@@ -28,61 +28,22 @@ namespace API
         {
             try
             {
-
-                //1 : PREPARE INPUT
-                //Based on the calculator method we prepare to cut the string into parameters as text
-                //get calculator data
-                var calculator = Tools.MethodNameToMethodInfo(calculatorName);
+                //1 : GET INPUT DATA
+                var calculator = Tools.MethodNameToMethodInfo(calculatorName); //get calculator name
                 var parameterTypes = calculator.GetParameters().Select(p => p.ParameterType).ToList();
+				
+                //get inputed parameters
+				var parsedParamList = await ParseUrlParameters(fullParamString, parameterTypes);
 
-                //2 : DEFAULT AYANAMSA
-                var userAyanamsa = Ayanamsa.Raman; //todo accept custom
 
-
-                //place to store ready params
-                var parsedParamList = new List<dynamic>(); //exact number as specified (performance)
-                                                           //cut the string based on parameter type
-                foreach (var parameterType in parameterTypes)
-                {
-                    //get inches to cut based on Type of cloth (ask the cloth)
-                    var nameOfField = nameof(IFromUrl.OpenAPILength);
-                    FieldInfo fieldInfo = parameterType.GetField(nameOfField, BindingFlags.Public | BindingFlags.Static);
-                    //note: enums can't set this, so default to 2 /{EnumName}/{EnumAsString}
-                    var cutCount = (int)(fieldInfo?.GetValue(null) ?? 2);
-
-                    //cut out the string that contains data of the parameter (URL version of Time, PlanetName, etc.)
-                    var extractedUrl = Tools.CutOutString(fullParamString, cutCount);
-
-                    //keep unused param string for next parsing
-                    fullParamString = Tools.CutRemoveString(fullParamString, cutCount);
-
-                    //convert URL to understandable data (magic!)
-                    var nameOfMethod = nameof(IFromUrl.FromUrl);
-                    var parsedParamInstance = parameterType.GetMethod(nameOfMethod, BindingFlags.Public | BindingFlags.Static);
-                    //if not found then probably Enum, so use special Enum converter
-                    if (parsedParamInstance == null)
-                    {
-                        //var enumExtensions = $"VedAstro.Library.{parameterType.Name}Extensions, VedAstro.Library, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null";
-                        parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static);
-                    }
-
-                    //execute param parser
-                    Task task = (Task)parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
-                    await task; //getting person and location is async, so all same 
-                    dynamic parsedParam = task.GetType().GetProperty("Result").GetValue(task, null);
-
-                    //ACT 5:
-                    //add to main list IF NOT AYANAMSA (used later for main final execution)
-                    parsedParamList.Add(parsedParam);
-                }
-
-                //2 : CUSTOM AYANAMSA
-                //DON'T LIMIT FEATURES JUST BECAUSE NOT LOGGED IN
-                //as such no API KEY field here, direct to Ayanamsa
-                //if this is ayanamsa, then take it out to be used later...
-                //var isAyanamsa = parsedParam is Ayanamsa;
-                //if (isAyanamsa) { userAyanamsa = parsedParam; }//value to be used later...
-                var isAyanamsa = fullParamString.Contains(nameof(Ayanamsa));
+				//2 : CUSTOM AYANAMSA
+				//DON'T LIMIT FEATURES JUST BECAUSE NOT LOGGED IN
+				//as such no API KEY field here, direct to Ayanamsa
+				//if this is ayanamsa, then take it out to be used later...
+				//var isAyanamsa = parsedParam is Ayanamsa;
+				//if (isAyanamsa) { userAyanamsa = parsedParam; }//value to be used later...
+				var userAyanamsa = Ayanamsa.Raman; //default
+				var isAyanamsa = fullParamString.Contains(nameof(Ayanamsa));
                 if (isAyanamsa)
                 {
                     userAyanamsa = await Tools.EnumFromUrl(fullParamString);
@@ -104,11 +65,57 @@ namespace API
             catch (Exception e)
             {
                 await APILogger.Error(e, incomingRequest);
-                return APITools.FailMessage(e.Message, incomingRequest);
+                return APITools.FailMessageJson(e.Message, incomingRequest);
             }
 
         }
 
+		/// <summary>
+		/// Reads URL data to instances  
+		/// </summary>
+		public static async Task<List<dynamic>> ParseUrlParameters(string fullParamString, List<Type> parameterTypes)
+		{
+			//Based on the calculator method we prepare to cut the string into parameters as text
+
+			//place to store ready params
+			var parsedParamList = new List<dynamic>(); //exact number as specified (performance)
+			//cut the string based on parameter type
+			foreach (var parameterType in parameterTypes)
+			{
+				//get inches to cut based on Type of cloth (ask the cloth)
+				var nameOfField = nameof(IFromUrl.OpenAPILength);
+				FieldInfo fieldInfo = parameterType.GetField(nameOfField, BindingFlags.Public | BindingFlags.Static);
+				//note: enums can't set this, so default to 2 /{EnumName}/{EnumAsString}
+				var cutCount = (int)(fieldInfo?.GetValue(null) ?? 2);
+
+				//cut out the string that contains data of the parameter (URL version of Time, PlanetName, etc.)
+				var extractedUrl = Tools.CutOutString(fullParamString, cutCount);
+
+				//keep unused param string for next parsing
+				fullParamString = Tools.CutRemoveString(fullParamString, cutCount);
+
+				//convert URL to understandable data (magic!)
+				var nameOfMethod = nameof(IFromUrl.FromUrl);
+				var parsedParamInstance = parameterType.GetMethod(nameOfMethod, BindingFlags.Public | BindingFlags.Static);
+				//if not found then probably Enum, so use special Enum converter
+				if (parsedParamInstance == null)
+				{
+					//var enumExtensions = $"VedAstro.Library.{parameterType.Name}Extensions, VedAstro.Library, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null";
+					parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static);
+				}
+
+				//execute param parser
+				Task task = (Task)parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+				await task; //getting person and location is async, so all same 
+				dynamic parsedParam = task.GetType().GetProperty("Result").GetValue(task, null);
+
+				//ACT 5:
+				//add to main list IF NOT AYANAMSA (used later for main final execution)
+				parsedParamList.Add(parsedParam);
+			}
+
+			return parsedParamList;
+		}
 
 
         //TODO MARKED FOR DELETION  

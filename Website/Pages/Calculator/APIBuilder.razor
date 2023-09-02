@@ -1,4 +1,4 @@
-@using VedAstro.Library
+﻿@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
 <PageTitle>Easy Open API | VedAstro</PageTitle>
@@ -17,7 +17,7 @@
 		<div class="vstack gap-4" style="max-width: @GR.W412px;">
 
 			<div class="vstack gap-4">
-				
+
 				@* FUNCTION NAME SELECT *@
 				<div>
 					<span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;"><Icon IconName="flat-color-icons:calculator" Size="34" /> Select Calculator</span>
@@ -30,18 +30,18 @@
 					<span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;"><Icon IconName="flat-color-icons:multiple-inputs" Size="34" /> Input Parameters</span>
 					<ParameterInputPanel @ref="_parameterInputPanel" />
 				</div>
-			
+
 
 				@* ADVANCED *@
 				<div @ref="_paramInputHolderElement2" style="display: none">
 					<span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;">
-						<Icon IconName="gala:settings" Size="34"/> Advanced
+						<Icon IconName="gala:settings" Size="34" /> Advanced
 						<Icon ExtraClass="ms-auto" IconName="icon-park-solid:down-c" OnClickCallback="OnClickShowAdvanced" />
-					</span>			
+					</span>
 					@* AYANAMSA *@
 					<div id="AyanamsaInputHolder" style="display: none">
 						<div class="input-group mb-2">
-							<label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="solar:stars-line-broken"/> Ayanamsa</label>
+							<label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
 							<select class="form-select">
 								<option value="Raman" selected>Raman</option>
 								<option value="Lahiri">Lahiri</option>
@@ -92,10 +92,14 @@
 					<IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep" />
 				</ButtonRow>
 				<TextHTML>
-					Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language
-					<strong>JS, Python, C#, Java</strong> or even your browsers' URL. Design your app to cache the received data.
-					<strong>If the call fails</strong>, just replay it again at least x2. Even a small network issue on the
-					client side may cause this.
+					<p>
+						Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language
+						<strong>JS, Python, C#, Java</strong> or even your browsers' URL.
+					</p>
+					<p>
+						You can also run <kbd>pip install vedastro</kbd> in your local or cloud environment.
+						<BoldLink URL="@URL.YoutubePythonGuide">Watch Python Guide</BoldLink>
+					</p>
 				</TextHTML>
 			</ArticleBlock>
 

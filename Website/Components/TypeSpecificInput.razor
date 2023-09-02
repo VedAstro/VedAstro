@@ -49,8 +49,11 @@
 	}
 	else
 	{
-		<p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate to help development</a></p>
-		<p style="font-size=8px;">@_apiCallData.FullName</p>
+		<div>
+			<Icon IconName="noto-v1:construction" />
+			<p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
+			<span style="font-size=4px;">@_apiCallData.FullName</span>
+		</div>
 	}
 
 

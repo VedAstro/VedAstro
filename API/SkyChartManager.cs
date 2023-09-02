@@ -117,7 +117,7 @@ namespace API
                 var randomId = Tools.GenerateId();
 
 
-                var planetList = AstronomicalCalculator.GetAllPlanetLongitude(time);
+                var planetList = Calculate.GetAllPlanetLongitude(time);
 
                 var renderWidth = widthPx - 30; // 750 -> 720
                 angleRuler = GenerateAngleRuler(renderWidth, 10);
@@ -276,7 +276,7 @@ namespace API
         private static string? GenerateHouseRuler(Time time, double widthPx, int yAxis)
         {
             //STAGE 1 : CREATE DATA
-            var allPositions = AstronomicalCalculator.GetHouses(time);
+            var allPositions = Calculate.GetHouses(time);
             var hse1 = allPositions[0];
 
             //store entire row as names of signs to process after into icons (begin and end)
@@ -1715,7 +1715,7 @@ namespace API
             if (planet.Name == PlanetName.PlanetNameEnum.Moon)
             {
                 //get moon lunar day to 
-                var lunarDay = AstronomicalCalculator.GetLunarDay(time).GetLunarDateNumber();
+                var lunarDay = Calculate.GetLunarDay(time).GetLunarDateNumber();
 
                 //make url for specific lunar frame
                 var svgFileUrl = $"{APITools.Url.WebUrl}/images/SkyChart/{planet.Name.ToString().ToLower()}-{lunarDay}.svg";

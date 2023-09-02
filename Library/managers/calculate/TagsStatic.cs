@@ -6,7 +6,7 @@ namespace VedAstro.Library
     /// <summary>
     /// FOR STATIC TABLE BASED FUNCTIONS, STORING DATA
     /// </summary>
-    public static partial class AstronomicalCalculator
+    public static partial class Calculate
     {
         /// <summary>
         /// keywords or tag related to a house

@@ -48,7 +48,7 @@ namespace API
                 {
                     userAyanamsa = await Tools.EnumFromUrl(fullParamString);
                 }
-                AstronomicalCalculator.YearOfCoincidence = (int)userAyanamsa;
+                VedAstro.Library.Calculate.YearOfCoincidence = (int)userAyanamsa;
 
 
                 //3 : EXECUTE COMMAND
@@ -361,7 +361,7 @@ namespace API
 
         private static JObject GetSignDataJson(PlanetName planetName, Time parsedTime)
         {
-            var planetSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, parsedTime);
+            var planetSign = VedAstro.Library.Calculate.GetPlanetRasiSign(planetName, parsedTime);
             var rootJson = new JObject();
             rootJson["Name"] = planetSign.GetSignName().ToString();
             rootJson["DegreesInSign"] = planetSign.GetDegreesInSign().TotalDegrees;

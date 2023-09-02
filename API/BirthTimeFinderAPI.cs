@@ -65,8 +65,8 @@ namespace API
                     var personAdjusted = foundPerson.ChangeBirthTime(timeSlice);
 
                     //get the animal prediction for possible birth time
-                    var newBirthConstellation = AstronomicalCalculator.GetMoonConstellation(personAdjusted.BirthTime).GetConstellationName();
-                    var animal = AstronomicalCalculator.GetAnimal(newBirthConstellation);
+                    var newBirthConstellation = Calculate.GetMoonConstellation(personAdjusted.BirthTime).GetConstellationName();
+                    var animal = Calculate.GetAnimal(newBirthConstellation);
 
                     //nicely packed
                     var named = new JProperty(timeSlice.ToString(), animal.ToString());
@@ -234,7 +234,7 @@ namespace API
                     foreach (var house in House.AllHouses)
                     {
                         //get house strength
-                        var strength = AstronomicalCalculator.GetHouseStrength(house, timeSlice).ToDouble(2);
+                        var strength = Calculate.GetHouseStrength(house, timeSlice).ToDouble(2);
 
                         //add to compiled string
                         var thisHouse = $"{house} {strength},";

@@ -368,7 +368,7 @@ namespace VedAstro.Library
         private static double GetPlanetPowerFactor(PlanetName valuePlanet, Time time)
         {
             //get all planet strength for given time (horoscope)
-            var list = AstronomicalCalculator.GetAllPlanetStrength(time);
+            var list = Calculate.GetAllPlanetStrength(time);
             //get the power of the planet inputed
             var planetPwr = list.FirstOrDefault(x => x.Item2 == valuePlanet).Item1;
 
@@ -1780,9 +1780,9 @@ namespace VedAstro.Library
                 //NOTE: Below we mix radical horoscope with now time = future prediction/muhurtha
                 //get ashtakvarga bindu points to predict good/bad nature of ongoing gochara (percentage possible)
                 //note here "Start Time" should be fine, since all throughout the event the house sign will be same as start
-                var houseSign = AstronomicalCalculator.GetHouseSignName(gocharaHouse, foundEvent.StartTime); //time here is current time, not birth
+                var houseSign = Calculate.GetHouseSignName(gocharaHouse, foundEvent.StartTime); //time here is current time, not birth
                 //here is birth time because ashtakvarga is based on birth
-                var binduPoints = AstronomicalCalculator.GetPlanetAshtakvargaBindu(gocharaPlanet, houseSign, person.BirthTime);//here is birth
+                var binduPoints = Calculate.GetPlanetAshtakvargaBindu(gocharaPlanet, houseSign, person.BirthTime);//here is birth
 
 
                 //if bindu is below 3 and below bad
@@ -1803,7 +1803,7 @@ namespace VedAstro.Library
             public static double StrongestPlanet(Event foundEvent, Person person)
             {
                 //get top planet
-                var topPlanet = AstronomicalCalculator.GetAllPlanetOrderedByStrength(person.BirthTime)[0];
+                var topPlanet = Calculate.GetAllPlanetOrderedByStrength(person.BirthTime)[0];
 
                 //get all planets in event, scan and give score
                 var planetNatureScore = 0.0;
@@ -1825,7 +1825,7 @@ namespace VedAstro.Library
             public static double WeakestPlanet(Event foundEvent, Person person)
             {
                 //get bottom planet
-                var bottomPlanet = AstronomicalCalculator.GetAllPlanetOrderedByStrength(person.BirthTime)[8];
+                var bottomPlanet = Calculate.GetAllPlanetOrderedByStrength(person.BirthTime)[8];
 
                 //get all planets in event, scan and give score
                 var planetNatureScore = 0.0;
@@ -1847,7 +1847,7 @@ namespace VedAstro.Library
             public static double StrongestHouse(Event foundEvent, Person person)
             {
                 //get top house
-                var topHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(person.BirthTime)[0];
+                var topHouse = Calculate.GetAllHousesOrderedByStrength(person.BirthTime)[0];
 
                 //get all houses in event, scan and give score
                 var houseNatureScore = 0.0;
@@ -1869,7 +1869,7 @@ namespace VedAstro.Library
             public static double WeakestHouse(Event foundEvent, Person person)
             {
                 //get bottom house
-                var bottomHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(person.BirthTime)[11];
+                var bottomHouse = Calculate.GetAllHousesOrderedByStrength(person.BirthTime)[11];
 
                 //get all houses in event, scan and give score
                 var houseNatureScore = 0.0;
@@ -1893,14 +1893,14 @@ namespace VedAstro.Library
             {
                 //all planets in event is bad
                 var planetList = foundEvent.GetRelatedPlanet();
-                bool isAllPlanetBad = planetList.All(pln => AstronomicalCalculator.IsPlanetBeneficInShadbala(pln, person.BirthTime) == false);
+                bool isAllPlanetBad = planetList.All(pln => Calculate.IsPlanetBeneficInShadbala(pln, person.BirthTime) == false);
 
                 //if all not bad, end here  
                 if (!isAllPlanetBad) { return 0; }
 
                 //if there is a house then all must be bad also
                 var houseList = foundEvent.GetRelatedHouse();
-                bool isAllHouseBad = houseList.All(hse => AstronomicalCalculator.IsHouseBeneficInShadbala(hse, person.BirthTime, 450) == false);
+                bool isAllHouseBad = houseList.All(hse => Calculate.IsHouseBeneficInShadbala(hse, person.BirthTime, 450) == false);
 
                 //if all not bad, end here  
                 if (!isAllHouseBad) { return 0; }
@@ -1921,7 +1921,7 @@ namespace VedAstro.Library
                 var dasaMainPlanet = foundEvent.GetRelatedPlanet()[0];
 
                 //get good or bad based on Ishta and Kashta, if former is more than good
-                var score = AstronomicalCalculator.GetPlanetIshtaKashtaScore(dasaMainPlanet, person.BirthTime);
+                var score = Calculate.GetPlanetIshtaKashtaScore(dasaMainPlanet, person.BirthTime);
 
                 //-1 bad, +1 good, no neutral
                 return score;
@@ -1933,12 +1933,12 @@ namespace VedAstro.Library
                 //get house that the event is related to
                 var relatedHouse = foundEvent.GetRelatedHouse().FirstOrDefault(); //for now assume only one
                 //get nature of house based on shadbala
-                var houseNatureScore = AstronomicalCalculator.GetHouseNatureScore(person.BirthTime, relatedHouse);
+                var houseNatureScore = Calculate.GetHouseNatureScore(person.BirthTime, relatedHouse);
 
                 //get houses and planet that the event is related to
                 var relatedPlanet = foundEvent.GetRelatedPlanet().FirstOrDefault(); //for now assume only one
                 //get nature of planet based on shadbala
-                var planetNatureScore = AstronomicalCalculator.GetPlanetNatureScore(person.BirthTime, relatedPlanet);
+                var planetNatureScore = Calculate.GetPlanetNatureScore(person.BirthTime, relatedPlanet);
 
                 var final = 0;
                 final += houseNatureScore;
@@ -1961,7 +1961,7 @@ namespace VedAstro.Library
                 double planetNatureScore = 0;
                 foreach (var relatedPlanet in foundEvent.GetRelatedPlanet())
                 {
-                    planetNatureScore = AstronomicalCalculator.GetPlanetNatureScoreMK4(person.BirthTime, relatedPlanet);
+                    planetNatureScore = Calculate.GetPlanetNatureScoreMK4(person.BirthTime, relatedPlanet);
                 }
 
                 var final = 0.0;
@@ -1980,9 +1980,9 @@ namespace VedAstro.Library
                 var planetInEventList = foundEvent.GetRelatedPlanet();
 
                 //get top 3 planets as good
-                var beneficPlanetList = AstronomicalCalculator.GetBeneficPlanetListByShadbala(person.BirthTime);
+                var beneficPlanetList = Calculate.GetBeneficPlanetListByShadbala(person.BirthTime);
                 //var beneficPlanetList2 = AstronomicalCalculator.GetBeneficPlanetListByShadbala(person.BirthTime, 500);
-                var maleficPlanetList = AstronomicalCalculator.GetMaleficPlanetListByShadbala(person.BirthTime);
+                var maleficPlanetList = Calculate.GetMaleficPlanetListByShadbala(person.BirthTime);
                 //var maleficPlanetList2 = AstronomicalCalculator.GetMaleficPlanetListByShadbala(person.BirthTime, 300);
 
                 //add and remove score based on planet good and bad todo add remove by voting power
@@ -2013,9 +2013,9 @@ namespace VedAstro.Library
                 {
                     var houseInEventList = foundEvent.GetRelatedHouse();
 
-                    var beneficHouseList = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime);
+                    var beneficHouseList = Calculate.GetBeneficHouseListByShadbala(person.BirthTime);
                     // var beneficHouseList2 = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime, 550);
-                    var maleficHouseList = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime);
+                    var maleficHouseList = Calculate.GetMaleficHouseListByShadbala(person.BirthTime);
                     //var maleficHouseList2 = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime, 250);
 
                     foreach (var houseName in houseInEventList)
@@ -2053,9 +2053,9 @@ namespace VedAstro.Library
                 var planetInEventList = foundEvent.GetRelatedPlanet();
 
                 //get top 3 planets as good
-                var beneficPlanetList = AstronomicalCalculator.GetBeneficPlanetListByShadbala(person.BirthTime);
+                var beneficPlanetList = Calculate.GetBeneficPlanetListByShadbala(person.BirthTime);
                 //var beneficPlanetList2 = AstronomicalCalculator.GetBeneficPlanetListByShadbala(person.BirthTime, 500);
-                var maleficPlanetList = AstronomicalCalculator.GetMaleficPlanetListByShadbala(person.BirthTime);
+                var maleficPlanetList = Calculate.GetMaleficPlanetListByShadbala(person.BirthTime);
                 //var maleficPlanetList2 = AstronomicalCalculator.GetMaleficPlanetListByShadbala(person.BirthTime, 300);
 
                 //add and remove score based on planet good and bad todo add remove by voting power
@@ -2083,9 +2083,9 @@ namespace VedAstro.Library
 
                 var houseInEventList = foundEvent.GetRelatedHouse();
 
-                var beneficHouseList = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime);
+                var beneficHouseList = Calculate.GetBeneficHouseListByShadbala(person.BirthTime);
                 // var beneficHouseList2 = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime, 550);
-                var maleficHouseList = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime);
+                var maleficHouseList = Calculate.GetMaleficHouseListByShadbala(person.BirthTime);
                 //var maleficHouseList2 = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime, 250);
 
                 foreach (var houseName in houseInEventList)

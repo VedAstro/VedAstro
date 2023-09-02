@@ -1595,7 +1595,7 @@ namespace VedAstro.Library
 
             //get all possible calls for API
             //get all calculators that can work with the inputed data
-            var calculatorClass = typeof(AstronomicalCalculator);
+            var calculatorClass = typeof(Calculate);
 
             foreach (var methodInfo in calculatorClass.GetMethods())
             {
@@ -1747,7 +1747,7 @@ namespace VedAstro.Library
         /// </summary>
         public static JProperty ExecuteCalculatorByApiName<T1, T2>(string methodName, T1 param1, T2 param2)
         {
-            var calculatorClass = typeof(AstronomicalCalculator);
+            var calculatorClass = typeof(Calculate);
             var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
 
             //if method not found, possible outdated API call link, end call here
@@ -1916,7 +1916,7 @@ namespace VedAstro.Library
             var inputedParamType2 = typeof(T2);
 
             //get all calculators that can work with the inputed data
-            var calculatorClass = typeof(AstronomicalCalculator);
+            var calculatorClass = typeof(Calculate);
 
             var finalList = new List<MethodInfo>();
 
@@ -1955,7 +1955,7 @@ namespace VedAstro.Library
             var inputedParamType1 = typeof(T1);
 
             //get all calculators that can work with the inputed data
-            var calculatorClass = typeof(AstronomicalCalculator);
+            var calculatorClass = typeof(Calculate);
 
             var finalList = new List<MethodInfo>();
 
@@ -1984,7 +1984,7 @@ namespace VedAstro.Library
         {
 
             //get all calculators that can work with the inputed data
-            var calculatorClass = typeof(AstronomicalCalculator);
+            var calculatorClass = typeof(Calculate);
 
             var finalList = calculatorClass.GetMethods().ToList();
 
@@ -2235,7 +2235,7 @@ namespace VedAstro.Library
         /// </summary>
         public static MethodInfo MethodNameToMethodInfo(string methodName)
         {
-            var calculatorClass = typeof(AstronomicalCalculator);
+            var calculatorClass = typeof(Calculate);
             var foundList = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName);
             var foundMethod = foundList.FirstOrDefault();
 

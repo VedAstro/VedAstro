@@ -154,13 +154,13 @@
 
     private async Task OnClickJoinUs()
     {
-
         //get email from user via js sweet alert lib
-        var emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("Email me at...");
+        var emailFromAlert = await AppData.JsRuntime.PopupTextInput("Email me at...");
 
         //loading box show
         await _jsRuntime.ShowLoading();
 
+        //add message to API Messages book
         await WebsiteTools.SendMailToAPI(emailFromAlert, $"Join Family > Tasks > {SelectedExperience}");
 
         //say thank you and will get back

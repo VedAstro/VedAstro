@@ -4,13 +4,13 @@
 
 
 <PageTop Title="Under Construction" IconName="noto-v1:construction">
-    <Description>
-        Below page is under construction. It might not work!
-        Leave your email, to get notified when page is ready.
-    </Description>
-    <ButtonsRow>
-        <IconButton IconName="ic:baseline-connect-without-contact" ButtonText="Leave Email" OnClickCallback="OnClickLeaveEmail" ClickUrl="@PageRoute.PersonList"></IconButton>
-    </ButtonsRow>
+	<Description>
+		Below page is under construction. It might not work!
+		Leave your email, to get notified when page is ready.
+	</Description>
+	<ButtonsRow>
+		<IconButton IconName="ic:baseline-connect-without-contact" ButtonText="Leave Email" OnClickCallback="OnClickLeaveEmail" ClickUrl="@PageRoute.PersonList"></IconButton>
+	</ButtonsRow>
 </PageTop>
 
 
@@ -18,27 +18,34 @@
 @code {
 
 
-    /// <summary>
-    /// Page name used when sending message to server
-    /// </summary>
-    [Parameter]
-    public string PageName { get; set; } = "Under Construction";
+	/// <summary>
+	/// Page name used when sending message to server
+	/// </summary>
+	[Parameter]
+	public string PageName { get; set; } = "Under Construction";
 
-    private async Task OnClickLeaveEmail()
-    {
-        //get email from user via js sweet alert lib
-        var emailFromAlert = await _jsRuntime.ShowLeaveEmailAlert();
+	private async Task OnClickLeaveEmail()
+	{
+		//get email from user via js sweet alert lib
+		var emailFromAlert = await _jsRuntime.PopupTextInput("Notify me on update");
 
-        //send email as message to API server for storage
-        //package message data to be sent
-        var textXml = new XElement("Text", $"LeaveEmailAlert from page: {PageName}");
-        var emailXml = new XElement("Email", emailFromAlert);
-        var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
-        var messageXml = new XElement("Message", userIdXml, emailXml, Tools.TimeStampSystemXml, textXml);
+		//loading box show
+		await _jsRuntime.ShowLoading();
 
-        //send message to API server
-        await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
+		//add message to API Messages book
+		//package message data to be sent
+		var textXml = new XElement("Text", $"LeaveEmailAlert from page: {PageName}");
+		var emailXml = new XElement("Email", emailFromAlert);
+		var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
+		var messageXml = new XElement("Message", userIdXml, emailXml, Tools.TimeStampSystemXml, textXml);
+
+		//send message to API server
+		await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
+
+		//say thank you and will get back
+		await _jsRuntime.ShowAlert("success", "Thank you", "we'll get back to you soon");
 
 
-    }
+
+	}
 }

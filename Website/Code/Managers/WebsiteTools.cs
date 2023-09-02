@@ -42,7 +42,7 @@ namespace Website
         public static async Task OnClickSendToEmail(string pdfFileName, ElementReference elementToConvert)
         {
             //get email from user via js sweet alert lib
-            var emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("Send PDF to...");
+            var emailFromAlert = await AppData.JsRuntime.PopupTextInput("Send PDF to...");
 
             //calls special JS lib to convert html version of the chart to PDF
             var cleanFileName = Tools.RemoveWhiteSpace(pdfFileName); //remove spaces so that no errors and looks clean in URL

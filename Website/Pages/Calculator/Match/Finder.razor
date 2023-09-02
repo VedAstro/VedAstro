@@ -116,7 +116,7 @@
         string emailFromAlert;
         if (AppData.IsGuestUser)
         {
-            emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("Soulmate can reach me at...");
+            emailFromAlert = await AppData.JsRuntime.PopupTextInput("Soulmate can reach me at...");
         }
         else
         {
@@ -138,7 +138,7 @@
             //var continueClicked = sweetAlertResult.GetProperty("isConfirmed").GetBoolean();
             //if (!continueClicked) { return false; }
 
-            emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("Soulmate can reach me at...");
+            emailFromAlert = await AppData.JsRuntime.PopupTextInput("Soulmate can reach me at...");
 
         }
 

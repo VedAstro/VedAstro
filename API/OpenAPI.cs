@@ -12,15 +12,15 @@ namespace API
     {
         //  CALC                          TIME
         //Karana/Location/Singapore/Time/23:59/31/12/2000/+08:00
-        private const string Route1 = "Calculator/{calculatorName}/{*fullParamString}"; //* that captures the rest of the URL path
+        private const string Route1 = "Calculate/{calculatorName}/{*fullParamString}"; //* that captures the rest of the URL path
 
 
         /// <summary>
         /// Main Open API method to handle all calls
         /// /.../Calculator/DistanceBetweenPlanets/PlanetName/Sun/PlanetName/Moon/Location/Singapore/Time/23:59/31/12/2000/+08:00
         /// </summary>
-        [Function(nameof(Calculator))]
-        public static async Task<HttpResponseData> Calculator([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route1)]
+        [Function(nameof(Calculate))]
+        public static async Task<HttpResponseData> Calculate([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route1)]
             HttpRequestData incomingRequest,
             string calculatorName,
             string fullParamString

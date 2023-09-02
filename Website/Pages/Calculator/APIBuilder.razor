@@ -1,4 +1,4 @@
-﻿@using VedAstro.Library
+@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
 <PageTitle>Easy Open API | VedAstro</PageTitle>
@@ -240,7 +240,7 @@
 		//format of the API call
 		//.../Calculator/DistanceBetweenPlanets/PlanetName/Sun/PlanetName/Moon/Location/Singapore/Time/23:59/31/12/2000/+08:00
 		var placeHolder = "";
-		var calcName = $"/Calculator/{_apiSelectorBox.GetSelectedMethodName()}";
+		var calcName = $"/Calculate/{_apiSelectorBox.GetSelectedMethodName()}";
 		var paramInput = await _parameterInputPanel.ToApiUrl();
 		placeHolder = domain + calcName + paramInput;
 

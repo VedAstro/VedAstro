@@ -24,18 +24,11 @@ KEEP IT REAL
 
 
 @*Component shows combo box with people list*@
-<div class="btn-group" style="width: @GR.W255px;">
+<div class="btn-group" style="width: @GR.W412px;">
 
 	@* DROPDOWN BUTTON *@
-	<button type="button" @onclick="OnClickTrigger" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
-		@if (SelectedMethod != null)
-		{
-			@(Format.FormatName(SelectedMethod.Name))
-		}
-		else
-		{
-			@("Choose...")
-		}
+	<button type="button" @onclick="OnClickTrigger" style="text-align-last: center;" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+		@FormattedMethodName
 	</button>
 
 	@* DROPDOWN SECTION *@
@@ -72,6 +65,12 @@ KEEP IT REAL
 
 
 @code {
+
+	/// <summary>
+	/// Name of selected method to show
+	/// </summary>
+	private string FormattedMethodName { get; set; } = "Make a choice...";
+
 	/// <summary>
 	/// only this way of marking works
 	/// </summary>
@@ -133,8 +132,9 @@ KEEP IT REAL
 	/// </summary>
 	private void OnClickMethodName(AutoCalculator.APICallData method)
 	{
-		//set tooltip as well
+		//set value for reference
 		SelectedMethod = method;
+		FormattedMethodName = Format.FormatName(SelectedMethod.Name);
 
 		//fire event, so parent listening can update other elements
 		RaiseOnChangeSelectMethod();

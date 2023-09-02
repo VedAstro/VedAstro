@@ -69,13 +69,9 @@
 
 			@*URL DISPLAY OUT*@
 			@* id so we can scroll to on complete *@
-			<div id="UrlDisplayOut" class="vstack gap-1" style="margin-top: -32px;">
+			<div class="vstack gap-1" style="margin-top: -32px;">
 				<span style="font-size: 14px; color: @AppData.Grey;">URL</span>
-				<kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">@_finalApiGetCall</kbd>
-			</div>
-			<div style="display: none;" class="form-floating" @ref="_postBodyElement">
-				<span>URL</span>
-				<kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">@_finalApiGetCall</kbd>
+				<kbd id="UrlDisplayOut" style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">@_finalApiGetCall</kbd>
 			</div>
 
 			@*COPY AND CALL BUTTON*@
@@ -189,7 +185,6 @@
 	private List<AutoCalculator.APICallData> MethodListALL = new List<AutoCalculator.APICallData>();
 
 	private APISelectorBox _apiSelectorBox;
-	private ElementReference _postBodyElement;
 	private ElementReference _paramInputHolderElement;
 	private ElementReference _paramInputHolderElement2;
 	private ParameterInputPanel _parameterInputPanel;

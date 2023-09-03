@@ -445,7 +445,7 @@ namespace VedAstro.Library
             bool condition1()
             {
                 //1. Moon is waxing
-                var moonPhase = Calculate.GetLunarDay(time).GetMoonPhase();
+                var moonPhase = Calculate.LunarDay(time).GetMoonPhase();
 
                 //check if phase is correct 
                 var rightPhase = moonPhase == MoonPhase.BrightHalf;
@@ -455,8 +455,8 @@ namespace VedAstro.Library
 
 
                 //2. Moon occupies a benefic sign
-                var moonSign = Calculate.GetPlanetRasiSign(PlanetName.Moon, time);
-                var relationship = Calculate.GetPlanetRelationshipWithSign(PlanetName.Moon, moonSign.GetSignName(), time);
+                var moonSign = Calculate.PlanetRasiSign(PlanetName.Moon, time);
+                var relationship = Calculate.PlanetRelationshipWithSign(PlanetName.Moon, moonSign.GetSignName(), time);
 
                 //check if sign is benefic 
                 var isBenefic = relationship == PlanetToSignRelationship.OwnVarga || //Swavarga - own varga
@@ -468,8 +468,8 @@ namespace VedAstro.Library
 
 
                 //3. Moon occupies a benefic Navamsa sign
-                var moonNavamsaSign = Calculate.GetPlanetNavamsaSign(PlanetName.Moon, time);
-                var navamsaRelationship = Calculate.GetPlanetRelationshipWithSign(PlanetName.Moon, moonNavamsaSign, time);
+                var moonNavamsaSign = Calculate.PlanetNavamsaSign(PlanetName.Moon, time);
+                var navamsaRelationship = Calculate.PlanetRelationshipWithSign(PlanetName.Moon, moonNavamsaSign, time);
 
                 //check if sign is benefic 
                 var isBeneficNavamsa = navamsaRelationship == PlanetToSignRelationship.OwnVarga || //Swavarga - own varga
@@ -494,11 +494,11 @@ namespace VedAstro.Library
             bool condition3()
             {
                 //get lord of 8th house
-                var lord8th = Calculate.GetLordOfHouse(HouseName.House8, time);
+                var lord8th = Calculate.LordOfHouse(HouseName.House8, time);
 
                 //get relationship between moon and 8th lord
                 var relationship =
-                    Calculate.GetPlanetCombinedRelationshipWithPlanet(PlanetName.Moon, lord8th, time);
+                    Calculate.PlanetCombinedRelationshipWithPlanet(PlanetName.Moon, lord8th, time);
 
                 var isFriends = relationship == PlanetToPlanetRelationship.BestFriend ||
                                 relationship == PlanetToPlanetRelationship.Friend;
@@ -676,7 +676,7 @@ namespace VedAstro.Library
             // Krittika (or Makha).
 
             //get lunar day
-            var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+            var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
             //get ruling constellation
             var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
@@ -729,7 +729,7 @@ namespace VedAstro.Library
 
             //2. Aries, Taurus. Cancer and Virgo are auspicious
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Aries
@@ -878,7 +878,7 @@ namespace VedAstro.Library
             // It is the 11th tithi
 
             //get lunar day
-            var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+            var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
 
             //right lunar days to look for
             var rightLunarDay = lunarDayNumber == 11;
@@ -900,7 +900,7 @@ namespace VedAstro.Library
             // associated with benefics, such a disposition is not approved.
 
             //get house venus is in
-            var houseVenusIsIn = Calculate.GetHousePlanetIsIn(time, PlanetName.Venus);
+            var houseVenusIsIn = Calculate.HousePlanetIsIn(time, PlanetName.Venus);
 
             //if venus is in 6th house
             if (houseVenusIsIn == HouseName.House6)
@@ -927,7 +927,7 @@ namespace VedAstro.Library
             // should not occupy the 8th house.
 
             //get house mars is in
-            var houseMarsIsIn = Calculate.GetHousePlanetIsIn(time, PlanetName.Mars);
+            var houseMarsIsIn = Calculate.HousePlanetIsIn(time, PlanetName.Mars);
 
             //if mars is in 8th house
             if (houseMarsIsIn == HouseName.House8)
@@ -1027,7 +1027,7 @@ namespace VedAstro.Library
             // rising in an election chart.
 
             //get house moon is in
-            var houseMoonIsIn = Calculate.GetHousePlanetIsIn(time, PlanetName.Moon);
+            var houseMoonIsIn = Calculate.HousePlanetIsIn(time, PlanetName.Moon);
 
             //if house moon is in is 6, 8 or 12
             if (houseMoonIsIn == HouseName.House6 || houseMoonIsIn == HouseName.House8 || houseMoonIsIn == HouseName.House12)
@@ -1204,7 +1204,7 @@ namespace VedAstro.Library
             {
                 //1.0 get navamsa lagna lord
                 //1.1 get navamsa lagna sign
-                var navamsaLagnaSign = Calculate.GetHouseNavamsaSign(HouseName.House1, time);
+                var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
 
                 var navamsaLagnaLord = Calculate.GetLordOfZodiacSign(navamsaLagnaSign);
 
@@ -1213,7 +1213,7 @@ namespace VedAstro.Library
                     Calculate.GetSignsPlanetIsAspecting(navamsaLagnaLord, time);
 
                 //3.0 get sign of lagna
-                var lagnaSign = Calculate.GetHouseSignName(HouseName.House1, time);
+                var lagnaSign = Calculate.HouseSignName(HouseName.House1, time);
 
                 //4.0 check if lagna is in one of the signs navamsa lagna lord is aspecting
                 if (signsNavamsaLagnaLordIsAspecting.Contains(lagnaSign))
@@ -1232,7 +1232,7 @@ namespace VedAstro.Library
             {
                 //1.0 get navamsa 7th lord
                 //1.1 get navamsa 7th sign
-                var navamsa7thSign = Calculate.GetHouseNavamsaSign(HouseName.House7, time);
+                var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
 
                 var navamsa7thLord = Calculate.GetLordOfZodiacSign(navamsa7thSign);
 
@@ -1241,7 +1241,7 @@ namespace VedAstro.Library
                     Calculate.GetSignsPlanetIsAspecting(navamsa7thLord, time);
 
                 //3.0 get sign of 7th
-                var _7thSign = Calculate.GetHouseSignName(HouseName.House7, time);
+                var _7thSign = Calculate.HouseSignName(HouseName.House7, time);
 
                 //4.0 check if 7th is in one of the signs navamsa 7th lord is aspecting
                 if (signsNavamsa7thLordIsAspecting.Contains(_7thSign))
@@ -1260,14 +1260,14 @@ namespace VedAstro.Library
             {
                 //1.0 gets sign navamsa lord is aspecting
                 //get lagna lord (house 1)
-                var lagnaLord = Calculate.GetLordOfHouse(HouseName.House1, time);
+                var lagnaLord = Calculate.LordOfHouse(HouseName.House1, time);
 
                 //get signs lagna lord is aspecting
                 var signsLagnaLordIsAspecting = Calculate.GetSignsPlanetIsAspecting(lagnaLord, time);
 
                 //2.0 get navamsa lagna sign
                 //get navamsa lagna at house 1 longitude
-                var navamsaLagnaSign = Calculate.GetHouseNavamsaSign(HouseName.House1, time);
+                var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
 
                 //3.0
                 //check if navamsa lagna is one of the signs lagna lord is aspecting
@@ -1287,13 +1287,13 @@ namespace VedAstro.Library
             {
                 //1.0 gets sign navamsa lord is aspecting
                 //get 7th lord
-                var _7thLord = Calculate.GetLordOfHouse(HouseName.House7, time);
+                var _7thLord = Calculate.LordOfHouse(HouseName.House7, time);
 
                 //get signs 7th lord is aspecting
                 var signs7thLordIsAspecting = Calculate.GetSignsPlanetIsAspecting(_7thLord, time);
 
                 //2.0 get navamsa 7th sign
-                var navamsa7thSign = Calculate.GetHouseNavamsaSign(HouseName.House7, time);
+                var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
 
                 //3.0
                 //check if navamsa 7th is one of the signs 7th lord is aspecting
@@ -1313,17 +1313,17 @@ namespace VedAstro.Library
             {
                 //1.0 get navamsa lagna sign
                 //get navamsa lagna at house 1 longitude
-                var navamsaLagnaSign = Calculate.GetHouseNavamsaSign(HouseName.House1, time);
+                var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
 
                 //2.0 Get navamsa lagna lord's current sign
                 //get navamsa lagna lord (planet)
                 var navamsaLagnaLord = Calculate.GetLordOfZodiacSign(navamsaLagnaSign);
 
                 //get ordinary sign of navamsa lagna lord
-                var ordinarySignOfNavamsaLagnaLord = Calculate.GetPlanetRasiSign(navamsaLagnaLord, person.BirthTime).GetSignName();
+                var ordinarySignOfNavamsaLagnaLord = Calculate.PlanetRasiSign(navamsaLagnaLord, person.BirthTime).GetSignName();
 
                 //3.0 Get sign of house 1
-                var house1Sign = Calculate.GetHouseSignName(HouseName.House1, time);
+                var house1Sign = Calculate.HouseSignName(HouseName.House1, time);
 
                 //check if house 1 sign is same sign as the one navamsa lagna lord is in
                 if (house1Sign == ordinarySignOfNavamsaLagnaLord)
@@ -1344,17 +1344,17 @@ namespace VedAstro.Library
             bool IsNavamsa7thLordIn7th(Time time)
             {
                 //1.0 get navamsa 7th sign
-                var navamsa7thSign = Calculate.GetHouseNavamsaSign(HouseName.House7, time);
+                var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
 
                 //2.0 Get navamsa 7th lord's current sign
                 //get navamsa 7th lord (planet)
                 var navamsa7thLord = Calculate.GetLordOfZodiacSign(navamsa7thSign);
 
                 //get ordinary sign of navamsa 7th lord
-                var ordinarySignOfNavamsa7thLord = Calculate.GetPlanetRasiSign(navamsa7thLord, person.BirthTime).GetSignName();
+                var ordinarySignOfNavamsa7thLord = Calculate.PlanetRasiSign(navamsa7thLord, person.BirthTime).GetSignName();
 
                 //3.0 Get sign of house 7
-                var house7Sign = Calculate.GetHouseSignName(HouseName.House7, time);
+                var house7Sign = Calculate.HouseSignName(HouseName.House7, time);
 
                 //check if house 7 sign is same sign as the one navamsa 7th lord is in
                 if (house7Sign == ordinarySignOfNavamsa7thLord)
@@ -1373,14 +1373,14 @@ namespace VedAstro.Library
             {
                 //1.0 Get
                 //get lord of house 1 (lagna)
-                var lagnaLord = Calculate.GetLordOfHouse(HouseName.House1, time);
+                var lagnaLord = Calculate.LordOfHouse(HouseName.House1, time);
 
                 //get navamsa sign of lagna lord
-                var navamsaSignOfLagnaLord = Calculate.GetPlanetNavamsaSign(lagnaLord, time);
+                var navamsaSignOfLagnaLord = Calculate.PlanetNavamsaSign(lagnaLord, time);
 
                 //2.0 get navamsa lagna sign
                 //get navamsa lagna at house 1 longitude
-                var navamsaLagnaSign = Calculate.GetHouseNavamsaSign(HouseName.House1, time);
+                var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
 
                 //3.0 check if lagna lord in navamsa lagna sign
                 if (navamsaSignOfLagnaLord == navamsaLagnaSign)
@@ -1399,13 +1399,13 @@ namespace VedAstro.Library
             {
                 //1.0 Get
                 //get lord of house 7
-                var _7thLord = Calculate.GetLordOfHouse(HouseName.House7, time);
+                var _7thLord = Calculate.LordOfHouse(HouseName.House7, time);
 
                 //get navamsa sign of 7th lord
-                var navamsaSignOf7thLord = Calculate.GetPlanetNavamsaSign(_7thLord, time);
+                var navamsaSignOf7thLord = Calculate.PlanetNavamsaSign(_7thLord, time);
 
                 //2.0 get navamsa 7th sign
-                var navamsa7thSign = Calculate.GetHouseNavamsaSign(HouseName.House7, time);
+                var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
 
                 //3.0 check if 7th lord in navamsa 7th sign
                 if (navamsaSignOf7thLord == navamsa7thSign)
@@ -1425,14 +1425,14 @@ namespace VedAstro.Library
 
                 //1.0 get navamsa lagna sign
                 //get navamsa lagna at house 1 longitude
-                var navamsaLagnaSign = Calculate.GetHouseNavamsaSign(HouseName.House1, time);
+                var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
 
                 //2.0 Get navamsa lagna lord's current sign
                 //get navamsa lagna lord (planet)
                 var navamsaLagnaLord = Calculate.GetLordOfZodiacSign(navamsaLagnaSign);
 
                 //get navamsa sign of navamsa lagna lord
-                var navamsaSignOfNavamsaLagnaLord = Calculate.GetPlanetNavamsaSign(navamsaLagnaLord, time);
+                var navamsaSignOfNavamsaLagnaLord = Calculate.PlanetNavamsaSign(navamsaLagnaLord, time);
 
                 //3.0
                 //check if lagna lord is in navamsa lagna sign
@@ -1451,14 +1451,14 @@ namespace VedAstro.Library
             {
 
                 //1.0 get 7th house navamsa sign
-                var navamsa7thSign = Calculate.GetHouseNavamsaSign(HouseName.House7, time);
+                var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
 
                 //2.0 Get navamsa 7th lord's current sign
                 //get navamsa 7th lord (planet)
                 var navamsa7thLord = Calculate.GetLordOfZodiacSign(navamsa7thSign);
 
                 //get navamsa sign of navamsa 7th lord
-                var navamsaSignOfNavamsa7thLord = Calculate.GetPlanetNavamsaSign(navamsa7thLord, time);
+                var navamsaSignOfNavamsa7thLord = Calculate.PlanetNavamsaSign(navamsa7thLord, time);
 
                 //3.0
                 //check if 7th lord is in navamsa 7th sign
@@ -1661,7 +1661,7 @@ namespace VedAstro.Library
                 //make sure each is in 3, 6 or 11th house
                 foreach (var malefic in allMalefics)
                 {
-                    var planetHouse = Calculate.GetHousePlanetIsIn(time, malefic);
+                    var planetHouse = Calculate.HousePlanetIsIn(time, malefic);
 
                     //if not in 3, 6 or 11, end here as not occuring
                     if (!(planetHouse == HouseName.House3 || planetHouse == HouseName.House6 || planetHouse == HouseName.House11)) { return false; }
@@ -1782,7 +1782,7 @@ namespace VedAstro.Library
                 //get weekday
                 var dayOfWeek = Calculate.GetDayOfWeek(time);
                 //get lunar day
-                var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+                var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
                 //get ruling constellation
                 var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
@@ -1821,7 +1821,7 @@ namespace VedAstro.Library
                 //get weekday
                 var dayOfWeek = Calculate.GetDayOfWeek(time);
                 //get lunar day
-                var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+                var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
                 //get ruling constellation
                 var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
@@ -1861,7 +1861,7 @@ namespace VedAstro.Library
                 //get weekday
                 var dayOfWeek = Calculate.GetDayOfWeek(time);
                 //get lunar day
-                var lunarDayGroup = Calculate.GetLunarDay(time).GetLunarDayGroup();
+                var lunarDayGroup = Calculate.LunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
                 var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
@@ -1904,7 +1904,7 @@ namespace VedAstro.Library
                 //get weekday
                 var dayOfWeek = Calculate.GetDayOfWeek(time);
                 //get lunar day
-                var lunarDayGroup = Calculate.GetLunarDay(time).GetLunarDayGroup();
+                var lunarDayGroup = Calculate.LunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
                 var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
@@ -1948,9 +1948,9 @@ namespace VedAstro.Library
                 //get weekday
                 var dayOfWeek = Calculate.GetDayOfWeek(time);
                 //get lunar day
-                var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+                var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
                 //get lunar day
-                var lunarDayGroup = Calculate.GetLunarDay(time).GetLunarDayGroup();
+                var lunarDayGroup = Calculate.LunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
                 var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
@@ -2000,7 +2000,7 @@ namespace VedAstro.Library
                 //get weekday
                 var dayOfWeek = Calculate.GetDayOfWeek(time);
                 //get lunar day group
-                var lunarDayGroup = Calculate.GetLunarDay(time).GetLunarDayGroup();
+                var lunarDayGroup = Calculate.LunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
                 var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
@@ -2046,7 +2046,7 @@ namespace VedAstro.Library
                 //get weekday
                 var dayOfWeek = Calculate.GetDayOfWeek(time);
                 //get lunar day
-                var lunarDayGroup = Calculate.GetLunarDay(time).GetLunarDayGroup();
+                var lunarDayGroup = Calculate.LunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
                 var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
@@ -2179,7 +2179,7 @@ namespace VedAstro.Library
             // and new moon days should be avoided.
 
             //get lunar day
-            var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+            var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
 
             if (lunarDayNumber == 4 || lunarDayNumber == 6
                 || lunarDayNumber == 8 || lunarDayNumber == 12
@@ -2306,7 +2306,7 @@ namespace VedAstro.Library
             const double hoursToReject = 6.4;
 
             //get time sun entered into current sign
-            var timeSunEnteredCurrentSign = Calculate.GetTimeSunEnteredCurrentSign(time);
+            var timeSunEnteredCurrentSign = Calculate.TimeSunEnteredCurrentSign(time);
 
             //get hours after entry into sign
             var hoursAfterEntryIntoSign = time.Subtract(timeSunEnteredCurrentSign).TotalHours;
@@ -2413,7 +2413,7 @@ namespace VedAstro.Library
             //   and Full Moon days are not desirable
 
             //get lunar day
-            var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+            var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
 
             //lunar days to avoid
             var avoidLunarDay = lunarDayNumber == 4 ||
@@ -2452,7 +2452,7 @@ namespace VedAstro.Library
             //days as well as New and Full Moon days.
 
             //get lunar day
-            var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+            var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
 
             //lunar days to avoid
             var avoidLunarDay = lunarDayNumber == 8 ||
@@ -2864,7 +2864,7 @@ namespace VedAstro.Library
 
                 //2. Correct rising sign
                 //get rising sign
-                var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+                var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
                 //check rising sign
                 var rightSign = risingSign == ZodiacName.Sagittarius ||
@@ -2976,7 +2976,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Taurus ||
@@ -3006,7 +3006,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Virgo;
@@ -3032,7 +3032,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Aries;
@@ -3058,7 +3058,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Taurus;
@@ -3084,7 +3084,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Cancer;
@@ -3110,7 +3110,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Libra;
@@ -3136,7 +3136,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Scorpio;
@@ -3162,7 +3162,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Sagittarius;
@@ -3188,7 +3188,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Capricornus;
@@ -3214,7 +3214,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Aquarius;
@@ -3240,7 +3240,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Pisces;
@@ -3319,7 +3319,7 @@ namespace VedAstro.Library
             //Lagna owned by the planet who is lord of the weekday in question
 
             //get lord of lagna
-            var lagnaLord = Calculate.GetLordOfHouse(HouseName.House1, time);
+            var lagnaLord = Calculate.LordOfHouse(HouseName.House1, time);
 
             //get lord of weekday
             var weekdayLord = Calculate.LordOfWeekday(time);
@@ -3345,7 +3345,7 @@ namespace VedAstro.Library
 
 
             //get lunar day
-            var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+            var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
 
             //right lunar days to look for
             var rightLunarDay = lunarDayNumber == 1 ||
@@ -3373,7 +3373,7 @@ namespace VedAstro.Library
             //Leo: Not good for any planting, especially bad for underground plants such as potato.
 
             //get rising sign
-            var risingSign = Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //if rising sign is Gemini or Leo, then event is occuring
             if (risingSign == ZodiacName.Gemini || risingSign == ZodiacName.Leo)
@@ -3425,7 +3425,7 @@ namespace VedAstro.Library
             //2. The Moon's situation in Taurus. Cancer or Pisces would greatly help the seller.
 
             //get sign moon is in 
-            var moonSign = Calculate.GetPlanetRasiSign(PlanetName.Moon, time);
+            var moonSign = Calculate.PlanetRasiSign(PlanetName.Moon, time);
 
             //check if moon is in the correct sign
             var inCorrectSign = moonSign.GetSignName() == ZodiacName.Taurus ||
@@ -3500,7 +3500,7 @@ namespace VedAstro.Library
             //2. The Moon's situation in Taurus. Cancer or Pisces would greatly help the seller.
 
             //get sign moon is in 
-            var moonSign = Calculate.GetPlanetRasiSign(PlanetName.Moon, time);
+            var moonSign = Calculate.PlanetRasiSign(PlanetName.Moon, time);
 
             //check if moon is in the correct sign
             var inCorrectSign = moonSign.GetSignName() == ZodiacName.Taurus ||
@@ -3547,7 +3547,7 @@ namespace VedAstro.Library
 
             //2. avoid the 8th and 9th lunar days and New Moon.
             //get lunar day
-            var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+            var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
 
             //right lunar days to look for
             var rightLunarDay = lunarDayNumber == 8 ||
@@ -4093,7 +4093,7 @@ namespace VedAstro.Library
             //even numbers : 2, 6, 10,
 
             //get lunar day
-            var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+            var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
 
             //right lunar days to look for
             var rightLunarDay = lunarDayNumber == 1 ||
@@ -4148,7 +4148,7 @@ namespace VedAstro.Library
             //Waning moon is bad
 
             //get the moon phase
-            var moonPhase = Calculate.GetLunarDay(time).GetMoonPhase();
+            var moonPhase = Calculate.LunarDay(time).GetMoonPhase();
 
             //occuring when moon is wanning
             var occuring = moonPhase == MoonPhase.DarkHalf;
@@ -4208,13 +4208,13 @@ namespace VedAstro.Library
 
             //friday & lagna is taurus or libra
             var isFriday = Calculate.GetDayOfWeek(time) == DayOfWeek.Friday;
-            var lagnaIsTaurus = Calculate.GetHouseSignName(HouseName.House1, time) == ZodiacName.Taurus;
-            var lagnaIsLibra = Calculate.GetHouseSignName(HouseName.House1, time) == ZodiacName.Libra;
+            var lagnaIsTaurus = Calculate.HouseSignName(HouseName.House1, time) == ZodiacName.Taurus;
+            var lagnaIsLibra = Calculate.HouseSignName(HouseName.House1, time) == ZodiacName.Libra;
             var isFridayLagnaTaurusLibra = isFriday && (lagnaIsLibra || lagnaIsTaurus);
 
             //monday & lagna is cancer
             var isMonday = Calculate.GetDayOfWeek(time) == DayOfWeek.Monday;
-            var lagnaIsCancer = Calculate.GetHouseSignName(HouseName.House1, time) == ZodiacName.Cancer;
+            var lagnaIsCancer = Calculate.HouseSignName(HouseName.House1, time) == ZodiacName.Cancer;
             var isMondayLagnaCancer = isMonday && lagnaIsCancer;
 
             //if either is true

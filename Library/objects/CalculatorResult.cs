@@ -173,7 +173,7 @@ namespace VedAstro.Library
             var newCalcResult = new CalculatorResult();
             newCalcResult.Occuring = occuring;
             newCalcResult.RelatedBody.RelatedHouses.Add(houseNumber);
-            var lord = Calculate.GetLordOfHouse(houseNumber, time);
+            var lord = Calculate.LordOfHouse(houseNumber, time);
             newCalcResult.RelatedBody.RelatedPlanets.Add(lord);
             return newCalcResult;
         }

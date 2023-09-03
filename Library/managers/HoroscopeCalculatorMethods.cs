@@ -931,8 +931,8 @@ namespace VedAstro.Library
 
 
             //if 2nd lord not in second, end here
-            var lord = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lordPlace = Calculate.GetHousePlanetIsIn(time, lord);
+            var lord = Calculate.LordOfHouse(HouseName.House2, time);
+            var lordPlace = Calculate.HousePlanetIsIn(time, lord);
             if (lordPlace != HouseName.House2) { return CalculatorResult.NotOccuring(); }
 
             //evil planet in house 2, prediction occuring
@@ -953,7 +953,7 @@ namespace VedAstro.Library
             //Ordinary wealth is indicated if Saturn is in the 2nd aspected by Venus.
 
             //if saturn not in 2nd end here
-            var saturnHouse = Calculate.GetHousePlanetIsIn(time, PlanetName.Saturn);
+            var saturnHouse = Calculate.HousePlanetIsIn(time, PlanetName.Saturn);
             var saturnIn2 = saturnHouse == HouseName.House2;
             if (!saturnIn2) { return CalculatorResult.NotOccuring(); }
 
@@ -971,8 +971,8 @@ namespace VedAstro.Library
             //he suffers from a peculiar skin disease.
 
             //moon and mars in 2nd
-            var moonIn2 = Calculate.GetHousePlanetIsIn(time, PlanetName.Moon) == HouseName.House2;
-            var marsIn2 = Calculate.GetHousePlanetIsIn(time, PlanetName.Mars) == HouseName.House2;
+            var moonIn2 = Calculate.HousePlanetIsIn(time, PlanetName.Moon) == HouseName.House2;
+            var marsIn2 = Calculate.HousePlanetIsIn(time, PlanetName.Mars) == HouseName.House2;
 
             //saturn aspects 2nd House
             var saturnAspects2nd =
@@ -991,7 +991,7 @@ namespace VedAstro.Library
             //Even if there is any ancestral wealth, it will be spent—rather wasted on extravagant purposes.
 
             //is mercury in 2nd house
-            var mercuryIn2 = Calculate.GetHousePlanetIsIn(time, PlanetName.Mercury) == HouseName.House2;
+            var mercuryIn2 = Calculate.HousePlanetIsIn(time, PlanetName.Mercury) == HouseName.House2;
 
             //evil planet in 2nd house
             var evilPlanetIn2 = Calculate.IsMaleficPlanetInHouse(HouseName.House2, time);
@@ -1012,7 +1012,7 @@ namespace VedAstro.Library
             //The Sun in the 2nd without being aspected by Saturn is favourable for a steady fortune.
 
             //sun in 2nd
-            var sunIn2 = Calculate.GetHousePlanetIsIn(time, PlanetName.Sun) == HouseName.House2;
+            var sunIn2 = Calculate.HousePlanetIsIn(time, PlanetName.Sun) == HouseName.House2;
 
             //saturn aspects 2nd House
             var saturnNotAspects2nd = !Calculate.IsHouseAspectedByPlanet(HouseName.House2, PlanetName.Saturn, time);
@@ -1029,7 +1029,7 @@ namespace VedAstro.Library
             //The Moon being placed in the 2nd and aspected by Mercury is favourable for earning money by self-exertion.
 
             //moon in 2nd
-            var moonIn2 = Calculate.GetHousePlanetIsIn(time, PlanetName.Moon) == HouseName.House2;
+            var moonIn2 = Calculate.HousePlanetIsIn(time, PlanetName.Moon) == HouseName.House2;
 
             //mercury aspects 2nd House
             var mercuryAspects2nd =
@@ -1047,12 +1047,12 @@ namespace VedAstro.Library
             //He will be poor if lords of the 2nd and 3rd are in the 6th with or aspected by evil planets.
 
             //lord 2 in 6th
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In6 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House6;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In6 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House6;
 
             //lord 3 in 6th
-            var lord3 = Calculate.GetLordOfHouse(HouseName.House3, time);
-            var lord3In6 = Calculate.GetHousePlanetIsIn(time, lord3) == HouseName.House6;
+            var lord3 = Calculate.LordOfHouse(HouseName.House3, time);
+            var lord3In6 = Calculate.HousePlanetIsIn(time, lord3) == HouseName.House6;
 
             //evil planets in 6th house OR aspecting the 6th
             var evilPlanetIn6 = Calculate.IsMaleficPlanetInHouse(HouseName.House6, time);
@@ -1071,8 +1071,8 @@ namespace VedAstro.Library
             //If the second lord is in the first — One earns money by his own exertions and generally by manual labour.
 
             //lord 2 in house 1
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In1 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House1;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In1 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House1;
 
             //check if all conditions met
             var occuring = lord2In1;
@@ -1089,12 +1089,12 @@ namespace VedAstro.Library
             //      Further checking needed.
 
             //lord 1 in house 2
-            var lord1 = Calculate.GetLordOfHouse(HouseName.House1, time);
-            var lord1In2 = Calculate.GetHousePlanetIsIn(time, lord1) == HouseName.House2;
+            var lord1 = Calculate.LordOfHouse(HouseName.House1, time);
+            var lord1In2 = Calculate.HousePlanetIsIn(time, lord1) == HouseName.House2;
 
             //lord 2 in house 1
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In1 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House1;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In1 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House1;
 
             //check if all conditions met
             var occuring = lord2In1 && lord1In2;
@@ -1108,8 +1108,8 @@ namespace VedAstro.Library
             //In the third — Loss from relatives, brothers and gain from travels and journeys.
 
             //lord 2 in house 3
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In3 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House3;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In3 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House3;
 
             //check if all conditions met
             var occuring = lord2In3;
@@ -1123,8 +1123,8 @@ namespace VedAstro.Library
             //In the fourth - Through mother, inheritance.
 
             //lord 2 in house 4
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In4 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House4;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In4 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House4;
 
             //check if all conditions met
             var occuring = lord2In4;
@@ -1138,8 +1138,8 @@ namespace VedAstro.Library
             //In the fifth — Ancestral properties, speculation and chance games.
 
             //lord 2 in house 5
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In5 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House5;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In5 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House5;
 
             //check if all conditions met
             var occuring = lord2In5;
@@ -1153,8 +1153,8 @@ namespace VedAstro.Library
             //In the sixth — Broker's business, loss from relatives.
 
             //lord 2 in house 6
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In6 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House6;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In6 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House6;
 
             //check if all conditions met
             var occuring = lord2In6;
@@ -1168,8 +1168,8 @@ namespace VedAstro.Library
             //In the seventh — Gain after marriage but loss from sickness, etc., of wife.
 
             //lord 2 in house 7
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In7 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House7;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In7 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House7;
 
             //check if all conditions met
             var occuring = lord2In7;
@@ -1183,8 +1183,8 @@ namespace VedAstro.Library
             //In the eighth — Legacies and enemies (source of income).
 
             //lord 2 in house 8
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In8 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House8;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In8 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House8;
 
             //check if all conditions met
             var occuring = lord2In8;
@@ -1198,8 +1198,8 @@ namespace VedAstro.Library
             //In the ninth — From father, voyages and shipping.
 
             //lord 2 in house 9
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In9 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House9;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In9 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House9;
 
             //check if all conditions met
             var occuring = lord2In9;
@@ -1214,8 +1214,8 @@ namespace VedAstro.Library
             //In the tenth — Profession, eminent people, government favours.
 
             //lord 2 in house 10
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In10 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House10;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In10 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House10;
 
             //check if all conditions met
             var occuring = lord2In10;
@@ -1229,8 +1229,8 @@ namespace VedAstro.Library
             //In the eleventh — From different means.
 
             //lord 2 in house 11
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In11 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House11;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In11 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House11;
 
             //check if all conditions met
             var occuring = lord2In11;
@@ -1244,8 +1244,8 @@ namespace VedAstro.Library
             //In the twelfth — Gain from servants and unscrupulous means including illegal gratifications.
 
             //lord 2 in house 12
-            var lord2 = Calculate.GetLordOfHouse(HouseName.House2, time);
-            var lord2In12 = Calculate.GetHousePlanetIsIn(time, lord2) == HouseName.House12;
+            var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
+            var lord2In12 = Calculate.HousePlanetIsIn(time, lord2) == HouseName.House12;
 
             //check if all conditions met
             var occuring = lord2In12;
@@ -1268,7 +1268,7 @@ namespace VedAstro.Library
             var arudhaLagna = Calculate.ArudhaLagnaSign(time);
 
             //get 11th sign from Arudha lagna
-            var sign11fromArudha = Calculate.GetSignCountedFromInputSign(arudhaLagna, 11);
+            var sign11fromArudha = Calculate.SignCountedFromInputSign(arudhaLagna, 11);
 
             //see if malefic planets are in that sign
             var maleficFound = Calculate.IsMaleficPlanetInSign(sign11fromArudha, time);
@@ -1295,7 +1295,7 @@ namespace VedAstro.Library
             var arudhaLagna = Calculate.ArudhaLagnaSign(time);
 
             //get 11th sign from Arudha lagna
-            var sign11fromArudha = Calculate.GetSignCountedFromInputSign(arudhaLagna, 11);
+            var sign11fromArudha = Calculate.SignCountedFromInputSign(arudhaLagna, 11);
 
             //see if benefic planets are in that sign
             var beneficFound = Calculate.IsBeneficPlanetInSign(sign11fromArudha, time);
@@ -1575,10 +1575,10 @@ namespace VedAstro.Library
             // husband will be subservient to the wife carrying out all her orders.
 
             //lagna is leo
-            var leoIsLagna = Calculate.GetHouseSignName(HouseName.House1, time) == ZodiacName.Leo;
+            var leoIsLagna = Calculate.HouseSignName(HouseName.House1, time) == ZodiacName.Leo;
 
             //is 7th lord saturn
-            var isLord7thSaturn = Calculate.GetLordOfHouse(HouseName.House7, time) ==
+            var isLord7thSaturn = Calculate.LordOfHouse(HouseName.House7, time) ==
                                   PlanetName.Saturn;
 
             //is saturn in 2nd
@@ -1603,11 +1603,11 @@ namespace VedAstro.Library
 
             //saturn is not lord of lagna
             var saturnNotLagnaLord =
-                Calculate.GetLordOfHouse(HouseName.House1, time) != PlanetName.Saturn;
+                Calculate.LordOfHouse(HouseName.House1, time) != PlanetName.Saturn;
 
             //saturn is not lord of 7th
             var saturnNot7thLord =
-                Calculate.GetLordOfHouse(HouseName.House7, time) != PlanetName.Saturn;
+                Calculate.LordOfHouse(HouseName.House7, time) != PlanetName.Saturn;
 
 
             //occuring conditions met
@@ -1678,11 +1678,11 @@ namespace VedAstro.Library
 
 
             //get lord of 7th and 1st house
-            var lord7 = Calculate.GetLordOfHouse(HouseName.House7, time);
-            var lord1 = Calculate.GetLordOfHouse(HouseName.House1, time);
+            var lord7 = Calculate.LordOfHouse(HouseName.House7, time);
+            var lord1 = Calculate.LordOfHouse(HouseName.House1, time);
 
             //get the relationship
-            var lord7And1Relationship = Calculate.GetPlanetCombinedRelationshipWithPlanet(lord7, lord1, time);
+            var lord7And1Relationship = Calculate.PlanetCombinedRelationshipWithPlanet(lord7, lord1, time);
 
             //occuring only if best friends or normal friends nothing else
             var occuring = (lord7And1Relationship == PlanetToPlanetRelationship.BestFriend) ||
@@ -1702,11 +1702,11 @@ namespace VedAstro.Library
 
 
             //get lord of 7th and 1st house
-            var lord7 = Calculate.GetLordOfHouse(HouseName.House7, time);
-            var lord1 = Calculate.GetLordOfHouse(HouseName.House1, time);
+            var lord7 = Calculate.LordOfHouse(HouseName.House7, time);
+            var lord1 = Calculate.LordOfHouse(HouseName.House1, time);
 
             //get the relationship
-            var lord7And1Relationship = Calculate.GetPlanetCombinedRelationshipWithPlanet(lord7, lord1, time);
+            var lord7And1Relationship = Calculate.PlanetCombinedRelationshipWithPlanet(lord7, lord1, time);
 
             //occuring only if bitter enemies or normal enemies nothing else
             var occuring = (lord7And1Relationship == PlanetToPlanetRelationship.BitterEnemy) ||
@@ -1754,7 +1754,7 @@ namespace VedAstro.Library
         public static CalculatorResult GeminiRisingWithEvilPlanet(Time time)
         {
             //1.gemini rising 
-            var geminiRising = Calculate.GetHouseSignName(HouseName.House1, time) == ZodiacName.Gemini;
+            var geminiRising = Calculate.HouseSignName(HouseName.House1, time) == ZodiacName.Gemini;
 
             //2.find evil planets in gemini
             //get planets in sign
@@ -1778,7 +1778,7 @@ namespace VedAstro.Library
             //Mental affliction and derangement are also likely since Saturn and the Moon are in Aries.
 
             //1.aries rising 
-            var ariesRising = Calculate.GetHouseSignName(HouseName.House1, time) == ZodiacName.Aries;
+            var ariesRising = Calculate.HouseSignName(HouseName.House1, time) == ZodiacName.Aries;
 
             //2.find if Saturn and the Moon are in Aries.
             //get planets in sign

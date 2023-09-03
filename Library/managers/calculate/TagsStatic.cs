@@ -76,23 +76,23 @@ namespace VedAstro.Library
         {
             switch (lordOfHouse.Name)
             {
-                case PlanetName.PlanetNameEnum.Sun:
+                case Library.PlanetName.PlanetNameEnum.Sun:
                     return "Father, masculine, malefic, copper colour, philosophical tendency, royal, ego, sons, patrimony, self reliance, political power, windy and bilious temperament, month, places of worship, money-lenders, goldsmith, bones, fires, coronation chambers, doctoring capacity";
-                case PlanetName.PlanetNameEnum.Moon:
+                case Library.PlanetName.PlanetNameEnum.Moon:
                     return "Mother, feminine, mind, benefic when waxing, malefic when waning, white colour, women, sea-men, pearls, gems, water, fishermen, stubbornness, romances, bath-rooms, blood, popularity, human responsibilities";
-                case PlanetName.PlanetNameEnum.Mars:
+                case Library.PlanetName.PlanetNameEnum.Mars:
                     return "Brothers, masculine, blood-red colour, malefic, refined taste, base metals, vegetation, rotten things, orators, ambassadors, military activities, commerce, aerial journeys, weaving, public speakers.";
-                case PlanetName.PlanetNameEnum.Mercury:
+                case Library.PlanetName.PlanetNameEnum.Mercury:
                     return "Profession, benefic if well associated, hermaphrodite, green colour, mercantile activity, public speakers, cold nervous, intelligence";
-                case PlanetName.PlanetNameEnum.Jupiter:
+                case Library.PlanetName.PlanetNameEnum.Jupiter:
                     return "Children, masculine, benefic, bright yellow colour, devotion, truthfulness, religious fervour, philosophical wisdom, corpulence";
-                case PlanetName.PlanetNameEnum.Venus:
+                case Library.PlanetName.PlanetNameEnum.Venus:
                     return "Wife, feminine, benefic, mixture of all colours, love affairs, sensual pleasure, family bliss, harems of ill-fame, vitality";
-                case PlanetName.PlanetNameEnum.Saturn:
+                case Library.PlanetName.PlanetNameEnum.Saturn:
                     return "Longevity, malefic, hermaphrodite, dark colour, stubbornness, impetuosity, demoralisation, windy diseases, despondency, gambling";
-                case PlanetName.PlanetNameEnum.Rahu:
+                case Library.PlanetName.PlanetNameEnum.Rahu:
                     return "Maternal relations, malefic, feminine, renunciation, corruption, epidemics";
-                case PlanetName.PlanetNameEnum.Ketu:
+                case Library.PlanetName.PlanetNameEnum.Ketu:
                     return "Paternal relations, Hermaphrodite, malefic, religious, sectarian principles, pride, selfishness, occultism, mendicancy";
                 default:
                     throw new ArgumentOutOfRangeException();

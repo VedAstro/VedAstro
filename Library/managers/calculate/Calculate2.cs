@@ -106,7 +106,7 @@ namespace VedAstro.Library
                 var planetSayanaLongitude = new Angle(degrees: results[0]);
 
                 //if ketu add 180 to rahu
-                if (planetName == PlanetName.Ketu)
+                if (planetName == Library.PlanetName.Ketu)
                 {
                     var x = planetSayanaLongitude + Angle.Degrees180;
                     planetSayanaLongitude = x.Expunge360();
@@ -147,37 +147,37 @@ namespace VedAstro.Library
 
 
                 //Convert PlanetName to SE_PLANET type
-                if (planetName == PlanetName.Sun)
+                if (planetName == Library.PlanetName.Sun)
                     planet = SwissEph.SE_SUN;
-                else if (planetName == PlanetName.Moon)
+                else if (planetName == Library.PlanetName.Moon)
                 {
                     planet = SwissEph.SE_MOON;
                 }
-                else if (planetName == PlanetName.Mars)
+                else if (planetName == Library.PlanetName.Mars)
                 {
                     planet = SwissEph.SE_MARS;
                 }
-                else if (planetName == PlanetName.Mercury)
+                else if (planetName == Library.PlanetName.Mercury)
                 {
                     planet = SwissEph.SE_MERCURY;
                 }
-                else if (planetName == PlanetName.Jupiter)
+                else if (planetName == Library.PlanetName.Jupiter)
                 {
                     planet = SwissEph.SE_JUPITER;
                 }
-                else if (planetName == PlanetName.Venus)
+                else if (planetName == Library.PlanetName.Venus)
                 {
                     planet = SwissEph.SE_VENUS;
                 }
-                else if (planetName == PlanetName.Saturn)
+                else if (planetName == Library.PlanetName.Saturn)
                 {
                     planet = SwissEph.SE_SATURN;
                 }
-                else if (planetName == PlanetName.Rahu)
+                else if (planetName == Library.PlanetName.Rahu)
                 {
                     planet = SwissEph.SE_MEAN_NODE;
                 }
-                else if (planetName == PlanetName.Ketu)
+                else if (planetName == Library.PlanetName.Ketu)
                 {
                     planet = SwissEph.SE_MEAN_NODE;
                 }
@@ -211,37 +211,37 @@ namespace VedAstro.Library
 
 
             //Convert PlanetName to SE_PLANET type
-            if (planetName == PlanetName.Sun)
+            if (planetName == Library.PlanetName.Sun)
                 planet = SwissEph.SE_SUN;
-            else if (planetName == PlanetName.Moon)
+            else if (planetName == Library.PlanetName.Moon)
             {
                 planet = SwissEph.SE_MOON;
             }
-            else if (planetName == PlanetName.Mars)
+            else if (planetName == Library.PlanetName.Mars)
             {
                 planet = SwissEph.SE_MARS;
             }
-            else if (planetName == PlanetName.Mercury)
+            else if (planetName == Library.PlanetName.Mercury)
             {
                 planet = SwissEph.SE_MERCURY;
             }
-            else if (planetName == PlanetName.Jupiter)
+            else if (planetName == Library.PlanetName.Jupiter)
             {
                 planet = SwissEph.SE_JUPITER;
             }
-            else if (planetName == PlanetName.Venus)
+            else if (planetName == Library.PlanetName.Venus)
             {
                 planet = SwissEph.SE_VENUS;
             }
-            else if (planetName == PlanetName.Saturn)
+            else if (planetName == Library.PlanetName.Saturn)
             {
                 planet = SwissEph.SE_SATURN;
             }
-            else if (planetName == PlanetName.Rahu)
+            else if (planetName == Library.PlanetName.Rahu)
             {
                 planet = SwissEph.SE_MEAN_NODE;
             }
-            else if (planetName == PlanetName.Ketu)
+            else if (planetName == Library.PlanetName.Ketu)
             {
                 planet = SwissEph.SE_MEAN_NODE;
             }
@@ -447,204 +447,204 @@ namespace VedAstro.Library
                 case DayOfWeek.Sunday:
                     switch (hora)
                     {
-                        case 1: return PlanetName.Sun;
-                        case 2: return PlanetName.Venus;
-                        case 3: return PlanetName.Mercury;
-                        case 4: return PlanetName.Moon;
-                        case 5: return PlanetName.Saturn;
-                        case 6: return PlanetName.Jupiter;
-                        case 7: return PlanetName.Mars;
-                        case 8: return PlanetName.Sun;
-                        case 9: return PlanetName.Venus;
-                        case 10: return PlanetName.Mercury;
-                        case 11: return PlanetName.Moon;
-                        case 12: return PlanetName.Saturn;
-                        case 13: return PlanetName.Jupiter;
-                        case 14: return PlanetName.Mars;
-                        case 15: return PlanetName.Sun;
-                        case 16: return PlanetName.Venus;
-                        case 17: return PlanetName.Mercury;
-                        case 18: return PlanetName.Moon;
-                        case 19: return PlanetName.Saturn;
-                        case 20: return PlanetName.Jupiter;
-                        case 21: return PlanetName.Mars;
-                        case 22: return PlanetName.Sun;
-                        case 23: return PlanetName.Venus;
-                        case 24: return PlanetName.Mercury;
+                        case 1: return Library.PlanetName.Sun;
+                        case 2: return Library.PlanetName.Venus;
+                        case 3: return Library.PlanetName.Mercury;
+                        case 4: return Library.PlanetName.Moon;
+                        case 5: return Library.PlanetName.Saturn;
+                        case 6: return Library.PlanetName.Jupiter;
+                        case 7: return Library.PlanetName.Mars;
+                        case 8: return Library.PlanetName.Sun;
+                        case 9: return Library.PlanetName.Venus;
+                        case 10: return Library.PlanetName.Mercury;
+                        case 11: return Library.PlanetName.Moon;
+                        case 12: return Library.PlanetName.Saturn;
+                        case 13: return Library.PlanetName.Jupiter;
+                        case 14: return Library.PlanetName.Mars;
+                        case 15: return Library.PlanetName.Sun;
+                        case 16: return Library.PlanetName.Venus;
+                        case 17: return Library.PlanetName.Mercury;
+                        case 18: return Library.PlanetName.Moon;
+                        case 19: return Library.PlanetName.Saturn;
+                        case 20: return Library.PlanetName.Jupiter;
+                        case 21: return Library.PlanetName.Mars;
+                        case 22: return Library.PlanetName.Sun;
+                        case 23: return Library.PlanetName.Venus;
+                        case 24: return Library.PlanetName.Mercury;
                     }
                     break;
                 case DayOfWeek.Monday:
                     switch (hora)
                     {
-                        case 1: return PlanetName.Moon;
-                        case 2: return PlanetName.Saturn;
-                        case 3: return PlanetName.Jupiter;
-                        case 4: return PlanetName.Mars;
-                        case 5: return PlanetName.Sun;
-                        case 6: return PlanetName.Venus;
-                        case 7: return PlanetName.Mercury;
-                        case 8: return PlanetName.Moon;
-                        case 9: return PlanetName.Saturn;
-                        case 10: return PlanetName.Jupiter;
-                        case 11: return PlanetName.Mars;
-                        case 12: return PlanetName.Sun;
-                        case 13: return PlanetName.Venus;
-                        case 14: return PlanetName.Mercury;
-                        case 15: return PlanetName.Moon;
-                        case 16: return PlanetName.Saturn;
-                        case 17: return PlanetName.Jupiter;
-                        case 18: return PlanetName.Mars;
-                        case 19: return PlanetName.Sun;
-                        case 20: return PlanetName.Venus;
-                        case 21: return PlanetName.Mercury;
-                        case 22: return PlanetName.Moon;
-                        case 23: return PlanetName.Saturn;
-                        case 24: return PlanetName.Jupiter;
+                        case 1: return Library.PlanetName.Moon;
+                        case 2: return Library.PlanetName.Saturn;
+                        case 3: return Library.PlanetName.Jupiter;
+                        case 4: return Library.PlanetName.Mars;
+                        case 5: return Library.PlanetName.Sun;
+                        case 6: return Library.PlanetName.Venus;
+                        case 7: return Library.PlanetName.Mercury;
+                        case 8: return Library.PlanetName.Moon;
+                        case 9: return Library.PlanetName.Saturn;
+                        case 10: return Library.PlanetName.Jupiter;
+                        case 11: return Library.PlanetName.Mars;
+                        case 12: return Library.PlanetName.Sun;
+                        case 13: return Library.PlanetName.Venus;
+                        case 14: return Library.PlanetName.Mercury;
+                        case 15: return Library.PlanetName.Moon;
+                        case 16: return Library.PlanetName.Saturn;
+                        case 17: return Library.PlanetName.Jupiter;
+                        case 18: return Library.PlanetName.Mars;
+                        case 19: return Library.PlanetName.Sun;
+                        case 20: return Library.PlanetName.Venus;
+                        case 21: return Library.PlanetName.Mercury;
+                        case 22: return Library.PlanetName.Moon;
+                        case 23: return Library.PlanetName.Saturn;
+                        case 24: return Library.PlanetName.Jupiter;
                     }
                     break;
                 case DayOfWeek.Tuesday:
                     switch (hora)
                     {
-                        case 1: return PlanetName.Mars;
-                        case 2: return PlanetName.Sun;
-                        case 3: return PlanetName.Venus;
-                        case 4: return PlanetName.Mercury;
-                        case 5: return PlanetName.Moon;
-                        case 6: return PlanetName.Saturn;
-                        case 7: return PlanetName.Jupiter;
-                        case 8: return PlanetName.Mars;
-                        case 9: return PlanetName.Sun;
-                        case 10: return PlanetName.Venus;
-                        case 11: return PlanetName.Mercury;
-                        case 12: return PlanetName.Moon;
-                        case 13: return PlanetName.Saturn;
-                        case 14: return PlanetName.Jupiter;
-                        case 15: return PlanetName.Mars;
-                        case 16: return PlanetName.Sun;
-                        case 17: return PlanetName.Venus;
-                        case 18: return PlanetName.Mercury;
-                        case 19: return PlanetName.Moon;
-                        case 20: return PlanetName.Saturn;
-                        case 21: return PlanetName.Jupiter;
-                        case 22: return PlanetName.Mars;
-                        case 23: return PlanetName.Sun;
-                        case 24: return PlanetName.Venus;
+                        case 1: return Library.PlanetName.Mars;
+                        case 2: return Library.PlanetName.Sun;
+                        case 3: return Library.PlanetName.Venus;
+                        case 4: return Library.PlanetName.Mercury;
+                        case 5: return Library.PlanetName.Moon;
+                        case 6: return Library.PlanetName.Saturn;
+                        case 7: return Library.PlanetName.Jupiter;
+                        case 8: return Library.PlanetName.Mars;
+                        case 9: return Library.PlanetName.Sun;
+                        case 10: return Library.PlanetName.Venus;
+                        case 11: return Library.PlanetName.Mercury;
+                        case 12: return Library.PlanetName.Moon;
+                        case 13: return Library.PlanetName.Saturn;
+                        case 14: return Library.PlanetName.Jupiter;
+                        case 15: return Library.PlanetName.Mars;
+                        case 16: return Library.PlanetName.Sun;
+                        case 17: return Library.PlanetName.Venus;
+                        case 18: return Library.PlanetName.Mercury;
+                        case 19: return Library.PlanetName.Moon;
+                        case 20: return Library.PlanetName.Saturn;
+                        case 21: return Library.PlanetName.Jupiter;
+                        case 22: return Library.PlanetName.Mars;
+                        case 23: return Library.PlanetName.Sun;
+                        case 24: return Library.PlanetName.Venus;
                     }
                     break;
                 case DayOfWeek.Wednesday:
                     switch (hora)
                     {
-                        case 1: return PlanetName.Mercury;
-                        case 2: return PlanetName.Moon;
-                        case 3: return PlanetName.Saturn;
-                        case 4: return PlanetName.Jupiter;
-                        case 5: return PlanetName.Mars;
-                        case 6: return PlanetName.Sun;
-                        case 7: return PlanetName.Venus;
-                        case 8: return PlanetName.Mercury;
-                        case 9: return PlanetName.Moon;
-                        case 10: return PlanetName.Saturn;
-                        case 11: return PlanetName.Jupiter;
-                        case 12: return PlanetName.Mars;
-                        case 13: return PlanetName.Sun;
-                        case 14: return PlanetName.Venus;
-                        case 15: return PlanetName.Mercury;
-                        case 16: return PlanetName.Moon;
-                        case 17: return PlanetName.Saturn;
-                        case 18: return PlanetName.Jupiter;
-                        case 19: return PlanetName.Mars;
-                        case 20: return PlanetName.Sun;
-                        case 21: return PlanetName.Venus;
-                        case 22: return PlanetName.Mercury;
-                        case 23: return PlanetName.Moon;
-                        case 24: return PlanetName.Saturn;
+                        case 1: return Library.PlanetName.Mercury;
+                        case 2: return Library.PlanetName.Moon;
+                        case 3: return Library.PlanetName.Saturn;
+                        case 4: return Library.PlanetName.Jupiter;
+                        case 5: return Library.PlanetName.Mars;
+                        case 6: return Library.PlanetName.Sun;
+                        case 7: return Library.PlanetName.Venus;
+                        case 8: return Library.PlanetName.Mercury;
+                        case 9: return Library.PlanetName.Moon;
+                        case 10: return Library.PlanetName.Saturn;
+                        case 11: return Library.PlanetName.Jupiter;
+                        case 12: return Library.PlanetName.Mars;
+                        case 13: return Library.PlanetName.Sun;
+                        case 14: return Library.PlanetName.Venus;
+                        case 15: return Library.PlanetName.Mercury;
+                        case 16: return Library.PlanetName.Moon;
+                        case 17: return Library.PlanetName.Saturn;
+                        case 18: return Library.PlanetName.Jupiter;
+                        case 19: return Library.PlanetName.Mars;
+                        case 20: return Library.PlanetName.Sun;
+                        case 21: return Library.PlanetName.Venus;
+                        case 22: return Library.PlanetName.Mercury;
+                        case 23: return Library.PlanetName.Moon;
+                        case 24: return Library.PlanetName.Saturn;
                     }
                     break;
                 case DayOfWeek.Thursday:
                     switch (hora)
                     {
-                        case 1: return PlanetName.Jupiter;
-                        case 2: return PlanetName.Mars;
-                        case 3: return PlanetName.Sun;
-                        case 4: return PlanetName.Venus;
-                        case 5: return PlanetName.Mercury;
-                        case 6: return PlanetName.Moon;
-                        case 7: return PlanetName.Saturn;
-                        case 8: return PlanetName.Jupiter;
-                        case 9: return PlanetName.Mars;
-                        case 10: return PlanetName.Sun;
-                        case 11: return PlanetName.Venus;
-                        case 12: return PlanetName.Mercury;
-                        case 13: return PlanetName.Moon;
-                        case 14: return PlanetName.Saturn;
-                        case 15: return PlanetName.Jupiter;
-                        case 16: return PlanetName.Mars;
-                        case 17: return PlanetName.Sun;
-                        case 18: return PlanetName.Venus;
-                        case 19: return PlanetName.Mercury;
-                        case 20: return PlanetName.Moon;
-                        case 21: return PlanetName.Saturn;
-                        case 22: return PlanetName.Jupiter;
-                        case 23: return PlanetName.Mars;
-                        case 24: return PlanetName.Sun;
+                        case 1: return Library.PlanetName.Jupiter;
+                        case 2: return Library.PlanetName.Mars;
+                        case 3: return Library.PlanetName.Sun;
+                        case 4: return Library.PlanetName.Venus;
+                        case 5: return Library.PlanetName.Mercury;
+                        case 6: return Library.PlanetName.Moon;
+                        case 7: return Library.PlanetName.Saturn;
+                        case 8: return Library.PlanetName.Jupiter;
+                        case 9: return Library.PlanetName.Mars;
+                        case 10: return Library.PlanetName.Sun;
+                        case 11: return Library.PlanetName.Venus;
+                        case 12: return Library.PlanetName.Mercury;
+                        case 13: return Library.PlanetName.Moon;
+                        case 14: return Library.PlanetName.Saturn;
+                        case 15: return Library.PlanetName.Jupiter;
+                        case 16: return Library.PlanetName.Mars;
+                        case 17: return Library.PlanetName.Sun;
+                        case 18: return Library.PlanetName.Venus;
+                        case 19: return Library.PlanetName.Mercury;
+                        case 20: return Library.PlanetName.Moon;
+                        case 21: return Library.PlanetName.Saturn;
+                        case 22: return Library.PlanetName.Jupiter;
+                        case 23: return Library.PlanetName.Mars;
+                        case 24: return Library.PlanetName.Sun;
                     }
                     break;
                 case DayOfWeek.Friday:
                     switch (hora)
                     {
-                        case 1: return PlanetName.Venus;
-                        case 2: return PlanetName.Mercury;
-                        case 3: return PlanetName.Moon;
-                        case 4: return PlanetName.Saturn;
-                        case 5: return PlanetName.Jupiter;
-                        case 6: return PlanetName.Mars;
-                        case 7: return PlanetName.Sun;
-                        case 8: return PlanetName.Venus;
-                        case 9: return PlanetName.Mercury;
-                        case 10: return PlanetName.Moon;
-                        case 11: return PlanetName.Saturn;
-                        case 12: return PlanetName.Jupiter;
-                        case 13: return PlanetName.Mars;
-                        case 14: return PlanetName.Sun;
-                        case 15: return PlanetName.Venus;
-                        case 16: return PlanetName.Mercury;
-                        case 17: return PlanetName.Moon;
-                        case 18: return PlanetName.Saturn;
-                        case 19: return PlanetName.Jupiter;
-                        case 20: return PlanetName.Mars;
-                        case 21: return PlanetName.Sun;
-                        case 22: return PlanetName.Venus;
-                        case 23: return PlanetName.Mercury;
-                        case 24: return PlanetName.Moon;
+                        case 1: return Library.PlanetName.Venus;
+                        case 2: return Library.PlanetName.Mercury;
+                        case 3: return Library.PlanetName.Moon;
+                        case 4: return Library.PlanetName.Saturn;
+                        case 5: return Library.PlanetName.Jupiter;
+                        case 6: return Library.PlanetName.Mars;
+                        case 7: return Library.PlanetName.Sun;
+                        case 8: return Library.PlanetName.Venus;
+                        case 9: return Library.PlanetName.Mercury;
+                        case 10: return Library.PlanetName.Moon;
+                        case 11: return Library.PlanetName.Saturn;
+                        case 12: return Library.PlanetName.Jupiter;
+                        case 13: return Library.PlanetName.Mars;
+                        case 14: return Library.PlanetName.Sun;
+                        case 15: return Library.PlanetName.Venus;
+                        case 16: return Library.PlanetName.Mercury;
+                        case 17: return Library.PlanetName.Moon;
+                        case 18: return Library.PlanetName.Saturn;
+                        case 19: return Library.PlanetName.Jupiter;
+                        case 20: return Library.PlanetName.Mars;
+                        case 21: return Library.PlanetName.Sun;
+                        case 22: return Library.PlanetName.Venus;
+                        case 23: return Library.PlanetName.Mercury;
+                        case 24: return Library.PlanetName.Moon;
                     }
                     break;
                 case DayOfWeek.Saturday:
                     switch (hora)
                     {
-                        case 1: return PlanetName.Saturn;
-                        case 2: return PlanetName.Jupiter;
-                        case 3: return PlanetName.Mars;
-                        case 4: return PlanetName.Sun;
-                        case 5: return PlanetName.Venus;
-                        case 6: return PlanetName.Mercury;
-                        case 7: return PlanetName.Moon;
-                        case 8: return PlanetName.Saturn;
-                        case 9: return PlanetName.Jupiter;
-                        case 10: return PlanetName.Mars;
-                        case 11: return PlanetName.Sun;
-                        case 12: return PlanetName.Venus;
-                        case 13: return PlanetName.Mercury;
-                        case 14: return PlanetName.Moon;
-                        case 15: return PlanetName.Saturn;
-                        case 16: return PlanetName.Jupiter;
-                        case 17: return PlanetName.Mars;
-                        case 18: return PlanetName.Sun;
-                        case 19: return PlanetName.Venus;
-                        case 20: return PlanetName.Mercury;
-                        case 21: return PlanetName.Moon;
-                        case 22: return PlanetName.Saturn;
-                        case 23: return PlanetName.Jupiter;
-                        case 24: return PlanetName.Mars;
+                        case 1: return Library.PlanetName.Saturn;
+                        case 2: return Library.PlanetName.Jupiter;
+                        case 3: return Library.PlanetName.Mars;
+                        case 4: return Library.PlanetName.Sun;
+                        case 5: return Library.PlanetName.Venus;
+                        case 6: return Library.PlanetName.Mercury;
+                        case 7: return Library.PlanetName.Moon;
+                        case 8: return Library.PlanetName.Saturn;
+                        case 9: return Library.PlanetName.Jupiter;
+                        case 10: return Library.PlanetName.Mars;
+                        case 11: return Library.PlanetName.Sun;
+                        case 12: return Library.PlanetName.Venus;
+                        case 13: return Library.PlanetName.Mercury;
+                        case 14: return Library.PlanetName.Moon;
+                        case 15: return Library.PlanetName.Saturn;
+                        case 16: return Library.PlanetName.Jupiter;
+                        case 17: return Library.PlanetName.Mars;
+                        case 18: return Library.PlanetName.Sun;
+                        case 19: return Library.PlanetName.Venus;
+                        case 20: return Library.PlanetName.Mercury;
+                        case 21: return Library.PlanetName.Moon;
+                        case 22: return Library.PlanetName.Saturn;
+                        case 23: return Library.PlanetName.Jupiter;
+                        case 24: return Library.PlanetName.Mars;
                     }
                     break;
             }
@@ -715,35 +715,35 @@ namespace VedAstro.Library
                     //Aries and Scorpio are ruled by Mars;
                     case ZodiacName.Aries:
                     case ZodiacName.Scorpio:
-                        return PlanetName.Mars;
+                        return Library.PlanetName.Mars;
 
                     //Taurus and Libra by Venus;
                     case ZodiacName.Taurus:
                     case ZodiacName.Libra:
-                        return PlanetName.Venus;
+                        return Library.PlanetName.Venus;
 
                     //Gemini and Virgo by Mercury;
                     case ZodiacName.Gemini:
                     case ZodiacName.Virgo:
-                        return PlanetName.Mercury;
+                        return Library.PlanetName.Mercury;
 
                     //Cancer by the Moon;
                     case ZodiacName.Cancer:
-                        return PlanetName.Moon;
+                        return Library.PlanetName.Moon;
 
                     //Leo by the Sun ;
                     case ZodiacName.Leo:
-                        return PlanetName.Sun;
+                        return Library.PlanetName.Sun;
 
                     //Sagittarius and Pisces by Jupiter
                     case ZodiacName.Sagittarius:
                     case ZodiacName.Pisces:
-                        return PlanetName.Jupiter;
+                        return Library.PlanetName.Jupiter;
 
                     //Capricorn and Aquarius by Saturn.
                     case ZodiacName.Capricornus:
                     case ZodiacName.Aquarius:
-                        return PlanetName.Saturn;
+                        return Library.PlanetName.Saturn;
                     default:
                         throw new Exception("Lord of sign not found, error!");
                 }
@@ -849,54 +849,54 @@ namespace VedAstro.Library
             ZodiacSign _getPlanetExaltationPoint()
             {
                 //Sun in the 10th degree of Aries;
-                if (planetName == PlanetName.Sun)
+                if (planetName == Library.PlanetName.Sun)
                 {
                     return new ZodiacSign(ZodiacName.Aries, Angle.FromDegrees(10));
                 }
 
                 // Moon 3rd of Taurus;
-                else if (planetName == PlanetName.Moon)
+                else if (planetName == Library.PlanetName.Moon)
                 {
                     return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(3));
                 }
 
                 // Mars 28th of Capricorn ;
-                else if (planetName == PlanetName.Mars)
+                else if (planetName == Library.PlanetName.Mars)
                 {
                     return new ZodiacSign(ZodiacName.Capricornus, Angle.FromDegrees(28));
                 }
 
                 // Mercury 15th of Virgo;
-                else if (planetName == PlanetName.Mercury)
+                else if (planetName == Library.PlanetName.Mercury)
                 {
                     return new ZodiacSign(ZodiacName.Virgo, Angle.FromDegrees(15));
                 }
 
                 // Jupiter 5th of Cancer;
-                else if (planetName == PlanetName.Jupiter)
+                else if (planetName == Library.PlanetName.Jupiter)
                 {
                     return new ZodiacSign(ZodiacName.Cancer, Angle.FromDegrees(5));
                 }
 
                 // Venus 27th of Pisces and
-                else if (planetName == PlanetName.Venus)
+                else if (planetName == Library.PlanetName.Venus)
                 {
                     return new ZodiacSign(ZodiacName.Pisces, Angle.FromDegrees(27));
                 }
 
                 // Saturn 20th of Libra.
-                else if (planetName == PlanetName.Saturn)
+                else if (planetName == Library.PlanetName.Saturn)
                 {
                     return new ZodiacSign(ZodiacName.Libra, Angle.FromDegrees(20));
                 }
 
                 // Rahu 20th of Taurus.
-                else if (planetName == PlanetName.Rahu)
+                else if (planetName == Library.PlanetName.Rahu)
                 {
                     return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(20));
                 }
                 // Ketu 20th of Scorpio.
-                else if (planetName == PlanetName.Ketu)
+                else if (planetName == Library.PlanetName.Ketu)
                 {
                     return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(20));
                 }
@@ -969,55 +969,55 @@ namespace VedAstro.Library
 
 
                 //Sun in the 10th degree of Libra;
-                if (planetName == PlanetName.Sun)
+                if (planetName == Library.PlanetName.Sun)
                 {
                     return new ZodiacSign(ZodiacName.Libra, Angle.FromDegrees(10));
                 }
 
                 // Moon 0 of Scorpio
-                else if (planetName == PlanetName.Moon)
+                else if (planetName == Library.PlanetName.Moon)
                 {
                     //TODO check if 0 degrees exist
                     return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(0));
                 }
 
                 // Mars 28th of Cancer ;
-                else if (planetName == PlanetName.Mars)
+                else if (planetName == Library.PlanetName.Mars)
                 {
                     return new ZodiacSign(ZodiacName.Cancer, Angle.FromDegrees(28));
                 }
 
                 // Mercury 15th of Pisces;
-                else if (planetName == PlanetName.Mercury)
+                else if (planetName == Library.PlanetName.Mercury)
                 {
                     return new ZodiacSign(ZodiacName.Pisces, Angle.FromDegrees(15));
                 }
 
                 // Jupiter 5th of Capricorn;
-                else if (planetName == PlanetName.Jupiter)
+                else if (planetName == Library.PlanetName.Jupiter)
                 {
                     return new ZodiacSign(ZodiacName.Capricornus, Angle.FromDegrees(5));
                 }
 
                 // Venus 27th of Virgo and
-                else if (planetName == PlanetName.Venus)
+                else if (planetName == Library.PlanetName.Venus)
                 {
                     return new ZodiacSign(ZodiacName.Virgo, Angle.FromDegrees(27));
                 }
 
                 // Saturn 20th of Aries.
-                else if (planetName == PlanetName.Saturn)
+                else if (planetName == Library.PlanetName.Saturn)
                 {
                     return new ZodiacSign(ZodiacName.Aries, Angle.FromDegrees(20));
                 }
 
                 // Rahu 20th of Scorpio.
-                else if (planetName == PlanetName.Rahu)
+                else if (planetName == Library.PlanetName.Rahu)
                 {
                     return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(20));
                 }
                 // Ketu 20th of Taurus.
-                else if (planetName == PlanetName.Ketu)
+                else if (planetName == Library.PlanetName.Ketu)
                 {
                     return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(20));
                 }
@@ -1160,10 +1160,10 @@ namespace VedAstro.Library
         {
 
             //no calculation for rahu and ketu here
-            var isRahu = mainPlanet.Name == PlanetName.PlanetNameEnum.Rahu;
-            var isKetu = mainPlanet.Name == PlanetName.PlanetNameEnum.Ketu;
-            var isRahu2 = secondaryPlanet.Name == PlanetName.PlanetNameEnum.Rahu;
-            var isKetu2 = secondaryPlanet.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahu = mainPlanet.Name == Library.PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = mainPlanet.Name == Library.PlanetName.PlanetNameEnum.Ketu;
+            var isRahu2 = secondaryPlanet.Name == Library.PlanetName.PlanetNameEnum.Rahu;
+            var isKetu2 = secondaryPlanet.Name == Library.PlanetName.PlanetNameEnum.Ketu;
             var isRahuKetu = isRahu || isKetu || isRahu2 || isKetu2;
             if (isRahuKetu) { return PlanetToPlanetRelationship.Empty; }
 
@@ -1186,12 +1186,12 @@ namespace VedAstro.Library
 
 
                 //if main planet is sun
-                if (mainPlanet == PlanetName.Sun)
+                if (mainPlanet == Library.PlanetName.Sun)
                 {
                     //List planets friends, neutrals & enemies
-                    var sunFriends = new List<PlanetName>() { PlanetName.Moon, PlanetName.Mars, PlanetName.Jupiter };
-                    var sunNeutrals = new List<PlanetName>() { PlanetName.Mercury };
-                    var sunEnemies = new List<PlanetName>() { PlanetName.Venus, PlanetName.Saturn };
+                    var sunFriends = new List<PlanetName>() { Library.PlanetName.Moon, Library.PlanetName.Mars, Library.PlanetName.Jupiter };
+                    var sunNeutrals = new List<PlanetName>() { Library.PlanetName.Mercury };
+                    var sunEnemies = new List<PlanetName>() { Library.PlanetName.Venus, Library.PlanetName.Saturn };
 
                     //check if planet is found in any of the lists
                     planetInFriends = sunFriends.Contains(secondaryPlanet);
@@ -1200,11 +1200,11 @@ namespace VedAstro.Library
                 }
 
                 //if main planet is moon
-                if (mainPlanet == PlanetName.Moon)
+                if (mainPlanet == Library.PlanetName.Moon)
                 {
                     //List planets friends, neutrals & enemies
-                    var moonFriends = new List<PlanetName>() { PlanetName.Sun, PlanetName.Mercury };
-                    var moonNeutrals = new List<PlanetName>() { PlanetName.Mars, PlanetName.Jupiter, PlanetName.Venus, PlanetName.Saturn };
+                    var moonFriends = new List<PlanetName>() { Library.PlanetName.Sun, Library.PlanetName.Mercury };
+                    var moonNeutrals = new List<PlanetName>() { Library.PlanetName.Mars, Library.PlanetName.Jupiter, Library.PlanetName.Venus, Library.PlanetName.Saturn };
                     var moonEnemies = new List<PlanetName>() { };
 
                     //check if planet is found in any of the lists
@@ -1215,12 +1215,12 @@ namespace VedAstro.Library
                 }
 
                 //if main planet is mars
-                if (mainPlanet == PlanetName.Mars)
+                if (mainPlanet == Library.PlanetName.Mars)
                 {
                     //List planets friends, neutrals & enemies
-                    var marsFriends = new List<PlanetName>() { PlanetName.Sun, PlanetName.Moon, PlanetName.Jupiter };
-                    var marsNeutrals = new List<PlanetName>() { PlanetName.Venus, PlanetName.Saturn };
-                    var marsEnemies = new List<PlanetName>() { PlanetName.Mercury };
+                    var marsFriends = new List<PlanetName>() { Library.PlanetName.Sun, Library.PlanetName.Moon, Library.PlanetName.Jupiter };
+                    var marsNeutrals = new List<PlanetName>() { Library.PlanetName.Venus, Library.PlanetName.Saturn };
+                    var marsEnemies = new List<PlanetName>() { Library.PlanetName.Mercury };
 
                     //check if planet is found in any of the lists
                     planetInFriends = marsFriends.Contains(secondaryPlanet);
@@ -1230,12 +1230,12 @@ namespace VedAstro.Library
                 }
 
                 //if main planet is mercury
-                if (mainPlanet == PlanetName.Mercury)
+                if (mainPlanet == Library.PlanetName.Mercury)
                 {
                     //List planets friends, neutrals & enemies
-                    var mercuryFriends = new List<PlanetName>() { PlanetName.Sun, PlanetName.Venus };
-                    var mercuryNeutrals = new List<PlanetName>() { PlanetName.Mars, PlanetName.Jupiter, PlanetName.Saturn };
-                    var mercuryEnemies = new List<PlanetName>() { PlanetName.Moon };
+                    var mercuryFriends = new List<PlanetName>() { Library.PlanetName.Sun, Library.PlanetName.Venus };
+                    var mercuryNeutrals = new List<PlanetName>() { Library.PlanetName.Mars, Library.PlanetName.Jupiter, Library.PlanetName.Saturn };
+                    var mercuryEnemies = new List<PlanetName>() { Library.PlanetName.Moon };
 
                     //check if planet is found in any of the lists
                     planetInFriends = mercuryFriends.Contains(secondaryPlanet);
@@ -1245,12 +1245,12 @@ namespace VedAstro.Library
                 }
 
                 //if main planet is jupiter
-                if (mainPlanet == PlanetName.Jupiter)
+                if (mainPlanet == Library.PlanetName.Jupiter)
                 {
                     //List planets friends, neutrals & enemies
-                    var jupiterFriends = new List<PlanetName>() { PlanetName.Sun, PlanetName.Moon, PlanetName.Mars };
-                    var jupiterNeutrals = new List<PlanetName>() { PlanetName.Saturn };
-                    var jupiterEnemies = new List<PlanetName>() { PlanetName.Mercury, PlanetName.Venus };
+                    var jupiterFriends = new List<PlanetName>() { Library.PlanetName.Sun, Library.PlanetName.Moon, Library.PlanetName.Mars };
+                    var jupiterNeutrals = new List<PlanetName>() { Library.PlanetName.Saturn };
+                    var jupiterEnemies = new List<PlanetName>() { Library.PlanetName.Mercury, Library.PlanetName.Venus };
 
                     //check if planet is found in any of the lists
                     planetInFriends = jupiterFriends.Contains(secondaryPlanet);
@@ -1260,12 +1260,12 @@ namespace VedAstro.Library
                 }
 
                 //if main planet is venus
-                if (mainPlanet == PlanetName.Venus)
+                if (mainPlanet == Library.PlanetName.Venus)
                 {
                     //List planets friends, neutrals & enemies
-                    var venusFriends = new List<PlanetName>() { PlanetName.Mercury, PlanetName.Saturn };
-                    var venusNeutrals = new List<PlanetName>() { PlanetName.Mars, PlanetName.Jupiter };
-                    var venusEnemies = new List<PlanetName>() { PlanetName.Sun, PlanetName.Moon };
+                    var venusFriends = new List<PlanetName>() { Library.PlanetName.Mercury, Library.PlanetName.Saturn };
+                    var venusNeutrals = new List<PlanetName>() { Library.PlanetName.Mars, Library.PlanetName.Jupiter };
+                    var venusEnemies = new List<PlanetName>() { Library.PlanetName.Sun, Library.PlanetName.Moon };
 
                     //check if planet is found in any of the lists
                     planetInFriends = venusFriends.Contains(secondaryPlanet);
@@ -1275,12 +1275,12 @@ namespace VedAstro.Library
                 }
 
                 //if main planet is saturn
-                if (mainPlanet == PlanetName.Saturn)
+                if (mainPlanet == Library.PlanetName.Saturn)
                 {
                     //List planets friends, neutrals & enemies
-                    var saturnFriends = new List<PlanetName>() { PlanetName.Mercury, PlanetName.Venus };
-                    var saturnNeutrals = new List<PlanetName>() { PlanetName.Jupiter };
-                    var saturnEnemies = new List<PlanetName>() { PlanetName.Sun, PlanetName.Moon, PlanetName.Mars };
+                    var saturnFriends = new List<PlanetName>() { Library.PlanetName.Mercury, Library.PlanetName.Venus };
+                    var saturnNeutrals = new List<PlanetName>() { Library.PlanetName.Jupiter };
+                    var saturnEnemies = new List<PlanetName>() { Library.PlanetName.Sun, Library.PlanetName.Moon, Library.PlanetName.Mars };
 
                     //check if planet is found in any of the lists
                     planetInFriends = saturnFriends.Contains(secondaryPlanet);
@@ -1290,7 +1290,7 @@ namespace VedAstro.Library
                 }
 
                 //for Rahu & Ketu special exception
-                if (mainPlanet == PlanetName.Rahu || mainPlanet == PlanetName.Ketu)
+                if (mainPlanet == Library.PlanetName.Rahu || mainPlanet == Library.PlanetName.Ketu)
                 {
                     throw new Exception("No Permenant Relation for Rahu and Ketu, use Temporary Relation!");
                 }
@@ -1513,7 +1513,7 @@ namespace VedAstro.Library
             var janmaSign = Calculate.MoonSignName(birthTime);
 
             //get planet sign at input time
-            var planetSign = Calculate.GetPlanetRasiSign(planet, currentTime).GetSignName();
+            var planetSign = Calculate.PlanetRasiSign(planet, currentTime).GetSignName();
 
             //count from janma to sign planet is in
             var count = Calculate.CountFromSignToSign(janmaSign, planetSign);
@@ -1538,15 +1538,15 @@ namespace VedAstro.Library
 
             //remove the exception planets
             //No Vedha occurs between the Sun and Saturn, and the Moon and Mercury.
-            if (planet == PlanetName.Sun || planet == PlanetName.Saturn)
+            if (planet == Library.PlanetName.Sun || planet == Library.PlanetName.Saturn)
             {
-                planetList.Remove(PlanetName.Sun);
-                planetList.Remove(PlanetName.Saturn);
+                planetList.Remove(Library.PlanetName.Sun);
+                planetList.Remove(Library.PlanetName.Saturn);
             }
-            if (planet == PlanetName.Moon || planet == PlanetName.Mercury)
+            if (planet == Library.PlanetName.Moon || planet == Library.PlanetName.Mercury)
             {
-                planetList.Remove(PlanetName.Moon);
-                planetList.Remove(PlanetName.Mercury);
+                planetList.Remove(Library.PlanetName.Moon);
+                planetList.Remove(Library.PlanetName.Mercury);
             }
 
             //now if any planet is found in the list, than obstruction is present
@@ -1563,23 +1563,23 @@ namespace VedAstro.Library
         public static List<PlanetName> GetPlanetsInGocharaHouse(Time birthTime, Time currentTime, int gocharaHouse)
         {
             //get the gochara house for every planet at current time
-            var gocharaSun = GetGocharaHouse(birthTime, currentTime, PlanetName.Sun);
-            var gocharaMoon = GetGocharaHouse(birthTime, currentTime, PlanetName.Moon);
-            var gocharaMars = GetGocharaHouse(birthTime, currentTime, PlanetName.Mars);
-            var gocharaMercury = GetGocharaHouse(birthTime, currentTime, PlanetName.Mercury);
-            var gocharaJupiter = GetGocharaHouse(birthTime, currentTime, PlanetName.Jupiter);
-            var gocharaVenus = GetGocharaHouse(birthTime, currentTime, PlanetName.Venus);
-            var gocharaSaturn = GetGocharaHouse(birthTime, currentTime, PlanetName.Saturn);
+            var gocharaSun = GetGocharaHouse(birthTime, currentTime, Library.PlanetName.Sun);
+            var gocharaMoon = GetGocharaHouse(birthTime, currentTime, Library.PlanetName.Moon);
+            var gocharaMars = GetGocharaHouse(birthTime, currentTime, Library.PlanetName.Mars);
+            var gocharaMercury = GetGocharaHouse(birthTime, currentTime, Library.PlanetName.Mercury);
+            var gocharaJupiter = GetGocharaHouse(birthTime, currentTime, Library.PlanetName.Jupiter);
+            var gocharaVenus = GetGocharaHouse(birthTime, currentTime, Library.PlanetName.Venus);
+            var gocharaSaturn = GetGocharaHouse(birthTime, currentTime, Library.PlanetName.Saturn);
 
             //add every planet name to return list that matches input Gochara house number
             var planetList = new List<PlanetName>();
-            if (gocharaSun == gocharaHouse) { planetList.Add(PlanetName.Sun); }
-            if (gocharaMoon == gocharaHouse) { planetList.Add(PlanetName.Moon); }
-            if (gocharaMars == gocharaHouse) { planetList.Add(PlanetName.Mars); }
-            if (gocharaMercury == gocharaHouse) { planetList.Add(PlanetName.Mercury); }
-            if (gocharaJupiter == gocharaHouse) { planetList.Add(PlanetName.Jupiter); }
-            if (gocharaVenus == gocharaHouse) { planetList.Add(PlanetName.Venus); }
-            if (gocharaSaturn == gocharaHouse) { planetList.Add(PlanetName.Saturn); }
+            if (gocharaSun == gocharaHouse) { planetList.Add(Library.PlanetName.Sun); }
+            if (gocharaMoon == gocharaHouse) { planetList.Add(Library.PlanetName.Moon); }
+            if (gocharaMars == gocharaHouse) { planetList.Add(Library.PlanetName.Mars); }
+            if (gocharaMercury == gocharaHouse) { planetList.Add(Library.PlanetName.Mercury); }
+            if (gocharaJupiter == gocharaHouse) { planetList.Add(Library.PlanetName.Jupiter); }
+            if (gocharaVenus == gocharaHouse) { planetList.Add(Library.PlanetName.Venus); }
+            if (gocharaSaturn == gocharaHouse) { planetList.Add(Library.PlanetName.Saturn); }
 
             return planetList;
         }
@@ -1594,7 +1594,7 @@ namespace VedAstro.Library
         public static int GetVedhanka(PlanetName planet, int house)
         {
             //filter based on planet
-            if (planet == PlanetName.Sun)
+            if (planet == Library.PlanetName.Sun)
             {
                 //good
                 if (house == 11) { return 5; }
@@ -1608,7 +1608,7 @@ namespace VedAstro.Library
                 if (house == 12) { return 6; }
             }
 
-            if (planet == PlanetName.Moon)
+            if (planet == Library.PlanetName.Moon)
             {
                 //good
                 if (house == 7) { return 2; }
@@ -1627,7 +1627,7 @@ namespace VedAstro.Library
 
             }
 
-            if (planet == PlanetName.Mars)
+            if (planet == Library.PlanetName.Mars)
             {
                 //good
                 if (house == 3) { return 12; }
@@ -1639,7 +1639,7 @@ namespace VedAstro.Library
                 if (house == 9) { return 6; }
             }
 
-            if (planet == PlanetName.Mercury)
+            if (planet == Library.PlanetName.Mercury)
             {
                 //good
                 if (house == 2) { return 5; }
@@ -1658,7 +1658,7 @@ namespace VedAstro.Library
                 if (house == 12) { return 11; }
             }
 
-            if (planet == PlanetName.Jupiter)
+            if (planet == Library.PlanetName.Jupiter)
             {
                 //good
                 if (house == 2) { return 12; }
@@ -1676,7 +1676,7 @@ namespace VedAstro.Library
 
             }
 
-            if (planet == PlanetName.Venus)
+            if (planet == Library.PlanetName.Venus)
             {
                 //good
                 if (house == 1) { return 8; }
@@ -1702,7 +1702,7 @@ namespace VedAstro.Library
 
             }
 
-            if (planet == PlanetName.Saturn)
+            if (planet == Library.PlanetName.Saturn)
             {
                 //good
                 if (house == 3) { return 12; }
@@ -1716,7 +1716,7 @@ namespace VedAstro.Library
 
             }
             //copy of saturn & mars
-            if (planet == PlanetName.Rahu)
+            if (planet == Library.PlanetName.Rahu)
             {
                 //good
                 if (house == 3) { return 12; }
@@ -1729,7 +1729,7 @@ namespace VedAstro.Library
                 if (house == 9) { return 6; }
 
             }
-            if (planet == PlanetName.Ketu)
+            if (planet == Library.PlanetName.Ketu)
             {
                 //good
                 if (house == 3) { return 12; }
@@ -1786,7 +1786,7 @@ namespace VedAstro.Library
             if (obstructionFound) { return false; }
 
             //gochara ongoing, get sign of house to get planet's bindu score for said transit
-            var gocharaSign = GetHouseSignName((HouseName)gocharaHouse, nowTime);
+            var gocharaSign = HouseSignName((HouseName)gocharaHouse, nowTime);
 
             //get planet's current bindu
             var planetBindu = Calculate.GetPlanetAshtakvargaBindu(planet, gocharaSign, nowTime);
@@ -1832,12 +1832,12 @@ namespace VedAstro.Library
         public static Dictionary<PlanetName, Dictionary<ZodiacName, int>> GetAllBhinnashtakavargaChart(Time birthTime)
         {
 
-            var minorPlanetList = PlanetName.All7Planets.Select(e => e.ToString()).ToList();
+            var minorPlanetList = Library.PlanetName.All7Planets.Select(e => e.ToString()).ToList();
             minorPlanetList.Add("ascendant"); //add special case Ascendant for Ashtakvarga calculation
             var mainBhinaAstaChart = new Dictionary<PlanetName, Dictionary<ZodiacName, int>>();
 
             //make the charts compiled from the position of 7 planets
-            foreach (var mainPlanet in PlanetName.All7Planets)
+            foreach (var mainPlanet in Library.PlanetName.All7Planets)
             {
                 //load the benefic places for all the minor planets
                 var allPlanetBeneficList = new Dictionary<string, int[]>();
@@ -1855,13 +1855,13 @@ namespace VedAstro.Library
                     //start sign can be from planet or 1st house (Ascendant)
                     var isAscendant = minorPlanet == "ascendant";
                     var minorPlanetStartSign = isAscendant
-                                                ? GetHouseSignName(HouseName.House1, birthTime)
-                                                : GetPlanetRasiSign(PlanetName.Parse(minorPlanet), birthTime).GetSignName();
+                                                ? HouseSignName(HouseName.House1, birthTime)
+                                                : PlanetRasiSign(Library.PlanetName.Parse(minorPlanet), birthTime).GetSignName();
 
                     //add the points together, add 1 for a benefic sign
                     foreach (var houseCount in allPlanetBeneficList[minorPlanet])
                     {
-                        var signXFromPlanet = GetSignCountedFromInputSign(minorPlanetStartSign, houseCount);
+                        var signXFromPlanet = SignCountedFromInputSign(minorPlanetStartSign, houseCount);
                         mainPlanetBhinaAstaChart[signXFromPlanet] += 1; //add 1 to existing score from previous
                     }
                 }
@@ -1884,10 +1884,10 @@ namespace VedAstro.Library
         public static Dictionary<ZodiacName, int> GetPlanetBhinnashtakavargaChart(PlanetName mainPlanet, Time birthTime)
         {
             //no rahu & ketu
-            if (mainPlanet.Name is PlanetName.PlanetNameEnum.Rahu or PlanetName.PlanetNameEnum.Ketu) { throw new InvalidOperationException("No rahu & ketu support"); }
+            if (mainPlanet.Name is Library.PlanetName.PlanetNameEnum.Rahu or Library.PlanetName.PlanetNameEnum.Ketu) { throw new InvalidOperationException("No rahu & ketu support"); }
 
             //make the charts compiled from the position of 7 planets plus Ascendant
-            var minorPlanetList = PlanetName.All7Planets.Select(e => e.ToString()).ToList();
+            var minorPlanetList = Library.PlanetName.All7Planets.Select(e => e.ToString()).ToList();
             minorPlanetList.Add("ascendant"); //add special case Ascendant for Ashtakvarga calculation
 
             //load the benefic places for all the minor planets
@@ -1907,13 +1907,13 @@ namespace VedAstro.Library
                 //start sign can be from planet or 1st house (Ascendant)
                 var isAscendant = minorPlanet == "ascendant";
                 var minorPlanetStartSign = isAscendant
-                    ? GetHouseSignName(HouseName.House1, birthTime)
-                    : GetPlanetRasiSign(PlanetName.Parse(minorPlanet), birthTime).GetSignName();
+                    ? HouseSignName(HouseName.House1, birthTime)
+                    : PlanetRasiSign(Library.PlanetName.Parse(minorPlanet), birthTime).GetSignName();
 
                 //add the points together, add 1 for a benefic sign
                 foreach (var houseCount in allPlanetBeneficList[minorPlanet])
                 {
-                    var signXFromPlanet = GetSignCountedFromInputSign(minorPlanetStartSign, houseCount);
+                    var signXFromPlanet = SignCountedFromInputSign(minorPlanetStartSign, houseCount);
                     mainPlanetBhinaAstaChart[signXFromPlanet] += 1; //add 1 to existing score from previous
                 }
             }
@@ -2155,59 +2155,59 @@ namespace VedAstro.Library
 
             switch (majorPlanet.Name)
             {
-                case PlanetName.PlanetNameEnum.Sun:
+                case Library.PlanetName.PlanetNameEnum.Sun:
                     {
                         switch (minorPlanet.Name)
                         {
-                            case PlanetName.PlanetNameEnum.Sun:
+                            case Library.PlanetName.PlanetNameEnum.Sun:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Unpleasantness with relatives and superiors, anxieties, headache, pain in the ear, some tendency to urinary or kidney troubles, sickness, fear from rulers and enemies, fear of death, loss of money, danger to father if the Sun is afflicted, stomachache and travels, gains through religious people, mental sufferings, a wandering life in a foreign country.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Moon:
+                            case Library.PlanetName.PlanetNameEnum.Moon:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Winning favour from superiors, increase in business, fresh enterprises, troubles through women, eye troubles, many relatives and friends, indulgence in idle pastimes, jaundice and kindred ailments, new clothes and ornaments, will be happy, healthy, good meals, respect among relatives.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mars:
+                            case Library.PlanetName.PlanetNameEnum.Mars:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Rheumatic and similar troubles, quarrels, danger of enteric fever, dysentery, troubles to relatives, loss of money by thefts or wasteful expenses, failures, acquisition of wealth in the form of gold and gems, royal favour leading to prosperity, contraction and transmission of bilious and other diseases, mental worries, danger from fire, ill-health, loss of reputation, sorrow.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mercury:
+                            case Library.PlanetName.PlanetNameEnum.Mercury:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Gain in money, good reputation, acquisition of new clothes and ornaments, new education, trouble through relatives, mental distress, depression of spirits, waste of money and nervous weakness, no comforts, friends becoming enemies, much anxiety and fears, health bad, children ungrateful, disputes and trouble from ruler or judge, suffer disgrace, many short journeys and wanderings.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Jupiter:
+                            case Library.PlanetName.PlanetNameEnum.Jupiter:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Benefits from friends and acquaintances, increase in education, employment in high circles, association with people of high rank, success through obstacles, birth of a child, wealth got through sons (if there is a son), honour to religious people, virtuous acts, good traditional observances, good society and conversations, reputation, gains and court-honours.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Venus:
+                            case Library.PlanetName.PlanetNameEnum.Venus:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Gain of money, respect by rulers and gain of vehicles, likelihood of marriage, increase of property, illness, does many good works, acquisition of pearls or other precious stones, fatigue, addiction to immoral females and profitless discussions.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Saturn:
+                            case Library.PlanetName.PlanetNameEnum.Saturn:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Constant sickness to family members, new enemies, some loss of property, bodily ailment, much unhappiness, displacement from home accidents, quarrels with relatives, loss of money, disease, lacking in energy, ignoble calls, mental worries, loans, danger from thieve and rulers.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Rahu:
+                            case Library.PlanetName.PlanetNameEnum.Rahu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Many troubles, changes according to the position of Rahu, family disputes, journeys, fear of death, trouble from relatives and enemies, loss of peace or mental misery, loss of money, sorrows, unsuccessful in all attempts, fear of thieves and reptiles, scandals.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Ketu:
+                            case Library.PlanetName.PlanetNameEnum.Ketu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Loss of money, affliction of mind with troubles, fainting or nervous exhaustion, mind full of misgivings, a long journey to a distant place, change of house due to disputes, troubles among relatives and associates, throat disease, mental anguish, ophthalmia, serious illness, fear from kings or rulers and enemies, diseases, cheated by others.";
@@ -2219,59 +2219,59 @@ namespace VedAstro.Library
                                 }
                         }
                     }
-                case PlanetName.PlanetNameEnum.Moon:
+                case Library.PlanetName.PlanetNameEnum.Moon:
                     {
                         switch (minorPlanet.Name)
                         {
-                            case PlanetName.PlanetNameEnum.Sun:
+                            case Library.PlanetName.PlanetNameEnum.Sun:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Feverish complaints, pains in the eyes, success or failure according to position of the Sun and the Moon, legal power, free from diseases, decadence of enemies, happiness and prosperity, jaundice, dropsy, fever, loss of money, travels, danger to father and mother, piles, weakness, loss of children and friends.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Moon:
+                            case Library.PlanetName.PlanetNameEnum.Moon:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Devoted attention to learning, love or music, good clothing, company of refined society, sound health, good reputation, journey to holy places, acquisition of abandoned wealth, power, vehicles and lands; marriage, relatives, fortunate deeds, inclination to public life, change of residence, birth of a child, increase of wealth, prosperity to relatives.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mars:
+                            case Library.PlanetName.PlanetNameEnum.Mars:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Quarrels and litigation among friends and relatives, headlong enterprises, danger of disputes between husband and wife, between lovers or in regard to marital affairs; disease, petulence, loss of money, waste of wealth, trouble from brothers and friends, danger from fever and fire, injury from instruments or stones, loss of blood and disease to household animals.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mercury:
+                            case Library.PlanetName.PlanetNameEnum.Mercury:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Acquisition of wealth from maternal relatives, new clothes and ornaments, settlement of disputes, pleasure through children or lover, increase of wealth, accomplishment of desires, intellectual achievements, new education, honour from rulers, general happiness, enjoyment with females, addiction to betting and drinks.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Jupiter:
+                            case Library.PlanetName.PlanetNameEnum.Jupiter:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Increase of property, plenty of food and comforts, prosperous, benefits from superiors such as masters or governors, birth. of a child, vehicles, abundance of clothes and ornaments and success in undertakings, patronage or rulers, gain or property, respect, learned.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Venus:
+                            case Library.PlanetName.PlanetNameEnum.Venus:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Sudden gain from wife, enjoys comforts of agriculture, water products and clothing, suffers from diseases inherited by mother, sickness, pain, loss of property, enmity, gain of houses, good works and good meals, birth of children, expenses due to marriage or other auspicious acts.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Saturn:
+                            case Library.PlanetName.PlanetNameEnum.Saturn:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Wife's death or separation, much mental anguish, loss of property, loss of friends, ill health, mental trouble due to mother, wind and bilious affections, harsh words, and discussion with unfriendly people, disease due to indigestion, no peace of mind, quarrels with relatives.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Rahu:
+                            case Library.PlanetName.PlanetNameEnum.Rahu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Distress of risks from falls and dangerous diseases, waste of wealth and loss of relatives and no ease to body, loss of money, danger of stirring up enemies, sickness, anxiety, enmity of superiors and elders, anxiety and troubles through wife, scandals, change of residence, diseases of skin, danger from thieves and poison, ill-health to father and mother, suffering from hunger.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Ketu:
+                            case Library.PlanetName.PlanetNameEnum.Ketu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Illness to wife, loss of relatives, suffering from stomach ache, loss or property, sickness of a feverish nature, danger from fire, subject to swellings or eruptions, eye troubles, mind filled with cares, public criticism or displeasure, dishonor, danger to father, mother and children, scandals among equals, eating of prohibited food, bad acts, bad company, loss of money and memory.";
@@ -2281,59 +2281,59 @@ namespace VedAstro.Library
                                 throw new Exception($"Planet not accounted for! : {minorPlanet}");
                         }
                     }
-                case PlanetName.PlanetNameEnum.Mars:
+                case Library.PlanetName.PlanetNameEnum.Mars:
                     {
                         switch (minorPlanet.Name)
                         {
-                            case PlanetName.PlanetNameEnum.Sun:
+                            case Library.PlanetName.PlanetNameEnum.Sun:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Gain of money in bad ways, destruction of enemies, good reputation, long journey to foreign lands and peace of mind, blame, odium of ciders, quarrels with them, sufferings by diseases, heartache occasioned by one's own relatives, fever or other inflammatory affection, danger of fire, troubles through persons in position, many enemies.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Moon:
+                            case Library.PlanetName.PlanetNameEnum.Moon:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Profit, acquisition of wealth, house renovated or some improvements effected in it, comforts of wealth, heavy sleep, ardent passion, enjoyment by the help or women.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mars:
+                            case Library.PlanetName.PlanetNameEnum.Mars:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Great heat, dislike of friends, annoyance from brothers and sisters, danger from rulers, failure of all undertakings, danger of hurts according to the sign held by Kuja, trouble with superiors and some anxiety through strangers, foreigners or people abroad and through warlike clan. Danger of open violence, quarrel with relations, loss of money, skin disease, consumption, loss of blood, fistula, and fissures in anus, loss of females and brothers, evil doings and boils.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mercury:
+                            case Library.PlanetName.PlanetNameEnum.Mercury:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Marriage or inclination to marriage, knowledge and fruits of knowledge, wealth, bodily evils disappear, slander, fear of insects, poisoned by animals and insects, gain of wealth by trade, abundance of houses, trouble from enemies and mental worries, service rendered to friends and relatives, new knowledge, success in litigation.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Jupiter:
+                            case Library.PlanetName.PlanetNameEnum.Jupiter:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Loss of wealth, enemies, end the unfortunate period, favour from superiors and persons in position, gain of money, birth of children, auspicious celebrations, acquisition or wealth through holy people, freedom from illness, public reputation, ascendancy and happiness.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Venus:
+                            case Library.PlanetName.PlanetNameEnum.Venus:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Acquisition of property, gain of money, domestic happiness, successful love affairs, inclination towards religious observances and festivities, favourable associations, influenced by priests, skin eruptions, boils, pleasure from travelling, jewels to wife, clothing, money from relatives and brothers, odium.of females and their society, increase of intelligence, enjoyment of females and gain of money.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Saturn:
+                            case Library.PlanetName.PlanetNameEnum.Saturn:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Loss of money, diseases, loss of relatives and danger from arms or operation, illness leading to misery, evil threatened by enemies and robbers, disputes with rulers, loss of wealth, quarrel, disputes, litigation, loss of property, cutaneous effects. loss of office or position and much anxiety.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Rahu:
+                            case Library.PlanetName.PlanetNameEnum.Rahu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Danger from rulers and robbers, loss of wealth, success in evil pursuits, suffering from poisonous complaints, loss of relatives, danger from skin diseases, change of residence, some severe kind of cutaneous disease, journey to a foreign country, scandals, loss of cows and buffaloes, illness to wife, loss of memory, fear from insects and thieves, falls into well, fear from ghosts, affection of gonorrhea, fretting and";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Ketu:
+                            case Library.PlanetName.PlanetNameEnum.Ketu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Enmity and quarrels with low people, loss of money due to evil works, commission of signs, great sufferings due to troubles from relatives and brothers and opposition of bad people, family disputes, troubles with one's own kindred diseases, poisonous complaints, trouble through women, many enemies.";
@@ -2343,59 +2343,59 @@ namespace VedAstro.Library
                                 throw new Exception($"Planet not accounted for! : {minorPlanet}");
                         }
                     }
-                case PlanetName.PlanetNameEnum.Mercury:
+                case Library.PlanetName.PlanetNameEnum.Mercury:
                     {
                         switch (minorPlanet.Name)
                         {
-                            case PlanetName.PlanetNameEnum.Sun:
+                            case Library.PlanetName.PlanetNameEnum.Sun:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Pains in bead and stomach, enmity of people, loss of respect, danger of fire, anxieties, sickness to wire, troubles from enemies, many obstacles, troubles through superiors, acquisition of wealth.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Moon:
+                            case Library.PlanetName.PlanetNameEnum.Moon:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Loss of health, some swellings or hurts in the limbs, quarrels and troubles through women, many difficulties, gain of money through ladies and agriculture and trade, success, happiness, diseases, ill-will of enemies, miscarriage of every concern, risk from quadrupeds.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mars:
+                            case Library.PlanetName.PlanetNameEnum.Mars:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Disappearance of all dangers diseases or enemies, fame derived from acts of charity and beneficence, royal favour, danger from jaundice or bilious fever, affections of the blood, neuralgic pains and headaches, troubles through neighbors, sickness, wounds or hurts, quarrels, addiction to drinks, betting and prostitutes, boils and hurts of arms, travels in forests and villages, sorrows, royal disfavour, imprisonment.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mercury:
+                            case Library.PlanetName.PlanetNameEnum.Mercury:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Acquisition of beautiful house and apparel, money through relatives, success in every undertaking, the birth of a brother or sister, increase in family, gain in business, good mind charitable acts, learning of mathematics and arts.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Jupiter:
+                            case Library.PlanetName.PlanetNameEnum.Jupiter:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Hatred of friends, relatives and elders, wealth, liable to diseases, acquisition of land and wealth, gain by trade, reputation, good happiness, good credit, benefits from superiors, birth of a child or marriage.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Venus:
+                            case Library.PlanetName.PlanetNameEnum.Venus:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Observance of duty, conformable to religion and morality, acquisition of wealth, clothes and jewels, birth or good children, happiness in married state, relatives prosper, trade increases, knowledge gained, return from a long journey, if not married, betrothal in this period, health, ornaments, vehicles, house, money gained.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Saturn:
+                            case Library.PlanetName.PlanetNameEnum.Saturn:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Bad luck. stranger to success and happiness, severe reversal, enmity, pain in the part governed by Saturn, downfall or disgrace to relatives, mind full of evil forebodings and distress. rear from diseases, loans, loss of children, destruction of family, scandals, troubles from foreigners, earnings through evil ways, acts of charity and beneficence, acquisition of wealth, material comforts through petty chiefs, failure in agricultural operations.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Rahu:
+                            case Library.PlanetName.PlanetNameEnum.Rahu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Intercourse with servants and prostitutes, skin diseases, sufferings from hot diseases, bad company and dirty meals. change or present position, fear and danger through foreigners, disputes concerning property, failure in litigation, evil dreams. headaches, sickness and loss of appetite. wealth from friends and relatives, happiness, new earnings.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Ketu:
+                            case Library.PlanetName.PlanetNameEnum.Ketu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Sorrow, disease, loss of work and Dharma, bilious sickness, aimless wandering, loss of property, misfortune to relatives, troubles through doctors, mental anxiety, trouble from relatives, mental agony, loss of comfort, dread of enemy, failure in business.";
@@ -2405,59 +2405,59 @@ namespace VedAstro.Library
                                 throw new Exception($"Planet not accounted for! : {minorPlanet}");
                         }
                     }
-                case PlanetName.PlanetNameEnum.Jupiter:
+                case Library.PlanetName.PlanetNameEnum.Jupiter:
                     {
                         switch (minorPlanet.Name)
                         {
-                            case PlanetName.PlanetNameEnum.Sun:
+                            case Library.PlanetName.PlanetNameEnum.Sun:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Enemies, victory, ease, great diligence, coming in of wealth, royal favour and sound health, gain,good actions or fruits of good action, loss of bodily strength.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Moon:
+                            case Library.PlanetName.PlanetNameEnum.Moon:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Increase of prosperity, gain of fame and fortune, acquisition or property, benefits through children, sexual intercourse with beautiful women, good meals and clothing, success and birth or a female child or marriage to some male member in the family, gain of money.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mars:
+                            case Library.PlanetName.PlanetNameEnum.Mars:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Disappointments and troubles of various kinds, loss by thefts, loss of near and dear relatives, inflammatory disease, transfer or leave, failure in hopes and business, wandering, high fever, great risks, loss of wealth and depression of mind, pilgrimage to temples, acquisition of wealth and fame, adventures.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mercury:
+                            case Library.PlanetName.PlanetNameEnum.Mercury:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Increase of wealth, good and auspicious works in the house, communion with relatives, happy, increase of knowledge, acquisition of wealth through trade, favour from rulers, material comforts, perfect practice of hospitality, gain through knowledge in fine arts, birth of a well-favoured child, advantages from superiors.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Jupiter:
+                            case Library.PlanetName.PlanetNameEnum.Jupiter:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Increase of property, domestic happiness, benefit from employment or occupation, birth of children, reputation, good meals, good deeds, health. royal favour, great diligence, success in all attempts, travels, dips in sacred rivers, pilgrimage, honour at stake if afflicted.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Venus:
+                            case Library.PlanetName.PlanetNameEnum.Venus:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Appointment, wealth, reputation, gain of money, savings, development of sons and grandsons, jewels, good and delicious meals, marital happiness, auspicious works, reunion of the family, good success in profession or business, gain of land in the month of Taurus or Libra, much enjoyment, relatives, friends, peace or mind, acquisition or valuables, troubles from females and odium of public.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Saturn:
+                            case Library.PlanetName.PlanetNameEnum.Saturn:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"A feeling of aversion, mental anguish, waste of wealth through sons, failure of business, increase of wealth and prosperity, pain in the body, rheumatic pains in limbs, trouble through wife or partners, failure in profit and credit, sorrows, fears, enmity of friends and relatives, adultery, unrighteous, a witness in court, quarrels in family, mental depression, funeral ceremonies for others,";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Rahu:
+                            case Library.PlanetName.PlanetNameEnum.Rahu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Income through low-caste people, apprehension of diseases, possibility of every possible calamity, deprivation of wealth.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Ketu:
+                            case Library.PlanetName.PlanetNameEnum.Ketu:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Pilgrimages to holy shrines, increase of wealth, suffering for the sake of several seniors and rulers, death of partner if in business, change of residence, separation from relatives and friends, may forsake business, poisonous effects, loss of wealth, destruction of work, illness, boils.";
@@ -2468,59 +2468,59 @@ namespace VedAstro.Library
                         }
                         break;
                     }
-                case PlanetName.PlanetNameEnum.Venus:
+                case Library.PlanetName.PlanetNameEnum.Venus:
                     {
                         switch (minorPlanet.Name)
                         {
-                            case PlanetName.PlanetNameEnum.Sun:
+                            case Library.PlanetName.PlanetNameEnum.Sun:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Anxious about everything, prosperity collapses, troubles with wife, children, land, family, disputes and quarrels, diseases affecting head, belly and eyes, damage in respect of agriculture.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Moon:
+                            case Library.PlanetName.PlanetNameEnum.Moon:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Gains of females, education, knowledge, money, children and vehicles, worship of God, accomplishments of desires, troubles through wife, domestic happiness afterwards, pain and disease due to inflammation of nervous tissue and from lust and other passions of human nature.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mars:
+                            case Library.PlanetName.PlanetNameEnum.Mars:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Flow of bile, disease of the eyes, great exertion, much income, acquisition or wealth, marriage, acquisition of lands, venereal diseases, danger from arms, exile in foreign places, atheistic tendencies, increase of property through the influence of females, negligence of duty, bent on pleasure and passion, temporary affection of eyes.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mercury:
+                            case Library.PlanetName.PlanetNameEnum.Mercury:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Association with prostitutes, enjoyments, knowledge, mathematical learning, success in litigations, inclination to learn music, piles and other hot ailments, pleasure through wife and children, increase of wealth, gain of knowledge in aru and sciences, wealth, royal favour, prosperity on a large scale and sound health.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Jupiter:
+                            case Library.PlanetName.PlanetNameEnum.Jupiter:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Means of livelihood settled, gains from profession, benefits through superiors or employers or persons ruled by Jupiter fame, anxiety, quarrels with saints and religious men, gain of knowledge, end of dependence, worship of certain inferior natural forces, happiness and health, marriages, sexual intercourse, increase of family reputation and good deeds, wealth. ultimate happiness, wife and children suffer in the end.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Venus:
+                            case Library.PlanetName.PlanetNameEnum.Venus:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Success, good servants and good many pleasures, money plentiful. disappearance of enemies, attainment of fame and birth of children.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Saturn:
+                            case Library.PlanetName.PlanetNameEnum.Saturn:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Sexual intercourse with females advanced in age, accession to lands and wealth, disappearance of enemies, affection of excretory system, piles, etc., rheumatic pains in legs and bands, danger to eye sight, distaste for food, loss of appetite, physical condition poor, loss of money, wanderings, servitude, bolting and gambling, addiction to liquor, bad company, etc., ill-health, loss of memory, impotence.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Rahu:
+                            case Library.PlanetName.PlanetNameEnum.Rahu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Meditation, seclusion, quarrels among relatives and his people, entire change of surroundings, schemes of deception. miserliness, acquisition of lost property, dislike of relatives. evil from friends and injury by fire.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Ketu:
+                            case Library.PlanetName.PlanetNameEnum.Ketu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Discordance, death of relatives, injury inflicted by enemies, misgivings in heart, deprivation of wealth, troubles through wife, danger from quadrupeds, illness to partner or a member of the family, accidental blood poisoning, delirious fits, weakness in body and mind, gradual loss of wealth, loss of relatives, bad company, abode in seclusion, manifold sorrows, but happiness in the end.";
@@ -2530,59 +2530,59 @@ namespace VedAstro.Library
                                 throw new Exception($"Planet not accounted for! : {minorPlanet}");
                         }
                     }
-                case PlanetName.PlanetNameEnum.Saturn:
+                case Library.PlanetName.PlanetNameEnum.Saturn:
                     {
                         switch (minorPlanet.Name)
                         {
-                            case PlanetName.PlanetNameEnum.Sun:
+                            case Library.PlanetName.PlanetNameEnum.Sun:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Loss of wife and children, trouble from rulers or robbers. sinking of heart, danger of blood poisoning, haemorrhage of the generative system, chronic poisoning, intestinal swellings, affliction of the eyes, sickness even to healthy children and wife, body full of pain and disorders, danger of death. fear of death to father-in-law.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Moon:
+                            case Library.PlanetName.PlanetNameEnum.Moon:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Increase in cattle, enmity of friends and relatives, cold affections, troubles and sickness, family disputes, loss of money and property, reduction to great need, mortgage of property and its recovery after a lapse of time, death of a near relative, sorrow, dislike of relatives, coming in of money, windy diseases.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mars:
+                            case Library.PlanetName.PlanetNameEnum.Mars:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Some disgrace, serious enmity, strife, much blame, wanderings from place to place, unsettled life, many enemies, loss of money by fraud or theft, change of residence, serious illness, distress to brothers and friends, hot diseases.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mercury:
+                            case Library.PlanetName.PlanetNameEnum.Mercury:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Charitable works, gain of wealth, birth of children, increase of knowledge in some branch, prosperity to children, success to relatives, general prosperity, favours and approbation from superiors, increase of happiness, wealth and fame, benefits occurring from acts of piety and customary religious observances, agriculture and commerce.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Jupiter:
+                            case Library.PlanetName.PlanetNameEnum.Jupiter:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Worship of gods and holy people, happiness to family, increase in bodily comforts, accomplishment of intentions by the help of superiors, increase of family circles, attainment of rank.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Venus:
+                            case Library.PlanetName.PlanetNameEnum.Venus:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Auspicious, general happiness, attentions and favours from others, gifts, profits in business, increase of family members, victory over enemies, success in life, goodwill of relatives, accession to wife's property and wealth.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Saturn:
+                            case Library.PlanetName.PlanetNameEnum.Saturn:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Brings on diseases, troubles and torments, much mental anguish, capacity of kings and free-hooters, loss of wealth, fear or poisonous effect to cattle, much sufferings to family, fever, wind or phlegm, bodily ailments and colic, body languishes, loss of money and children, serious enmities, dispute and troubles from relatives, blood and bilious complaints, quarrels in family, loss of money, mental derangement.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Rahu:
+                            case Library.PlanetName.PlanetNameEnum.Rahu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Disease in every limb, loss of wealth by rulers, robbers and foes, danger of physical hurts, various physical troubles, fevers, enemies, increase of troubles.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Ketu:
+                            case Library.PlanetName.PlanetNameEnum.Ketu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Rheumatism or sickness, danger of poison, danger from sons, loss of money, contentions and quarrels with vile and wicked people, dread of evil dreams, quarrels in family.";
@@ -2592,59 +2592,59 @@ namespace VedAstro.Library
                                 throw new Exception($"Planet not accounted for! : {minorPlanet}");
                         }
                     }
-                case PlanetName.PlanetNameEnum.Rahu:
+                case Library.PlanetName.PlanetNameEnum.Rahu:
                     {
                         switch (minorPlanet.Name)
                         {
-                            case PlanetName.PlanetNameEnum.Sun:
+                            case Library.PlanetName.PlanetNameEnum.Sun:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Hot fevers, giddiness, fear and enmity of people, quarrels in family, benefits from persons in good position, fear and suspicion in connection with wife, children and relatives, change of position or residence, love of charitable acts, contentment, cessation of all violence and outrage of contagious diseases, success in examinations, private life happy, much reputation and fame, but mental unrest.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Moon:
+                            case Library.PlanetName.PlanetNameEnum.Moon:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Abundance of enjoyments, good crops, coming in of money and communion with kith and kin, loss of relatives, loss of money through wife, pains in the limbs, change of position or residence, danger of personal hurts, unstability of health, sea voyages, gain of lands and money, loss or danger to wife and children.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mars:
+                            case Library.PlanetName.PlanetNameEnum.Mars:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Danger from rulers, fires or thieves and by arms, defeat in litigation, loss of money due to cousins, difficulties, sorrows, danger to the person due to malice of enemies, tendency to ease or dissolute habits, disputes and mental anxiety, combination of all possible calamities, bewilderment in every work and culpable failure of memory.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mercury:
+                            case Library.PlanetName.PlanetNameEnum.Mercury:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Many friends and relatives, wife and children, accession to wealth or royal favour. In the first 18 months of this period very busy, seriously inclined to marry. In the latter 12 months, enemies increase through his own action, happiness, birth of children, acquisition of vehicles, happiness to relatives and family, enjoyments with prostitutes, showy, gains through trade, fraudulent schemes.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Jupiter:
+                            case Library.PlanetName.PlanetNameEnum.Jupiter:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Total disappearance of enemies and sickness, royal favour, acquisition of wealth, birth of children, increase of pleasure, gain through nobles or persons in power, benefits and comforts from superiors, success in all efforts, marriage in the house, increase of enemies, litigations and dips in sacred rivers.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Venus:
+                            case Library.PlanetName.PlanetNameEnum.Venus:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Accession to vehicles and things of foreign land, troubles from foes, relatives and diseases, acquisition of wealth and other advantages, friendly alliances, wife a source of fortune and happiness, benefits from superiors or beads above in office, liable to deception, false friends, gain in land, birth of a child or marriage.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Saturn:
+                            case Library.PlanetName.PlanetNameEnum.Saturn:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Scandal, danger due to fall of a tree, bad associations, divorce of wife or husband, incessant disputes and contests, rheumatism, biliousness, etc., throughout: disease due to wind and bile, distress of relatives, friends and well-wishers, residence in a remote foreign land.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Rahu:
+                            case Library.PlanetName.PlanetNameEnum.Rahu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Disturbance in mind, anxieties, quarrels among relatives, death of partner, master or the head of the family, mental anxiety, danger of poisoning, transfer, all sorts of scandals and quarrels, fever, bites of insects or wounds by arms, death of relatives, going to court as witness, quarrels with parents, diseases, illness to wife, failure of intellect, loss of wealth, wandering in far-off countries and distress there.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Ketu:
+                            case Library.PlanetName.PlanetNameEnum.Ketu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Danger, disease in the anus, no good and timely meals, epidemic diseases, danger of physical hurts and poison, ill-health to children, some swellings in the body, troubles through wife, danger from superiors, loss of wealth and honour, loss of children, death of cattle and misfortunes of all kinds.";
@@ -2654,59 +2654,59 @@ namespace VedAstro.Library
                                 throw new Exception($"Planet not accounted for! : {minorPlanet}");
                         }
                     }
-                case PlanetName.PlanetNameEnum.Ketu:
+                case Library.PlanetName.PlanetNameEnum.Ketu:
                     {
                         switch (minorPlanet.Name)
                         {
-                            case PlanetName.PlanetNameEnum.Sun:
+                            case Library.PlanetName.PlanetNameEnum.Sun:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Disappointment, physical pain, exile in foreign country, peril and obstruction in every business, increase of knowledge, sickness in family, long journey and return, anxiety about wife's health.";
                                     break;
                                 }
-                            case PlanetName.PlanetNameEnum.Moon:
+                            case Library.PlanetName.PlanetNameEnum.Moon:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Disputes about fair sex, trouble through children, gains and financial success, diseases of biliousness and cold, loss of relatives and money, destruction of wealth and distress of mind.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mars:
+                            case Library.PlanetName.PlanetNameEnum.Mars:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Odium of sons, wife and younger brothers, loss of relatives, trouble from diseases, foes and bad rulers, path of progress obstructed, fear and anxiety, disputes and contests of different kinds, enemies arise, danger of disputes and destruction through females, sufferings from fever, fear of robbers, death, imprisonment, urinary diseases, loss and difficulties and surgical operations.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Mercury:
+                            case Library.PlanetName.PlanetNameEnum.Mercury:
                                 {
                                     returnVal.eventNature = EventNature.Neutral;
                                     returnVal.desciption = @"Society of relatives, friends and the like, material gains from knowledge, danger from relatives, anxiety on account of children, failure in plans, deception, jealousy, falsehood, and knowledge.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Jupiter:
+                            case Library.PlanetName.PlanetNameEnum.Jupiter:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Exemption from ailments, acquisition of lands and birth of children, profitable transactions, association with people of good position, danger of poison, wife an object of pleasure, if unmarried marriage takes place.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Venus:
+                            case Library.PlanetName.PlanetNameEnum.Venus:
                                 {
                                     returnVal.eventNature = EventNature.Good;
                                     returnVal.desciption = @"Wealth and happiness, birth of a child, efforts crowned with success, in the end sickness, wife ill, illness to children, quarrels, loss of relatives and friends, fever and dysentery.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Saturn:
+                            case Library.PlanetName.PlanetNameEnum.Saturn:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Loss of wife, danger from enemies, imprisonment, loss of wealth, indigestion, property in danger or ruin, heavy loss in different ways, change of residence, some cutaneous diseases. anxiety owing to sickness of partner misgivings in the heart, mental anguish, difference of opinion with relations, exile in foreign countries.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Rahu:
+                            case Library.PlanetName.PlanetNameEnum.Rahu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Loss of lands, imprisonment, quarrel with friends, danger of blood poisoning, danger of ruin, loss of property, fame and honour, rear of kings and robbers, sorrow, ruin of all business, adultery with mean women.";
                                     return returnVal;
                                 }
-                            case PlanetName.PlanetNameEnum.Ketu:
+                            case Library.PlanetName.PlanetNameEnum.Ketu:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
                                     returnVal.desciption = @"Fear of death of wife or children, loss of wealth and happiness, mental troubles, separation from relatives, subject to some estrangement, restraint or detention, danger of poison.";
@@ -2773,7 +2773,7 @@ namespace VedAstro.Library
             //    : GetMoonConstellation(birthTime);
 
             //get dasa planet at birth
-            var moonConstellation = PlanetConstellation(birthTime, PlanetName.Moon);
+            var moonConstellation = PlanetConstellation(birthTime, Library.PlanetName.Moon);
             //var risingConstellation = GetHouseConstellation(1, birthTime);
             var birthDasaPlanetMoon = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
             //var birthDasaPlanet = GetConstellationDasaPlanet(risingConstellation.GetConstellationName());
@@ -3109,15 +3109,15 @@ namespace VedAstro.Library
         /// </summary>
         public static PlanetName GetNextDasaPlanet(PlanetName planet)
         {
-            if (planet == PlanetName.Sun) { return PlanetName.Moon; }
-            if (planet == PlanetName.Moon) { return PlanetName.Mars; }
-            if (planet == PlanetName.Mars) { return PlanetName.Rahu; }
-            if (planet == PlanetName.Rahu) { return PlanetName.Jupiter; }
-            if (planet == PlanetName.Jupiter) { return PlanetName.Saturn; }
-            if (planet == PlanetName.Saturn) { return PlanetName.Mercury; }
-            if (planet == PlanetName.Mercury) { return PlanetName.Ketu; }
-            if (planet == PlanetName.Ketu) { return PlanetName.Venus; }
-            if (planet == PlanetName.Venus) { return PlanetName.Sun; }
+            if (planet == Library.PlanetName.Sun) { return Library.PlanetName.Moon; }
+            if (planet == Library.PlanetName.Moon) { return Library.PlanetName.Mars; }
+            if (planet == Library.PlanetName.Mars) { return Library.PlanetName.Rahu; }
+            if (planet == Library.PlanetName.Rahu) { return Library.PlanetName.Jupiter; }
+            if (planet == Library.PlanetName.Jupiter) { return Library.PlanetName.Saturn; }
+            if (planet == Library.PlanetName.Saturn) { return Library.PlanetName.Mercury; }
+            if (planet == Library.PlanetName.Mercury) { return Library.PlanetName.Ketu; }
+            if (planet == Library.PlanetName.Ketu) { return Library.PlanetName.Venus; }
+            if (planet == Library.PlanetName.Venus) { return Library.PlanetName.Sun; }
 
             //if no plant found something wrong
             throw new Exception("Planet not found!");
@@ -3201,47 +3201,47 @@ namespace VedAstro.Library
                 case ConstellationName.Krithika:
                 case ConstellationName.Uttara:
                 case ConstellationName.Uttarashada:
-                    return PlanetName.Sun;
+                    return Library.PlanetName.Sun;
 
                 case ConstellationName.Rohini:
                 case ConstellationName.Hasta:
                 case ConstellationName.Sravana:
-                    return PlanetName.Moon;
+                    return Library.PlanetName.Moon;
 
                 case ConstellationName.Mrigasira:
                 case ConstellationName.Chitta:
                 case ConstellationName.Dhanishta:
-                    return PlanetName.Mars;
+                    return Library.PlanetName.Mars;
 
                 case ConstellationName.Aridra:
                 case ConstellationName.Swathi:
                 case ConstellationName.Satabhisha:
-                    return PlanetName.Rahu;
+                    return Library.PlanetName.Rahu;
 
                 case ConstellationName.Punarvasu:
                 case ConstellationName.Vishhaka:
                 case ConstellationName.Poorvabhadra:
-                    return PlanetName.Jupiter;
+                    return Library.PlanetName.Jupiter;
 
                 case ConstellationName.Pushyami:
                 case ConstellationName.Anuradha:
                 case ConstellationName.Uttarabhadra:
-                    return PlanetName.Saturn;
+                    return Library.PlanetName.Saturn;
 
                 case ConstellationName.Aslesha:
                 case ConstellationName.Jyesta:
                 case ConstellationName.Revathi:
-                    return PlanetName.Mercury;
+                    return Library.PlanetName.Mercury;
 
                 case ConstellationName.Makha:
                 case ConstellationName.Moola:
                 case ConstellationName.Aswini:
-                    return PlanetName.Ketu;
+                    return Library.PlanetName.Ketu;
 
                 case ConstellationName.Pubba:
                 case ConstellationName.Poorvashada:
                 case ConstellationName.Bharani:
-                    return PlanetName.Venus;
+                    return Library.PlanetName.Venus;
             }
 
             //if it reaches here something wrong
@@ -3259,15 +3259,15 @@ namespace VedAstro.Library
         public static double GetPD1PlanetFullYears(PlanetName planet)
         {
 
-            if (planet == PlanetName.Sun) { return 6.0; }
-            if (planet == PlanetName.Moon) { return 10.0; }
-            if (planet == PlanetName.Mars) { return 7.0; }
-            if (planet == PlanetName.Rahu) { return 18.0; }
-            if (planet == PlanetName.Jupiter) { return 16.0; }
-            if (planet == PlanetName.Saturn) { return 19.0; }
-            if (planet == PlanetName.Mercury) { return 17.0; }
-            if (planet == PlanetName.Ketu) { return 7.0; }
-            if (planet == PlanetName.Venus) { return 20.0; }
+            if (planet == Library.PlanetName.Sun) { return 6.0; }
+            if (planet == Library.PlanetName.Moon) { return 10.0; }
+            if (planet == Library.PlanetName.Mars) { return 7.0; }
+            if (planet == Library.PlanetName.Rahu) { return 18.0; }
+            if (planet == Library.PlanetName.Jupiter) { return 16.0; }
+            if (planet == Library.PlanetName.Saturn) { return 19.0; }
+            if (planet == Library.PlanetName.Mercury) { return 17.0; }
+            if (planet == Library.PlanetName.Ketu) { return 7.0; }
+            if (planet == Library.PlanetName.Venus) { return 20.0; }
 
             //if no plant found something wrong
             throw new Exception("Planet not found!");

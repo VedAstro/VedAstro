@@ -137,11 +137,11 @@ namespace VedAstro.Library
 
 
                 //Get sayana longitude on day 
-                Angle longitude = GetPlanetSayanaLongitude(time, planetName);
+                Angle longitude = PlanetSayanaLongitude(time, planetName);
 
 
                 //3 - Hindu Nirayana Long = Sayana Long — Ayanamsa.
-                Angle birthAyanamsa = GetAyanamsa(time);
+                Angle birthAyanamsa = Ayanamsa(time);
 
                 //if below ayanamsa add 360 before minus
                 returnValue = longitude.TotalDegrees < birthAyanamsa.TotalDegrees
@@ -195,17 +195,18 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the constellation behind a planet at a given time
         /// </summary>
-        [API("Constellation")]
+        [API("Gets the constellation behind a planet at a given time")]
         public static PlanetConstellation PlanetConstellation(Time time, PlanetName planet)
         {
             //get position of planet in longitude
             var planetLongitude = PlanetNirayanaLongitude(time, planet);
 
             //return the constellation behind the planet
-            return GetConstellationAtLongitude(planetLongitude);
+            return ConstellationAtLongitude(planetLongitude);
         }
 
-        [API("Tarabala")]
+
+        [API("Tarabala or birth ruling constellation strength, used for personal muhurtha")]
         public static Tarabala Tarabala(Time time, Person person)
         {
             int dayRulingConstellationNumber = MoonConstellation(time).GetConstellationNumber();
@@ -268,7 +269,7 @@ namespace VedAstro.Library
         /// best, the Moon should not occupy in the election chart, a position that
         /// happens to represent the 6th, 8th or 12th from the person's Janma Rasi.
         /// </summary>
-        [API("Chandrabala")]
+        [API("Chandrabala or lunar strength, used for personal muhurtha")]
         public static int Chandrabala(Time time, Person person)
         {
             //TODO Needs to be updated with count sign from sign for better consistency
@@ -308,7 +309,7 @@ namespace VedAstro.Library
 
         }
 
-        [API("MoonSign", "", Category.StarsAboveMe)]
+        [API( "Zodiac sign behind the Moon at given time", Category.StarsAboveMe)]
         public static ZodiacName MoonSignName(Time time)
         {
             //get zodiac sign behind the moon
@@ -318,7 +319,7 @@ namespace VedAstro.Library
             return moonSign.GetSignName();
         }
 
-        [API("NithyaYoga", "", Category.StarsAboveMe)]
+        [API("Nithya Yoga = (Longitude of Sun + Longitude of Moon) / 13°20' (or 800')", Category.StarsAboveMe)]
         public static NithyaYoga NithyaYoga(Time time)
         {
             //Nithya Yoga = (Longitude of Sun + Longitude of Moon) / 13°20' (or 800')
@@ -345,7 +346,7 @@ namespace VedAstro.Library
             return nithyaYoga;
         }
 
-        [API("Karana", "", Category.StarsAboveMe)]
+        [API("used for auspicious activities, part Panchang like Tithi, Nakshatra, Yoga, etc.", Category.StarsAboveMe)]
         public static Karana Karana(Time time)
         {
             //declare karana as empty first
@@ -438,16 +439,14 @@ namespace VedAstro.Library
             return (Karana)karanaToReturn;
         }
 
-        [API("SunSign", "", Category.StarsAboveMe)]
+        [API("Zodiac sign behind the Sun at a time", Category.StarsAboveMe)]
         public static ZodiacSign SunSign(Time time)
         {
-
             //get zodiac sign behind the sun
             var sunSign = PlanetRasiSign(Library.PlanetName.Sun, time);
 
             //return zodiac sign behind sun
             return sunSign;
-
         }
 
         ///<summary>
@@ -459,11 +458,11 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetTimeSunEnteredCurrentSign", time), _getTimeSunEnteredCurrentSign);
+            return CacheManager.GetCache(new CacheKey(nameof(TimeSunEnteredCurrentSign), time), _timeSunEnteredCurrentSign);
 
 
             //UNDERLYING FUNCTION
-            Time _getTimeSunEnteredCurrentSign()
+            Time _timeSunEnteredCurrentSign()
             {
 
                 //set the maximum accuracy used to calculate time sun will enter the sign
@@ -531,10 +530,10 @@ namespace VedAstro.Library
         ///
         /// Note:
         /// -2 possible ways leaving time is calculated
-        ///     1. degrees Sun is in sign is more than 29.999 degress (very very close to leaving sign)
+        ///     1. degrees Sun is in sign is more than 29.999 degrees (very very close to leaving sign)
         ///     2. accuracy limit is hit
         ///</summary>
-        [API("TimeSunLeavesCurrentSign", "", Category.StarsAboveMe)]
+        [API("Time when Sun was just about to leave sign (29.99 degree)", Category.StarsAboveMe)]
         public static Time TimeSunLeavesCurrentSign(Time time)
         {
 
@@ -608,7 +607,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Calculates & creates all houses as list
         /// </summary>
-        [API("HouseLongitudes", "", Category.Astrology)]
+        [API("Calculates & creates all houses data as list", Category.Astrology)]
         public static List<House> GetHouses(Time time)
         {
             //CACHE MECHANISM
@@ -648,7 +647,7 @@ namespace VedAstro.Library
 
                 //Deduct from these two, the Ayanamsa to get the Nirayana longitudes
                 // of Udaya Lagna (Ascendant) and the Madhya Lagna (Upper Meridian)
-                var ayanamsa = GetAyanamsa(time);
+                var ayanamsa = Ayanamsa(time);
 
                 var udayaLagna = sayanaCuspOfHouse1 - ayanamsa;
                 var madhyaLagna = sayanaCuspOfHouse10 - ayanamsa;
@@ -739,18 +738,18 @@ namespace VedAstro.Library
 
                 //3.0 Calculate house begin & end longitudes
 
-                house1EndLongitude = house2BeginLongitude = GetHouseJunctionPoint(house1MiddleLongitude, house2MiddleLongitude);
-                house2EndLongitude = house3BeginLongitude = GetHouseJunctionPoint(house2MiddleLongitude, house3MiddleLongitude);
-                house3EndLongitude = house4BeginLongitude = GetHouseJunctionPoint(house3MiddleLongitude, house4MiddleLongitude);
-                house4EndLongitude = house5BeginLongitude = GetHouseJunctionPoint(house4MiddleLongitude, house5MiddleLongitude);
-                house5EndLongitude = house6BeginLongitude = GetHouseJunctionPoint(house5MiddleLongitude, house6MiddleLongitude);
-                house6EndLongitude = house7BeginLongitude = GetHouseJunctionPoint(house6MiddleLongitude, house7MiddleLongitude);
-                house7EndLongitude = house8BeginLongitude = GetHouseJunctionPoint(house7MiddleLongitude, house8MiddleLongitude);
-                house8EndLongitude = house9BeginLongitude = GetHouseJunctionPoint(house8MiddleLongitude, house9MiddleLongitude);
-                house9EndLongitude = house10BeginLongitude = GetHouseJunctionPoint(house9MiddleLongitude, house10MiddleLongitude);
-                house10EndLongitude = house11BeginLongitude = GetHouseJunctionPoint(house10MiddleLongitude, house11MiddleLongitude);
-                house11EndLongitude = house12BeginLongitude = GetHouseJunctionPoint(house11MiddleLongitude, house12MiddleLongitude);
-                house12EndLongitude = house1BeginLongitude = GetHouseJunctionPoint(house12MiddleLongitude, house1MiddleLongitude);
+                house1EndLongitude = house2BeginLongitude = HouseJunctionPoint(house1MiddleLongitude, house2MiddleLongitude);
+                house2EndLongitude = house3BeginLongitude = HouseJunctionPoint(house2MiddleLongitude, house3MiddleLongitude);
+                house3EndLongitude = house4BeginLongitude = HouseJunctionPoint(house3MiddleLongitude, house4MiddleLongitude);
+                house4EndLongitude = house5BeginLongitude = HouseJunctionPoint(house4MiddleLongitude, house5MiddleLongitude);
+                house5EndLongitude = house6BeginLongitude = HouseJunctionPoint(house5MiddleLongitude, house6MiddleLongitude);
+                house6EndLongitude = house7BeginLongitude = HouseJunctionPoint(house6MiddleLongitude, house7MiddleLongitude);
+                house7EndLongitude = house8BeginLongitude = HouseJunctionPoint(house7MiddleLongitude, house8MiddleLongitude);
+                house8EndLongitude = house9BeginLongitude = HouseJunctionPoint(house8MiddleLongitude, house9MiddleLongitude);
+                house9EndLongitude = house10BeginLongitude = HouseJunctionPoint(house9MiddleLongitude, house10MiddleLongitude);
+                house10EndLongitude = house11BeginLongitude = HouseJunctionPoint(house10MiddleLongitude, house11MiddleLongitude);
+                house11EndLongitude = house12BeginLongitude = HouseJunctionPoint(house11MiddleLongitude, house12MiddleLongitude);
+                house12EndLongitude = house1BeginLongitude = HouseJunctionPoint(house12MiddleLongitude, house1MiddleLongitude);
 
                 //4.0 Initialize houses into list
                 var houseList = new List<House>();
@@ -777,7 +776,7 @@ namespace VedAstro.Library
 
         }
 
-        [API("JulianDays")]
+        [API("Convert LMT to Julian Days used in Swiss Ephemeris")]
         public static double ConvertLmtToJulian(Time time)
         {
 
@@ -815,7 +814,6 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Gets all the planets that are in conjunction with the inputed planet
         ///
@@ -837,8 +835,8 @@ namespace VedAstro.Library
         /// same sign and not in conjunction but another planet occupying
         /// a trine in respect of the two."
         /// </summary>
-        [API("PlanetsInConjuction")]
-        public static List<PlanetName> GetPlanetsInConjuction(Time time, PlanetName inputedPlanetName)
+        [API("Gets all the planets that are in conjunction with the inputed planet")]
+        public static List<PlanetName> PlanetsInConjuction(Time time, PlanetName inputedPlanetName)
         {
             //set 8° degrees as max space around planet where conjunction occurs
             var conjunctionOrbMax = new Angle(8, 0, 0);
@@ -847,7 +845,7 @@ namespace VedAstro.Library
             var inputedPlanet = PlanetNirayanaLongitude(time, inputedPlanetName);
 
             //get all planet longitudes
-            List<PlanetLongitude> allPlanetLongitudeList = GetAllPlanetLongitude(time);
+            List<PlanetLongitude> allPlanetLongitudeList = AllPlanetLongitude(time);
 
             //a place to store conjunct planets 
             var conjunctPlanets = new List<PlanetName>();
@@ -881,7 +879,7 @@ namespace VedAstro.Library
         /// - Calculation in Nirayana longitudes
         /// - Calculates longitudes for you
         /// </summary>
-        [API("DistanceBetweenPlanets")]
+        [API("Gets longitudinal space between 2 planets")]
         public static Angle DistanceBetweenPlanets(PlanetName planet1, PlanetName planet2, Time time)
         {
             var planet1Longitude = PlanetNirayanaLongitude(time, planet1);
@@ -957,8 +955,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the planets in the house
         /// </summary>
-        [API("PlanetsInHouse", "Gets list of planets that's in a house/bhava")]
-        public static List<PlanetName> GetPlanetsInHouse(HouseName houseNumber, Time time)
+        [API( "Gets list of planets that's in a house/bhava")]
+        public static List<PlanetName> PlanetsInHouse(HouseName houseNumber, Time time)
         {
 
             //declare empty list of planets
@@ -971,7 +969,7 @@ namespace VedAstro.Library
             var house = houseList.Find(h => h.GetHouseName() == houseNumber);
 
             //get all planet longitudes
-            List<PlanetLongitude> allPlanetLongitudeList = GetAllPlanetLongitude(time);
+            List<PlanetLongitude> allPlanetLongitudeList = AllPlanetLongitude(time);
 
             //loop through each planet in house
             foreach (var planet in allPlanetLongitudeList)
@@ -993,8 +991,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets longitude positions of all planets
         /// </summary>
-        [API("AllPlanetLongitude", "Gets the Nirayana longitude of all 9 planets")]
-        public static List<PlanetLongitude> GetAllPlanetLongitude(Time time)
+        [API( "Gets the Nirayana longitude of all 9 planets")]
+        public static List<PlanetLongitude> AllPlanetLongitude(Time time)
         {
 
             //get longitudes of all planets
@@ -1041,36 +1039,36 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets longitude positions of all planets Sayana / Fixed zodiac 
         /// </summary>
-        [API("AllPlanetFixedLongitude")]
-        public static List<PlanetLongitude> GetAllPlanetFixedLongitude(Time time)
+        [API("Gets longitude positions of all planets Sayana / Fixed zodiac ")]
+        public static List<PlanetLongitude> AllPlanetFixedLongitude(Time time)
         {
 
             //get longitudes of all planets
-            var sunLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Sun);
+            var sunLongitude = PlanetSayanaLongitude(time, Library.PlanetName.Sun);
             var sun = new PlanetLongitude(Library.PlanetName.Sun, sunLongitude);
 
-            var moonLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Moon);
+            var moonLongitude = PlanetSayanaLongitude(time, Library.PlanetName.Moon);
             var moon = new PlanetLongitude(Library.PlanetName.Moon, moonLongitude);
 
-            var marsLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Mars);
+            var marsLongitude = PlanetSayanaLongitude(time, Library.PlanetName.Mars);
             var mars = new PlanetLongitude(Library.PlanetName.Mars, marsLongitude);
 
-            var mercuryLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Mercury);
+            var mercuryLongitude = PlanetSayanaLongitude(time, Library.PlanetName.Mercury);
             var mercury = new PlanetLongitude(Library.PlanetName.Mercury, mercuryLongitude);
 
-            var jupiterLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Jupiter);
+            var jupiterLongitude = PlanetSayanaLongitude(time, Library.PlanetName.Jupiter);
             var jupiter = new PlanetLongitude(Library.PlanetName.Jupiter, jupiterLongitude);
 
-            var venusLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Venus);
+            var venusLongitude = PlanetSayanaLongitude(time, Library.PlanetName.Venus);
             var venus = new PlanetLongitude(Library.PlanetName.Venus, venusLongitude);
 
-            var saturnLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Saturn);
+            var saturnLongitude = PlanetSayanaLongitude(time, Library.PlanetName.Saturn);
             var saturn = new PlanetLongitude(Library.PlanetName.Saturn, saturnLongitude);
 
-            var rahuLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Rahu);
+            var rahuLongitude = PlanetSayanaLongitude(time, Library.PlanetName.Rahu);
             var rahu = new PlanetLongitude(Library.PlanetName.Rahu, rahuLongitude);
 
-            var ketuLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Ketu);
+            var ketuLongitude = PlanetSayanaLongitude(time, Library.PlanetName.Ketu);
             var ketu = new PlanetLongitude(Library.PlanetName.Ketu, ketuLongitude);
 
 
@@ -1087,7 +1085,7 @@ namespace VedAstro.Library
         }
 
 
-        [API("HousePlanetIsIn")]
+        [API("Gets the House number a given planet is in at a time")]
         public static HouseName HousePlanetIsIn(Time time, PlanetName planetName)
         {
 
@@ -1127,7 +1125,7 @@ namespace VedAstro.Library
             var houseSignName = Calculate.HouseSignName(houseNumber, time);
 
             //get the lord of the house sign
-            var lordOfHouseSign = Calculate.GetLordOfZodiacSign(houseSignName);
+            var lordOfHouseSign = Calculate.LordOfZodiacSign(houseSignName);
 
             return lordOfHouseSign;
         }
@@ -1137,8 +1135,8 @@ namespace VedAstro.Library
         /// the Graha (planet) in whose Rasi (sign) the Bhavamadhya falls
         /// List overload to GetLordOfHouse (above method)
         /// </summary>
-        [API("LordOfHouseList")]
-        public static List<PlanetName> GetLordOfHouseList(List<HouseName> houseList, Time time)
+        [API("The lord of a bhava is the Graha (planet) in whose Rasi (sign) the Bhavamadhya falls")]
+        public static List<PlanetName> LordOfHouseList(List<HouseName> houseList, Time time)
         {
             var returnList = new List<PlanetName>();
             foreach (var house in houseList)
@@ -1153,7 +1151,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Checks if the inputed sign was the sign of the house during the inputed time
         /// </summary>
-        [API("IsHouseSignName")]
+        [API("Checks if the inputed sign was the sign of the house during the inputed time")]
         public static bool IsHouseSignName(HouseName house, ZodiacName sign, Time time) => HouseSignName(house, time) == sign;
 
         /// <summary>
@@ -1178,7 +1176,7 @@ namespace VedAstro.Library
             var middleLongitude = specifiedHouse.GetMiddleLongitude();
             //todo is round needed!!
             var roundedMiddleLongitude = Angle.FromDegrees(Math.Round(middleLongitude.TotalDegrees, 4)); //rounded to 5 places for accuracy
-            var houseSignName = Calculate.GetZodiacSignAtLongitude(roundedMiddleLongitude).GetSignName();
+            var houseSignName = Calculate.ZodiacSignAtLongitude(roundedMiddleLongitude).GetSignName();
 
 #if DEBUG_LOG
 
@@ -1216,7 +1214,7 @@ namespace VedAstro.Library
             //Example, with middle longitude 90.4694, becomes Cancer (0°28'9"),
             //but predictive results points to Gemini (30°0'0"), so rounding is implemented
             var middleLongitude = specifiedHouse.GetMiddleLongitude();
-            var houseConstellation = Calculate.GetConstellationAtLongitude(middleLongitude);
+            var houseConstellation = Calculate.ConstellationAtLongitude(middleLongitude);
 
             //return the name of house sign
             return houseConstellation;
@@ -1227,7 +1225,7 @@ namespace VedAstro.Library
         {
             //1.0 Get ordinary zodiac sign name
             //get ordinary zodiac sign
-            var ordinarySign = Calculate.GetZodiacSignAtLongitude(longitude);
+            var ordinarySign = Calculate.ZodiacSignAtLongitude(longitude);
 
             //get name of ordinary sign
             var ordinarySignName = ordinarySign.GetSignName();
@@ -1289,7 +1287,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Exp : Get 4th sign from Cancer
         /// </summary>
-        [API("SignCountedFromInputSign")]
+        [API("Exp : Get 4th sign from Cancer")]
         public static ZodiacName SignCountedFromInputSign(ZodiacName inputSign, int countToNextSign)
         {
             //assign counted to same as starting sign at first
@@ -1299,7 +1297,7 @@ namespace VedAstro.Library
             for (int i = 1; i < countToNextSign; i++)
             {
                 //get the next zodiac sign from the current counted to sign
-                signCountedTo = GetNextZodiacSign(signCountedTo);
+                signCountedTo = NextZodiacSign(signCountedTo);
             }
 
             return signCountedTo;
@@ -1343,7 +1341,7 @@ namespace VedAstro.Library
                 var longitudeOfPlanet = Calculate.PlanetNirayanaLongitude(time, planetName);
 
                 //get sign planet is in
-                var signPlanetIsIn = Calculate.GetZodiacSignAtLongitude(longitudeOfPlanet);
+                var signPlanetIsIn = Calculate.ZodiacSignAtLongitude(longitudeOfPlanet);
 
                 //return
                 return signPlanetIsIn;
@@ -1387,7 +1385,7 @@ namespace VedAstro.Library
         /// 
         /// </summary>
         [API("SignsPlanetIsAspecting")]
-        public static List<ZodiacName> GetSignsPlanetIsAspecting(PlanetName planetName, Time time)
+        public static List<ZodiacName> SignsPlanetIsAspecting(PlanetName planetName, Time time)
         {
 
             //create empty list of signs
@@ -1603,7 +1601,6 @@ namespace VedAstro.Library
             return dwadasamsaSign;
         }
 
-
         [API("sign is divided into 7 equal parts each is called a Saptamsa and measures 4.28 degrees")]
         public static ZodiacName PlanetSaptamsaSign(PlanetName planetName, Time time)
         {
@@ -1690,7 +1687,7 @@ namespace VedAstro.Library
         /// NOTE:
         /// - No moolatrikone for Rahu & Ketu, no error will be raised
         /// </summary>
-        [API("Moolatrikona", "Similar to Exaltation but covers a range not just a point")]
+        [API("Similar to Exaltation but covers a range not just a point")]
         public static bool IsPlanetInMoolatrikona(PlanetName planetName, Time time)
         {
             //get sign planet is in
@@ -1798,7 +1795,6 @@ namespace VedAstro.Library
             return false;
         }
 
-
         /// <summary>
         /// Gets a planet's relationship to a sign, based on the relation to the lord
         /// Note :
@@ -1826,7 +1822,7 @@ namespace VedAstro.Library
 
 
             //Get lord of zodiac sign
-            var lordOfSign = Calculate.GetLordOfZodiacSign(zodiacSignName);
+            var lordOfSign = Calculate.LordOfZodiacSign(zodiacSignName);
 
             //if lord of sign is same as input planet
             if (planetName == lordOfSign)
@@ -1880,7 +1876,7 @@ namespace VedAstro.Library
             if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.SamePlanet; }
 
             //get planet's permanent relationship
-            PlanetToPlanetRelationship planetPermanentRelationship = GetPlanetPermanentRelationshipWithPlanet(mainPlanet, secondaryPlanet);
+            PlanetToPlanetRelationship planetPermanentRelationship = PlanetPermanentRelationshipWithPlanet(mainPlanet, secondaryPlanet);
 
             //get planet's temporary relationship
             PlanetToPlanetRelationship planetTemporaryRelationship = PlanetTemporaryRelationshipWithPlanet(mainPlanet, secondaryPlanet, time);
@@ -1956,7 +1952,7 @@ namespace VedAstro.Library
 
 
             //1.0 get planet's friends
-            var friendlyPlanetList = Calculate.GetPlanetTemporaryFriendList(mainPlanet, time);
+            var friendlyPlanetList = Calculate.PlanetTemporaryFriendList(mainPlanet, time);
 
             //check if planet is found in friend list
             var planetFoundInFriendList = friendlyPlanetList.Contains(secondaryPlanet);
@@ -1973,113 +1969,114 @@ namespace VedAstro.Library
             return PlanetToPlanetRelationship.Enemy;
         }
 
-        //public static List<PlanetName> GetPlanetTemporaryEnemyList(PlanetName planetName, Time time)
-        //{
-        //    //Enemy houses 1,5,6,7,8,9
+		//public static List<PlanetName> GetPlanetTemporaryEnemyList(PlanetName planetName, Time time)
+		//{
+		//    //Enemy houses 1,5,6,7,8,9
 
-        //    //get house planet is currently in
-        //    var mainPlanetHouseNumber = AstronomicalCalculator.GetHousePlanetIsIn(time, planetName);
+		//    //get house planet is currently in
+		//    var mainPlanetHouseNumber = AstronomicalCalculator.GetHousePlanetIsIn(time, planetName);
 
-        //    //Get houses of enemies of main planet
-        //    //get planets in 1
-        //    var house1FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 1);
-        //    //get planets in 5
-        //    var house5FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 5);
-        //    //get planets in 6
-        //    var house6FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 6);
-        //    //get planets in 7
-        //    var house7FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 7);
-        //    //get planets in 8
-        //    var house8FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 8);
-        //    //get planets in 9
-        //    var house9FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 9);
+		//    //Get houses of enemies of main planet
+		//    //get planets in 1
+		//    var house1FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 1);
+		//    //get planets in 5
+		//    var house5FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 5);
+		//    //get planets in 6
+		//    var house6FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 6);
+		//    //get planets in 7
+		//    var house7FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 7);
+		//    //get planets in 8
+		//    var house8FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 8);
+		//    //get planets in 9
+		//    var house9FromMainPlanet = AstronomicalCalculator.GetHouseCountedFromInputHouse(mainPlanetHouseNumber, 9);
 
-        //    //add houses of friendly planets to a list
-        //    var housesOfEnemyPlanet = new List<int>(){house1FromMainPlanet, house5FromMainPlanet, house6FromMainPlanet,
-        //                                                house7FromMainPlanet, house8FromMainPlanet, house9FromMainPlanet};
+		//    //add houses of friendly planets to a list
+		//    var housesOfEnemyPlanet = new List<int>(){house1FromMainPlanet, house5FromMainPlanet, house6FromMainPlanet,
+		//                                                house7FromMainPlanet, house8FromMainPlanet, house9FromMainPlanet};
 
-        //    //declare list of enemy planets
-        //    var enemyPlanetList = new List<PlanetName>();
+		//    //declare list of enemy planets
+		//    var enemyPlanetList = new List<PlanetName>();
 
-        //    //loop through the houses and fill the enemy planet list
-        //    foreach (var house in housesOfEnemyPlanet)
-        //    {
-        //        //get the planets in the current house
-        //        var enemyPlanetsInThisHouse = AstronomicalCalculator.GetPlanetsInHouse(house, time);
+		//    //loop through the houses and fill the enemy planet list
+		//    foreach (var house in housesOfEnemyPlanet)
+		//    {
+		//        //get the planets in the current house
+		//        var enemyPlanetsInThisHouse = AstronomicalCalculator.GetPlanetsInHouse(house, time);
 
-        //        //add the planets in to the list
-        //        enemyPlanetList.AddRange(enemyPlanetsInThisHouse);
-        //    }
+		//        //add the planets in to the list
+		//        enemyPlanetList.AddRange(enemyPlanetsInThisHouse);
+		//    }
 
-        //    //remove rahu & ketu from list
-        //    enemyPlanetList.Remove(PlanetName.Rahu);
-        //    enemyPlanetList.Remove(PlanetName.Ketu);
-
-
-        //    return enemyPlanetList;
-
-        //}
-
-        //public static List<PlanetName> GetPlanetTemporaryEnemyList(PlanetName planetName, Time time)
-        //{
-        //    //Signs where enemy planets are located 1,5,6,7,8,9
-
-        //    //get sign planet is currently in
-        //    var planetSignName = AstronomicalCalculator.GetPlanetRasiSign(planetName, time).GetSignName();
-
-        //    //Get signs of enemies of main planet
-        //    //get planets in 1
-        //    var sign1FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 1);
-        //    //get planets in 5
-        //    var sign5FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 5);
-        //    //get planets in 6
-        //    var sign6FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 6);
-        //    //get planets in 7
-        //    var sign7FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 7);
-        //    //get planets in 8
-        //    var sign8FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 8);
-        //    //get planets in 9
-        //    var sign9FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 9);
-
-        //    //add signs of enemy planets to a list
-        //    var signsOfEnemyPlanet = new List<ZodiacName>(){sign1FromMainPlanet, sign5FromMainPlanet, sign6FromMainPlanet,
-        //                                                sign7FromMainPlanet, sign8FromMainPlanet, sign9FromMainPlanet};
-
-        //    //declare list of enemy planets
-        //    var enemyPlanetList = new List<PlanetName>();
-
-        //    //loop through the signs and fill the enemy planet list
-        //    foreach (var sign in signsOfEnemyPlanet)
-        //    {
-        //        //get the planets in the current sign
-        //        var enemyPlanetsInThisSign = AstronomicalCalculator.GetPlanetInSign(sign, time);
-
-        //        //add the planets in to the list
-        //        enemyPlanetList.AddRange(enemyPlanetsInThisSign);
-        //    }
+		//    //remove rahu & ketu from list
+		//    enemyPlanetList.Remove(PlanetName.Rahu);
+		//    enemyPlanetList.Remove(PlanetName.Ketu);
 
 
-        //    //remove rahu & ketu from list
-        //    enemyPlanetList.Remove(PlanetName.Rahu);
-        //    enemyPlanetList.Remove(PlanetName.Ketu);
+		//    return enemyPlanetList;
 
-        //    //remove the main planet from list
-        //    enemyPlanetList.Remove(planetName);
+		//}
+
+		//public static List<PlanetName> GetPlanetTemporaryEnemyList(PlanetName planetName, Time time)
+		//{
+		//    //Signs where enemy planets are located 1,5,6,7,8,9
+
+		//    //get sign planet is currently in
+		//    var planetSignName = AstronomicalCalculator.GetPlanetRasiSign(planetName, time).GetSignName();
+
+		//    //Get signs of enemies of main planet
+		//    //get planets in 1
+		//    var sign1FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 1);
+		//    //get planets in 5
+		//    var sign5FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 5);
+		//    //get planets in 6
+		//    var sign6FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 6);
+		//    //get planets in 7
+		//    var sign7FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 7);
+		//    //get planets in 8
+		//    var sign8FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 8);
+		//    //get planets in 9
+		//    var sign9FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 9);
+
+		//    //add signs of enemy planets to a list
+		//    var signsOfEnemyPlanet = new List<ZodiacName>(){sign1FromMainPlanet, sign5FromMainPlanet, sign6FromMainPlanet,
+		//                                                sign7FromMainPlanet, sign8FromMainPlanet, sign9FromMainPlanet};
+
+		//    //declare list of enemy planets
+		//    var enemyPlanetList = new List<PlanetName>();
+
+		//    //loop through the signs and fill the enemy planet list
+		//    foreach (var sign in signsOfEnemyPlanet)
+		//    {
+		//        //get the planets in the current sign
+		//        var enemyPlanetsInThisSign = AstronomicalCalculator.GetPlanetInSign(sign, time);
+
+		//        //add the planets in to the list
+		//        enemyPlanetList.AddRange(enemyPlanetsInThisSign);
+		//    }
 
 
-        //    return enemyPlanetList;
+		//    //remove rahu & ketu from list
+		//    enemyPlanetList.Remove(PlanetName.Rahu);
+		//    enemyPlanetList.Remove(PlanetName.Ketu);
 
-        //}
+		//    //remove the main planet from list
+		//    enemyPlanetList.Remove(planetName);
 
-        /// <summary>
-        /// Gets all the planets in a sign
-        /// </summary>
-        public static List<PlanetName> GetPlanetInSign(ZodiacName signName, Time time)
-        {
-            //get all planets locations in signs
-            var sunSignName = Calculate.PlanetRasiSign(Library.PlanetName.Sun, time).GetSignName();
-            var moonSignName = Calculate.PlanetRasiSign(Library.PlanetName.Moon, time).GetSignName();
-            var marsSignName = Calculate.PlanetRasiSign(Library.PlanetName.Mars, time).GetSignName();
+
+		//    return enemyPlanetList;
+
+		//}
+
+		/// <summary>
+		/// Gets all the planets in a sign
+		/// </summary>
+		[API("Gets all the planets in a sign")]
+		public static List<PlanetName> PlanetInSign(ZodiacName signName, Time time)
+		{
+			//get all planets locations in signs
+			var sunSignName = Calculate.PlanetRasiSign(Library.PlanetName.Sun, time).GetSignName();
+			var moonSignName = Calculate.PlanetRasiSign(Library.PlanetName.Moon, time).GetSignName();
+			var marsSignName = Calculate.PlanetRasiSign(Library.PlanetName.Mars, time).GetSignName();
             var mercurySignName = Calculate.PlanetRasiSign(Library.PlanetName.Mercury, time).GetSignName();
             var jupiterSignName = Calculate.PlanetRasiSign(Library.PlanetName.Jupiter, time).GetSignName();
             var venusSignName = Calculate.PlanetRasiSign(Library.PlanetName.Venus, time).GetSignName();
@@ -2138,8 +2135,8 @@ namespace VedAstro.Library
         /// 12th signs from any other planet becomes his
         /// (Tatkalika) friend.
         /// </summary>
-        [API("TemporaryFriends")]
-        public static List<PlanetName> GetPlanetTemporaryFriendList(PlanetName planetName, Time time)
+        [API("Get list of Temporary (Tatkalika) Friend for a planet")]
+        public static List<PlanetName> PlanetTemporaryFriendList(PlanetName planetName, Time time)
         {
             //get sign planet is currently in
             var planetSignName = Calculate.PlanetRasiSign(planetName, time).GetSignName();
@@ -2169,7 +2166,7 @@ namespace VedAstro.Library
             foreach (var sign in signsOfFriendlyPlanet)
             {
                 //get the planets in the current sign
-                var friendlyPlanetsInThisSign = Calculate.GetPlanetInSign(sign, time);
+                var friendlyPlanetsInThisSign = Calculate.PlanetInSign(sign, time);
 
                 //add the planets in to the list
                 friendlyPlanetList.AddRange(friendlyPlanetsInThisSign);
@@ -2184,10 +2181,11 @@ namespace VedAstro.Library
 
         }
 
+		[API("Greenwich Apparent In Julian Days")]
         public static double GreenwichApparentInJulianDays(Time time)
         {
             //convert lmt to julian days, in universal time (UT)
-            var localMeanTimeInJulian_UT = GetGreenwichLmtInJulianDays(time);
+            var localMeanTimeInJulian_UT = GreenwichLmtInJulianDays(time);
 
             //get longitude of location
             double longitude = time.GetGeoLocation().Longitude();
@@ -2245,7 +2243,6 @@ namespace VedAstro.Library
         /// </summary>
         public static DateTimeOffset LocalMeanTime(Time time) => time.GetLmtDateTimeOffset();
 
-
         [API("House start middle and end longitudes")]
 		public static House House(HouseName houseNumber, Time time)
         {
@@ -2269,7 +2266,7 @@ namespace VedAstro.Library
 
         }
 
-        [API("Panchaka", "", Category.StarsAboveMe)]
+        [API("Gets Panchaka at a given time", Category.StarsAboveMe)]
         public static PanchakaName Panchaka(Time time)
         {
             //If the remainder is 1 (mrityu panchakam), it
@@ -2285,7 +2282,7 @@ namespace VedAstro.Library
             var rullingConstellationNumber = Calculate.MoonConstellation(time).GetConstellationNumber();
 
             //Number of weekday
-            var weekdayNumber = (int)Calculate.GetDayOfWeek(time);
+            var weekdayNumber = (int)Calculate.DayOfWeek(time);
 
             //Number of zodiacal sign, number of the Lagna (from Aries).
             var risingSignNumber = (int)Calculate.HouseSignName(HouseName.House1, time);
@@ -2341,24 +2338,25 @@ namespace VedAstro.Library
 
 
             //get the weekday
-            var weekday = GetDayOfWeek(time);
+            var weekday = DayOfWeek(time);
 
             //based on weekday return the planet lord
             switch (weekday)
             {
-                case DayOfWeek.Sunday: return Library.PlanetName.Sun;
-                case DayOfWeek.Monday: return Library.PlanetName.Moon;
-                case DayOfWeek.Tuesday: return Library.PlanetName.Mars;
-                case DayOfWeek.Wednesday: return Library.PlanetName.Mercury;
-                case DayOfWeek.Thursday: return Library.PlanetName.Jupiter;
-                case DayOfWeek.Friday: return Library.PlanetName.Venus;
-                case DayOfWeek.Saturday: return Library.PlanetName.Saturn;
+                case Library.DayOfWeek.Sunday: return Library.PlanetName.Sun;
+                case Library.DayOfWeek.Monday: return Library.PlanetName.Moon;
+                case Library.DayOfWeek.Tuesday: return Library.PlanetName.Mars;
+                case Library.DayOfWeek.Wednesday: return Library.PlanetName.Mercury;
+                case Library.DayOfWeek.Thursday: return Library.PlanetName.Jupiter;
+                case Library.DayOfWeek.Friday: return Library.PlanetName.Venus;
+                case Library.DayOfWeek.Saturday: return Library.PlanetName.Saturn;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        public static PlanetName LordOfWeekday(DayOfWeek weekday)
+        [API("Planet lord that governs a weekday", Category.StarsAboveMe)]
+		public static PlanetName LordOfWeekday(DayOfWeek weekday)
         {
             //Sunday Sun
             //Monday Moon
@@ -2372,13 +2370,13 @@ namespace VedAstro.Library
             //based on weekday return the planet lord
             switch (weekday)
             {
-                case DayOfWeek.Sunday: return Library.PlanetName.Sun;
-                case DayOfWeek.Monday: return Library.PlanetName.Moon;
-                case DayOfWeek.Tuesday: return Library.PlanetName.Mars;
-                case DayOfWeek.Wednesday: return Library.PlanetName.Mercury;
-                case DayOfWeek.Thursday: return Library.PlanetName.Jupiter;
-                case DayOfWeek.Friday: return Library.PlanetName.Venus;
-                case DayOfWeek.Saturday: return Library.PlanetName.Saturn;
+                case Library.DayOfWeek.Sunday: return Library.PlanetName.Sun;
+                case Library.DayOfWeek.Monday: return Library.PlanetName.Moon;
+                case Library.DayOfWeek.Tuesday: return Library.PlanetName.Mars;
+                case Library.DayOfWeek.Wednesday: return Library.PlanetName.Mercury;
+                case Library.DayOfWeek.Thursday: return Library.PlanetName.Jupiter;
+                case Library.DayOfWeek.Friday: return Library.PlanetName.Venus;
+                case Library.DayOfWeek.Saturday: return Library.PlanetName.Saturn;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -2399,7 +2397,7 @@ namespace VedAstro.Library
         /// first hour after sunrise and the last hora, the hour
         /// before sunrise the next day.
         /// </summary>
-        [API("Hora", "A hora is equal to 1/24th part of a day", Category.StarsAboveMe)]
+        [API( "A hora is equal to 1/24th part of a day", Category.StarsAboveMe)]
         public static int HoraAtBirth(Time time)
         {
             TimeSpan hours;
@@ -2437,8 +2435,7 @@ namespace VedAstro.Library
 
         }
 
-
-        [API("PlanetHoraSign", "", Category.StarsAboveMe)]
+        [API( "Gets hora zodiac sign of a planet", Category.StarsAboveMe)]
         public static ZodiacName PlanetHoraSign(PlanetName planetName, Time time)
         {
             //get planet sign
@@ -2512,11 +2509,10 @@ namespace VedAstro.Library
             throw new Exception("Planet hora not found, error!");
         }
 
-
         /// <summary>
         /// get sunrise time for that day
         /// </summary>
-        [API("Sunrise")]
+        [API("get sunrise time for that day at that place")]
         public static Time SunriseTime(Time time)
         {
 
@@ -2549,7 +2545,7 @@ namespace VedAstro.Library
 
 
                 //get LMT at Greenwich in Julian days
-                var julianLmtUtcTime = Calculate.GetGreenwichLmtInJulianDays(timeAt12Am);
+                var julianLmtUtcTime = Calculate.GreenwichLmtInJulianDays(timeAt12Am);
 
                 //do calculation for sunrise time
                 using SwissEph ephemeris = new();
@@ -2559,7 +2555,7 @@ namespace VedAstro.Library
                 //2. Convert raw sun rise time (julian lmt utc) to normal time (std)
 
                 //julian days back to normal time (greenwich)
-                var sunriseLmtAtGreenwich = Calculate.GetGreenwichTimeFromJulianDays(riseTimeRaw);
+                var sunriseLmtAtGreenwich = Calculate.GreenwichTimeFromJulianDays(riseTimeRaw);
 
                 //return sunrise time at orginal location to caller
                 var stdOriginal = sunriseLmtAtGreenwich.ToOffset(time.GetStdDateTimeOffset().Offset);
@@ -2573,7 +2569,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Get actual sunset time for that day at that place
         /// </summary>
-        [API("Sunset")]
+        [API("actual sunset time for that day at that place")]
         public static Time SunsetTime(Time time)
         {
 
@@ -2606,7 +2602,7 @@ namespace VedAstro.Library
                 var timeAt12Am = new Time(lmtAt12Am, time.GetStdDateTimeOffset().Offset, time.GetGeoLocation());
 
                 //get LMT at Greenwich in Julian days
-                var julianLmtUtcTime = Calculate.GetGreenwichLmtInJulianDays(timeAt12Am);
+                var julianLmtUtcTime = Calculate.GreenwichLmtInJulianDays(timeAt12Am);
 
                 //do calculation for sunset time
                 using SwissEph ephemeris = new();
@@ -2617,7 +2613,7 @@ namespace VedAstro.Library
                 //2. Convert raw sun set time (julian lmt utc) to normal time (std)
 
                 //julian days back to normal time (greenwich)
-                var sunriseLmtAtGreenwich = Calculate.GetGreenwichTimeFromJulianDays(setTimeRaw);
+                var sunriseLmtAtGreenwich = Calculate.GreenwichTimeFromJulianDays(setTimeRaw);
 
                 //return sunset time at orginal location to caller
                 var stdOriginal = sunriseLmtAtGreenwich.ToOffset(time.GetStdDateTimeOffset().Offset);
@@ -2646,7 +2642,6 @@ namespace VedAstro.Library
 
             return apparentNoon;
         }
-
 
         /// <summary>
         ///Checks if planet A is in good aspect to planet B
@@ -2715,7 +2710,7 @@ namespace VedAstro.Library
         /// max = hightest possible value
         /// min = lowest possible value
         /// </summary>
-        [API("PlanetSthanaBalaNeutralPoint", "", Category.Astronomical)]
+        [API("Sthana bala is indicating good position or bad position", Category.Astronomical)]
         public static double PlanetSthanaBalaNeutralPoint(PlanetName planet)
         {
             //no calculation for rahu and ketu here
@@ -2809,7 +2804,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Checks if a planet is in a kendra house (1,4,7,10)
         /// </summary>
-        [API("InKendra")]
+        [API("Checks if a planet is in a kendra house (1,4,7,10)")]
         public static bool IsPlanetInKendra(PlanetName planet, Time time)
         {
             //The 4th, the 7th and the 10th are the Kendras
@@ -2821,11 +2816,12 @@ namespace VedAstro.Library
             return isPlanetInKendra;
         }
 
-        /// <summary>
-        /// Checks if the lord of a house is in the specified house.
-        /// Example question : Is Lord of 1st house in 2nd house?
-        /// </summary>
-        public static bool IsHouseLordInHouse(HouseName lordHouse, HouseName occupiedHouse, Time time)
+		/// <summary>
+		/// Checks if the lord of a house is in the specified house.
+		/// Example question : Is Lord of 1st house in 2nd house?
+		/// </summary>
+		[API("Checks if the lord of a house is in the specified house. Exp : Is Lord of 1st house in 2nd house?")]
+		public static bool IsHouseLordInHouse(HouseName lordHouse, HouseName occupiedHouse, Time time)
         {
             //get the house lord
             var houseLord = Calculate.LordOfHouse(lordHouse, time);
@@ -2843,11 +2839,11 @@ namespace VedAstro.Library
         /// <summary>
         /// Checks if a planet is conjuct with an evil/malefic planet
         /// </summary>
-        [API("ConjunctWithMalefics")]
+        [API("Checks if a planet is conjuct with an evil/malefic planet")]
         public static bool IsPlanetConjunctWithMaleficPlanets(PlanetName planetName, Time time)
         {
             //get all the planets conjuct with inputed planet
-            var planetsInConjunct = Calculate.GetPlanetsInConjuction(time, planetName);
+            var planetsInConjunct = Calculate.PlanetsInConjuction(time, planetName);
 
             //get all evil planets
             var evilPlanets = Calculate.GetMaleficPlanetList(time);
@@ -2858,12 +2854,13 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// Checks if any evil/malefic planets are in a house
-        /// Note : Planet to house relationship not account for
-        /// TODO Account for planet to sign relationship, find reference
-        /// </summary>
-        public static bool IsMaleficPlanetInHouse(HouseName houseNumber, Time time)
+		/// <summary>
+		/// Checks if any evil/malefic planets are in a house
+		/// Note : Planet to house relationship not account for
+		/// TODO Account for planet to sign relationship, find reference
+		/// </summary>
+		[API("Checks if any evil/malefic planets are in a house")]
+		public static bool IsMaleficPlanetInHouse(HouseName houseNumber, Time time)
         {
             //get all the planets in the house
             var planetsInHouse = Calculate.GetPlanetsInHouse(houseNumber, time);
@@ -2878,18 +2875,19 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// Checks if any good/benefic planets are in a house
-        /// Note : Planet to house relationship not account for
-        /// TODO Account for planet to sign relationship, find reference
-        /// </summary>
-        public static bool IsBeneficPlanetInHouse(HouseName houseNumber, Time time)
+		/// <summary>
+		/// Checks if any good/benefic planets are in a house
+		/// Note : Planet to house relationship not account for
+		/// TODO Account for planet to sign relationship, find reference
+		/// </summary>
+		[API("Checks if any good/benefic planets are in a house")]
+		public static bool IsBeneficPlanetInHouse(HouseName houseNumber, Time time)
         {
             //get all the planets in the house
             var planetsInHouse = Calculate.GetPlanetsInHouse(houseNumber, time);
 
             //get all good planets
-            var goodPlanets = Calculate.GetBeneficPlanetList(time);
+            var goodPlanets = Calculate.BeneficPlanetList(time);
 
             //check if any planet in house is an good one
             var goodFound = planetsInHouse.FindAll(planet => goodPlanets.Contains(planet)).Any();
@@ -2905,7 +2903,7 @@ namespace VedAstro.Library
         public static bool IsMaleficPlanetInSign(ZodiacName sign, Time time)
         {
             //get all the planets in the sign
-            var planetsInSign = Calculate.GetPlanetInSign(sign, time);
+            var planetsInSign = Calculate.PlanetInSign(sign, time);
 
             //get all evil planets
             var evilPlanets = Calculate.GetMaleficPlanetList(time);
@@ -2919,10 +2917,10 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets list of evil/malefic planets in a sign
         /// </summary>
-        public static List<PlanetName> GetMaleficPlanetListInSign(ZodiacName sign, Time time)
+        public static List<PlanetName> MaleficPlanetListInSign(ZodiacName sign, Time time)
         {
             //get all the planets in the sign
-            var planetsInSign = Calculate.GetPlanetInSign(sign, time);
+            var planetsInSign = Calculate.PlanetInSign(sign, time);
 
             //get all evil planets
             var evilPlanets = Calculate.GetMaleficPlanetList(time);
@@ -2939,10 +2937,10 @@ namespace VedAstro.Library
         public static bool IsBeneficPlanetInSign(ZodiacName sign, Time time)
         {
             //get all the planets in the sign
-            var planetsInSign = Calculate.GetPlanetInSign(sign, time);
+            var planetsInSign = Calculate.PlanetInSign(sign, time);
 
             //get all good planets
-            var goodPlanets = Calculate.GetBeneficPlanetList(time);
+            var goodPlanets = Calculate.BeneficPlanetList(time);
 
             //check if any planet in sign is an good one
             var goodFound = planetsInSign.FindAll(planet => goodPlanets.Contains(planet)).Any();
@@ -2953,13 +2951,13 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets any good/benefic planets in a sign
         /// </summary>
-        public static List<PlanetName> GetBeneficPlanetListInSign(ZodiacName sign, Time time)
+        public static List<PlanetName> BeneficPlanetListInSign(ZodiacName sign, Time time)
         {
             //get all the planets in the sign
-            var planetsInSign = Calculate.GetPlanetInSign(sign, time);
+            var planetsInSign = Calculate.PlanetInSign(sign, time);
 
             //get all good planets
-            var goodPlanets = Calculate.GetBeneficPlanetList(time);
+            var goodPlanets = Calculate.BeneficPlanetList(time);
 
             //gets all good planets in this sign
             var goodFound = planetsInSign.FindAll(planet => goodPlanets.Contains(planet));
@@ -2992,7 +2990,7 @@ namespace VedAstro.Library
         public static bool IsBeneficPlanetAspectHouse(HouseName house, Time time)
         {
             //get all good planets
-            var goodPlanets = Calculate.GetBeneficPlanetList(time);
+            var goodPlanets = Calculate.BeneficPlanetList(time);
 
             //check if any good planet is aspecting the inputed house
             var goodFound = goodPlanets.FindAll(goodPlanet => Calculate.IsHouseAspectedByPlanet(house, goodPlanet, time)).Any();
@@ -3028,7 +3026,7 @@ namespace VedAstro.Library
         /// Thus if Aquarius is ascendant and its lord Saturn is in the 4th (Taurus)
         /// then the 4th from Taurus, viz., Leo becomes Arudha Lagna.
         /// </summary>
-        [API("ArudhaLagna", "bearing on the financial status", Category.StarsAboveMe)]
+        [API("Gets the Arudha Lagna sign, bearing on the financial status", Category.StarsAboveMe)]
         public static ZodiacName ArudhaLagnaSign(Time time)
         {
             //get janma lagna
@@ -3122,10 +3120,10 @@ namespace VedAstro.Library
             return counter;
         }
 
-
-        /// <summary>
-        /// Checks if a planet is in a given house at a specified time 
-        /// </summary>
+		/// <summary>
+		/// Checks if a planet is in a given house at a specified time 
+		/// </summary>
+		[API("Checks if a planet is in a given house at a specified time")]
         public static bool IsPlanetInHouse(Time time, PlanetName planet, HouseName houseNumber)
         {
             return Calculate.HousePlanetIsIn(time, planet) == houseNumber;
@@ -3135,17 +3133,17 @@ namespace VedAstro.Library
         /// Checks if a planet is in a longitude where it's in Debilitated
         /// Note : Rahu & ketu accounted for
         /// </summary>
-        [API("Debilitated")]
+        [API("Checks if a planet is in a longitude where it's in Debilitated")]
         public static bool IsPlanetDebilitated(PlanetName planet, Time time)
         {
             //get planet location
             var planetLongitude = PlanetNirayanaLongitude(time, planet);
 
             //convert planet longitude to zodiac sign
-            var planetZodiac = GetZodiacSignAtLongitude(planetLongitude);
+            var planetZodiac = ZodiacSignAtLongitude(planetLongitude);
 
             //get the longitude where planet is Debilited
-            var point = GetPlanetDebilitationPoint(planet);
+            var point = PlanetDebilitationPoint(planet);
 
             //check if planet is in Debilitation sign
             var sameSign = planetZodiac.GetSignName() == point.GetSignName();
@@ -3171,17 +3169,17 @@ namespace VedAstro.Library
         ///     the planet is exalted but in a particular degree
         ///     its exaltation is at the maximum level.
         /// </summary>
-        [API("Exalted")]
+        [API("Checks if a planet is in a longitude where it's in Exaltation")]
         public static bool IsPlanetExalted(PlanetName planet, Time time)
         {
             //get planet location
             var planetLongitude = PlanetNirayanaLongitude(time, planet);
 
             //convert planet longitude to zodiac sign
-            var planetZodiac = GetZodiacSignAtLongitude(planetLongitude);
+            var planetZodiac = ZodiacSignAtLongitude(planetLongitude);
 
             //get the longitude where planet is Exaltation
-            var point = GetPlanetExaltationPoint(planet);
+            var point = PlanetExaltationPoint(planet);
 
             //check if planet is in Exaltation sign
             var sameSign = planetZodiac.GetSignName() == point.GetSignName();
@@ -3193,7 +3191,7 @@ namespace VedAstro.Library
             return planetIsExaltation;
         }
 
-        [API("LunarMonth", "name of vedic month", Category.StarsAboveMe)]
+        [API("name of vedic month", Category.StarsAboveMe)]
         public static LunarMonth LunarMonth(Time time)
         {
 
@@ -3373,7 +3371,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Checks if the moon is FULL, moon day 15
         /// </summary>
-        [API("IsFullMoon", "moon day 15", Category.StarsAboveMe)]
+        [API("Checks if the moon is FULL, moon day 15", Category.StarsAboveMe)]
         public static bool IsFullMoon(Time time)
         {
             //get the lunar date number
@@ -3384,29 +3382,32 @@ namespace VedAstro.Library
         }
 
 
-
-        /// <summary>
-        /// Check if it is a Water / Aquatic sign
-        /// Water Signs: this category include Cancer, Scorpio and Pisces.
-        /// </summary>
+		/// <summary>
+		/// Check if it is a Water / Aquatic sign
+		/// Water Signs: this category include Cancer, Scorpio and Pisces.
+		/// </summary>
+		[API("Check if it is a Water / Aquatic sign")]
         public static bool IsAquaticSign(ZodiacName moonSign) => moonSign is ZodiacName.Cancer or ZodiacName.Scorpio or ZodiacName.Pisces;
 
-        /// <summary>
-        /// Check if it is a Fire sign
-        /// Fire Signs: this sign encloses Aries, Leo and Sagittarius.
-        /// </summary>
+		/// <summary>
+		/// Check if it is a Fire sign
+		/// Fire Signs: this sign encloses Aries, Leo and Sagittarius.
+		/// </summary>
+		[API("Check if it is a Fire sign, Aries, Leo and Sagittarius.")]
         public static bool IsFireSign(ZodiacName moonSign) => moonSign is ZodiacName.Aries or ZodiacName.Leo or ZodiacName.Sagittarius;
 
-        /// <summary>
-        /// Check if it is a Earth sign
-        /// Earth Signs: it contains Taurus, Virgo and Capricorn.
-        /// </summary>
+		/// <summary>
+		/// Check if it is a Earth sign
+		/// Earth Signs: it contains Taurus, Virgo and Capricorn.
+		/// </summary>
+		[API("Check if it is a Earth sign, Taurus, Virgo and Capricorn.")]
         public static bool IsEarthSign(ZodiacName moonSign) => moonSign is ZodiacName.Taurus or ZodiacName.Virgo or ZodiacName.Capricornus;
 
-        /// <summary>
-        /// Check if it is a Air / Windy sign
-        /// Air Signs: this sign include Gemini, Libra and Aquarius.
-        /// </summary>
+		/// <summary>
+		/// Check if it is a Air / Windy sign
+		/// Air Signs: this sign include Gemini, Libra and Aquarius.
+		/// </summary>
+		[API("Check if it is a Air / Windy sign, Gemini, Libra and Aquarius.")]
         public static bool IsAirSign(ZodiacName moonSign) => moonSign is ZodiacName.Gemini or ZodiacName.Libra or ZodiacName.Aquarius;
 
 
@@ -3623,7 +3624,6 @@ namespace VedAstro.Library
             }
         }
 
-
         /// <summary>
         /// Soumyas
         /// Source : Astrology for beginners pg 30
@@ -3785,7 +3785,7 @@ namespace VedAstro.Library
         /// meaning house sign owned by planet
         /// note: rahu and ketu return false always
         /// </summary>
-        [API("IsPlanetInOwnHouse", "Return true if planet is own house sign, planet is owner")]
+        [API("Return true if planet is own house sign, planet is owner")]
         public static bool IsPlanetInOwnHouse(Time time, PlanetName planetName)
         {
             //find out if planet is rahu or ketu, because not all calculations supported
@@ -3811,8 +3811,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Swiss Ephemeris "swe_calc" wrapper for open API 
         /// </summary>
-        [API("SwissEphemeris", "Get planet's Longitude, Latitude, DistanceAU, SpeedLongitude, SpeedLatitude...")]
-        public static dynamic swe_calc_wrapper(Time time, PlanetName planetName)
+        [API( "Get planet's Longitude, Latitude, DistanceAU, SpeedLongitude, SpeedLatitude...")]
+        public static dynamic SwissEphemeris(Time time, PlanetName planetName)
         {
             //Converts LMT to UTC (GMT)
             //DateTimeOffset utcDate = lmtDateTime.ToUniversalTime();
@@ -3846,7 +3846,6 @@ namespace VedAstro.Library
             return sweCalcResults;
         }
 
-
         /// <summary>
         /// Checks if a planet is same house (not nessarly conjunct) with the lord of a certain house
         /// Example : Is Sun joined with lord of 9th?
@@ -3872,8 +3871,7 @@ namespace VedAstro.Library
 
         }
 
-
-        public static IEnumerable<MethodInfo> GetTimeHouseCalcs()
+        public static IEnumerable<MethodInfo> TimeHouseCalcs()
         {
             var returnList = new List<MethodInfo>();
 
@@ -3926,7 +3924,7 @@ namespace VedAstro.Library
             }
 
             //get house score
-            var houseStrength = GetHouseStrength(inputHouse, personBirthTime).ToDouble();
+            var houseStrength = HouseStrength(inputHouse, personBirthTime).ToDouble();
 
             //based on score determine final nature
             switch (houseStrength)
@@ -3953,13 +3951,13 @@ namespace VedAstro.Library
             }
 
             //get house score
-            var houseStrength = GetHouseStrength(inputHouse, personBirthTime).ToDouble();
+            var houseStrength = HouseStrength(inputHouse, personBirthTime).ToDouble();
 
             //weakest planet gives lowest score -2
             //strongest planet gives highest score 2
             //get range
-            var highestHouseScore = GetHouseStrength(GetAllHousesOrderedByStrength(personBirthTime)[0], personBirthTime).ToDouble();
-            var lowestHouseScore = GetHouseStrength(GetAllHousesOrderedByStrength(personBirthTime)[11], personBirthTime).ToDouble();
+            var highestHouseScore = HouseStrength(GetAllHousesOrderedByStrength(personBirthTime)[0], personBirthTime).ToDouble();
+            var lowestHouseScore = HouseStrength(GetAllHousesOrderedByStrength(personBirthTime)[11], personBirthTime).ToDouble();
 
             var rangeBasedScore = houseStrength.Remap(lowestHouseScore, highestHouseScore, -3, 3);
 
@@ -4013,7 +4011,7 @@ namespace VedAstro.Library
         public static int PlanetNatureScore(Time personBirthTime, PlanetName inputPlanet)
         {
             //get house score
-            var planetStrength = GetPlanetShadbalaPinda(inputPlanet, personBirthTime).ToDouble();
+            var planetStrength = PlanetShadbalaPinda(inputPlanet, personBirthTime).ToDouble();
 
 
             //based on score determine final nature
@@ -4032,18 +4030,12 @@ namespace VedAstro.Library
             }
         }
 
-        public enum Varna
-        {
-            SudraServant = 1,
-            VaisyaWorkmen = 2,
-            KshatriyaWarrior = 3,
-            BrahminScholar = 4
-        }
 
-        /// <summary>
-        /// Get a person's varna or color (character)
-        /// A person's varna can be observed in real life
-        /// </summary>
+		/// <summary>
+		/// Get a person's varna or color (character)
+		/// A person's varna can be observed in real life
+		/// </summary>
+		[API("Get a person's varna or color (character), from birth time")]
         public static Varna BirthVarna(Time birthTime)
         {
             //get ruling sign
@@ -4096,7 +4088,7 @@ namespace VedAstro.Library
         /// </summary>
         public static double PlanetIshtaKashtaScore(PlanetName planet, Time birthTime)
         {
-            var ishtaScore = GetPlanetIshtaScore(planet, birthTime);
+            var ishtaScore = PlanetIshtaScore(planet, birthTime);
 
             var kashtaScore = PlanetKashtaScore(planet, birthTime);
 

@@ -1782,7 +1782,7 @@ namespace VedAstro.Library
                 //note here "Start Time" should be fine, since all throughout the event the house sign will be same as start
                 var houseSign = Calculate.HouseSignName(gocharaHouse, foundEvent.StartTime); //time here is current time, not birth
                 //here is birth time because ashtakvarga is based on birth
-                var binduPoints = Calculate.GetPlanetAshtakvargaBindu(gocharaPlanet, houseSign, person.BirthTime);//here is birth
+                var binduPoints = Calculate.PlanetAshtakvargaBindu(gocharaPlanet, houseSign, person.BirthTime);//here is birth
 
 
                 //if bindu is below 3 and below bad
@@ -1980,9 +1980,9 @@ namespace VedAstro.Library
                 var planetInEventList = foundEvent.GetRelatedPlanet();
 
                 //get top 3 planets as good
-                var beneficPlanetList = Calculate.GetBeneficPlanetListByShadbala(person.BirthTime);
+                var beneficPlanetList = Calculate.BeneficPlanetListByShadbala(person.BirthTime);
                 //var beneficPlanetList2 = AstronomicalCalculator.GetBeneficPlanetListByShadbala(person.BirthTime, 500);
-                var maleficPlanetList = Calculate.GetMaleficPlanetListByShadbala(person.BirthTime);
+                var maleficPlanetList = Calculate.MaleficPlanetListByShadbala(person.BirthTime);
                 //var maleficPlanetList2 = AstronomicalCalculator.GetMaleficPlanetListByShadbala(person.BirthTime, 300);
 
                 //add and remove score based on planet good and bad todo add remove by voting power
@@ -2013,9 +2013,9 @@ namespace VedAstro.Library
                 {
                     var houseInEventList = foundEvent.GetRelatedHouse();
 
-                    var beneficHouseList = Calculate.GetBeneficHouseListByShadbala(person.BirthTime);
+                    var beneficHouseList = Calculate.BeneficHouseListByShadbala(person.BirthTime);
                     // var beneficHouseList2 = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime, 550);
-                    var maleficHouseList = Calculate.GetMaleficHouseListByShadbala(person.BirthTime);
+                    var maleficHouseList = Calculate.MaleficHouseListByShadbala(person.BirthTime);
                     //var maleficHouseList2 = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime, 250);
 
                     foreach (var houseName in houseInEventList)
@@ -2053,9 +2053,9 @@ namespace VedAstro.Library
                 var planetInEventList = foundEvent.GetRelatedPlanet();
 
                 //get top 3 planets as good
-                var beneficPlanetList = Calculate.GetBeneficPlanetListByShadbala(person.BirthTime);
+                var beneficPlanetList = Calculate.BeneficPlanetListByShadbala(person.BirthTime);
                 //var beneficPlanetList2 = AstronomicalCalculator.GetBeneficPlanetListByShadbala(person.BirthTime, 500);
-                var maleficPlanetList = Calculate.GetMaleficPlanetListByShadbala(person.BirthTime);
+                var maleficPlanetList = Calculate.MaleficPlanetListByShadbala(person.BirthTime);
                 //var maleficPlanetList2 = AstronomicalCalculator.GetMaleficPlanetListByShadbala(person.BirthTime, 300);
 
                 //add and remove score based on planet good and bad todo add remove by voting power
@@ -2083,9 +2083,9 @@ namespace VedAstro.Library
 
                 var houseInEventList = foundEvent.GetRelatedHouse();
 
-                var beneficHouseList = Calculate.GetBeneficHouseListByShadbala(person.BirthTime);
+                var beneficHouseList = Calculate.BeneficHouseListByShadbala(person.BirthTime);
                 // var beneficHouseList2 = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime, 550);
-                var maleficHouseList = Calculate.GetMaleficHouseListByShadbala(person.BirthTime);
+                var maleficHouseList = Calculate.MaleficHouseListByShadbala(person.BirthTime);
                 //var maleficHouseList2 = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime, 250);
 
                 foreach (var houseName in houseInEventList)

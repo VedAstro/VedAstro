@@ -117,7 +117,7 @@ namespace API
                 var randomId = Tools.GenerateId();
 
 
-                var planetList = Calculate.GetAllPlanetLongitude(time);
+                var planetList = Calculate.AllPlanetLongitude(time);
 
                 var renderWidth = widthPx - 30; // 750 -> 720
                 angleRuler = GenerateAngleRuler(renderWidth, 10);

@@ -1276,7 +1276,7 @@ namespace VedAstro.Library
             //check if all conditions met
             var occuring = maleficFound;
 
-            var malefics = Calculate.GetMaleficPlanetListInSign(sign11fromArudha, time);
+            var malefics = Calculate.MaleficPlanetListInSign(sign11fromArudha, time);
 
             return CalculatorResult.New(occuring, new[] { HouseName.House11 }, malefics.ToArray(), time);
         }
@@ -1303,7 +1303,7 @@ namespace VedAstro.Library
             //check if all conditions met
             var occuring = beneficFound;
 
-            var benefics = Calculate.GetBeneficPlanetListInSign(sign11fromArudha, time);
+            var benefics = Calculate.BeneficPlanetListInSign(sign11fromArudha, time);
 
             return CalculatorResult.New(occuring, new[] { HouseName.House11 }, benefics.ToArray(), time);
         }
@@ -1758,7 +1758,7 @@ namespace VedAstro.Library
 
             //2.find evil planets in gemini
             //get planets in sign
-            var planetsInSign = Calculate.GetPlanetInSign(ZodiacName.Gemini, time);
+            var planetsInSign = Calculate.PlanetInSign(ZodiacName.Gemini, time);
             //filer in only evil (malefic) planets 
             var evilPlanets = planetsInSign.Where(planet => Calculate.IsPlanetMalefic(planet, time));
             //mark if evil planets found in sign
@@ -1782,7 +1782,7 @@ namespace VedAstro.Library
 
             //2.find if Saturn and the Moon are in Aries.
             //get planets in sign
-            var planetsInSign = Calculate.GetPlanetInSign(ZodiacName.Aries, time);
+            var planetsInSign = Calculate.PlanetInSign(ZodiacName.Aries, time);
             var evilPlanetFound = planetsInSign.Contains(PlanetName.Saturn) || planetsInSign.Contains(PlanetName.Moon);
 
 

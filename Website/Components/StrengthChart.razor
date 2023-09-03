@@ -37,15 +37,15 @@
 
         //PLANET
         //get planet details and save it for view
-        _shadbalaPindaSun = Calculate.GetPlanetShadbalaPinda(PlanetName.Sun, _time).ToDouble();
-        _shadbalaPindaMoon = Calculate.GetPlanetShadbalaPinda(PlanetName.Moon, _time).ToDouble();
-        _shadbalaPindaMercury = Calculate.GetPlanetShadbalaPinda(PlanetName.Mercury, _time).ToDouble();
-        _shadbalaPindaMars = Calculate.GetPlanetShadbalaPinda(PlanetName.Mars, _time).ToDouble();
-        _shadbalaPindaJupiter = Calculate.GetPlanetShadbalaPinda(PlanetName.Jupiter, _time).ToDouble();
-        _shadbalaPindaSaturn = Calculate.GetPlanetShadbalaPinda(PlanetName.Saturn, _time).ToDouble();
-        _shadbalaPindaVenus = Calculate.GetPlanetShadbalaPinda(PlanetName.Venus, _time).ToDouble();
-        _shadbalaPindaRahu = Calculate.GetPlanetShadbalaPinda(PlanetName.Rahu, _time).ToDouble();
-        _shadbalaPindaKetu = Calculate.GetPlanetShadbalaPinda(PlanetName.Ketu, _time).ToDouble();
+        _shadbalaPindaSun = Calculate.PlanetShadbalaPinda(PlanetName.Sun, _time).ToDouble();
+        _shadbalaPindaMoon = Calculate.PlanetShadbalaPinda(PlanetName.Moon, _time).ToDouble();
+        _shadbalaPindaMercury = Calculate.PlanetShadbalaPinda(PlanetName.Mercury, _time).ToDouble();
+        _shadbalaPindaMars = Calculate.PlanetShadbalaPinda(PlanetName.Mars, _time).ToDouble();
+        _shadbalaPindaJupiter = Calculate.PlanetShadbalaPinda(PlanetName.Jupiter, _time).ToDouble();
+        _shadbalaPindaSaturn = Calculate.PlanetShadbalaPinda(PlanetName.Saturn, _time).ToDouble();
+        _shadbalaPindaVenus = Calculate.PlanetShadbalaPinda(PlanetName.Venus, _time).ToDouble();
+        _shadbalaPindaRahu = Calculate.PlanetShadbalaPinda(PlanetName.Rahu, _time).ToDouble();
+        _shadbalaPindaKetu = Calculate.PlanetShadbalaPinda(PlanetName.Ketu, _time).ToDouble();
 
         //generate JS bar chart with calculated values
         //note : done here so needed element is available
@@ -64,18 +64,18 @@
 
 
         //HOUSE
-        _house1 = Calculate.GetHouseStrength((HouseName)1, _time).ToDouble();
-        _house2 = Calculate.GetHouseStrength((HouseName)2, _time).ToDouble();
-        _house3 = Calculate.GetHouseStrength((HouseName)3, _time).ToDouble();
-        _house4 = Calculate.GetHouseStrength((HouseName)4, _time).ToDouble();
-        _house5 = Calculate.GetHouseStrength((HouseName)5, _time).ToDouble();
-        _house6 = Calculate.GetHouseStrength((HouseName)6, _time).ToDouble();
-        _house7 = Calculate.GetHouseStrength((HouseName)7, _time).ToDouble();
-        _house8 = Calculate.GetHouseStrength((HouseName)8, _time).ToDouble();
-        _house9 = Calculate.GetHouseStrength((HouseName)9, _time).ToDouble();
-        _house10 = Calculate.GetHouseStrength((HouseName)10, _time).ToDouble();
-        _house11 = Calculate.GetHouseStrength((HouseName)11, _time).ToDouble();
-        _house12 = Calculate.GetHouseStrength((HouseName)12, _time).ToDouble();
+        _house1 = Calculate.HouseStrength((HouseName)1, _time).ToDouble();
+        _house2 = Calculate.HouseStrength((HouseName)2, _time).ToDouble();
+        _house3 = Calculate.HouseStrength((HouseName)3, _time).ToDouble();
+        _house4 = Calculate.HouseStrength((HouseName)4, _time).ToDouble();
+        _house5 = Calculate.HouseStrength((HouseName)5, _time).ToDouble();
+        _house6 = Calculate.HouseStrength((HouseName)6, _time).ToDouble();
+        _house7 = Calculate.HouseStrength((HouseName)7, _time).ToDouble();
+        _house8 = Calculate.HouseStrength((HouseName)8, _time).ToDouble();
+        _house9 = Calculate.HouseStrength((HouseName)9, _time).ToDouble();
+        _house10 = Calculate.HouseStrength((HouseName)10, _time).ToDouble();
+        _house11 = Calculate.HouseStrength((HouseName)11, _time).ToDouble();
+        _house12 = Calculate.HouseStrength((HouseName)12, _time).ToDouble();
 
         //generate JS bar chart with calculated values
         //note : done here so needed element is available

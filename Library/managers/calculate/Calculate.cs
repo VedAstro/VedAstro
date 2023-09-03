@@ -29,8 +29,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Wrapper function to make planet name appear "Payload" of API call data, for easier data probing by 3rd party code
         /// </summary>
-        [API("PlanetName", "English name of planet", Category.Astronomical)]
-        public static string GetPlanetName(PlanetName planetName) => planetName.ToString();
+        [API( "English name of planet", Category.Astronomical)]
+        public static string PlanetName(PlanetName planetName) => planetName.ToString();
 
         /// <summary>
         /// Use of Residential Strength --This will
@@ -49,7 +49,7 @@ namespace VedAstro.Library
         /// For instance, in the Standard Horoscope Jupiter
         /// gives 0.48 units of the total effects of the 6th Bhava.
         /// </summary>
-        [API("ResidentialStrength", "Strength to judge the exact quantity of effect planet gives in a house")]
+        [API("Strength to judge the exact quantity of effect planet gives in a house")]
         public static double ResidentialStrength(PlanetName planetName, Time time)
         {
             return 0;
@@ -62,7 +62,7 @@ namespace VedAstro.Library
         /// Converts time back to longitude, it is the reverse of GetLocalTimeOffset in Time
         /// Exp :  5h. 10m. 20s. E. Long. to 77° 35' E. Long
         /// </summary>
-        [API("TimeToLongitude", "Converts time back to longitude", Category.Astronomical)]
+        [API("Converts time back to longitude", Category.Astronomical)]
         public static Angle TimeToLongitude(TimeSpan time)
         {
             //TODO function is a candidate for caching
@@ -78,7 +78,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the ephemris time that is consumed by Swiss Ephemeris
         /// </summary>
-        [API("EphemerisTime", "Converts normal time to Ephemeris time shown as a number")]
+        [API("Converts normal time to Ephemeris time shown as a number")]
         public static double TimeToEphemerisTime(Time time)
         {
 
@@ -122,11 +122,11 @@ namespace VedAstro.Library
         /// Number from 0 to 360, represent the degrees in the zodiac as viewed from earth
         /// Note: Since Nirayana is corrected, in actuality 0 degrees will start at Taurus not Aries
         /// </summary>
-        [API("NirayanaLongitude", "Planet longitude that has been corrected with Ayanamsa")]
-        public static Angle GetPlanetNirayanaLongitude(Time time, PlanetName planetName)
+        [API( "Planet longitude that has been corrected with Ayanamsa")]
+        public static Angle PlanetNirayanaLongitude(Time time, PlanetName planetName)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(GetPlanetNirayanaLongitude), time, planetName, Calculate.YearOfCoincidence), _getPlanetNirayanaLongitude);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetNirayanaLongitude), time, planetName, Calculate.YearOfCoincidence), _getPlanetNirayanaLongitude);
 
 
             //UNDERLYING FUNCTION
@@ -155,12 +155,12 @@ namespace VedAstro.Library
 
         }
 
-        [API("LunarDay", "Gets Moon's position or day in lunar calendar", Category.StarsAboveMe)]
-        public static LunarDay GetLunarDay(Time time)
+        [API("Gets Moon's position or day in lunar calendar", Category.StarsAboveMe)]
+        public static LunarDay LunarDay(Time time)
         {
             //get position of sun & moon
-            Angle sunLong = Calculate.GetPlanetNirayanaLongitude(time, PlanetName.Sun);
-            Angle moonLong = Calculate.GetPlanetNirayanaLongitude(time, PlanetName.Moon);
+            Angle sunLong = Calculate.PlanetNirayanaLongitude(time, Library.PlanetName.Sun);
+            Angle moonLong = Calculate.PlanetNirayanaLongitude(time, Library.PlanetName.Moon);
 
             double rawLunarDate;
 
@@ -189,8 +189,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets constellation behind the moon (shortcut function)
         /// </summary>
-        [API("MoonConstellation", "Constellation behind the moon at a given time", Category.StarsAboveMe)]
-        public static PlanetConstellation MoonConstellation(Time time) => PlanetConstellation(time, PlanetName.Moon);
+        [API( "Constellation behind the moon at a given time", Category.StarsAboveMe)]
+        public static PlanetConstellation MoonConstellation(Time time) => PlanetConstellation(time, Library.PlanetName.Moon);
 
         /// <summary>
         /// Gets the constellation behind a planet at a given time
@@ -199,7 +199,7 @@ namespace VedAstro.Library
         public static PlanetConstellation PlanetConstellation(Time time, PlanetName planet)
         {
             //get position of planet in longitude
-            var planetLongitude = GetPlanetNirayanaLongitude(time, planet);
+            var planetLongitude = PlanetNirayanaLongitude(time, planet);
 
             //return the constellation behind the planet
             return GetConstellationAtLongitude(planetLongitude);
@@ -312,7 +312,7 @@ namespace VedAstro.Library
         public static ZodiacName MoonSignName(Time time)
         {
             //get zodiac sign behind the moon
-            var moonSign = GetPlanetRasiSign(PlanetName.Moon, time);
+            var moonSign = PlanetRasiSign(Library.PlanetName.Moon, time);
 
             //return name of zodiac sign
             return moonSign.GetSignName();
@@ -324,8 +324,8 @@ namespace VedAstro.Library
             //Nithya Yoga = (Longitude of Sun + Longitude of Moon) / 13°20' (or 800')
 
             //get position of sun & moon in longitude
-            Angle sunLongitude = Calculate.GetPlanetNirayanaLongitude(time, PlanetName.Sun);
-            Angle moonLongitude = Calculate.GetPlanetNirayanaLongitude(time, PlanetName.Moon);
+            Angle sunLongitude = Calculate.PlanetNirayanaLongitude(time, Library.PlanetName.Sun);
+            Angle moonLongitude = Calculate.PlanetNirayanaLongitude(time, Library.PlanetName.Moon);
 
             //get joint motion in longitude of the Sun and the Moon
             var jointLongitudeInMinutes = sunLongitude.TotalMinutes + moonLongitude.TotalMinutes;
@@ -352,8 +352,8 @@ namespace VedAstro.Library
             Karana? karanaToReturn = null;
 
             //get position of sun & moon
-            Angle sunLong = Calculate.GetPlanetNirayanaLongitude(time, PlanetName.Sun);
-            Angle moonLong = Calculate.GetPlanetNirayanaLongitude(time, PlanetName.Moon);
+            Angle sunLong = Calculate.PlanetNirayanaLongitude(time, Library.PlanetName.Sun);
+            Angle moonLong = Calculate.PlanetNirayanaLongitude(time, Library.PlanetName.Moon);
 
             //get raw lunar date
             double rawlunarDate;
@@ -443,7 +443,7 @@ namespace VedAstro.Library
         {
 
             //get zodiac sign behind the sun
-            var sunSign = GetPlanetRasiSign(PlanetName.Sun, time);
+            var sunSign = PlanetRasiSign(Library.PlanetName.Sun, time);
 
             //return zodiac sign behind sun
             return sunSign;
@@ -454,8 +454,8 @@ namespace VedAstro.Library
         ///Find time when Sun was in 0.001 degrees
         ///in current sign (just entered sign)
         ///</summary>
-        [API("TimeSunEnteredCurrentSign", "", Category.StarsAboveMe)]
-        public static Time GetTimeSunEnteredCurrentSign(Time time)
+        [API("Find time when Sun in current sign (just entered sign)", Category.StarsAboveMe)]
+        public static Time TimeSunEnteredCurrentSign(Time time)
         {
 
             //CACHE MECHANISM
@@ -844,7 +844,7 @@ namespace VedAstro.Library
             var conjunctionOrbMax = new Angle(8, 0, 0);
 
             //get longitude of inputed planet
-            var inputedPlanet = GetPlanetNirayanaLongitude(time, inputedPlanetName);
+            var inputedPlanet = PlanetNirayanaLongitude(time, inputedPlanetName);
 
             //get all planet longitudes
             List<PlanetLongitude> allPlanetLongitudeList = GetAllPlanetLongitude(time);
@@ -859,7 +859,7 @@ namespace VedAstro.Library
                 if (planet.GetPlanetName() == inputedPlanetName) { continue; }
 
                 //get the space between the planet in longitude
-                var spaceBetween = GetDistanceBetweenPlanets(inputedPlanet, planet.GetPlanetLongitude());
+                var spaceBetween = DistanceBetweenPlanets(inputedPlanet, planet.GetPlanetLongitude());
 
                 //if space between is from 0° to 8°, then it is conjunct
                 if (spaceBetween >= Angle.Zero && spaceBetween <= conjunctionOrbMax)
@@ -882,10 +882,10 @@ namespace VedAstro.Library
         /// - Calculates longitudes for you
         /// </summary>
         [API("DistanceBetweenPlanets")]
-        public static Angle GetDistanceBetweenPlanets(PlanetName planet1, PlanetName planet2, Time time)
+        public static Angle DistanceBetweenPlanets(PlanetName planet1, PlanetName planet2, Time time)
         {
-            var planet1Longitude = GetPlanetNirayanaLongitude(time, planet1);
-            var planet2Longitude = GetPlanetNirayanaLongitude(time, planet2);
+            var planet1Longitude = PlanetNirayanaLongitude(time, planet1);
+            var planet2Longitude = PlanetNirayanaLongitude(time, planet2);
 
             var distanceBetweenPlanets = planetDistance(planet1Longitude.TotalDegrees, planet2Longitude.TotalDegrees);
 
@@ -922,8 +922,8 @@ namespace VedAstro.Library
         ///   when calculating difference this needs to be accounted for
         /// - Expects you to calculate longitude
         /// </summary>
-        [API("DistanceBetweenPlanetsLong")]
-        public static Angle GetDistanceBetweenPlanets(Angle planet1, Angle planet2)
+        [API("Gets longitudinal space between 2 planets")]
+        public static Angle DistanceBetweenPlanets(Angle planet1, Angle planet2)
         {
 
             var distanceBetweenPlanets = planetDistance(planet1.TotalDegrees, planet2.TotalDegrees);
@@ -998,32 +998,32 @@ namespace VedAstro.Library
         {
 
             //get longitudes of all planets
-            var sunLongitude = GetPlanetNirayanaLongitude(time, PlanetName.Sun);
-            var sun = new PlanetLongitude(PlanetName.Sun, sunLongitude);
+            var sunLongitude = PlanetNirayanaLongitude(time, Library.PlanetName.Sun);
+            var sun = new PlanetLongitude(Library.PlanetName.Sun, sunLongitude);
 
-            var moonLongitude = GetPlanetNirayanaLongitude(time, PlanetName.Moon);
-            var moon = new PlanetLongitude(PlanetName.Moon, moonLongitude);
+            var moonLongitude = PlanetNirayanaLongitude(time, Library.PlanetName.Moon);
+            var moon = new PlanetLongitude(Library.PlanetName.Moon, moonLongitude);
 
-            var marsLongitude = GetPlanetNirayanaLongitude(time, PlanetName.Mars);
-            var mars = new PlanetLongitude(PlanetName.Mars, marsLongitude);
+            var marsLongitude = PlanetNirayanaLongitude(time, Library.PlanetName.Mars);
+            var mars = new PlanetLongitude(Library.PlanetName.Mars, marsLongitude);
 
-            var mercuryLongitude = GetPlanetNirayanaLongitude(time, PlanetName.Mercury);
-            var mercury = new PlanetLongitude(PlanetName.Mercury, mercuryLongitude);
+            var mercuryLongitude = PlanetNirayanaLongitude(time, Library.PlanetName.Mercury);
+            var mercury = new PlanetLongitude(Library.PlanetName.Mercury, mercuryLongitude);
 
-            var jupiterLongitude = GetPlanetNirayanaLongitude(time, PlanetName.Jupiter);
-            var jupiter = new PlanetLongitude(PlanetName.Jupiter, jupiterLongitude);
+            var jupiterLongitude = PlanetNirayanaLongitude(time, Library.PlanetName.Jupiter);
+            var jupiter = new PlanetLongitude(Library.PlanetName.Jupiter, jupiterLongitude);
 
-            var venusLongitude = GetPlanetNirayanaLongitude(time, PlanetName.Venus);
-            var venus = new PlanetLongitude(PlanetName.Venus, venusLongitude);
+            var venusLongitude = PlanetNirayanaLongitude(time, Library.PlanetName.Venus);
+            var venus = new PlanetLongitude(Library.PlanetName.Venus, venusLongitude);
 
-            var saturnLongitude = GetPlanetNirayanaLongitude(time, PlanetName.Saturn);
-            var saturn = new PlanetLongitude(PlanetName.Saturn, saturnLongitude);
+            var saturnLongitude = PlanetNirayanaLongitude(time, Library.PlanetName.Saturn);
+            var saturn = new PlanetLongitude(Library.PlanetName.Saturn, saturnLongitude);
 
-            var rahuLongitude = GetPlanetNirayanaLongitude(time, PlanetName.Rahu);
-            var rahu = new PlanetLongitude(PlanetName.Rahu, rahuLongitude);
+            var rahuLongitude = PlanetNirayanaLongitude(time, Library.PlanetName.Rahu);
+            var rahu = new PlanetLongitude(Library.PlanetName.Rahu, rahuLongitude);
 
-            var ketuLongitude = GetPlanetNirayanaLongitude(time, PlanetName.Ketu);
-            var ketu = new PlanetLongitude(PlanetName.Ketu, ketuLongitude);
+            var ketuLongitude = PlanetNirayanaLongitude(time, Library.PlanetName.Ketu);
+            var ketu = new PlanetLongitude(Library.PlanetName.Ketu, ketuLongitude);
 
 
 
@@ -1046,32 +1046,32 @@ namespace VedAstro.Library
         {
 
             //get longitudes of all planets
-            var sunLongitude = GetPlanetSayanaLongitude(time, PlanetName.Sun);
-            var sun = new PlanetLongitude(PlanetName.Sun, sunLongitude);
+            var sunLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Sun);
+            var sun = new PlanetLongitude(Library.PlanetName.Sun, sunLongitude);
 
-            var moonLongitude = GetPlanetSayanaLongitude(time, PlanetName.Moon);
-            var moon = new PlanetLongitude(PlanetName.Moon, moonLongitude);
+            var moonLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Moon);
+            var moon = new PlanetLongitude(Library.PlanetName.Moon, moonLongitude);
 
-            var marsLongitude = GetPlanetSayanaLongitude(time, PlanetName.Mars);
-            var mars = new PlanetLongitude(PlanetName.Mars, marsLongitude);
+            var marsLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Mars);
+            var mars = new PlanetLongitude(Library.PlanetName.Mars, marsLongitude);
 
-            var mercuryLongitude = GetPlanetSayanaLongitude(time, PlanetName.Mercury);
-            var mercury = new PlanetLongitude(PlanetName.Mercury, mercuryLongitude);
+            var mercuryLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Mercury);
+            var mercury = new PlanetLongitude(Library.PlanetName.Mercury, mercuryLongitude);
 
-            var jupiterLongitude = GetPlanetSayanaLongitude(time, PlanetName.Jupiter);
-            var jupiter = new PlanetLongitude(PlanetName.Jupiter, jupiterLongitude);
+            var jupiterLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Jupiter);
+            var jupiter = new PlanetLongitude(Library.PlanetName.Jupiter, jupiterLongitude);
 
-            var venusLongitude = GetPlanetSayanaLongitude(time, PlanetName.Venus);
-            var venus = new PlanetLongitude(PlanetName.Venus, venusLongitude);
+            var venusLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Venus);
+            var venus = new PlanetLongitude(Library.PlanetName.Venus, venusLongitude);
 
-            var saturnLongitude = GetPlanetSayanaLongitude(time, PlanetName.Saturn);
-            var saturn = new PlanetLongitude(PlanetName.Saturn, saturnLongitude);
+            var saturnLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Saturn);
+            var saturn = new PlanetLongitude(Library.PlanetName.Saturn, saturnLongitude);
 
-            var rahuLongitude = GetPlanetSayanaLongitude(time, PlanetName.Rahu);
-            var rahu = new PlanetLongitude(PlanetName.Rahu, rahuLongitude);
+            var rahuLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Rahu);
+            var rahu = new PlanetLongitude(Library.PlanetName.Rahu, rahuLongitude);
 
-            var ketuLongitude = GetPlanetSayanaLongitude(time, PlanetName.Ketu);
-            var ketu = new PlanetLongitude(PlanetName.Ketu, ketuLongitude);
+            var ketuLongitude = GetPlanetSayanaLongitude(time, Library.PlanetName.Ketu);
+            var ketu = new PlanetLongitude(Library.PlanetName.Ketu, ketuLongitude);
 
 
 
@@ -1086,12 +1086,13 @@ namespace VedAstro.Library
             return allPlanetLongitudeList;
         }
 
+
         [API("HousePlanetIsIn")]
-        public static HouseName GetHousePlanetIsIn(Time time, PlanetName planetName)
+        public static HouseName HousePlanetIsIn(Time time, PlanetName planetName)
         {
 
             //get the planets longitude
-            var planetLongitude = Calculate.GetPlanetNirayanaLongitude(time, planetName);
+            var planetLongitude = Calculate.PlanetNirayanaLongitude(time, planetName);
 
             //get all houses
             var houseList = Calculate.GetHouses(time);
@@ -1119,11 +1120,11 @@ namespace VedAstro.Library
         /// The lord of a bhava is
         /// the Graha (planet) in whose Rasi (sign) the Bhavamadhya falls
         /// </summary>
-        [API("LordOfHouse", "Gets planet lord of given house at given time")]
-        public static PlanetName GetLordOfHouse(HouseName houseNumber, Time time)
+        [API("Gets planet lord of given house at given time")]
+        public static PlanetName LordOfHouse(HouseName houseNumber, Time time)
         {
             //get sign name based on house number //TODO Change to use house name instead of casting to int
-            var houseSignName = Calculate.GetHouseSignName(houseNumber, time);
+            var houseSignName = Calculate.HouseSignName(houseNumber, time);
 
             //get the lord of the house sign
             var lordOfHouseSign = Calculate.GetLordOfZodiacSign(houseSignName);
@@ -1142,7 +1143,7 @@ namespace VedAstro.Library
             var returnList = new List<PlanetName>();
             foreach (var house in houseList)
             {
-                var tempLord = GetLordOfHouse(house, time);
+                var tempLord = LordOfHouse(house, time);
                 returnList.Add(tempLord);
             }
 
@@ -1153,13 +1154,13 @@ namespace VedAstro.Library
         /// Checks if the inputed sign was the sign of the house during the inputed time
         /// </summary>
         [API("IsHouseSignName")]
-        public static bool IsHouseSignName(HouseName house, ZodiacName sign, Time time) => GetHouseSignName(house, time) == sign;
+        public static bool IsHouseSignName(HouseName house, ZodiacName sign, Time time) => HouseSignName(house, time) == sign;
 
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
-        [API("HouseSign")]
-        public static ZodiacName GetHouseSignName(HouseName houseNumber, Time time)
+        [API("zodiac sign at middle longitude of the house")]
+        public static ZodiacName HouseSignName(HouseName houseNumber, Time time)
         {
 
             //get all houses
@@ -1198,8 +1199,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
-        [API("HouseConstellation")]
-        public static PlanetConstellation GetHouseConstellation(HouseName houseNumber, Time time)
+        [API("Gets the Constellation at middle longitude of the house")]
+        public static PlanetConstellation HouseConstellation(HouseName houseNumber, Time time)
         {
 
             //get all houses
@@ -1221,8 +1222,8 @@ namespace VedAstro.Library
             return houseConstellation;
         }
 
-        [API("NavamsaSignNameFromLongitude")]
-        public static ZodiacName GetNavamsaSignNameFromLongitude(Angle longitude)
+        [API("Navamsa Sign Name From Longitude")]
+        public static ZodiacName NavamsaSignNameFromLongitude(Angle longitude)
         {
             //1.0 Get ordinary zodiac sign name
             //get ordinary zodiac sign
@@ -1279,7 +1280,7 @@ namespace VedAstro.Library
 
             //4.0 Get navamsa sign
             //count from first navamsa sign
-            ZodiacName signAtNavamsa = Calculate.GetSignCountedFromInputSign(firstNavamsa, navamsaNumber);
+            ZodiacName signAtNavamsa = Calculate.SignCountedFromInputSign(firstNavamsa, navamsaNumber);
 
             return signAtNavamsa;
 
@@ -1289,7 +1290,7 @@ namespace VedAstro.Library
         /// Exp : Get 4th sign from Cancer
         /// </summary>
         [API("SignCountedFromInputSign")]
-        public static ZodiacName GetSignCountedFromInputSign(ZodiacName inputSign, int countToNextSign)
+        public static ZodiacName SignCountedFromInputSign(ZodiacName inputSign, int countToNextSign)
         {
             //assign counted to same as starting sign at first
             ZodiacName signCountedTo = inputSign;
@@ -1308,8 +1309,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Exp : Get 4th house from 5th house (input house)
         /// </summary>
-        [API("HouseCountedFromInputHouse")]
-        public static int GetHouseCountedFromInputHouse(int inputHouseNumber, int countToNextHouse)
+        [API("Exp : Get 4th house from 5th house (input house)")]
+        public static int HouseCountedFromInputHouse(int inputHouseNumber, int countToNextHouse)
         {
             //assign count to same as starting house at first
             int houseCountedTo = inputHouseNumber;
@@ -1328,8 +1329,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Get zodiac sign planet is in.
         /// </summary>
-        [API("Sign")]
-        public static ZodiacSign GetPlanetRasiSign(PlanetName planetName, Time time)
+        [API("Get zodiac sign planet is in.")]
+        public static ZodiacSign PlanetRasiSign(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
             return CacheManager.GetCache(new CacheKey("GetPlanetRasiSign", planetName, time), _getPlanetRasiSign);
@@ -1339,7 +1340,7 @@ namespace VedAstro.Library
             ZodiacSign _getPlanetRasiSign()
             {
                 //get longitude of planet
-                var longitudeOfPlanet = Calculate.GetPlanetNirayanaLongitude(time, planetName);
+                var longitudeOfPlanet = Calculate.PlanetNirayanaLongitude(time, planetName);
 
                 //get sign planet is in
                 var signPlanetIsIn = Calculate.GetZodiacSignAtLongitude(longitudeOfPlanet);
@@ -1357,7 +1358,7 @@ namespace VedAstro.Library
         [API("IsPlanetInSign")]
         public static bool IsPlanetInSign(PlanetName planetName, ZodiacName signInput, Time time)
         {
-            var currentSign = Calculate.GetPlanetRasiSign(planetName, time).GetSignName();
+            var currentSign = Calculate.PlanetRasiSign(planetName, time).GetSignName();
 
             //check if sign match
             return currentSign == signInput;
@@ -1366,14 +1367,14 @@ namespace VedAstro.Library
         /// <summary>
         /// Get navamsa sign of planet
         /// </summary>
-        [API("Navamsa")]
-        public static ZodiacName GetPlanetNavamsaSign(PlanetName planetName, Time time)
+        [API("Get navamsa sign of planet")]
+        public static ZodiacName PlanetNavamsaSign(PlanetName planetName, Time time)
         {
             //get planets longitude
-            var planetLongitude = GetPlanetNirayanaLongitude(time, planetName);
+            var planetLongitude = PlanetNirayanaLongitude(time, planetName);
 
             //get navamsa sign at longitude
-            var navamsaSignOfPlanet = Calculate.GetNavamsaSignNameFromLongitude(planetLongitude);
+            var navamsaSignOfPlanet = Calculate.NavamsaSignNameFromLongitude(planetLongitude);
 
             return navamsaSignOfPlanet;
         }
@@ -1393,14 +1394,14 @@ namespace VedAstro.Library
             var planetSignList = new List<ZodiacName>();
 
             //get zodiac sign name which the planet is currently in
-            var planetSignName = Calculate.GetPlanetRasiSign(planetName, time).GetSignName();
+            var planetSignName = Calculate.PlanetRasiSign(planetName, time).GetSignName();
 
             // Saturn powerfully aspects the 3rd and the 10th houses
-            if (planetName == PlanetName.Saturn)
+            if (planetName == Library.PlanetName.Saturn)
             {
                 //get signs planet is aspecting
-                var sign3FromSaturn = Calculate.GetSignCountedFromInputSign(planetSignName, 3);
-                var sign10FromSaturn = Calculate.GetSignCountedFromInputSign(planetSignName, 10);
+                var sign3FromSaturn = Calculate.SignCountedFromInputSign(planetSignName, 3);
+                var sign10FromSaturn = Calculate.SignCountedFromInputSign(planetSignName, 10);
 
                 //add signs to return list
                 planetSignList.Add(sign3FromSaturn);
@@ -1409,11 +1410,11 @@ namespace VedAstro.Library
             }
 
             // Jupiter the 5th and the 9th houses
-            if (planetName == PlanetName.Jupiter)
+            if (planetName == Library.PlanetName.Jupiter)
             {
                 //get signs planet is aspecting
-                var sign5FromJupiter = Calculate.GetSignCountedFromInputSign(planetSignName, 5);
-                var sign9FromJupiter = Calculate.GetSignCountedFromInputSign(planetSignName, 9);
+                var sign5FromJupiter = Calculate.SignCountedFromInputSign(planetSignName, 5);
+                var sign9FromJupiter = Calculate.SignCountedFromInputSign(planetSignName, 9);
 
                 //add signs to return list
                 planetSignList.Add(sign5FromJupiter);
@@ -1422,11 +1423,11 @@ namespace VedAstro.Library
             }
 
             // Mars, the 4th and the 8th houses
-            if (planetName == PlanetName.Mars)
+            if (planetName == Library.PlanetName.Mars)
             {
                 //get signs planet is aspecting
-                var sign4FromMars = Calculate.GetSignCountedFromInputSign(planetSignName, 4);
-                var sign8FromMars = Calculate.GetSignCountedFromInputSign(planetSignName, 8);
+                var sign4FromMars = Calculate.SignCountedFromInputSign(planetSignName, 4);
+                var sign8FromMars = Calculate.SignCountedFromInputSign(planetSignName, 8);
 
                 //add signs to return list
                 planetSignList.Add(sign4FromMars);
@@ -1437,7 +1438,7 @@ namespace VedAstro.Library
             //All planets aspect 7th house
 
             //get signs planet is aspecting
-            var sign7FromPlanet = Calculate.GetSignCountedFromInputSign(planetSignName, 7);
+            var sign7FromPlanet = Calculate.SignCountedFromInputSign(planetSignName, 7);
 
             //add signs to return list
             planetSignList.Add(sign7FromPlanet);
@@ -1451,8 +1452,8 @@ namespace VedAstro.Library
         /// Get navamsa sign of house (mid point)
         /// TODO: Checking for correctness needed
         /// </summary>
-        [API("Navamsa")]
-        public static ZodiacName GetHouseNavamsaSign(HouseName house, Time time)
+        [API("Get navamsa sign of house (mid point)")]
+        public static ZodiacName HouseNavamsaSign(HouseName house, Time time)
         {
             //get all houses
             var allHouseList = Calculate.GetHouses(time);
@@ -1461,16 +1462,16 @@ namespace VedAstro.Library
             var houseMiddleLongitude = allHouseList.Find(hs => hs.GetHouseName() == house).GetMiddleLongitude();
 
             //get navamsa house sign at house mid longitude
-            var navamsaSign = Calculate.GetNavamsaSignNameFromLongitude(houseMiddleLongitude);
+            var navamsaSign = Calculate.NavamsaSignNameFromLongitude(houseMiddleLongitude);
 
             return navamsaSign;
         }
 
-        [API("Thrimsamsa")]
-        public static ZodiacName GetPlanetThrimsamsaSign(PlanetName planetName, Time time)
+        [API("Get Thrimsamsa sign of house (mid point)")]
+        public static ZodiacName PlanetThrimsamsaSign(PlanetName planetName, Time time)
         {
             //get sign planet is in
-            var planetSign = Calculate.GetPlanetRasiSign(planetName, time);
+            var planetSign = Calculate.PlanetRasiSign(planetName, time);
 
             //get planet sign name
             var planetSignName = planetSign.GetSignName();
@@ -1574,11 +1575,11 @@ namespace VedAstro.Library
         /// Dwadasamsas in a sign are the lords of the 12 signs from it, i.e.,
         /// the lord of the first Dwadasamsa in Mesha is Kuja, that of the second Sukra and so on.
         /// </summary>
-        [API("Dwadasamsa")]
-        public static ZodiacName GetPlanetDwadasamsaSign(PlanetName planetName, Time time)
+        [API("sign is divided into 12 equal parts each is called a dwadasamsa and measures 2.5 degrees")]
+        public static ZodiacName PlanetDwadasamsaSign(PlanetName planetName, Time time)
         {
             //get sign planet is in
-            var planetSign = Calculate.GetPlanetRasiSign(planetName, time);
+            var planetSign = Calculate.PlanetRasiSign(planetName, time);
 
             //get planet sign name
             var planetSignName = planetSign.GetSignName();
@@ -1597,16 +1598,17 @@ namespace VedAstro.Library
             var dwadasamsaNumber = (int)Math.Ceiling(roughDwadasamsaNumber);
 
             //get Dwadasamsa sign from counting with Dwadasamsa number
-            var dwadasamsaSign = GetSignCountedFromInputSign(planetSignName, dwadasamsaNumber);
+            var dwadasamsaSign = SignCountedFromInputSign(planetSignName, dwadasamsaNumber);
 
             return dwadasamsaSign;
         }
 
-        [API("Saptamsa")]
-        public static ZodiacName GetPlanetSaptamsaSign(PlanetName planetName, Time time)
+
+        [API("sign is divided into 7 equal parts each is called a Saptamsa and measures 4.28 degrees")]
+        public static ZodiacName PlanetSaptamsaSign(PlanetName planetName, Time time)
         {
             //get sign planet is in
-            var planetSign = Calculate.GetPlanetRasiSign(planetName, time);
+            var planetSign = Calculate.PlanetRasiSign(planetName, time);
 
             //get planet sign name
             var planetSignName = planetSign.GetSignName();
@@ -1630,14 +1632,14 @@ namespace VedAstro.Library
             if (IsOddSign(planetSignName))
             {
                 //convert saptamsa number to zodiac name
-                return Calculate.GetSignCountedFromInputSign(planetSignName, saptamsaNumber);
+                return Calculate.SignCountedFromInputSign(planetSignName, saptamsaNumber);
             }
 
             //if planet is in even sign
             if (IsEvenSign(planetSignName))
             {
                 var countToNextSign = saptamsaNumber + 6;
-                return Calculate.GetSignCountedFromInputSign(planetSignName, countToNextSign);
+                return Calculate.SignCountedFromInputSign(planetSignName, countToNextSign);
             }
 
 
@@ -1645,10 +1647,10 @@ namespace VedAstro.Library
         }
 
         [API("Drekkana")]
-        public static ZodiacName GetPlanetDrekkanaSign(PlanetName planetName, Time time)
+        public static ZodiacName PlanetDrekkanaSign(PlanetName planetName, Time time)
         {
             //get sign planet is in
-            var planetSign = Calculate.GetPlanetRasiSign(planetName, time);
+            var planetSign = Calculate.PlanetRasiSign(planetName, time);
 
             //get planet sign name
             var planetSignName = planetSign.GetSignName();
@@ -1669,14 +1671,14 @@ namespace VedAstro.Library
             if (degreesInSign > 10 && degreesInSign <= 20)
             {
                 //return 5th sign from planets current sign
-                return Calculate.GetSignCountedFromInputSign(planetSignName, 5);
+                return Calculate.SignCountedFromInputSign(planetSignName, 5);
             }
 
             //if planet is in 3rd drekkana
             if (degreesInSign > 20 && degreesInSign <= 30)
             {
                 //return 9th sign from planets current sign
-                return Calculate.GetSignCountedFromInputSign(planetSignName, 9);
+                return Calculate.SignCountedFromInputSign(planetSignName, 9);
             }
 
             throw new Exception("Planet drekkana not found, error!");
@@ -1692,10 +1694,10 @@ namespace VedAstro.Library
         public static bool IsPlanetInMoolatrikona(PlanetName planetName, Time time)
         {
             //get sign planet is in
-            var planetSign = Calculate.GetPlanetRasiSign(planetName, time);
+            var planetSign = Calculate.PlanetRasiSign(planetName, time);
 
             //Sun's Moola Thrikona is Leo (0°-20°);
-            if (planetName == PlanetName.Sun)
+            if (planetName == Library.PlanetName.Sun)
             {
                 if (planetSign.GetSignName() == ZodiacName.Leo)
                 {
@@ -1709,7 +1711,7 @@ namespace VedAstro.Library
             }
 
             //Moon-Taurus (4°-30°);
-            if (planetName == PlanetName.Moon)
+            if (planetName == Library.PlanetName.Moon)
             {
                 if (planetSign.GetSignName() == ZodiacName.Taurus)
                 {
@@ -1723,7 +1725,7 @@ namespace VedAstro.Library
             }
 
             //Mercury-Virgo (16°-20°);
-            if (planetName == PlanetName.Mercury)
+            if (planetName == Library.PlanetName.Mercury)
             {
                 if (planetSign.GetSignName() == ZodiacName.Virgo)
                 {
@@ -1737,7 +1739,7 @@ namespace VedAstro.Library
             }
 
             //Jupiter-Sagittarius (0°-13°);
-            if (planetName == PlanetName.Jupiter)
+            if (planetName == Library.PlanetName.Jupiter)
             {
                 if (planetSign.GetSignName() == ZodiacName.Sagittarius)
                 {
@@ -1751,7 +1753,7 @@ namespace VedAstro.Library
             }
 
             // Mars-Aries (0°-18°);
-            if (planetName == PlanetName.Mars)
+            if (planetName == Library.PlanetName.Mars)
             {
                 if (planetSign.GetSignName() == ZodiacName.Aries)
                 {
@@ -1765,7 +1767,7 @@ namespace VedAstro.Library
             }
 
             // Venus-Libra (0°-10°)
-            if (planetName == PlanetName.Venus)
+            if (planetName == Library.PlanetName.Venus)
             {
                 if (planetSign.GetSignName() == ZodiacName.Libra)
                 {
@@ -1779,7 +1781,7 @@ namespace VedAstro.Library
             }
 
             // Saturn-Aquarius (0°-20°).
-            if (planetName == PlanetName.Saturn)
+            if (planetName == Library.PlanetName.Saturn)
             {
                 if (planetSign.GetSignName() == ZodiacName.Aquarius)
                 {
@@ -1803,13 +1805,13 @@ namespace VedAstro.Library
         /// - Moolatrikona, Debilited & Exalted is not calculated heres
         /// - Rahu & ketu not accounted for
         /// </summary>
-        [API("PlanetRelationshipWithSign", "Gets a planets relationship with a sign, friend, enemy, etc.")]
-        public static PlanetToSignRelationship GetPlanetRelationshipWithSign(PlanetName planetName, ZodiacName zodiacSignName, Time time)
+        [API("Gets a planets relationship with a sign, friend, enemy, etc.")]
+        public static PlanetToSignRelationship PlanetRelationshipWithSign(PlanetName planetName, ZodiacName zodiacSignName, Time time)
         {
 
             //no calculation for rahu and ketu here
-            var isRahu = planetName.Name == PlanetName.PlanetNameEnum.Rahu;
-            var isKetu = planetName.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahu = planetName.Name == Library.PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planetName.Name == Library.PlanetName.PlanetNameEnum.Ketu;
             var isRahuKetu = isRahu || isKetu;
             if (isRahuKetu) { return PlanetToSignRelationship.Empty; }
 
@@ -1834,7 +1836,7 @@ namespace VedAstro.Library
             }
 
             //else, get relationship between input planet and lord of sign
-            PlanetToPlanetRelationship relationshipToLordOfSign = GetPlanetCombinedRelationshipWithPlanet(planetName, lordOfSign, time);
+            PlanetToPlanetRelationship relationshipToLordOfSign = PlanetCombinedRelationshipWithPlanet(planetName, lordOfSign, time);
 
             //return relation ship with sign based on relationship with lord of sign
             switch (relationshipToLordOfSign)
@@ -1861,15 +1863,15 @@ namespace VedAstro.Library
         /// relations. Thus a temporary enemy plus a permanent
         /// or natural enemy becomes a bitter enemy.
         /// </summary>
-        [API("PlanetCombinedRelationshipWithPlanet")]
-        public static PlanetToPlanetRelationship GetPlanetCombinedRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet, Time time)
+        [API("strengths of planets, mix the temporary relations and the permanent")]
+        public static PlanetToPlanetRelationship PlanetCombinedRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet, Time time)
         {
 
             //no calculation for rahu and ketu here
-            var isRahu = mainPlanet.Name == PlanetName.PlanetNameEnum.Rahu;
-            var isKetu = mainPlanet.Name == PlanetName.PlanetNameEnum.Ketu;
-            var isRahu2 = secondaryPlanet.Name == PlanetName.PlanetNameEnum.Rahu;
-            var isKetu2 = secondaryPlanet.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahu = mainPlanet.Name == Library.PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = mainPlanet.Name == Library.PlanetName.PlanetNameEnum.Ketu;
+            var isRahu2 = secondaryPlanet.Name == Library.PlanetName.PlanetNameEnum.Rahu;
+            var isKetu2 = secondaryPlanet.Name == Library.PlanetName.PlanetNameEnum.Ketu;
             var isRahuKetu = isRahu || isKetu || isRahu2 || isKetu2;
             if (isRahuKetu) { return PlanetToPlanetRelationship.Empty; }
 
@@ -1881,7 +1883,7 @@ namespace VedAstro.Library
             PlanetToPlanetRelationship planetPermanentRelationship = GetPlanetPermanentRelationshipWithPlanet(mainPlanet, secondaryPlanet);
 
             //get planet's temporary relationship
-            PlanetToPlanetRelationship planetTemporaryRelationship = GetPlanetTemporaryRelationshipWithPlanet(mainPlanet, secondaryPlanet, time);
+            PlanetToPlanetRelationship planetTemporaryRelationship = PlanetTemporaryRelationshipWithPlanet(mainPlanet, secondaryPlanet, time);
 
             //Tatkalika Mitra + Naisargika Mitra = Adhi Mitras
             if (planetTemporaryRelationship == PlanetToPlanetRelationship.Friend && planetPermanentRelationship == PlanetToPlanetRelationship.Friend)
@@ -1928,14 +1930,14 @@ namespace VedAstro.Library
         /// Based on the relation between the planet and the lord of the sign of the house
         /// Note : needs verification if this is correct
         /// </summary>
-        [API("PlanetRelationshipWithHouse")]
-        public static PlanetToSignRelationship GetPlanetRelationshipWithHouse(HouseName house, PlanetName planet, Time time)
+        [API("Relation between the planet and the lord of the sign of the house")]
+        public static PlanetToSignRelationship PlanetRelationshipWithHouse(HouseName house, PlanetName planet, Time time)
         {
             //get sign the house is in
-            var houseSign = GetHouseSignName(house, time);
+            var houseSign = HouseSignName(house, time);
 
             //get the planet's relationship with the sign
-            var relationship = GetPlanetRelationshipWithSign(planet, houseSign, time);
+            var relationship = PlanetRelationshipWithSign(planet, houseSign, time);
 
             return relationship;
         }
@@ -1946,8 +1948,8 @@ namespace VedAstro.Library
         /// and 12th signs from any other planet becomes the
         /// latter's temporary friends. The others are its enemies.
         /// </summary>
-        [API("PlanetTemporaryRelationshipWithPlanet")]
-        public static PlanetToPlanetRelationship GetPlanetTemporaryRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet, Time time)
+        [API("Planets found in the certain signs from any other planet becomes temporary friends")]
+        public static PlanetToPlanetRelationship PlanetTemporaryRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet, Time time)
         {
             //if main planet & secondary planet is same, then it is own plant (same planet), end here
             if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.SamePlanet; }
@@ -2075,15 +2077,15 @@ namespace VedAstro.Library
         public static List<PlanetName> GetPlanetInSign(ZodiacName signName, Time time)
         {
             //get all planets locations in signs
-            var sunSignName = Calculate.GetPlanetRasiSign(PlanetName.Sun, time).GetSignName();
-            var moonSignName = Calculate.GetPlanetRasiSign(PlanetName.Moon, time).GetSignName();
-            var marsSignName = Calculate.GetPlanetRasiSign(PlanetName.Mars, time).GetSignName();
-            var mercurySignName = Calculate.GetPlanetRasiSign(PlanetName.Mercury, time).GetSignName();
-            var jupiterSignName = Calculate.GetPlanetRasiSign(PlanetName.Jupiter, time).GetSignName();
-            var venusSignName = Calculate.GetPlanetRasiSign(PlanetName.Venus, time).GetSignName();
-            var saturnSignName = Calculate.GetPlanetRasiSign(PlanetName.Saturn, time).GetSignName();
-            var rahuSignName = Calculate.GetPlanetRasiSign(PlanetName.Rahu, time).GetSignName();
-            var ketuSignName = Calculate.GetPlanetRasiSign(PlanetName.Ketu, time).GetSignName();
+            var sunSignName = Calculate.PlanetRasiSign(Library.PlanetName.Sun, time).GetSignName();
+            var moonSignName = Calculate.PlanetRasiSign(Library.PlanetName.Moon, time).GetSignName();
+            var marsSignName = Calculate.PlanetRasiSign(Library.PlanetName.Mars, time).GetSignName();
+            var mercurySignName = Calculate.PlanetRasiSign(Library.PlanetName.Mercury, time).GetSignName();
+            var jupiterSignName = Calculate.PlanetRasiSign(Library.PlanetName.Jupiter, time).GetSignName();
+            var venusSignName = Calculate.PlanetRasiSign(Library.PlanetName.Venus, time).GetSignName();
+            var saturnSignName = Calculate.PlanetRasiSign(Library.PlanetName.Saturn, time).GetSignName();
+            var rahuSignName = Calculate.PlanetRasiSign(Library.PlanetName.Rahu, time).GetSignName();
+            var ketuSignName = Calculate.PlanetRasiSign(Library.PlanetName.Ketu, time).GetSignName();
 
 
             //create empty list of planet names to return
@@ -2092,39 +2094,39 @@ namespace VedAstro.Library
             //if planet is in same sign as input sign add planet to list
             if (sunSignName == signName)
             {
-                planetFoundInSign.Add(PlanetName.Sun);
+                planetFoundInSign.Add(Library.PlanetName.Sun);
             }
             if (moonSignName == signName)
             {
-                planetFoundInSign.Add(PlanetName.Moon);
+                planetFoundInSign.Add(Library.PlanetName.Moon);
             }
             if (marsSignName == signName)
             {
-                planetFoundInSign.Add(PlanetName.Mars);
+                planetFoundInSign.Add(Library.PlanetName.Mars);
             }
             if (mercurySignName == signName)
             {
-                planetFoundInSign.Add(PlanetName.Mercury);
+                planetFoundInSign.Add(Library.PlanetName.Mercury);
             }
             if (jupiterSignName == signName)
             {
-                planetFoundInSign.Add(PlanetName.Jupiter);
+                planetFoundInSign.Add(Library.PlanetName.Jupiter);
             }
             if (venusSignName == signName)
             {
-                planetFoundInSign.Add(PlanetName.Venus);
+                planetFoundInSign.Add(Library.PlanetName.Venus);
             }
             if (saturnSignName == signName)
             {
-                planetFoundInSign.Add(PlanetName.Saturn);
+                planetFoundInSign.Add(Library.PlanetName.Saturn);
             }
             if (rahuSignName == signName)
             {
-                planetFoundInSign.Add(PlanetName.Rahu);
+                planetFoundInSign.Add(Library.PlanetName.Rahu);
             }
             if (ketuSignName == signName)
             {
-                planetFoundInSign.Add(PlanetName.Ketu);
+                planetFoundInSign.Add(Library.PlanetName.Ketu);
             }
 
 
@@ -2140,21 +2142,21 @@ namespace VedAstro.Library
         public static List<PlanetName> GetPlanetTemporaryFriendList(PlanetName planetName, Time time)
         {
             //get sign planet is currently in
-            var planetSignName = Calculate.GetPlanetRasiSign(planetName, time).GetSignName();
+            var planetSignName = Calculate.PlanetRasiSign(planetName, time).GetSignName();
 
             //Get signs of friends of main planet
             //get planets in 2nd
-            var sign2FromMainPlanet = Calculate.GetSignCountedFromInputSign(planetSignName, 2);
+            var sign2FromMainPlanet = Calculate.SignCountedFromInputSign(planetSignName, 2);
             //get planets in 3rd
-            var sign3FromMainPlanet = Calculate.GetSignCountedFromInputSign(planetSignName, 3);
+            var sign3FromMainPlanet = Calculate.SignCountedFromInputSign(planetSignName, 3);
             //get planets in 4th
-            var sign4FromMainPlanet = Calculate.GetSignCountedFromInputSign(planetSignName, 4);
+            var sign4FromMainPlanet = Calculate.SignCountedFromInputSign(planetSignName, 4);
             //get planets in 10th
-            var sign10FromMainPlanet = Calculate.GetSignCountedFromInputSign(planetSignName, 10);
+            var sign10FromMainPlanet = Calculate.SignCountedFromInputSign(planetSignName, 10);
             //get planets in 11th
-            var sign11FromMainPlanet = Calculate.GetSignCountedFromInputSign(planetSignName, 11);
+            var sign11FromMainPlanet = Calculate.SignCountedFromInputSign(planetSignName, 11);
             //get planets in 12th
-            var sign12FromMainPlanet = Calculate.GetSignCountedFromInputSign(planetSignName, 12);
+            var sign12FromMainPlanet = Calculate.SignCountedFromInputSign(planetSignName, 12);
 
             //add houses of friendly planets to a list
             var signsOfFriendlyPlanet = new List<ZodiacName>(){sign2FromMainPlanet, sign3FromMainPlanet, sign4FromMainPlanet,
@@ -2174,15 +2176,15 @@ namespace VedAstro.Library
             }
 
             //remove rahu & ketu from list
-            friendlyPlanetList.Remove(PlanetName.Rahu);
-            friendlyPlanetList.Remove(PlanetName.Ketu);
+            friendlyPlanetList.Remove(Library.PlanetName.Rahu);
+            friendlyPlanetList.Remove(Library.PlanetName.Ketu);
 
 
             return friendlyPlanetList;
 
         }
 
-        public static double GetGreenwichApparentInJulianDays(Time time)
+        public static double GreenwichApparentInJulianDays(Time time)
         {
             //convert lmt to julian days, in universal time (UT)
             var localMeanTimeInJulian_UT = GetGreenwichLmtInJulianDays(time);
@@ -2202,7 +2204,8 @@ namespace VedAstro.Library
             return localApparentTimeInJulian;
         }
 
-        public static DateTime LocalApparentTime(Time time)
+        [API("Shows local apparent time from Swiss Eph")]
+		public static DateTime LocalApparentTime(Time time)
         {
 
             //CACHE MECHANISM
@@ -2242,7 +2245,9 @@ namespace VedAstro.Library
         /// </summary>
         public static DateTimeOffset LocalMeanTime(Time time) => time.GetLmtDateTimeOffset();
 
-        public static House House(HouseName houseNumber, Time time)
+
+        [API("House start middle and end longitudes")]
+		public static House House(HouseName houseNumber, Time time)
         {
 
             //CACHE MECHANISM
@@ -2274,7 +2279,7 @@ namespace VedAstro.Library
             // good.
 
             //get the number of the lunar day (from the 1st of the month),
-            var lunarDateNumber = Calculate.GetLunarDay(time).GetLunarDateNumber();
+            var lunarDateNumber = Calculate.LunarDay(time).GetLunarDateNumber();
 
             //get the number of the constellation (from Aswini)
             var rullingConstellationNumber = Calculate.MoonConstellation(time).GetConstellationNumber();
@@ -2283,7 +2288,7 @@ namespace VedAstro.Library
             var weekdayNumber = (int)Calculate.GetDayOfWeek(time);
 
             //Number of zodiacal sign, number of the Lagna (from Aries).
-            var risingSignNumber = (int)Calculate.GetHouseSignName(HouseName.House1, time);
+            var risingSignNumber = (int)Calculate.HouseSignName(HouseName.House1, time);
 
             //add all to get total
             double total = lunarDateNumber + rullingConstellationNumber + weekdayNumber + risingSignNumber;
@@ -2323,7 +2328,7 @@ namespace VedAstro.Library
 
         }
 
-        [API("LordOfWeekday", "", Category.StarsAboveMe)]
+        [API("Planet lord that governs a weekday", Category.StarsAboveMe)]
         public static PlanetName LordOfWeekday(Time time)
         {
             //Sunday Sun
@@ -2341,13 +2346,13 @@ namespace VedAstro.Library
             //based on weekday return the planet lord
             switch (weekday)
             {
-                case DayOfWeek.Sunday: return PlanetName.Sun;
-                case DayOfWeek.Monday: return PlanetName.Moon;
-                case DayOfWeek.Tuesday: return PlanetName.Mars;
-                case DayOfWeek.Wednesday: return PlanetName.Mercury;
-                case DayOfWeek.Thursday: return PlanetName.Jupiter;
-                case DayOfWeek.Friday: return PlanetName.Venus;
-                case DayOfWeek.Saturday: return PlanetName.Saturn;
+                case DayOfWeek.Sunday: return Library.PlanetName.Sun;
+                case DayOfWeek.Monday: return Library.PlanetName.Moon;
+                case DayOfWeek.Tuesday: return Library.PlanetName.Mars;
+                case DayOfWeek.Wednesday: return Library.PlanetName.Mercury;
+                case DayOfWeek.Thursday: return Library.PlanetName.Jupiter;
+                case DayOfWeek.Friday: return Library.PlanetName.Venus;
+                case DayOfWeek.Saturday: return Library.PlanetName.Saturn;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -2367,13 +2372,13 @@ namespace VedAstro.Library
             //based on weekday return the planet lord
             switch (weekday)
             {
-                case DayOfWeek.Sunday: return PlanetName.Sun;
-                case DayOfWeek.Monday: return PlanetName.Moon;
-                case DayOfWeek.Tuesday: return PlanetName.Mars;
-                case DayOfWeek.Wednesday: return PlanetName.Mercury;
-                case DayOfWeek.Thursday: return PlanetName.Jupiter;
-                case DayOfWeek.Friday: return PlanetName.Venus;
-                case DayOfWeek.Saturday: return PlanetName.Saturn;
+                case DayOfWeek.Sunday: return Library.PlanetName.Sun;
+                case DayOfWeek.Monday: return Library.PlanetName.Moon;
+                case DayOfWeek.Tuesday: return Library.PlanetName.Mars;
+                case DayOfWeek.Wednesday: return Library.PlanetName.Mercury;
+                case DayOfWeek.Thursday: return Library.PlanetName.Jupiter;
+                case DayOfWeek.Friday: return Library.PlanetName.Venus;
+                case DayOfWeek.Saturday: return Library.PlanetName.Saturn;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -2437,7 +2442,7 @@ namespace VedAstro.Library
         public static ZodiacName PlanetHoraSign(PlanetName planetName, Time time)
         {
             //get planet sign
-            var planetSign = Calculate.GetPlanetRasiSign(planetName, time);
+            var planetSign = Calculate.PlanetRasiSign(planetName, time);
 
             //get planet sign name
             var planetSignName = planetSign.GetSignName();
@@ -2632,7 +2637,7 @@ namespace VedAstro.Library
         /// almost the same for all places.
         /// *Center of disk is not actually used for now (future implementation)
         /// </summary>
-        [API("LocalNoonTime", "Sun is exactly overhead at location")]
+        [API( "Sun is exactly overhead at location")]
         public static DateTime NoonTime(Time time)
         {
             //get apparent time
@@ -2661,7 +2666,7 @@ namespace VedAstro.Library
             if (!isAspecting) { return false; }
 
             //check if it is a good aspect
-            var aspectNature = Calculate.GetPlanetCombinedRelationshipWithPlanet(receivingAspect, transmitingAspect, time);
+            var aspectNature = Calculate.PlanetCombinedRelationshipWithPlanet(receivingAspect, transmitingAspect, time);
             var isGood = aspectNature == PlanetToPlanetRelationship.BestFriend ||
                          aspectNature == PlanetToPlanetRelationship.Friend;
 
@@ -2686,7 +2691,7 @@ namespace VedAstro.Library
             if (!isAspecting) { return false; }
 
             //check if it is a good aspect
-            var aspectNature = Calculate.GetPlanetRelationshipWithHouse(receivingAspect, transmitingAspect, time);
+            var aspectNature = Calculate.PlanetRelationshipWithHouse(receivingAspect, transmitingAspect, time);
 
             var isGood = aspectNature == PlanetToSignRelationship.OwnVarga || //Swavarga - own varga
                          aspectNature == PlanetToSignRelationship.FriendVarga || //Mitravarga - friendly varga
@@ -2714,8 +2719,8 @@ namespace VedAstro.Library
         public static double PlanetSthanaBalaNeutralPoint(PlanetName planet)
         {
             //no calculation for rahu and ketu here
-            var isRahu = planet.Name == PlanetName.PlanetNameEnum.Rahu;
-            var isKetu = planet.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahu = planet.Name == Library.PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planet.Name == Library.PlanetName.PlanetNameEnum.Ketu;
             var isRahuKetu = isRahu || isKetu;
             if (isRahuKetu) { return 0; }
 
@@ -2729,13 +2734,13 @@ namespace VedAstro.Library
             {
                 int max = 0, min = 0;
 
-                if (planet == PlanetName.Saturn) { max = 297; min = 59; }
-                if (planet == PlanetName.Mars) { max = 362; min = 60; }
-                if (planet == PlanetName.Jupiter) { max = 296; min = 77; }
-                if (planet == PlanetName.Mercury) { max = 295; min = 47; }
-                if (planet == PlanetName.Venus) { max = 284; min = 60; }
-                if (planet == PlanetName.Sun) { max = 327; min = 52; }
-                if (planet == PlanetName.Moon) { max = 311; min = 54; }
+                if (planet == Library.PlanetName.Saturn) { max = 297; min = 59; }
+                if (planet == Library.PlanetName.Mars) { max = 362; min = 60; }
+                if (planet == Library.PlanetName.Jupiter) { max = 296; min = 77; }
+                if (planet == Library.PlanetName.Mercury) { max = 295; min = 47; }
+                if (planet == Library.PlanetName.Venus) { max = 284; min = 60; }
+                if (planet == Library.PlanetName.Sun) { max = 327; min = 52; }
+                if (planet == Library.PlanetName.Moon) { max = 311; min = 54; }
 
                 //calculate neutral point
                 var neutralPoint = ((max - min) / 2) + min;
@@ -2764,8 +2769,8 @@ namespace VedAstro.Library
         {
 
             //no calculation for rahu and ketu here
-            var isRahu = planet.Name == PlanetName.PlanetNameEnum.Rahu;
-            var isKetu = planet.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahu = planet.Name == Library.PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planet.Name == Library.PlanetName.PlanetNameEnum.Ketu;
             var isRahuKetu = isRahu || isKetu;
             if (isRahuKetu) { return 0; }
 
@@ -2779,13 +2784,13 @@ namespace VedAstro.Library
             {
                 int max = 0, min = 0;
 
-                if (planet == PlanetName.Saturn) { max = 150; min = 11; }
-                if (planet == PlanetName.Mars) { max = 188; min = 21; }
-                if (planet == PlanetName.Jupiter) { max = 172; min = 17; }
-                if (planet == PlanetName.Mercury) { max = 150; min = 17; }
-                if (planet == PlanetName.Venus) { max = 158; min = 15; }
-                if (planet == PlanetName.Sun) { max = 180; min = 17; }
-                if (planet == PlanetName.Moon) { max = 165; min = 26; }
+                if (planet == Library.PlanetName.Saturn) { max = 150; min = 11; }
+                if (planet == Library.PlanetName.Mars) { max = 188; min = 21; }
+                if (planet == Library.PlanetName.Jupiter) { max = 172; min = 17; }
+                if (planet == Library.PlanetName.Mercury) { max = 150; min = 17; }
+                if (planet == Library.PlanetName.Venus) { max = 158; min = 15; }
+                if (planet == Library.PlanetName.Sun) { max = 180; min = 17; }
+                if (planet == Library.PlanetName.Moon) { max = 165; min = 26; }
 
                 //difference between max & min
                 var difference = (max - min);
@@ -2808,7 +2813,7 @@ namespace VedAstro.Library
         public static bool IsPlanetInKendra(PlanetName planet, Time time)
         {
             //The 4th, the 7th and the 10th are the Kendras
-            var planetHouse = GetHousePlanetIsIn(time, planet);
+            var planetHouse = HousePlanetIsIn(time, planet);
 
             //check if planet is in kendra
             var isPlanetInKendra = planetHouse == HouseName.House1 || planetHouse == HouseName.House4 || planetHouse == HouseName.House7 || planetHouse == HouseName.House10;
@@ -2823,10 +2828,10 @@ namespace VedAstro.Library
         public static bool IsHouseLordInHouse(HouseName lordHouse, HouseName occupiedHouse, Time time)
         {
             //get the house lord
-            var houseLord = Calculate.GetLordOfHouse(lordHouse, time);
+            var houseLord = Calculate.LordOfHouse(lordHouse, time);
 
             //get house the lord is in
-            var houseIsIn = Calculate.GetHousePlanetIsIn(time, houseLord);
+            var houseIsIn = Calculate.HousePlanetIsIn(time, houseLord);
 
             //if it matches then occuring
             return houseIsIn == occupiedHouse;
@@ -3027,17 +3032,17 @@ namespace VedAstro.Library
         public static ZodiacName ArudhaLagnaSign(Time time)
         {
             //get janma lagna
-            var janmaLagna = Calculate.GetHouseSignName(HouseName.House1, time);
+            var janmaLagna = Calculate.HouseSignName(HouseName.House1, time);
 
             //get sign lord of janma lagna is in
-            var lagnaLord = Calculate.GetLordOfHouse(HouseName.House1, time);
-            var lagnaLordSign = Calculate.GetPlanetRasiSign(lagnaLord, time).GetSignName();
+            var lagnaLord = Calculate.LordOfHouse(HouseName.House1, time);
+            var lagnaLordSign = Calculate.PlanetRasiSign(lagnaLord, time).GetSignName();
 
             //count the signs from janma to the sign the lord is in
             var janmaToLordCount = Calculate.CountFromSignToSign(janmaLagna, lagnaLordSign);
 
             //use the above count to find arudha sign from lord's sign
-            var arudhaSign = Calculate.GetSignCountedFromInputSign(lagnaLordSign, janmaToLordCount);
+            var arudhaSign = Calculate.SignCountedFromInputSign(lagnaLordSign, janmaToLordCount);
 
             return arudhaSign;
         }
@@ -3123,7 +3128,7 @@ namespace VedAstro.Library
         /// </summary>
         public static bool IsPlanetInHouse(Time time, PlanetName planet, HouseName houseNumber)
         {
-            return Calculate.GetHousePlanetIsIn(time, planet) == houseNumber;
+            return Calculate.HousePlanetIsIn(time, planet) == houseNumber;
         }
 
         /// <summary>
@@ -3134,7 +3139,7 @@ namespace VedAstro.Library
         public static bool IsPlanetDebilitated(PlanetName planet, Time time)
         {
             //get planet location
-            var planetLongitude = GetPlanetNirayanaLongitude(time, planet);
+            var planetLongitude = PlanetNirayanaLongitude(time, planet);
 
             //convert planet longitude to zodiac sign
             var planetZodiac = GetZodiacSignAtLongitude(planetLongitude);
@@ -3170,7 +3175,7 @@ namespace VedAstro.Library
         public static bool IsPlanetExalted(PlanetName planet, Time time)
         {
             //get planet location
-            var planetLongitude = GetPlanetNirayanaLongitude(time, planet);
+            var planetLongitude = PlanetNirayanaLongitude(time, planet);
 
             //convert planet longitude to zodiac sign
             var planetZodiac = GetZodiacSignAtLongitude(planetLongitude);
@@ -3334,7 +3339,7 @@ namespace VedAstro.Library
             Time getFullMoonTime()
             {
                 //get the lunar date number
-                int lunarDayNumber = GetLunarDay(time).GetLunarDateNumber();
+                int lunarDayNumber = LunarDay(time).GetLunarDateNumber();
 
                 //start with input time
                 var fullMoonTime = time;
@@ -3372,7 +3377,7 @@ namespace VedAstro.Library
         public static bool IsFullMoon(Time time)
         {
             //get the lunar date number
-            int lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
+            int lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
 
             //if day 15, it is full moon
             return lunarDayNumber == 15;
@@ -3423,7 +3428,7 @@ namespace VedAstro.Library
         {
             //todo account for rahu & ketu
             //rahu & ketu not sure for now, just return neutral
-            if (planet == PlanetName.Rahu || planet == PlanetName.Ketu) { return EventNature.Neutral; }
+            if (planet == Library.PlanetName.Rahu || planet == Library.PlanetName.Ketu) { return EventNature.Neutral; }
 
             //get nature from person's lagna
             var planetNature = GetNatureFromLagna();
@@ -3433,9 +3438,9 @@ namespace VedAstro.Library
             //note: generaly speaking a neutral planet shloud not exist, either good or bad
             if (planetNature == EventNature.Neutral)
             {
-                var _planetCurrentHouse = GetHousePlanetIsIn(person.BirthTime, planet);
+                var _planetCurrentHouse = HousePlanetIsIn(person.BirthTime, planet);
 
-                var _currentHouseRelation = GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planet, person.BirthTime);
+                var _currentHouseRelation = PlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planet, person.BirthTime);
 
                 switch (_currentHouseRelation)
                 {
@@ -3462,7 +3467,7 @@ namespace VedAstro.Library
 
             EventNature GetNatureFromLagna()
             {
-                var personLagna = GetHouseSignName(HouseName.House1, person.BirthTime);
+                var personLagna = HouseSignName(HouseName.House1, person.BirthTime);
 
                 //get list of good and bad planets for a lagna
                 dynamic planetData = GetPlanetData(personLagna);
@@ -3501,8 +3506,8 @@ namespace VedAstro.Library
                     // becomes a maraka, he will not kill the native but planets like
                     // Saturn will bring about death to the person.
                     case ZodiacName.Aries:
-                        good = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Sun };
-                        bad = new List<PlanetName>() { PlanetName.Saturn, PlanetName.Mercury, PlanetName.Venus };
+                        good = new List<PlanetName>() { Library.PlanetName.Jupiter, Library.PlanetName.Sun };
+                        bad = new List<PlanetName>() { Library.PlanetName.Saturn, Library.PlanetName.Mercury, Library.PlanetName.Venus };
                         break;
                     //Taurus - Saturn is the most auspicious and powerful
                     // planet. Jupiter, Venus and the Moon are evil planets. Saturn
@@ -3510,8 +3515,8 @@ namespace VedAstro.Library
                     // periods and sub-periods of Jupiter, Venus and the Moon if
                     // they get death-inflicting powers.
                     case ZodiacName.Taurus:
-                        good = new List<PlanetName>() { PlanetName.Saturn };
-                        bad = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Venus, PlanetName.Moon };
+                        good = new List<PlanetName>() { Library.PlanetName.Saturn };
+                        bad = new List<PlanetName>() { Library.PlanetName.Jupiter, Library.PlanetName.Venus, Library.PlanetName.Moon };
                         break;
                     //Gemini - Mars, Jupiter and the Sun are evil. Venus alone
                     // is most beneficial and in conjunction with Saturn in good signs
@@ -3521,8 +3526,8 @@ namespace VedAstro.Library
                     // The Moon will not kill the person even though possessed of
                     // death-inflicting powers.
                     case ZodiacName.Gemini:
-                        good = new List<PlanetName>() { PlanetName.Venus };
-                        bad = new List<PlanetName>() { PlanetName.Mars, PlanetName.Jupiter, PlanetName.Sun };
+                        good = new List<PlanetName>() { Library.PlanetName.Venus };
+                        bad = new List<PlanetName>() { Library.PlanetName.Mars, Library.PlanetName.Jupiter, Library.PlanetName.Sun };
                         break;
                     //Cancer - Venus and Mercury are evil. Jupiter and Mars
                     // give beneficial results. Mars is the Rajayogakaraka
@@ -3534,8 +3539,8 @@ namespace VedAstro.Library
                     // houses especially the 1st, the 5th, the 9th and the 10th
                     // produces much reputation.
                     case ZodiacName.Cancer:
-                        good = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Mars };
-                        bad = new List<PlanetName>() { PlanetName.Venus, PlanetName.Mercury };
+                        good = new List<PlanetName>() { Library.PlanetName.Jupiter, Library.PlanetName.Mars };
+                        bad = new List<PlanetName>() { Library.PlanetName.Venus, Library.PlanetName.Mercury };
                         break;
                     //Leo - Mars is the most auspicious and favourable planet.
                     // The combination of Venus and Jupiter does not cause Rajayoga
@@ -3545,8 +3550,8 @@ namespace VedAstro.Library
                     // power but Mercury and other evil planets inflict death when
                     // they get maraka powers.
                     case ZodiacName.Leo:
-                        good = new List<PlanetName>() { PlanetName.Mars };
-                        bad = new List<PlanetName>() { PlanetName.Saturn, PlanetName.Venus, PlanetName.Mercury };
+                        good = new List<PlanetName>() { Library.PlanetName.Mars };
+                        bad = new List<PlanetName>() { Library.PlanetName.Saturn, Library.PlanetName.Venus, Library.PlanetName.Mercury };
                         break;
                     //Virgo - Venus alone is the most powerful. Mercury and
                     // Venus when combined together cause Rajayoga. Mars and
@@ -3554,8 +3559,8 @@ namespace VedAstro.Library
                     // be becomes a maraka but Venus, the Moon and Jupiter will
                     // inflict death when they are possessed of death-infticting power.
                     case ZodiacName.Virgo:
-                        good = new List<PlanetName>() { PlanetName.Venus };
-                        bad = new List<PlanetName>() { PlanetName.Mars, PlanetName.Moon };
+                        good = new List<PlanetName>() { Library.PlanetName.Venus };
+                        bad = new List<PlanetName>() { Library.PlanetName.Mars, Library.PlanetName.Moon };
                         break;
                     // Libra - Saturn alone causes Rajayoga. Jupiter, the Sun
                     // and Mars are inauspicious. Mercury and Saturn produce good.
@@ -3564,8 +3569,8 @@ namespace VedAstro.Library
                     // and Mars when possessed of maraka powers certainly kill the
                     // nalive.
                     case ZodiacName.Libra:
-                        good = new List<PlanetName>() { PlanetName.Saturn, PlanetName.Mercury };
-                        bad = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Sun, PlanetName.Mars };
+                        good = new List<PlanetName>() { Library.PlanetName.Saturn, Library.PlanetName.Mercury };
+                        bad = new List<PlanetName>() { Library.PlanetName.Jupiter, Library.PlanetName.Sun, Library.PlanetName.Mars };
                         break;
                     //Scorpio - Jupiter is beneficial. The Sun and the Moon
                     // produce Rajayoga. Mercury and Venus are evil. Jupiter,
@@ -3573,8 +3578,8 @@ namespace VedAstro.Library
                     // and other evil planets, when they get death-inlflicting powers,
                     // do not certainly spare the native.
                     case ZodiacName.Scorpio:
-                        good = new List<PlanetName>() { PlanetName.Jupiter };
-                        bad = new List<PlanetName>() { PlanetName.Mercury, PlanetName.Venus };
+                        good = new List<PlanetName>() { Library.PlanetName.Jupiter };
+                        bad = new List<PlanetName>() { Library.PlanetName.Mercury, Library.PlanetName.Venus };
                         break;
                     //Sagittarius - Mars is the best planet and in conjunction
                     // with Jupiter, produces much good. The Sun and Mars also
@@ -3583,30 +3588,30 @@ namespace VedAstro.Library
                     // bring about death even when he is a maraka. But Venus
                     // causes death when be gets jurisdiction as a maraka planet.
                     case ZodiacName.Sagittarius:
-                        good = new List<PlanetName>() { PlanetName.Mars };
-                        bad = new List<PlanetName>() { PlanetName.Venus };
+                        good = new List<PlanetName>() { Library.PlanetName.Mars };
+                        bad = new List<PlanetName>() { Library.PlanetName.Venus };
                         break;
                     //Capricornus - Venus is the most powerful planet and in
                     // conjunction with Mercury produces Rajayoga. Mars, Jupiter
                     // and the Moon are evil.
                     case ZodiacName.Capricornus:
-                        good = new List<PlanetName>() { PlanetName.Venus };
-                        bad = new List<PlanetName>() { PlanetName.Mars, PlanetName.Jupiter, PlanetName.Moon };
+                        good = new List<PlanetName>() { Library.PlanetName.Venus };
+                        bad = new List<PlanetName>() { Library.PlanetName.Mars, Library.PlanetName.Jupiter, Library.PlanetName.Moon };
                         break;
                     //Aquarius - Venus alone is auspicious. The combination of
                     // Venus and Mars causes Rajayoga. Jupiter and the Moon are
                     // evil.
                     case ZodiacName.Aquarius:
-                        good = new List<PlanetName>() { PlanetName.Venus };
-                        bad = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Moon };
+                        good = new List<PlanetName>() { Library.PlanetName.Venus };
+                        bad = new List<PlanetName>() { Library.PlanetName.Jupiter, Library.PlanetName.Moon };
                         break;
                     //Pisces - The Moon and Mars are auspicious. Mars is
                     // most powerful. Mars with the Moon or Jupiter causes Rajayoga.
                     // Saturn, Venus, the Sun and Mercury are evil. Mars
                     // himself does not kill the person even if he is a maraka.
                     case ZodiacName.Pisces:
-                        good = new List<PlanetName>() { PlanetName.Moon, PlanetName.Mars };
-                        bad = new List<PlanetName>() { PlanetName.Saturn, PlanetName.Venus, PlanetName.Sun, PlanetName.Mercury };
+                        good = new List<PlanetName>() { Library.PlanetName.Moon, Library.PlanetName.Mars };
+                        bad = new List<PlanetName>() { Library.PlanetName.Saturn, Library.PlanetName.Venus, Library.PlanetName.Sun, Library.PlanetName.Mercury };
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -3628,31 +3633,31 @@ namespace VedAstro.Library
             switch (lagna)
             {
                 case ZodiacName.Aries:
-                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                    return planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Jupiter;
                 case ZodiacName.Taurus:
-                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars
-                           || planetName == PlanetName.Mercury || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Mars
+                                                                || planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Gemini:
-                    return planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Cancer:
-                    return planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                    return planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Jupiter;
                 case ZodiacName.Leo:
-                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars;
+                    return planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Mars;
                 case ZodiacName.Virgo:
-                    return planetName == PlanetName.Venus;
+                    return planetName == Library.PlanetName.Venus;
                 case ZodiacName.Libra:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Scorpio:
-                    return planetName == PlanetName.Jupiter || planetName == PlanetName.Sun || planetName == PlanetName.Moon;
+                    return planetName == Library.PlanetName.Jupiter || planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon;
                 case ZodiacName.Sagittarius:
-                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars;
+                    return planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Mars;
                 case ZodiacName.Capricornus:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Aquarius:
-                    return planetName == PlanetName.Venus || planetName == PlanetName.Mars
-                           || planetName == PlanetName.Sun || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Mars
+                                                                  || planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Pisces:
-                    return planetName == PlanetName.Mars || planetName == PlanetName.Moon;
+                    return planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Moon;
             }
 
             //control should not come here
@@ -3668,30 +3673,30 @@ namespace VedAstro.Library
             switch (lagna)
             {
                 case ZodiacName.Aries:
-                    return planetName == PlanetName.Venus || planetName == PlanetName.Mercury || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Taurus:
-                    return planetName == PlanetName.Moon || planetName == PlanetName.Jupiter || planetName == PlanetName.Venus;
+                    return planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Jupiter || planetName == Library.PlanetName.Venus;
                 case ZodiacName.Gemini:
-                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                    return planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Jupiter;
                 case ZodiacName.Cancer:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Leo:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Virgo:
-                    return planetName == PlanetName.Mars || planetName == PlanetName.Moon || planetName == PlanetName.Jupiter;
+                    return planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Jupiter;
                 case ZodiacName.Libra:
-                    return planetName == PlanetName.Sun || planetName == PlanetName.Moon || planetName == PlanetName.Jupiter;
+                    return planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Jupiter;
                 case ZodiacName.Scorpio:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Sagittarius:
-                    return planetName == PlanetName.Saturn || planetName == PlanetName.Venus || planetName == PlanetName.Mercury;
+                    return planetName == Library.PlanetName.Saturn || planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Mercury;
                 case ZodiacName.Capricornus:
-                    return planetName == PlanetName.Moon || planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                    return planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Jupiter;
                 case ZodiacName.Aquarius:
-                    return planetName == PlanetName.Jupiter || planetName == PlanetName.Moon;
+                    return planetName == Library.PlanetName.Jupiter || planetName == Library.PlanetName.Moon;
                 case ZodiacName.Pisces:
-                    return planetName == PlanetName.Sun || planetName == PlanetName.Mercury
-                           || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Mercury
+                                                                || planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Saturn;
             }
 
             //control should not come here
@@ -3708,29 +3713,29 @@ namespace VedAstro.Library
             switch (lagna)
             {
                 case ZodiacName.Aries:
-                    return planetName == PlanetName.Sun;
+                    return planetName == Library.PlanetName.Sun;
                 case ZodiacName.Taurus:
-                    return planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Gemini:
-                    return planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Cancer:
-                    return planetName == PlanetName.Mars;
+                    return planetName == Library.PlanetName.Mars;
                 case ZodiacName.Leo:
-                    return planetName == PlanetName.Mars;
+                    return planetName == Library.PlanetName.Mars;
                 case ZodiacName.Virgo:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Venus;
                 case ZodiacName.Libra:
-                    return planetName == PlanetName.Moon || planetName == PlanetName.Mercury || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Scorpio:
-                    return planetName == PlanetName.Sun || planetName == PlanetName.Moon;
+                    return planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon;
                 case ZodiacName.Sagittarius:
-                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars;
+                    return planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Mars;
                 case ZodiacName.Capricornus:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Venus;
                 case ZodiacName.Aquarius:
-                    return planetName == PlanetName.Mars || planetName == PlanetName.Venus;
+                    return planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Venus;
                 case ZodiacName.Pisces:
-                    return planetName == PlanetName.Mars || planetName == PlanetName.Jupiter || planetName == PlanetName.Moon;
+                    return planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Jupiter || planetName == Library.PlanetName.Moon;
             }
 
             //control should not come here
@@ -3746,29 +3751,29 @@ namespace VedAstro.Library
             switch (lagna)
             {
                 case ZodiacName.Aries:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Taurus:
-                    return planetName == PlanetName.Jupiter || planetName == PlanetName.Venus;
+                    return planetName == Library.PlanetName.Jupiter || planetName == Library.PlanetName.Venus;
                 case ZodiacName.Gemini:
-                    return planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                    return planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Jupiter;
                 case ZodiacName.Cancer:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Venus;
                 case ZodiacName.Leo:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Venus;
                 case ZodiacName.Virgo:
-                    return planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                    return planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Jupiter;
                 case ZodiacName.Libra:
-                    return planetName == PlanetName.Jupiter;
+                    return planetName == Library.PlanetName.Jupiter;
                 case ZodiacName.Scorpio:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Sagittarius:
-                    return planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Saturn;
                 case ZodiacName.Capricornus:
-                    return planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                    return planetName == Library.PlanetName.Mars || planetName == Library.PlanetName.Jupiter;
                 case ZodiacName.Aquarius:
-                    return planetName == PlanetName.Mars;
+                    return planetName == Library.PlanetName.Mars;
                 case ZodiacName.Pisces:
-                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                    return planetName == Library.PlanetName.Mercury || planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Saturn;
             }
 
             //control should not come here
@@ -3784,13 +3789,13 @@ namespace VedAstro.Library
         public static bool IsPlanetInOwnHouse(Time time, PlanetName planetName)
         {
             //find out if planet is rahu or ketu, because not all calculations supported
-            var isRahuKetu = planetName == PlanetName.Rahu || planetName == PlanetName.Ketu;
+            var isRahuKetu = planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu;
 
             //get current house
-            var _planetCurrentHouse = Calculate.GetHousePlanetIsIn(time, planetName);
+            var _planetCurrentHouse = Calculate.HousePlanetIsIn(time, planetName);
 
             //relatioship with current house
-            var _currentHouseRelation = isRahuKetu ? 0 : Calculate.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, time);
+            var _currentHouseRelation = isRahuKetu ? 0 : Calculate.PlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, time);
 
             //relation should be own
             if (_currentHouseRelation == PlanetToSignRelationship.OwnVarga)
@@ -3849,11 +3854,11 @@ namespace VedAstro.Library
         public static bool IsPlanetSameHouseWithHouseLord(Time birthTime, int houseNumber, PlanetName planet)
         {
             //get house of the lord in question
-            var houseLord = GetLordOfHouse((HouseName)houseNumber, birthTime);
-            var houseLordHouse = GetHousePlanetIsIn(birthTime, houseLord);
+            var houseLord = LordOfHouse((HouseName)houseNumber, birthTime);
+            var houseLordHouse = HousePlanetIsIn(birthTime, houseLord);
 
             //get house of input planet
-            var inputPlanetHouse = GetHousePlanetIsIn(birthTime, planet);
+            var inputPlanetHouse = HousePlanetIsIn(birthTime, planet);
 
             //check if both are in same house
             if (inputPlanetHouse == houseLordHouse)
@@ -3965,7 +3970,7 @@ namespace VedAstro.Library
         public static double PlanetNatureScoreMK4(Time personBirthTime, PlanetName inputPlanet)
         {
             //if no house then no score
-            if (inputPlanet == PlanetName.Empty) { return 0; }
+            if (inputPlanet == Library.PlanetName.Empty) { return 0; }
 
             //get house score
             //var planetStrength = GetPlanetShadbalaPinda(inputPlanet, personBirthTime).ToDouble();
@@ -4042,7 +4047,7 @@ namespace VedAstro.Library
         public static Varna BirthVarna(Time birthTime)
         {
             //get ruling sign
-            var ruleSign = Calculate.GetPlanetRasiSign(PlanetName.Moon, birthTime).GetSignName();
+            var ruleSign = Calculate.PlanetRasiSign(Library.PlanetName.Moon, birthTime).GetSignName();
 
             //get grade
             var maleGrade = GetGrade(ruleSign);
@@ -4106,7 +4111,8 @@ namespace VedAstro.Library
             throw new NotImplementedException();
         }
 
-        public static double GetPlanetIshtaScore(PlanetName planet, Time birthTime)
+        [API("Ishta Phala (Good Strength) of a Planet")]
+		public static double PlanetIshtaScore(PlanetName planet, Time birthTime)
         {
             //The Ochcha Bala (exaltation strength) of a planet
             //is multiplied by its Chesta Bala(motional strength)

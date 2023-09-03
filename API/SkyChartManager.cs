@@ -1715,7 +1715,7 @@ namespace API
             if (planet.Name == PlanetName.PlanetNameEnum.Moon)
             {
                 //get moon lunar day to 
-                var lunarDay = Calculate.GetLunarDay(time).GetLunarDateNumber();
+                var lunarDay = Calculate.LunarDay(time).GetLunarDateNumber();
 
                 //make url for specific lunar frame
                 var svgFileUrl = $"{APITools.Url.WebUrl}/images/SkyChart/{planet.Name.ToString().ToLower()}-{lunarDay}.svg";

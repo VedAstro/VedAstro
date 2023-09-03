@@ -1564,26 +1564,6 @@ namespace VedAstro.Library
             return planet;
         }
 
-        /// <summary>
-        /// Given a reference to astro calculator method,
-        /// will return it's API friendly name
-        /// </summary>
-        public static string GetAPISpecialName(MethodInfo methodInfo1)
-        {
-            //try to get special API name for the calculator, possible not to exist
-            var customAttributes = methodInfo1?.GetCustomAttributes(true);
-            var apiAttributes = customAttributes?.OfType<APIAttribute>();
-            var firstOrDefault = apiAttributes?.FirstOrDefault();
-            var properApiName = firstOrDefault?.Name ?? "";
-            //default name in-case no special
-            var defaultName = methodInfo1.Name;
-
-            //choose which name is available, prefer special
-            var name = string.IsNullOrEmpty(properApiName) ? defaultName : properApiName;
-
-            return name;
-
-        }
 
         /// <summary>
         /// All possible for all celestial body types
@@ -1600,7 +1580,7 @@ namespace VedAstro.Library
             foreach (var methodInfo in calculatorClass.GetMethods())
             {
                 //get special API name
-                returnList.Add(GetAPISpecialName(methodInfo));
+                returnList.Add(methodInfo.Name);
             }
 
             return returnList;
@@ -1699,7 +1679,7 @@ namespace VedAstro.Library
             var finalList = GetCalculatorListByParam<T1, T2>();
 
             //sort alphabetically so easier to eye data point
-            var aToZOrder = finalList.OrderBy(method => Tools.GetAPISpecialName(method)).ToList();
+            var aToZOrder = finalList.OrderBy(method => method.Name).ToList();
 
 
             //place the data from all possible methods nicely in JSON
@@ -1723,7 +1703,7 @@ namespace VedAstro.Library
             var finalList = GetCalculatorListByParam<T1>();
 
             //sort alphabetically so easier to eye data point
-            var aToZOrder = finalList.OrderBy(method => Tools.GetAPISpecialName(method)).ToList();
+            var aToZOrder = finalList.OrderBy(method => method.Name).ToList();
 
 
             //place the data from all possible methods nicely in JSON
@@ -1748,7 +1728,7 @@ namespace VedAstro.Library
         public static JProperty ExecuteCalculatorByApiName<T1, T2>(string methodName, T1 param1, T2 param2)
         {
             var calculatorClass = typeof(Calculate);
-            var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
+            var foundMethod = calculatorClass.GetMethods().Where(x => x.Name == methodName).FirstOrDefault();
 
             //if method not found, possible outdated API call link, end call here
             if (foundMethod == null)
@@ -1784,7 +1764,7 @@ namespace VedAstro.Library
             var rawResult = foundMethod?.Invoke(null, finalParamOrder);
 
             //get correct name for this method, API friendly
-            var apiSpecialName = Tools.GetAPISpecialName(foundMethod);
+            var apiSpecialName = foundMethod.Name;
 
             //process list differently
             JProperty rootPayloadJson;
@@ -1822,7 +1802,7 @@ namespace VedAstro.Library
             var rawResult = foundMethod?.Invoke(null, paramOrder1);
 
             //get correct name for this method, API friendly
-            var apiSpecialName = Tools.GetAPISpecialName(foundMethod);
+            var apiSpecialName = foundMethod.Name;
 
             //process list differently
             JProperty rootPayloadJson;
@@ -2236,7 +2216,7 @@ namespace VedAstro.Library
         public static MethodInfo MethodNameToMethodInfo(string methodName)
         {
             var calculatorClass = typeof(Calculate);
-            var foundList = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName);
+            var foundList = calculatorClass.GetMethods().Where(x => x.Name == methodName);
             var foundMethod = foundList.FirstOrDefault();
 
             //if more than 1 method found major internal error, crash it!

@@ -23,20 +23,14 @@ namespace VedAstro.Library
         public Category Category { get; }
 
         /// <summary>
-        /// nice and sweet name to id the Astro data
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// include alternate names and explanation for data
         /// </summary>
         public string Description { get; }
 
-        public APIAttribute(string name, string description = "", Category category = Category.Astronomical)
+        public APIAttribute(string description = "", Category category = Category.Astronomical)
         {
             Category = category;
             Description = description;
-            Name = name;
         }
 
     }

@@ -79,7 +79,7 @@
 
         object getData(HouseName houseNumber)
         {
-            var lordOfHouse = Calculate.GetLordOfHouse((HouseName)houseNumber, _time);
+            var lordOfHouse = Calculate.LordOfHouse((HouseName)houseNumber, _time);
 
             //get house details and save it for view
             var _houseDetails = Calculate.GetHouseTags(houseNumber);
@@ -88,13 +88,13 @@
             var _planetsAspectingHouse = Tools.ListToString<PlanetName>(Calculate.GetPlanetsAspectingHouse((HouseName)houseNumber, _time));
             var rawHouseStrength = Calculate.GetHouseStrength((HouseName)houseNumber, _time).ToDouble();
             var _houseStrength = Math.Round(rawHouseStrength, 2).ToString();
-            var _houseSign = Calculate.GetHouseSignName(houseNumber, _time).ToString();
-            var _houseNavamsaSign = Calculate.GetHouseNavamsaSign((HouseName)houseNumber, _time).ToString();
+            var _houseSign = Calculate.HouseSignName(houseNumber, _time).ToString();
+            var _houseNavamsaSign = Calculate.HouseNavamsaSign((HouseName)houseNumber, _time).ToString();
 
             var _lordExalted = Calculate.IsPlanetExalted(lordOfHouse, _time);
             var _lordDebilitated = Calculate.IsPlanetDebilitated(lordOfHouse, _time);
 
-            var _currentSignDescription = Calculate.GetSignTags(Calculate.GetHouseSignName(houseNumber, _time));
+            var _currentSignDescription = Calculate.GetSignTags(Calculate.HouseSignName(houseNumber, _time));
             var _lordInfo = Calculate.GetPlanetTags(lordOfHouse);
 
             return new
@@ -151,24 +151,24 @@
 
             var _permanentStrength = isRahuKetu ? 0 : Math.Round(Calculate.GetPlanetNaisargikaBala(planetName, _time).ToDouble(), 2);
 
-            var _planetCurrentHouse = Calculate.GetHousePlanetIsIn(_time, planetName);
+            var _planetCurrentHouse = Calculate.HousePlanetIsIn(_time, planetName);
 
-            var _planetRasiSign = Calculate.GetPlanetRasiSign(planetName, _time);
+            var _planetRasiSign = Calculate.PlanetRasiSign(planetName, _time);
 
             var _planetCurrentSign = _planetRasiSign.ToString();
 
-            var _nirayanaLongitude = Math.Round(Calculate.GetPlanetNirayanaLongitude(_time, planetName).TotalDegrees, 2);
+            var _nirayanaLongitude = Math.Round(Calculate.PlanetNirayanaLongitude(_time, planetName).TotalDegrees, 2);
             var _sayanaLongitude = Math.Round(Calculate.GetPlanetSayanaLongitude(_time, planetName).TotalDegrees, 2);
 
-            var planetNavamsaSign = Calculate.GetPlanetNavamsaSign(planetName, _time);
+            var planetNavamsaSign = Calculate.PlanetNavamsaSign(planetName, _time);
 
             var _planetCurrentNavamsaSign = planetNavamsaSign.ToString();
 
             var _planetCurrentConstellation = Calculate.PlanetConstellation(_time, planetName).ToString();
 
-            var _currentHouseRelation = isRahuKetu ? 0 : Calculate.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, _time);
+            var _currentHouseRelation = isRahuKetu ? 0 : Calculate.PlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, _time);
 
-            var _navamsaRelation = isRahuKetu ? 0 : Calculate.GetPlanetRelationshipWithSign(planetName, planetNavamsaSign, _time);
+            var _navamsaRelation = isRahuKetu ? 0 : Calculate.PlanetRelationshipWithSign(planetName, planetNavamsaSign, _time);
 
             var _isPlanetAspectedByMaleficPlanets = Calculate.IsPlanetAspectedByMaleficPlanets(planetName, _time);
 
@@ -180,13 +180,13 @@
 
             var _currentSignDescription = Calculate.GetSignTags(_planetRasiSign.GetSignName());
 
-            var _currentHouseDescription = Calculate.GetHouseTags(Calculate.GetHousePlanetIsIn(_time, planetName));
+            var _currentHouseDescription = Calculate.GetHouseTags(Calculate.HousePlanetIsIn(_time, planetName));
 
-            var _planetCurrentHouseType = Calculate.GetHouseType(Calculate.GetHousePlanetIsIn(_time, planetName));
+            var _planetCurrentHouseType = Calculate.GetHouseType(Calculate.HousePlanetIsIn(_time, planetName));
 
             var _planetInfo = Calculate.GetPlanetTags(planetName);
 
-            var lagna = Calculate.GetHouseSignName(HouseName.House1, _time);
+            var lagna = Calculate.HouseSignName(HouseName.House1, _time);
             var _isPlanetBeneficToLagna = Calculate.IsPlanetBeneficToLagna(planetName, lagna);
             var _isPlanetMaleficToLagna = Calculate.IsPlanetMaleficToLagna(planetName, lagna);
             var _isPlanetYogakarakaToLagna = Calculate.IsPlanetYogakarakaToLagna(planetName, lagna);

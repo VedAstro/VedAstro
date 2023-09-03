@@ -54,6 +54,9 @@ namespace API
                 //3 : EXECUTE COMMAND
                 var rawPlanetData = calculator?.Invoke(null, parsedParamList.ToArray()); ;
 
+                //4 : OVERLOAD LIMIT
+                await Task.Delay(1000);
+
                 //4 : CONVERT TO JSON
                 var payloadJson = Tools.AnyToJSON(calculatorName, rawPlanetData); //use calculator name as key
 

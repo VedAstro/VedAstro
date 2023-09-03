@@ -210,7 +210,6 @@
 		_jsRuntime.HideAlert();
 	}
 
-
 	/// <summary>
 	/// When user selects a method, this is code is called
 	/// </summary>
@@ -226,7 +225,6 @@
 			_jsRuntime.Show(_paramInputHolderElement2);
 		}
 	}
-
 
 	/// <summary>
 	/// After user click generate check data validity, generate final url
@@ -269,24 +267,15 @@
 	/// </summary>
 	private async Task<bool> IsValidationPassed()
 	{
-		// //TEST 1 : Time
-		// //todo check if time is 00 confirm with user
-		// var timeTxt = await _timeInput.GetFullTimeString();
-		// if (string.IsNullOrEmpty(timeTxt))
-		// {
-		// 	//mark invalid & alert user
-		// 	await _jsRuntime.ShowAlert("error", "Time is invalid, check it again", true);
-		// 	return false;
-		// }
+		//TEST 1 : Calculator name
+		var isSelected = await _apiSelectorBox.IsSelected();
+		if (!isSelected)
+		{
+			//mark invalid & alert user
+			await _jsRuntime.ShowAlert("error", "Please select a Calculator first!", true);
+			return false;
+		}
 
-		// //TEST 2 : Location
-		// var isValid = await _geoLocationInput.IsValid();
-		// if (!isValid)
-		// {
-		// 	//mark invalid & alert user
-		// 	await _jsRuntime.ShowAlert("error", AlertText.InvalidLocation, true);
-		// 	return false;
-		// }
 
 
 

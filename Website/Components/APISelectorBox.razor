@@ -70,7 +70,9 @@ KEEP IT REAL
 	/// <summary>
 	/// Name of selected method to show
 	/// </summary>
-	private string FormattedMethodName { get; set; } = "Make a choice...";
+	private string FormattedMethodName { get; set; } = DefaultMessage;  //used to detect if selected
+
+	private const string DefaultMessage = "Make a choice...";  //used to detect if selected
 
 	/// <summary>
 	/// only this way of marking works
@@ -203,5 +205,11 @@ KEEP IT REAL
 		await _jsRuntime.ShowAlert("success", "Thank you", "stay tuned in our Facebook for updates");
 
 	}
+
+	/// <summary>
+	/// Return true if drop down is selected, else false
+	/// </summary>
+	/// <returns></returns>
+	public async Task<bool> IsSelected() => FormattedMethodName != DefaultMessage;
 
 }

@@ -294,7 +294,7 @@ namespace VedAstro.Library
         public static bool IsPlanetMalefic(PlanetName planetName, Time time)
         {
             //get list of malefic planets
-            var maleficPlanetList = GetMaleficPlanetList(time);
+            var maleficPlanetList = MaleficPlanetList(time);
 
             //check if input planet is in the list
             var planetIsMalefic = maleficPlanetList.Contains(planetName);
@@ -310,7 +310,7 @@ namespace VedAstro.Library
 		/// conditions, the intensity of the mischief is tempered.
 		/// </summary>
 		[API("list of permanent malefic planets, for moon & mercury it is based on changing factors", Category.StarsAboveMe)]
-        public static List<PlanetName> GetMaleficPlanetList(Time time)
+        public static List<PlanetName> MaleficPlanetList(Time time)
         {
             //Add permanent evil planets to list first
             var listOfEvilPlanets = new List<PlanetName>() { Library.PlanetName.Sun, Library.PlanetName.Saturn, Library.PlanetName.Mars, Library.PlanetName.Rahu, Library.PlanetName.Ketu };
@@ -338,8 +338,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets planet aspected by the inputed planet
         /// </summary>
-        [API("TransmittingAspectToPlanet")]
-        public static List<PlanetName> GetPlanetsInAspect(PlanetName planet, Time time)
+        [API("Gets planet aspected by the inputed planet")]
+        public static List<PlanetName> PlanetsInAspect(PlanetName planet, Time time)
         {
             //get signs planet is aspecting
             var signAspecting = Calculate.SignsPlanetIsAspecting(planet, time);
@@ -360,10 +360,10 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets all planets the transmiting aspect to inputed planet
+        /// Gets all planets the transmitting aspect to inputed planet
         /// </summary>
-        [API("ReceivingAspectFrom")]
-        public static List<PlanetName> GetPlanetsAspectingPlanet(Time time, PlanetName receivingAspect)
+        [API(" Gets all planets the transmitting aspect to inputed planet")]
+        public static List<PlanetName> PlanetsAspectingPlanet(Time time, PlanetName receivingAspect)
         {
             //check if all planets is aspecting inputed planet
             var aspectFound = Library.PlanetName.All9Planets.FindAll(transmitPlanet => IsPlanetAspectedByPlanet(receivingAspect, transmitPlanet, time));
@@ -375,8 +375,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets houses aspected by the inputed planet
         /// </summary>
-        [API("TransmittingAspectToHouse")]
-        public static List<HouseName> GetHousesInAspect(PlanetName planet, Time time)
+        [API("Gets houses aspected by the inputed planet")]
+        public static List<HouseName> HousesInAspect(PlanetName planet, Time time)
         {
             //get signs planet is aspecting
             var signAspecting = Calculate.SignsPlanetIsAspecting(planet, time);
@@ -401,7 +401,7 @@ namespace VedAstro.Library
         /// Gets all planets aspecting inputed house
         /// </summary>
         [API("PlanetsAspectingHouse")]
-        public static List<PlanetName> GetPlanetsAspectingHouse(HouseName inputHouse, Time time)
+        public static List<PlanetName> PlanetsAspectingHouse(HouseName inputHouse, Time time)
         {
             //create empty list
             var returnPlanetList = new List<PlanetName>();
@@ -410,7 +410,7 @@ namespace VedAstro.Library
             foreach (var planet in Library.PlanetName.All9Planets)
             {
                 //get houses
-                var housesInAspect = GetHousesInAspect(planet, time);
+                var housesInAspect = HousesInAspect(planet, time);
 
                 //check if any house is a match
                 var houseMatch = housesInAspect.FindAll(house => house == inputHouse).Any();
@@ -430,7 +430,7 @@ namespace VedAstro.Library
         public static bool IsPlanetAspectedByPlanet(PlanetName receiveingAspect, PlanetName transmitingAspect, Time time)
         {
             //get planets aspected by transmiting planet
-            var planetsInAspect = Calculate.GetPlanetsInAspect(transmitingAspect, time);
+            var planetsInAspect = Calculate.PlanetsInAspect(transmitingAspect, time);
 
             //if receiving planet is in list of currently aspected
             return planetsInAspect.Contains(receiveingAspect);
@@ -442,7 +442,7 @@ namespace VedAstro.Library
         public static bool IsHouseAspectedByPlanet(HouseName receiveingAspect, PlanetName transmitingAspect, Time time)
         {
             //get houses aspected by transmiting planet
-            var houseInAspect = Calculate.GetHousesInAspect(transmitingAspect, time);
+            var houseInAspect = Calculate.HousesInAspect(transmitingAspect, time);
 
             //if receiving house is in list of currently aspected
             return houseInAspect.Contains(receiveingAspect);
@@ -492,11 +492,11 @@ namespace VedAstro.Library
         /// which has the greatest Sbadbala, influences the
         /// bhava most.
         /// </summary>
-        public static List<PlanetName> GetAllPlanetOrderedByStrength(Time time)
+        public static List<PlanetName> AllPlanetOrderedByStrength(Time time)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetAllPlanetOrderedByStrength", time), _getAllPlanetOrderedByStrength);
+            return CacheManager.GetCache(new CacheKey(nameof(AllPlanetOrderedByStrength), time), _getAllPlanetOrderedByStrength);
 
 
             //UNDERLYING FUNCTION
@@ -577,11 +577,12 @@ namespace VedAstro.Library
             return isBenefic;
         }
 
-
-        /// <summary>
-        /// Gets all planets strenght (shadbala)
-        /// </summary>
-        public static List<(double, PlanetName)> GetAllPlanetStrength(Time time)
+			
+		/// <summary>
+		/// Gets all planets strength (shadbala)
+		/// </summary>
+		[API("Gets  strength (shadbala) of all 9 planets")]
+		public static List<(double, PlanetName)> AllPlanetStrength(Time time)
         {
             var planetStrenghtList = new List<(double, PlanetName)>();
 
@@ -678,27 +679,27 @@ namespace VedAstro.Library
                 //if planet name is rahu or ketu then replace with house lord's strength
                 if (planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu)
                 {
-                    var houseLord = Calculate.GetLordOfHousePlanetIsIn(time, planetName);
+                    var houseLord = Calculate.LordOfHousePlanetIsIn(time, planetName);
                     planetName = houseLord;
                 }
 
                 //Sthana bala (Positional Strength)
-                var sthanaBala = GetPlanetSthanaBala(planetName, time);
+                var sthanaBala = PlanetSthanaBala(planetName, time);
 
                 //Get dik bala (Directional Strength)
-                var digBala = GetPlanetDigBala(planetName, time);
+                var digBala = PlanetDigBala(planetName, time);
 
                 //Get kala bala (Temporal Strength)
-                var kalaBala = GetPlanetKalaBala(planetName, time);
+                var kalaBala = PlanetKalaBala(planetName, time);
 
                 //Get Chesta bala (Motional Strength)
-                var chestaBala = GetPlanetChestaBala(planetName, time);
+                var chestaBala = PlanetChestaBala(planetName, time);
 
                 //Get Naisargika bala (Natural Strength)
-                var naisargikaBala = GetPlanetNaisargikaBala(planetName, time);
+                var naisargikaBala = PlanetNaisargikaBala(planetName, time);
 
                 //Get Drik/drug bala (Aspect Strength)
-                var drikBala = GetPlanetDrikBala(planetName, time);
+                var drikBala = PlanetDrikBala(planetName, time);
 
 
                 //Get total Shadbala Pinda
@@ -717,13 +718,14 @@ namespace VedAstro.Library
         /// input birth time to get strength in horoscope
         /// note: an alias method to GetPlanetShadbalaPinda ("strength" is easier to remember)
         /// </summary>
-        [API("TotalStrength")]
-        public static Shashtiamsa GetPlanetStrength(PlanetName planetName, Time time) => PlanetShadbalaPinda(planetName, time);
+        [API("get total combined strength of the inputed planet")]
+        public static Shashtiamsa PlanetStrength(PlanetName planetName, Time time) => PlanetShadbalaPinda(planetName, time);
 
-        /// <summary>
-        /// Gets the lord of the house the inputed planet is in
-        /// </summary>
-        private static PlanetName GetLordOfHousePlanetIsIn(Time time, PlanetName planetName)
+		/// <summary>
+		/// Gets the lord of the house the inputed planet is in
+		/// </summary>
+		[API("Gets the lord of the house the inputed planet is in")]
+		private static PlanetName LordOfHousePlanetIsIn(Time time, PlanetName planetName)
         {
             var currentHouse = Calculate.HousePlanetIsIn(time, planetName);
             var houseLord = Calculate.LordOfHouse((HouseName)currentHouse, time);
@@ -752,8 +754,8 @@ namespace VedAstro.Library
         /// 5th and 9th, 4th and 8th and 3rd and 10th signs
         /// respectively.
         /// </summary>
-        [API("DrikBala")]
-        public static Shashtiamsa GetPlanetDrikBala(PlanetName planetName, Time time)
+        [API("This means aspect strength. It is positive or negative according as the Drishti Pinda")]
+        public static Shashtiamsa PlanetDrikBala(PlanetName planetName, Time time)
         {
             //no calculation for rahu and ketu here
             var isRahu = planetName.Name == Library.PlanetName.PlanetNameEnum.Rahu;
@@ -912,8 +914,8 @@ namespace VedAstro.Library
         ///
         /// This is the natural or inherent strength of a planet.
         /// </summary>
-        [API("NaisargikaBala")]
-        public static Shashtiamsa GetPlanetNaisargikaBala(PlanetName planetName, Time time)
+        [API("This is the natural or inherent strength of a planet.")]
+        public static Shashtiamsa PlanetNaisargikaBala(PlanetName planetName, Time time)
         {
             //no calculation for rahu and ketu here
             var isRahu = planetName.Name == Library.PlanetName.PlanetNameEnum.Rahu;
@@ -956,14 +958,14 @@ namespace VedAstro.Library
         /// from the Sun, it gradually loses the power
         /// of the Sun's gravitation and consequently, 
         /// </summary>
-        [API("ChestaBala")]
-        public static Shashtiamsa GetPlanetChestaBala(PlanetName planetName, Time time, bool includeSunMoon = false)
+        [API("Chesta here means Vakra Chesta or act of retrogression. strength or potency termed as Chesta Bala")]
+        public static Shashtiamsa PlanetChestaBala(PlanetName planetName, Time time, bool includeSunMoon = false)
         {
             //if include Sun/Moon specified, then use special function (used for Ishta/Kashta score)
             var isSunMoon = planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon;
             if (isSunMoon && includeSunMoon)
             {
-                return GetSunMoonChestaBala(planetName);
+                return SunMoonChestaBala(planetName);
             }
 
             //the Sun,Moon,Rahu and Ketu does not not retrograde, so 0 chesta bala
@@ -972,10 +974,10 @@ namespace VedAstro.Library
             //get the interval between birth date and the date of the epoch (1900)
             //verified standard horoscope = 6862.579
             //NOTE: dates before 1900 give negative values
-            var interval = GetEpochInterval(time);
+            var interval = EpochInterval(time);
 
             //get the mean/average longitudes of all planets
-            var madhya = GetMadhya(interval, time);
+            var madhya = Madhya(interval, time);
 
             //get the apogee of all planets (apogee=earth, aphelion=sun)
             // aphelion (the part of a planet's orbit most distant from the Sun) 
@@ -1054,16 +1056,17 @@ namespace VedAstro.Library
         /// special function to get chesta score for Ishta/Kashta score
         /// Bala book pg. 108
         /// </summary>
-        private static Shashtiamsa GetSunMoonChestaBala(PlanetName planetName)
+        private static Shashtiamsa SunMoonChestaBala(PlanetName planetName)
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// The mean position of a planet is the position which it would have attained at a uniform
-        /// rate of motion and the corrections to be applied in respect of the eccentricity of the orbit are not considered
-        /// </summary>
-        public static Dictionary<PlanetName, double> GetMadhya(double epochToBirthDays, Time time1)
+		/// <summary>
+		/// The mean position of a planet is the position which it would have attained at a uniform
+		/// rate of motion and the corrections to be applied in respect of the eccentricity of the orbit are not considered
+		/// </summary>
+		[API("mean position of a planet it would have attained at a uniform rate of motion, eccentricity of the orbit are not considered")]
+		public static Dictionary<PlanetName, double> Madhya(double epochToBirthDays, Time time1)
         {
             int _birthYear = time1.GetLmtDateTimeOffset().Year;
 
@@ -1119,11 +1122,12 @@ namespace VedAstro.Library
         }
 
 
-        /// <summary>
-        /// Get interval from the epoch to the birth date in days
-        /// The result represents the interval from the epoch to the birth date.
-        /// </summary>
-        public static double GetEpochInterval(Time time1)
+		/// <summary>
+		/// Get interval from the epoch to the birth date in days
+		/// The result represents the interval from the epoch to the birth date.
+		/// </summary>
+		[API("Get interval from the epoch to the birth date in days")]
+		public static double EpochInterval(Time time1)
         {
             //Determine the interval between birth date and the date of the epoch thus.
 
@@ -1159,14 +1163,14 @@ namespace VedAstro.Library
         /// Gets the planets motion name, can be Retrograde, Direct, Stationary
         /// a name version of Chesta Bala
         /// </summary>
-        [API("Motion")]
-        public static PlanetMotion GetPlanetMotionName(PlanetName planetName, Time time)
+        [API("Gets the planets motion name, can be Retrograde, Direct, Stationary, a name version of Chesta Bala")]
+        public static PlanetMotion PlanetMotionName(PlanetName planetName, Time time)
         {
             //sun, moon, rahu & ketu don' have retrograde so always direct
             if (planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu) { return PlanetMotion.Direct; }
 
             //get chestaBala
-            var chestaBala = Calculate.GetPlanetChestaBala(planetName, time).ToDouble();
+            var chestaBala = Calculate.PlanetChestaBala(planetName, time).ToDouble();
 
             //based on chesta bala assign name to it
             //Chesta kendra = 180 degrees = Retrograde
@@ -1182,10 +1186,11 @@ namespace VedAstro.Library
         }
 
 
-        /// <summary>
-        /// circulation time of the objects in years, used by cheshta bala calculation
-        /// </summary>
-        public static double GetPlanetCirculationTime(PlanetName planetName)
+		/// <summary>
+		/// circulation time of the objects in years, used by cheshta bala calculation
+		/// </summary>
+		[API("circulation time of the objects in years, used by cheshta bala calculation")]
+		public static double PlanetCirculationTime(PlanetName planetName)
         {
 
             if (planetName == Library.PlanetName.Sun) { return 1.0; }
@@ -1210,8 +1215,8 @@ namespace VedAstro.Library
         /// neutral or inimical Rasi, Hora, Drekkana, Sapthamsa,
         /// Navamsa, Dwadasamsa and Thrimsamsa.
         /// </summary>
-        [API("SaptavargajaBala")]
-        public static Shashtiamsa GetPlanetSaptavargajaBala(PlanetName planetName, Time time)
+        [API(" strength of a planet due to its residence in the seven sub-divisions, Rasi, Hora, Drekkana, Sapthamsa, Navamsa, Dwadasamsa and Thrimsamsa")]
+        public static Shashtiamsa PlanetSaptavargajaBala(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
             return CacheManager.GetCache(new CacheKey("GetPlanetSaptavargajaBala", planetName, time), _getPlanetSaptavargajaBala);
@@ -1356,8 +1361,8 @@ namespace VedAstro.Library
         /// They are (1) Rasi, {2) Hora, (3) Drekkana, (4) Navamsa, (5)
         /// Dwadasamsa and (6) Trimsamsa.
         /// </summary>
-        [API("ShadvargaBala")]
-        public static Shashtiamsa GetPlanetShadvargaBala(PlanetName planetName, Time time)
+        [API("strength of a  planet due to its residence in the 6 sub-divisions, Rasi, Hora, Drekkana, Navamsa, Dwadasamsa and Trimsamsa")]
+        public static Shashtiamsa PlanetShadvargaBala(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
             return CacheManager.GetCache(new CacheKey("GetPlanetShadvargaBala", planetName, time), _getPlanetShadvargaBala);
@@ -1500,7 +1505,7 @@ namespace VedAstro.Library
         public static bool IsPlanetStrongInShadvarga(PlanetName planet, Time time)
         {
             //get planet shadvarga bala
-            var planetBala = Calculate.GetPlanetShadvargaBala(planet, time).ToDouble();
+            var planetBala = Calculate.PlanetShadvargaBala(planet, time).ToDouble();
 
             //Note: To determine if shadvarga bala value is strong or weak
             //a neutral point is set, anything above is strong & below is weak
@@ -1547,8 +1552,8 @@ namespace VedAstro.Library
         /// Due to placement in first, second, or third Drekkana of a sign, male, female and hermaphrodite planets respectively,
         /// get a quarter strength according to placements in the first, second and third Drekkana.
         /// </summary>
-        [API("SthanaBala")]
-        public static Shashtiamsa GetPlanetSthanaBala(PlanetName planetName, Time time)
+        [API("residence of the planet and as such a certain degree of strength or weakness attends on it")]
+        public static Shashtiamsa PlanetSthanaBala(PlanetName planetName, Time time)
         {
 
             //no calculation for rahu and ketu here
@@ -1565,19 +1570,19 @@ namespace VedAstro.Library
             Shashtiamsa _getPlanetSthanaBala()
             {
                 //Get Ochcha Bala (exaltation strength)
-                var ochchaBala = GetPlanetOchchaBala(planetName, time);
+                var ochchaBala = PlanetOchchaBala(planetName, time);
 
                 //Get Saptavargaja Bala
-                var saptavargajaBala = GetPlanetSaptavargajaBala(planetName, time);
+                var saptavargajaBala = PlanetSaptavargajaBala(planetName, time);
 
                 //Get Ojayugmarasyamsa Bala
-                var ojayugmarasymsaBala = GetPlanetOjayugmarasyamsaBala(planetName, time);
+                var ojayugmarasymsaBala = PlanetOjayugmarasyamsaBala(planetName, time);
 
                 //Get Kendra Bala
-                var kendraBala = GetPlanetKendraBala(planetName, time);
+                var kendraBala = PlanetKendraBala(planetName, time);
 
                 //Drekkana Bala
-                var drekkanaBala = GetPlanetDrekkanaBala(planetName, time);
+                var drekkanaBala = PlanetDrekkanaBala(planetName, time);
 
                 //Total Sthana Bala
                 var totalSthanaBala = ochchaBala + saptavargajaBala + ojayugmarasymsaBala + kendraBala + drekkanaBala;
@@ -1594,8 +1599,8 @@ namespace VedAstro.Library
         /// the Moon and Venus in the last Drekkana, get full
         /// strength of 60 shashtiamsas.
         /// </summary>
-        [API("DrekkanaBala")]
-        public static Shashtiamsa GetPlanetDrekkanaBala(PlanetName planetName, Time time)
+        [API("Planet fixed bala, Moon and Venus in the last Drekkana, get full strength of 60 shashtiamsas")]
+        public static Shashtiamsa PlanetDrekkanaBala(PlanetName planetName, Time time)
         {
             //get sign planet is in
             var planetSign = Calculate.PlanetRasiSign(planetName, time);
@@ -1646,8 +1651,8 @@ namespace VedAstro.Library
         /// Kendrtzbala: Planets in Kendras get 60
         /// shashtiamsas; in Panapara 30, and in Apoklima 15.
         /// </summary>
-        [API("KendraBala")]
-        public static Shashtiamsa GetPlanetKendraBala(PlanetName planetName, Time time)
+        [API("Planets in Kendras get 60 shashtiamsas; in Panapara 30, and in Apoklima 15.")]
+        public static Shashtiamsa PlanetKendraBala(PlanetName planetName, Time time)
         {
             //get number of the sign planet is in
             var planetSignNumber = (int)Calculate.PlanetRasiSign(planetName, time).GetSignName();
@@ -1678,13 +1683,13 @@ namespace VedAstro.Library
             throw new Exception("Kendra Bala not found, error");
         }
 
-        /// <summary>
-        /// Ojayugmarasiba/a: In odd Rasi and Navamsa,
-        /// the Sun, Mars, Jupiter, Mercury and Saturn
-        /// get strength and the rest in even signs
-        /// </summary>
-        [API("OjayugmarasyamsaBala")]
-        public static Shashtiamsa GetPlanetOjayugmarasyamsaBala(PlanetName planetName, Time time)
+		/// <summary>
+		/// Ojayugmarasyamsa: In odd Rasi and Navamsa,
+		/// the Sun, Mars, Jupiter, Mercury and Saturn
+		/// get strength and the rest in even signs
+		/// </summary>
+		[API("In odd Rasi and Navamsa the Sun, Mars, Jupiter, Mercury and Saturn get strength and the rest in even signs")]
+        public static Shashtiamsa PlanetOjayugmarasyamsaBala(PlanetName planetName, Time time)
         {
             //get planet rasi sign
             var planetRasiSign = Calculate.PlanetRasiSign(planetName, time).GetSignName();
@@ -1737,7 +1742,7 @@ namespace VedAstro.Library
         }
 
         [API("KalaBala")]
-        public static Shashtiamsa GetPlanetKalaBala(PlanetName planetName, Time time)
+        public static Shashtiamsa PlanetKalaBala(PlanetName planetName, Time time)
         {
             //no calculation for rahu and ketu here
             var isRahu = planetName.Name == Library.PlanetName.PlanetNameEnum.Rahu;
@@ -1748,7 +1753,7 @@ namespace VedAstro.Library
 
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetKalaBala", planetName, time), _getPlanetKalaBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetKalaBala), planetName, time), _getPlanetKalaBala);
 
 
             //UNDERLYING FUNCTION
@@ -1771,7 +1776,7 @@ namespace VedAstro.Library
 
 
                 //calculate Yuddha Bala
-                var yuddhaBala = GetPlanetYuddhaBala(planetName, kalaBalaList, time);
+                var yuddhaBala = PlanetYuddhaBala(planetName, kalaBalaList, time);
 
 
                 //Total Kala Bala
@@ -1785,28 +1790,28 @@ namespace VedAstro.Library
                 Shashtiamsa GetPreKalaBala(PlanetName planetName, Time time)
                 {
                     //Nathonnatha Bala
-                    var nathonnathaBala = GetPlanetNathonnathaBala(planetName, time);
+                    var nathonnathaBala = PlanetNathonnathaBala(planetName, time);
 
                     //Paksha Bala
                     var pakshaBala = PlanetPakshaBala(planetName, time);
 
                     //Tribhaga Bala
-                    var tribhagaBala = GetPlanetTribhagaBala(planetName, time);
+                    var tribhagaBala = PlanetTribhagaBala(planetName, time);
 
                     //Abda Bala
-                    var abdaBala = GetPlanetAbdaBala(planetName, time);
+                    var abdaBala = PlanetAbdaBala(planetName, time);
 
                     //Masa Bala
-                    var masaBala = GetPlanetMasaBala(planetName, time);
+                    var masaBala = PlanetMasaBala(planetName, time);
 
                     //Vara Bala
-                    var varaBala = GetPlanetVaraBala(planetName, time);
+                    var varaBala = PlanetVaraBala(planetName, time);
 
                     //Hora Bala
-                    var horaBala = GetPlanetHoraBala(planetName, time);
+                    var horaBala = PlanetHoraBala(planetName, time);
 
                     //Ayana Bala
-                    var ayanaBala = GetPlanetAyanaBala(planetName, time);
+                    var ayanaBala = PlanetAyanaBala(planetName, time);
 
                     //combine all the kala bala calculated so far, and return the value
                     var preKalaBala = nathonnathaBala + pakshaBala + tribhagaBala + abdaBala + masaBala + varaBala + horaBala +
@@ -1819,22 +1824,23 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// Two planets are said to be in Yuddha or fight when they are in
-        /// conjunction and the distance between them is less than one degree.
-        /// TODO Not fully tested
-        ///
-        /// Yuddhabala : All planets excepting the Sun
-        /// and the Moon enter into war when two planets are
-        /// in the same degree. The pJanet having the lesser
-        /// longitude is the winner. Find out the sum total of
-        /// the SthanabaJa, Kalabala and Digbala of these two'
-        /// planets. Difference between the two, divided by
-        /// the difference of their diameters of its disc, gives
-        /// the Yuddhabala. Add this to the victorious planet
-        /// and dedu_ct it from the vanquished.
-        /// </summary>
-        public static Shashtiamsa GetPlanetYuddhaBala(PlanetName inputedPlanet, Dictionary<PlanetName, Shashtiamsa> preKalaBalaValues, Time time)
+		/// <summary>
+		/// Two planets are said to be in Yuddha or fight when they are in
+		/// conjunction and the distance between them is less than one degree.
+		/// TODO Not fully tested
+		///
+		/// Yuddhabala : All planets excepting the Sun
+		/// and the Moon enter into war when two planets are
+		/// in the same degree. The pJanet having the lesser
+		/// longitude is the winner. Find out the sum total of
+		/// the SthanabaJa, Kalabala and Digbala of these two'
+		/// planets. Difference between the two, divided by
+		/// the difference of their diameters of its disc, gives
+		/// the Yuddhabala. Add this to the victorious planet
+		/// and dedu_ct it from the vanquished.
+		/// </summary>
+		[API("Two planets are said to be in Yuddha or fight when they are in conjunction and the distance between them is less than one degree")]
+		public static Shashtiamsa PlanetYuddhaBala(PlanetName inputedPlanet, Dictionary<PlanetName, Shashtiamsa> preKalaBalaValues, Time time)
         {
             //All the planets excepting Sun and Moon may enter into war (Yuddha)
             if (inputedPlanet == Library.PlanetName.Moon || inputedPlanet == Library.PlanetName.Sun) { return Shashtiamsa.Zero; }
@@ -1888,7 +1894,7 @@ namespace VedAstro.Library
 
 
                     //Divide shadbala difference by the difference between the diameters of the discs of the two fighting planets
-                    var diameterDifference = GetPlanetDiscDiameter(inputedPlanet).GetDifference(GetPlanetDiscDiameter(checkingPlanet));
+                    var diameterDifference = PlanetDiscDiameter(inputedPlanet).GetDifference(PlanetDiscDiameter(checkingPlanet));
 
 
                     //And the resulting quotient which is the Yuddhabala (Shashtiamsa) must be added to the total of the Kalabala (detailed
@@ -1913,41 +1919,46 @@ namespace VedAstro.Library
 
             //-----------FUNCTIONS----------------
 
-            //Bimba Parimanas.-This means the diameters of the discs of the planets.
-            static Angle GetPlanetDiscDiameter(PlanetName planet)
-            {
-                if (planet == Library.PlanetName.Mars) { return new Angle(0, 9, 4); }
-                if (planet == Library.PlanetName.Mercury) { return new Angle(0, 6, 6); }
-                if (planet == Library.PlanetName.Jupiter) { return new Angle(0, 190, 4); }
-                if (planet == Library.PlanetName.Venus) { return new Angle(0, 16, 6); }
-                if (planet == Library.PlanetName.Saturn) { return new Angle(0, 158, 0); }
-
-                //control should not come here, report error
-                throw new Exception("Disc diameter now found!");
-            }
 
         }
 
-        /// <summary>
-        /// Ayanabala : All planets get 30 shasbtiamsas
-        /// at the equator. For the Sun, Jupiter, Mars
-        /// and Venus add proportionately when they are in
-        /// northern course and for the Moon and Saturn when
-        /// in southern course. Deduct proportionately when
-        /// they are in the opposite direction. Unit of strength
-        /// is 60 shashtiamsas.
-        ///
-        /// 
-        /// TODO some values for calculation with standard hooscope out of whack,
-        /// it seems small differences in longitude seem magnified at final value,
-        /// not 100% sure, need further testing for confirmation, but final values seem ok so far
-        /// </summary>
-        [API("AyanaBala")]
-        public static Shashtiamsa GetPlanetAyanaBala(PlanetName planetName, Time time)
+		/// <summary>
+		/// Bimba Parimanas -This means the diameters of the discs of the planets.
+		/// </summary>
+		[API("Bimba Parimanas, This means the diameters of the discs of the planets")]
+		static Angle PlanetDiscDiameter(PlanetName planet)
+		{
+			if (planet == Library.PlanetName.Mars) { return new Angle(0, 9, 4); }
+			if (planet == Library.PlanetName.Mercury) { return new Angle(0, 6, 6); }
+			if (planet == Library.PlanetName.Jupiter) { return new Angle(0, 190, 4); }
+			if (planet == Library.PlanetName.Venus) { return new Angle(0, 16, 6); }
+			if (planet == Library.PlanetName.Saturn) { return new Angle(0, 158, 0); }
+
+			//control should not come here, report error
+			throw new Exception("Disc diameter now found!");
+		}
+
+
+		/// <summary>
+		/// Ayanabala : All planets get 30 shasbtiamsas
+		/// at the equator. For the Sun, Jupiter, Mars
+		/// and Venus add proportionately when they are in
+		/// northern course and for the Moon and Saturn when
+		/// in southern course. Deduct proportionately when
+		/// they are in the opposite direction. Unit of strength
+		/// is 60 shashtiamsas.
+		///
+		/// 
+		/// TODO some values for calculation with standard hooscope out of whack,
+		/// it seems small differences in longitude seem magnified at final value,
+		/// not 100% sure, need further testing for confirmation, but final values seem ok so far
+		/// </summary>
+		[API("All planets get 30 Shashtiamsas at the equator. For the Sun, Jupiter, Mars and Venus add proportionately")]
+        public static Shashtiamsa PlanetAyanaBala(PlanetName planetName, Time time)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetAyanaBala", planetName, time), _getPlanetAyanaBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetAyanaBala), planetName, time), _getPlanetAyanaBala);
 
 
             //UNDERLYING FUNCTION
@@ -1956,7 +1967,7 @@ namespace VedAstro.Library
                 double ayanaBala = 0;
 
                 //get plant kranti (negative south, positive north)
-                var kranti = GetPlanetDeclination(planetName, time);
+                var kranti = PlanetDeclination(planetName, time);
 
                 //prepare values for calculation of ayanabala
                 var x = Angle.FromDegrees(24);
@@ -2012,8 +2023,8 @@ namespace VedAstro.Library
         /// Declinations are reckoned plus or minus according as the planet
         /// is situated in the northern or southern celestial hemisphere
         /// </summary>
-        [API("Declination")]
-        public static double GetPlanetDeclination(PlanetName planetName, Time time)
+        [API("This angular distance from the equinoctial or celestial equator is Kranti or the declination")]
+        public static double PlanetDeclination(PlanetName planetName, Time time)
         {
 
             //CACHE MECHANISM
@@ -2026,7 +2037,7 @@ namespace VedAstro.Library
                 //for degree to radian conversion
                 const double DEG2RAD = 0.0174532925199433;
 
-                var eps = GetEclipticObliquity(time);
+                var eps = EclipticObliquity(time);
 
                 var tlen = Calculate.PlanetSayanaLongitude(time, planetName);
                 var lat = Calculate.PlanetSayanaLatitude(time, planetName);
@@ -2042,8 +2053,8 @@ namespace VedAstro.Library
         /// <summary>
         /// true obliquity of the Ecliptic (includes nutation)
         /// </summary>
-        [API("EclipticObliquity")]
-        public static double GetEclipticObliquity(Time time)
+        [API("true obliquity of the Ecliptic (includes nutation)")]
+        public static double EclipticObliquity(Time time)
         {
 
             //CACHE MECHANISM
@@ -2075,12 +2086,12 @@ namespace VedAstro.Library
         /// <summary>
         /// AKA Horadhipathi Bala
         /// </summary>
-        [API("HoraBala")]
-        public static Shashtiamsa GetPlanetHoraBala(PlanetName planetName, Time time)
+        [API("Hora Bala AKA Horadhipathi Bala")]
+        public static Shashtiamsa PlanetHoraBala(PlanetName planetName, Time time)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetHoraBala", planetName, time), _getPlanetHoraBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetHoraBala), planetName, time), _getPlanetHoraBala);
 
 
             //UNDERLYING FUNCTION
@@ -2117,18 +2128,18 @@ namespace VedAstro.Library
         /// the year of birth is assigned a value of 15 Shashtiamsas
         /// as his Abdabala.
         /// </summary>
-        [API("AbdaBala")]
-        public static Shashtiamsa GetPlanetAbdaBala(PlanetName planetName, Time time)
+        [API("The planet who is the king of the year of birth is assigned a value of 15 Shashtiamsas as his Abdabala")]
+        public static Shashtiamsa PlanetAbdaBala(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetAbdaBala", planetName, time), _getPlanetAbdaBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetAbdaBala), planetName, time), _getPlanetAbdaBala);
 
 
             //UNDERLYING FUNCTION
             Shashtiamsa _getPlanetAbdaBala()
             {
                 //calculate year lord
-                dynamic yearAndMonthLord = GetYearAndMonthLord(time);
+                dynamic yearAndMonthLord = YearAndMonthLord(time);
                 PlanetName yearLord = yearAndMonthLord.YearLord;
 
                 //if inputed planet is year lord than 15 Shashtiamsas
@@ -2141,15 +2152,15 @@ namespace VedAstro.Library
 
         }
 
-        [API("MasaBala")]
-        public static Shashtiamsa GetPlanetMasaBala(PlanetName planetName, Time time)
+        [API("the lord of the month of birth is assigned a value of 30 Shashtiamsas as his Masabala")]
+        public static Shashtiamsa PlanetMasaBala(PlanetName planetName, Time time)
         {
             //The planet who is the lord of
             //the month of birth is assigned a value of 30 Shashtiamsas
             //as his Masabala.
 
             //calculate month lord
-            dynamic yearAndMonthLord = GetYearAndMonthLord(time);
+            dynamic yearAndMonthLord = YearAndMonthLord(time);
             PlanetName monthLord = yearAndMonthLord.MonthLord;
 
             //if inputed planet is month lord than 30 Shashtiamsas
@@ -2160,8 +2171,8 @@ namespace VedAstro.Library
 
         }
 
-        [API("VaraBala")]
-        public static Shashtiamsa GetPlanetVaraBala(PlanetName planetName, Time time)
+        [API("the lord of the day of birth is assigned a value of 45 Shashtiamsas as his Varabala")]
+        public static Shashtiamsa PlanetVaraBala(PlanetName planetName, Time time)
         {
             //The planet who is the lord of
             //the day of birth is assigned a value of 45 Shashtiamsas
@@ -2182,10 +2193,10 @@ namespace VedAstro.Library
         /// Gets year & month lord at inputed time
         /// </summary>
         [API("Gets year & month lord at given time", Category.StarsAboveMe)]
-        public static object GetYearAndMonthLord(Time time)
+        public static object YearAndMonthLord(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(GetYearAndMonthLord), time), _getYearAndMonthLord);
+            return CacheManager.GetCache(new CacheKey(nameof(YearAndMonthLord), time), _getYearAndMonthLord);
 
 
             //UNDERLYING FUNCTION
@@ -2267,8 +2278,8 @@ namespace VedAstro.Library
         /// respectively. Jupiter is always strong and gets 60
         /// shashtiamsas of strength.
         /// </summary>
-        [API("TribhagaBala")]
-        public static Shashtiamsa GetPlanetTribhagaBala(PlanetName planetName, Time time)
+        [API("Planets gets bala during the 1st, 2nd and 3rd one-third positions of the day & night respectively.")]
+        public static Shashtiamsa PlanetTribhagaBala(PlanetName planetName, Time time)
         {
             PlanetName ret = Library.PlanetName.Jupiter;
 
@@ -2322,7 +2333,7 @@ namespace VedAstro.Library
         /// by 3, gives its exaltation strength or oochchabaJa.
         /// </summary>
         [API("OchchaBala")]
-        public static Shashtiamsa GetPlanetOchchaBala(PlanetName planetName, Time time)
+        public static Shashtiamsa PlanetOchchaBala(PlanetName planetName, Time time)
         {
             //1.0 Get Planet longitude
             var planetLongitude = Calculate.PlanetNirayanaLongitude(time, planetName);
@@ -2468,8 +2479,8 @@ namespace VedAstro.Library
         /// midday to midnight proportionately. In the same
         /// way, Mercury is always strong and gets 60 shashtiamsas.
         /// </summary>
-        [API("NathonnathaBala")]
-        public static Shashtiamsa GetPlanetNathonnathaBala(PlanetName planetName, Time time)
+        [API("Strength gained by planet from Midnight to midday, midday to midnight proportionately.")]
+        public static Shashtiamsa PlanetNathonnathaBala(PlanetName planetName, Time time)
         {
 
             //no calculation for rahu and ketu here
@@ -2531,8 +2542,8 @@ namespace VedAstro.Library
         /// distance between the longitude of the planet and
         /// its depression point by 3. Quotient is the strength.
         /// </summary>
-        [API("DigBala")]
-        public static Shashtiamsa GetPlanetDigBala(PlanetName planetName, Time time)
+        [API("Divide the distance between the longitude of the planet and its depression point by 3. Quotient is the strength.")]
+        public static Shashtiamsa PlanetDigBala(PlanetName planetName, Time time)
         {
             //no calculation for rahu and ketu here
             var isRahu = planetName.Name == Library.PlanetName.PlanetNameEnum.Rahu;
@@ -2927,7 +2938,7 @@ namespace VedAstro.Library
 
             //take top 3 as needed planets
             var returnList = new List<PlanetName>();
-            var yyy = Calculate.GetAllPlanetStrength(personBirthTime);
+            var yyy = Calculate.AllPlanetStrength(personBirthTime);
             foreach (var planet in yyy)
             {
                 if (planet.Item1 > threshold)
@@ -2942,7 +2953,7 @@ namespace VedAstro.Library
         {
 
             //get all planets
-            var allPlanetByStrenght = Calculate.GetAllPlanetOrderedByStrength(personBirthTime);
+            var allPlanetByStrenght = Calculate.AllPlanetOrderedByStrength(personBirthTime);
 
             //take top 3 as needed planets
             var returnList = new List<PlanetName>();
@@ -3000,7 +3011,7 @@ namespace VedAstro.Library
         {
 
             var returnList = new List<PlanetName>();
-            var yyy = Calculate.GetAllPlanetStrength(personBirthTime);
+            var yyy = Calculate.AllPlanetStrength(personBirthTime);
             foreach (var planet in yyy)
             {
                 if (planet.Item1 < threshold)
@@ -3018,7 +3029,7 @@ namespace VedAstro.Library
         {
 
             //get all planets
-            var allPlanetByStrenght = Calculate.GetAllPlanetOrderedByStrength(personBirthTime);
+            var allPlanetByStrenght = Calculate.AllPlanetOrderedByStrength(personBirthTime);
 
             //take last 3 as needed planets
             var returnList = new List<PlanetName>();

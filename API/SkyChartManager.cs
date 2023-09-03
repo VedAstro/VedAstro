@@ -276,7 +276,7 @@ namespace API
         private static string? GenerateHouseRuler(Time time, double widthPx, int yAxis)
         {
             //STAGE 1 : CREATE DATA
-            var allPositions = Calculate.GetHouses(time);
+            var allPositions = Calculate.AllHouseLongitudes(time);
             var hse1 = allPositions[0];
 
             //store entire row as names of signs to process after into icons (begin and end)

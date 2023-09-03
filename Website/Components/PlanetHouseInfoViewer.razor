@@ -84,8 +84,8 @@
             //get house details and save it for view
             var _houseDetails = Calculate.GetHouseTags(houseNumber);
             var _houseLord = lordOfHouse.ToString();
-            var _planetsInHouse = Tools.ListToString<PlanetName>(Calculate.GetPlanetsInHouse(houseNumber, _time));
-            var _planetsAspectingHouse = Tools.ListToString<PlanetName>(Calculate.GetPlanetsAspectingHouse((HouseName)houseNumber, _time));
+            var _planetsInHouse = Tools.ListToString<PlanetName>(Calculate.PlanetsInHouse(houseNumber, _time));
+            var _planetsAspectingHouse = Tools.ListToString<PlanetName>(Calculate.PlanetsAspectingHouse((HouseName)houseNumber, _time));
             var rawHouseStrength = Calculate.HouseStrength((HouseName)houseNumber, _time).ToDouble();
             var _houseStrength = Math.Round(rawHouseStrength, 2).ToString();
             var _houseSign = Calculate.HouseSignName(houseNumber, _time).ToString();
@@ -138,18 +138,18 @@
             //get planet details and save it for view
             var _shadbalaPinda = Calculate.PlanetShadbalaPinda(planetName, _time).ToDouble();
 
-            var _positionStrength = isRahuKetu ? 0 : Math.Round(Calculate.GetPlanetSthanaBala(planetName, _time).ToDouble(), 2);
+            var _positionStrength = isRahuKetu ? 0 : Math.Round(Calculate.PlanetSthanaBala(planetName, _time).ToDouble(), 2);
 
-            var _directionalStrength = isRahuKetu ? 0 : Math.Round(Calculate.GetPlanetDigBala(planetName, _time).ToDouble(), 2);
+            var _directionalStrength = isRahuKetu ? 0 : Math.Round(Calculate.PlanetDigBala(planetName, _time).ToDouble(), 2);
 
-            var _motionalStrength = isRahuKetu ? 0 : Math.Round(Calculate.GetPlanetChestaBala(planetName, _time).ToDouble(), 2);
-            var _motionName = Calculate.GetPlanetMotionName(planetName, _time).ToString();
+            var _motionalStrength = isRahuKetu ? 0 : Math.Round(Calculate.PlanetChestaBala(planetName, _time).ToDouble(), 2);
+            var _motionName = Calculate.PlanetMotionName(planetName, _time).ToString();
 
-            var _temporalStrength = isRahuKetu ? 0 : Math.Round(Calculate.GetPlanetKalaBala(planetName, _time).ToDouble(), 2);
+            var _temporalStrength = isRahuKetu ? 0 : Math.Round(Calculate.PlanetKalaBala(planetName, _time).ToDouble(), 2);
 
-            var _aspectStrength = isRahuKetu ? 0 : Math.Round(Calculate.GetPlanetDrikBala(planetName, _time).ToDouble(), 2);
+            var _aspectStrength = isRahuKetu ? 0 : Math.Round(Calculate.PlanetDrikBala(planetName, _time).ToDouble(), 2);
 
-            var _permanentStrength = isRahuKetu ? 0 : Math.Round(Calculate.GetPlanetNaisargikaBala(planetName, _time).ToDouble(), 2);
+            var _permanentStrength = isRahuKetu ? 0 : Math.Round(Calculate.PlanetNaisargikaBala(planetName, _time).ToDouble(), 2);
 
             var _planetCurrentHouse = Calculate.HousePlanetIsIn(_time, planetName);
 
@@ -176,7 +176,7 @@
 
             var _conjunctPlanets = Tools.ListToString<PlanetName>(Calculate.PlanetsInConjuction(_time, planetName));
 
-            var _aspectingPlanets = Tools.ListToString<PlanetName>(Calculate.GetPlanetsAspectingPlanet(_time, planetName));
+            var _aspectingPlanets = Tools.ListToString<PlanetName>(Calculate.PlanetsAspectingPlanet(_time, planetName));
 
             var _currentSignDescription = Calculate.GetSignTags(_planetRasiSign.GetSignName());
 

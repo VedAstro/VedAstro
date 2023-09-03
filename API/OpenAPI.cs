@@ -54,6 +54,9 @@ namespace API
                 //3 : EXECUTE COMMAND
                 var rawPlanetData = calculator?.Invoke(null, parsedParamList.ToArray()); ;
 
+                //4 : OVERLOAD LIMIT
+                await Task.Delay(1000);
+
                 //4 : CONVERT TO JSON
                 var payloadJson = Tools.AnyToJSON(calculatorName, rawPlanetData); //use calculator name as key
 
@@ -73,15 +76,15 @@ namespace API
         /// <summary>
         /// Backup function to catch invalid calls, say gracefully fails
         /// </summary>
-        [Function(nameof(Catch404))]
-		public static async Task<HttpResponseData> Catch404([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{*Catch404}")]
-			HttpRequestData incomingRequest,
-			string Catch404
-		)
-		{
-			var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
-	        return APITools.FailMessageJson(message, incomingRequest);
-		}
+  //      [Function(nameof(Catch404))]
+		//public static async Task<HttpResponseData> Catch404([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{*Catch404}")]
+		//	HttpRequestData incomingRequest,
+		//	string Catch404
+		//)
+		//{
+		//	var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
+	 //       return APITools.FailMessageJson(message, incomingRequest);
+		//}
 
 
 		/// <summary>

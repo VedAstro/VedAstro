@@ -346,12 +346,12 @@ namespace VedAstro.Library
                 //The evil due to Nadi Kuta can be ignored subject to the following conditions:
 
                 //a.The same planet is lord of the Janma Rasis of both the male and the female,
-                var maleJanmaLord = Calculate.GetLordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName());
-                var femaleJanmaLord = Calculate.GetLordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName());
+                var maleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName());
+                var femaleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName());
                 var sameJanmaLord = maleJanmaLord == femaleJanmaLord;
 
                 //b.The lords of the Janma Rasi of the couple are friends.
-                var relationship = Calculate.GetPlanetPermanentRelationshipWithPlanet(maleJanmaLord, femaleJanmaLord);
+                var relationship = Calculate.PlanetPermanentRelationshipWithPlanet(maleJanmaLord, femaleJanmaLord);
                 var janmaIsFriend = relationship is PlanetToPlanetRelationship.BestFriend or PlanetToPlanetRelationship.Friend;
 
                 //if any above exceptions met, change prediction
@@ -612,8 +612,8 @@ namespace VedAstro.Library
 
 
             //get group names
-            var maleGroupName = Calculate.GetAnimal(maleConstellation);
-            var femaleGroupName = Calculate.GetAnimal(femaleConstellation);
+            var maleGroupName = Calculate.YoniKutaAnimal(maleConstellation);
+            var femaleGroupName = Calculate.YoniKutaAnimal(femaleConstellation);
 
             AnimalName maleAnimal = maleGroupName.Animal;
             AnimalName femaleAnimal = femaleGroupName.Animal;
@@ -1153,8 +1153,8 @@ namespace VedAstro.Library
             var femaleRuleSign = Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
 
             //get lords of sign
-            var maleLord = Calculate.GetLordOfZodiacSign(maleRuleSign);
-            var femaleLord = Calculate.GetLordOfZodiacSign(femaleRuleSign);
+            var maleLord = Calculate.LordOfZodiacSign(maleRuleSign);
+            var femaleLord = Calculate.LordOfZodiacSign(femaleRuleSign);
 
             // get permanent relationship of planets
             // Ref : Some suggest that in considering the planetary
@@ -1163,8 +1163,8 @@ namespace VedAstro.Library
             // opinion is uncalled for, because, the entire
             // subject of adaptability hinges on the birth
             // constellations and not on birth charts as a whole.
-            var maleToFemaleRelation = Calculate.GetPlanetPermanentRelationshipWithPlanet(maleLord, femaleLord);
-            var femaleToMaleRelation = Calculate.GetPlanetPermanentRelationshipWithPlanet(femaleLord, maleLord);
+            var maleToFemaleRelation = Calculate.PlanetPermanentRelationshipWithPlanet(maleLord, femaleLord);
+            var femaleToMaleRelation = Calculate.PlanetPermanentRelationshipWithPlanet(femaleLord, maleLord);
 
             //show user
             prediction.MaleInfo = maleToFemaleRelation.ToString() + " Sign";
@@ -1382,12 +1382,12 @@ namespace VedAstro.Library
             if (prediction.Nature == EventNature.Bad)
             {
                 //a.The same planet is lord of the Janma Rasis of both the male and the female,
-                var maleJanmaLord = Calculate.GetLordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName());
-                var femaleJanmaLord = Calculate.GetLordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName());
+                var maleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName());
+                var femaleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName());
                 var sameJanmaLord = maleJanmaLord == femaleJanmaLord;
 
                 //b.The lords of the Janma Rasi of the couple are friends.
-                var relationship = Calculate.GetPlanetPermanentRelationshipWithPlanet(maleJanmaLord, femaleJanmaLord);
+                var relationship = Calculate.PlanetPermanentRelationshipWithPlanet(maleJanmaLord, femaleJanmaLord);
                 var janmaIsFriend = relationship is PlanetToPlanetRelationship.BestFriend or PlanetToPlanetRelationship.Friend;
 
                 //if any above exceptions met, change prediction
@@ -1650,7 +1650,7 @@ namespace VedAstro.Library
                 if (planet == PlanetName.Rahu || planet == PlanetName.Ketu)
                 {
                     //change input planet from rahu/ketu to the lord of the sign
-                    var lordOfRahuKetuSign = Calculate.GetLordOfZodiacSign(planetSign);
+                    var lordOfRahuKetuSign = Calculate.LordOfZodiacSign(planetSign);
                     planet = lordOfRahuKetuSign;
 
                     //change current occupied rahu/ketu sign to the one occupied by the lord

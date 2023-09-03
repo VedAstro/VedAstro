@@ -91,7 +91,7 @@ namespace VedAstro.Library
             var newCalcResult = new CalculatorResult();
             newCalcResult.Occuring = occuring;
             newCalcResult.RelatedBody.RelatedHouses.AddRange(houseNames.ToList());
-            var lordNames = Calculate.GetLordOfHouseList(newCalcResult.RelatedBody.RelatedHouses, time);
+            var lordNames = Calculate.LordOfHouseList(newCalcResult.RelatedBody.RelatedHouses, time);
             newCalcResult.RelatedBody.RelatedPlanets.AddRange(lordNames.ToList());
 
             return newCalcResult;

@@ -717,7 +717,7 @@ namespace VedAstro.Library
             // pain wilt be severe and nervous weakness may set in.
 
             //get current weekday
-            var weekday = Calculate.GetDayOfWeek(time);
+            var weekday = Calculate.DayOfWeek(time);
 
             //1. may be taken on Saturday or Monday.
             //right weekdays to look for
@@ -1048,7 +1048,7 @@ namespace VedAstro.Library
             // applicable in case of marriage.
 
             //get planets in conjunction with the moon
-            var planetsInConjunct = Calculate.GetPlanetsInConjuction(time, PlanetName.Moon);
+            var planetsInConjunct = Calculate.PlanetsInConjuction(time, PlanetName.Moon);
 
             //if any planets are in conjunct with moon, event is occuring
             if (planetsInConjunct.Count > 0) { return CalculatorResult.IsOccuring(); }
@@ -1206,11 +1206,11 @@ namespace VedAstro.Library
                 //1.1 get navamsa lagna sign
                 var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
 
-                var navamsaLagnaLord = Calculate.GetLordOfZodiacSign(navamsaLagnaSign);
+                var navamsaLagnaLord = Calculate.LordOfZodiacSign(navamsaLagnaSign);
 
                 //2.0 get signs navamsa lagna lord is aspecting
                 var signsNavamsaLagnaLordIsAspecting =
-                    Calculate.GetSignsPlanetIsAspecting(navamsaLagnaLord, time);
+                    Calculate.SignsPlanetIsAspecting(navamsaLagnaLord, time);
 
                 //3.0 get sign of lagna
                 var lagnaSign = Calculate.HouseSignName(HouseName.House1, time);
@@ -1234,11 +1234,11 @@ namespace VedAstro.Library
                 //1.1 get navamsa 7th sign
                 var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
 
-                var navamsa7thLord = Calculate.GetLordOfZodiacSign(navamsa7thSign);
+                var navamsa7thLord = Calculate.LordOfZodiacSign(navamsa7thSign);
 
                 //2.0 get signs navamsa 7th lord is aspecting
                 var signsNavamsa7thLordIsAspecting =
-                    Calculate.GetSignsPlanetIsAspecting(navamsa7thLord, time);
+                    Calculate.SignsPlanetIsAspecting(navamsa7thLord, time);
 
                 //3.0 get sign of 7th
                 var _7thSign = Calculate.HouseSignName(HouseName.House7, time);
@@ -1263,7 +1263,7 @@ namespace VedAstro.Library
                 var lagnaLord = Calculate.LordOfHouse(HouseName.House1, time);
 
                 //get signs lagna lord is aspecting
-                var signsLagnaLordIsAspecting = Calculate.GetSignsPlanetIsAspecting(lagnaLord, time);
+                var signsLagnaLordIsAspecting = Calculate.SignsPlanetIsAspecting(lagnaLord, time);
 
                 //2.0 get navamsa lagna sign
                 //get navamsa lagna at house 1 longitude
@@ -1290,7 +1290,7 @@ namespace VedAstro.Library
                 var _7thLord = Calculate.LordOfHouse(HouseName.House7, time);
 
                 //get signs 7th lord is aspecting
-                var signs7thLordIsAspecting = Calculate.GetSignsPlanetIsAspecting(_7thLord, time);
+                var signs7thLordIsAspecting = Calculate.SignsPlanetIsAspecting(_7thLord, time);
 
                 //2.0 get navamsa 7th sign
                 var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
@@ -1317,7 +1317,7 @@ namespace VedAstro.Library
 
                 //2.0 Get navamsa lagna lord's current sign
                 //get navamsa lagna lord (planet)
-                var navamsaLagnaLord = Calculate.GetLordOfZodiacSign(navamsaLagnaSign);
+                var navamsaLagnaLord = Calculate.LordOfZodiacSign(navamsaLagnaSign);
 
                 //get ordinary sign of navamsa lagna lord
                 var ordinarySignOfNavamsaLagnaLord = Calculate.PlanetRasiSign(navamsaLagnaLord, person.BirthTime).GetSignName();
@@ -1348,7 +1348,7 @@ namespace VedAstro.Library
 
                 //2.0 Get navamsa 7th lord's current sign
                 //get navamsa 7th lord (planet)
-                var navamsa7thLord = Calculate.GetLordOfZodiacSign(navamsa7thSign);
+                var navamsa7thLord = Calculate.LordOfZodiacSign(navamsa7thSign);
 
                 //get ordinary sign of navamsa 7th lord
                 var ordinarySignOfNavamsa7thLord = Calculate.PlanetRasiSign(navamsa7thLord, person.BirthTime).GetSignName();
@@ -1429,7 +1429,7 @@ namespace VedAstro.Library
 
                 //2.0 Get navamsa lagna lord's current sign
                 //get navamsa lagna lord (planet)
-                var navamsaLagnaLord = Calculate.GetLordOfZodiacSign(navamsaLagnaSign);
+                var navamsaLagnaLord = Calculate.LordOfZodiacSign(navamsaLagnaSign);
 
                 //get navamsa sign of navamsa lagna lord
                 var navamsaSignOfNavamsaLagnaLord = Calculate.PlanetNavamsaSign(navamsaLagnaLord, time);
@@ -1455,7 +1455,7 @@ namespace VedAstro.Library
 
                 //2.0 Get navamsa 7th lord's current sign
                 //get navamsa 7th lord (planet)
-                var navamsa7thLord = Calculate.GetLordOfZodiacSign(navamsa7thSign);
+                var navamsa7thLord = Calculate.LordOfZodiacSign(navamsa7thSign);
 
                 //get navamsa sign of navamsa 7th lord
                 var navamsaSignOfNavamsa7thLord = Calculate.PlanetNavamsaSign(navamsa7thLord, time);
@@ -1483,7 +1483,7 @@ namespace VedAstro.Library
             var house1MiddleLongitude = Calculate.House(HouseName.House1, time).GetMiddleLongitude();
 
             //get zodiac sign at lagna (middle longitude)
-            var house1ZodiacSign = Calculate.GetZodiacSignAtLongitude(house1MiddleLongitude);
+            var house1ZodiacSign = Calculate.ZodiacSignAtLongitude(house1MiddleLongitude);
 
             var house1SignName = house1ZodiacSign.GetSignName();
             var house1DegreesInSign = house1ZodiacSign.GetDegreesInSign().TotalDegrees;
@@ -1551,7 +1551,7 @@ namespace VedAstro.Library
             //Tuesday is not evil after midday
 
             //get current weekday
-            var weekday = Calculate.GetDayOfWeek(time);
+            var weekday = Calculate.DayOfWeek(time);
 
             //if tuesday & after midday then not occuring, end here
             if (weekday == DayOfWeek.Tuesday && isAfterMidday()) { return CalculatorResult.NotOccuring(); }
@@ -1780,7 +1780,7 @@ namespace VedAstro.Library
                 //
 
                 //get weekday
-                var dayOfWeek = Calculate.GetDayOfWeek(time);
+                var dayOfWeek = Calculate.DayOfWeek(time);
                 //get lunar day
                 var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
                 //get ruling constellation
@@ -1819,7 +1819,7 @@ namespace VedAstro.Library
                 // Satabhisha, Dhanishta or Poorvabhadra produces Siddha Yoga.
 
                 //get weekday
-                var dayOfWeek = Calculate.GetDayOfWeek(time);
+                var dayOfWeek = Calculate.DayOfWeek(time);
                 //get lunar day
                 var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
                 //get ruling constellation
@@ -1859,7 +1859,7 @@ namespace VedAstro.Library
                 //Tuesday coinciding with Jaya (3rd 8th and 13th lunar days)
 
                 //get weekday
-                var dayOfWeek = Calculate.GetDayOfWeek(time);
+                var dayOfWeek = Calculate.DayOfWeek(time);
                 //get lunar day
                 var lunarDayGroup = Calculate.LunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
@@ -1902,7 +1902,7 @@ namespace VedAstro.Library
                 //Wednesday identical with Bhadra (2nd, 7th and 12th lunar days),
 
                 //get weekday
-                var dayOfWeek = Calculate.GetDayOfWeek(time);
+                var dayOfWeek = Calculate.DayOfWeek(time);
                 //get lunar day
                 var lunarDayGroup = Calculate.LunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
@@ -1946,7 +1946,7 @@ namespace VedAstro.Library
                 //Thursday falling on 5th, 10th or 15th(Poorna)
 
                 //get weekday
-                var dayOfWeek = Calculate.GetDayOfWeek(time);
+                var dayOfWeek = Calculate.DayOfWeek(time);
                 //get lunar day
                 var lunarDayNumber = Calculate.LunarDay(time).GetLunarDayNumber();
                 //get lunar day
@@ -1998,7 +1998,7 @@ namespace VedAstro.Library
 
 
                 //get weekday
-                var dayOfWeek = Calculate.GetDayOfWeek(time);
+                var dayOfWeek = Calculate.DayOfWeek(time);
                 //get lunar day group
                 var lunarDayGroup = Calculate.LunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
@@ -2044,7 +2044,7 @@ namespace VedAstro.Library
                 //Saturday falling on a Riktha tithi(4th, 9th and 14th lunar days)
 
                 //get weekday
-                var dayOfWeek = Calculate.GetDayOfWeek(time);
+                var dayOfWeek = Calculate.DayOfWeek(time);
                 //get lunar day
                 var lunarDayGroup = Calculate.LunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
@@ -2088,7 +2088,7 @@ namespace VedAstro.Library
             // rise to Amita Siddha Yoga.
 
             //get weekday
-            var dayOfWeek = Calculate.GetDayOfWeek(time);
+            var dayOfWeek = Calculate.DayOfWeek(time);
             //get ruling constellation
             var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
@@ -2196,7 +2196,7 @@ namespace VedAstro.Library
             //
 
             //get weekday
-            var dayOfWeek = Calculate.GetDayOfWeek(time);
+            var dayOfWeek = Calculate.DayOfWeek(time);
 
             if (dayOfWeek != DayOfWeek.Thursday || dayOfWeek != DayOfWeek.Friday)
             {
@@ -2438,7 +2438,7 @@ namespace VedAstro.Library
 
 
             //get weekday
-            var dayOfWeek = Calculate.GetDayOfWeek(time);
+            var dayOfWeek = Calculate.DayOfWeek(time);
 
             //check if days to avoid are occuring
             var avoidDays = dayOfWeek == DayOfWeek.Friday || dayOfWeek == DayOfWeek.Saturday;
@@ -2816,7 +2816,7 @@ namespace VedAstro.Library
 
                 //3. Weekday
                 //get current weekday
-                var currentWeekday = Calculate.GetDayOfWeek(time);
+                var currentWeekday = Calculate.DayOfWeek(time);
 
                 //check weekday
                 var rightWeekday = currentWeekday == DayOfWeek.Thursday;
@@ -2853,7 +2853,7 @@ namespace VedAstro.Library
 
                 //3. Weekday
                 //get current weekday
-                var currentWeekday = Calculate.GetDayOfWeek(time);
+                var currentWeekday = Calculate.DayOfWeek(time);
 
                 //check weekday
                 var rightWeekday = currentWeekday == DayOfWeek.Thursday;
@@ -2896,7 +2896,7 @@ namespace VedAstro.Library
 
             //3. Weekday
             //get current weekday
-            var currentWeekday = Calculate.GetDayOfWeek(time);
+            var currentWeekday = Calculate.DayOfWeek(time);
 
             //check weekday
             var rightWeekday = currentWeekday == DayOfWeek.Friday;
@@ -2936,7 +2936,7 @@ namespace VedAstro.Library
 
             //3. Weekday
             //get current weekday
-            var currentWeekday = Calculate.GetDayOfWeek(time);
+            var currentWeekday = Calculate.DayOfWeek(time);
 
             //check weekday
             var rightWeekday = currentWeekday == DayOfWeek.Tuesday;
@@ -3448,7 +3448,7 @@ namespace VedAstro.Library
             // is unpropitious, Saturday is middling.
 
             //get weekday
-            var weekDay = Calculate.GetDayOfWeek(time);
+            var weekDay = Calculate.DayOfWeek(time);
 
             //check if weekday correct 
             var inCorrectWeekday = weekDay == DayOfWeek.Monday ||
@@ -3474,7 +3474,7 @@ namespace VedAstro.Library
             //4. Monday, Wednesday and Thursday are the best.
 
             //get weekday
-            var weekDay = Calculate.GetDayOfWeek(time);
+            var weekDay = Calculate.DayOfWeek(time);
 
             //check if weekday correct 
             var inCorrectWeekday = weekDay == DayOfWeek.Monday ||
@@ -4123,7 +4123,7 @@ namespace VedAstro.Library
             // Monday, Wednesday and Thursday are the best.
 
             //get week day
-            var weekday = Calculate.GetDayOfWeek(time);
+            var weekday = Calculate.DayOfWeek(time);
 
 
             switch (weekday)
@@ -4163,7 +4163,7 @@ namespace VedAstro.Library
             // should also be avoided unless the day is otherwise very auspicious.
 
             //get week day
-            var weekday = Calculate.GetDayOfWeek(time);
+            var weekday = Calculate.DayOfWeek(time);
 
 
             switch (weekday)
@@ -4184,7 +4184,7 @@ namespace VedAstro.Library
             // Do not commence repairs on Tuesdays.
 
             //get week day
-            var weekday = Calculate.GetDayOfWeek(time);
+            var weekday = Calculate.DayOfWeek(time);
 
 
             switch (weekday)
@@ -4207,13 +4207,13 @@ namespace VedAstro.Library
             // Monday when Cancer is rising are very suitable for beginning repairs.
 
             //friday & lagna is taurus or libra
-            var isFriday = Calculate.GetDayOfWeek(time) == DayOfWeek.Friday;
+            var isFriday = Calculate.DayOfWeek(time) == DayOfWeek.Friday;
             var lagnaIsTaurus = Calculate.HouseSignName(HouseName.House1, time) == ZodiacName.Taurus;
             var lagnaIsLibra = Calculate.HouseSignName(HouseName.House1, time) == ZodiacName.Libra;
             var isFridayLagnaTaurusLibra = isFriday && (lagnaIsLibra || lagnaIsTaurus);
 
             //monday & lagna is cancer
-            var isMonday = Calculate.GetDayOfWeek(time) == DayOfWeek.Monday;
+            var isMonday = Calculate.DayOfWeek(time) == DayOfWeek.Monday;
             var lagnaIsCancer = Calculate.HouseSignName(HouseName.House1, time) == ZodiacName.Cancer;
             var isMondayLagnaCancer = isMonday && lagnaIsCancer;
 

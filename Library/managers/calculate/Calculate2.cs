@@ -1824,7 +1824,7 @@ namespace VedAstro.Library
 		public static int PlanetAshtakvargaBindu(PlanetName planet, ZodiacName signToCheck, Time time)
 		{
 			//calculates ashtakvarga for given planet 
-			var bhinnashtakavargaChart = GetPlanetBhinnashtakavargaChart(planet, time);
+			var bhinnashtakavargaChart = PlanetBhinnashtakavargaChart(planet, time);
 
 			//get bindu score for given sign
 			var bindu = bhinnashtakavargaChart[signToCheck];
@@ -1836,7 +1836,7 @@ namespace VedAstro.Library
 		/// Bhinnashtakavarga or individual Ashtakvarga charts
 		/// Made on cold winter morning in July
 		/// </summary>
-		public static Dictionary<PlanetName, Dictionary<ZodiacName, int>> GetAllBhinnashtakavargaChart(Time birthTime)
+		public static Dictionary<PlanetName, Dictionary<ZodiacName, int>> AllBhinnashtakavargaChart(Time birthTime)
 		{
 
 			var minorPlanetList = Library.PlanetName.All7Planets.Select(e => e.ToString()).ToList();
@@ -1883,12 +1883,11 @@ namespace VedAstro.Library
 
 		}
 
-
 		/// <summary>
 		/// Calculates full ashtakvarga chart for a given planet for all 12 signs
 		/// Needed to compute final ashtakvarga
 		/// </summary>
-		public static Dictionary<ZodiacName, int> GetPlanetBhinnashtakavargaChart(PlanetName mainPlanet, Time birthTime)
+		public static Dictionary<ZodiacName, int> PlanetBhinnashtakavargaChart(PlanetName mainPlanet, Time birthTime)
 		{
 			//no rahu & ketu
 			if (mainPlanet.Name is Library.PlanetName.PlanetNameEnum.Rahu or Library.PlanetName.PlanetNameEnum.Ketu) { throw new InvalidOperationException("No rahu & ketu support"); }

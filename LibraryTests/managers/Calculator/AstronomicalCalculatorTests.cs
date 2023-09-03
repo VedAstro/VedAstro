@@ -17,7 +17,7 @@ namespace VedAstro.Library.Tests
         public void GetAllBhinnashtakavargaChartTest()
         {
 
-            var bhinnashtakavargaChart = Calculate.GetAllBhinnashtakavargaChart(StandardHoroscope);
+            var bhinnashtakavargaChart = Calculate.AllBhinnashtakavargaChart(StandardHoroscope);
 
             //correct answer for Standard Horoscope from Ashtakavarga System pg.18            
             Assert.AreEqual(5,bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Aries]);

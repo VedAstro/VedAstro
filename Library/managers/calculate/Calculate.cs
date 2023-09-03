@@ -608,10 +608,10 @@ namespace VedAstro.Library
         /// Calculates & creates all houses as list
         /// </summary>
         [API("Calculates & creates all houses data as list", Category.Astrology)]
-        public static List<House> GetHouses(Time time)
+        public static List<House> AllHouseLongitudes(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetHouses", time, Calculate.YearOfCoincidence), _getHouses);
+            return CacheManager.GetCache(new CacheKey(nameof(AllHouseLongitudes), time, Calculate.YearOfCoincidence), _getHouses);
 
 
             //UNDERLYING FUNCTION
@@ -963,7 +963,7 @@ namespace VedAstro.Library
             var listOfPlanetInHouse = new List<PlanetName>();
 
             //get all houses
-            var houseList = GetHouses(time);
+            var houseList = AllHouseLongitudes(time);
 
             //find house that matches input house number
             var house = houseList.Find(h => h.GetHouseName() == houseNumber);
@@ -1093,7 +1093,7 @@ namespace VedAstro.Library
             var planetLongitude = Calculate.PlanetNirayanaLongitude(time, planetName);
 
             //get all houses
-            var houseList = Calculate.GetHouses(time);
+            var houseList = Calculate.AllHouseLongitudes(time);
 
             //loop through all houses
             foreach (var house in houseList)
@@ -1162,7 +1162,7 @@ namespace VedAstro.Library
         {
 
             //get all houses
-            var allHouses = Calculate.GetHouses(time);
+            var allHouses = Calculate.AllHouseLongitudes(time);
 
             //get the house specified 
             var specifiedHouse = allHouses.Find(house => house.GetHouseName() == houseNumber);
@@ -1202,7 +1202,7 @@ namespace VedAstro.Library
         {
 
             //get all houses
-            var allHouses = Calculate.GetHouses(time);
+            var allHouses = Calculate.AllHouseLongitudes(time);
 
             //get the house specified 
             var specifiedHouse = allHouses.Find(house => house.GetHouseName() == houseNumber);
@@ -1317,7 +1317,7 @@ namespace VedAstro.Library
             for (int i = 1; i < countToNextHouse; i++)
             {
                 //get the next house number from the current counted to house
-                houseCountedTo = GetNextHouseNumber(houseCountedTo);
+                houseCountedTo = NextHouseNumber(houseCountedTo);
             }
 
             return houseCountedTo;
@@ -1454,7 +1454,7 @@ namespace VedAstro.Library
         public static ZodiacName HouseNavamsaSign(HouseName house, Time time)
         {
             //get all houses
-            var allHouseList = Calculate.GetHouses(time);
+            var allHouseList = Calculate.AllHouseLongitudes(time);
 
             //get house mid longitude
             var houseMiddleLongitude = allHouseList.Find(hs => hs.GetHouseName() == house).GetMiddleLongitude();
@@ -2255,7 +2255,7 @@ namespace VedAstro.Library
             House _getHouse()
             {
                 //get all house list
-                var allHouses = GetHouses(time);
+                var allHouses = AllHouseLongitudes(time);
 
                 //get required house from list
                 var requiredHouse = allHouses.Find(h => h.GetHouseName() == houseNumber);
@@ -2846,7 +2846,7 @@ namespace VedAstro.Library
             var planetsInConjunct = Calculate.PlanetsInConjuction(time, planetName);
 
             //get all evil planets
-            var evilPlanets = Calculate.GetMaleficPlanetList(time);
+            var evilPlanets = Calculate.MaleficPlanetList(time);
 
             //check if any conjunct planet is an evil one
             var evilFound = planetsInConjunct.FindAll(planet => evilPlanets.Contains(planet)).Any();
@@ -2863,10 +2863,10 @@ namespace VedAstro.Library
 		public static bool IsMaleficPlanetInHouse(HouseName houseNumber, Time time)
         {
             //get all the planets in the house
-            var planetsInHouse = Calculate.GetPlanetsInHouse(houseNumber, time);
+            var planetsInHouse = Calculate.PlanetsInHouse(houseNumber, time);
 
             //get all evil planets
-            var evilPlanets = Calculate.GetMaleficPlanetList(time);
+            var evilPlanets = Calculate.MaleficPlanetList(time);
 
             //check if any planet in house is an evil one
             var evilFound = planetsInHouse.FindAll(planet => evilPlanets.Contains(planet)).Any();
@@ -2884,7 +2884,7 @@ namespace VedAstro.Library
 		public static bool IsBeneficPlanetInHouse(HouseName houseNumber, Time time)
         {
             //get all the planets in the house
-            var planetsInHouse = Calculate.GetPlanetsInHouse(houseNumber, time);
+            var planetsInHouse = Calculate.PlanetsInHouse(houseNumber, time);
 
             //get all good planets
             var goodPlanets = Calculate.BeneficPlanetList(time);
@@ -2906,7 +2906,7 @@ namespace VedAstro.Library
             var planetsInSign = Calculate.PlanetInSign(sign, time);
 
             //get all evil planets
-            var evilPlanets = Calculate.GetMaleficPlanetList(time);
+            var evilPlanets = Calculate.MaleficPlanetList(time);
 
             //check if any planet in sign is an evil one
             var evilFound = planetsInSign.FindAll(planet => evilPlanets.Contains(planet)).Any();
@@ -2923,7 +2923,7 @@ namespace VedAstro.Library
             var planetsInSign = Calculate.PlanetInSign(sign, time);
 
             //get all evil planets
-            var evilPlanets = Calculate.GetMaleficPlanetList(time);
+            var evilPlanets = Calculate.MaleficPlanetList(time);
 
             //get evil planets in sign
             var evilFound = planetsInSign.FindAll(planet => evilPlanets.Contains(planet));
@@ -2973,7 +2973,7 @@ namespace VedAstro.Library
         public static bool IsMaleficPlanetAspectHouse(HouseName house, Time time)
         {
             //get all evil planets
-            var evilPlanets = Calculate.GetMaleficPlanetList(time);
+            var evilPlanets = Calculate.MaleficPlanetList(time);
 
             //check if any evil planet is aspecting the inputed house
             var evilFound = evilPlanets.FindAll(evilPlanet => Calculate.IsHouseAspectedByPlanet(house, evilPlanet, time)).Any();
@@ -3006,7 +3006,7 @@ namespace VedAstro.Library
         public static bool IsPlanetAspectedByMaleficPlanets(PlanetName lord, Time time)
         {
             //get list of evil planets
-            var evilPlanets = GetMaleficPlanetList(time);
+            var evilPlanets = MaleficPlanetList(time);
 
             //check if any of the evil planets is aspecting inputed planet
             var evilAspectFound = evilPlanets.FindAll(evilPlanet =>
@@ -4109,8 +4109,8 @@ namespace VedAstro.Library
             //The Ochcha Bala (exaltation strength) of a planet
             //is multiplied by its Chesta Bala(motional strength)
             //and then the square root of the product extracted.
-            var ochchaBala = GetPlanetOchchaBala(planet, birthTime).ToDouble();
-            var chestaBala = GetPlanetChestaBala(planet, birthTime, includeSunMoon:true).ToDouble();
+            var ochchaBala = PlanetOchchaBala(planet, birthTime).ToDouble();
+            var chestaBala = PlanetChestaBala(planet, birthTime, includeSunMoon:true).ToDouble();
             var product = ochchaBala * chestaBala;
 
             //Square root of the product extracted.

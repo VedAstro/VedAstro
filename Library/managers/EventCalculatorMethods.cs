@@ -15,7 +15,7 @@ using System.Linq;
 namespace VedAstro.Library
 {
     /// <summary>
-    /// A collection of methods used to calculate if an event is occuring
+    /// A collection of methods used to calculate if an event is ocuring
     /// Note:
     /// - Attributes are used to link a particular method to the event data stored in database
     /// - Split across file because VS IDE started to lag with autocomplete (too much code at once)
@@ -742,7 +742,7 @@ namespace VedAstro.Library
 
 
             //3. The 8th house must be unoccupied
-            var planets8thHouse = Calculate.GetPlanetsInHouse(HouseName.House8, time);
+            var planets8thHouse = Calculate.PlanetsInHouse(HouseName.House8, time);
 
             //if got planets in 8th house, event not occuring
             if (planets8thHouse.Any()) { return CalculatorResult.NotOccuring(); }
@@ -958,7 +958,7 @@ namespace VedAstro.Library
             //
 
             //1.0 Get list of evil planets
-            var listOfEvilPlanets = Calculate.GetMaleficPlanetList(time);
+            var listOfEvilPlanets = Calculate.MaleficPlanetList(time);
 
             //2.0 Check if evil planets are in house 12 & 2
 
@@ -968,7 +968,7 @@ namespace VedAstro.Library
             var evilPlanetFoundInHouse2 = false;
 
             //get planets in 12th house
-            List<PlanetName> planetsInHouse12 = Calculate.GetPlanetsInHouse(HouseName.House12, time);
+            List<PlanetName> planetsInHouse12 = Calculate.PlanetsInHouse(HouseName.House12, time);
 
             //check if evil planets are found in house 12
             foreach (var planet in listOfEvilPlanets)
@@ -988,7 +988,7 @@ namespace VedAstro.Library
             if (evilPlanetFoundInHouse12)
             {
                 //get planets in 2nd house
-                List<PlanetName> planetsInHouse2 = Calculate.GetPlanetsInHouse(HouseName.House2, time);
+                List<PlanetName> planetsInHouse2 = Calculate.PlanetsInHouse(HouseName.House2, time);
 
                 //check if evil planets are found in house 2
                 foreach (var planet in listOfEvilPlanets)
@@ -1582,7 +1582,7 @@ namespace VedAstro.Library
             //other adverse influences
 
             //get planets in 1st house (ascendant)
-            var planetsInLagna = Calculate.GetPlanetsInHouse(HouseName.House1, time);
+            var planetsInLagna = Calculate.PlanetsInHouse(HouseName.House1, time);
 
             //list of good planets to look for
             var goodList = new List<PlanetName>() { PlanetName.Venus, PlanetName.Mercury, PlanetName.Jupiter };
@@ -1604,7 +1604,7 @@ namespace VedAstro.Library
             // antidote for other evils obtaining in the horoscope
 
             //get planets in 11st house 
-            var planetsIn11th = Calculate.GetPlanetsInHouse(HouseName.House11, time);
+            var planetsIn11th = Calculate.PlanetsInHouse(HouseName.House11, time);
 
             //list of good planets to look for
             var goodList = new List<PlanetName>() { PlanetName.Moon, PlanetName.Sun };
@@ -1655,7 +1655,7 @@ namespace VedAstro.Library
             bool isAllMaleficsIn3rd6th11th()
             {
                 //get all malefic planets
-                var allMalefics = Calculate.GetMaleficPlanetList(time);
+                var allMalefics = Calculate.MaleficPlanetList(time);
 
                 //go through each malefic planet and
                 //make sure each is in 3, 6 or 11th house
@@ -2354,7 +2354,7 @@ namespace VedAstro.Library
             //            Shadvarga bala uses malefic's relationship with sign to determine strenght
 
             //get all malefic planets
-            var allMalefics = Calculate.GetMaleficPlanetList(time);
+            var allMalefics = Calculate.MaleficPlanetList(time);
 
             //rahu & ketu are not included
             //TODO needs checking
@@ -2827,7 +2827,7 @@ namespace VedAstro.Library
 
                 //2. Jupiter is in Lagna
                 //get planets in lagna 
-                var currentPlanetsInLagna = Calculate.GetPlanetsInHouse(HouseName.House1, time);
+                var currentPlanetsInLagna = Calculate.PlanetsInHouse(HouseName.House1, time);
 
                 //check if jupiter is in lagna
                 var rightPlanet = currentPlanetsInLagna.Contains(PlanetName.Jupiter);
@@ -2907,7 +2907,7 @@ namespace VedAstro.Library
 
             //2. Planet is in Lagna
             //get planets in lagna 
-            var currentPlanetsInLagna = Calculate.GetPlanetsInHouse(HouseName.House1, time);
+            var currentPlanetsInLagna = Calculate.PlanetsInHouse(HouseName.House1, time);
 
             //check if correct planet is in lagna
             var rightPlanet = currentPlanetsInLagna.Contains(PlanetName.Venus);
@@ -2947,7 +2947,7 @@ namespace VedAstro.Library
 
             //2. Planet is in Lagna
             //get planets in lagna 
-            var currentPlanetsInLagna = Calculate.GetPlanetsInHouse(HouseName.House1, time);
+            var currentPlanetsInLagna = Calculate.PlanetsInHouse(HouseName.House1, time);
 
             //check if correct planet is in lagna
             var rightPlanet = currentPlanetsInLagna.Contains(PlanetName.Mars);
@@ -3300,7 +3300,7 @@ namespace VedAstro.Library
             //While beginning all agricultural operations, see that the 8th house is unoccupied
 
             //get all planets in 8th house
-            var planets = Calculate.GetPlanetsInHouse(HouseName.House8, time);
+            var planets = Calculate.PlanetsInHouse(HouseName.House8, time);
 
             //if any planets in 8th house, return occuring
             if (planets.Any())
@@ -3712,8 +3712,8 @@ namespace VedAstro.Library
                 //1. good aspect
                 //the goodness of the aspect received by Sun & Moon is 
                 //based on Drik Bala calculations (aspect strenght)
-                var sunAspectStrength = Calculate.GetPlanetDrikBala(PlanetName.Sun, time);
-                var moonAspectStrength = Calculate.GetPlanetDrikBala(PlanetName.Sun, time);
+                var sunAspectStrength = Calculate.PlanetDrikBala(PlanetName.Sun, time);
+                var moonAspectStrength = Calculate.PlanetDrikBala(PlanetName.Sun, time);
 
                 //Note: positive bala = positive aspect, negative bala = negative aspect
                 //if NOT postive number, end here as not good
@@ -3722,8 +3722,8 @@ namespace VedAstro.Library
 
                 //2. well situated
                 //based on Planet Sthana Bala (Positonal strength)
-                var sunPositionStrenght = Calculate.GetPlanetSthanaBala(PlanetName.Sun, time);
-                var moonPositionStrenght = Calculate.GetPlanetSthanaBala(PlanetName.Moon, time);
+                var sunPositionStrenght = Calculate.PlanetSthanaBala(PlanetName.Sun, time);
+                var moonPositionStrenght = Calculate.PlanetSthanaBala(PlanetName.Moon, time);
 
                 //Note: To determine if sthana bala is indicating good position or bad position
                 //a neutral point is set, anything above is good & below is bad
@@ -3749,7 +3749,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.SunIsStrong)]
         public static CalculatorResult IsSunIsStrongOccuring(Time time, Person person)
         {
-            var strongestPlanet = Calculate.GetAllPlanetOrderedByStrength(time)[0];
+            var strongestPlanet = Calculate.AllPlanetOrderedByStrength(time)[0];
             var occuring = strongestPlanet == PlanetName.Sun;
 
 
@@ -3759,7 +3759,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.MoonIsStrong)]
         public static CalculatorResult IsMoonIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Moon;
+            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Moon;
 
             //STRENGTH CALCULATION
 
@@ -3771,7 +3771,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.MarsIsStrong)]
         public static CalculatorResult IsMarsIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Mars;
+            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Mars;
 
 
             return new() { Occuring = occuring };
@@ -3780,7 +3780,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.MercuryIsStrong)]
         public static CalculatorResult IsMercuryIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Mercury;
+            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Mercury;
 
 
             return new() { Occuring = occuring };
@@ -3789,7 +3789,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.JupiterIsStrong)]
         public static CalculatorResult IsJupiterIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Jupiter;
+            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Jupiter;
 
             //STRENGTH CALCULATION
 
@@ -3801,7 +3801,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.VenusIsStrong)]
         public static CalculatorResult IsVenusIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Venus;
+            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Venus;
 
 
             return new() { Occuring = occuring };
@@ -3810,7 +3810,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.SaturnIsStrong)]
         public static CalculatorResult IsSaturnIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Saturn;
+            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Saturn;
 
 
 

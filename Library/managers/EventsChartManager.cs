@@ -368,7 +368,7 @@ namespace VedAstro.Library
         private static double GetPlanetPowerFactor(PlanetName valuePlanet, Time time)
         {
             //get all planet strength for given time (horoscope)
-            var list = Calculate.GetAllPlanetStrength(time);
+            var list = Calculate.AllPlanetStrength(time);
             //get the power of the planet inputed
             var planetPwr = list.FirstOrDefault(x => x.Item2 == valuePlanet).Item1;
 
@@ -1803,7 +1803,7 @@ namespace VedAstro.Library
             public static double StrongestPlanet(Event foundEvent, Person person)
             {
                 //get top planet
-                var topPlanet = Calculate.GetAllPlanetOrderedByStrength(person.BirthTime)[0];
+                var topPlanet = Calculate.AllPlanetOrderedByStrength(person.BirthTime)[0];
 
                 //get all planets in event, scan and give score
                 var planetNatureScore = 0.0;
@@ -1825,7 +1825,7 @@ namespace VedAstro.Library
             public static double WeakestPlanet(Event foundEvent, Person person)
             {
                 //get bottom planet
-                var bottomPlanet = Calculate.GetAllPlanetOrderedByStrength(person.BirthTime)[8];
+                var bottomPlanet = Calculate.AllPlanetOrderedByStrength(person.BirthTime)[8];
 
                 //get all planets in event, scan and give score
                 var planetNatureScore = 0.0;

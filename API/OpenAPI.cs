@@ -75,22 +75,23 @@ namespace API
 
         /// <summary>
         /// Backup function to catch invalid calls, say gracefully fails
+        /// NOTE: "z" in name needed to make as last API call, else will be called all the time
         /// </summary>
-  //      [Function(nameof(Catch404))]
-		//public static async Task<HttpResponseData> Catch404([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{*Catch404}")]
-		//	HttpRequestData incomingRequest,
-		//	string Catch404
-		//)
-		//{
-		//	var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
-	 //       return APITools.FailMessageJson(message, incomingRequest);
-		//}
+        [Function(nameof(zCatch404))]
+        public static async Task<HttpResponseData> zCatch404([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{*Catch404}")]
+            HttpRequestData incomingRequest,
+            string Catch404
+        )
+        {
+            var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
+            return APITools.FailMessageJson(message, incomingRequest);
+        }
 
 
-		/// <summary>
-		/// Reads URL data to instances  
-		/// </summary>
-		public static async Task<List<dynamic>> ParseUrlParameters(string fullParamString, List<Type> parameterTypes)
+        /// <summary>
+        /// Reads URL data to instances  
+        /// </summary>
+        public static async Task<List<dynamic>> ParseUrlParameters(string fullParamString, List<Type> parameterTypes)
 		{
 			//Based on the calculator method we prepare to cut the string into parameters as text
 

@@ -15,112 +15,111 @@
 
 @* id is set so can auto scroll by url *@
 <div id="APICallList">
-    <IconTitle IconSize="AppData.DefaultIconSize" Title="Browse Calls" IconName="fluent:line-horizontal-4-search-16-filled" TitleHolder="h4">
-        <ButtonRow>
-            <span style="font-size: 25px;">
-                Count : <strong>@MethodListFiltered.Count</strong>
-            </span>
-        </ButtonRow>
-    </IconTitle>
+	<IconTitle IconSize="AppData.DefaultIconSize" Title="Browse Calls" IconName="fluent:line-horizontal-4-search-16-filled" TitleHolder="h4">
+		<ButtonRow>
+			<span style="font-size: 25px;">
+				Count : <strong>@MethodListFiltered.Count</strong>
+			</span>
+		</ButtonRow>
+	</IconTitle>
 
-    @if (_isReady)
-    {
+	@if (_isReady)
+	{
 
-        <div class="vstack gap-1">
-            @* SEARCH *@
-            <div class="hstack gap-2">
-                <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
-            </div>
+		<div class="vstack gap-1">
+			@* SEARCH *@
+			<div class="hstack gap-2">
+				<input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+			</div>
 
-            @* METHOD DATA LIST *@
-            <div style="max-height: @GR.W667px; max-width: @GR.W764px; overflow-x: hidden; overflow-y: scroll;">
+			@* METHOD DATA LIST *@
+			<div style="max-height: @GR.W667px; max-width: @GR.W764px; overflow-x: hidden; overflow-y: scroll;">
 
-                @* LOADING ICON *@
-                @* loading icon when list is being made, no loading popup because reduces user UX *@
-                <div @ref="_loadingBox" style="display: none;">
-                    <div class="d-flex flex-column align-items-center mt-5">
-                        <strong>Loading...</strong>
-                        <div class="spinner-border" role="status" aria-hidden="true"></div>
-                    </div>
-                </div>
-                @* RESULTS HOLDER *@
-                <div @ref="_resultsBox" style="">
-                    @* list of method data *@
-                    @foreach (var methodData in MethodListFiltered)
-                    {
-                        <div class="card shadow mt-2">
-                            <div class="card-header d-flex justify-content-between">
-                                <h6 class="mb-0">
-                                    <IconText IconSize="42" FontSize="19" IconName="openmoji:european-name-badge">
-                                        @methodData.Name
-                                    </IconText>
-                                </h6>
-                                <IconButton TooltipText="Copy" IconName="carbon:link" OnClickCallback="@(()=>OnClickCopyAPI(methodData.Name))" SmallSize="true" />
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
+				@* LOADING ICON *@
+				@* loading icon when list is being made, no loading popup because reduces user UX *@
+				<div @ref="_loadingBox" style="display: none;">
+					<div class="d-flex flex-column align-items-center mt-5">
+						<strong>Loading...</strong>
+						<div class="spinner-border" role="status" aria-hidden="true"></div>
+					</div>
+				</div>
+				@* RESULTS HOLDER *@
+				<div @ref="_resultsBox" style="">
+					@* list of method data *@
+					@foreach (var methodData in MethodListFiltered)
+					{
+						<div class="card shadow mt-2">
+							<div class="card-header d-flex justify-content-between">
+								<h6 class="mb-0">
+									<IconText IconSize="42" FontSize="19" IconName="openmoji:european-name-badge">
+										@methodData.Name
+									</IconText>
+								</h6>
+								<IconButton TooltipText="Copy" IconName="carbon:link" OnClickCallback="@(()=>OnClickCopyAPI(methodData.Name))" SmallSize="true" />
+							</div>
+							<div class="card-body">
+								<div class="d-flex justify-content-between">
 
-                                    @* DESCRIPTION *@
-                                    <div style="max-width: @GR.W412px;">
-                                        <div class="vstack gap-3">
+									@* DESCRIPTION *@
+									<div style="max-width: @GR.W412px;">
+										<div class="vstack gap-3">
+											@* INPUT TYPE *@
+											<div class="hstack gap-2">
+												<IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="mdi:input">Input </IconText>
+												@{
+													var temp = methodData.ParamTypeList.Select(x => x.Name).ToArray();
+												}
+												<div class="hstack gap-3">
+													@for (var indexParamColor = 0; indexParamColor < temp.Length; indexParamColor++)
+													{
+														var paramTypeName = temp[indexParamColor];
+														var paramColor = ParamColor[indexParamColor]; //color based on number of param, to make each param look different
+														<span style="font-weight: 800; color: @paramColor">@paramTypeName,</span>
+													}
+												</div>
+											</div>
+											@* DESCRIPTION  TEXT*@
+											<div class="hstack gap-2">
+												<IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="dashicons:text">Description </IconText>
+												<span style="">@methodData.Description</span>
+											</div>
+											@* OUTPUT RETURN TYPE *@
+											<div class="hstack gap-2">
+												<IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="ph:terminal-fill">Output </IconText>
+												<span style="font-weight: 800; color: @ParamColor[2]">@methodData.ReturnType</span>
+											</div>
+										</div>
+									</div>
 
-	                                        @* INPUT TYPE *@
-	                                        <div class="hstack gap-2">
-		                                        <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="mdi:input">Input </IconText>
-		                                        @{
-			                                        var temp = methodData.ParamTypeList.Select(x=>x.Name).ToArray();
-		                                        }
-		                                        <div class="hstack gap-3">
-			                                        @for (var indexParamColor = 0; indexParamColor < temp.Length; indexParamColor++)
-			                                        {
-				                                        var paramTypeName = temp[indexParamColor];
-				                                        var paramColor = ParamColor[indexParamColor]; //color based on number of param, to make each param look different
-				                                        <span style="font-weight: 800; color: @paramColor">@paramTypeName,</span>
-			                                        }
-		                                        </div>
-	                                        </div>
-                                            @* DESCRIPTION  TEXT*@
-                                            <div class="hstack gap-2">
-                                                <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="dashicons:text">Description </IconText>
-                                                <span style="">@methodData.Description</span>
-                                            </div>
-                                            @* OUTPUT RETURN TYPE *@
-                                            <div class="hstack gap-2">
-                                                <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="ph:terminal-fill">Output </IconText>
-                                                <span style="font-weight: 800; color: @ParamColor[2]">@methodData.ReturnType</span>
-                                            </div>
-                                        </div>
-                                    </div>
+									@* CALL & COPY BUTTONS *@
+									<div>
+										<div class="vstack gap-2">
+											<IconButton FullWidth="true" ButtonText="Python" TooltipText="Copy Python Snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(methodData.Name))" SmallSize="true" />
+											<IconButton FullWidth="true" ButtonText="Test" Color="success" IconName="ph:phone-call-light" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" SmallSize="true"/>
+											<IconButton FullWidth="true" ButtonText="Code" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" SmallSize="true"/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
 
-                                    @* CALL & COPY BUTTONS *@
-                                    <div>
-                                        <div class="vstack gap-2">
-                                            <IconButton FullWidth="true" Color="success" IconName="ph:phone-call-light" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" ButtonText="Test" SmallSize="true" />
-                                            <IconButton FullWidth="true" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" ButtonText="Code" SmallSize="true" />
-                                            <IconButton FullWidth="true" IconName="clarity:bug-line" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" ButtonText="Bug" SmallSize="true" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
+				</div>
 
-                </div>
+			</div>
+		</div>
+	}
 
-            </div>
-        </div>
-    }
-
-    <hr />
+	<hr />
 </div>
 @code {
 
-    /// <summary>
-    /// Unique colors to id different params
-    /// </summary>
-    private static Dictionary<int, string> ParamColor = new Dictionary<int, string>
-    {
-        { 0, "#FF6EC7" }, // Neon Pink
+	/// <summary>
+	/// Unique colors to id different params
+	/// </summary>
+	private static Dictionary<int, string> ParamColor = new Dictionary<int, string>
+	{
+		{ 0, "#FF6EC7" }, // Neon Pink
         { 1, "#4D4DFF" }, // Neon Blue
         { 2, "#39FF14" }, // Neon Green
         { 3, "#FFFF00" }, // Neon Yellow
@@ -133,126 +132,127 @@
     };
 
 
-    private ElementReference _searchInput;
-    private ElementReference _resultsBox;
-    private ElementReference _loadingBox;
+	private ElementReference _searchInput;
+	private ElementReference _resultsBox;
+	private ElementReference _loadingBox;
 
 
-    /// <summary>
-    /// list that is shown to user and is changed by search
-    /// </summary>
-    private List<AutoCalculator.APICallData> MethodListFiltered { get; set; } = new List<AutoCalculator.APICallData>();
+	/// <summary>
+	/// list that is shown to user and is changed by search
+	/// </summary>
+	private List<AutoCalculator.APICallData> MethodListFiltered { get; set; } = new List<AutoCalculator.APICallData>();
 
-    private List<AutoCalculator.APICallData> MethodListALL = new List<AutoCalculator.APICallData>();
+	private List<AutoCalculator.APICallData> MethodListALL = new List<AutoCalculator.APICallData>();
 
-    /// <summary>
-    /// extracted search text for faster search
-    /// </summary>
-    private string[] MethodListALLSearchText;
+	/// <summary>
+	/// extracted search text for faster search
+	/// </summary>
+	private string[] MethodListALLSearchText;
 
-    /// <summary>
-    /// Hide on default till all ready to show
-    /// </summary>
-    private bool _isReady = false;
+	/// <summary>
+	/// Hide on default till all ready to show
+	/// </summary>
+	private bool _isReady = false;
 
-    private bool _showLoading = false;
-
-
-
-    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
-    protected override async Task OnInitializedAsync()
-    {
-        //hide display
-        await _jsRuntime.ShowLoading();
-        _isReady = false;
-
-        var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
-
-        //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
-        MethodListALL = AutoCalculator.APICallData.FromMethodInfoList(allApiCalculatorsMethodInfo);
-        MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
-
-        //make copy for search
-        MethodListFiltered = MethodListALL;
-
-        //show data on display
-        _isReady = true;
-        _jsRuntime.HideAlert();
-    }
-
-    /// <summary>
-    /// This delay helps to wait for user to finish typing before starting to render list
-    /// reduces lag and makes for better UX
-    /// </summary>
-    private static System.Timers.Timer _onKeyUpWaitTimer = new(3000);
+	private bool _showLoading = false;
 
 
-    bool searchIsRunning = false;
 
-    /// <summary>
-    /// Handle when user uses the Search
-    /// </summary>
-    private async Task OnKeyUpSearchBar()
-    {
-        if (!searchIsRunning)
-        {
-            searchIsRunning = true;
-            _jsRuntime.Show(_loadingBox);
-            _jsRuntime.Hide(_resultsBox);
+	//█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+	//█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-            //effectively giving user time to press button before auto search begins
-            //restart timer count on every press
-            _onKeyUpWaitTimer.Stop();
-            _onKeyUpWaitTimer.Start();
-            _onKeyUpWaitTimer.Elapsed += async (sender, args) =>
-            {
-                _onKeyUpWaitTimer.Stop();
+	protected override async Task OnInitializedAsync()
+	{
+		//hide display
+		await _jsRuntime.ShowLoading();
+		_isReady = false;
 
-                //get search text, lower case for more results
-                var searchText = (await _jsRuntime.GetValue(_searchInput)).ToLower();
+		var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
 
-                //if no search text then show all
-                if (string.IsNullOrEmpty(searchText))
-                {
-                    MethodListFiltered = MethodListALL;
-                }
-                else
-                {
+		//NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
+		MethodListALL = AutoCalculator.APICallData.FromMethodInfoList(allApiCalculatorsMethodInfo);
+		MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
 
-                    var results = Process.ExtractAll(searchText, MethodListALLSearchText, cutoff: 60).OrderByDescending(r => r.Score); ;
+		//make copy for search
+		MethodListFiltered = MethodListALL;
 
-                    foreach (var result in results)
-                    {
-                        Console.WriteLine($" Score: {result.Score}, Index: {result.Index}, Choice: {result.Value}");
-                    }
+		//show data on display
+		_isReady = true;
+		_jsRuntime.HideAlert();
+	}
 
-                    MethodListFiltered = results.Select(yy => MethodListALL[yy.Index]).ToList();
-                }
-
-                // User has stopped typing, perform your action here
-                await InvokeAsync(StateHasChanged); // To refresh the UI
-
-                _jsRuntime.Hide(_loadingBox);
-                _jsRuntime.Show(_resultsBox);
-
-                searchIsRunning = false;
-            };
-
-        }
+	/// <summary>
+	/// This delay helps to wait for user to finish typing before starting to render list
+	/// reduces lag and makes for better UX
+	/// </summary>
+	private static System.Timers.Timer _onKeyUpWaitTimer = new(3000);
 
 
-    }
+	bool searchIsRunning = false;
+
+	/// <summary>
+	/// Handle when user uses the Search
+	/// </summary>
+	private async Task OnKeyUpSearchBar()
+	{
+		if (!searchIsRunning)
+		{
+			searchIsRunning = true;
+			_jsRuntime.Show(_loadingBox);
+			_jsRuntime.Hide(_resultsBox);
+
+			//effectively giving user time to press button before auto search begins
+			//restart timer count on every press
+			_onKeyUpWaitTimer.Stop();
+			_onKeyUpWaitTimer.Start();
+			_onKeyUpWaitTimer.Elapsed += async (sender, args) =>
+			{
+				_onKeyUpWaitTimer.Stop();
+
+				//get search text, lower case for more results
+				var searchText = (await _jsRuntime.GetValue(_searchInput)).ToLower();
+
+				//if no search text then show all
+				if (string.IsNullOrEmpty(searchText))
+				{
+					MethodListFiltered = MethodListALL;
+				}
+				else
+				{
+
+					var results = Process.ExtractAll(searchText, MethodListALLSearchText, cutoff: 60).OrderByDescending(r => r.Score); ;
+
+					foreach (var result in results)
+					{
+						Console.WriteLine($" Score: {result.Score}, Index: {result.Index}, Choice: {result.Value}");
+					}
+
+					MethodListFiltered = results.Select(yy => MethodListALL[yy.Index]).ToList();
+				}
+
+				// User has stopped typing, perform your action here
+				await InvokeAsync(StateHasChanged); // To refresh the UI
+
+				_jsRuntime.Hide(_loadingBox);
+				_jsRuntime.Show(_resultsBox);
+
+				searchIsRunning = false;
+			};
+
+		}
 
 
-    private async Task OnClickCopyAPI(string methodDataName)
-    {
-        //use js to transfer to clipboard
-        await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, methodDataName);
+	}
 
-        //let user know link copied
-        await _jsRuntime.ShowAlert("success", $"Call Name Copied!", false, 2600);
-    }
+	private async Task OnClickCopyAPI(string methodDataName)
+	{
+		//use js to transfer to clipboard
+		await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, methodDataName);
+
+		//let user know link copied
+		await _jsRuntime.ShowAlert("success", $"Call Name Copied!", false, 2600);
+	}
+
+	
 
 }

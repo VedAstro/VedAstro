@@ -210,15 +210,14 @@ namespace VedAstro.Library
         /// important is to always have some location for app to use
         /// </summary>
         /// <returns></returns>
-        public static async Task<GeoLocation> FromIpAddress()
+        public static async Task<GeoLocation> FromIpAddress(string apiKey)
         {
             try
             {
                 //get only coordinates 1st
-                dynamic coordinates = await GetLocationFromIpAddressGoogle();
+                dynamic coordinates = await GetLocationFromIpAddressGoogle(apiKey);
 
                 //get name from coordinates
-                var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
                 var urlReverse = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={coordinates.Latitude},{coordinates.Longitude}&key={apiKey}";
                 var resultString2 = await Tools.WriteServer(HttpMethod.Post, urlReverse);
                 //var parsed2 = JObject.Parse(resultString2);
@@ -249,11 +248,8 @@ namespace VedAstro.Library
         /// Will get longitude and latitude from IP using google API
         /// </summary>
         /// <returns></returns>
-        private static async Task<object> GetLocationFromIpAddressGoogle()
+        private static async Task<object> GetLocationFromIpAddressGoogle(string apiKey)
         {
-
-            var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
-
             var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={apiKey}";
             var resultString = await Tools.WriteServer(HttpMethod.Post, url);
 

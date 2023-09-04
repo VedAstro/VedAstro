@@ -127,12 +127,13 @@ public static class APILogger
         var url = httpRequestData?.Url.ToString() ?? "no URL";
 
 		//set the call as running
-		OpenAPILogBookEntity customerEntity = new OpenAPILogBookEntity()
+		var customerEntity = new OpenAPILogBookEntity()
         {
             //can have many IP as partition key
 	        PartitionKey = ip,
 	        RowKey = Tools.GenerateId(),
-	        URL = url
+	        URL = url,
+            Timestamp = DateTimeOffset.UtcNow //utc used later to check for overload control
         };
 
         //creates record if no exist, update if already there

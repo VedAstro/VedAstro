@@ -108,7 +108,8 @@ public class URL
     public readonly string DeleteVisitorByVisitorId;
     public readonly string AddTaskApi;
     public readonly string AddVisitorApi;
-    public static readonly string AddVisitorApiStable = "https://api.vedastro.org/addvisitor";
+    public static readonly string AddVisitorApiStable = $"{ApiStable}/addvisitor";
+    public static readonly string AddressToGeoLocationAPIStable = $"{ApiStable}/AddressToGeoLocation";
 
     //MATCH
     public readonly string GetSavedMatchReport;

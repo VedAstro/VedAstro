@@ -1071,6 +1071,8 @@ namespace VedAstro.Library
                     //OPTION 1 : xml with VedAstro standard reply
                     var parsedXml = XElement.Parse(inputRawString);
                     var returnVal = WebResult<XElement>.FromXml(parsedXml);
+                    //if can't parse, raise exception so can check other methods
+                    if (!returnVal.IsPass) { throw new InvalidOperationException(); }
                     return returnVal;
                 }
                 catch (Exception e1)

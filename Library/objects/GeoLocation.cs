@@ -215,20 +215,10 @@ namespace VedAstro.Library
             try
             {
                 //get only coordinates 1st
-                dynamic coordinates = await GetLocationFromIpAddressGoogle(apiKey);
+                var coordinates = await GetCoordinatesFromIpAddressGoogle(apiKey);
 
                 //get name from coordinates
-                var urlReverse = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={coordinates.Latitude},{coordinates.Longitude}&key={apiKey}";
-                var resultString2 = await Tools.WriteServer(HttpMethod.Post, urlReverse);
-                //var parsed2 = JObject.Parse(resultString2);
-                var resultsJson = resultString2["results"][0];
-
-                var locationNameLong = resultsJson["formatted_address"].Value<string>();
-                var splitted = locationNameLong.Split(',');
-                //keep only the last parts, country, state...
-                var newLocationName = $"{splitted[splitted.Length - 3]},{splitted[splitted.Length - 2]},{splitted[splitted.Length - 1]}";
-
-                var fromIpAddress = new GeoLocation(newLocationName, coordinates.Longitude, coordinates.Latitude);
+                var fromIpAddress = await CoordinatesToGeoLocation(coordinates.Latitude(), coordinates.Longitude());
 
                 //new geo location from the depths
                 return fromIpAddress;
@@ -244,11 +234,27 @@ namespace VedAstro.Library
             }
         }
 
+
+
+        public static async Task<GeoLocation> CoordinatesToGeoLocation(double latitude, double longitude)
+        {
+            //get from API
+            var url = URL.CoordinatesToGeoLocationAPIStable + $"/Latitude/{latitude}/Longitude/{longitude}";
+            var webResult = await Tools.ReadFromServerXmlReply(url);
+
+            //convert
+            var parsed = GeoLocation.FromXml(webResult.Payload);
+
+            return parsed;
+        }
+
+
         /// <summary>
         /// Will get longitude and latitude from IP using google API
+        /// NOTE: The only place so far Google API outside VedAstro API
         /// </summary>
         /// <returns></returns>
-        private static async Task<object> GetLocationFromIpAddressGoogle(string apiKey)
+        private static async Task<GeoLocation> GetCoordinatesFromIpAddressGoogle(string apiKey)
         {
             var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={apiKey}";
             var resultString = await Tools.WriteServer(HttpMethod.Post, url);
@@ -257,11 +263,7 @@ namespace VedAstro.Library
             var rawLat = resultString["location"]["lat"].Value<double>();
             var rawLong = resultString["location"]["lng"].Value<double>();
 
-            var result = new
-            {
-                Latitude = rawLat,
-                Longitude = rawLong,
-            };
+            var result = new GeoLocation("", rawLong, rawLat);
 
             return result;
         }

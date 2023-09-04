@@ -110,6 +110,7 @@ public class URL
     public readonly string AddVisitorApi;
     public static readonly string AddVisitorApiStable = $"{ApiStable}/addvisitor";
     public static readonly string AddressToGeoLocationAPIStable = $"{ApiStable}/AddressToGeoLocation";
+    public static readonly string CoordinatesToGeoLocationAPIStable = $"{ApiStable}/CoordinatesToGeoLocation";
 
     //MATCH
     public readonly string GetSavedMatchReport;

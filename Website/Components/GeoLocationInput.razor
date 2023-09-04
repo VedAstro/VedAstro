@@ -239,7 +239,9 @@
         var results = await Tools.AddressToGeoLocation(LocationName);
 
         //if fail, show message -> set default country -> try again
-        if (!results.IsPass)
+	    var isEmpty = results.Payload.Name() == GeoLocation.Empty.Name();
+	    var failedCall = !results.IsPass;
+	    if (failedCall || isEmpty)
         {
             //alert user first with the wrong name
             var msg = $"The location \"{LocationName}\", not found!" +

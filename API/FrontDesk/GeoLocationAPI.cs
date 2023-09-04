@@ -128,7 +128,27 @@ namespace API
 
 
 
-        //---------------------------------------------------------------
+        //----------------------------------PRIVATE FUNCS-----------------------------
+        
+        /// <summary>
+        /// Will add new cache to Geo Location Cache
+        /// </summary>
+        private static void AddToCache(GeoLocation parsedGeoLocation, string dateTimeTimezoneTicks = "", string timezone = "")
+        {
+            //package the data
+            GeoLocationCacheEntity customerEntity = new GeoLocationCacheEntity()
+            {
+                PartitionKey = parsedGeoLocation.Name(),
+                RowKey = dateTimeTimezoneTicks,
+                Timezone = timezone,
+                Latitude = parsedGeoLocation.Latitude(),
+                Longitude = parsedGeoLocation.Longitude()
+            };
+
+            //creates record if no exist, update if already there
+            tableClient.UpsertEntity(customerEntity);
+        }
+
         private static async Task<string> GeoLocationToTimezone_Vedastro(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
 
@@ -195,25 +215,6 @@ namespace API
             returnResult.Payload = Tools.TimeSpanToUTCTimezoneString(offsetMinutes);
             return returnResult.Payload;
 
-        }
-
-        /// <summary>
-        /// Will add new cache to Geo Location Cache
-        /// </summary>
-        private static void AddToCache(GeoLocation parsedGeoLocation, string dateTimeTimezoneTicks = "", string timezone = "")
-        {
-            //package the data
-            GeoLocationCacheEntity customerEntity = new GeoLocationCacheEntity()
-            {
-                PartitionKey = parsedGeoLocation.Name(),
-                RowKey = dateTimeTimezoneTicks,
-                Timezone = timezone,
-                Latitude = parsedGeoLocation.Latitude(),
-                Longitude = parsedGeoLocation.Longitude()
-            };
-
-            //creates record if no exist, update if already there
-            tableClient.UpsertEntity(customerEntity);
         }
 
         /// <summary>

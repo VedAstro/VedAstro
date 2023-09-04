@@ -28,7 +28,7 @@
 	TypeSpecificInput param2;
 	TypeSpecificInput param3;
 	TypeSpecificInput param4;
-	List<TypeSpecificInput> paramList ;
+	List<TypeSpecificInput> paramList;
 
 
 	protected async override Task OnAfterRenderAsync(bool firstRender)
@@ -37,7 +37,7 @@
 		{
 			paramList = new() { param1, param2, param3, param4 };
 		}
-		
+
 	}
 
 	public void Show(List<Type> paramTypeList)
@@ -68,6 +68,23 @@
 
 		return compiledUrl;
 
+	}
+
+	/// <summary>
+	/// Check if all fields has been filled
+	/// </summary>
+	/// <returns></returns>
+	public async Task<bool> IsValidationPassed()
+	{
+		//TEST 1 :
+		foreach (var typeSpecificInput in paramList)
+		{
+			var isValid = await typeSpecificInput.IsValidationPassed(); //will raise own error
+			if (!isValid) { return false; }
+		}
+
+		//if control reaches here than, it's valid
+		return true;
 	}
 
 }

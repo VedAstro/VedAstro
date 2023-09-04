@@ -90,4 +90,33 @@
 		return combinedUrl;
 	}
 
+	/// <summary>
+	/// Check if all fields has been filled
+	/// </summary>
+	/// <returns></returns>
+	public async Task<bool> IsValidationPassed()
+	{
+		//TEST 1 : ENUM
+		var isNotSelected = string.IsNullOrEmpty(_inputEnumName);
+		if (_apiCallData.IsEnum & isNotSelected)
+		{
+			//mark invalid & alert user
+			await _jsRuntime.ShowAlert("error", $"Please select a {_apiCallData.Name} first!", true);
+			return false;
+		}
+
+
+		//TEST 2 : PLANET NAME
+		isNotSelected = string.IsNullOrEmpty(_inputPlanetName);
+		if (_apiCallData == typeof(PlanetName) & isNotSelected)
+		{
+			//mark invalid & alert user
+			await _jsRuntime.ShowAlert("error", $"Please select a Planet first!", true);
+			return false;
+		}
+
+
+		//if control reaches here than, it's valid
+		return true;
+	}
 }

@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Azure;
 using Azure.Data.Tables;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -139,4 +140,17 @@ public static class APILogger
 
         return customerEntity;
 	}
+
+    /// <summary>
+    /// Given an IP address, will return number of calls made in the last specified time period
+    /// </summary>
+    public static int GetAllCallsWithinLastTimeperiod(string ipAddress, double timeMinute)
+    {
+		//get all IP address records in the last specified time period
+		DateTimeOffset aMomentAgo = DateTimeOffset.UtcNow.AddMinutes(-timeMinute);
+		Pageable<OpenAPILogBookEntity> linqEntities = tableClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == ipAddress && call.Timestamp >= aMomentAgo);
+
+        //return the number of last calls found
+		return linqEntities.Count();
+    }
 }

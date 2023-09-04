@@ -11,6 +11,7 @@ namespace VedAstro.Library
         public static string? AutoEmailerConnectString => Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
         public static string? VedAstroApiStorageKey => Environment.GetEnvironmentVariable("VedAstroApiStorageKey"); //vedastro-api-data
         public static string? API_STORAGE => Environment.GetEnvironmentVariable("API_STORAGE");
+        public static string? OpenAPICallDelayMs => Environment.GetEnvironmentVariable("OpenAPICallDelayMs");
         public static string? BING_IMAGE_SEARCH => Environment.GetEnvironmentVariable("BING_IMAGE_SEARCH");
         public static string? WEB_STORAGE => Environment.GetEnvironmentVariable("WEB_STORAGE");
         public static string? EnableCache => Environment.GetEnvironmentVariable("EnableCache");

@@ -28,9 +28,8 @@ namespace API
         {
             try
             {
-                //0 : LOG CALL
-                //log ip address, call time and URL
-                var call = APILogger.OpenApiCall(incomingRequest);
+                //0 : LOG CALL : used later for throttle limit
+                var callLog = APILogger.OpenApiCall(incomingRequest);
 
                 //1 : GET INPUT DATA
                 var calculator = Tools.MethodNameToMethodInfo(calculatorName); //get calculator name
@@ -59,7 +58,7 @@ namespace API
                 var rawPlanetData = calculator?.Invoke(null, parsedParamList.ToArray()); ;
 
                 //4 : OVERLOAD LIMIT
-                await Task.Delay(1000);
+                await APITools.AutoControlOpenAPIOverload(callLog);
 
                 //4 : CONVERT TO JSON
                 var payloadJson = Tools.AnyToJSON(calculatorName, rawPlanetData); //use calculator name as key
@@ -87,7 +86,11 @@ namespace API
             string Catch404
         )
         {
-            var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
+	        //0 : LOG CALL
+	        //log ip address, call time and URL
+	        var call = APILogger.OpenApiCall(incomingRequest);
+
+			var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
             return APITools.FailMessageJson(message, incomingRequest);
         }
 

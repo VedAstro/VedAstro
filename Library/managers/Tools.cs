@@ -952,7 +952,8 @@ namespace VedAstro.Library
         {
             //get location data from VedAstro API
             var timePackage = new Time(timeAtLocation, geoLocation);
-            var webResult = await Tools.ReadFromServerXmlReply(URL.GeoLocationToTimezoneAPIStable + timePackage.ToUrl());
+            var url = URL.GeoLocationToTimezoneAPIStable + timePackage.ToUrl();
+            var webResult = await Tools.ReadFromServerXmlReply(url);
 
             //if fail to make call, end here
             if (!webResult.IsPass) { return new WebResult<string>(false, ""); }

@@ -481,18 +481,23 @@ namespace VedAstro.Library
         /// <summary>
         /// Output TIME only for URL format
         /// time converted to the format used in OPEN API url
-        /// 00:00/01/01/2011/+08:00
+        /// /Location/London/Time/00:00/01/01/2011/+08:00
         /// </summary>
         public string ToUrl()
         {
+            var stringWithSpace = this.GetGeoLocation().Name();
+            var locationName = Tools.RemoveWhiteSpace(stringWithSpace);
+
             //reconstruct into URL pattern
             //00:00/22/05/2023/+08:00
             var returnVal = this.GetStdDateTimeOffsetText(); //date time with space
 
             //replace spacing between to slash, presto done!
-            var formatted = returnVal.Replace(" ", "/");
+            var formattedTime = returnVal.Replace(" ", "/");
 
-            return formatted;
+            var finalUrl = $"/Location/{locationName}/Time/{formattedTime}";
+
+            return finalUrl;
         }
 
 

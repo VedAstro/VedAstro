@@ -33,81 +33,10 @@ namespace Website
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
 
-            //send request to API server
-            var result = await RequestServer(apiUrl);
-
-            //get raw reply from the server response
-            var rawMessage = await result.Content?.ReadAsStringAsync() ?? "";
-
-            //only good reply from server is accepted, anything else is marked invalid
-            //stops invalid replies from being passed as valid
-            if (!result.IsSuccessStatusCode) { return new WebResult<XElement>(false, new("RawErrorData", rawMessage)); }
-
-            //tries to parse the raw data received into XML or JSON
-            //if all fail will return raw data with fail status
-            var parsed = ParseData(rawMessage);
-
+            var parsed = await Tools.ReadFromServerXmlReply(apiUrl, rootElementName);
 
             return parsed;
 
-
-            //----------------------------------------------------------
-            // FUNCTIONS
-
-            WebResult<XElement> ParseData(string inputRawString)
-            {
-                var exceptionList = new List<Exception>();
-
-                try
-                {
-                    //OPTION 1 : xml with VedAstro standard reply
-                    var parsedXml = XElement.Parse(inputRawString);
-                    var returnVal = WebResult<XElement>.FromXml(parsedXml);
-                    return returnVal;
-                }
-                catch (Exception e1)
-                {
-                    try
-                    {
-                        //OPTION 2 : xml 3rd party reply (google)
-                        var parsedXml = XElement.Parse(inputRawString);
-                        return new WebResult<XElement>(true, parsedXml);
-                    }
-                    catch (Exception e2) { exceptionList.Add(e2); }
-
-                    try
-                    {
-                        //OPTION 3 : json 3rd party reply
-                        var parsedJson = JsonConvert.DeserializeXmlNode(inputRawString, "LocationData");
-                        var wrappedXml = XElement.Parse(parsedJson.InnerXml); //expected to fail if not right
-                        return new WebResult<XElement>(true, wrappedXml);
-                    }
-                    catch (Exception e3) { exceptionList.Add(e3); } //if fail just void print
-
-                    exceptionList.Add(e1);
-
-                    //send all exception data to server
-                    foreach (var exception in exceptionList) { WebLogger.Error(exception, inputRawString); }
-
-                    //if control reaches here all has failed
-                    return new WebResult<XElement>(false, new XElement("Failed"));
-                }
-            }
-
-            async Task<HttpResponseMessage> RequestServer(string receiverAddress)
-            {
-                //prepare the data to be sent
-                var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, receiverAddress);
-
-                //tell sender to wait for complete reply before exiting
-                var waitForContent = HttpCompletionOption.ResponseContentRead;
-
-                //send the data on its way
-                var response = await AppData.HttpClient.SendAsync(httpRequestMessage, waitForContent);
-
-                //return the raw reply to caller
-                return response;
-            }
         }
 
         /// <summary>

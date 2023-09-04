@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Azure.Data.Tables;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker.Http;
 
@@ -16,15 +17,31 @@ public static class APILogger
     private static readonly XElement SourceXml = new("Source", "APILogger");
     private static XElement BranchXml = new XElement("Branch", ThisAssembly.Version);
 
+    private static readonly TableClient tableClient;
+    private static readonly TableServiceClient tableServiceClient;
+    private static string tableName = "OpenAPILogBook";
+
+	static APILogger()
+    {
+	    //todo cleanup
+	    var storageUri = $"https://vedastroapistorage.table.core.windows.net/{tableName}";
+	    string accountName = "vedastroapistorage";
+	    string storageAccountKey = Secrets.VedAstroApiStorageKey;
+
+	    //save reference for late use
+	    tableServiceClient = new TableServiceClient(new Uri(storageUri), new TableSharedKeyCredential(accountName, storageAccountKey));
+	    tableClient = tableServiceClient.GetTableClient(tableName);
+
+    }
 
 
-    //PUBLIC FUNCTIONS
+	//PUBLIC FUNCTIONS
 
-    /// <summary>
-    /// Logs an error directly to AppLog.xml
-    /// note: request can be null
-    /// </summary>
-    public static async Task Error(Exception exception, HttpRequestData req = null)
+	/// <summary>
+	/// Logs an error directly to AppLog.xml
+	/// note: request can be null
+	/// </summary>
+	public static async Task Error(Exception exception, HttpRequestData req = null)
     {
 
         //add error data to main app log file
@@ -99,7 +116,10 @@ public static class APILogger
     //PRIVATE FUNCTIONS
 
 
-    public static object OpenApiCall(HttpRequestData httpRequestData)
+    /// <summary>
+    /// Adds a row to open api log book, with ip address & call url
+    /// </summary>
+    public static OpenAPILogBookEntity OpenApiCall(HttpRequestData httpRequestData)
     {
         //var get ip address
         var ip = httpRequestData?.GetCallerIp()?.ToString() ?? "no ip";
@@ -111,10 +131,12 @@ public static class APILogger
             //can have many IP as partition key
 	        PartitionKey = ip,
 	        RowKey = Tools.GenerateId(),
-	        IsRunning = true
+	        URL = url
         };
 
         //creates record if no exist, update if already there
         tableClient.UpsertEntity(customerEntity);
+
+        return customerEntity;
 	}
 }

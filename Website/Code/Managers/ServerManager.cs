@@ -16,10 +16,6 @@ namespace Website
     public static class ServerManager
     {
 
-        //TODO HIDE API
-        public const string GoogleGeoLocationApiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
-
-
         //PUBLIC METHODS
 
         /// <summary>

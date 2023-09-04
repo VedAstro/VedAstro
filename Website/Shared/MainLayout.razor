@@ -189,7 +189,8 @@
 
 
         //get location from IP (uses browser cache if any else google API)
-        AppData.ClientLocation = await WebsiteTools.GetClientLocation();
+	    var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE"; 
+        AppData.ClientLocation = await WebsiteTools.GetClientLocation(apiKey);
 
         //log it
         WebLogger.Data(AppData.ClientLocation.ToString());

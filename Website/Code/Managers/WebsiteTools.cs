@@ -578,7 +578,8 @@ namespace Website
             //no cache, call Google API with IP
             else
             {
-                parsedLocation = await GeoLocation.FromIpAddress();
+	            var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE"; //todo clean up
+				parsedLocation = await GeoLocation.FromIpAddress(apiKey);
                 //save for future use
                 await AppData.JsRuntime.SetProperty("ClientLocation", parsedLocation.ToXml().ToString());
             }
@@ -586,6 +587,21 @@ namespace Website
             Console.WriteLine($"Client Location:{parsedLocation.Name()}");
 
             return parsedLocation;
+        }
+
+        public async static Task OnClickCopyPythonSnippet(string methodName)
+        {
+	        var pythonCode =
+		        $@"
+				calcResult = VedAstro.Calculate.{methodName}(...)
+			";
+
+	        //use js to transfer to clipboard
+	        await AppData.JsRuntime.InvokeVoidAsync(JS.CopyToClipboard, methodName);
+
+	        //let user know link copied
+	        await AppData.JsRuntime.ShowAlert("success", $"Python snippet copied. Remember to run \"pip install vedastro\"", false, 2600);
+
         }
     }
 }

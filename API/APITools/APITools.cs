@@ -1064,6 +1064,7 @@ namespace API
 			var ipAddress = callData.PartitionKey;
 			var lastCallsCount = APILogger.GetAllCallsWithinLastTimeperiod(ipAddress, minute1);
 
+			//rate set in runtime settings is multiplied
 			var msDelayRate = int.Parse(Secrets.OpenAPICallDelayMs);
 
 			//every additional call within specified time limit gets slowed accordingly
@@ -1071,7 +1072,7 @@ namespace API
 			var msDelay = lastCallsCount * msDelayRate;
 
 			//if delay applied then let caller know
-			if (msDelay > 0) { APITools.ApiExtraNote = "Sorry too many calls on FREE package, Please donate to increase limit"; }
+			if (msDelay > 1) { APITools.ApiExtraNote = "Call Slowed down. Sorry too many calls on FREE package. Please donate to increase limit"; }
 
 			await Task.Delay(msDelay);
 

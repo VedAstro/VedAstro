@@ -884,30 +884,21 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {
-            //if null or empty turn back as nothing
-            if (string.IsNullOrEmpty(address)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
-
-            //create the request url for Google API
-            var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
-            var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={apiKey}&address={Uri.EscapeDataString(address)}&sensor=false";
-
-            //get location data from GoogleAPI
-            var webResult = await ReadFromServerXmlReply(url);
+            //get location data from VedAstro API
+            var webResult = await Tools.ReadFromServerXmlReply(URL.AddressToGeoLocationAPIStable + $"/{address}");
 
             //if fail to make call, end here
             if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
 
             //if success, get the reply data out
             var geocodeResponseXml = webResult.Payload;
-            var resultXml = geocodeResponseXml.Element("result");
-            var statusXml = geocodeResponseXml.Element("status");
+            var parsed = GeoLocation.FromXml(geocodeResponseXml);
 
-#if DEBUG
-            //DEBUG
-            Console.WriteLine(geocodeResponseXml.ToString());
-#endif
-
+            //return to caller pass
+            return new WebResult<GeoLocation>(true, parsed);
         }
+
+
 
         /// <summary>
         /// gets the name of the place given th coordinates, uses Google API
@@ -953,11 +944,11 @@ namespace VedAstro.Library
             return await GetTimezoneOffsetApi(geoLocation, timeAtLocation, apiKey);
         }
 
-        public static async Task<string> GetTimezoneOffsetString(string location, string dateTime)
+        public static async Task<string> GetTimezoneOffsetString(string location, string dateTime, string apiKey)
         {
             //get timezone from Google API
             var lifeEvtTimeNoTimezone = DateTime.ParseExact(dateTime, Time.DateTimeFormatNoTimezone, null);
-            var timezone = await Tools.GetTimezoneOffsetString(location, lifeEvtTimeNoTimezone, "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE");
+            var timezone = await Tools.GetTimezoneOffsetString(location, lifeEvtTimeNoTimezone, apiKey);
 
             return timezone;
 

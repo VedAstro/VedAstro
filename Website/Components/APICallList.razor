@@ -64,20 +64,21 @@
                                     <div style="max-width: @GR.W412px;">
                                         <div class="vstack gap-3">
 
-                                            <div class="hstack gap-2">
-                                                <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="mdi:input">Input </IconText>
-                                                @{
-                                                    var temp = methodData.ParamTypeList;
-                                                }
-                                                <div class="hstack gap-3">
-                                                    @for (var indexParamColor = 0; indexParamColor < temp.Count; indexParamColor++)
-                                                    {
-                                                        var paramTypeName = temp[indexParamColor];
-                                                        var paramColor = ParamColor[indexParamColor]; //color based on number of param, to make each param look different
-                                                        <span style="font-weight: 800; color: @paramColor">@paramTypeName,</span>
-                                                    }
-                                                </div>
-                                            </div>
+	                                        @* INPUT TYPE *@
+	                                        <div class="hstack gap-2">
+		                                        <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="mdi:input">Input </IconText>
+		                                        @{
+			                                        var temp = methodData.ParamTypeList.Select(x=>x.Name).ToArray();
+		                                        }
+		                                        <div class="hstack gap-3">
+			                                        @for (var indexParamColor = 0; indexParamColor < temp.Length; indexParamColor++)
+			                                        {
+				                                        var paramTypeName = temp[indexParamColor];
+				                                        var paramColor = ParamColor[indexParamColor]; //color based on number of param, to make each param look different
+				                                        <span style="font-weight: 800; color: @paramColor">@paramTypeName,</span>
+			                                        }
+		                                        </div>
+	                                        </div>
                                             @* DESCRIPTION  TEXT*@
                                             <div class="hstack gap-2">
                                                 <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="dashicons:text">Description </IconText>

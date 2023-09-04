@@ -47,7 +47,7 @@ namespace API
         }
 
         [Function(nameof(AddressToGeoLocation))]
-        public static async Task<HttpResponseData> AddressToGeoLocation([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = AddressToGeoLocationRoute)]
+        public static async Task<HttpResponseData> AddressToGeoLocation([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = AddressToGeoLocationRoute)]
             HttpRequestData incomingRequest,
             string address
         )
@@ -72,7 +72,7 @@ namespace API
         }
 
         [Function(nameof(CoordinatesToGeoLocation))]
-        public static async Task<HttpResponseData> CoordinatesToGeoLocation([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = CoordinatesToGeoLocationRoute)]
+        public static async Task<HttpResponseData> CoordinatesToGeoLocation([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = CoordinatesToGeoLocationRoute)]
             HttpRequestData incomingRequest,
             string latitude, string longitude
         )
@@ -97,7 +97,7 @@ namespace API
         }
 
         [Function(nameof(GeoLocationToTimezone))]
-        public static async Task<HttpResponseData> GeoLocationToTimezone([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = GeoLocationToTimezoneRoute)]
+        public static async Task<HttpResponseData> GeoLocationToTimezone([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = GeoLocationToTimezoneRoute)]
             HttpRequestData incomingRequest,
             string timeUrl
         )

@@ -111,6 +111,7 @@ public class URL
     public static readonly string AddVisitorApiStable = $"{ApiStable}/addvisitor";
     public static readonly string AddressToGeoLocationAPIStable = $"{ApiStable}/AddressToGeoLocation";
     public static readonly string CoordinatesToGeoLocationAPIStable = $"{ApiStable}/CoordinatesToGeoLocation";
+    public static readonly string GeoLocationToTimezoneAPIStable = $"{ApiStable}/GeoLocationToTimezone";
 
     //MATCH
     public readonly string GetSavedMatchReport;

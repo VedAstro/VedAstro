@@ -252,7 +252,7 @@
             //note: auto timezone checked first, so that Google TimeZone API is not called until needed
             if (autoTimeZoneUsed)
             {
-                var birthLocationTimezone = await Tools.GetTimezoneOffsetApi(_geoLocationInput.GetGeoLocation(), parsedInputTime, ServerManager.GoogleGeoLocationApiKey);
+                var birthLocationTimezone = await Tools.GetTimezoneOffsetApi(_geoLocationInput.GetGeoLocation(), parsedInputTime);
                 var currentTimezone = _timeInput.TimeZone;
                 var timezoneNotMatch = birthLocationTimezone != currentTimezone;
                 if (timezoneNotMatch)

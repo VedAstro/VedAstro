@@ -25,6 +25,7 @@ using Azure.Storage.Blobs;
 using System.Reflection.Metadata;
 using FuzzySharp;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Net;
 
 
 namespace VedAstro.Library
@@ -907,25 +908,25 @@ namespace VedAstro.Library
         /// - offset of timeAtLocation not important
         /// - googleGeoLocationApiKey needed to work
         /// </summary>
-        public static async Task<TimeSpan> GetTimezoneOffset(string locationName, DateTimeOffset timeAtLocation, string apiKey)
+        public static async Task<TimeSpan> GetTimezoneOffset(string locationName, DateTimeOffset timeAtLocation)
         {
             //get geo location first then call underlying method
             var geoLocation = await GeoLocation.FromName(locationName);
-            return Tools.StringToTimezone(await GetTimezoneOffsetApi(geoLocation, timeAtLocation, apiKey));
+            return Tools.StringToTimezone(await GetTimezoneOffsetApi(geoLocation, timeAtLocation));
         }
 
-        public static async Task<string> GetTimezoneOffsetString(string locationName, DateTime timeAtLocation, string apiKey)
+        public static async Task<string> GetTimezoneOffsetString(string locationName, DateTime timeAtLocation)
         {
             //get geo location first then call underlying method
             var geoLocation = await GeoLocation.FromName(locationName);
-            return await GetTimezoneOffsetApi(geoLocation, timeAtLocation, apiKey);
+            return await GetTimezoneOffsetApi(geoLocation, timeAtLocation);
         }
 
-        public static async Task<string> GetTimezoneOffsetString(string location, string dateTime, string apiKey)
+        public static async Task<string> GetTimezoneOffsetString(string location, string dateTime)
         {
             //get timezone from Google API
             var lifeEvtTimeNoTimezone = DateTime.ParseExact(dateTime, Time.DateTimeFormatNoTimezone, null);
-            var timezone = await Tools.GetTimezoneOffsetString(location, lifeEvtTimeNoTimezone, apiKey);
+            var timezone = await Tools.GetTimezoneOffsetString(location, lifeEvtTimeNoTimezone);
 
             return timezone;
 
@@ -946,56 +947,27 @@ namespace VedAstro.Library
         /// - offset of timeAtLocation not important
         /// - googleGeoLocationApiKey needed to work
         /// </summary>
-        public static async Task<WebResult<string>> GetTimezoneOffsetApi(GeoLocation geoLocation, DateTimeOffset timeAtLocation, string apiKey)
+        public static async Task<WebResult<string>> GetTimezoneOffsetApi(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
-            var returnResult = new WebResult<string>();
+            //get location data from VedAstro API
+            var timePackage = new Time(timeAtLocation, geoLocation);
+            var webResult = await Tools.ReadFromServerXmlReply(URL.GeoLocationToTimezoneAPIStable + timePackage);
 
-            //use timestamp to account for historic timezone changes
-            var locationTimeUnix = timeAtLocation.ToUnixTimeSeconds();
-            var longitude = geoLocation.Longitude();
-            var latitude = geoLocation.Latitude();
+            //if fail to make call, end here
+            if (!webResult.IsPass) { return new WebResult<string>(false, ""); }
 
-            //create the request url for Google API 
-            //todo get the API key string stored separately (for security reasons)
-            var url = string.Format($@"https://maps.googleapis.com/maps/api/timezone/xml?location={latitude},{longitude}&timestamp={locationTimeUnix}&key={apiKey}");
+            //if success, get the reply data out
+            var data = webResult.Payload.Value;
 
-            //get raw location data from GoogleAPI
-            var apiResult = await ReadFromServerXmlReply(url);
-
-            //if result from API is a failure then use system timezone
-            //this is clearly an error, as such log it
-            TimeSpan offsetMinutes;
-            if (apiResult.IsPass) //all well
-            {
-                //get the raw data from google
-                var timeZoneResponseXml = apiResult.Payload;
-
-                //try parse Google API's payload
-                var isParsed = TryParseGoogleTimeZoneResponse(timeZoneResponseXml, out offsetMinutes);
-                if (!isParsed) { goto Fail; } //not parsed end here
-
-                //convert to string exp: +08:00
-                var parsedOffsetString = Tools.TimeSpanToUTCTimezoneString(offsetMinutes);
-
-                //place data inside capsule
-                returnResult.Payload = parsedOffsetString;
-                returnResult.IsPass = true;
-                return returnResult;
-            }
-
-        Fail:
-            //mark as fail & use possibly inaccurate backup timezone (client browser's timezone)
-            returnResult.IsPass = false;
-            offsetMinutes = Tools.GetSystemTimezone();
-            returnResult.Payload = Tools.TimeSpanToUTCTimezoneString(offsetMinutes);
-            return returnResult;
+            //return to caller pass
+            return new WebResult<string>(true, data);
 
         }
 
         /// <summary>
         /// Given a timespan instance converts to string timezone +08:00
         /// </summary>
-        private static string TimeSpanToUTCTimezoneString(TimeSpan offsetMinutes)
+        public static string TimeSpanToUTCTimezoneString(TimeSpan offsetMinutes)
         {
             var x = DateTimeOffset.UtcNow.ToOffset(offsetMinutes).ToString("zzz");
             return x;

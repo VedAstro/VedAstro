@@ -880,7 +880,7 @@ namespace VedAstro.Library
 
 
         /// <summary>
-        /// Given a place's name, using google API will get location
+        /// Given a place's name, using API will get location
         /// </summary>
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {
@@ -898,29 +898,6 @@ namespace VedAstro.Library
             return new WebResult<GeoLocation>(true, parsed);
         }
 
-
-
-        /// <summary>
-        /// gets the name of the place given th coordinates, uses Google API
-        /// </summary>
-        public static async Task<GeoLocation> CoordinateToGeoLocation(double longitude, double latitude, string apiKey)
-        {
-            //create the request url for Google API
-            var url = string.Format($"https://maps.googleapis.com/maps/api/geocode/xml?latlng={latitude},{longitude}&key={apiKey}");
-
-            //get location data from GoogleAPI
-            var webResult = await ReadFromServerXmlReply(url);
-            var rawReplyXml = webResult.Payload;
-
-            //extract out the longitude & latitude
-            var locationData = new XDocument(rawReplyXml);
-            var localityResult = locationData.Element("GeocodeResponse")?.Elements("result").FirstOrDefault(result => result.Element("type")?.Value == "locality");
-            var locationName = localityResult?.Element("formatted_address")?.Value;
-
-
-            return new GeoLocation(locationName, longitude, latitude);
-
-        }
 
         /// <summary>
         /// Given a location & time, will use Google Timezone API

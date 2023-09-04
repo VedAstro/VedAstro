@@ -11,6 +11,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
 using static API.CallTracker;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace API
 {
@@ -22,6 +23,7 @@ namespace API
     {
 
         private const string AddressToGeoLocationRoute = "AddressToGeoLocation/{address}";
+        private const string CoordinatesToGeoLocationRoute = "CoordinatesToGeoLocation/Latitude/{latitude}/Longitude/{longitude}";
 
         private static readonly TableServiceClient tableServiceClient;
         private static string tableName = "GeoLocationCache";
@@ -42,6 +44,7 @@ namespace API
             tableClient = tableServiceClient.GetTableClient(tableName);
 
         }
+
         /// <summary>
         /// Backup function to catch invalid calls, say gracefully fails
         /// NOTE: "z" in name needed to make as last API call, else will be called all the time
@@ -57,9 +60,34 @@ namespace API
             var call = APILogger.OpenApiCall(incomingRequest);
 
             //1 : CALCULATE
-            var parsedGeoLocation = await UseVedAstroAPICache(address);
+            var parsedGeoLocation = await AddressToGeoLocation_VedAstro(address);
             //use google only if no cache in VedAstro
-            if (parsedGeoLocation.Name() == GeoLocation.Empty.Name()) { parsedGeoLocation = await CallGoogleAPI(address); }
+            if (parsedGeoLocation.Name() == GeoLocation.Empty.Name()) { parsedGeoLocation = await AddressToGeoLocation_Google(address); }
+
+
+            //2 : SEND TO CALLER
+            return APITools.PassMessage((XElement)parsedGeoLocation.ToXml(), incomingRequest);
+        }
+        
+        
+        /// <summary>
+        /// Backup function to catch invalid calls, say gracefully fails
+        /// NOTE: "z" in name needed to make as last API call, else will be called all the time
+        /// </summary>
+        [Function(nameof(CoordinatesToGeoLocation))]
+        public static async Task<HttpResponseData> CoordinatesToGeoLocation([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = CoordinatesToGeoLocationRoute)]
+            HttpRequestData incomingRequest,
+            string latitude, string longitude
+        )
+        {
+            //0 : LOG CALL
+            //log ip address, call time and URL
+            var call = APILogger.OpenApiCall(incomingRequest);
+
+            //1 : CALCULATE
+            var parsedGeoLocation = await CoordinatesToGeoLocation_Vedastro(longitude, latitude);
+            //use google only if no cache in VedAstro
+            if (parsedGeoLocation.Name() == GeoLocation.Empty.Name()) { parsedGeoLocation = await CoordinatesToGeoLocation_Google(longitude, latitude); }
 
 
             //2 : SEND TO CALLER
@@ -67,10 +95,34 @@ namespace API
         }
 
 
+        //---------------------------------------------------------------
+
+        /// <summary>
+        /// Gets coordinates from Google API
+        /// </summary>
+        private static async Task<GeoLocation> CoordinatesToGeoLocation_Google(string longitude, string latitude)
+        {
+            var apiKey = Secrets.GoogleAPIKey;
+            var urlReverse = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={apiKey}";
+            var resultString2 = await Tools.WriteServer(HttpMethod.Post, urlReverse);
+
+            var resultsJson = resultString2["results"][0];
+
+            var locationNameLong = resultsJson["formatted_address"].Value<string>();
+            var splitted = locationNameLong.Split(',');
+            
+            //keep only the last parts, country, state...
+            var newLocationName = $"{splitted[splitted.Length - 3]},{splitted[splitted.Length - 2]},{splitted[splitted.Length - 1]}";
+
+            var fromIpAddress = new GeoLocation(newLocationName, double.Parse(longitude), double.Parse(latitude));
+
+            return fromIpAddress;
+        }
+
         /// <summary>
         /// Will return empty Geo Location if no cache
         /// </summary>
-        private static async Task<GeoLocation> UseVedAstroAPICache(string address)
+        private static async Task<GeoLocation> AddressToGeoLocation_VedAstro(string address)
         {
             //do direct search for address in name field 
             Pageable<GeoLocationCacheEntity> linqEntities = tableClient.Query<GeoLocationCacheEntity>(call => call.PartitionKey == address);
@@ -83,7 +135,25 @@ namespace API
 
         }
 
-        private static async Task<GeoLocation> CallGoogleAPI(string address)
+        /// <summary>
+        /// Will return empty Geo Location if no cache
+        /// </summary>
+        private static async Task<GeoLocation> CoordinatesToGeoLocation_Vedastro(string longitude, string latitude)
+        {
+            //do direct search for address in name field 
+            var linqEntities = 
+                tableClient.Query<GeoLocationCacheEntity>(
+                    call => call.Longitude == double.Parse(longitude) && call.Latitude == double.Parse(latitude));
+
+            //if old call found check if running else default false
+            //NOTE : important return empty, because used to detect later if empty
+            var foundRaw = linqEntities?.FirstOrDefault()?.ToGeoLocation() ?? GeoLocation.Empty;
+
+            return foundRaw;
+
+        }
+
+        private static async Task<GeoLocation> AddressToGeoLocation_Google(string address)
         {
             //if null or empty turn back as nothing
             if (string.IsNullOrEmpty(address)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }

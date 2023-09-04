@@ -282,7 +282,7 @@
             if (Longitude == 0 && Latitude == 0) { goto SetDefault; }
 
             //set gotten location name into view
-            var geoLocation = await Tools.CoordinateToGeoLocation((double)locationCoordinates.Longitude, (double)locationCoordinates.Latitude, ServerManager.GoogleGeoLocationApiKey);
+            var geoLocation = await GeoLocation.CoordinatesToGeoLocation((double)locationCoordinates.Longitude, (double)locationCoordinates.Latitude);
             LocationName = geoLocation.Name();
 
             //exit

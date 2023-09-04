@@ -52,6 +52,9 @@ namespace VedAstro.Library
             catch (Exception) { return false; }
         }
 
+        /// <summary>
+        ///  xml with VedAstro standard reply ONLY
+        /// </summary>
         public static WebResult<XElement> FromXml(XElement inputXml)
         {
             var result = new WebResult<XElement>();
@@ -84,6 +87,7 @@ namespace VedAstro.Library
 
             return result;
         }
+
         public static WebResult<JToken> FromJson(JObject inputXml)
         {
             var result = new WebResult<JToken>();

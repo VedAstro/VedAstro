@@ -28,6 +28,10 @@ namespace API
         {
             try
             {
+                //0 : LOG CALL
+                //log ip address, call time and URL
+                var call = APILogger.OpenApiCall(incomingRequest);
+
                 //1 : GET INPUT DATA
                 var calculator = Tools.MethodNameToMethodInfo(calculatorName); //get calculator name
                 var parameterTypes = calculator.GetParameters().Select(p => p.ParameterType).ToList();

@@ -99,5 +99,22 @@ public static class APILogger
     //PRIVATE FUNCTIONS
 
 
+    public static object OpenApiCall(HttpRequestData httpRequestData)
+    {
+        //var get ip address
+        var ip = httpRequestData?.GetCallerIp()?.ToString() ?? "no ip";
+        var url = httpRequestData?.Url.ToString() ?? "no URL";
 
+		//set the call as running
+		OpenAPILogBookEntity customerEntity = new OpenAPILogBookEntity()
+        {
+            //can have many IP as partition key
+	        PartitionKey = ip,
+	        RowKey = Tools.GenerateId(),
+	        IsRunning = true
+        };
+
+        //creates record if no exist, update if already there
+        tableClient.UpsertEntity(customerEntity);
+	}
 }

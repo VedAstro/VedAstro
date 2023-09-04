@@ -290,7 +290,7 @@
     {
         //auto set correct Timezone based on location & birth date
         var dateTimeOffset = await _timeInput.GetDateTimeOffset(); //offset is ignored here
-        _timeInput.TimeZone = await Tools.GetTimezoneOffsetApi(_geoLocationInput.GetGeoLocation(), dateTimeOffset, ServerManager.GoogleGeoLocationApiKey);
+        _timeInput.TimeZone = await Tools.GetTimezoneOffsetApi(_geoLocationInput.GetGeoLocation(), dateTimeOffset);
 
         //parse data received from user
         var geoLocation = _geoLocationInput.GetGeoLocation();

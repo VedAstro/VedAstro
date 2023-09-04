@@ -13,8 +13,17 @@ public class GeoLocationCacheEntity : ITableEntity
     /// Name of the location
     /// </summary>
     public string PartitionKey { get; set; }
+    
+    /// <summary>
+    /// date time offset in ticks seconds
+    /// </summary>
     public string RowKey { get; set; }
     public DateTimeOffset? Timestamp { get; set; }
+    
+    /// <summary>
+    /// Timezone linked to date time offset in RowKey
+    /// </summary>
+    public string Timezone { get; set; }
     public ETag ETag { get; set; }
     public double Longitude { get; set; }
     public double Latitude { get; set; }

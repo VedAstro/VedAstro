@@ -160,7 +160,6 @@ namespace API
             var latitude = geoLocation.Latitude();
 
             //create the request url for Google API 
-            //todo get the API key string stored separately (for security reasons)
             var apiKey = Secrets.GoogleAPIKey;
             var url = string.Format($@"https://maps.googleapis.com/maps/api/timezone/xml?location={latitude},{longitude}&timestamp={locationTimeUnix}&key={apiKey}");
 

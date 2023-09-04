@@ -892,8 +892,9 @@ namespace VedAstro.Library
             if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
 
             //if success, get the reply data out
-            var geocodeResponseXml = webResult.Payload;
-            var parsed = GeoLocation.FromXml(geocodeResponseXml);
+            var rootXml = webResult.Payload;
+            Console.WriteLine(rootXml);
+            var parsed = GeoLocation.FromXml(rootXml);
 
             //return to caller pass
             return new WebResult<GeoLocation>(true, parsed);
@@ -951,7 +952,7 @@ namespace VedAstro.Library
         {
             //get location data from VedAstro API
             var timePackage = new Time(timeAtLocation, geoLocation);
-            var webResult = await Tools.ReadFromServerXmlReply(URL.GeoLocationToTimezoneAPIStable + timePackage);
+            var webResult = await Tools.ReadFromServerXmlReply(URL.GeoLocationToTimezoneAPIStable + timePackage.ToUrl());
 
             //if fail to make call, end here
             if (!webResult.IsPass) { return new WebResult<string>(false, ""); }
@@ -1037,54 +1038,70 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<WebResult<XElement>> ReadFromServerXmlReply(string apiUrl, string rootElementName = "Root")
         {
-            var returnResult = new WebResult<XElement>();
-            string rawMessage = "";
+            //send request to API server
+            var result = await RequestServer(apiUrl);
 
-            try
-            {
-                //send request to API server
-                var result = await RequestServerPost(apiUrl);
+            //get raw reply from the server response
+            var rawMessage = await result.Content?.ReadAsStringAsync() ?? "";
 
-                //parse data reply
-                rawMessage = result.Content.ReadAsStringAsync().Result;
+            //only good reply from server is accepted, anything else is marked invalid
+            //stops invalid replies from being passed as valid
+            if (!result.IsSuccessStatusCode) { return new WebResult<XElement>(false, new("RawErrorData", rawMessage)); }
 
-                //raw message can be JSON or XML
-                //try parse as XML if fail then as JSON
-                var readFromServerXmlReply = XElement.Parse(rawMessage);
-                returnResult.Payload = readFromServerXmlReply;
-                returnResult.IsPass = true; //pass
-
-            }
-            catch (Exception)
-            {
-                //try to parse data as JSON
-                try
-                {
-                    var rawXml = JsonConvert.DeserializeXmlNode(rawMessage, rootElementName);
-                    var readFromServerXmlReply = XElement.Parse(rawXml?.InnerXml ?? "<Empty/>");
-
-                    returnResult.Payload = readFromServerXmlReply;
-                    returnResult.IsPass = true; //pass
-
-                }
-                //unparseable data, let user know
-                catch (Exception)
-                {
-                    //todo log it
-                    var logData = $"ReadFromServerXmlReply()\n{rawMessage}";
-
-                    returnResult.IsPass = false; //fail
-                }
-            }
-
-            //send the prepared result caller
-            return returnResult;
+            //tries to parse the raw data received into XML or JSON
+            //if all fail will return raw data with fail status
+            var parsed = ParseData(rawMessage);
 
 
-            //--------------------
+            return parsed;
+
+
+
+
+            //----------------------------------------------------------
             // FUNCTIONS
 
-            async Task<HttpResponseMessage> RequestServerPost(string receiverAddress)
+            WebResult<XElement> ParseData(string inputRawString)
+            {
+                var exceptionList = new List<Exception>();
+
+                try
+                {
+                    //OPTION 1 : xml with VedAstro standard reply
+                    var parsedXml = XElement.Parse(inputRawString);
+                    var returnVal = WebResult<XElement>.FromXml(parsedXml);
+                    return returnVal;
+                }
+                catch (Exception e1)
+                {
+                    try
+                    {
+                        //OPTION 2 : xml 3rd party reply (google)
+                        var parsedXml = XElement.Parse(inputRawString);
+                        return new WebResult<XElement>(true, parsedXml);
+                    }
+                    catch (Exception e2) { exceptionList.Add(e2); }
+
+                    try
+                    {
+                        //OPTION 3 : json 3rd party reply
+                        var parsedJson = JsonConvert.DeserializeXmlNode(inputRawString, "LocationData");
+                        var wrappedXml = XElement.Parse(parsedJson.InnerXml); //expected to fail if not right
+                        return new WebResult<XElement>(true, wrappedXml);
+                    }
+                    catch (Exception e3) { exceptionList.Add(e3); } //if fail just void print
+
+                    exceptionList.Add(e1);
+
+                    //send all exception data to server
+                    foreach (var exception in exceptionList) { LibLogger.Error(exception, inputRawString); }
+
+                    //if control reaches here all has failed
+                    return new WebResult<XElement>(false, new XElement("Failed"));
+                }
+            }
+
+            async Task<HttpResponseMessage> RequestServer(string receiverAddress)
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, receiverAddress);
@@ -1101,6 +1118,8 @@ namespace VedAstro.Library
                 //return the raw reply to caller
                 return response;
             }
+
+
         }
 
         /// <summary>

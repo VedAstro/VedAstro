@@ -46,13 +46,12 @@
 
     private string GetUrl(string ending)
     {
-        var stringWithSpace = time?.GetGeoLocation().Name();
+        
 
         //if null end here
-        if (string.IsNullOrEmpty(stringWithSpace)) { return ""; }
+        //if (string.IsNullOrEmpty(stringWithSpace)) { return ""; }
 
-        var locationName = Tools.RemoveWhiteSpace(stringWithSpace);
-        var url = $"{AppData.URL.ApiUrl}/Location/{locationName}/Time/{time?.ToUrl()}/{ending}";
+        var url = $"{AppData.URL.ApiUrl}{time?.ToUrl()}/{ending}";
         return url;
 
     }

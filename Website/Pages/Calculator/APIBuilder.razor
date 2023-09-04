@@ -247,7 +247,7 @@
 		var placeHolder = "";
 		var calcName = $"/Calculate/{_apiSelectorBox.GetSelectedMethodName()}";
 		var paramInput = await _parameterInputPanel.ToApiUrl();
-		var ayanamsaUrl = _selectedAyanamsa == "Raman" ? "" : $"/Ayanamsa/{_selectedAyanamsa}" ;
+		var ayanamsaUrl = _selectedAyanamsa == "Raman" ? "" : $"/Ayanamsa/{_selectedAyanamsa}";
 		placeHolder = domain + calcName + paramInput + ayanamsaUrl;
 
 
@@ -276,8 +276,9 @@
 			return false;
 		}
 
-
-
+		//TEST 2 : All input drop down selected
+		var isValid = await _parameterInputPanel.IsValidationPassed(); //will raise own error
+		if (!isValid) { return false; }
 
 
 		//if control reaches here than, it's valid

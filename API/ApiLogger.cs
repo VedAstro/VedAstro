@@ -95,19 +95,6 @@ public static class APILogger
 
 	}
 
-    public static async Task Visitor(HttpRequestData req)
-    {
-        var visitorXml = new XElement("Visitor");
-
-        visitorXml.Add(BranchXml, SourceXml);
-        visitorXml.Add(await APITools.RequestToXml(req)); //contains IP
-        visitorXml.Add(Tools.TimeStampSystemXml);
-        visitorXml.Add(Tools.TimeStampServerXml);
-
-        //add error data to main app log file
-        await Tools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
-
-    }
 
     public static async Task Data(string textData, HttpRequestData req = null)
     {

@@ -318,7 +318,7 @@ namespace API
 
         }
 
-        private static JToken GetPlanetDataJSON(PlanetName planetName, string propertyName, Time parsedTime)
+        private static JToken GetPlanetDataJSON(PlanetName planetName, string propertyName, Time parsedTime, MethodInfo callerToExclude = null)
         {
             var individualPropertySelected = !string.IsNullOrEmpty(propertyName);
 
@@ -336,7 +336,7 @@ namespace API
             {
                 //all planet related data
                 //get all calculators that can accept a planet name and time
-                var xxx = AutoCalculator.FindAndExecuteFunctionsJSON(Category.All, planetName, parsedTime); ;
+                var xxx = AutoCalculator.FindAndExecuteFunctionsJSON(Category.All, callerToExclude, planetName, parsedTime); ;
 
                 //send the payload on it's merry way
                 return xxx;
@@ -344,7 +344,7 @@ namespace API
 
         }
 
-        private static JToken GetHouseDataJSON(HouseName houseName, string methodName, Time parsedTime)
+        private static JToken GetHouseDataJSON(HouseName houseName, string methodName, Time parsedTime, MethodInfo callerToExclude = null)
         {
             var individualPropertySelected = !string.IsNullOrEmpty(methodName);
 
@@ -361,7 +361,7 @@ namespace API
             {
                 //all house related data
                 //get all calculators that can accept a house name and time
-                var houseTimeCalcs = AutoCalculator.FindAndExecuteFunctionsJSON(Category.All, houseName, parsedTime);
+                var houseTimeCalcs = AutoCalculator.FindAndExecuteFunctionsJSON(Category.All, callerToExclude, houseName, parsedTime);
 
                 //send the payload on it's mary way
                 return houseTimeCalcs;

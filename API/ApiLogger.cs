@@ -8,16 +8,10 @@ using System;
 namespace API;
 
 /// <summary>
-/// Custom simple logger for API, auto log to AppLog.xml file
+/// Custom simple logger for API, auto log to Azure Data Table
 /// </summary>
 public static class APILogger
 {
-    private const string VisitorLogXml = "VisitorLog.xml";
-    private const string ContainerName = "vedastro-site-data";
-
-    private static readonly XElement SourceXml = new("Source", "APILogger");
-    private static XElement BranchXml = new XElement("Branch", ThisAssembly.Version);
-
     /// <summary>
     /// Table client used for API LogBook
     /// </summary>

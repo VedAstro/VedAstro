@@ -73,7 +73,7 @@ public static class CallTracker
     public static void CallEnd(string callerId)
     {
         //set the call as running
-        CallStatusEntity customerEntity = new CallStatusEntity()
+        CallStatusEntity customerEntity = new()
         {
             PartitionKey = callerId,
             RowKey = "",

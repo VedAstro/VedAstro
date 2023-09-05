@@ -20,16 +20,12 @@ public class GeoLocationCacheEntity : ITableEntity
     /// </summary>
     public string CleanedName { get; set; }
 
-    /// <summary>
-    /// location name given by caller
-    /// NOTE : done to do faster server side search
-    /// </summary>
-    public string SearchedName { get; set; }
-    
-    /// <summary>
-    /// date time offset in ticks seconds
-    /// </summary>
-    public string RowKey { get; set; }
+	/// <summary>
+	/// date time offset in ticks seconds OR location name given by caller
+	/// NOTE : done to do faster server side search
+	/// </summary>
+	public string RowKey { get; set; }
+
     public DateTimeOffset? Timestamp { get; set; }
     
     /// <summary>

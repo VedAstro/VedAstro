@@ -292,7 +292,7 @@ namespace API
 			//todo better logging
 			catch (Exception e)
 			{
-				await APILogger.Error(e); //log it
+				APILogger.Error(e); //log it
 				throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}");
 			}
 		}
@@ -313,8 +313,8 @@ namespace API
 			}
 			catch (Exception e)
 			{
-				await APILogger.Data("ERROR NO DATA FROM CALLER"); //log it
-				await APILogger.Error(e); //log it
+				APILogger.Error("ERROR NO DATA FROM CALLER"); //log it
+				APILogger.Error(e); //log it
 				return new JObject(); //null to be detected by caller
 			}
 		}

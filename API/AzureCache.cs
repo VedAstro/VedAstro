@@ -80,7 +80,7 @@ namespace API
             }
             catch (Exception e)
             {
-                await APILogger.Error(e); //log it
+                APILogger.Error(e); //log it
                 return "";
             }
 

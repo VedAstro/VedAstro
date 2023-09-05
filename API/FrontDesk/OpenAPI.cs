@@ -29,7 +29,7 @@ namespace API
             try
             {
                 //0 : LOG CALL : used later for throttle limit
-                var callLog = APILogger.OpenApiCall(incomingRequest);
+                var callLog = APILogger.Visit(incomingRequest);
 
                 //1 : GET INPUT DATA
                 var calculator = Tools.MethodNameToMethodInfo(calculatorName); //get calculator name
@@ -70,7 +70,7 @@ namespace API
             //if any failure, show error in payload
             catch (Exception e)
             {
-                await APILogger.Error(e, incomingRequest);
+                APILogger.Error(e, incomingRequest);
                 return APITools.FailMessageJson(e.Message, incomingRequest);
             }
 
@@ -88,7 +88,7 @@ namespace API
         {
 	        //0 : LOG CALL
 	        //log ip address, call time and URL
-	        var call = APILogger.OpenApiCall(incomingRequest);
+	        var call = APILogger.Visit(incomingRequest);
 
 			var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
             return APITools.FailMessageJson(message, incomingRequest);

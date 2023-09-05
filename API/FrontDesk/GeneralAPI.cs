@@ -40,7 +40,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await APILogger.Error(e, incomingRequest);
+                APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FailMessage(e, incomingRequest);
             }
@@ -87,7 +87,7 @@ namespace API
         [Function(nameof(OpenAPILog))]
         public static HttpResponseData OpenAPILog([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "OpenAPILog")] HttpRequestData incomingRequest)
         {
-            var tableClient = APILogger.TableClient;
+            var tableClient = APILogger.LogBookClient;
 
             //get all IP address records in the last 30 days
             DateTimeOffset aMomentAgo = DateTimeOffset.UtcNow.AddDays(-30);
@@ -124,7 +124,7 @@ namespace API
         public static HttpResponseData OpenAPILog_IP([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "OpenAPILog/IP/{ipAddress}")] HttpRequestData incomingRequest,
             string ipAddress)
         {
-            var tableClient = APILogger.TableClient;
+            var tableClient = APILogger.LogBookClient;
 
             //all for IP
             var foundCalls = tableClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == ipAddress);

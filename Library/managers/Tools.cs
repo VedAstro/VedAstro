@@ -1232,7 +1232,7 @@ namespace VedAstro.Library
 		/// <summary>
 		/// Extracts data from an Exception puts it in a nice XML
 		/// </summary>
-		public static XElement ExtractDataFromException(Exception e)
+		public static XElement ExceptionToXML(Exception e)
 		{
 			//place to store the exception data
 			string fileName;
@@ -1279,6 +1279,64 @@ namespace VedAstro.Library
 				new XElement("SourceColNumber", columnNumber),
 				new XElement("MethodName", methodName),
 				new XElement("MethodName", methodName)
+			);
+
+
+			return newRecord;
+		}
+		
+		
+		/// <summary>
+		/// Extracts data from an Exception puts it in a nice JSON
+		/// </summary>
+		public static JObject ExceptionToJSON(Exception e)
+		{
+			//place to store the exception data
+			string fileName;
+			string methodName;
+			int line;
+			int columnNumber;
+			string message;
+			string source;
+
+			//get the exception that started it all
+			var originalException = e.GetBaseException();
+
+			//extract the data from the error
+			StackTrace st = new StackTrace(e, true);
+
+			//Get the first stack frame
+			StackFrame frame = st.GetFrame(st.FrameCount - 1);
+
+			//Get the file name
+			fileName = frame?.GetFileName();
+
+			//Get the method name
+			methodName = frame.GetMethod()?.Name;
+
+			//Get the line number from the stack frame
+			line = frame.GetFileLineNumber();
+
+			//Get the column number
+			columnNumber = frame.GetFileColumnNumber();
+
+			message = originalException.ToString();
+
+			source = originalException.Source;
+			//todo include inner exception data
+			var stackTrace = originalException.StackTrace;
+
+
+			//put together the new error record
+			var newRecord = new JObject(
+				new JProperty("Error", new JObject(
+					new JProperty("Message", message),
+					new JProperty("Source", source),
+					new JProperty("FileName", fileName),
+					new JProperty("SourceLineNumber", line),
+					new JProperty("SourceColNumber", columnNumber),
+					new JProperty("MethodName", methodName)
+				))
 			);
 
 

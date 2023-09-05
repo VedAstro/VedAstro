@@ -1060,25 +1060,43 @@ namespace API
 		/// <returns></returns>
 		public static async Task AutoControlOpenAPIOverload(OpenAPILogBookEntity callData)
 		{
-			var minute1 = 0.5;
+			var minute1 = 1;
 			var ipAddress = callData.PartitionKey;
 			var lastCallsCount = APILogger.GetAllCallsWithinLastTimeperiod(ipAddress, minute1);
 
 			//rate set in runtime settings is multiplied
 			var msDelayRate = int.Parse(Secrets.OpenAPICallDelayMs);
+			var freeCallRate = 5;//allowed 5 high speed calls per minute //int.Parse(Secrets.OpenAPICallDelayMs); TODO add to Secrets
 
-			//every additional call within specified time limit gets slowed accordingly
-			//exp: last 3 calls x 800ms = 4th call delay --> 2400ms
-			var msDelay = lastCallsCount * msDelayRate;
 
 			//if delay applied then let caller know
-			if (msDelay > 1) { APITools.ApiExtraNote = "Call slowed down. Sorry too many calls on FREE package. Please donate to increase limit"; }
+			//NOTE : other words allowed 1 call every 30 seconds
+			var userCallRate = lastCallsCount / minute1; //calls per minute
+			if (userCallRate > freeCallRate)
+			{
+				APITools.ApiExtraNote = $"Call slowed down." +
+													 $" Sorry too many calls on FREE package." +
+													 $" You made {lastCallsCount} calls in 1 min." +
+													 $" {userCallRate} call/min." +
+													 $" Please donate to increase limit.";
 
-			await Task.Delay(msDelay);
 
+				//every additional call within specified time limit gets slowed accordingly
+				//exp: last 3 calls x 800ms = 4th call delay --> 2400ms
+				var msDelay = lastCallsCount * msDelayRate;
+
+				await Task.Delay(msDelay);
 #if DEBUG
-			Console.WriteLine($"AUTO Throttle : IP -> {ipAddress} Delay ->{msDelay}ms");
+				Console.WriteLine($"AUTO Throttle : IP -> {ipAddress} Delay ->{msDelay}ms");
 #endif
+
+			}
+			else
+			{
+				//if below limit than let call run, clear message
+				APITools.ApiExtraNote = "";
+			}
+
 		}
 	}
 

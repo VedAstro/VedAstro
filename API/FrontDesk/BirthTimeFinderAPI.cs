@@ -82,7 +82,7 @@ namespace API
             catch (Exception e)
             {
                 //log it
-                await APILogger.Error(e);
+                APILogger.Error(e);
                 var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Call-Status", "Fail"); //caller checks this
                 response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
@@ -158,7 +158,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await APILogger.Error(e, incomingRequest);
+                APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e, incomingRequest);
@@ -204,7 +204,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await APILogger.Error(e, incomingRequest);
+                APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FailMessage(e, incomingRequest);
             }
@@ -258,7 +258,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await APILogger.Error(e, incomingRequest);
+                APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FailMessage(e, incomingRequest);
             }
@@ -317,7 +317,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await APILogger.Error(e, incomingRequest);
+                APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FailMessage(e, incomingRequest);
             }

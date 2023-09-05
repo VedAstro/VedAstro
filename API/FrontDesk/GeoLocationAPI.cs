@@ -61,7 +61,7 @@ namespace API
         {
             //0 : LOG CALL
             //log ip address, call time and URL
-            var call = APILogger.OpenApiCall(incomingRequest);
+            var call = APILogger.Visit(incomingRequest);
 
             //1 : CALCULATE
             var parsedGeoLocation = AddressToGeoLocation_VedAstro(address);
@@ -89,7 +89,7 @@ namespace API
         {
             //0 : LOG CALL
             //log ip address, call time and URL
-            var call = APILogger.OpenApiCall(incomingRequest);
+            var call = APILogger.Visit(incomingRequest);
 
             //1 : CALCULATE
             var parsedGeoLocation = CoordinatesToGeoLocation_Vedastro(longitude, latitude);
@@ -117,7 +117,7 @@ namespace API
         {
             //0 : LOG CALL
             //log ip address, call time and URL
-            var call = APILogger.OpenApiCall(incomingRequest);
+            var call = APILogger.Visit(incomingRequest);
 
             //1 : GET DATA OUT TODO NEEDS CHECKING
             Time x = await Time.FromUrl(timeUrl);

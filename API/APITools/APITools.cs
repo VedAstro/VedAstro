@@ -1072,7 +1072,7 @@ namespace API
 			var msDelay = lastCallsCount * msDelayRate;
 
 			//if delay applied then let caller know
-			if (msDelay > 1) { APITools.ApiExtraNote = "Call Slowed down. Sorry too many calls on FREE package. Please donate to increase limit"; }
+			if (msDelay > 1) { APITools.ApiExtraNote = "Call slowed down. Sorry too many calls on FREE package. Please donate to increase limit"; }
 
 			await Task.Delay(msDelay);
 

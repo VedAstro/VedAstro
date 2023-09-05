@@ -18,7 +18,10 @@ public static class APILogger
     private static readonly XElement SourceXml = new("Source", "APILogger");
     private static XElement BranchXml = new XElement("Branch", ThisAssembly.Version);
 
-    private static readonly TableClient tableClient;
+    /// <summary>
+    /// Table client used for API LogBook
+    /// </summary>
+    public static readonly TableClient TableClient;
     private static readonly TableServiceClient tableServiceClient;
     private static string tableName = "OpenAPILogBook";
 
@@ -31,7 +34,7 @@ public static class APILogger
 
 	    //save reference for late use
 	    tableServiceClient = new TableServiceClient(new Uri(storageUri), new TableSharedKeyCredential(accountName, storageAccountKey));
-	    tableClient = tableServiceClient.GetTableClient(tableName);
+	    TableClient = tableServiceClient.GetTableClient(tableName);
 
     }
 
@@ -137,7 +140,7 @@ public static class APILogger
         };
 
         //creates record if no exist, update if already there
-        tableClient.UpsertEntity(customerEntity);
+        TableClient.UpsertEntity(customerEntity);
 
         return customerEntity;
 	}
@@ -149,7 +152,7 @@ public static class APILogger
     {
 		//get all IP address records in the last specified time period
 		DateTimeOffset aMomentAgo = DateTimeOffset.UtcNow.AddMinutes(-timeMinute);
-		Pageable<OpenAPILogBookEntity> linqEntities = tableClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == ipAddress && call.Timestamp >= aMomentAgo);
+		Pageable<OpenAPILogBookEntity> linqEntities = TableClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == ipAddress && call.Timestamp >= aMomentAgo);
 
         //return the number of last calls found
 		return linqEntities.Count();

@@ -1052,12 +1052,14 @@ namespace VedAstro.Library
         }
 
 
-        /// <summary>
-        /// special function to get chesta score for Ishta/Kashta score
-        /// Bala book pg. 108
-        /// </summary>
-        private static Shashtiamsa SunMoonChestaBala(PlanetName planetName)
+		/// <summary>
+		/// special function to get chesta score for Ishta/Kashta score
+		/// Bala book pg. 108
+		/// </summary>
+		[API("special function to get chesta score for Ishta/Kashta score")]
+        public static Shashtiamsa SunMoonChestaBala(PlanetName planetName)
         {
+            return Shashtiamsa.Zero;
             throw new NotImplementedException();
         }
 

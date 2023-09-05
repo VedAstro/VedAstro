@@ -4098,8 +4098,10 @@ namespace VedAstro.Library
             return ishtaMore ? 1 : -1;
         }
 
-        private static double PlanetKashtaScore(PlanetName planet, Time birthTime)
-        {
+        [API("Kashta Phala (Bad Strength) of a Planet")]
+		public static double PlanetKashtaScore(PlanetName planet, Time birthTime)
+		{
+			return 0;
             throw new NotImplementedException();
         }
 

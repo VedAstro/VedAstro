@@ -184,15 +184,13 @@ namespace API
             //time that is linked to timezone
             //NOTE :Search from +/- 1 year, as not to clog cache book
             //      Possibility to miss timezone changes that occurred within 1 year
-            var oneYearBefore = timeAtLocation.AddYears(-1).Ticks;
-            var oneYearAfter = timeAtLocation.AddYears(1).Ticks;
+            var timeTicks = timeAtLocation.Ticks.ToString();
 
 
             //search cache table
             //NOTE: don't search by location name, because geo location name might be empty
-            Expression<Func<GeoLocationCacheEntity, bool>> expression = call => long.Parse(call.RowKey) >= oneYearBefore //occurred after
-                                                                                && long.Parse(call.RowKey) <= oneYearAfter  //occurred before
-                                                                                && call.Latitude == geoLocation.Latitude()
+            Expression<Func<GeoLocationCacheEntity, bool>> expression = call => call.RowKey == timeTicks
+																				&& call.Latitude == geoLocation.Latitude()
                                                                                 && call.Longitude == geoLocation.Longitude();
 
             var linqEntities = tableClient.Query<GeoLocationCacheEntity>(expression);

@@ -6,6 +6,7 @@ using System.Net;
 using Azure.Data.Tables;
 using Azure;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace API
 {
@@ -105,8 +106,7 @@ namespace API
             }
 
             //sort by most called to least
-            IOrderedEnumerable<KeyValuePair<string, int>> sortedList = presentationList
-                                                .OrderByDescending(x => x.Value); //order by call count
+            var sortedList = presentationList.OrderByDescending(x => x.Value); //order by call count
 
             //4 : CONVERT TO JSON
             JArray jsonArray = new JArray(sortedList.Select(x => new JObject { { x.Key, x.Value } }));
@@ -130,17 +130,21 @@ namespace API
             var foundCalls = tableClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == ipAddress);
 
             //create new presentation list
-            var presentationList = new List<string>();
+            var presentationList = new Dictionary<DateTimeOffset, string>();
             foreach (var callLog in foundCalls)
             {
                 //format into understandable time format
-                var serverTime = callLog.Timestamp?.ToOffset(TimeSpan.FromHours(8)).ToString(Time.DateTimeFormatSeconds);
-                var temp = $"{serverTime} | {callLog.PartitionKey} | {callLog.URL}";
-                presentationList.Add(temp);
+                var x = callLog?.Timestamp ?? DateTimeOffset.MinValue;
+                var serverTime = x.ToOffset(TimeSpan.FromHours(8)).ToString(Time.DateTimeFormatSeconds);
+                var rowData = $"{serverTime} | {callLog.PartitionKey} | {callLog.URL}";
+                presentationList[x] = rowData;
             }
 
+            //sort by most called to least
+            var sortedList = presentationList.OrderBy(x => x.Value); //order by time
+
             //4 : CONVERT TO JSON
-            JArray jsonArray = new JArray(presentationList);
+            JArray jsonArray = new JArray(sortedList.Select(x => x.Value));
 
             //5 : SEND DATA
             return APITools.PassMessageJson(jsonArray, incomingRequest);

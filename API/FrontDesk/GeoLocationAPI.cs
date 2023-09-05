@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,9 @@ using VedAstro.Library;
 using static API.CallTracker;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Xml;
+using System.Text.RegularExpressions;
 
 namespace API
 {
@@ -46,6 +50,9 @@ namespace API
 
         }
 
+        /// <summary>
+        /// https://vedastroapibeta.azurewebsites.net/api/AddressToGeoLocation/Gaithersburg, MD, USA
+        /// </summary>
         [Function(nameof(AddressToGeoLocation))]
         public static async Task<HttpResponseData> AddressToGeoLocation([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = AddressToGeoLocationRoute)]
             HttpRequestData incomingRequest,
@@ -57,13 +64,13 @@ namespace API
             var call = APILogger.OpenApiCall(incomingRequest);
 
             //1 : CALCULATE
-            var parsedGeoLocation = await AddressToGeoLocation_VedAstro(address);
+            var parsedGeoLocation = AddressToGeoLocation_VedAstro(address);
             //use google only if no cache in VedAstro
             if (parsedGeoLocation.Name() == GeoLocation.Empty.Name())
             {
                 parsedGeoLocation = await AddressToGeoLocation_Google(address);
                 //add new data to cache, for future speed up
-                AddToCache(parsedGeoLocation);
+                AddToCache(parsedGeoLocation,userLocationName: address);
             }
 
 
@@ -71,6 +78,9 @@ namespace API
             return APITools.PassMessage((XElement)parsedGeoLocation.ToXml(), incomingRequest);
         }
 
+        /// <summary>
+        /// https://vedastroapibeta.azurewebsites.net/api/CoordinatesToGeoLocation/Latitude/46.9748794/Longitude/8.7843529
+        /// </summary>
         [Function(nameof(CoordinatesToGeoLocation))]
         public static async Task<HttpResponseData> CoordinatesToGeoLocation([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = CoordinatesToGeoLocationRoute)]
             HttpRequestData incomingRequest,
@@ -96,6 +106,9 @@ namespace API
             return APITools.PassMessage((XElement)parsedGeoLocation.ToXml(), incomingRequest);
         }
 
+        /// <summary>
+        /// https://vedastroapibeta.azurewebsites.net/api/GeoLocationToTimezone/Location/Chennai,TamilNadu,India/Time/23:37/07/08/1990/+01:00
+        /// </summary>
         [Function(nameof(GeoLocationToTimezone))]
         public static async Task<HttpResponseData> GeoLocationToTimezone([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = GeoLocationToTimezoneRoute)]
             HttpRequestData incomingRequest,
@@ -112,13 +125,13 @@ namespace API
             var geoLocation = x.GetGeoLocation();
 
             //2 : CALCULATE
-            var timezoneStr = await GeoLocationToTimezone_Vedastro(geoLocation, timeAtLocation);
+            var timezoneStr = GeoLocationToTimezone_Vedastro(geoLocation, timeAtLocation);
             //use google only if no cache in VedAstro
             if (string.IsNullOrEmpty(timezoneStr))
             {
                 timezoneStr = await GeoLocationToTimezone_Google(geoLocation, timeAtLocation);
                 //add new data to cache, for future speed up
-                AddToCache(geoLocation, timeAtLocation.Ticks.ToString(),timezoneStr);
+                AddToCache(geoLocation, timeAtLocation.Ticks.ToString(), timezone: timezoneStr);
             }
 
 
@@ -129,17 +142,19 @@ namespace API
 
 
         //----------------------------------PRIVATE FUNCS-----------------------------
-        
+
         /// <summary>
         /// Will add new cache to Geo Location Cache
         /// </summary>
-        private static void AddToCache(GeoLocation parsedGeoLocation, string dateTimeTimezoneTicks = "", string timezone = "")
+        private static void AddToCache(GeoLocation parsedGeoLocation, string dateTimeTimezoneTicks = "", string timezone = "", string userLocationName = "")
         {
             //package the data
             GeoLocationCacheEntity customerEntity = new GeoLocationCacheEntity()
             {
-                PartitionKey = parsedGeoLocation.Name(),
-                RowKey = dateTimeTimezoneTicks,
+                PartitionKey = parsedGeoLocation.Name(), //name given by Google API
+                CleanedName = CreateSearchableName(parsedGeoLocation.Name()), //used for fuzzy search on query side
+                SearchedName = userLocationName, //text inputed by caller to search
+                RowKey = dateTimeTimezoneTicks, //timezone linked
                 Timezone = timezone,
                 Latitude = parsedGeoLocation.Latitude(),
                 Longitude = parsedGeoLocation.Longitude()
@@ -149,22 +164,80 @@ namespace API
             tableClient.UpsertEntity(customerEntity);
         }
 
-        private static async Task<string> GeoLocationToTimezone_Vedastro(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
+        //data as it saved to table for easy search, user can input sandiago and San Diago, both will match here
+        private static string CreateSearchableName(string inputLocatioName)
+        {
+            //lower case it
+            var lower = inputLocatioName.ToLower();
+
+            //removes any character that is not a letter or a number
+            var cleanInputAddress = Regex.Replace(lower, @"[^a-zA-Z0-9]", string.Empty);
+
+            return cleanInputAddress;
+        }
+
+        private static string GeoLocationToTimezone_Vedastro(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
 
             //time that is linked to timezone
-            var timezoneTime = timeAtLocation.Ticks.ToString();
+            //NOTE :Search from +/- 1 year, as not to clog cache book
+            //      Possibility to miss timezone changes that occurred within 1 year
+            var oneYearBefore = timeAtLocation.AddYears(-1).Ticks;
+            var oneYearAfter = timeAtLocation.AddYears(1).Ticks;
 
-            //do direct search in table
+
+            //search cache table
             //NOTE: don't search by location name, because geo location name might be empty
+            Expression<Func<GeoLocationCacheEntity, bool>> expression = call => long.Parse(call.RowKey) >= oneYearBefore //occurred after
+                                                                                && long.Parse(call.RowKey) <= oneYearAfter  //occurred before
+                                                                                && call.Latitude == geoLocation.Latitude()
+                                                                                && call.Longitude == geoLocation.Longitude();
+
+            var linqEntities = tableClient.Query<GeoLocationCacheEntity>(expression);
+
+            //get timezone data out
+            var foundRaw = linqEntities?.FirstOrDefault()?.Timezone ?? "";
+
+            return foundRaw;
+
+        }
+
+        /// <summary>
+        /// Will return empty Geo Location if no cache
+        /// </summary>
+        private static GeoLocation AddressToGeoLocation_VedAstro(string inputLocalName)
+        {
+            //do direct search for address in name field
+            //NOTE: we want to include misspelled and under-case to save
+            var inputLocalNameLower = inputLocalName.ToLower();
+            var searchText = CreateSearchableName(inputLocalName); //possible
+            //NOTE: to make search more likely to hit, text that was inputed before by user is also cached as "UserLocationName"
+            Expression<Func<GeoLocationCacheEntity, bool>> expression = call => call.SearchedName == inputLocalNameLower
+                                                                            || call.CleanedName == searchText;
+            Pageable<GeoLocationCacheEntity> linqEntities = tableClient.Query(expression);
+
+
+            //if old call found check if running else default false
+            //NOTE : important return empty, because used to detect later if empty
+            var foundRaw = linqEntities?.FirstOrDefault()?.ToGeoLocation() ?? GeoLocation.Empty;
+
+            return foundRaw;
+
+        }
+
+        /// <summary>
+        /// Will return empty Geo Location if no cache
+        /// </summary>
+        private static async Task<GeoLocation> CoordinatesToGeoLocation_Vedastro(string longitude, string latitude)
+        {
+            //do direct search for address in name field 
             var linqEntities =
                 tableClient.Query<GeoLocationCacheEntity>(
-                    call => call.RowKey == timezoneTime //match time for timezone
-                                                    && call.Latitude == geoLocation.Latitude()
-                                                    && call.Longitude == geoLocation.Longitude());
+                    call => call.Longitude == double.Parse(longitude) && call.Latitude == double.Parse(latitude));
 
-            //ro
-            var foundRaw = linqEntities?.FirstOrDefault()?.Timezone ?? "";
+            //if old call found check if running else default false
+            //NOTE : important return empty, because used to detect later if empty
+            var foundRaw = linqEntities?.FirstOrDefault()?.ToGeoLocation() ?? GeoLocation.Empty;
 
             return foundRaw;
 
@@ -230,7 +303,7 @@ namespace API
 
             var locationNameLong = resultsJson["formatted_address"].Value<string>();
             var splitted = locationNameLong.Split(',');
-            
+
             //keep only the last parts, country, state...
             var newLocationName = $"{splitted[splitted.Length - 3]},{splitted[splitted.Length - 2]},{splitted[splitted.Length - 1]}";
 
@@ -239,39 +312,6 @@ namespace API
             return fromIpAddress;
         }
 
-        /// <summary>
-        /// Will return empty Geo Location if no cache
-        /// </summary>
-        private static async Task<GeoLocation> AddressToGeoLocation_VedAstro(string address)
-        {
-            //do direct search for address in name field 
-            Pageable<GeoLocationCacheEntity> linqEntities = tableClient.Query<GeoLocationCacheEntity>(call => call.PartitionKey == address);
-
-            //if old call found check if running else default false
-            //NOTE : important return empty, because used to detect later if empty
-            var foundRaw = linqEntities?.FirstOrDefault()?.ToGeoLocation() ?? GeoLocation.Empty;
-
-            return foundRaw;
-
-        }
-
-        /// <summary>
-        /// Will return empty Geo Location if no cache
-        /// </summary>
-        private static async Task<GeoLocation> CoordinatesToGeoLocation_Vedastro(string longitude, string latitude)
-        {
-            //do direct search for address in name field 
-            var linqEntities = 
-                tableClient.Query<GeoLocationCacheEntity>(
-                    call => call.Longitude == double.Parse(longitude) && call.Latitude == double.Parse(latitude));
-
-            //if old call found check if running else default false
-            //NOTE : important return empty, because used to detect later if empty
-            var foundRaw = linqEntities?.FirstOrDefault()?.ToGeoLocation() ?? GeoLocation.Empty;
-
-            return foundRaw;
-
-        }
 
         private static async Task<GeoLocation> AddressToGeoLocation_Google(string address)
         {

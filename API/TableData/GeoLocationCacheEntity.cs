@@ -15,6 +15,18 @@ public class GeoLocationCacheEntity : ITableEntity
     public string PartitionKey { get; set; }
     
     /// <summary>
+    /// official name of location with lowercase with all special characters removed
+    /// NOTE : done to do faster server side search
+    /// </summary>
+    public string CleanedName { get; set; }
+
+    /// <summary>
+    /// location name given by caller
+    /// NOTE : done to do faster server side search
+    /// </summary>
+    public string SearchedName { get; set; }
+    
+    /// <summary>
     /// date time offset in ticks seconds
     /// </summary>
     public string RowKey { get; set; }

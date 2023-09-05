@@ -64,14 +64,13 @@ namespace VedAstro.Library
 		/// <summary>
 		/// based on number and type of params all available methods are taken and 
 		/// </summary>
-		public static List<APIFunctionResult> FindAndExecuteFunctions(Category calcCategory, params object[] paramInput)
+		public static List<APIFunctionResult> FindAndExecuteFunctions(Category calcCategory, MethodInfo callerToExclude = null, params object[] paramInput)
 		{
-
-			var foundCalcs = FindCalcs(calcCategory, paramInput);
+			//GET ALL CALCS
+			var foundCalcs = FindCalcs(calcCategory, callerToExclude, paramInput);
 
 			//STAGE 2: EXECUTE
 			var returnList = ExecuteCals(foundCalcs, paramInput);
-
 
 			//STAGE 3: HALLELUJAH
 			return returnList;
@@ -103,9 +102,9 @@ namespace VedAstro.Library
 			return parsed;
 		}
 
-		public static JToken FindAndExecuteFunctionsJSON(Category calcCategory, params object[] paramInput)
+		public static JToken FindAndExecuteFunctionsJSON(Category calcCategory, MethodInfo callerToExclude = null , params object[] paramInput)
 		{
-			var raw = FindAndExecuteFunctions(calcCategory, paramInput);
+			var raw = FindAndExecuteFunctions(calcCategory, callerToExclude, paramInput);
 
 			var parsed = APIFunctionResult.ToJsonList(raw);
 
@@ -149,7 +148,7 @@ namespace VedAstro.Library
 		/// <summary>
 		/// given a category will find those method's info only
 		/// </summary>
-		private static IEnumerable<MethodInfo> FindCalcs(Category calcCategory, params object[] paramInput)
+		private static IEnumerable<MethodInfo> FindCalcs(Category calcCategory, MethodInfo callerToExclude = null, params object[] paramInput)
 		{
 			//STAGE 1: FIND
 			//get the data needed to 
@@ -161,8 +160,8 @@ namespace VedAstro.Library
 			var matchedCalculators =
 				from calculatorInfo in calculatorClass.GetMethods()
 				let parameter = calculatorInfo.GetParameters()
-				where ParamListMatch(parameter, typeList) && CategoryMatch(calculatorInfo, calcCategory)
-				select calculatorInfo;
+				where ParamListMatch(parameter, typeList) && CategoryMatch(calculatorInfo, calcCategory) && calculatorInfo != callerToExclude
+                select calculatorInfo;
 
 			//sort alphabetically so easier to eye data point
 			var aToZOrder = matchedCalculators.OrderBy(method => method.Name).ToList();

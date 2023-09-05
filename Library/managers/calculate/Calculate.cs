@@ -3,7 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 using SwissEphNet;
 
 
@@ -26,6 +28,54 @@ namespace VedAstro.Library
     public static partial class Calculate
     {
 
+        /// <summary>
+        /// Wrapper function to make planet name appear "Payload" of API call data, for easier data probing by 3rd party code
+        /// </summary>
+        [API("All possible calculation for a Planet at a given Time", Category.Astronomical)]
+        public static List<APIFunctionResult> AllPlanetData(PlanetName planetName, Time parsedTime)
+        {
+            //compile together all the data
+            var compiledObj = new JObject();
+            var compiledAry = new JArray();
+            var isArray = true;
+
+			//var planetName = planetName.Name.ToString();
+			MethodBase method = MethodBase.GetCurrentMethod();
+			MethodInfo methodInfo = method as MethodInfo;
+			var raw = AutoCalculator.FindAndExecuteFunctions(Category.All, methodInfo, planetName, parsedTime);
+
+			return raw;
+
+			//var planetData = AutoCalculator.FindAndExecuteFunctionsJSON(Category.All, planetName, parsedTime);
+
+
+			//JSON format used for all planet data and selected data is different
+			//as such when building for all planets needs to be done properly to match
+			//var dataType = planetData.GetType();
+			//if (typeof(JObject) == dataType)
+			//{
+			//    isArray = true; //hack for below
+			//    var xxx = new JObject();
+			//    xxx[planetName] = planetData;
+			//    compiledAry.Add(xxx);
+			//}
+			//else
+			//{
+			//    isArray = false; //hack for below
+
+			//    //nicely packed
+			//    var wrapped = new JObject(planetData);
+			//    var named = new JProperty(planetName.Name.ToString(), wrapped);
+			//    compiledObj.Add(named);
+			//}
+
+
+			//for ALL property
+			//return isArray ? compiledAry : compiledObj;
+
+        }
+        
+        
         /// <summary>
         /// Wrapper function to make planet name appear "Payload" of API call data, for easier data probing by 3rd party code
         /// </summary>

@@ -2389,6 +2389,28 @@ namespace VedAstro.Library
             var remainingParts = parts.Skip(cutCount);
             return "/" + string.Join("/", remainingParts) + "/";
         }
+
+
+        /// <summary>
+        /// This algorithm calculates the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one word into the other. It's a good measure of how dissimilar two strings are.
+        /// </summary>
+        public static int LevenshteinDistance(string a, string b)
+        {
+            var matrix = new int[a.Length + 1, b.Length + 1];
+            for (int i = 0; i <= a.Length; i++)
+                matrix[i, 0] = i;
+            for (int j = 0; j <= b.Length; j++)
+                matrix[0, j] = j;
+            for (int i = 1; i <= a.Length; i++)
+            {
+                for (int j = 1; j <= b.Length; j++)
+                {
+                    int cost = (a[i - 1] == b[j - 1]) ? 0 : 1;
+                    matrix[i, j] = Math.Min(Math.Min(matrix[i - 1, j] + 1, matrix[i, j - 1] + 1), matrix[i - 1, j - 1] + cost);
+                }
+            }
+            return matrix[a.Length, b.Length];
+        }
     }
 
 

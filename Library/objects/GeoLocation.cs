@@ -235,11 +235,14 @@ namespace VedAstro.Library
         }
 
 
-
         public static async Task<GeoLocation> CoordinatesToGeoLocation(double latitude, double longitude)
         {
-            //get from API
-            var url = URL.CoordinatesToGeoLocationAPIStable + $"/Latitude/{latitude}/Longitude/{longitude}";
+            //round the coordinates, to match cache better and also because 3 decimal places is enough
+            var latitudeRound = Math.Round(latitude, 3);
+            var longitudeRound = Math.Round(longitude, 3);
+
+			//get from API
+			var url = URL.CoordinatesToGeoLocationAPIStable + $"/Latitude/{latitudeRound}/Longitude/{longitudeRound}";
             var webResult = await Tools.ReadFromServerXmlReply(url);
 
             //convert

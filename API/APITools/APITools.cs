@@ -1074,15 +1074,15 @@ namespace API
 			var userCallRate = lastCallsCount / minute1; //calls per minute
 			if (userCallRate > freeCallRate)
 			{
-				APITools.ApiExtraNote = $"Call Slowed Down :" +
-										 $" Sorry FREE package limited to {freeCallRate} calls/min." +
-										 $" You made {lastCallsCount} calls in 1 min." +
-										 $" Please donate to increase limit.";
-
-
 				//every additional call within specified time limit gets slowed accordingly
 				//exp: last 3 calls x 800ms = 4th call delay --> 2400ms
 				var msDelay = lastCallsCount * msDelayRate;
+
+				APITools.ApiExtraNote = $"Call Slowed Down {msDelay}ms:" +
+				                        $" Sorry for now public API quota is {freeCallRate} calls/min." +
+				                        $" You made {lastCallsCount} calls in 1 min." +
+				                        $" Please donate to increase limit.";
+
 
 				await Task.Delay(msDelay);
 #if DEBUG

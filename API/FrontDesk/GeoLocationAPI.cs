@@ -149,11 +149,11 @@ namespace API
         private static void AddToCache(GeoLocation parsedGeoLocation, string dateTimeTimezoneTicks = "", string timezone = "", string userLocationName = "")
         {
             //package the data
-            GeoLocationCacheEntity customerEntity = new GeoLocationCacheEntity()
+            GeoLocationCacheEntity customerEntity = new()
             {
                 PartitionKey = parsedGeoLocation.Name(), //name given by Google API
                 CleanedName = CreateSearchableName(parsedGeoLocation.Name()), //used for fuzzy search on query side
-                SearchedName = userLocationName, //text inputed by caller to search
+                SearchedName = CreateSearchableName(userLocationName), //text inputed by caller to search
                 RowKey = dateTimeTimezoneTicks, //timezone linked
                 Timezone = timezone,
                 Latitude = parsedGeoLocation.Latitude(),
@@ -209,10 +209,9 @@ namespace API
         {
             //do direct search for address in name field
             //NOTE: we want to include misspelled and under-case to save
-            var inputLocalNameLower = inputLocalName.ToLower();
             var searchText = CreateSearchableName(inputLocalName); //possible
             //NOTE: to make search more likely to hit, text that was inputed before by user is also cached as "UserLocationName"
-            Expression<Func<GeoLocationCacheEntity, bool>> expression = call => call.SearchedName == inputLocalNameLower
+            Expression<Func<GeoLocationCacheEntity, bool>> expression = call => call.SearchedName == searchText
                                                                             || call.CleanedName == searchText;
             Pageable<GeoLocationCacheEntity> linqEntities = tableClient.Query(expression);
 

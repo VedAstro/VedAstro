@@ -70,7 +70,7 @@ namespace API
             {
                 parsedGeoLocation = await AddressToGeoLocation_Google(address);
                 //add new data to cache, for future speed up
-                AddToCache(parsedGeoLocation,userLocationName: address);
+                AddToCache(parsedGeoLocation, rowKeyData: CreateSearchableName(address));
             }
 
 
@@ -92,13 +92,13 @@ namespace API
             var call = APILogger.OpenApiCall(incomingRequest);
 
             //1 : CALCULATE
-            var parsedGeoLocation = await CoordinatesToGeoLocation_Vedastro(longitude, latitude);
+            var parsedGeoLocation = CoordinatesToGeoLocation_Vedastro(longitude, latitude);
             //use google only if no cache in VedAstro
             if (parsedGeoLocation.Name() == GeoLocation.Empty.Name())
             {
                 parsedGeoLocation = await CoordinatesToGeoLocation_Google(longitude, latitude);
                 //add new data to cache, for future speed up
-                AddToCache(parsedGeoLocation);
+                AddToCache(parsedGeoLocation: parsedGeoLocation);
             }
 
 
@@ -131,7 +131,7 @@ namespace API
             {
                 timezoneStr = await GeoLocationToTimezone_Google(geoLocation, timeAtLocation);
                 //add new data to cache, for future speed up
-                AddToCache(geoLocation, timeAtLocation.Ticks.ToString(), timezone: timezoneStr);
+                AddToCache(geoLocation, rowKeyData: timeAtLocation.Ticks.ToString(), timezone: timezoneStr);
             }
 
 
@@ -148,16 +148,20 @@ namespace API
         /// <summary>
         /// Will add new cache to Geo Location Cache
         /// </summary>
-        private static void AddToCache(GeoLocation parsedGeoLocation, string dateTimeTimezoneTicks = "", string timezone = "", string userLocationName = "")
+        private static void AddToCache(GeoLocation parsedGeoLocation, string rowKeyData = "", string timezone = "")
         {
-            //package the data
-            GeoLocationCacheEntity customerEntity = new()
+
+			//if cleaned name is same with user input name (RowKey), than remove cleaned name (save space)
+			var cleanedName = CreateSearchableName(parsedGeoLocation.Name());
+			cleanedName = cleanedName == rowKeyData ? "" : cleanedName;
+
+			//package the data
+			GeoLocationCacheEntity customerEntity = new()
             {
                 PartitionKey = parsedGeoLocation.Name(), //name given by Google API
-                CleanedName = CreateSearchableName(parsedGeoLocation.Name()), //used for fuzzy search on query side
-                SearchedName = CreateSearchableName(userLocationName), //text inputed by caller to search
-                RowKey = dateTimeTimezoneTicks, //timezone linked
-                Timezone = timezone,
+                CleanedName = cleanedName, //used for fuzzy search on query side
+                RowKey = rowKeyData, //row key data can be time or name inputed by caller
+				Timezone = timezone,
                 Latitude = parsedGeoLocation.Latitude(),
                 Longitude = parsedGeoLocation.Longitude()
             };
@@ -167,10 +171,10 @@ namespace API
         }
 
         //data as it saved to table for easy search, user can input sandiago and San Diago, both will match here
-        private static string CreateSearchableName(string inputLocatioName)
+        private static string CreateSearchableName(string inputLocationName)
         {
             //lower case it
-            var lower = inputLocatioName.ToLower();
+            var lower = inputLocationName.ToLower();
 
             //removes any character that is not a letter or a number
             var cleanInputAddress = Regex.Replace(lower, @"[^a-zA-Z0-9]", string.Empty);
@@ -211,8 +215,9 @@ namespace API
             //NOTE: we want to include misspelled and under-case to save
             var searchText = CreateSearchableName(inputLocalName); //possible
             //NOTE: to make search more likely to hit, text that was inputed before by user is also cached as "UserLocationName"
-            Expression<Func<GeoLocationCacheEntity, bool>> expression = call => call.SearchedName == searchText
+            Expression<Func<GeoLocationCacheEntity, bool>> expression = call => call.RowKey == searchText
                                                                             || call.CleanedName == searchText;
+            
             Pageable<GeoLocationCacheEntity> linqEntities = tableClient.Query(expression);
 
 
@@ -227,12 +232,15 @@ namespace API
         /// <summary>
         /// Will return empty Geo Location if no cache
         /// </summary>
-        private static async Task<GeoLocation> CoordinatesToGeoLocation_Vedastro(string longitude, string latitude)
+        private static GeoLocation CoordinatesToGeoLocation_Vedastro(string longitude, string latitude)
         {
             //do direct search for address in name field 
-            var linqEntities =
+            var longitudeParsed = double.Parse(longitude);
+            var latitudeParsed = double.Parse(latitude);
+
+			var linqEntities =
                 tableClient.Query<GeoLocationCacheEntity>(
-                    call => call.Longitude == double.Parse(longitude) && call.Latitude == double.Parse(latitude));
+                    call => call.Longitude == longitudeParsed && call.Latitude == latitudeParsed);
 
             //if old call found check if running else default false
             //NOTE : important return empty, because used to detect later if empty

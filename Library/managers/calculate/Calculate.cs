@@ -29,51 +29,55 @@ namespace VedAstro.Library
     {
 
         /// <summary>
-        /// Wrapper function to make planet name appear "Payload" of API call data, for easier data probing by 3rd party code
+        /// Wrapper function for open API
         /// </summary>
-        [API("All possible calculation for a Planet at a given Time", Category.Astronomical)]
-        public static List<APIFunctionResult> AllPlanetData(PlanetName planetName, Time parsedTime)
+        [API("Gets all possible calculations for a Planet at a given Time", Category.Astronomical)]
+        public static List<APIFunctionResult> AllPlanetData(PlanetName planetName, Time time)
         {
-            //compile together all the data
-            var compiledObj = new JObject();
-            var compiledAry = new JArray();
-            var isArray = true;
-
-			//var planetName = planetName.Name.ToString();
+            //exclude this method from getting included in "Find" and Execute below
 			MethodBase method = MethodBase.GetCurrentMethod();
-			MethodInfo methodInfo = method as MethodInfo;
-			var raw = AutoCalculator.FindAndExecuteFunctions(Category.All, methodInfo, planetName, parsedTime);
+			MethodInfo methodToExclude = method as MethodInfo;
+
+            //do calculation
+			var raw = AutoCalculator.FindAndExecuteFunctions(Category.All, methodToExclude, planetName, time);
 
 			return raw;
-
-			//var planetData = AutoCalculator.FindAndExecuteFunctionsJSON(Category.All, planetName, parsedTime);
-
-
-			//JSON format used for all planet data and selected data is different
-			//as such when building for all planets needs to be done properly to match
-			//var dataType = planetData.GetType();
-			//if (typeof(JObject) == dataType)
-			//{
-			//    isArray = true; //hack for below
-			//    var xxx = new JObject();
-			//    xxx[planetName] = planetData;
-			//    compiledAry.Add(xxx);
-			//}
-			//else
-			//{
-			//    isArray = false; //hack for below
-
-			//    //nicely packed
-			//    var wrapped = new JObject(planetData);
-			//    var named = new JProperty(planetName.Name.ToString(), wrapped);
-			//    compiledObj.Add(named);
-			//}
-
-
-			//for ALL property
-			//return isArray ? compiledAry : compiledObj;
-
         }
+        
+        
+        /// <summary>
+        /// Wrapper function for open API
+        /// </summary>
+        [API("All possible calculations for a House at a given Time", Category.Astronomical)]
+        public static List<APIFunctionResult> AllHouseData(HouseName houseName, Time time)
+        {
+            //exclude this method from getting included in "Find" and Execute below
+			MethodBase method = MethodBase.GetCurrentMethod();
+			MethodInfo methodToExclude = method as MethodInfo;
+
+            //do calculation
+			var raw = AutoCalculator.FindAndExecuteFunctions(Category.All, methodToExclude, houseName, time);
+
+			return raw;
+        }
+        
+        
+        /// <summary>
+        /// Wrapper function for open API
+        /// </summary>
+        [API("All possible calculations for a Zodiac Sign at a given Time", Category.Astronomical)]
+        public static List<APIFunctionResult> AllZodiacSignData(ZodiacName zodiacName, Time time)
+        {
+            //exclude this method from getting included in "Find" and Execute below
+			MethodBase method = MethodBase.GetCurrentMethod();
+			MethodInfo methodToExclude = method as MethodInfo;
+
+            //do calculation
+			var raw = AutoCalculator.FindAndExecuteFunctions(Category.All, methodToExclude, zodiacName, time);
+
+			return raw;
+        }
+
         
         
         /// <summary>

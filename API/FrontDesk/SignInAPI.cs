@@ -85,8 +85,7 @@ namespace API
             //facebook pings this when user Deauthorize facebook login
             //https://api.vedastro.org/FacebookDeauthorize 
 
-            //todo proper logging
-            await APILogger.Visitor(incomingRequest);
+	        APILogger.Visit(incomingRequest);
 
             return APITools.PassMessage(incomingRequest);
         }

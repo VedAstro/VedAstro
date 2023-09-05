@@ -23,9 +23,8 @@ public static class APILogger
     /// </summary>
     public static readonly TableClient LogBookClient;
     public static readonly TableClient ErrorBookClient;
-    private static readonly TableServiceClient tableServiceClient;
-    private const string OpenAPILogBook = "OpenAPILogBook";
-    private const string OpenAPIErrorBook = "OpenAPIErrorBook"; //place to store errors, should be cleaned regularly
+    private const string OpenApiLogBook = "OpenAPILogBook";
+    private const string OpenApiErrorBook = "OpenAPIErrorBook"; //place to store errors, should be cleaned regularly
 
     /// <summary>
     /// ip address set when visit log is made
@@ -40,21 +39,19 @@ public static class APILogger
 
 	static APILogger()
     {
-	    var storageUri = $"https://vedastroapistorage.table.core.windows.net/{OpenAPILogBook}";
+	    var logBookUri = $"https://vedastroapistorage.table.core.windows.net/{OpenApiLogBook}";
+	    var errorBookUri = $"https://vedastroapistorage.table.core.windows.net/{OpenApiErrorBook}";
 	    string accountName = "vedastroapistorage";
 	    string storageAccountKey = Secrets.VedAstroApiStorageKey;
 
-        //get connection
-	    tableServiceClient = new TableServiceClient(new Uri(storageUri), new TableSharedKeyCredential(accountName, storageAccountKey));
-	    
-	    //load tables
-	    LogBookClient = tableServiceClient.GetTableClient(OpenAPILogBook);
-	    ErrorBookClient = tableServiceClient.GetTableClient(OpenAPIErrorBook);
+		//get connection & load tables
+		var _tableServiceClient = new TableServiceClient(new Uri(logBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
+		LogBookClient = _tableServiceClient.GetTableClient(OpenApiLogBook);
+
+		_tableServiceClient = new TableServiceClient(new Uri(errorBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
+		ErrorBookClient = _tableServiceClient.GetTableClient(errorBookUri);
 
     }
-
-
-	//PUBLIC FUNCTIONS
 
 
 	/// <summary>
@@ -78,7 +75,9 @@ public static class APILogger
         LogBookClient.UpsertEntity(errorLog);
 	}
 
-
+	/// <summary>
+	/// Adds error log to OpenAPIErrorBook
+	/// </summary>
 	public static void Error(string message)
     {
 		var errorLog = new OpenAPIErrorBookEntity()
@@ -95,23 +94,6 @@ public static class APILogger
 
 	}
 
-
-    public static async Task Data(string textData, HttpRequestData req = null)
-    {
-
-        var visitorXml = new XElement("Visitor");
-        visitorXml.Add(BranchXml, SourceXml);
-        visitorXml.Add(new XElement("Data"), textData);
-        if (req != null) { visitorXml.Add(await APITools.RequestToXml(req)); } //only add if specified
-        visitorXml.Add(Tools.TimeStampSystemXml);
-        visitorXml.Add(Tools.TimeStampServerXml);
-
-        //add error data to main app log file
-        await Tools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
-
-    }
-
-	// NEW AZURE TABLE FUNCTIONS
 	/// <summary>
 	/// Adds a row to open api log book, with ip address & call url
 	/// </summary>
@@ -138,10 +120,7 @@ public static class APILogger
 	}
 
 
-
-
-	//PRIVATE FUNCTIONS
-
+	//BELOW METHODS ARE FOR QUERYING DATA OUT
 
 	/// <summary>
 	/// Given an IP address, will return number of calls made in the last specified time period

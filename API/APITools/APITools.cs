@@ -420,7 +420,7 @@ namespace API
 			{
 				var msg = $"FAILED TO GET FILE:/n{url}";
 				Console.WriteLine(msg);
-				await APILogger.Data(msg); //log it
+				APILogger.Error(msg); //log it
 				return "";
 			}
 
@@ -449,7 +449,7 @@ namespace API
 			{
 				var msg = $"FAILED TO GET FILE:/n{url}";
 				Console.WriteLine(msg);
-				await APILogger.Data(msg); //log it
+				APILogger.Error(msg); //log it
 				return new byte[] { };
 			}
 
@@ -631,7 +631,9 @@ namespace API
 				await SaveXDocumentToAzure(allListXmlDoc, cloudXmlFile, Tools.BlobContainerName);
 
 				//since heavy computation, log if happens
-				APILogger.Data($"Profiles swapped : {visitorIdList.Count}", AppInstance.IncomingRequest);
+				#region DEBUG
+				Console.WriteLine($"Profiles swapped : {visitorIdList.Count}");
+				#endregion
 
 
 				//clear cache
@@ -1079,9 +1081,9 @@ namespace API
 				var msDelay = lastCallsCount * msDelayRate;
 
 				APITools.ApiExtraNote = $"Call Slowed Down {msDelay}ms:" +
-				                        $" Sorry for now public API quota is {freeCallRate} calls/min." +
-				                        $" You made {lastCallsCount} calls in 1 min." +
-				                        $" Please donate to increase limit.";
+										$" Sorry for now public API quota is {freeCallRate} calls/min." +
+										$" You made {lastCallsCount} calls in 1 min." +
+										$" Please donate to increase limit.";
 
 
 				await Task.Delay(msDelay);

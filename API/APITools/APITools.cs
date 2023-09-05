@@ -1074,11 +1074,10 @@ namespace API
 			var userCallRate = lastCallsCount / minute1; //calls per minute
 			if (userCallRate > freeCallRate)
 			{
-				APITools.ApiExtraNote = $"Call slowed down." +
-													 $" Sorry too many calls on FREE package." +
-													 $" You made {lastCallsCount} calls in 1 min." +
-													 $" {userCallRate} call/min." +
-													 $" Please donate to increase limit.";
+				APITools.ApiExtraNote = $"Call Slowed Down :" +
+										 $" Sorry FREE package limited to {freeCallRate} calls/min." +
+										 $" You made {lastCallsCount} calls in 1 min." +
+										 $" Please donate to increase limit.";
 
 
 				//every additional call within specified time limit gets slowed accordingly

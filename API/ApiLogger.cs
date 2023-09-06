@@ -30,6 +30,8 @@ public static class APILogger
     /// </summary>
     public static string URL = "NOT SET";
 
+    private static TableClient openApiErrorBookClient = APITools.GetTableClientFromTableName("OpenAPIErrorBook");
+
 
 	static APILogger()
     {
@@ -65,9 +67,11 @@ public static class APILogger
 	        Message = exceptionData
         };
 
-        //creates record if no exist, update if already there
-        LogBookClient.UpsertEntity(errorLog);
+		//creates record if no exist, update if already there
+		openApiErrorBookClient.UpsertEntity(errorLog);
 	}
+
+
 
 	/// <summary>
 	/// Adds error log to OpenAPIErrorBook
@@ -84,7 +88,7 @@ public static class APILogger
 		};
 
 		//creates record if no exist, update if already there
-		LogBookClient.UpsertEntity(errorLog);
+		ErrorBookClient.UpsertEntity(errorLog);
 
 	}
 
@@ -117,6 +121,7 @@ public static class APILogger
 	//BELOW METHODS ARE FOR QUERYING DATA OUT
 
 	/// <summary>
+	/// from LogBookClient
 	/// Given an IP address, will return number of calls made in the last specified time period
 	/// </summary>
 	public static int GetAllCallsWithinLastTimeperiod(string ipAddress, double timeMinute)

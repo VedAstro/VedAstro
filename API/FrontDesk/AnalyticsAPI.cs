@@ -26,102 +26,20 @@ namespace API
 	{
 
 		private const string Route1 = "Analytics/{*tableName}"; //* that captures the rest of the URL path
+		private const string Route2 = "Analytics/{tableName}/{*partitionKey}"; 
 
-		/// <summary>
-		/// Gets log from last 30 days, and groups by IP and all time count
-		/// http://localhost:7071/api/OpenAPILog/
-		/// </summary>
-		[Function(nameof(OpenAPILog))]
-		public static HttpResponseData OpenAPILog([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route1)] HttpRequestData incomingRequest,
-			string tableName)
-		{
-			//user inputs table name and user does not input table name
-			if (string.IsNullOrEmpty(tableName)) //no input, show directory
-			{
-				var nameList = GetAllTableNames();
-
-				//4 : CONVERT TO JSON
-				var jsonArray = new JArray(nameList); //IP address | Call Count
-
-				//5 : SEND DATA
-				return APITools.PassMessageJson(jsonArray, incomingRequest);
-
-			}
-			//has input, process table
-			else
-			{
-				//from table name get table client
-				TableClient logBookClient = GetTableClientFromTableName(tableName);
-
-				//get all IP address records in the last 30 days
-				var aMomentAgo = DateTimeOffset.UtcNow.AddDays(-30);
-				var allEntities = logBookClient.Query<ITableEntity>(call => call.Timestamp >= aMomentAgo).ToList();
-
-				//get only unique addresses from last 30 days
-				List<string> distinctIpAddressList = allEntities.Select(e => e.PartitionKey).Distinct().ToList();
-
-				//create new presentation list
-				var presentationList = new Dictionary<string, int>();
-				foreach (var callerAddress in distinctIpAddressList)
-				{
-					//get all calls from full time period
-					var foundCalls = logBookClient.Query<ITableEntity>(call => call.PartitionKey == callerAddress);
-					presentationList[callerAddress] = foundCalls.Count();
-				}
-
-				//sort by most called to least
-				var sortedList = presentationList.OrderByDescending(x => x.Value); //order by call count
-
-				//4 : CONVERT TO JSON
-				var jsonArray = new JArray(sortedList.Select(x => $"IP: {x.Key} | Count: {x.Value}")); //IP address | Call Count
-
-				//5 : SEND DATA
-				return APITools.PassMessageJson(jsonArray, incomingRequest);
-			}
-
-			
-
-		}
-		/// <summary>
-		/// Gets the names of all the tables in azure storage
-		/// </summary>
-		public static List<string> GetAllTableNames()
-		{
-			string connectionString = Secrets.API_STORAGE; // Replace with your storage account's connection string
-			var serviceClient = new TableServiceClient(connectionString);
-			var tableResponses =  serviceClient.Query();
-			var tableNames = new List<string>();
-			foreach (var table in tableResponses)
-			{
-				tableNames.Add(table.Name);
-			}
-			return tableNames;
-		}
-
-		private static TableClient GetTableClientFromTableName(string tableName)
-		{
-			//prepare call stuff
-			var tableUlr = $"https://vedastroapistorage.table.core.windows.net/{tableName}";
-			string accountName = "vedastroapistorage";
-			string storageAccountKey = Secrets.VedAstroApiStorageKey;
-
-			//get connection
-			var _tableServiceClient = new TableServiceClient(new Uri(tableUlr), new TableSharedKeyCredential(accountName, storageAccountKey));
-			var client = _tableServiceClient.GetTableClient(tableName);
-
-			return client;
-		}
 
 		/// <summary>
 		/// Shows all rows for a given IP
-		/// http://localhost:7071/api/OpenAPILog/IP/212.35.2.245
+		/// http://localhost:7071/api/OpenAPILog/212.35.2.245
 		/// </summary>
-		[Function(nameof(OpenAPILog_IP))]
-		public static HttpResponseData OpenAPILog_IP([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "OpenAPILog/IP/{ipAddress}")] HttpRequestData incomingRequest,
-			string ipAddress)
+		[Function(nameof(Analytics2))]
+		public static HttpResponseData Analytics2([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route2)] HttpRequestData incomingRequest,
+			string tableName, string partitionKey)
 		{
-			//all for IP
-			var foundCalls = APILogger.LogBookClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == ipAddress);
+			//from table name get table client
+			TableClient tableClient = APITools.GetTableClientFromTableName(tableName);
+			var foundCalls = tableClient.Query<AnalyticsEntity>(call => call.PartitionKey == partitionKey);
 
 			//create new presentation list
 			var presentationList = new Dictionary<DateTimeOffset, string>();
@@ -132,12 +50,12 @@ namespace API
 				var serverTime = timestamp.ToOffset(TimeSpan.FromHours(8)).ToString(Time.DateTimeFormatSeconds); //convert to +08:00 time
 
 				//combined string
-				var rowData = $"{serverTime} | {ipAddress} | {callLog.URL}";
+				var rowData = $"{serverTime} | {partitionKey} | {callLog.URL}";
 				presentationList[timestamp] = rowData;
 			}
 
 			//sort by most called to least
-			var sortedList = presentationList.OrderBy(x => x.Value); //order by time
+			var sortedList = presentationList.OrderBy(x => x.Key); //order by time
 
 			//4 : CONVERT TO JSON
 			var jsonArray = new JArray(sortedList.Select(x => x.Value));
@@ -152,8 +70,8 @@ namespace API
 		/// Shows all rows for a given IP
 		/// http://localhost:7071/api/OpenAPILog/Chart
 		/// </summary>
-		[Function(nameof(OpenAPILog_Chart))]
-		public static HttpResponseData OpenAPILog_Chart([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "OpenAPILog/Chart/SliceDays/{sliceDays}/DaysAgo/{daysAgo}")] HttpRequestData incomingRequest,
+		[Function(nameof(Analytics3))]
+		public static HttpResponseData Analytics3([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "OpenAPILog/Chart/SliceDays/{sliceDays}/DaysAgo/{daysAgo}")] HttpRequestData incomingRequest,
 			string daysAgo, string sliceDays)
 		{
 
@@ -208,6 +126,69 @@ namespace API
 		}
 
 
+		/// <summary>
+		/// Gets log from last 30 days, and groups by IP and all time count
+		/// http://localhost:7071/api/OpenAPILog/
+		/// </summary>
+		[Function(nameof(Analytics4))]
+		public static HttpResponseData Analytics4([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route1)] HttpRequestData incomingRequest,
+			string tableName)
+		{
+			//user inputs table name and user does not input table name
+			if (string.IsNullOrEmpty(tableName)) //no input, show directory
+			{
+				var nameList = GetAllTableNames();
+
+				//4 : CONVERT TO JSON
+				var jsonArray = new JArray(nameList); //IP address | Call Count
+
+				//5 : SEND DATA
+				return APITools.PassMessageJson(jsonArray, incomingRequest);
+
+			}
+			//has input, process table
+			else
+			{
+				//from table name get table client
+				TableClient logBookClient = APITools.GetTableClientFromTableName(tableName);
+
+				//get all IP address records in the last 30 days
+				var aMomentAgo = DateTimeOffset.UtcNow.AddDays(-30);
+				var allEntities = logBookClient.Query<AnalyticsEntity>(call => call.Timestamp >= aMomentAgo).ToList();
+
+				//get only unique IP addresses from last 30 days (PARTITION KEY)
+				List<string> distinctIpAddressList = allEntities.Select(e => e.PartitionKey).Distinct().ToList();
+
+				//create new presentation list
+				var presentationList = new Dictionary<string, int>();
+				foreach (var callerAddress in distinctIpAddressList)
+				{
+					//get all calls from full time period
+					var foundCalls = logBookClient.Query<AnalyticsEntity>(call => call.PartitionKey == callerAddress);
+					presentationList[callerAddress] = foundCalls.Count();
+				}
+
+				//sort by most called to least
+				var sortedList = presentationList.OrderByDescending(x => x.Value); //order by call count
+
+				//4 : CONVERT TO JSON
+				var jsonArray = new JArray(sortedList.Select(x => $"IP: {x.Key} | Count: {x.Value}")); //IP address | Call Count
+
+				//5 : SEND DATA
+				return APITools.PassMessageJson(jsonArray, incomingRequest);
+			}
+
+			
+
+		}
+
+
+
+
+
+
+		//----------------------------------- PRIVATE -------------------------------
+
 
 		//public static byte[] CreateBarChart(Dictionary<string, int> data)
 		//{
@@ -249,6 +230,24 @@ namespace API
 			bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
 			return stream.ToArray();
 		}
+
+		/// <summary>
+		/// Gets the names of all the tables in azure storage
+		/// </summary>
+		public static List<string> GetAllTableNames()
+		{
+			string connectionString = Secrets.API_STORAGE; // Replace with your storage account's connection string
+			var serviceClient = new TableServiceClient(connectionString);
+			var tableResponses = serviceClient.Query();
+			var tableNames = new List<string>();
+			foreach (var table in tableResponses)
+			{
+				tableNames.Add(table.Name);
+			}
+			return tableNames;
+		}
+
+		
 
 	}
 }

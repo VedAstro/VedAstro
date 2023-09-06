@@ -374,7 +374,7 @@ namespace API
                 APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(Tools.ExceptionToXml(e), incomingRequest);
+                return APITools.FailMessage(Tools.ExceptionToXML(e), incomingRequest);
             }
 
         }

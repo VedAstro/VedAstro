@@ -192,7 +192,7 @@ namespace API
 			MessageJson("Fail", payload, req);
 
 		public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) =>
-			MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
+			MessageJson("Fail", Tools.ExceptionToXML(payloadException), req);
 
 		public static HttpResponseData PassMessageJson(object payload, HttpRequestData req) =>
 			MessageJson("Pass", payload, req);
@@ -216,7 +216,7 @@ namespace API
 		}
 
 		public static HttpResponseData FailMessage(Exception payloadException, HttpRequestData req) =>
-			FailMessage(Tools.ExceptionToXml(payloadException), req);
+			FailMessage(Tools.ExceptionToXML(payloadException), req);
 
 
 		//----------------------------------------FUNCTIONS---------------------------------------------

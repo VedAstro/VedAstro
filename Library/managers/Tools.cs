@@ -1970,26 +1970,9 @@ namespace VedAstro.Library
 			JProperty rootPayloadJson;
 			if (anyTypeData is List<APIFunctionResult> apiList) //handles results that have many props from 1 call, exp : SwissEphemeris
 			{
-				//var compiledAry = new JArray();
-
-
-				//foreach (var apiFunctionResult in apiList)
-				//{
-				//	var xxx = new JObject();
-				//	xxx[apiFunctionResult.Name] = AnyToJSON("", apiFunctionResult.Result);
-				//	compiledAry.Add(xxx);
-
-				//}
-
-				////convert list to comma separated string
-				//var parsedList = iList.Cast<object>().ToList();
-				//var stringComma = Tools.ListToString(parsedList);
-
+				//converts into JSON list with property names
+				//NOTE: uses back this AnyToJSON to convert nested types
 				var parsed = APIFunctionResult.ToJsonList(apiList);
-
-				var xxx = new JObject();
-				xxx[dataName] = parsed;
-				//compiledAry.Add(xxx);
 				return parsed;
 			}
 			if (anyTypeData is IList iList) //handles results that have many props from 1 call, exp : SwissEphemeris

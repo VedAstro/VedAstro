@@ -1,4 +1,4 @@
-﻿using VedAstro.Library;
+using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,15 +26,15 @@ namespace API
                 var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var personId = rootXml.Value;
 
-                var person = await Tools.GetPersonById(personId);
+                var person = await VedAstro.Library.Tools.GetPersonById(personId);
 
                 //calculate predictions for current person
-                var predictionList = await Tools.GetHoroscopePrediction(person.BirthTime, APITools.HoroscopeDataListFile);
+                var predictionList = await VedAstro.Library.Tools.GetHoroscopePrediction(person.BirthTime, APITools.HoroscopeDataListFile);
 
                 var sortedList = SortPredictionData(predictionList);
 
                 //convert list to xml string in root elm
-                return APITools.PassMessage(Tools.AnyTypeToXmlList(sortedList), incomingRequest);
+                return APITools.PassMessage(VedAstro.Library.Tools.AnyTypeToXmlList(sortedList), incomingRequest);
 
             }
             catch (Exception e)
@@ -87,11 +87,9 @@ namespace API
         [Function(nameof(OpenAPILog))]
         public static HttpResponseData OpenAPILog([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "OpenAPILog")] HttpRequestData incomingRequest)
         {
-            var tableClient = APILogger.LogBookClient;
-
             //get all IP address records in the last 30 days
-            DateTimeOffset aMomentAgo = DateTimeOffset.UtcNow.AddDays(-30);
-            var allEntities = tableClient.Query<OpenAPILogBookEntity>(call => call.Timestamp >= aMomentAgo).ToList();
+            var aMomentAgo = DateTimeOffset.UtcNow.AddDays(-30);
+            var allEntities = APILogger.LogBookClient.Query<OpenAPILogBookEntity>(call => call.Timestamp >= aMomentAgo).ToList();
 
             //get only unique addresses from last 30 days
             List<string> distinctIpAddressList = allEntities.Select(e => e.PartitionKey).Distinct().ToList();
@@ -101,7 +99,7 @@ namespace API
             foreach (var callerAddress in distinctIpAddressList)
             {
                 //get all calls from full time period
-                var foundCalls = tableClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == callerAddress);
+                var foundCalls = APILogger.LogBookClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == callerAddress);
                 presentationList[callerAddress] = foundCalls.Count();
             }
 
@@ -109,7 +107,7 @@ namespace API
             var sortedList = presentationList.OrderByDescending(x => x.Value); //order by call count
 
             //4 : CONVERT TO JSON
-            JArray jsonArray = new JArray(sortedList.Select(x => new JObject { { x.Key, x.Value } }));
+            var jsonArray = new JArray(sortedList.Select(x => $"IP: {x.Key} | Count: {x.Value}")); //IP address | Call Count
 
             //5 : SEND DATA
             return APITools.PassMessageJson(jsonArray, incomingRequest);
@@ -124,27 +122,27 @@ namespace API
         public static HttpResponseData OpenAPILog_IP([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "OpenAPILog/IP/{ipAddress}")] HttpRequestData incomingRequest,
             string ipAddress)
         {
-            var tableClient = APILogger.LogBookClient;
-
             //all for IP
-            var foundCalls = tableClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == ipAddress);
+            var foundCalls = APILogger.LogBookClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == ipAddress);
 
             //create new presentation list
             var presentationList = new Dictionary<DateTimeOffset, string>();
             foreach (var callLog in foundCalls)
             {
                 //format into understandable time format
-                var x = callLog?.Timestamp ?? DateTimeOffset.MinValue;
-                var serverTime = x.ToOffset(TimeSpan.FromHours(8)).ToString(Time.DateTimeFormatSeconds);
-                var rowData = $"{serverTime} | {callLog.PartitionKey} | {callLog.URL}";
-                presentationList[x] = rowData;
+                var timestamp = callLog?.Timestamp ?? DateTimeOffset.MinValue;
+                var serverTime = timestamp.ToOffset(TimeSpan.FromHours(8)).ToString(Time.DateTimeFormatSeconds); //convert to +08:00 time
+                
+                //combined string
+                var rowData = $"{serverTime} | {ipAddress} | {callLog.URL}";
+                presentationList[timestamp] = rowData;
             }
 
             //sort by most called to least
             var sortedList = presentationList.OrderBy(x => x.Value); //order by time
 
             //4 : CONVERT TO JSON
-            JArray jsonArray = new JArray(sortedList.Select(x => x.Value));
+            var jsonArray = new JArray(sortedList.Select(x => x.Value));
 
             //5 : SEND DATA
             return APITools.PassMessageJson(jsonArray, incomingRequest);

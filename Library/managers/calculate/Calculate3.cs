@@ -148,7 +148,7 @@ namespace VedAstro.Library
         public static bool IsMercuryMalefic(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("IsMercuryMalefic", time), _isMercuryMalefic);
+            return CacheManager.GetCache(new CacheKey(nameof(IsMercuryMalefic), time), _isMercuryMalefic);
 
 
             //UNDERLYING FUNCTION

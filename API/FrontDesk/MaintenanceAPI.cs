@@ -22,20 +22,24 @@ namespace API
         [Function(nameof(Home))]
         public static async Task<HttpResponseData> Home([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Home")] HttpRequestData incomingRequest)
         {
-            //get chart special API home page and send that to caller
-            var APIHomePageTxt = await APITools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
+	        APILogger.Visit(incomingRequest);
+
+			//get chart special API home page and send that to caller
+			var APIHomePageTxt = await APITools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
 
             return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
         }
 
         /// <summary>
-        /// API Home page
+        /// Searches for image and gives URL
         /// </summary>
         [Function(nameof(SearchImage))]
         public static async Task<HttpResponseData> SearchImage([HttpTrigger(AuthorizationLevel.Anonymous, "get",
             Route = "SearchImage/Keywords/{keywords}")] HttpRequestData incomingRequest,
             string keywords)
         {
+	        APILogger.Visit(incomingRequest);
+
             //IMPORTANT: replace this variable with your Cognitive Services subscription key
             string subscriptionKey = Secrets.BING_IMAGE_SEARCH;
             //stores the image results returned by Bing
@@ -78,8 +82,9 @@ namespace API
             HttpRequestData req,
             string callerId, string formatName)
         {
+	        APILogger.Visit(req);
 
-            if (formatName.ToLower() == "json")
+			if (formatName.ToLower() == "json")
             {
                 string jsonText = await AzureCache.GetData<string>(callerId);
 
@@ -118,8 +123,10 @@ namespace API
         public static async Task<HttpResponseData> SendFileToEmail([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Send/{fileName}/{fileFormat}/{receiverEmail}")] HttpRequestData incomingRequest,
             string fileName, string fileFormat, string receiverEmail)
         {
-            try
-            {
+	        APILogger.Visit(incomingRequest);
+
+			try
+			{
                 //log the call todo log causes errors in reading body, maybe read first
                 //APILogger.Visitor(incomingRequest);
 
@@ -151,10 +158,11 @@ namespace API
         [Function("getipaddress")]
         public static HttpResponseData GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
+	        APILogger.Visit(incomingRequest);
 
-            try
-            {
-                return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
+			try
+			{
+				return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
             }
             catch (Exception e)
             {
@@ -171,10 +179,11 @@ namespace API
         [Function("version")]
         public static HttpResponseData GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
+	        APILogger.Visit(incomingRequest);
 
 
-            try
-            {
+			try
+			{
                 var holder = new XElement("Root");
                 var versionNumberXml = new XElement("Version", ThisAssembly.Version);
                 holder.Add(versionNumberXml, Tools.TimeStampServerXml);
@@ -198,10 +207,11 @@ namespace API
         [Function("Stats")]
         public static async Task<HttpResponseData> GetStats([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
+	        APILogger.Visit(incomingRequest);
 
 
-            try
-            {
+			try
+			{
                 //get visitor log from storage
                 var visitorLogDocument = await Tools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, Tools.BlobContainerName);
 
@@ -232,9 +242,10 @@ namespace API
         [Function("health")]
         public static HttpResponseData GetHealth([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
+	        APILogger.Visit(incomingRequest);
 
-            try
-            {
+			try
+			{
                 //so long as respond as OK 200, then will pass (Render server)
                 //todo real health check please
                 //check if all data files are accessible

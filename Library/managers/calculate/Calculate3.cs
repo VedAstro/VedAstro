@@ -160,10 +160,9 @@ namespace VedAstro.Library
                 //if conjunct with benefic, then it is benefic
                 if (conjunctWithBenefic()) { return false; }
 
-                //if not conjunct with any planet, should be malefic (not 100% sure, maybe aspects needs to be considered)
-                //TODO NOTE : Further checking on this point is needed, for now just place as benefic with mild warning
-                LibLogger.Debug("Info:Mercury not conjunct, but placed as benefic!");
-                return false;
+				//if not conjunct with any planet, should be benefic
+				//NOTE : Mercury, by nature, is called sournya or good.
+				return false; // false means not malefic
 
 
                 //------------FUNCTIONS-------------

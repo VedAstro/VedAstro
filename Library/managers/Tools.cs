@@ -505,23 +505,62 @@ namespace VedAstro.Library
 
 		}
 
+
+
 		/// <summary>
-		/// Converts given exception data to XML
+		/// Extracts data from an Exception puts it in a nice XML
 		/// </summary>
-		public static XElement ExceptionToXml(Exception e)
+		public static XElement ExceptionToXML(Exception e)
 		{
+			//place to store the exception data
+			string fileName;
+			string methodName;
+			int line;
+			int columnNumber;
+			string message;
+			string source;
 
-			var responseMessage = new XElement("Exception");
+			//get the exception that started it all
+			var originalException = e.GetBaseException();
 
-			responseMessage.Add($"#Message#\n{e.Message}\n");
-			responseMessage.Add($"#Data#\n{e.Data}\n");
-			responseMessage.Add($"#InnerException#\n{e.InnerException}\n");
-			responseMessage.Add($"#Source#\n{e.Source}\n");
-			responseMessage.Add($"#Source#\n{e.Source}\n");
-			responseMessage.Add($"#StackTrace#\n{e.StackTrace}\n");
-			responseMessage.Add($"#StackTrace#\n{e.TargetSite}\n");
+			//extract the data from the error
+			StackTrace st = new StackTrace(e, true);
 
-			return responseMessage;
+			//Get the first stack frame
+			StackFrame frame = st.GetFrame(st.FrameCount - 1);
+
+			//Get the file name
+			fileName = frame?.GetFileName();
+
+			//Get the method name
+			methodName = frame.GetMethod()?.Name;
+
+			//Get the line number from the stack frame
+			line = frame.GetFileLineNumber();
+
+			//Get the column number
+			columnNumber = frame.GetFileColumnNumber();
+
+			message = originalException.ToString();
+
+			source = originalException.Source;
+			//todo include inner exception data
+			var stackTrace = originalException.StackTrace;
+
+
+			//put together the new error record
+			var newRecord = new XElement("Error",
+				new XElement("Message", message),
+				new XElement("Source", source),
+				new XElement("FileName", fileName),
+				new XElement("SourceLineNumber", line),
+				new XElement("SourceColNumber", columnNumber),
+				new XElement("MethodName", methodName),
+				new XElement("MethodName", methodName)
+			);
+
+
+			return newRecord;
 		}
 
 		/// <summary>
@@ -1229,61 +1268,6 @@ namespace VedAstro.Library
 			return new StringContent(dataString, encoding, mediaType);
 		}
 
-		/// <summary>
-		/// Extracts data from an Exception puts it in a nice XML
-		/// </summary>
-		public static XElement ExceptionToXML(Exception e)
-		{
-			//place to store the exception data
-			string fileName;
-			string methodName;
-			int line;
-			int columnNumber;
-			string message;
-			string source;
-
-			//get the exception that started it all
-			var originalException = e.GetBaseException();
-
-			//extract the data from the error
-			StackTrace st = new StackTrace(e, true);
-
-			//Get the first stack frame
-			StackFrame frame = st.GetFrame(st.FrameCount - 1);
-
-			//Get the file name
-			fileName = frame?.GetFileName();
-
-			//Get the method name
-			methodName = frame.GetMethod()?.Name;
-
-			//Get the line number from the stack frame
-			line = frame.GetFileLineNumber();
-
-			//Get the column number
-			columnNumber = frame.GetFileColumnNumber();
-
-			message = originalException.ToString();
-
-			source = originalException.Source;
-			//todo include inner exception data
-			var stackTrace = originalException.StackTrace;
-
-
-			//put together the new error record
-			var newRecord = new XElement("Error",
-				new XElement("Message", message),
-				new XElement("Source", source),
-				new XElement("FileName", fileName),
-				new XElement("SourceLineNumber", line),
-				new XElement("SourceColNumber", columnNumber),
-				new XElement("MethodName", methodName),
-				new XElement("MethodName", methodName)
-			);
-
-
-			return newRecord;
-		}
 		
 		
 		/// <summary>

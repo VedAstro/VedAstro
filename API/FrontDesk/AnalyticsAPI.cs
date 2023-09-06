@@ -10,8 +10,11 @@ using System.Linq.Expressions;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using Azure;
 using Azure.Data.Tables;
 using VedAstro.Library;
+using Azure.Data.Tables.Models;
+using System.Collections;
 
 namespace API
 {
@@ -22,7 +25,7 @@ namespace API
 	public static class TableAPI
 	{
 
-		private const string Route1 = "Analytics/{tableName}"; //* that captures the rest of the URL path
+		private const string Route1 = "Analytics/{*tableName}"; //* that captures the rest of the URL path
 
 		/// <summary>
 		/// Gets log from last 30 days, and groups by IP and all time count
@@ -35,7 +38,14 @@ namespace API
 			//user inputs table name and user does not input table name
 			if (string.IsNullOrEmpty(tableName)) //no input, show directory
 			{
-				throw new NotImplementedException();
+				var nameList = GetAllTableNames();
+
+				//4 : CONVERT TO JSON
+				var jsonArray = new JArray(nameList); //IP address | Call Count
+
+				//5 : SEND DATA
+				return APITools.PassMessageJson(jsonArray, incomingRequest);
+
 			}
 			//has input, process table
 			else
@@ -45,7 +55,7 @@ namespace API
 
 				//get all IP address records in the last 30 days
 				var aMomentAgo = DateTimeOffset.UtcNow.AddDays(-30);
-				var allEntities = logBookClient.Query<OpenAPILogBookEntity>(call => call.Timestamp >= aMomentAgo).ToList();
+				var allEntities = logBookClient.Query<ITableEntity>(call => call.Timestamp >= aMomentAgo).ToList();
 
 				//get only unique addresses from last 30 days
 				List<string> distinctIpAddressList = allEntities.Select(e => e.PartitionKey).Distinct().ToList();
@@ -55,7 +65,7 @@ namespace API
 				foreach (var callerAddress in distinctIpAddressList)
 				{
 					//get all calls from full time period
-					var foundCalls = logBookClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == callerAddress);
+					var foundCalls = logBookClient.Query<ITableEntity>(call => call.PartitionKey == callerAddress);
 					presentationList[callerAddress] = foundCalls.Count();
 				}
 
@@ -71,6 +81,21 @@ namespace API
 
 			
 
+		}
+		/// <summary>
+		/// Gets the names of all the tables in azure storage
+		/// </summary>
+		public static List<string> GetAllTableNames()
+		{
+			string connectionString = Secrets.API_STORAGE; // Replace with your storage account's connection string
+			var serviceClient = new TableServiceClient(connectionString);
+			var tableResponses =  serviceClient.Query();
+			var tableNames = new List<string>();
+			foreach (var table in tableResponses)
+			{
+				tableNames.Add(table.Name);
+			}
+			return tableNames;
 		}
 
 		private static TableClient GetTableClientFromTableName(string tableName)

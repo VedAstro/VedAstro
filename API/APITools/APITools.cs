@@ -26,6 +26,7 @@ using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
 using System.Xml.Linq;
+using Azure.Data.Tables;
 using Azure.Storage.Blobs;
 using SuperConvert.Extensions;
 using VedAstro.Library;
@@ -1098,6 +1099,20 @@ namespace API
 				APITools.ApiExtraNote = "";
 			}
 
+		}
+
+		public static TableClient GetTableClientFromTableName(string tableName)
+		{
+			//prepare call stuff
+			var tableUlr = $"https://vedastroapistorage.table.core.windows.net/{tableName}";
+			string accountName = "vedastroapistorage";
+			string storageAccountKey = Secrets.VedAstroApiStorageKey;
+
+			//get connection
+			var _tableServiceClient = new TableServiceClient(new Uri(tableUlr), new TableSharedKeyCredential(accountName, storageAccountKey));
+			var client = _tableServiceClient.GetTableClient(tableName);
+
+			return client;
 		}
 	}
 

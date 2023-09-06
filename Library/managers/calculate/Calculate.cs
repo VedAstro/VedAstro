@@ -60,6 +60,22 @@ namespace VedAstro.Library
 
 			return raw;
         }
+
+        /// <summary>
+        /// Wrapper function for open API
+        /// </summary>
+        [API("All possible calculations for a Planet and House at a given Time", Category.Astronomical)]
+        public static List<APIFunctionResult> AllPlanetHouseData(PlanetName planetName, HouseName houseName, Time time)
+        {
+            //exclude this method from getting included in "Find" and Execute below
+			MethodBase method = MethodBase.GetCurrentMethod();
+			MethodInfo methodToExclude = method as MethodInfo;
+
+            //do calculation
+			var raw = AutoCalculator.FindAndExecuteFunctions(Category.All, methodToExclude, planetName,houseName, time);
+
+			return raw;
+        }
         
         
         /// <summary>

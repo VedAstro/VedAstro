@@ -43,8 +43,6 @@ namespace API
 				//DON'T LIMIT FEATURES JUST BECAUSE NOT LOGGED IN
 				//as such no API KEY field here, direct to Ayanamsa
 				//if this is ayanamsa, then take it out to be used later...
-				//var isAyanamsa = parsedParam is Ayanamsa;
-				//if (isAyanamsa) { userAyanamsa = parsedParam; }//value to be used later...
 				var userAyanamsa = Ayanamsa.Raman; //default
 				var isAyanamsa = fullParamString.Contains(nameof(Ayanamsa));
                 if (isAyanamsa)

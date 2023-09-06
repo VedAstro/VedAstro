@@ -105,7 +105,6 @@ namespace Website
 
             //convert exception into nice xml
             var errorXml = Tools.ExceptionToXML(exception);
-            var errorXml = Tools.ExceptionToXML(exception);
 
             //place error data into visitor tag
             //this is done because visitor data might hold clues to error

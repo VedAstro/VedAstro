@@ -1734,7 +1734,7 @@ namespace API
                 }
                 else
                 {
-                    Console.WriteLine("PLANET ICON CACHE USED!");
+                   // Console.WriteLine("PLANET ICON CACHE USED!");
                 }
 
                 return svgIconHttp ?? "";
@@ -1762,7 +1762,7 @@ namespace API
                 }
                 else
                 {
-                    Console.WriteLine("PLANET ICON CACHE USED!");
+                    //Console.WriteLine("PLANET ICON CACHE USED!");
                 }
 
                 return svgIconHttp ?? "";

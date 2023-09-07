@@ -210,7 +210,7 @@ namespace API
             try
             {
                 //get chart index.html and send that to caller
-                var eventsChartViewerHtml = await APITools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
+                var eventsChartViewerHtml = await Tools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
 
                 //insert person name into page, to show ready page faster
                 var personName = (await Tools.FindPersonXMLById(personId)).Name;
@@ -284,7 +284,7 @@ namespace API
 
                 //get chart index.html and send that to caller
                 //get data list from Static Website storage
-                var htmlTemplate = await APITools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
+                var htmlTemplate = await Tools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
 
                 //insert person name into page, to show ready page faster
                 //TODO NEEDS TO BE UPDATED

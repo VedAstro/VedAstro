@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
-using static Azure.Core.HttpHeader;
 
 namespace VedAstro.Library
 {

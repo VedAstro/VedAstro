@@ -3,7 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
+using System.Threading.Tasks;
 using SwissEphNet;
 using static VedAstro.Library.PlanetName;
 
@@ -25,6 +27,18 @@ namespace VedAstro.Library
 	/// </summary>
 	public static partial class Calculate
 	{
+
+		/// <summary>
+		/// SkyChartGIF squeeze the Sky Juice!
+		/// </summary>
+		[API("Get sky chart as animated GIF. URL can be used like a image source link")]
+		public static async Task<byte[]> SkyChartGIF(Time time) => await SkyChartManager.GenerateChartGif(time, 750, 230);
+
+		/// <summary>
+		/// SkyChartGIF squeeze the Sky Juice!
+		/// </summary>
+		[API("Get sky chart at a given time. SVG image file. URL can be used like a image source link")]
+		public static async Task<string> SkyChart(Time time) => await SkyChartManager.GenerateChart(time, 750, 230);
 
 
 		/// <summary>

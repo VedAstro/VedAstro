@@ -52,21 +52,31 @@ namespace API
                 VedAstro.Library.Calculate.YearOfCoincidence = (int)userAyanamsa;
 
 
-                //3 : EXECUTE COMMAND
-                var rawPlanetData = calculator?.Invoke(null, parsedParamList.ToArray()); ;
+				//3 : EXECUTE COMMAND
+				object rawPlanetData;
+                //when calculator return an async result
+				if (calculator.ReturnType.IsGenericType && calculator.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
+				{
+					dynamic task = calculator.Invoke(null, parsedParamList.ToArray());
+					await task;
+					rawPlanetData = task.Result;
+				}
+				//when calculator return a normal result
+				else
+				{
+					rawPlanetData = calculator?.Invoke(null, parsedParamList.ToArray());
+				}
 
-                //4 : OVERLOAD LIMIT
-                await APITools.AutoControlOpenAPIOverload(callLog);
+				//4 : OVERLOAD LIMIT
+				await APITools.AutoControlOpenAPIOverload(callLog);
 
-                //4 : CONVERT TO JSON
-                var payloadJson = Tools.AnyToJSON(calculatorName, rawPlanetData); //use calculator name as key
+                //5 : SEND DATA TO CALLER
+                return APITools.SendAnyToCaller(calculatorName, rawPlanetData,incomingRequest);
 
-                //5 : SEND DATA
-                return APITools.PassMessageJson(payloadJson, incomingRequest);
-            }
+			}
 
-            //if any failure, show error in payload
-            catch (Exception e)
+			//if any failure, show error in payload
+			catch (Exception e)
             {
                 APILogger.Error(e, incomingRequest);
                 return APITools.FailMessageJson(e.Message, incomingRequest);
@@ -301,7 +311,6 @@ namespace API
 
                 //get chart if in cache, else make and save in cache
                 var chartGif = await APITools.CacheExecuteTaskOpenAPI(chartTask, callerId, MediaTypeNames.Image.Gif);
-
 
 
                 return APITools.SendFileToCaller(chartGif, incomingRequest, MediaTypeNames.Image.Gif);

@@ -12,9 +12,7 @@
 using SwissEphNet;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Reflection;
 
 namespace VedAstro.Library
 {
@@ -74,6 +72,57 @@ namespace VedAstro.Library
 		/// </summary>
 		[API("get fixed longitude used in western systems, connects SwissEph Library with VedAstro")]
 		public static Angle PlanetSayanaLongitude(Time time, PlanetName planetName)
+		{
+
+			//CACHE MECHANISM
+			return CacheManager.GetCache(new CacheKey("GetPlanetSayanaLongitude", time, planetName), _getPlanetSayanaLongitude);
+
+
+			//UNDERLYING FUNCTION
+
+			Angle _getPlanetSayanaLongitude()
+			{
+				//Converts LMT to UTC (GMT)
+				//DateTimeOffset utcDate = lmtDateTime.ToUniversalTime();
+
+				int iflag = SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
+				double[] results = new double[6];
+				string err_msg = "";
+				double jul_day_ET;
+				SwissEph ephemeris = new SwissEph();
+
+				// Convert DOB to ET
+				jul_day_ET = TimeToEphemerisTime(time);
+
+				//convert planet name, compatible with Swiss Eph
+				int swissPlanet = Tools.VedAstroToSwissEph(planetName);
+
+				//Get planet long
+				int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
+
+				//data in results at index 0 is longitude
+				var planetSayanaLongitude = new Angle(degrees: results[0]);
+
+				//if ketu add 180 to rahu
+				if (planetName == Library.PlanetName.Ketu)
+				{
+					var x = planetSayanaLongitude + Angle.Degrees180;
+					planetSayanaLongitude = x.Expunge360();
+				}
+
+
+				return planetSayanaLongitude;
+
+			}
+
+
+		}
+
+		/// <summary>
+		/// NOTE This method connects SwissEph Library with VedAstro Library
+		/// </summary>
+		[API("DIget fixed longitude used in western systems, connects SwissEph Library with VedAstro")]
+		public static Angle PlanetEphemerisLongitude(Time time, PlanetName planetName)
 		{
 
 			//CACHE MECHANISM

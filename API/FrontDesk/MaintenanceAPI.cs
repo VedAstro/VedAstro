@@ -8,6 +8,8 @@ using Azure.Storage.Blobs;
 using Microsoft.Bing.ImageSearch;
 using Microsoft.Bing.ImageSearch.Models;
 using Newtonsoft.Json.Linq;
+using Person = VedAstro.Library.Person;
+using System.Text;
 
 namespace API
 {
@@ -28,6 +30,40 @@ namespace API
 			var APIHomePageTxt = await Tools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
 
             return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
+        }
+
+        /// <summary>
+        /// wrapper place to run 1 time debug code
+        /// </summary>
+        [Function(nameof(DEBUG))]
+        public static async Task<HttpResponseData> DEBUG([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DEBUG")] HttpRequestData incomingRequest)
+        {
+	        throw new NotImplementedException();
+	        //      //get latest all match reports
+	        //      var personListXml = await Tools.GetXmlFileFromAzureStorage(Tools.PersonListFile, Tools.BlobContainerName);
+
+	        //      //list of person XMLs
+	        //      var personXmlList = personListXml?.Root?.Elements() ?? new List<XElement>();
+
+	        //      var personList = Person.FromXml(personXmlList);
+
+	        //      var xxx = ConvertListToCsv(personList);
+
+	        //return APITools.SendTextToCaller(xxx, incomingRequest);
+
+	        // string ConvertListToCsv(List<Person> people)
+	        //{
+	        //	var csv = new StringBuilder();
+	        //	// Add headers
+	        //	csv.AppendLine("Name,Gender,BirthDate,BirthLocation");
+	        //	foreach (var person in people)
+	        //	{
+	        //		var localNameClean = person.GetBirthLocation().Name().Replace(",", "");
+	        //		csv.AppendLine($"{person.Name.Truncate(5," ")},{person.Gender},{person.BirthTimeString},{localNameClean}");
+	        //	}
+	        //	return csv.ToString();
+	        //}
+
         }
 
         /// <summary>

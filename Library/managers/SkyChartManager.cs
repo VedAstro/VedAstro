@@ -1738,7 +1738,7 @@ namespace VedAstro.Library
 				}
 				else
 				{
-					Console.WriteLine("PLANET ICON CACHE USED!");
+					//Console.WriteLine("PLANET ICON CACHE USED!");
 				}
 
 				return svgIconHttp ?? "";
@@ -1766,7 +1766,7 @@ namespace VedAstro.Library
 				}
 				else
 				{
-					Console.WriteLine("PLANET ICON CACHE USED!");
+					//Console.WriteLine("PLANET ICON CACHE USED!");
 				}
 
 				return svgIconHttp ?? "";

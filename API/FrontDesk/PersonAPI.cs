@@ -87,6 +87,7 @@ namespace API
                 if (!callerInfo.Both101) //only swap if needed
                 {
                     bool didSwap = await APITools.SwapUserId(callerInfo, Tools.PersonListFile);
+                    //if (didSwap) { APILogger.LogBookClient()} //TODO change to .Data()
                 }
 
                 //get latest all match reports

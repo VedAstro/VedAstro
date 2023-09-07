@@ -838,6 +838,10 @@ namespace API
 
 
 
+		/// <summary>
+		/// Uses cache if available else calculates the data
+		/// also auto adds the newly calculated data cache for future
+		/// </summary>
 		public static async Task<T> CacheExecuteTask<T>(Func<Task<T>> generateChart, string callerId, string mimeType = "")
 		{
 			//check if cache exist
@@ -860,28 +864,7 @@ namespace API
 			return chart;
 		}
 
-		//todo do as below
-		public static async Task<BlobClient> CacheExecuteTaskOpenAPI(Func<Task<byte[]>> generateChart, string callerId, string mimeType = "")
-		{
-			//check if cache exist
-			var isExist = await AzureCache.IsExist(callerId);
-
-			BlobClient chartBlobClient;
-
-			if (!isExist)
-			{
-				//squeeze the Sky Juice!
-				var chartBytes = await generateChart.Invoke();
-				//save for future
-				chartBlobClient = await AzureCache.Add<byte[]>(callerId, chartBytes, mimeType);
-			}
-			else
-			{
-				chartBlobClient = await AzureCache.GetData<BlobClient>(callerId);
-			}
-
-			return chartBlobClient;
-		}
+		
 
 		/// <summary>
 		/// Given a cache generator function and a name for the data
@@ -906,7 +889,9 @@ namespace API
 
 				//save for future
 				chartBlobClient = await AzureCache.Add(cacheName, chartBytes, mimeType);
+				//chartBlobClient = await AzureCache.Add<byte[]>(callerId, chartBytes, mimeType);
 
+				//chartBlobClient = await AzureCache.GetData<BlobClient>(callerId);
 			}
 			//always mark the call as ended
 			finally

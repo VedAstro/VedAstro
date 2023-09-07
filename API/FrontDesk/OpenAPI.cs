@@ -103,10 +103,13 @@ namespace API
         }
 
 
+
+        //-----------------------------------------------PRIVATE-----------------------------------------------
+
         /// <summary>
         /// Reads URL data to instances  
         /// </summary>
-        public static async Task<List<dynamic>> ParseUrlParameters(string fullParamString, List<Type> parameterTypes)
+        private static async Task<List<dynamic>> ParseUrlParameters(string fullParamString, List<Type> parameterTypes)
 		{
 			//Based on the calculator method we prepare to cut the string into parameters as text
 
@@ -149,181 +152,6 @@ namespace API
 
 			return parsedParamList;
 		}
-
-
-        //TODO MARKED FOR DELETION  
-        private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime,
-            HttpRequestData incomingRequest)
-        {
-
-            var individualPropertySelected = !string.IsNullOrEmpty(propertyName);
-
-
-            //all planet body calls
-            if (celestialBodyType.ToLower() == "planet")
-            {
-
-                //if all planets
-                if (celestialBodyName.ToLower() == "all")
-                {
-
-                    //compile together all the data
-                    var compiledObj = new JObject();
-                    var compiledAry = new JArray();
-                    var isArray = true;
-                    foreach (var planet in PlanetName.All9Planets)
-                    {
-                        var planetName = planet.Name.ToString();
-                        var planetData = GetPlanetDataJSON(planet, propertyName, parsedTime);
-
-
-                        //JSON format used for all planet data and selected data is different
-                        //as such when building for all planets needs to be done properly to match
-                        var dataType = planetData.GetType();
-                        if (typeof(JObject) == dataType)
-                        {
-                            isArray = true; //hack for below
-                            var xxx = new JObject();
-                            xxx[planetName] = planetData;
-                            compiledAry.Add(xxx);
-                        }
-                        else
-                        {
-                            isArray = false; //hack for below
-
-                            //nicely packed
-                            var wrapped = new JObject(planetData);
-                            var named = new JProperty(planetName, wrapped);
-                            compiledObj.Add(named);
-                        }
-                    }
-
-                    //for ALL property
-                    if (isArray) { return APITools.PassMessageJson(compiledAry, incomingRequest); }
-
-                    //for selected property
-                    else { return APITools.PassMessageJson(compiledObj, incomingRequest); }
-
-                }
-
-
-                //users selects 1 particular planet
-                else
-                {
-                    var planetName = PlanetName.Parse(celestialBodyName);
-                    var result = GetPlanetDataJSON(planetName, propertyName, parsedTime);
-                    return APITools.PassMessageJson(result, incomingRequest);
-                }
-
-            }
-
-            //all house body calls
-            if (celestialBodyType.ToLower() == "house")
-            {
-
-                //if all house
-                if (celestialBodyName.ToLower() == "all")
-                {
-
-                    //compile together all the data
-                    var compiledObj = new JObject();
-                    var compiledAry = new JArray();
-                    var isArray = true;
-                    foreach (var house in House.AllHouses)
-                    {
-                        var houseData = GetHouseDataJSON(house, propertyName, parsedTime);
-
-                        //JSON format used for all planet data and selected data is different
-                        //as such when building for all planets needs to be done properly to match
-                        var dataType = houseData.GetType();
-                        if (typeof(JObject) == dataType)
-                        {
-                            isArray = true; //hack for below
-                            var xxx = new JObject();
-                            xxx[house.ToString()] = houseData;
-                            compiledAry.Add(xxx);
-                        }
-                        else
-                        {
-                            isArray = false; //hack for below
-
-                            //nicely packed
-                            var wrapped = new JObject(houseData);
-                            var named = new JProperty(house.ToString(), wrapped);
-                            compiledObj.Add(named);
-                        }
-
-
-                    }
-
-                    //for ALL property
-                    if (isArray) { return APITools.PassMessageJson(compiledAry, incomingRequest); }
-
-                    //for selected property
-                    else { return APITools.PassMessageJson(compiledObj, incomingRequest); }
-
-                }
-
-                //users selects 1 particular house
-                else
-                {
-                    //get the planet data needed
-                    Enum.TryParse<HouseName>(celestialBodyName, out var houseName);
-
-                    var result = GetHouseDataJSON(houseName, propertyName, parsedTime);
-                    return APITools.PassMessageJson(result, incomingRequest);
-                }
-
-                //-------------
-
-
-            }
-
-
-
-            //------------------------------------------------------
-
-            //sky chart
-            var skyChartWidth = 750.0;
-            var skyChartHeight = 230.0;
-
-            //NOTE: each frame is cached
-            if (celestialBodyType.ToLower() == "skychart")
-            {
-                //create unique id based on params to recognize future calls (caching)
-                var callerId = $"{parsedTime.GetHashCode()}{skyChartWidth}{skyChartHeight}";
-
-                Func<Task<string>> generateChart = () => SkyChartManager.GenerateChart(parsedTime, skyChartWidth, skyChartHeight);
-
-                var chart = await APITools.CacheExecuteTask(generateChart, callerId);
-
-                return APITools.SendSvgToCaller(chart, incomingRequest);
-
-            }
-
-            if (celestialBodyType.ToLower() == "skychartgif")
-            {
-                //create unique id based on params to recognize future calls (caching)
-                var callerId = $"{parsedTime.GetHashCode()}{skyChartWidth}{skyChartHeight}GIF";
-
-                //squeeze the Sky Juice!
-                var chartTask = () => SkyChartManager.GenerateChartGif(parsedTime, skyChartWidth, skyChartHeight);
-
-                //get chart if in cache, else make and save in cache
-                var chartGif = await APITools.CacheExecuteTaskOpenAPI(chartTask, callerId, MediaTypeNames.Image.Gif);
-
-
-                return APITools.SendFileToCaller(chartGif, incomingRequest, MediaTypeNames.Image.Gif);
-
-            }
-
-
-            return APITools.FailMessage("End Of ThE Line", incomingRequest);
-
-            //-----------------------------
-
-
-        }
 
         private static JToken GetPlanetDataJSON(PlanetName planetName, string propertyName, Time parsedTime, MethodInfo callerToExclude = null)
         {

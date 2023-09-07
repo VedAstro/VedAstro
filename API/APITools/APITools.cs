@@ -34,6 +34,9 @@ using Microsoft.Bing.ImageSearch.Models;
 using Microsoft.Bing.ImageSearch;
 using Person = VedAstro.Library.Person;
 
+using MimeDetective;
+using System.IO;
+
 namespace API
 {
 	/// <summary>
@@ -395,37 +398,6 @@ namespace API
 				//return newly created user to caller
 				return newUser;
 			}
-		}
-
-		/// <summary>
-		/// Gets any file at given WWW url will return as string
-		/// used for SVG
-		/// </summary>
-		public static async Task<string> GetStringFileHttp(string url)
-		{
-			try
-			{
-
-				//get the data sender
-				using var client = new HttpClient();
-
-				client.Timeout = Timeout.InfiniteTimeSpan;
-
-				//load xml event data files before hand to be used quickly later for search
-				//get main horoscope prediction file (located in wwwroot)
-				var fileString = await client.GetStringAsync(url, CancellationToken.None);
-
-				return fileString;
-			}
-			catch (Exception e)
-			{
-				var msg = $"FAILED TO GET FILE:/n{url}";
-				Console.WriteLine(msg);
-				APILogger.Error(msg); //log it
-				return "";
-			}
-
-
 		}
 
 		/// <summary>
@@ -844,32 +816,6 @@ namespace API
 			return response;
 		}
 
-
-
-		//gets the exact width of a text based on Font size & type
-		//used to generate nicely fitting background for text
-		public static double GetTextWidthPx(string textInput)
-		{
-			//TODO handle max & min
-			//set max & min width background
-			//const int maxWidth = 70;
-			//backgroundWidth = backgroundWidth > maxWidth ? maxWidth : backgroundWidth;
-			//const int minWidth = 30;
-			//backgroundWidth = backgroundWidth > minWidth ? minWidth : backgroundWidth;
-
-
-			SizeF size;
-			using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
-			{
-				size = graphics.MeasureString(textInput,
-					new Font("Calibri", 12, FontStyle.Regular, GraphicsUnit.Pixel));
-			}
-
-			var widthPx = Math.Round(size.Width);
-
-			return widthPx;
-		}
-
 		public static string GetCallerId(string userId, string visitorId)
 		{
 			var IsLoggedIn = userId != "101";
@@ -884,43 +830,6 @@ namespace API
 			}
 
 		}
-
-		/// <summary>
-		/// Gets a SVG icon file direct from Illustrator, removes not needed
-		/// attributes and makes it ready to be injected into another SVG
-		/// no file return nothing
-		/// </summary>
-		public static async Task<string> GetSvgIconHttp(string svgFileUrl, double width, double height)
-		{
-
-			//get raw icon as SVG (if exist)
-			var svgIconString = await APITools.GetStringFileHttp(svgFileUrl);
-			if (!string.IsNullOrEmpty(svgIconString))
-			{
-				//remove XML file header
-
-				var parsedIcon = Svg.SvgDocument.FromSvg<Svg.SvgDocument>(svgIconString);
-
-				//set custom width & height
-				parsedIcon.Height = (SvgUnit)height;
-				parsedIcon.Width = (SvgUnit)width;
-				//parsedIcon.ViewBox = new SvgViewBox(0, 0, (float)width, (float)height);
-
-				var final = parsedIcon.GetXML();
-
-				//<?xml version="1.0" encoding="utf-8"?>
-				final = final.Replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>", "");
-				//<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-				final = final.Replace("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">", "");
-
-				return final;
-			}
-
-			//if control reaches here than no file
-			return "";
-
-		}
-
 
 
 
@@ -974,12 +883,15 @@ namespace API
 			return chartBlobClient;
 		}
 
-		//we know there is no cache
-		public static async Task<BlobClient> ExecuteAndSaveToCache(Func<Task<string>> generateChart, string callerId, string mimeType = "")
+		/// <summary>
+		/// Given a cache generator function and a name for the data
+		/// it calculate and save data to cache Data Blob storage
+		/// </summary>
+		public static async Task<BlobClient> ExecuteAndSaveToCache(Func<Task<string>> cacheGenerator, string cacheName, string mimeType = "")
 		{
 
 #if DEBUG
-			Console.WriteLine($"NO CACHE! RUNNING COMPUTE : {callerId}");
+			Console.WriteLine($"NO CACHE! RUNNING COMPUTE : {cacheName}");
 #endif
 
 			BlobClient? chartBlobClient;
@@ -987,19 +899,19 @@ namespace API
 			try
 			{
 				//lets everybody know call is running
-				CallTracker.CallStart(callerId);
+				CallTracker.CallStart(cacheName);
 
 				//squeeze the Sky Juice!
-				var chartBytes = await generateChart.Invoke();
+				var chartBytes = await cacheGenerator.Invoke();
 
 				//save for future
-				chartBlobClient = await AzureCache.Add(callerId, chartBytes, mimeType);
+				chartBlobClient = await AzureCache.Add(cacheName, chartBytes, mimeType);
 
 			}
 			//always mark the call as ended
 			finally
 			{
-				CallTracker.CallEnd(callerId); //mark the call as ended
+				CallTracker.CallEnd(cacheName); //mark the call as ended
 			}
 
 
@@ -1113,6 +1025,50 @@ namespace API
 			var client = _tableServiceClient.GetTableClient(tableName);
 
 			return client;
+		}
+
+
+		/// <summary>
+		/// Given a file or string convertible data, send it to caller accordingly
+		/// </summary>
+		public static HttpResponseData SendAnyToCaller(string calculatorName, object rawPlanetData, HttpRequestData incomingRequest)
+		{
+
+			//then it is a file
+			if (rawPlanetData is byte[] rawFileData)
+			{
+				//get correct mime type so browser or receiver knows how to present
+				var mimeType = GetMimeType(rawFileData);
+
+				return APITools.SendFileToCaller(rawFileData, incomingRequest, mimeType);
+			}
+
+			//probably data that can be sent as JSON text
+			else
+			{
+				//4 : CONVERT TO JSON
+				var payloadJson = Tools.AnyToJSON(calculatorName, rawPlanetData); //use calculator name as key
+
+				//5 : SEND DATA
+				return APITools.PassMessageJson(payloadJson, incomingRequest);
+			}
+
+		}
+
+		public static string GetMimeType(byte[] fileBytes)
+		{
+			var inspector = new ContentInspectorBuilder()
+			{
+				Definitions = MimeDetective.Definitions.Default.All()
+			}.Build();
+
+			var fileType = inspector.Inspect(fileBytes);
+
+			var resultsByMimeType = fileType.ByMimeType();
+
+			// Return the MIME type
+			var mimeType = resultsByMimeType[0].MimeType;
+			return mimeType ?? "application/octet-stream";
 		}
 	}
 

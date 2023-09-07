@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -24,10 +25,13 @@ namespace Library.API
     /// </summary>
     public static class Tools
     {
-        /// <summary>
-        /// No parsing direct from horses mouth
-        /// </summary>
-        public static async Task<string> ReadServerRaw(string receiverAddress)
+
+
+
+		/// <summary>
+		/// No parsing direct from horses mouth
+		/// </summary>
+		public static async Task<string> ReadServerRaw(string receiverAddress)
         {
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
 

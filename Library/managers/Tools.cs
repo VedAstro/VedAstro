@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,18 +17,15 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SwissEphNet;
 using Formatting = Newtonsoft.Json.Formatting;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
-using System.Reflection.Metadata;
-using FuzzySharp;
+using Svg;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Net;
-
+using Microsoft.Extensions.Logging;
 
 namespace VedAstro.Library
 {
@@ -36,6 +35,149 @@ namespace VedAstro.Library
 	/// </summary>
 	public static class Tools
 	{
+
+		//gets the exact width of a text based on Font size & type
+		//used to generate nicely fitting background for text
+		public static double GetTextWidthPx(string textInput)
+		{
+			//TODO handle max & min
+			//set max & min width background
+			//const int maxWidth = 70;
+			//backgroundWidth = backgroundWidth > maxWidth ? maxWidth : backgroundWidth;
+			//const int minWidth = 30;
+			//backgroundWidth = backgroundWidth > minWidth ? minWidth : backgroundWidth;
+
+
+			SizeF size;
+			using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
+			{
+				size = graphics.MeasureString(textInput,
+					new Font("Calibri", 12, FontStyle.Regular, GraphicsUnit.Pixel));
+			}
+
+			var widthPx = Math.Round(size.Width);
+
+			return widthPx;
+		}
+
+
+		/// <summary>
+		/// Gets any file at given WWW url will return as string
+		/// used for SVG
+		/// </summary>
+		public static async Task<string> GetStringFileHttp(string url)
+		{
+			try
+			{
+
+				//get the data sender
+				using var client = new HttpClient();
+
+				client.Timeout = Timeout.InfiniteTimeSpan;
+
+				//load xml event data files before hand to be used quickly later for search
+				//get main horoscope prediction file (located in wwwroot)
+				var fileString = await client.GetStringAsync(url, CancellationToken.None);
+
+				return fileString;
+			}
+			catch (Exception e)
+			{
+				var msg = $"FAILED TO GET FILE:/n{url}";
+				Console.WriteLine(msg);
+				LibLogger.Error(msg); //log it
+				return "";
+			}
+
+
+		}
+
+
+		/// <summary>
+		/// Gets a SVG icon file direct from Illustrator, removes not needed
+		/// attributes and makes it ready to be injected into another SVG
+		/// no file return nothing
+		/// </summary>
+		public static async Task<string> GetSvgIconHttp(string svgFileUrl, double width, double height)
+		{
+
+			//get raw icon as SVG (if exist)
+			var svgIconString = await Tools.GetStringFileHttp(svgFileUrl);
+			if (!string.IsNullOrEmpty(svgIconString))
+			{
+				//remove XML file header
+
+				var parsedIcon = Svg.SvgDocument.FromSvg<Svg.SvgDocument>(svgIconString);
+
+				//set custom width & height
+				parsedIcon.Height = (SvgUnit)height;
+				parsedIcon.Width = (SvgUnit)width;
+				//parsedIcon.ViewBox = new SvgViewBox(0, 0, (float)width, (float)height);
+
+				var final = parsedIcon.GetXML();
+
+				//<?xml version="1.0" encoding="utf-8"?>
+				final = final.Replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>", "");
+				//<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+				final = final.Replace("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">", "");
+
+				return final;
+			}
+
+			//if control reaches here than no file
+			return "";
+
+		}
+
+		public static Image Svg2Png(string svg, int width, int height)
+		{
+
+			byte[] png_bytes;
+			string png_base64;
+			byte[] byte_array;
+			Stream stream;
+			SvgDocument svg_document;
+			Bitmap bitmap;
+			string base64_string;
+
+
+			//convert svg string to byte array
+			//NOTE : proper encoding needed else will shown funny values when render
+			byte_array = Encoding.UTF8.GetBytes(svg);
+
+			//convert byte array to stream
+			stream = new MemoryStream(byte_array);
+
+			Svg.SvgDocument.EnsureSystemIsGdiPlusCapable();
+
+
+			//generate svg doc from stream
+			svg_document = SvgDocument.Open<Svg.SvgDocument>(stream);
+
+			//convert svg doc to bitmap with specified width & height
+			bitmap = svg_document.Draw(width, height);
+
+			return bitmap;
+
+			//png_bytes = ImageToByte2(bitmap);
+
+			//base64_string = Convert.ToBase64String(png_bytes, 0, png_bytes.Length);
+
+			//png_base64 = "data:image/png;base64," + base64_string;
+
+			//return png_bytes;
+
+		}
+
+		public static byte[] ImageToByte2(Image img)
+		{
+			using (var stream = new MemoryStream())
+			{
+				img.Save(stream, ImageFormat.Png);
+				return stream.ToArray();
+			}
+		}
+
 
 		/// <summary>
 		/// Extension method to get null when out of range, instead of exception

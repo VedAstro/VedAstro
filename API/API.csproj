@@ -19,6 +19,7 @@
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
 		<PackageReference Include="Microsoft.Bing.Search.ImageSearch" Version="1.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+		<PackageReference Include="Mime-Detective" Version="23.6.1" />
 		<PackageReference Include="ScottPlot" Version="4.1.67" />
 		<PackageReference Include="SuperConvert" Version="1.0.4.4" />
 		<PackageReference Include="Svg" Version="3.4.4" />

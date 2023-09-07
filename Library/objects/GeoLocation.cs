@@ -1,13 +1,8 @@
 using System;
 using System.Net.Http;
-using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Azure;
-using FuzzySharp.Utils;
 using Newtonsoft.Json.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static Azure.Core.HttpHeader;
 
 namespace VedAstro.Library
 {

@@ -1,4 +1,4 @@
-﻿@using VedAstro.Library
+@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
 <PageTitle>Easy Open API | VedAstro</PageTitle>
@@ -77,7 +77,7 @@
 
 			@*COPY AND CALL BUTTON*@
 			<div class="d-flex justify-content-center gap-3">
-				<IconButton ButtonText="Python" TooltipText="Copy Python Snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(_apiSelectorBox.SelectedMethod))" SmallSize="true" />
+				<IconButton ButtonText="Python" TooltipText="Copy Python Snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(_apiSelectorBox.SelectedMethod, this))" SmallSize="true" />
 				<IconButton ButtonText="Copy" TooltipText="Copy GET request URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
 				<IconButton ButtonText="Test Call" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
 			</div>
@@ -266,7 +266,7 @@
 	/// <summary>
 	/// Checks if validation of all input fields
 	/// </summary>
-	private async Task<bool> IsValidationPassed()
+	public async Task<bool> IsValidationPassed()
 	{
 		//TEST 1 : Calculator name
 		var isSelected = await _apiSelectorBox.IsSelected();

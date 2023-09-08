@@ -27,32 +27,17 @@ namespace VedAstro.Library
 	/// </summary>
 	public static partial class Calculate
 	{
+		#region AVASTA
 
-		/// <summary>
-		/// SkyChartGIF squeeze the Sky Juice!
-		/// </summary>
-		[API("Get sky chart as animated GIF. URL can be used like a image source link")]
-		public static async Task<byte[]> SkyChartGIF(Time time) => await SkyChartManager.GenerateChartGif(time, 750, 230);
-
-		/// <summary>
-		/// SkyChartGIF squeeze the Sky Juice!
-		/// </summary>
-		[API("Get sky chart at a given time. SVG image file. URL can be used like a image source link")]
-		public static async Task<string> SkyChart(Time time) => await SkyChartManager.GenerateChart(time, 750, 230);
-
-
-		/// <summary>
-		/// Lajjita / humiliated : Planet in the 5th house in conjunction with rahu or ketu, Saturn or mars.
-		/// </summary>
 		[API("Lajjita / humiliated : Planet in the 5th house in conjunction with rahu or ketu, Saturn or mars.")]
 		public static bool IsPlanetInLajjitaAvasta(PlanetName planetName, Time time)
 		{
 			//check if input planet is in 5th
-			var isPlanetIn5thHouse = Calculate.IsPlanetInHouse(time, planetName, HouseName.House5);
+			var isPlanetIn5thHouse = IsPlanetInHouse(time, planetName, HouseName.House5);
 
 			//check if any negative planets is in 5th (conjunct)
 			var planetNames = new List<PlanetName>() { Rahu, Ketu, Saturn, Mars };
-			var rahuKetuSaturnMarsIn5th = Calculate.IsAllPlanetInHouse(time, planetNames, HouseName.House5);
+			var rahuKetuSaturnMarsIn5th = IsAllPlanetInHouse(time, planetNames, HouseName.House5);
 
 			//check if all conditions are met Lajjita
 			var isLajjita = isPlanetIn5thHouse && rahuKetuSaturnMarsIn5th;
@@ -61,6 +46,95 @@ namespace VedAstro.Library
 
 		}
 
+		[API("Garvita/proud – Planet in exaltation sign or moolatrikona zone.happiness and gains")]
+		public static bool IsPlanetInGarvitaAvasta(PlanetName planetName, Time time)
+		{
+			//Planet in exaltation sign
+			var planetExalted = IsPlanetExalted(planetName, time);
+
+			//moolatrikona zone
+			var planetInMoolatrikona = IsPlanetInMoolatrikona(planetName, time);
+
+			//check if all conditions are met for Garvita
+			var isGarvita = planetExalted || planetInMoolatrikona;
+
+			return isGarvita;
+		}
+
+		[API("Kshudita/hungry – Planet in enemy’s sign or conjoined with enemy or aspected by enemy.Grief")]
+		public static bool IsPlanetInKshuditaAvasta(PlanetName planetName, Time time)
+		{
+			//Planet in enemy’s sign 
+			var planetExalted = IsPlanetInEnemyHouse(time, planetName);
+
+			//conjoined with enemy (same house)
+			var conjunctWithMalefic = IsPlanetConjunctWithEnemyPlanets(planetName, time);
+
+			//aspected by enemy
+			var aspectedByMalefic = IsPlanetAspectedByEnemyPlanets(planetName, time);
+
+			//check if all conditions are met for Kshudita
+			var isKshudita = planetExalted || conjunctWithMalefic || aspectedByMalefic;
+
+			return isKshudita;
+		}
+
+		/// <summary>
+		/// i) The Planet who being conjoined or aspected by a Malefic or his enemy Planet is situated,
+		/// without the aspect of a benefic Planet, in the 4th House is Trashita.
+		/// 
+		/// Another version
+		/// 
+		/// If the Planet is situated in a watery sign, is aspected by an enemy Planet and
+		/// is without the aspect of benefic Planets he is called Trashita.
+		/// </summary>
+		[API("Trashita/thirsty – Planet in a watery sign, aspected by a enemy and is without the aspect of benefic Planets")]
+		public static bool IsPlanetInTrashitaAvasta(PlanetName planetName, Time time)
+		{
+			//Planet in a watery sign
+			var planetInWater = IsPlanetInWaterySign(planetName, time);
+
+			//aspected by an enemy
+			var aspectedByEnemy = IsPlanetAspectedByEnemyPlanets(planetName, time);
+
+			//no benefic planet aspect
+			var noBeneficAspect = false == IsPlanetAspectedByBeneficPlanets(planetName, time);
+
+			//check if all conditions are met for Trashita
+			var isTrashita = planetInWater && aspectedByEnemy && noBeneficAspect;
+
+			return isTrashita;
+		}
+
+		/// <summary>
+		/// The Planet who is in his friend’s sign, is in conjunction with Jupiter,
+		/// and is together with or is aspected by a friendly Planet is called Mudita
+		/// 
+		/// Mudita/sated/happy – Planet in a friend’s sign or aspected by a friend and conjoined with Jupiter, Gains
+		/// </summary>
+		[API("Mudita/sated/happy – Planet in a friend’s sign or aspected by a friend and conjoined with Jupiter, Gains")]
+		public static bool IsPlanetInMuditaAvasta(PlanetName planetName, Time time)
+		{
+			//Planet who is in his friend’s sign
+			var isInFriendly = IsPlanetInFriendHouse(time, planetName);
+
+			//is in conjunction with Jupiter
+			var isConjunctJupiter = IsPlanetConjunctWithPlanet(planetName, Jupiter, time);
+
+			//is together with or is aspected by a friendly (conjunct or aspect)
+			var isConjunctWithFriendly = false == IsPlanetConjunctWithFriendPlanets(planetName, time);
+			var isAspectedByFriendly = false == IsPlanetAspectedByFriendPlanets(planetName, time);
+			var accosiatedWithFriendly = isConjunctWithFriendly || isAspectedByFriendly;
+
+			//check if all conditions are met for Mudita
+			var isMudita = isInFriendly && isConjunctJupiter && accosiatedWithFriendly;
+
+			return isMudita;
+		}
+
+		#endregion
+
+		#region ALL DATA
 
 		/// <summary>
 		/// Wrapper function for open API
@@ -77,7 +151,6 @@ namespace VedAstro.Library
 
 			return raw;
 		}
-
 
 		/// <summary>
 		/// Wrapper function for open API
@@ -111,7 +184,6 @@ namespace VedAstro.Library
 			return raw;
 		}
 
-
 		/// <summary>
 		/// Wrapper function for open API
 		/// </summary>
@@ -129,6 +201,30 @@ namespace VedAstro.Library
 		}
 
 
+		#endregion
+
+		/// <summary>
+		/// SkyChartGIF squeeze the Sky Juice!
+		/// </summary>
+		[API("Get sky chart as animated GIF. URL can be used like a image source link")]
+		public static async Task<byte[]> SkyChartGIF(Time time) => await SkyChartManager.GenerateChartGif(time, 750, 230);
+
+		/// <summary>
+		/// SkyChartGIF squeeze the Sky Juice!
+		/// </summary>
+		[API("Get sky chart at a given time. SVG image file. URL can be used like a image source link")]
+		public static async Task<string> SkyChart(Time time) => await SkyChartManager.GenerateChart(time, 750, 230);
+
+		public static bool IsPlanetInWaterySign(PlanetName planetName, Time time)
+		{
+			//get sign planet is in
+			var planetSign = Calculate.PlanetRasiSign(planetName, time);
+
+			//check if sign is watery
+			var isWater = Calculate.IsWaterSign(planetSign.GetSignName());
+
+			return isWater;
+		}
 
 		/// <summary>
 		/// Wrapper function to make planet name appear "Payload" of API call data, for easier data probing by 3rd party code
@@ -289,7 +385,6 @@ namespace VedAstro.Library
 
 		}
 
-
 		/// <summary>
 		/// Gets constellation behind the moon (shortcut function)
 		/// </summary>
@@ -308,7 +403,6 @@ namespace VedAstro.Library
 			//return the constellation behind the planet
 			return ConstellationAtLongitude(planetLongitude);
 		}
-
 
 		[API("Tarabala or birth ruling constellation strength, used for personal muhurtha")]
 		public static Tarabala Tarabala(Time time, Person person)
@@ -1188,7 +1282,6 @@ namespace VedAstro.Library
 			return allPlanetLongitudeList;
 		}
 
-
 		[API("Gets the House number a given planet is in at a time")]
 		public static HouseName HousePlanetIsIn(Time time, PlanetName planetName)
 		{
@@ -1488,7 +1581,7 @@ namespace VedAstro.Library
 		/// a full sight.
 		/// 
 		/// </summary>
-		[API("SignsPlanetIsAspecting")]
+		[API("Gives a list of all zodiac signs a specified planet is aspecting")]
 		public static List<ZodiacName> SignsPlanetIsAspecting(PlanetName planetName, Time time)
 		{
 
@@ -1747,7 +1840,7 @@ namespace VedAstro.Library
 			throw new Exception("Saptamsa not found, error!");
 		}
 
-		[API("Drekkana")]
+		[API("Gets the Drekkana sign the planet is in")]
 		public static ZodiacName PlanetDrekkanaSign(PlanetName planetName, Time time)
 		{
 			//get sign planet is in
@@ -2748,17 +2841,17 @@ namespace VedAstro.Library
 		}
 
 		/// <summary>
-		///Checks if planet A is in good aspect to planet B
+		/// Checks if planet A is in good aspect to planet B
 		///
 		/// Note:
-		/// A is transmiter, B is receiver
+		/// A is transmitter, B is receiver
 		/// 
 		/// An aspect is good or bad according to the relation
 		/// between the aspecting and the aspected body
 		/// </summary>
 		public static bool IsPlanetInGoodAspectToPlanet(PlanetName receivingAspect, PlanetName transmitingAspect, Time time)
 		{
-			//check if transmiting planet is aspecting receiving planet
+			//check if transmitting planet is aspecting receiving planet
 			var isAspecting = IsPlanetAspectedByPlanet(receivingAspect, transmitingAspect, time);
 
 			//if not aspecting at all, end here as not occuring
@@ -2959,6 +3052,60 @@ namespace VedAstro.Library
 		}
 
 		/// <summary>
+		/// Checks if a planet is conjunct with an enemy planet by combined relationship
+		/// </summary>
+		[API("Checks if a planet is conjunct with an enemy planet by combined relationship")]
+		public static bool IsPlanetConjunctWithEnemyPlanets(PlanetName inputPlanet, Time time)
+		{
+			//get all the planets conjunct with inputed planet
+			var planetsInConjunct = PlanetsInConjuction(time, inputPlanet);
+
+			//check if any conjunct planet is an enemy
+			foreach (var planet in planetsInConjunct)
+			{
+				//get relationship of the 2 planets
+				var aspectNature = PlanetCombinedRelationshipWithPlanet(inputPlanet, planet, time);
+				var isEnemy = aspectNature == PlanetToPlanetRelationship.Enemy ||
+							 aspectNature == PlanetToPlanetRelationship.BitterEnemy;
+
+				//if enemy than end here as true
+				if (isEnemy) { return true; }
+
+			}
+
+			//if control reaches here than no enemy planet found
+			return false;
+
+		}
+
+		/// <summary>
+		/// Checks if a planet is conjunct with an Friend planet by combined relationship
+		/// </summary>
+		[API("Checks if a planet is conjunct with a Friend planet by combined relationship")]
+		public static bool IsPlanetConjunctWithFriendPlanets(PlanetName inputPlanet, Time time)
+		{
+			//get all the planets conjunct with inputed planet
+			var planetsInConjunct = PlanetsInConjuction(time, inputPlanet);
+
+			//check if any conjunct planet is an Friend
+			foreach (var planet in planetsInConjunct)
+			{
+				//get relationship of the 2 planets
+				var conjunctNature = PlanetCombinedRelationshipWithPlanet(inputPlanet, planet, time);
+				var isFriend = conjunctNature == PlanetToPlanetRelationship.Friend ||
+				               conjunctNature == PlanetToPlanetRelationship.BestFriend;
+
+				//if enemy than end here as true
+				if (isFriend) { return true; }
+
+			}
+
+			//if control reaches here than no enemy planet found
+			return false;
+
+		}
+
+		/// <summary>
 		/// Checks if any evil/malefic planets are in a house
 		/// Note : Planet to house relationship not account for
 		/// TODO Account for planet to sign relationship, find reference
@@ -3116,6 +3263,79 @@ namespace VedAstro.Library
 			var evilAspectFound = evilPlanets.FindAll(evilPlanet =>
 				IsPlanetAspectedByPlanet(lord, evilPlanet, time)).Any();
 			return evilAspectFound;
+
+		}
+
+		/// <summary>
+		/// Checks if a planet is receiving aspects from an benefic planet
+		/// </summary>
+		[API("Checks if a planet is receiving aspects from an benefic planet")]
+		public static bool IsPlanetAspectedByBeneficPlanets(PlanetName lord, Time time)
+		{
+			//get list of benefic planets
+			var goodPlanets = BeneficPlanetList(time);
+
+			//check if any of the benefic planets is aspecting inputed planet
+			var goodAspectFound = goodPlanets.FindAll(goodPlanet =>
+				IsPlanetAspectedByPlanet(lord, goodPlanet, time)).Any();
+
+			return goodAspectFound;
+
+		}
+
+		/// <summary>
+		/// Checks if a planet is receiving aspects from an enemy planet based on combined relationship
+		/// </summary>
+		[API("Checks if a planet is receiving aspects from an enemy planet based on combined relationship")]
+		public static bool IsPlanetAspectedByEnemyPlanets(PlanetName inputPlanet, Time time)
+		{
+			//get all the planets aspecting inputed planet
+			var planetsAspecting = PlanetsAspectingPlanet(time, inputPlanet);
+
+			//check if any aspecting planet is an enemy
+			foreach (var planet in planetsAspecting)
+			{
+				//get relationship of the 2 planets
+				var aspectNature = PlanetCombinedRelationshipWithPlanet(inputPlanet, planet, time);
+				var isEnemy = aspectNature == PlanetToPlanetRelationship.Enemy ||
+							  aspectNature == PlanetToPlanetRelationship.BitterEnemy;
+
+				//if enemy than end here as true
+				if (isEnemy) { return true; }
+
+			}
+
+			//if control reaches here than no enemy planet found
+			return false;
+
+
+		}
+
+		/// <summary>
+		/// Checks if a planet is receiving aspects from a Friend planet based on combined relationship
+		/// </summary>
+		[API("Checks if a planet is receiving aspects from a Friend planet based on combined relationship")]
+		public static bool IsPlanetAspectedByFriendPlanets(PlanetName inputPlanet, Time time)
+		{
+			//get all the planets aspecting inputed planet
+			var planetsAspecting = PlanetsAspectingPlanet(time, inputPlanet);
+
+			//check if any aspecting planet is an Friend
+			foreach (var planet in planetsAspecting)
+			{
+				//get relationship of the 2 planets
+				var aspectNature = PlanetCombinedRelationshipWithPlanet(inputPlanet, planet, time);
+				var isFriend = aspectNature == PlanetToPlanetRelationship.Friend ||
+				               aspectNature == PlanetToPlanetRelationship.BestFriend;
+
+				//if Friend than end here as true
+				if (isFriend) { return true; }
+
+			}
+
+			//if control reaches here than no Friend planet found
+			return false;
+
 
 		}
 
@@ -3519,13 +3739,12 @@ namespace VedAstro.Library
 			return lunarDayNumber == 15;
 		}
 
-
 		/// <summary>
 		/// Check if it is a Water / Aquatic sign
 		/// Water Signs: this category include Cancer, Scorpio and Pisces.
 		/// </summary>
 		[API("Check if it is a Water / Aquatic sign")]
-		public static bool IsAquaticSign(ZodiacName moonSign) => moonSign is ZodiacName.Cancer or ZodiacName.Scorpio or ZodiacName.Pisces;
+		public static bool IsWaterSign(ZodiacName moonSign) => moonSign is ZodiacName.Cancer or ZodiacName.Scorpio or ZodiacName.Pisces;
 
 		/// <summary>
 		/// Check if it is a Fire sign
@@ -3547,7 +3766,6 @@ namespace VedAstro.Library
 		/// </summary>
 		[API("Check if it is a Air / Windy sign, Gemini, Libra and Aquarius.")]
 		public static bool IsAirSign(ZodiacName moonSign) => moonSign is ZodiacName.Gemini or ZodiacName.Libra or ZodiacName.Aquarius;
-
 
 		/// <summary>
 		/// WARNING! MARKED FOR DELETION : ERONEOUS RESULTS NOT SUITED FOR INTENDED PURPOSE
@@ -3841,7 +4059,6 @@ namespace VedAstro.Library
 			throw new InvalidOperationException();
 		}
 
-
 		/// <summary>
 		/// Yogakaraka (Planets indicating prosperity)
 		/// Source : Astrology for beginners pg 30
@@ -3923,7 +4140,7 @@ namespace VedAstro.Library
 		/// meaning house sign owned by planet
 		/// note: rahu and ketu return false always
 		/// </summary>
-		[API("Return true if planet is own house sign, planet is owner")]
+		[API("Return true if planet is own house sign, planet is owner. Rahu and Ketu return false always")]
 		public static bool IsPlanetInOwnHouse(Time time, PlanetName planetName)
 		{
 			//find out if planet is rahu or ketu, because not all calculations supported
@@ -3932,11 +4149,67 @@ namespace VedAstro.Library
 			//get current house
 			var _planetCurrentHouse = HousePlanetIsIn(time, planetName);
 
-			//relatioship with current house
-			var _currentHouseRelation = isRahuKetu ? 0 : PlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, time);
+			//relationship with current house
+			var _currentHouseRelation = isRahuKetu ? 0 : PlanetRelationshipWithHouse(_planetCurrentHouse, planetName, time);
 
 			//relation should be own
 			if (_currentHouseRelation == PlanetToSignRelationship.OwnVarga)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// True if a planet is in a house sign owned by an enemy. Rahu and Ketu is false always
+		/// </summary>
+		[API("True if a planet is in a house sign owned by an enemy. Rahu and Ketu is false always")]
+		public static bool IsPlanetInEnemyHouse(Time time, PlanetName planetName)
+		{
+			//find out if planet is rahu or ketu, because not all calculations supported
+			var isRahuKetu = planetName == Rahu || planetName == Ketu;
+
+			//get current house
+			var _planetCurrentHouse = HousePlanetIsIn(time, planetName);
+
+			//relationship with current house
+			var _currentHouseRelation = isRahuKetu ? 0 : PlanetRelationshipWithHouse(_planetCurrentHouse, planetName, time);
+
+			//relation should be own
+			var isEnemy = _currentHouseRelation == PlanetToSignRelationship.EnemyVarga;
+			var isSuperEnemy = _currentHouseRelation == PlanetToSignRelationship.BitterEnemyVarga;
+			if (isEnemy || isSuperEnemy)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		
+		/// <summary>
+		/// True if a planet is in a house sign owned by a friend. Rahu and Ketu is false always
+		/// </summary>
+		[API("True if a planet is in a house sign owned by an friend. Rahu and Ketu is false always")]
+		public static bool IsPlanetInFriendHouse(Time time, PlanetName planetName)
+		{
+			//find out if planet is rahu or ketu, because not all calculations supported
+			var isRahuKetu = planetName == Rahu || planetName == Ketu;
+
+			//get current house
+			var _planetCurrentHouse = HousePlanetIsIn(time, planetName);
+
+			//relationship with current house
+			var _currentHouseRelation = isRahuKetu ? 0 : PlanetRelationshipWithHouse(_planetCurrentHouse, planetName, time);
+
+			//relation should be own
+			var isEnemy = _currentHouseRelation == PlanetToSignRelationship.EnemyVarga;
+			var isSuperEnemy = _currentHouseRelation == PlanetToSignRelationship.BitterEnemyVarga;
+			if (isEnemy || isSuperEnemy)
 			{
 				return true;
 			}
@@ -4167,7 +4440,6 @@ namespace VedAstro.Library
 					throw new Exception("No Strength Power defined!");
 			}
 		}
-
 
 		/// <summary>
 		/// Get a person's varna or color (character)

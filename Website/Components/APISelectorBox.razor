@@ -26,11 +26,11 @@ KEEP IT REAL
 	@*Component shows combo box with people list*@
 	<div class="btn-group" style="width: @GR.W412px;">
 		@* DROPDOWN BUTTON *@
-		<button type="button" @onclick="OnClickTrigger" style="text-align-last: center;" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown">
+		<button type="button" @onclick="OnClickTrigger" style="text-align-last: center;font-size: 16px; font-weight: 500;" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown">
 			@FormattedMethodName
 		</button>
 		@* DROPDOWN SECTION *@
-		<ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
+		<ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; width: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
 
 			@* SEARCH *@
 			<div class="hstack gap-2">
@@ -43,7 +43,10 @@ KEEP IT REAL
 			{
 				@foreach (var apiMethod in MethodListFiltered)
 				{
-					<li class="dropdown-item" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">@(Format.FormatName(apiMethod.Name))</li>
+					<li class="dropdown-item d-flex gap-2 w-100" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">
+						<span style=" font-size: 16px; font-weight: 500; ">@(Format.FormatName(apiMethod.Name))</span>
+						<IconTooltip Opacity="0.3" Interactive="false" ShowOnHover="true" Size="16" TooltipText="@apiMethod.Description" SmallIcon="true" />
+				</li>
 				}
 			}
 			@* LOADING ICON *@

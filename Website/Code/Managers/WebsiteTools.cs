@@ -598,10 +598,10 @@ namespace Website
 			AppData.Go(searchLink, newTab: true);
 		}
 
-		public async static Task OnClickCopyPythonSnippet(AutoCalculator.APICallData methodData, dynamic component)
+		public async static Task OnClickCopyPythonSnippet(AutoCalculator.APICallData methodData, dynamic component = null)
 		{
 			//only continue if passed input field validation
-			if (!(await component.IsValidationPassed())) { return; }
+			if (component != null && !(await component.IsValidationPassed())) { return; }
 
 			//generate the param field dynamically
 			var paramNameList = GetParamNameList(methodData.Name);
@@ -622,7 +622,7 @@ namespace Website
 			await AppData.JsRuntime.InvokeVoidAsync(JS.CopyToClipboard, pythonCode);
 
 			//let user know link copied
-			await AppData.JsRuntime.ShowAlert("success", $"Python snippet copied. Remember to run \"pip install vedastro\"", false, 2600);
+			await AppData.JsRuntime.ShowAlert("success", $"Code Copied!", "Remember to run <kbd>pip install vedastro</kbd>");
 
 		}
 

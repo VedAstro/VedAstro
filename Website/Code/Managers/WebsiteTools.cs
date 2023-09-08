@@ -598,8 +598,11 @@ namespace Website
 			AppData.Go(searchLink, newTab: true);
 		}
 
-		public async static Task OnClickCopyPythonSnippet(AutoCalculator.APICallData methodData)
+		public async static Task OnClickCopyPythonSnippet(AutoCalculator.APICallData methodData, dynamic component)
 		{
+			//only continue if passed input field validation
+			if (!(await component.IsValidationPassed())) { return; }
+
 			//generate the param field dynamically
 			var paramNameList = GetParamNameList(methodData.Name);
 
@@ -693,6 +696,30 @@ namespace Website
 					$"""
 					# set planet
 					{variableName} = PlanetName.Sun
+					""";
+			}
+			if (typeName == typeof(HouseName).FullName)
+			{
+				final =
+					$"""
+					# set house (bhava)
+					{variableName} = HouseName.House3
+					""";
+			}
+			if (typeName == typeof(ZodiacName).FullName)
+			{
+				final =
+					$"""
+					# set zodiac sign
+					{variableName} = ZodiacName.Gemini
+					""";
+			}
+			if (typeName == typeof(Person).FullName)
+			{
+				final =
+					$"""
+					# set person
+					{variableName} = Person("", "", "Juliet", Gender.Female, birth_time, "", List[LifeEvent.EventTag]())
 					""";
 			}
 

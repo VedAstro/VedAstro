@@ -4236,7 +4236,7 @@ namespace VedAstro.Library
 
             //monday in aquatic sign
             var moonSign = Calculate.MoonSignName(time);
-            var isMoonInAquaticSign = Calculate.IsAquaticSign(moonSign);
+            var isMoonInAquaticSign = Calculate.IsWaterSign(moonSign);
 
             //if either is true
             var occuring = isMoonInAquaticSign || beneficsInLagna;

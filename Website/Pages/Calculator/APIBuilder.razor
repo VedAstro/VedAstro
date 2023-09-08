@@ -77,9 +77,9 @@
 
 			@*COPY AND CALL BUTTON*@
 			<div class="d-flex justify-content-center gap-3">
-				<IconButton ButtonText="Python" TooltipText="Copy Python code snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(_apiSelectorBox.SelectedMethod, this))" SmallSize="true" />
-				<IconButton ButtonText="Copy" TooltipText="Copy HTTP GET request URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
-				<IconButton ButtonText="Test Call" TooltipText="Demo call to see output" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
+				<IconButton ButtonText="Python" TooltipPosition="bottom" TooltipText="Copy Python code snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(_apiSelectorBox.SelectedMethod, this))" SmallSize="true" />
+				<IconButton ButtonText="Copy" TooltipPosition="bottom" TooltipText="Copy HTTP GET request URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
+				<IconButton ButtonText="Test Call" TooltipPosition="bottom" TooltipText="Demo call to see output" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
 			</div>
 		</div>
 

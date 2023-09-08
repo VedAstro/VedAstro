@@ -8,76 +8,113 @@
 
 @*this element is auto hidden by Tippy, and made visible when on hover*@
 <div @ref="tooltipElement" class="@nameof(this.GetType)shadow rounded-4 border-dark-subtle" style="width: max-content;">
-    @HelpHtml
+	@TooltipHtml
 </div>
 
 
-<div @ref="helpIconHolder" class="@ExtraClass" style="cursor: help; float: right; margin-left: 8px;margin-top: -2px;">
-    <span class="iconify" data-icon="@IconName" data-width="@(SmallIcon?smallIconSize:bigIconSize)"></span>
+<div @ref="helpIconHolder" class="@ExtraClass" style="@FinalCss">
+	<span class="iconify" data-icon="@IconName" data-width="@Size"></span>
 </div>
 
 
 
 @code {
 
-    /// <summary>
-    /// element that is shown in tool tip is referenced here to be accessed by Tippy.js
-    /// </summary>
-    private ElementReference tooltipElement { get; set; }
+	/// <summary>
+	/// element that is shown in tool tip is referenced here to be accessed by Tippy.js
+	/// </summary>
+	private ElementReference tooltipElement { get; set; }
 
-    /// <summary>
-    /// Text that is shown next help icon
-    /// </summary>
-    [Parameter]
-    public string IconName { get; set; } = "bxs:right-arrow";
+	/// <summary>
+	/// Text that is shown next help icon
+	/// </summary>
+	[Parameter]
+	public string IconName { get; set; } = "bxs:right-arrow";
 
-    [Parameter]
-    public string ExtraClass { get; set; } = "";
+	/// <summary>
+	/// default to 22px
+	/// </summary>
+	[Parameter]
+	public int Size { get; set; } = 22;
 
-    /// <summary>
-    /// Help text in HTML format to be shown in drop down
-    /// </summary>
-    [Parameter]
-    public RenderFragment? HelpHtml { get; set; }
+	[Parameter]
+	public double Opacity { get; set; } = 1;
 
+	[Parameter]
+	public string ExtraClass { get; set; } = "";
 
-    /// <summary>
-    /// Set true if for small icon size 19px next to form labels
-    /// default false, not need to be set
-    /// </summary>
-    [Parameter]
-    public bool SmallIcon { get; set; } = false;
-
-    private string smallIconSize = "19";
-    private string bigIconSize = "22";
+	/// <summary>
+	/// Help text in HTML format to be shown in drop down
+	/// </summary>
+	[Parameter]
+	public RenderFragment? TooltipHtml { get; set; }
 
 
-    private ElementReference helpIconHolder;
+	[Parameter]
+	public string TooltipText { get; set; }
+
+	/// <summary>
+	/// If true will show tooltip on hover else, will default to show on click
+	/// </summary>
+	[Parameter]
+	public bool ShowOnHover { get; set; } = false;
+
+	/// <summary>
+	/// sets Tippy.js interactive property, defaults to true, so users can copy help text
+	/// </summary>
+	[Parameter]
+	public bool Interactive { get; set; } = true;
 
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+	/// <summary>
+	/// Set true if for small icon size 19px next to form labels
+	/// default false, not need to be set
+	/// </summary>
+	[Parameter]
+	public bool SmallIcon { get; set; } = false;
+
+	private string smallIconSize = "19";
+	private string bigIconSize = "22";
+
+
+	private ElementReference helpIconHolder;
+
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			//setup the tooltip
+			//attach tooltip lib element if tooltip provided
+			//construct html to show image
+			var tooltipSettings =
+				new
+				{
+					placement = "right",
+					//if HTML specified use that, else use text
+					content = TooltipHtml != null? tooltipElement : (object)TooltipText,
+					theme = "light",
+					allowHTML = true,
+					arrow = true,
+					interactive = Interactive, //so that can click button
+					trigger = ShowOnHover ? "mouseenter" : "click" //set trigger based on user set default to click
+				};
+
+
+			//attach tooltip lib to element
+			await _jsRuntime.Tippy(helpIconHolder, tooltipSettings);
+		}
+	}
+
+
+	public string FinalCss 
     {
-        if (firstRender)
-        {
-            //setup the tooltip
-            //attach tooltip lib element if tooltip provided
-            //construct html to show image
-            var tooltipSettings =
-                new
-                {
-                    placement = "right",
-                    content = tooltipElement,
-                    theme = "light",
-                    allowHTML = true,
-                    arrow = true,
-                    interactive = true //so that can click button
-                };
-
-
-            //attach tooltip lib to element
-            await _jsRuntime.Tippy(helpIconHolder, tooltipSettings);
-        }
+	    get
+	    {
+		    return "cursor: help;" +
+		           " float: right;" +
+		           $" opacity:{Opacity};";
+	    }
     }
-
 
 }

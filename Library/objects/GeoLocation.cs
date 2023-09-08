@@ -51,7 +51,7 @@ namespace VedAstro.Library
 
             //coordinates have been known to be inputed with misplaced decimal (from api)
             //this will check and try correct if possible
-            bool isValid = IsValidLatitudeLongitude(latitude, longitude);
+            bool isValid = IsValidLatitudeLongitude(longitude, latitude);
             if (isValid) //normal operation
             {
                 _longitude = longitude;
@@ -272,16 +272,20 @@ namespace VedAstro.Library
         /// The maximum longitude is 180 degrees and the minimum longitude is -180 degrees.
         /// Here is a simple C# method to check if a given latitude and longitude are within these ranges:
         /// </summary>
-        public bool IsValidLatitudeLongitude(double latitude, double longitude)
+        public bool IsValidLatitudeLongitude(double longitude, double latitude)
         {
             if (latitude < -90 || latitude > 90)
             {
+	            Console.WriteLine($"Invalid Latitude! {latitude}");
                 return false;
             }
             if (longitude < -180 || longitude > 180)
             {
-                return false;
+	            Console.WriteLine($"Invalid Longitude! {longitude}");
+				return false;
             }
+
+            //if control reaches here than is valid
             return true;
         }
 

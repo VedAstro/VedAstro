@@ -171,6 +171,12 @@ else
     [Parameter]
     public string? TooltipText { get; set; }
 
+	/// <summary>
+	/// bottom, right, left, top
+	/// </summary>
+	[Parameter]
+	public string? TooltipPosition { get; set; } = "right";
+
     /// <summary>
     /// Tooltip text in HTML format
     /// </summary>
@@ -300,7 +306,7 @@ else
             if (!string.IsNullOrEmpty(TooltipText))
             {
 
-                var tooltipData = new { content = TooltipText, placement = "right" };
+                var tooltipData = new { content = TooltipText, placement = TooltipPosition };
                 await _jsRuntime.Tippy(ElementReference, tooltipData);
             }
 
@@ -317,7 +323,7 @@ else
                 var tooltipSettings =
                     new
                     {
-                        placement = "right",
+                        placement = TooltipPosition,
                         content = TooltipHTML,
                         theme = "light",
                         allowHTML = true,

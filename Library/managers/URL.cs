@@ -156,7 +156,7 @@ public class URL
     public const string LaptopBuyPage = "https://www.ebay.com/itm/304878531330";
     public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
     public const string GitHubDiscussions = "https://github.com/orgs/VedAstro/discussions";
-    public const string YoutubeChannel = "https://www.youtube.com/@vedastro";
+    public const string YoutubeChannel = "https://www.youtube.com/@vedastro/videos";
     public const string YoutubePythonGuide = "https://youtu.be/chEeF-xEQ48?si=RNTvGlSD-WXgso7P";
     public const string FacebookPage = "https://www.facebook.com/vedastro.org";
     public const string Instagram = "https://www.instagram.com/_vedastro/";

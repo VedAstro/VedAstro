@@ -91,12 +91,12 @@
 										</div>
 									</div>
 
-									@* CALL & COPY BUTTONS *@
+									@* CALL, COPY, GOTO CODE BUTTONS *@
 									<div>
 										<div class="vstack gap-2">
-											<IconButton FullWidth="true" ButtonText="Python" TooltipText="Copy Python Snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(methodData.Name))" SmallSize="true" />
+											<IconButton FullWidth="true" ButtonText="Python" TooltipText="Copy Python Snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(methodData))" SmallSize="true" />
 											<IconButton FullWidth="true" ButtonText="Test" Color="success" IconName="ph:phone-call-light" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" SmallSize="true"/>
-											<IconButton FullWidth="true" ButtonText="Code" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" SmallSize="true"/>
+											<IconButton FullWidth="true" ButtonText="Goto Code" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(()=>WebsiteTools.OnClickGotoGithubCode(methodData.Name))" SmallSize="true" />
 										</div>
 									</div>
 								</div>

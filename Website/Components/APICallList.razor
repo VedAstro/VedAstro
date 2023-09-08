@@ -55,7 +55,6 @@
 										@methodData.Name
 									</IconText>
 								</h6>
-								<IconButton TooltipText="Copy" IconName="carbon:link" OnClickCallback="@(()=>OnClickCopyAPI(methodData.Name))" SmallSize="true" />
 							</div>
 							<div class="card-body">
 								<div class="d-flex justify-content-between">
@@ -94,8 +93,7 @@
 									@* CALL, COPY, GOTO CODE BUTTONS *@
 									<div>
 										<div class="vstack gap-2">
-											<IconButton FullWidth="true" ButtonText="Python" TooltipText="Copy Python Snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(methodData))" SmallSize="true" />
-											<IconButton FullWidth="true" ButtonText="Test" Color="success" IconName="ph:phone-call-light" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" SmallSize="true"/>
+											<IconButton FullWidth="true" ButtonText="Copy Python" TooltipText="Copy Python Snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(methodData, this))" SmallSize="true" />
 											<IconButton FullWidth="true" ButtonText="Goto Code" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(()=>WebsiteTools.OnClickGotoGithubCode(methodData.Name))" SmallSize="true" />
 										</div>
 									</div>

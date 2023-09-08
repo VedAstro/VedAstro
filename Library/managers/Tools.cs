@@ -26,6 +26,7 @@ using Azure.Storage.Blobs;
 using Svg;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.Extensions.Logging;
+using System.Reflection.Metadata;
 
 namespace VedAstro.Library
 {
@@ -35,6 +36,16 @@ namespace VedAstro.Library
 	/// </summary>
 	public static class Tools
 	{
+		/// <summary>
+		/// Given any data will try to print it as data readable json
+		/// Note: made for beautiful code use in python 
+		/// </summary>
+		public static void Print(dynamic input)
+		{
+			JToken jsonData = Tools.AnyToJSON("", input);
+			var stringJson = jsonData.ToString();
+			Console.WriteLine(stringJson);
+		}
 
 		//gets the exact width of a text based on Font size & type
 		//used to generate nicely fitting background for text

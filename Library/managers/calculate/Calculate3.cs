@@ -334,14 +334,14 @@ namespace VedAstro.Library
             return listOfEvilPlanets;
         }
 
-        /// <summary>
-        /// Gets planet aspected by the inputed planet
-        /// </summary>
-        [API("Gets planet aspected by the inputed planet")]
-        public static List<PlanetName> PlanetsInAspect(PlanetName planet, Time time)
+		/// <summary>
+		/// Gets all planets the inputed planet is transmitting aspect to
+		/// </summary>
+		[API("Gets all planets the inputed planet is transmitting aspect to")]
+        public static List<PlanetName> PlanetsInAspect(PlanetName inputPlanet, Time time)
         {
             //get signs planet is aspecting
-            var signAspecting = Calculate.SignsPlanetIsAspecting(planet, time);
+            var signAspecting = Calculate.SignsPlanetIsAspecting(inputPlanet, time);
 
             //get all the planets located in these signs
             var planetsAspected = new List<PlanetName>();

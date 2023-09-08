@@ -52,9 +52,14 @@
 							<div class="card-header d-flex justify-content-between">
 								<h6 class="mb-0">
 									<IconText IconSize="42" FontSize="19" IconName="openmoji:european-name-badge">
-										@methodData.Name
+										@(Format.FormatName(@methodData.Name))
 									</IconText>
 								</h6>
+								@* OUTPUT RETURN TYPE *@
+								<div class="hstack gap-2">
+									<IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="ph:terminal-fill">Output </IconText>
+									<span style="font-weight: 800; color: @ParamColor[2]">@methodData.ReturnType</span>
+								</div>
 							</div>
 							<div class="card-body">
 								<div class="d-flex justify-content-between">
@@ -62,6 +67,11 @@
 									@* DESCRIPTION *@
 									<div style="max-width: @GR.W412px;">
 										<div class="vstack gap-3">
+											@* DESCRIPTION  TEXT*@
+											<div class="hstack gap-2">
+												<IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="dashicons:text"></IconText>
+												<span style="">@methodData.Description</span>
+											</div>
 											@* INPUT TYPE *@
 											<div class="hstack gap-2">
 												<IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="mdi:input">Input </IconText>
@@ -77,23 +87,13 @@
 													}
 												</div>
 											</div>
-											@* DESCRIPTION  TEXT*@
-											<div class="hstack gap-2">
-												<IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="dashicons:text">Description </IconText>
-												<span style="">@methodData.Description</span>
-											</div>
-											@* OUTPUT RETURN TYPE *@
-											<div class="hstack gap-2">
-												<IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="ph:terminal-fill">Output </IconText>
-												<span style="font-weight: 800; color: @ParamColor[2]">@methodData.ReturnType</span>
-											</div>
 										</div>
 									</div>
 
 									@* CALL, COPY, GOTO CODE BUTTONS *@
 									<div>
 										<div class="vstack gap-2">
-											<IconButton FullWidth="true" ButtonText="Copy Python" TooltipText="Copy Python Snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(methodData, this))" SmallSize="true" />
+											<IconButton FullWidth="true" ButtonText="Copy Python" TooltipText="Copy Python Snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(methodData))" SmallSize="true" />
 											<IconButton FullWidth="true" ButtonText="Goto Code" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(()=>WebsiteTools.OnClickGotoGithubCode(methodData.Name))" SmallSize="true" />
 										</div>
 									</div>
@@ -251,6 +251,6 @@
 		await _jsRuntime.ShowAlert("success", $"Call Name Copied!", false, 2600);
 	}
 
-	
+
 
 }

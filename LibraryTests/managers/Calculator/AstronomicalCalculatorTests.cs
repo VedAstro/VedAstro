@@ -14,6 +14,15 @@ namespace VedAstro.Library.Tests
         public static Time StandardHoroscope = new("14:20 16/10/1918 +05:30", GeoLocation.Bangalore);
 
         [TestMethod()]
+        public void GeoLocationTest()
+        {
+	        var x = new GeoLocation("Tokyo", 35.6895, 139.6917);
+
+
+        }
+
+
+		[TestMethod()]
         public void GetAllBhinnashtakavargaChartTest()
         {
 

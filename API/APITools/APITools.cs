@@ -978,10 +978,15 @@ namespace API
 				//exp: last 3 calls x 800ms = 4th call delay --> 2400ms
 				var msDelay = lastCallsCount * msDelayRate;
 
-				APITools.ApiExtraNote = $"Call Slowed Down {msDelay}ms:" +
-										$" Sorry for now public API quota is {freeCallRate} calls/min." +
-										$" You made {lastCallsCount} calls in 1 min." +
-										$" Please donate to increase limit.";
+				//todo shorten link
+				APITools.ApiExtraNote = $"Free Limit 5 calls/min : Get Unlimited API for only $3 : " +
+				                        $"{URL.BuyAPI}";
+
+				//APITools.ApiExtraNote = $"Call Slowed Down {msDelay}ms:" +
+				//						$"\nSorry for now public API quota is {freeCallRate} calls/min." +
+				//						$"\nYou made {lastCallsCount} calls in 1 min." +
+				//						$"\nPlease buy unlimited for only $3 :" +
+				//						$"https://ko-fi.com/summary/f17451bf-7509-4e59-8471-2f7ce446c9ae";
 
 
 				await Task.Delay(msDelay);

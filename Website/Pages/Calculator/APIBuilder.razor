@@ -1,4 +1,4 @@
-@using VedAstro.Library
+﻿@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
 <PageTitle>Easy Open API | VedAstro</PageTitle>
@@ -56,6 +56,14 @@
 							<span class="input-group-text">Year of Zero Coincidence</span>
 							<input type="text" class="form-control" placeholder="397">
 						</div>
+						<div class="input-group mb-2">
+							<label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="fluent:top-speed-20-filled" /> Call Limit</label>
+							<select @bind="SelectedCallRate" class="form-select">
+								<option selected value="Free">5 calls/min</option>
+								<option value="Unlimited">Unlimited</option>
+							</select>
+						</div>
+
 					</div>
 				</div>
 
@@ -181,11 +189,24 @@
 	/// default set to Raman, as used system wide
 	/// </summary>
 	private string _selectedAyanamsa = "Raman";
+	private string _selectedCallRate = "Free"; //todo default follow user account
 
 	/// <summary>
 	/// list that is shown to user and is changed by search
 	/// </summary>
 	private List<AutoCalculator.APICallData> MethodListFiltered { get; set; } = new List<AutoCalculator.APICallData>();
+
+	public string SelectedCallRate
+	{
+		get => _selectedCallRate;
+		set
+		{
+			//if unlimited plan, send to buy page
+			if (value == "Unlimited"){ AppData.Go(URL.BuyAPI, newTab:true);}
+
+			_selectedCallRate = value;
+		}
+	}
 
 	private List<AutoCalculator.APICallData> MethodListALL = new List<AutoCalculator.APICallData>();
 

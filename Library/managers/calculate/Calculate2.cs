@@ -119,6 +119,90 @@ namespace VedAstro.Library
 		}
 
 		/// <summary>
+		/// find time of next lunar eclipse
+		/// </summary>
+		[API("find time of next lunar eclipse UTC time")]
+		public static DateTime NextLunarEclipse(Time time)
+		{
+
+			//CACHE MECHANISM
+			return CacheManager.GetCache(new CacheKey(nameof(NextLunarEclipse), time), _getNextLunarEclipse);
+
+
+			//UNDERLYING FUNCTION
+
+			DateTime _getNextLunarEclipse()
+			{
+				int iflag = SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
+				double[] results = new double[10];
+				string err_msg = "";
+				double jul_day_ET;
+				SwissEph ephemeris = new SwissEph();
+
+				// Convert DOB to ET
+				jul_day_ET = Calculate.ConvertLmtToJulian(time);
+
+				//Get planet long
+				var eclipseType = 0; /* eclipse type wanted: SE_ECL_TOTAL etc. or 0, if any eclipse type */
+				var backward = false; /* TRUE, if backward search */
+				int ret_flag = ephemeris.swe_lun_eclipse_when(jul_day_ET, iflag, eclipseType, results, backward, ref err_msg);
+
+				//get raw results out
+				var eclipseMaxTime = results[0]; //time of maximum eclipse (Julian day number)
+
+				//convert to UTC Time
+				var utcTime = Calculate.ConvertJulianTimeToNormalTime(eclipseMaxTime);
+
+				return utcTime;
+
+			}
+
+
+		}
+
+		/// <summary>
+		/// finds the next solar eclipse globally
+		/// </summary>
+		[API("finds the next solar eclipse globally UTC time")]
+		public static DateTime NextSolarEclipse(Time time)
+		{
+
+			//CACHE MECHANISM
+			return CacheManager.GetCache(new CacheKey(nameof(NextSolarEclipse), time), _getNextSolarEclipse);
+
+
+			//UNDERLYING FUNCTION
+
+			DateTime _getNextSolarEclipse()
+			{
+				int iflag = SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
+				double[] results = new double[10];
+				string err_msg = "";
+				double jul_day_ET;
+				SwissEph ephemeris = new SwissEph();
+
+				// Convert DOB to ET
+				jul_day_ET = Calculate.ConvertLmtToJulian(time);
+
+				//Get planet long
+				var eclipseType = 0; /* eclipse type wanted: SE_ECL_TOTAL etc. or 0, if any eclipse type */
+				var backward = false; /* TRUE, if backward search */
+				int ret_flag = ephemeris.swe_sol_eclipse_when_glob(jul_day_ET, iflag, eclipseType, results, backward, ref err_msg);
+
+				//get raw results out
+				var eclipseMaxTime = results[0]; //time of maximum eclipse (Julian day number)
+
+				//convert to UTC Time
+				var utcTime = Calculate.ConvertJulianTimeToNormalTime(eclipseMaxTime);
+
+				return utcTime;
+
+			}
+
+
+		}
+
+		/// <summary>
 		/// NOTE This method connects SwissEph Library with VedAstro Library
 		/// </summary>
 		[API("DIget fixed longitude used in western systems, connects SwissEph Library with VedAstro")]

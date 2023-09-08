@@ -49,14 +49,14 @@
                             <Icon IconName="fluent:people-team-20-regular" />
                             @(Format.FormatName(EventTag.General.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                                <HelpHtml>
+                                <TooltipHtml>
                                     <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                         @foreach (var x in EventManager.GetEventDataListByTag(EventTag.General))
                                         {
                                             <span>@x.FormattedName</span>
                                         }
                                     </div>
-                                </HelpHtml>
+                                </TooltipHtml>
                             </IconTooltip>
                         </label>
                     </div>
@@ -66,14 +66,14 @@
                             <Icon IconName="bi:person-fill" />
                             @(Format.FormatName(EventTag.Personal.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                                <HelpHtml>
+                                <TooltipHtml>
                                     <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                         @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Personal))
                                         {
                                             <span>@x.FormattedName</span>
                                         }
                                     </div>
-                                </HelpHtml>
+                                </TooltipHtml>
                             </IconTooltip>
                         </label>
                     </div>
@@ -83,14 +83,14 @@
                             <Icon IconName="material-symbols:potted-plant" />
                             @(Format.FormatName(EventTag.Agriculture.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                                <HelpHtml>
+                                <TooltipHtml>
                                     <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                         @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Agriculture))
                                         {
                                             <span>@x.FormattedName</span>
                                         }
                                     </div>
-                                </HelpHtml>
+                                </TooltipHtml>
                             </IconTooltip>
                         </label>
                     </div>
@@ -100,7 +100,7 @@
                             <Icon IconName="tabler:school" />
                             @(Format.FormatName(EventTag.Education.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                                <HelpHtml>
+                                <TooltipHtml>
                                     Coming Soon!
                                     @* <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                 @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Agriculture))
@@ -108,7 +108,7 @@
                                 <span>@x.FormattedName</span>
                                 }
                                 </div> *@
-                                </HelpHtml>
+                                </TooltipHtml>
                             </IconTooltip>
                         </label>
                     </div>
@@ -118,7 +118,7 @@
                             <Icon IconName="carbon:construction" />
                             @(Format.FormatName(EventTag.Building.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                                <HelpHtml>
+                                <TooltipHtml>
                                     Coming Soon!
                                     @* <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                 @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Agriculture))
@@ -126,7 +126,7 @@
                                 <span>@x.FormattedName</span>
                                 }
                                 </div> *@
-                                </HelpHtml>
+                                </TooltipHtml>
                             </IconTooltip>
                         </label>
                     </div>
@@ -136,7 +136,7 @@
                             <Icon IconName="mdi:plane-train" />
                             @(Format.FormatName(EventTag.Travel.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                                <HelpHtml>
+                                <TooltipHtml>
                                     Coming Soon!
                                     @*
                                 <div style="max-height: @GR.W157px; overflow: auto;" class="vstack gap-1">
@@ -145,7 +145,7 @@
                                 <span>@x.FormattedName</span>
                                 }
                                 </div> *@
-                                </HelpHtml>
+                                </TooltipHtml>
                             </IconTooltip>
                         </label>
                     </div>
@@ -155,14 +155,14 @@
                             <Icon IconName="fluent-emoji-high-contrast:heart-with-arrow" />
                             @(Format.FormatName(EventTag.Marriage.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                                <HelpHtml>
+                                <TooltipHtml>
                                     <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                         @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Marriage))
                                         {
                                             <span>@x.FormattedName</span>
                                         }
                                     </div>
-                                </HelpHtml>
+                                </TooltipHtml>
                             </IconTooltip>
                         </label>
                     </div>
@@ -172,14 +172,14 @@
                             <Icon IconName="clarity:dollar-solid" />
                             @(Format.FormatName(EventTag.BuyingSelling.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                                <HelpHtml>
+                                <TooltipHtml>
                                     <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                         @foreach (var x in EventManager.GetEventDataListByTag(EventTag.BuyingSelling))
                                         {
                                             <span>@x.FormattedName</span>
                                         }
                                     </div>
-                                </HelpHtml>
+                                </TooltipHtml>
                             </IconTooltip>
                         </label>
                     </div>
@@ -189,14 +189,14 @@
                             <Icon IconName="game-icons:hair-strands" />
                             @(Format.FormatName(EventTag.HairNailCutting.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                                <HelpHtml>
+                                <TooltipHtml>
                                     <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                         @foreach (var x in EventManager.GetEventDataListByTag(EventTag.HairNailCutting))
                                         {
                                             <span>@x.FormattedName</span>
                                         }
                                     </div>
-                                </HelpHtml>
+                                </TooltipHtml>
                             </IconTooltip>
                         </label>
                     </div>
@@ -207,14 +207,14 @@
                             @(Format.FormatName(EventTag.Medical.ToString()))
                         </label>
                         <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                            <HelpHtml>
+                            <TooltipHtml>
                                 <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                     @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Medical))
                                     {
                                         <span>@x.FormattedName</span>
                                     }
                                 </div>
-                            </HelpHtml>
+                            </TooltipHtml>
                         </IconTooltip>
                     </div>
                     <div style="width: @GR.W255px;" class="form-check hstack gap-2">
@@ -224,14 +224,14 @@
                             @(Format.FormatName(EventTag.Dasa.ToString()))
                         </label>
                         <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                            <HelpHtml>
+                            <TooltipHtml>
                                 <div style="max-height: @GR.W157px; overflow: auto;" class="vstack gap-1">
                                     @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Medical))
                                     {
                                         <span>@x.FormattedName</span>
                                     }
                                 </div>
-                            </HelpHtml>
+                            </TooltipHtml>
                         </IconTooltip>
                     </div>
                     <div style="width: @GR.W255px;" class="form-check hstack gap-2">
@@ -241,14 +241,14 @@
                             @(Format.FormatName(EventTag.Gochara.ToString()))
                         </label>
                         <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                            <HelpHtml>
+                            <TooltipHtml>
                                 <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                     @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Medical))
                                     {
                                         <span>@x.FormattedName</span>
                                     }
                                 </div>
-                            </HelpHtml>
+                            </TooltipHtml>
                         </IconTooltip>
                     </div>
                 </div>

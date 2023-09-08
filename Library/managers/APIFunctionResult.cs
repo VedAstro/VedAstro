@@ -73,7 +73,6 @@ public record APIFunctionResult(string Name, object Result)
             //pass in name of function as header
             var rootPayloadJson = Tools.AnyToJSON(apiFunctionResult.Name ,content);
             
-            //var sss = new JProperty(apiFunctionResult.Name, content);
             returnOb.Add(rootPayloadJson);
         }
 

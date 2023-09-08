@@ -77,9 +77,9 @@
 
 			@*COPY AND CALL BUTTON*@
 			<div class="d-flex justify-content-center gap-3">
-				<IconButton ButtonText="Python" TooltipText="Copy Python Snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(_apiSelectorBox.SelectedMethod, this))" SmallSize="true" />
-				<IconButton ButtonText="Copy" TooltipText="Copy GET request URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
-				<IconButton ButtonText="Test Call" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
+				<IconButton ButtonText="Python" TooltipText="Copy Python code snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(_apiSelectorBox.SelectedMethod, this))" SmallSize="true" />
+				<IconButton ButtonText="Copy" TooltipText="Copy HTTP GET request URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
+				<IconButton ButtonText="Test Call" TooltipText="Demo call to see output" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
 			</div>
 		</div>
 
@@ -106,8 +106,8 @@
 
 			<ArticleBlock Title="Simple Response" IconName="bi:filetype-json">
 				<TextHTML>
-					Data is returned in <strong>JSON</strong>. Only 2 properties. First field is always <kbd>Status</kbd>, it can be only <kbd>Pass</kbd> or <kbd>Fail</kbd>.
-					If it shows <kbd>Fail</kbd> then most likely cause is invalid data on your part. More details about the
+					Data is returned in <strong>JSON</strong>. Only 2 properties. First field is always <kbd>Status</kbd>, it can be only <kbd style="background-color:green;">Pass</kbd> or <kbd style="background-color:red;">Fail</kbd>.
+					If it shows <kbd style="background-color:red;">Fail</kbd> then most likely cause is invalid data on your part. More details about the
 					error will be in <kbd>Payload</kbd> property. If call is successful, all the data you need will be alphabetically stored in <kbd>Payload</kbd> property.
 				</TextHTML>
 			</ArticleBlock>

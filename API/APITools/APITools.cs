@@ -979,13 +979,13 @@ namespace API
 				var msDelay = lastCallsCount * msDelayRate;
 
 				//todo shorten link
-				APITools.ApiExtraNote = $"Free Limit 5 calls/min : Get Unlimited API for only $3 : " +
+				APITools.ApiExtraNote = $"Get Unlimited Speed Calls for only $1 : " +
 				                        $"{URL.BuyAPI}";
 
 				//APITools.ApiExtraNote = $"Call Slowed Down {msDelay}ms:" +
 				//						$"\nSorry for now public API quota is {freeCallRate} calls/min." +
 				//						$"\nYou made {lastCallsCount} calls in 1 min." +
-				//						$"\nPlease buy unlimited for only $3 :" +
+				//						$"\nPlease buy unlimited for only $1 :" +
 				//						$"https://ko-fi.com/summary/f17451bf-7509-4e59-8471-2f7ce446c9ae";
 
 

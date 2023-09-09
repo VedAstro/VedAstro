@@ -29,6 +29,27 @@ namespace VedAstro.Library
 	{
 		#region AVASTA
 
+
+
+		[API("Gets all the Avastas for a planet, Lajjita, Garvita, Kshudita, etc...")]
+		public static List<Avasta> PlanetAvasta(PlanetName planetName, Time time)
+		{
+			var finalList = new Avasta?[6]; //total 6 avasta
+
+			//add in each avasta that matches
+			finalList[0] = IsPlanetInLajjitaAvasta(planetName, time) ? Avasta.LajjitaShamed : null;
+			finalList[1] = IsPlanetInGarvitaAvasta(planetName, time) ? Avasta.GarvitaProud : null;
+			finalList[2] = IsPlanetInKshuditaAvasta(planetName, time) ? Avasta.KshuditaStarved : null;
+			finalList[3] = IsPlanetInTrashitaAvasta(planetName, time) ? Avasta.TrishitaThirst : null;
+			finalList[4] = IsPlanetInMuditaAvasta(planetName, time) ? Avasta.MuditaDelighted : null;
+			finalList[5] = IsPlanetInKshobhitaAvasta(planetName, time) ? Avasta.KshobitaAgitated : null;
+
+			// Convert array to List<Avasta> and remove nulls
+			var resultList = finalList.OfType<Avasta>().ToList();
+			return resultList;
+
+		}
+
 		[API("Lajjita / humiliated : Planet in the 5th house in conjunction with rahu or ketu, Saturn or mars.")]
 		public static bool IsPlanetInLajjitaAvasta(PlanetName planetName, Time time)
 		{
@@ -87,6 +108,17 @@ namespace VedAstro.Library
 		/// 
 		/// If the Planet is situated in a watery sign, is aspected by an enemy Planet and
 		/// is without the aspect of benefic Planets he is called Trashita.
+		///
+		/// --------
+		/// "A planet in a Water Sign and aspected by an enemy planet,
+		/// with no auspiscious Graha aspecting is said to be Trishita Avastha/Thirsty State".
+		/// 
+		/// This state is in effect whenever a planet is in a Water Sign and it gets
+		/// aspected by an enemy planet. But if, a Gentle Planet (Mercury/Venus/Moon) aspects here,
+		/// it strengthens the planet in Water Sign. This Avastha is only for the aspecting enemy
+		/// planet that will cause Trishita/Thirst. This state shows that a planet in a watery
+		/// Rasi can still be productive even when aspected by enemies, though it will not be happy.
+		/// As the name “Thirsty State” implies, it indicates the lack of emotional fulfillment that a planet experiences.
 		/// </summary>
 		[API("Trashita/thirsty – Planet in a watery sign, aspected by a enemy and is without the aspect of benefic Planets")]
 		public static bool IsPlanetInTrashitaAvasta(PlanetName planetName, Time time)
@@ -111,6 +143,16 @@ namespace VedAstro.Library
 		/// and is together with or is aspected by a friendly Planet is called Mudita
 		/// 
 		/// Mudita/sated/happy – Planet in a friend’s sign or aspected by a friend and conjoined with Jupiter, Gains
+		///
+		/// If a planet is in a friend’s sign or joined with a friend or aspected by a friend,
+		/// or that joined with Jupiter is called Mudita Avastha/Delighted State
+		///
+		/// It is clear from explanation itself that a planet will feel delighted when it
+		/// is in friendly sign or friendly planet conjuncts/aspects or it is joined by the
+		/// biggest benefic planet Jupiter. We can understand planet’s delight in such cases. 
+		/// 
+		/// Planet in friendly sign - A planet in a friendly sign is productive,
+		/// and the stronger that friend planet, the more productive it will be. 
 		/// </summary>
 		[API("Mudita/sated/happy – Planet in a friend’s sign or aspected by a friend and conjoined with Jupiter, Gains")]
 		public static bool IsPlanetInMuditaAvasta(PlanetName planetName, Time time)
@@ -122,14 +164,37 @@ namespace VedAstro.Library
 			var isConjunctJupiter = IsPlanetConjunctWithPlanet(planetName, Jupiter, time);
 
 			//is together with or is aspected by a friendly (conjunct or aspect)
-			var isConjunctWithFriendly = false == IsPlanetConjunctWithFriendPlanets(planetName, time);
-			var isAspectedByFriendly = false == IsPlanetAspectedByFriendPlanets(planetName, time);
+			var isConjunctWithFriendly = IsPlanetConjunctWithFriendPlanets(planetName, time);
+			var isAspectedByFriendly = IsPlanetAspectedByFriendPlanets(planetName, time);
 			var accosiatedWithFriendly = isConjunctWithFriendly || isAspectedByFriendly;
 
 			//check if all conditions are met for Mudita
-			var isMudita = isInFriendly && isConjunctJupiter && accosiatedWithFriendly;
+			var isMudita = isInFriendly || isConjunctJupiter || accosiatedWithFriendly;
 
 			return isMudita;
+		}
+
+		/// <summary>
+		/// If a planet is conjunct by Sun or it is aspected by Enemy Malefic Planets then
+		/// it should always be known as Kshobhita Avastha/Agitated State
+		/// 
+		/// Kshobhita/guilty/repentant – Planet in conjunction with sun and aspected by malefics and an enemy. Penury
+		/// </summary>
+		[API("Kshobhita/guilty/repentant – Planet in conjunction with sun and aspected by malefics and an enemy. Penury")]
+		public static bool IsPlanetInKshobhitaAvasta(PlanetName planetName, Time time)
+		{
+			//Planet in conjunction with sun 
+			var conjunctWithSun = IsPlanetConjunctWithPlanet(planetName, Sun, time);
+
+			//aspected by an enemy or malefic
+			var isAspectedByEnemy = false == IsPlanetAspectedByEnemyPlanets(planetName, time);
+			var isAspectedByMalefics = false == IsPlanetAspectedByMaleficPlanets(planetName, time);
+			var accosiatedWithBadPlanets = isAspectedByEnemy || isAspectedByMalefics;
+
+			//check if all conditions are met for Kshobhita
+			var isKshobhita = conjunctWithSun && accosiatedWithBadPlanets;
+
+			return isKshobhita;
 		}
 
 		#endregion
@@ -3093,7 +3158,7 @@ namespace VedAstro.Library
 				//get relationship of the 2 planets
 				var conjunctNature = PlanetCombinedRelationshipWithPlanet(inputPlanet, planet, time);
 				var isFriend = conjunctNature == PlanetToPlanetRelationship.Friend ||
-				               conjunctNature == PlanetToPlanetRelationship.BestFriend;
+							   conjunctNature == PlanetToPlanetRelationship.BestFriend;
 
 				//if enemy than end here as true
 				if (isFriend) { return true; }
@@ -3326,7 +3391,7 @@ namespace VedAstro.Library
 				//get relationship of the 2 planets
 				var aspectNature = PlanetCombinedRelationshipWithPlanet(inputPlanet, planet, time);
 				var isFriend = aspectNature == PlanetToPlanetRelationship.Friend ||
-				               aspectNature == PlanetToPlanetRelationship.BestFriend;
+							   aspectNature == PlanetToPlanetRelationship.BestFriend;
 
 				//if Friend than end here as true
 				if (isFriend) { return true; }
@@ -4190,7 +4255,7 @@ namespace VedAstro.Library
 				return false;
 			}
 		}
-		
+
 		/// <summary>
 		/// True if a planet is in a house sign owned by a friend. Rahu and Ketu is false always
 		/// </summary>

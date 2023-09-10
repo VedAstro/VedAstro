@@ -25,6 +25,7 @@ jobs:
       run: |
         git config --global user.name 'sengiv'
         git config --global user.email 'vignes@live.com.my'
+        git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/VedAstro.Python.git
         #Clones the other repository where you want to commit the DLL.
         git clone https://github.com/VedAstro/VedAstro.Python.git
         #Copies the DLL from the ./publish directory to the cloned repository.

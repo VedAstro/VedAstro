@@ -26,19 +26,18 @@ jobs:
       run: dotnet publish ./Library --configuration Release --no-build --output ./publish
     - name: Commit to another repo
       run: |
-        echo "--------SETING NAME--------------"
+        echo "--------SETTING NAME--------------"
         git config --global user.name 'sengiv'
         git config --global user.email 'vignes@live.com.my'
-        git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/VedAstro.Python.git
-        #Clones the other repository where you want to commit the DLL.
+        # Clones the other repository where you want to commit the DLL.
         echo "--------CLONING VEDASTRO.PYTHON--"
-        git clone git@github.com:VedAstro/VedAstro.Python.git
-        #Copies the DLL from the ./publish directory to the cloned repository.
+        git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/VedAstro.Python.git
+        # Copies the DLL from the ./publish directory to the cloned repository.
         echo "--------COPYING DLL INTO VEDASTRO.PYTHON--"
         cp ./publish/*.dll ./VedAstro.Python
         cd ./VedAstro.Python
         git add .
-        #Commits and pushes the DLL to the other repository.
+        # Commits and pushes the DLL to the other repository.
         echo "--------MAKING A COMMIT--"
         git commit -m "Auto Update VedAstro.DLL"
         echo "--------MAKING A PUSH FOR IT!--"

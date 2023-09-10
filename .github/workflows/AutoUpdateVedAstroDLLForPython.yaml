@@ -1,8 +1,6 @@
 name: Auto Update VedAstroDLL To Python Repo
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,7 +42,7 @@ jobs:
         echo "--------GOING INTO REPO--"
         cd ./VedAstro.Python
       env:
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
     - name: Set up Python
       uses: actions/setup-python@v2
       with:

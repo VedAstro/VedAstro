@@ -28,8 +28,8 @@ jobs:
         #Clones the other repository where you want to commit the DLL.
         git clone https://github.com/VedAstro/VedAstro.Python.git
         #Copies the DLL from the ./publish directory to the cloned repository.
-        cp ./publish/*.dll ./vedastro/dlls
-        cd other-repo
+        cp ./publish/*.dll ./
+        cd ./
         git add .
         #Commits and pushes the DLL to the other repository.
         git commit -m "Auto Update VedAstro.DLL"

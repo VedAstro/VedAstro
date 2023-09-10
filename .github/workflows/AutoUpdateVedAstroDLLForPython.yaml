@@ -23,7 +23,7 @@ jobs:
       run: dotnet publish ./Library --configuration Release --no-build --output ./publish
     - name: Commit to another repo
       run: |
-        git config --global user.name 'Vignes'
+        git config --global user.name 'sengiv'
         git config --global user.email 'vignes@live.com.my'
         #Clones the other repository where you want to commit the DLL.
         git clone https://github.com/VedAstro/VedAstro.Python.git

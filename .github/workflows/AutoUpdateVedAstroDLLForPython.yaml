@@ -7,6 +7,9 @@ jobs:
     steps:
         #Checks out your code using the actions/checkout@v2 action.
     - uses: actions/checkout@v2
+      with:
+        persist-credentials: false # This prevents GitHub Actions from using its token
+        fetch-depth: 0 # This makes sure all history is fetched
         #Sets up the .NET environment with the specified version using the actions/setup-dotnet@v1 action.
     - name: Setup .NET
       uses: actions/setup-dotnet@v1

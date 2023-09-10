@@ -1,40 +1,31 @@
-name: Auto Update VedAstroDLL To Python Repo
+name: Build and Commit DLL
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-        #Checks out your code using the actions/checkout@v2 action.
     - uses: actions/checkout@v2
-        #Sets up the .NET environment with the specified version using the actions/setup-dotnet@v1 action.
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
-        #Restores any dependencies for your project.
     - name: Restore dependencies
       run: dotnet restore
-        #Builds your project in the Release configuration.
     - name: Build
       run: dotnet build --configuration Release --no-restore
-        #Publishes the build output (including the DLL) to the ./publish directory.
     - name: Publish
       run: dotnet publish --configuration Release --no-build --output ./publish
     - name: Commit to another repo
       run: |
         git config --global user.name 'Vignes'
         git config --global user.email 'vignes@live.com.my'
-        #Clones the other repository where you want to commit the DLL.
         git clone https://github.com/VedAstro/VedAstro.Python.git
-        #Copies the DLL from the ./publish directory to the cloned repository.
         cp ./publish/*.dll ./other-repo/
         cd other-repo
         git add .
-        #Commits and pushes the DLL to the other repository.
-        git commit -m "Auto Update VedAstro.DLL"
+        git commit -m "Add DLL"
         git push
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}

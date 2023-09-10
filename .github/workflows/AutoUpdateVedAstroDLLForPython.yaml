@@ -54,7 +54,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install poetry
     - name: Install project dependencies
-      run: poetry install
+      run: |
+        cd ./VedAstro.Python
+        poetry install
     - name: Bump version
       run: |
         poetry version minor

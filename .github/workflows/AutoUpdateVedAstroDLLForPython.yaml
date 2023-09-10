@@ -39,8 +39,8 @@ jobs:
         echo "Listing files in the directory"
         ls ./VedAstro.Python/vedastro/dlls
         
-        echo "--------GOING INTO REPO--"
-        cd ./VedAstro.Python
+        #echo "--------GOING INTO REPO--"
+        #cd ./VedAstro.Python
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
     - name: Set up Python
@@ -59,8 +59,9 @@ jobs:
         poetry install
     - name: Bump version
       run: |
+        cd ./VedAstro.Python
         poetry version minor
-
+        
         echo "Listing files in the directory"
         ls
         

@@ -27,22 +27,22 @@ jobs:
     - name: Commit to another repo
       run: |
         echo "--------SETTING NAME--------------"
-        git config --global user.name 'sengiv'
-        git config --global user.email 'vignes@live.com.my'
+        git config --global user.name 'GitHub Actions Bot'
+        git config --global user.email 'actions@github.com'
         # Clones the other repository where you want to commit the DLL.
         echo "--------CLONING VEDASTRO.PYTHON--"
         git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/VedAstro.Python.git
         # Copies the DLL from the ./publish directory to the cloned repository.
         echo "--------COPYING DLL INTO VEDASTRO.PYTHON--"
         cp ./publish/*.dll ./VedAstro.Python/vedastro/dlls
-        echo "Listing files in the directory:"
+        echo "Listing files in the directory"
         ls ./VedAstro.Python/vedastro/dlls
         echo "--------GOING INTO REPO--"
         cd ./VedAstro.Python
-        echo "Listing files in the directory:"
+        echo "Listing files in the directory"
         ls
         # Commits and pushes the DLL to the other repository.
-        echo "--------MAKING A COMMIT--
+        echo "--------MAKING A COMMIT--"
         git add .
         git commit -m "Auto Update VedAstro.DLL"
         echo "--------MAKING A PUSH FOR IT!--"

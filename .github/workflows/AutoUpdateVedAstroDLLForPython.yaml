@@ -1,6 +1,8 @@
 name: Auto Update VedAstroDLL To Python Repo
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest

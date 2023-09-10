@@ -34,7 +34,7 @@ jobs:
         git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/VedAstro.Python.git
         # Copies the DLL from the ./publish directory to the cloned repository.
         echo "--------COPYING DLL INTO VEDASTRO.PYTHON--"
-        cp ./publish/*.dll ./VedAstro.Python/vedastro/dlls
+        cp ./publish/*.dll ./vedastro/dlls
         echo "--------GOING INTO REPO--"
         cd ./VedAstro.Python
         # Commits and pushes the DLL to the other repository.

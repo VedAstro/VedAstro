@@ -14,13 +14,13 @@ jobs:
         dotnet-version: '3.1.x'
         #Restores any dependencies for your project.
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./Library
         #Builds your project in the Release configuration.
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build ./Library --configuration Release --no-restore
         #Publishes the build output (including the DLL) to the ./publish directory.
     - name: Publish
-      run: dotnet publish --configuration Release --no-build --output ./publish
+      run: dotnet publish ./Library --configuration Release --no-build --output ./publish
     - name: Commit to another repo
       run: |
         git config --global user.name 'Vignes'

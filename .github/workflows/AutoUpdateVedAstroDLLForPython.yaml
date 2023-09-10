@@ -31,12 +31,18 @@ jobs:
         git config --global user.email 'vignes@live.com.my'
         # Clones the other repository where you want to commit the DLL.
         echo "--------CLONING VEDASTRO.PYTHON--"
-        git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/VedAstro.Python.git /VedAstro.Python
+        git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/VedAstro.Python.git
         # Copies the DLL from the ./publish directory to the cloned repository.
+        echo "Listing files in the directory:"
+        ls
         echo "--------COPYING DLL INTO VEDASTRO.PYTHON--"
-        cp ./publish/*.dll ./VedAstro.Python/vedastro/dlls
+        cp ./publish/*.dll ./VedAstro.Python/vedastro/
+        echo "Listing files in the directory:"
+        ls
         echo "--------GOING INTO REPO--"
         cd ./VedAstro.Python
+        echo "Listing files in the directory:"
+        ls
         # Commits and pushes the DLL to the other repository.
         echo "--------MAKING A COMMIT--
         git add .

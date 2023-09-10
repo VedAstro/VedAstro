@@ -35,14 +35,33 @@ jobs:
         echo "--------CLONING VEDASTRO.PYTHON--"
         git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/VedAstro.Python.git
         # Copies the DLL from the ./publish directory to the cloned repository.
+        
         echo "--------COPYING DLL INTO VEDASTRO.PYTHON--"
         cp ./publish/*.dll ./VedAstro.Python/vedastro/dlls
         echo "Listing files in the directory"
         ls ./VedAstro.Python/vedastro/dlls
+        
         echo "--------GOING INTO REPO--"
         cd ./VedAstro.Python
+      env:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry
+    - name: Install project dependencies
+      run: poetry install
+    - name: Bump version
+      run: |
+        poetry version minor
+
         echo "Listing files in the directory"
         ls
+        
         # Commits and pushes the DLL to the other repository.
         echo "--------MAKING A COMMIT--"
         git add .

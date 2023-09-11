@@ -103,6 +103,15 @@ namespace VedAstro.Library.Tests
 				Angle.ConvertDegreeMinuteToTotalMinutes(77,2),
 				11));
 
+		/// <summary>
+		/// Chart No 13 : Born on 19-7-1816 at Gh. 15 3/4 after Sunrise
+		/// Lat 17" N ; Long. 5h 10m 20s E.
+		/// </summary>
+		public static Time ChatussagaraYogaHoroscope1 = new("07:15 19/07/1816 +05:30", 
+			new GeoLocation("", 
+				new Angle(5,10,20).TotalDegrees,
+				17));
+
 		[TestMethod()]
 		public void GeoLocationTest()
 		{
@@ -235,6 +244,17 @@ namespace VedAstro.Library.Tests
 
 			Assert.IsTrue(horoscope2.Occuring);
 
+		}
+
+		/// <summary>
+		/// Working test!
+		/// </summary>
+		[TestMethod()]
+		public void ChatussagaraYogaTest()
+		{
+			var horoscope1 = HoroscopeCalculatorMethods.ChatussagaraYoga(ChatussagaraYogaHoroscope1);
+
+			Assert.IsTrue(horoscope1.Occuring);
 		}
 
 	}

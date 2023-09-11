@@ -4665,6 +4665,17 @@ namespace VedAstro.Library
 			return ishtaScore;
 		}
 
+		[API("Gets all planets in certain sign from the moon. Exp: get planets 3rd from the moon")]
+		public static List<PlanetName> AllPlanetsSignsFromMoon(int signsFromMoon, Time birthTime)
+		{
+			//get the sign to check
+			var moonNthSign = Calculate.SignCountedFromMoonSign(signsFromMoon, birthTime);
+
+			//get all the planets in the sign
+			var planetsIn = Calculate.PlanetsInSign(moonNthSign, birthTime);
+
+			return planetsIn;
+		}
 	}
 }
 

@@ -388,8 +388,8 @@
         SaturnInAquarius,
         SaturnInPisces,
 
-        //YOGA DETECTOR
-        KemadrumaYoga,
+		//YOGA DETECTOR
+		GajakesariYoga,
         Empty
     }
 }

@@ -1,6 +1,7 @@
 ﻿using ExCSS;
 using System.Linq;
 
+using static VedAstro.Library.PlanetName;
 
 //█▀▀█ █▀▀▄ █░░ █░░█ 　 █▀▀ █▀▀█ █▀▀▄ █▀▀ 　 █░░░█ █░░█ █▀▀ █▀▀▄ 　 █░░█ █▀▀█ █░░█ 　 █▀▀ █▀▀█ █▀▀▄ █▀▀▄ █▀▀█ ▀▀█▀▀ 
 //█░░█ █░░█ █░░ █▄▄█ 　 █░░ █░░█ █░░█ █▀▀ 　 █▄█▄█ █▀▀█ █▀▀ █░░█ 　 █▄▄█ █░░█ █░░█ 　 █░░ █▄▄█ █░░█ █░░█ █░░█ ░░█░░ 
@@ -172,6 +173,43 @@ namespace VedAstro.Library
 				PlanetName.Mars, PlanetName.Moon, birthTime);
 
 			return CalculatorResult.New(marsConjunctMoon, new[] { PlanetName.Moon }, birthTime);
+		}
+
+		/// <summary>
+		/// Definition: If benefics are situated in the 6th,
+		/// 7th and 8th from the Moon, the combination goes
+		/// under the name of Adhi Yoga
+		/// 
+		/// Results: The person will be polite and trustworthy, will have an enjoyable and happy life,
+		/// surrounded by luxuries and affluence, will inflict
+		/// defeats on his enemies, will be healthy and will live long.
+		/// </summary>
+		[HoroscopeCalculator(HoroscopeName.AdhiYoga)]
+		public static CalculatorResult AdhiYoga(Time birthTime)
+		{
+			//get all planets in 6, 7, 8 from moon
+			var planet6FromMoon = Calculate.AllPlanetsSignsFromMoon(6, birthTime);
+			var planet7FromMoon = Calculate.AllPlanetsSignsFromMoon(7, birthTime);
+			var planet8FromMoon = Calculate.AllPlanetsSignsFromMoon(8, birthTime);
+			var combinedList = planet6FromMoon.Concat(planet7FromMoon).Concat(planet8FromMoon).Distinct().ToList();
+
+			var isOccuring = false; //default to false
+
+			//if planet is a benefic will be set by checks below
+			foreach (var planet in combinedList)
+			{
+				//Varahamihira distinctly observes Sounyehi-implying
+				// cle4rly only the benefics, vz., Mercury, Jupiter and
+				// Venus.
+				var isBenefic = planet == Mercury || planet == Jupiter || planet == Venus;
+				if (isBenefic)
+				{
+					isOccuring = true;
+					break; //stop looking
+				}
+			}
+
+			return CalculatorResult.New(isOccuring, new[] { PlanetName.Moon }, birthTime);
 		}
 
 

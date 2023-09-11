@@ -85,6 +85,15 @@ namespace VedAstro.Library.Tests
 				Angle.ConvertDegreeMinuteToTotalMinutes(77,34),
 				13));
 
+		/// <summary>
+		/// Chart No 11 : Born on 24-9-1871 at Gh. 7 after Sunrise
+		/// Lat 10" N ; Long. 77" 34' E.
+		/// </summary>
+		public static Time AdhiYogaHoroscope1 = new("07:07 24/09/1871 +05:30", 
+			new GeoLocation("", 
+				Angle.ConvertDegreeMinuteToTotalMinutes(77,34),
+				10));
+
 		[TestMethod()]
 		public void GeoLocationTest()
 		{
@@ -198,6 +207,15 @@ namespace VedAstro.Library.Tests
 		public void ChandraMangalaYogaTest()
 		{
 			var horoscope1 = HoroscopeCalculatorMethods.ChandraMangalaYoga(ChandraMangalaYogaHoroscope1);
+
+			Assert.IsTrue(horoscope1.Occuring);
+
+		}
+
+		[TestMethod()]
+		public void AdhiYogaTest()
+		{
+			var horoscope1 = HoroscopeCalculatorMethods.AdhiYoga(AdhiYogaHoroscope1);
 
 			Assert.IsTrue(horoscope1.Occuring);
 

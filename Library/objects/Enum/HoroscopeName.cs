@@ -394,6 +394,7 @@
         SunaphaYoga,
 		AnaphaYoga,
 		DhurdhuraYoga,
-		KemadrumaYoga
+		KemadrumaYoga,
+		ChandraMangalaYoga
 	}
 }

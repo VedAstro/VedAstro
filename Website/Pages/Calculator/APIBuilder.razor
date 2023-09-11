@@ -111,6 +111,32 @@
 
 			@* LIST OF ALL API CALLS *@
 			<APICallList />
+			
+			
+			<ArticleBlock Title="Price" IconName="flat-color-icons:like">
+				<TextHTML>
+					This API service is <kbd>FREE</kbd> for the beneficial use of all.
+					Paid by donations from users like you. Server speed is increased or
+					or decreased based on monthly <strong>donation balance</strong>.
+
+					<div class="vstack my-3 d-flex justify-content-center align-items-center">
+						<div>
+							<div class="hstack">
+								<h5>@DateTime.Now.ToString("MMMM") Balance</h5>
+								<h5 style=" margin-left: 67px; ">Limit</h5>
+							</div>
+						</div>
+						<div>
+							<h3 style="margin-left: 32px;">
+								USD $10 = 5 calls/minute
+							</h3>
+						</div>
+					</div>
+
+					<BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase this limit for you and everybody else.
+					Every $2 donated increases the limit by +1 call/minute for everybody for a month.
+				</TextHTML>
+			</ArticleBlock>
 
 			<ArticleBlock Title="Simple Response" IconName="bi:filetype-json">
 				<TextHTML>
@@ -128,16 +154,7 @@
 					We hope to reduce this lag with this simple &amp; intuitive <strong>API Builder</strong>.
 				</TextHTML>
 			</ArticleBlock>
-			<ArticleBlock Title="Fair Usage Policy" IconName="flat-color-icons:like">
-				<TextHTML>
-					In order to keep this <strong>API FREE</strong> for the benefit of all people. Please do not abuse it.
-					<ul class="mt-2 gap-2">
-						<li>design your app to call the API only when needed</li>
-						<li>save the data you receive</li>
-					</ul>
-					For <kbd>Business / Professional</kbd> users please buy <BoldLink URL="@URL.BuyAPI">Unlimited API</BoldLink> access for only $1.
-				</TextHTML>
-			</ArticleBlock>
+			
 
 			<ArticleBlock Title="Sponsor Music" IconName="emojione:violin">
 				<ButtonRow>
@@ -159,7 +176,7 @@
 					</QuoteTextBlock>
 				</TextHTML>
 			</ArticleBlock>
-			
+
 			<ArticleBlock Title="Reverse Engineer" IconName="emojione:hammer-and-wrench">
 				<TextHTML>
 					To maximize the use of the API, you need to understand its <strong>basic structure</strong>.
@@ -202,7 +219,7 @@
 		set
 		{
 			//if unlimited plan, send to buy page
-			if (value == "Unlimited"){ AppData.Go(URL.BuyAPI, newTab:true);}
+			if (value == "Unlimited") { AppData.Go(URL.BuyAPI, newTab: true); }
 
 			_selectedCallRate = value;
 		}

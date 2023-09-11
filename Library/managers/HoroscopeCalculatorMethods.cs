@@ -105,7 +105,7 @@ namespace VedAstro.Library
 			planetsIn12.RemoveAll(x => x.Name == PlanetName.PlanetNameEnum.Sun);
 
 			//both conditions have to be met
-			var isOccuring =  planetsIn12.Any();
+			var isOccuring = planetsIn12.Any();
 
 			return CalculatorResult.New(isOccuring, new[] { HouseName.House12 }, new[] { PlanetName.Moon }, birthTime);
 		}
@@ -128,7 +128,7 @@ namespace VedAstro.Library
 			var bottomSideSign = Calculate.SignCountedFromMoonSign(12, birthTime);
 			var planetsInBottom = Calculate.PlanetsInSign(bottomSideSign, birthTime).Any();
 
-			var planetOnBothSides = planetsInBottom && planetsInTop; 
+			var planetOnBothSides = planetsInBottom && planetsInTop;
 
 			return CalculatorResult.New(planetOnBothSides, new[] { PlanetName.Moon }, birthTime);
 		}
@@ -151,7 +151,7 @@ namespace VedAstro.Library
 			var bottomSideSign = Calculate.SignCountedFromMoonSign(12, birthTime);
 			var noPlanetsInBottom = Calculate.PlanetsInSign(bottomSideSign, birthTime).Any() == false;
 
-			var planetOnBothSides = noPlanetsInBottom && noPlanetsInTop; 
+			var planetOnBothSides = noPlanetsInBottom && noPlanetsInTop;
 
 			return CalculatorResult.New(planetOnBothSides, new[] { PlanetName.Moon }, birthTime);
 		}
@@ -212,6 +212,36 @@ namespace VedAstro.Library
 			return CalculatorResult.New(isOccuring, new[] { PlanetName.Moon }, birthTime);
 		}
 
+
+		/// <summary>
+		/// Definition: Chatussagara Yoga is caused when
+		/// all the kendras are occupied by planets
+		/// 
+		/// Results: The person will earn good reputation,
+		/// be an equal to a ruler, have a long and prosperous
+		/// life, be blessed with good children and health and
+		/// his name will travel to the confines of the four
+		/// oceans
+		/// </summary>
+		[HoroscopeCalculator(HoroscopeName.ChatussagaraYoga)]
+		public static CalculatorResult ChatussagaraYoga(Time birthTime)
+		{
+			var isOccuring = true; //start with is occuring
+
+			//go through all the kendras if any one house,
+			//does not have a planet, than exit and mark as not occuring
+			//kendra house (1,4,7,10)
+			var kendraList = new HouseName[] { HouseName.House1, HouseName.House4, HouseName.House7, HouseName.House10 };
+			foreach (var house in kendraList)
+			{
+				//true if no planet found
+				var noPlanet = Calculate.PlanetsInHouse(house, birthTime).Any() == false;
+				if (noPlanet) { isOccuring = false; break; } //set as not occuring, stop checking anymore
+
+			}
+
+			return CalculatorResult.New(isOccuring, new[] { PlanetName.Jupiter, PlanetName.Moon }, birthTime);
+		}
 
 
 		#endregion

@@ -3078,6 +3078,37 @@ namespace VedAstro.Library
 			return isPlanetInKendra;
 		}
 
+		[API("Checks if a planet is in a kendra house (1,4,7,10) from another planet. Exp : Is Jupiter is in a kendra from the Moon")]
+		public static bool IsPlanetInKendraFromPlanet(PlanetName kendraFrom, PlanetName kendraTo, Time time)
+		{
+			//get the number of signs between planets
+			var count = Calculate.SignDistanceFromPlanetToPlanet(kendraTo, kendraFrom, time);
+
+			//check if number is a kendra number
+			var isKendra = count == 1 ||
+						   count == 4 ||
+						   count == 7 ||
+						   count == 10;
+
+			return isKendra;
+		}
+
+
+		[API("Counts number of sign between 2 planets.")]
+		public static int SignDistanceFromPlanetToPlanet(PlanetName startPlanet, PlanetName endPlanet, Time time)
+		{
+			//get position of "kendra to" planet
+			var startSign = Calculate.PlanetRasiSign(startPlanet, time);
+
+			//get position of "kendra from" planet
+			var endSign = Calculate.PlanetRasiSign(endPlanet, time);
+
+			//count distance between signs
+			var count = Calculate.CountFromSignToSign(startSign.GetSignName(), endSign.GetSignName());
+
+			return count;
+		}
+
 		/// <summary>
 		/// Checks if the lord of a house is in the specified house.
 		/// Example question : Is Lord of 1st house in 2nd house?

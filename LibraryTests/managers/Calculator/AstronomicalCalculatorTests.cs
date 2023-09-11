@@ -13,6 +13,19 @@ namespace VedAstro.Library.Tests
 	{
 		public static Time StandardHoroscope = new("14:20 16/10/1918 +05:30", GeoLocation.Bangalore);
 
+
+		/// <summary>
+		/// ChartNo.2.-Born on 13-8-1894, at 2:30 pm (LMT)
+		/// Lat. 23" N. ; Long.75" E. Ujjain, India (23.1667° N, 75.7167° E)
+		/// </summary>
+		public static Time GajakesariYogaHoroscope1 = new("14:30 13/08/1894 +05:30", GeoLocation.Ujjain);
+
+		/// <summary>
+		/// Born on 9-8-1911, at 6-7 am. (IST)  Lat. 29' 1' N., Long,77' 41' E.
+		/// </summary>
+		public static Time GajakesariYogaHoroscope2 = new("06:30 09/08/1911 +05:30", 
+			new GeoLocation("", 29.01667, 77.6833));
+
 		[TestMethod()]
 		public void GeoLocationTest()
 		{
@@ -47,7 +60,23 @@ namespace VedAstro.Library.Tests
 		public void NextLunarEclipseTest()
 		{
 			var x = Calculate.NextLunarEclipse(Time.Now(GeoLocation.Bangkok));
-            Assert.Fail();
+			Assert.Fail();
+		}
+
+
+		/// <summary>
+		/// Test fully functional and should pass
+		/// </summary>
+		[TestMethod()]
+		public void GajakesariYogaTest()
+		{
+			var horoscope1 = HoroscopeCalculatorMethods.GajakesariYoga(GajakesariYogaHoroscope1);
+			
+			Assert.IsTrue(horoscope1.Occuring);
+
+			var horoscope2 = HoroscopeCalculatorMethods.GajakesariYoga(GajakesariYogaHoroscope2);
+			
+			Assert.IsTrue(horoscope2.Occuring);
         }
     }
 }

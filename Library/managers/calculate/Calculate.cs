@@ -1594,6 +1594,15 @@ namespace VedAstro.Library
 
 		}
 
+		[API("Exp : Get 4th sign from Moon")]
+		public static ZodiacName SignCountedFromMoonSign(int countToNextSign, Time inputTime)
+		{
+			var moon12ndHseSign = Calculate.SignCountedFromInputSign(Calculate.MoonSignName(inputTime), countToNextSign);
+
+			return moon12ndHseSign;
+
+		}
+
 		/// <summary>
 		/// Exp : Get 4th house from 5th house (input house)
 		/// </summary>

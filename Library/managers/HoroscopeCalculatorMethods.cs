@@ -26,6 +26,7 @@ namespace VedAstro.Library
 	/// </summary>
 	public class HoroscopeCalculatorMethods
 	{
+		// todo marked for deletion
 		public readonly record struct YogaResult(bool IsOccurred, double Strength, string Notes);
 
 
@@ -66,7 +67,7 @@ namespace VedAstro.Library
 
 			//If there are planets
 			//get sign 2nd house from moon
-			var moon2ndHseSign = Calculate.SignCountedFromInputSign(Calculate.MoonSignName(birthTime), 2);
+			var moon2ndHseSign = Calculate.SignCountedFromMoonSign(2, birthTime);
 			//get planets in that 2nd hse sign
 			var planetsIn2 = Calculate.PlanetsInSign(moon2ndHseSign, birthTime);
 
@@ -76,6 +77,60 @@ namespace VedAstro.Library
 			return CalculatorResult.New(isOccuring, new[] { HouseName.House2 }, new[] { PlanetName.Moon }, birthTime);
 		}
 
+		/// <summary>
+		/// Definition: If there are planets in the 12th from
+		/// the Moon, Anapha Yoga is formed.
+		/// 
+		/// Results: Well-formed organs, majestic appearance,
+		/// good reputation, polite, generous, self-respect,
+		/// fond of dress and sense pleasures. In later life,
+		/// renunciation and austerity
+		/// </summary>
+		[HoroscopeCalculator(HoroscopeName.AnaphaYoga)]
+		public static CalculatorResult AnaphaYoga(Time birthTime)
+		{
+
+			//If there are planets in the 12th from moon
+			var moon12ndHseSign = Calculate.SignCountedFromMoonSign(12, birthTime);
+			//get planets in that 12th hse sign from moon
+			var planetsIn12 = Calculate.PlanetsInSign(moon12ndHseSign, birthTime);
+
+
+			//Remarks.- In Anapha also the Sun is not taken
+			//into account. The remarks made for Sunapha apply
+			//to this also with slight variation.
+
+			//remove sun if found
+			planetsIn12.RemoveAll(x => x.Name == PlanetName.PlanetNameEnum.Sun);
+
+			//both conditions have to be met
+			var isOccuring =  planetsIn12.Any();
+
+			return CalculatorResult.New(isOccuring, new[] { HouseName.House12 }, new[] { PlanetName.Moon }, birthTime);
+		}
+
+		/// <summary>
+		/// Definition: If there are planets on either side of
+		/// the Moon, the combination goes under the name of
+		/// Dhurdhura.
+		/// 
+		/// Results: The native is bountiful. He will be
+		/// blessed with much wealth and conveyances.
+		/// </summary>
+		[HoroscopeCalculator(HoroscopeName.DhurdhuraYoga)]
+		public static CalculatorResult DhurdhuraYoga(Time birthTime)
+		{
+			//If there are planets on either side of the Moon
+			var topSideSign = Calculate.SignCountedFromMoonSign(2, birthTime);
+			var planetsInTop = Calculate.PlanetsInSign(topSideSign, birthTime).Any();
+
+			var bottomSideSign = Calculate.SignCountedFromMoonSign(12, birthTime);
+			var planetsInBottom = Calculate.PlanetsInSign(bottomSideSign, birthTime).Any();
+
+			var planetOnBothSides = planetsInBottom && planetsInTop; 
+
+			return CalculatorResult.New(planetOnBothSides, new[] { PlanetName.Moon }, birthTime);
+		}
 
 
 

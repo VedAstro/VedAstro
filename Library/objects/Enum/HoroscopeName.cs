@@ -391,6 +391,8 @@
 		//YOGA DETECTOR
 		GajakesariYoga,
         Empty,
-        SunaphaYoga
-    }
+        SunaphaYoga,
+		AnaphaYoga,
+		DhurdhuraYoga
+	}
 }

@@ -106,11 +106,25 @@ namespace VedAstro.Library.Tests
 		/// <summary>
 		/// Chart No 13 : Born on 19-7-1816 at Gh. 15 3/4 after Sunrise
 		/// Lat 17" N ; Long. 5h 10m 20s E.
+		///
+		/// Chart No. 13 is the horoscope of the father of
+		/// late Professor B. Suryanarain Rao. Note all the
+		/// kendras are occupied. He was a man of great self respect, held a decent position as a Dewan, a great
+		/// yogee and knew well eight languages
 		/// </summary>
 		public static Time ChatussagaraYogaHoroscope1 = new("07:15 19/07/1816 +05:30", 
 			new GeoLocation("", 
 				new Angle(5,10,20).TotalDegrees,
 				17));
+
+		/// <summary>
+		/// Chart No 14 : Born on 31-10-1915 at 7pm 
+		/// Lat 31" 27' N ; Long. 74" 26' E.
+		/// </summary>
+		public static Time VasumathiYogaHoroscope1 = new("19:00 31/10/1915 +05:30", 
+			new GeoLocation("",
+				Angle.ConvertDegreeMinuteToTotalMinutes(74, 26),
+				Angle.ConvertDegreeMinuteToTotalMinutes(31, 27)));
 
 		[TestMethod()]
 		public void GeoLocationTest()
@@ -253,6 +267,14 @@ namespace VedAstro.Library.Tests
 		public void ChatussagaraYogaTest()
 		{
 			var horoscope1 = HoroscopeCalculatorMethods.ChatussagaraYoga(ChatussagaraYogaHoroscope1);
+
+			Assert.IsTrue(horoscope1.Occuring);
+		}
+
+		[TestMethod()]
+		public void VasumathiYogaTest()
+		{
+			var horoscope1 = HoroscopeCalculatorMethods.VasumathiYoga(VasumathiYogaHoroscope1);
 
 			Assert.IsTrue(horoscope1.Occuring);
 		}

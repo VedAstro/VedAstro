@@ -291,11 +291,6 @@ namespace VedAstro.Library
 			return isWater;
 		}
 
-		/// <summary>
-		/// Wrapper function to make planet name appear "Payload" of API call data, for easier data probing by 3rd party code
-		/// </summary>
-		[API("English name of planet", Category.Astronomical)]
-		public static string PlanetName(PlanetName planetName) => planetName.ToString();
 
 		/// <summary>
 		/// Use of Residential Strength --This will
@@ -1218,7 +1213,7 @@ namespace VedAstro.Library
 		/// <summary>
 		/// Gets the planets in the house
 		/// </summary>
-		[API("Gets list of planets that's in a house/bhava")]
+		[API("Gets list of all planets that's in a house/bhava at a given time")]
 		public static List<PlanetName> PlanetsInHouse(HouseName houseNumber, Time time)
 		{
 
@@ -1249,6 +1244,39 @@ namespace VedAstro.Library
 
 			//return list
 			return listOfPlanetInHouse;
+		}
+
+		[API("Gets list of all planets that's in a sign at a given time")]
+		public static List<PlanetName> PlanetsInSign(ZodiacName signName, Time time)
+		{
+			var returnList = new List<PlanetName>();
+
+			//check each planet if in sign
+			foreach (var planet in PlanetName.All9Planets)
+			{
+				var planetSign = Calculate.PlanetRasiSign(planet, time);
+
+				//if correct sign add to return list
+				if (planetSign.GetSignName() == signName) { returnList.Add(planet); }
+			}
+
+			return returnList;
+		}
+
+		[API("Gets list of all planets and the zodiac signs they are in")]
+		public static Dictionary<PlanetName, ZodiacName> AllPlanetSigns(Time time)
+		{
+			var returnList = new Dictionary<PlanetName, ZodiacName>();
+
+			//check each planet if in sign
+			foreach (var planet in PlanetName.All9Planets)
+			{
+				var planetSign = Calculate.PlanetRasiSign(planet, time);
+
+				returnList[planet] = planetSign.GetSignName();
+			}
+
+			return returnList;
 		}
 
 		/// <summary>

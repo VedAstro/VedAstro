@@ -390,6 +390,7 @@
 
 		//YOGA DETECTOR
 		GajakesariYoga,
-        Empty
+        Empty,
+        SunaphaYoga
     }
 }

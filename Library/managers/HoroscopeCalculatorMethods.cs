@@ -132,6 +132,29 @@ namespace VedAstro.Library
 			return CalculatorResult.New(planetOnBothSides, new[] { PlanetName.Moon }, birthTime);
 		}
 
+		/// <summary>
+		/// Definition: When there are no planets on both
+		/// sides of the Moon, Kemadruma Yoga is formed
+		/// 
+		/// Results: The person will be dirty, sorrowful,
+		/// doing unrighteous deeds, poor, dependent, a rogue
+		/// and a swindler
+		/// </summary>
+		[HoroscopeCalculator(HoroscopeName.KemadrumaYoga)]
+		public static CalculatorResult KemadrumaYoga(Time birthTime)
+		{
+			//If there are planets on either side of the Moon
+			var topSideSign = Calculate.SignCountedFromMoonSign(2, birthTime);
+			var noPlanetsInTop = Calculate.PlanetsInSign(topSideSign, birthTime).Any() == false;
+
+			var bottomSideSign = Calculate.SignCountedFromMoonSign(12, birthTime);
+			var noPlanetsInBottom = Calculate.PlanetsInSign(bottomSideSign, birthTime).Any() == false;
+
+			var planetOnBothSides = noPlanetsInBottom && noPlanetsInTop; 
+
+			return CalculatorResult.New(planetOnBothSides, new[] { PlanetName.Moon }, birthTime);
+		}
+
 
 
 		#endregion

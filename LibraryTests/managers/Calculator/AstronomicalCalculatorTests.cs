@@ -58,6 +58,24 @@ namespace VedAstro.Library.Tests
 				Angle.ConvertDegreeMinuteToTotalMinutes(77,44),
 				Angle.ConvertDegreeMinuteToTotalMinutes(8, 44)));
 
+		/// <summary>
+		/// Chart No 8 : Born on 28-7-1896 at Gh. 10 after Sunrise
+		/// Lat 13" N.; Long. 77" 35' E.
+		/// </summary>
+		public static Time KemadrumaYogaHoroscope1 = new("07:10 28/07/1896 +05:30", 
+			new GeoLocation("", 
+				Angle.ConvertDegreeMinuteToTotalMinutes(77,35),
+				13));
+
+		/// <summary>
+		/// Chart No 9 : Born on 26-2-1908 at 2-56 p.m. (L.M.T.)
+		/// Lat 18" 55' N.; Long. 72" 54' E.
+		/// </summary>
+		public static Time KemadrumaYogaHoroscope2 = new("14:56 26/02/1908 +05:30", 
+			new GeoLocation("", 
+				Angle.ConvertDegreeMinuteToTotalMinutes(72,54),
+				Angle.ConvertDegreeMinuteToTotalMinutes(18, 55)));
+
 		[TestMethod()]
 		public void GeoLocationTest()
 		{
@@ -142,13 +160,28 @@ namespace VedAstro.Library.Tests
 			Assert.IsTrue(horoscope2.Occuring);
 		}
 
-		
+		/// <summary>
+		/// Working test
+		/// </summary>
 		[TestMethod()]
 		public void DhurdhuraYogaTest()
 		{
 			var horoscope1 = HoroscopeCalculatorMethods.DhurdhuraYoga(DhurdhuraYogaHoroscope1);
 
 			Assert.IsTrue(horoscope1.Occuring);
+
+		}
+
+		[TestMethod()]
+		public void KemadrumaYogaTest()
+		{
+			var horoscope1 = HoroscopeCalculatorMethods.KemadrumaYoga(KemadrumaYogaHoroscope1);
+
+			Assert.IsTrue(horoscope1.Occuring);
+
+			var horoscope2 = HoroscopeCalculatorMethods.KemadrumaYoga(KemadrumaYogaHoroscope2);
+
+			Assert.IsTrue(horoscope2.Occuring);
 
 		}
 

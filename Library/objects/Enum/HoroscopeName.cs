@@ -393,6 +393,7 @@
         Empty,
         SunaphaYoga,
 		AnaphaYoga,
-		DhurdhuraYoga
+		DhurdhuraYoga,
+		KemadrumaYoga
 	}
 }

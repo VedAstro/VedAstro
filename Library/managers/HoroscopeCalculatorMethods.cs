@@ -49,6 +49,33 @@ namespace VedAstro.Library
 			return CalculatorResult.New(jupiterInKendraFromMoon, new[] { PlanetName.Jupiter, PlanetName.Moon }, birthTime);
 		}
 
+		/// <summary>
+		/// Definition: If there are planets (excepting the
+		/// Sun) in the second house from the Moon, Sunapha
+		/// is caused.
+		/// 
+		/// Results: Self-earned property, king, ruler or his
+		/// equal, intelligent, wealthy and good reputation.
+		/// </summary>
+		[HoroscopeCalculator(HoroscopeName.SunaphaYoga)]
+		public static CalculatorResult SunaphaYoga(Time birthTime)
+		{
+			//sun not in house 2 from moon
+			var sunMoonDistance = Calculate.SignDistanceFromPlanetToPlanet(PlanetName.Moon, PlanetName.Sun, birthTime);
+			var sunNotIn2 = sunMoonDistance != 2;
+
+			//If there are planets
+			//get sign 2nd house from moon
+			var moon2ndHseSign = Calculate.SignCountedFromInputSign(Calculate.MoonSignName(birthTime), 2);
+			//get planets in that 2nd hse sign
+			var planetsIn2 = Calculate.PlanetsInSign(moon2ndHseSign, birthTime);
+
+			//both conditions have to be met
+			var isOccuring = sunNotIn2 && planetsIn2.Any();
+
+			return CalculatorResult.New(isOccuring, new[] { HouseName.House2 }, new[] { PlanetName.Moon }, birthTime);
+		}
+
 
 
 

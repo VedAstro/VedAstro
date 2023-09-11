@@ -34,11 +34,29 @@ namespace VedAstro.Library.Tests
 			new GeoLocation("", Angle.ConvertDegreeMinuteToTotalMinutes(77,34), 13));
 
 		/// <summary>
-		/// Chart No 5.Born on 28-5-1903 st 1:19 am, (L.M.T)
+		/// Chart No 5 : Born on 28-5-1903 st 1:19 am, (L.M.T)
 		/// Lat 9" N.; Long. 77" 42' E.
 		/// </summary>
 		public static Time SunaphaYogaHoroscope2 = new("13:21 28/05/1903 +05:30", 
 			new GeoLocation("", Angle.ConvertDegreeMinuteToTotalMinutes(77,42), 9));
+
+		/// <summary>
+		/// Chart No 6 : Born on 20-8-1902 at 11:33 am, (L.M.T)
+		/// Lat 9" 58' N.; Long. 78" 10' E.
+		/// </summary>
+		public static Time AnaphaYogaHoroscope1 = new("11:33 20/08/1902 +05:30", 
+			new GeoLocation("", 
+				Angle.ConvertDegreeMinuteToTotalMinutes(78,10),
+				Angle.ConvertDegreeMinuteToTotalMinutes(9, 58)));
+
+		/// <summary>
+		/// Chart No 7 : Born on 31-7-1910 at Gh. 32-15 after Sunrise
+		/// Lat 8" 44' N.; Long. 77" 44' E.
+		/// </summary>
+		public static Time DhurdhuraYogaHoroscope1 = new("07:33 31/07/1910 +05:30", 
+			new GeoLocation("", 
+				Angle.ConvertDegreeMinuteToTotalMinutes(77,44),
+				Angle.ConvertDegreeMinuteToTotalMinutes(8, 44)));
 
 		[TestMethod()]
 		public void GeoLocationTest()
@@ -108,5 +126,31 @@ namespace VedAstro.Library.Tests
 			//
 			//Assert.IsTrue(horoscope2.Occuring);
         }
-    }
+
+		/// <summary>
+		/// Test fully functional and should pass
+		/// </summary>
+		[TestMethod()]
+		public void AnaphaYogaTest()
+		{
+			var horoscope1 = HoroscopeCalculatorMethods.AnaphaYoga(AnaphaYogaHoroscope1);
+
+			Assert.IsTrue(horoscope1.Occuring);
+
+			var horoscope2 = HoroscopeCalculatorMethods.AnaphaYoga(GajakesariYogaHoroscope2);
+
+			Assert.IsTrue(horoscope2.Occuring);
+		}
+
+		
+		[TestMethod()]
+		public void DhurdhuraYogaTest()
+		{
+			var horoscope1 = HoroscopeCalculatorMethods.DhurdhuraYoga(DhurdhuraYogaHoroscope1);
+
+			Assert.IsTrue(horoscope1.Occuring);
+
+		}
+
+	}
 }

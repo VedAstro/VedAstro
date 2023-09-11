@@ -94,6 +94,15 @@ namespace VedAstro.Library.Tests
 				Angle.ConvertDegreeMinuteToTotalMinutes(77,34),
 				10));
 
+		/// <summary>
+		/// Chart No 12 : Born on 7-8-1887 at 1-30pm (L.M.T.)
+		/// Lat 11" N ; Long. 77" 2' E.
+		/// </summary>
+		public static Time AdhiYogaHoroscope2 = new("13:30 07/08/1887 +05:30", 
+			new GeoLocation("", 
+				Angle.ConvertDegreeMinuteToTotalMinutes(77,2),
+				11));
+
 		[TestMethod()]
 		public void GeoLocationTest()
 		{
@@ -212,12 +221,19 @@ namespace VedAstro.Library.Tests
 
 		}
 
+		/// <summary>
+		/// Test passing good
+		/// </summary>
 		[TestMethod()]
 		public void AdhiYogaTest()
 		{
 			var horoscope1 = HoroscopeCalculatorMethods.AdhiYoga(AdhiYogaHoroscope1);
 
 			Assert.IsTrue(horoscope1.Occuring);
+
+			var horoscope2 = HoroscopeCalculatorMethods.AdhiYoga(AdhiYogaHoroscope2);
+
+			Assert.IsTrue(horoscope2.Occuring);
 
 		}
 

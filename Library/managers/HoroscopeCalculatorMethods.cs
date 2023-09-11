@@ -156,6 +156,25 @@ namespace VedAstro.Library
 		}
 
 
+		/// <summary>
+		/// Definition: If Mars conjoins the Moon this
+		/// yoga is formed.
+		/// 
+		/// Results: Earnings through unscrupulous means,
+		/// a seller of women, treating mother harshly and doing
+		/// mischief to her and other relatives
+		/// </summary>
+		[HoroscopeCalculator(HoroscopeName.ChandraMangalaYoga)]
+		public static CalculatorResult ChandraMangalaYoga(Time birthTime)
+		{
+			//If Mars conjoins the Moon
+			var marsConjunctMoon = Calculate.IsPlanetConjunctWithPlanet(
+				PlanetName.Mars, PlanetName.Moon, birthTime);
+
+			return CalculatorResult.New(marsConjunctMoon, new[] { PlanetName.Moon }, birthTime);
+		}
+
+
 
 		#endregion
 		#region HOROSCOPE

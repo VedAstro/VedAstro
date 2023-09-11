@@ -76,6 +76,15 @@ namespace VedAstro.Library.Tests
 				Angle.ConvertDegreeMinuteToTotalMinutes(72,54),
 				Angle.ConvertDegreeMinuteToTotalMinutes(18, 55)));
 
+		/// <summary>
+		/// Chart No 10 : Born on 24-8-1890 at Gh. 37-10 after Sunrise
+		/// Lat 13" N ; Long. 77" 34' E.
+		/// </summary>
+		public static Time ChandraMangalaYogaHoroscope1 = new("07:37 24/08/1890 +05:30", 
+			new GeoLocation("", 
+				Angle.ConvertDegreeMinuteToTotalMinutes(77,34),
+				13));
+
 		[TestMethod()]
 		public void GeoLocationTest()
 		{
@@ -182,6 +191,15 @@ namespace VedAstro.Library.Tests
 			var horoscope2 = HoroscopeCalculatorMethods.KemadrumaYoga(KemadrumaYogaHoroscope2);
 
 			Assert.IsTrue(horoscope2.Occuring);
+
+		}
+
+		[TestMethod()]
+		public void ChandraMangalaYogaTest()
+		{
+			var horoscope1 = HoroscopeCalculatorMethods.ChandraMangalaYoga(ChandraMangalaYogaHoroscope1);
+
+			Assert.IsTrue(horoscope1.Occuring);
 
 		}
 

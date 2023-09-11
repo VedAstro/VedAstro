@@ -396,6 +396,7 @@
 		DhurdhuraYoga,
 		KemadrumaYoga,
 		ChandraMangalaYoga,
-		AdhiYoga
+		AdhiYoga,
+		ChatussagaraYoga
 	}
 }

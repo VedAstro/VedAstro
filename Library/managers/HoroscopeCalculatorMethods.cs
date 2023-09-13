@@ -48,7 +48,7 @@ namespace VedAstro.Library
 			//If Jupiter is in a kendra from the Moon
 			var jupiterInKendraFromMoon = Calculate.IsPlanetInKendraFromPlanet(Jupiter, Moon, birthTime);
 
-			return CalculatorResult.New(jupiterInKendraFromMoon, new[] { Jupiter, Moon }, birthTime);
+			return CalculatorResult.New(jupiterInKendraFromMoon, [Jupiter, Moon], birthTime);
 		}
 
 		/// <summary>
@@ -160,7 +160,6 @@ namespace VedAstro.Library
 			return CalculatorResult.New(planetOnBothSides, [Moon], birthTime);
 		}
 
-
 		/// <summary>
 		/// Definition: If Mars conjoins the Moon this
 		/// yoga is formed.
@@ -201,7 +200,6 @@ namespace VedAstro.Library
 
 			return CalculatorResult.New(isOccuring, [Moon], birthTime);
 		}
-
 
 		/// <summary>
 		/// Definition: Chatussagara Yoga is caused when
@@ -260,6 +258,34 @@ namespace VedAstro.Library
 
 			return CalculatorResult.New(isOccuring);
 		}
+
+		/// <summary>
+		/// Definition: Jupiter, Venus, Mercury and the
+		/// Moon should be in Lagna or they should be placed
+		/// in kendra.
+		/// 
+		/// Results: The native will possess an attractive
+		/// appearance and he will be endowed with all the
+		/// good qualities of high personages.
+		/// </summary>
+		[HoroscopeCalculator(HoroscopeName.RajalakshanaYoga)]
+		public static CalculatorResult RajalakshanaYoga(Time birthTime)
+		{
+			//planets to check
+			PlanetName[] planetList = [Jupiter, Venus, Mercury, Moon ];
+
+			//is any of the planet in Kendra
+			var isInKendra = Calculate.IsPlanetInKendra(planetList, birthTime);
+
+			//is any of the planet in Lagna/Ascendant
+			var isInLagna = Calculate.IsAnyPlanetInHouse(birthTime, planetList.ToList(), House1);
+
+			//is ocurring if either is true
+			var isOccuring = isInKendra || isInLagna;
+
+			return CalculatorResult.New(isOccuring);
+		}
+
 
 
 		#endregion

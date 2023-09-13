@@ -190,26 +190,14 @@ namespace VedAstro.Library
 		[HoroscopeCalculator(HoroscopeName.AdhiYoga)]
 		public static CalculatorResult AdhiYoga(Time birthTime)
 		{
-			//get all planets in 6, 7, 8 from moon
-			var planet6FromMoon = Calculate.AllPlanetsSignsFromMoon(6, birthTime);
-			var planet7FromMoon = Calculate.AllPlanetsSignsFromMoon(7, birthTime);
-			var planet8FromMoon = Calculate.AllPlanetsSignsFromMoon(8, birthTime);
-			var combinedList = planet6FromMoon.Concat(planet7FromMoon).Concat(planet8FromMoon).Distinct().ToList();
+			//If benefics are situated in the 6th,7th and 8th from the Moon
+			int[] signsFromList = [6,7,8];
 
-			var isOccuring = false; //default to false
+			//Varahamihira distinctly observes Sounyehi-implying
+			// clearly only the benefics, vz., Mercury, Jupiter and Venus.
+			PlanetName[] beneficList = [Mercury, Jupiter, Venus]; //override standard benefics
 
-			//if planet is a benefic will be set by checks below
-			foreach (var planet in combinedList)
-			{
-				//Varahamihira distinctly observes Sounyehi-implying
-				// clearly only the benefics, vz., Mercury, Jupiter and Venus.
-				var isBenefic = planet == Mercury || planet == Jupiter || planet == Venus;
-				if (isBenefic)
-				{
-					isOccuring = true;
-					break; //stop looking
-				}
-			}
+			var isOccuring = Calculate.IsPlanetsInSignsFromMoon(signsFromList, beneficList, birthTime);
 
 			return CalculatorResult.New(isOccuring, [Moon], birthTime);
 		}
@@ -243,6 +231,34 @@ namespace VedAstro.Library
 			}
 
 			return CalculatorResult.New(isOccuring, kendraList, birthTime);
+		}
+
+		/// <summary>
+		/// Definition: If benefics occupy the upachayas
+		/// (3,6,10 and 11) either from the ascendant or from
+		/// the Moon, the combination goes under the name of
+		/// Vasumathi Yoga.
+		/// 	
+		/// Results: The person will not be a dependent
+		/// but will always command plenty of wealth.
+		/// oceans
+		/// </summary>
+		[HoroscopeCalculator(HoroscopeName.VasumathiYoga)]
+		public static CalculatorResult VasumathiYoga(Time birthTime)
+		{
+			//upachayas (3,6,10 and 11)
+			int[] upachayasList = [3,6,10,11];
+
+			//get benefics in upachayas from the ascendant
+			var beneficsFoundInUpachFromLagna = Calculate.IsBeneficsInSignsFromLagna(upachayasList, birthTime);
+
+			//get benefics in upachayas from the Moon
+			var beneficsFoundInUpachFromMoon = Calculate.IsBeneficsInSignsFromMoon(upachayasList, birthTime);
+
+			//is ocurring if either is true
+			var isOccuring = beneficsFoundInUpachFromLagna || beneficsFoundInUpachFromMoon;
+
+			return CalculatorResult.New(isOccuring);
 		}
 
 

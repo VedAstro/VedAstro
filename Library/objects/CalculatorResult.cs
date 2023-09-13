@@ -75,6 +75,15 @@ namespace VedAstro.Library
         /// <summary>
         /// Helper method to make new instance of calculator result
         /// </summary>
+        public static CalculatorResult New(bool occuring)
+        {
+            var newCalcResult = new CalculatorResult{ Occuring = occuring };
+            return newCalcResult;
+        }
+
+        /// <summary>
+        /// Helper method to make new instance of calculator result
+        /// </summary>
         public static CalculatorResult New(bool occuring, PlanetName lord)
         {
             var newCalcResult = new CalculatorResult();

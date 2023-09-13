@@ -265,26 +265,27 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Gets all planets that are benefics at a given time, since moon & mercury changes
         /// Benefics, on the other hand, tend to do good ; but
         /// sometimes they also become capable of doing harm.
         /// </summary>
-        [API("tend to do good", Category.StarsAboveMe)]
+        [API("Gets all planets that are benefics at a given time, since moon & mercury changes", Category.StarsAboveMe)]
         public static List<PlanetName> BeneficPlanetList(Time time)
         {
             //Add permanent good planets to list first
-            var listOfGoodPlanets = new List<PlanetName>() { Library.PlanetName.Jupiter, Library.PlanetName.Venus };
+            var listOfGoodPlanets = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Venus };
 
             //check if moon is benefic
             var moonIsBenefic = IsMoonBenefic(time);
 
             //if moon is benefic add to benefic list
-            if (moonIsBenefic) { listOfGoodPlanets.Add(Library.PlanetName.Moon); }
+            if (moonIsBenefic) { listOfGoodPlanets.Add(PlanetName.Moon); }
 
             //check if mercury is good
             var mercuryIsBenefic = IsMercuryMalefic(time) == false;
 
             //if mercury is benefic add to benefic list
-            if (mercuryIsBenefic) { listOfGoodPlanets.Add(Library.PlanetName.Mercury); }
+            if (mercuryIsBenefic) { listOfGoodPlanets.Add(PlanetName.Mercury); }
 
             return listOfGoodPlanets;
         }

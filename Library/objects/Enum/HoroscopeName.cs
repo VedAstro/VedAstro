@@ -399,6 +399,7 @@
 		AdhiYoga,
 		ChatussagaraYoga,
 		VasumathiYoga,
-        RajalakshanaYoga
+        RajalakshanaYoga,
+        VanchanaChoraBheethiYoga
     }
 }

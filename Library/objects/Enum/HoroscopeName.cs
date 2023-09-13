@@ -398,6 +398,7 @@
 		ChandraMangalaYoga,
 		AdhiYoga,
 		ChatussagaraYoga,
-		VasumathiYoga
+		VasumathiYoga,
+        RajalakshanaYoga
     }
 }

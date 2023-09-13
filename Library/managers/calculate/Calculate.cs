@@ -3162,6 +3162,24 @@ namespace VedAstro.Library
 			return isPlanetInKendra;
 		}
 
+		/// <summary>
+		/// Checks if any given planet is in a kendra house (1,4,7,10)
+		/// </summary>
+		[API("Checks if any given planet is in a kendra house (1,4,7,10)")]
+		public static bool IsPlanetInKendra(PlanetName[] planetList, Time time)
+		{
+			//default to false
+			var isFound = false; 
+
+			//if any planet is found, stop loop and return true
+			foreach(var planet in planetList){
+				var isKendra = Calculate.IsPlanetInKendra(planet, time);
+				if (isKendra) { return true; }
+			}
+
+			return isFound;
+		}
+
 		[API("Checks if a planet is in a kendra house (1,4,7,10) from another planet. Exp : Is Jupiter is in a kendra from the Moon")]
 		public static bool IsPlanetInKendraFromPlanet(PlanetName kendraFrom, PlanetName kendraTo, Time time)
 		{

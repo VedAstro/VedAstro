@@ -1,7 +1,8 @@
 ﻿using ExCSS;
 using System.Linq;
-
+//makes accessing Planet and House shorter and sweeter
 using static VedAstro.Library.PlanetName;
+using static VedAstro.Library.HouseName;
 
 //█▀▀█ █▀▀▄ █░░ █░░█ 　 █▀▀ █▀▀█ █▀▀▄ █▀▀ 　 █░░░█ █░░█ █▀▀ █▀▀▄ 　 █░░█ █▀▀█ █░░█ 　 █▀▀ █▀▀█ █▀▀▄ █▀▀▄ █▀▀█ ▀▀█▀▀ 
 //█░░█ █░░█ █░░ █▄▄█ 　 █░░ █░░█ █░░█ █▀▀ 　 █▄█▄█ █▀▀█ █▀▀ █░░█ 　 █▄▄█ █░░█ █░░█ 　 █░░ █▄▄█ █░░█ █░░█ █░░█ ░░█░░ 
@@ -45,9 +46,9 @@ namespace VedAstro.Library
 		public static CalculatorResult GajakesariYoga(Time birthTime)
 		{
 			//If Jupiter is in a kendra from the Moon
-			var jupiterInKendraFromMoon = Calculate.IsPlanetInKendraFromPlanet(PlanetName.Jupiter, PlanetName.Moon, birthTime);
+			var jupiterInKendraFromMoon = Calculate.IsPlanetInKendraFromPlanet(Jupiter, Moon, birthTime);
 
-			return CalculatorResult.New(jupiterInKendraFromMoon, new[] { PlanetName.Jupiter, PlanetName.Moon }, birthTime);
+			return CalculatorResult.New(jupiterInKendraFromMoon, new[] { Jupiter, Moon }, birthTime);
 		}
 
 		/// <summary>
@@ -62,7 +63,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SunaphaYoga(Time birthTime)
 		{
 			//sun not in house 2 from moon
-			var sunMoonDistance = Calculate.SignDistanceFromPlanetToPlanet(PlanetName.Moon, PlanetName.Sun, birthTime);
+			var sunMoonDistance = Calculate.SignDistanceFromPlanetToPlanet(Moon, Sun, birthTime);
 			var sunNotIn2 = sunMoonDistance != 2;
 
 			//If there are planets
@@ -74,7 +75,7 @@ namespace VedAstro.Library
 			//both conditions have to be met
 			var isOccuring = sunNotIn2 && planetsIn2.Any();
 
-			return CalculatorResult.New(isOccuring, new[] { HouseName.House2 }, new[] { PlanetName.Moon }, birthTime);
+			return CalculatorResult.New(isOccuring, [House2], [Moon], birthTime);
 		}
 
 		/// <summary>
@@ -101,12 +102,12 @@ namespace VedAstro.Library
 			//to this also with slight variation.
 
 			//remove sun if found
-			planetsIn12.RemoveAll(x => x.Name == PlanetName.PlanetNameEnum.Sun);
+			planetsIn12.RemoveAll(x => x.Name == PlanetNameEnum.Sun);
 
 			//both conditions have to be met
 			var isOccuring = planetsIn12.Any();
 
-			return CalculatorResult.New(isOccuring, new[] { HouseName.House12 }, new[] { PlanetName.Moon }, birthTime);
+			return CalculatorResult.New(isOccuring, [House12], [Moon], birthTime);
 		}
 
 		/// <summary>
@@ -127,9 +128,10 @@ namespace VedAstro.Library
 			var bottomSideSign = Calculate.SignCountedFromMoonSign(12, birthTime);
 			var planetsInBottom = Calculate.PlanetsInSign(bottomSideSign, birthTime).Any();
 
-			var planetOnBothSides = planetsInBottom && planetsInTop;
+			//on either side of  the Moon
+			var planetOnBothSides = planetsInBottom || planetsInTop;
 
-			return CalculatorResult.New(planetOnBothSides, new[] { PlanetName.Moon }, birthTime);
+			return CalculatorResult.New(planetOnBothSides, [Moon], birthTime);
 		}
 
 		/// <summary>
@@ -144,15 +146,18 @@ namespace VedAstro.Library
 		public static CalculatorResult KemadrumaYoga(Time birthTime)
 		{
 			//If there are planets on either side of the Moon
+			//count to sign next to moon on right
 			var topSideSign = Calculate.SignCountedFromMoonSign(2, birthTime);
 			var noPlanetsInTop = Calculate.PlanetsInSign(topSideSign, birthTime).Any() == false;
 
+			//count around to sign left side of moon (since counter only goes one way)
 			var bottomSideSign = Calculate.SignCountedFromMoonSign(12, birthTime);
 			var noPlanetsInBottom = Calculate.PlanetsInSign(bottomSideSign, birthTime).Any() == false;
 
+			//no planets on both sides of the Moon
 			var planetOnBothSides = noPlanetsInBottom && noPlanetsInTop;
 
-			return CalculatorResult.New(planetOnBothSides, new[] { PlanetName.Moon }, birthTime);
+			return CalculatorResult.New(planetOnBothSides, [Moon], birthTime);
 		}
 
 
@@ -168,10 +173,9 @@ namespace VedAstro.Library
 		public static CalculatorResult ChandraMangalaYoga(Time birthTime)
 		{
 			//If Mars conjoins the Moon
-			var marsConjunctMoon = Calculate.IsPlanetConjunctWithPlanet(
-				PlanetName.Mars, PlanetName.Moon, birthTime);
+			var marsConjunctMoon = Calculate.IsPlanetConjunctWithPlanet(Mars, Moon, birthTime);
 
-			return CalculatorResult.New(marsConjunctMoon, new[] { PlanetName.Moon }, birthTime);
+			return CalculatorResult.New(marsConjunctMoon, [Moon, Mars], birthTime);
 		}
 
 		/// <summary>
@@ -198,8 +202,7 @@ namespace VedAstro.Library
 			foreach (var planet in combinedList)
 			{
 				//Varahamihira distinctly observes Sounyehi-implying
-				// cle4rly only the benefics, vz., Mercury, Jupiter and
-				// Venus.
+				// clearly only the benefics, vz., Mercury, Jupiter and Venus.
 				var isBenefic = planet == Mercury || planet == Jupiter || planet == Venus;
 				if (isBenefic)
 				{
@@ -208,7 +211,7 @@ namespace VedAstro.Library
 				}
 			}
 
-			return CalculatorResult.New(isOccuring, new[] { PlanetName.Moon }, birthTime);
+			return CalculatorResult.New(isOccuring, [Moon], birthTime);
 		}
 
 
@@ -230,7 +233,7 @@ namespace VedAstro.Library
 			//go through all the kendras if any one house,
 			//does not have a planet, than exit and mark as not occuring
 			//kendra house (1,4,7,10)
-			var kendraList = new HouseName[] { HouseName.House1, HouseName.House4, HouseName.House7, HouseName.House10 };
+			var kendraList = new HouseName[] { House1, House4, House7, House10 };
 			foreach (var house in kendraList)
 			{
 				//true if no planet found
@@ -239,7 +242,7 @@ namespace VedAstro.Library
 
 			}
 
-			return CalculatorResult.New(isOccuring, new[] { PlanetName.Jupiter, PlanetName.Moon }, birthTime);
+			return CalculatorResult.New(isOccuring, kendraList, birthTime);
 		}
 
 

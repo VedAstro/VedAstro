@@ -27,11 +27,11 @@ namespace VedAstro.Library
 	/// </summary>
 	public static partial class Calculate
 	{
-		#region AVASTA
+        #region AVASTA
 
 
 
-		[API("Gets all the Avastas for a planet, Lajjita, Garvita, Kshudita, etc...")]
+        [API("Gets all the Avastas for a planet, Lajjita, Garvita, Kshudita, etc...")]
 		public static List<Avasta> PlanetAvasta(PlanetName planetName, Time time)
 		{
 			var finalList = new Avasta?[6]; //total 6 avasta
@@ -575,6 +575,16 @@ namespace VedAstro.Library
 
 			//return name of zodiac sign
 			return moonSign.GetSignName();
+		}
+
+		[API("Zodiac sign at the Lagna/Ascendant at given time", Category.StarsAboveMe)]
+		public static ZodiacName LagnaSignName(Time time)
+		{
+			//get zodiac sign behind the Lagna/Ascendant
+			var lagnaSign = Calculate.HouseSignName(HouseName.House1, time);
+
+			//return name of zodiac sign
+			return lagnaSign;
 		}
 
 		[API("Nithya Yoga = (Longitude of Sun + Longitude of Moon) / 13°20' (or 800')", Category.StarsAboveMe)]
@@ -1595,13 +1605,10 @@ namespace VedAstro.Library
 		}
 
 		[API("Exp : Get 4th sign from Moon")]
-		public static ZodiacName SignCountedFromMoonSign(int countToNextSign, Time inputTime)
-		{
-			var moon12ndHseSign = Calculate.SignCountedFromInputSign(Calculate.MoonSignName(inputTime), countToNextSign);
+		public static ZodiacName SignCountedFromMoonSign(int countToNextSign, Time inputTime) => Calculate.SignCountedFromInputSign(Calculate.MoonSignName(inputTime), countToNextSign);
 
-			return moon12ndHseSign;
-
-		}
+		[API("Exp : Get 4th sign from Lagna/Ascendant")]
+		public static ZodiacName SignCountedFromLagnaSign(int countToNextSign, Time inputTime) => Calculate.SignCountedFromInputSign(Calculate.LagnaSignName(inputTime), countToNextSign);
 
 		/// <summary>
 		/// Exp : Get 4th house from 5th house (input house)
@@ -4676,7 +4683,137 @@ namespace VedAstro.Library
 
 			return planetsIn;
 		}
-	}
+
+		[API("Gets all planets in certain sign from the Lagna/Ascendant. Exp: get planets 3rd from the Lagna/Ascendant")]
+		public static List<PlanetName> AllPlanetsSignsFromLagna(int signsFromLagna, Time birthTime)
+		{
+			//get the sign to check
+			var lagnaNthSign = Calculate.SignCountedFromLagnaSign(signsFromLagna, birthTime);
+
+			//get all the planets in the sign
+			var planetsIn = Calculate.PlanetsInSign(lagnaNthSign, birthTime);
+
+			return planetsIn;
+		}
+
+
+		[API("Gets all planets in certain sign from the moon, given list of signs. Exp: get planets 3rd from the moon")]
+		public static List<PlanetName> AllPlanetsSignsFromMoon(int[] signsFromList, Time birthTime)
+		{
+			var returnList = new List<PlanetName>();
+
+			foreach(var sigsFrom in signsFromList){
+				//get all planets in given number (house) from moon
+				var temp = Calculate.AllPlanetsSignsFromMoon(sigsFrom, birthTime);
+				returnList.AddRange(temp);
+			}
+
+			//remove duplicates
+			return returnList.Distinct().ToList();
+
+		}
+
+		[API("Gets all planets in certain sign from the Lagna/Ascendant, given list of signs. Exp: get planets 3rd from the Lagna/Ascendant")]
+		public static List<PlanetName> AllPlanetsSignsFromLagna(int[] signsFromList, Time birthTime)
+		{
+			var returnList = new List<PlanetName>();
+
+			foreach(var sigsFrom in signsFromList){
+				//get all planets in given number (house) from moon
+				var temp = Calculate.AllPlanetsSignsFromLagna(sigsFrom, birthTime);
+				returnList.AddRange(temp);
+			}
+
+			//remove duplicates
+			return returnList.Distinct().ToList();
+
+		}
+
+
+
+		/// <summary>
+		/// Checks if a given list of planets are found in any inputed signs from moon
+		/// Exp: Is Sun or Moon in 6 or 7th from Moon
+		/// </summary>
+        public static bool IsPlanetsInSignsFromMoon(int[] signsFromList, PlanetName[] planetList, Time birthTime)
+        {
+			//get all planets in given list of signs from moon
+			var planetsFromMoon = Calculate.AllPlanetsSignsFromMoon(signsFromList, birthTime);
+
+			var isOccuring = false; //default to false
+
+			//if planet is found will be set by checks below and retured as occuring
+			foreach (var planet in planetsFromMoon)
+			{
+				//check given list if contains planets 
+				var isFound = planetList.Contains(planet);
+				if (isFound)
+				{
+					isOccuring = true;
+					break; //stop looking
+				}
+			}
+
+			return isOccuring;
+        }
+
+		/// <summary>
+		/// Checks if a given list of planets are found in any inputed signs from Lagna/Ascendant
+		/// Exp: Is Sun or Moon in 6 or 7th from Lagna
+		/// </summary>
+        public static bool IsPlanetsInSignsFromLagna(int[] signsFromList, PlanetName[] planetList, Time birthTime)
+        {
+			//get all planets in given list of signs from Lagna
+			var planetsFromLagna = Calculate.AllPlanetsSignsFromLagna(signsFromList, birthTime);
+
+			var isOccuring = false; //default to false
+
+			//if planet is found will be set by checks below and retured as occuring
+			foreach (var planet in planetsFromLagna)
+			{
+				//check given list if contains planets 
+				var isFound = planetList.Contains(planet);
+				if (isFound)
+				{
+					isOccuring = true;
+					break; //stop looking
+				}
+			}
+
+			return isOccuring;
+        }
+
+		/// <summary>
+		/// Checks if benefics are found in any inputed signs from moon
+		/// Exp: Is benefics in 6 & 7th from moon
+		/// </summary>
+        public static bool IsBeneficsInSignsFromMoon(int[] signsFromList, Time birthTime)
+        {
+			//get all planets that are standard benefics at given time
+			var beneficList = Calculate.BeneficPlanetList(birthTime).ToArray();
+			
+			//get all planets in given list of signs from moon
+			var isOccuring = Calculate.IsPlanetsInSignsFromMoon(signsFromList, beneficList, birthTime);
+
+			return isOccuring;
+        }
+
+		/// <summary>
+		/// Checks if benefics are found in any inputed signs from Lagna/Ascendant
+		/// Exp: Is benefics in 6 & 7th from moon
+		/// </summary>
+		public static bool IsBeneficsInSignsFromLagna(int[] signsFromList, Time birthTime)
+        {
+			//get all planets that are standard benefics at given time
+			var beneficList = Calculate.BeneficPlanetList(birthTime).ToArray();
+			
+			//get all planets in given list of signs from lagna
+			var isOccuring = Calculate.IsPlanetsInSignsFromLagna(signsFromList, beneficList, birthTime);
+
+			return isOccuring;
+        }
+
+    }
 }
 
 

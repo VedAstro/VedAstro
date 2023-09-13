@@ -286,6 +286,22 @@ namespace VedAstro.Library
 			return CalculatorResult.New(isOccuring);
 		}
 
+		/// <summary>
+		/// Definition: The Lagna is occupied by a malefic
+		///	with Gulika in a trine: or Gulika is associated with
+		///	the lords of Kendras and Thrikonas; or the lord of
+		///	Lagna is combined with Rahu, Saturn or Kethu.
+		///
+		///	Results: The native will always entertain feelings
+		///	of suspicion towards others around him. He is afraid
+		///	of being cheated, swindled and robbed.
+		/// </summary>
+		[HoroscopeCalculator(HoroscopeName.VanchanaChoraBheethiYoga)]
+		public static CalculatorResult VanchanaChoraBheethiYoga(Time birthTime)
+		{
+			//todo not implemented yet!
+			return CalculatorResult.NotOccuring();
+		}
 
 
 		#endregion

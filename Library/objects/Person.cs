@@ -74,7 +74,6 @@ namespace VedAstro.Library
             }
         }
 
-
         /// <summary>
         /// Misc. notes about the person
         /// </summary>
@@ -109,7 +108,6 @@ namespace VedAstro.Library
             LifeEventList = lifeEventList ?? new List<LifeEvent>(); //empty list if not specified
         }
 
-
         /// <summary>
         /// Gets STD birth year for person
         /// </summary>
@@ -135,7 +133,6 @@ namespace VedAstro.Library
         public string BirthDateMonthYear =>
             BirthTime.GetStdDateTimeOffset().ToString("dd/MM/yyyy"); //note "MM" is month, not "mm"
 
-
         /// <summary>
         /// Used by tabulator JS, when person is converted to json
         /// </summary>
@@ -156,7 +153,6 @@ namespace VedAstro.Library
         /// Gets now time at birth location of person (STD time)
         /// </summary>
         public DateTimeOffset StdTimeNowAtBirthLocation => DateTimeOffset.Now.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset);
-
 
         /// <summary>
         /// Gets now time at birth location of person
@@ -194,9 +190,6 @@ namespace VedAstro.Library
         /// Note: uses the location stored in birth "Time"
         /// </summary>
         public GeoLocation GetBirthLocation() => BirthTime.GetGeoLocation();
-
-
-
 
         /// <summary>
         /// Gets this person's age at the inputed time (using year from STD time)
@@ -359,7 +352,7 @@ namespace VedAstro.Library
                 return returnXml;
             }
         }
-        
+
         /// <summary>
         /// The root element is expected to be Person
         /// Note: Special method done to implement IToXml

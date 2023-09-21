@@ -111,9 +111,17 @@ namespace VedAstro.Library
         /// </summary>
         public DateTimeOffset StdTimeNowAtOffset => DateTimeOffset.Now.ToOffset(this.GetStdDateTimeOffset().Offset);
 
+        /// <summary>
+        /// Sample method used for Open API example metadata StandardHoroscope
+        /// </summary>
+        public static Time StandardHoroscope() => new("14:20 16/10/1918 +05:30", GeoLocation.Bangalore);
+
+
 
         //█▀█ █░█ █▄▄ █░░ █ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▄█ █▄█ █▄▄ █ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+
 
         /// <summary>
         /// Gets the Time now in current system, needs location

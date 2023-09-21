@@ -19,7 +19,9 @@ namespace VedAstro.Library
             this._degreesInSign = degreesInSign;
         }
 
+
         //METHODS
+
         public ZodiacName GetSignName() => _signName;
 
         public Angle GetDegreesInSign() => _degreesInSign;

@@ -81,16 +81,6 @@ namespace VedAstro.Library
             return newCalcResult;
         }
 
-        /// <summary>
-        /// Helper method to make new instance of calculator result
-        /// </summary>
-        public static CalculatorResult New(bool occuring, PlanetName lord)
-        {
-            var newCalcResult = new CalculatorResult();
-            newCalcResult.Occuring = occuring;
-            newCalcResult.RelatedBody.RelatedPlanets.Add(lord);
-            return newCalcResult;
-        }
 
         /// <summary>
         /// Helper method to make new instance of calculator result
@@ -106,7 +96,19 @@ namespace VedAstro.Library
             return newCalcResult;
         }
 
-        public static CalculatorResult New(bool occuring, PlanetName[] planetNames, Time time)
+        /// <summary>
+        /// Helper method to make new instance of calculator result
+        /// </summary>
+        public static CalculatorResult New(bool occuring, PlanetName lord)
+        {
+            var newCalcResult = new CalculatorResult();
+            newCalcResult.Occuring = occuring;
+            newCalcResult.RelatedBody.RelatedPlanets.Add(lord);
+            return newCalcResult;
+        }
+
+
+        public static CalculatorResult New(bool occuring, PlanetName[] planetNames, Time birthTime)
         {
             var newCalcResult = new CalculatorResult();
             newCalcResult.Occuring = occuring;
@@ -143,10 +145,10 @@ namespace VedAstro.Library
 
         }
 
-        public static CalculatorResult New(bool occuring, PlanetName[] planetNames, ZodiacName[] signNames, Time time)
+        public static CalculatorResult New(bool occuring, PlanetName[] planetNames, ZodiacName[] signNames, Time timeInput)
         {
             //create with house names
-            var newCalcResult = New(occuring, planetNames, time);
+            var newCalcResult = New(occuring, planetNames, timeInput);
 
             //add in sign names
             newCalcResult.RelatedBody.RelatedZodiac.AddRange(signNames.ToList());
@@ -186,5 +188,6 @@ namespace VedAstro.Library
             newCalcResult.RelatedBody.RelatedPlanets.Add(lord);
             return newCalcResult;
         }
+
     }
 }

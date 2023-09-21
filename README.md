@@ -144,7 +144,6 @@ The chart takes alot of computational power to generate, so please be patient af
 
 
 # 📜 About
-
 Anybody who has studied Vedic Astrology knows well how accurate it can be.
 But also how complex it can get to make accurate predictions.
 It takes **decades of experience** to be able make accurate prediction.

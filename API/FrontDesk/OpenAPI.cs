@@ -134,11 +134,7 @@ namespace API
 				var nameOfMethod = nameof(IFromUrl.FromUrl);
 				var parsedParamInstance = parameterType.GetMethod(nameOfMethod, BindingFlags.Public | BindingFlags.Static);
 				//if not found then probably Enum, so use special Enum converter
-				if (parsedParamInstance == null)
-				{
-					//var enumExtensions = $"VedAstro.Library.{parameterType.Name}Extensions, VedAstro.Library, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null";
-					parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static);
-				}
+				if (parsedParamInstance == null) { parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static); }
 
 				//execute param parser
 				Task task = (Task)parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
@@ -207,7 +203,7 @@ namespace API
 
         private static JObject GetSignDataJson(PlanetName planetName, Time parsedTime)
         {
-            var planetSign = VedAstro.Library.Calculate.PlanetRasiSign(planetName, parsedTime);
+            var planetSign = VedAstro.Library.Calculate.PlanetSignName(planetName, parsedTime);
             var rootJson = new JObject();
             rootJson["Name"] = planetSign.GetSignName().ToString();
             rootJson["DegreesInSign"] = planetSign.GetDegreesInSign().TotalDegrees;

@@ -57,6 +57,7 @@ namespace VedAstro.Library
 
 
         //METHODS
+
         private static long DegreesToSeconds(double degrees)
         {
             return (long)(degrees * SecondsPerDegree);
@@ -159,7 +160,10 @@ namespace VedAstro.Library
         }
         public static bool operator ==(Angle left, Angle right)
         {
-            //return
+            if (ReferenceEquals(left, null))
+            {
+                return ReferenceEquals(right, null);
+            }
             return left.Equals(right);
         }
         public static bool operator !=(Angle left, Angle right)
@@ -173,12 +177,15 @@ namespace VedAstro.Library
         }
         public static bool operator <(Angle left, Angle right)
         {
-            //return
-            return (left._seconds < right._seconds);
+            var leftSeconds = left?._seconds ?? 0;
+            var rightSeconds = right?._seconds ?? 0;
+            return leftSeconds < rightSeconds;
         }
         public static bool operator >=(Angle left, Angle right)
         {
-            return (left._seconds >= right._seconds);
+            var leftSeconds = left?._seconds ?? 0;
+            var rightSeconds = right?._seconds ?? 0;
+            return leftSeconds >= rightSeconds;
         }
         public static bool operator <=(Angle left, Angle right)
         {
@@ -190,6 +197,8 @@ namespace VedAstro.Library
         //METHOD OVERRIDES
         public override bool Equals(object value)
         {
+            //if null auto false
+            if (value == null) { return false; }
 
             if (value.GetType() == typeof(Angle))
             {

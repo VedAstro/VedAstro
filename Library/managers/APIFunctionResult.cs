@@ -15,10 +15,9 @@ public record APIFunctionResult(string Name, object Result)
     /// special override to print out any type of data
     /// nicely for HUMAN EYES
     /// </summary>
-    /// <returns></returns>
     public override string ToString()
     {
-        var returnData = "";
+        //TODO handle dictionary
         if (Result is IList iList) //handles results that have many props from 1 call, exp : SwissEphemeris
         {
             //convert list to comma separated string
@@ -65,18 +64,28 @@ public record APIFunctionResult(string Name, object Result)
 
     public static JToken ToJsonList(List<APIFunctionResult> apiFunctionResultList)
     {
-        var returnOb = new JObject();
+        var returnOb = new JArray();
+        var returnOb2 = new JObject();
         foreach (var apiFunctionResult in apiFunctionResultList)
         {
             var content = apiFunctionResult.Result;
 
             //pass in name of function as header
-            var rootPayloadJson = Tools.AnyToJSON(apiFunctionResult.Name ,content);
-            
-            returnOb.Add(rootPayloadJson);
+            var methodName = apiFunctionResult.Name;
+            var rootPayloadJson = Tools.AnyToJSON(methodName ,content);
+
+            //if already contains mini data inside than we have to this one, else can't add into return object
+            if (rootPayloadJson is JObject)
+            {
+                returnOb2.Add(methodName, rootPayloadJson);
+            }
+            else
+            {
+                returnOb2.Add(rootPayloadJson);
+            }
         }
 
-        return returnOb;
+        return returnOb2;
 
     }
 }

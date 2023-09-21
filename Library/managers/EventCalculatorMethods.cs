@@ -455,7 +455,7 @@ namespace VedAstro.Library
 
 
                 //2. Moon occupies a benefic sign
-                var moonSign = Calculate.PlanetRasiSign(PlanetName.Moon, time);
+                var moonSign = Calculate.PlanetSignName(PlanetName.Moon, time);
                 var relationship = Calculate.PlanetRelationshipWithSign(PlanetName.Moon, moonSign.GetSignName(), time);
 
                 //check if sign is benefic 
@@ -1320,7 +1320,7 @@ namespace VedAstro.Library
                 var navamsaLagnaLord = Calculate.LordOfZodiacSign(navamsaLagnaSign);
 
                 //get ordinary sign of navamsa lagna lord
-                var ordinarySignOfNavamsaLagnaLord = Calculate.PlanetRasiSign(navamsaLagnaLord, person.BirthTime).GetSignName();
+                var ordinarySignOfNavamsaLagnaLord = Calculate.PlanetSignName(navamsaLagnaLord, person.BirthTime).GetSignName();
 
                 //3.0 Get sign of house 1
                 var house1Sign = Calculate.HouseSignName(HouseName.House1, time);
@@ -1351,7 +1351,7 @@ namespace VedAstro.Library
                 var navamsa7thLord = Calculate.LordOfZodiacSign(navamsa7thSign);
 
                 //get ordinary sign of navamsa 7th lord
-                var ordinarySignOfNavamsa7thLord = Calculate.PlanetRasiSign(navamsa7thLord, person.BirthTime).GetSignName();
+                var ordinarySignOfNavamsa7thLord = Calculate.PlanetSignName(navamsa7thLord, person.BirthTime).GetSignName();
 
                 //3.0 Get sign of house 7
                 var house7Sign = Calculate.HouseSignName(HouseName.House7, time);
@@ -3425,7 +3425,7 @@ namespace VedAstro.Library
             //2. The Moon's situation in Taurus. Cancer or Pisces would greatly help the seller.
 
             //get sign moon is in 
-            var moonSign = Calculate.PlanetRasiSign(PlanetName.Moon, time);
+            var moonSign = Calculate.PlanetSignName(PlanetName.Moon, time);
 
             //check if moon is in the correct sign
             var inCorrectSign = moonSign.GetSignName() == ZodiacName.Taurus ||
@@ -3500,7 +3500,7 @@ namespace VedAstro.Library
             //2. The Moon's situation in Taurus. Cancer or Pisces would greatly help the seller.
 
             //get sign moon is in 
-            var moonSign = Calculate.PlanetRasiSign(PlanetName.Moon, time);
+            var moonSign = Calculate.PlanetSignName(PlanetName.Moon, time);
 
             //check if moon is in the correct sign
             var inCorrectSign = moonSign.GetSignName() == ZodiacName.Taurus ||

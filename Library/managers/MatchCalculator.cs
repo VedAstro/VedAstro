@@ -346,8 +346,8 @@ namespace VedAstro.Library
                 //The evil due to Nadi Kuta can be ignored subject to the following conditions:
 
                 //a.The same planet is lord of the Janma Rasis of both the male and the female,
-                var maleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName());
-                var femaleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName());
+                var maleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetSignName(PlanetName.Moon, male.BirthTime).GetSignName());
+                var femaleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetSignName(PlanetName.Moon, female.BirthTime).GetSignName());
                 var sameJanmaLord = maleJanmaLord == femaleJanmaLord;
 
                 //b.The lords of the Janma Rasi of the couple are friends.
@@ -982,8 +982,8 @@ namespace VedAstro.Library
 
 
             //get ruling sign
-            var maleRuleSign = Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
-            var femaleRuleSign = Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
+            var maleRuleSign = Calculate.PlanetSignName(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleRuleSign = Calculate.PlanetSignName(PlanetName.Moon, female.BirthTime).GetSignName();
 
             //show the names of the sign to user
             prediction.MaleInfo = maleRuleSign.ToString();
@@ -1149,8 +1149,8 @@ namespace VedAstro.Library
 
 
             //get ruling sign
-            var maleRuleSign = Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
-            var femaleRuleSign = Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
+            var maleRuleSign = Calculate.PlanetSignName(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleRuleSign = Calculate.PlanetSignName(PlanetName.Moon, female.BirthTime).GetSignName();
 
             //get lords of sign
             var maleLord = Calculate.LordOfZodiacSign(maleRuleSign);
@@ -1233,8 +1233,8 @@ namespace VedAstro.Library
 
 
             //get ruling sign
-            var maleRuleSign = Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
-            var femaleRuleSign = Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
+            var maleRuleSign = Calculate.PlanetSignName(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleRuleSign = Calculate.PlanetSignName(PlanetName.Moon, female.BirthTime).GetSignName();
 
             //count from female to male
             var femaleToMale = Calculate.CountFromSignToSign(femaleRuleSign, maleRuleSign);
@@ -1382,8 +1382,8 @@ namespace VedAstro.Library
             if (prediction.Nature == EventNature.Bad)
             {
                 //a.The same planet is lord of the Janma Rasis of both the male and the female,
-                var maleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName());
-                var femaleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName());
+                var maleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetSignName(PlanetName.Moon, male.BirthTime).GetSignName());
+                var femaleJanmaLord = Calculate.LordOfZodiacSign(Calculate.PlanetSignName(PlanetName.Moon, female.BirthTime).GetSignName());
                 var sameJanmaLord = maleJanmaLord == femaleJanmaLord;
 
                 //b.The lords of the Janma Rasi of the couple are friends.
@@ -1469,8 +1469,8 @@ namespace VedAstro.Library
             // agreement is found.
 
             //get ruling sign
-            var maleRuleSign = Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
-            var femaleRuleSign = Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
+            var maleRuleSign = Calculate.PlanetSignName(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleRuleSign = Calculate.PlanetSignName(PlanetName.Moon, female.BirthTime).GetSignName();
 
             //show user
             prediction.MaleInfo = maleRuleSign.ToString();
@@ -1501,8 +1501,8 @@ namespace VedAstro.Library
         {
 
             //get birth moon sign & lagna, details needed for prediction
-            var maleSign = Calculate.PlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
-            var femaleSign = Calculate.PlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
+            var maleSign = Calculate.PlanetSignName(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleSign = Calculate.PlanetSignName(PlanetName.Moon, female.BirthTime).GetSignName();
             var maleLagna = Calculate.HouseSignName(HouseName.House1, male.BirthTime);
             var femaleLagna = Calculate.HouseSignName(HouseName.House1, female.BirthTime);
 
@@ -1515,8 +1515,8 @@ namespace VedAstro.Library
             //lord of the 7th (in the other)
             var female7thLord = Calculate.LordOfHouse(HouseName.House7, female.BirthTime);
             var male7thLord = Calculate.LordOfHouse(HouseName.House7, male.BirthTime);
-            var female7LordSign = Calculate.PlanetRasiSign(female7thLord, female.BirthTime).GetSignName();
-            var male7LordSign = Calculate.PlanetRasiSign(male7thLord, male.BirthTime).GetSignName();
+            var female7LordSign = Calculate.PlanetSignName(female7thLord, female.BirthTime).GetSignName();
+            var male7LordSign = Calculate.PlanetSignName(male7thLord, male.BirthTime).GetSignName();
             var femaleLagna7thFromMaleLord = Calculate.CountFromSignToSign(male7LordSign, femaleLagna) == 7;
             var maleLagna7thFromFemaleLord = Calculate.CountFromSignToSign(female7LordSign, maleLagna) == 7;
             var lagna7thFromLord = femaleLagna7thFromMaleLord || maleLagna7thFromFemaleLord;
@@ -1581,7 +1581,7 @@ namespace VedAstro.Library
                 //1. GET DETAILS
                 //get planets house details
                 var planetHouse = Calculate.HousePlanetIsIn(birthTime, planet);
-                var planetSign = Calculate.PlanetRasiSign(planet, birthTime).GetSignName();
+                var planetSign = Calculate.PlanetSignName(planet, birthTime).GetSignName();
                 var planetIn7Or8 = planetHouse == HouseName.House7 || planetHouse == HouseName.House8;
                 var planetIn2Or4Or12 = planetHouse == HouseName.House2 || planetHouse == HouseName.House4 || planetHouse == HouseName.House12;
 
@@ -1654,7 +1654,7 @@ namespace VedAstro.Library
                     planet = lordOfRahuKetuSign;
 
                     //change current occupied rahu/ketu sign to the one occupied by the lord
-                    planetSign = Calculate.PlanetRasiSign(lordOfRahuKetuSign, birthTime).GetSignName();
+                    planetSign = Calculate.PlanetSignName(lordOfRahuKetuSign, birthTime).GetSignName();
                 }
 
 

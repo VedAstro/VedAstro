@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 
 /// <summary>
-/// Represents the mini strengths that mae the final strength of a house
+/// Represents the mini strengths that makes the final strength of a house
 /// </summary>
 public class HouseSubStrength : IToJson
 {
@@ -31,18 +31,13 @@ public class HouseSubStrength : IToJson
             temp["House"] = (int)houseData.Key; //show as number
             temp["Strength"] = houseData.Value; //show as number
 
-            Console.WriteLine(temp.ToString());
-
             //add to main list
             returnList.Add(temp);
         }
-        
-        Console.WriteLine("POSSIBLE CRASH!!");
 
-        //todo FAIL ALERT!!!!!
         //send list on its way
         var wrap = new JObject();
-        wrap.Add(returnList);
+        wrap.Add(Name, returnList);
 
         return wrap;
     }

@@ -13,6 +13,8 @@ namespace VedAstro.Library
         private const int QuarterMax = 4;
         private const int QuarterMin = 1;
 
+        public static PlanetConstellation Empty = new PlanetConstellation(1, 1, Angle.FromDegrees(0));
+
 
         //DATA FIELDS
         private readonly ConstellationName _name;
@@ -37,6 +39,7 @@ namespace VedAstro.Library
 
 
         //PUBLIC METHODS
+
 
         /// <summary>
         ///  Gets the constellation name as a number in the preset order

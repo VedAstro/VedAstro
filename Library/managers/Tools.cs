@@ -24,10 +24,9 @@ using Formatting = Newtonsoft.Json.Formatting;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
 using Svg;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Microsoft.Extensions.Logging;
-using System.Reflection.Metadata;
-using System.Security.Cryptography;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis;
+
 
 namespace VedAstro.Library
 {
@@ -1793,7 +1792,37 @@ namespace VedAstro.Library
         {
             var parameters = methodInfo.GetParameters();
             var parameterDescriptions = parameters.Select(param => $"{GetGenericTypeName(param.ParameterType)} {param.Name}");
-            return $"{methodInfo.DeclaringType.FullName}.{GetGenericTypeName(methodInfo.ReturnType)} {methodInfo.Name}({string.Join(", ", parameterDescriptions)})";
+            return GetMethodSignature(methodInfo.Name, parameterDescriptions);
+        }
+
+        /// <summary>
+        /// EXAMPLE: VedAstro.Library.Calculate.List<Avasta> PlanetAvasta(PlanetName planetName, Time time)
+        /// </summary>
+        public static string GetMethodSignature(this MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
+        {
+            var parameters = methodDeclaration.ParameterList.Parameters;
+            var parameterDescriptions = parameters.Select(param => $"{param.Type.ToString()} {param.Identifier.Text}");
+            return GetMethodSignature(methodDeclaration.Identifier.Text, parameterDescriptions);
+        }
+
+
+        /// <summary>
+        /// Main purpose is to get unified method signature from Code and Reflection
+        /// </summary>
+        public static string GetMethodSignature(string methodName, IEnumerable<string> parameterDescriptions)
+        {
+            //unify type names, one is coming from Reflection and another direct from C# file
+            var listString = parameterDescriptions.Select(p => p.Replace("Int32", "int"));
+            listString = listString.Select(p => p.Replace("Double", "double"));
+            listString = listString.Select(p => p.Replace("String", "string"));
+            listString = listString.Select(p => p.Replace("Boolean", "bool"));
+
+            var methodSignature = $"{methodName}({string.Join(", ", listString)})";
+
+            //remove all space, else won't match
+            methodSignature = methodSignature.Replace(" ", "");
+
+            return methodSignature;
         }
 
         public static string GetGenericTypeName(Type type)
@@ -2206,12 +2235,13 @@ namespace VedAstro.Library
             //get all calculators that can work with the inputed data
             var calculatorClass = typeof(Calculate);
 
-            //remove auto properties methods
+            //fine tune, what methods gets set as calculators
+            //remove auto properties methods and base methods
             var finalList = calculatorClass.GetMethods()
-                .Where(m => !m.Name.StartsWith("get_") && !m.Name.StartsWith("set_"))
+                .Where(m => !m.Name.StartsWith("get_") && !m.Name.StartsWith("set_") && m.DeclaringType != typeof(object))
                 .ToList();
-
             return finalList;
+
         }
 
         /// <summary>

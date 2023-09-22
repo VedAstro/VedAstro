@@ -609,7 +609,8 @@ namespace Website
 			//declare the used variables
 			var paramDeclaration = GetParamDeclaration(methodData.Name);
 
-			var importDeclaration = "import vedastro # install via pip\nfrom VedAstro.Library import * # reference full library";
+			var importDeclaration = "import VedAstro # install via pip\n" +
+                                    "from VedAstro.Library import " + "* # reference full library";
 
 			var pythonCode = $"{importDeclaration}\n\n" +
 									$"{paramDeclaration}\n\n" +
@@ -622,7 +623,7 @@ namespace Website
 			await AppData.JsRuntime.InvokeVoidAsync(JS.CopyToClipboard, pythonCode);
 
 			//let user know link copied
-			await AppData.JsRuntime.ShowAlert("success", $"Code Copied!", "Remember to run <kbd>pip install vedastro</kbd>");
+			await AppData.JsRuntime.ShowAlert("success", $"Code Copied!", "Remember to run <strong>pip install vedastro</strong>");
 
 		}
 

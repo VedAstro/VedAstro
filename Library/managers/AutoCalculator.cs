@@ -64,10 +64,10 @@ namespace VedAstro.Library
 		/// <summary>
 		/// based on number and type of params all available methods are taken and 
 		/// </summary>
-		public static List<APIFunctionResult> FindAndExecuteFunctions(Category calcCategory, MethodInfo callerToExclude = null, params object[] paramInput)
+		public static List<APIFunctionResult> FindAndExecuteFunctions(MethodInfo callerToExclude = null, params object[] paramInput)
 		{
 			//GET ALL CALCS
-			var foundCalcs = FindCalcs(calcCategory, callerToExclude, paramInput);
+			var foundCalcs = FindCalcs(callerToExclude, paramInput);
 
 			//STAGE 2: EXECUTE
 			var returnList = ExecuteCals(foundCalcs, paramInput);
@@ -112,9 +112,9 @@ namespace VedAstro.Library
 			return parsed;
 		}
 
-		public static JToken FindAndExecuteFunctionsJSON(Category calcCategory, MethodInfo callerToExclude = null , params object[] paramInput)
+		public static JToken FindAndExecuteFunctionsJSON(MethodInfo callerToExclude = null , params object[] paramInput)
 		{
-			var raw = FindAndExecuteFunctions(calcCategory, callerToExclude, paramInput);
+			var raw = FindAndExecuteFunctions(callerToExclude, paramInput);
 
 			var parsed = APIFunctionResult.ToJsonList(raw);
 
@@ -158,7 +158,7 @@ namespace VedAstro.Library
 		/// <summary>
 		/// given a category will find those method's info only
 		/// </summary>
-		private static IEnumerable<MethodInfo> FindCalcs(Category calcCategory, MethodInfo callerToExclude = null, params object[] paramInput)
+		private static IEnumerable<MethodInfo> FindCalcs(MethodInfo callerToExclude = null, params object[] paramInput)
 		{
 			//STAGE 1: FIND
 			//get the data needed to 
@@ -170,7 +170,7 @@ namespace VedAstro.Library
 			var matchedCalculators =
 				from calculatorInfo in calculatorClass.GetMethods()
 				let parameter = calculatorInfo.GetParameters()
-				where ParamListMatch(parameter, typeList) && CategoryMatch(calculatorInfo, calcCategory) && calculatorInfo != callerToExclude
+				where ParamListMatch(parameter, typeList) && calculatorInfo != callerToExclude
                 select calculatorInfo;
 
 			//sort alphabetically so easier to eye data point
@@ -189,21 +189,7 @@ namespace VedAstro.Library
 
 
 		//------------------------
-		/// <summary>
-		/// checks if a calc matches the category, handles not specified as well
-		/// </summary>
-		private static bool CategoryMatch(MethodInfo calculatorInfo, Category inputCategory)
-		{
-			//if user calls for all category than don't check all goes
-			if (inputCategory == Category.All) { return true; }
-
-			//try to get category assigned to method of any
-			var attr = calculatorInfo?.GetCustomAttributes<APIAttribute>()?.FirstOrDefault();
-			var methodCategory = attr?.Category ?? Category.All; //if not specified than set as all
-
-			return methodCategory == inputCategory;
-		}
-
+		
 		/// <summary>
 		/// Here we know the params exist, but assume that the order is out of whack
 		/// so we rebuild the param order again, this will allow any and all param

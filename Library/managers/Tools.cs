@@ -1864,7 +1864,7 @@ namespace VedAstro.Library
                 if (parameterType == typeof(List<HouseName>)) { sampleData = new List<HouseName>() { HouseName.House1, HouseName.House4 }; }
                 if (parameterType == typeof(List<PlanetName>)) { sampleData = new List<PlanetName>() { PlanetName.Moon, PlanetName.Mars }; }
                 if (parameterType == typeof(int)) { sampleData = 5; }
-                if (parameterType == typeof(double)) { sampleData = 2415018.5; }
+                if (parameterType == typeof(double)) { sampleData = 2415018.5; } //julian days
                 if (parameterType == typeof(string)) { sampleData = "sun"; }
                 if (parameterType == typeof(bool)) { sampleData = false; }
                 if (parameterType == typeof(DateTimeOffset)) { sampleData = DateTimeOffset.Now; }
@@ -2714,6 +2714,63 @@ namespace VedAstro.Library
             }
             return matrix[a.Length, b.Length];
         }
+
+
+        /// <summary>
+        /// Given a MethodInfo will generate Python method stub declaration code (Made by AI in 30s)
+        /// EXP: def HousePlanetIsIn(time: Time, planet_name: PlanetName) -> HouseName: 
+        /// </summary>
+        public static string GeneratePythonDef(MethodInfo methodInfo)
+        {
+            var sb = new StringBuilder();
+            // Get the method name
+            string methodName = methodInfo.Name;
+            sb.Append("def ");
+            sb.Append(methodName);
+            sb.Append("(");
+            // Get the parameter types and names
+            var parameters = methodInfo.GetParameters();
+            if (parameters.Length == 0)
+            {
+                sb.Append("cls");
+            }
+            else
+            {
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    var param = parameters[i];
+                    sb.Append(param.Name);
+                    sb.Append(": ");
+                    //meaning it is a Task, List or Dictionary
+                    var cleanedTypeName = param.ParameterType.Name.Contains("`") ? "Any" : param.ParameterType.Name;
+                    cleanedTypeName = cleanedTypeName.Replace("[", "").Replace("]", ""); // Remove square brackets
+                    sb.Append(cleanedTypeName);
+                    if (i < parameters.Length - 1)
+                    {
+                        sb.Append(", ");
+                    }
+                }
+            }
+            sb.Append(")");
+            // Get the return type
+            var returnType = methodInfo.ReturnType;
+            if (returnType.Name.Contains("`")) //meaning it is a Task, List or Dictionary
+            {
+                sb.Append(" -> Any");
+            }
+            else
+            {
+                sb.Append(" -> ");
+                var cleanedReturnTypeName = returnType.Name.Replace("[", "").Replace("]", ""); // Remove square brackets
+                sb.Append(cleanedReturnTypeName);
+            }
+            sb.Append(":");
+            return sb.ToString();
+        }
+
+
+
+
     }
 
 

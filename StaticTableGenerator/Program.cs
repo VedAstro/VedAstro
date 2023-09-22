@@ -30,6 +30,7 @@ namespace StaticTableGenerator
     {
         const string CalculatorCodeFile = @"C:\Users\VedAstro\Desktop\Projects\VedAstro\Library\managers\Calculate.cs";
         const string MetadataStaticTableFile = @"C:\Users\VedAstro\Desktop\Projects\VedAstro\Library\objects\OpenAPIStaticTable.cs";
+        const string PythonCalculateStubFile = @"C:\Users\VedAstro\Desktop\Projects\VedAstro.Python\VedAstro\Library.pyi";
 
         static void Main(string[] args)
         {
@@ -45,12 +46,12 @@ namespace StaticTableGenerator
                 var signature = openApiCalc.GetMethodSignature();
                 calcDescriptionList.TryGetValue(signature, out var description); 
                 var exampleOut = GetExampleOutputJson(openApiCalc);
-                returnList.Add(new OpenAPIMetadata(description ?? "NO DESC FOUND!! ERROR", exampleOut, signature));
+                returnList.Add(new OpenAPIMetadata(description ?? "NO DESC FOUND!! ERROR", exampleOut, signature, openApiCalc));
             }
 
+            //------
             //generate the new code
-            var classAsText = GenerateClass(returnList);
-
+            var classAsText = GenerateStaticTableClass(returnList);
             //wrap with namespace
             var finalClassFile = $$"""
                           using System.Collections.Generic;
@@ -65,10 +66,84 @@ namespace StaticTableGenerator
                           }
 
                           """;
-
             //writes new static table class
             File.WriteAllText(MetadataStaticTableFile, finalClassFile);
 
+            //-----
+            var pythonStubFile = GeneratePythonStubFile(returnList);
+            //wrap with namespace
+            var finalPythonStubFile = $$"""
+                                   # AUTO GENERATED ON {{DateTime.Now.ToString(Time.DateTimeFormat)}}
+                                   # DO NOT EDIT DIRECTLY, USE STATIC TABLE GENERATOR IN MAIN REPO
+                                   
+                                   from typing import Any
+                                   
+                                   class Object:
+                                       pass
+                                   class Type:
+                                       pass
+                                   class DateTimeOffset:
+                                       pass
+                                   class DateTime:
+                                       pass
+                                   class Boolean:
+                                       pass
+                                   class Int32:
+                                       pass
+                                   class TimeSpan:
+                                       pass
+                                   class Double:
+                                       pass
+                                   class String:
+                                       pass
+                                   class Time:
+                                       pass
+                                   class Angle:
+                                       pass
+                                   class ZodiacSign:
+                                       pass
+                                   class ZodiacName:
+                                       pass
+                                   class ConstellationName:
+                                       pass
+                                   class ConstellationAnimal:
+                                       pass
+                                   class PlanetToSignRelationship:
+                                       pass
+                                   class PlanetToPlanetRelationship:
+                                       pass
+                                   class HouseSubStrength:
+                                       pass
+                                   class PlanetName:
+                                       pass
+                                   class PlanetConstellation:
+                                       pass
+                                   class HouseName:
+                                       pass
+                                   class GeoLocation:
+                                       pass
+                                   class Person:
+                                       pass
+                                   class PanchakaName:
+                                       pass
+                                   class EventNature:
+                                       pass
+                                   class Varna:
+                                       pass
+                                   class PlanetMotion:
+                                       pass
+                                   class Shashtiamsa:
+                                       pass
+                                   class Dasas:
+                                       pass
+                                   class Tools:
+                                       pass
+                                   
+                                   {{pythonStubFile}}
+
+                                   """;
+            //writes new static stub file
+            File.WriteAllText(PythonCalculateStubFile, finalPythonStubFile);
 
             Console.WriteLine("Done!");
             Console.ReadLine();
@@ -97,12 +172,11 @@ namespace StaticTableGenerator
             return safeOutputJson;
         }
 
-       
         /// <summary>
         /// class that implements this has a sample initialization data for demo/sample uses
         /// used to show Open API method's output without running code, dynamic documentation
         /// </summary>
-        public static string GenerateClass(List<OpenAPIMetadata> metadataList)
+        public static string GenerateStaticTableClass(List<OpenAPIMetadata> metadataList)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("public static class OpenAPIStaticTable");
@@ -118,6 +192,18 @@ namespace StaticTableGenerator
             return sb.ToString();
         }
 
+        public static string GeneratePythonStubFile(List<OpenAPIMetadata> metadataList)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("class Calculate:");
+            foreach (var metadata in metadataList)
+            {
+                sb.AppendLine($"    {metadata.ToPythonMethodNameStub()}");
+                sb.AppendLine($"        {metadata.ToPythonMethodDescStub()}");
+                sb.AppendLine("        ...");
+            }
+            return sb.ToString();
+        }
 
         /// <summary>
         /// Given a path to a CS class file, will parse it and extract method name and comments above and return as list
@@ -168,7 +254,6 @@ namespace StaticTableGenerator
             }
             return summaries;
         }
-
 
     }
 }

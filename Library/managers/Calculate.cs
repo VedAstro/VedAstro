@@ -3,15 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
 using System.Reflection;
 using System.Threading.Tasks;
 using SwissEphNet;
 using static VedAstro.Library.PlanetName;
-using SwissEphNet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 
 namespace VedAstro.Library
@@ -80,8 +75,9 @@ namespace VedAstro.Library
 
 		}
 
+
         /// <summary>
-        /// Garvita/proud – Planet in exaltation sign or moolatrikona zone.happiness and gains
+        /// Garvita, proud : Planet in exaltation sign or moolatrikona zone, happiness and gains
         /// </summary>
         public static bool IsPlanetInGarvitaAvasta(PlanetName planetName, Time time)
 		{
@@ -98,7 +94,7 @@ namespace VedAstro.Library
 		}
 
         /// <summary>
-        /// Kshudita/hungry – Planet in enemy’s sign or conjoined with enemy or aspected by enemy.Grief
+        /// Kshudita, hungry : Planet in enemy’s sign or conjoined with enemy or aspected by enemy, Grief
         /// </summary>
         public static bool IsPlanetInKshuditaAvasta(PlanetName planetName, Time time)
 		{
@@ -118,7 +114,7 @@ namespace VedAstro.Library
 		}
 
         /// <summary>
-        /// Trashita/thirsty – Planet in a watery sign, aspected by a enemy and is without the aspect of benefic Planets
+        /// Trashita, thirsty – Planet in a watery sign, aspected by a enemy and is without the aspect of benefic Planets
         /// 
         /// The Planet who being conjoined or aspected by a Malefic or his enemy Planet is situated,
         /// without the aspect of a benefic Planet, in the 4th House is Trashita.
@@ -160,7 +156,7 @@ namespace VedAstro.Library
 		/// The Planet who is in his friend’s sign, is in conjunction with Jupiter,
 		/// and is together with or is aspected by a friendly Planet is called Mudita
 		/// 
-		/// Mudita/sated/happy – Planet in a friend’s sign or aspected by a friend and conjoined with Jupiter, Gains
+		/// Mudita, sated, happy – Planet in a friend’s sign or aspected by a friend and conjoined with Jupiter, Gains
 		///
 		/// If a planet is in a friend’s sign or joined with a friend or aspected by a friend,
 		/// or that joined with Jupiter is called Mudita Avastha/Delighted State
@@ -195,7 +191,7 @@ namespace VedAstro.Library
 		/// If a planet is conjunct by Sun or it is aspected by Enemy Malefic Planets then
 		/// it should always be known as Kshobhita Avastha/Agitated State
 		/// 
-		/// Kshobhita/guilty/repentant – Planet in conjunction with sun and aspected by malefics and an enemy. Penury
+		/// Kshobhita, guilty, repentant – Planet in conjunction with sun and aspected by malefics and an enemy. Penury
 		/// </summary>
 		public static bool IsPlanetInKshobhitaAvasta(PlanetName planetName, Time time)
 		{

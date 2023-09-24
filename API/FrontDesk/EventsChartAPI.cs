@@ -50,7 +50,7 @@ namespace API
                 //PREPARE THE CALL
                 Func<Task<string>> generateChart = async () =>
                 {
-                    var chartSvg = await EventsChartManager.GenerateEventsChartSVG(chartSpecsOnly);
+                    var chartSvg = await EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
                     return chartSvg;
                 };
 
@@ -98,7 +98,7 @@ namespace API
                 var chartSpecsOnly = await EventsChart.FromUrl(settingsUrl);
 
                 //PREPARE THE CALL
-                var chartSvg = await EventsChartManager.GenerateEventsChartSVG(chartSpecsOnly);
+                var chartSvg = await EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
 
                 //send image back to caller
                 return APITools.SendSvgToCaller(chartSvg, incomingRequest);
@@ -137,7 +137,7 @@ namespace API
 
                 //PREPARE THE CALL
                 var foundPerson = await Tools.GetPersonById(chartSpecsOnly.Person.Id);
-                var chartSvg = await EventsChartManager.GenerateEventsChartSVG(chartSpecsOnly);
+                var chartSvg = await EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
 
                 //string to binary
                 byte[] rawFileBytes = System.Text.Encoding.UTF8.GetBytes(chartSvg); //SVG uses UTF-8

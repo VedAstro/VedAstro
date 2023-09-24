@@ -109,6 +109,24 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// shortcut method to make person when database not needed
+        /// made for easy 3rd party lib code 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="birthTime"></param>
+        /// <param name="gender"></param>
+        public Person(string name, Time birthTime, Gender gender)
+        {
+            Id = Tools.GenerateId();
+            Name = name;
+            BirthTime = birthTime;
+            Gender = gender;
+            UserId = DefaultUserId;
+            Notes = "";
+            LifeEventList =  new List<LifeEvent>(); //empty list if not specified
+        }
+
+        /// <summary>
         /// Gets STD birth year for person
         /// </summary>
         public int BirthYear => this.BirthTime.GetStdDateTimeOffset().Year;

@@ -78,6 +78,18 @@ namespace StaticTableGenerator
                                    
                                    from typing import Any
                                    
+                                   class Tarabala:
+                                       pass
+                                   class Karana:
+                                       pass
+                                   class NithyaYoga:
+                                       pass
+                                   class House:
+                                       pass
+                                   class DayOfWeek:
+                                       pass
+                                   class LunarMonth:
+                                       pass
                                    class Object:
                                        pass
                                    class Type:
@@ -138,6 +150,9 @@ namespace StaticTableGenerator
                                        pass
                                    class Tools:
                                        pass
+                                   class LunarDay:
+                                       pass
+                                   
                                    
                                    {{pythonStubFile}}
 

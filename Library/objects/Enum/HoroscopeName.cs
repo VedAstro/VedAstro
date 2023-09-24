@@ -400,6 +400,7 @@
 		ChatussagaraYoga,
 		VasumathiYoga,
         RajalakshanaYoga,
-        VanchanaChoraBheethiYoga
+        VanchanaChoraBheethiYoga,
+        SakataYoga
     }
 }

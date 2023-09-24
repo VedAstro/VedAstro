@@ -10,7 +10,7 @@ namespace VedAstro.Library
 {
 
     /// <summary>
-    /// Central place to for all things events
+    /// Central place to for all things related to generating an Events Chart in SVG
     /// </summary>
     public static class EventsChartManager
     {
@@ -52,7 +52,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Main method that starts making chart
         /// </summary>
-        public static async Task<string> GenerateEventsChartSVG(EventsChart chartSpecs)
+        public static async Task<string> GenerateEventsChartSvg(EventsChart chartSpecs)
         {
 
             var inputPerson = chartSpecs.Person;
@@ -206,7 +206,7 @@ namespace VedAstro.Library
             var newChart = new EventsChart(newChartId, "", foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
 
             //from person get SVG chart as string
-            var eventsChartSvgString = await EventsChartManager.GenerateEventsChartSVG(newChart);
+            var eventsChartSvgString = await GenerateEventsChartSvg(newChart);
 
             //combine chart and data
             newChart.ContentSvg = eventsChartSvgString;

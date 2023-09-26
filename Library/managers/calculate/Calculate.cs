@@ -200,42 +200,6 @@ namespace VedAstro.Library
 		#endregion
 
 
-		/// <summary>
-	        /// Calculate Destiny Point for a given birth time & place. Returns Sign Number from Lagna
-	        /// </summary>
-	        [API("Calculate Destiny Point for a given birth time & place. Returns sign number from Lagna")]
-	        public static int calculateDestinyPoint(Time time, ZodiacName _asc_Zod_Sign_Name, PlanetName _rahu, PlanetName _moon)
-	        {
-	            //destiny point is calculated as follows
-	            //Difference between Moon and Rahu longitude, Difference divided by 2, the result added to Rahu longitude
-	
-	            var _rahuDegrees = Calculate.PlanetNirayanaLongitude(time, _rahu).TotalDegrees;
-	            var _moonDegrees = Calculate.PlanetNirayanaLongitude(time, _moon).TotalDegrees;
-	            
-	            var diff = _moonDegrees - _rahuDegrees;
-	
-	            // if diff is negative, that means Moon is ahead of Rahu, then add 360 to the number. 
-	            if (diff < 0)
-	            {
-	                diff = diff + 360;
-	            }
-	
-	            var _mid_point = diff / 2;
-	
-	            // Add mid_point to Rahu degrees
-	            var destinyPointDegrees = _rahuDegrees + _mid_point;
-	
-	            if (destinyPointDegrees >= 360)
-	            {
-	                destinyPointDegrees = destinyPointDegrees - 360;
-	            }
-	
-	            var _angleAtdestinyPointDegrees = VedAstro.Library.Angle.FromDegrees(destinyPointDegrees);
-	            var _zodiacSignAtDP = Calculate.ZodiacSignAtLongitude(_angleAtdestinyPointDegrees).GetSignName();
-	            var _signCount = Calculate.CountFromSignToSign(_asc_Zod_Sign_Name, _zodiacSignAtDP);
-	
-	            return _signCount;
-	        }
 
 		#region ALL DATA
 
@@ -306,6 +270,44 @@ namespace VedAstro.Library
 
 		#endregion
 
+		
+			
+		/// <summary>
+	        /// Calculate Destiny Point for a given birth time & place. Returns Sign Number from Lagna
+	        /// </summary>
+	        [API("Calculate Destiny Point for a given birth time & place. Returns sign number from Lagna")]
+	        public static int calculateDestinyPoint(Time time, ZodiacName _asc_Zod_Sign_Name, PlanetName _rahu, PlanetName _moon)
+	        {
+	            //destiny point is calculated as follows
+	            //Difference between Moon and Rahu longitude, Difference divided by 2, the result added to Rahu longitude
+	
+	            var _rahuDegrees = Calculate.PlanetNirayanaLongitude(time, _rahu).TotalDegrees;
+	            var _moonDegrees = Calculate.PlanetNirayanaLongitude(time, _moon).TotalDegrees;
+	            
+	            var diff = _moonDegrees - _rahuDegrees;
+	
+	            // if diff is negative, that means Moon is ahead of Rahu, then add 360 to the number. 
+	            if (diff < 0)
+	            {
+	                diff = diff + 360;
+	            }
+	
+	            var _mid_point = diff / 2;
+	
+	            // Add mid_point to Rahu degrees
+	            var destinyPointDegrees = _rahuDegrees + _mid_point;
+	
+	            if (destinyPointDegrees >= 360)
+	            {
+	                destinyPointDegrees = destinyPointDegrees - 360;
+	            }
+	
+	            var _angleAtdestinyPointDegrees = VedAstro.Library.Angle.FromDegrees(destinyPointDegrees);
+	            var _zodiacSignAtDP = Calculate.ZodiacSignAtLongitude(_angleAtdestinyPointDegrees).GetSignName();
+	            var _signCount = Calculate.CountFromSignToSign(_asc_Zod_Sign_Name, _zodiacSignAtDP);
+	
+	            return _signCount;
+	        }	
 		/// <summary>
 		/// SkyChartGIF squeeze the Sky Juice!
 		/// </summary>

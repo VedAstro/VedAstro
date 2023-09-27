@@ -4572,7 +4572,7 @@ namespace VedAstro.Library
         public static double PlanetNatureScoreMK4(Time personBirthTime, PlanetName inputPlanet)
         {
             //if no house then no score
-            if (inputPlanet == Empty) { return 0; }
+            if (inputPlanet == PlanetName.Empty) { return 0; }
 
             //get house score
             //var planetStrength = GetPlanetShadbalaPinda(inputPlanet, personBirthTime).ToDouble();

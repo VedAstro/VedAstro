@@ -167,7 +167,7 @@ namespace API
             {
                 //all planet related data
                 //get all calculators that can accept a planet name and time
-                var xxx = AutoCalculator.FindAndExecuteFunctionsJSON(Category.All, callerToExclude, planetName, parsedTime); ;
+                var xxx = AutoCalculator.FindAndExecuteFunctionsJSON(callerToExclude, planetName, parsedTime); ;
 
                 //send the payload on it's merry way
                 return xxx;
@@ -192,7 +192,7 @@ namespace API
             {
                 //all house related data
                 //get all calculators that can accept a house name and time
-                var houseTimeCalcs = AutoCalculator.FindAndExecuteFunctionsJSON(Category.All, callerToExclude, houseName, parsedTime);
+                var houseTimeCalcs = AutoCalculator.FindAndExecuteFunctionsJSON(callerToExclude, houseName, parsedTime);
 
                 //send the payload on it's mary way
                 return houseTimeCalcs;

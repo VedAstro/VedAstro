@@ -8,8 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
     steps:
-        #Checks out your code using the actions/checkout@v2 action.
+    #Checks out your code using the actions/checkout@v2 action.
     - uses: actions/checkout@v2
       with:
         persist-credentials: false # This prevents GitHub Actions from using its token
@@ -64,7 +65,8 @@ jobs:
       run: |
         cd ./VedAstro.Python
 
-        # poetry version minor
+        echo "----------------BUMPING VERSION-----"
+        poetry version minor
         # echo "Listing files in the directory"
         # ls
         
@@ -72,7 +74,10 @@ jobs:
         echo "--------MAKING A COMMIT--"
         git add .
         git commit -m "GITHUB ROBOT : Latest VedAstro.DLL built and injected"
+        
+        
         echo "--------MAKING A PUSH FOR IT!--"
         git push
+
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}

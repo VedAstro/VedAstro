@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using SwissEphNet;
 using static VedAstro.Library.PlanetName;
+using static VedAstro.Library.HouseName;
+using static VedAstro.Library.ZodiacName;
 
 
 namespace VedAstro.Library
@@ -277,6 +279,44 @@ namespace VedAstro.Library
         #endregion
 
         #region GENERAL
+
+
+        /// <summary>
+        /// Calculate Destiny Point for a given birth time & place. Returns Sign Number from Lagna
+        /// </summary>
+        public static int DestinyPoint(Time time, ZodiacName ascZodiacSignName, PlanetName rahu, PlanetName moon)
+        {
+            //destiny point is calculated as follows
+            //Difference between Moon and Rahu longitude, Difference divided by 2, the result added to Rahu longitude
+
+            var rahuDegrees = Calculate.PlanetNirayanaLongitude(time, rahu).TotalDegrees;
+            var moonDegrees = Calculate.PlanetNirayanaLongitude(time, moon).TotalDegrees;
+
+            var diff = moonDegrees - rahuDegrees;
+
+            // if diff is negative, that means Moon is ahead of Rahu, then add 360 to the number. 
+            if (diff < 0)
+            {
+                diff = diff + 360;
+            }
+
+            var mid_point = diff / 2;
+
+            // Add mid_point to Rahu degrees
+            var destinyPointDegrees = rahuDegrees + mid_point;
+
+            if (destinyPointDegrees >= 360)
+            {
+                destinyPointDegrees = destinyPointDegrees - 360;
+            }
+
+            var angleAtDestinyPointDegrees = VedAstro.Library.Angle.FromDegrees(destinyPointDegrees);
+            var zodiacSignAtDP = Calculate.ZodiacSignAtLongitude(angleAtDestinyPointDegrees).GetSignName();
+            var signCount = Calculate.CountFromSignToSign(ascZodiacSignName, zodiacSignAtDP);
+
+            return signCount;
+        }
+
 
         /// <summary>
         /// Given a person will give yoni kuta animal with sex

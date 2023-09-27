@@ -284,15 +284,15 @@ namespace VedAstro.Library
 	            var _rahuDegrees = Calculate.PlanetNirayanaLongitude(time, _rahu).TotalDegrees;
 	            var _moonDegrees = Calculate.PlanetNirayanaLongitude(time, _moon).TotalDegrees;
 	            
-	            var diff = _moonDegrees - _rahuDegrees;
+	            var _diff = _moonDegrees - _rahuDegrees;
 	
 	            // if diff is negative, that means Moon is ahead of Rahu, then add 360 to the number. 
-	            if (diff < 0)
+	            if (_diff < 0)
 	            {
-	                diff = diff + 360;
+	                _diff = _diff + 360;
 	            }
 	
-	            var _mid_point = diff / 2;
+	            var _mid_point = _diff / 2;
 	
 	            // Add mid_point to Rahu degrees
 	            var destinyPointDegrees = _rahuDegrees + _mid_point;

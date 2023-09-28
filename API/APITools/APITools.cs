@@ -979,8 +979,8 @@ namespace API
 				var msDelay = lastCallsCount * msDelayRate;
 
 				//todo shorten link
-				APITools.ApiExtraNote = $"Get Unlimited Speed Calls for only $1 : " +
-				                        $"{URL.BuyAPI}";
+				APITools.ApiExtraNote = $"Donate To Increase Speed : " +
+				                        $"{URL.Donate}";
 
 				//APITools.ApiExtraNote = $"Call Slowed Down {msDelay}ms:" +
 				//						$"\nSorry for now public API quota is {freeCallRate} calls/min." +

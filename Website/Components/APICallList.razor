@@ -176,17 +176,14 @@
     protected override async Task OnInitializedAsync()
     {
         //hide display
-        await _jsRuntime.ShowLoading();
+        _jsRuntime.ShowLoading();
         _isReady = false;
 
         var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
-        await _jsRuntime.ShowLoading();
 
         //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
         MethodListALL = OpenAPIMetadata.FromMethodInfoList(allApiCalculatorsMethodInfo);
         MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
-
-        await _jsRuntime.ShowLoading();
 
         //make copy for search
         MethodListFiltered = MethodListALL;

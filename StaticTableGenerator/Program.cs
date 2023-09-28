@@ -23,14 +23,22 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 
 namespace StaticTableGenerator
 {
     internal class Program
     {
-        const string CalculatorCodeFile = @"C:\Users\VedAstro\Desktop\Projects\VedAstro\Library\managers\Calculate.cs";
-        const string MetadataStaticTableFile = @"C:\Users\VedAstro\Desktop\Projects\VedAstro\Library\objects\OpenAPIStaticTable.cs";
-        const string PythonCalculateStubFile = @"C:\Users\VedAstro\Desktop\Projects\VedAstro.Python\VedAstro\Library.pyi";
+
+        /// <summary>
+        /// dynamically fill in the place the location of the files, somewhat
+        /// </summary>
+        static string userFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+        static string CalculatorCodeFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\managers\Calculate.cs");
+        static string MetadataStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\objects\OpenAPIStaticTable.cs");
+        static string PythonCalculateStubFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro.Python\VedAstro\Library.pyi");
+
 
         static void Main(string[] args)
         {
@@ -44,9 +52,9 @@ namespace StaticTableGenerator
             {
                 //get special signature to find the correct description from list
                 var signature = openApiCalc.GetMethodSignature();
-                calcDescriptionList.TryGetValue(signature, out var description); 
+                calcDescriptionList.TryGetValue(signature, out var description);
                 var exampleOut = GetExampleOutputJson(openApiCalc);
-                returnList.Add(new OpenAPIMetadata(description ?? "NO DESC FOUND!! ERROR", exampleOut, signature, openApiCalc));
+                returnList.Add(new OpenAPIMetadata(signature, description ?? "NO DESC FOUND!! ERROR", exampleOut, openApiCalc));
             }
 
             //------
@@ -200,7 +208,7 @@ namespace StaticTableGenerator
             sb.AppendLine("    {");
             foreach (var metadata in metadataList)
             {
-                sb.AppendLine($"        new OpenAPIMetadata() {{ Signature = \"{metadata.Signature}\", Description = \"{metadata.Description}\", ExampleOutput = \"{metadata.ExampleOutput}\" }},");
+                sb.AppendLine($"        new( \"{metadata.Signature}\",\"{metadata.Description}\",\"{metadata.ExampleOutput}\"),");
             }
             sb.AppendLine("    };");
             sb.AppendLine("}");

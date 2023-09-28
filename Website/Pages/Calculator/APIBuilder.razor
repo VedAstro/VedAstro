@@ -56,14 +56,6 @@
 							<span class="input-group-text">Year of Zero Coincidence</span>
 							<input type="text" class="form-control" placeholder="397">
 						</div>
-						<div class="input-group mb-2">
-							<label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="fluent:top-speed-20-filled" /> Call Limit</label>
-							<select @bind="SelectedCallRate" class="form-select">
-								<option selected value="Free">5 calls/min</option>
-								<option value="Unlimited">Unlimited</option>
-							</select>
-						</div>
-
 					</div>
 				</div>
 
@@ -114,8 +106,9 @@
 
 			<ArticleBlock Title="Price = Free" IconName="flat-color-icons:like">
                 <TextHTML>
-                    To encourage global use of vedic astrology we pledge to keep this API service <kbd>Free Forever</kbd>
-                    The speed of the API will be automatically adjusted by the amount of money in the Donation Box.
+                    To encourage global use of vedic astrology we pledge to keep this API service <kbd>Free</kbd>
+                    But to control the cost the speed of the API will be auto adjusted
+					by the amount of money in the <BoldLink URL="@PageRoute.Donate">Donation Box</BoldLink>.
                     Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase the speed for yourself and others.
 
                     @* This API service is <kbd>FREE</kbd> for the beneficial use of all.
@@ -209,24 +202,12 @@
 	/// default set to Raman, as used system wide
 	/// </summary>
 	private string _selectedAyanamsa = "Raman";
-	private string _selectedCallRate = "Free"; //todo default follow user account
 
 	/// <summary>
 	/// list that is shown to user and is changed by search
 	/// </summary>
 	private List<OpenAPIMetadata> MethodListFiltered { get; set; } = new List<OpenAPIMetadata>();
 
-	public string SelectedCallRate
-	{
-		get => _selectedCallRate;
-		set
-		{
-			//if unlimited plan, send to buy page
-			if (value == "Unlimited") { AppData.Go(URL.BuyAPI, newTab: true); }
-
-			_selectedCallRate = value;
-		}
-	}
 
 	private List<OpenAPIMetadata> MethodListALL = new List<OpenAPIMetadata>();
 

@@ -138,39 +138,35 @@ public class OpenAPIMetadata
 
     }
 
-    /// <summary>
-    /// Given a list of method info will convert to a list of API call Data
-    /// </summary>
-    public static List<OpenAPIMetadata> FromMethodInfoList(IEnumerable<MethodInfo> calcList)
-    {
-        var finalList = new List<OpenAPIMetadata>();
+	/// <summary>
+	/// Given a list of method info will convert to a list of API call Data
+	/// </summary>
+	public static List<OpenAPIMetadata> FromMethodInfoList(IEnumerable<MethodInfo> calcList)
+	{
+		var finalList = new List<OpenAPIMetadata>();
+		//make final list with API description
+		//get nice API calc name, shown in builder dropdown
+		foreach (var calc in calcList)
+		{
+			//using the method's signature ID get the pre created comments
+			var signature = calc.GetMethodSignature();
+			var metadata = OpenAPIStaticTable.Rows.Where(x => x.Signature == signature).FirstOrDefault();
+			//if null than raise silent alarm!, don't add to return list todo log to server
+			if (metadata == null) { Console.WriteLine($"METHOD NOT FOUND!!!! --> {signature}"); continue; }
+			//add link to current code instance
+			metadata.MethodInfo = calc;
+			//add to final list
+			finalList.Add(metadata);
+		}
+		// Sort the list alphabetically based on the Name property
+		finalList = finalList.OrderBy(metadata => metadata.Name).ToList();
+		return finalList;
+	}
 
-        //make final list with API description
-        //get nice API calc name, shown in builder dropdown
-        foreach (var calc in calcList)
-        {
-            //using the method's signature ID get the pre created comments
-            var signature = calc.GetMethodSignature();
-            var metadata = OpenAPIStaticTable.Rows.Where(x => x.Signature == signature).FirstOrDefault();
-
-            //if null than raise silent alarm!, don't add to return list todo log to server
-            if (metadata == null) { Console.WriteLine($"METHOD NOT FOUND!!!! --> {signature}"); continue; }
-
-            //add link to current code instance
-            metadata.MethodInfo = calc;
-
-            //add to final list
-            finalList.Add(metadata);
-
-        }
-
-        return finalList;
-    }
-
-    /// <summary>
-    /// Given a type will return is most relevant name
-    /// </summary>
-    public static string GetTypeName(Type type)
+	/// <summary>
+	/// Given a type will return is most relevant name
+	/// </summary>
+	public static string GetTypeName(Type type)
     {
         if (type == null) { return "null"; }
 

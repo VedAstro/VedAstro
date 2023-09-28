@@ -6939,14 +6939,15 @@ namespace VedAstro.Library
             return bindu;
         }
 
-        /// <summary>
-        /// Bhinnashtakavarga or individual Ashtakvarga charts
-        /// Made on cold winter morning in July
-        /// </summary>
-        public static Dictionary<PlanetName, Dictionary<ZodiacName, int>> AllBhinnashtakavargaChart(Time birthTime)
+		/// <summary>
+		/// Bhinnashtakavarga or individual Ashtakvarga charts
+		/// List of planets & ascendant with their their bindu point
+		/// </summary>
+		public static Dictionary<PlanetName, Dictionary<ZodiacName, int>> AllBhinnashtakavargaChart(Time birthTime)
         {
+			//Made on cold winter morning in July
 
-            var minorPlanetList = Library.PlanetName.All7Planets.Select(e => e.ToString()).ToList();
+			var minorPlanetList = Library.PlanetName.All7Planets.Select(e => e.ToString()).ToList();
             minorPlanetList.Add("ascendant"); //add special case Ascendant for Ashtakvarga calculation
             var mainBhinaAstaChart = new Dictionary<PlanetName, Dictionary<ZodiacName, int>>();
 

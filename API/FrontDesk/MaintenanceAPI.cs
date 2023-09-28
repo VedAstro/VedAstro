@@ -8,8 +8,6 @@ using Azure.Storage.Blobs;
 using Microsoft.Bing.ImageSearch;
 using Microsoft.Bing.ImageSearch.Models;
 using Newtonsoft.Json.Linq;
-using Person = VedAstro.Library.Person;
-using System.Text;
 
 namespace API
 {

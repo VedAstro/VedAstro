@@ -1,6 +1,5 @@
 ﻿using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
-using System.Xml.Linq;
 
 namespace API
 {

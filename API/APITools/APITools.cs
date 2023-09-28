@@ -20,8 +20,6 @@ using Azure;
 using Azure.Communication.Email;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
-using Svg;
-using System.Drawing;
 using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
@@ -35,7 +33,6 @@ using Microsoft.Bing.ImageSearch;
 using Person = VedAstro.Library.Person;
 
 using MimeDetective;
-using System.IO;
 
 namespace API
 {

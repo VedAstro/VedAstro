@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using VedAstro.Library;
+﻿using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;

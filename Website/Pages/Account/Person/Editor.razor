@@ -162,7 +162,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await _jsRuntime.ShowLoading();
+        _jsRuntime.ShowLoading();
 
         //little delay to let page elements load up
         //otherwise render page will encounter nulls

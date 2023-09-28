@@ -40,7 +40,11 @@ namespace VedAstro.Library
         Gochara,
 
         //DASA STUFF
-        Dasa, //main category include below sub category
+        Dasa, //main category include below sub category todo marked for deletion replaced by PD...
+
+        /// <summary>
+        /// Dasa, main planet period
+        /// </summary>
         PD1,
         PD2,
         PD3,

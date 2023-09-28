@@ -609,8 +609,7 @@ namespace Website
 			//declare the used variables
 			var paramDeclaration = GetParamDeclaration(methodData.Name);
 
-			var importDeclaration = "import VedAstro # install via pip\n" +
-                                    "from VedAstro.Library import " + "* # reference full library";
+            var importDeclaration = "from vedastro import *  # install via pip";
 
 			var pythonCode = $"{importDeclaration}\n\n" +
 									$"{paramDeclaration}\n\n" +

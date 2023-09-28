@@ -53,16 +53,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="managers\GIFConverter\AnimatedGifEncoder.cs">
+	  <Compile Update="Logic\GIFConverter\AnimatedGifEncoder.cs">
 	    <SubType>Code</SubType>
 	  </Compile>
-	  <Compile Update="managers\GIFConverter\GifDecoder.cs">
+	  <Compile Update="Logic\GIFConverter\GifDecoder.cs">
 	    <SubType>Code</SubType>
 	  </Compile>
-	  <Compile Update="managers\GIFConverter\LZWEncoder.cs">
+	  <Compile Update="Logic\GIFConverter\LZWEncoder.cs">
 	    <SubType>Code</SubType>
 	  </Compile>
-	  <Compile Update="managers\GIFConverter\NeuQuant.cs">
+	  <Compile Update="Logic\GIFConverter\NeuQuant.cs">
 	    <SubType>Code</SubType>
 	  </Compile>
 	</ItemGroup>

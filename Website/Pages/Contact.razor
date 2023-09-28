@@ -73,7 +73,7 @@
     private async Task SendMessage()
     {
         //loading box show
-        await _jsRuntime.ShowLoading();
+        _jsRuntime.ShowLoading();
 
         await WebsiteTools.SendMailToAPI(_emailInput, _messageInput);
 

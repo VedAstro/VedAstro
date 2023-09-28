@@ -151,10 +151,13 @@ public class OpenAPIMetadata
 			//using the method's signature ID get the pre created comments
 			var signature = calc.GetMethodSignature();
 			var metadata = OpenAPIStaticTable.Rows.Where(x => x.Signature == signature).FirstOrDefault();
+			
 			//if null than raise silent alarm!, don't add to return list todo log to server
 			if (metadata == null) { Console.WriteLine($"METHOD NOT FOUND!!!! --> {signature}"); continue; }
+			
 			//add link to current code instance
 			metadata.MethodInfo = calc;
+			
 			//add to final list
 			finalList.Add(metadata);
 		}

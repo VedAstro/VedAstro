@@ -56,7 +56,7 @@
         That's an impressive number. The more code there is, the more testing &amp; debugging that needs to be done. As such more programmer work hours are required.
         Every dollar donated <strong>goes a long way</strong> to help pay for this expenses.
     </SubArticleBlock>
-    
+
     @* todo temp bank turned off *@
     <!--
     <ArticleBlock Title="Bank Transfer" IconName="noto-v1:bank">
@@ -141,7 +141,7 @@
                         <p class="card-text"><strong>Auto Telescope:</strong> can improve the accuracy of the system to match the real world</p>
                     </div>
                 </div>
-                <div class="card" style="width: 18rem; cursor: pointer;" @onclick="OnClickLaptop">
+                <div class="card" style="width: 18rem; cursor: pointer;" @onclick="OnClickBook">
                     <img src="images/wish-list-books-card.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
                         <p class="card-text"><strong>Astro Books:</strong> can help add new vedic data from ancient books or records</p>
@@ -177,7 +177,7 @@
         var emailFromAlert = await AppData.JsRuntime.PopupTextInput("We will send bank details via email");
 
         //loading box show
-        await _jsRuntime.ShowLoading();
+        _jsRuntime.ShowLoading();
 
         await WebsiteTools.SendMailToAPI("Bank Details Request", emailFromAlert);
 
@@ -200,16 +200,20 @@
 
     }
 
-    private async Task OnClickLaptop()
+    private async Task OnClickBook()
     {
-        await _jsRuntime.ShowAlert("success", "Thank you", "for wanting to donate. Now redirecting to safe and verified buy page.");
-
-        //send user to telescope page on new tab
-        AppData.Go(url: URL.LaptopBuyPage, newTab: true);
 
         //then on user return from buy page, address is shown
-        var address = $"Shipping Address:<br/>{OfficeAddress}";
-        await _jsRuntime.ShowAlert("success", "Thank you for gifts", address);
+        await _jsRuntime.ShowAlert("success", "Send books to:", OfficeAddress);
+
+        // await _jsRuntime.ShowAlert("success", "Thank you", "for wanting to donate. Now redirecting to safe and verified buy page.");
+
+        // //send user to telescope page on new tab
+        // AppData.Go(url: URL.LaptopBuyPage, newTab: true);
+
+        // //then on user return from buy page, address is shown
+        // var address = $"Shipping Address:<br/>{OfficeAddress}";
+        // await _jsRuntime.ShowAlert("success", "Thank you for gifts", address);
 
     }
 

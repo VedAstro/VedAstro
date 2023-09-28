@@ -44,6 +44,7 @@
                         <div class="spinner-border" role="status" aria-hidden="true"></div>
                     </div>
                 </div>
+
                 @* RESULTS HOLDER *@
                 <div @ref="_resultsBox" style="">
                     @* list of method data *@
@@ -51,6 +52,7 @@
                     {
                         <div class="card shadow mt-2">
                             <div class="card-header d-flex justify-content-between">
+                                @* NAME *@
                                 <h6 class="mb-0">
                                     <IconText IconSize="42" FontSize="19" IconName="openmoji:european-name-badge">
                                         @(Format.FormatName(@methodData.Name))
@@ -71,8 +73,9 @@
                                             @* DESCRIPTION  TEXT*@
                                             <div class="hstack gap-2">
                                                 <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="dashicons:text"></IconText>
-                                                <span style="">@methodData.Description</span>
+                                                <span style="">@methodData.Description.Truncate(200)</span>
                                             </div>
+
                                             @* INPUT TYPE *@
                                             <div class="hstack gap-2">
                                                 <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="mdi:input">Input </IconText>
@@ -135,6 +138,16 @@
     private ElementReference _resultsBox;
     private ElementReference _loadingBox;
 
+    /// <summary>
+    /// This delay helps to wait for user to finish typing before starting to render list
+    /// reduces lag and makes for better UX
+    /// </summary>
+    private static System.Timers.Timer _onKeyUpWaitTimer = new(3500);
+
+    //data used to track search timer
+    private static bool searchIsRunning = false;
+    private static bool _timerInitialized = false;
+
 
     /// <summary>
     /// list that is shown to user and is changed by search
@@ -184,23 +197,25 @@
     }
 
     /// <summary>
-    /// This delay helps to wait for user to finish typing before starting to render list
-    /// reduces lag and makes for better UX
-    /// </summary>
-    private static System.Timers.Timer _onKeyUpWaitTimer = new(3500);
-
-    //data used to track search timer
-    bool searchIsRunning = false;
-    private bool _timerInitialized = false;
-
-
-    /// <summary>
     /// called when user key up (AI code)
     /// uses a timer to delay the search operation until the user has stopped typing,
     /// improving the user experience by not triggering a search on every keystroke
     /// </summary>
-    private async Task OnKeyUpSearchBar()
+    private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
     {
+        //if arrow keys than obviously don't count
+        //if arrow keys, space, or control keys then obviously don't count
+        if (keyEventArgs.Code == "ArrowUp" || keyEventArgs.Code == "ArrowDown" ||
+            keyEventArgs.Code == "ArrowLeft" || keyEventArgs.Code == "ArrowRight" ||
+            keyEventArgs.Code == "Space" || keyEventArgs.Code == "ControlLeft" ||
+            keyEventArgs.Code == "ControlRight" || keyEventArgs.Code == "AltLeft" ||
+            keyEventArgs.Code == "AltRight" || keyEventArgs.Code == "ShiftLeft" ||
+            keyEventArgs.Code == "ShiftRight" || keyEventArgs.Code == "Enter" ||
+            keyEventArgs.Code == "Tab" || keyEventArgs.Code == "Escape")
+        {
+            return;
+        }
+
         if (!_timerInitialized)
         {
             _onKeyUpWaitTimer.Elapsed += OnKeyUpWaitTimerElapsed;
@@ -234,7 +249,10 @@
         await InvokeAsync(StateHasChanged);
         _jsRuntime.Hide(_loadingBox);
         _jsRuntime.Show(_resultsBox);
+
         searchIsRunning = false;
+
+        StateHasChanged();
     }
 
     private async Task OnClickCopyAPI(string methodDataName)

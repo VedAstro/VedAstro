@@ -64,7 +64,7 @@ KEEP IT REAL
                     {
                         <li class="dropdown-item" @onclick="@(() => OnClickPersonName(person))" style="cursor: pointer;">@person.DisplayName</li>
                     }
-	                <li><hr class="dropdown-divider"></li> 
+                    <li><hr class="dropdown-divider"></li>
                     @* DIVIDER *@
                     <div class="ms-3 d-flex justify-content-between">
                         <IconText FontColor="@AppData.Grey" IconName="material-symbols:demography-rounded">
@@ -97,8 +97,6 @@ KEEP IT REAL
         <IconButton ExtraClass="ms-2" TooltipText="Add New Person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
     </div>
 </div>
-
-
 
 @code {
 
@@ -198,12 +196,24 @@ KEEP IT REAL
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-
     /// <summary>
     /// Handle when user uses the Search
     /// </summary>
     private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
     {
+        //if arrow keys than obviously don't count
+        //if arrow keys, space, or control keys then obviously don't count
+        if (keyEventArgs.Code == "ArrowUp" || keyEventArgs.Code == "ArrowDown" ||
+            keyEventArgs.Code == "ArrowLeft" || keyEventArgs.Code == "ArrowRight" ||
+            keyEventArgs.Code == "Space" || keyEventArgs.Code == "ControlLeft" ||
+            keyEventArgs.Code == "ControlRight" || keyEventArgs.Code == "AltLeft" ||
+            keyEventArgs.Code == "AltRight" || keyEventArgs.Code == "ShiftLeft" ||
+            keyEventArgs.Code == "ShiftRight" || keyEventArgs.Code == "Enter" ||
+            keyEventArgs.Code == "Tab" || keyEventArgs.Code == "Escape")
+        {
+            return;
+        }
+
         //get search text, lower case for more results
         var text = (await _jsRuntime.GetValue(_searchInput)).ToLower();
 
@@ -220,7 +230,6 @@ KEEP IT REAL
         }
 
     }
-
 
     private async Task FillDropDown()
     {
@@ -243,8 +252,6 @@ KEEP IT REAL
 
     public async Task<Person> GetSelectedPerson() => await WebsiteTools.GetPersonById(SelectedPersonId, _jsRuntime);
 
-    //private Person selectedPerson;
-
     /// <summary>
     /// True if a person has been selected else false
     /// </summary>
@@ -262,7 +269,6 @@ KEEP IT REAL
         //simulate click
         OnClickPersonName(inputPerson);
     }
-
 
     /// <summary>
     /// when a person in tooltip drop down menu is clicked

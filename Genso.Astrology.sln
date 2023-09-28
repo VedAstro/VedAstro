@@ -6,6 +6,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library", "Library\Library.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{317ADC97-8BF1-49D5-880F-07818908FCE3}"
 	ProjectSection(SolutionItems) = preProject
+		Demo To Calculate Events.cs = Demo To Calculate Events.cs
 		Directory.Build.props = Directory.Build.props
 		Dockerfile = Dockerfile
 		HoroscopeAnalysisTips.txt = HoroscopeAnalysisTips.txt
@@ -57,7 +58,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Books", "Books", "{782C27F6
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "API.Python", "API.Python\API.Python.pyproj", "{EA142697-FCE8-46F8-AA66-EAAF5C686619}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticTableGenerator", "StaticTableGenerator\StaticTableGenerator.csproj", "{CAEE0D29-BBE3-4B29-ACBF-F9D510306A73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticTableGenerator", "StaticTableGenerator\StaticTableGenerator.csproj", "{CAEE0D29-BBE3-4B29-ACBF-F9D510306A73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

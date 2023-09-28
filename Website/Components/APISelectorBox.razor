@@ -121,7 +121,7 @@ KEEP IT REAL
     protected override async Task OnInitializedAsync()
     {
         //hide display
-        await _jsRuntime.ShowLoading();
+        _jsRuntime.ShowLoading();
         _isReady = false;
 
         var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
@@ -131,8 +131,6 @@ KEEP IT REAL
 
         //to speed up search array of description
         MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
-
-        await _jsRuntime.ShowLoading();
 
 
         //make copy for search

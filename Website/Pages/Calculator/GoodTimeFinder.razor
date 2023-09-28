@@ -1,4 +1,4 @@
-@attribute [Route(PageRoute.GoodTimeFinder)]
+﻿@attribute [Route(PageRoute.GoodTimeFinder)]
 @using VedAstro.Library
 @using System.Collections
 
@@ -307,10 +307,16 @@
 
     private List<EventData> eventDataListFiltered = new List<EventData>();
 
+    public List<EventTag> FullList { get; set; }
+
+    public Person SelectedPerson { get; set; }
+
+
 
     protected override async Task OnInitializedAsync()
     {
         _jsRuntime.ShowLoading();
+
         //set all not selected as default
         //load tag extenstion list
         FullList = EventTagExtensions.GetAll();
@@ -335,8 +341,8 @@
 
 
 
-    public List<EventTag> FullList { get; set; }
-
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
     /// <summary>
     /// Gets possible age list for selection 120 years
@@ -354,13 +360,12 @@
         return compiledList;
     }
 
-
     private async Task OnClickCalculateEasy()
     {
         //keep copy of selected time range else gets reset, on re-render
         var backUpSelection = SelectedTimeRangePreset;
 
-        await _jsRuntime.ShowLoading();
+        _jsRuntime.ShowLoading();
 
         //only continue if passed input field validation
         if (!EasyValidationPassed()) { return; }
@@ -392,9 +397,6 @@
         //place time preset value back
         SelectedTimeRangePreset = backUpSelection;
     }
-
-
-    public Person SelectedPerson { get; set; }
 
     /// <summary>
     /// Gets parsed time from users crazy input

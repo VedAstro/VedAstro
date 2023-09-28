@@ -288,5 +288,15 @@ namespace VedAstro.Library.Tests
             //check the test
             Assert.Fail();
         }
+
+        [TestMethod()]
+        public void FortunePointTest()
+        {
+            //do the test
+            var testResult = Calculate.FortunePoint(ZodiacName.Pisces, PlanetName.Rahu, PlanetName.Moon, StandardHoroscope);
+
+            //check the test
+            Assert.Fail();
+        }
     }
 }

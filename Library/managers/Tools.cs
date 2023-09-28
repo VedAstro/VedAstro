@@ -1761,28 +1761,17 @@ namespace VedAstro.Library
         /// this is the list that will appear on the fly in API Builder dropdown
         /// </summary>
         /// <returns></returns>
-        public static List<AutoCalculator.APICallData> GetPlanetApiCallList<T1, T2>()
+        public static List<OpenAPIMetadata> GetPlanetApiCallList<T1, T2>()
         {
             //get all the same methods gotten by Open api func
             var calcList = GetCalculatorListByParam<T1, T2>();
 
             //extract needed data out in convenient form
-            var finalList = AutoCalculator.APICallData.FromMethodInfoList(calcList);
+            var finalList = OpenAPIMetadata.FromMethodInfoList(calcList);
 
             return finalList;
         }
 
-        /// <summary>
-        /// Get Description text from api code
-        /// </summary>
-        public static string GetAPISpecialDescription(MethodInfo methodInfo1)
-        {
-            //using the method's signature ID get the pre created metadata
-            var signature = methodInfo1.GetMethodSignature();
-
-            var descText = OpenAPIStaticTable.Rows.Where(x => x.Signature == signature).FirstOrDefault().Description;
-            return descText;
-        }
 
         /// <summary>
         /// Gets a unique string to repent the methods name and signature
@@ -1850,7 +1839,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Get all data inside a method info as string made by AI
+        /// Gets name, params and return type as string from method info
         /// </summary>
         public static string GetAllDataAsText(this MethodInfo methodInfo)
         {
@@ -1862,7 +1851,10 @@ namespace VedAstro.Library
             {
                 sb.AppendLine($"\t{parameter.ParameterType.Name} {parameter.Name}");
             }
-            return sb.ToString();
+
+            var allDataAsText = sb.ToString();
+
+            return allDataAsText;
         }
 
         /// <summary>

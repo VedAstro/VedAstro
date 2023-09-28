@@ -87,11 +87,11 @@ KEEP IT REAL
 	/// <summary>
 	/// list that is shown to user and is changed by search
 	/// </summary>
-	private List<AutoCalculator.APICallData> MethodListFiltered { get; set; } = new();
+	private List<OpenAPIMetadata> MethodListFiltered { get; set; } = new();
 
-	public AutoCalculator.APICallData SelectedMethod { get; set; }
+	public OpenAPIMetadata SelectedMethod { get; set; }
 
-	private List<AutoCalculator.APICallData> MethodListALL = new();
+	private List<OpenAPIMetadata> MethodListALL = new();
 
 	/// <summary>
 	/// extracted search text for faster search
@@ -103,6 +103,7 @@ KEEP IT REAL
 	/// </summary>
 	public event EventHandler OnChangeSelectMethod;
 
+
 	protected override async Task OnInitializedAsync()
 	{
 		//hide display
@@ -112,14 +113,14 @@ KEEP IT REAL
 		var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
 
 		//NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
-		MethodListALL = AutoCalculator.APICallData.FromMethodInfoList(allApiCalculatorsMethodInfo);
+		MethodListALL = OpenAPIMetadata.FromMethodInfoList(allApiCalculatorsMethodInfo);
 
 		//to speed up search array of description
 		MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
 
 		//make copy for search
 		MethodListFiltered = MethodListALL;
-
+		
 		//show data on display
 		IsReady = true;
 		_jsRuntime.HideAlert();
@@ -136,7 +137,7 @@ KEEP IT REAL
 	/// <summary>
 	/// when a method name in tooltip drop down menu is clicked
 	/// </summary>
-	private void OnClickMethodName(AutoCalculator.APICallData method)
+	private void OnClickMethodName(OpenAPIMetadata method)
 	{
 		//set value for reference
 		SelectedMethod = method;
@@ -167,10 +168,10 @@ KEEP IT REAL
 			//find in string list
 			var results = Process.ExtractAll(searchText, MethodListALLSearchText, cutoff: 60).OrderByDescending(r => r.Score); ;
 
-			foreach (var result in results)
-			{
-				Console.WriteLine($" Score: {result.Score}, Index: {result.Index}, Choice: {result.Value}");
-			}
+			// foreach (var result in results)
+			// {
+			// 	Console.WriteLine($" Score: {result.Score}, Index: {result.Index}, Choice: {result.Value}");
+			// }
 
 			MethodListFiltered = results.Select(yy => MethodListALL[yy.Index]).ToList();
 

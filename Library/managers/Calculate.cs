@@ -280,6 +280,49 @@ namespace VedAstro.Library
 
         #region GENERAL
 
+        /// <summary>
+        /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
+        /// </summary>
+        public static int FortunaPoint(ZodiacName _asc_Zod_Sign_Name, PlanetName _moon, PlanetName _sun, Time time)
+        {
+            Calculate.YearOfCoincidence = (int)VedAstro.Library.Ayanamsa.Lahiri;
+
+            //Fortune Point is calculated as Asc Degrees + Moon Degrees - Sun Degrees
+
+            //Find Lagna, Moon and Sun longitude degree
+            var _asc_Degrees = Calculate.AllHouseLongitudes(time)[0].GetMiddleLongitude().TotalDegrees;
+            var _moonDegrees = Calculate.PlanetNirayanaLongitude(time, _moon).TotalDegrees;
+            var _sunDegrees = Calculate.PlanetNirayanaLongitude(time, _sun).TotalDegrees;
+
+            //fortuna point is the point that is same distance from Ascendant
+            //as Moon is from Sun
+
+            //first let's compute how far the Moon is from Sun
+            var _moon_sun_distance = _moonDegrees - _sunDegrees;
+
+            if (_moon_sun_distance < 0) //moon is behind sun
+            {
+                _moon_sun_distance = _moon_sun_distance + 360;
+            }
+
+            //now lets compute the Fortuna point 
+            var _fortunaPointDegrees = _asc_Degrees + _moon_sun_distance;
+
+            if (_fortunaPointDegrees >= 360)
+            {
+                _fortunaPointDegrees = _fortunaPointDegrees - 360;
+            }
+
+            //convert Degrees to Angle
+            var _angleAtFortunaPointDegrees = VedAstro.Library.Angle.FromDegrees(_fortunaPointDegrees);
+
+            //find zodiacSignAtFP Longitude
+            var _zodiacSignAtFP = Calculate.ZodiacSignAtLongitude(_angleAtFortunaPointDegrees).GetSignName();
+
+            //find how many signs the FP is from Lagna
+            var _signCount = Calculate.CountFromSignToSign(_asc_Zod_Sign_Name, _zodiacSignAtFP);
+            return _signCount;
+        }
 
         /// <summary>
         /// Calculate Destiny Point for a given birth time & place. Returns Sign Number from Lagna

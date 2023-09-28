@@ -111,31 +111,34 @@
 
 			@* LIST OF ALL API CALLS *@
 			<APICallList />
-			
-			
-			<ArticleBlock Title="Price" IconName="flat-color-icons:like">
-				<TextHTML>
-					This API service is <kbd>FREE</kbd> for the beneficial use of all.
-					Paid by donations from users like you. Server speed is increased or
-					or decreased based on monthly <strong>donation balance</strong>.
 
-					<div class="vstack my-3 d-flex justify-content-center align-items-center">
-						<div>
-							<div class="hstack">
-								<h5>@DateTime.Now.ToString("MMMM") Balance</h5>
-								<h5 style=" margin-left: 67px; ">Limit</h5>
-							</div>
-						</div>
-						<div>
-							<h3 style="margin-left: 32px;">
-								USD $10 = 5 calls/minute
-							</h3>
-						</div>
-					</div>
+			<ArticleBlock Title="Price = Free" IconName="flat-color-icons:like">
+                <TextHTML>
+                    To encourage global use of vedic astrology we pledge to keep this API service <kbd>Free Forever</kbd>
+                    The speed of the API will be automatically adjusted by the amount of money in the Donation Box.
+                    Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase the speed for yourself and others.
 
-					<BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase this limit for you and everybody else.
-					Every $2 donated increases the limit by +1 call/minute for everybody for a month.
-				</TextHTML>
+                    @* This API service is <kbd>FREE</kbd> for the beneficial use of all.
+                    Paid by donations from users like you. Server speed is increased or
+                    or decreased based on monthly <strong>donation balance</strong>.
+
+                    <div class="vstack my-3 d-flex justify-content-center align-items-center">
+                        <div>
+                            <div class="hstack">
+                                <h5>@DateTime.Now.ToString("MMMM") Balance</h5>
+                                <h5 style=" margin-left: 67px; ">Limit</h5>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="margin-left: 32px;">
+                                USD $10 = 5 calls/minute
+                            </h3>
+                        </div>
+                    </div>
+
+                    <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase this limit for you and everybody else.
+                    Every $2 donated increases the limit by +1 call/minute for everybody for a month. *@
+                </TextHTML>
 			</ArticleBlock>
 
 			<ArticleBlock Title="Simple Response" IconName="bi:filetype-json">
@@ -154,7 +157,6 @@
 					We hope to reduce this lag with this simple &amp; intuitive <strong>API Builder</strong>.
 				</TextHTML>
 			</ArticleBlock>
-			
 
 			<ArticleBlock Title="Sponsor Music" IconName="emojione:violin">
 				<ButtonRow>
@@ -185,8 +187,9 @@
 					The API is designed to handle this, so don't worry about breaking it. Have fun.
 				</TextHTML>
 			</ArticleBlock>
+			
 
-			@*             <ArticleBlock Title="Library (coming soon)" IconName="clarity:thin-client-line">
+            @*             <ArticleBlock Title="Library (coming soon)" IconName="clarity:thin-client-line">
 			<TextHTML>
 			There are also client libraries to help you access the API even more easily. It simply wraps HTTP calls into easy to consume functions, that your app can use.
 			Please note, these sub-projects is under <strong>prototype</strong> stage and much remains to be done. If you've created a library already please share it with the community.
@@ -211,7 +214,7 @@
 	/// <summary>
 	/// list that is shown to user and is changed by search
 	/// </summary>
-	private List<AutoCalculator.APICallData> MethodListFiltered { get; set; } = new List<AutoCalculator.APICallData>();
+	private List<OpenAPIMetadata> MethodListFiltered { get; set; } = new List<OpenAPIMetadata>();
 
 	public string SelectedCallRate
 	{
@@ -225,7 +228,7 @@
 		}
 	}
 
-	private List<AutoCalculator.APICallData> MethodListALL = new List<AutoCalculator.APICallData>();
+	private List<OpenAPIMetadata> MethodListALL = new List<OpenAPIMetadata>();
 
 	private APISelectorBox _apiSelectorBox;
 	private ElementReference _paramInputHolderElement;
@@ -254,7 +257,7 @@
 		if (_apiSelectorBox.GetSelectedMethodName() != "")
 		{
 			//set new params
-			_parameterInputPanel.Show(_apiSelectorBox.SelectedMethod.ParamTypeList);
+			_parameterInputPanel.Show(_apiSelectorBox.SelectedMethod.ParameterTypes);
 
 			//make param input panel visible
 			_jsRuntime.Show(_paramInputHolderElement);

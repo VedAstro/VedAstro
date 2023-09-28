@@ -9,57 +9,6 @@ namespace VedAstro.Library
 
 	public static class AutoCalculator
 	{
-		/// <summary>
-		/// Data structure to hold api call method's name and description
-		/// INT = Outputs: Int32, List<string> = List of String
-		/// </summary>
-		public readonly record struct APICallData(string Name, string Description, List<Type> ParamTypeList, string ReturnType, string SearchText)
-		{
-			/// <summary>
-			/// Given a type will return is most relevant name
-			/// </summary>
-			public static string GetTypeName(Type type)
-			{
-				if (type.IsGenericType)
-				{
-					Type itemType = type.GetGenericArguments()[0];
-					return type.Name.Split('`')[0] + " of " + itemType.Name;
-				}
-				else
-				{
-					return type.Name;
-				}
-			}
-
-
-			public static List<APICallData> FromMethodInfoList(IEnumerable<MethodInfo> calcList)
-			{
-				var finalList = new List<APICallData>();
-
-				//make final list with API description
-				//get nice API calc name, shown in builder dropdown
-				foreach (var calc in calcList)
-				{
-					List<Type> parameterTypes = calc.GetParameters()
-						.Select(param => param.ParameterType)
-						.ToList();
-
-					var apiSpecialName = calc.Name;
-
-					var apiSpecialDescription = Tools.GetAPISpecialDescription(calc);
-					finalList.Add(new APICallData(
-						Name: apiSpecialName,
-						Description: apiSpecialDescription,
-						ParamTypeList: parameterTypes,
-						ReturnType: GetTypeName(calc.ReturnType), //gets type name nicely formatted
-						SearchText: calc.GetAllDataAsText() + apiSpecialDescription + apiSpecialName));
-				}
-
-				return finalList;
-			}
-
-		}
-
 
 		/// <summary>
 		/// based on number and type of params all available methods are taken and 

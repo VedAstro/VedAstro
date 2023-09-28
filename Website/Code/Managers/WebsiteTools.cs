@@ -598,7 +598,7 @@ namespace Website
 			AppData.Go(searchLink, newTab: true);
 		}
 
-		public async static Task OnClickCopyPythonSnippet(AutoCalculator.APICallData methodData, dynamic component = null)
+		public static async Task OnClickCopyPythonSnippet(OpenAPIMetadata methodData, dynamic component = null)
 		{
 			//only continue if passed input field validation
 			if (component != null && !(await component.IsValidationPassed())) { return; }

@@ -29,7 +29,7 @@
                 </div>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" ButtonText="Life Events" IconName="mdi:calendar-outline" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}/{SelectedPerson.Id}")"/>
+        <IconButton SmallSize="true" ButtonText="Life Events" IconName="mdi:calendar-outline" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}{SelectedPerson.Id}")"/>
         <IconButton SmallSize="true" ButtonText="Download" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg"/>
         <IconButton SmallSize="true" TooltipText="Print" IconName="ic:round-print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))"/>
         <IconButton SmallSize="true" TooltipText="Share" IconName="tabler:share-2">

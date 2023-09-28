@@ -47,18 +47,4 @@
 	<ItemGroup>
 		<Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Compile Update="GIFConverter\AnimatedGifEncoder.cs">
-	    <SubType>Code</SubType>
-	  </Compile>
-	  <Compile Update="GIFConverter\GifDecoder.cs">
-	    <SubType>Code</SubType>
-	  </Compile>
-	  <Compile Update="GIFConverter\LZWEncoder.cs">
-	    <SubType>Code</SubType>
-	  </Compile>
-	  <Compile Update="GIFConverter\NeuQuant.cs">
-	    <SubType>Code</SubType>
-	  </Compile>
-	</ItemGroup>
 </Project>

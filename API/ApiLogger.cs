@@ -1,9 +1,7 @@
-using System.Xml.Linq;
 using Azure;
 using Azure.Data.Tables;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker.Http;
-using System;
 
 namespace API;
 

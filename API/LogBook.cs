@@ -1,7 +1,4 @@
-﻿using Azure;
-using Azure.Data.Tables;
-using System.Xml.Linq;
-using VedAstro.Library;
+﻿using Azure.Data.Tables;
 
 namespace API
 {

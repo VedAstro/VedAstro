@@ -4,9 +4,6 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Azure.Storage.Blobs;
 using System.Net;
-using static SuperConvert.Enums;
-using System.Collections;
-using Newtonsoft.Json.Linq;
 
 namespace API
 {

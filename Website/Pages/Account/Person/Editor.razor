@@ -406,7 +406,6 @@
     private async void CopyPersonProfileShareLink()
     {
         //generate the url
-        //var url = AppData.URL.WebUrl + $"{PageRoute.PersonEditor}/{PersonId}";
         var url = Path.Combine(AppData.URL.WebUrl, PageRoute.PersonEditor, PersonIdUrl); //use Combine for safety
 
         //use js to transfer to clipboard

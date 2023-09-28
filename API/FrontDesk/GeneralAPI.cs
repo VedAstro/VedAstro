@@ -1,17 +1,7 @@
 ﻿using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Azure.Data.Tables;
-using Azure;
-using Newtonsoft.Json.Linq;
-using System.Linq;
-using System.Linq.Expressions;
-using ScottPlot;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Net.Mime;
 
 namespace API
 {

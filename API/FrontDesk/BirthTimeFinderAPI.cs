@@ -3,7 +3,6 @@ using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
 using System.Net;
 using Newtonsoft.Json.Linq;
-using Person = VedAstro.Library.Person;
 using Time = VedAstro.Library.Time;
 
 

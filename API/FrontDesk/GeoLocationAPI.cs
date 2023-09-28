@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 using Azure.Data.Tables;
 using Azure;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
-using static API.CallTracker;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Xml;
 using System.Text.RegularExpressions;
 
 namespace API

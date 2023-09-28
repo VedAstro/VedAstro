@@ -283,7 +283,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
         /// </summary>
-        public static int FortunaPoint(ZodiacName _asc_Zod_Sign_Name, PlanetName _moon, PlanetName _sun, Time time)
+        public static int FortunePoint(ZodiacName ascZodiacSignName, PlanetName moon, PlanetName sun, Time time)
         {
             Calculate.YearOfCoincidence = (int)VedAstro.Library.Ayanamsa.Lahiri;
 
@@ -291,8 +291,8 @@ namespace VedAstro.Library
 
             //Find Lagna, Moon and Sun longitude degree
             var _asc_Degrees = Calculate.AllHouseLongitudes(time)[0].GetMiddleLongitude().TotalDegrees;
-            var _moonDegrees = Calculate.PlanetNirayanaLongitude(time, _moon).TotalDegrees;
-            var _sunDegrees = Calculate.PlanetNirayanaLongitude(time, _sun).TotalDegrees;
+            var _moonDegrees = Calculate.PlanetNirayanaLongitude(time, moon).TotalDegrees;
+            var _sunDegrees = Calculate.PlanetNirayanaLongitude(time, sun).TotalDegrees;
 
             //fortuna point is the point that is same distance from Ascendant
             //as Moon is from Sun
@@ -320,7 +320,7 @@ namespace VedAstro.Library
             var _zodiacSignAtFP = Calculate.ZodiacSignAtLongitude(_angleAtFortunaPointDegrees).GetSignName();
 
             //find how many signs the FP is from Lagna
-            var _signCount = Calculate.CountFromSignToSign(_asc_Zod_Sign_Name, _zodiacSignAtFP);
+            var _signCount = Calculate.CountFromSignToSign(ascZodiacSignName, _zodiacSignAtFP);
             return _signCount;
         }
 

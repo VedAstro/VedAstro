@@ -168,6 +168,7 @@ public class URL
     public const string PatreonPage = "https://patreon.com/vedastro";
     public const string KoFiPage = "https://ko-fi.com/vedastro";
     public const string KoFiPageMemberships = "https://ko-fi.com/vedastro/tiers";
+    public const string KoFiPrivateServer = "https://ko-fi.com/summary/783edc41-20e6-4e78-adb2-d4380577b5d1";
     public const string KoFiDonateIframe = "https://ko-fi.com/vedastro/?hidefeed=true&widget=true&embed=true&preview=true";
     public const string PaypalMePage = "https://paypal.me/VedAstroOrg";
     public const string NasaJplSource = "https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html";

@@ -176,7 +176,6 @@
     protected override async Task OnInitializedAsync()
     {
         //hide display
-        _jsRuntime.ShowLoading();
         _isReady = false;
 
         var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
@@ -190,7 +189,6 @@
 
         //show data on display
         _isReady = true;
-        _jsRuntime.HideAlert();
     }
 
     /// <summary>

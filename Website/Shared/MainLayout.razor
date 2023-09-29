@@ -5,7 +5,7 @@
 @using System.Text.Json
 @using Library.API
 
-<NotificationSound @ref="soundPlayer" />
+<NotificationSound @ref="_soundPlayer" />
 
 @*
     NOTE : Components here are loaded same time as page,
@@ -103,12 +103,12 @@
 
 @code
 {
-    private bool LoadExtra = true;
+    private bool _loadExtra = true;
 
     /// <summary>
     /// notification after chart complete for UX sake
     /// </summary>
-    private NotificationSound soundPlayer;
+    private NotificationSound _soundPlayer;
 
     //IJSObjectReference? _module;
     bool _mainPageInitDone;
@@ -136,7 +136,7 @@
             //log visit only 1 once when page is rendered
             await WebLogger.Visitor(_jsRuntime);
 
-            LoadExtra = false;
+            _loadExtra = false;
             Console.WriteLine("ORI TAKEN OUT OF DOM!!!!!!!!!!!!");
         }
     }

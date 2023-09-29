@@ -63,6 +63,8 @@ namespace API
                 // mark as SVG to be viewed direct in browser, and remove old if already set
                 httpResponseData.Headers.Remove("Content-Type");
                 httpResponseData.Headers.Add("Content-Type", "image/svg+xml");
+                httpResponseData.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
+
                 return httpResponseData;
 
             }

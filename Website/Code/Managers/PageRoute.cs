@@ -88,6 +88,7 @@
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";
         public const string About = "/About";
         public const string Payment = "/Payment";
+        public const string PrivateServer = "/PrivateServer";
         public const string JoinOurFamily = "/JoinOurFamily";
         public const string Contact = "/Contact";
         public const string MadeOnEarth = "/MadeOnEarth";

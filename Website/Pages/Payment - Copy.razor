@@ -1,0 +1,14 @@
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.PrivateServer)]
+
+<PageTitle>Private Server</PageTitle>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        //redirect user to kofi membership page
+        AppData.Go(URL.KoFiPrivateServer);
+    }
+
+}

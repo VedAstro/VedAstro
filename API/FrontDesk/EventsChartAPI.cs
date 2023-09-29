@@ -63,7 +63,7 @@ namespace API
                 // mark as SVG to be viewed direct in browser, and remove old if already set
                 httpResponseData.Headers.Remove("Content-Type");
                 httpResponseData.Headers.Add("Content-Type", "image/svg+xml");
-                httpResponseData.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
+                httpResponseData.Headers.Add("Access-Control-Allow-Origin", "*"); //for CORS
 
                 return httpResponseData;
 
@@ -75,6 +75,8 @@ namespace API
                 var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Call-Status", "Fail"); //caller checks this
                 response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
+                response.Headers.Add("Access-Control-Allow-Origin", "*"); //for CORS
+
                 return response;
             }
 

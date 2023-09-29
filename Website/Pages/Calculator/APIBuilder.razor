@@ -1,348 +1,349 @@
 ﻿@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
+
 <PageTitle>Easy Open API | VedAstro</PageTitle>
 
 <PageTop ImageName="api-builder-banner.png"
-		 Title="Open API"
-		 DescriptionText="Advanced astronomical data via a simple HTTP request for free.
+         Title="Open API"
+         DescriptionText="Advanced astronomical data via a simple HTTP request for free.
  Enabling you to build your app or service faster and cheaper. Including Python library.">
 </PageTop>
 
+@*
+    This makes sure API Builder is loaded first.
+    Else loading of other components start at the same time
+*@
+@if (_mainPageInitDone)
+{
+    @*API DROP DOWN SELECTORS*@
+    <div>
+        <div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
 
-@*API DROP DOWN SELECTORS*@
-<div>
-	<div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
+            @*GENERATOR*@
+            <div class="vstack gap-4" style="max-width: @GR.W412px;">
 
-		@*GENERATOR*@
-		<div class="vstack gap-4" style="max-width: @GR.W412px;">
+                <div class="vstack gap-4">
 
-			<div class="vstack gap-4">
-
-				@* FUNCTION NAME SELECT *@
-				<div>
-					<span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;"><Icon IconName="flat-color-icons:calculator" Size="34" /> Select Calculator</span>
-					<APISelectorBox @ref="_apiSelectorBox" />
-				</div>
-
-
-				@* INPUT PARAM NAME SELECT *@
-				<div @ref="_paramInputHolderElement" style="display: none">
-					<span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;"><Icon IconName="flat-color-icons:multiple-inputs" Size="34" /> Input Parameters</span>
-					<ParameterInputPanel @ref="_parameterInputPanel" />
-				</div>
+                    @* FUNCTION NAME SELECT *@
+                    <div>
+                        <span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;"><Icon IconName="flat-color-icons:calculator" Size="34" /> Select Calculator</span>
+                        <APISelectorBox @ref="ApiSelectorBox" />
+                    </div>
 
 
-				@* ADVANCED *@
-				<div @ref="_paramInputHolderElement2" style="display: none">
-					<span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:300;">
-						<Icon IconName="gala:settings" Size="30" /> Advanced (optional)
-						<Icon ExtraClass="ms-auto" IconName="icon-park-solid:down-c" OnClickCallback="OnClickShowAdvanced" />
-					</span>
-					@* AYANAMSA *@
-					<div id="AyanamsaInputHolder" style="display: none">
-						<div class="input-group mb-2">
-							<label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
-							<select @bind="_selectedAyanamsa" class="form-select">
-								@foreach (var ayanamsa in Enum.GetValues(typeof(Ayanamsa)))
-								{
-									<option value="@ayanamsa">@ayanamsa</option>
-
-								}
-								<option @onclick="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" value="Custom" disabled>Custom</option>
-							</select>
-						</div>
-						<div class="input-group" style="display: none">
-							<span class="input-group-text">Year of Zero Coincidence</span>
-							<input type="text" class="form-control" placeholder="397">
-						</div>
-					</div>
-				</div>
-
-			</div>
+                    @* INPUT PARAM NAME SELECT *@
+                    <div @ref="_paramInputHolderElement" style="display: none">
+                        <span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;"><Icon IconName="flat-color-icons:multiple-inputs" Size="34" /> Input Parameters</span>
+                        <ParameterInputPanel @ref="_parameterInputPanel" />
+                    </div>
 
 
-			@* -------- BOTTOM BUTTONS --------*@
-			<IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />
+                    @* ADVANCED *@
+                    <div @ref="_paramInputHolderElement2" style="display: none">
+                        <span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:300;">
+                            <Icon IconName="gala:settings" Size="30" /> Advanced (optional)
+                            <Icon ExtraClass="ms-auto" IconName="icon-park-solid:down-c" OnClickCallback="OnClickShowAdvanced" />
+                        </span>
+                        @* AYANAMSA *@
+                        <div id="AyanamsaInputHolder" style="display: none">
+                            <div class="input-group mb-2">
+                                <label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
+                                <select @bind="_selectedAyanamsa" class="form-select">
+                                    @foreach (var ayanamsa in Enum.GetValues(typeof(Ayanamsa)))
+                                    {
+                                        <option value="@ayanamsa">@ayanamsa</option>
 
-			@*OUTPUT ARROW ICON*@
-			<Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="80" />
-
-			@*URL DISPLAY OUT*@
-			@* id so we can scroll to on complete *@
-			<div class="vstack gap-1" style="margin-top: -32px;">
-				<span style="font-size: 14px; color: @AppData.Grey;">URL</span>
-				<kbd id="UrlDisplayOut" style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">@_finalApiGetCall</kbd>
-			</div>
-
-			@*COPY AND CALL BUTTON*@
-			<div class="d-flex justify-content-center gap-3">
-				<IconButton ButtonText="Python" TooltipPosition="bottom" TooltipText="Copy Python code snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(_apiSelectorBox.SelectedMethod, this))" SmallSize="true" />
-				<IconButton ButtonText="Copy" TooltipPosition="bottom" TooltipText="Copy HTTP GET request URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
-				<IconButton ButtonText="Test Call" TooltipPosition="bottom" TooltipText="Demo call to see output" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
-			</div>
-		</div>
-
-		@*GUIDE TEXT*@
-		<div class="vstack gap-3">
-			<ArticleBlock Title="Next Step" IconName="mdi:foot-print">
-				<ButtonRow>
-					<IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep" />
-				</ButtonRow>
-				<TextHTML>
-					<p>
-						Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language
-						<strong>JS, Python, C#, Java</strong> or even your browsers' URL.
-					</p>
-					<p>
-						You can also run <kbd>pip install vedastro</kbd> in your local or cloud environment.
-						<BoldLink URL="@URL.YoutubePythonGuide">Watch Python Guide</BoldLink>
-					</p>
-				</TextHTML>
-			</ArticleBlock>
-
-			@* LIST OF ALL API CALLS *@
-			<APICallList />
-
-			<ArticleBlock Title="Price = Free" IconName="flat-color-icons:like">
-                <TextHTML>
-                    To encourage global use of vedic astrology we pledge to keep this API service <kbd>Free</kbd>
-                    But to control the cost the speed of the API will be auto adjusted
-					by the amount of money in the <BoldLink URL="@PageRoute.Donate">Donation Box</BoldLink>.
-                    Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase the speed for yourself and others.
-
-                    @* This API service is <kbd>FREE</kbd> for the beneficial use of all.
-                    Paid by donations from users like you. Server speed is increased or
-                    or decreased based on monthly <strong>donation balance</strong>.
-
-                    <div class="vstack my-3 d-flex justify-content-center align-items-center">
-                        <div>
-                            <div class="hstack">
-                                <h5>@DateTime.Now.ToString("MMMM") Balance</h5>
-                                <h5 style=" margin-left: 67px; ">Limit</h5>
+                                    }
+                                    <option @onclick="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" value="Custom" disabled>Custom</option>
+                                </select>
                             </div>
-                        </div>
-                        <div>
-                            <h3 style="margin-left: 32px;">
-                                USD $10 = 5 calls/minute
-                            </h3>
+                            <div class="input-group" style="display: none">
+                                <span class="input-group-text">Year of Zero Coincidence</span>
+                                <input type="text" class="form-control" placeholder="397">
+                            </div>
                         </div>
                     </div>
 
-                    <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase this limit for you and everybody else.
-                    Every $2 donated increases the limit by +1 call/minute for everybody for a month. *@
-                </TextHTML>
-			</ArticleBlock>
+                </div>
 
-			<ArticleBlock Title="Simple Response" IconName="bi:filetype-json">
-				<TextHTML>
-					Data is returned in <strong>JSON</strong>. Only 2 properties. First field is always <kbd>Status</kbd>, it can be only <kbd style="background-color:green;">Pass</kbd> or <kbd style="background-color:red;">Fail</kbd>.
-					If it shows <kbd style="background-color:red;">Fail</kbd> then most likely cause is invalid data on your part. More details about the
-					error will be in <kbd>Payload</kbd> property. If call is successful, all the data you need will be alphabetically stored in <kbd>Payload</kbd> property.
-				</TextHTML>
-			</ArticleBlock>
 
-			<ArticleBlock Title="No Manuals Needed" IconName="emojione:clamp">
-				<TextHTML>
-					This API is made to be easy for any beginner to get started.
-					The biggest problem with consuming any API, is the <strong>learning curve</strong> .
-					Normally the first 3-5 hours will be spent learning the small nuances or semantics used by the API provider.
-					We hope to reduce this lag with this simple &amp; intuitive <strong>API Builder</strong>.
-				</TextHTML>
-			</ArticleBlock>
+                @* -------- BOTTOM BUTTONS --------*@
+                <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />
 
-			<ArticleBlock Title="Sponsor Music" IconName="emojione:violin">
-				<ButtonRow>
-					<IconButton ClickUrl="@PageRoute.Donate" IconName="flat-color-icons:donate" ButtonText="Tip" Outline="true" SmallSize="true"></IconButton>
-				</ButtonRow>
-				<TextHTML>
-					Running this API service, is like playing a <strong>beautiful public orchestra</strong>.
-					It is only possible because of many moving parts by many people.
-					Servers need to be optimized, updated and maintained. Code needs to be improved, tested and cleaned.
+                @*OUTPUT ARROW ICON*@
+                <Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="80" />
 
-					<img src="images/public-orchestra.jpg" class="img-thumbnail my-3" alt="...">
+                @*URL DISPLAY OUT*@
+                @* id so we can scroll to on complete *@
+                <div class="vstack gap-1" style="margin-top: -32px;">
+                    <span style="font-size: 14px; color: @AppData.Grey;">URL</span>
+                    <kbd id="UrlDisplayOut" style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">@_finalApiGetCall</kbd>
+                </div>
 
-					And all this has to be juggled to create the final product you see. Its a group effort.
-					Please consider supporting this service to keep the "music" playing.
-					<strong>Everybody</strong> can enjoy the music, so long as there's <strong>one</strong> person, willing to <BoldLink URL="@PageRoute.Donate">tip</BoldLink>
+                @*COPY AND CALL BUTTON*@
+                <div class="d-flex justify-content-center gap-3">
+                    <IconButton ButtonText="Python" TooltipPosition="bottom" TooltipText="Copy Python code snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(ApiSelectorBox.SelectedMethod, this))" SmallSize="true" />
+                    <IconButton ButtonText="Copy" TooltipPosition="bottom" TooltipText="Copy HTTP GET request URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
+                    <IconButton ButtonText="Test Call" TooltipPosition="bottom" TooltipText="Demo call to see output" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
+                </div>
+            </div>
 
-					<QuoteTextBlock Author="W.H. Auden" URL="@URL.WHAudenWiki">
-						We are all here on earth to help others:<br />what on earth the others are here for,<br />I don't know.
-					</QuoteTextBlock>
-				</TextHTML>
-			</ArticleBlock>
+            @*GUIDE TEXT*@
+            <div class="vstack gap-3">
+                <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
+                    <ButtonRow>
+                        <IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep" />
+                    </ButtonRow>
+                    <TextHTML>
+                        <p>
+                            Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language
+                            <strong>JS, Python, C#, Java</strong> or even your browsers' URL.
+                        </p>
+                        <p>
+                            You can also run <kbd>pip install vedastro</kbd> in your local or cloud environment.
+                            <BoldLink URL="@URL.YoutubePythonGuide">Watch Python Guide</BoldLink>
+                        </p>
+                    </TextHTML>
+                </ArticleBlock>
 
-			<ArticleBlock Title="Reverse Engineer" IconName="emojione:hammer-and-wrench">
-				<TextHTML>
-					To maximize the use of the API, you need to understand its <strong>basic structure</strong>.
-					And the best way todo so is to <strong>play with it</strong>. Try modifying the API URL in your browser,
-					and see what data you get. Experiment with different data formats.
-					The API is designed to handle this, so don't worry about breaking it. Have fun.
-				</TextHTML>
-			</ArticleBlock>
-			
+                @* LIST OF ALL API CALLS *@
+                <APICallList />
 
-            @*             <ArticleBlock Title="Library (coming soon)" IconName="clarity:thin-client-line">
-			<TextHTML>
-			There are also client libraries to help you access the API even more easily. It simply wraps HTTP calls into easy to consume functions, that your app can use.
-			Please note, these sub-projects is under <strong>prototype</strong> stage and much remains to be done. If you've created a library already please share it with the community.
-			<BoldLink URL="@URL.VedAstroJS">JavaScript</BoldLink>, <BoldLink URL="@URL.VedAstroNuget">.NET NuGet</BoldLink> &amp; <BoldLink URL="@URL.VedAstroSwift">Swift iOS &amp; MacOS</BoldLink>.
-			</TextHTML>
-			</ArticleBlock>
-			*@
+                <ArticleBlock Title="Price = Free" IconName="flat-color-icons:like">
+                    <TextHTML>
+                        To encourage global use of vedic astrology we pledge to keep this API service <kbd>Free</kbd>
+                        But to control the cost the speed of the API will be auto adjusted
+                        by the amount of money in the <BoldLink URL="@PageRoute.Donate">Donation Box</BoldLink>.
+                        Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase the speed for yourself and others.
+                    </TextHTML>
+                </ArticleBlock>
 
-		</div>
-	</div>
-</div>
+                <ArticleBlock Title="Simple Response" IconName="bi:filetype-json">
+                    <TextHTML>
+                        Data is returned in <strong>JSON</strong>. Only 2 properties. First field is always <kbd>Status</kbd>, it can be only <kbd style="background-color:green;">Pass</kbd> or <kbd style="background-color:red;">Fail</kbd>.
+                        If it shows <kbd style="background-color:red;">Fail</kbd> then most likely cause is invalid data on your part. More details about the
+                        error will be in <kbd>Payload</kbd> property. If call is successful, all the data you need will be alphabetically stored in <kbd>Payload</kbd> property.
+                    </TextHTML>
+                </ArticleBlock>
+
+                <ArticleBlock Title="No Manuals Needed" IconName="emojione:clamp">
+                    <TextHTML>
+                        This API is made to be easy for any beginner to get started.
+                        The biggest problem with consuming any API, is the <strong>learning curve</strong> .
+                        Normally the first 3-5 hours will be spent learning the small nuances or semantics used by the API provider.
+                        We hope to reduce this lag with this simple &amp; intuitive <strong>API Builder</strong>.
+                    </TextHTML>
+                </ArticleBlock>
+
+                <ArticleBlock Title="Sponsor Music" IconName="emojione:violin">
+                    <ButtonRow>
+                        <IconButton ClickUrl="@PageRoute.Donate" IconName="flat-color-icons:donate" ButtonText="Tip" Outline="true" SmallSize="true"></IconButton>
+                    </ButtonRow>
+                    <TextHTML>
+                        Running this API service, is like playing a <strong>beautiful public orchestra</strong>.
+                        It is only possible because of many moving parts by many people.
+                        Servers need to be optimized, updated and maintained. Code needs to be improved, tested and cleaned.
+
+                        <img src="images/public-orchestra.jpg" class="img-thumbnail my-3" alt="...">
+
+                        And all this has to be juggled to create the final product you see. Its a group effort.
+                        Please consider supporting this service to keep the "music" playing.
+                        <strong>Everybody</strong> can enjoy the music, so long as there's <strong>one</strong> person, willing to <BoldLink URL="@PageRoute.Donate">tip</BoldLink>
+
+                        <QuoteTextBlock Author="W.H. Auden" URL="@URL.WHAudenWiki">
+                            We are all here on earth to help others:<br />what on earth the others are here for,<br />I don't know.
+                        </QuoteTextBlock>
+                    </TextHTML>
+                </ArticleBlock>
+
+                <ArticleBlock Title="Reverse Engineer" IconName="emojione:hammer-and-wrench">
+                    <TextHTML>
+                        To maximize the use of the API, you need to understand its <strong>basic structure</strong>.
+                        And the best way todo so is to <strong>play with it</strong>. Try modifying the API URL in your browser,
+                        and see what data you get. Experiment with different data formats.
+                        The API is designed to handle this, so don't worry about breaking it. Have fun.
+                    </TextHTML>
+                </ArticleBlock>
+
+            </div>
+        </div>
+    </div>
+
+}
+
 
 @code {
 
-	/// <summary>
-	/// if not specified will not be included in final URL
-	/// default set to Raman, as used system wide
-	/// </summary>
-	private string _selectedAyanamsa = "Raman";
+    /// <summary>
+    /// if not specified will not be included in final URL
+    /// default set to Raman, as used system wide
+    /// </summary>
+    private string _selectedAyanamsa = "Raman";
 
-	/// <summary>
-	/// list that is shown to user and is changed by search
-	/// </summary>
-	private List<OpenAPIMetadata> MethodListFiltered { get; set; } = new List<OpenAPIMetadata>();
+    /// <summary>
+    /// list that is shown to user and is changed by search
+    /// </summary>
+    private List<OpenAPIMetadata> MethodListFiltered { get; set; } = new List<OpenAPIMetadata>();
 
+    private List<OpenAPIMetadata> MethodListALL = new List<OpenAPIMetadata>();
 
-	private List<OpenAPIMetadata> MethodListALL = new List<OpenAPIMetadata>();
+    private APISelectorBox ApiSelectorBox;
 
-	private APISelectorBox _apiSelectorBox;
-	private ElementReference _paramInputHolderElement;
-	private ElementReference _paramInputHolderElement2;
-	private ParameterInputPanel _parameterInputPanel;
+    private ElementReference _paramInputHolderElement;
+    private ElementReference _paramInputHolderElement2;
+    private ParameterInputPanel _parameterInputPanel;
 
-	private string _finalApiGetCall = "https://api.vedastro.org/Home";
+    private string _finalApiGetCall = "https://api.vedastro.org/Home";
 
-	protected override async Task OnInitializedAsync()
-	{
-		//hide display
-		await _jsRuntime.ShowLoading();
-
-		//sub event: when an method is selected, auto show inputs panel
-		_apiSelectorBox.OnChangeSelectMethod += OnChangeSelectMethod;
-
-		//show data on display
-		_jsRuntime.HideAlert();
-	}
-
-	/// <summary>
-	/// When user selects a method, this is code is called
-	/// </summary>
-	private void OnChangeSelectMethod(object sender, EventArgs e)
-	{
-		if (_apiSelectorBox.GetSelectedMethodName() != "")
-		{
-			//set new params
-			_parameterInputPanel.Show(_apiSelectorBox.SelectedMethod.ParameterTypes);
-
-			//make param input panel visible
-			_jsRuntime.Show(_paramInputHolderElement);
-			_jsRuntime.Show(_paramInputHolderElement2);
-		}
-	}
-
-	/// <summary>
-	/// After user click generate check data validity, generate final url
-	/// </summary>
-	/// <returns></returns>
-	private async Task OnClickGenerateButton()
-	{
-		await _jsRuntime.ShowLoading();
-
-		//only continue if passed input field validation
-		if (!(await IsValidationPassed())) { return; }
-
-		//STAGE 2 :
-		//combine the call
-		var domain = AppData.URL.ApiUrl; //get stable or beta as needed
+    /// <summary>
+    /// Marker to control component loading
+    /// start as false
+    /// </summary>
+    bool _mainPageInitDone = false;
 
 
-		//format of the API call
-		//.../Calculator/DistanceBetweenPlanets/PlanetName/Sun/PlanetName/Moon/Location/Singapore/Time/23:59/31/12/2000/+08:00
-		var placeHolder = "";
-		var calcName = $"/Calculate/{_apiSelectorBox.GetSelectedMethodName()}";
-		var paramInput = await _parameterInputPanel.ToApiUrl();
-		var ayanamsaUrl = _selectedAyanamsa == "Raman" ? "" : $"/Ayanamsa/{_selectedAyanamsa}";
-		placeHolder = domain + calcName + paramInput + ayanamsaUrl;
+    protected override async Task OnInitializedAsync()
+    {
+        //NOTE: small needed else, components rendering gets messed up (time to pop)
+        await _jsRuntime.ShowLoading(100);
+
+        //other components can start loading now (heavy computation starts)
+        _mainPageInitDone = true;
+
+        //show data on display
+        _jsRuntime.HideAlert();
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (ApiSelectorBox != null)
+        {
+            //sub event: when an method is selected, auto show inputs panel
+            ApiSelectorBox.OnChangeSelectMethod += OnChangeSelectMethod;
+        }
+    }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    public async Task<bool> IsValidationPassed()
+    {
+        //TEST 1 : Calculator name
+        var isSelected = await ApiSelectorBox.IsSelected();
+        if (!isSelected)
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", "Please select a Calculator first!", true);
+            return false;
+        }
+
+        //TEST 2 : All input drop down selected
+        var isValid = await _parameterInputPanel.IsValidationPassed(); //will raise own error
+        if (!isValid) { return false; }
 
 
-		_finalApiGetCall = placeHolder;
+        //if control reaches here than, it's valid
+        return true;
 
-		//tactile feedback to user
-		await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
-
-		_jsRuntime.PlayDoneSound();
-
-		//auto scroll to URL display out, so user can see better
-		AppData.Go(PageRoute.UrlDisplayOut);
-	}
-
-	/// <summary>
-	/// Checks if validation of all input fields
-	/// </summary>
-	public async Task<bool> IsValidationPassed()
-	{
-		//TEST 1 : Calculator name
-		var isSelected = await _apiSelectorBox.IsSelected();
-		if (!isSelected)
-		{
-			//mark invalid & alert user
-			await _jsRuntime.ShowAlert("error", "Please select a Calculator first!", true);
-			return false;
-		}
-
-		//TEST 2 : All input drop down selected
-		var isValid = await _parameterInputPanel.IsValidationPassed(); //will raise own error
-		if (!isValid) { return false; }
+    }
 
 
-		//if control reaches here than, it's valid
-		return true;
 
-	}
 
-	private async Task OnDemoCallGeneratedUrl()
-	{
-		//make API GET direct call on new tab
-		_jsRuntime.OpenNewTab(_finalApiGetCall);
-	}
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-	private async Task OnClickCopyChartLink()
-	{
-		//use js to transfer to clipboard
-		await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, _finalApiGetCall);
+    /// <summary>
+    /// When user selects a method, this is code is called
+    /// </summary>
+    private void OnChangeSelectMethod(object sender, EventArgs e)
+    {
+        if (ApiSelectorBox.GetSelectedMethodName() != "")
+        {
+            //set new params
+            _parameterInputPanel.Show(ApiSelectorBox.SelectedMethod.ParameterTypes);
 
-		//let user know link copied
-		await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);
-	}
+            //make param input panel visible
+            _jsRuntime.Show(_paramInputHolderElement);
+            _jsRuntime.Show(_paramInputHolderElement2);
+        }
+    }
 
-	private async Task FilterMethodList(string searchKeyword)
-	{
+    /// <summary>
+    /// After user click generate check data validity, generate final url
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnClickGenerateButton()
+    {
+        _jsRuntime.ShowLoading();
 
-		//if no search text then show all
-		if (string.IsNullOrEmpty(searchKeyword) || searchKeyword == "All")
-		{
-			MethodListFiltered = MethodListALL;
-		}
-		else
-		{
-			MethodListFiltered = MethodListALL.FindAll(apiCalc => apiCalc.SearchText.SearchText(searchKeyword));
-		}
+        //only continue if passed input field validation
+        if (!(await IsValidationPassed())) { return; }
 
-		// User has stopped typing, perform your action here
-		await InvokeAsync(StateHasChanged); // To refresh the UI
+        //STAGE 2 :
+        //combine the call
+        var domain = AppData.URL.ApiUrl; //get stable or beta as needed
 
-	}
 
-	private void OnClickShowAdvanced()
-	{
-		//advanced inputs visible
-		_jsRuntime.ToggleDisplay("AyanamsaInputHolder");
-	}
+        //format of the API call
+        //.../Calculator/DistanceBetweenPlanets/PlanetName/Sun/PlanetName/Moon/Location/Singapore/Time/23:59/31/12/2000/+08:00
+        var placeHolder = "";
+        var calcName = $"/Calculate/{ApiSelectorBox.GetSelectedMethodName()}";
+        var paramInput = await _parameterInputPanel.ToApiUrl();
+        var ayanamsaUrl = _selectedAyanamsa == "Raman" ? "" : $"/Ayanamsa/{_selectedAyanamsa}";
+        placeHolder = domain + calcName + paramInput + ayanamsaUrl;
+
+
+        _finalApiGetCall = placeHolder;
+
+        //tactile feedback to user
+        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
+
+        _jsRuntime.PlayDoneSound();
+
+        //auto scroll to URL display out, so user can see better
+        AppData.Go(PageRoute.UrlDisplayOut);
+    }
+
+    private async Task OnDemoCallGeneratedUrl()
+    {
+        //make API GET direct call on new tab
+        _jsRuntime.OpenNewTab(_finalApiGetCall);
+    }
+
+    private async Task OnClickCopyChartLink()
+    {
+        //use js to transfer to clipboard
+        await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, _finalApiGetCall);
+
+        //let user know link copied
+        await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);
+    }
+
+    private async Task FilterMethodList(string searchKeyword)
+    {
+
+        //if no search text then show all
+        if (string.IsNullOrEmpty(searchKeyword) || searchKeyword == "All")
+        {
+            MethodListFiltered = MethodListALL;
+        }
+        else
+        {
+            MethodListFiltered = MethodListALL.FindAll(apiCalc => apiCalc.SearchText.SearchText(searchKeyword));
+        }
+
+        // User has stopped typing, perform your action here
+        await InvokeAsync(StateHasChanged); // To refresh the UI
+
+    }
+
+    private void OnClickShowAdvanced()
+    {
+        //advanced inputs visible
+        _jsRuntime.ToggleDisplay("AyanamsaInputHolder");
+    }
 
 }

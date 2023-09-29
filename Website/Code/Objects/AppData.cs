@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Xml.Linq;
 using Library.API;
@@ -158,16 +158,6 @@ namespace Website
         /// used as backup location for selector
         /// </summary>
         public static GeoLocation ClientLocation { get; set; }
-
-        public static PersonSelectorBox PersonSelectorBox
-        {
-            get => _personSelectorBox;
-            set
-            {
-                Console.WriteLine("EXP:PERSON SELECTOR LOADED!!!!!!!!!");
-                _personSelectorBox = value;
-            }
-        }
 
         /// <summary>
         /// starts false, set when search is used for the 1st time

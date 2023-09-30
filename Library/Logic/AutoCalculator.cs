@@ -73,7 +73,7 @@ namespace VedAstro.Library
 
 
 
-		private static List<APIFunctionResult> ExecuteCals(IEnumerable<MethodInfo> foundCalcs, params object[] paramInput)
+		public static List<APIFunctionResult> ExecuteCals(IEnumerable<MethodInfo> foundCalcs, params object[] paramInput)
 		{
 			var returnList = new List<APIFunctionResult>();
 			foreach (var calc in foundCalcs)
@@ -106,8 +106,9 @@ namespace VedAstro.Library
 
 		/// <summary>
 		/// given a category will find those method's info only
+		/// Param input only used to get the Types names , data inside not used
 		/// </summary>
-		private static IEnumerable<MethodInfo> FindCalcs(MethodInfo callerToExclude = null, params object[] paramInput)
+		public static IEnumerable<MethodInfo> FindCalcs(MethodInfo callerToExclude = null, params object[] paramInput)
 		{
 			//STAGE 1: FIND
 			//get the data needed to 

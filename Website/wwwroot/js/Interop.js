@@ -84,11 +84,12 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
                 time: `${hour12}:${minute} ${meridian}`,
             },
         },
+        //this is where time is sent back to blazor, by setting straight to dom
         actions: {
             changeTime(e, time, hours, minutes, keeping) {
-                window.Calendar.hourInputElm.value = hours;
-                window.Calendar.minuteInputElm.value = minutes;
-                window.Calendar.meridianInputElm.value = keeping;
+                window.Calendar.hourInputElm.innerText = hours;
+                window.Calendar.minuteInputElm.innerText = minutes;
+                window.Calendar.meridianInputElm.innerText = keeping;
             },
             clickDay(e, dates) {
                 //if date selected, hide date picker
@@ -105,9 +106,9 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
                     var day = choppedTimeData[2];
 
                     //inject the values into the text input
-                    window.Calendar.dateInputElm.value = day;
-                    window.Calendar.monthInputElm.value = month;
-                    window.Calendar.yearInputElm.value = year;
+                    window.Calendar.dateInputElm.innerText = day;
+                    window.Calendar.monthInputElm.innerText = month;
+                    window.Calendar.yearInputElm.innerText = year;
                 }
 
             },
@@ -116,9 +117,9 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
             clickMonth(e, month) {
                 month = month + 1; //correction for JS lib bug
                 var with0 = ('0' + month).slice(-2);//change 9 to 09
-                window.Calendar.monthInputElm.value = with0;
+                window.Calendar.monthInputElm.innerText = with0;
             },
-            clickYear(e, year) { window.Calendar.yearInputElm.value = year; }
+            clickYear(e, year) { window.Calendar.yearInputElm.innerText = year; }
         },
     });
 

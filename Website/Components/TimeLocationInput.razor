@@ -2,11 +2,14 @@
 @using VedAstro.Library;
 
 
-<TimeInputSimple @ref="_timeInput" LabelText="Time" />
+<TimeInputSimple @ref="_timeInput" LabelText="@LabelText" />
 <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
 
 
 @code {
+    [Parameter]
+    public string? LabelText { get; set; } = "Time";
+
     private TimeInputSimple _timeInput;
     private GeoLocationInput _geoLocationInput;
 

@@ -75,6 +75,9 @@ KEEP IT REAL
 
 @code {
 
+    [Parameter]
+    public List<OpenAPIMetadata> CustomAllMethodList { get; set; } = new List<OpenAPIMetadata>(); //set empty list so can detect
+
     /// <summary>
     /// add extra styles to SVG icon parent div
     /// </summary>
@@ -148,7 +151,8 @@ KEEP IT REAL
         _isReady = false;
 
         //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
-        MethodListALL = OpenAPIMetadata.FromMethodInfoList();
+        //if custom list specified use that else default to all from Open API
+        MethodListALL = CustomAllMethodList.Any() ? CustomAllMethodList : OpenAPIMetadata.FromMethodInfoList();
 
         //to speed up search array of description
         MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();

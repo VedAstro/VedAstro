@@ -308,6 +308,9 @@ namespace Website
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, elementSelector);
 
+        /// <summary>
+        /// to be used like this @(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))
+        /// </summary>
         public static async Task FunFeaturePopUp(this IJSRuntime jsRuntime, string featureName)
         {
             //log this

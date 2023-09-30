@@ -11,35 +11,57 @@
 
 <div class="vstack gap-5" style="max-width: @GR.W412px;">
 
-    @* TIME RANGE INPUT *@
-    <div>
-            <IconTitle IconName="flat-color-icons:multiple-inputs" Title="Inputs" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
-        @*         <span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;"><Icon IconName="flat-color-icons:multiple-inputs" Size="34"/> Input</span>
-        *@        <div class="vstack gap-3">
-            <TimeLocationInput @ref="_inputTimeLocation" />
-
-            @* TIME RANGE *@
-            <div class="input-group">
-                <label class="input-group-text gap-2" for="TimeRangeInput" style="width: 165px;"><Icon IconName="flat-color-icons:calendar" Size="34" />Time Range</label>
-                <select @bind="SelectedTimeRangePreset" class="form-select" id="TimeRangeInput" style="font-weight: 600; font-size: 17px;">
-                    <option value="1month" selected>+/- 1 Month</option>
-                    <option value="2month">+/- 2 Month</option>
-                    <option value="3month">+/- 3 Months</option>
-                    <option value="6month">+/- 6 Months</option>
-                    <option value="1year">+/- 1 Year</option>
-                    <option value="3year">+/- 3 Year</option>
-                    <option value="5year">+/- 5 Year</option>
-                    <option value="10year">+/- 10 Year</option>
-                    <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
-                </select>
-            </div>
-
+    @* SOURCE SELECTOR *@
+    <div class="vstack gap-3">
+        <IconTitle IconName="flat-color-icons:list" Title="Time List" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
+        
+        @* SOURCE SELECT *@
+        <div class="input-group">
+            <label class="input-group-text gap-2" for="SourceSelectInput" style="width: 165px;"><Icon IconName="flat-color-icons:data-recovery" Size="34" />Source</label>
+            <select @bind="SelectedSource" class="form-select" id="SourceSelectInput" style="font-weight: 600; font-size: 17px;">
+                <option value="" selected>Select...</option>
+                <option value="generate">Generate New</option>
+                <option value="upload">Upload CSV or Excel</option>
+            </select>
         </div>
+
+        @* TIME RANGE GENERATE *@
+        <div @ref="timeRangeGenerateInputHtml" style="display:none;">
+            <div class="vstack gap-3">
+                <TimeLocationInput @ref="_inputTimeLocation" />
+
+                @* TIME RANGE *@
+                <div class="input-group">
+                    <label class="input-group-text gap-2" for="TimeRangeInput" style="width: 165px;"><Icon IconName="flat-color-icons:calendar" Size="34" />Time Range</label>
+                    <select @bind="SelectedTimeRangePreset" class="form-select" id="TimeRangeInput" style="font-weight: 600; font-size: 17px;">
+                        <option value="" selected>Make a choice...</option>
+                        <option value="1month">+/- 1 Month</option>
+                        <option value="2month">+/- 2 Month</option>
+                        <option value="3month">+/- 3 Months</option>
+                        <option value="6month">+/- 6 Months</option>
+                        <option value="1year">+/- 1 Year</option>
+                        <option value="3year">+/- 3 Year</option>
+                        <option value="5year">+/- 5 Year</option>
+                        <option value="10year">+/- 10 Year</option>
+                        <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        @* TIME RANGE UPLOAD *@
+        <div @ref="timeRangeUploadInputHtml" style="display:none;">
+            <div>
+                <Icon IconName="noto-v1:construction" />
+                <p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
+            </div>
+        </div>
+
+
     </div>
 
-
     @* DATA SELECT *@
-    <APIMethodCheckSelector @ref="_APIMethodCheckSelector" />
+    <APIMethodCheckSelector CustomAllMethodList="@MethodListALL" @ref="_APIMethodCheckSelector" />
 
     @* GENERATE BUTTON *@
     <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGenerate" />
@@ -102,6 +124,10 @@ else
 }
 
 @code {
+
+    private ElementReference timeRangeUploadInputHtml;
+    private ElementReference timeRangeGenerateInputHtml;
+
     private APISelectorBox ApiSelectorBox;
 
     /// <summary>
@@ -112,10 +138,53 @@ else
     private APIMethodCheckSelector _APIMethodCheckSelector;
     private TimeLocationInput _inputTimeLocation;
     private List<OpenAPIMetadata> SelectedDataMethods = new List<OpenAPIMetadata>();
-    private List<OpenAPIMetadata> MethodListALL = new List<OpenAPIMetadata>();
+    private static List<OpenAPIMetadata> MethodListALL
+    {
+        get {        
+    
+            //get all the calc for time & planet (possible data points)
+            var foundCalcs = AutoCalculator.FindCalcs(null, Time.Empty, PlanetName.Sun); //note data does not matter
+            var tempAll = OpenAPIMetadata.FromMethodInfoList(foundCalcs);
+            return tempAll;
+        }
+    }
+
     private bool _isReady;
 
-    public string? SelectedTimeRangePreset { get; set; } = "1month"; //default
+    public string? SelectedTimeRangePreset
+    {
+        get => _selectedTimeRangePreset;
+        set
+        {
+            //if user selected some value than only show data input
+            //NOTE: this is done reduce clutter until last needed (better UX)
+            if (!string.IsNullOrEmpty(value)){_APIMethodCheckSelector.Show();}
+
+            _selectedTimeRangePreset = value;
+        }
+    } //default
+
+    public string? SelectedSource
+    {
+        get => _selectedSource;
+        set
+        {
+            //hide & show the correct inputs
+            switch (value)
+            {
+                case "generate":
+                    _jsRuntime.Show(timeRangeGenerateInputHtml);
+                    _jsRuntime.Hide(timeRangeUploadInputHtml);
+                    break;
+                case "upload":
+                    _jsRuntime.Show(timeRangeUploadInputHtml);
+                    _jsRuntime.Hide(timeRangeGenerateInputHtml);
+                    break;
+            }
+
+            _selectedSource = value;
+        }
+    }
 
 
     private class TableRow(PlanetName selectedPlanet, Time time, List<APIFunctionResult> dataRowList)
@@ -127,14 +196,14 @@ else
 
     private List<TableRow> TableRowList { get; set; } = new List<TableRow>();
     private TimeRange timeRange = TimeRange.Empty;
+    private string? _selectedSource;
+    private string? _selectedTimeRangePreset = ""; //leave default empty to detect later
 
     protected async override Task OnInitializedAsync()
     {
         //give time to pop, because next is heavy
         await _jsRuntime.ShowLoading(100);
 
-        var foundCalcs = AutoCalculator.FindCalcs(null, timeRange.start, PlanetName.Sun); //note data does not matter
-        MethodListALL = OpenAPIMetadata.FromMethodInfoList(foundCalcs);
 
         SelectedDataMethods = MethodListALL;
 
@@ -144,6 +213,8 @@ else
         {
             SelectedDataMethodsDictionary.Add(openApiMetadata, false);
         }
+
+        _APIMethodCheckSelector.Hide();
 
         _jsRuntime.HideLoading();
 

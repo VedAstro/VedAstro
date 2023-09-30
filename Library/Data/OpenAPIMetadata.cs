@@ -140,6 +140,7 @@ public class OpenAPIMetadata
 
     /// <summary>
     /// Given a list of method info will convert to a list of API call Data
+    /// if none provided, will use ALL from Open API
     /// </summary>
     public static List<OpenAPIMetadata> FromMethodInfoList(IEnumerable<MethodInfo> calcList = null)
     {

@@ -1,0 +1,104 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+@using System.Reflection
+
+
+<div>
+
+    <IconTitle IconName="flat-color-icons:data-sheet" Title="Data Points" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
+        <ButtonRow>
+            <Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="Suggest New Data Points" IconName="fluent:person-feedback-28-regular" OnClickCallback="@_ApiSelectorBox.OnClickSuggestNewApi" />
+        </ButtonRow>
+    </IconTitle>
+
+    <style>
+        .hovered:hover span {
+            font-weight: 600;
+            /* your styles here */
+        }
+    </style>
+    @if (SelectedMethodMetaList.Any())
+    {
+        @* LIST OF SELECTED DATA POINTS *@
+        <div class="vstack gap-1">
+            @foreach (var methodData in SelectedMethodMetaList)
+            {
+                <div class="vstack gap-4">
+                    <div class="hovered border-secondary border px-4 py-2 rounded-4 border-2 hstack d-flex justify-content-between">
+                        <span class="" style="font-size: 17.5px; color: #030ce1;">@Format.FormatName(methodData.Name)</span>
+                        <Icon ExtraStyle="cursor: pointer;" TooltipText="Remove" IconName="twemoji:cross-mark" OnClickCallback="@(() => OnClickRemoveMethod(methodData))" />
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @* special option to add new hidden until needed *@
+    <APISelectorBox ExtraClass="mt-2" @ref="_ApiSelectorBox" HideButton="true" />
+
+</div>
+
+@code {
+    private bool _showAddNewField = false;
+    private ElementReference selectorHtml;
+
+    private APISelectorBox _ApiSelectorBox;
+    private List<OpenAPIMetadata> allMethodMetaList = new List<OpenAPIMetadata>();
+    private List<OpenAPIMetadata?> SelectedMethodMetaList = new List<OpenAPIMetadata?>();
+    private bool _isEventAttached = false;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_ApiSelectorBox != null && !_isEventAttached)
+        {
+            //sub event: when an method is selected, auto show inputs panel
+            _ApiSelectorBox.OnChangeSelectMethod += OnChangeSelectMethod;
+            _isEventAttached = true;
+        }
+    }
+
+    /// <summary>
+    /// Gets selected methods
+    /// </summary>
+    /// <returns></returns>
+    public List<MethodInfo> GetSelected()
+    {
+        var methodInfos = SelectedMethodMetaList.Select(x => x.MethodInfo).ToList();
+        return methodInfos;
+    }
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    /// <summary>
+    /// When user selects a method, this is code is called
+    /// </summary>
+    private void OnChangeSelectMethod(object sender, EventArgs e)
+    {
+        if (_ApiSelectorBox.GetSelectedMethodName() != "")
+        {
+            //add newly selected data point to main list
+            var newMethod = _ApiSelectorBox.SelectedMethod;
+            SelectedMethodMetaList.Add(newMethod);
+
+            //reset selector to go back to "make new selection"
+            _ApiSelectorBox.Reset();
+
+            //refresh to make changes appear
+            StateHasChanged();
+        }
+    }
+
+    private void OnClickRemoveMethod(OpenAPIMetadata? methodData)
+    {
+        //remove method from list
+        SelectedMethodMetaList.Remove(methodData);
+
+        StateHasChanged();
+    }
+
+   
+
+}

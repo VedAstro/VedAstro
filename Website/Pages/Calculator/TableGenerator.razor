@@ -1,0 +1,197 @@
+﻿@using VedAstro.Library
+@using System.Collections
+@attribute [Route(PageRoute.TableGenerator)]
+
+<PageTitle>Table Generator | VedAstro</PageTitle>
+
+<PageTop ImageName="table-generator-banner.png"
+         Title="ML Data Generator"
+         DescriptionText="Generate large astronomical tables for use in ML/AI Model training and Data Science">
+</PageTop>
+
+<div class="vstack gap-5" style="max-width: @GR.W412px;">
+
+    @* TIME RANGE INPUT *@
+    <div>
+            <IconTitle IconName="flat-color-icons:multiple-inputs" Title="Inputs" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
+        @*         <span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;"><Icon IconName="flat-color-icons:multiple-inputs" Size="34"/> Input</span>
+        *@        <div class="vstack gap-3">
+            <TimeLocationInput @ref="_inputTimeLocation" />
+
+            @* TIME RANGE *@
+            <div class="input-group">
+                <label class="input-group-text gap-2" for="TimeRangeInput" style="width: 165px;"><Icon IconName="flat-color-icons:calendar" Size="34" />Time Range</label>
+                <select @bind="SelectedTimeRangePreset" class="form-select" id="TimeRangeInput" style="font-weight: 600; font-size: 17px;">
+                    <option value="1month" selected>+/- 1 Month</option>
+                    <option value="2month">+/- 2 Month</option>
+                    <option value="3month">+/- 3 Months</option>
+                    <option value="6month">+/- 6 Months</option>
+                    <option value="1year">+/- 1 Year</option>
+                    <option value="3year">+/- 3 Year</option>
+                    <option value="5year">+/- 5 Year</option>
+                    <option value="10year">+/- 10 Year</option>
+                    <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+
+    @* DATA SELECT *@
+    <APIMethodCheckSelector @ref="_APIMethodCheckSelector" />
+
+    @* GENERATE BUTTON *@
+    <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGenerate" />
+</div>
+
+@*dont wrap table, looks untidy*@
+<style>
+    th {
+        white-space: nowrap;
+    }
+
+    td {
+        white-space: nowrap;
+    }
+</style>
+
+
+@if (_isReady)
+{
+    <hr />
+
+    <p>Time Range : @timeRange.start.StdDateMonthYearText - @timeRange.end.StdDateMonthYearText</p>
+    @* TABLE LIST *@
+    <table id="GeneratedTable" class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Time</th>
+                <th>Planet</th>
+                @foreach (var result in SelectedDataMethods)
+                {
+                    <td>@result.Name</td>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int index = 0; index < TableRowList.Count; index++)
+            {
+                <tr>
+                    <td>@TableRowList[index].Time</td> @* TIME *@
+                    <td>@TableRowList[index].Planet</td> @* Planet *@
+                    @* print out each selected data *@
+                    @foreach (var result in @TableRowList[index].DataRowList)
+                    {
+                        <td>@result.Result.ToString()</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <hr class="mt-5" />
+    @* PLACE HOLDER MESSAGE *@
+    @* hide when loaded *@
+    <div class="d-flex justify-content-center" style="@((!_isReady) ? "" : "display:none !important;")">
+        @* important needed to override flex *@
+        <span class="" style="color: @AppData.Grey; font-size: 14px;">Table will appear here after you click <strong>Generate</strong></span>
+    </div>
+}
+
+@code {
+    private APISelectorBox ApiSelectorBox;
+
+    /// <summary>
+    /// data from HTML when selection changes is auto updated here
+    /// </summary>
+    private Dictionary<OpenAPIMetadata, bool> SelectedDataMethodsDictionary;
+
+    private APIMethodCheckSelector _APIMethodCheckSelector;
+    private TimeLocationInput _inputTimeLocation;
+    private List<OpenAPIMetadata> SelectedDataMethods = new List<OpenAPIMetadata>();
+    private List<OpenAPIMetadata> MethodListALL = new List<OpenAPIMetadata>();
+    private bool _isReady;
+
+    public string? SelectedTimeRangePreset { get; set; } = "1month"; //default
+
+
+    private class TableRow(PlanetName selectedPlanet, Time time, List<APIFunctionResult> dataRowList)
+    {
+        public Time Time { get; set; } = time;
+        public PlanetName Planet { get; set; } = selectedPlanet;
+        public List<APIFunctionResult> DataRowList { get; set; } = dataRowList;
+    }
+
+    private List<TableRow> TableRowList { get; set; } = new List<TableRow>();
+    private TimeRange timeRange = TimeRange.Empty;
+
+    protected async override Task OnInitializedAsync()
+    {
+        //give time to pop, because next is heavy
+        await _jsRuntime.ShowLoading(100);
+
+        var foundCalcs = AutoCalculator.FindCalcs(null, timeRange.start, PlanetName.Sun); //note data does not matter
+        MethodListALL = OpenAPIMetadata.FromMethodInfoList(foundCalcs);
+
+        SelectedDataMethods = MethodListALL;
+
+        //add all to list for checking with check box
+        SelectedDataMethodsDictionary = new Dictionary<OpenAPIMetadata, bool>();
+        foreach (var openApiMetadata in MethodListALL)
+        {
+            SelectedDataMethodsDictionary.Add(openApiMetadata, false);
+        }
+
+        _jsRuntime.HideLoading();
+
+    }
+
+    private async Task OnClickGenerate()
+    {
+        _jsRuntime.ShowLoading();
+
+        //get range to generate start & end of data
+        var startTime = await _inputTimeLocation.GetTime();
+        var tempPerson = new Person("", startTime, Gender.Empty); //inject start time as birth time HACK
+        timeRange = EventChartTools.AutoCalculateTimeRange(tempPerson, SelectedTimeRangePreset, Tools.GetSystemTimezone());
+        var timeSlices = Time.GetTimeListFromRange(startTime, timeRange.end, 24);
+
+        //selected data points to include
+        var methodInfos = _APIMethodCheckSelector.GetSelected();
+
+        //pair up each time with a planet
+        var selectedPlanets = new List<PlanetName>() { PlanetName.Sun, PlanetName.Moon };
+        foreach (var selectedPlanet in selectedPlanets)
+        {
+            foreach (var _time in timeSlices)
+            {
+                //var calcData = Calculate.AllPlanetData(selectedPlanet, _time);
+                object[] param = new[] { (object)selectedPlanet, (object)_time };
+                var methodToExec = methodInfos;
+                var calcData = AutoCalculator.ExecuteCals(methodToExec, param);
+
+                TableRowList.Add(new TableRow(selectedPlanet, _time, calcData));
+            }
+        }
+
+        //can show now
+        _isReady = true;
+
+        //update view
+        StateHasChanged();
+
+        //tactile feedback to user
+        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
+
+        _jsRuntime.PlayDoneSound();
+
+        //auto scroll to URL display out, so user can see better
+        AppData.Go(PageRoute.GeneratedTableOut);
+
+    }
+
+
+}

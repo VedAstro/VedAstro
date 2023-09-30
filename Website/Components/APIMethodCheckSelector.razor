@@ -4,19 +4,25 @@
 @using System.Reflection
 
 
-<div>
+<div @ref="mainElementRef">
 
     <IconTitle IconName="flat-color-icons:data-sheet" Title="Data Points" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
         <ButtonRow>
-            <Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="Suggest New Data Points" IconName="fluent:person-feedback-28-regular" OnClickCallback="@_ApiSelectorBox.OnClickSuggestNewApi" />
+            <Icon ExtraStyle="cursor: pointer;" TooltipText="Suggest New Data Points" IconName="fluent:person-feedback-28-regular" OnClickCallback="@_ApiSelectorBox.OnClickSuggestNewApi" />
         </ButtonRow>
     </IconTitle>
 
     <style>
-        .hovered:hover span {
-            font-weight: 600;
-            /* your styles here */
+        .hovered:hover {
+            transform: scale(1.05); /* Increase the size of the card */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Add a shadow effect */
+            transition: all 0.3s ease; /* Add a transition effect */
         }
+
+            .hovered:hover span {
+                font-weight: 600;
+                /* your styles here */
+            }
     </style>
     @if (SelectedMethodMetaList.Any())
     {
@@ -35,19 +41,26 @@
     }
 
     @* special option to add new hidden until needed *@
-    <APISelectorBox ExtraClass="mt-2" @ref="_ApiSelectorBox" HideButton="true" />
+    <APISelectorBox CustomAllMethodList="@CustomAllMethodList" ExtraClass="mt-2" @ref="_ApiSelectorBox" HideButton="true" />
 
 </div>
 
 @code {
+
+    [Parameter]
+    public List<OpenAPIMetadata> CustomAllMethodList { get; set; }
+
     private bool _showAddNewField = false;
     private ElementReference selectorHtml;
+    private ElementReference mainElementRef;
 
     private APISelectorBox _ApiSelectorBox;
     private List<OpenAPIMetadata> allMethodMetaList = new List<OpenAPIMetadata>();
     private List<OpenAPIMetadata?> SelectedMethodMetaList = new List<OpenAPIMetadata?>();
     private bool _isEventAttached = false;
-    
+
+
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (_ApiSelectorBox != null && !_isEventAttached)
@@ -67,6 +80,11 @@
         var methodInfos = SelectedMethodMetaList.Select(x => x.MethodInfo).ToList();
         return methodInfos;
     }
+
+    public void Hide() => _jsRuntime.Hide(mainElementRef);
+
+    public void Show() => _jsRuntime.Show(mainElementRef);
+
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -99,6 +117,5 @@
         StateHasChanged();
     }
 
-   
 
 }

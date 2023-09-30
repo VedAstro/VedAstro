@@ -121,6 +121,16 @@ Allen Mullen
     <!-- FACEBOOK SDK (for login, future share, post...)-->
     <script>
 
+        // PURE JS TO CATCH ERRORS from outdated files
+        // AUTO refresh when hit critical errors
+        window.onerror = function (message, source, lineno, colno, error) {
+            console.log('An error occurred: ' + message);
+            // Refresh the page
+            location.reload(true); // Pass true to perform a hard reload
+            //return false;
+        };
+
+
         //█░░ █▀█ █▀▀ █ █▄░█   █▀▀ █▀█ █▀▄ █▀▀
         //█▄▄ █▄█ █▄█ █ █░▀█   █▄▄ █▄█ █▄▀ ██▄
 

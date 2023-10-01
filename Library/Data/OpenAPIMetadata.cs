@@ -116,6 +116,12 @@ public class OpenAPIMetadata
     /// </summary>
     public object ReturnType => GetTypeName(MethodInfo?.ReturnType);
 
+    /// <summary>
+    /// SPECIAL HACK METHOD to inject custom params for use in ML Data Generator
+    /// Users inputs this params instances before executing API method
+    /// </summary>
+    public List<object> SelectedParams { get; set; }
+
 
     /// <summary>
     /// generates python method stub declaration code

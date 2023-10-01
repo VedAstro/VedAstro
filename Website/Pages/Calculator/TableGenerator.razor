@@ -2,13 +2,14 @@
 @using System.Collections
 @using System.Reflection
 @using System.Text
+@using OfficeOpenXml
 @attribute [Route(PageRoute.TableGenerator)]
 
 <PageTitle>Data Generator | VedAstro</PageTitle>
 
 <PageTop ImageName="table-generator-banner.png"
          Title="ML Data Generator"
-         DescriptionText="Generate large astronomical tables for use in ML/AI Model training and Data Science">
+         DescriptionText="Easily generate large astronomical tables for use in ML/AI Model training and Data Science for free">
 </PageTop>
 
 <div>
@@ -37,11 +38,11 @@
             @* TIME RANGE GENERATE *@
             <div @ref="timeRangeGenerateInputHtml" style="display:none;">
                 <div class="vstack gap-3">
-                    <TimeLocationInput @ref="_inputTimeLocation" />
+                    <TimeLocationInput LabelText="Start Time" @ref="_inputTimeLocation" />
 
                     @* TIME RANGE *@
                     <div class="input-group">
-                        <label class="input-group-text gap-2" for="TimeRangeInput" style="width: 165px;"><Icon IconName="flat-color-icons:calendar" Size="34" />Time Range</label>
+                        <label class="input-group-text gap-2" for="TimeRangeInput" style="width: 165px;"><Icon IconName="flat-color-icons:calendar" Size="34" />End Time</label>
                         <select @bind="SelectedTimeRangePreset" class="form-select" id="TimeRangeInput" style="font-weight: 600; font-size: 17px;">
                             <option value="" selected>Make a choice...</option>
                             <option value="1month">+/- 1 Month</option>
@@ -295,7 +296,12 @@
                 calcData.ForEach(aR => aR.AddSelectedParams(param));
 
                 //combine data columns for this row
-                finalResultList.AddRange(calcData);
+                //check if many or just 1 result (is many results inside)
+                if (calcData[0]?.Result is List<APIFunctionResult> subResults) { finalResultList.AddRange(subResults); }
+
+                //else add like normal
+                else { finalResultList.AddRange(calcData); }
+
             }
 
             //add row to table
@@ -325,9 +331,6 @@
         await _jsRuntime.ShowLoading(100);
 
         //convert created table to CSV string
-        // var columnNames = _APIMethodCheckSelector
-        //                             .SelectedMethodMetaList
-        //                             .Select(mI => $"{mI.Name}{mI.ParamName}").ToList();
         var csvString = MLTableRow.ListToCSV(TableRowList);
 
         // convert string to file
@@ -344,9 +347,24 @@
         await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
     }
 
-    private void OnClickDownloadExcel()
+    private async Task OnClickDownloadExcel()
     {
-        _jsRuntime.FunFeaturePopUp("");
-    }
+        //show loading
+        await _jsRuntime.ShowLoading(100);
 
+        //convert created table to CSV string
+        var excelFileBytes = MLTableRow.ListToExcel(TableRowList);
+
+        var base64Raw = Convert.ToBase64String(excelFileBytes);
+        //start download using JS
+        var base64 = $"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64Raw}";
+        var filename = $"DataTable.xlsx"; //todo better name
+        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, base64);
+        //tactile feedback to user
+        _jsRuntime.PlayDoneSound();
+        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
+
+
+    }
 }
+

@@ -2850,10 +2850,31 @@ namespace VedAstro.Library
             foreach (var selectedParam in openApiMetadata.SelectedParams)
             {
                 //if time no need to add into column name, since its in the row
-                if (selectedParam is Time) { continue; }
+                if (selectedParam is Time)
+                {
+                    continue;
+                }
+                else if (selectedParam is IList ccc)
+                {
+                    foreach (object xxx in ccc)
+                    {
+                        if (xxx is Time)
+                        {
+                            continue;
+                        }
+                        var strData = Tools.AnyToString(xxx);
+                        paramCombined += "_" + strData;
 
-                var strData = Tools.AnyToString(selectedParam);
-                paramCombined += "_" + strData;
+                    }
+                }
+                else
+                {
+                    var strData = Tools.AnyToString(selectedParam);
+                    paramCombined += "_" + strData;
+
+                }
+
+
             }
 
             return $"{openApiMetadata.Name}{paramCombined}";

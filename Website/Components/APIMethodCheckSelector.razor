@@ -6,7 +6,7 @@
 
 <div @ref="mainElementRef">
 
-    <IconTitle IconName="flat-color-icons:data-sheet" Title="Data Points" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
+    <IconTitle IconName="flat-color-icons:data-sheet" Title="Data Columns" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
         <ButtonRow>
             <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.Column2MLData" SmallIcon="true" />
         </ButtonRow>
@@ -51,8 +51,8 @@
         </div>
     }
 
-    @* special option to add new hidden until needed *@
-    <APISelectorBox CustomAllMethodList="@CustomAllMethodList" ExtraClass="mt-2" @ref="_ApiSelectorBox" HideButton="true" />
+    @* ADD NEW METHOD *@
+    <APISelectorBox DefaultMessage="+ Add Column" CustomAllMethodList="@CustomAllMethodList" ExtraClass="mt-2" @ref="_ApiSelectorBox" HideButton="true" />
 
 </div>
 

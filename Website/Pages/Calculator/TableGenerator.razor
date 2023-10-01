@@ -1,147 +1,193 @@
 ﻿@using VedAstro.Library
 @using System.Collections
+@using System.Text
 @attribute [Route(PageRoute.TableGenerator)]
 
-<PageTitle>Table Generator | VedAstro</PageTitle>
+<PageTitle>Data Generator | VedAstro</PageTitle>
 
 <PageTop ImageName="table-generator-banner.png"
          Title="ML Data Generator"
          DescriptionText="Generate large astronomical tables for use in ML/AI Model training and Data Science">
 </PageTop>
 
-<div class="vstack gap-5" style="max-width: @GR.W412px;">
+<div>
+    @* INPUT *@
+    <div class="vstack gap-5" style="max-width: @GR.W412px;">
 
-    @* SOURCE SELECTOR *@
-    <div class="vstack gap-3">
-        <IconTitle IconName="flat-color-icons:list" Title="Time List" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
-        
-        @* SOURCE SELECT *@
-        <div class="input-group">
-            <label class="input-group-text gap-2" for="SourceSelectInput" style="width: 165px;"><Icon IconName="flat-color-icons:data-recovery" Size="34" />Source</label>
-            <select @bind="SelectedSource" class="form-select" id="SourceSelectInput" style="font-weight: 600; font-size: 17px;">
-                <option value="" selected>Select...</option>
-                <option value="generate">Generate New</option>
-                <option value="upload">Upload CSV or Excel</option>
-            </select>
-        </div>
+        @* SOURCE SELECTOR *@
+        <div class="vstack gap-3">
+            <IconTitle IconName="flat-color-icons:list" Title="Time List" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
+                <ButtonRow>
+                    <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.Column1MLData" SmallIcon="true" />
+                </ButtonRow>
+            </IconTitle>
 
-        @* TIME RANGE GENERATE *@
-        <div @ref="timeRangeGenerateInputHtml" style="display:none;">
-            <div class="vstack gap-3">
-                <TimeLocationInput @ref="_inputTimeLocation" />
+            @* SOURCE SELECT *@
+            <div class="input-group">
+                <label class="input-group-text gap-2" for="SourceSelectInput" style="width: 165px;"><Icon IconName="flat-color-icons:data-recovery" Size="34" />Source</label>
+                <select @bind="SelectedSource" class="form-select" id="SourceSelectInput" style="font-weight: 600; font-size: 17px;">
+                    <option value="" selected>Select...</option>
+                    <option value="generate">Generate New</option>
+                    <option value="upload">Upload CSV or Excel</option>
+                    <option value="sample">Public +10k Horoscopes</option>
+                </select>
+            </div>
 
-                @* TIME RANGE *@
-                <div class="input-group">
-                    <label class="input-group-text gap-2" for="TimeRangeInput" style="width: 165px;"><Icon IconName="flat-color-icons:calendar" Size="34" />Time Range</label>
-                    <select @bind="SelectedTimeRangePreset" class="form-select" id="TimeRangeInput" style="font-weight: 600; font-size: 17px;">
-                        <option value="" selected>Make a choice...</option>
-                        <option value="1month">+/- 1 Month</option>
-                        <option value="2month">+/- 2 Month</option>
-                        <option value="3month">+/- 3 Months</option>
-                        <option value="6month">+/- 6 Months</option>
-                        <option value="1year">+/- 1 Year</option>
-                        <option value="3year">+/- 3 Year</option>
-                        <option value="5year">+/- 5 Year</option>
-                        <option value="10year">+/- 10 Year</option>
-                        <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
-                    </select>
+            @* TIME RANGE GENERATE *@
+            <div @ref="timeRangeGenerateInputHtml" style="display:none;">
+                <div class="vstack gap-3">
+                    <TimeLocationInput @ref="_inputTimeLocation" />
+
+                    @* TIME RANGE *@
+                    <div class="input-group">
+                        <label class="input-group-text gap-2" for="TimeRangeInput" style="width: 165px;"><Icon IconName="flat-color-icons:calendar" Size="34" />Time Range</label>
+                        <select @bind="SelectedTimeRangePreset" class="form-select" id="TimeRangeInput" style="font-weight: 600; font-size: 17px;">
+                            <option value="" selected>Make a choice...</option>
+                            <option value="1month">+/- 1 Month</option>
+                            <option value="2month">+/- 2 Month</option>
+                            <option value="3month">+/- 3 Months</option>
+                            <option value="6month">+/- 6 Months</option>
+                            <option value="1year">+/- 1 Year</option>
+                            <option value="3year">+/- 3 Year</option>
+                            <option value="5year">+/- 5 Year</option>
+                            <option value="10year">+/- 10 Year</option>
+                            <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        @* TIME RANGE UPLOAD *@
-        <div @ref="timeRangeUploadInputHtml" style="display:none;">
-            <div>
-                <Icon IconName="noto-v1:construction" />
-                <p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
+            @* TIME RANGE UPLOAD *@
+            <div @ref="timeRangeUploadInputHtml" style="display:none;">
+                <div>
+                    <Icon IconName="noto-v1:construction" />
+                    <p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
+                </div>
             </div>
+
+            @* TIME RANGE SAMPLE HOROSCOPES *@
+            <div @ref="timeRangeSampleInputHtml" style="display:none;">
+                <div>
+                    <Icon IconName="noto-v1:construction" />
+                    <p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
+                </div>
+            </div>
+
+
         </div>
 
+        @* DATA SELECT *@
+        <APIMethodCheckSelector CustomAllMethodList="@MethodListALL" @ref="_APIMethodCheckSelector" />
+
+        @* GENERATE BUTTON *@
+        <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGenerate" />
+    </div>
+
+    @* OUTPUT *@
+    <div class="vstack gap-3 mt-4">
+        @*dont wrap table, looks untidy*@
+        <style>
+            th {
+                white-space: nowrap;
+            }
+
+            td {
+                white-space: nowrap;
+            }
+        </style>
+        <hr class="mt-5" />
+
+        @if (_isReady)
+        {
+            @* TABLE TITLE & OPTIONS *@
+            <div class="hstack gap-4">
+                <IconButton SmallSize="true" ButtonText="Download" IconName="line-md:cloud-download-loop">
+                    <DropDownList>
+                        <li>
+                            <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadCSV">
+                                <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="eos-icons:csv-file" />
+                                <span>CSV</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
+                                <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mdi:microsoft-excel" />
+                                <span>Excel</span>
+                            </a>
+                        </li>
+                    </DropDownList>
+                </IconButton>
+                <span class="mt-1">Time Range : <strong>@timeRange.start.StdDateMonthYearText - @timeRange.end.StdDateMonthYearText</strong></span>
+                <span class="mt-1">Rows : <strong>@TableRowList.Count</strong></span>
+            </div>
+
+            @* TABLE LIST *@
+            <table id="GeneratedTable" class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Time</th>
+                        <th>Planet</th>
+                        @foreach (var result in _APIMethodCheckSelector.SelectedMethodMetaList)
+                        {
+                            <td>@result.Name</td>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int index = 0; index < TableRowList.Count; index++)
+                    {
+                        <tr>
+                            <td>@TableRowList[index].Time</td> @* TIME *@
+                            <td>@TableRowList[index].Planet</td> @* Planet *@
+                            @* print out each selected data *@
+                            @foreach (var result in @TableRowList[index].DataRowList)
+                            {
+                                <td>@result.ResultAsString()</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            @* PLACE HOLDER MESSAGE *@
+            @* hide when loaded *@
+            <div class="d-flex justify-content-center" style="@((!_isReady) ? "" : "display:none !important;")">
+                @* important needed to override flex *@
+                <span style="color: @AppData.Grey; font-size: 14px;">Table will appear here after <strong>Generate</strong></span>
+                <span style="color: @AppData.Grey; font-size: 14px;">Export as <strong>CSV</strong> or <strong>Excel</strong></span>
+            </div>
+        }
 
     </div>
 
-    @* DATA SELECT *@
-    <APIMethodCheckSelector CustomAllMethodList="@MethodListALL" @ref="_APIMethodCheckSelector" />
-
-    @* GENERATE BUTTON *@
-    <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGenerate" />
 </div>
 
-@*dont wrap table, looks untidy*@
-<style>
-    th {
-        white-space: nowrap;
-    }
-
-    td {
-        white-space: nowrap;
-    }
-</style>
 
 
-@if (_isReady)
-{
-    <hr />
-
-    <p>Time Range : @timeRange.start.StdDateMonthYearText - @timeRange.end.StdDateMonthYearText</p>
-    @* TABLE LIST *@
-    <table id="GeneratedTable" class="table table-bordered table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>Time</th>
-                <th>Planet</th>
-                @foreach (var result in SelectedDataMethods)
-                {
-                    <td>@result.Name</td>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @for (int index = 0; index < TableRowList.Count; index++)
-            {
-                <tr>
-                    <td>@TableRowList[index].Time</td> @* TIME *@
-                    <td>@TableRowList[index].Planet</td> @* Planet *@
-                    @* print out each selected data *@
-                    @foreach (var result in @TableRowList[index].DataRowList)
-                    {
-                        <td>@result.Result.ToString()</td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <hr class="mt-5" />
-    @* PLACE HOLDER MESSAGE *@
-    @* hide when loaded *@
-    <div class="d-flex justify-content-center" style="@((!_isReady) ? "" : "display:none !important;")">
-        @* important needed to override flex *@
-        <span class="" style="color: @AppData.Grey; font-size: 14px;">Table will appear here after you click <strong>Generate</strong></span>
-    </div>
-}
 
 @code {
 
+    #region FIELDS
+
     private ElementReference timeRangeUploadInputHtml;
+
+    private ElementReference timeRangeSampleInputHtml;
+
     private ElementReference timeRangeGenerateInputHtml;
 
     private APISelectorBox ApiSelectorBox;
 
-    /// <summary>
-    /// data from HTML when selection changes is auto updated here
-    /// </summary>
-    private Dictionary<OpenAPIMetadata, bool> SelectedDataMethodsDictionary;
-
     private APIMethodCheckSelector _APIMethodCheckSelector;
+
     private TimeLocationInput _inputTimeLocation;
-    private List<OpenAPIMetadata> SelectedDataMethods = new List<OpenAPIMetadata>();
+
     private static List<OpenAPIMetadata> MethodListALL
     {
-        get {        
-    
+        get
+        {
+
             //get all the calc for time & planet (possible data points)
             var foundCalcs = AutoCalculator.FindCalcs(null, Time.Empty, PlanetName.Sun); //note data does not matter
             var tempAll = OpenAPIMetadata.FromMethodInfoList(foundCalcs);
@@ -158,7 +204,7 @@ else
         {
             //if user selected some value than only show data input
             //NOTE: this is done reduce clutter until last needed (better UX)
-            if (!string.IsNullOrEmpty(value)){_APIMethodCheckSelector.Show();}
+            if (!string.IsNullOrEmpty(value)) { _APIMethodCheckSelector.Show(); }
 
             _selectedTimeRangePreset = value;
         }
@@ -175,9 +221,16 @@ else
                 case "generate":
                     _jsRuntime.Show(timeRangeGenerateInputHtml);
                     _jsRuntime.Hide(timeRangeUploadInputHtml);
+                    _jsRuntime.Hide(timeRangeSampleInputHtml);
                     break;
                 case "upload":
                     _jsRuntime.Show(timeRangeUploadInputHtml);
+                    _jsRuntime.Hide(timeRangeGenerateInputHtml);
+                    _jsRuntime.Hide(timeRangeSampleInputHtml);
+                    break;
+                case "sample":
+                    _jsRuntime.Show(timeRangeSampleInputHtml);
+                    _jsRuntime.Hide(timeRangeUploadInputHtml);
                     _jsRuntime.Hide(timeRangeGenerateInputHtml);
                     break;
             }
@@ -186,33 +239,21 @@ else
         }
     }
 
+    private List<MLTableRow> TableRowList { get; set; } = new List<MLTableRow>();
 
-    private class TableRow(PlanetName selectedPlanet, Time time, List<APIFunctionResult> dataRowList)
-    {
-        public Time Time { get; set; } = time;
-        public PlanetName Planet { get; set; } = selectedPlanet;
-        public List<APIFunctionResult> DataRowList { get; set; } = dataRowList;
-    }
-
-    private List<TableRow> TableRowList { get; set; } = new List<TableRow>();
     private TimeRange timeRange = TimeRange.Empty;
+
     private string? _selectedSource;
+
     private string? _selectedTimeRangePreset = ""; //leave default empty to detect later
 
-    protected async override Task OnInitializedAsync()
+    #endregion
+
+
+    protected override async Task OnInitializedAsync()
     {
         //give time to pop, because next is heavy
         await _jsRuntime.ShowLoading(100);
-
-
-        SelectedDataMethods = MethodListALL;
-
-        //add all to list for checking with check box
-        SelectedDataMethodsDictionary = new Dictionary<OpenAPIMetadata, bool>();
-        foreach (var openApiMetadata in MethodListALL)
-        {
-            SelectedDataMethodsDictionary.Add(openApiMetadata, false);
-        }
 
         _APIMethodCheckSelector.Hide();
 
@@ -224,6 +265,9 @@ else
     {
         _jsRuntime.ShowLoading();
 
+        //hide & also regenerates table
+        _isReady = false;
+
         //get range to generate start & end of data
         var startTime = await _inputTimeLocation.GetTime();
         var tempPerson = new Person("", startTime, Gender.Empty); //inject start time as birth time HACK
@@ -231,7 +275,10 @@ else
         var timeSlices = Time.GetTimeListFromRange(startTime, timeRange.end, 24);
 
         //selected data points to include
-        var methodInfos = _APIMethodCheckSelector.GetSelected();
+        var methodInfos = _APIMethodCheckSelector.SelectedMethodInfo();
+
+        //need to reset list, else won't update properly on 2nd generate
+        TableRowList = new List<MLTableRow>();
 
         //pair up each time with a planet
         var selectedPlanets = new List<PlanetName>() { PlanetName.Sun, PlanetName.Moon };
@@ -244,11 +291,11 @@ else
                 var methodToExec = methodInfos;
                 var calcData = AutoCalculator.ExecuteCals(methodToExec, param);
 
-                TableRowList.Add(new TableRow(selectedPlanet, _time, calcData));
+                TableRowList.Add(new MLTableRow(selectedPlanet, _time, calcData));
             }
         }
 
-        //can show now
+        //can show now also regenerates table
         _isReady = true;
 
         //update view
@@ -264,5 +311,34 @@ else
 
     }
 
+    private async Task OnClickDownloadCSV()
+    {
+        //show loading
+        await _jsRuntime.ShowLoading(100);
+
+        //convert to CSV string
+        // var columnNames = _APIMethodCheckSelector
+        //                             .SelectedMethodMetaList
+        //                             .Select(mI => $"{mI.Name}{mI.ParamName}").ToList();
+        var csvString = MLTableRow.ListToCSV(TableRowList);
+
+        // convert string to file
+        var bytes = Encoding.UTF8.GetBytes(csvString);
+        var base64Raw = Convert.ToBase64String(bytes);
+
+        //start download using JS
+        var base64 = $"data:text/csv;base64,{base64Raw}";
+        var filename = $"DataTable.csv"; //todo better name
+        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, base64);
+
+        //tactile feedback to user
+        _jsRuntime.PlayDoneSound();
+        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
+    }
+
+    private void OnClickDownloadExcel()
+    {
+        _jsRuntime.FunFeaturePopUp("");
+    }
 
 }

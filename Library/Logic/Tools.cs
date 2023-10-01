@@ -2264,7 +2264,7 @@ namespace VedAstro.Library
             {
                 rootPayloadJson = new JProperty(dataName, iToJson.ToJson());
             }
-            //normal conversion via to string
+            //normal conversion via "ToString"
             else
             {
                 rootPayloadJson = new JProperty(dataName, anyTypeData?.ToString());
@@ -2272,6 +2272,54 @@ namespace VedAstro.Library
 
             return rootPayloadJson;
 
+        }
+
+        /// <summary>
+        /// Given any type tries best to convert to string
+        /// note: used in ML Table Generator
+        /// </summary>
+        public static string AnyToString(object result)
+        {
+            //based on the underlying type try best to convert to string
+            switch (result)
+            {
+                //convert list to comma separated string
+                case IList iList:
+                    var parsedList = iList.Cast<object>().ToList();
+                    var stringComma = Tools.ListToString(parsedList);
+                    return stringComma;
+                //enum value as string
+                case Enum enumResult:
+                    return enumResult.ToString(); // so that enum prints nicely
+                // Dictionary<PlanetName, ZodiacName>
+                case Dictionary<PlanetName, ZodiacName> dictPZ:
+                    return string.Join(", ", dictPZ.Select(kv => $"{kv.Key.ToString()}: {kv.Value.ToString()}"));
+                // Dictionary<PlanetName, Dictionary<ZodiacName, int>>
+                case Dictionary<PlanetName, Dictionary<ZodiacName, int>> dictPDZ:
+                    return string.Join(", ", dictPDZ.Select(kv => $"{kv.Key.ToString()}: {AnyToString(kv.Value)}"));
+                // Dictionary<ZodiacName, int>
+                case Dictionary<ZodiacName, int> dictZI:
+                    return string.Join(", ", dictZI.Select(kv => $"{kv.Key.ToString()}: {kv.Value}"));
+                // Dictionary<PlanetName, double>
+                case Dictionary<PlanetName, double> dictPD:
+                    return string.Join(", ", dictPD.Select(kv => $"{kv.Key.ToString()}: {kv.Value}"));
+                //default call ToString
+                default:
+                    return result.ToString();
+            }
+        }
+
+
+        /// <summary>
+        /// QuoteValue method takes care of escaping double quotes and enclosing values in double quotes.
+        /// This should handle cases where property values contain commas, newlines, or double quotes.
+        /// If a value contains a double quote, you can escape it by doubling it. 
+        /// </summary>
+        public static string QuoteValue(object value)
+        {
+            var stringValue = value?.ToString() ?? string.Empty;
+            stringValue = stringValue.Replace("\"", "\"\""); // escape double quotes
+            return $"\"{stringValue}\""; // enclose in double quotes
         }
 
         public static string StringToMimeType(string fileFormat)
@@ -2789,7 +2837,6 @@ namespace VedAstro.Library
             sb.Append(":");
             return sb.ToString();
         }
-
 
 
 

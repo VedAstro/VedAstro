@@ -8,7 +8,9 @@
 
     <IconTitle IconName="flat-color-icons:data-sheet" Title="Data Points" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
         <ButtonRow>
-            <Icon ExtraStyle="cursor: pointer;" TooltipText="Suggest New Data Points" IconName="fluent:person-feedback-28-regular" OnClickCallback="@_ApiSelectorBox.OnClickSuggestNewApi" />
+            <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.Column2MLData" SmallIcon="true" />
+            @*             <Icon ExtraStyle="cursor: pointer;" TooltipText="Suggest New Data Points" IconName="fluent:person-feedback-28-regular" OnClickCallback="@_ApiSelectorBox.OnClickSuggestNewApi"/>
+            *@
         </ButtonRow>
     </IconTitle>
 
@@ -27,14 +29,23 @@
     @if (SelectedMethodMetaList.Any())
     {
         @* LIST OF SELECTED DATA POINTS *@
-        <div class="vstack gap-1">
+        <div class="vstack gap-2">
             @foreach (var methodData in SelectedMethodMetaList)
             {
-                <div class="vstack gap-4">
-                    <div class="hovered border-secondary border px-4 py-2 rounded-4 border-2 hstack d-flex justify-content-between">
-                        <span class="" style="font-size: 17.5px; color: #030ce1;">@Format.FormatName(methodData.Name)</span>
-                        <Icon ExtraStyle="cursor: pointer;" TooltipText="Remove" IconName="twemoji:cross-mark" OnClickCallback="@(() => OnClickRemoveMethod(methodData))" />
-                    </div>
+                <div class="hovered border-secondary border px-4 py-2 rounded-4 border-2 hstack d-flex justify-content-between">
+                    <span class="" style="font-size: 17.5px; color: #030ce1;">@Format.FormatName(methodData.Name)</span>
+                    <select class="ms-1">
+                        <option value="Sun" selected>Sun</option>
+                        <option value="Moon">Moon</option>
+                        <option value="Mars">Mars</option>
+                        <option value="Mercury">Mercury</option>
+                        <option value="Jupiter">Jupiter</option>
+                        <option value="Venus">Venus</option>
+                        <option value="Saturn">Saturn</option>
+                        <option value="Rahu">Rahu</option>
+                        <option value="Ketu">Ketu</option>
+                    </select>
+                    <Icon Size="15" ExtraStyle="cursor: pointer;" TooltipText="Remove" IconName="twemoji:cross-mark" OnClickCallback="@(() => OnClickRemoveMethod(methodData))" />
                 </div>
             }
         </div>
@@ -56,9 +67,13 @@
 
     private APISelectorBox _ApiSelectorBox;
     private List<OpenAPIMetadata> allMethodMetaList = new List<OpenAPIMetadata>();
-    private List<OpenAPIMetadata?> SelectedMethodMetaList = new List<OpenAPIMetadata?>();
-    private bool _isEventAttached = false;
 
+    /// <summary>
+    /// The list of selected methods by user
+    /// </summary>
+    public List<OpenAPIMetadata?> SelectedMethodMetaList = new List<OpenAPIMetadata?>();
+
+    private bool _isEventAttached = false;
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -75,11 +90,7 @@
     /// Gets selected methods
     /// </summary>
     /// <returns></returns>
-    public List<MethodInfo> GetSelected()
-    {
-        var methodInfos = SelectedMethodMetaList.Select(x => x.MethodInfo).ToList();
-        return methodInfos;
-    }
+    public List<MethodInfo> SelectedMethodInfo() => SelectedMethodMetaList.Select(x => x.MethodInfo).ToList();
 
     public void Hide() => _jsRuntime.Hide(mainElementRef);
 
@@ -92,6 +103,7 @@
 
     /// <summary>
     /// When user selects a method, this is code is called
+    /// basically adds new method
     /// </summary>
     private void OnChangeSelectMethod(object sender, EventArgs e)
     {

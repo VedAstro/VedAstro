@@ -26,6 +26,7 @@ using Azure.Storage.Blobs;
 using Svg;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
+using static Azure.Core.HttpHeader;
 
 
 namespace VedAstro.Library
@@ -2838,8 +2839,25 @@ namespace VedAstro.Library
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Given a meta data will give name params stacked
+        /// exp : IsPlanetBenefic_Sun
+        /// </summary>
+        public static string GetSpecialMLTableName(dynamic openApiMetadata)
+        {
+            //stack the param values next to each other exp: Sun_House1
+            var paramCombined = "";
+            foreach (var selectedParam in openApiMetadata.SelectedParams)
+            {
+                //if time no need to add into column name, since its in the row
+                if (selectedParam is Time) { continue; }
 
+                var strData = Tools.AnyToString(selectedParam);
+                paramCombined += "_" + strData;
+            }
 
+            return $"{openApiMetadata.Name}{paramCombined}";
+        }
     }
 
 

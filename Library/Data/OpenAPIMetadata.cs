@@ -116,6 +116,7 @@ public class OpenAPIMetadata
     /// </summary>
     public object ReturnType => GetTypeName(MethodInfo?.ReturnType);
 
+
     /// <summary>
     /// generates python method stub declaration code
     /// EXP: def HousePlanetIsIn(time: Time, planet_name: PlanetName) -> HouseName:

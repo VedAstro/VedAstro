@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
@@ -88,4 +89,10 @@ public record APIFunctionResult(string Name, object Result)
         return returnOb2;
 
     }
+
+    /// <summary>
+    /// gets best representation of data in result as text
+    /// </summary>
+    public string ResultAsString() => Tools.AnyToString(Result);
+    
 }

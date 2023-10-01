@@ -71,8 +71,6 @@ namespace VedAstro.Library
 		}
 
 
-
-
 		public static List<APIFunctionResult> ExecuteCals(IEnumerable<MethodInfo> foundCalcs, params object[] paramInput)
 		{
 			var returnList = new List<APIFunctionResult>();

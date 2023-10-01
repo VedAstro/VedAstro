@@ -1,5 +1,6 @@
 ﻿@using VedAstro.Library
 @using System.Collections
+@using System.Reflection
 @using System.Text
 @attribute [Route(PageRoute.TableGenerator)]
 
@@ -138,9 +139,8 @@
                     {
                         <tr>
                             <td>@TableRowList[index].Time</td> @* TIME *@
-                            <td>@TableRowList[index].Planet</td> @* Planet *@
                             @* print out each selected data *@
-                            @foreach (var result in @TableRowList[index].DataRowList)
+                            @foreach (var result in @TableRowList[index].DataColumns)
                             {
                                 <td>@result.ResultAsString()</td>
                             }
@@ -163,8 +163,6 @@
     </div>
 
 </div>
-
-
 
 
 @code {
@@ -276,23 +274,32 @@
 
         //selected data points to include
         var methodInfos = _APIMethodCheckSelector.SelectedMethodInfo();
+        var selectedMetaList = _APIMethodCheckSelector.SelectedMethodMetaList;
 
         //need to reset list, else won't update properly on 2nd generate
         TableRowList = new List<MLTableRow>();
 
-        //pair up each time with a planet
-        var selectedPlanets = new List<PlanetName>() { PlanetName.Sun, PlanetName.Moon };
-        foreach (var selectedPlanet in selectedPlanets)
+        //using time as 1 column generate the other data columns
+        foreach (var _time in timeSlices)
         {
-            foreach (var _time in timeSlices)
+            var finalResultList = new List<APIFunctionResult>();
+            foreach (var metaInfo in selectedMetaList)
             {
-                //var calcData = Calculate.AllPlanetData(selectedPlanet, _time);
-                object[] param = new[] { (object)selectedPlanet, (object)_time };
-                var methodToExec = methodInfos;
-                var calcData = AutoCalculator.ExecuteCals(methodToExec, param);
+                //get the planet or house selected by user in each individual data point packet
+                List<object> param = metaInfo.SelectedParams;
+                param.Add((object)_time); //time injected from different component
 
-                TableRowList.Add(new MLTableRow(selectedPlanet, _time, calcData));
+                //calculate together all the parameters given by user (heavy computation)
+                var wrapped = new List<MethodInfo>() { metaInfo.MethodInfo };
+                var calcData = AutoCalculator.ExecuteCals(wrapped, param.ToArray());
+
+                //combine data columns for this row
+                finalResultList.AddRange(calcData);
             }
+
+            //add row to table
+            TableRowList.Add(new MLTableRow(_time, finalResultList));
+
         }
 
         //can show now also regenerates table

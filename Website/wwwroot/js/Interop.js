@@ -28,6 +28,8 @@ const RETRY_COUNT = 5;
 
 
 
+
+
 //--------------------------CALENDAR INPUT SELECTOR CODE
 //DESCRIPTION
 //This file stores all code fo js date picker (VanillaCalendar)
@@ -150,6 +152,7 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
 
 }
 
+//given a base64 will convert file and init download
 export function SaveAsFile(filename, data) {
     var link = document.createElement('a');
     link.download = filename;
@@ -158,7 +161,6 @@ export function SaveAsFile(filename, data) {
     link.click();
     document.body.removeChild(link);
 }
-
 
 //TODO MARKED FOR DELETION SINCE CAN TOGGLE VIA CLASS IN BLAZOR
 //export function togglePopup(e) {

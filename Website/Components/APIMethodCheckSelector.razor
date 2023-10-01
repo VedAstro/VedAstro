@@ -9,8 +9,6 @@
     <IconTitle IconName="flat-color-icons:data-sheet" Title="Data Points" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
         <ButtonRow>
             <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.Column2MLData" SmallIcon="true" />
-            @*             <Icon ExtraStyle="cursor: pointer;" TooltipText="Suggest New Data Points" IconName="fluent:person-feedback-28-regular" OnClickCallback="@_ApiSelectorBox.OnClickSuggestNewApi"/>
-            *@
         </ButtonRow>
     </IconTitle>
 
@@ -33,18 +31,20 @@
             @foreach (var methodData in SelectedMethodMetaList)
             {
                 <div class="hovered border-secondary border px-4 py-2 rounded-4 border-2 hstack d-flex justify-content-between">
-                    <span class="" style="font-size: 17.5px; color: #030ce1;">@Format.FormatName(methodData.Name)</span>
-                    <select class="ms-1">
-                        <option value="Sun" selected>Sun</option>
-                        <option value="Moon">Moon</option>
-                        <option value="Mars">Mars</option>
-                        <option value="Mercury">Mercury</option>
-                        <option value="Jupiter">Jupiter</option>
-                        <option value="Venus">Venus</option>
-                        <option value="Saturn">Saturn</option>
-                        <option value="Rahu">Rahu</option>
-                        <option value="Ketu">Ketu</option>
-                    </select>
+                    <div class="hstack gap-1">
+                        <span class="" style="font-size: 17.5px; color: #030ce1;">@Format.FormatName(methodData.Name)</span>
+                        <select @onchange="@((e)=> OnSelectPlanetAsCustomParam(methodData, e))" class="">
+                            <option value="Sun" selected>Sun</option>
+                            <option value="Moon">Moon</option>
+                            <option value="Mars">Mars</option>
+                            <option value="Mercury">Mercury</option>
+                            <option value="Jupiter">Jupiter</option>
+                            <option value="Venus">Venus</option>
+                            <option value="Saturn">Saturn</option>
+                            <option value="Rahu">Rahu</option>
+                            <option value="Ketu">Ketu</option>
+                        </select>
+                    </div>
                     <Icon Size="15" ExtraStyle="cursor: pointer;" TooltipText="Remove" IconName="twemoji:cross-mark" OnClickCallback="@(() => OnClickRemoveMethod(methodData))" />
                 </div>
             }
@@ -57,6 +57,8 @@
 </div>
 
 @code {
+
+    #region FIELDS
 
     [Parameter]
     public List<OpenAPIMetadata> CustomAllMethodList { get; set; }
@@ -72,8 +74,11 @@
     /// The list of selected methods by user
     /// </summary>
     public List<OpenAPIMetadata?> SelectedMethodMetaList = new List<OpenAPIMetadata?>();
+    public List<MethodInfo> SelectedMethodInfo => SelectedMethodMetaList.Select(mI => mI.MethodInfo).ToList();
 
     private bool _isEventAttached = false;
+
+    #endregion
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -86,12 +91,6 @@
         }
     }
 
-    /// <summary>
-    /// Gets selected methods
-    /// </summary>
-    /// <returns></returns>
-    public List<MethodInfo> SelectedMethodInfo() => SelectedMethodMetaList.Select(x => x.MethodInfo).ToList();
-
     public void Hide() => _jsRuntime.Hide(mainElementRef);
 
     public void Show() => _jsRuntime.Show(mainElementRef);
@@ -102,23 +101,25 @@
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
     /// <summary>
-    /// When user selects a method, this is code is called
-    /// basically adds new method
+    /// When user selects a method, this code is called
+    /// basically adds new method to selected list
     /// </summary>
     private void OnChangeSelectMethod(object sender, EventArgs e)
     {
-        if (_ApiSelectorBox.GetSelectedMethodName() != "")
-        {
-            //add newly selected data point to main list
-            var newMethod = _ApiSelectorBox.SelectedMethod;
-            SelectedMethodMetaList.Add(newMethod);
+        //end here if not selected
+        if (_ApiSelectorBox.GetSelectedMethodName() == "") return;
 
-            //reset selector to go back to "make new selection"
-            _ApiSelectorBox.Reset();
+        //add newly selected data point to main list
+        var newMethod = _ApiSelectorBox.SelectedMethod.Clone(); //IMPORTANT : make new instance to support multiple same methods
+        //inject in the custom params
+        newMethod.AddSelectedParams(PlanetName.Sun); //set sun as default planet
+        SelectedMethodMetaList.Add(newMethod);
 
-            //refresh to make changes appear
-            StateHasChanged();
-        }
+        //reset selector to go back to "make new selection"
+        _ApiSelectorBox.Reset();
+
+        //refresh to make changes appear
+        StateHasChanged();
     }
 
     private void OnClickRemoveMethod(OpenAPIMetadata? methodData)
@@ -129,5 +130,14 @@
         StateHasChanged();
     }
 
+    private void OnSelectPlanetAsCustomParam(OpenAPIMetadata openApiMetadata, ChangeEventArgs obj)
+    {
+        //get planet name from string
+        var planetParsed = PlanetName.Parse(obj.Value.ToString());
+
+        //inject custom planet name as param into selected method meta
+        openApiMetadata.SelectedParams.Clear(); //important to clear previous values
+        openApiMetadata.SelectedParams.Add(planetParsed);
+    }
 
 }

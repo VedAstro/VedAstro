@@ -77,14 +77,14 @@
 
         </div>
 
-        @* DATA SELECT *@
+        @* DATA POINT / METHOD SELECT *@
         <APIMethodCheckSelector CustomAllMethodList="@MethodListALL" @ref="_APIMethodCheckSelector" />
 
         @* GENERATE BUTTON *@
         <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGenerate" />
     </div>
 
-    @* OUTPUT *@
+    @* OUTPUT TABLE *@
     <div class="vstack gap-3 mt-4">
         @*dont wrap table, looks untidy*@
         <style>
@@ -100,7 +100,7 @@
 
         @if (_isReady)
         {
-            @* TABLE TITLE & OPTIONS *@
+            @* TITLE & OPTIONS *@
             <div class="hstack gap-4">
                 <IconButton SmallSize="true" ButtonText="Download" IconName="line-md:cloud-download-loop">
                     <DropDownList>
@@ -122,15 +122,14 @@
                 <span class="mt-1">Rows : <strong>@TableRowList.Count</strong></span>
             </div>
 
-            @* TABLE LIST *@
+            @* TABLE *@
             <table id="GeneratedTable" class="table table-bordered table-hover">
                 <thead class="table-dark">
                     <tr>
                         <th>Time</th>
-                        <th>Planet</th>
                         @foreach (var result in _APIMethodCheckSelector.SelectedMethodMetaList)
                         {
-                            <td>@result.Name</td>
+                            <td>@result.MLTableName</td>
                         }
                     </tr>
                 </thead>
@@ -206,7 +205,7 @@
 
             _selectedTimeRangePreset = value;
         }
-    } //default
+    }
 
     public string? SelectedSource
     {
@@ -245,8 +244,8 @@
 
     private string? _selectedTimeRangePreset = ""; //leave default empty to detect later
 
-    #endregion
 
+    #endregion
 
     protected override async Task OnInitializedAsync()
     {
@@ -273,7 +272,6 @@
         var timeSlices = Time.GetTimeListFromRange(startTime, timeRange.end, 24);
 
         //selected data points to include
-        var methodInfos = _APIMethodCheckSelector.SelectedMethodInfo();
         var selectedMetaList = _APIMethodCheckSelector.SelectedMethodMetaList;
 
         //need to reset list, else won't update properly on 2nd generate
@@ -286,12 +284,15 @@
             foreach (var metaInfo in selectedMetaList)
             {
                 //get the planet or house selected by user in each individual data point packet
-                List<object> param = metaInfo.SelectedParams;
+                List<object> param = metaInfo.SelectedParams.ToList(); //clone else will effect underlying list
                 param.Add((object)_time); //time injected from different component
 
                 //calculate together all the parameters given by user (heavy computation)
                 var wrapped = new List<MethodInfo>() { metaInfo.MethodInfo };
                 var calcData = AutoCalculator.ExecuteCals(wrapped, param.ToArray());
+
+                //inject selected params for use when converting into CSV & EXCEL (HACK)
+                calcData.ForEach(aR => aR.AddSelectedParams(param));
 
                 //combine data columns for this row
                 finalResultList.AddRange(calcData);
@@ -323,7 +324,7 @@
         //show loading
         await _jsRuntime.ShowLoading(100);
 
-        //convert to CSV string
+        //convert created table to CSV string
         // var columnNames = _APIMethodCheckSelector
         //                             .SelectedMethodMetaList
         //                             .Select(mI => $"{mI.Name}{mI.ParamName}").ToList();

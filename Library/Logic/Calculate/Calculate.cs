@@ -11758,6 +11758,14 @@ namespace VedAstro.Library
 
         #endregion
 
+
+#if DEBUG
+        /// <summary>
+        /// Special debug function
+        /// </summary>
+        public static string BouncBackInputAsString(PlanetName planetName, Time time) => planetName.ToString();
+
+#endif
     }
 }
 

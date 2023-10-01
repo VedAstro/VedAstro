@@ -65,6 +65,11 @@ namespace VedAstro.Library;
 /// </summary>
 public class OpenAPIMetadata
 {
+    /// <summary>
+    /// Special name for use in ML Data Tables, includes first param value added to name
+    /// </summary>
+    public string MLTableName => Tools.GetSpecialMLTableName(this);
+
     public OpenAPIMetadata(string signature, string description, string exampleOutput, MethodInfo methodInfo = null)
     {
         Description = description;
@@ -195,5 +200,23 @@ public class OpenAPIMetadata
         }
     }
 
+    /// <summary>
+    /// Safely adds to Selected param list no init needed
+    /// </summary>
+    public void AddSelectedParams(PlanetName inputPlanet)
+    {
+        //assign new if null
+        this.SelectedParams ??= new List<object>();
+        this.SelectedParams.Add(inputPlanet);
+    }
 
+    /// <summary>
+    /// Return a new instance
+    /// </summary>
+    public OpenAPIMetadata Clone()
+    {
+        var clonedDolly = new OpenAPIMetadata(Signature, Description, ExampleOutput, MethodInfo);
+
+        return clonedDolly;
+    }
 }

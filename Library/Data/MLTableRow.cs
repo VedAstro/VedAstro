@@ -32,8 +32,8 @@ namespace VedAstro.Library
             // Get property names (column names)
             PropertyInfo[] properties = typeof(MLTableRow).GetProperties().Where(p => p.Name != "DataColumns").ToArray();
             
-            //names of the columns with custom name combined with param EXP: IsPlanetBenefic+Sun
-            var columnNames = tableRowList[0].DataColumns.Select(d => d.Name);
+            //names of the columns with custom name combined with param EXP: IsPlanetBenefic_Sun
+            var columnNames = tableRowList[0].DataColumns.Select(result => result.MLTableName);
 
             // Assuming DataRowList is the first property in MLTableRow
             csv.AppendLine(string.Join(",", properties.Select(p => p.Name).Concat(columnNames)));

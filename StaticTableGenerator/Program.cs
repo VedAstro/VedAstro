@@ -34,9 +34,8 @@ namespace StaticTableGenerator
         /// dynamically fill in the place the location of the files, somewhat
         /// </summary>
         static string userFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-        static string CalculatorCodeFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\managers\Calculate.cs");
-        static string MetadataStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\objects\OpenAPIStaticTable.cs");
+        static string CalculatorCodeFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Logic\Calculate\Calculate.cs");
+        static string MetadataStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\OpenAPIStaticTable.cs");
         static string PythonCalculateStubFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro.Python\VedAstro\Library.pyi");
 
 

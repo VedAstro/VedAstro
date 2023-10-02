@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -8,6 +10,7 @@ namespace VedAstro.Library
     /// <summary>
     /// A list of planet names, with string parsing & comparison
     /// </summary>
+    [TypeConverter(typeof(PlanetNameTypeConverter))]
     public class PlanetName : IToXml, IFromUrl
     {
         /// <summary>
@@ -261,4 +264,27 @@ namespace VedAstro.Library
 
     }
 
+
+    /// <summary>
+    /// Special class to allow direct use Planet Name in blazor
+    /// </summary>
+    public class PlanetNameTypeConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+        }
+
+        /// <summary>
+        /// Tells blazor how to auto convert string to Planet Name
+        /// </summary>
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value is string stringValue)
+            {
+                return PlanetName.Parse(stringValue);
+            }
+            return base.ConvertFrom(context, culture, value);
+        }
+    }
 }

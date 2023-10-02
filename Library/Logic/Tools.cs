@@ -2843,8 +2843,13 @@ namespace VedAstro.Library
         /// Given a meta data will give name params stacked
         /// exp : IsPlanetBenefic_Sun
         /// </summary>
-        public static string GetSpecialMLTableName(dynamic openApiMetadata)
+        public static string GetSpecialMLTableName(dynamic openApiMetadata, object resultOverride = null)
         {
+            if (openApiMetadata.SelectedParams == null)
+            {
+                //when using methods like All, need to dig out column name
+                return $"{openApiMetadata.Name}_{resultOverride.ToString()}";
+            }
             //stack the param values next to each other exp: Sun_House1
             var paramCombined = "";
             foreach (var selectedParam in openApiMetadata.SelectedParams)

@@ -3,6 +3,7 @@
 @using System.Reflection
 @using System.Text
 @using OfficeOpenXml
+@using SwissEphNet
 @attribute [Route(PageRoute.TableGenerator)]
 
 <PageTitle>Data Generator | VedAstro</PageTitle>
@@ -103,65 +104,50 @@
         {
             @* TITLE & OPTIONS *@
             <div class="hstack gap-4">
-                <IconButton SmallSize="true" ButtonText="Download" IconName="line-md:cloud-download-loop">
-                    <DropDownList>
-                        <li>
-                            <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadCSV">
-                                <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="eos-icons:csv-file" />
-                                <span>CSV</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
-                                <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mdi:microsoft-excel" />
-                                <span>Excel</span>
-                            </a>
-                        </li>
-                    </DropDownList>
-                </IconButton>
-                <span class="mt-1">Time Range : <strong>@timeRange.start.StdDateMonthYearText - @timeRange.end.StdDateMonthYearText</strong></span>
-                <span class="mt-1">Rows : <strong>@TableRowList.Count</strong></span>
+
+                <div class="hstack gap-3">
+                    <IconButton SmallSize="true" IconName="iconamoon:zoom-in" TooltipText="Zoom In" OnClickCallback="OnClickZoomIn" />
+                    <IconButton SmallSize="true" IconName="iconamoon:zoom-out" TooltipText="Zoom Out" OnClickCallback="OnClickZoomOut" />
+                    <IconButton SmallSize="true" ButtonText="Download" IconName="line-md:cloud-download-loop">
+                        <DropDownList>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadCSV">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="eos-icons:csv-file" />
+                                    <span>CSV</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mdi:microsoft-excel" />
+                                    <span>Excel</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="simple-icons:apacheparquet" />
+                                    <span>Parquet</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="tabler:file-database" />
+                                    <span>HDF5</span>
+                                </a>
+                            </li>
+                        </DropDownList>
+                    </IconButton>
+                </div>
+                <div class="hstack gap-3">
+                    <span class="mt-1">Rows : <strong>@CurrentTable.RowsCount</strong></span>
+                    <span class="mt-1">Columns : <strong>@CurrentTable.ColumnsCount</strong></span>
+                </div>
             </div>
 
+
             @* TABLE *@
-            <table id="GeneratedTable" class="table table-bordered table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Time</th>
-                        @foreach (var result in _DataColumnSelector.SelectedMethodMetaList)
-                        {
-                            //if is list within list
-                            if (result?.MethodInfo?.ReturnType == typeof(List<APIFunctionResult>)) 
-                            {
-                                @foreach (var funcResult in TableRowList[0].DataColumns.Select(xx => xx.MLTableName(result.SelectedParams[0])))
-                                {
-                                    <th>@funcResult</th>
-                                }
-                            }
-                            //else print normal
-                            else
-                            {
-                                <th>@result.MLTableName</th>
-                            }
-
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int index = 0; index < TableRowList.Count; index++)
-                    {
-                        <tr>
-                            <td>@TableRowList[index].Time</td> @* TIME *@
-
-                            @* print out each selected data *@
-                            @foreach (var resultX in TableRowList[index].DataColumns)
-                            {
-                                <td>@resultX.ResultAsString()</td>
-                            }
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <div id="MLTableHolder">
+                @((MarkupString)CurrentTable.ToHtml())
+            </div>
         }
         else
         {
@@ -182,6 +168,10 @@
 @code {
 
     #region FIELDS
+
+    private int CurrentZoomLevel = 100; //defaults to 100 on start
+
+    private MLTable CurrentTable = new MLTable();
 
     private ElementReference timeRangeUploadInputHtml;
 
@@ -280,6 +270,7 @@
         //hide & also regenerates table
         _isReady = false;
 
+        //# PREPARE DATA
         //get range to generate start & end of data
         var startTime = await _inputTimeLocation.GetTime();
         var tempPerson = new Person("", startTime, Gender.Empty); //inject start time as birth time HACK
@@ -323,6 +314,10 @@
 
         }
 
+        //# BRING DATA TO LIVE AS TABLE
+        CurrentTable.Update(TableRowList, selectedMetaList);
+
+
         //can show now also regenerates table
         _isReady = true;
 
@@ -345,7 +340,7 @@
         await _jsRuntime.ShowLoading(100);
 
         //convert created table to CSV string
-        var csvString = MLTableRow.ListToCSV(TableRowList);
+        var csvString = CurrentTable.ToCSV();
 
         // convert string to file
         var bytes = Encoding.UTF8.GetBytes(csvString);
@@ -361,13 +356,15 @@
         await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
     }
 
+
+
     private async Task OnClickDownloadExcel()
     {
         //show loading
         await _jsRuntime.ShowLoading(100);
 
         //convert created table to CSV string
-        var excelFileBytes = MLTableRow.ListToExcel(TableRowList);
+        var excelFileBytes = CurrentTable.ToExcel();
 
         var base64Raw = Convert.ToBase64String(excelFileBytes);
         //start download using JS
@@ -380,5 +377,24 @@
 
 
     }
+
+    private async Task OnClickZoomIn()
+    {
+        //increment current zoom level
+        CurrentZoomLevel += 10;
+
+        //note : beautiful JS use without call to JS file (AI's awesome "eval" method)
+        await _jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('MLTableHolder').style.zoom = '{CurrentZoomLevel}%'");
+    }
+
+    private async Task OnClickZoomOut()
+    {
+        //increment current zoom level
+        CurrentZoomLevel -= 10;
+
+        //note : beautiful JS use without call to JS file (AI's awesome "eval" method)
+        await _jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('MLTableHolder').style.zoom = '{CurrentZoomLevel}%'");
+    }
+
 }
 

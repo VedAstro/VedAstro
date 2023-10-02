@@ -71,7 +71,7 @@ public class OpenAPIMetadata
     /// <summary>
     /// Special name for use in ML Data Tables, includes first param value added to name
     /// </summary>
-    public string MLTableName => Tools.GetSpecialMLTableName(this);
+    public string MLTableName(object resultOverride = null) => Tools.GetSpecialMLTableName(this, resultOverride);
 
     public OpenAPIMetadata(string signature, string description, string exampleOutput, MethodInfo methodInfo = null)
     {
@@ -145,7 +145,7 @@ public class OpenAPIMetadata
 
             _selectedPlanet = value;
         }
-    } 
+    }
 
 
     /// <summary>
@@ -238,5 +238,18 @@ public class OpenAPIMetadata
         var clonedDolly = new OpenAPIMetadata(Signature, Description, ExampleOutput, MethodInfo);
 
         return clonedDolly;
+    }
+
+
+    public static OpenAPIMetadata FromAPIFunctionResult(APIFunctionResult funcResult)
+    {
+        //get method info from calc name
+        var calcName = funcResult.Name;
+        var methodInfo = Tools.MethodNameToMethodInfo(calcName);
+
+        //convert method info to meta data
+        var converted = OpenAPIMetadata.FromMethodInfoList(new List<MethodInfo>() { methodInfo })[0];
+
+        return converted;
     }
 }

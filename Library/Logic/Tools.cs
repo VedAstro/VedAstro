@@ -2530,7 +2530,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Given a method name in string form, will get it's reference to code
-        /// gets from AstronomicalCalculator class
+        /// gets from Calculate.cs class
         /// </summary>
         public static MethodInfo MethodNameToMethodInfo(string methodName)
         {
@@ -2539,7 +2539,10 @@ namespace VedAstro.Library
             var foundMethod = foundList.FirstOrDefault();
 
             //if more than 1 method found major internal error, crash it!
-            if (foundList.Count() > 1) { throw new InvalidOperationException($"Duplicate API Names : {methodName}"); }
+            if (foundList.Count() > 1)
+            {
+                Console.WriteLine($"POTENTIAL ERROR: Duplicate API Names : {methodName}");
+            }
 
             return foundMethod;
 
@@ -2848,7 +2851,7 @@ namespace VedAstro.Library
             if (openApiMetadata.SelectedParams == null)
             {
                 //when using methods like All, need to dig out column name
-                return $"{openApiMetadata.Name}_{resultOverride.ToString()}";
+                return $"{openApiMetadata.Name}_{resultOverride?.ToString() ?? "PLEASE INJECT VALUE"}";
             }
             //stack the param values next to each other exp: Sun_House1
             var paramCombined = "";

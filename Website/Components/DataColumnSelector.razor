@@ -33,8 +33,8 @@
                 <div class="hovered border-secondary border px-4 py-2 rounded-4 border-2 hstack d-flex justify-content-between">
                     <div class="hstack gap-1">
                         <span class="" style="font-size: 17.5px; color: #030ce1;">@Format.FormatName(methodData.Name)</span>
-                        <select @onchange="@((e)=> OnSelectPlanetAsCustomParam(methodData, e))" class="">
-                            <option value="Sun" selected>Sun</option>
+                        <select @bind="methodData.SelectedPlanet"class="">
+                            <option value="Sun">Sun</option>
                             <option value="Moon">Moon</option>
                             <option value="Mars">Mars</option>
                             <option value="Mercury">Mercury</option>
@@ -49,6 +49,7 @@
                 </div>
             }
         </div>
+
     }
 
     @* ADD NEW METHOD *@
@@ -111,7 +112,7 @@
 
         //add newly selected data point to main list
         var newMethod = _ApiSelectorBox.SelectedMethod.Clone(); //IMPORTANT : make new instance to support multiple same methods
-        //inject in the custom params
+                                                                //inject in the custom params
         newMethod.AddSelectedParams(PlanetName.Sun); //set sun as default planet
         SelectedMethodMetaList.Add(newMethod);
 
@@ -130,14 +131,20 @@
         StateHasChanged();
     }
 
-    private void OnSelectPlanetAsCustomParam(OpenAPIMetadata openApiMetadata, ChangeEventArgs obj)
+    /// <summary>
+    /// injects selected planet into given meta data
+    /// </summary>
+    private void OnSelectPlanetAsCustomParam(OpenAPIMetadata openApiMetadata, PlanetName planetParsed)
     {
         //get planet name from string
-        var planetParsed = PlanetName.Parse(obj.Value.ToString());
+        //var planetParsed = PlanetName.Parse(obj.Value.ToString());
 
         //inject custom planet name as param into selected method meta
         openApiMetadata.SelectedParams.Clear(); //important to clear previous values
         openApiMetadata.SelectedParams.Add(planetParsed);
+
+        //add extra for easy access
+        openApiMetadata.SelectedPlanet = planetParsed;
     }
 
 }

@@ -14,7 +14,10 @@ public record APIFunctionResult(string Name, object Result)
     /// <summary>
     /// Special name for use in ML Data Tables, includes param value added to name
     /// </summary>
-    public string MLTableName => Tools.GetSpecialMLTableName(this);
+    public string MLTableName(object resultOverride = null)
+    {
+        return Tools.GetSpecialMLTableName(this, resultOverride);
+    }
 
     /// <summary>
     /// SPECIAL HACK METHOD to inject custom params for use in ML Data Generator

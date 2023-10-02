@@ -79,7 +79,7 @@
         </div>
 
         @* DATA POINT / METHOD SELECT *@
-        <APIMethodCheckSelector CustomAllMethodList="@MethodListALL" @ref="_APIMethodCheckSelector" />
+        <DataColumnSelector CustomAllMethodList="@MethodListALL" @ref="_DataColumnSelector" />
 
         @* GENERATE BUTTON *@
         <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGenerate" />
@@ -128,9 +128,22 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Time</th>
-                        @foreach (var result in _APIMethodCheckSelector.SelectedMethodMetaList)
+                        @foreach (var result in _DataColumnSelector.SelectedMethodMetaList)
                         {
-                            <td>@result.MLTableName</td>
+                            //if is list within list
+                            if (result?.MethodInfo?.ReturnType == typeof(List<APIFunctionResult>)) 
+                            {
+                                @foreach (var funcResult in TableRowList[0].DataColumns.Select(xx => xx.MLTableName(result.SelectedParams[0])))
+                                {
+                                    <th>@funcResult</th>
+                                }
+                            }
+                            //else print normal
+                            else
+                            {
+                                <th>@result.MLTableName</th>
+                            }
+
                         }
                     </tr>
                 </thead>
@@ -139,10 +152,11 @@
                     {
                         <tr>
                             <td>@TableRowList[index].Time</td> @* TIME *@
+
                             @* print out each selected data *@
-                            @foreach (var result in @TableRowList[index].DataColumns)
+                            @foreach (var resultX in TableRowList[index].DataColumns)
                             {
-                                <td>@result.ResultAsString()</td>
+                                <td>@resultX.ResultAsString()</td>
                             }
                         </tr>
                     }
@@ -177,7 +191,7 @@
 
     private APISelectorBox ApiSelectorBox;
 
-    private APIMethodCheckSelector _APIMethodCheckSelector;
+    private DataColumnSelector _DataColumnSelector;
 
     private TimeLocationInput _inputTimeLocation;
 
@@ -202,7 +216,7 @@
         {
             //if user selected some value than only show data input
             //NOTE: this is done reduce clutter until last needed (better UX)
-            if (!string.IsNullOrEmpty(value)) { _APIMethodCheckSelector.Show(); }
+            if (!string.IsNullOrEmpty(value)) { _DataColumnSelector.Show(); }
 
             _selectedTimeRangePreset = value;
         }
@@ -253,7 +267,7 @@
         //give time to pop, because next is heavy
         await _jsRuntime.ShowLoading(100);
 
-        _APIMethodCheckSelector.Hide();
+        _DataColumnSelector.Hide();
 
         _jsRuntime.HideLoading();
 
@@ -273,7 +287,7 @@
         var timeSlices = Time.GetTimeListFromRange(startTime, timeRange.end, 24);
 
         //selected data points to include
-        var selectedMetaList = _APIMethodCheckSelector.SelectedMethodMetaList;
+        var selectedMetaList = _DataColumnSelector.SelectedMethodMetaList;
 
         //need to reset list, else won't update properly on 2nd generate
         TableRowList = new List<MLTableRow>();

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Text;
 
@@ -65,6 +66,8 @@ namespace VedAstro.Library;
 /// </summary>
 public class OpenAPIMetadata
 {
+    private PlanetName _selectedPlanet = PlanetName.Sun; //set default so dropdown has something on load
+
     /// <summary>
     /// Special name for use in ML Data Tables, includes first param value added to name
     /// </summary>
@@ -126,6 +129,23 @@ public class OpenAPIMetadata
     /// Users inputs this params instances before executing API method
     /// </summary>
     public List<object> SelectedParams { get; set; }
+
+    /// <summary>
+    /// SPECIAL HACK METHOD to inject custom params for use in ML Data Generator
+    /// made for Blazor binding
+    /// </summary>
+    public PlanetName SelectedPlanet
+    {
+        get => _selectedPlanet;
+        set
+        {
+            //inject custom planet name as param into selected method meta
+            this.SelectedParams.Clear(); //important to clear previous values
+            this.SelectedParams.Add(value);
+
+            _selectedPlanet = value;
+        }
+    } 
 
 
     /// <summary>

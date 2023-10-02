@@ -12,12 +12,20 @@ namespace VedAstro.Library
     /// <summary>
     /// Represents 1 row in table used to make ML Data Generator 
     /// </summary>
-    public class MLTableRow(Time time, List<APIFunctionResult> dataRowList)
+    public class MLTableRow
     {
+        /// <summary>
+        /// Represents 1 row in table used to make ML Data Generator 
+        /// </summary>
+        public MLTableRow(Time time, List<APIFunctionResult> dataRowList)
+        {
+            Time = time;
+            DataColumns = dataRowList;
+        }
 
-        public Time Time { get; set; } = time;
+        public Time Time { get; set; }
 
-        public List<APIFunctionResult> DataColumns { get; set; } = dataRowList;
+        public List<APIFunctionResult> DataColumns { get; set; }
 
         /// <summary>
         /// Converts a list of TableRow aka a full ML Data Table into CSV string 
@@ -32,7 +40,7 @@ namespace VedAstro.Library
             
             // Get the column names from the first row in the list.
             // The column names are the MLTableName properties of the DataColumns.
-            var columnNames = tableRowList[0].DataColumns.Select(result => result.MLTableName);
+            var columnNames = tableRowList[0].DataColumns.Select(result => result.MLTableName("NOTHH!"));
             
             // Add the column headers to the CSV string.
             // The headers are the column names joined by commas, with "Time" as the first column.
@@ -67,7 +75,7 @@ namespace VedAstro.Library
                     return package.GetAsByteArray();
                 }
                 // Get the column names from the first row in the list.
-                var columnNames = tableRowList[0].DataColumns.Select(result => result.MLTableName);
+                var columnNames = tableRowList[0].DataColumns.Select(result => result.MLTableName("NOT YET"));
                 // Add the column headers to the Excel file.
                 var headerRow = new List<string> { "Time" };
                 headerRow.AddRange(columnNames);

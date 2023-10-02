@@ -110,8 +110,6 @@ Allen Mullen
     <!-- Bootstrap CSS : Used for styling everything-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
 
-    <!-- TODO MARKED FOR DELETION Bootstrap icons  -->
-    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />-->
     <!--TABULATOR Styles-->
     <link rel="stylesheet" href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css">
 
@@ -125,9 +123,13 @@ Allen Mullen
         // AUTO refresh when hit critical errors
         window.onerror = function (message, source, lineno, colno, error) {
             console.log('An error occurred: ' + message);
+
+            alert("Sorry, VedAstro crashed, lets reload it...");
+
+            //todo server log
+
             // Refresh the page
             location.reload(true); // Pass true to perform a hard reload
-            //return false;
         };
 
 

@@ -123,17 +123,17 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
+                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadParquet">
                                     <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="simple-icons:apacheparquet" />
                                     <span>Parquet</span>
                                 </a>
                             </li>
-                            <li>
+                           @*  <li>
                                 <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
                                     <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="tabler:file-database" />
                                     <span>HDF5</span>
                                 </a>
-                            </li>
+                            </li> *@
                         </DropDownList>
                     </IconButton>
                 </div>
@@ -295,17 +295,22 @@
 
                 //calculate together all the parameters given by user (heavy computation)
                 var wrapped = new List<MethodInfo>() { metaInfo.MethodInfo };
-                var calcData = AutoCalculator.ExecuteCals(wrapped, param.ToArray());
+                var calcDataList = AutoCalculator.ExecuteCals(wrapped, param.ToArray());
 
                 //inject selected params for use when converting into CSV & EXCEL (HACK)
-                calcData.ForEach(aR => aR.AddSelectedParams(param));
+                calcDataList.ForEach(aR => aR.AddSelectedParams(param));
 
                 //combine data columns for this row
                 //check if many or just 1 result (is many results inside)
-                if (calcData[0]?.Result is List<APIFunctionResult> subResults) { finalResultList.AddRange(subResults); }
+                foreach (var calcData in calcDataList)
+                {
+                    //if list hidden inside
+                    if (calcData?.Result is List<APIFunctionResult> subResults) { finalResultList.AddRange(subResults); }
 
-                //else add like normal
-                else { finalResultList.AddRange(calcData); }
+                    //else add like normal
+                    else { finalResultList.AddRange(calcDataList); }
+
+                }
 
             }
 
@@ -356,6 +361,21 @@
         await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
     }
 
+    private async Task OnClickDownloadParquet()
+    {
+        //show loading
+        await _jsRuntime.ShowLoading(100);
+        //convert created table to Parquet string
+        var parquetString = await CurrentTable.ToParquet(); // You need to implement ToParquet() method
+        var base64Raw = Convert.ToBase64String(parquetString);
+        //start download using JS
+        var base64 = $"data:text/plain;base64,{base64Raw}"; // Parquet is binary format, but we can use text/plain for download
+        var filename = $"DataTable.parquet"; //todo better name
+        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, base64);
+        //tactile feedback to user
+        _jsRuntime.PlayDoneSound();
+        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
+    }
 
 
     private async Task OnClickDownloadExcel()

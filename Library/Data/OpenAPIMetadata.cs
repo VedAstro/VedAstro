@@ -140,8 +140,8 @@ public class OpenAPIMetadata
         set
         {
             //inject custom planet name as param into selected method meta
-            this.SelectedParams.Clear(); //important to clear previous values
-            this.SelectedParams.Add(value);
+            this.SelectedParams?.Clear(); //important to clear previous values
+            this.SelectedParams?.Add(value);
 
             _selectedPlanet = value;
         }

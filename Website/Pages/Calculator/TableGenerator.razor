@@ -1,10 +1,8 @@
 ﻿@using VedAstro.Library
-@using System.Collections
 @using System.Reflection
 @using System.Text
-@using OfficeOpenXml
-@using SwissEphNet
 @attribute [Route(PageRoute.TableGenerator)]
+@using Microsoft.AspNetCore.Components.Forms
 
 <PageTitle>Data Generator | VedAstro</PageTitle>
 
@@ -62,9 +60,10 @@
 
             @* TIME RANGE UPLOAD *@
             <div @ref="timeRangeUploadInputHtml" style="display:none;">
-                <div>
-                    <Icon IconName="noto-v1:construction" />
-                    <p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
+                <InputFile OnChange="@OnInputFileChange" />
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" id="inputGroupFile02">
+                    <label class="input-group-text" for="inputGroupFile02">Upload</label>
                 </div>
             </div>
 
@@ -128,12 +127,12 @@
                                     <span>Parquet</span>
                                 </a>
                             </li>
-                           @*  <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="tabler:file-database" />
-                                    <span>HDF5</span>
-                                </a>
-                            </li> *@
+                            @*  <li>
+                        <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="tabler:file-database" />
+                        <span>HDF5</span>
+                        </a>
+                        </li> *@
                         </DropDownList>
                     </IconButton>
                 </div>
@@ -261,6 +260,20 @@
 
         _jsRuntime.HideLoading();
 
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            // Read the file's content
+            using var stream = file.OpenReadStream();
+            using var reader = new StreamReader(stream);
+            var content = await reader.ReadToEndAsync();
+            // Now you can use the content of the file
+            Console.WriteLine(content);
+        }
     }
 
     private async Task OnClickGenerate()

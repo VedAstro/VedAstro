@@ -47,7 +47,9 @@ namespace VedAstro.Library
             {
                 foreach (var td in row.Elements("td"))
                 {
-                    csvBuilder.Append(td.InnerText);
+                    //note careful of commas in data, since CSV uses it
+                    var escapeComma = Tools.QuoteValue(td.InnerText);
+                    csvBuilder.Append(escapeComma);
                     csvBuilder.Append(",");
                 }
                 csvBuilder.AppendLine();
@@ -96,7 +98,9 @@ namespace VedAstro.Library
 
             }
             parquetWriter.Dispose();
-            return memoryStream.ToArray();
+            var parquet = memoryStream.ToArray();
+
+            return parquet;
         }
 
         public byte[] ToExcel()

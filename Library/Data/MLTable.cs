@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Apache.Arrow;
 using HtmlAgilityPack;
+using OfficeOpenXml;
+using Parquet;
+using Parquet.Data;
+using Parquet.Schema;
 
 namespace VedAstro.Library
 {
@@ -14,7 +20,8 @@ namespace VedAstro.Library
     /// </summary>
     public class MLTable
     {
-        private string _htmlTable;
+        private string HtmlTable => this.ToHtml();
+
         private List<MLTableRow> TableRowList { get; set; } = new List<MLTableRow>();
         private List<OpenAPIMetadata?> SelectedMethodMetaList { get; set; } = new List<OpenAPIMetadata>();
         public int RowsCount => TableRowList.Count;
@@ -26,7 +33,7 @@ namespace VedAstro.Library
         public string ToCSV()
         {
             var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(_htmlTable);
+            htmlDocument.LoadHtml(HtmlTable);
             var csvBuilder = new StringBuilder();
             var header = htmlDocument.DocumentNode.SelectSingleNode("//tr");
             foreach (var th in header.Elements("th"))
@@ -48,17 +55,84 @@ namespace VedAstro.Library
             return csvBuilder.ToString();
         }
 
+        public async Task<byte[]> ToParquet()
+        {
+            var htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(HtmlTable);
+            // Create a new Parquet file
+            using var memoryStream = new MemoryStream();
+
+            // Write the header (columns)
+            var header = htmlDocument.DocumentNode.SelectSingleNode("//tr");
+            var columnNames = header.Elements("th").Select(th => th.InnerText).ToList();
+
+            // create file schema (columns)
+            var parsedColumnNames = columnNames.Select(columnName => new DataField<int>(columnName)).ToArray();
+            var schema = new ParquetSchema(parsedColumnNames);
+
+            using var parquetWriter = await ParquetWriter.CreateAsync(schema, memoryStream);
+
+
+            // Write the rows
+            var rows = htmlDocument.DocumentNode.SelectNodes("//tr[position()>1]");
+            foreach (var row in rows)
+            {
+                using (ParquetRowGroupWriter groupWriter = parquetWriter.CreateRowGroup())
+                {
+                    var htmlNodes = row.Elements("td").ToArray();
+                    for (int i = 0; i < htmlNodes.Count(); i++)
+                    {
+                        var td = htmlNodes[i];
+
+                        //parsedColumnNames;
+                        var idColumn = new DataColumn(
+                            schema.DataFields[i],
+                            new string[] { td.InnerText });
+                        await groupWriter.WriteColumnAsync(idColumn);
+
+                    }
+
+                }
+
+            }
+            parquetWriter.Dispose();
+            return memoryStream.ToArray();
+        }
+
         public byte[] ToExcel()
         {
-            throw new NotImplementedException();
+            var htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(HtmlTable);
+            
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+                var header = htmlDocument.DocumentNode.SelectSingleNode("//tr");
+                int columnIndex = 1;
+                foreach (var th in header.Elements("th"))
+                {
+                    worksheet.Cells[1, columnIndex].Value = th.InnerText;
+                    columnIndex++;
+                }
+                var rows = htmlDocument.DocumentNode.SelectNodes("//tr[position()>1]");
+                int rowIndex = 2;
+                foreach (var row in rows)
+                {
+                    columnIndex = 1;
+                    foreach (var td in row.Elements("td"))
+                    {
+                        worksheet.Cells[rowIndex, columnIndex].Value = td.InnerText;
+                        columnIndex++;
+                    }
+                    rowIndex++;
+                }
+                return package.GetAsByteArray();
+            }
         }
-        
+
         public byte[] ToHDF5()
-        {
-            throw new NotImplementedException();
-        }
-        
-        public byte[] ToParquet()
         {
             throw new NotImplementedException();
         }
@@ -103,11 +177,12 @@ namespace VedAstro.Library
                 //detect if underlying list of results exist
                 if (selectedMethod?.MethodInfo?.ReturnType == typeof(List<APIFunctionResult>))
                 {
-                    //take first row and get data out that way
-                    var mlTableRow = tableRowList.FirstOrDefault();
-                    foreach (var funcResult in mlTableRow.DataColumns)
+                    //take first row and get columns names out that way
+                    var mlTableRow1st = tableRowList.FirstOrDefault();
+                    foreach (var funcResult in mlTableRow1st.DataColumns)
                     {
                         var temp = OpenAPIMetadata.FromAPIFunctionResult(funcResult);
+                        temp.SelectedPlanet = selectedMethod.SelectedPlanet; //inject planet from above main method
                         correctedList.Add(temp);
                     }
                 }

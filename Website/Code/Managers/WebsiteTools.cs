@@ -781,7 +781,6 @@ namespace Website
             string apiUrl = repoUrl.Replace("github.com", "api.github.com/repos") + "/tags";
             string jsonString = await client.GetStringAsync(apiUrl);
             JArray json = JArray.Parse(jsonString);
-            Console.WriteLine(jsonString);
             var tags = json?.Select(j => j["name"]?.ToString()).ToList();
             return tags ?? new List<string> { "0000-0000-stable" }; //mean no tags found
         }

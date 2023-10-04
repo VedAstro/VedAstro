@@ -14,7 +14,7 @@
          DescriptionText="Easily generate large astronomical tables for use in ML/AI Model training and Data Science for free">
 </PageTop>
 
-<div>
+<div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
     @* INPUT *@
     <div class="vstack gap-5" style="max-width: @GR.W412px;">
 
@@ -108,7 +108,6 @@
                 white-space: nowrap;
             }
         </style>
-        <hr class="mt-5" />
 
         @if (_isReady)
         {
@@ -161,33 +160,41 @@
         }
         else
         {
+            <hr class="mt-5" />
+
             @* PLACE HOLDER MESSAGE *@
             @* hide when loaded *@
             <div class="d-flex justify-content-center" style="@((!_isReady) ? "" : "display:none !important;")">
                 @* important needed to override flex *@
-                <span style="color: @AppData.Grey; font-size: 14px;">Table will appear here after <strong>Generate</strong></span>
-                <span style="color: @AppData.Grey; font-size: 14px;">Export as <strong>CSV</strong> or <strong>Excel</strong></span>
+                <span style="color: @AppData.Grey; font-size: 14px;">
+                    Table will appear here after <strong>Generate</strong><br />
+                    Export as <strong>CSV</strong> or <strong>Excel</strong>
+                </span>
+                <span style="color: @AppData.Grey; font-size: 14px;"></span>
             </div>
+            <hr class="" />
+
         }
 
     </div>
 
 
     @* DOCS *@
-    <div class="border border-top">
+    <div class="">
 
         <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
-            <ButtonRow>
-                <IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep" />
-            </ButtonRow>
             <TextHTML>
-                Once you have a <strong>data table</strong> downloaded. Feed into a ML model maker, this can be done Python.
+                After download table in suitable format. You can feed it into an ML model maker, this can be done Python.
                 You can also run <kbd>pip install vedastro</kbd> in your local or cloud environment.
-                <BoldLink URL="@URL.YoutubePythonGuide">Watch Python Guide</BoldLink>
             </TextHTML>
         </ArticleBlock>
 
         <ArticleBlock Title="Price &amp; Payment" IconName="flat-color-icons:like">
+            <ButtonRow>
+                <IconButton PlaceBottom="true" SmallSize="true" Color="warning" ButtonText="Donate" IconName="openmoji:love-letter" ClickUrl="@PageRoute.Donate" />
+
+@*                 <IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep"/>
+ *@            </ButtonRow>
             <TextHTML>
                 This service will run for <kbd>FREE</kbd>, so long there is money in the <strong>donation box</strong>.
                 Below is the <strong>live</strong> balance with auto deducting server &amp; maintenance costs.
@@ -197,7 +204,6 @@
                 Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase the speed for yourself and others.
             </TextHTML>
         </ArticleBlock>
-
 
     </div>
 </div>
@@ -210,8 +216,8 @@
     /// <summary>
     /// generated after upload or after selecting time range
     /// </summary>
-    List<Time> _timeList;
-    List<OpenAPIMetadata> _columnNameList;
+    List<Time> _timeList = new List<Time>();
+    List<OpenAPIMetadata> _columnNameList = new List<OpenAPIMetadata>();
 
     private int CurrentZoomLevel = 100; //defaults to 100 on start
 
@@ -396,7 +402,7 @@
 
 
     /// <summary>
-    /// Only generates 
+    /// Only generates
     /// </summary>
     /// <returns></returns>
     private async Task OnClickGenerateHTML()

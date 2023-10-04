@@ -4,25 +4,22 @@
 
 
 @* BALANCE *@
-<div class="input-group">
+<div class="my-3 input-group d-flex justify-content-center">
     <label class="input-group-text gap-2" for="genderSelectInput" style="width: 165px;"><Icon IconName="noto-v1:bank" Size="80" />Balance</label>
-    <span class="input-group-text">USD $@BankBalanceUSD</span>
-    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Donate</button>
-</div>
+    <span class="input-group-text" style="width: 300px;font-size: 23px;font-weight: 800;">USD $@(Math.Round(BankBalanceUSD, 7))</span>
+@*     <button class="btn btn-warning " style="width: fit-content; font-family: 'Lexend Deca', serif !important;" type="button" id="button-addon2">Donate</button>
+ *@</div>
 
-
-@* <IconButton ClickUrl="@PageRoute.Donate" IconName="flat-color-icons:donate" ButtonText="Tip" Outline="true" SmallSize="true"></IconButton>
- *@
 @code {
 
-    private double BankBalanceUSD { get; set; } = 10;
+    private double BankBalanceUSD { get; set; } = 28.45;
 
     private Timer timer;
 
     protected override void OnInitialized()
     {
         timer = new Timer();
-        timer.Interval = 1000; // 2 seconds
+        timer.Interval = 500; //
         timer.Elapsed += OnElapsed;
         timer.Start();
     }
@@ -32,7 +29,15 @@
     /// </summary>
     private void OnElapsed(object sender, ElapsedEventArgs e)
     {
-        BankBalanceUSD = BankBalanceUSD - 0.000000000000001;
+        // So, the total number of seconds in a month is approximately:
+        // 30 days/month  24 hours/day  60 minutes/hour  60 seconds/minute = 2,592,000 seconds/month
+        // Therefore, the cost per second is:
+        //     $40/month / 2,592,000 seconds/month = $0.0000154/second
+        // And the cost per 500 milliseconds (which is 0.5 seconds) is:
+        //     $0.0000154/second  0.5 seconds = $0.0000077
+        // So, the website costs approximately $0.0000077 every 500 milliseconds.
+
+        BankBalanceUSD = BankBalanceUSD - 0.0000077;
         InvokeAsync(StateHasChanged);
     }
     public void Dispose()

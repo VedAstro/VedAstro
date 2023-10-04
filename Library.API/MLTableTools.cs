@@ -45,6 +45,27 @@ public class MLTableTools
 
     public async Task<string?> GenerateMLTableHtml(List<Time> timeList, List<OpenAPIMetadata> columnNameList)
     {
-        throw new NotImplementedException();
+
+        return @"
+
+<table>
+  <tr>
+    <th>Header 1</th>
+    <th>Header 2</th>
+  </tr>
+  <tr>
+    <td>Row 1 Data 1</td>
+    <td>Row 1 Data 2</td>
+  </tr>
+  <tr>
+    <td>Row 2 Data 1</td>
+    <td>Row 2 Data 2</td>
+  </tr>
+</table>
+
+";
+
+
+
     }
 }

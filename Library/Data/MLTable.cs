@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
-using Apache.Arrow;
 using HtmlAgilityPack;
+using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using Parquet;
 using Parquet.Data;
@@ -20,12 +20,108 @@ namespace VedAstro.Library
     /// </summary>
     public class MLTable
     {
-        private string HtmlTable => this.ToHtml();
 
-        private List<MLTableRow> TableRowList { get; set; } = new List<MLTableRow>();
-        private List<OpenAPIMetadata?> SelectedMethodMetaList { get; set; } = new List<OpenAPIMetadata>();
-        public int RowsCount => TableRowList.Count;
-        public int ColumnsCount => SelectedMethodMetaList.Count;
+        private MLTable(List<MLTableRow> rowData, List<OpenAPIMetadata> columnData)
+        {
+            RowData = rowData;
+            ColumnData = columnData;
+        }
+
+        private List<MLTableRow> RowData { get; set; } = new List<MLTableRow>();
+        private List<OpenAPIMetadata?> ColumnData { get; set; } = new List<OpenAPIMetadata>();
+
+        public int RowsCount => RowData.Count;
+        public int ColumnsCount => ColumnData.Count;
+
+        /// <summary>
+        /// This will update the underlying HTML
+        /// </summary>
+        public static MLTable FromData(List<MLTableRow> tableRowList, List<OpenAPIMetadata> selectedMetaList)
+        {
+
+            //#PROCESS DATA
+            //need to bump up hidden many results calcs
+            var correctedList = new List<OpenAPIMetadata>();
+            foreach (var selectedMethod in selectedMetaList)
+            {
+                //detect if underlying list of results exist
+                if (selectedMethod?.MethodInfo?.ReturnType == typeof(List<APIFunctionResult>))
+                {
+                    //take first row and get columns names out that way
+                    var mlTableRow1st = tableRowList.FirstOrDefault();
+                    foreach (var funcResult in mlTableRow1st.DataColumns)
+                    {
+                        var temp = OpenAPIMetadata.FromAPIFunctionResult(funcResult);
+                        temp.SelectedPlanet = selectedMethod.SelectedPlanet; //inject planet from above main method
+                        correctedList.Add(temp);
+                    }
+                }
+                //else add like normal
+                else
+                {
+                    correctedList.Add(selectedMethod);
+                }
+            }
+
+            var tempNew = new MLTable(tableRowList, correctedList);
+
+            return tempNew;
+        }
+
+        /// <summary>
+        /// Given a raw data from User selection in GUI, generate ML Table
+        /// </summary>
+        public static MLTable FromData(List<Time> timeSlices, List<OpenAPIMetadata> columnData)
+        {
+            //# PREPARE DATA
+
+            //need to reset list, else won't update properly on 2nd generate
+            var rowData = new List<MLTableRow>();
+
+            //using time as 1 column generate the other data columns
+            foreach (var _time in timeSlices)
+            {
+                var finalResultList = new List<APIFunctionResult>();
+                foreach (var metaInfo in columnData)
+                {
+                    //get the planet or house selected by user in each individual data point packet
+                    List<object> param = metaInfo.SelectedParams.ToList(); //clone else will effect underlying list
+                    param.Add((object)_time); //time injected from different component
+
+                    //calculate together all the parameters given by user (heavy computation)
+                    var wrapped = new List<MethodInfo>() { metaInfo.MethodInfo };
+                    var calcDataList = AutoCalculator.ExecuteCals(wrapped, param.ToArray());
+
+                    //inject selected params for use when converting into CSV & EXCEL (HACK)
+                    calcDataList.ForEach(aR => aR.AddSelectedParams(param));
+
+                    //combine data columns for this row
+                    //check if many or just 1 result (is many results inside)
+                    foreach (var calcData in calcDataList)
+                    {
+                        //if list hidden inside
+                        if (calcData?.Result is List<APIFunctionResult> subResults) { finalResultList.AddRange(subResults); }
+
+                        //else add like normal
+                        else { finalResultList.AddRange(calcDataList); }
+
+                    }
+
+                }
+
+                //add row to table
+                rowData.Add(new MLTableRow(_time, finalResultList));
+
+            }
+
+            //# BRING DATA TO LIVE AS TABLE
+            var newTable = new MLTable(rowData, columnData);
+
+            return newTable;
+        }
+
+
+        //----------------------------- CONVERTERS ------------------------------------------
 
         /// <summary>
         /// converts current instance to CSV string
@@ -33,7 +129,7 @@ namespace VedAstro.Library
         public string ToCSV()
         {
             var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(HtmlTable);
+            htmlDocument.LoadHtml(this.ToHtml());
             var csvBuilder = new StringBuilder();
             var header = htmlDocument.DocumentNode.SelectSingleNode("//tr");
             foreach (var th in header.Elements("th"))
@@ -60,7 +156,8 @@ namespace VedAstro.Library
         public async Task<byte[]> ToParquet()
         {
             var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(HtmlTable);
+            htmlDocument.LoadHtml(this.ToHtml());
+
             // Create a new Parquet file
             using var memoryStream = new MemoryStream();
 
@@ -106,8 +203,8 @@ namespace VedAstro.Library
         public byte[] ToExcel()
         {
             var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(HtmlTable);
-            
+            htmlDocument.LoadHtml(this.ToHtml());
+
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using (var package = new ExcelPackage())
@@ -148,62 +245,50 @@ namespace VedAstro.Library
             sb.AppendLine("<thead class=\"table-dark\">");
             sb.AppendLine("<tr>");
             sb.AppendLine("<th>Time</th>");
-            foreach (var result in SelectedMethodMetaList)
+
+            //make Columns
+            foreach (var result in ColumnData)
             {
                 sb.AppendLine($"<th>{result.MLTableName(result.SelectedPlanet)}</th>");
             }
             sb.AppendLine("</tr>");
             sb.AppendLine("</thead>");
             sb.AppendLine("<tbody>");
-            for (int index = 0; index < TableRowList.Count; index++)
+
+            //make Rows
+            foreach (var mlTableRow in RowData)
             {
                 sb.AppendLine("<tr>");
-                sb.AppendLine($"<td>{TableRowList[index].Time}</td>");
-                foreach (var resultX in TableRowList[index].DataColumns)
+                sb.AppendLine($"<td>{mlTableRow.Time}</td>");
+                foreach (var resultX in mlTableRow.DataColumns)
                 {
                     sb.AppendLine($"<td>{resultX.ResultAsString()}</td>");
                 }
                 sb.AppendLine("</tr>");
+
             }
+
             sb.AppendLine("</tbody>");
             sb.AppendLine("</table>");
             return sb.ToString();
         }
 
-        public void Update(List<MLTableRow> tableRowList, List<OpenAPIMetadata> selectedMetaList)
+
+
+        //------------------------- METHODS TO SEND ACROSS THE VAST INTERNATIONAL NETWORKS ---------------------------------
+
+        /// <summary>
+        /// converts the table data into json version for transport
+        /// </summary>
+        public JToken ToJson() => Tools.ConvertHtmlTableToJson(this.ToHtml());
+
+
+        public static MLTable FromJson(JToken tableInput) => MLTable.FromHtml(Tools.ConvertJsonToHtmlTable(tableInput));
+
+        private static MLTable FromHtml(string convertJsonToHtmlTable)
         {
-
-            //#PROCESS DATA
-            //need to bump up hidden many results calcs
-            var correctedList = new List<OpenAPIMetadata>();
-            foreach (var selectedMethod in selectedMetaList)
-            {
-                //detect if underlying list of results exist
-                if (selectedMethod?.MethodInfo?.ReturnType == typeof(List<APIFunctionResult>))
-                {
-                    //take first row and get columns names out that way
-                    var mlTableRow1st = tableRowList.FirstOrDefault();
-                    foreach (var funcResult in mlTableRow1st.DataColumns)
-                    {
-                        var temp = OpenAPIMetadata.FromAPIFunctionResult(funcResult);
-                        temp.SelectedPlanet = selectedMethod.SelectedPlanet; //inject planet from above main method
-                        correctedList.Add(temp);
-                    }
-                }
-                //else add like normal
-                else
-                {
-                    correctedList.Add(selectedMethod);
-                }
-            }
-
-
-            TableRowList = tableRowList;
-            SelectedMethodMetaList = correctedList;
+            throw new NotImplementedException();
         }
     }
-
-
-
 
 }

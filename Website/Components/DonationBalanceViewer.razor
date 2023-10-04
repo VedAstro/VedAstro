@@ -1,0 +1,42 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Timers
+
+
+@* BALANCE *@
+<div class="input-group">
+    <label class="input-group-text gap-2" for="genderSelectInput" style="width: 165px;"><Icon IconName="noto-v1:bank" Size="80" />Balance</label>
+    <span class="input-group-text">USD $@BankBalanceUSD</span>
+    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Donate</button>
+</div>
+
+
+@* <IconButton ClickUrl="@PageRoute.Donate" IconName="flat-color-icons:donate" ButtonText="Tip" Outline="true" SmallSize="true"></IconButton>
+ *@
+@code {
+
+    private double BankBalanceUSD { get; set; } = 10;
+
+    private Timer timer;
+
+    protected override void OnInitialized()
+    {
+        timer = new Timer();
+        timer.Interval = 1000; // 2 seconds
+        timer.Elapsed += OnElapsed;
+        timer.Start();
+    }
+
+    /// <summary>
+    /// slowly decrement USD based on server use rate
+    /// </summary>
+    private void OnElapsed(object sender, ElapsedEventArgs e)
+    {
+        BankBalanceUSD = BankBalanceUSD - 0.000000000000001;
+        InvokeAsync(StateHasChanged);
+    }
+    public void Dispose()
+    {
+        timer?.Dispose();
+    }
+}

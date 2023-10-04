@@ -9,6 +9,7 @@ using SwissEphNet;
 using static VedAstro.Library.PlanetName;
 using static VedAstro.Library.HouseName;
 using static VedAstro.Library.ZodiacName;
+using System.Numerics;
 
 
 namespace VedAstro.Library
@@ -4493,36 +4494,41 @@ namespace VedAstro.Library
         /// </summary>
         public static dynamic SwissEphemeris(Time time, PlanetName planetName)
         {
-            //Converts LMT to UTC (GMT)
-            //DateTimeOffset utcDate = lmtDateTime.ToUniversalTime();
-
-            int iflag = 2;//SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
-            double[] results = new double[6];
-            string err_msg = "";
-            double jul_day_ET;
-            SwissEph ephemeris = new SwissEph();
-
-            // Convert DOB to ET
-            jul_day_ET = TimeToEphemerisTime(time);
-
             //convert planet name, compatible with Swiss Eph
             int swissPlanet = Tools.VedAstroToSwissEph(planetName);
 
-            //Get planet long
-            int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
-
-            //data in results at index 0 is longitude
-            var sweCalcResults = new
-            {
-                Longitude = results[0],
-                Latitude = results[1],
-                DistanceAU = results[2],
-                SpeedLongitude = results[3],
-                SpeedLatitude = results[4],
-                SpeedDistance = results[5]
-            };
+            //do the calculation
+            var sweCalcResults = Tools.ephemeris_swe_calc(time, swissPlanet);
 
             return sweCalcResults;
+        }
+
+        /// <summary>
+        /// For all planets including Pluto, Neptune, Uranus
+        /// Get planet's Longitude, Latitude, DistanceAU, SpeedLongitude, SpeedLatitude...
+        /// Uses Swiss Ephemeris directly to get values
+        /// </summary>
+        public static List<dynamic> SwissEphemerisAll(Time time)
+        {
+            //for all planets
+            var _12Planets = new List<int>
+            {
+                SwissEph.SE_SUN, SwissEph.SE_MOON, SwissEph.SE_MERCURY, SwissEph.SE_MARS,
+                SwissEph.SE_VENUS, SwissEph.SE_JUPITER, SwissEph.SE_SATURN,
+                SwissEph.SE_URANUS, SwissEph.SE_NEPTUNE, SwissEph.SE_PLUTO,
+                //rahu & ketu
+                SwissEph.SE_TRUE_NODE, SwissEph.SE_OSCU_APOG,
+            };
+
+            //put all data for all planets in 1 big list
+            var bigList = new List<dynamic>();
+            foreach (var planet in _12Planets)
+            {
+                var temp = Tools.ephemeris_swe_calc(time, planet);
+                bigList.Add(temp);
+            }
+
+            return bigList;
         }
 
         /// <summary>

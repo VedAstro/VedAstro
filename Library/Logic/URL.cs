@@ -40,6 +40,9 @@ public class URL
         GetCallData = ApiUrl + "/GetCallData";
         Login = WebUrl + "/Account/Login"; //note must match with page route
 
+        //ML TABLE
+        GetMLTimeListFromExcel = ApiUrl + "/GetMLTimeListFromExcel";
+
         //PERSON
         GetPersonList = ApiUrl + "/GetPersonList";
         AddPerson = ApiUrl + "/AddPerson";
@@ -126,6 +129,7 @@ public class URL
     /// Gets raw data at API data cache
     /// </summary>
     public readonly string GetCallData;
+    public readonly string GetMLTimeListFromExcel;
     public readonly string GetPersonList;
     public readonly string GetPerson;
     public readonly string GetPersonImage;
@@ -168,6 +172,7 @@ public class URL
     public const string PatreonPage = "https://patreon.com/vedastro";
     public const string KoFiPage = "https://ko-fi.com/vedastro";
     public const string KoFiPageMemberships = "https://ko-fi.com/vedastro/tiers";
+    public const string KoFiSponsorMemberships = "https://ko-fi.com/summary/2f3ac2df-9d55-4c48-87cf-2d6af0b80ceb";
     public const string KoFiPrivateServer = "https://ko-fi.com/summary/783edc41-20e6-4e78-adb2-d4380577b5d1";
     public const string KoFiDonateIframe = "https://ko-fi.com/vedastro/?hidefeed=true&widget=true&embed=true&preview=true";
     public const string PaypalMePage = "https://paypal.me/VedAstroOrg";
@@ -201,4 +206,5 @@ public class URL
     public const string FreedmanYoutubePencil = "https://youtu.be/67tHtpac5ws";
     public const string APIGuideNextStep = "https://youtu.be/y110RAgIorY?t=127";
     public const string Donate = "https://vedastro.org/Donate";
+    public const string VSLifeSharePublicSession = "https://prod.liveshare.vsengsaas.visualstudio.com/join?CBAE0FED0D849DD2E74F90CD7F4DC639AA89";
 }

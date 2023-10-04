@@ -27,16 +27,76 @@ using Svg;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
 using static Azure.Core.HttpHeader;
+using Newtonsoft.Json.Linq;
+using HtmlAgilityPack;
+using System.Collections.Generic;
 
 
 namespace VedAstro.Library
 {
     /// <summary>
     /// A collection of general functions that don't have a home yet, so they live here for now.
-    /// You're allowed to move them somewhere you see fit, not copy, move!
+    /// You're allowed to move them somewhere you see fit, not copy, move!! remember dear :-)
     /// </summary>
     public static class Tools
     {
+        /// <summary>
+        /// Given a JSON version of a Table will convert to HTML table in string
+        /// </summary>
+        public static string ConvertJsonToHtmlTable(JToken jObject)
+        {
+            var data = jObject.ToObject<List<Dictionary<string, string>>>();
+            var sb = new StringBuilder();
+            sb.Append("<table>");
+            // Add header row
+            sb.Append("<tr>");
+            foreach (var key in data[0].Keys)
+            {
+                sb.AppendFormat("<th>{0}</th>", key);
+            }
+            sb.Append("</tr>");
+            // Add data rows
+            foreach (var row in data)
+            {
+                sb.Append("<tr>");
+                foreach (var value in row.Values)
+                {
+                    sb.AppendFormat("<td>{0}</td>", value);
+                }
+                sb.Append("</tr>");
+            }
+            sb.Append("</table>");
+            return sb.ToString();
+        }
+
+
+        /// <summary>
+        /// Given a HTML table in string will convert to JSON version
+        /// </summary>
+        public static JObject ConvertHtmlTableToJson(string htmlTable)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(htmlTable);
+            var table = doc.DocumentNode.SelectSingleNode("//table");
+            var rows = table.SelectNodes("tr").Skip(1); // Skip header row
+            var header = table.SelectSingleNode("tr"); // Header row
+            var data = new List<Dictionary<string, string>>();
+            foreach (var row in rows)
+            {
+                var rowData = new Dictionary<string, string>();
+                var cells = row.SelectNodes("td");
+                for (int i = 0; i < cells.Count; i++)
+                {
+                    var cellText = cells[i].InnerText;
+                    var headerText = header.SelectNodes("th")[i].InnerText;
+                    rowData.Add(headerText, cellText);
+                }
+                data.Add(rowData);
+            }
+            return JObject.FromObject(data);
+        }
+
+
         /// <summary>
         /// Given any data will try to print it as data readable json
         /// Note: made for beautiful code use in python 
@@ -1666,6 +1726,8 @@ namespace VedAstro.Library
             }
             else if (planetName == PlanetName.Ketu)
             {
+                //the true node, which is the point where the Moon's orbit crosses the ecliptic plane
+                //todo can also be SE_OSCU_APOG, but no need to add 180
                 planet = SwissEph.SE_TRUE_NODE; //ask for rahu values then add 180 later
             }
 
@@ -2887,6 +2949,36 @@ namespace VedAstro.Library
 
             return $"{openApiMetadata.Name}{paramCombined}";
         }
+
+        public static dynamic ephemeris_swe_calc(Time time, int swissPlanet)
+        {
+            //Converts LMT to UTC (GMT)
+            int iflag = 2;//SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
+            double[] results = new double[6];
+            string err_msg = "";
+            double jul_day_ET;
+            SwissEph ephemeris = new SwissEph();
+
+            // Convert DOB to ET
+            jul_day_ET = Calculate.TimeToEphemerisTime(time);
+
+            //Get planet long
+            int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
+
+            //data in results at index 0 is longitude
+            var sweCalcResults = new
+            {
+                Longitude = results[0],
+                Latitude = results[1],
+                DistanceAU = results[2],
+                SpeedLongitude = results[3],
+                SpeedLatitude = results[4],
+                SpeedDistance = results[5]
+            };
+
+            return sweCalcResults;
+        }
+
     }
 
 

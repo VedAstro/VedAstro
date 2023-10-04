@@ -39,6 +39,7 @@ namespace Library.API
             Match = new MatchTools(this);
             Person = new PersonTools(this);
             EventsChart = new EventsChartTools(this);
+            MLTable = new MLTableTools(this);
         }
 
 

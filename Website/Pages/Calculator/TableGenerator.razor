@@ -193,8 +193,9 @@
             <ButtonRow>
                 <IconButton PlaceBottom="true" SmallSize="true" Color="warning" ButtonText="Donate" IconName="openmoji:love-letter" ClickUrl="@PageRoute.Donate" />
 
-@*                 <IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep"/>
- *@            </ButtonRow>
+                @*                 <IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep"/>
+                *@
+            </ButtonRow>
             <TextHTML>
                 This service will run for <kbd>FREE</kbd>, so long there is money in the <strong>donation box</strong>.
                 Below is the <strong>live</strong> balance with auto deducting server &amp; maintenance costs.
@@ -407,7 +408,8 @@
     /// <returns></returns>
     private async Task OnClickGenerateHTML()
     {
-        _jsRuntime.ShowLoading();
+
+        await _jsRuntime.ShowLoading();
 
         //hide & also regenerates table
         _isReady = false;
@@ -419,13 +421,14 @@
         //can show now also regenerates table
         _isReady = true;
 
-        //update view
-        StateHasChanged();
-
         //tactile feedback to user
         await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
 
         _jsRuntime.PlayDoneSound();
+
+        //update view
+        StateHasChanged();
+
 
         //auto scroll to URL display out, so user can see better
         AppData.Go(PageRoute.GeneratedTableOut);

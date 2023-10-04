@@ -28,6 +28,8 @@ public static class APILogger
     /// </summary>
     public static string URL = "NOT SET";
 
+    
+
     private static TableClient openApiErrorBookClient = APITools.GetTableClientFromTableName("OpenAPIErrorBook");
 
 
@@ -93,11 +95,16 @@ public static class APILogger
 	/// <summary>
 	/// Adds a row to open api log book, with ip address & call url
 	/// </summary>
-	public static OpenAPILogBookEntity Visit(HttpRequestData httpRequestData)
+	public static async Task<OpenAPILogBookEntity> Visit(HttpRequestData httpRequestData)
 	{
 		//var get ip address & URL and save it for future use
 		APILogger.IpAddress = httpRequestData?.GetCallerIp()?.ToString() ?? "no ip";
 		APILogger.URL = httpRequestData?.Url.ToString() ?? "no URL";
+
+		//# extract out the body data (POST/GET/...)
+        var streamReader = new StreamReader(httpRequestData?.Body);
+        var payload = await streamReader?.ReadToEndAsync();
+        var bodyData = payload ?? "no Body";
 
 		//set the call as running
 		var customerEntity = new OpenAPILogBookEntity()
@@ -106,7 +113,8 @@ public static class APILogger
 			PartitionKey = IpAddress,
 			RowKey = Tools.GenerateId(),
 			URL = URL,
-			Timestamp = DateTimeOffset.UtcNow //utc used later to check for overload control
+			Body = bodyData,
+            Timestamp = DateTimeOffset.UtcNow //utc used later to check for overload control
 		};
 
 		//creates record if no exist, update if already there
@@ -116,7 +124,8 @@ public static class APILogger
 	}
 
 
-	//BELOW METHODS ARE FOR QUERYING DATA OUT
+
+    //BELOW METHODS ARE FOR QUERYING DATA OUT
 
 	/// <summary>
 	/// from LogBookClient

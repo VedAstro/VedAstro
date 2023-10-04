@@ -52,6 +52,7 @@
         public const string APICallList = "APIBuilder#APICallList";
         public const string UrlDisplayOut = "APIBuilder#UrlDisplayOut";
         public const string GeneratedTableOut = "TableGenerator#GeneratedTable";
+        public const string DataColumnSelector = "TableGenerator#DataColumnSelector";
 
 
         //MATCH
@@ -90,6 +91,8 @@
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";
         public const string About = "/About";
         public const string Payment = "/Payment";
+        public const string Sponsor = "/Sponsor";
+        public const string VSLifeSharePublicSession = "/VSLifeSharePublicSession";
         public const string PrivateServer = "/PrivateServer";
         public const string JoinOurFamily = "/JoinOurFamily";
         public const string Contact = "/Contact";

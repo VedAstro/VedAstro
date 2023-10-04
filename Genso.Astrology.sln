@@ -60,7 +60,7 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "API.Python", "API.Python\AP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaticTableGenerator", "StaticTableGenerator\StaticTableGenerator.csproj", "{CAEE0D29-BBE3-4B29-ACBF-F9D510306A73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataProcessor", "DataProcessor\DataProcessor.csproj", "{EF012AB2-708F-46C3-B884-C769E6D54AAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataProcessor", "DataProcessor\DataProcessor.csproj", "{EF012AB2-708F-46C3-B884-C769E6D54AAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

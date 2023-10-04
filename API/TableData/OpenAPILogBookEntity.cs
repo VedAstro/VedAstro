@@ -14,5 +14,6 @@ namespace API
         public string URL { get; set; }
 		public DateTimeOffset? Timestamp { get; set; }
         public ETag ETag { get; set; }
-	}
+        public string Body { get; set; }
+    }
 }

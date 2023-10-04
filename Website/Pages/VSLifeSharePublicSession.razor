@@ -1,0 +1,17 @@
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.VSLifeSharePublicSession)]
+
+<PageTitle>VSLifeSharePublicSession</PageTitle>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        //notify coder that someone is joining session (so he can prepare!!)
+        await WebsiteTools.SendMailToAPI("Someone Joined Code Session", "Someone Joined Code Session");
+
+        //redirect user to kofi membership page
+        AppData.Go(URL.VSLifeSharePublicSession);
+    }
+
+}

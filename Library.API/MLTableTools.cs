@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using VedAstro.Library;
-using Microsoft.AspNetCore.Components.Forms;
+﻿using VedAstro.Library;
 
 
 namespace Library.API;
@@ -36,6 +34,16 @@ public class MLTableTools
     }
 
     public async Task<byte[]> GenerateMLTableExcel(List<Time> timeList, List<OpenAPIMetadata> columnNameList)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<string> GenerateMLTableCsv(List<Time> timeList, List<OpenAPIMetadata> columnNameList)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<string?> GenerateMLTableHtml(List<Time> timeList, List<OpenAPIMetadata> columnNameList)
     {
         throw new NotImplementedException();
     }

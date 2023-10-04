@@ -1,8 +1,11 @@
 ﻿@using VedAstro.Library
 @using System.Reflection
 @using System.Text
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using OfficeOpenXml;
 @attribute [Route(PageRoute.TableGenerator)]
-@using Microsoft.AspNetCore.Components.Forms
 
 <PageTitle>Data Generator | VedAstro</PageTitle>
 
@@ -60,11 +63,19 @@
 
             @* TIME RANGE UPLOAD *@
             <div @ref="timeRangeUploadInputHtml" style="display:none;">
-                <InputFile OnChange="@OnInputFileChange" />
                 <div class="input-group mb-3">
-                    <input type="file" class="form-control" id="inputGroupFile02">
-                    <label class="input-group-text" for="inputGroupFile02">Upload</label>
+                    <div class="form-control">
+                        <InputFile id="inputGroupFile02" OnChange="@OnInputFileChange" />
+                    </div>
+                    @* <label class="input-group-text" for="inputGroupFile02">Upload</label> *@
+                    <button class="btn btn-outline-primary" type="button" id="button-addon2">Upload</button>
                 </div>
+                <div @ref="uploadFileInfoHolder" class="hstack gap-3" style="display:none;">
+                    <span>File Read Complete!</span>
+                    <span class="mt-1">Rows : <strong>@_timeList.Count</strong></span>
+                    <span class="mt-1">Columns : <strong>@_columnNameList.Count</strong></span>
+                </div>
+
             </div>
 
             @* TIME RANGE SAMPLE HOROSCOPES *@
@@ -82,7 +93,7 @@
         <DataColumnSelector CustomAllMethodList="@MethodListALL" @ref="_DataColumnSelector" />
 
         @* GENERATE BUTTON *@
-        <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGenerate" />
+        <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGenerateHTML" />
     </div>
 
     @* OUTPUT TABLE *@
@@ -137,15 +148,15 @@
                     </IconButton>
                 </div>
                 <div class="hstack gap-3">
-                    <span class="mt-1">Rows : <strong>@CurrentTable.RowsCount</strong></span>
-                    <span class="mt-1">Columns : <strong>@CurrentTable.ColumnsCount</strong></span>
+                    <span class="mt-1">Rows : <strong>Coming soon...</strong></span>
+                    <span class="mt-1">Columns : <strong>Coming soon...</strong></span>
                 </div>
             </div>
 
 
             @* TABLE *@
             <div id="MLTableHolder">
-                @((MarkupString)CurrentTable.ToHtml())
+                @((MarkupString)HtmlTable)
             </div>
         }
         else
@@ -161,6 +172,34 @@
 
     </div>
 
+
+    @* DOCS *@
+    <div class="border border-top">
+
+        <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
+            <ButtonRow>
+                <IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep" />
+            </ButtonRow>
+            <TextHTML>
+                Once you have a <strong>data table</strong> downloaded. Feed into a ML model maker, this can be done Python.
+                You can also run <kbd>pip install vedastro</kbd> in your local or cloud environment.
+                <BoldLink URL="@URL.YoutubePythonGuide">Watch Python Guide</BoldLink>
+            </TextHTML>
+        </ArticleBlock>
+
+        <ArticleBlock Title="Price &amp; Payment" IconName="flat-color-icons:like">
+            <TextHTML>
+                This service will run for <kbd>FREE</kbd>, so long there is money in the <strong>donation box</strong>.
+                Below is the <strong>live</strong> balance with auto deducting server &amp; maintenance costs.
+
+                <DonationBalanceViewer />
+
+                Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase the speed for yourself and others.
+            </TextHTML>
+        </ArticleBlock>
+
+
+    </div>
 </div>
 
 
@@ -168,9 +207,13 @@
 
     #region FIELDS
 
-    private int CurrentZoomLevel = 100; //defaults to 100 on start
+    /// <summary>
+    /// generated after upload or after selecting time range
+    /// </summary>
+    List<Time> _timeList;
+    List<OpenAPIMetadata> _columnNameList;
 
-    private MLTable CurrentTable = new MLTable();
+    private int CurrentZoomLevel = 100; //defaults to 100 on start
 
     private ElementReference timeRangeUploadInputHtml;
 
@@ -197,6 +240,8 @@
     }
 
     private bool _isReady;
+    public IBrowserFile UploadedFile { get; set; }
+    private ElementReference uploadFileInfoHolder;
 
     public string? SelectedTimeRangePreset
     {
@@ -204,8 +249,11 @@
         set
         {
             //if user selected some value than only show data input
-            //NOTE: this is done reduce clutter until last needed (better UX)
+            //NOTE: this is done reduce clutter until last needed (better UX, sweet heart's idea)
             if (!string.IsNullOrEmpty(value)) { _DataColumnSelector.Show(); }
+
+            //auto scroll for user lower, so user can see better
+            AppData.Go(PageRoute.DataColumnSelector);
 
             _selectedTimeRangePreset = value;
         }
@@ -246,6 +294,11 @@
 
     private string? _selectedSource;
 
+    /// <summary>
+    /// Filled with data when Generate button is clicked
+    /// </summary>
+    private string? HtmlTable;
+
     private string? _selectedTimeRangePreset = ""; //leave default empty to detect later
 
 
@@ -262,79 +315,100 @@
 
     }
 
+
+    //// <summary>
+    /// Once received file send for processing (API) to extract time list for later use
+    /// </summary>
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
         var file = e.File;
         if (file != null)
         {
-            // Read the file's content
-            using var stream = file.OpenReadStream();
-            using var reader = new StreamReader(stream);
-            var content = await reader.ReadToEndAsync();
-            // Now you can use the content of the file
-            Console.WriteLine(content);
+            //keep a copy of the file to be used later
+            UploadedFile = file;
+
+            //show icon that file is being processed hold tight
+            _jsRuntime.ShowLoading();
+
+            //once updated here, files rows count can be seen by user
+            using var ms = new MemoryStream();
+            await UploadedFile.OpenReadStream().CopyToAsync(ms);
+            _timeList = await AppData.API.MLTable.GetTimeListFromExcel(ms.ToArray());
+
+            //let user know upload success
+            _jsRuntime.Show(uploadFileInfoHolder);
+
+
+            _jsRuntime.HideLoading();
+
         }
     }
 
-    private async Task OnClickGenerate()
+
+    public async Task<List<DateTimeOffset>> ExtractTimeColumnFromExcel(Stream input)
+    {
+        Console.WriteLine($"File Size : {input.Length}");
+
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set the license context for EPPlus
+        var timeList = new List<DateTimeOffset>();
+        int timeColumnIndex = -1;
+
+        var excelFileStream = new MemoryStream();
+        await input.CopyToAsync(excelFileStream);
+        excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning
+
+        using (var package = new ExcelPackage(excelFileStream))
+        {
+            var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
+                                                            // Start from the second row (index 2) to skip the header
+            for (int rowIndex = 2; rowIndex <= worksheet.Dimension.Rows; rowIndex++)
+            {
+                // If we haven't found the time column yet, search for it
+                if (timeColumnIndex == -1)
+                {
+                    for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
+                    {
+                        var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
+                        // If the cell value can be parsed as a Time, this is the time column
+                        if (Time.TryParseStd(cellValue, out _))
+                        {
+                            timeColumnIndex = colIndex;
+                            break;
+                        }
+                    }
+                }
+                // If we've found the time column, add the cell value to the list
+                if (timeColumnIndex != -1)
+                {
+                    var cellValue = worksheet.Cells[rowIndex, timeColumnIndex].Value?.ToString();
+                    if (Time.TryParseStd(cellValue, out var time))
+                    {
+                        timeList.Add(time);
+                    }
+                }
+            }
+        }
+
+        Console.WriteLine($"Rows Found : {timeList.Count}");
+
+        return timeList;
+    }
+
+
+    /// <summary>
+    /// Only generates 
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnClickGenerateHTML()
     {
         _jsRuntime.ShowLoading();
 
         //hide & also regenerates table
         _isReady = false;
 
-        //# PREPARE DATA
-        //get range to generate start & end of data
-        var startTime = await _inputTimeLocation.GetTime();
-        var tempPerson = new Person("", startTime, Gender.Empty); //inject start time as birth time HACK
-        timeRange = EventChartTools.AutoCalculateTimeRange(tempPerson, SelectedTimeRangePreset, Tools.GetSystemTimezone());
-        var timeSlices = Time.GetTimeListFromRange(startTime, timeRange.end, 24);
-
-        //selected data points to include
-        var selectedMetaList = _DataColumnSelector.SelectedMethodMetaList;
-
-        //need to reset list, else won't update properly on 2nd generate
-        TableRowList = new List<MLTableRow>();
-
-        //using time as 1 column generate the other data columns
-        foreach (var _time in timeSlices)
-        {
-            var finalResultList = new List<APIFunctionResult>();
-            foreach (var metaInfo in selectedMetaList)
-            {
-                //get the planet or house selected by user in each individual data point packet
-                List<object> param = metaInfo.SelectedParams.ToList(); //clone else will effect underlying list
-                param.Add((object)_time); //time injected from different component
-
-                //calculate together all the parameters given by user (heavy computation)
-                var wrapped = new List<MethodInfo>() { metaInfo.MethodInfo };
-                var calcDataList = AutoCalculator.ExecuteCals(wrapped, param.ToArray());
-
-                //inject selected params for use when converting into CSV & EXCEL (HACK)
-                calcDataList.ForEach(aR => aR.AddSelectedParams(param));
-
-                //combine data columns for this row
-                //check if many or just 1 result (is many results inside)
-                foreach (var calcData in calcDataList)
-                {
-                    //if list hidden inside
-                    if (calcData?.Result is List<APIFunctionResult> subResults) { finalResultList.AddRange(subResults); }
-
-                    //else add like normal
-                    else { finalResultList.AddRange(calcDataList); }
-
-                }
-
-            }
-
-            //add row to table
-            TableRowList.Add(new MLTableRow(_time, finalResultList));
-
-        }
-
-        //# BRING DATA TO LIVE AS TABLE
-        CurrentTable.Update(TableRowList, selectedMetaList);
-
+        //convert inputed data via API into fully calculated html table (conversion to CSV,.. on client side)
+        //note: Time list should be generated by previous API call and should be ready for use
+        HtmlTable = await AppData.API.MLTable.GenerateMLTableHtml(_timeList, _columnNameList);
 
         //can show now also regenerates table
         _isReady = true;
@@ -358,7 +432,7 @@
         await _jsRuntime.ShowLoading(100);
 
         //convert created table to CSV string
-        var csvString = CurrentTable.ToCSV();
+        var csvString = await AppData.API.MLTable.GenerateMLTableCsv(_timeList, _columnNameList);
 
         // convert string to file
         var bytes = Encoding.UTF8.GetBytes(csvString);
@@ -374,30 +448,14 @@
         await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
     }
 
-    private async Task OnClickDownloadParquet()
-    {
-        //show loading
-        await _jsRuntime.ShowLoading(100);
-        //convert created table to Parquet string
-        var parquetString = await CurrentTable.ToParquet(); // You need to implement ToParquet() method
-        var base64Raw = Convert.ToBase64String(parquetString);
-        //start download using JS
-        var base64 = $"data:text/plain;base64,{base64Raw}"; // Parquet is binary format, but we can use text/plain for download
-        var filename = $"DataTable.parquet"; //todo better name
-        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, base64);
-        //tactile feedback to user
-        _jsRuntime.PlayDoneSound();
-        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
-    }
-
 
     private async Task OnClickDownloadExcel()
     {
         //show loading
         await _jsRuntime.ShowLoading(100);
 
-        //convert created table to CSV string
-        var excelFileBytes = CurrentTable.ToExcel();
+        //convert created table to Excel file
+        var excelFileBytes = await AppData.API.MLTable.GenerateMLTableExcel(_timeList, _columnNameList);
 
         var base64Raw = Convert.ToBase64String(excelFileBytes);
         //start download using JS

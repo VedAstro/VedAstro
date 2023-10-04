@@ -32,7 +32,13 @@ namespace VedAstro.Library
             Jupiter,
             Venus,
             Saturn,
+            /// <summary>
+            /// the true node, which is the point where the Moon's orbit crosses the ecliptic plane
+            /// </summary>
             Rahu,
+            /// <summary>
+            ///  true osculating apogee, which is the point where the Moon is farthest from the Earth in its elliptical orbit.
+            /// </summary>
             Ketu
         }
 
@@ -44,8 +50,15 @@ namespace VedAstro.Library
         public static readonly PlanetName Jupiter = new PlanetName(PlanetNameEnum.Jupiter);
         public static readonly PlanetName Venus = new PlanetName(PlanetNameEnum.Venus);
         public static readonly PlanetName Saturn = new PlanetName(PlanetNameEnum.Saturn);
-        public static readonly PlanetName Ketu = new PlanetName(PlanetNameEnum.Ketu);
+        /// <summary>
+        /// the true node, which is the point where the Moon's orbit crosses the ecliptic plane
+        /// </summary>
         public static readonly PlanetName Rahu = new PlanetName(PlanetNameEnum.Rahu);
+        /// <summary>
+        /// true osculating apogee, which is the point where the Moon is farthest from the Earth in its elliptical orbit.
+        /// </summary>
+        public static readonly PlanetName Ketu = new PlanetName(PlanetNameEnum.Ketu);
+
 
         /// <summary>
         /// Gets a list of planet excluding rahu & ketu, used for looping through planets
@@ -62,6 +75,17 @@ namespace VedAstro.Library
         /// Gets a list of planet WITH rahu & ketu, used for looping through planets
         /// </summary>
         public static readonly List<PlanetName> All9Planets = new List<PlanetName>()
+        {
+            Sun, Moon,
+            Mars, Mercury,
+            Jupiter, Venus,
+            Saturn, Rahu, Ketu
+        };
+
+        /// <summary>
+        /// Gets a list of planet WITH rahu & ketu, used for looping through planets
+        /// </summary>
+        public static readonly List<PlanetName> All12Planets = new List<PlanetName>()
         {
             Sun, Moon,
             Mars, Mercury,

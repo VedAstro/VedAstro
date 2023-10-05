@@ -34,7 +34,7 @@ namespace VedAstro.Library
         /// Defaults to RAMAN, but can be set before calling any funcs,
         /// NOTE: remember not to change mid instance, because "GetAyanamsa" & others are cached per instance
         /// </summary>
-        public static int YearOfCoincidence { get; set; } = (int)Library.Ayanamsa.Raman;
+        public static double YearOfCoincidence { get; set; } = (int)Library.Ayanamsa.Raman;
 
         #region AVASTA
 
@@ -280,6 +280,35 @@ namespace VedAstro.Library
         #endregion
 
         #region GENERAL
+
+        public static double AyanamsaFinder(PlanetName inputPlanet, ConstellationName expectedConstellation, Time time)
+        {
+            var isMatch = false;
+            //test each untill found right one
+            double ayanamsaYear = -4000;
+            while (ayanamsaYear < 4000)
+            {
+                Calculate.YearOfCoincidence = ayanamsaYear;
+                var planetConste = PlanetConstellation(time, inputPlanet);
+                isMatch = expectedConstellation == planetConste.GetConstellationName();
+                
+                if (isMatch)
+                {
+                    Console.WriteLine($"Ayanamsa : {ayanamsaYear} {planetConste} : FOUND");
+                    return ayanamsaYear;
+                }
+                else
+                {
+                    Console.WriteLine($"Ayanamsa : {ayanamsaYear} {planetConste} : FAIL");
+                }
+                //increase slightly
+                ayanamsaYear += 0.005;
+            }
+           
+
+            //if control reaches here than not found
+            throw new Exception();
+        }
 
         /// <summary>
         /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
@@ -1487,20 +1516,39 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets list of all planets and the zodiac signs they are in
         /// </summary>
-        public static Dictionary<PlanetName, ZodiacName> AllPlanetSigns(Time time)
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetSigns(Time time)
         {
-            var returnList = new Dictionary<PlanetName, ZodiacName>();
+            var returnList = new Dictionary<PlanetName, ZodiacSign>();
 
             //check each planet if in sign
             foreach (var planet in All9Planets)
             {
                 var planetSign = PlanetSignName(planet, time);
 
-                returnList[planet] = planetSign.GetSignName();
+                returnList[planet] = planetSign;
             }
 
             return returnList;
         }
+
+        /// <summary>
+        /// Gets list of all planets and the constellation they are in
+        /// </summary>
+        public static Dictionary<PlanetName, PlanetConstellation> AllPlanetConstellation(Time time)
+        {
+            var returnList = new Dictionary<PlanetName, PlanetConstellation>();
+
+            //check each planet if in sign
+            foreach (var planet in All9Planets)
+            {
+                var planetSign = PlanetConstellation(time, planet);
+
+                returnList[planet] = planetSign;
+            }
+
+            return returnList;
+        }
+
 
         /// <summary>
         /// Gets the Nirayana longitude of all 9 planets
@@ -1687,7 +1735,7 @@ namespace VedAstro.Library
             //var roundVal = Math.Round(middleLongitude.TotalDegrees, 4);
             //var roundedMiddleLongitude = Angle.FromDegrees(roundVal); //rounded to 5 places for accuracy
 
-            var houseSignName = ZodiacSignAtLongitude(middleLongitude.TotalDegrees).GetSignName();
+            var houseSignName = ZodiacSignAtLongitude(middleLongitude).GetSignName();
 
 #if DEBUG
 
@@ -1864,7 +1912,7 @@ namespace VedAstro.Library
         public static ZodiacSign PlanetSignName(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetSignName), planetName, time), _getPlanetRasiSign);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetSignName), planetName, time, YearOfCoincidence), _getPlanetRasiSign);
 
             //UNDERLYING FUNCTION
             ZodiacSign _getPlanetRasiSign()
@@ -5360,7 +5408,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(ConstellationAtLongitude), planetLongitude), _constellationAtLongitude);
+            return CacheManager.GetCache(new CacheKey(nameof(ConstellationAtLongitude), planetLongitude, YearOfCoincidence), _constellationAtLongitude);
 
 
             //UNDERLYING FUNCTION
@@ -5436,7 +5484,7 @@ namespace VedAstro.Library
                 //convert remainder to degrees in current sign
                 var degreesInSignRaw = roughZodiacNumberRemainder * maxDegreesInSign;
                 //round number (too high accuracy causes equality mismtach because of minute difference)
-                var degreesInSign = Math.Round(degreesInSignRaw, 4);
+                var degreesInSign = Math.Round(degreesInSignRaw, 7);
 
                 //if degrees in sign is 0, it means 30 degrees
                 if (degreesInSign == 0)

@@ -328,12 +328,13 @@ export async function PlaySoundFromUrl(fileUrl) {
 
 //only give response if header says ok
 //todo special to hadnle empty person list
-export async function ReadOnlyIfPassJson(url) {
+//defaults to get, but can be changed to any
+export async function ReadOnlyIfPassJson(url, callMethod = "GET") {
     console.log("JS > Read Only If Pass Json...");
 
     var response = await fetch(url, {
         "headers": { "accept": "*/*", "Connection": "keep-alive" },
-        "method": "GET"
+        "method": callMethod
     });
 
     var callStatus = response.headers.get('Call-Status');

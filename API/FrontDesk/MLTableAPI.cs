@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using Google.Protobuf.WellKnownTypes;
+using Azure.Core;
 
 namespace API
 {
@@ -19,17 +20,23 @@ namespace API
         /// </summary>
         [Function(nameof(GetMLTimeListFromExcel))]
         public static async Task<HttpResponseData> GetMLTimeListFromExcel(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post,get", Route = nameof(GetMLTimeListFromExcel))]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetMLTimeListFromExcel")]
             HttpRequestData incomingRequest)
         {
             //0 : LOG CALL
             //log ip address, call time and URL
-            var call = APILogger.Visit(incomingRequest);
+            var call = await APILogger.Visit(incomingRequest);
 
-            //1 : GET DATA OUT TODO NEEDS CHECKING
+            //1 : GET DATA OUT 
             //get data out of call
-            var rootJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
+            var excelBinary = incomingRequest.Body;
+            excelBinary.Position = 0;
+            var foundRawTimeList = await Tools.ExtractTimeColumnFromExcel(excelBinary);
+            var foundGeoLocationList = await Tools.ExtractLocationColumnFromExcel(excelBinary);
 
+            //2 : CALCULATE
+            //combine to create final Time list
+            var returnList = foundRawTimeList.Select(dateTimeOffset => new Time(dateTimeOffset, foundGeoLocationList[foundRawTimeList.IndexOf(dateTimeOffset)])).ToList();
 
             throw new NotImplementedException();
             //Time x = await Time.FromUrl(timeUrl);

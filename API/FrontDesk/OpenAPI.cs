@@ -28,7 +28,7 @@ namespace API
             try
             {
                 //0 : LOG CALL : used later for throttle limit
-                var callLog = APILogger.Visit(incomingRequest);
+                var callLog = await APILogger.Visit(incomingRequest);
 
                 //1 : GET INPUT DATA
                 var calculator = Tools.MethodNameToMethodInfo(calculatorName); //get calculator name

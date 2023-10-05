@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
+using OfficeOpenXml;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -40,6 +41,116 @@ namespace VedAstro.Library
     /// </summary>
     public static class Tools
     {
+        /// <summary>
+        /// Given an excel file will extract out 1 column that contains parseable time
+        /// </summary>
+        public static async Task<List<GeoLocation>> ExtractLocationColumnFromExcel(Stream excelBinary)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set the license context for EPPlus
+            var timeList = new List<GeoLocation>();
+            int timeColumnIndex = -1;
+
+            var excelFileStream = new MemoryStream();
+            await excelBinary.CopyToAsync(excelFileStream);
+            excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning
+
+            using (var package = new ExcelPackage(excelFileStream))
+            {
+                var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
+                                                                // Start from the second row (index 2) to skip the header
+                for (int rowIndex = 2; rowIndex <= worksheet.Dimension.Rows; rowIndex++)
+                {
+                    // If we haven't found the time column yet, search for it
+                    if (timeColumnIndex == -1)
+                    {
+                        for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
+                        {
+                            var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
+                            // If the cell value can be parsed as a Time, this is the time column
+                            var tryParse = await GeoLocation.TryParse(cellValue);
+                            if (tryParse.Item1) //is parsed, we no need the parsed val
+                            {
+                                timeColumnIndex = colIndex;
+                                break;
+                            }
+                        }
+                    }
+                    // If we've found the time column, add the cell value to the list
+                    if (timeColumnIndex != -1)
+                    {
+                        var cellValue = worksheet.Cells[rowIndex, timeColumnIndex].Value?.ToString();
+                        var tryParse = await GeoLocation.TryParse(cellValue);
+                        if (tryParse.Item1)
+                        {
+                            //add in the final parsed location into return list
+                            timeList.Add(tryParse.Item2);
+                        }
+                    }
+                }
+            }
+
+#if DEBUG
+            Console.WriteLine($"File Size : {excelBinary.Length}");
+            Console.WriteLine($"Rows Found : {timeList.Count}");
+#endif
+
+            return timeList;
+        }
+
+
+        /// <summary>
+        /// Given an excel file will extract out 1 column that contains parseable time
+        /// </summary>
+        public static async Task<List<DateTimeOffset>> ExtractTimeColumnFromExcel(Stream excelBinary)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set the license context for EPPlus
+            var timeList = new List<DateTimeOffset>();
+            int timeColumnIndex = -1;
+
+            var excelFileStream = new MemoryStream();
+            await excelBinary.CopyToAsync(excelFileStream);
+            excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning
+
+            using (var package = new ExcelPackage(excelFileStream))
+            {
+                var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
+                                                                // Start from the second row (index 2) to skip the header
+                for (int rowIndex = 2; rowIndex <= worksheet.Dimension.Rows; rowIndex++)
+                {
+                    // If we haven't found the time column yet, search for it
+                    if (timeColumnIndex == -1)
+                    {
+                        for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
+                        {
+                            var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
+                            // If the cell value can be parsed as a Time, this is the time column
+                            if (Time.TryParseStd(cellValue, out _))
+                            {
+                                timeColumnIndex = colIndex;
+                                break;
+                            }
+                        }
+                    }
+                    // If we've found the time column, add the cell value to the list
+                    if (timeColumnIndex != -1)
+                    {
+                        var cellValue = worksheet.Cells[rowIndex, timeColumnIndex].Value?.ToString();
+                        if (Time.TryParseStd(cellValue, out var time))
+                        {
+                            timeList.Add(time);
+                        }
+                    }
+                }
+            }
+
+#if DEBUG
+            Console.WriteLine($"File Size : {excelBinary.Length}");
+            Console.WriteLine($"Rows Found : {timeList.Count}");
+#endif
+
+            return timeList;
+        }
+
         /// <summary>
         /// Given a JSON version of a Table will convert to HTML table in string
         /// </summary>

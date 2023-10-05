@@ -1684,10 +1684,10 @@ namespace VedAstro.Library
             var middleLongitude = specifiedHouse.GetMiddleLongitude();
 
             //TODO is round needed!!
-            var roundVal = Math.Round(middleLongitude.TotalDegrees, 4);
-            var roundedMiddleLongitude = Angle.FromDegrees(roundVal); //rounded to 5 places for accuracy
+            //var roundVal = Math.Round(middleLongitude.TotalDegrees, 4);
+            //var roundedMiddleLongitude = Angle.FromDegrees(roundVal); //rounded to 5 places for accuracy
 
-            var houseSignName = ZodiacSignAtLongitude(roundedMiddleLongitude).GetSignName();
+            var houseSignName = ZodiacSignAtLongitude(middleLongitude.TotalDegrees).GetSignName();
 
 #if DEBUG
 

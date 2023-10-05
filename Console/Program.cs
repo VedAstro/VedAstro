@@ -12,8 +12,17 @@ namespace VedAstro.Console
 
         static async Task Main(string[] args)
         {
+
+
+            Time timeSample = new("00:00 10/10/2023 +05:30", GeoLocation.Bangalore);
+
+            //do the test
+            var testResult = Calculate.AyanamsaFinder(PlanetName.Mars, ConstellationName.Swathi, timeSample);
+
+            //check the test
+            
             //make instance to store variables from input nicely
-            var thisInstance = await Program.CreateInstance();
+            //var thisInstance = await Program.CreateInstance();
         }
 
         public static async Task<Program> CreateInstance()

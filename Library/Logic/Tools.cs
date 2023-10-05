@@ -1678,8 +1678,17 @@ namespace VedAstro.Library
             //get the type of the enum
             var enumType = Type.GetType("VedAstro.Library." + enumName);
 
-            //parse the string to an enum value
-            var parsedZodiac = Enum.Parse(enumType, enumValue);
+            object parsedZodiac;
+            try
+            {
+                //parse the string to an enum value
+                parsedZodiac = Enum.Parse(enumType, enumValue);
+            }
+            catch (Exception e)
+            {
+                //enum value could is a number
+                parsedZodiac = double.Parse(enumValue); 
+            }
 
             return parsedZodiac;
         }
@@ -2418,30 +2427,53 @@ namespace VedAstro.Library
         {
             //process list differently
             JProperty rootPayloadJson;
-            if (anyTypeData is List<APIFunctionResult> apiList) //handles results that have many props from 1 call, exp : SwissEphemeris
+            switch (anyTypeData)
             {
-                //converts into JSON list with property names
-                //NOTE: uses back this AnyToJSON to convert nested types
-                var parsed = APIFunctionResult.ToJsonList(apiList);
-                return parsed;
-            }
-            if (anyTypeData is IList iList) //handles results that have many props from 1 call, exp : SwissEphemeris
-            {
-                //convert list to comma separated string
-                var parsedList = iList.Cast<object>().ToList();
-                var stringComma = Tools.ListToString(parsedList);
+                //handles results that have many props from 1 call, exp : SwissEphemeris
+                case List<APIFunctionResult> apiList:
+                    {
+                        //converts into JSON list with property names
+                        //NOTE: uses back this AnyToJSON to convert nested types
+                        var parsed = APIFunctionResult.ToJsonList(apiList);
+                        return parsed;
+                    }
+                //handles results that have many props from 1 call, exp : SwissEphemeris
+                case IList iList:
+                    {
+                        //convert list to comma separated string
+                        var parsedList = iList.Cast<object>().ToList();
+                        var stringComma = Tools.ListToString(parsedList);
 
-                rootPayloadJson = new JProperty(dataName, stringComma);
-            }
-            //custom JSON converter available
-            else if (anyTypeData is IToJson iToJson)
-            {
-                rootPayloadJson = new JProperty(dataName, iToJson.ToJson());
-            }
-            //normal conversion via "ToString"
-            else
-            {
-                rootPayloadJson = new JProperty(dataName, anyTypeData?.ToString());
+                        rootPayloadJson = new JProperty(dataName, stringComma);
+                        break;
+                    }
+                //handles results that have many props from 1 call, exp : SwissEphemeris
+                case Dictionary<PlanetName, ZodiacSign> dictionary:
+                    {
+                        //convert list to comma separated string
+                        var parsedList = dictionary.Cast<object>().ToList();
+                        var stringComma = Tools.ListToString(parsedList);
+
+                        rootPayloadJson = new JProperty(dataName, stringComma);
+                        break;
+                    }
+                case Dictionary<PlanetName, PlanetConstellation> dictionary:
+                    {
+                        //convert list to comma separated string
+                        var parsedList = dictionary.Cast<object>().ToList();
+                        var stringComma = Tools.ListToString(parsedList);
+
+                        rootPayloadJson = new JProperty(dataName, stringComma);
+                        break;
+                    }
+                //custom JSON converter available
+                case IToJson iToJson:
+                    rootPayloadJson = new JProperty(dataName, iToJson.ToJson());
+                    break;
+                //normal conversion via "ToString"
+                default:
+                    rootPayloadJson = new JProperty(dataName, anyTypeData?.ToString());
+                    break;
             }
 
             return rootPayloadJson;
@@ -2454,32 +2486,52 @@ namespace VedAstro.Library
         /// </summary>
         public static string AnyToString(object result)
         {
-            //based on the underlying type try best to convert to string
+            // Use StringBuilder for efficient string concatenation
+            var sb = new StringBuilder();
             switch (result)
             {
-                //convert list to comma separated string
+                // Use 'is' for pattern matching
                 case IList iList:
-                    var parsedList = iList.Cast<object>().ToList();
-                    var stringComma = Tools.ListToString(parsedList);
-                    return stringComma;
-                //enum value as string
+                    sb.Append(string.Join(", ", iList.Cast<object>()));
+                    break;
                 case Enum enumResult:
-                    return enumResult.ToString(); // so that enum prints nicely
-                // Dictionary<PlanetName, ZodiacName>
-                case Dictionary<PlanetName, ZodiacName> dictPZ:
-                    return string.Join(", ", dictPZ.Select(kv => $"{kv.Key.ToString()}: {kv.Value.ToString()}"));
-                // Dictionary<PlanetName, Dictionary<ZodiacName, int>>
+                    sb.Append(enumResult.ToString());
+                    break;
+                case Dictionary<PlanetName, ZodiacName> dictPZodiacName:
+                    AppendDictionary(sb, dictPZodiacName);
+                    break;
+                case Dictionary<PlanetName, ZodiacSign> dictPZodiacSign:
+                    AppendDictionary(sb, dictPZodiacSign);
+                    break;
+                case Dictionary<PlanetName, PlanetConstellation> dictPConstellation:
+                    AppendDictionary(sb, dictPConstellation);
+                    break;
                 case Dictionary<PlanetName, Dictionary<ZodiacName, int>> dictPDZ:
-                    return string.Join(", ", dictPDZ.Select(kv => $"{kv.Key.ToString()}: {AnyToString(kv.Value)}"));
-                // Dictionary<ZodiacName, int>
+                {
+                    foreach (var kv in dictPDZ)
+                    {
+                        sb.Append($"{kv.Key}: {AnyToString(kv.Value)}, ");
+                    }
+
+                    break;
+                }
                 case Dictionary<ZodiacName, int> dictZI:
-                    return string.Join(", ", dictZI.Select(kv => $"{kv.Key.ToString()}: {kv.Value}"));
-                // Dictionary<PlanetName, double>
+                    AppendDictionary(sb, dictZI);
+                    break;
                 case Dictionary<PlanetName, double> dictPD:
-                    return string.Join(", ", dictPD.Select(kv => $"{kv.Key.ToString()}: {kv.Value}"));
-                //default call ToString
+                    AppendDictionary(sb, dictPD);
+                    break;
                 default:
-                    return result.ToString();
+                    sb.Append(result.ToString());
+                    break;
+            }
+            return sb.ToString();
+        }
+        private static void AppendDictionary<TKey, TValue>(StringBuilder sb, Dictionary<TKey, TValue> dict)
+        {
+            foreach (var kv in dict)
+            {
+                sb.Append($"{kv.Key}: {kv.Value}, ");
             }
         }
 

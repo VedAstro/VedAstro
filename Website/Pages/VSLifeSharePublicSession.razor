@@ -10,8 +10,11 @@
         //notify coder that someone is joining session (so he can prepare!!)
         await WebsiteTools.SendMailToAPI("Someone Joined Code Session", "Someone Joined Code Session");
 
-        //redirect user to kofi membership page
-        AppData.Go(URL.VSLifeSharePublicSession);
+        //redirect user to VS share link on new tav
+        AppData.Go(URL.VSLifeSharePublicSession, newTab: true);
+
+        //send current tab back to home
+        AppData.Go(PageRoute.Home);
     }
 
 }

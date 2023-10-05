@@ -74,6 +74,8 @@
                     <span>File Read Complete!</span>
                     <span class="mt-1">Rows : <strong>@_timeList.Count</strong></span>
                     <span class="mt-1">Columns : <strong>@_columnNameList.Count</strong></span>
+                    <span class="mt-1">Type : <strong>@UploadedFile?.ContentType</strong></span>
+                    <span class="mt-1">Size : <strong>@UploadedFile?.Size</strong></span>
                 </div>
 
             </div>
@@ -247,7 +249,7 @@
     }
 
     private bool _isReady;
-    public IBrowserFile UploadedFile { get; set; }
+    public IBrowserFile? UploadedFile { get; set; }
     private ElementReference uploadFileInfoHolder;
 
     public string? SelectedTimeRangePreset

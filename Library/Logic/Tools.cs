@@ -2524,6 +2524,15 @@ namespace VedAstro.Library
                         rootPayloadJson = new JProperty(dataName, stringComma);
                         break;
                     }
+                case Dictionary<ZodiacName, int> dictionary:
+                    {
+                        //convert list to comma separated string
+                        var parsedList = dictionary.Cast<object>().ToList();
+                        var stringComma = Tools.ListToString(parsedList);
+
+                        rootPayloadJson = new JProperty(dataName, stringComma);
+                        break;
+                    }
                 case Dictionary<PlanetName, PlanetConstellation> dictionary:
                     {
                         //convert list to comma separated string

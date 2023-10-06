@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Text;
 
@@ -65,6 +66,13 @@ namespace VedAstro.Library;
 /// </summary>
 public class OpenAPIMetadata
 {
+    private PlanetName _selectedPlanet = PlanetName.Sun; //set default so dropdown has something on load
+
+    /// <summary>
+    /// Special name for use in ML Data Tables, includes first param value added to name
+    /// </summary>
+    public string MLTableName(object resultOverride = null) => Tools.GetSpecialMLTableName(this, resultOverride);
+
     public OpenAPIMetadata(string signature, string description, string exampleOutput, MethodInfo methodInfo = null)
     {
         Description = description;
@@ -117,6 +125,30 @@ public class OpenAPIMetadata
     public object ReturnType => GetTypeName(MethodInfo?.ReturnType);
 
     /// <summary>
+    /// SPECIAL HACK METHOD to inject custom params for use in ML Data Generator
+    /// Users inputs this params instances before executing API method
+    /// </summary>
+    public List<object> SelectedParams { get; set; }
+
+    /// <summary>
+    /// SPECIAL HACK METHOD to inject custom params for use in ML Data Generator
+    /// made for Blazor binding
+    /// </summary>
+    public PlanetName SelectedPlanet
+    {
+        get => _selectedPlanet;
+        set
+        {
+            //inject custom planet name as param into selected method meta
+            this.SelectedParams?.Clear(); //important to clear previous values
+            this.SelectedParams?.Add(value);
+
+            _selectedPlanet = value;
+        }
+    }
+
+
+    /// <summary>
     /// generates python method stub declaration code
     /// EXP: def HousePlanetIsIn(time: Time, planet_name: PlanetName) -> HouseName:
     /// </summary>
@@ -138,38 +170,42 @@ public class OpenAPIMetadata
 
     }
 
-	/// <summary>
-	/// Given a list of method info will convert to a list of API call Data
-	/// </summary>
-	public static List<OpenAPIMetadata> FromMethodInfoList(IEnumerable<MethodInfo> calcList)
-	{
-		var finalList = new List<OpenAPIMetadata>();
-		//make final list with API description
-		//get nice API calc name, shown in builder dropdown
-		foreach (var calc in calcList)
-		{
-			//using the method's signature ID get the pre created comments
-			var signature = calc.GetMethodSignature();
-			var metadata = OpenAPIStaticTable.Rows.Where(x => x.Signature == signature).FirstOrDefault();
-			
-			//if null than raise silent alarm!, don't add to return list todo log to server
-			if (metadata == null) { Console.WriteLine($"METHOD NOT FOUND!!!! --> {signature}"); continue; }
-			
-			//add link to current code instance
-			metadata.MethodInfo = calc;
-			
-			//add to final list
-			finalList.Add(metadata);
-		}
-		// Sort the list alphabetically based on the Name property
-		finalList = finalList.OrderBy(metadata => metadata.Name).ToList();
-		return finalList;
-	}
+    /// <summary>
+    /// Given a list of method info will convert to a list of API call Data
+    /// if none provided, will use ALL from Open API
+    /// </summary>
+    public static List<OpenAPIMetadata> FromMethodInfoList(IEnumerable<MethodInfo> calcList = null)
+    {
+        //if null include all API methods
+        calcList = calcList ?? Tools.GetAllApiCalculatorsMethodInfo();
 
-	/// <summary>
-	/// Given a type will return is most relevant name
-	/// </summary>
-	public static string GetTypeName(Type type)
+        var finalList = new List<OpenAPIMetadata>();
+        //make final list with API description
+        //get nice API calc name, shown in builder dropdown
+        foreach (var calc in calcList)
+        {
+            //using the method's signature ID get the pre created comments
+            var signature = calc.GetMethodSignature();
+            var metadata = OpenAPIStaticTable.Rows.Where(x => x.Signature == signature).FirstOrDefault();
+
+            //if null than raise silent alarm!, don't add to return list todo log to server
+            if (metadata == null) { Console.WriteLine($"METHOD NOT FOUND!!!! --> {signature}"); continue; }
+
+            //add link to current code instance
+            metadata.MethodInfo = calc;
+
+            //add to final list
+            finalList.Add(metadata);
+        }
+        // Sort the list alphabetically based on the Name property
+        finalList = finalList.OrderBy(metadata => metadata.Name).ToList();
+        return finalList;
+    }
+
+    /// <summary>
+    /// Given a type will return is most relevant name
+    /// </summary>
+    public static string GetTypeName(Type type)
     {
         if (type == null) { return "null"; }
 
@@ -184,5 +220,36 @@ public class OpenAPIMetadata
         }
     }
 
+    /// <summary>
+    /// Safely adds to Selected param list no init needed
+    /// </summary>
+    public void AddSelectedParams(PlanetName inputPlanet)
+    {
+        //assign new if null
+        this.SelectedParams ??= new List<object>();
+        this.SelectedParams.Add(inputPlanet);
+    }
 
+    /// <summary>
+    /// Return a new instance
+    /// </summary>
+    public OpenAPIMetadata Clone()
+    {
+        var clonedDolly = new OpenAPIMetadata(Signature, Description, ExampleOutput, MethodInfo);
+
+        return clonedDolly;
+    }
+
+
+    public static OpenAPIMetadata FromAPIFunctionResult(APIFunctionResult funcResult)
+    {
+        //get method info from calc name
+        var calcName = funcResult.Name;
+        var methodInfo = Tools.MethodNameToMethodInfo(calcName);
+
+        //convert method info to meta data
+        var converted = OpenAPIMetadata.FromMethodInfoList(new List<MethodInfo>() { methodInfo })[0];
+
+        return converted;
+    }
 }

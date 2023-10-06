@@ -343,11 +343,10 @@
     {
         var encodingHeader = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
         var bytes = Encoding.UTF8.GetBytes(encodingHeader + RawChartSvg);
-        var base64 = Convert.ToBase64String(bytes);
-        var url = $"data:text/plain;base64,{base64}";
+        var base64Raw = Convert.ToBase64String(bytes);
+        var base64 = $"data:text/plain;base64,{base64Raw}";
         var filename = $"LifePredictor-{SelectedPerson.NameWithNoSpace}-{SelectedPerson.BirthYear}.svg";
-        //await JSRuntime.InvokeVoidAsync("saveAsFile", filename, url);
-        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, url);
+        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, base64);
     }
 
 

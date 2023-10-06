@@ -1,0 +1,37 @@
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.Sponsor)]
+
+<PageTitle>Sponsor</PageTitle>
+
+
+
+<div id="paypal-button-container-P-8DP88753MM4018809MUOV6BQ"></div>
+<script src="https://www.paypal.com/sdk/js?client-id=Aax_Ku08Hlg5Zx0Meyz1kOuxc6OP_mTy9fgGwhlROd8bEopQ0KV7X1GMwCRxiLExRy-1TCiqohdSo7aZ&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+<script>
+    paypal.Buttons({
+        style: {
+            shape: 'pill',
+            color: 'gold',
+            layout: 'horizontal',
+            label: 'subscribe'
+        },
+        createSubscription: function (data, actions) {
+            return actions.subscription.create({
+                /* Creates the subscription */
+                plan_id: 'P-8DP88753MM4018809MUOV6BQ'
+            });
+        },
+        onApprove: function (data, actions) {
+            alert(data.subscriptionID); // You can add optional success message for the subscriber here
+        }
+    }).render('#paypal-button-container-P-8DP88753MM4018809MUOV6BQ'); // Renders the PayPal button
+</script>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        
+    }
+
+}

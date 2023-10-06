@@ -433,6 +433,10 @@ namespace VedAstro.Library
             }
         }
 
+        /// <summary>
+        /// Given a json list of person will convert to instance
+        /// used for transferring between server & client
+        /// </summary>
         public static List<Person> FromJsonList(JToken personList)
         {
             //if null empty list please

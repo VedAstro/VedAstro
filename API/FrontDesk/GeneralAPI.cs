@@ -2,6 +2,7 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Net;
+using System.Reflection;
 
 namespace API
 {
@@ -74,6 +75,9 @@ namespace API
 				return response;
 			}
 		}
+
+        
+       
 
 	}
 }

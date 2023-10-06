@@ -9,6 +9,8 @@ using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using Google.Protobuf.WellKnownTypes;
 using Azure.Core;
+using Azure.Storage.Blobs;
+using System.Net;
 
 namespace API
 {
@@ -20,42 +22,40 @@ namespace API
         /// </summary>
         [Function(nameof(GetMLTimeListFromExcel))]
         public static async Task<HttpResponseData> GetMLTimeListFromExcel(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetMLTimeListFromExcel")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = nameof(GetMLTimeListFromExcel))]
             HttpRequestData incomingRequest)
         {
-            //0 : LOG CALL
-            //log ip address, call time and URL
-            var call = await APILogger.Visit(incomingRequest);
-
-            //1 : GET DATA OUT 
-            //get data out of call
-            var excelBinary = incomingRequest.Body;
-            excelBinary.Position = 0;
-            var foundRawTimeList = await Tools.ExtractTimeColumnFromExcel(excelBinary);
-            var foundGeoLocationList = await Tools.ExtractLocationColumnFromExcel(excelBinary);
-
-            //2 : CALCULATE
-            //combine to create final Time list
-            var returnList = foundRawTimeList.Select(dateTimeOffset => new Time(dateTimeOffset, foundGeoLocationList[foundRawTimeList.IndexOf(dateTimeOffset)])).ToList();
-
-            throw new NotImplementedException();
-            //Time x = await Time.FromUrl(timeUrl);
-            //var timeAtLocation = x.GetStdDateTimeOffset();
-            //var geoLocation = x.GetGeoLocation();
-
-            ////2 : CALCULATE
-            //var timezoneStr = GeoLocationToTimezone_Vedastro(geoLocation, timeAtLocation);
-            ////use google only if no cache in VedAstro
-            //if (string.IsNullOrEmpty(timezoneStr))
-            //{
-            //    timezoneStr = await GeoLocationToTimezone_Google(geoLocation, timeAtLocation);
-            //    //add new data to cache, for future speed up
-            //    AddToCache(geoLocation, rowKeyData: timeAtLocation.Ticks.ToString(), timezone: timezoneStr);
-            //}
 
 
-            ////3 : SEND TO CALLER
-            //return APITools.PassMessage(timezoneStr, incomingRequest);
+            try
+            {
+
+                //0 : LOG CALL
+                //log ip address, call time and URL
+                var call = await APILogger.Visit(incomingRequest);
+
+                //1 : GET DATA OUT 
+                var excelBinary = incomingRequest.Body;
+                excelBinary.Position = 0;
+                var foundRawTimeList = await Tools.ExtractTimeColumnFromExcel(excelBinary);
+                var foundGeoLocationList = await Tools.ExtractLocationColumnFromExcel(excelBinary);
+
+                //3 : COMBINE DATA
+                var returnList = foundRawTimeList.Select(dateTimeOffset => new Time(dateTimeOffset, foundGeoLocationList[foundRawTimeList.IndexOf(dateTimeOffset)])).ToList();
+
+                //convert raw XML to Person Json
+                var personListJson = Tools.ListToJson(returnList);
+
+                return APITools.PassMessageJson(personListJson, incomingRequest);
+
+            }
+
+            //if any failure, show error in payload
+            catch (Exception e)
+            {
+                APILogger.Error(e, incomingRequest);
+                return APITools.FailMessageJson(e.Message, incomingRequest);
+            }
 
         }
 

@@ -67,14 +67,12 @@ namespace API
                 return httpResponseData;
 
             }
+
+            //if any failure, show error in payload
             catch (Exception e)
             {
-                //log it
-                APILogger.Error(e);
-                var response = req.CreateResponse(HttpStatusCode.OK);
-                response.Headers.Add("Call-Status", "Fail"); //caller checks this
-                response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
-                return response;
+                APILogger.Error(e, req);
+                return APITools.FailMessageJson(e.Message, req);
             }
 
 

@@ -68,12 +68,12 @@ namespace VedAstro.Library
         /// </summary>
         public bool IsEventOccuring(Time time)
         {
-            Calculate.YearOfCoincidence = (int)VedAstro.Library.Ayanamsa.Lahiri;
+            Calculate.Ayanamsa = (int)VedAstro.Library.Ayanamsa.Lahiri;
 
             //do calculation for this event to get prediction data
             var predictionData = this.HoroscopeCalculator(time);
 
-            Calculate.YearOfCoincidence = (int)VedAstro.Library.Ayanamsa.Yukteshwar;
+            Calculate.Ayanamsa = (int)VedAstro.Library.Ayanamsa.Yukteshwar;
 
             //do calculation for this event to get prediction data
             var predictionData2CP = this.HoroscopeCalculator(time);

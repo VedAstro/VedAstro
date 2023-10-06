@@ -6616,6 +6616,7 @@ namespace VedAstro.Library
             var janmaSign = Calculate.MoonSignName(birthTime);
 
             //get planet sign at input time
+            var planetSignAngle = Calculate.PlanetSignName(planet, currentTime);
             var planetSign = Calculate.PlanetSignName(planet, currentTime).GetSignName();
 
             //count from janma to sign planet is in

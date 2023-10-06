@@ -2568,22 +2568,26 @@ namespace VedAstro.Library
         /// <summary>
         /// Given a list of object will make into JSON
         /// </summary>
-        public static JArray ListToJson<T>(List<T> personList)
+        public static JArray ListToJson<T>(List<T> itemList)
         {
             //get all as converted to basic string
 
             JArray arrayJson = new JArray();
-            foreach (var person in personList)
+            foreach (var item in itemList)
             {
-                if (person is XElement personXml)
+                if (item is XElement personXml)
                 {
                     var personJson = Tools.XmlToJson(personXml);
                     arrayJson.Add(personJson);
                 }
+                else if (item is IToJson toJson)
+                {
+                    arrayJson.Add(toJson.ToJson());
+                }
                 //do it normal string way
                 else
                 {
-                    arrayJson.Add(person.ToString());
+                    arrayJson.Add(item.ToString());
                 }
 
             }

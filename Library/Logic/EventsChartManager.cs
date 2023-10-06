@@ -1845,7 +1845,7 @@ namespace VedAstro.Library
             public static double StrongestHouse(Event foundEvent, Person person)
             {
                 //get top house
-                var topHouse = Calculate.GetAllHousesOrderedByStrength(person.BirthTime)[0];
+                var topHouse = Calculate.AllHousesOrderedByStrength(person.BirthTime)[0];
 
                 //get all houses in event, scan and give score
                 var houseNatureScore = 0.0;
@@ -1867,7 +1867,7 @@ namespace VedAstro.Library
             public static double WeakestHouse(Event foundEvent, Person person)
             {
                 //get bottom house
-                var bottomHouse = Calculate.GetAllHousesOrderedByStrength(person.BirthTime)[11];
+                var bottomHouse = Calculate.AllHousesOrderedByStrength(person.BirthTime)[11];
 
                 //get all houses in event, scan and give score
                 var houseNatureScore = 0.0;

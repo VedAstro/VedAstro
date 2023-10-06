@@ -20,23 +20,31 @@ namespace API
         /// </summary>
         [Function(nameof(GetMLTimeListFromExcel))]
         public static async Task<HttpResponseData> GetMLTimeListFromExcel(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetMLTimeListFromExcel")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = nameof(GetMLTimeListFromExcel))]
             HttpRequestData incomingRequest)
         {
-            //0 : LOG CALL
-            //log ip address, call time and URL
-            var call = await APILogger.Visit(incomingRequest);
+            try
+            {
+                //0 : LOG CALL
+                //log ip address, call time and URL
+                var call = await APILogger.Visit(incomingRequest);
 
-            //1 : GET DATA OUT 
-            //get data out of call
-            var excelBinary = incomingRequest.Body;
-            excelBinary.Position = 0;
-            var foundRawTimeList = await Tools.ExtractTimeColumnFromExcel(excelBinary);
-            var foundGeoLocationList = await Tools.ExtractLocationColumnFromExcel(excelBinary);
+                //1 : GET DATA OUT 
+                //get data out of call
+                var excelBinary = incomingRequest.Body;
+                excelBinary.Position = 0;
+                var foundRawTimeList = await Tools.ExtractTimeColumnFromExcel(excelBinary);
+                var foundGeoLocationList = await Tools.ExtractLocationColumnFromExcel(excelBinary);
 
-            //2 : CALCULATE
-            //combine to create final Time list
-            var returnList = foundRawTimeList.Select(dateTimeOffset => new Time(dateTimeOffset, foundGeoLocationList[foundRawTimeList.IndexOf(dateTimeOffset)])).ToList();
+                //2 : CALCULATE
+                //combine to create final Time list
+                var returnList = foundRawTimeList.Select(dateTimeOffset => new Time(dateTimeOffset, foundGeoLocationList[foundRawTimeList.IndexOf(dateTimeOffset)])).ToList();
+            }
+            catch (Exception e)
+            {
+                    Console.WriteLine(e);
+                    throw;
+            }
 
             throw new NotImplementedException();
             //Time x = await Time.FromUrl(timeUrl);

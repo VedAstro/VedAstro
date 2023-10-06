@@ -175,7 +175,7 @@ else
 
         //--------------------------------
         //2 2nd strongest House
-        var strongestHouse = Calculate.GetAllHousesOrderedByStrength(_birthTime)[0];
+        var strongestHouse = Calculate.AllHousesOrderedByStrength(_birthTime)[0];
         //var strongestHouseSign = AstronomicalCalculator.GetHouseSignName((int)strongestHouse, _birthTime);
 
         //pick out planet predictions based on related body of planet and sign
@@ -193,7 +193,7 @@ else
         //---------------------------------
         //3 strongest house
         //source of happiness and source of sadness
-        var weakestHouse = Calculate.GetAllHousesOrderedByStrength(_birthTime)[11];
+        var weakestHouse = Calculate.AllHousesOrderedByStrength(_birthTime)[11];
         var getHouseTagsGood = Calculate.GetHouseTags(strongestHouse);
         var getHouseTagsBad = Calculate.GetHouseTags(weakestHouse);
 

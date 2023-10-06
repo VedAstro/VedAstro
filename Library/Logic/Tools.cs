@@ -50,6 +50,7 @@ namespace VedAstro.Library
             var timeList = new List<GeoLocation>();
             int timeColumnIndex = -1;
 
+            excelBinary.Position = 0; //important to reset else, no file error
             var excelFileStream = new MemoryStream();
             await excelBinary.CopyToAsync(excelFileStream);
             excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning

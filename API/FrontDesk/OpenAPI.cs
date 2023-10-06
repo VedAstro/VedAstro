@@ -43,13 +43,10 @@ namespace API
                 //DON'T LIMIT FEATURES JUST BECAUSE NOT LOGGED IN
                 //as such no API KEY field here, direct to Ayanamsa
                 //if this is ayanamsa, then take it out to be used later...
-                double userAyanamsa = (double)Ayanamsa.Raman; //default
+                int userAyanamsa = (int)Ayanamsa.Raman; //default
                 var isCustomAyanamsa = fullParamString.Contains(nameof(Ayanamsa));
-                if (isCustomAyanamsa)
-                {
-                    userAyanamsa = (double)await Tools.EnumFromUrl(remainderParamString);
-                }
-                VedAstro.Library.Calculate.YearOfCoincidence = (double)userAyanamsa;
+                if (isCustomAyanamsa) { userAyanamsa = (int)await Tools.EnumFromUrl(remainderParamString); }
+                VedAstro.Library.Calculate.Ayanamsa = (int)userAyanamsa;
 
 
 				//3 : EXECUTE COMMAND

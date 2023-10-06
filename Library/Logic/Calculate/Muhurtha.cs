@@ -3820,7 +3820,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House1IsStrong)]
         public static CalculatorResult IsHouse1IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House1;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House1;
 
             //STRENGTH CALCULATION
 
@@ -3832,7 +3832,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House2IsStrong)]
         public static CalculatorResult IsHouse2IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House2;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House2;
 
 
 
@@ -3842,7 +3842,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House3IsStrong)]
         public static CalculatorResult IsHouse3IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House3;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House3;
 
 
 
@@ -3852,7 +3852,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House4IsStrong)]
         public static CalculatorResult IsHouse4IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House4;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House4;
 
 
 
@@ -3863,7 +3863,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House5IsStrong)]
         public static CalculatorResult IsHouse5IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House5;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House5;
 
 
 
@@ -3873,7 +3873,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House6IsStrong)]
         public static CalculatorResult IsHouse6IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House6;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House6;
 
 
 
@@ -3883,7 +3883,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House7IsStrong)]
         public static CalculatorResult IsHouse7IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House7;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House7;
 
 
 
@@ -3893,7 +3893,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House8IsStrong)]
         public static CalculatorResult IsHouse8IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House8;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House8;
 
 
 
@@ -3903,7 +3903,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House9IsStrong)]
         public static CalculatorResult IsHouse9IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House9;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House9;
 
 
 
@@ -3913,7 +3913,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House10IsStrong)]
         public static CalculatorResult IsHouse10IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House10;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House10;
 
 
 
@@ -3923,7 +3923,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House11IsStrong)]
         public static CalculatorResult IsHouse11IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House11;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House11;
 
 
 
@@ -3933,7 +3933,7 @@ namespace VedAstro.Library
         [EventCalculator(EventName.House12IsStrong)]
         public static CalculatorResult IsHouse12IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.GetAllHousesOrderedByStrength(time)[0] == HouseName.House12;
+            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House12;
 
 
 

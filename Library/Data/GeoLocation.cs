@@ -24,7 +24,7 @@ namespace VedAstro.Library
         public static GeoLocation Tokyo = new GeoLocation("Tokyo, Japan", 139.83, 35.65);
         public static GeoLocation Bangkok = new GeoLocation("Bangkok, Thailand", 100.50, 13.75);
         public static GeoLocation Bangalore = new GeoLocation("Bangalore, India", 77.5946, 12.9716);
-		public static GeoLocation Ujjain = new GeoLocation("Ujjain, India", 75.7167, 23.1667);
+        public static GeoLocation Ujjain = new GeoLocation("Ujjain, India", 75.7167, 23.1667);
         public static GeoLocation WashingtonDC = new GeoLocation("Washington D.C., USA", -77.0369, 38.9072);
         public static GeoLocation London = new GeoLocation("London, UK", -0.1276, 51.5074);
         public static GeoLocation Paris = new GeoLocation("Paris, France", 2.3522, 48.8566);
@@ -121,7 +121,7 @@ namespace VedAstro.Library
 
             return hash1 + hash2 + hash3;
         }
-        
+
         public JToken ToJson()
         {
             var temp = new JObject();
@@ -194,11 +194,16 @@ namespace VedAstro.Library
             //try get location from name using google API
             var results = await Tools.AddressToGeoLocation(locationName);
 
-            //if fail, raise alarm
-            if (!results.IsPass) { throw new Exception("Location failed to find!"); }
-
-            //make the new Geo Location and return it
-            return results.Payload;
+            //meant to fail, so return Empty
+            if (!results.IsPass)
+            {
+                return Empty;
+            }
+            else
+            {
+                //make the new Geo Location and return it
+                return results.Payload;
+            }
         }
 
         /// <summary>
@@ -237,8 +242,8 @@ namespace VedAstro.Library
             var latitudeRound = Math.Round(latitude, 3);
             var longitudeRound = Math.Round(longitude, 3);
 
-			//get from API
-			var url = URL.CoordinatesToGeoLocationAPIStable + $"/Latitude/{latitudeRound}/Longitude/{longitudeRound}";
+            //get from API
+            var url = URL.CoordinatesToGeoLocationAPIStable + $"/Latitude/{latitudeRound}/Longitude/{longitudeRound}";
             var webResult = await Tools.ReadFromServerXmlReply(url);
 
             //convert
@@ -277,13 +282,13 @@ namespace VedAstro.Library
         {
             if (latitude < -90 || latitude > 90)
             {
-	            Console.WriteLine($"Invalid Latitude! {latitude}");
+                Console.WriteLine($"Invalid Latitude! {latitude}");
                 return false;
             }
             if (longitude < -180 || longitude > 180)
             {
-	            Console.WriteLine($"Invalid Longitude! {longitude}");
-				return false;
+                Console.WriteLine($"Invalid Longitude! {longitude}");
+                return false;
             }
 
             //if control reaches here than is valid
@@ -328,7 +333,7 @@ namespace VedAstro.Library
         {
             //should return empty 
             var tryParsed = await GeoLocation.FromName(cellValue);
-            
+
             //if empty than parse failed
             var isParsed = !(tryParsed.Equals(Empty));
 

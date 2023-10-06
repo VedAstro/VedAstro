@@ -11,17 +11,19 @@
         /// the Indian government for official purposes. 
         /// </summary>
         Lahiri = 1,
-        Lahiri1940 = 43,
-        LahiriVp285 = 44,
-        LahiriIcrc = 46,
+
+        /// <summary>
+        /// "SSCitra" is an abbreviation for Surya Siddhanta Citra Paksha Ayanamsa, which is one of the systems used in Hindu astrology to account for the precession of equinoxes. It is based on the position of the star Spica (Chitra) at 0 degrees Libra, as prescribed by the Surya Siddhanta, an ancient Sanskrit treatise on astronomy and astrology.
+        /// It is also known as Lahiri Ayanamsa, named after its inventor, astronomer N.C. Lahiri, who proposed it in 1955
+        /// </summary>
+        LahiriChitrapaksha = 26,
 
         /// <summary>
         /// Krishnamurti: This is another popular ayanamsa in Vedic astrology, especially among the followers of the Krishnamurti Paddhati (KP) system. It is based on the position of the star Ashwini at 0 degrees Aries, as proposed by K.S. Krishnamurti.
         /// It is also known as KP Ayanamsa, and it has been widely
         /// used for horary astrology and stellar astrology
         /// </summary>
-        Krishnamurti = 5,
-        KrishnamurtiVp291 = 45,
+        KrishnamurtiKP = 5,
 
         /// <summary>
         /// This is a well-known ayanamsa in Vedic astrology, especially among the followers of B.V. Raman. It is based on the position of the star Revati at 0 degrees Pisces, as suggested by B.V. Raman.
@@ -58,8 +60,6 @@
 
 
         SsRevati = 25,
-        SsCitra = 26,
-        TrueCitra = 27,
         TrueRevati = 28,
         TruePushya = 29,
         Suryasiddhanta = 21,

@@ -5037,20 +5037,18 @@ namespace VedAstro.Library
             {
                 //This would request sidereal positions calculated using the Swiss Ephemeris.
                 int iflag = SwissEph.SEFLG_SIDEREAL;
-                double[] results = new double[6];
-                string err_msg = "";
                 double jul_day_ET;
                 SwissEph ephemeris = new SwissEph();
 
                 // Convert DOB to ET
                 jul_day_ET = TimeToEphemerisTime(time);
 
-                //Get planet long
-                ephemeris.swe_set_sid_mode(46, 0, 0);
-                var ret_flag = ephemeris.swe_get_ayanamsa(jul_day_ET);
+                //set ayanamsa
+                ephemeris.swe_set_sid_mode(Ayanamsa, 0, 0);
+                var ayanamsaDegree = ephemeris.swe_get_ayanamsa(jul_day_ET);
 
-                //ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
-                throw new NotImplementedException();
+                return Angle.FromDegrees(ayanamsaDegree);
+
             }
 
         }

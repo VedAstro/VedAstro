@@ -17,7 +17,7 @@ namespace VedAstro.Library
     /// to generate the Local Mean Time needed for astrological calculation
     /// </summary>
     [Serializable()]
-    public struct Time : IToXml, IFromUrl
+    public struct Time : IToXml, IFromUrl, IToJson
     {
         //FIELDS
 
@@ -365,7 +365,7 @@ namespace VedAstro.Library
             return timeHolder;
         }
 
-        public JToken ToJson()
+        public JObject ToJson()
         {
             var temp = new JObject();
             temp["StdTime"] = this.GetStdDateTimeOffsetText();

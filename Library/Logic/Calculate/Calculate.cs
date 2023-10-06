@@ -9,31 +9,32 @@ using SwissEphNet;
 using static VedAstro.Library.PlanetName;
 using static VedAstro.Library.HouseName;
 using static VedAstro.Library.ZodiacName;
+using System.Numerics;
 
 
 namespace VedAstro.Library
 {
 
-	//█▀▄▀█ █▀▀ ▀▀█▀▀ █░░█ █▀▀█ █▀▀▄ 　 ▀▀█▀▀ █▀▀█ 　 ▀▀█▀▀ █░░█ █▀▀ 　 █▀▄▀█ █▀▀█ █▀▀▄ █▀▀▄ █▀▀ █▀▀ █▀▀ 
-	//█░▀░█ █▀▀ ░░█░░ █▀▀█ █░░█ █░░█ 　 ░░█░░ █░░█ 　 ░░█░░ █▀▀█ █▀▀ 　 █░▀░█ █▄▄█ █░░█ █░░█ █▀▀ ▀▀█ ▀▀█ 
-	//▀░░░▀ ▀▀▀ ░░▀░░ ▀░░▀ ▀▀▀▀ ▀▀▀░ 　 ░░▀░░ ▀▀▀▀ 　 ░░▀░░ ▀░░▀ ▀▀▀ 　 ▀░░░▀ ▀░░▀ ▀▀▀░ ▀░░▀ ▀▀▀ ▀▀▀ ▀▀▀ 
+    //█▀▄▀█ █▀▀ ▀▀█▀▀ █░░█ █▀▀█ █▀▀▄ 　 ▀▀█▀▀ █▀▀█ 　 ▀▀█▀▀ █░░█ █▀▀ 　 █▀▄▀█ █▀▀█ █▀▀▄ █▀▀▄ █▀▀ █▀▀ █▀▀ 
+    //█░▀░█ █▀▀ ░░█░░ █▀▀█ █░░█ █░░█ 　 ░░█░░ █░░█ 　 ░░█░░ █▀▀█ █▀▀ 　 █░▀░█ █▄▄█ █░░█ █░░█ █▀▀ ▀▀█ ▀▀█ 
+    //▀░░░▀ ▀▀▀ ░░▀░░ ▀░░▀ ▀▀▀▀ ▀▀▀░ 　 ░░▀░░ ▀▀▀▀ 　 ░░▀░░ ▀░░▀ ▀▀▀ 　 ▀░░░▀ ▀░░▀ ▀▀▀░ ▀░░▀ ▀▀▀ ▀▀▀ ▀▀▀ 
 
-	//█▀▀█ █▀▀█ █▀▀▄ █▀▀ █▀▀█ 　 ▀▀█▀▀ █▀▀█ 　 ▀▀█▀▀ █░░█ █▀▀ 　 █▀▀ █░░█ █▀▀█ █▀▀█ █▀▀ 
-	//█░░█ █▄▄▀ █░░█ █▀▀ █▄▄▀ 　 ░░█░░ █░░█ 　 ░░█░░ █▀▀█ █▀▀ 　 █░░ █▀▀█ █▄▄█ █░░█ ▀▀█ 
-	//▀▀▀▀ ▀░▀▀ ▀▀▀░ ▀▀▀ ▀░▀▀ 　 ░░▀░░ ▀▀▀▀ 　 ░░▀░░ ▀░░▀ ▀▀▀ 　 ▀▀▀ ▀░░▀ ▀░░▀ ▀▀▀▀ ▀▀▀
+    //█▀▀█ █▀▀█ █▀▀▄ █▀▀ █▀▀█ 　 ▀▀█▀▀ █▀▀█ 　 ▀▀█▀▀ █░░█ █▀▀ 　 █▀▀ █░░█ █▀▀█ █▀▀█ █▀▀ 
+    //█░░█ █▄▄▀ █░░█ █▀▀ █▄▄▀ 　 ░░█░░ █░░█ 　 ░░█░░ █▀▀█ █▀▀ 　 █░░ █▀▀█ █▄▄█ █░░█ ▀▀█ 
+    //▀▀▀▀ ▀░▀▀ ▀▀▀░ ▀▀▀ ▀░▀▀ 　 ░░▀░░ ▀▀▀▀ 　 ░░▀░░ ▀░░▀ ▀▀▀ 　 ▀▀▀ ▀░░▀ ▀░░▀ ▀▀▀▀ ▀▀▀
 
-	/// <summary>
-	/// Collection of astronomical calculator functions
-	/// Note : Many of the functions here use cacheing machanism
-	/// </summary>
-	public static partial class Calculate
-	{
+    /// <summary>
+    /// Collection of astronomical calculator functions
+    /// Note : Many of the functions here use cacheing machanism
+    /// </summary>
+    public static partial class Calculate
+    {
 
         /// <summary>
         /// Defaults to RAMAN, but can be set before calling any funcs,
         /// NOTE: remember not to change mid instance, because "GetAyanamsa" & others are cached per instance
         /// </summary>
-        public static int YearOfCoincidence { get; set; } = (int)Library.Ayanamsa.Raman;
+        public static double YearOfCoincidence { get; set; } = (int)Library.Ayanamsa.Raman;
 
         #region AVASTA
 
@@ -41,79 +42,79 @@ namespace VedAstro.Library
         /// Gets all the Avastas for a planet, Lajjita, Garvita, Kshudita, etc...
         /// </summary>
 		public static List<Avasta> PlanetAvasta(PlanetName planetName, Time time)
-		{
-			var finalList = new Avasta?[6]; //total 6 avasta
+        {
+            var finalList = new Avasta?[6]; //total 6 avasta
 
-			//add in each avasta that matches
-			finalList[0] = IsPlanetInLajjitaAvasta(planetName, time) ? Avasta.LajjitaShamed : null;
-			finalList[1] = IsPlanetInGarvitaAvasta(planetName, time) ? Avasta.GarvitaProud : null;
-			finalList[2] = IsPlanetInKshuditaAvasta(planetName, time) ? Avasta.KshuditaStarved : null;
-			finalList[3] = IsPlanetInTrashitaAvasta(planetName, time) ? Avasta.TrishitaThirst : null;
-			finalList[4] = IsPlanetInMuditaAvasta(planetName, time) ? Avasta.MuditaDelighted : null;
-			finalList[5] = IsPlanetInKshobhitaAvasta(planetName, time) ? Avasta.KshobitaAgitated : null;
+            //add in each avasta that matches
+            finalList[0] = IsPlanetInLajjitaAvasta(planetName, time) ? Avasta.LajjitaShamed : null;
+            finalList[1] = IsPlanetInGarvitaAvasta(planetName, time) ? Avasta.GarvitaProud : null;
+            finalList[2] = IsPlanetInKshuditaAvasta(planetName, time) ? Avasta.KshuditaStarved : null;
+            finalList[3] = IsPlanetInTrashitaAvasta(planetName, time) ? Avasta.TrishitaThirst : null;
+            finalList[4] = IsPlanetInMuditaAvasta(planetName, time) ? Avasta.MuditaDelighted : null;
+            finalList[5] = IsPlanetInKshobhitaAvasta(planetName, time) ? Avasta.KshobitaAgitated : null;
 
-			// Convert array to List<Avasta> and remove nulls
-			var resultList = finalList.OfType<Avasta>().ToList();
-			return resultList;
+            // Convert array to List<Avasta> and remove nulls
+            var resultList = finalList.OfType<Avasta>().ToList();
+            return resultList;
 
-		}
+        }
 
         /// <summary>
         /// Lajjita / humiliated : Planet in the 5th house in conjunction with rahu or ketu, Saturn or mars.
         /// </summary>
         public static bool IsPlanetInLajjitaAvasta(PlanetName planetName, Time time)
-		{
-			//check if input planet is in 5th
-			var isPlanetIn5thHouse = IsPlanetInHouse(time, planetName, HouseName.House5);
+        {
+            //check if input planet is in 5th
+            var isPlanetIn5thHouse = IsPlanetInHouse(time, planetName, HouseName.House5);
 
-			//check if any negative planets is in 5th (conjunct)
-			var planetNames = new List<PlanetName>() { Rahu, Ketu, Saturn, Mars };
-			var rahuKetuSaturnMarsIn5th = IsAllPlanetInHouse(time, planetNames, HouseName.House5);
+            //check if any negative planets is in 5th (conjunct)
+            var planetNames = new List<PlanetName>() { Rahu, Ketu, Saturn, Mars };
+            var rahuKetuSaturnMarsIn5th = IsAllPlanetInHouse(time, planetNames, HouseName.House5);
 
-			//check if all conditions are met Lajjita
-			var isLajjita = isPlanetIn5thHouse && rahuKetuSaturnMarsIn5th;
+            //check if all conditions are met Lajjita
+            var isLajjita = isPlanetIn5thHouse && rahuKetuSaturnMarsIn5th;
 
-			return isLajjita;
+            return isLajjita;
 
-		}
+        }
 
 
         /// <summary>
         /// Garvita, proud : Planet in exaltation sign or moolatrikona zone, happiness and gains
         /// </summary>
         public static bool IsPlanetInGarvitaAvasta(PlanetName planetName, Time time)
-		{
-			//Planet in exaltation sign
-			var planetExalted = IsPlanetExalted(planetName, time);
+        {
+            //Planet in exaltation sign
+            var planetExalted = IsPlanetExalted(planetName, time);
 
-			//moolatrikona zone
-			var planetInMoolatrikona = IsPlanetInMoolatrikona(planetName, time);
+            //moolatrikona zone
+            var planetInMoolatrikona = IsPlanetInMoolatrikona(planetName, time);
 
-			//check if all conditions are met for Garvita
-			var isGarvita = planetExalted || planetInMoolatrikona;
+            //check if all conditions are met for Garvita
+            var isGarvita = planetExalted || planetInMoolatrikona;
 
-			return isGarvita;
-		}
+            return isGarvita;
+        }
 
         /// <summary>
         /// Kshudita, hungry : Planet in enemy’s sign or conjoined with enemy or aspected by enemy, Grief
         /// </summary>
         public static bool IsPlanetInKshuditaAvasta(PlanetName planetName, Time time)
-		{
-			//Planet in enemy’s sign 
-			var planetExalted = IsPlanetInEnemyHouse(time, planetName);
+        {
+            //Planet in enemy’s sign 
+            var planetExalted = IsPlanetInEnemyHouse(time, planetName);
 
-			//conjoined with enemy (same house)
-			var conjunctWithMalefic = IsPlanetConjunctWithEnemyPlanets(planetName, time);
+            //conjoined with enemy (same house)
+            var conjunctWithMalefic = IsPlanetConjunctWithEnemyPlanets(planetName, time);
 
-			//aspected by enemy
-			var aspectedByMalefic = IsPlanetAspectedByEnemyPlanets(planetName, time);
+            //aspected by enemy
+            var aspectedByMalefic = IsPlanetAspectedByEnemyPlanets(planetName, time);
 
-			//check if all conditions are met for Kshudita
-			var isKshudita = planetExalted || conjunctWithMalefic || aspectedByMalefic;
+            //check if all conditions are met for Kshudita
+            var isKshudita = planetExalted || conjunctWithMalefic || aspectedByMalefic;
 
-			return isKshudita;
-		}
+            return isKshudita;
+        }
 
         /// <summary>
         /// Trashita, thirsty – Planet in a watery sign, aspected by a enemy and is without the aspect of benefic Planets
@@ -138,147 +139,176 @@ namespace VedAstro.Library
         /// As the name “Thirsty State” implies, it indicates the lack of emotional fulfillment that a planet experiences.
         /// </summary>
 		public static bool IsPlanetInTrashitaAvasta(PlanetName planetName, Time time)
-		{
-			//Planet in a watery sign
-			var planetInWater = IsPlanetInWaterySign(planetName, time);
+        {
+            //Planet in a watery sign
+            var planetInWater = IsPlanetInWaterySign(planetName, time);
 
-			//aspected by an enemy
-			var aspectedByEnemy = IsPlanetAspectedByEnemyPlanets(planetName, time);
+            //aspected by an enemy
+            var aspectedByEnemy = IsPlanetAspectedByEnemyPlanets(planetName, time);
 
-			//no benefic planet aspect
-			var noBeneficAspect = false == IsPlanetAspectedByBeneficPlanets(planetName, time);
+            //no benefic planet aspect
+            var noBeneficAspect = false == IsPlanetAspectedByBeneficPlanets(planetName, time);
 
-			//check if all conditions are met for Trashita
-			var isTrashita = planetInWater && aspectedByEnemy && noBeneficAspect;
+            //check if all conditions are met for Trashita
+            var isTrashita = planetInWater && aspectedByEnemy && noBeneficAspect;
 
-			return isTrashita;
-		}
+            return isTrashita;
+        }
 
-		/// <summary>
-		/// The Planet who is in his friend’s sign, is in conjunction with Jupiter,
-		/// and is together with or is aspected by a friendly Planet is called Mudita
-		/// 
-		/// Mudita, sated, happy – Planet in a friend’s sign or aspected by a friend and conjoined with Jupiter, Gains
-		///
-		/// If a planet is in a friend’s sign or joined with a friend or aspected by a friend,
-		/// or that joined with Jupiter is called Mudita Avastha/Delighted State
-		///
-		/// It is clear from explanation itself that a planet will feel delighted when it
-		/// is in friendly sign or friendly planet conjuncts/aspects or it is joined by the
-		/// biggest benefic planet Jupiter. We can understand planet’s delight in such cases. 
-		/// 
-		/// Planet in friendly sign - A planet in a friendly sign is productive,
-		/// and the stronger that friend planet, the more productive it will be. 
-		/// </summary>
-		public static bool IsPlanetInMuditaAvasta(PlanetName planetName, Time time)
-		{
-			//Planet who is in his friend’s sign
-			var isInFriendly = IsPlanetInFriendHouse(time, planetName);
+        /// <summary>
+        /// The Planet who is in his friend’s sign, is in conjunction with Jupiter,
+        /// and is together with or is aspected by a friendly Planet is called Mudita
+        /// 
+        /// Mudita, sated, happy – Planet in a friend’s sign or aspected by a friend and conjoined with Jupiter, Gains
+        ///
+        /// If a planet is in a friend’s sign or joined with a friend or aspected by a friend,
+        /// or that joined with Jupiter is called Mudita Avastha/Delighted State
+        ///
+        /// It is clear from explanation itself that a planet will feel delighted when it
+        /// is in friendly sign or friendly planet conjuncts/aspects or it is joined by the
+        /// biggest benefic planet Jupiter. We can understand planet’s delight in such cases. 
+        /// 
+        /// Planet in friendly sign - A planet in a friendly sign is productive,
+        /// and the stronger that friend planet, the more productive it will be. 
+        /// </summary>
+        public static bool IsPlanetInMuditaAvasta(PlanetName planetName, Time time)
+        {
+            //Planet who is in his friend’s sign
+            var isInFriendly = IsPlanetInFriendHouse(time, planetName);
 
-			//is in conjunction with Jupiter
-			var isConjunctJupiter = IsPlanetConjunctWithPlanet(planetName, Jupiter, time);
+            //is in conjunction with Jupiter
+            var isConjunctJupiter = IsPlanetConjunctWithPlanet(planetName, Jupiter, time);
 
-			//is together with or is aspected by a friendly (conjunct or aspect)
-			var isConjunctWithFriendly = IsPlanetConjunctWithFriendPlanets(planetName, time);
-			var isAspectedByFriendly = IsPlanetAspectedByFriendPlanets(planetName, time);
-			var accosiatedWithFriendly = isConjunctWithFriendly || isAspectedByFriendly;
+            //is together with or is aspected by a friendly (conjunct or aspect)
+            var isConjunctWithFriendly = IsPlanetConjunctWithFriendPlanets(planetName, time);
+            var isAspectedByFriendly = IsPlanetAspectedByFriendPlanets(planetName, time);
+            var accosiatedWithFriendly = isConjunctWithFriendly || isAspectedByFriendly;
 
-			//check if all conditions are met for Mudita
-			var isMudita = isInFriendly || isConjunctJupiter || accosiatedWithFriendly;
+            //check if all conditions are met for Mudita
+            var isMudita = isInFriendly || isConjunctJupiter || accosiatedWithFriendly;
 
-			return isMudita;
-		}
+            return isMudita;
+        }
 
-		/// <summary>
-		/// If a planet is conjunct by Sun or it is aspected by Enemy Malefic Planets then
-		/// it should always be known as Kshobhita Avastha/Agitated State
-		/// 
-		/// Kshobhita, guilty, repentant – Planet in conjunction with sun and aspected by malefics and an enemy. Penury
-		/// </summary>
-		public static bool IsPlanetInKshobhitaAvasta(PlanetName planetName, Time time)
-		{
-			//Planet in conjunction with sun 
-			var conjunctWithSun = IsPlanetConjunctWithPlanet(planetName, Sun, time);
+        /// <summary>
+        /// If a planet is conjunct by Sun or it is aspected by Enemy Malefic Planets then
+        /// it should always be known as Kshobhita Avastha/Agitated State
+        /// 
+        /// Kshobhita, guilty, repentant – Planet in conjunction with sun and aspected by malefics and an enemy. Penury
+        /// </summary>
+        public static bool IsPlanetInKshobhitaAvasta(PlanetName planetName, Time time)
+        {
+            //Planet in conjunction with sun 
+            var conjunctWithSun = IsPlanetConjunctWithPlanet(planetName, Sun, time);
 
-			//aspected by an enemy or malefic
-			var isAspectedByEnemy = false == IsPlanetAspectedByEnemyPlanets(planetName, time);
-			var isAspectedByMalefics = false == IsPlanetAspectedByMaleficPlanets(planetName, time);
-			var accosiatedWithBadPlanets = isAspectedByEnemy || isAspectedByMalefics;
+            //aspected by an enemy or malefic
+            var isAspectedByEnemy = false == IsPlanetAspectedByEnemyPlanets(planetName, time);
+            var isAspectedByMalefics = false == IsPlanetAspectedByMaleficPlanets(planetName, time);
+            var accosiatedWithBadPlanets = isAspectedByEnemy || isAspectedByMalefics;
 
-			//check if all conditions are met for Kshobhita
-			var isKshobhita = conjunctWithSun && accosiatedWithBadPlanets;
+            //check if all conditions are met for Kshobhita
+            var isKshobhita = conjunctWithSun && accosiatedWithBadPlanets;
 
-			return isKshobhita;
-		}
+            return isKshobhita;
+        }
 
-		#endregion
+        #endregion
 
-		#region ALL DATA
+        #region ALL DATA
 
-		/// <summary>
-		/// Gets all possible calculations for a Planet at a given Time
-		/// </summary>
-		public static List<APIFunctionResult> AllPlanetData(PlanetName planetName, Time time)
-		{
-			//exclude this method from getting included in "Find" and Execute below
-			MethodBase method = MethodBase.GetCurrentMethod();
-			MethodInfo methodToExclude = method as MethodInfo;
+        /// <summary>
+        /// Gets all possible calculations for a Planet at a given Time
+        /// </summary>
+        public static List<APIFunctionResult> AllPlanetData(PlanetName planetName, Time time)
+        {
+            //exclude this method from getting included in "Find" and Execute below
+            MethodBase method = MethodBase.GetCurrentMethod();
+            MethodInfo methodToExclude = method as MethodInfo;
 
-			//do calculation
-			var raw = AutoCalculator.FindAndExecuteFunctions(methodToExclude, planetName, time);
+            //do calculation
+            var raw = AutoCalculator.FindAndExecuteFunctions(methodToExclude, planetName, time);
 
-			return raw;
-		}
+            return raw;
+        }
 
         /// <summary>
         /// All possible calculations for a House at a given Time
         /// </summary>
 		public static List<APIFunctionResult> AllHouseData(HouseName houseName, Time time)
-		{
-			//exclude this method from getting included in "Find" and Execute below
-			MethodBase method = MethodBase.GetCurrentMethod();
-			MethodInfo methodToExclude = method as MethodInfo;
+        {
+            //exclude this method from getting included in "Find" and Execute below
+            MethodBase method = MethodBase.GetCurrentMethod();
+            MethodInfo methodToExclude = method as MethodInfo;
 
-			//do calculation
-			var raw = AutoCalculator.FindAndExecuteFunctions(methodToExclude, houseName, time);
+            //do calculation
+            var raw = AutoCalculator.FindAndExecuteFunctions(methodToExclude, houseName, time);
 
-			return raw;
-		}
+            return raw;
+        }
 
         /// <summary>
         /// All possible calculations for a Planet and House at a given Time
         /// </summary>
 		public static List<APIFunctionResult> AllPlanetHouseData(PlanetName planetName, HouseName houseName, Time time)
-		{
-			//exclude this method from getting included in "Find" and Execute below
-			MethodBase method = MethodBase.GetCurrentMethod();
-			MethodInfo methodToExclude = method as MethodInfo;
+        {
+            //exclude this method from getting included in "Find" and Execute below
+            MethodBase method = MethodBase.GetCurrentMethod();
+            MethodInfo methodToExclude = method as MethodInfo;
 
-			//do calculation
-			var raw = AutoCalculator.FindAndExecuteFunctions(methodToExclude, planetName, houseName, time);
+            //do calculation
+            var raw = AutoCalculator.FindAndExecuteFunctions(methodToExclude, planetName, houseName, time);
 
-			return raw;
-		}
+            return raw;
+        }
 
         /// <summary>
         /// All possible calculations for a Zodiac Sign at a given Time
         /// </summary>
 		public static List<APIFunctionResult> AllZodiacSignData(ZodiacName zodiacName, Time time)
-		{
-			//exclude this method from getting included in "Find" and Execute below
-			MethodBase method = MethodBase.GetCurrentMethod();
-			MethodInfo methodToExclude = method as MethodInfo;
+        {
+            //exclude this method from getting included in "Find" and Execute below
+            MethodBase method = MethodBase.GetCurrentMethod();
+            MethodInfo methodToExclude = method as MethodInfo;
 
-			//do calculation
-			var raw = AutoCalculator.FindAndExecuteFunctions(methodToExclude, zodiacName, time);
+            //do calculation
+            var raw = AutoCalculator.FindAndExecuteFunctions(methodToExclude, zodiacName, time);
 
-			return raw;
-		}
+            return raw;
+        }
 
 
         #endregion
 
         #region GENERAL
+
+        public static double AyanamsaFinder(PlanetName inputPlanet, ConstellationName expectedConstellation, Time time)
+        {
+            var isMatch = false;
+            //test each untill found right one
+            double ayanamsaYear = -4000;
+            while (ayanamsaYear < 4000)
+            {
+                Calculate.YearOfCoincidence = ayanamsaYear;
+                var planetConste = PlanetConstellation(time, inputPlanet);
+                isMatch = expectedConstellation == planetConste.GetConstellationName();
+                
+                if (isMatch)
+                {
+                    Console.WriteLine($"Ayanamsa : {ayanamsaYear} {planetConste} : FOUND");
+                    return ayanamsaYear;
+                }
+                else
+                {
+                    Console.WriteLine($"Ayanamsa : {ayanamsaYear} {planetConste} : FAIL");
+                }
+                //increase slightly
+                ayanamsaYear += 0.005;
+            }
+           
+
+            //if control reaches here than not found
+            throw new Exception();
+        }
 
         /// <summary>
         /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
@@ -455,7 +485,7 @@ namespace VedAstro.Library
                     return new ConstellationAnimal("Male", AnimalName.Monkey);
                 case ConstellationName.Sravana:
                     return new ConstellationAnimal("Female", AnimalName.Monkey);
-                
+
                 //
                 case ConstellationName.Poorvabhadra:
                     return new ConstellationAnimal("Male", AnimalName.Lion);
@@ -1486,20 +1516,39 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets list of all planets and the zodiac signs they are in
         /// </summary>
-        public static Dictionary<PlanetName, ZodiacName> AllPlanetSigns(Time time)
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetSigns(Time time)
         {
-            var returnList = new Dictionary<PlanetName, ZodiacName>();
+            var returnList = new Dictionary<PlanetName, ZodiacSign>();
 
             //check each planet if in sign
             foreach (var planet in All9Planets)
             {
                 var planetSign = PlanetSignName(planet, time);
 
-                returnList[planet] = planetSign.GetSignName();
+                returnList[planet] = planetSign;
             }
 
             return returnList;
         }
+
+        /// <summary>
+        /// Gets list of all planets and the constellation they are in
+        /// </summary>
+        public static Dictionary<PlanetName, PlanetConstellation> AllPlanetConstellation(Time time)
+        {
+            var returnList = new Dictionary<PlanetName, PlanetConstellation>();
+
+            //check each planet if in sign
+            foreach (var planet in All9Planets)
+            {
+                var planetSign = PlanetConstellation(time, planet);
+
+                returnList[planet] = planetSign;
+            }
+
+            return returnList;
+        }
+
 
         /// <summary>
         /// Gets the Nirayana longitude of all 9 planets
@@ -1681,12 +1730,12 @@ namespace VedAstro.Library
             //Example, with middle longitude 90.4694, becomes Cancer (0°28'9"),
             //but predictive results points to Gemini (30°0'0"), so rounding is implemented
             var middleLongitude = specifiedHouse.GetMiddleLongitude();
-            
-            //TODO is round needed!!
-            var roundVal = Math.Round(middleLongitude.TotalDegrees, 4);
-            var roundedMiddleLongitude = Angle.FromDegrees(roundVal); //rounded to 5 places for accuracy
 
-            var houseSignName = ZodiacSignAtLongitude(roundedMiddleLongitude).GetSignName();
+            //TODO is round needed!!
+            //var roundVal = Math.Round(middleLongitude.TotalDegrees, 4);
+            //var roundedMiddleLongitude = Angle.FromDegrees(roundVal); //rounded to 5 places for accuracy
+
+            var houseSignName = ZodiacSignAtLongitude(middleLongitude).GetSignName();
 
 #if DEBUG
 
@@ -1694,11 +1743,11 @@ namespace VedAstro.Library
             var unroundedSignName = Calculate.ZodiacSignAtLongitude(middleLongitude).GetSignName();
 
             if (unroundedSignName != houseSignName)
-                {
-                    //todo clean up
-                    Console.WriteLine($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}");
-                    LibLogger.Debug($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}");
-                }
+            {
+                //todo clean up
+                Console.WriteLine($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}");
+                LibLogger.Debug($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}");
+            }
 #endif
 
 
@@ -1863,7 +1912,7 @@ namespace VedAstro.Library
         public static ZodiacSign PlanetSignName(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetSignName), planetName, time), _getPlanetRasiSign);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetSignName), planetName, time, YearOfCoincidence), _getPlanetRasiSign);
 
             //UNDERLYING FUNCTION
             ZodiacSign _getPlanetRasiSign()
@@ -3260,10 +3309,11 @@ namespace VedAstro.Library
         public static bool IsPlanetInKendra(PlanetName[] planetList, Time time)
         {
             //default to false
-            var isFound = false; 
+            var isFound = false;
 
             //if any planet is found, stop loop and return true
-            foreach(var planet in planetList){
+            foreach (var planet in planetList)
+            {
                 var isKendra = IsPlanetInKendra(planet, time);
                 if (isKendra) { return true; }
             }
@@ -3841,7 +3891,7 @@ namespace VedAstro.Library
             var x = SunriseTime(time);
             var y = MoonConstellation(x).GetConstellationName();
 
-            Calculate:
+        Calculate:
             //get the constellation behind the moon
             var constellation = MoonConstellation(fullMoonTime).GetConstellationName();
 
@@ -4492,36 +4542,41 @@ namespace VedAstro.Library
         /// </summary>
         public static dynamic SwissEphemeris(Time time, PlanetName planetName)
         {
-            //Converts LMT to UTC (GMT)
-            //DateTimeOffset utcDate = lmtDateTime.ToUniversalTime();
-
-            int iflag = 2;//SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
-            double[] results = new double[6];
-            string err_msg = "";
-            double jul_day_ET;
-            SwissEph ephemeris = new SwissEph();
-
-            // Convert DOB to ET
-            jul_day_ET = TimeToEphemerisTime(time);
-
             //convert planet name, compatible with Swiss Eph
             int swissPlanet = Tools.VedAstroToSwissEph(planetName);
 
-            //Get planet long
-            int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
-
-            //data in results at index 0 is longitude
-            var sweCalcResults = new
-            {
-                Longitude = results[0],
-                Latitude = results[1],
-                DistanceAU = results[2],
-                SpeedLongitude = results[3],
-                SpeedLatitude = results[4],
-                SpeedDistance = results[5]
-            };
+            //do the calculation
+            var sweCalcResults = Tools.ephemeris_swe_calc(time, swissPlanet);
 
             return sweCalcResults;
+        }
+
+        /// <summary>
+        /// For all planets including Pluto, Neptune, Uranus
+        /// Get planet's Longitude, Latitude, DistanceAU, SpeedLongitude, SpeedLatitude...
+        /// Uses Swiss Ephemeris directly to get values
+        /// </summary>
+        public static List<dynamic> SwissEphemerisAll(Time time)
+        {
+            //for all planets
+            var _12Planets = new List<int>
+            {
+                SwissEph.SE_SUN, SwissEph.SE_MOON, SwissEph.SE_MERCURY, SwissEph.SE_MARS,
+                SwissEph.SE_VENUS, SwissEph.SE_JUPITER, SwissEph.SE_SATURN,
+                SwissEph.SE_URANUS, SwissEph.SE_NEPTUNE, SwissEph.SE_PLUTO,
+                //rahu & ketu
+                SwissEph.SE_TRUE_NODE, SwissEph.SE_OSCU_APOG,
+            };
+
+            //put all data for all planets in 1 big list
+            var bigList = new List<dynamic>();
+            foreach (var planet in _12Planets)
+            {
+                var temp = Tools.ephemeris_swe_calc(time, planet);
+                bigList.Add(temp);
+            }
+
+            return bigList;
         }
 
         /// <summary>
@@ -4810,7 +4865,8 @@ namespace VedAstro.Library
         {
             var returnList = new List<PlanetName>();
 
-            foreach(var sigsFrom in signsFromList){
+            foreach (var sigsFrom in signsFromList)
+            {
                 //get all planets in given number (house) from moon
                 var temp = AllPlanetsSignsFromMoon(sigsFrom, birthTime);
                 returnList.AddRange(temp);
@@ -4828,7 +4884,8 @@ namespace VedAstro.Library
         {
             var returnList = new List<PlanetName>();
 
-            foreach(var sigsFrom in signsFromList){
+            foreach (var sigsFrom in signsFromList)
+            {
                 //get all planets in given number (house) from moon
                 var temp = AllPlanetsSignsFromPlanet(sigsFrom, birthTime, startPlanet);
                 returnList.AddRange(temp);
@@ -4860,7 +4917,8 @@ namespace VedAstro.Library
         {
             var returnList = new List<PlanetName>();
 
-            foreach(var sigsFrom in signsFromList){
+            foreach (var sigsFrom in signsFromList)
+            {
                 //get all planets in given number (house) from moon
                 var temp = AllPlanetsSignsFromLagna(sigsFrom, birthTime);
                 returnList.AddRange(temp);
@@ -4961,7 +5019,7 @@ namespace VedAstro.Library
         {
             //get all planets that are standard benefics at given time
             var beneficList = BeneficPlanetList(birthTime).ToArray();
-			
+
             //get all planets in given list of signs from moon
             var isOccuring = IsPlanetsInSignsFromMoon(signsFromList, beneficList, birthTime);
 
@@ -4976,7 +5034,7 @@ namespace VedAstro.Library
         {
             //get all planets that are standard benefics at given time
             var beneficList = BeneficPlanetList(birthTime).ToArray();
-			
+
             //get all planets in given list of signs from lagna
             var isOccuring = IsPlanetsInSignsFromLagna(signsFromList, beneficList, birthTime);
 
@@ -5350,7 +5408,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(ConstellationAtLongitude), planetLongitude), _constellationAtLongitude);
+            return CacheManager.GetCache(new CacheKey(nameof(ConstellationAtLongitude), planetLongitude, YearOfCoincidence), _constellationAtLongitude);
 
 
             //UNDERLYING FUNCTION
@@ -5426,7 +5484,7 @@ namespace VedAstro.Library
                 //convert remainder to degrees in current sign
                 var degreesInSignRaw = roughZodiacNumberRemainder * maxDegreesInSign;
                 //round number (too high accuracy causes equality mismtach because of minute difference)
-                var degreesInSign = Math.Round(degreesInSignRaw, 4);
+                var degreesInSign = Math.Round(degreesInSignRaw, 7);
 
                 //if degrees in sign is 0, it means 30 degrees
                 if (degreesInSign == 0)
@@ -6928,15 +6986,15 @@ namespace VedAstro.Library
             return bindu;
         }
 
-		/// <summary>
-		/// Bhinnashtakavarga or individual Ashtakvarga charts
-		/// List of planets & ascendant with their their bindu point
-		/// </summary>
-		public static Dictionary<PlanetName, Dictionary<ZodiacName, int>> AllBhinnashtakavargaChart(Time birthTime)
+        /// <summary>
+        /// Bhinnashtakavarga or individual Ashtakvarga charts
+        /// List of planets & ascendant with their their bindu point
+        /// </summary>
+        public static Dictionary<PlanetName, Dictionary<ZodiacName, int>> AllBhinnashtakavargaChart(Time birthTime)
         {
-			//Made on cold winter morning in July
+            //Made on cold winter morning in July
 
-			var minorPlanetList = Library.PlanetName.All7Planets.Select(e => e.ToString()).ToList();
+            var minorPlanetList = Library.PlanetName.All7Planets.Select(e => e.ToString()).ToList();
             minorPlanetList.Add("ascendant"); //add special case Ascendant for Ashtakvarga calculation
             var mainBhinaAstaChart = new Dictionary<PlanetName, Dictionary<ZodiacName, int>>();
 
@@ -7833,9 +7891,9 @@ namespace VedAstro.Library
         public static int CurrentDasaCountFromBirth(Time birthTime, Time currentTime)
         {
             //get dasa planet at birth (birth time = current time)
-            var birthDasaPlanet = CurrentPlanetDasas(birthTime, birthTime).PD1;
+            var birthDasaPlanet = CurrentDasa8Levels(birthTime, birthTime).PD1;
 
-            var currentDasaPlanet = CurrentPlanetDasas(birthTime, currentTime).PD1;
+            var currentDasaPlanet = CurrentDasa8Levels(birthTime, currentTime).PD1;
 
             //count from birth dasa planet to current dasa planet
             var dasaCount = 1; //minimum 1
@@ -7867,7 +7925,7 @@ namespace VedAstro.Library
         /// The main method that starts all Dasa Calculations
         /// Gets the occuring Planet Dasas (PD1, PD2,...) for a person at the given time
         /// </summary>
-        public static Dasas CurrentPlanetDasas(Time birthTime, Time currentTime)
+        public static Dasas CurrentDasa8Levels(Time birthTime, Time currentTime)
         {
             //todo strength determined by constellation rules not shad or bhava bala
             //lagna lord or moon constellation used based on which is stronger
@@ -8680,7 +8738,7 @@ namespace VedAstro.Library
 
         }
 
-       
+
         /// <summary>
         /// Checks if a given planet is benefic
         /// </summary>
@@ -8862,7 +8920,7 @@ namespace VedAstro.Library
             return planetsInAspect.Contains(receiveingAspect);
 
         }
-        
+
         /// <summary>
         /// Checks if a house is aspected by a planet
         /// </summary>
@@ -11759,6 +11817,14 @@ namespace VedAstro.Library
 
         #endregion
 
+
+#if DEBUG
+        /// <summary>
+        /// Special debug function
+        /// </summary>
+        public static string BouncBackInputAsString(PlanetName planetName, Time time) => planetName.ToString();
+
+#endif
     }
 }
 

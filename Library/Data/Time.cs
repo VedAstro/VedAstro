@@ -439,6 +439,26 @@ namespace VedAstro.Library
             }
         }
 
+
+        /// <summary>
+        /// Given a list of Time wrapped in json will convert to instance
+        /// used for transferring between server & client
+        /// </summary>
+        public static List<Time> FromJsonList(JToken personList)
+        {
+            //if null empty list please
+            if (personList == null) { return new List<Time>(); }
+
+            var returnList = new List<Time>();
+
+            foreach (var personJson in personList)
+            {
+                returnList.Add(Time.FromJson(personJson));
+            }
+
+            return returnList;
+        }
+
         /// <summary>
         /// Given Time instance in URL form will convert to instance
         /// Location/Singapore/Time/23:59/31/12/2000/+08:00/
@@ -663,6 +683,10 @@ namespace VedAstro.Library
         }
 
 
+        public static bool TryParse(string cellValue, out object o)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
@@ -10,6 +11,20 @@ namespace VedAstro.Library;
 /// </summary>
 public record APIFunctionResult(string Name, object Result)
 {
+    /// <summary>
+    /// Special name for use in ML Data Tables, includes param value added to name
+    /// </summary>
+    public string MLTableName(object resultOverride = null)
+    {
+        return Tools.GetSpecialMLTableName(this, resultOverride);
+    }
+
+    /// <summary>
+    /// SPECIAL HACK METHOD to inject custom params for use in ML Data Generator
+    /// Users inputs this params instances before executing API method
+    /// set via add method
+    /// </summary>
+    public List<object> SelectedParams { get; private set; }
 
     /// <summary>
     /// special override to print out any type of data
@@ -87,5 +102,20 @@ public record APIFunctionResult(string Name, object Result)
 
         return returnOb2;
 
+    }
+
+    /// <summary>
+    /// gets best representation of data in result as text
+    /// </summary>
+    public string ResultAsString() => Tools.AnyToString(Result);
+
+    /// <summary>
+    /// Safely adds to Selected param list no init needed
+    /// </summary>
+    public void AddSelectedParams(dynamic inputPlanet)
+    {
+        //assign new if null
+        this.SelectedParams ??= new List<object>();
+        this.SelectedParams.Add(inputPlanet);
     }
 }

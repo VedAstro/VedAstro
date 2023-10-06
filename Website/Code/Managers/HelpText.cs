@@ -24,6 +24,8 @@
         public const string MuhurthaChart = @"This chart shows when good and bad Muhurtha events will happen";
         public const string SearchReference = @"Astrological facts used for quick reference";
         public const string SearchPredictions = @"These are horoscope predictions that have been programmed into VedAstro";
+        public const string Column1MLData = @"Data in 1st column of table, can be birth time list or time list from range";
+        public const string Column2MLData = @"Astro data in each column after Time, column read by ML/AI for learning";
         public const string SearchEvents = @"These are Muhurtha events that have been programmed into VedAstro";
         public const string HouseStrength = @"Good and bad aspects of life, higher score is better";
         public const string PlanetStrength = @"Degree of planet's effect on you, higher score is stronger positive influence";

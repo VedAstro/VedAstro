@@ -92,7 +92,7 @@
             <div>@Body</div>
 
             <!-- FOOTER LINE AND SPACING -->
-            <hr class="mt-5" style="margin-bottom:@GR.W157px;">
+            <hr class="mt-5" style="margin-bottom:@GR.W255px;">
         </div>
     </div>
 
@@ -152,10 +152,10 @@
         //1: do little check to make sure all functions in Interop is accounted for
         await InteropHealthCheck();
 
-        //3: to be accessed by classes todo obliviion
+        //3: to be accessed by classes todo oblivion
         AppData.HttpClient = _client;
 
-        //4: used later to create HTTP client with correct base address todo obliviion
+        //4: used later to create HTTP client with correct base address todo oblivion
         AppData.BaseAddress = new Uri(_navigation.BaseUri);
 
         //5: get visitor ID if available
@@ -163,7 +163,6 @@
 
         //6: retrieve login status from previous visit if available
         await TryGetPreviousLogin();
-
 
         //2: create url based on beta or stable
         //note : must do after
@@ -189,9 +188,8 @@
         //8:ask server to prepare person list, will be available instantly later when user needs it
         AppData.API.Person.PreparePersonList();
 
-
         //get location from IP (uses browser cache if any else google API)
-	    var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE"; 
+        var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
         AppData.ClientLocation = await WebsiteTools.GetClientLocation(apiKey);
 
         //log it
@@ -200,7 +198,36 @@
         //other components can start loading now
         _mainPageInitDone = true;
 
+        //7: check if on latest version (else raise warning)
+        await CheckRaiseOutdatedWarning();
 
+    }
+
+    /// <summary>
+    /// Gets current build version with the one in GitHub
+    /// compares commit number to check
+    /// </summary>
+    private async Task CheckRaiseOutdatedWarning()
+    {
+        //higher number is latest
+        var currentCommitNo = int.Parse(ThisAssembly.CommitNumber);
+
+        //uses tags to detect correct version
+        var latestPublishedCommitNo = await WebsiteTools.GetLatestCommitNumber();
+
+        //if lower raise warning
+        if (currentCommitNo < latestPublishedCommitNo)
+        {
+            await AppData.JsRuntime.ShowAlert(
+                icon: "warning",
+                title: "VedAstro Needs Update!",
+                descriptionText: "Press <kbd>CTRL + SHIFT + R</kbd> to get <strong>latest</strong> version. " +
+                                 $"Also try clearing your <strong>Cookies & Cache</strong>. " +
+                                 $"{currentCommitNo} --> {latestPublishedCommitNo}");
+
+            //reloads page
+            await AppData.JsRuntime.ReloadPage();
+        }
     }
 
     /// <summary>

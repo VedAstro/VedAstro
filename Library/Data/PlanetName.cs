@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -8,6 +10,7 @@ namespace VedAstro.Library
     /// <summary>
     /// A list of planet names, with string parsing & comparison
     /// </summary>
+    [TypeConverter(typeof(PlanetNameTypeConverter))]
     public class PlanetName : IToXml, IFromUrl
     {
         /// <summary>
@@ -29,7 +32,13 @@ namespace VedAstro.Library
             Jupiter,
             Venus,
             Saturn,
+            /// <summary>
+            /// the true node, which is the point where the Moon's orbit crosses the ecliptic plane
+            /// </summary>
             Rahu,
+            /// <summary>
+            ///  true osculating apogee, which is the point where the Moon is farthest from the Earth in its elliptical orbit.
+            /// </summary>
             Ketu
         }
 
@@ -41,8 +50,15 @@ namespace VedAstro.Library
         public static readonly PlanetName Jupiter = new PlanetName(PlanetNameEnum.Jupiter);
         public static readonly PlanetName Venus = new PlanetName(PlanetNameEnum.Venus);
         public static readonly PlanetName Saturn = new PlanetName(PlanetNameEnum.Saturn);
-        public static readonly PlanetName Ketu = new PlanetName(PlanetNameEnum.Ketu);
+        /// <summary>
+        /// the true node, which is the point where the Moon's orbit crosses the ecliptic plane
+        /// </summary>
         public static readonly PlanetName Rahu = new PlanetName(PlanetNameEnum.Rahu);
+        /// <summary>
+        /// true osculating apogee, which is the point where the Moon is farthest from the Earth in its elliptical orbit.
+        /// </summary>
+        public static readonly PlanetName Ketu = new PlanetName(PlanetNameEnum.Ketu);
+
 
         /// <summary>
         /// Gets a list of planet excluding rahu & ketu, used for looping through planets
@@ -59,6 +75,17 @@ namespace VedAstro.Library
         /// Gets a list of planet WITH rahu & ketu, used for looping through planets
         /// </summary>
         public static readonly List<PlanetName> All9Planets = new List<PlanetName>()
+        {
+            Sun, Moon,
+            Mars, Mercury,
+            Jupiter, Venus,
+            Saturn, Rahu, Ketu
+        };
+
+        /// <summary>
+        /// Gets a list of planet WITH rahu & ketu, used for looping through planets
+        /// </summary>
+        public static readonly List<PlanetName> All12Planets = new List<PlanetName>()
         {
             Sun, Moon,
             Mars, Mercury,
@@ -261,4 +288,27 @@ namespace VedAstro.Library
 
     }
 
+
+    /// <summary>
+    /// Special class to allow direct use Planet Name in blazor
+    /// </summary>
+    public class PlanetNameTypeConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+        }
+
+        /// <summary>
+        /// Tells blazor how to auto convert string to Planet Name
+        /// </summary>
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value is string stringValue)
+            {
+                return PlanetName.Parse(stringValue);
+            }
+            return base.ConvertFrom(context, culture, value);
+        }
+    }
 }

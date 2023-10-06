@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
+using OfficeOpenXml;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -26,16 +27,187 @@ using Azure.Storage.Blobs;
 using Svg;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
+using static Azure.Core.HttpHeader;
+using Newtonsoft.Json.Linq;
+using HtmlAgilityPack;
+using System.Collections.Generic;
 
 
 namespace VedAstro.Library
 {
     /// <summary>
     /// A collection of general functions that don't have a home yet, so they live here for now.
-    /// You're allowed to move them somewhere you see fit, not copy, move!
+    /// You're allowed to move them somewhere you see fit, not copy, move!! remember dear :-)
     /// </summary>
     public static class Tools
     {
+        /// <summary>
+        /// Given an excel file will extract out 1 column that contains parseable time
+        /// </summary>
+        public static async Task<List<GeoLocation>> ExtractLocationColumnFromExcel(Stream excelBinary)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set the license context for EPPlus
+            var timeList = new List<GeoLocation>();
+            int timeColumnIndex = -1;
+
+            var excelFileStream = new MemoryStream();
+            await excelBinary.CopyToAsync(excelFileStream);
+            excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning
+
+            using (var package = new ExcelPackage(excelFileStream))
+            {
+                var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
+                                                                // Start from the second row (index 2) to skip the header
+                for (int rowIndex = 2; rowIndex <= worksheet.Dimension.Rows; rowIndex++)
+                {
+                    // If we haven't found the time column yet, search for it
+                    if (timeColumnIndex == -1)
+                    {
+                        for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
+                        {
+                            var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
+                            // If the cell value can be parsed as a Time, this is the time column
+                            var tryParse = await GeoLocation.TryParse(cellValue);
+                            if (tryParse.Item1) //is parsed, we no need the parsed val
+                            {
+                                timeColumnIndex = colIndex;
+                                break;
+                            }
+                        }
+                    }
+                    // If we've found the time column, add the cell value to the list
+                    if (timeColumnIndex != -1)
+                    {
+                        var cellValue = worksheet.Cells[rowIndex, timeColumnIndex].Value?.ToString();
+                        var tryParse = await GeoLocation.TryParse(cellValue);
+                        if (tryParse.Item1)
+                        {
+                            //add in the final parsed location into return list
+                            timeList.Add(tryParse.Item2);
+                        }
+                    }
+                }
+            }
+
+#if DEBUG
+            Console.WriteLine($"File Size : {excelBinary.Length}");
+            Console.WriteLine($"Rows Found : {timeList.Count}");
+#endif
+
+            return timeList;
+        }
+
+
+        /// <summary>
+        /// Given an excel file will extract out 1 column that contains parseable time
+        /// </summary>
+        public static async Task<List<DateTimeOffset>> ExtractTimeColumnFromExcel(Stream excelBinary)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set the license context for EPPlus
+            var timeList = new List<DateTimeOffset>();
+            int timeColumnIndex = -1;
+
+            var excelFileStream = new MemoryStream();
+            await excelBinary.CopyToAsync(excelFileStream);
+            excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning
+
+            using (var package = new ExcelPackage(excelFileStream))
+            {
+                var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
+                                                                // Start from the second row (index 2) to skip the header
+                for (int rowIndex = 2; rowIndex <= worksheet.Dimension.Rows; rowIndex++)
+                {
+                    // If we haven't found the time column yet, search for it
+                    if (timeColumnIndex == -1)
+                    {
+                        for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
+                        {
+                            var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
+                            // If the cell value can be parsed as a Time, this is the time column
+                            if (Time.TryParseStd(cellValue, out _))
+                            {
+                                timeColumnIndex = colIndex;
+                                break;
+                            }
+                        }
+                    }
+                    // If we've found the time column, add the cell value to the list
+                    if (timeColumnIndex != -1)
+                    {
+                        var cellValue = worksheet.Cells[rowIndex, timeColumnIndex].Value?.ToString();
+                        if (Time.TryParseStd(cellValue, out var time))
+                        {
+                            timeList.Add(time);
+                        }
+                    }
+                }
+            }
+
+#if DEBUG
+            Console.WriteLine($"File Size : {excelBinary.Length}");
+            Console.WriteLine($"Rows Found : {timeList.Count}");
+#endif
+
+            return timeList;
+        }
+
+        /// <summary>
+        /// Given a JSON version of a Table will convert to HTML table in string
+        /// </summary>
+        public static string ConvertJsonToHtmlTable(JToken jObject)
+        {
+            var data = jObject.ToObject<List<Dictionary<string, string>>>();
+            var sb = new StringBuilder();
+            sb.Append("<table>");
+            // Add header row
+            sb.Append("<tr>");
+            foreach (var key in data[0].Keys)
+            {
+                sb.AppendFormat("<th>{0}</th>", key);
+            }
+            sb.Append("</tr>");
+            // Add data rows
+            foreach (var row in data)
+            {
+                sb.Append("<tr>");
+                foreach (var value in row.Values)
+                {
+                    sb.AppendFormat("<td>{0}</td>", value);
+                }
+                sb.Append("</tr>");
+            }
+            sb.Append("</table>");
+            return sb.ToString();
+        }
+
+
+        /// <summary>
+        /// Given a HTML table in string will convert to JSON version
+        /// </summary>
+        public static JObject ConvertHtmlTableToJson(string htmlTable)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(htmlTable);
+            var table = doc.DocumentNode.SelectSingleNode("//table");
+            var rows = table.SelectNodes("tr").Skip(1); // Skip header row
+            var header = table.SelectSingleNode("tr"); // Header row
+            var data = new List<Dictionary<string, string>>();
+            foreach (var row in rows)
+            {
+                var rowData = new Dictionary<string, string>();
+                var cells = row.SelectNodes("td");
+                for (int i = 0; i < cells.Count; i++)
+                {
+                    var cellText = cells[i].InnerText;
+                    var headerText = header.SelectNodes("th")[i].InnerText;
+                    rowData.Add(headerText, cellText);
+                }
+                data.Add(rowData);
+            }
+            return JObject.FromObject(data);
+        }
+
+
         /// <summary>
         /// Given any data will try to print it as data readable json
         /// Note: made for beautiful code use in python 
@@ -1506,8 +1678,17 @@ namespace VedAstro.Library
             //get the type of the enum
             var enumType = Type.GetType("VedAstro.Library." + enumName);
 
-            //parse the string to an enum value
-            var parsedZodiac = Enum.Parse(enumType, enumValue);
+            object parsedZodiac;
+            try
+            {
+                //parse the string to an enum value
+                parsedZodiac = Enum.Parse(enumType, enumValue);
+            }
+            catch (Exception e)
+            {
+                //enum value could is a number
+                parsedZodiac = double.Parse(enumValue); 
+            }
 
             return parsedZodiac;
         }
@@ -1665,6 +1846,8 @@ namespace VedAstro.Library
             }
             else if (planetName == PlanetName.Ketu)
             {
+                //the true node, which is the point where the Moon's orbit crosses the ecliptic plane
+                //todo can also be SE_OSCU_APOG, but no need to add 180
                 planet = SwissEph.SE_TRUE_NODE; //ask for rahu values then add 180 later
             }
 
@@ -2244,34 +2427,125 @@ namespace VedAstro.Library
         {
             //process list differently
             JProperty rootPayloadJson;
-            if (anyTypeData is List<APIFunctionResult> apiList) //handles results that have many props from 1 call, exp : SwissEphemeris
+            switch (anyTypeData)
             {
-                //converts into JSON list with property names
-                //NOTE: uses back this AnyToJSON to convert nested types
-                var parsed = APIFunctionResult.ToJsonList(apiList);
-                return parsed;
-            }
-            if (anyTypeData is IList iList) //handles results that have many props from 1 call, exp : SwissEphemeris
-            {
-                //convert list to comma separated string
-                var parsedList = iList.Cast<object>().ToList();
-                var stringComma = Tools.ListToString(parsedList);
+                //handles results that have many props from 1 call, exp : SwissEphemeris
+                case List<APIFunctionResult> apiList:
+                    {
+                        //converts into JSON list with property names
+                        //NOTE: uses back this AnyToJSON to convert nested types
+                        var parsed = APIFunctionResult.ToJsonList(apiList);
+                        return parsed;
+                    }
+                //handles results that have many props from 1 call, exp : SwissEphemeris
+                case IList iList:
+                    {
+                        //convert list to comma separated string
+                        var parsedList = iList.Cast<object>().ToList();
+                        var stringComma = Tools.ListToString(parsedList);
 
-                rootPayloadJson = new JProperty(dataName, stringComma);
-            }
-            //custom JSON converter available
-            else if (anyTypeData is IToJson iToJson)
-            {
-                rootPayloadJson = new JProperty(dataName, iToJson.ToJson());
-            }
-            //normal conversion via to string
-            else
-            {
-                rootPayloadJson = new JProperty(dataName, anyTypeData?.ToString());
+                        rootPayloadJson = new JProperty(dataName, stringComma);
+                        break;
+                    }
+                //handles results that have many props from 1 call, exp : SwissEphemeris
+                case Dictionary<PlanetName, ZodiacSign> dictionary:
+                    {
+                        //convert list to comma separated string
+                        var parsedList = dictionary.Cast<object>().ToList();
+                        var stringComma = Tools.ListToString(parsedList);
+
+                        rootPayloadJson = new JProperty(dataName, stringComma);
+                        break;
+                    }
+                case Dictionary<PlanetName, PlanetConstellation> dictionary:
+                    {
+                        //convert list to comma separated string
+                        var parsedList = dictionary.Cast<object>().ToList();
+                        var stringComma = Tools.ListToString(parsedList);
+
+                        rootPayloadJson = new JProperty(dataName, stringComma);
+                        break;
+                    }
+                //custom JSON converter available
+                case IToJson iToJson:
+                    rootPayloadJson = new JProperty(dataName, iToJson.ToJson());
+                    break;
+                //normal conversion via "ToString"
+                default:
+                    rootPayloadJson = new JProperty(dataName, anyTypeData?.ToString());
+                    break;
             }
 
             return rootPayloadJson;
 
+        }
+
+        /// <summary>
+        /// Given any type tries best to convert to string
+        /// note: used in ML Table Generator
+        /// </summary>
+        public static string AnyToString(object result)
+        {
+            // Use StringBuilder for efficient string concatenation
+            var sb = new StringBuilder();
+            switch (result)
+            {
+                // Use 'is' for pattern matching
+                case IList iList:
+                    sb.Append(string.Join(", ", iList.Cast<object>()));
+                    break;
+                case Enum enumResult:
+                    sb.Append(enumResult.ToString());
+                    break;
+                case Dictionary<PlanetName, ZodiacName> dictPZodiacName:
+                    AppendDictionary(sb, dictPZodiacName);
+                    break;
+                case Dictionary<PlanetName, ZodiacSign> dictPZodiacSign:
+                    AppendDictionary(sb, dictPZodiacSign);
+                    break;
+                case Dictionary<PlanetName, PlanetConstellation> dictPConstellation:
+                    AppendDictionary(sb, dictPConstellation);
+                    break;
+                case Dictionary<PlanetName, Dictionary<ZodiacName, int>> dictPDZ:
+                {
+                    foreach (var kv in dictPDZ)
+                    {
+                        sb.Append($"{kv.Key}: {AnyToString(kv.Value)}, ");
+                    }
+
+                    break;
+                }
+                case Dictionary<ZodiacName, int> dictZI:
+                    AppendDictionary(sb, dictZI);
+                    break;
+                case Dictionary<PlanetName, double> dictPD:
+                    AppendDictionary(sb, dictPD);
+                    break;
+                default:
+                    sb.Append(result.ToString());
+                    break;
+            }
+            return sb.ToString();
+        }
+        private static void AppendDictionary<TKey, TValue>(StringBuilder sb, Dictionary<TKey, TValue> dict)
+        {
+            foreach (var kv in dict)
+            {
+                sb.Append($"{kv.Key}: {kv.Value}, ");
+            }
+        }
+
+
+        /// <summary>
+        /// QuoteValue method takes care of escaping double quotes and enclosing values in double quotes.
+        /// This should handle cases where property values contain commas, newlines, or double quotes.
+        /// If a value contains a double quote, you can escape it by doubling it. 
+        /// </summary>
+        public static string QuoteValue(object value)
+        {
+            var stringValue = value?.ToString() ?? string.Empty;
+            stringValue = stringValue.Replace("\"", "\"\""); // escape double quotes
+            return $"\"{stringValue}\""; // enclose in double quotes
         }
 
         public static string StringToMimeType(string fileFormat)
@@ -2481,7 +2755,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Given a method name in string form, will get it's reference to code
-        /// gets from AstronomicalCalculator class
+        /// gets from Calculate.cs class
         /// </summary>
         public static MethodInfo MethodNameToMethodInfo(string methodName)
         {
@@ -2490,7 +2764,10 @@ namespace VedAstro.Library
             var foundMethod = foundList.FirstOrDefault();
 
             //if more than 1 method found major internal error, crash it!
-            if (foundList.Count() > 1) { throw new InvalidOperationException($"Duplicate API Names : {methodName}"); }
+            if (foundList.Count() > 1)
+            {
+                Console.WriteLine($"POTENTIAL ERROR: Duplicate API Names : {methodName}");
+            }
 
             return foundMethod;
 
@@ -2790,8 +3067,80 @@ namespace VedAstro.Library
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Given a meta data will give name params stacked
+        /// exp : IsPlanetBenefic_Sun
+        /// </summary>
+        public static string GetSpecialMLTableName(dynamic openApiMetadata, object resultOverride = null)
+        {
+            if (openApiMetadata.SelectedParams == null)
+            {
+                //when using methods like All, need to dig out column name
+                return $"{openApiMetadata.Name}_{resultOverride?.ToString() ?? "PLEASE INJECT VALUE"}";
+            }
+            //stack the param values next to each other exp: Sun_House1
+            var paramCombined = "";
+            foreach (var selectedParam in openApiMetadata.SelectedParams)
+            {
+                //if time no need to add into column name, since its in the row
+                if (selectedParam is Time)
+                {
+                    continue;
+                }
+                else if (selectedParam is IList ccc)
+                {
+                    foreach (object xxx in ccc)
+                    {
+                        if (xxx is Time)
+                        {
+                            continue;
+                        }
+                        var strData = Tools.AnyToString(xxx);
+                        paramCombined += "_" + strData;
+
+                    }
+                }
+                else
+                {
+                    var strData = Tools.AnyToString(selectedParam);
+                    paramCombined += "_" + strData;
+
+                }
 
 
+            }
+
+            return $"{openApiMetadata.Name}{paramCombined}";
+        }
+
+        public static dynamic ephemeris_swe_calc(Time time, int swissPlanet)
+        {
+            //Converts LMT to UTC (GMT)
+            int iflag = 2;//SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
+            double[] results = new double[6];
+            string err_msg = "";
+            double jul_day_ET;
+            SwissEph ephemeris = new SwissEph();
+
+            // Convert DOB to ET
+            jul_day_ET = Calculate.TimeToEphemerisTime(time);
+
+            //Get planet long
+            int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
+
+            //data in results at index 0 is longitude
+            var sweCalcResults = new
+            {
+                Longitude = results[0],
+                Latitude = results[1],
+                DistanceAU = results[2],
+                SpeedLongitude = results[3],
+                SpeedLatitude = results[4],
+                SpeedDistance = results[5]
+            };
+
+            return sweCalcResults;
+        }
 
     }
 

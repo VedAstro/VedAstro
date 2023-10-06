@@ -298,5 +298,20 @@ namespace VedAstro.Library.Tests
             //check the test
             Assert.Fail();
         }
+
+        [TestMethod()]
+        public void AyanamsaFinderTest()
+        {
+
+            Time timeSample  = new("00:00 10/10/2023 +05:30", GeoLocation.Bangalore);
+
+            //do the test
+            var testResult = Calculate.AyanamsaFinder(PlanetName.Sun,ConstellationName.Rohini, timeSample);
+
+            //check the test
+            Assert.Fail();
+        }
+
+
     }
 }

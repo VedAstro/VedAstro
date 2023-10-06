@@ -152,9 +152,9 @@
     /// <summary>
     /// list that is shown to user and is changed by search
     /// </summary>
-    private List<OpenAPIMetadata> MethodListFiltered { get; set; } = new List<OpenAPIMetadata>();
+    private List<OpenAPIMetadata?> MethodListFiltered { get; set; } = new List<OpenAPIMetadata?>();
 
-    private List<OpenAPIMetadata> MethodListALL = new List<OpenAPIMetadata>();
+    private List<OpenAPIMetadata?> MethodListALL = new List<OpenAPIMetadata?>();
 
     /// <summary>
     /// extracted search text for faster search
@@ -178,10 +178,8 @@
         //hide display
         _isReady = false;
 
-        var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
-
         //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
-        MethodListALL = OpenAPIMetadata.FromMethodInfoList(allApiCalculatorsMethodInfo);
+        MethodListALL = OpenAPIMetadata.FromMethodInfoList();
         MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
 
         //make copy for search

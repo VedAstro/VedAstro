@@ -101,16 +101,33 @@ namespace VedAstro.Library
             var msgList = new[]
             {
                 "Your pizza is ready!",
+                "I will donate!",
+                "Mission accomplished!",
                 "Ready, captain!",
                 "Shells away!",
+                "I will donate!",
                 "Fire in the hole!",
                 "Your cake is baked!",
                 "Generated nicely!",
                 "Bingo done!",
                 "Oh yeah, its done!",
                 "Ready to sail, captain!",
+                "I'm donating!",
                 "We have liftoff!",
                 "Houston, we have liftoff!",
+                "Your order is up!",
+                "I will donate!",
+                "Success, commander!",
+                "Bombs away!",
+                "I'm donating!",
+                "Your pie is cooked!",
+                "Generated smoothly!",
+                "Jackpot hit!",
+                "Yes, it's complete!",
+                "Anchors aweigh, captain!",
+                "We are airborne!",
+                "I'm donating!",
+                "Houston, we are in orbit!",
             };
 
             var isDoneText = Tools.RandomSelect(msgList);

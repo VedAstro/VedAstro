@@ -27,14 +27,14 @@
 
                     @* FUNCTION NAME SELECT *@
                     <div>
-                        <span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;"><Icon IconName="flat-color-icons:calculator" Size="34" /> Select Calculator</span>
+                        <IconTitle IconName="flat-color-icons:calculator" Title="Calculator" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
                         <APISelectorBox @ref="ApiSelectorBox" />
                     </div>
 
 
                     @* INPUT PARAM NAME SELECT *@
                     <div @ref="_paramInputHolderElement" style="display: none">
-                        <span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:500;"><Icon IconName="flat-color-icons:multiple-inputs" Size="34" /> Input Parameters</span>
+                        <IconTitle IconName="flat-color-icons:multiple-inputs" Title="Input Parameters" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
                         <ParameterInputPanel @ref="_parameterInputPanel" />
                     </div>
 
@@ -83,8 +83,48 @@
 
                 @*COPY AND CALL BUTTON*@
                 <div class="d-flex justify-content-center gap-3">
-                    <IconButton ButtonText="Python" TooltipPosition="bottom" TooltipText="Copy Python code snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(ApiSelectorBox.SelectedMethod, this))" SmallSize="true" />
-                    <IconButton ButtonText="Copy" TooltipPosition="bottom" TooltipText="Copy HTTP GET request URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
+
+                    <IconButton TooltipPosition="bottom" TooltipText="Copy code snippet" SmallSize="true" ButtonText="Copy Code" IconName="ph:code-fill">
+                        <DropDownList>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.OnClickCopyPythonSnippet(ApiSelectorBox.SelectedMethod, this))">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="vscode-icons:file-type-python" />
+                                    <span>Python</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("JavaScript"))">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="skill-icons:javascript" />
+                                    <span>JavaScript</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("Swift"))">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:swift" />
+                                    <span>Swift</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("Java"))">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:java" />
+                                    <span>Java</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("C#"))">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:csharp" />
+                                    <span>C# .NET</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("PHP"))">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:php" />
+                                    <span>PHP</span>
+                                </a>
+                            </li>
+                        </DropDownList>
+                    </IconButton>
+                    <IconButton ButtonText="Copy URL" TooltipPosition="bottom" TooltipText="Copy HTTP GET request URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
                     <IconButton ButtonText="Test Call" TooltipPosition="bottom" TooltipText="Demo call to see output" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
                 </div>
             </div>
@@ -175,6 +215,8 @@
 
 @code {
 
+    #region FIELDS
+
     /// <summary>
     /// if not specified will not be included in final URL
     /// default set to Raman, as used system wide
@@ -202,6 +244,12 @@
     /// </summary>
     bool _mainPageInitDone = false;
 
+    /// <summary>
+    /// marker to make sure only attache handler once
+    /// </summary>
+    private bool _isEventAttached = false;
+
+    #endregion
 
     protected override async Task OnInitializedAsync()
     {
@@ -218,10 +266,11 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (ApiSelectorBox != null)
+        if (ApiSelectorBox != null && !_isEventAttached)
         {
             //sub event: when an method is selected, auto show inputs panel
             ApiSelectorBox.OnChangeSelectMethod += OnChangeSelectMethod;
+            _isEventAttached = true;
         }
     }
 
@@ -248,7 +297,6 @@
         return true;
 
     }
-
 
 
 

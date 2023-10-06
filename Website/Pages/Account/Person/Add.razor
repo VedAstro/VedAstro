@@ -3,10 +3,9 @@
 @*A simple page specialized for adding new Person profiles fast & easy*@
 @attribute [Route(PageRoute.AddPerson)]
 
-
 <PageTitle>Add Person | VedAstro</PageTitle>
 
-<PageTop Title="Add New Person" IconName="icomoon-free:profile"/>
+<PageTop Title="Add New Person" IconName="icomoon-free:profile" />
 
 @*show loading first, note done by style because need element alive*@
 <div class="@(!_nothingToShow?"d-none":"")">
@@ -17,18 +16,15 @@
     @*SELECTOR*@
     <div class="me-5">
         <div class="vstack gap-3 @(_nothingToShow ? "d-none" : "")" style="max-width: @GR.W412px">
-            
-            @* NAME *@                
+
+            @* NAME *@
             <div class="input-group">
                 <span class="input-group-text gap-2" style="width: 136px;"><Icon IconName="flat-color-icons:butting-in" Size="35" />Name</span>
                 <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 17px;">
             </div>
 
             @* TIME *@
-            <TimeInputSimple @ref="_timeInput" LabelText="Birth Time"/>
-
-            @* LOCATION *@
-            <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true"/>
+            <TimeLocationInput @ref="_timeInput" LabelText="Birth Time" />
 
             @* GENDER *@
             <div class="input-group">
@@ -41,29 +37,26 @@
 
             <div class="mt-2 d-flex justify-content-between">
                 <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-                <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton"/>
+                <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton" />
             </div>
         </div>
     </div>
 
     @*SIDEBAR*@
-    <div class="mt-md-0 mt-4 me-md-5"> <!--when small give at top-->
+    <div class="mt-md-0 mt-4 me-md-5">
+        <!--when small give at top-->
         <div class="vstack gap-0 gap-md-2">
-            <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy"/>
-            <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="fa-solid:history" ClickUrl="@PageRoute.BirthTimeFinder"/>
+            <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
+            <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="fa-solid:history" IsNewTabOpen="true" ClickUrl="@PageRoute.BirthTimeFinder" />
         </div>
     </div>
 </div>
 
 
 @code {
-    /// <summary>
-    /// notification after chart complete for UX sake
-    /// </summary>
 
-    TimeInputSimple _timeInput;
+    TimeLocationInput _timeInput;
     private string? _nameInput;
-    private GeoLocationInput _geoLocationInput;
     private string? _genderInput = "Male"; //since Male is first in combobox
     private Person _person;
     private bool _nothingToShow = false; //start by showing when start
@@ -146,14 +139,9 @@
             return false;
         }
 
-        //TEST 3 : Location
-        var isValid = await _geoLocationInput.IsValid();
-        if (!isValid)
-        {
-            //mark invalid & alert user
-            await _jsRuntime.ShowAlert("error", AlertText.InvalidLocation, true);
-            return false;
-        }
+        //TEST 3 : Time & Location
+        var isValid = await _timeInput.IsValid();
+        if (!isValid) { return false; }
 
         //TEST 4 : check if user is sleeping by letting time be set as current year and date and month
         var tempTime = await _timeInput.GetDateTimeOffset();
@@ -288,15 +276,8 @@
     /// </summary>
     private async Task<Person> GetPersonInstanceFromInput()
     {
-        //auto set correct Timezone based on location & birth date
-        var dateTimeOffset = await _timeInput.GetDateTimeOffset(); //offset is ignored here
-        _timeInput.TimeZone = await Tools.GetTimezoneOffsetApi(_geoLocationInput.GetGeoLocation(), dateTimeOffset);
-
-        //parse data received from user
-        var geoLocation = _geoLocationInput.GetGeoLocation();
-
         //create a new person from the inputed data
-        var birthTime = await _timeInput.GetTime(geoLocation);
+        var birthTime = await _timeInput.GetTime();
 
         //get gender from gender string
         var gender = Enum.Parse<Gender>(_genderInput);

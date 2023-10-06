@@ -29,13 +29,14 @@
     #TimeInputHolder {
         text-align-last: center;
         cursor: pointer;
+        font-size: 18px;
     }
 
     .inputPerfect {
         cursor: pointer;
         font-weight: 600;
         background: transparent;
-        font-size: 17px;
+        font-size: 18px;
     }
 
 </style>
@@ -44,18 +45,18 @@
 <div class="input-group">
 
     <span class="input-group-text gap-2"><Icon IconName="noto-v1:timer-clock" Size="30" />@LabelText</span>
-    <div class="form-control">
+    <div class="form-control" >
         @*note : on click will toggle picker, so picker cannot be inside TimeInputHolder*@
-        <div id="TimeInputHolder" class="d-flex justify-content-between" @onclick="OnClickDateTimeInput" style="letter-spacing: -10px;text-wrap: nowrap;overflow: hidden;">
-            <div>
-                <input class="border-0 inputPerfect" id="HourInput" style="width: 33px;" @bind="Hour" disabled />:
-                <input class="border-0 inputPerfect" id="MinuteInput" style="width: 33px;" @bind="Minute" disabled />
-                <input class="border-0 inputPerfect" id="MeridianInput" style="width: 37px;" @bind="Meridian" disabled />
+        <div id="TimeInputHolder" @onclick="OnClickDateTimeInput" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
+            <div class="hstack">
+                <span class="border-0 inputPerfect" id="HourInput" style="width: 33px;" @onclick:stopPropagation="false">@Hour</span>:
+                <span class="border-0 inputPerfect" id="MinuteInput" style="width: 33px;" @onclick:stopPropagation="false">@Minute</span>
+                <span class="border-0 inputPerfect" id="MeridianInput" style="width: 37px;" @onclick:stopPropagation="false">@Meridian</span>
             </div>
-            <div>
-                <input class="border-0 inputPerfect" id="DateInput" style="width: 33px;" @bind="Date" disabled />/
-                <input class="border-0 inputPerfect" id="MonthInput" style="width: 33px;" @bind="Month" disabled />/
-                <input class="border-0 inputPerfect" id="YearInput" style="width: 56px;" @bind="Year" disabled />
+            <div class="hstack">
+                <span class="border-0 inputPerfect" id="DateInput" style="width: 33px;" @onclick:stopPropagation="false">@Date</span>/
+                <span class="border-0 inputPerfect" id="MonthInput" style="width: 33px;" @onclick:stopPropagation="false">@Month</span>/
+                <span class="border-0 inputPerfect" id="YearInput" style="width: 56px;" @onclick:stopPropagation="false">@Year</span>
             </div>
         </div>
         @*this is where js date picker will be created*@
@@ -183,12 +184,12 @@
         try
         {
             //get latest values using JS
-            var hour = await _jsRuntime.GetValue("#HourInput");
-            var minute = await _jsRuntime.GetValue("#MinuteInput");
-            var meridian = await _jsRuntime.GetValue("#MeridianInput");
-            var date = await _jsRuntime.GetValue("#DateInput");
-            var month = await _jsRuntime.GetValue("#MonthInput");
-            var year = await _jsRuntime.GetValue("#YearInput");
+            var hour = await _jsRuntime.GetText("#HourInput");
+            var minute = await _jsRuntime.GetText("#MinuteInput");
+            var meridian = await _jsRuntime.GetText("#MeridianInput");
+            var date = await _jsRuntime.GetText("#DateInput");
+            var month = await _jsRuntime.GetText("#MonthInput");
+            var year = await _jsRuntime.GetText("#YearInput");
 
 
             //convert 12H time from input to 24H
@@ -212,12 +213,12 @@
     {
 
         //get latest values using JS
-        var hour = await _jsRuntime.GetValue("#HourInput");
-        var minute = await _jsRuntime.GetValue("#MinuteInput");
-        var meridian = await _jsRuntime.GetValue("#MeridianInput");
-        var date = await _jsRuntime.GetValue("#DateInput");
-        var month = await _jsRuntime.GetValue("#MonthInput");
-        var year = await _jsRuntime.GetValue("#YearInput");
+        var hour = await _jsRuntime.GetText("#HourInput");
+        var minute = await _jsRuntime.GetText("#MinuteInput");
+        var meridian = await _jsRuntime.GetText("#MeridianInput");
+        var date = await _jsRuntime.GetText("#DateInput");
+        var month = await _jsRuntime.GetText("#MonthInput");
+        var year = await _jsRuntime.GetText("#YearInput");
 
 
         //initialize picker with needed values

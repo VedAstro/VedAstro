@@ -28,27 +28,28 @@ namespace API
             try
             {
                 //0 : LOG CALL : used later for throttle limit
-                var callLog = APILogger.Visit(incomingRequest);
+                var callLog = await APILogger.Visit(incomingRequest);
 
                 //1 : GET INPUT DATA
                 var calculator = Tools.MethodNameToMethodInfo(calculatorName); //get calculator name
                 var parameterTypes = calculator.GetParameters().Select(p => p.ParameterType).ToList();
 				
                 //get inputed parameters
-				var parsedParamList = await ParseUrlParameters(fullParamString, parameterTypes);
+				var rawOut = await ParseUrlParameters(fullParamString, parameterTypes);
+                var parsedParamList = rawOut.Item1;
+                var remainderParamString = rawOut.Item2; //remainder of chopped string
 
-
-				//2 : CUSTOM AYANAMSA
-				//DON'T LIMIT FEATURES JUST BECAUSE NOT LOGGED IN
-				//as such no API KEY field here, direct to Ayanamsa
-				//if this is ayanamsa, then take it out to be used later...
-				var userAyanamsa = Ayanamsa.Raman; //default
-				var isAyanamsa = fullParamString.Contains(nameof(Ayanamsa));
-                if (isAyanamsa)
+                //2 : CUSTOM AYANAMSA
+                //DON'T LIMIT FEATURES JUST BECAUSE NOT LOGGED IN
+                //as such no API KEY field here, direct to Ayanamsa
+                //if this is ayanamsa, then take it out to be used later...
+                double userAyanamsa = (double)Ayanamsa.Raman; //default
+                var isCustomAyanamsa = fullParamString.Contains(nameof(Ayanamsa));
+                if (isCustomAyanamsa)
                 {
-                    userAyanamsa = await Tools.EnumFromUrl(fullParamString);
+                    userAyanamsa = (double)await Tools.EnumFromUrl(remainderParamString);
                 }
-                VedAstro.Library.Calculate.YearOfCoincidence = (int)userAyanamsa;
+                VedAstro.Library.Calculate.YearOfCoincidence = (double)userAyanamsa;
 
 
 				//3 : EXECUTE COMMAND
@@ -93,11 +94,11 @@ namespace API
             string Catch404
         )
         {
-	        //0 : LOG CALL
-	        //log ip address, call time and URL
-	        var call = APILogger.Visit(incomingRequest);
+            //0 : LOG CALL
+            //log ip address, call time and URL
+            var call = APILogger.Visit(incomingRequest);
 
-			var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
+            var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
             return APITools.FailMessageJson(message, incomingRequest);
         }
 
@@ -106,9 +107,10 @@ namespace API
         //-----------------------------------------------PRIVATE-----------------------------------------------
 
         /// <summary>
-        /// Reads URL data to instances  
+        /// Reads URL data to instances
+        /// returns parsed list and remained of chopped up URL for enum processing
         /// </summary>
-        private static async Task<List<dynamic>> ParseUrlParameters(string fullParamString, List<Type> parameterTypes)
+        private static async Task<(List<dynamic>, string)> ParseUrlParameters(string fullParamString, List<Type> parameterTypes)
 		{
 			//Based on the calculator method we prepare to cut the string into parameters as text
 
@@ -145,7 +147,7 @@ namespace API
 				parsedParamList.Add(parsedParam);
 			}
 
-			return parsedParamList;
+			return (parsedParamList, fullParamString);
 		}
 
         private static JToken GetPlanetDataJSON(PlanetName planetName, string propertyName, Time parsedTime, MethodInfo callerToExclude = null)

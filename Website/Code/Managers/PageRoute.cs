@@ -40,6 +40,7 @@
         public const string LifePredictorParam = "LifePredictor/{PersonIdUrl}";
         public const string GoodTimeFinder = "GoodTimeFinder";
         public const string StarsAboveMe = "StarsAboveMe";
+        public const string TableGenerator = "TableGenerator";
         public const string SunRiseSetTime = "SunRiseSetTime";
         public const string BirthTimeFinder = "BirthTimeFinder";
         public const string LocalMeanTime = "LocalMeanTime";
@@ -50,6 +51,8 @@
         public const string APIBuilder = "APIBuilder";
         public const string APICallList = "APIBuilder#APICallList";
         public const string UrlDisplayOut = "APIBuilder#UrlDisplayOut";
+        public const string GeneratedTableOut = "TableGenerator#GeneratedTable";
+        public const string DataColumnSelector = "TableGenerator#DataColumnSelector";
 
 
         //MATCH
@@ -88,6 +91,8 @@
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";
         public const string About = "/About";
         public const string Payment = "/Payment";
+        public const string Sponsor = "/Sponsor";
+        public const string VSLifeSharePublicSession = "/VSLifeSharePublicSession";
         public const string PrivateServer = "/PrivateServer";
         public const string JoinOurFamily = "/JoinOurFamily";
         public const string Contact = "/Contact";

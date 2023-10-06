@@ -28,6 +28,8 @@ const RETRY_COUNT = 5;
 
 
 
+
+
 //--------------------------CALENDAR INPUT SELECTOR CODE
 //DESCRIPTION
 //This file stores all code fo js date picker (VanillaCalendar)
@@ -84,11 +86,12 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
                 time: `${hour12}:${minute} ${meridian}`,
             },
         },
+        //this is where time is sent back to blazor, by setting straight to dom
         actions: {
             changeTime(e, time, hours, minutes, keeping) {
-                window.Calendar.hourInputElm.value = hours;
-                window.Calendar.minuteInputElm.value = minutes;
-                window.Calendar.meridianInputElm.value = keeping;
+                window.Calendar.hourInputElm.innerText = hours;
+                window.Calendar.minuteInputElm.innerText = minutes;
+                window.Calendar.meridianInputElm.innerText = keeping;
             },
             clickDay(e, dates) {
                 //if date selected, hide date picker
@@ -105,9 +108,9 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
                     var day = choppedTimeData[2];
 
                     //inject the values into the text input
-                    window.Calendar.dateInputElm.value = day;
-                    window.Calendar.monthInputElm.value = month;
-                    window.Calendar.yearInputElm.value = year;
+                    window.Calendar.dateInputElm.innerText = day;
+                    window.Calendar.monthInputElm.innerText = month;
+                    window.Calendar.yearInputElm.innerText = year;
                 }
 
             },
@@ -116,9 +119,9 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
             clickMonth(e, month) {
                 month = month + 1; //correction for JS lib bug
                 var with0 = ('0' + month).slice(-2);//change 9 to 09
-                window.Calendar.monthInputElm.value = with0;
+                window.Calendar.monthInputElm.innerText = with0;
             },
-            clickYear(e, year) { window.Calendar.yearInputElm.value = year; }
+            clickYear(e, year) { window.Calendar.yearInputElm.innerText = year; }
         },
     });
 
@@ -149,6 +152,7 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
 
 }
 
+//given a base64 will convert file and init download
 export function SaveAsFile(filename, data) {
     var link = document.createElement('a');
     link.download = filename;
@@ -157,7 +161,6 @@ export function SaveAsFile(filename, data) {
     link.click();
     document.body.removeChild(link);
 }
-
 
 //TODO MARKED FOR DELETION SINCE CAN TOGGLE VIA CLASS IN BLAZOR
 //export function togglePopup(e) {
@@ -325,12 +328,13 @@ export async function PlaySoundFromUrl(fileUrl) {
 
 //only give response if header says ok
 //todo special to hadnle empty person list
-export async function ReadOnlyIfPassJson(url) {
+//defaults to get, but can be changed to any
+export async function ReadOnlyIfPassJson(url, callMethod = "GET") {
     console.log("JS > Read Only If Pass Json...");
 
     var response = await fetch(url, {
         "headers": { "accept": "*/*", "Connection": "keep-alive" },
-        "method": "GET"
+        "method": callMethod
     });
 
     var callStatus = response.headers.get('Call-Status');

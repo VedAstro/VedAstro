@@ -59,6 +59,15 @@
         Yukteshwar = 7,
 
 
+        /// <summary>
+        /// Sassanian: This is an ancient ayanamsa in Persian astrology,
+        /// especially for Zoroastrian astrology. It is based on the position of the star Antares
+        /// at 15 degrees Scorpio, as assumed by Persian astrologers.
+        /// It is also known as Antares 15 Sco Ayanamsa, and it has been used for historical astrology
+        /// </summary>
+        Sassanian = 16,
+
+
         SsRevati = 25,
         TrueRevati = 28,
         TruePushya = 29,
@@ -70,7 +79,6 @@
         JnBhasin = 8,
         Aldebaran15Tau = 14,
         Hipparchos = 15,
-        Sassanian = 16,
         Galcent0Sag = 17,
         J1900 = 19,
         B1950 = 20,

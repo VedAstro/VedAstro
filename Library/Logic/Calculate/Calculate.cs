@@ -9,6 +9,7 @@ using SwissEphNet;
 using static VedAstro.Library.PlanetName;
 using static VedAstro.Library.HouseName;
 using static VedAstro.Library.ZodiacName;
+using static VedAstro.Library.Ayanamsa;
 using System.Numerics;
 
 
@@ -34,7 +35,8 @@ namespace VedAstro.Library
         /// Defaults to RAMAN, but can be set before calling any funcs,
         /// NOTE: remember not to change mid instance, because "GetAyanamsa" & others are cached per instance
         /// </summary>
-        public static double YearOfCoincidence { get; set; } = (int)Library.Ayanamsa.Raman;
+        public static int Ayanamsa { get; set; } = (int)Library.Ayanamsa.Raman;
+
 
         #region AVASTA
 
@@ -281,17 +283,19 @@ namespace VedAstro.Library
 
         #region GENERAL
 
-        public static double AyanamsaFinder(PlanetName inputPlanet, ConstellationName expectedConstellation, Time time)
+        public static double AyanamsaFinder(PlanetName inputPlanet, ConstellationName expectedConstellation, int expectedPada, Time time)
         {
             var isMatch = false;
             //test each untill found right one
-            double ayanamsaYear = -4000;
-            while (ayanamsaYear < 4000)
+            double ayanamsaYear = 0;
+            while (ayanamsaYear < 2000)
             {
-                Calculate.YearOfCoincidence = ayanamsaYear;
+                Calculate.Ayanamsa = (int)Lahiri;
                 var planetConste = PlanetConstellation(time, inputPlanet);
-                isMatch = expectedConstellation == planetConste.GetConstellationName();
-                
+                var testQuarter = planetConste.GetQuarter();
+                var testConstellationName = planetConste.GetConstellationName();
+                isMatch = expectedConstellation == testConstellationName && expectedPada == testQuarter;
+
                 if (isMatch)
                 {
                     Console.WriteLine($"Ayanamsa : {ayanamsaYear} {planetConste} : FOUND");
@@ -299,15 +303,15 @@ namespace VedAstro.Library
                 }
                 else
                 {
-                    Console.WriteLine($"Ayanamsa : {ayanamsaYear} {planetConste} : FAIL");
+                    //Console.WriteLine($"Ayanamsa : {ayanamsaYear} {planetConste} : FAIL");
                 }
                 //increase slightly
                 ayanamsaYear += 0.005;
             }
-           
+
 
             //if control reaches here than not found
-            throw new Exception();
+            return 0;
         }
 
         /// <summary>
@@ -315,8 +319,6 @@ namespace VedAstro.Library
         /// </summary>
         public static int FortunePoint(ZodiacName ascZodiacSignName, PlanetName moon, PlanetName sun, Time time)
         {
-            Calculate.YearOfCoincidence = (int)VedAstro.Library.Ayanamsa.Lahiri;
-
             //Fortune Point is calculated as Asc Degrees + Moon Degrees - Sun Degrees
 
             //Find Lagna, Moon and Sun longitude degree
@@ -575,7 +577,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(TimeToEphemerisTime), time), _timeToEphemerisTime);
+            return CacheManager.GetCache(new CacheKey(nameof(TimeToEphemerisTime), time, Ayanamsa), _timeToEphemerisTime);
 
 
             //UNDERLYING FUNCTION
@@ -608,44 +610,6 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// Planet longitude that has been corrected with Ayanamsa
-        /// Gets planet longitude used vedic astrology
-        /// Nirayana Longitude = Sayana Longitude corrected to Ayanamsa
-        /// Number from 0 to 360, represent the degrees in the zodiac as viewed from earth
-        /// Note: Since Nirayana is corrected, in actuality 0 degrees will start at Taurus not Aries
-        /// </summary>
-        public static Angle PlanetNirayanaLongitude(Time time, PlanetName planetName)
-        {
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetNirayanaLongitude), time, planetName, YearOfCoincidence), _getPlanetNirayanaLongitude);
-
-
-            //UNDERLYING FUNCTION
-            Angle _getPlanetNirayanaLongitude()
-            {
-                //declare return value
-                Angle returnValue;
-
-
-                //Get sayana longitude on day 
-                Angle longitude = PlanetSayanaLongitude(time, planetName);
-
-
-                //3 - Hindu Nirayana Long = Sayana Long — Ayanamsa.
-                Angle birthAyanamsa = Ayanamsa(time);
-
-                //if below ayanamsa add 360 before minus
-                returnValue = longitude.TotalDegrees < birthAyanamsa.TotalDegrees
-                    ? (longitude + Angle.Degrees360) - birthAyanamsa
-                    : longitude - birthAyanamsa;
-
-
-                return returnValue;
-            }
-
-
-        }
 
         /// <summary>
         /// Gets Moon's position or day in lunar calendar
@@ -968,7 +932,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(TimeSunEnteredCurrentSign), time), _timeSunEnteredCurrentSign);
+            return CacheManager.GetCache(new CacheKey(nameof(TimeSunEnteredCurrentSign), time, Ayanamsa), _timeSunEnteredCurrentSign);
 
 
             //UNDERLYING FUNCTION
@@ -1047,7 +1011,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetTimeSunLeavesCurrentSign", time), _getTimeSunLeavesCurrentSign);
+            return CacheManager.GetCache(new CacheKey(nameof(TimeSunLeavesCurrentSign), time, Ayanamsa), _getTimeSunLeavesCurrentSign);
 
 
             //UNDERLYING FUNCTION
@@ -1119,7 +1083,7 @@ namespace VedAstro.Library
         public static List<House> AllHouseLongitudes(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(AllHouseLongitudes), time, YearOfCoincidence), _getHouses);
+            return CacheManager.GetCache(new CacheKey(nameof(AllHouseLongitudes), time, Ayanamsa), _getHouses);
 
 
             //UNDERLYING FUNCTION
@@ -1155,7 +1119,7 @@ namespace VedAstro.Library
 
                 //Deduct from these two, the Ayanamsa to get the Nirayana longitudes
                 // of Udaya Lagna (Ascendant) and the Madhya Lagna (Upper Meridian)
-                var ayanamsa = Ayanamsa(time);
+                var ayanamsa = AyanamsaDegree(time);
 
                 var udayaLagna = sayanaCuspOfHouse1 - ayanamsa;
                 var madhyaLagna = sayanaCuspOfHouse10 - ayanamsa;
@@ -1291,7 +1255,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(ConvertLmtToJulian), time), _convertLmtToJulian);
+            return CacheManager.GetCache(new CacheKey(nameof(ConvertLmtToJulian), time, Ayanamsa), _convertLmtToJulian);
 
 
             //UNDERLYING FUNCTION
@@ -1912,7 +1876,7 @@ namespace VedAstro.Library
         public static ZodiacSign PlanetSignName(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetSignName), planetName, time, YearOfCoincidence), _getPlanetRasiSign);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetSignName), planetName, time, Ayanamsa), _getPlanetRasiSign);
 
             //UNDERLYING FUNCTION
             ZodiacSign _getPlanetRasiSign()
@@ -2697,7 +2661,7 @@ namespace VedAstro.Library
         public static DateTime LocalApparentTime(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(LocalApparentTime), time), _getLocalApparentTime);
+            return CacheManager.GetCache(new CacheKey(nameof(LocalApparentTime), time, Ayanamsa), _getLocalApparentTime);
 
             //UNDERLYING FUNCTION
             DateTime _getLocalApparentTime()
@@ -2738,7 +2702,7 @@ namespace VedAstro.Library
         public static House House(HouseName houseNumber, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(House), houseNumber, time), _getHouse);
+            return CacheManager.GetCache(new CacheKey(nameof(House), houseNumber, time, Ayanamsa), _getHouse);
 
             //UNDERLYING FUNCTION
             House _getHouse()
@@ -3013,7 +2977,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(SunriseTime), time), _getSunriseTime);
+            return CacheManager.GetCache(new CacheKey(nameof(SunriseTime), time, Ayanamsa), _getSunriseTime);
 
 
             //UNDERLYING FUNCTION
@@ -3069,7 +3033,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(SunsetTime), time), _getSunsetTime);
+            return CacheManager.GetCache(new CacheKey(nameof(SunsetTime), time, Ayanamsa), _getSunsetTime);
 
 
             //UNDERLYING FUNCTION
@@ -3213,7 +3177,7 @@ namespace VedAstro.Library
 
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetSthanaBalaNeutralPoint), planet), _getPlanetSthanaBalaNeutralPoint);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetSthanaBalaNeutralPoint), planet, Ayanamsa), _getPlanetSthanaBalaNeutralPoint);
 
 
             double _getPlanetSthanaBalaNeutralPoint()
@@ -3260,7 +3224,7 @@ namespace VedAstro.Library
 
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadvargaBalaNeutralPoint), planet), _getPlanetShadvargaBalaNeutralPoint);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadvargaBalaNeutralPoint), planet, Ayanamsa), _getPlanetShadvargaBalaNeutralPoint);
 
 
             double _getPlanetShadvargaBalaNeutralPoint()
@@ -4655,8 +4619,8 @@ namespace VedAstro.Library
             //weakest planet gives lowest score -2
             //strongest planet gives highest score 2
             //get range
-            var highestHouseScore = HouseStrength(GetAllHousesOrderedByStrength(personBirthTime)[0], personBirthTime).ToDouble();
-            var lowestHouseScore = HouseStrength(GetAllHousesOrderedByStrength(personBirthTime)[11], personBirthTime).ToDouble();
+            var highestHouseScore = HouseStrength(AllHousesOrderedByStrength(personBirthTime)[0], personBirthTime).ToDouble();
+            var lowestHouseScore = HouseStrength(AllHousesOrderedByStrength(personBirthTime)[11], personBirthTime).ToDouble();
 
             var rangeBasedScore = houseStrength.Remap(lowestHouseScore, highestHouseScore, -3, 3);
 
@@ -5055,28 +5019,38 @@ namespace VedAstro.Library
         /// and the winter solistice with the first degree of Capricorn, whereas at one time the summer solistice coincided with the
         /// middle of the Aslesha
         /// </summary>
-        public static Angle Ayanamsa(Time time)
+        public static Angle AyanamsaDegree(Time time)
         {
 
+            //it has been observed and proved mathematically, that each year at the time when the Sun reaches his
+            //equinoctial point of Aries 0° when throughout the earth, the day and night are equal in length,
+            //the position of the earth in reference to some fixed star is nearly 50.333 of space farther west
+            //than the earth was at the same equinoctial moment of the previous year.
+
+
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(Ayanamsa), time, Calculate.YearOfCoincidence), _getAyanamsa);
+            return CacheManager.GetCache(new CacheKey(nameof(AyanamsaDegree), time, Ayanamsa), _getAyanamsaDegree);
 
 
             //UNDERLYING FUNCTION
-            Angle _getAyanamsa()
+            Angle _getAyanamsaDegree()
             {
-                int year = LmtToUtc(time).Year;
+                //This would request sidereal positions calculated using the Swiss Ephemeris.
+                int iflag = SwissEph.SEFLG_SIDEREAL;
+                double[] results = new double[6];
+                string err_msg = "";
+                double jul_day_ET;
+                SwissEph ephemeris = new SwissEph();
 
-                //it has been observed and proved mathematically, that each year at the time when the Sun reaches his
-                //equinoctial point of Aries 0° when throughout the earth, the day and night are equal in length,
-                //the position of the earth in reference to some fixed star is nearly 50.333 of space farther west
-                //than the earth was at the same equinoctial moment of the previous year.
-                const double precessionRate = 50.3333333333;
+                // Convert DOB to ET
+                jul_day_ET = TimeToEphemerisTime(time);
 
-                var ayanamsaSecondsRaw = (year - Calculate.YearOfCoincidence) * precessionRate;
-                var returnValue = new Angle(seconds: (long)(Math.Round(ayanamsaSecondsRaw)));
+                //Get planet long
+                ephemeris.swe_set_sid_mode(46, 0, 0);
+                var ret_flag = ephemeris.swe_get_ayanamsa(jul_day_ET);
 
-                return returnValue;
+                //ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
+                throw new NotImplementedException();
             }
 
         }
@@ -5089,7 +5063,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetSayanaLongitude), time, planetName), _getPlanetSayanaLongitude);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetSayanaLongitude), time, planetName, Ayanamsa), _getPlanetSayanaLongitude);
 
 
             //UNDERLYING FUNCTION
@@ -5114,6 +5088,8 @@ namespace VedAstro.Library
                 //Get planet long
                 int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
 
+
+
                 //data in results at index 0 is longitude
                 var planetSayanaLongitude = new Angle(degrees: results[0]);
 
@@ -5132,13 +5108,69 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Planet longitude that has been corrected with Ayanamsa
+        /// Gets planet longitude used vedic astrology
+        /// Nirayana Longitude = Sayana Longitude corrected to Ayanamsa
+        /// Number from 0 to 360, represent the degrees in the zodiac as viewed from earth
+        /// Note: Since Nirayana is corrected, in actuality 0 degrees will start at Taurus not Aries
+        /// </summary>
+        public static Angle PlanetNirayanaLongitude(Time time, PlanetName planetName)
+        {
+
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetNirayanaLongitude), time, planetName, Ayanamsa), _getPlanetNirayanaLongitude);
+
+
+            //UNDERLYING FUNCTION
+
+            Angle _getPlanetNirayanaLongitude()
+            {
+
+                //This would request sidereal positions calculated using the Swiss Ephemeris.
+                int iflag = SwissEph.SEFLG_SIDEREAL;  //SEFLG_SIDEREAL | SEFLG_SWIEPH; //+ SwissEph.SEFLG_SPEED;
+                double[] results = new double[6];
+                string err_msg = "";
+                double jul_day_ET;
+                SwissEph ephemeris = new SwissEph();
+
+                // Convert DOB to ET
+                jul_day_ET = TimeToEphemerisTime(time);
+
+                //convert planet name, compatible with Swiss Eph
+                int swissPlanet = Tools.VedAstroToSwissEph(planetName);
+
+                //NOTE Ayanamsa needs to be set before caling calc
+                ephemeris.swe_set_sid_mode(Ayanamsa, 0, 0);
+
+                //do calculation
+                int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
+
+                //data in results at index 0 is longitude
+                var planetSayanaLongitude = new Angle(degrees: results[0]);
+
+                //if ketu add 180 to rahu
+                if (planetName == Ketu)
+                {
+                    var x = planetSayanaLongitude + Angle.Degrees180;
+                    planetSayanaLongitude = x.Expunge360();
+                }
+
+                return planetSayanaLongitude;
+
+            }
+
+
+        }
+
+
+        /// <summary>
         /// find time of next lunar eclipse UTC time
         /// </summary>
         public static DateTime NextLunarEclipse(Time time)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(NextLunarEclipse), time), _getNextLunarEclipse);
+            return CacheManager.GetCache(new CacheKey(nameof(NextLunarEclipse), time, Ayanamsa), _getNextLunarEclipse);
 
 
             //UNDERLYING FUNCTION
@@ -5179,7 +5211,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(NextSolarEclipse), time), _getNextSolarEclipse);
+            return CacheManager.GetCache(new CacheKey(nameof(NextSolarEclipse), time, Ayanamsa), _getNextSolarEclipse);
 
 
             //UNDERLYING FUNCTION
@@ -5221,7 +5253,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetEphemerisLongitude), time, planetName), _getPlanetSayanaLongitude);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetEphemerisLongitude), time, planetName, Ayanamsa), _getPlanetSayanaLongitude);
 
 
             //UNDERLYING FUNCTION
@@ -5269,7 +5301,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetSayanaLatitude), time, planetName), _getPlanetSayanaLatitude);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetSayanaLatitude), time, planetName, Ayanamsa), _getPlanetSayanaLatitude);
 
 
             //UNDERLYING FUNCTION
@@ -5408,7 +5440,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(ConstellationAtLongitude), planetLongitude, YearOfCoincidence), _constellationAtLongitude);
+            return CacheManager.GetCache(new CacheKey(nameof(ConstellationAtLongitude), planetLongitude, Ayanamsa), _constellationAtLongitude);
 
 
             //UNDERLYING FUNCTION
@@ -5465,7 +5497,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(ZodiacSignAtLongitude), longitude), _zodiacSignAtLongitude);
+            return CacheManager.GetCache(new CacheKey(nameof(ZodiacSignAtLongitude), longitude, Ayanamsa), _zodiacSignAtLongitude);
 
 
             //UNDERLYING FUNCTION
@@ -5521,7 +5553,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(LongitudeAtZodiacSign), zodiacSign), _getLongitudeAtZodiacSign);
+            return CacheManager.GetCache(new CacheKey(nameof(LongitudeAtZodiacSign), zodiacSign, Ayanamsa), _getLongitudeAtZodiacSign);
 
 
             //UNDERLYING FUNCTION
@@ -5557,7 +5589,7 @@ namespace VedAstro.Library
         public static DayOfWeek DayOfWeek(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetDayOfWeek", time), _getDayOfWeek);
+            return CacheManager.GetCache(new CacheKey(nameof(DayOfWeek), time, Ayanamsa), _getDayOfWeek);
 
 
             //UNDERLYING FUNCTION
@@ -5809,7 +5841,7 @@ namespace VedAstro.Library
         public static Angle HouseJunctionPoint(Angle previousHouse, Angle nextHouse)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetHouseJunctionPoint", previousHouse, nextHouse), _getHouseJunctionPoint);
+            return CacheManager.GetCache(new CacheKey(nameof(HouseJunctionPoint), previousHouse, nextHouse, Ayanamsa), _getHouseJunctionPoint);
 
 
             //UNDERLYING FUNCTION
@@ -5856,7 +5888,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(LordOfZodiacSign), signName), _getLordOfZodiacSign);
+            return CacheManager.GetCache(new CacheKey(nameof(LordOfZodiacSign), signName, Ayanamsa), _getLordOfZodiacSign);
 
 
             //UNDERLYING FUNCTION
@@ -5911,7 +5943,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetNextZodiacSign", inputSign), _getNextZodiacSign);
+            return CacheManager.GetCache(new CacheKey(nameof(NextZodiacSign), inputSign, Ayanamsa), _getNextZodiacSign);
 
 
             //UNDERLYING FUNCTION
@@ -5948,7 +5980,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetNextHouseNumber", inputHouseNumber), _getNextHouseNumber);
+            return CacheManager.GetCache(new CacheKey(nameof(NextHouseNumber), inputHouseNumber, Ayanamsa), _getNextHouseNumber);
 
 
             //UNDERLYING FUNCTION
@@ -5994,7 +6026,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetExaltationPoint", planetName), _getPlanetExaltationPoint);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetExaltationPoint), planetName, Ayanamsa), _getPlanetExaltationPoint);
 
 
             //UNDERLYING FUNCTION
@@ -6078,7 +6110,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetDebilitationPoint", planetName), _getPlanetDebilitationPoint);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetDebilitationPoint), planetName, Ayanamsa), _getPlanetDebilitationPoint);
 
 
             //UNDERLYING FUNCTION
@@ -6192,7 +6224,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("IsEvenSign", planetSignName), _isEvenSign);
+            return CacheManager.GetCache(new CacheKey(nameof(IsEvenSign), planetSignName, Ayanamsa), _isEvenSign);
 
 
             //UNDERLYING FUNCTION
@@ -6218,7 +6250,7 @@ namespace VedAstro.Library
         public static bool IsOddSign(ZodiacName planetSignName)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("IsOddSign", planetSignName), _isOddSign);
+            return CacheManager.GetCache(new CacheKey(nameof(IsOddSign), planetSignName, Ayanamsa), _isOddSign);
 
 
             //UNDERLYING FUNCTION
@@ -6322,7 +6354,7 @@ namespace VedAstro.Library
 
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetPermanentRelationshipWithPlanet", mainPlanet, secondaryPlanet), _getPlanetPermanentRelationshipWithPlanet);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetPermanentRelationshipWithPlanet), mainPlanet, secondaryPlanet, Ayanamsa), _getPlanetPermanentRelationshipWithPlanet);
 
 
             //UNDERLYING FUNCTION
@@ -6478,7 +6510,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("ConvertJulianTimeToNormalTime", julianTime), _convertJulianTimeToNormalTime);
+            return CacheManager.GetCache(new CacheKey(nameof(ConvertJulianTimeToNormalTime), julianTime, Ayanamsa), _convertJulianTimeToNormalTime);
 
 
             //UNDERLYING FUNCTION
@@ -6515,7 +6547,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetGreenwichTimeFromJulianDays", julianTime), _convertJulianTimeToNormalTime);
+            return CacheManager.GetCache(new CacheKey(nameof(GreenwichTimeFromJulianDays), julianTime, Ayanamsa), _convertJulianTimeToNormalTime);
 
 
             //UNDERLYING FUNCTION
@@ -6553,7 +6585,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetGreenwichLmtInJulianDays", time), _getGreenwichLmtInJulianDays);
+            return CacheManager.GetCache(new CacheKey(nameof(GreenwichLmtInJulianDays), time, Ayanamsa), _getGreenwichLmtInJulianDays);
 
 
             //UNDERLYING FUNCTION
@@ -6593,7 +6625,7 @@ namespace VedAstro.Library
         public static double[] GetHouse1And10Longitudes(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(GetHouse1And10Longitudes), time), _getHouse1And10Longitudes);
+            return CacheManager.GetCache(new CacheKey(nameof(GetHouse1And10Longitudes), time, Ayanamsa), _getHouse1And10Longitudes);
 
 
             //UNDERLYING FUNCTION
@@ -6650,7 +6682,7 @@ namespace VedAstro.Library
         public static DateTimeOffset LmtToUtc(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(LmtToUtc), time), _lmtToUtc);
+            return CacheManager.GetCache(new CacheKey(nameof(LmtToUtc), time, Ayanamsa), _lmtToUtc);
 
 
             //UNDERLYING FUNCTION
@@ -8634,7 +8666,7 @@ namespace VedAstro.Library
         public static bool IsMercuryMalefic(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(IsMercuryMalefic), time), _isMercuryMalefic);
+            return CacheManager.GetCache(new CacheKey(nameof(IsMercuryMalefic), time, Ayanamsa), _isMercuryMalefic);
 
 
             //UNDERLYING FUNCTION
@@ -8978,7 +9010,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(AllPlanetOrderedByStrength), time), _getAllPlanetOrderedByStrength);
+            return CacheManager.GetCache(new CacheKey(nameof(AllPlanetOrderedByStrength), time, Ayanamsa), _getAllPlanetOrderedByStrength);
 
 
             //UNDERLYING FUNCTION
@@ -9084,11 +9116,11 @@ namespace VedAstro.Library
         /// Returns an array of all houses sorted by strength,
         /// 0 index being strongest to 11 index being weakest
         /// </summary>
-        public static HouseName[] GetAllHousesOrderedByStrength(Time time)
+        public static HouseName[] AllHousesOrderedByStrength(Time time)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetAllHousesOrderedByStrength", time), _getAllHousesOrderedByStrength);
+            return CacheManager.GetCache(new CacheKey(nameof(AllHousesOrderedByStrength), time, Ayanamsa), _getAllHousesOrderedByStrength);
 
 
             //UNDERLYING FUNCTION
@@ -9148,7 +9180,7 @@ namespace VedAstro.Library
             if (planetName == null) { return Shashtiamsa.Zero; }
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadbalaPinda), planetName, time), _getPlanetShadbalaPinda);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadbalaPinda), planetName, time, Ayanamsa), _getPlanetShadbalaPinda);
 
 
             //UNDERLYING FUNCTION
@@ -9689,7 +9721,7 @@ namespace VedAstro.Library
         public static Shashtiamsa PlanetSaptavargajaBala(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetSaptavargajaBala", planetName, time), _getPlanetSaptavargajaBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetSaptavargajaBala), planetName, time, Ayanamsa), _getPlanetSaptavargajaBala);
 
 
             //UNDERLYING FUNCTION
@@ -9834,7 +9866,7 @@ namespace VedAstro.Library
         public static Shashtiamsa PlanetShadvargaBala(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetShadvargaBala", planetName, time), _getPlanetShadvargaBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadvargaBala), planetName, time, Ayanamsa), _getPlanetShadvargaBala);
 
 
             //UNDERLYING FUNCTION
@@ -10032,7 +10064,7 @@ namespace VedAstro.Library
             if (isRahuKetu) { return Shashtiamsa.Zero; }
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetSthanaBala), planetName, time), _getPlanetSthanaBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetSthanaBala), planetName, time, Ayanamsa), _getPlanetSthanaBala);
 
 
             //UNDERLYING FUNCTION
@@ -10221,7 +10253,7 @@ namespace VedAstro.Library
 
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetKalaBala), planetName, time), _getPlanetKalaBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetKalaBala), planetName, time, Ayanamsa), _getPlanetKalaBala);
 
 
             //UNDERLYING FUNCTION
@@ -10417,7 +10449,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetAyanaBala), planetName, time), _getPlanetAyanaBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetAyanaBala), planetName, time, Ayanamsa), _getPlanetAyanaBala);
 
 
             //UNDERLYING FUNCTION
@@ -10486,7 +10518,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetDeclination", planetName, time), _getPlanetDeclination);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetDeclination), planetName, time, Ayanamsa), _getPlanetDeclination);
 
 
             //UNDERLYING FUNCTION
@@ -10515,7 +10547,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetEps", time), _getPlanetEps);
+            return CacheManager.GetCache(new CacheKey(nameof(EclipticObliquity), time, Ayanamsa), _getPlanetEps);
 
 
             //UNDERLYING FUNCTION
@@ -10547,7 +10579,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetHoraBala), planetName, time), _getPlanetHoraBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetHoraBala), planetName, time, Ayanamsa), _getPlanetHoraBala);
 
 
             //UNDERLYING FUNCTION
@@ -10587,7 +10619,7 @@ namespace VedAstro.Library
         public static Shashtiamsa PlanetAbdaBala(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetAbdaBala), planetName, time), _getPlanetAbdaBala);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetAbdaBala), planetName, time, Ayanamsa), _getPlanetAbdaBala);
 
 
             //UNDERLYING FUNCTION
@@ -10651,7 +10683,7 @@ namespace VedAstro.Library
         public static object YearAndMonthLord(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(YearAndMonthLord), time), _getYearAndMonthLord);
+            return CacheManager.GetCache(new CacheKey(nameof(YearAndMonthLord), time, Ayanamsa), _getYearAndMonthLord);
 
 
             //UNDERLYING FUNCTION
@@ -11082,7 +11114,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(HouseStrength), inputHouse, time), _getBhavabala);
+            return CacheManager.GetCache(new CacheKey(nameof(HouseStrength), inputHouse, time, Ayanamsa), _getBhavabala);
 
 
             //UNDERLYING FUNCTION
@@ -11125,7 +11157,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(BhavaDrishtiBala), time), _calcBhavaDrishtiBala);
+            return CacheManager.GetCache(new CacheKey(nameof(BhavaDrishtiBala), time, Ayanamsa), _calcBhavaDrishtiBala);
 
 
             //UNDERLYING FUNCTION
@@ -11344,7 +11376,7 @@ namespace VedAstro.Library
         public static HouseSubStrength BhavaAdhipathiBala(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(BhavaAdhipathiBala), time), _calcBhavaAdhipathiBala);
+            return CacheManager.GetCache(new CacheKey(nameof(BhavaAdhipathiBala), time, Ayanamsa), _calcBhavaAdhipathiBala);
 
 
             //UNDERLYING FUNCTION
@@ -11442,7 +11474,7 @@ namespace VedAstro.Library
         public static List<HouseName> BeneficHouseListByShadbala(Time personBirthTime)
         {
             //get all planets
-            var allPlanetByStrenght = Calculate.GetAllHousesOrderedByStrength(personBirthTime);
+            var allPlanetByStrenght = Calculate.AllHousesOrderedByStrength(personBirthTime);
 
             //take top 3 as needed planets
             var returnList = new List<HouseName>();
@@ -11517,7 +11549,7 @@ namespace VedAstro.Library
         {
 
             //get all planets
-            var allPlanetByStrenght = Calculate.GetAllHousesOrderedByStrength(personBirthTime);
+            var allPlanetByStrenght = Calculate.AllHousesOrderedByStrength(personBirthTime);
 
             //take last 3 as needed planets
             var returnList = new List<HouseName>();

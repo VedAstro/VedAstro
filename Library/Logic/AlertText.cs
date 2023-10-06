@@ -13,6 +13,7 @@ namespace VedAstro.Library
     {
         //public const string ValidationError = $"Something went wrong, refresh page and try again!";
         public const string FailedNameList = $"Failed to fetch name list.";
+        public const string FailedFileProcess = $"Failed to process file, try again.";
         public const string InvalidBirthTime = $"Birth time is invalid, check date time format!";
         public const string UnderMaintenance = $"Sorry, under maintenance.\nPlease try later";
         public const string NewFeatures = $"New features are being added.\nPlease try later";

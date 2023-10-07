@@ -70,6 +70,10 @@ namespace API
             Url = new URL(GetIsBetaRuntime(), false); //obviously no debug mode
         }
 
+
+
+
+
         /// <summary>
         /// Default success message sent to caller
         /// - .ToString(SaveOptions.DisableFormatting); to remove make xml indented
@@ -898,9 +902,7 @@ namespace API
 
                 //save for future
                 chartBlobClient = await AzureCache.Add(cacheName, chartBytes, mimeType);
-                //chartBlobClient = await AzureCache.Add<byte[]>(callerId, chartBytes, mimeType);
 
-                //chartBlobClient = await AzureCache.GetData<BlobClient>(callerId);
             }
             //always mark the call as ended
             finally

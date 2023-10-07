@@ -7066,12 +7066,12 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Calculates full ashtakvarga chart for a given planet for all 12 signs
-        /// Needed to compute final ashtakvarga
+        /// Used to for calculating final Ashtakvarga, Rahu & Ketu will return 0
         /// </summary>
         public static Dictionary<ZodiacName, int> PlanetBhinnashtakavargaChart(PlanetName mainPlanet, Time birthTime)
         {
-            //no rahu & ketu
-            if (mainPlanet.Name is Library.PlanetName.PlanetNameEnum.Rahu or Library.PlanetName.PlanetNameEnum.Ketu) { throw new InvalidOperationException("No rahu & ketu support"); }
+            //no rahu & ketu, so re
+            if (mainPlanet.Name is PlanetNameEnum.Rahu or PlanetNameEnum.Ketu) { return new Dictionary<ZodiacName, int>(); }
 
             //make the charts compiled from the position of 7 planets plus Ascendant
             var minorPlanetList = Library.PlanetName.All7Planets.Select(e => e.ToString()).ToList();
@@ -11843,6 +11843,7 @@ namespace VedAstro.Library
 
         #endregion
 
+        //--------------------------------------------------------------------------------------------
 
 #if DEBUG
         /// <summary>

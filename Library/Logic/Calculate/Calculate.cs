@@ -6642,6 +6642,9 @@ namespace VedAstro.Library
                 //we have to supply ascmc to make the function run
                 double[] ascmc = new double[10];
 
+                //set ayanamsa
+                swissEph.swe_set_sid_mode(Ayanamsa, 0, 0);
+
                 //NOTE:
                 //if you use P which is Placidus there is a high chances you will get unequal houses from the SwissEph library itself...
                 // you have to use V - 'V'Vehlow equal (Asc. in middle of house 1)

@@ -25,11 +25,8 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = nameof(GetMLTimeListFromExcel))]
             HttpRequestData incomingRequest)
         {
-
-
             try
             {
-
                 //0 : LOG CALL
                 //log ip address, call time and URL
                 var call = await APILogger.Visit(incomingRequest);

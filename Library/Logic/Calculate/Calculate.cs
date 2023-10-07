@@ -31,12 +31,25 @@ namespace VedAstro.Library
     public static partial class Calculate
     {
 
+        #region SETTINGS
+
         /// <summary>
         /// Defaults to RAMAN, but can be set before calling any funcs,
         /// NOTE: remember not to change mid instance, because "GetAyanamsa" & others are cached per instance
         /// </summary>
         public static int Ayanamsa { get; set; } = (int)Library.Ayanamsa.Lahiri;
 
+
+        /// <summary>
+        /// If set true, will not include gochara that was obstructed by "Vedhanka Point" calculation
+        /// Enabled by default, recommend only disabled for research & debugging.
+        /// Vedhanka needed for accuracy, recommended leave true
+        /// </summary>
+        public static bool UseVedhankaInGochara { get; set; } = true;
+
+        #endregion
+
+        //----------------------------------------CORE CODE---------------------------------------------
 
         #region AVASTA
 
@@ -6930,8 +6943,13 @@ namespace VedAstro.Library
             //check if planet is in the specified gochara house
             var planetGocharaMatch = Calculate.GocharaHouse(birthTime, time, planet) == gocharaHouse;
 
-            //check if there is any planet obstructing this transit prediction via Vedhasthana
-            var obstructionNotFound = !Calculate.IsGocharaObstructed(planet, gocharaHouse, birthTime, time);
+            //NOTE: only use Vedha point by default, but allow disable if needed (LONG LEVER DESIGN)
+            bool obstructionNotFound = true; //default to true, so if disabled Vedha point will still work
+            if (Calculate.UseVedhankaInGochara)
+            {
+                //check if there is any planet obstructing this transit prediction via Vedhasthana
+                obstructionNotFound = !Calculate.IsGocharaObstructed(planet, gocharaHouse, birthTime, time);
+            }
 
             //occuring if all conditions met
             var occuring = planetGocharaMatch && obstructionNotFound;

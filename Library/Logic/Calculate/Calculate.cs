@@ -35,7 +35,7 @@ namespace VedAstro.Library
         /// Defaults to RAMAN, but can be set before calling any funcs,
         /// NOTE: remember not to change mid instance, because "GetAyanamsa" & others are cached per instance
         /// </summary>
-        public static int Ayanamsa { get; set; } = (int)Library.Ayanamsa.Raman;
+        public static int Ayanamsa { get; set; } = (int)Library.Ayanamsa.Lahiri;
 
 
         #region AVASTA

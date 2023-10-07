@@ -1688,32 +1688,8 @@ namespace VedAstro.Library
             var specifiedHouse = allHouses.Find(house => house.GetHouseName() == houseNumber);
 
             //get sign of the specified house
-            //Note :
-            //When the middle longitude has just entered a new sign,
-            //rounding the longitude shows better accuracy.
-            //Example, with middle longitude 90.4694, becomes Cancer (0°28'9"),
-            //but predictive results points to Gemini (30°0'0"), so rounding is implemented
             var middleLongitude = specifiedHouse.GetMiddleLongitude();
-
-            //TODO is round needed!!
-            //var roundVal = Math.Round(middleLongitude.TotalDegrees, 4);
-            //var roundedMiddleLongitude = Angle.FromDegrees(roundVal); //rounded to 5 places for accuracy
-
             var houseSignName = ZodiacSignAtLongitude(middleLongitude).GetSignName();
-
-#if DEBUG
-
-            //for sake of testing, if sign is changed due to rounding, then log it
-            var unroundedSignName = Calculate.ZodiacSignAtLongitude(middleLongitude).GetSignName();
-
-            if (unroundedSignName != houseSignName)
-            {
-                //todo clean up
-                Console.WriteLine($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}");
-                LibLogger.Debug($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}");
-            }
-#endif
-
 
             //return the name of house sign
             return houseSignName;

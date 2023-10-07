@@ -88,16 +88,18 @@ namespace API
 
         }
 
-        //}
-        public static async Task<BlobClient?> Add<T>(string callerId, T value, string mimeType = "")
+        /// <summary>
+        /// Given a any data type, will add to Cache container, with specified name, mimetype is optional
+        /// </summary>
+        public static async Task<BlobClient?> Add<T>(string fileName, T value, string mimeType = "")
         {
 
 #if DEBUG
-            Console.WriteLine($"SAVING NEW DATA TO CACHE: {callerId}");
+            Console.WriteLine($"SAVING NEW DATA TO CACHE: {fileName}");
 #endif
 
 
-            var blobClient = blobContainerClient.GetBlobClient(callerId);
+            var blobClient = blobContainerClient.GetBlobClient(fileName);
 
             if (typeof(T) == typeof(string))
             {
@@ -211,7 +213,7 @@ namespace API
 #endif
                     //no waiting
                     //will execute and save the data to cache,
-                    //so on next call will retreive from cache
+                    //so on next call will retrieve from cache
                     cacheExecuteTask3.Invoke();
 
 

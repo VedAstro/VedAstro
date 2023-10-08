@@ -1134,10 +1134,10 @@ namespace VedAstro.Library
                 pathalaLagna = pathalaLagna.Expunge360();
 
                 //assign angular house middle longitudes, houses 1,4,7,10
-                house1MiddleLongitude = udayaLagna;
-                house4MiddleLongitude = pathalaLagna;
-                house7MiddleLongitude = astaLagna;
-                house10MiddleLongitude = madhyaLagna;
+                house1MiddleLongitude = udayaLagna + Angle.FromDegrees(15);
+                house4MiddleLongitude = pathalaLagna + Angle.FromDegrees(15);
+                house7MiddleLongitude = astaLagna + Angle.FromDegrees(15);
+                house10MiddleLongitude = madhyaLagna + Angle.FromDegrees(15);
 
                 //2.0 Get middle longitudes of non-angular houses
                 //2.1 Calculate arcs
@@ -1800,7 +1800,7 @@ namespace VedAstro.Library
 
             //round the raw number to get current navamsa number
             var navamsaNumber = (int)Math.Ceiling(rawNavamsaNumber);
-
+            
             //4.0 Get navamsa sign
             //count from first navamsa sign
             ZodiacName signAtNavamsa = SignCountedFromInputSign(firstNavamsa, navamsaNumber);

@@ -7971,10 +7971,11 @@ namespace VedAstro.Library
             //var birthDasaPlanet = GetConstellationDasaPlanet(risingConstellation.GetConstellationName());
 
             //get time traversed in birth dasa 
-            var timeTraversedInDasa = YearsTraversedInBirthDasa(birthTime, moonConstellation);
+            var timeTraversedInDasa = (float) YearsTraversedInBirthDasa(birthTime, moonConstellation);
 
             //get time from birth to current time (converted to Dasa years ie. 360 days per year)
-            var timeBetween = currentTime.Subtract(birthTime).TotalDays / 360;
+            var timeBetween = (float) currentTime.Subtract(birthTime).TotalDays / 361.88;
+            
 
             //combine years traversed at birth and years to current time
             //this is done to easily calculate to current dasa, bhukti & antaram

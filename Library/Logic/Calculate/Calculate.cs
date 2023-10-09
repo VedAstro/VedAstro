@@ -1147,7 +1147,7 @@ namespace VedAstro.Library
                 pathalaLagna = pathalaLagna.Expunge360();
 
                 //assign angular house middle longitudes, houses 1,4,7,10
-                house1MiddleLongitude = udayaLagna;
+                house1MiddleLongitude = udayaLagna + Angle.FromDegrees(15); //middle = StartLong + 15 degrees.
                 house4MiddleLongitude = pathalaLagna;
                 house7MiddleLongitude = astaLagna;
                 house10MiddleLongitude = madhyaLagna;

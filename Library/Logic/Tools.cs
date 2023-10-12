@@ -1909,13 +1909,17 @@ namespace VedAstro.Library
             }
             else if (planetName == PlanetName.Rahu)
             {
-                planet = SwissEph.SE_TRUE_NODE;
+                //set based on user preference
+                planet = Calculate.UseMeanRahuKetu ? SwissEph.SE_MEAN_NODE : SwissEph.SE_TRUE_NODE;
             }
             else if (planetName == PlanetName.Ketu)
             {
+                //NOTES:
                 //the true node, which is the point where the Moon's orbit crosses the ecliptic plane
-                //todo can also be SE_OSCU_APOG, but no need to add 180
-                planet = SwissEph.SE_TRUE_NODE; //ask for rahu values then add 180 later
+                //can also be SE_OSCU_APOG, but no need to add 180
+
+                //set based on user preference, ask for rahu values then add 180 later
+                planet = Calculate.UseMeanRahuKetu ? SwissEph.SE_MEAN_NODE : SwissEph.SE_TRUE_NODE;
             }
 
             return planet;
@@ -1928,7 +1932,7 @@ namespace VedAstro.Library
         {
             int planet = 0;
 
-            //make small case, best reliablility
+            //make small case, best reliability
             planetName = planetName.ToLower();
 
             //Convert PlanetName to SE_PLANET type
@@ -1960,12 +1964,17 @@ namespace VedAstro.Library
             }
             else if (planetName == "Rahu")
             {
-                planet = SwissEph.SE_MEAN_NODE;
+                //set based on user preference
+                planet = Calculate.UseMeanRahuKetu ? SwissEph.SE_MEAN_NODE : SwissEph.SE_TRUE_NODE;
             }
             else if (planetName == "Ketu")
             {
-                //TODO CHECK HERE + REF BV RAMAN ADD 180 TO ketu to get rahu
-                planet = SwissEph.SE_MEAN_NODE;
+                //NOTES:
+                //the true node, which is the point where the Moon's orbit crosses the ecliptic plane
+                //can also be SE_OSCU_APOG, but no need to add 180
+
+                //set based on user preference, ask for rahu values then add 180 later
+                planet = Calculate.UseMeanRahuKetu ? SwissEph.SE_MEAN_NODE : SwissEph.SE_TRUE_NODE;
             }
 
             return planet;

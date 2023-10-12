@@ -121,7 +121,7 @@ namespace VedAstro.Library
 
         }
 
-        public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData)
+        private static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData)
         {
             WebResult<XElement> returnVal;
 

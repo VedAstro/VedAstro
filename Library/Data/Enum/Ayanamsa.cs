@@ -63,11 +63,21 @@
         /// </summary>
 
         [AdvancedOption]
+        FAGAN_BRADLEY = 0,
+        [AdvancedOption]
+        LAHIRI = 1,
+        [AdvancedOption]
         DELUCE = 2,
+        [AdvancedOption]
+        RAMAN = 3,
         [AdvancedOption]
         USHASHASHI = 4,
         [AdvancedOption]
+        KRISHNAMURTI = 5,
+        [AdvancedOption]
         DJWHAL_KHUL = 6,
+        [AdvancedOption]
+        YUKTESHWAR = 7,
         [AdvancedOption]
         JN_BHASIN = 8,
         [AdvancedOption]

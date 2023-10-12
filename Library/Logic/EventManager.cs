@@ -467,7 +467,7 @@ namespace VedAstro.Library
 
         public static List<Event> CalculateEventsForTag(double eventsPrecision, Time startTime, Time endTime, GeoLocation geoLocation, Person person, EventTag tag)
         {
-
+            
             //get all event data/types which has the inputed tag (FILTER)
             var eventDataListFiltered = EventManager.GetEventDataListByTag(tag);
 

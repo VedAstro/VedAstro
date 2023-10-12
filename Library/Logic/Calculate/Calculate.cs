@@ -1147,10 +1147,10 @@ namespace VedAstro.Library
                 pathalaLagna = pathalaLagna.Expunge360();
 
                 //assign angular house middle longitudes, houses 1,4,7,10
-                house1MiddleLongitude = udayaLagna;
-                house4MiddleLongitude = pathalaLagna;
-                house7MiddleLongitude = astaLagna;
-                house10MiddleLongitude = madhyaLagna;
+                house1MiddleLongitude = udayaLagna + Angle.FromDegrees(15);
+                house4MiddleLongitude = pathalaLagna + Angle.FromDegrees(15);
+                house7MiddleLongitude = astaLagna + Angle.FromDegrees(15);
+                house10MiddleLongitude = madhyaLagna + Angle.FromDegrees(15);
 
                 //2.0 Get middle longitudes of non-angular houses
                 //2.1 Calculate arcs
@@ -1789,7 +1789,7 @@ namespace VedAstro.Library
 
             //round the raw number to get current navamsa number
             var navamsaNumber = (int)Math.Ceiling(rawNavamsaNumber);
-
+            
             //4.0 Get navamsa sign
             //count from first navamsa sign
             ZodiacName signAtNavamsa = SignCountedFromInputSign(firstNavamsa, navamsaNumber);
@@ -6696,6 +6696,7 @@ namespace VedAstro.Library
             var janmaSign = Calculate.MoonSignName(birthTime);
 
             //get planet sign at input time
+            var planetSignAngle = Calculate.PlanetSignName(planet, currentTime);
             var planetSign = Calculate.PlanetSignName(planet, currentTime).GetSignName();
 
             //count from janma to sign planet is in
@@ -7967,10 +7968,11 @@ namespace VedAstro.Library
             //var birthDasaPlanet = GetConstellationDasaPlanet(risingConstellation.GetConstellationName());
 
             //get time traversed in birth dasa 
-            var timeTraversedInDasa = YearsTraversedInBirthDasa(birthTime, moonConstellation);
+            var timeTraversedInDasa = (float) YearsTraversedInBirthDasa(birthTime, moonConstellation);
 
             //get time from birth to current time (converted to Dasa years ie. 360 days per year)
-            var timeBetween = currentTime.Subtract(birthTime).TotalDays / 360.0;
+            var timeBetween = (float) currentTime.Subtract(birthTime).TotalDays / 361.88;
+            
 
             //combine years traversed at birth and years to current time
             //this is done to easily calculate to current dasa, bhukti & antaram

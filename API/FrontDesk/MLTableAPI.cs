@@ -28,8 +28,7 @@ namespace API
             try
             {
                 //0 : LOG CALL
-                //log ip address, call time and URL
-                var call = await APILogger.Visit(incomingRequest);
+                await APILogger.Visit(incomingRequest);
 
                 //1 : GET DATA OUT 
                 var excelBinary = incomingRequest.Body;
@@ -65,30 +64,17 @@ namespace API
             HttpRequestData incomingRequest)
         {
             //0 : LOG CALL
-            //log ip address, call time and URL
-            var call = APILogger.Visit(incomingRequest);
+            await APILogger.Visit(incomingRequest);
 
             //1 : PREPARE PARAMS DATA
-            //prepare url to call
-            //get data out of call
             var rootJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
 
-            throw new NotImplementedException();
+            //2 : GENERATE TABLE (HEAVY COMPUTE 🚀) 
+            var newMLTable = MLTable.FromJson(rootJson);
 
-            //var url = $"{_api.URL.GetPersonList}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
-            //CachedPersonList = await _api.GetList(url, Person.FromJsonList);
-
-
-            ////2 : GENERATE TABLE (HEAVY COMPUTE 🚀) 
-            //var timeSlices = new List<Time>();
-            //var openApiMetadatas = new List<OpenAPIMetadata>();
-            //var newMLTable = MLTable.FromData(timeSlices, openApiMetadatas);
-
-
-            ////3 : SEND TO CALLER (HTML)
-            //var jsonMLTable = newMLTable.ToJson();
-            //return APITools.PassMessageJson(jsonMLTable, incomingRequest);
-
+            //3 : SEND TO CALLER (HTML)
+            var jsonMLTable = newMLTable.ToJson();
+            return APITools.PassMessageJson(jsonMLTable, incomingRequest);
 
         }
 

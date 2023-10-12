@@ -101,9 +101,14 @@ namespace VedAstro.Library
             return temp;
         }
 
-        public static ChartOptions FromXml(XElement summaryOptionsXml)
+
+        /// <summary>
+        /// returns list selected algo as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
         {
-            throw new NotImplementedException();
+            return Tools.ListToString(SelectedAlgorithm);
         }
     }
 }

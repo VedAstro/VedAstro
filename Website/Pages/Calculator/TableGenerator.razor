@@ -337,70 +337,31 @@
             UploadedFile = file;
 
             //show icon that file is being processed hold tight
-            _jsRuntime.ShowLoading();
+            await _jsRuntime.ShowLoading();
 
             //once updated here, files rows count can be seen by user
             using var ms = new MemoryStream();
             await UploadedFile.OpenReadStream().CopyToAsync(ms);
             _timeList = await AppData.API.MLTable.GetTimeListFromExcel(ms.ToArray());
 
-            //let user know upload success
-            _jsRuntime.Show(uploadFileInfoHolder);
-
-
-            _jsRuntime.HideLoading();
-
-        }
-    }
-
-
-    public async Task<List<DateTimeOffset>> ExtractTimeColumnFromExcel(Stream input)
-    {
-        Console.WriteLine($"File Size : {input.Length}");
-
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set the license context for EPPlus
-        var timeList = new List<DateTimeOffset>();
-        int timeColumnIndex = -1;
-
-        var excelFileStream = new MemoryStream();
-        await input.CopyToAsync(excelFileStream);
-        excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning
-
-        using (var package = new ExcelPackage(excelFileStream))
-        {
-            var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
-                                                            // Start from the second row (index 2) to skip the header
-            for (int rowIndex = 2; rowIndex <= worksheet.Dimension.Rows; rowIndex++)
+            if (_timeList.Any() && _timeList != null)
             {
-                // If we haven't found the time column yet, search for it
-                if (timeColumnIndex == -1)
-                {
-                    for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
-                    {
-                        var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
-                        // If the cell value can be parsed as a Time, this is the time column
-                        if (Time.TryParseStd(cellValue, out _))
-                        {
-                            timeColumnIndex = colIndex;
-                            break;
-                        }
-                    }
-                }
-                // If we've found the time column, add the cell value to the list
-                if (timeColumnIndex != -1)
-                {
-                    var cellValue = worksheet.Cells[rowIndex, timeColumnIndex].Value?.ToString();
-                    if (Time.TryParseStd(cellValue, out var time))
-                    {
-                        timeList.Add(time);
-                    }
-                }
+                //let user know upload success
+                _jsRuntime.Show(uploadFileInfoHolder);
+
+                //now show data column input
+                //NOTE: this is done reduce clutter until last needed (better UX, sweet heart's idea)
+                _DataColumnSelector.Show();
+
+                _jsRuntime.HideLoading();
             }
+            else
+            {
+                //mark invalid & alert user
+                await _jsRuntime.ShowAlert("error", AlertText.FailedFileProcess, true);
+            }
+
         }
-
-        Console.WriteLine($"Rows Found : {timeList.Count}");
-
-        return timeList;
     }
 
 
@@ -458,7 +419,6 @@
         _jsRuntime.PlayDoneSound();
         await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
     }
-
 
     private async Task OnClickDownloadExcel()
     {

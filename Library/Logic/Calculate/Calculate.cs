@@ -5114,7 +5114,7 @@ namespace VedAstro.Library
             {
 
                 //This would request sidereal positions calculated using the Swiss Ephemeris.
-                int iflag = SwissEph.SEFLG_SIDEREAL;  //SEFLG_SIDEREAL | SEFLG_SWIEPH; //+ SwissEph.SEFLG_SPEED;
+                int iflag = SwissEph.SEFLG_SIDEREAL | SwissEph.SEFLG_SWIEPH; // SEFLG_SIDEREAL | ; //+ SwissEph.SEFLG_SPEED;
                 double[] results = new double[6];
                 string err_msg = "";
                 double jul_day_ET;

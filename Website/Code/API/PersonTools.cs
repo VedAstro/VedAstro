@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 
-namespace Library.API;
+namespace Website;
 
 public class PersonTools
 {
@@ -35,8 +35,7 @@ public class PersonTools
 
         //no wait for speed
         //we get call status and id to get data from when ready
-        Tools.ReadServer<JObject>(url);
-
+        Tools.ReadServerRaw<JObject>(url);
 
         //STAGE 2 : get person list for public, example profiles
         //tell API to get started
@@ -44,7 +43,7 @@ public class PersonTools
 
         //no wait for speed
         //API gives a url to check on poll fo results
-        Tools.ReadServer<JObject>(url);
+        Tools.ReadServerRaw<JObject>(url);
 
     }
 
@@ -157,7 +156,7 @@ public class PersonTools
     public async Task<Person> GetPerson(string personId)
     {
         var url = $"{_api.URL.GetPerson}/PersonId/{personId}";
-        var result = await Tools.ReadServer<JObject>(url);
+        var result = await Tools.ReadServerRaw<JObject>(url);
 
         //get parsed payload from raw result
         var person = VedAstroAPI.GetPayload(result, Person.FromJson);

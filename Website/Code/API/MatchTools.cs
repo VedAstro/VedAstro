@@ -1,6 +1,6 @@
 ﻿using VedAstro.Library;
 
-namespace Library.API;
+namespace Website;
 
 public class MatchTools
 {

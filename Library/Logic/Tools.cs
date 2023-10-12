@@ -2798,21 +2798,30 @@ namespace VedAstro.Library
             //}
         }
 
-        public static async Task<JObject> ReadServer(string receiverAddress)
+
+        /// <summary>
+        /// No parsing direct from horses mouth
+        /// </summary>
+        public static async Task<T> ReadServerRaw<T>(string receiverAddress)
         {
-            //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
-
-            //tell sender to wait for complete reply before exiting
             var waitForContent = HttpCompletionOption.ResponseContentRead;
-
-            //send the data on its way
             using var client = new HttpClient();
+            client.Timeout = Timeout.InfiniteTimeSpan;
             var response = await client.SendAsync(httpRequestMessage, waitForContent);
-
-            //return the raw reply to caller
             var dataReturned = await response.Content.ReadAsStringAsync();
-            return JObject.Parse(dataReturned);
+            if (typeof(T) == typeof(string))
+            {
+                return (T)(object)dataReturned;
+            }
+            else if (typeof(T) == typeof(JObject))
+            {
+                return (T)(object)JObject.Parse(dataReturned);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported type parameter");
+            }
         }
 
 

@@ -68,11 +68,14 @@ namespace VedAstro.Library
         /// </summary>
         public bool IsEventOccuring(Time time)
         {
+
             //do calculation for this event to get prediction data
             var predictionData = this.HoroscopeCalculator(time);
 
+
             //extract the data out and store it for later use
             //is prediction occuring
+            
             bool isEventOccuring = predictionData.Occuring;
 
             //store planets, houses & signs related to result

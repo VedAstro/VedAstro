@@ -47,6 +47,13 @@ namespace VedAstro.Library
         /// </summary>
         public static bool UseVedhankaInGochara { get; set; } = true;
 
+        /// <summary>
+        /// Defaults to mean Rahu & Ketu positions for a more even value,
+        /// set to false to use true node.
+        /// Correlates to Swiss Ephemeris, SE_TRUE_NODE & SE_MEAN_NODE
+        /// </summary>
+        public static bool UseMeanRahuKetu { get; set; } = true;
+
         #endregion
 
         //----------------------------------------CORE CODE---------------------------------------------
@@ -5148,7 +5155,6 @@ namespace VedAstro.Library
 
 
         }
-
 
         /// <summary>
         /// find time of next lunar eclipse UTC time

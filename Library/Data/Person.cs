@@ -459,7 +459,6 @@ namespace VedAstro.Library
 
             try
             {
-
                 var id = personInput["PersonId"].Value<string>();
                 var name = personInput["Name"].Value<string>();
                 var notes = personInput["Notes"].Value<string>();
@@ -474,15 +473,9 @@ namespace VedAstro.Library
             }
             catch (Exception e)
             {
-#if DEBUG
-                Console.WriteLine($"PERSON XML INVALID : {personInput["PersonId"].Value<string>()}");
-                throw;
-#endif
-#if RELEASE
-                //todo if in the wild log it to server
-                throw;
-#endif
+                LibLogger.Error($"Failed to parse Person:\n{personInput.ToString()}");
 
+                return Person.Empty;
             }
 
         }
@@ -493,7 +486,6 @@ namespace VedAstro.Library
         /// <param name="personXmlList"></param>
         /// <returns></returns>
         public static List<Person> FromXml(IEnumerable<XElement> personXmlList) => personXmlList.Select(personXml => Person.FromXml(personXml)).ToList();
-
 
         /// <summary>
         /// Given Time instance in URL form will convert to instance

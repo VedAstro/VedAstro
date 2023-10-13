@@ -20,6 +20,7 @@ namespace VedAstro.Library
     /// </summary>
     public class MLTable
     {
+        public static readonly MLTable Empty = new MLTable(new List<MLTableRow>(), new List<OpenAPIMetadata>());
 
         private MLTable(List<MLTableRow> rowData, List<OpenAPIMetadata> columnData)
         {
@@ -28,9 +29,13 @@ namespace VedAstro.Library
         }
 
         private List<MLTableRow> RowData { get; set; } = new List<MLTableRow>();
+
+        private List<Time> TimeList { get; set; } = new List<Time>();
+
         private List<OpenAPIMetadata?> ColumnData { get; set; } = new List<OpenAPIMetadata>();
 
         public int RowsCount => RowData.Count;
+
         public int ColumnsCount => ColumnData.Count;
 
         /// <summary>
@@ -79,14 +84,14 @@ namespace VedAstro.Library
             var rowData = new List<MLTableRow>();
 
             //using time as 1 column generate the other data columns
-            foreach (var _time in timeSlices)
+            foreach (var time in timeSlices)
             {
                 var finalResultList = new List<APIFunctionResult>();
                 foreach (var metaInfo in columnData)
                 {
                     //get the planet or house selected by user in each individual data point packet
-                    List<object> param = metaInfo.SelectedParams.ToList(); //clone else will effect underlying list
-                    param.Add((object)_time); //time injected from different component
+                    var param = metaInfo.SelectedParams.ToList(); //clone else will effect underlying list
+                    param.Add((object)time); //time injected from different component
 
                     //calculate together all the parameters given by user (heavy computation)
                     var wrapped = new List<MethodInfo>() { metaInfo.MethodInfo };
@@ -110,7 +115,7 @@ namespace VedAstro.Library
                 }
 
                 //add row to table
-                rowData.Add(new MLTableRow(_time, finalResultList));
+                rowData.Add(new MLTableRow(time, finalResultList));
 
             }
 
@@ -283,12 +288,35 @@ namespace VedAstro.Library
         public JToken ToJson() => Tools.ConvertHtmlTableToJson(this.ToHtml());
 
 
-        public static MLTable FromJson(JToken tableInput) => MLTable.FromHtml(Tools.ConvertJsonToHtmlTable(tableInput));
-
-        private static MLTable FromHtml(string convertJsonToHtmlTable)
+        /// <summary>
+        /// ML Table data in JSON form
+        /// </summary>
+        public static MLTable FromJson(JToken tableInput)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                //extract out the time list
+                var timeListJson = tableInput[nameof(TimeList)];
+                var timeList = Time.FromJsonList(timeListJson);
+
+                //extract out the column data
+                var columnDataJson = tableInput[nameof(ColumnData)];
+                var openApiMetadata = OpenAPIMetadata.FromJsonList(columnDataJson);
+
+                var parsed = MLTable.FromData(timeList, openApiMetadata);
+
+                return parsed;
+            }
+            catch (Exception e)
+            {
+                LibLogger.Error(e,"Failed to parse MLTable");
+
+                return MLTable.Empty;
+            }
+
         }
+
     }
 
 }

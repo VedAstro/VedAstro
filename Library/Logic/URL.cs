@@ -42,6 +42,7 @@ public class URL
 
         //ML TABLE
         GetMLTimeListFromExcel = ApiUrl + "/GetMLTimeListFromExcel";
+        GenerateMLTable = ApiUrl + "/GenerateMLTable";
 
         //PERSON
         GetPersonList = ApiUrl + "/GetPersonList";
@@ -130,6 +131,7 @@ public class URL
     /// </summary>
     public readonly string GetCallData;
     public readonly string GetMLTimeListFromExcel;
+    public readonly string GenerateMLTable;
     public readonly string GetPersonList;
     public readonly string GetPerson;
     public readonly string GetPersonImage;

@@ -40,49 +40,6 @@ namespace VedAstro.Library
         }
 
 
-        public XElement ToXml()
-        {
-            var chartXml = new XElement("Chart");
-            var chartIdXml = new XElement("ChartId", ChartId);
-            var contentSvg = new XElement("ContentSvg", ContentSvg);
-            var personId = new XElement("PersonId", Person.Id);
-            var daysPerPixel = new XElement("DaysPerPixel", DaysPerPixel);
-            var eventTagListXml = EventTagExtensions.ToXmlList(EventTagList);
-
-            chartXml.Add(
-                chartIdXml,
-                personId,
-                daysPerPixel,
-                eventTagListXml,
-                new XElement("StartTime", TimeRange.start.ToXml()),
-                new XElement("EndTime", TimeRange.end.ToXml()),
-                contentSvg);
-
-            return chartXml;
-        }
-
-        /// <summary>
-        /// Data coming in
-        /// </summary>
-        public static async Task<EventsChart> FromXml(XElement personXml)
-        {
-            var personId = personXml.Element("PersonId")?.Value;
-            var foundPerson = await Tools.GetPersonById(personId);
-            var chartId = personXml.Element("ChartId")?.Value; //if no id tag generate new one
-            var contentSvg = personXml.Element("ContentSvg")?.Value;
-            var eventTagListXml = personXml.Element("EventTagList");
-            var eventTagList = EventTagExtensions.FromXmlList(eventTagListXml);
-            var startTimeXml = personXml.Element("StartTime").Element("Time");
-            var endTimeXml = personXml.Element("EndTime").Element("Time");
-            var daysPerPixel = double.Parse(personXml.Element("DaysPerPixel")?.Value);
-            var optionsXml = personXml.Element("StartTime");
-            var options = ChartOptions.FromXml(optionsXml);
-
-            var timeRange = new TimeRange(Time.FromXml(startTimeXml), Time.FromXml(endTimeXml));
-            var parsedPerson = new EventsChart(chartId, contentSvg, foundPerson, timeRange, daysPerPixel, eventTagList, options);
-
-            return parsedPerson;
-        }
 
         /// <summary>
         /// Gets a nice identifiable name for this chart to show user 
@@ -98,17 +55,23 @@ namespace VedAstro.Library
 
         /// <summary>
         /// create a unique signature to identify all future calls that is exactly alike
+        /// name of data, designed for human eyes
         /// </summary>
         public string GetEventsChartSignature()
         {
-            //convert events into 1 signature
-            var eventTagsHash = 0;
-            foreach (var eventTag in this.EventTagList) { eventTagsHash += (int)eventTag; }
-
             //use ticks because can revert back from there
-            var endTime = TimeRange.end.GetStdDateTimeOffset().Ticks;
-            var startTime = TimeRange.start.GetStdDateTimeOffset().Ticks;
-            var dataSignature = $"{this.Person.Id}-{startTime}-{endTime}-{this.DaysPerPixel}-{eventTagsHash}";
+            var endTime = TimeRange.end.StdDateMonthYearText;
+            var startTime = TimeRange.start.StdDateMonthYearText;
+
+            //include all data into the name of the cache,
+            //so easy to ID en mass and genocide them when needed
+            var dataSignature = $"{nameof(EventsChart)}-" +
+                                $"{this.Person.Id}-" +
+                                $"{startTime}-{endTime}-" +
+                                $"{this.DaysPerPixel}-" +
+                                $"{(Ayanamsa)Calculate.Ayanamsa}-" +
+                                $"{Tools.ListToString(EventTagList)}-" +
+                                $"{Options}";
 
             return dataSignature;
         }
@@ -193,6 +156,16 @@ namespace VedAstro.Library
             var daysPerPixel = double.Parse(parts[12]);
             var eventTags = EventTagExtensions.FromString(parts[13]);
             var summaryOptions = ChartOptions.FromUrl(parts[14]);
+
+            //if custom ayanamsa specified
+            var isCustomAya = url.Contains(nameof(Ayanamsa)); //check if ayanamsa specified anywhere
+            if (isCustomAya)
+            {
+                var ayaRaw = $"{parts[^2]}/{parts[^1]}"; //get last since that will be ayanamsa in text or number int
+                var enumFromUrl = await Tools.EnumFromUrl(ayaRaw);
+                Calculate.Ayanamsa = (int)enumFromUrl;
+            }
+
 
             //a new chart is born
             var newChartId = Tools.GenerateId();

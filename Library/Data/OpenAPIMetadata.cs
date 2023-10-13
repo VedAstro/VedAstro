@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library;
 
@@ -66,6 +67,8 @@ namespace VedAstro.Library;
 /// </summary>
 public class OpenAPIMetadata
 {
+    public static readonly OpenAPIMetadata Empty = new OpenAPIMetadata("Empty", "Empty", "Empty");
+
     private PlanetName _selectedPlanet = PlanetName.Sun; //set default so dropdown has something on load
 
     /// <summary>
@@ -252,4 +255,55 @@ public class OpenAPIMetadata
 
         return converted;
     }
+
+    /// <summary>
+    /// Given a list of OpenAPIMeta wrapped in json will convert to instance
+    /// used for transferring between server & client
+    /// </summary>
+    public static List<OpenAPIMetadata> FromJsonList(JToken columnDataList)
+    {
+        //if null empty list please
+        if (columnDataList == null) { return new List<OpenAPIMetadata>(); }
+
+        var returnList = new List<OpenAPIMetadata>();
+
+        foreach (var json in columnDataList)
+        {
+            returnList.Add(OpenAPIMetadata.FromJson(json));
+        }
+
+        return returnList;
+    }
+
+    public static OpenAPIMetadata FromJson(JToken timeJson)
+    {
+        try
+        {
+            var signatureString = timeJson["Signature"].Value<string>();
+            var descriptionString = timeJson["Description"].Value<string>();
+            var exampleOutputString = timeJson["ExampleOutput"].Value<string>();
+
+            var parsedTime = new OpenAPIMetadata(signatureString, descriptionString, exampleOutputString);
+
+            return parsedTime;
+
+        }
+        catch (Exception e)
+        {
+            LibLogger.Error(e, "Failed to Parse");
+            return OpenAPIMetadata.Empty;
+        }
+    }
+
+    public JToken ToJson()
+    {
+        var temp = new JObject();
+        temp[nameof(this.Signature)] = this.Signature;
+        temp[nameof(this.Description)] = this.Description;
+        temp[nameof(this.ExampleOutput)] = this.ExampleOutput;
+
+        return temp;
+    }
+
+
 }

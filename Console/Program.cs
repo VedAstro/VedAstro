@@ -16,6 +16,9 @@ namespace VedAstro.Console
 
             Time timeSample = new("00:00 30/10/2023 +05:30", GeoLocation.Bangalore);
 
+            var x = Calculate.AllPlanetData(PlanetName.Moon, timeSample);
+
+
             //do the test
             var testResult = Calculate.AyanamsaFinder(PlanetName.Sun, ConstellationName.Swathi, 3, timeSample);
             var testResult1 = Calculate.AyanamsaFinder(PlanetName.Moon, ConstellationName.Rohini, 3, timeSample);

@@ -295,7 +295,7 @@ namespace API
         {
             var apiKey = Secrets.GoogleAPIKey;
             var urlReverse = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={apiKey}";
-            var resultString2 = await Tools.WriteServer(HttpMethod.Post, urlReverse);
+            var resultString2 = await Tools.WriteServer<object>(HttpMethod.Post, urlReverse);
 
             var resultsJson = resultString2["results"][0];
 

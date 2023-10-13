@@ -72,6 +72,7 @@
 
         //ACCOUNT
         public const string UserAccount = "Account/";
+        public const string UserAccountGuest = "Account/Guest";
         public const string Login = "Account/Login";
         public const string SavedCharts = "Account/SavedCharts";
         public const string PersonList = "Account/Person/List";

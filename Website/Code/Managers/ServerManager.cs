@@ -148,7 +148,7 @@ namespace Website
             //send data to URL, using JS for reliability & speed
             //also if call does not respond in time, we replay the call over & over
             string receivedData;
-            try { receivedData = await Tools.TaskWithTimeoutAndException(WebsiteTools.Post(apiUrl, xmlData), TimeSpan.FromSeconds(timeout)); }
+            try { receivedData = await Tools.TaskWithTimeoutAndException(Post(apiUrl, xmlData.ToString(SaveOptions.DisableFormatting)), TimeSpan.FromSeconds(timeout)); }
 
             //if fail replay and log it
             catch (Exception e)
@@ -183,6 +183,17 @@ namespace Website
             //ACT 4:
             return returnVal;
         }
+
+
+        public static async Task<string> Post(string apiUrl, string stringData)
+        {
+            //this call will take you to NetworkThread.js
+            var rawPayload = await AppData.JsRuntime.InvokeAsync<string>(JS.postWrapper, apiUrl, stringData);
+
+            //todo proper checking of status needed
+            return rawPayload;
+        }
+
         //public static async Task<WebResult<JToken>> WriteToServerJsonReply(string apiUrl, JObject xmlData, int timeout = 60)
         //{
         //    //prepare the data to be sent

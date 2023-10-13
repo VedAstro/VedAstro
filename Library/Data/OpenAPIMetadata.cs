@@ -65,7 +65,7 @@ namespace VedAstro.Library;
 /// <summary>
 /// static meta data for a given method in Open API
 /// </summary>
-public class OpenAPIMetadata
+public class OpenAPIMetadata : IToJson
 {
     public static readonly OpenAPIMetadata Empty = new OpenAPIMetadata("Empty", "Empty", "Empty");
 
@@ -283,7 +283,38 @@ public class OpenAPIMetadata
             var descriptionString = timeJson["Description"].Value<string>();
             var exampleOutputString = timeJson["ExampleOutput"].Value<string>();
 
+            //# SELECTED PARAMS
+            var selectedParamsString = timeJson["SelectedParams"];
             var parsedTime = new OpenAPIMetadata(signatureString, descriptionString, exampleOutputString);
+            var parsedParamList = new List<object>();
+            foreach (var xx in selectedParamsString)
+            {
+                //get type name
+                var jProperty = (JProperty)xx;
+                var jPropertyName = jProperty.Name;
+
+                //dig deep do take out value
+                var value = jProperty.Value.Value<string>();
+
+                //based on type name, recreate instance
+                switch (jPropertyName)
+                {
+                    case "PlanetName":
+                        parsedParamList.Add(PlanetName.Parse(value));
+                        break;
+                    case "HouseName":
+                        parsedParamList.Add(Enum.Parse<HouseName>(value));
+                        break;
+
+                }
+            }
+
+            parsedTime.SelectedParams = parsedParamList;
+
+            //# METHOD INFO
+            var methodInfoJson = (JObject)timeJson["MethodInfo"];
+            var vv = Tools.MethodInfoFromJson(methodInfoJson);
+            parsedTime.MethodInfo = vv;
 
             return parsedTime;
 
@@ -295,12 +326,32 @@ public class OpenAPIMetadata
         }
     }
 
-    public JToken ToJson()
+    public JObject ToJson()
     {
         var temp = new JObject();
         temp[nameof(this.Signature)] = this.Signature;
         temp[nameof(this.Description)] = this.Description;
         temp[nameof(this.ExampleOutput)] = this.ExampleOutput;
+
+        //# SELECTED PARAMS
+
+        //place each property in nicely in Json
+        var package = new JObject();
+        foreach (var xx in this.SelectedParams)
+        {
+            var typeNameStr = xx.GetType().Name;
+            var valueStr = xx.ToString();
+            var yy = new JProperty(typeNameStr, valueStr);
+            package.Add(yy);
+        }
+
+        temp[nameof(this.SelectedParams)] = package;
+
+
+        //# METHOD INFO
+        temp[nameof(this.MethodInfo)] = this.MethodInfo.ToJson();
+
+
 
         return temp;
     }

@@ -282,18 +282,6 @@ namespace VedAstro.Library
 
         //------------------------- METHODS TO SEND ACROSS THE VAST INTERNATIONAL NETWORKS ---------------------------------
 
-        /// <summary>
-        /// converts the table data into json version for transport
-        /// </summary>
-        //public JToken ToJson() => Tools.ConvertHtmlTableToJson(this.ToHtml());
-        public JToken ToJson()
-        {
-            var temp = new JObject();
-            temp[nameof(TimeList)] = Tools.ListToJson(TimeList);
-            temp[nameof(ColumnData)] = Tools.ListToJson(ColumnData);
-
-            return temp;
-        }
 
 
 

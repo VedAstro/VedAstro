@@ -37,6 +37,8 @@ namespace VedAstro.Library
         /// </summary>
         public const string DateTimeFormat = "HH:mm dd/MM/yyyy zzz"; //define date time format
 
+        public const string DateTimeFormatTimezone = "zzz";
+
         /// <summary>
         /// HH:mm dd/MM/yyyy
         /// </summary>
@@ -125,8 +127,36 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Gets the Time now in current system, needs location
+        /// Note: Offset of system is used not location
         /// </summary>
-        public static Time Now(GeoLocation geoLocation) => new Time(DateTimeOffset.Now, geoLocation);
+        public static Time NowSystem(GeoLocation geoLocation)
+        {
+            //get current date time
+            var dateTimeOffset = DateTimeOffset.Now;
+
+            return new Time(dateTimeOffset, geoLocation);
+        }
+
+
+        /// <summary>
+        /// Gets the Time now at given location uses api to get correct offset
+        /// </summary>
+        public static async Task<Time> Now(GeoLocation geoLocation)
+        {
+            //get current date time
+            var dateTimeOffset = DateTimeOffset.UtcNow;
+
+            //get standard offset at location
+            var locationOffset = await Tools.GetTimezoneOffsetApi(geoLocation, dateTimeOffset);
+
+            DateTimeOffset temp = DateTimeOffset.ParseExact(locationOffset.Payload, Time.DateTimeFormatTimezone, null);
+            TimeSpan timespan = temp.Offset;
+
+            //var timeSpan = TimeSpan.Parse(locationOffset.Payload);
+            var modifiedOffset = dateTimeOffset.ToOffset(timespan);
+
+            return new Time(modifiedOffset, geoLocation);
+        }
 
         public int StdYear() => this.GetStdDateTimeOffset().Year;
 
@@ -271,7 +301,7 @@ namespace VedAstro.Library
         /// </summary>
         /// <returns></returns>
         public readonly string StdTimezoneText => _stdTime.ToString("zzz");
-        
+
         /// <summary>
         /// STD Hour and Minute exp : 14:18
         /// </summary>
@@ -315,18 +345,8 @@ namespace VedAstro.Library
             return difference;
         }
 
-        public string GetLmtDateTimeOffsetText()
-        {
-            //convert internal STD time to LMT
-            var lmtTime = StdToLmt(_stdTime, _geoLocation.Longitude());
-
-            //create LMT time string based on formatting info
-            //note: only explicit statement of format as below works
-            var lmtTimeString = lmtTime.ToString("HH:mm dd/MM/yyyy zzz");
-
-            //return time string caller
-            return lmtTimeString;
-        }
+        public string GetLmtDateTimeOffsetText() => this.GetLmtDateTimeOffset().ToString(Time.DateTimeFormat);
+       
 
         /// <summary>
         /// Check if an inputed STD time string is valid,

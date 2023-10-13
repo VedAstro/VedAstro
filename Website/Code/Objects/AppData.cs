@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Xml.Linq;
-using Library.API;
 using VedAstro.Library;
 using Website.Pages;
 using Website.Pages.Account;
 
 namespace Website
 {
+
     /// <summary>
     /// Static class to hold global site data
     /// </summary>

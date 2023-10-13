@@ -63,19 +63,48 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = nameof(GenerateMLTable))]
             HttpRequestData incomingRequest)
         {
-            //0 : LOG CALL
-            await APILogger.Visit(incomingRequest);
+            try
+            {
 
-            //1 : PREPARE PARAMS DATA
-            var rootJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
+                //0 : LOG CALL
+                await APILogger.Visit(incomingRequest);
 
-            //2 : GENERATE TABLE (HEAVY COMPUTE 🚀) 
-            var newMLTable = MLTable.FromJson(rootJson);
+                //1 : PREPARE PARAMS DATA
+                // Get body as stream
+                incomingRequest.Body.Position = 0;// Reset the position
+                using var reader = new StreamReader(incomingRequest.Body);
+                var jsonText = await reader.ReadToEndAsync();
+                // Parse JSON text
+                var rootJson = JObject.Parse(jsonText);
+                //return parsedJson;
+                //var rootJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
 
-            //3 : SEND TO CALLER (HTML)
-            var jsonMLTable = newMLTable.ToJson();
-            return APITools.PassMessageJson(jsonMLTable, incomingRequest);
+                //2 : GENERATE TABLE (HEAVY COMPUTE 🚀) 
+                //extract out the time list
+                var timeListJson = rootJson["TimeList"];
+                var timeList = Time.FromJsonList(timeListJson);
 
+                //extract out the column data
+                var columnDataJson = rootJson["ColumnData"];
+                Console.WriteLine(columnDataJson);
+                var openApiMetadata = OpenAPIMetadata.FromJsonList(columnDataJson);
+
+                var newMLTable = MLTable.FromData(timeList, openApiMetadata);
+
+
+                //3 : SEND TO CALLER (HTML)
+
+                var jsonMLTable =  new JObject();
+                jsonMLTable["HTML"] = newMLTable.ToHtml();
+                return APITools.PassMessageJson(jsonMLTable, incomingRequest);
+
+            }
+            //if any failure, show error in payload
+            catch (Exception e)
+            {
+                APILogger.Error(e, incomingRequest);
+                return APITools.FailMessageJson(e.Message, incomingRequest);
+            }
         }
 
 

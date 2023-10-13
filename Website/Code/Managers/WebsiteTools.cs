@@ -6,6 +6,7 @@ using System.Threading;
 using Website.Pages;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace Website
 {
@@ -27,14 +28,6 @@ namespace Website
         //░█░█░█ ░█▀▀▀ ─░█── ░█▀▀█ ░█──░█ ░█─░█ ─▀▀▀▄▄ 
         //░█──░█ ░█▄▄▄ ─░█── ░█─░█ ░█▄▄▄█ ░█▄▄▀ ░█▄▄▄█
 
-        public static async Task<string> Post(string apiUrl, XElement xmlData)
-        {
-            //this call will take you to NetworkThread.js
-            var rawPayload = await AppData.JsRuntime.InvokeAsync<string>(JS.postWrapper, apiUrl, xmlData.ToString(SaveOptions.DisableFormatting));
-
-            //todo proper checking of status needed
-            return rawPayload;
-        }
 
 
         /// <summary>
@@ -530,6 +523,7 @@ namespace Website
         /// <summary>
         /// gets debug mode set in browser memory
         /// false = disabled, enabled = true
+        /// defaults to false
         /// </summary>
         public static async Task<bool> GetDebugModeBool()
         {
@@ -541,19 +535,8 @@ namespace Website
 
         public static async Task<string> GetDebugModeText()
         {
-            string selectedDebugMode;
-
-            //only continue if logged in
-            if (!AppData.IsGuestUser)
-            {
-                var debugMode = await WebsiteTools.GetDebugModeBool();
-                selectedDebugMode = debugMode ? "enabled" : "disabled";
-            }
-            //if not logged in then auto set disabled
-            else
-            {
-                selectedDebugMode = "disabled";
-            }
+            var debugMode = await WebsiteTools.GetDebugModeBool();
+            var selectedDebugMode = debugMode ? "enabled" : "disabled";
 
             return selectedDebugMode;
         }
@@ -784,6 +767,103 @@ namespace Website
             var tags = json?.Select(j => j["name"]?.ToString()).ToList();
             return tags ?? new List<string> { "0000-0000-stable" }; //mean no tags found
         }
+
+
+       
+
+        /// <summary>
+        /// only give response if header says ok
+        /// defaults to get, but can be changed to any
+        /// </summary>
+        public static async Task<JToken?> ReadOnlyIfPassJSJson(string receiverAddress, IJSRuntime jsRuntime, string callMethod = "GET")
+        {
+            //this call will take you to NetworkThread.js
+            //todo handle empty response, and move JS file to API.Library
+            var rawPayloadStr = await jsRuntime.InvokeAsync<JsonElement>("Interop.ReadOnlyIfPassJson", receiverAddress, callMethod);
+            var status = rawPayloadStr.GetProperty("Status").GetString();
+            var payload = rawPayloadStr.GetProperty("Payload").GetString() ?? "{}";
+
+
+            var isPass = status == "Pass";
+            //var payload = rawPayload["Payload"]?.Value<JToken>() ?? new JObject();
+            if (isPass)
+            {
+                var rawPayload = JToken.Parse(payload);
+
+                //return the raw reply to caller
+                return rawPayload;
+
+            }
+
+            //if anything but pass, don't look inside just say nothing
+            return null;
+
+        }
+
+
+        /// <summary>
+        /// give null data to send to get auto use GET instead of POST done by JS side
+        /// </summary>
+        public static async Task<string?> ReadOnlyIfPassJSString(string receiverUrl, string? dataToSend, IJSRuntime jsRuntime)
+        {
+            //holds control till get
+            //more efficient than passing control back and form Blazor and JS
+            var rawPayloadStr = await jsRuntime.InvokeAsync<string?>("Interop.ReadOnlyIfPassString", receiverUrl, dataToSend);
+
+            return rawPayloadStr;
+        }
+
+
+
+        public static async Task<JToken> WriteServer(HttpMethod method, string receiverAddress, JToken? payloadJson = null)
+        {
+
+            //prepare the data to be sent
+            var httpRequestMessage = new HttpRequestMessage(method, receiverAddress);
+
+            //tell sender to wait for complete reply before exiting
+            var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+            //add in payload if specified
+            if (payloadJson != null) { httpRequestMessage.Content = VedAstro.Library.Tools.JsontoHttpContent(payloadJson); }
+
+            //send the data on its way (wait forever no timeout)
+            using var client = new HttpClient();
+            client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
+
+            //send the data on its way
+            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+            //return the raw reply to caller
+            var dataReturned = await response.Content.ReadAsStringAsync();
+
+            //return data as JSON as expected from API 
+            return JObject.Parse(dataReturned);
+        }
+
+
+        /// <summary>
+        /// Send file will receive JSon list
+        /// </summary>
+        public static async Task<JToken> WriteServer(HttpMethod method, string receiverAddress, byte[] payloadFile)
+        {
+            //prepare the data to be sent
+            var httpRequestMessage = new HttpRequestMessage(method, receiverAddress);
+            //tell sender to wait for complete reply before exiting
+            var waitForContent = HttpCompletionOption.ResponseContentRead;
+            //add in payload if specified
+            httpRequestMessage.Content = new ByteArrayContent(payloadFile);
+            //send the data on its way (wait forever no timeout)
+            using var client = new HttpClient();
+            client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
+            //send the data on its way
+            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+            //return the raw reply to caller
+            var dataReturned = await response.Content.ReadAsStringAsync();
+            //return data as JSON as expected from API 
+            return JObject.Parse(dataReturned);
+        }
+
 
     }
 }

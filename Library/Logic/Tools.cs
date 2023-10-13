@@ -47,6 +47,38 @@ namespace VedAstro.Library
     /// </summary>
     public static class Tools
     {
+        /// <summary>
+        /// public static string ToJson(this MethodInfo methodInfo)
+        /// </summary>
+        /// <param name="methodInfo"></param>
+        /// <returns></returns>
+        public static JObject ToJson(this MethodInfo methodInfo)
+        {
+            var jObject = new JObject
+            {
+                ["Name"] = methodInfo.Name,
+                ["DeclaringType"] = methodInfo.DeclaringType?.FullName,
+                ["Parameters"] = new JArray(methodInfo.GetParameters().Select(p => new JObject
+                {
+                    ["Name"] = p.Name,
+                    ["ParameterType"] = p.ParameterType.FullName
+                }))
+            };
+            return jObject;
+        }
+
+        // public static MethodInfo FromJson(this MethodInfo methodInfo, JObject jsonInput)
+        public static MethodInfo MethodInfoFromJson(JObject jObject)
+        {
+            var methodName = (string)jObject["Name"];
+            var declaringType = Type.GetType((string)jObject["DeclaringType"]);
+            var parameters = ((JArray)jObject["Parameters"]).Select(jt => Type.GetType((string)jt["ParameterType"])).ToArray();
+            var methodInfo = declaringType?.GetMethod(methodName, parameters);
+            return methodInfo;
+        }
+        
+
+
 
         /// <summary>
         /// Converts a list of TableRow aka a full ML Data Table into CSV string 

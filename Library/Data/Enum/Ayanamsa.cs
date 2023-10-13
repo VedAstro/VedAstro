@@ -10,12 +10,12 @@
         /// Chitra Paksha Ayanamsa, and it has been adopted by
         /// the Indian government for official purposes. 
         /// </summary>
-        TraditionalLahiri = 1,
+        //TraditionalLahiri = 1,
 
         /// <summary>
         /// 
         /// </summary>
-        ChitrapakshaLahiri = 25,
+        ChitrapakshaLahiri = 1,
 
         /// <summary>
         /// Krishnamurti: This is another popular ayanamsa in Vedic astrology, especially among the followers of the Krishnamurti Paddhati (KP) system. It is based on the position of the star Ashwini at 0 degrees Aries, as proposed by K.S. Krishnamurti.

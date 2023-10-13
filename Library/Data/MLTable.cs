@@ -285,37 +285,17 @@ namespace VedAstro.Library
         /// <summary>
         /// converts the table data into json version for transport
         /// </summary>
-        public JToken ToJson() => Tools.ConvertHtmlTableToJson(this.ToHtml());
-
-
-        /// <summary>
-        /// ML Table data in JSON form
-        /// </summary>
-        public static MLTable FromJson(JToken tableInput)
+        //public JToken ToJson() => Tools.ConvertHtmlTableToJson(this.ToHtml());
+        public JToken ToJson()
         {
+            var temp = new JObject();
+            temp[nameof(TimeList)] = Tools.ListToJson(TimeList);
+            temp[nameof(ColumnData)] = Tools.ListToJson(ColumnData);
 
-            try
-            {
-                //extract out the time list
-                var timeListJson = tableInput[nameof(TimeList)];
-                var timeList = Time.FromJsonList(timeListJson);
-
-                //extract out the column data
-                var columnDataJson = tableInput[nameof(ColumnData)];
-                var openApiMetadata = OpenAPIMetadata.FromJsonList(columnDataJson);
-
-                var parsed = MLTable.FromData(timeList, openApiMetadata);
-
-                return parsed;
-            }
-            catch (Exception e)
-            {
-                LibLogger.Error(e,"Failed to parse MLTable");
-
-                return MLTable.Empty;
-            }
-
+            return temp;
         }
+
+
 
     }
 

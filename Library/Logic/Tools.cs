@@ -31,6 +31,7 @@ using static Azure.Core.HttpHeader;
 using Newtonsoft.Json.Linq;
 using HtmlAgilityPack;
 using System.Collections.Generic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 
@@ -1386,20 +1387,30 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<WebResult<string>> GetTimezoneOffsetApi(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
-            //get location data from VedAstro API
-            var timePackage = new Time(timeAtLocation, geoLocation);
-            var url = URL.GeoLocationToTimezoneAPIStable + timePackage.ToUrl();
-            var webResult = await Tools.ReadFromServerXmlReply(url);
 
-            //if fail to make call, end here
-            if (!webResult.IsPass) { return new WebResult<string>(false, ""); }
+            try
+            {
+                //get location data from VedAstro API
+                var timePackage = new Time(timeAtLocation, geoLocation);
+                var url = URL.GeoLocationToTimezoneAPIStable + timePackage.ToUrl();
+                var webResult = await Tools.ReadFromServerXmlReply(url);
 
-            //if success, get the reply data out
-            var data = webResult.Payload.Value;
+                //if fail to make call, end here
+                if (!webResult.IsPass) { return new WebResult<string>(false, ""); }
 
-            //return to caller pass
-            return new WebResult<string>(true, data);
+                //if success, get the reply data out
+                var data = webResult.Payload.Value;
 
+                //return to caller pass
+                return new WebResult<string>(true, data);
+
+            }
+            catch (Exception e)
+            {
+                LibLogger.Error(e);
+                //return to caller pass
+                return new WebResult<string>(false, "");
+            }
         }
 
         /// <summary>
@@ -1759,7 +1770,7 @@ namespace VedAstro.Library
             catch (Exception e)
             {
                 //enum value could is a number
-                parsedZodiac = double.Parse(enumValue); 
+                parsedZodiac = double.Parse(enumValue);
             }
 
             return parsedZodiac;
@@ -2597,14 +2608,14 @@ namespace VedAstro.Library
                     AppendDictionary(sb, dictPConstellation);
                     break;
                 case Dictionary<PlanetName, Dictionary<ZodiacName, int>> dictPDZ:
-                {
-                    foreach (var kv in dictPDZ)
                     {
-                        sb.Append($"{kv.Key}: {AnyToString(kv.Value)}, ");
-                    }
+                        foreach (var kv in dictPDZ)
+                        {
+                            sb.Append($"{kv.Key}: {AnyToString(kv.Value)}, ");
+                        }
 
-                    break;
-                }
+                        break;
+                    }
                 case Dictionary<ZodiacName, int> dictZI:
                     AppendDictionary(sb, dictZI);
                     break;
@@ -2837,10 +2848,10 @@ namespace VedAstro.Library
         {
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(method, receiverAddress);
-            
+
             //tell sender to wait for complete reply before exiting
             var waitForContent = HttpCompletionOption.ResponseContentRead;
-            
+
             //add in payload if specified
             if (payload != null)
             {
@@ -2857,17 +2868,17 @@ namespace VedAstro.Library
                     throw new ArgumentException("Payload must be either a JToken or a byte array.", nameof(payload));
                 }
             }
-            
+
             //send the data on its way (wait forever no timeout)
             using var client = new HttpClient();
             client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
-            
+
             //send the data on its way
             var response = await client.SendAsync(httpRequestMessage, waitForContent);
-            
+
             //return the raw reply to caller
             var dataReturned = await response.Content.ReadAsStringAsync();
-            
+
             //return data as JSON as expected from API 
             return JObject.Parse(dataReturned);
         }

@@ -33,6 +33,11 @@ using HtmlAgilityPack;
 using System.Collections.Generic;
 
 
+
+//    𝕀❜𝕞 𝕟𝕠𝕥 𝕒𝕟 𝕚𝕟𝕔𝕙 𝕥𝕠𝕠 𝕗𝕒𝕣 𝕠𝕣 𝕒 𝕤𝕖𝕔𝕠𝕟𝕕 𝕥𝕠𝕠 𝕝𝕒𝕥𝕖,
+//    𝕀❜𝕞 𝕖𝕩𝕒𝕔𝕥𝕝𝕪 𝕨𝕙𝕖𝕣𝕖 𝕀❜𝕞 𝕤𝕦𝕡𝕡𝕠𝕤𝕖𝕕 𝕥𝕠 𝕓𝕖 𝕒𝕝𝕨𝕒𝕪𝕤.
+//    ℍ𝕖𝕣𝕖 𝕒𝕟𝕕 ℕ𝕠𝕨.
+
 namespace VedAstro.Library
 {
     /// <summary>
@@ -2825,28 +2830,44 @@ namespace VedAstro.Library
         }
 
 
-        public static async Task<JObject> WriteServer(HttpMethod method, string receiverAddress, JToken? payloadJson = null)
+        /// <summary>
+        /// makes HTTP call to address using .NET
+        /// </summary>
+        public static async Task<JObject> WriteServer<T>(HttpMethod method, string receiverAddress, T payload = default)
         {
-
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(method, receiverAddress);
-
+            
             //tell sender to wait for complete reply before exiting
             var waitForContent = HttpCompletionOption.ResponseContentRead;
-
+            
             //add in payload if specified
-            if (payloadJson != null) { httpRequestMessage.Content = VedAstro.Library.Tools.JsontoHttpContent(payloadJson); }
-
+            if (payload != null)
+            {
+                if (payload is JToken payloadJson)
+                {
+                    httpRequestMessage.Content = JsontoHttpContent(payloadJson);
+                }
+                else if (payload is byte[] payloadBinary)
+                {
+                    httpRequestMessage.Content = new ByteArrayContent(payloadBinary);
+                }
+                else
+                {
+                    throw new ArgumentException("Payload must be either a JToken or a byte array.", nameof(payload));
+                }
+            }
+            
             //send the data on its way (wait forever no timeout)
             using var client = new HttpClient();
             client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
-
+            
             //send the data on its way
             var response = await client.SendAsync(httpRequestMessage, waitForContent);
-
+            
             //return the raw reply to caller
             var dataReturned = await response.Content.ReadAsStringAsync();
-
+            
             //return data as JSON as expected from API 
             return JObject.Parse(dataReturned);
         }

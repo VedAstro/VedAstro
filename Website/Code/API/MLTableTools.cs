@@ -3,6 +3,7 @@ using System.Text;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using VedAstro.Library;
+using Microsoft.AspNetCore.Components.Forms;
 
 
 namespace Website;
@@ -49,39 +50,39 @@ public class MLTableTools
     public async Task<string?> GenerateMLTableHtml(List<Time> timeList, List<OpenAPIMetadata> columnNameList)
     {
         //prepare to send data to API
-        var temp = MLTable.FromData(timeList, columnNameList);
-        var payloadJson = temp.ToJson();
+        var payloadJson = new JObject();
+        payloadJson["TimeList"] = Tools.ListToJson(timeList);
+        payloadJson["ColumnData"] = Tools.ListToJson(columnNameList);
+
 
         //send to api and get results
-        var resultsRaw = await WriteToServerXmlReply(AppData.URL.GetEventsApi, root);
+        var url = _api.URL.GenerateMLTable;
+        var xListJson = await Tools.WriteServer(HttpMethod.Post, url, payloadJson);
 
-        //parse raw results
-        List<Event> resultsParsed = Event.FromXml(resultsRaw);
+        var htmlTable = xListJson["Payload"]["HTML"].Value<string>();
 
+        return htmlTable;
 
-        //make call, send file for processing
-        var results = await _api.GetListNoPolling(_api.URL.GetMLTimeListFromExcel, inputedFile, Time.FromJsonList);
-
-        return results;
+        //return "<table>\n  <tr>\n    <th>Header 1</th>\n    <th>Header 2</th>\n  </tr>\n  <tr>\n    <td>Row 1 Data 1</td>\n    <td>Row 1 Data 2</td>\n  </tr>\n  <tr>\n    <td>Row 2 Data 1</td>\n    <td>Row 2 Data 2</td>\n  </tr>\n</table>\n";
     }
 
     public static async Task<WebResult<JToken>> WriteToServerJsonReply(string apiUrl, string stringData, int timeout = 60)
     {
 
-        TryAgain:
+    TryAgain:
 
         //ACT 1:
         //send data to URL, using JS for reliability & speed
         //also if call does not respond in time, we replay the call over & over
         string receivedData;
-        try { receivedData = await VedAstro.Library.Tools.TaskWithTimeoutAndException(Post(apiUrl, stringData), TimeSpan.FromSeconds(timeout)); }
+        try { receivedData = await Tools.TaskWithTimeoutAndException( ServerManager.Post(apiUrl, stringData), TimeSpan.FromSeconds(timeout)); }
 
         //if fail replay and log it
         catch (Exception e)
         {
             var debugInfo = $"Call to \"{apiUrl}\" timeout at : {timeout}s";
 
-           // WebLogger.Data(debugInfo);
+            // WebLogger.Data(debugInfo);
 #if DEBUG
             Console.WriteLine(debugInfo);
 #endif
@@ -108,14 +109,6 @@ public class MLTableTools
         return returnVal;
     }
 
-    public static async Task<string> Post(string apiUrl, string stringData)
-    {
-        //this call will take you to NetworkThread.js
-        var rawPayload = await AppData.JsRuntime.InvokeAsync<string>(JS.postWrapper, apiUrl, stringData);
-
-        //todo proper checking of status needed
-        return rawPayload;
-    }
 
 
 }

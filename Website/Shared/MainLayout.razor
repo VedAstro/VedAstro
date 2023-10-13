@@ -3,7 +3,6 @@
 @using System.Xml.Linq
 @using Website.Pages
 @using System.Text.Json
-@using Library.API
 
 <NotificationSound @ref="_soundPlayer" />
 
@@ -169,13 +168,10 @@
         //---------------------
         bool debugMode;
 
-        //if no login can't access account page, so can't set debug
-        //thus no login, disable debug
-        if (AppData.IsGuestUser) { debugMode = false; }
 
         //user already logged in, get debug mode from browser setting if any
         //note: "debug mode" is stored local instead of online, because possible mobile use under same account
-        else { debugMode = await WebsiteTools.GetDebugModeBool(); }
+        debugMode = await WebsiteTools.GetDebugModeBool();
 
         AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime(), debugMode);
 
@@ -194,6 +190,7 @@
 
         //log it
         WebLogger.Data(AppData.ClientLocation.ToString());
+
 
         //other components can start loading now
         _mainPageInitDone = true;

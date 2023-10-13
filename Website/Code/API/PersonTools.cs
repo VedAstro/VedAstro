@@ -113,7 +113,7 @@ public class PersonTools
         var url = $"{_api.URL.DeletePerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}/PersonId/{personToDelete.Id}";
 
         //API gives a url to check on poll fo results
-        var jsonResult = await Tools.WriteServer(HttpMethod.Get, url);
+        var jsonResult = await Tools.WriteServer<object>(HttpMethod.Get, url);
 
 #if DEBUG
         Console.WriteLine($"SERVER SAID:\n{jsonResult}");
@@ -174,7 +174,7 @@ public class PersonTools
     {
         //get all person profile owned by current user/visitor
         var url = $"{_api.URL.GetNewPersonId}/Name/{personName}/BirthYear/{stdBirthYear}";
-        var jsonResult = await Tools.WriteServer(HttpMethod.Get, url);
+        var jsonResult = await Tools.WriteServer<object>(HttpMethod.Get, url);
 
         //get parsed payload from raw result
         string personId = VedAstroAPI.GetPayload<string>(jsonResult, null);

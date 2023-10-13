@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 
 
-namespace Library.API
+namespace Website
 {
     /// <summary>
     /// Make easy access to API, makes API easily consumable
@@ -45,26 +45,51 @@ namespace Library.API
 
         //--------------------------------------------------
 
+        /// <summary>
+        /// Polls the URL, gets the data and auto converts it
+        /// </summary>
         public async Task<List<T>> GetList<T>(string inputUrl, Func<JToken, List<T>> converter)
         {
 
             //call until data appears, API takes care of everything
-            JToken? personListJson = null;
-            var pollRate = 1500;
+            JToken? xListJson = null;
+            var pollRate = 2000;
             var notReady = true;
             while (notReady)
             {
                 await Task.Delay(pollRate);
-                personListJson = await Tools.ReadOnlyIfPassJSJson(inputUrl, JsRuntime);
-                notReady = personListJson == null;
+                xListJson = await WebsiteTools.ReadOnlyIfPassJSJson(inputUrl, JsRuntime);
+                notReady = xListJson == null;
             }
 
             //var cachedPersonList = Person.FromJsonList(personListJson);
-            var cachedPersonList = converter.Invoke(personListJson);
+            var cachedPersonList = converter.Invoke(xListJson);
 
             return cachedPersonList;
 
         }
+
+
+        /// <summary>
+        /// Makes direct call to API and waits tills she replies, could fail if call wait time is long
+        ///  header with value pass is not checked for
+        /// </summary>
+        public async Task<List<T>> GetListNoPolling<T>(string inputUrl, byte[] byteData, Func<JToken, List<T>> converter)
+        {
+
+            //call until data appears, API takes care of everything
+            JToken? xListJson = null;
+
+            xListJson = await Tools.WriteServer(HttpMethod.Post, inputUrl, byteData);
+
+            //var cachedPersonList = Person.FromJsonList(personListJson);
+            var timeListJson = xListJson["Payload"];
+            var cachedPersonList = converter.Invoke(timeListJson);
+
+            return cachedPersonList;
+
+        }
+       
         /// <summary>
         /// Shows alert using sweet alert js
         /// </summary>
@@ -154,14 +179,13 @@ namespace Library.API
             while (notReady)
             {
                 await Task.Delay(pollRate);
-                parsedJsonReply = await Tools.ReadOnlyIfPassJSString(inputUrl, dataToSend, JsRuntime);
+                parsedJsonReply = await WebsiteTools.ReadOnlyIfPassJSString(inputUrl, dataToSend, JsRuntime);
                 notReady = parsedJsonReply == null; //if null no data, continue wait
             }
 
             return parsedJsonReply;
 
         }
-
 
         /// <summary>
         /// takes in raw response from API and
@@ -200,6 +224,52 @@ namespace Library.API
                 throw new Exception($"Failed to get {typeof(T).AssemblyQualifiedName} from API payload");
             }
 
+        }
+
+        /// <summary>
+        /// HTTP Post via JS interop
+        /// </summary>
+        public static async Task<WebResult<JToken>> WriteToServerJsonReply(string apiUrl, string stringData, int timeout = 60)
+        {
+
+            TryAgain:
+
+            //ACT 1:
+            //send data to URL, using JS for reliability & speed
+            //also if call does not respond in time, we replay the call over & over
+            string receivedData;
+            try { receivedData = await Tools.TaskWithTimeoutAndException(ServerManager.Post(apiUrl, stringData), TimeSpan.FromSeconds(timeout)); }
+
+            //if fail replay and log it
+            catch (Exception e)
+            {
+                var debugInfo = $"Call to \"{apiUrl}\" timeout at : {timeout}s";
+
+                WebLogger.Data(debugInfo);
+#if DEBUG
+                Console.WriteLine(debugInfo);
+#endif
+                goto TryAgain;
+            }
+
+            //ACT 2:
+            //check raw data 
+            if (string.IsNullOrEmpty(receivedData))
+            {
+                //log it
+                await WebLogger.Error($"BLZ > Call returned empty\n To:{apiUrl} with payload:\n{stringData}");
+
+                //send failed empty data to caller, it should know what to do with it
+                return new WebResult<JToken>(false, new JObject("CallEmptyError"));
+            }
+
+            //ACT 3:
+            //return data as Json
+            var writeToServerXmlReply = JObject.Parse(receivedData);
+            var returnVal = WebResult<XElement>.FromJson(writeToServerXmlReply);
+
+            //ACT 4:
+            return returnVal;
         }
 
     }

@@ -93,7 +93,7 @@ namespace VedAstro.Library.Tests
         public async Task CalculateEventsTest()
         {
             //create needed data to generate events
-            var startTime = Time.Now(GeoLocation.Bangkok);
+            var startTime = Time.NowSystem(GeoLocation.Bangkok);
             var endTime = startTime.AddHours(1000); 
             var johnDoe = new Person("Juliet", Time.StandardHoroscope(), Gender.Female);
 

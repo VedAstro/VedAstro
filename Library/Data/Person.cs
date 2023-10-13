@@ -30,7 +30,7 @@ namespace VedAstro.Library
         /// All internal properties are initialized with empty values
         /// so use that to detect
         /// </summary>
-        public static Person Empty = new Person("0", "Empty", Time.Now(GeoLocation.Empty), Gender.Empty, DefaultUserId,
+        public static Person Empty = new Person("0", "Empty", Time.Empty, Gender.Empty, DefaultUserId,
             "Empty", new List<LifeEvent>());
 
         private string _notes;
@@ -179,7 +179,7 @@ namespace VedAstro.Library
         {
             get
             {
-                var temp = new Time(DateTimeOffset.Now.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset), this.GetBirthLocation());
+                var temp = new Time(DateTimeOffset.UtcNow.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset), this.GetBirthLocation());
                 return temp;
             }
         }
@@ -223,7 +223,7 @@ namespace VedAstro.Library
         /// Gets age at now time at current time's locations
         /// </summary>
         /// <returns></returns>
-        public int GetAge() => GetAge(Time.Now(this.GetBirthLocation()));
+        public int GetAge() => GetAge(Time.NowSystem(this.GetBirthLocation()));
 
 
 

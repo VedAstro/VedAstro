@@ -135,16 +135,16 @@
         _lmtOffset = new DateTimeOffset(2000, 1, 1, 1, 1, 1, offsetTimeSpan).ToString("zzz");
     }
 
-    private void UpdateLocalMeanTime()
+    private async Task UpdateLocalMeanTime()
     {
         //parse location received from user
         var geoLocation = _geoLocationInput.GetGeoLocation();
 
         //get time now
-        var timeNow = Time.Now(geoLocation);
+        var timeNow = await Time.Now(geoLocation);
 
         //show lmt time as string
-        _lmtString = timeNow.GetLmtDateTimeOffset().ToString(Time.DateTimeFormat);
+        _lmtString = timeNow.GetLmtDateTimeOffsetText();
         _stdString1 = timeNow.GetStdDateTimeOffsetText();
     }
 

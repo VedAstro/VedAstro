@@ -48,7 +48,7 @@
         var geoLocation = _geoLocationInput.GetGeoLocation();
 
         //get time now
-        var timeNow = Time.Now(geoLocation);
+        var timeNow = Time.NowSystem(geoLocation);
 
         var rise = Calculate.SunriseTime(timeNow);
         var set = Calculate.SunsetTime(timeNow);

@@ -79,7 +79,7 @@ namespace VedAstro.Library
                 string _3MonthsAgo = now.AddDays(-90).ToString("dd/MM/yyyy zzz");
                 string _6MonthsAgo = now.AddDays(-182).ToString("dd/MM/yyyy zzz");
                 string _1YearAgo = now.AddDays(-365).ToString("dd/MM/yyyy zzz");
-                var timeNow = Time.Now(birthLocation);
+                var timeNow = Time.NowSystem(birthLocation);
                 switch (dateType.ToLower())
                 {
                     case "hour":

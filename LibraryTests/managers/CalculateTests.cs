@@ -159,7 +159,7 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void NextLunarEclipseTest()
         {
-            var x = Calculate.NextLunarEclipse(Time.Now(GeoLocation.Bangkok));
+            var x = Calculate.NextLunarEclipse(Time.NowSystem(GeoLocation.Bangkok));
             Assert.Fail();
         }
 

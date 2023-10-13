@@ -10,7 +10,7 @@
         /// Chitra Paksha Ayanamsa, and it has been adopted by
         /// the Indian government for official purposes. 
         /// </summary>
-        //TraditionalLahiri = 1,
+        TraditionalLahiri = 46,
 
         /// <summary>
         /// 

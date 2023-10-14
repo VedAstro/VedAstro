@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -73,7 +74,11 @@ namespace VedAstro.Library
                                 $"{Tools.ListToString(EventTagList)}-" +
                                 $"{Options}";
 
-            return dataSignature;
+            var cleaned = new string(dataSignature
+                .Where(ch => !Path.GetInvalidFileNameChars().Contains(ch))
+                .ToArray());
+
+            return cleaned;
         }
 
         /// <summary>

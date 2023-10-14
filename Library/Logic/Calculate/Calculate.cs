@@ -6670,6 +6670,67 @@ namespace VedAstro.Library
 
 
         }
+       
+        /// <summary>
+        /// Gets longitudes for houses under KP astrology system
+        /// </summary>
+        public static double[] HouseLongitudesKP(Time time)
+        {
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey(nameof(HouseLongitudesKP), time, Ayanamsa), _houseLongitudesKP);
+
+
+            //UNDERLYING FUNCTION
+            double[] _houseLongitudesKP()
+            {
+                //get location at place of time
+                var location = time.GetGeoLocation();
+
+                //Convert DOB to Julian Day
+                var jul_day_UT = TimeToJulianDay(time);
+
+                SwissEph swissEph = new SwissEph();
+
+                double[] cusps = new double[13];
+
+                //we have to supply ascmc to make the function run
+                double[] ascmc = new double[10];
+
+                //set ayanamsa
+                swissEph.swe_set_sid_mode(Ayanamsa, 0, 0);
+
+                var iflag = SwissEph.SEFLG_SIDEREAL;
+
+                //NOTE:
+                //if you use P which is Placidus there
+                swissEph.swe_houses_ex(jul_day_UT,iflag, location.Latitude(), location.Longitude(), 'V', cusps, ascmc);
+
+                //we only return cusps, cause that is what is used for now
+                return cusps;
+            }
+
+            //special function localized to allow caching
+            //note: there is another version that does caching
+            double TimeToJulianDay(Time time)
+            {
+                //get lmt time
+                var lmtDateTime = time.GetLmtDateTimeOffset();
+
+                //Converts LMT to UTC (GMT)
+                DateTimeOffset utcDateTime = lmtDateTime.ToUniversalTime();
+
+                SwissEph swissEph = new SwissEph();
+
+                double jul_day_UT;
+                jul_day_UT = swissEph.swe_julday(utcDateTime.Year, utcDateTime.Month, utcDateTime.Day,
+                    utcDateTime.TimeOfDay.TotalHours, SwissEph.SE_GREG_CAL);
+                return jul_day_UT;
+
+            }
+
+
+
+        }
 
         /// <summary>
         /// Converts Local Mean Time (LMT) to Universal Time (UTC)

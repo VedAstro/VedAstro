@@ -63,12 +63,14 @@
 
             @* TIME RANGE UPLOAD *@
             <div @ref="timeRangeUploadInputHtml" style="display:none;">
-                <div class="input-group mb-3">
+                <div class="vstack gap-2 input-group mb-3">
                     <div class="form-control">
                         <InputFile id="inputGroupFile02" OnChange="@OnInputFileChange" />
                     </div>
-                    @* <label class="input-group-text" for="inputGroupFile02">Upload</label> *@
-                    <button class="btn btn-outline-primary" type="button" id="button-addon2">Upload</button>
+                    <div>
+                        1.<BoldLink URL="@URL.ExcelSampleMLFile">Download</BoldLink> sample EXCEL file.<br />
+                        2. Modify excel file and upload back here.
+                    </div>
                 </div>
                 <div @ref="uploadFileInfoHolder" class="hstack gap-3" style="display:none;">
                     <span>File Read Complete!</span>
@@ -124,6 +126,12 @@
                                 <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadCSV">
                                     <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="eos-icons:csv-file" />
                                     <span>CSV</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadJson">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="bxs:file-json" />
+                                    <span>JSON</span>
                                 </a>
                             </li>
                             <li>
@@ -422,6 +430,29 @@
         await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
     }
 
+    private async Task OnClickDownloadJson()
+    {
+        //show loading
+        await _jsRuntime.ShowLoading(100);
+
+        //convert created table to CSV string
+        var _columnNameList = _DataColumnSelector.SelectedMethodMetaList;
+        var csvString = await AppData.API.MLTable.GenerateMLTable<string>(_timeList, _columnNameList, "JSON");
+
+        // convert string to file
+        var bytes = Encoding.UTF8.GetBytes(csvString);
+        var base64Raw = Convert.ToBase64String(bytes);
+
+        //start download using JS
+        var base64 = $"data:application/json;base64,{base64Raw}";
+        var filename = $"DataTable.json"; //todo better name
+        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, base64);
+
+        //tactile feedback to user
+        _jsRuntime.PlayDoneSound();
+        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
+    }
+
     private async Task OnClickDownloadExcel()
     {
         //show loading
@@ -439,7 +470,6 @@
         //tactile feedback to user
         _jsRuntime.PlayDoneSound();
         await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
-
 
     }
 

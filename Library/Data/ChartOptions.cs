@@ -108,7 +108,10 @@ namespace VedAstro.Library
         /// <returns></returns>
         public override string ToString()
         {
-            return Tools.ListToString(SelectedAlgorithm);
+            //get names of funcs
+            var nameList = SelectedAlgorithm.Select(al => al.Method.Name).ToList();
+
+            return Tools.ListToString(nameList, "-");
         }
     }
 }

@@ -3329,6 +3329,16 @@ namespace VedAstro.Library
             return sweCalcResults;
         }
 
+        /// <summary>
+        /// Prints each item in list
+        /// </summary>
+        public static void PrintList<T>(List<T> list)
+        {
+            foreach (var item in list)
+            {
+                Console.WriteLine(item.ToString());
+            }
+        }
     }
 
 

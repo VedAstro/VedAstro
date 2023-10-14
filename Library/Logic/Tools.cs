@@ -1212,7 +1212,7 @@ namespace VedAstro.Library
         /// Converts any list to comma separated string
         /// Note: calls ToString();
         /// </summary>
-        public static string ListToString<T>(List<T> list)
+        public static string ListToString<T>(List<T> list, string separator = ",")
         {
             var combinedNames = "";
 
@@ -1220,7 +1220,7 @@ namespace VedAstro.Library
             {
                 //when last in row, don't add comma
                 var isLastItem = i == (list.Count - 1);
-                var ending = isLastItem ? "" : ", ";
+                var ending = isLastItem ? "" : $"{separator} ";
 
                 //combine to together based on type
                 var item = list[i];

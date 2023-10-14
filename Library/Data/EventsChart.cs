@@ -71,9 +71,10 @@ namespace VedAstro.Library
                                 $"{startTime}-{endTime}-" +
                                 $"{this.DaysPerPixel}-" +
                                 $"{(Ayanamsa)Calculate.Ayanamsa}-" +
-                                $"{Tools.ListToString(EventTagList)}-" +
+                                $"{Tools.ListToString(EventTagList, "-")}-" +
                                 $"{Options}";
 
+            //needed else cache can't be created 
             var cleaned = new string(dataSignature
                 .Where(ch => !Path.GetInvalidFileNameChars().Contains(ch))
                 .ToArray());

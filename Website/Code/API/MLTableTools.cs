@@ -34,20 +34,10 @@ public class MLTableTools
         return results;
     }
 
-    public async Task<byte[]> GenerateMLTableExcel(List<Time> timeList, List<OpenAPIMetadata> columnNameList)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<string> GenerateMLTableCsv(List<Time> timeList, List<OpenAPIMetadata> columnNameList)
-    {
-        throw new NotImplementedException();
-    }
-
     /// <summary>
     /// Send time list column as Json to API to make HTML table
     /// </summary>
-    public async Task<string?> GenerateMLTableHtml(List<Time> timeList, List<OpenAPIMetadata> columnNameList)
+    public async Task<T> GenerateMLTable<T>(List<Time> timeList, List<OpenAPIMetadata> columnNameList, string selectedFormat)
     {
         //prepare to send data to API
         var payloadJson = new JObject();
@@ -55,60 +45,27 @@ public class MLTableTools
         payloadJson["ColumnData"] = Tools.ListToJson(columnNameList);
 
 
-        //send to api and get results
-        var url = _api.URL.GenerateMLTable;
-        var xListJson = await Tools.WriteServer(HttpMethod.Post, url, payloadJson);
+        //send to api and get results 
+        //.../GenerateMLTable/HTML or CSV or EXCEL
+        var url = _api.URL.GenerateMLTable + $"/{selectedFormat}";
 
-        var htmlTable = xListJson["Payload"]["HTML"].Value<string>();
-
-        return htmlTable;
-
-        //return "<table>\n  <tr>\n    <th>Header 1</th>\n    <th>Header 2</th>\n  </tr>\n  <tr>\n    <td>Row 1 Data 1</td>\n    <td>Row 1 Data 2</td>\n  </tr>\n  <tr>\n    <td>Row 2 Data 1</td>\n    <td>Row 2 Data 2</td>\n  </tr>\n</table>\n";
-    }
-
-    public static async Task<WebResult<JToken>> WriteToServerJsonReply(string apiUrl, string stringData, int timeout = 60)
-    {
-
-    TryAgain:
-
-        //ACT 1:
-        //send data to URL, using JS for reliability & speed
-        //also if call does not respond in time, we replay the call over & over
-        string receivedData;
-        try { receivedData = await Tools.TaskWithTimeoutAndException( ServerManager.Post(apiUrl, stringData), TimeSpan.FromSeconds(timeout)); }
-
-        //if fail replay and log it
-        catch (Exception e)
+        if (typeof(T) == typeof(string))
         {
-            var debugInfo = $"Call to \"{apiUrl}\" timeout at : {timeout}s";
+            var xListJson = await Tools.WriteServer<JObject, JObject>(HttpMethod.Post, url, payloadJson);
 
-            // WebLogger.Data(debugInfo);
-#if DEBUG
-            Console.WriteLine(debugInfo);
-#endif
-            goto TryAgain;
+            var htmlTable = xListJson["Payload"]?[selectedFormat].Value<string>();
+            return (T)(object)htmlTable;
+        }
+        else if (typeof(T) == typeof(byte[]))
+        {
+            var xListJson = await Tools.WriteServer<byte[], JObject>(HttpMethod.Post, url, payloadJson);
+
+            return (T)(object)xListJson;
         }
 
-        //ACT 2:
-        //check raw data 
-        if (string.IsNullOrEmpty(receivedData))
-        {
-            //log it
-            //await WebLogger.Error($"BLZ > Call returned empty\n To:{apiUrl} with payload:\n{stringData}");
 
-            //send failed empty data to caller, it should know what to do with it
-            return new WebResult<JToken>(false, new JObject("CallEmptyError"));
-        }
-
-        //ACT 3:
-        //return data as Json
-        var writeToServerXmlReply = JObject.Parse(receivedData);
-        var returnVal = WebResult<XElement>.FromJson(writeToServerXmlReply);
-
-        //ACT 4:
-        return returnVal;
+        throw new Exception("END OF LINE!");
     }
-
 
 
 }

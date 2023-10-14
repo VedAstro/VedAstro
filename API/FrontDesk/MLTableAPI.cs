@@ -17,6 +17,9 @@ namespace API
     public class MLTableAPI
     {
 
+
+        private const string Route1 = $"{nameof(GenerateMLTable)}/{{SelectedFormat}}"; //* that captures the rest of the URL path
+
         /// <summary>
         /// Generates Time List from an excel file uploaded by user to be parsed and returned as Time list
         /// </summary>
@@ -60,8 +63,8 @@ namespace API
         /// </summary>
         [Function(nameof(GenerateMLTable))]
         public static async Task<HttpResponseData> GenerateMLTable(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = nameof(GenerateMLTable))]
-            HttpRequestData incomingRequest)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = Route1)]
+            HttpRequestData incomingRequest, string SelectedFormat)
         {
             try
             {
@@ -94,9 +97,35 @@ namespace API
 
                 //3 : SEND TO CALLER (HTML)
 
-                var jsonMLTable =  new JObject();
-                jsonMLTable["HTML"] = newMLTable.ToHtml();
-                return APITools.PassMessageJson(jsonMLTable, incomingRequest);
+                switch (SelectedFormat)
+                {
+                    case "HTML":
+                        {
+                            var jsonMLTable = new JObject();
+                            jsonMLTable["HTML"] = newMLTable.ToHtml();
+                            return APITools.PassMessageJson(jsonMLTable, incomingRequest);
+                        }
+                    case "CSV":
+                        {
+                            var jsonMLTable = new JObject();
+                            jsonMLTable["CSV"] = newMLTable.ToCSV();
+                            return APITools.PassMessageJson(jsonMLTable, incomingRequest);
+                        }
+                    case "JSON":
+                        {
+                            var jsonMLTable = new JObject();
+                            jsonMLTable["JSON"] = newMLTable.ToJson();
+                            return APITools.PassMessageJson(jsonMLTable, incomingRequest);
+                        }
+                    case "EXCEL":
+                        {
+                            var excelFile = newMLTable.ToExcel();
+                            return APITools.SendFileToCaller(excelFile, incomingRequest, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.");
+                        }
+
+                    default: throw new Exception("END OF LINE!");
+
+                }
 
             }
             //if any failure, show error in payload

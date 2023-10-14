@@ -133,29 +133,51 @@ namespace VedAstro.Library
         /// </summary>
         public string ToCSV()
         {
-            var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(this.ToHtml());
-            var csvBuilder = new StringBuilder();
-            var header = htmlDocument.DocumentNode.SelectSingleNode("//tr");
-            foreach (var th in header.Elements("th"))
+            StringBuilder sb = new StringBuilder();
+            //make Columns
+            sb.Append("Time,");
+            foreach (var result in ColumnData)
             {
-                csvBuilder.Append(th.InnerText);
-                csvBuilder.Append(",");
+                sb.Append($"{result.MLTableName(result.SelectedPlanet)},");
             }
-            csvBuilder.AppendLine();
-            var rows = htmlDocument.DocumentNode.SelectNodes("//tr[position()>1]");
-            foreach (var row in rows)
+            sb.AppendLine();
+            //make Rows
+            foreach (var mlTableRow in RowData)
             {
-                foreach (var td in row.Elements("td"))
+                sb.Append($"{mlTableRow.Time},");
+                foreach (var resultX in mlTableRow.DataColumns)
                 {
-                    //note careful of commas in data, since CSV uses it
-                    var escapeComma = Tools.QuoteValue(td.InnerText);
-                    csvBuilder.Append(escapeComma);
-                    csvBuilder.Append(",");
+                    sb.Append($"{resultX.ResultAsString()},");
                 }
-                csvBuilder.AppendLine();
+                sb.AppendLine();
             }
-            return csvBuilder.ToString();
+            return sb.ToString();
+        }
+
+        public JObject ToJson()
+        {
+            JObject jObject = new JObject();
+            JArray columns = new JArray();
+            JArray rows = new JArray();
+            //make Columns
+            foreach (var result in ColumnData)
+            {
+                columns.Add(result.MLTableName(result.SelectedPlanet));
+            }
+            //make Rows
+            foreach (var mlTableRow in RowData)
+            {
+                JObject row = new JObject();
+                row.Add("Time", mlTableRow.Time.ToJson());
+                foreach (var resultX in mlTableRow.DataColumns)
+                {
+                    row.Add(resultX.ResultAsString(), resultX.ResultAsString());
+                }
+                rows.Add(row);
+            }
+            jObject.Add("Columns", columns);
+            jObject.Add("Rows", rows);
+            return jObject;
         }
 
         public async Task<byte[]> ToParquet()
@@ -207,29 +229,28 @@ namespace VedAstro.Library
 
         public byte[] ToExcel()
         {
-            var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(this.ToHtml());
-
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            using (var package = new ExcelPackage())
+            using (ExcelPackage package = new ExcelPackage())
             {
-                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
-                var header = htmlDocument.DocumentNode.SelectSingleNode("//tr");
-                int columnIndex = 1;
-                foreach (var th in header.Elements("th"))
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
+                // Add headers
+                worksheet.Cells[1, 1].Value = "Time";
+                int headerColumnIndex = 2;
+                foreach (var result in ColumnData)
                 {
-                    worksheet.Cells[1, columnIndex].Value = th.InnerText;
-                    columnIndex++;
+                    worksheet.Cells[1, headerColumnIndex].Value = result.MLTableName(result.SelectedPlanet);
+                    headerColumnIndex++;
                 }
-                var rows = htmlDocument.DocumentNode.SelectNodes("//tr[position()>1]");
+                // Add rows
                 int rowIndex = 2;
-                foreach (var row in rows)
+                foreach (var mlTableRow in RowData)
                 {
-                    columnIndex = 1;
-                    foreach (var td in row.Elements("td"))
+                    worksheet.Cells[rowIndex, 1].Value = mlTableRow.Time;
+                    int columnIndex = 2;
+                    foreach (var resultX in mlTableRow.DataColumns)
                     {
-                        worksheet.Cells[rowIndex, columnIndex].Value = td.InnerText;
+                        worksheet.Cells[rowIndex, columnIndex].Value = resultX.ResultAsString();
                         columnIndex++;
                     }
                     rowIndex++;

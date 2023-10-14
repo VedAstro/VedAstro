@@ -50,10 +50,19 @@
                             <div class="input-group mb-2">
                                 <label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
                                 <select @bind="_selectedAyanamsa" class="form-select">
-                                    @foreach (var ayanamsa in Enum.GetValues(typeof(Ayanamsa)))
-                                    {
-                                        <option value="@ayanamsa">@ayanamsa</option>
-                                    }
+
+                                    <optgroup label="Easy">
+                                        @foreach (var ayanamsa in @SimpleAyanamsaAll)
+                                        {
+                                            <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
+                                        }
+                                    </optgroup>
+                                    <optgroup label="Advanced">
+                                        @foreach (var ayanamsa in @AdvancedAyanamsaAll)
+                                        {
+                                            <option value="@ayanamsa">@ayanamsa</option>
+                                        }
+                                    </optgroup>
                                 </select>
                             </div>
                             <div class="input-group" style="display: none">
@@ -219,7 +228,7 @@
     /// if not specified will not be included in final URL
     /// default set to Raman, as used system wide
     /// </summary>
-    private string _selectedAyanamsa = "Raman";
+    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
 
     /// <summary>
     /// list that is shown to user and is changed by search
@@ -247,12 +256,124 @@
     /// </summary>
     private bool _isEventAttached = false;
 
+    private List<SimpleAyanamsa> SimpleAyanamsaAll { get; set; }
+
+    private List<Ayanamsa> AdvancedAyanamsaAll { get; set; }
+
+
     #endregion
 
     protected override async Task OnInitializedAsync()
     {
         //NOTE: small needed else, components rendering gets messed up (time to pop)
         await _jsRuntime.ShowLoading(100);
+
+        SimpleAyanamsaAll = new List<SimpleAyanamsa>()
+        {
+            SimpleAyanamsa.LahiriChitrapaksha,
+            SimpleAyanamsa.KrishnamurtiKP,
+            SimpleAyanamsa.Raman,
+            SimpleAyanamsa.FaganBradley,
+            SimpleAyanamsa.J2000,
+            SimpleAyanamsa.Yukteshwar,
+
+        };
+
+        AdvancedAyanamsaAll = new List<Ayanamsa>()
+        {
+
+            Ayanamsa.FAGAN_BRADLEY,
+
+            Ayanamsa.LAHIRI,
+
+            Ayanamsa.DELUCE,
+
+            Ayanamsa.RAMAN,
+
+            Ayanamsa.USHASHASHI,
+
+            Ayanamsa.KRISHNAMURTI,
+
+            Ayanamsa.DJWHAL_KHUL,
+
+            Ayanamsa.YUKTESHWAR,
+
+            Ayanamsa.JN_BHASIN,
+
+            Ayanamsa.BABYL_KUGLER1,
+
+            Ayanamsa.BABYL_KUGLER2,
+
+            Ayanamsa.BABYL_KUGLER3,
+
+            Ayanamsa.BABYL_HUBER,
+
+            Ayanamsa.BABYL_ETPSC,
+
+            Ayanamsa.ALDEBARAN_15TAU,
+
+            Ayanamsa.HIPPARCHOS,
+
+            Ayanamsa.SASSANIAN,
+
+            Ayanamsa.GALCENT_0SAG,
+
+            Ayanamsa.J1900,
+
+            Ayanamsa.B1950,
+
+            Ayanamsa.SURYASIDDHANTA,
+
+            Ayanamsa.SURYASIDDHANTA_MSUN,
+
+            Ayanamsa.ARYABHATA,
+
+            Ayanamsa.ARYABHATA_MSUN,
+
+            Ayanamsa.SS_REVATI ,
+
+            Ayanamsa.SS_CITRA,
+
+            Ayanamsa.TRUE_CITRA,
+
+            Ayanamsa.TRUE_REVATI,
+
+            Ayanamsa.TRUE_PUSHYA,
+
+            Ayanamsa.GALCENT_RGBRAND ,
+
+            Ayanamsa.GALEQU_IAU1958,
+
+            Ayanamsa.GALEQU_TRUE,
+
+            Ayanamsa.GALEQU_MULA,
+            Ayanamsa.GALALIGN_MARDYKS,
+
+            Ayanamsa.TRUE_MULA ,
+
+            Ayanamsa.GALCENT_MULA_WILHELM,
+
+            Ayanamsa.ARYABHATA_522,
+
+            Ayanamsa.BABYL_BRITTON,
+
+            Ayanamsa.TRUE_SHEORAN,
+
+            Ayanamsa.GALCENT_COCHRANE,
+
+            Ayanamsa.GALEQU_FIORENZA,
+
+            Ayanamsa.VALENS_MOON,
+
+            Ayanamsa.LAHIRI_1940,
+
+            Ayanamsa.LAHIRI_VP285,
+
+            Ayanamsa.KRISHNAMURTI_VP291,
+
+            Ayanamsa.LAHIRI_ICRC,
+        };
+
 
         //other components can start loading now (heavy computation starts)
         _mainPageInitDone = true;
@@ -338,7 +459,7 @@
         var placeHolder = "";
         var calcName = $"/Calculate/{ApiSelectorBox.GetSelectedMethodName()}";
         var paramInput = await _parameterInputPanel.ToApiUrl();
-        var ayanamsaUrl = _selectedAyanamsa == "Raman" ? "" : $"/Ayanamsa/{_selectedAyanamsa}";
+        var ayanamsaUrl = _selectedAyanamsa == SimpleAyanamsa.LahiriChitrapaksha.ToString() ? "" : $"/Ayanamsa/{_selectedAyanamsa}";
         placeHolder = domain + calcName + paramInput + ayanamsaUrl;
 
 

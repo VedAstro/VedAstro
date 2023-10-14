@@ -157,14 +157,20 @@
                 @* LIST OF ALL API CALLS *@
                 <APICallList />
 
-                <ArticleBlock Title="Price = Free" IconName="flat-color-icons:like">
+                <ArticleBlock Title="Price" IconName="flat-color-icons:money-transfer">
+                    <ButtonRow>
+                        <IconButton PlaceBottom="true" SmallSize="true" Color="warning" ButtonText="Donate" IconName="openmoji:love-letter" ClickUrl="@PageRoute.Donate" />
+                    </ButtonRow>
                     <TextHTML>
-                        To encourage global use of vedic astrology we pledge to keep this API service <kbd>Free</kbd>
-                        But to control the cost the speed of the API will be auto adjusted
-                        by the amount of money in the <BoldLink URL="@PageRoute.Donate">Donation Box</BoldLink>.
-                        Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase the speed for yourself and others.
+                        This service will run for <kbd>FREE</kbd>, so long there is money in the <strong>donation box</strong>.
+                        Below is the <strong>live</strong> balance with auto deducting server &amp; maintenance costs.
+
+                        <DonationBalanceViewer />
+
+                        Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to keep this service running for yourself and others.
                     </TextHTML>
                 </ArticleBlock>
+
 
                 <ArticleBlock Title="Simple Response" IconName="bi:filetype-json">
                     <TextHTML>

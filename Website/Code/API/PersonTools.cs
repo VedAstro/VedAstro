@@ -86,7 +86,7 @@ public class PersonTools
         var personJson = person.ToJson();
         //pass in user id to make sure user has right to delete
         var url = $"{_api.URL.AddPerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
-        var jsonResult = await Tools.WriteServer(HttpMethod.Post, url, personJson);
+        var jsonResult = await Tools.WriteServer<JObject, JToken>(HttpMethod.Post, url, personJson);
 
 #if DEBUG
         Console.WriteLine($"SERVER SAID:\n{jsonResult}");
@@ -113,7 +113,7 @@ public class PersonTools
         var url = $"{_api.URL.DeletePerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}/PersonId/{personToDelete.Id}";
 
         //API gives a url to check on poll fo results
-        var jsonResult = await Tools.WriteServer<object>(HttpMethod.Get, url);
+        var jsonResult = await Tools.WriteServer<JObject, object>(HttpMethod.Get, url);
 
 #if DEBUG
         Console.WriteLine($"SERVER SAID:\n{jsonResult}");
@@ -138,7 +138,7 @@ public class PersonTools
         //prepare and send updated person to API server
         var updatedPerson = person.ToJson();
         var url = $"{_api.URL.UpdatePerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
-        var jsonResult = await Tools.WriteServer(HttpMethod.Post, url, updatedPerson);
+        var jsonResult = await Tools.WriteServer<JObject, JToken>(HttpMethod.Post, url, updatedPerson);
 
 
 #if DEBUG
@@ -174,7 +174,7 @@ public class PersonTools
     {
         //get all person profile owned by current user/visitor
         var url = $"{_api.URL.GetNewPersonId}/Name/{personName}/BirthYear/{stdBirthYear}";
-        var jsonResult = await Tools.WriteServer<object>(HttpMethod.Get, url);
+        var jsonResult = await Tools.WriteServer<JObject, object>(HttpMethod.Get, url);
 
         //get parsed payload from raw result
         string personId = VedAstroAPI.GetPayload<string>(jsonResult, null);

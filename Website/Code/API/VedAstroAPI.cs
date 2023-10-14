@@ -80,7 +80,7 @@ namespace Website
             //call until data appears, API takes care of everything
             JToken? xListJson = null;
 
-            xListJson = await Tools.WriteServer(HttpMethod.Post, inputUrl, byteData);
+            xListJson = await Tools.WriteServer<JObject, byte[]>(HttpMethod.Post, inputUrl, byteData);
 
             //var cachedPersonList = Person.FromJsonList(personListJson);
             var timeListJson = xListJson["Payload"];

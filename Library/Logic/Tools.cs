@@ -2857,18 +2857,26 @@ namespace VedAstro.Library
             using var client = new HttpClient();
             client.Timeout = Timeout.InfiniteTimeSpan;
             var response = await client.SendAsync(httpRequestMessage, waitForContent);
-            var dataReturned = await response.Content.ReadAsStringAsync();
-            if (typeof(T) == typeof(string))
+            if (typeof(T) == typeof(byte[]))
             {
+                var dataReturned = await response.Content.ReadAsByteArrayAsync();
                 return (T)(object)dataReturned;
-            }
-            else if (typeof(T) == typeof(JObject))
-            {
-                return (T)(object)JObject.Parse(dataReturned);
             }
             else
             {
-                throw new InvalidOperationException("Unsupported type parameter");
+                var dataReturned = await response.Content.ReadAsStringAsync();
+                if (typeof(T) == typeof(string))
+                {
+                    return (T)(object)dataReturned;
+                }
+                else if (typeof(T) == typeof(JObject))
+                {
+                    return (T)(object)JObject.Parse(dataReturned);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unsupported type parameter");
+                }
             }
         }
 
@@ -2876,7 +2884,7 @@ namespace VedAstro.Library
         /// <summary>
         /// makes HTTP call to address using .NET
         /// </summary>
-        public static async Task<JObject> WriteServer<T>(HttpMethod method, string receiverAddress, T payload = default)
+        public static async Task<T> WriteServer<T, Z>(HttpMethod method, string receiverAddress, Z payload = default)
         {
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(method, receiverAddress);
@@ -2903,16 +2911,33 @@ namespace VedAstro.Library
 
             //send the data on its way (wait forever no timeout)
             using var client = new HttpClient();
-            client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
+            client.Timeout = Timeout.InfiniteTimeSpan;
 
             //send the data on its way
             var response = await client.SendAsync(httpRequestMessage, waitForContent);
+            if (typeof(T) == typeof(byte[]))
+            {
+                var dataReturned = await response.Content.ReadAsByteArrayAsync();
+                return (T)(object)dataReturned;
+            }
+            else
+            {
+                var dataReturned = await response.Content.ReadAsStringAsync();
+                if (typeof(T) == typeof(string))
+                {
+                    return (T)(object)dataReturned;
+                }
+                else if (typeof(T) == typeof(JObject))
+                {
+                    //return data as JSON as expected from API 
+                    return (T)(object)JObject.Parse(dataReturned);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unsupported type parameter");
+                }
+            }
 
-            //return the raw reply to caller
-            var dataReturned = await response.Content.ReadAsStringAsync();
-
-            //return data as JSON as expected from API 
-            return JObject.Parse(dataReturned);
         }
 
         /// <summary>

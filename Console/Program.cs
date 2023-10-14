@@ -16,6 +16,15 @@ namespace VedAstro.Console
 
             Time timeSample = new("00:00 30/10/2023 +05:30", GeoLocation.Bangalore);
 
+            var yy = Calculate.AllHouseData(HouseName.House1, timeSample);
+            foreach (var y in yy)
+            {
+                var parts = (House)y.Result;
+                var middle = parts.GetMiddleLongitude();
+                var begin = parts.GetBeginLongitude();
+                var end = parts.GetEndLongitude();
+            }
+
             var x = Calculate.AllPlanetData(PlanetName.Moon, timeSample);
 
 

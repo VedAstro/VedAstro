@@ -261,7 +261,7 @@ namespace VedAstro.Library
         private static async Task<GeoLocation> GetCoordinatesFromIpAddressGoogle(string apiKey)
         {
             var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={apiKey}";
-            var resultString = await Tools.WriteServer<object>(HttpMethod.Post, url);
+            var resultString = await Tools.WriteServer<JObject, object>(HttpMethod.Post, url);
 
             //get raw value 
             var rawLat = resultString["location"]["lat"].Value<double>();

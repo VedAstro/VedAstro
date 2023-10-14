@@ -157,6 +157,7 @@ public class URL
     /// link to js file used for google sign in function
     /// </summary>
     public const string GoogleSignInJs = "https://accounts.google.com/gsi/client";
+    public const string ExcelSampleMLFile = "https://github.com/VedAstro/VedAstro/raw/master/DataProcessor/TableGeneratorSampleInput.xlsx";
     public const string GeoJsApiUrl = "https://get.geojs.io/v1/ip/geo.json";
     public const string TelescopeBuyPage = "https://www.ebay.com/itm/285323405966";
     public const string LaptopBuyPage = "https://www.ebay.com/itm/304878531330";

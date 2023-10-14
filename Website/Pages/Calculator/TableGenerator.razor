@@ -187,7 +187,6 @@
 
     </div>
 
-
     @* DOCS *@
     <div class="">
 
@@ -198,12 +197,9 @@
             </TextHTML>
         </ArticleBlock>
 
-        <ArticleBlock Title="Price &amp; Payment" IconName="flat-color-icons:like">
+        <ArticleBlock Title="Price" IconName="flat-color-icons:money-transfer">
             <ButtonRow>
                 <IconButton PlaceBottom="true" SmallSize="true" Color="warning" ButtonText="Donate" IconName="openmoji:love-letter" ClickUrl="@PageRoute.Donate" />
-
-                @*                 <IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep"/>
-                *@
             </ButtonRow>
             <TextHTML>
                 This service will run for <kbd>FREE</kbd>, so long there is money in the <strong>donation box</strong>.
@@ -211,7 +207,7 @@
 
                 <DonationBalanceViewer />
 
-                Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to increase the speed for yourself and others.
+                Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to keep this service running for yourself and others.
             </TextHTML>
         </ArticleBlock>
 

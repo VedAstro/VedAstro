@@ -1,21 +1,15 @@
 ﻿namespace VedAstro.Library
 {
-    /// <summary>
-    /// connected to swiss eph
-    /// </summary>
-    public enum Ayanamsa
-    {
-        /// <summary>
-        /// Lahiri: This is one of the most widely used and accepted ayanamsas in Vedic astrology, especially in India. It is based on the position of the star Spica (Chitra) at 0 degrees Libra, as prescribed by the Surya Siddhanta. It is also known as
-        /// Chitra Paksha Ayanamsa, and it has been adopted by
-        /// the Indian government for official purposes. 
-        /// </summary>
-        TraditionalLahiri = 46,
 
+    /// <summary>
+    /// For use in websites
+    /// </summary>
+    public enum SimpleAyanamsa
+    {
         /// <summary>
         /// 
         /// </summary>
-        ChitrapakshaLahiri = 1,
+        LahiriChitrapaksha = 1,
 
         /// <summary>
         /// Krishnamurti: This is another popular ayanamsa in Vedic astrology, especially among the followers of the Krishnamurti Paddhati (KP) system. It is based on the position of the star Ashwini at 0 degrees Aries, as proposed by K.S. Krishnamurti.
@@ -57,6 +51,13 @@
         /// </summary>
         Yukteshwar = 7,
 
+    }
+
+    /// <summary>
+    /// connected to swiss eph
+    /// </summary>
+    public enum Ayanamsa
+    {
 
         /// <summary>
         /// BELOW IS SPECIAL DIRECT TO SWISS FOR SUPER ADVANCED USERS

@@ -53,7 +53,12 @@ namespace VedAstro.Library
 
         //PUBLIC METHODS
         public HouseName GetHouseName() => _houseNumber;
+
         public Angle GetMiddleLongitude() => _middleLongitude;
+        
+        public Angle GetBeginLongitude() => _beginLongitude;
+
+        public Angle GetEndLongitude() => _endLongitude;
 
         public bool IsLongitudeInHouseRange(Angle longitude)
         {

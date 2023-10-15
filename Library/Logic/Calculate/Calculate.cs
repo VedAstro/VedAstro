@@ -411,7 +411,6 @@ namespace VedAstro.Library
             return signCount;
         }
 
-
         /// <summary>
         /// Given a person will give yoni kuta animal with sex
         /// </summary>
@@ -532,6 +531,16 @@ namespace VedAstro.Library
         public static async Task<string> SkyChart(Time time) => await SkyChartManager.GenerateChart(time, 750, 230);
 
         /// <summary>
+        /// Get sky chart at a given time. SVG image file. URL can be used like a image source link
+        /// </summary>
+        public static string SouthIndianChart(Time time)
+        {
+            var x = VedicChartManager.GenerateChart(time, 1000, 1000);
+
+            return x;
+        }
+
+        /// <summary>
         /// Checks if a planet is in a Watery or aqua sign
         /// </summary>
         public static bool IsPlanetInWaterySign(PlanetName planetName, Time time)
@@ -628,7 +637,6 @@ namespace VedAstro.Library
             }
 
         }
-
 
         /// <summary>
         /// Gets Moon's position or day in lunar calendar
@@ -1163,7 +1171,6 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Gets all houses with their constelation for KP Krishnamurti system
         /// </summary>
@@ -1640,7 +1647,6 @@ namespace VedAstro.Library
             return returnList;
         }
 
-
         /// <summary>
         /// Gets the Nirayana longitude of all 9 planets
         /// </summary>
@@ -1974,11 +1980,11 @@ namespace VedAstro.Library
                 case ZodiacName.Sagittarius:
                     firstNavamsa = ZodiacName.Aries;
                     break;
-                //Taurus, Capricornus, Virgo - from Capricornus.
+                //Taurus, Capricorn, Virgo - from Capricorn.
                 case ZodiacName.Taurus:
-                case ZodiacName.Capricornus:
+                case ZodiacName.Capricorn:
                 case ZodiacName.Virgo:
-                    firstNavamsa = ZodiacName.Capricornus;
+                    firstNavamsa = ZodiacName.Capricorn;
                     break;
                 //Gemini, Libra, Aquarius - from Libra.
                 case ZodiacName.Gemini:
@@ -2253,7 +2259,7 @@ namespace VedAstro.Library
                 if (thrimsamsaNumber >= 6 && thrimsamsaNumber <= 10)
                 {
                     //Capricorn and Aquarius by Saturn.
-                    return ZodiacName.Capricornus;
+                    return ZodiacName.Capricorn;
 
                 }
                 //11,12,13,14,15,16,17,18 - jupiter
@@ -2304,7 +2310,7 @@ namespace VedAstro.Library
                 if (thrimsamsaNumber >= 21 && thrimsamsaNumber <= 25)
                 {
                     //Capricorn and Aquarius by Saturn.
-                    return ZodiacName.Capricornus;
+                    return ZodiacName.Capricorn;
 
                 }
                 //26,27,28,29,30 - Mars
@@ -4251,7 +4257,7 @@ namespace VedAstro.Library
         /// Check if it is a Earth sign
         /// Earth Signs: it contains Taurus, Virgo and Capricorn.
         /// </summary>
-        public static bool IsEarthSign(ZodiacName moonSign) => moonSign is ZodiacName.Taurus or ZodiacName.Virgo or ZodiacName.Capricornus;
+        public static bool IsEarthSign(ZodiacName moonSign) => moonSign is ZodiacName.Taurus or ZodiacName.Virgo or ZodiacName.Capricorn;
 
         /// <summary>
         /// Check if it is a Air / Windy sign
@@ -4440,10 +4446,10 @@ namespace VedAstro.Library
                         good = new List<PlanetName>() { Mars };
                         bad = new List<PlanetName>() { Venus };
                         break;
-                    //Capricornus - Venus is the most powerful planet and in
+                    //Capricorn - Venus is the most powerful planet and in
                     // conjunction with Mercury produces Rajayoga. Mars, Jupiter
                     // and the Moon are evil.
-                    case ZodiacName.Capricornus:
+                    case ZodiacName.Capricorn:
                         good = new List<PlanetName>() { Venus };
                         bad = new List<PlanetName>() { Mars, Jupiter, Moon };
                         break;
@@ -4499,7 +4505,7 @@ namespace VedAstro.Library
                     return planetName == Jupiter || planetName == Sun || planetName == Moon;
                 case ZodiacName.Sagittarius:
                     return planetName == Sun || planetName == Mars;
-                case ZodiacName.Capricornus:
+                case ZodiacName.Capricorn:
                     return planetName == Mercury || planetName == Venus || planetName == Saturn;
                 case ZodiacName.Aquarius:
                     return planetName == Venus || planetName == Mars
@@ -4538,7 +4544,7 @@ namespace VedAstro.Library
                     return planetName == Mercury || planetName == Saturn;
                 case ZodiacName.Sagittarius:
                     return planetName == Saturn || planetName == Venus || planetName == Mercury;
-                case ZodiacName.Capricornus:
+                case ZodiacName.Capricorn:
                     return planetName == Moon || planetName == Mars || planetName == Jupiter;
                 case ZodiacName.Aquarius:
                     return planetName == Jupiter || planetName == Moon;
@@ -4577,7 +4583,7 @@ namespace VedAstro.Library
                     return planetName == Sun || planetName == Moon;
                 case ZodiacName.Sagittarius:
                     return planetName == Sun || planetName == Mars;
-                case ZodiacName.Capricornus:
+                case ZodiacName.Capricorn:
                     return planetName == Mercury || planetName == Venus;
                 case ZodiacName.Aquarius:
                     return planetName == Mars || planetName == Venus;
@@ -4615,7 +4621,7 @@ namespace VedAstro.Library
                     return planetName == Mercury || planetName == Venus || planetName == Saturn;
                 case ZodiacName.Sagittarius:
                     return planetName == Venus || planetName == Saturn;
-                case ZodiacName.Capricornus:
+                case ZodiacName.Capricorn:
                     return planetName == Mars || planetName == Jupiter;
                 case ZodiacName.Aquarius:
                     return planetName == Mars;
@@ -4943,7 +4949,7 @@ namespace VedAstro.Library
                     //while Taurus, Virgo and Capricorn indicate the last grade, viz., Sudra
                     case ZodiacName.Taurus:
                     case ZodiacName.Virgo:
-                    case ZodiacName.Capricornus:
+                    case ZodiacName.Capricorn:
                         return Varna.SudraServant;
 
                     default: throw new Exception("");
@@ -6130,7 +6136,7 @@ namespace VedAstro.Library
                         return Library.PlanetName.Jupiter;
 
                     //Capricorn and Aquarius by Saturn.
-                    case ZodiacName.Capricornus:
+                    case ZodiacName.Capricorn:
                     case ZodiacName.Aquarius:
                         return Library.PlanetName.Saturn;
                     default:
@@ -6252,7 +6258,7 @@ namespace VedAstro.Library
                 // Mars 28th of Capricorn ;
                 else if (planetName == Library.PlanetName.Mars)
                 {
-                    return new ZodiacSign(ZodiacName.Capricornus, Angle.FromDegrees(28));
+                    return new ZodiacSign(ZodiacName.Capricorn, Angle.FromDegrees(28));
                 }
 
                 // Mercury 15th of Virgo;
@@ -6385,7 +6391,7 @@ namespace VedAstro.Library
                 // Jupiter 5th of Capricorn;
                 else if (planetName == Library.PlanetName.Jupiter)
                 {
-                    return new ZodiacSign(ZodiacName.Capricornus, Angle.FromDegrees(5));
+                    return new ZodiacSign(ZodiacName.Capricorn, Angle.FromDegrees(5));
                 }
 
                 // Venus 27th of Virgo and
@@ -6436,7 +6442,7 @@ namespace VedAstro.Library
             bool _isEvenSign()
             {
                 if (planetSignName == ZodiacName.Taurus || planetSignName == ZodiacName.Cancer || planetSignName == ZodiacName.Virgo ||
-                    planetSignName == ZodiacName.Scorpio || planetSignName == ZodiacName.Capricornus || planetSignName == ZodiacName.Pisces)
+                    planetSignName == ZodiacName.Scorpio || planetSignName == ZodiacName.Capricorn || planetSignName == ZodiacName.Pisces)
                 {
                     return true;
                 }
@@ -6504,7 +6510,7 @@ namespace VedAstro.Library
                 case ZodiacName.Aries:
                 case ZodiacName.Cancer:
                 case ZodiacName.Libra:
-                case ZodiacName.Capricornus:
+                case ZodiacName.Capricorn:
                     return true;
                 default:
                     return false;
@@ -11808,7 +11814,7 @@ namespace VedAstro.Library
                     return @"fixed, even, feminine, mild, watery, of long ascension, rising by the head.";
                 case ZodiacName.Sagittarius:
                     return @"common, odd, masculine, cruel, fiery, of long ascension, rising by the hinder part.";
-                case ZodiacName.Capricornus:
+                case ZodiacName.Capricorn:
                     return @"movable, even, feminine, mild, earthy, of long ascension, rising by hinder part";
                 case ZodiacName.Aquarius:
                     return @"fixed, odd, masculine, cruel, fruitful, airy, of short ascension, rising by the head.";
@@ -12014,9 +12020,9 @@ namespace VedAstro.Library
                         bring about death even when he is a maraka. But Venus
                         causes death when be gets jurisdiction as a maraka planet.
                         ";
-                case ZodiacName.Capricornus:
+                case ZodiacName.Capricorn:
                     return @"
-                        Capricornus - Venus is the most powerful planet and in
+                        Capricorn - Venus is the most powerful planet and in
                         conjunction with Mercury produces Rajayoga. Mars, Jupiter
                         and the Moon are evil.
                         ";

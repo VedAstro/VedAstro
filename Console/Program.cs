@@ -17,6 +17,7 @@ namespace VedAstro.Console
             //Time timeSample = new("00:00 30/10/2023 +05:30", GeoLocation.Bangalore);
             Time timeSample = new("11:00 25/07/1984 +05:30", new GeoLocation("",77.2,28.6));
 
+            var chart = await Calculate.SouthIndianChart(timeSample);
             var longitudes = Calculate.AllHouseLongitudesKP(timeSample);
             var constellations = Calculate.AllHouseConstellationKP(timeSample);
             var housesPlanets = Calculate.AllPlanetHousePositionsKP(timeSample);

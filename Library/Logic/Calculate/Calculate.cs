@@ -535,7 +535,7 @@ namespace VedAstro.Library
         /// </summary>
         public static string SouthIndianChart(Time time)
         {
-            var x = VedicChartManager.GenerateChart(time, 1000, 1000);
+            var x = SouthChartManager.GenerateChart(time, 1000, 1000);
 
             return x;
         }

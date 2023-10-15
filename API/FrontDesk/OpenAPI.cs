@@ -73,6 +73,7 @@ namespace API
                     //handle SVG string
                     case nameof(VedAstro.Library.Calculate.SkyChart):
                     case nameof(VedAstro.Library.Calculate.SouthIndianChart):
+                    case nameof(VedAstro.Library.Calculate.NorthIndianChart):
                         return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawPlanetData), incomingRequest, "image/svg+xml");
 
                     default:

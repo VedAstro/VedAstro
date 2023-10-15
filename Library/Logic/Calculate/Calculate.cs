@@ -1097,6 +1097,114 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Gets longitudes for houses under Krishnamurti (KP) astrology system
+        /// Note: Ayanamsa hard set to Krishnamurti
+        /// </summary>
+        public static List<House> AllHouseLongitudesKP(Time time)
+        {
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey(nameof(AllHouseLongitudesKP), time, Ayanamsa), _allHouseLongitudesKP);
+
+
+            //UNDERLYING FUNCTION
+
+            List<House> _allHouseLongitudesKP()
+            {
+                //get house positions modified for KP system in raw 
+                var swissEphCusps = _houseLongitudesKP();
+
+                //4.0 Initialize houses into list
+                var houseList = new List<House>();
+
+                foreach (var house in Library.House.AllHouses)
+                {
+                    var houseNumber = (int)house;
+                    var houseBegin = swissEphCusps[houseNumber];
+                    var nextHseNumber = houseNumber + 1;
+                    nextHseNumber = nextHseNumber >= 12 ? 1 : nextHseNumber; //goto house 1 once hit house 12
+                    var houseEnd = swissEphCusps[nextHseNumber];//start of next house is end of this
+                    var houseMid = houseBegin + ((houseEnd - houseBegin) / 2);
+                    houseList.Add(new House(house, Angle.FromDegrees(houseBegin), Angle.FromDegrees(houseMid), Angle.FromDegrees(houseEnd)));
+
+                }
+
+                return houseList;
+
+            }
+
+            double[] _houseLongitudesKP()
+            {
+                //get location at place of time
+                var location = time.GetGeoLocation();
+
+                //Convert DOB to Julian Day
+                var jul_day_UT = TimeToJulianDay(time);
+
+                SwissEph swissEph = new SwissEph();
+
+                double[] cusps = new double[13];
+
+                //we have to supply ascmc to make the function run
+                double[] ascmc = new double[10];
+
+                //set ayanamsa
+                swissEph.swe_set_sid_mode((int)SimpleAyanamsa.KrishnamurtiKP, 0, 0);
+
+                var iflag = SwissEph.SEFLG_SIDEREAL;
+
+                //NOTE:
+                //if you use P which is Placidus there for Krishamurti
+                swissEph.swe_houses_ex(jul_day_UT, iflag, location.Latitude(), location.Longitude(), 'P', cusps, ascmc);
+
+                //we only return cusps, cause that is what is used for now
+                return cusps;
+            }
+
+
+        }
+
+
+        /// <summary>
+        /// Gets all houses with their constelation for KP Krishnamurti system
+        /// </summary>
+        public static Dictionary<House, PlanetConstellation> AllHouseConstellationKP(Time time)
+        {
+            //get all house positions
+            var housePositions = AllHouseLongitudesKP(time);
+
+            //fill the planet constellations
+            var returnList = new Dictionary<House, PlanetConstellation>();
+            foreach (var house in housePositions)
+            {
+                var constellation = Calculate.ConstellationAtLongitude(house.GetBeginLongitude());
+                returnList.Add(house, constellation);
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
+        /// special function localized to allow caching
+        /// note: there is another version that does caching
+        /// </summary>
+        public static double TimeToJulianDay(Time time)
+        {
+            //get lmt time
+            var lmtDateTime = time.GetLmtDateTimeOffset();
+
+            //Converts LMT to UTC (GMT)
+            DateTimeOffset utcDateTime = lmtDateTime.ToUniversalTime();
+
+            SwissEph swissEph = new SwissEph();
+
+            double jul_day_UT;
+            jul_day_UT = swissEph.swe_julday(utcDateTime.Year, utcDateTime.Month, utcDateTime.Day,
+                utcDateTime.TimeOfDay.TotalHours, SwissEph.SE_GREG_CAL);
+            return jul_day_UT;
+
+        }
+
+        /// <summary>
         /// Calculates & creates all houses as list
         /// </summary>
         public static List<House> AllHouseLongitudes(Time time)
@@ -1655,6 +1763,111 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Gets the House number a given planet is in at a time
+        /// </summary>
+        public static HouseName HousePlanetIsInKP(Time time, PlanetName planetName)
+        {
+
+            //get the planets longitude
+            var planetLongitude = PlanetNirayanaLongitude(time, planetName);
+
+            //get all houses
+            var houseList = AllHouseLongitudesKP(time);
+
+            //loop through all houses
+            foreach (var house in houseList)
+            {
+                //check if planet is in house's range
+                var planetIsInHouse = house.IsLongitudeInHouseRange(planetLongitude);
+
+                //if planet is in house
+                if (planetIsInHouse)
+                {
+                    //return house's number
+                    return house.GetHouseName();
+                }
+            }
+
+            //if planet not found in any house, raise error
+            throw new Exception("Planet not in any house, error!");
+
+        }
+
+        /// <summary>
+        /// List of all planets and the houses they are located in at a given time
+        /// </summary>
+        public static Dictionary<PlanetName, HouseName> AllPlanetHousePositions(Time time)
+        {
+            var returnList = new Dictionary<PlanetName, HouseName>();
+
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                var houseIsIn = HousePlanetIsIn(time, planet);
+                returnList.Add(planet, houseIsIn);
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
+        /// List of all planets and the zodiac signs they are located in at a given time
+        /// </summary>
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSigns(Time time)
+        {
+            var returnList = new Dictionary<PlanetName, ZodiacSign>();
+
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                var houseIsIn = Calculate.PlanetSignName(planet, time);
+                returnList.Add(planet, houseIsIn);
+            }
+
+            return returnList;
+        }
+
+
+        /// <summary>
+        /// List of all planets and the zodiac signs they are located in at a given time
+        /// using KP Krishnamurti system, note KP ayanamsa is hard set
+        /// </summary>
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSignsKP(Time time)
+        {
+
+            //hard set KP ayanamsa to match commercial software default output
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.KrishnamurtiKP;
+
+            var returnList = new Dictionary<PlanetName, ZodiacSign>();
+
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                var houseIsIn = Calculate.PlanetSignName(planet, time);
+                returnList.Add(planet, houseIsIn);
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
+        /// List of all planets and the houses they are located in at a given time
+        /// using KP Krishnamurti system, note KP ayanamsa is hard set
+        /// </summary>
+        public static Dictionary<PlanetName, HouseName> AllPlanetHousePositionsKP(Time time)
+        {
+            //hard set KP ayanamsa to match commercial software default output
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.KrishnamurtiKP;
+
+            var returnList = new Dictionary<PlanetName, HouseName>();
+
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                var houseIsIn = HousePlanetIsInKP(time, planet);
+                returnList.Add(planet, houseIsIn);
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
         /// Gets planet lord of given house at given time
         /// The lord of a bhava is
         /// the Graha (planet) in whose Rasi (sign) the Bhavamadhya falls
@@ -1795,7 +2008,7 @@ namespace VedAstro.Library
 
             //round the raw number to get current navamsa number
             var navamsaNumber = (int)Math.Ceiling(rawNavamsaNumber);
-            
+
             //4.0 Get navamsa sign
             //count from first navamsa sign
             ZodiacName signAtNavamsa = SignCountedFromInputSign(firstNavamsa, navamsaNumber);
@@ -6648,89 +6861,8 @@ namespace VedAstro.Library
                 return cusps;
             }
 
-            //special function localized to allow caching
-            //note: there is another version that does caching
-            double TimeToJulianDay(Time time)
-            {
-                //get lmt time
-                var lmtDateTime = time.GetLmtDateTimeOffset();
-
-                //Converts LMT to UTC (GMT)
-                DateTimeOffset utcDateTime = lmtDateTime.ToUniversalTime();
-
-                SwissEph swissEph = new SwissEph();
-
-                double jul_day_UT;
-                jul_day_UT = swissEph.swe_julday(utcDateTime.Year, utcDateTime.Month, utcDateTime.Day,
-                    utcDateTime.TimeOfDay.TotalHours, SwissEph.SE_GREG_CAL);
-                return jul_day_UT;
-
-            }
-
-
-
         }
-       
-        /// <summary>
-        /// Gets longitudes for houses under KP astrology system
-        /// </summary>
-        public static double[] HouseLongitudesKP(Time time)
-        {
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(HouseLongitudesKP), time, Ayanamsa), _houseLongitudesKP);
 
-
-            //UNDERLYING FUNCTION
-            double[] _houseLongitudesKP()
-            {
-                //get location at place of time
-                var location = time.GetGeoLocation();
-
-                //Convert DOB to Julian Day
-                var jul_day_UT = TimeToJulianDay(time);
-
-                SwissEph swissEph = new SwissEph();
-
-                double[] cusps = new double[13];
-
-                //we have to supply ascmc to make the function run
-                double[] ascmc = new double[10];
-
-                //set ayanamsa
-                swissEph.swe_set_sid_mode(Ayanamsa, 0, 0);
-
-                var iflag = SwissEph.SEFLG_SIDEREAL;
-
-                //NOTE:
-                //if you use P which is Placidus there
-                swissEph.swe_houses_ex(jul_day_UT,iflag, location.Latitude(), location.Longitude(), 'V', cusps, ascmc);
-
-                //we only return cusps, cause that is what is used for now
-                return cusps;
-            }
-
-            //special function localized to allow caching
-            //note: there is another version that does caching
-            double TimeToJulianDay(Time time)
-            {
-                //get lmt time
-                var lmtDateTime = time.GetLmtDateTimeOffset();
-
-                //Converts LMT to UTC (GMT)
-                DateTimeOffset utcDateTime = lmtDateTime.ToUniversalTime();
-
-                SwissEph swissEph = new SwissEph();
-
-                double jul_day_UT;
-                jul_day_UT = swissEph.swe_julday(utcDateTime.Year, utcDateTime.Month, utcDateTime.Day,
-                    utcDateTime.TimeOfDay.TotalHours, SwissEph.SE_GREG_CAL);
-                return jul_day_UT;
-
-            }
-
-
-
-        }
 
         /// <summary>
         /// Converts Local Mean Time (LMT) to Universal Time (UTC)

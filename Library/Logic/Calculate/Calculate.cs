@@ -541,6 +541,16 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Get sky chart at a given time. SVG image file. URL can be used like a image source link
+        /// </summary>
+        public static string NorthIndianChart(Time time)
+        {
+            var svgString = NorthChartManager.GenerateChart(time, 1000, 1000);
+
+            return svgString;
+        }
+
+        /// <summary>
         /// Checks if a planet is in a Watery or aqua sign
         /// </summary>
         public static bool IsPlanetInWaterySign(PlanetName planetName, Time time)

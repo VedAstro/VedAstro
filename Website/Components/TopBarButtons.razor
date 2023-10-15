@@ -11,7 +11,7 @@
 <IconButton SmallSize="true" IconName="lucide:panel-left-close" OnClickCallback="OnClickHideSidebar" TooltipText="Hide Sidebar" />
 <IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Dark/Light Mode" />
 
-@*show links to beta & stable from vice versa*@
+@*show links to beta & stable from vice versa
 @if (@WebsiteTools.GetIsBetaRuntime())
 {
     <IconButton RetinaText="NOW BETA" SmallSize="true" Color="warning" IconName="mdi:bench-back" OnClickCallback="() => ChangeDomainMaintainURL(URL.WebStable)" TooltipText="Old version" />
@@ -19,7 +19,7 @@
 else
 {
     <IconButton RetinaText="NOW STABLE" SmallSize="true" Color="warning" IconName="icomoon-free:lab" OnClickCallback="() => ChangeDomainMaintainURL(URL.WebBeta)" TooltipText="Latest version" />
-}
+}*@
 
 <IconButton ExtraClass="ms-md-auto" SmallSize="true" Outline="true" ButtonText="Guide" IconName="mdi:book-open-page-variant-outline" ClickUrl="@PageRoute.QuickGuide" />
 <IconButton SmallSize="true" Outline="true" ButtonText="Open API" IconName="carbon:gateway-api" ClickUrl="@PageRoute.APIBuilder" />

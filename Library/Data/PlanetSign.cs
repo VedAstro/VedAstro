@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
@@ -9,6 +11,27 @@ namespace VedAstro.Library
     [Serializable()]
     public struct ZodiacSign : IToJson
     {
+
+        /// <summary>
+        /// List of zodiac sign in order
+        /// </summary>
+        public static readonly List<ZodiacName> All12ZodiacNames = new List<ZodiacName>
+        {
+            ZodiacName.Aries ,
+            ZodiacName.Taurus,
+            ZodiacName.Gemini,
+            ZodiacName.Cancer,
+            ZodiacName.Leo,
+            ZodiacName.Virgo,
+            ZodiacName.Libra,
+            ZodiacName.Scorpio,
+            ZodiacName.Sagittarius,
+            ZodiacName.Capricorn,
+            ZodiacName.Aquarius,
+            ZodiacName.Pisces,
+        };
+
+
         private readonly ZodiacName _signName;
         private readonly Angle _degreesInSign;
 
@@ -76,7 +99,7 @@ namespace VedAstro.Library
             return temp;
 
         }
-    
+
 
     }
 }

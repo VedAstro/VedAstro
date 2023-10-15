@@ -3,6 +3,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyModel;
 
 
 namespace API
@@ -66,7 +67,18 @@ namespace API
                 await APITools.AutoControlOpenAPIOverload(callLog);
 
                 //5 : SEND DATA TO CALLER
-                return APITools.SendAnyToCaller(calculatorName, rawPlanetData, incomingRequest);
+                //some calculators return SVG & binary data, so need to send to caller directly
+                switch (calculatorName)
+                {
+                    //handle SVG string
+                    case nameof(VedAstro.Library.Calculate.SkyChart):
+                    case nameof(VedAstro.Library.Calculate.SouthIndianChart):
+                        return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawPlanetData), incomingRequest, "image/svg+xml");
+
+                    default:
+                        return APITools.SendAnyToCaller(calculatorName, rawPlanetData, incomingRequest);
+                }
+
 
             }
 

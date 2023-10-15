@@ -3170,7 +3170,7 @@
 		<Tag>Dasa,PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusSunPD1</Name>
+		<Name>CapricornSunPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Capricorn - A wandering life, loss of
@@ -3287,7 +3287,7 @@
 		<Tag>Dasa,PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusMoonPD1</Name>
+		<Name>CapricornMoonPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Increase in lands and houses and wealth, success
@@ -3409,7 +3409,7 @@
 		<Tag>Dasa,PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusMarsPD1</Name>
+		<Name>CapricornMarsPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Success in
@@ -3539,7 +3539,7 @@
 		<Tag>Dasa,PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusRahuPD1</Name>
+		<Name>CapricornRahuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Sudden promotions
@@ -3672,7 +3672,7 @@
 		<Tag>Dasa,PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusJupiterPD1</Name>
+		<Name>CapricornJupiterPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Capricorn - Death or
@@ -3800,7 +3800,7 @@
 		<Tag>Dasa,PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusSaturnPD1</Name>
+		<Name>CapricornSaturnPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Increase in lands, gains in
@@ -3933,7 +3933,7 @@
 		<Tag>Dasa,PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusMercuryPD1</Name>
+		<Name>CapricornMercuryPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Success in trade,
@@ -4074,7 +4074,7 @@
 		<Tag>Dasa,PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusKetuPD1</Name>
+		<Name>CapricornKetuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Capricorn - Misappropriation of private and governmental
@@ -4213,7 +4213,7 @@
 		<Tag>Dasa,PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusVenusPD1</Name>
+		<Name>CapricornVenusPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Travels in foreign lands, freedom from

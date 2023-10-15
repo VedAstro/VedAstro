@@ -1180,8 +1180,8 @@ namespace VedAstro.Library
 		[HoroscopeCalculator(HoroscopeName.SagittariusRising)]
 		public static CalculatorResult SagittariusRisingOccuring(Time time) => CalculatorResult.New(Calculate.IsHouseSignName(HouseName.House1, ZodiacName.Sagittarius, time), new[] { HouseName.House1, }, new[] { ZodiacName.Sagittarius }, time);
 
-		[HoroscopeCalculator(HoroscopeName.CapricornusRising)]
-		public static CalculatorResult CapricornusRisingOccuring(Time time) => CalculatorResult.New(Calculate.IsHouseSignName(HouseName.House1, ZodiacName.Capricornus, time), new[] { HouseName.House1, }, new[] { ZodiacName.Capricornus }, time);
+		[HoroscopeCalculator(HoroscopeName.CapricornRising)]
+		public static CalculatorResult CapricornRisingOccuring(Time time) => CalculatorResult.New(Calculate.IsHouseSignName(HouseName.House1, ZodiacName.Capricorn, time), new[] { HouseName.House1, }, new[] { ZodiacName.Capricorn }, time);
 
 		[HoroscopeCalculator(HoroscopeName.AquariusRising)]
 		public static CalculatorResult AquariusRisingOccuring(Time time) => CalculatorResult.New(Calculate.IsHouseSignName(HouseName.House1, ZodiacName.Aquarius, time), new[] { HouseName.House1, }, new[] { ZodiacName.Aquarius }, time);
@@ -1629,8 +1629,8 @@ namespace VedAstro.Library
 		public static CalculatorResult SunInScorpio(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Sun, ZodiacName.Scorpio, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Scorpio }, time);
 		[HoroscopeCalculator(HoroscopeName.SunInSagittarius)]
 		public static CalculatorResult SunInSagittarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Sun, ZodiacName.Sagittarius, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Sagittarius }, time);
-		[HoroscopeCalculator(HoroscopeName.SunInCapricornus)]
-		public static CalculatorResult SunInCapricornus(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Sun, ZodiacName.Capricornus, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Capricornus }, time);
+		[HoroscopeCalculator(HoroscopeName.SunInCapricorn)]
+		public static CalculatorResult SunInCapricorn(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Sun, ZodiacName.Capricorn, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Capricorn }, time);
 		[HoroscopeCalculator(HoroscopeName.SunInAquarius)]
 		public static CalculatorResult SunInAquarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Sun, ZodiacName.Aquarius, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Aquarius }, time);
 		[HoroscopeCalculator(HoroscopeName.SunInPisces)]
@@ -1655,8 +1655,8 @@ namespace VedAstro.Library
 		public static CalculatorResult MoonInScorpio(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Moon, ZodiacName.Scorpio, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Scorpio }, time);
 		[HoroscopeCalculator(HoroscopeName.MoonInSagittarius)]
 		public static CalculatorResult MoonInSagittarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Moon, ZodiacName.Sagittarius, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Sagittarius }, time);
-		[HoroscopeCalculator(HoroscopeName.MoonInCapricornus)]
-		public static CalculatorResult MoonInCapricornus(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Moon, ZodiacName.Capricornus, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Capricornus }, time);
+		[HoroscopeCalculator(HoroscopeName.MoonInCapricorn)]
+		public static CalculatorResult MoonInCapricorn(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Moon, ZodiacName.Capricorn, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Capricorn }, time);
 		[HoroscopeCalculator(HoroscopeName.MoonInAquarius)]
 		public static CalculatorResult MoonInAquarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Moon, ZodiacName.Aquarius, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Aquarius }, time);
 		[HoroscopeCalculator(HoroscopeName.MoonInPisces)]
@@ -1682,8 +1682,8 @@ namespace VedAstro.Library
 		public static CalculatorResult MarsInScorpio(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Mars, ZodiacName.Scorpio, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Scorpio }, time);
 		[HoroscopeCalculator(HoroscopeName.MarsInSagittarius)]
 		public static CalculatorResult MarsInSagittarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Mars, ZodiacName.Sagittarius, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Sagittarius }, time);
-		[HoroscopeCalculator(HoroscopeName.MarsInCapricornus)]
-		public static CalculatorResult MarsInCapricornus(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Mars, ZodiacName.Capricornus, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Capricornus }, time);
+		[HoroscopeCalculator(HoroscopeName.MarsInCapricorn)]
+		public static CalculatorResult MarsInCapricorn(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Mars, ZodiacName.Capricorn, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Capricorn }, time);
 		[HoroscopeCalculator(HoroscopeName.MarsInAquarius)]
 		public static CalculatorResult MarsInAquarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Mars, ZodiacName.Aquarius, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Aquarius }, time);
 		[HoroscopeCalculator(HoroscopeName.MarsInPisces)]
@@ -1709,8 +1709,8 @@ namespace VedAstro.Library
 		public static CalculatorResult MercuryInScorpio(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Scorpio, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Scorpio }, time);
 		[HoroscopeCalculator(HoroscopeName.MercuryInSagittarius)]
 		public static CalculatorResult MercuryInSagittarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Sagittarius, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Sagittarius }, time);
-		[HoroscopeCalculator(HoroscopeName.MercuryInCapricornus)]
-		public static CalculatorResult MercuryInCapricornus(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Capricornus, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Capricornus }, time);
+		[HoroscopeCalculator(HoroscopeName.MercuryInCapricorn)]
+		public static CalculatorResult MercuryInCapricorn(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Capricorn, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Capricorn }, time);
 		[HoroscopeCalculator(HoroscopeName.MercuryInAquarius)]
 		public static CalculatorResult MercuryInAquarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Aquarius, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Aquarius }, time);
 		[HoroscopeCalculator(HoroscopeName.MercuryInPisces)]
@@ -1735,8 +1735,8 @@ namespace VedAstro.Library
 		public static CalculatorResult JupiterInScorpio(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Scorpio, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Scorpio }, time);
 		[HoroscopeCalculator(HoroscopeName.JupiterInSagittarius)]
 		public static CalculatorResult JupiterInSagittarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Sagittarius, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Sagittarius }, time);
-		[HoroscopeCalculator(HoroscopeName.JupiterInCapricornus)]
-		public static CalculatorResult JupiterInCapricornus(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Capricornus, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Capricornus }, time);
+		[HoroscopeCalculator(HoroscopeName.JupiterInCapricorn)]
+		public static CalculatorResult JupiterInCapricorn(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Capricorn, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Capricorn }, time);
 		[HoroscopeCalculator(HoroscopeName.JupiterInAquarius)]
 		public static CalculatorResult JupiterInAquarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Aquarius, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Aquarius }, time);
 		[HoroscopeCalculator(HoroscopeName.JupiterInPisces)]
@@ -1761,8 +1761,8 @@ namespace VedAstro.Library
 		public static CalculatorResult VenusInScorpio(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Venus, ZodiacName.Scorpio, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Scorpio }, time);
 		[HoroscopeCalculator(HoroscopeName.VenusInSagittarius)]
 		public static CalculatorResult VenusInSagittarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Venus, ZodiacName.Sagittarius, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Sagittarius }, time);
-		[HoroscopeCalculator(HoroscopeName.VenusInCapricornus)]
-		public static CalculatorResult VenusInCapricornus(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Venus, ZodiacName.Capricornus, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Capricornus }, time);
+		[HoroscopeCalculator(HoroscopeName.VenusInCapricorn)]
+		public static CalculatorResult VenusInCapricorn(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Venus, ZodiacName.Capricorn, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Capricorn }, time);
 		[HoroscopeCalculator(HoroscopeName.VenusInAquarius)]
 		public static CalculatorResult VenusInAquarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Venus, ZodiacName.Aquarius, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Aquarius }, time);
 		[HoroscopeCalculator(HoroscopeName.VenusInPisces)]
@@ -1788,8 +1788,8 @@ namespace VedAstro.Library
 		public static CalculatorResult SaturnInScorpio(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Scorpio, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Scorpio }, time);
 		[HoroscopeCalculator(HoroscopeName.SaturnInSagittarius)]
 		public static CalculatorResult SaturnInSagittarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Sagittarius, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Sagittarius }, time);
-		[HoroscopeCalculator(HoroscopeName.SaturnInCapricornus)]
-		public static CalculatorResult SaturnInCapricornus(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Capricornus, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Capricornus }, time);
+		[HoroscopeCalculator(HoroscopeName.SaturnInCapricorn)]
+		public static CalculatorResult SaturnInCapricorn(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Capricorn, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Capricorn }, time);
 		[HoroscopeCalculator(HoroscopeName.SaturnInAquarius)]
 		public static CalculatorResult SaturnInAquarius(Time time) => CalculatorResult.New(Calculate.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Aquarius, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Aquarius }, time);
 		[HoroscopeCalculator(HoroscopeName.SaturnInPisces)]

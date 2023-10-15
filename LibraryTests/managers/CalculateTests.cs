@@ -151,7 +151,7 @@ namespace VedAstro.Library.Tests
             Assert.AreEqual(3, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Libra]);
             Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Scorpio]);
             Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Sagittarius]);
-            Assert.AreEqual(0, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Capricornus]);
+            Assert.AreEqual(0, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Capricorn]);
             Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Aquarius]);
             Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Pisces]);
         }

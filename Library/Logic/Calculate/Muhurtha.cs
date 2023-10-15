@@ -1508,7 +1508,7 @@ namespace VedAstro.Library
 
             //In regard to Pisces, Capricorn, Cancer and Scorpio, the last (three degrees) (27 to 30)
             //has to be avoided as it is supposed to be presided over by the evil force of Rahu.
-            if (house1SignName == ZodiacName.Pisces || house1SignName == ZodiacName.Capricornus ||
+            if (house1SignName == ZodiacName.Pisces || house1SignName == ZodiacName.Capricorn ||
                 house1SignName == ZodiacName.Cancer || house1SignName == ZodiacName.Scorpio)
             {
                 if (house1DegreesInSign >= 27 && house1DegreesInSign <= 30)
@@ -3191,7 +3191,7 @@ namespace VedAstro.Library
             var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
             //check rising sign
-            var rightSign = risingSign == ZodiacName.Capricornus;
+            var rightSign = risingSign == ZodiacName.Capricorn;
 
             //if not correct sign, end here as not occuring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
@@ -4963,11 +4963,11 @@ namespace VedAstro.Library
 			return new() { Occuring = occuring };
 		}
 
-		[EventCalculator(EventName.CapricornusSunPD1)]
-		public static CalculatorResult CapricornusSunPD1(Time time, Person person)
+		[EventCalculator(EventName.CapricornSunPD1)]
+		public static CalculatorResult CapricornSunPD1(Time time, Person person)
 		{
 			//planet in sign at birth
-			var planetInSign = Calculate.PlanetSignName(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
+			var planetInSign = Calculate.PlanetSignName(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
 			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5147,11 +5147,11 @@ namespace VedAstro.Library
 			return new() { Occuring = occuring };
 		}
 
-		[EventCalculator(EventName.CapricornusMoonPD1)]
-		public static CalculatorResult CapricornusMoonPD1(Time time, Person person)
+		[EventCalculator(EventName.CapricornMoonPD1)]
+		public static CalculatorResult CapricornMoonPD1(Time time, Person person)
 		{
 			//planet in sign at birth
-			var planetInSign = Calculate.PlanetSignName(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
+			var planetInSign = Calculate.PlanetSignName(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
 			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5331,11 +5331,11 @@ namespace VedAstro.Library
 			return new() { Occuring = occuring };
 		}
 
-		[EventCalculator(EventName.CapricornusMarsPD1)]
-		public static CalculatorResult CapricornusMarsPD1(Time time, Person person)
+		[EventCalculator(EventName.CapricornMarsPD1)]
+		public static CalculatorResult CapricornMarsPD1(Time time, Person person)
 		{
 			//planet in sign at birth
-			var planetInSign = Calculate.PlanetSignName(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
+			var planetInSign = Calculate.PlanetSignName(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
 			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5515,11 +5515,11 @@ namespace VedAstro.Library
 			return new() { Occuring = occuring };
 		}
 
-		[EventCalculator(EventName.CapricornusRahuPD1)]
-		public static CalculatorResult CapricornusRahuPD1(Time time, Person person)
+		[EventCalculator(EventName.CapricornRahuPD1)]
+		public static CalculatorResult CapricornRahuPD1(Time time, Person person)
 		{
 			//planet in sign at birth
-			var planetInSign = Calculate.PlanetSignName(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
+			var planetInSign = Calculate.PlanetSignName(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
 			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -5699,11 +5699,11 @@ namespace VedAstro.Library
 			return new() { Occuring = occuring };
 		}
 
-		[EventCalculator(EventName.CapricornusJupiterPD1)]
-		public static CalculatorResult CapricornusJupiterPD1(Time time, Person person)
+		[EventCalculator(EventName.CapricornJupiterPD1)]
+		public static CalculatorResult CapricornJupiterPD1(Time time, Person person)
 		{
 			//planet in sign at birth
-			var planetInSign = Calculate.PlanetSignName(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
+			var planetInSign = Calculate.PlanetSignName(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
 			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -5883,11 +5883,11 @@ namespace VedAstro.Library
 			return new() { Occuring = occuring };
 		}
 
-		[EventCalculator(EventName.CapricornusSaturnPD1)]
-		public static CalculatorResult CapricornusSaturnPD1(Time time, Person person)
+		[EventCalculator(EventName.CapricornSaturnPD1)]
+		public static CalculatorResult CapricornSaturnPD1(Time time, Person person)
 		{
 			//planet in sign at birth
-			var planetInSign = Calculate.PlanetSignName(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
+			var planetInSign = Calculate.PlanetSignName(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
 			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6067,11 +6067,11 @@ namespace VedAstro.Library
 			return new() { Occuring = occuring };
 		}
 
-		[EventCalculator(EventName.CapricornusMercuryPD1)]
-		public static CalculatorResult CapricornusMercuryPD1(Time time, Person person)
+		[EventCalculator(EventName.CapricornMercuryPD1)]
+		public static CalculatorResult CapricornMercuryPD1(Time time, Person person)
 		{
 			//planet in sign at birth
-			var planetInSign = Calculate.PlanetSignName(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
+			var planetInSign = Calculate.PlanetSignName(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
 			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6251,11 +6251,11 @@ namespace VedAstro.Library
 			return new() { Occuring = occuring };
 		}
 
-		[EventCalculator(EventName.CapricornusKetuPD1)]
-		public static CalculatorResult CapricornusKetuPD1(Time time, Person person)
+		[EventCalculator(EventName.CapricornKetuPD1)]
+		public static CalculatorResult CapricornKetuPD1(Time time, Person person)
 		{
 			//planet in sign at birth
-			var planetInSign = Calculate.PlanetSignName(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
+			var planetInSign = Calculate.PlanetSignName(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
 			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6435,11 +6435,11 @@ namespace VedAstro.Library
 			return new() { Occuring = occuring };
 		}
 
-		[EventCalculator(EventName.CapricornusVenusPD1)]
-		public static CalculatorResult CapricornusVenusPD1(Time time, Person person)
+		[EventCalculator(EventName.CapricornVenusPD1)]
+		public static CalculatorResult CapricornVenusPD1(Time time, Person person)
 		{
 			//planet in sign at birth
-			var planetInSign = Calculate.PlanetSignName(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
+			var planetInSign = Calculate.PlanetSignName(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
 			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;

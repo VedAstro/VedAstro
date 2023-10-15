@@ -1055,7 +1055,7 @@ namespace VedAstro.Library
             }
             if (mainSign == ZodiacName.Libra)
             {
-                if (subSign is ZodiacName.Capricornus or ZodiacName.Virgo)
+                if (subSign is ZodiacName.Capricorn or ZodiacName.Virgo)
                 {
                     mainControlSub = true;
                 }
@@ -1074,7 +1074,7 @@ namespace VedAstro.Library
                     mainControlSub = true;
                 }
             }
-            if (mainSign == ZodiacName.Capricornus)
+            if (mainSign == ZodiacName.Capricorn)
             {
                 if (subSign is ZodiacName.Aries or ZodiacName.Aquarius)
                 {
@@ -1090,7 +1090,7 @@ namespace VedAstro.Library
             }
             if (mainSign == ZodiacName.Pisces)
             {
-                if (subSign is ZodiacName.Capricornus)
+                if (subSign is ZodiacName.Capricorn)
                 {
                     mainControlSub = true;
                 }
@@ -1612,7 +1612,7 @@ namespace VedAstro.Library
                 if (planet == PlanetName.Mars && planetHouse == HouseName.House4 && ariesOrScorpio) { return 0; }
 
                 //2.4   when the 7th is other than Capricorn and Cancer, the dosha is given rise to;
-                var cancerOrCapricorn = planetSign == ZodiacName.Capricornus || planetSign == ZodiacName.Cancer;
+                var cancerOrCapricorn = planetSign == ZodiacName.Capricorn || planetSign == ZodiacName.Cancer;
                 if (planet == PlanetName.Mars && planetHouse == HouseName.House7 && cancerOrCapricorn) { return 0; }
 
                 //2.5   and Mars gives bad effects in the 8th, provided the 8th is any other than

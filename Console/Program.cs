@@ -14,18 +14,25 @@ namespace VedAstro.Console
         {
 
 
-            Time timeSample = new("00:00 30/10/2023 +05:30", GeoLocation.Bangalore);
+            //Time timeSample = new("00:00 30/10/2023 +05:30", GeoLocation.Bangalore);
+            Time timeSample = new("11:00 25/07/1984 +05:30", new GeoLocation("",77.2,28.6));
 
-            var yy = Calculate.AllHouseData(HouseName.House1, timeSample);
-            foreach (var y in yy)
-            {
-                var parts = (House)y.Result;
-                var middle = parts.GetMiddleLongitude();
-                var begin = parts.GetBeginLongitude();
-                var end = parts.GetEndLongitude();
-            }
+            var longitudes = Calculate.AllHouseLongitudesKP(timeSample);
+            var constellations = Calculate.AllHouseConstellationKP(timeSample);
+            var housesPlanets = Calculate.AllPlanetHousePositionsKP(timeSample);
+            var signsPlanets = Calculate.AllPlanetZodiacSignsKP(timeSample);
 
-            var x = Calculate.AllPlanetData(PlanetName.Moon, timeSample);
+
+            //var yy = Calculate.AllHouseData(HouseName.House1, timeSample);
+            //foreach (var y in yy)
+            //{
+            //    var parts = (House)y.Result;
+            //    var middle = parts.GetMiddleLongitude();
+            //    var begin = parts.GetBeginLongitude();
+            //    var end = parts.GetEndLongitude();
+            //}
+
+            //var x = Calculate.AllPlanetData(PlanetName.Moon, timeSample);
 
 
             //do the test

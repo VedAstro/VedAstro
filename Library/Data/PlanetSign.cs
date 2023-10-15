@@ -62,7 +62,10 @@ namespace VedAstro.Library
 
         public override string ToString()
         {
-            return $"{_signName} : {_degreesInSign.Rounded}";
+            //break down into common view format
+            var dmg = $"{_degreesInSign.Degrees}° {Math.Abs(_degreesInSign.Minutes)}' {Math.Abs(_degreesInSign.Seconds)}";
+
+            return $"{_signName} : {dmg}";
         }
 
         public JObject ToJson()

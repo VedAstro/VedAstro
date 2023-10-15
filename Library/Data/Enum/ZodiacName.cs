@@ -20,7 +20,7 @@ namespace VedAstro.Library
         Libra = 7,
         Scorpio = 8,
         Sagittarius = 9,
-        Capricornus = 10,
+        Capricorn = 10,
         Aquarius = 11,
         Pisces = 12
     }

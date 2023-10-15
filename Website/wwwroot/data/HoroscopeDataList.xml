@@ -1373,7 +1373,7 @@
 		<Tag>Personal, RisingSign</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusRising</Name>
+		<Name>CapricornRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mental Tendencies.—They are stoical to the miseries of life. Possessed of sympathy, generosity and philanthropy, self-willed, strong in purpose, secretive and vindictive, Capricorn natives are cunning and determined.
@@ -3021,10 +3021,10 @@
 		<Tag>Horoscope</Tag>
 	</Event>
 	<Event>
-		<Name>SunInCapricornus</Name>
+		<Name>SunInCapricorn</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Capricornus - Mean-minded, stubborn, ignorant, miserly,
+			Capricorn - Mean-minded, stubborn, ignorant, miserly,
 			pushful, unhappy, boring, active, meddlesome, obliging,
 			humorous, witty, affable, prudent, firm.
 		</Description>
@@ -3167,10 +3167,10 @@
 		<Tag>Horoscope</Tag>
 	</Event>
 	<Event>
-		<Name>MoonInCapricornus</Name>
+		<Name>MoonInCapricorn</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Capricornus - Ever attached to wife and children, virtuous,
+			Capricorn - Ever attached to wife and children, virtuous,
 			good eyes. slender waist, quick in perception, clever, active,
 			crafty, somewhat selfish, sagacious, strategic, liberal. merciless,
 			unscrupulous, inconsistent, low morals, niggardly and
@@ -3310,10 +3310,10 @@
 		<Tag>Horoscope</Tag>
 	</Event>
 	<Event>
-		<Name>MarsInCapricornus</Name>
+		<Name>MarsInCapricorn</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Capricornus - Rich. high political position, many sons,
+			Capricorn - Rich. high political position, many sons,
 			brave, generous. love for children, middle stature, industrious,
 			indefatigable, successful. penetrating, bold, tactful, respected,
 			generous, ,gallant, influential.
@@ -3444,10 +3444,10 @@
 		<Tag>Horoscope</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryInCapricornus</Name>
+		<Name>MercuryInCapricorn</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Capricornus - Selfless, business tendencies, economical,
+			Capricorn - Selfless, business tendencies, economical,
 			debtor, inconsistent, low stature, cunning, inventive, active.
 			restless, suspicious, drudging.
 		</Description>
@@ -3570,10 +3570,10 @@
 		<Tag>Horoscope</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterInCapricornus</Name>
+		<Name>JupiterInCapricorn</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Capricornus - Tactless, good intention, disgraceful behaviour,
+			Capricorn - Tactless, good intention, disgraceful behaviour,
 			generous, unhappy, irritable, inconsistent, avaricious,
 			unmanly, jealous.
 		</Description>
@@ -3694,10 +3694,10 @@
 		<Tag>Horoscope</Tag>
 	</Event>
 	<Event>
-		<Name>VenusInCapricornus</Name>
+		<Name>VenusInCapricorn</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Capricornus - Fond of low class women, imprudent, ambitious,
+			Capricorn - Fond of low class women, imprudent, ambitious,
 			unprincipled, licentious, boastful, subtle, learned, weak
 			body.
 		</Description>
@@ -3820,10 +3820,10 @@
 		<Tag>Horoscope</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnInCapricornus</Name>
+		<Name>SaturnInCapricorn</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Capricornus - Intelligent, harmony and felicity in domestic
+			Capricorn - Intelligent, harmony and felicity in domestic
 			life, selfish, covetous, peevish, intellectual, learned, suspicious,
 			reflective, revengeful, prudent, melancholy, inheritance from
 			wife's parties.

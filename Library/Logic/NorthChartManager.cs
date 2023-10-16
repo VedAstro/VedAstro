@@ -41,18 +41,18 @@ namespace VedAstro.Library
         private static Dictionary<HouseName, dynamic> ChartSignCoordinates { get; set; } =
             new Dictionary<HouseName, dynamic>()
             {
-                { HouseName.House1, new { xAxis = 310, yAxis = 100 } },
-                { HouseName.House2, new { xAxis = 530, yAxis = 100 } },
-                { HouseName.House3, new { xAxis = 750, yAxis = 100 } },
+                { HouseName.House1, new { xAxis = 475, yAxis = 150 } },
+                { HouseName.House2, new { xAxis = 250, yAxis = 100 } },
+                { HouseName.House3, new { xAxis = 100, yAxis = 200 } },
                 { HouseName.House4, new { xAxis = 250, yAxis = 400 } },
-                { HouseName.House5, new { xAxis = 750, yAxis = 540 } },
-                { HouseName.House6, new { xAxis = 750, yAxis = 760 } },
-                { HouseName.House7, new { xAxis = 530, yAxis = 760 } },
-                { HouseName.House8, new { xAxis = 310, yAxis = 760 } },
-                { HouseName.House9, new { xAxis = 90, yAxis = 760 } },
-                { HouseName.House10, new { xAxis = 90, yAxis = 540 } },
-                { HouseName.House11, new { xAxis = 90, yAxis = 320 } },
-                { HouseName.House12, new { xAxis = 90, yAxis = 100 } },
+                { HouseName.House5, new { xAxis = 100, yAxis = 620 } },
+                { HouseName.House6, new { xAxis = 250, yAxis = 825 } },
+                { HouseName.House7, new { xAxis = 475, yAxis = 600 } },
+                { HouseName.House8, new { xAxis = 675, yAxis = 825 } },
+                { HouseName.House9, new { xAxis = 840, yAxis = 620 } },
+                { HouseName.House10, new { xAxis = 675, yAxis = 400 } },
+                { HouseName.House11, new { xAxis = 840, yAxis = 200 } },
+                { HouseName.House12, new { xAxis = 675, yAxis = 100 } },
             };
 
 

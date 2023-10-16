@@ -2574,23 +2574,54 @@ namespace VedAstro.Library
                 //handles results that have many props from 1 call, exp : SwissEphemeris
                 case Dictionary<PlanetName, ZodiacSign> dictionary:
                     {
-                        //convert list to comma separated string
-                        var parsedList = dictionary.Cast<object>().ToList();
-                        var stringComma = Tools.ListToString(parsedList);
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
+                            {
+                                { "Planet", item.Key.ToString() },
+                                { "ZodiacSign", item.Value.ToString() }
+                            };
+                            array.Add(obj);
+                        }
 
-                        rootPayloadJson = new JProperty(dataName, stringComma);
-                        break;
-                    }
-                case Dictionary<ZodiacName, int> dictionary:
-                    {
-                        //convert list to comma separated string
-                        var parsedList = dictionary.Cast<object>().ToList();
-                        var stringComma = Tools.ListToString(parsedList);
 
-                        rootPayloadJson = new JProperty(dataName, stringComma);
+                        rootPayloadJson = new JProperty(dataName, array);
                         break;
                     }
                 case Dictionary<PlanetName, PlanetConstellation> dictionary:
+                    {
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
+                            {
+                                { "Planet", item.Key.ToString() },
+                                { "Constellation", item.Value.ToString() }
+                            };
+                            array.Add(obj);
+                        }
+
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+                    }
+                case Dictionary<PlanetName, HouseName> dictionary:
+                    {
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
+                            {
+                                { "Planet", item.Key.ToString() },
+                                { "House", item.Value.ToString() }
+                            };
+                            array.Add(obj);
+                        }
+
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+                    }
+                case Dictionary<ZodiacName, int> dictionary:
                     {
                         //convert list to comma separated string
                         var parsedList = dictionary.Cast<object>().ToList();

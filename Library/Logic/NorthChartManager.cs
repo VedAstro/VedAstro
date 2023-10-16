@@ -44,7 +44,7 @@ namespace VedAstro.Library
                 { HouseName.House1, new { xAxis = 310, yAxis = 100 } },
                 { HouseName.House2, new { xAxis = 530, yAxis = 100 } },
                 { HouseName.House3, new { xAxis = 750, yAxis = 100 } },
-                { HouseName.House4, new { xAxis = 750, yAxis = 320 } },
+                { HouseName.House4, new { xAxis = 250, yAxis = 400 } },
                 { HouseName.House5, new { xAxis = 750, yAxis = 540 } },
                 { HouseName.House6, new { xAxis = 750, yAxis = 760 } },
                 { HouseName.House7, new { xAxis = 530, yAxis = 760 } },

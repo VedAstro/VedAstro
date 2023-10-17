@@ -7078,9 +7078,7 @@ namespace VedAstro.Library
                 previousConstellation = tempConstellationName;
             }
 
-
             return returnList;
-
         }
 
         /// <summary>

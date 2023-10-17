@@ -7055,23 +7055,32 @@ namespace VedAstro.Library
         /// Gets all the constellation start time for a given planet
         /// Set to an accuracy of 1 minute
         /// </summary>
-        public static List<Tuple<ConstellationName, Time>> GetConstellationTransitStartTime(PlanetName planetName, TimeRange timeRange)
+        public static List<Tuple<ConstellationName, Time, ZodiacSign>> GetConstellationTransitStartTime(PlanetName planetName, TimeRange timeRange)
         {
             //make slices to scan
             var accuracyInHours = 0.0166666; // 1 minute
             var timeSlices = Time.GetTimeListFromRange(timeRange.start, timeRange.end, accuracyInHours);
 
-            var returnList = new List<Tuple<ConstellationName, Time>>();
+            var returnList = new List<Tuple<ConstellationName, Time, ZodiacSign>>();
 
             var startConstellation = Calculate.PlanetConstellation(timeRange.start, planetName);
             var previousConstellation = startConstellation.GetConstellationName();
+
+            
+
             foreach (var timeSlice in timeSlices)
             {
                 //if constellation changes mark the time
                 var tempConstellationName = Calculate.PlanetConstellation(timeSlice, planetName).GetConstellationName();
+                
+                //CPJ Added for Planet's Zodiac Sign
+                var planetLongitude = Calculate.PlanetNirayanaLongitude(timeSlice, planetName);
+                var planetZodiacSign = Calculate.ZodiacSignAtLongitude(planetLongitude);
+                //-------
+
                 if (tempConstellationName != previousConstellation)
                 {
-                    returnList.Add(new Tuple<ConstellationName, Time>(tempConstellationName, timeSlice));
+                    returnList.Add(new Tuple<ConstellationName, Time, ZodiacSign>(tempConstellationName, timeSlice, planetZodiacSign));
                 }
 
                 //update value for next check

@@ -76,7 +76,7 @@ namespace VedAstro.Library
             var methodInfo = declaringType?.GetMethod(methodName, parameters);
             return methodInfo;
         }
-        
+
 
 
 
@@ -2171,36 +2171,39 @@ namespace VedAstro.Library
         {
             List<object> parameters = new List<object>();
 
-            foreach (ParameterInfo parameter in methodInfo.GetParameters())
+            try
             {
-                // Get the underlying type of the parameter
-                var parameterType = parameter.ParameterType;
 
-                //final sample initialized data
-                object sampleData = null;
-
-                //HACK to handle custom types, since can't extend class
-                if (parameterType == typeof(object)) { sampleData = new object(); }
-                if (parameterType == typeof(ZodiacSign)) { sampleData = new ZodiacSign(ZodiacName.Aquarius, Angle.FromDegrees(15)); }
-                if (parameterType == typeof(Time)) { sampleData = Time.StandardHoroscope(); }
-                if (parameterType == typeof(Angle)) { sampleData = Angle.Degrees180; }
-                if (parameterType == typeof(PlanetName)) { sampleData = PlanetName.Sun; }
-                if (parameterType == typeof(PlanetConstellation)) { sampleData = new PlanetConstellation(1, 1, Angle.FromDegrees(13)); }
-                if (parameterType == typeof(Person)) { sampleData = new Person("", "Juliet", Time.StandardHoroscope(), Gender.Female, new[] { "" }); }
-                if (parameterType == typeof(HouseName)) { sampleData = HouseName.House4; }
-                if (parameterType == typeof(TimeSpan)) { sampleData = new TimeSpan(1, 0, 0); }
-                if (parameterType == typeof(List<HouseName>)) { sampleData = new List<HouseName>() { HouseName.House1, HouseName.House4 }; }
-                if (parameterType == typeof(List<PlanetName>)) { sampleData = new List<PlanetName>() { PlanetName.Moon, PlanetName.Mars }; }
-                if (parameterType == typeof(int)) { sampleData = 5; }
-                if (parameterType == typeof(double)) { sampleData = 2415018.5; } //julian days
-                if (parameterType == typeof(string)) { sampleData = "sun"; }
-                if (parameterType == typeof(bool)) { sampleData = false; }
-                if (parameterType == typeof(DateTimeOffset)) { sampleData = DateTimeOffset.Now; }
-                if (parameterType == typeof(PlanetName[])) { sampleData = new[] { PlanetName.Mars, PlanetName.Jupiter }; }
-                if (parameterType == typeof(int[])) { sampleData = new[] { 3, 5 }; }
-                if (parameterType == typeof(Dictionary<PlanetName, Shashtiamsa>))
+                foreach (ParameterInfo parameter in methodInfo.GetParameters())
                 {
-                    sampleData = new Dictionary<PlanetName, Shashtiamsa>()
+                    // Get the underlying type of the parameter
+                    var parameterType = parameter.ParameterType;
+
+                    //final sample initialized data
+                    object sampleData = null;
+
+                    //HACK to handle custom types, since can't extend class
+                    if (parameterType == typeof(object)) { sampleData = new object(); }
+                    if (parameterType == typeof(ZodiacSign)) { sampleData = new ZodiacSign(ZodiacName.Aquarius, Angle.FromDegrees(15)); }
+                    if (parameterType == typeof(Time)) { sampleData = Time.StandardHoroscope(); }
+                    if (parameterType == typeof(Angle)) { sampleData = Angle.Degrees180; }
+                    if (parameterType == typeof(PlanetName)) { sampleData = PlanetName.Sun; }
+                    if (parameterType == typeof(PlanetConstellation)) { sampleData = new PlanetConstellation(1, 1, Angle.FromDegrees(13)); }
+                    if (parameterType == typeof(Person)) { sampleData = new Person("", "Juliet", Time.StandardHoroscope(), Gender.Female, new[] { "" }); }
+                    if (parameterType == typeof(HouseName)) { sampleData = HouseName.House4; }
+                    if (parameterType == typeof(TimeSpan)) { sampleData = new TimeSpan(1, 0, 0); }
+                    if (parameterType == typeof(List<HouseName>)) { sampleData = new List<HouseName>() { HouseName.House1, HouseName.House4 }; }
+                    if (parameterType == typeof(List<PlanetName>)) { sampleData = new List<PlanetName>() { PlanetName.Moon, PlanetName.Mars }; }
+                    if (parameterType == typeof(int)) { sampleData = 5; }
+                    if (parameterType == typeof(double)) { sampleData = 2415018.5; } //julian days
+                    if (parameterType == typeof(string)) { sampleData = "sun"; }
+                    if (parameterType == typeof(bool)) { sampleData = false; }
+                    if (parameterType == typeof(DateTimeOffset)) { sampleData = DateTimeOffset.Now; }
+                    if (parameterType == typeof(PlanetName[])) { sampleData = new[] { PlanetName.Mars, PlanetName.Jupiter }; }
+                    if (parameterType == typeof(int[])) { sampleData = new[] { 3, 5 }; }
+                    if (parameterType == typeof(Dictionary<PlanetName, Shashtiamsa>))
+                    {
+                        sampleData = new Dictionary<PlanetName, Shashtiamsa>()
                     {
                         { PlanetName.Sun, new Shashtiamsa(103.244) },
                         { PlanetName.Moon, new Shashtiamsa(195.338) },
@@ -2210,15 +2213,24 @@ namespace VedAstro.Library
                         { PlanetName.Venus, new Shashtiamsa(117.7177) },
                         { PlanetName.Saturn, new Shashtiamsa(114.849) },
                     };
+                    }
+
+                    //if not found then probably Enum, so use special Enum converter
+                    if (sampleData == null) { sampleData = Tools.GetRandomEnumValue(parameterType); }
+
+                    parameters.Add(sampleData);
                 }
 
-                //if not found then probably Enum, so use special Enum converter
-                if (sampleData == null) { sampleData = Tools.GetRandomEnumValue(parameterType); }
+                return parameters;
 
-                parameters.Add(sampleData);
             }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error when getting sample for : {methodInfo.Name}");
 
-            return parameters;
+                //if fail means type not specified and no sample
+                return parameters;
+            }
 
         }
 
@@ -2621,6 +2633,22 @@ namespace VedAstro.Library
                         rootPayloadJson = new JProperty(dataName, array);
                         break;
                     }
+                case Dictionary<HouseName, ZodiacName> dictionary:
+                    {
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
+                            {
+                                { "House", item.Key.ToString() },
+                                { "ZodiacSign", item.Value.ToString() }
+                            };
+                            array.Add(obj);
+                        }
+
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+                    }
                 case Dictionary<ZodiacName, int> dictionary:
                     {
                         //convert list to comma separated string
@@ -2629,6 +2657,24 @@ namespace VedAstro.Library
 
                         rootPayloadJson = new JProperty(dataName, stringComma);
                         break;
+                    }
+                case Dictionary<HouseName, List<PlanetName>> dictionary:
+                    {
+                        
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
+                            {
+                                { "House", item.Key.ToString() },
+                                { "Planets",  Tools.ListToString(item.Value) }
+                            };
+                            array.Add(obj);
+                        }
+
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+
                     }
                 //custom JSON converter available
                 case IToJson iToJson:

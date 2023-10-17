@@ -7053,12 +7053,12 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Gets all the constellation start time for a given planet
+        /// Set to an accuracy of 1 minute
         /// </summary>
-        /// <returns></returns>
         public static List<Tuple<ConstellationName, Time>> GetConstellationTransitStartTime(PlanetName planetName, TimeRange timeRange)
         {
             //make slices to scan
-            var accuracyInHours = 1;
+            var accuracyInHours = 0.0166666; // 1 minute
             var timeSlices = Time.GetTimeListFromRange(timeRange.start, timeRange.end, accuracyInHours);
 
             var returnList = new List<Tuple<ConstellationName, Time>>();
@@ -9242,14 +9242,13 @@ namespace VedAstro.Library
             foreach (var zodiacSign in signAspecting)
             {
                 var planetInSign = Calculate.PlanetInSign(zodiacSign, time);
+
                 //add to list
                 planetsAspected.AddRange(planetInSign);
             }
 
-
             //return these planets as aspected by input planet
             return planetsAspected;
-
         }
 
         /// <summary>

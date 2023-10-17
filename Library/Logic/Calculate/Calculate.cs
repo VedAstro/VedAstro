@@ -339,56 +339,46 @@ namespace VedAstro.Library
         /// </summary>
         public static PlanetName LordOfConstellation(ConstellationName constellation)
         {
-            var x = constellation;
-
             switch (constellation)
             {
                 case ConstellationName.Aswini:
                 case ConstellationName.Makha:
                 case ConstellationName.Moola:
-                    return VedAstro.Library.PlanetName.Ketu;
+                    return Ketu;
                     break;
                 case ConstellationName.Bharani:
                 case ConstellationName.Pubba:
                 case ConstellationName.Poorvashada:
-                    return VedAstro.Library.PlanetName.Venus;
-                    break;
+                    return Venus;
                 case ConstellationName.Krithika:
                 case ConstellationName.Uttara:
                 case ConstellationName.Uttarashada:
                     return VedAstro.Library.PlanetName.Sun;
-                    break;
                 case ConstellationName.Rohini:
                 case ConstellationName.Hasta:
                 case ConstellationName.Sravana:
                     return VedAstro.Library.PlanetName.Moon;
-                    break;
                 case ConstellationName.Mrigasira:
                 case ConstellationName.Chitta:
                 case ConstellationName.Dhanishta:
                     return VedAstro.Library.PlanetName.Mars;
-                    break;
                 case ConstellationName.Aridra:
                 case ConstellationName.Swathi:
                 case ConstellationName.Satabhisha:
                     return VedAstro.Library.PlanetName.Rahu;
-                    break;
                 case ConstellationName.Punarvasu:
                 case ConstellationName.Vishhaka:
                 case ConstellationName.Poorvabhadra:
                     return VedAstro.Library.PlanetName.Jupiter;
-                    break;
                 case ConstellationName.Pushyami:
-                case ConstellationName.Anuradha: 
+                case ConstellationName.Anuradha:
                 case ConstellationName.Uttarabhadra:
                     return VedAstro.Library.PlanetName.Saturn;
-                    break;
                 case ConstellationName.Aslesha:
                 case ConstellationName.Jyesta:
                 case ConstellationName.Revathi:
                     return VedAstro.Library.PlanetName.Mercury;
-                    break;
-                
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(constellation), constellation, null);
             }
@@ -396,16 +386,11 @@ namespace VedAstro.Library
             throw new Exception("End of Line");
 
         }
-    
 
-
-
-
-
-    /// <summary>
-    /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
-    /// </summary>
-    public static int FortunePoint(ZodiacName ascZodiacSignName, PlanetName moon, PlanetName sun, Time time)
+        /// <summary>
+        /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
+        /// </summary>
+        public static int FortunePoint(ZodiacName ascZodiacSignName, PlanetName moon, PlanetName sun, Time time)
         {
             //Fortune Point is calculated as Asc Degrees + Moon Degrees - Sun Degrees
 
@@ -1672,6 +1657,21 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Gets list of all planets that's in a house/bhava at a given time based on sign the house and planet is in
+        /// </summary>
+        public static List<PlanetName> PlanetsInHouseBasedOnSign(HouseName houseNumber, Time time)
+        {
+            //get house sign
+            var houseSign = Calculate.HouseSignName(houseNumber, time);
+
+            //get all planets in sign
+            var planetsInSign = Calculate.PlanetsInSign(houseSign, time);
+
+            //return list
+            return planetsInSign;
+        }
+
+        /// <summary>
         /// Gets list of all planets that's in a sign at a given time
         /// </summary>
         public static List<PlanetName> PlanetsInSign(ZodiacName signName, Time time)
@@ -1879,6 +1879,31 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// List of all planets and the houses they are located in at a given time based on zodiac sign.
+        /// </summary>
+        public static Dictionary<PlanetName, HouseName> AllPlanetHousePositionsBasedOnSign(Time time)
+        {
+            //get all the signs of the planets
+            var planetSigns = Calculate.AllPlanetSigns(time);
+
+            //get all signs of houses at middle longitude 
+            var houseSigns = Calculate.AllHouseSignName(time);
+
+            //make new list combined data
+            var returnList = new Dictionary<PlanetName, HouseName>();
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                var planetSign = planetSigns[planet];
+
+                var foundHouse = houseSigns.Where(yy => yy.Value == planetSign.GetSignName()).FirstOrDefault();
+
+                returnList.Add(planet, foundHouse.Key);
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
         /// List of all planets and the houses they are located in at a given time
         /// </summary>
         public static Dictionary<PlanetName, HouseName> AllPlanetHousePositions(Time time)
@@ -1888,44 +1913,6 @@ namespace VedAstro.Library
             foreach (var planet in PlanetName.All9Planets)
             {
                 var houseIsIn = HousePlanetIsIn(time, planet);
-                returnList.Add(planet, houseIsIn);
-            }
-
-            return returnList;
-        }
-
-        /// <summary>
-        /// List of all planets and the zodiac signs they are located in at a given time
-        /// </summary>
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSigns(Time time)
-        {
-            var returnList = new Dictionary<PlanetName, ZodiacSign>();
-
-            foreach (var planet in PlanetName.All9Planets)
-            {
-                var houseIsIn = Calculate.PlanetSignName(planet, time);
-                returnList.Add(planet, houseIsIn);
-            }
-
-            return returnList;
-        }
-
-
-        /// <summary>
-        /// List of all planets and the zodiac signs they are located in at a given time
-        /// using KP Krishnamurti system, note KP ayanamsa is hard set
-        /// </summary>
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSignsKP(Time time)
-        {
-
-            //hard set KP ayanamsa to match commercial software default output
-            Calculate.Ayanamsa = (int)SimpleAyanamsa.KrishnamurtiKP;
-
-            var returnList = new Dictionary<PlanetName, ZodiacSign>();
-
-            foreach (var planet in PlanetName.All9Planets)
-            {
-                var houseIsIn = Calculate.PlanetSignName(planet, time);
                 returnList.Add(planet, houseIsIn);
             }
 
@@ -1951,6 +1938,45 @@ namespace VedAstro.Library
 
             return returnList;
         }
+
+
+        /// <summary>
+        /// List of all planets and the zodiac signs they are located in at a given time
+        /// </summary>
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSigns(Time time)
+        {
+            var returnList = new Dictionary<PlanetName, ZodiacSign>();
+
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                var houseIsIn = Calculate.PlanetSignName(planet, time);
+                returnList.Add(planet, houseIsIn);
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
+        /// List of all planets and the zodiac signs they are located in at a given time
+        /// using KP Krishnamurti system, note KP ayanamsa is hard set
+        /// </summary>
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSignsKP(Time time)
+        {
+
+            //hard set KP ayanamsa to match commercial software default output
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.KrishnamurtiKP;
+
+            var returnList = new Dictionary<PlanetName, ZodiacSign>();
+
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                var houseIsIn = Calculate.PlanetSignName(planet, time);
+                returnList.Add(planet, houseIsIn);
+            }
+
+            return returnList;
+        }
+
 
         /// <summary>
         /// Gets planet lord of given house at given time
@@ -2010,6 +2036,42 @@ namespace VedAstro.Library
 
             //return the name of house sign
             return houseSignName;
+        }
+
+        /// <summary>
+        /// Gets the zodiac sign at middle longitude of the house.
+        /// </summary>
+        public static Dictionary<HouseName, ZodiacName> AllHouseSignName(Time time)
+        {
+            //get all houses
+            var allHouses = new Dictionary<HouseName, ZodiacName>();
+
+            //get for all houses
+            foreach (var house in VedAstro.Library.House.AllHouses)
+            {
+                var calcHouseSign = Calculate.HouseSignName(house, time);
+                allHouses.Add(house, calcHouseSign);
+            }
+
+            return allHouses;
+        }
+
+        /// <summary>
+        /// Gets the zodiac sign at middle longitude of the house.
+        /// </summary>
+        public static Dictionary<HouseName, List<PlanetName>> AllHousePlanetsInHouseBasedOnSign(Time time)
+        {
+            //get all houses
+            var allHouses = new Dictionary<HouseName, List<PlanetName>>();
+
+            //get for all houses
+            foreach (var house in VedAstro.Library.House.AllHouses)
+            {
+                var calcHouseSign = Calculate.PlanetsInHouseBasedOnSign(house, time);
+                allHouses.Add(house, calcHouseSign);
+            }
+
+            return allHouses;
         }
 
         /// <summary>
@@ -6987,6 +7049,40 @@ namespace VedAstro.Library
             return count;
         }
 
+
+
+        /// <summary>
+        /// Gets all the constellation start time for a given planet
+        /// Set to an accuracy of 1 minute
+        /// </summary>
+        public static List<Tuple<ConstellationName, Time>> GetConstellationTransitStartTime(PlanetName planetName, TimeRange timeRange)
+        {
+            //make slices to scan
+            var accuracyInHours = 0.0166666; // 1 minute
+            var timeSlices = Time.GetTimeListFromRange(timeRange.start, timeRange.end, accuracyInHours);
+
+            var returnList = new List<Tuple<ConstellationName, Time>>();
+
+            var startConstellation = Calculate.PlanetConstellation(timeRange.start, planetName);
+            var previousConstellation = startConstellation.GetConstellationName();
+            foreach (var timeSlice in timeSlices)
+            {
+                //if constellation changes mark the time
+                var tempConstellationName = Calculate.PlanetConstellation(timeSlice, planetName).GetConstellationName();
+                if (tempConstellationName != previousConstellation)
+                {
+                    returnList.Add(new Tuple<ConstellationName, Time>(tempConstellationName, timeSlice));
+                }
+
+                //update value for next check
+                previousConstellation = tempConstellationName;
+            }
+
+
+            return returnList;
+
+        }
+
         /// <summary>
         /// Check if there is an obstruction to a given Gochara, obstructing house/point (Vedhanka)
         /// </summary>
@@ -9146,14 +9242,13 @@ namespace VedAstro.Library
             foreach (var zodiacSign in signAspecting)
             {
                 var planetInSign = Calculate.PlanetInSign(zodiacSign, time);
+
                 //add to list
                 planetsAspected.AddRange(planetInSign);
             }
 
-
             //return these planets as aspected by input planet
             return planetsAspected;
-
         }
 
         /// <summary>

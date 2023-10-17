@@ -173,25 +173,37 @@ namespace StaticTableGenerator
 
         private static string GetExampleOutputJson(MethodInfo openApiCalc)
         {
-            //prepare sample list
-            var sampleInput = openApiCalc.GetInitializedSampleParameters();
+            try
+            {
+                //prepare sample list
+                var sampleInput = openApiCalc.GetInitializedSampleParameters();
 
-            var jsonData = AutoCalculator.ExecuteFunctionsJSON(openApiCalc, sampleInput.ToArray());
+                var jsonData = AutoCalculator.ExecuteFunctionsJSON(openApiCalc, sampleInput.ToArray());
 
-            var jsonRaw = jsonData.ToString();
+                var jsonRaw = jsonData.ToString();
 
-            //clean comments, since it can be wild
-            //will remove all non-alphanumeric characters except for space, underscore, and dot.
-            //It will also replace all new lines and multiple spaces with a single space. 
-            string safeOutputJson = Regex.Replace(jsonRaw, @"\r\n?|\n", "");
+                //clean comments, since it can be wild
+                //will remove all non-alphanumeric characters except for space, underscore, and dot.
+                //It will also replace all new lines and multiple spaces with a single space. 
+                string safeOutputJson = Regex.Replace(jsonRaw, @"\r\n?|\n", "");
 
-            //double quotes to single quotes, to make storable in C#
-            safeOutputJson = Regex.Replace(safeOutputJson, "\"", "'");
+                //double quotes to single quotes, to make storable in C#
+                safeOutputJson = Regex.Replace(safeOutputJson, "\"", "'");
 
-            //clean double white space or more
-            safeOutputJson = Regex.Replace(safeOutputJson, @"\s{2,}", " ");
+                //clean double white space or more
+                safeOutputJson = Regex.Replace(safeOutputJson, @"\s{2,}", " ");
 
-            return safeOutputJson;
+                return safeOutputJson;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error No sample for {openApiCalc.Name}");
+
+                //no sample output can be made
+                return "";
+            }
+
         }
 
         /// <summary>

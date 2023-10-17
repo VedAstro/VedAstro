@@ -11,6 +11,7 @@ using static VedAstro.Library.HouseName;
 using static VedAstro.Library.ZodiacName;
 using static VedAstro.Library.Ayanamsa;
 using System.Numerics;
+using ExCSS;
 
 
 namespace VedAstro.Library
@@ -6916,6 +6917,40 @@ namespace VedAstro.Library
             var count = Calculate.CountFromSignToSign(janmaSign, planetSign);
 
             return count;
+        }
+
+
+
+        /// <summary>
+        /// Gets all the constellation start time for a given planet
+        /// </summary>
+        /// <returns></returns>
+        public static List<Tuple<ConstellationName, Time>> GetConstellationTransitStartTime(PlanetName planetName, TimeRange timeRange)
+        {
+            //make slices to scan
+            var accuracyInHours = 1;
+            var timeSlices = Time.GetTimeListFromRange(timeRange.start, timeRange.end, accuracyInHours);
+
+            var returnList = new List<Tuple<ConstellationName, Time>>();
+
+            var startConstellation = Calculate.PlanetConstellation(timeRange.start, planetName);
+            var previousConstellation = startConstellation.GetConstellationName();
+            foreach (var timeSlice in timeSlices)
+            {
+                //if constellation changes mark the time
+                var tempConstellationName = Calculate.PlanetConstellation(timeSlice, planetName).GetConstellationName();
+                if (tempConstellationName != previousConstellation)
+                {
+                    returnList.Add(new Tuple<ConstellationName, Time>(tempConstellationName, timeSlice));
+                }
+
+                //update value for next check
+                previousConstellation = tempConstellationName;
+            }
+
+
+            return returnList;
+
         }
 
         /// <summary>

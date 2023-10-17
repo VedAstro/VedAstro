@@ -14,10 +14,13 @@ namespace VedAstro.Console
         {
 
 
-            //Time timeSample = new("00:00 30/10/2023 +05:30", GeoLocation.Bangalore);
-            Time timeSample = new("11:00 25/07/1984 +05:30", new GeoLocation("",77.2,28.6));
+            Time timeSample1 = new("00:00 15/10/2023 +05:30", GeoLocation.Bangalore);
+            Time timeSample2 = new("00:00 15/11/2023 +05:30", GeoLocation.Bangalore);
+            Time timeSample = new("11:00 25/07/1984 +05:30", new GeoLocation("", 77.2, 28.6));
 
-            var chart =  Calculate.SouthIndianChart(timeSample);
+            var x = Calculate.GetConstellationTransitStartTime(PlanetName.Moon, new TimeRange(timeSample1, timeSample2));
+
+            var chart = Calculate.SouthIndianChart(timeSample);
             var longitudes = Calculate.AllHouseLongitudesKP(timeSample);
             var constellations = Calculate.AllHouseConstellationKP(timeSample);
             var housesPlanets = Calculate.AllPlanetHousePositionsKP(timeSample);
@@ -43,7 +46,7 @@ namespace VedAstro.Console
             var testResult3 = Calculate.AyanamsaFinder(PlanetName.Mercury, ConstellationName.Vishhaka, 1, timeSample);
 
             //check the test
-            
+
             //make instance to store variables from input nicely
             //var thisInstance = await Program.CreateInstance();
         }
@@ -159,7 +162,7 @@ namespace VedAstro.Console
             var foundPerson = await Tools.GetPersonById(personId);
 
             //generate the needed charts
-            var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4,EventTag.PD5, EventTag.Gochara };
+            var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.Gochara };
             var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
 
@@ -246,8 +249,8 @@ namespace VedAstro.Console
             var finalSvg = EventsChartManager.WrapSvgElements(
                 svgClass: "MultipleDasa",
                 combinedSvgString: combinedSvg,
-                svgWidth: maxWidth+100,
-                svgTotalHeight: chartYPosition+100,
+                svgWidth: maxWidth + 100,
+                svgTotalHeight: chartYPosition + 100,
                 randomId: Tools.GenerateId(),
                 svgBackgroundColor: "#757575"); //grey easy on the eyes
 
@@ -301,7 +304,7 @@ namespace VedAstro.Console
             System.Console.WriteLine("All person record updated!");
 
         }
-        
+
         private static async Task MigrateOldLifeEventsToNewFormat2()
         {
 

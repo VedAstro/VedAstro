@@ -2633,6 +2633,22 @@ namespace VedAstro.Library
                         rootPayloadJson = new JProperty(dataName, array);
                         break;
                     }
+                case Dictionary<HouseName, ZodiacName> dictionary:
+                    {
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
+                            {
+                                { "House", item.Key.ToString() },
+                                { "ZodiacSign", item.Value.ToString() }
+                            };
+                            array.Add(obj);
+                        }
+
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+                    }
                 case Dictionary<ZodiacName, int> dictionary:
                     {
                         //convert list to comma separated string
@@ -2641,6 +2657,24 @@ namespace VedAstro.Library
 
                         rootPayloadJson = new JProperty(dataName, stringComma);
                         break;
+                    }
+                case Dictionary<HouseName, List<PlanetName>> dictionary:
+                    {
+                        
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
+                            {
+                                { "House", item.Key.ToString() },
+                                { "Planets",  Tools.ListToString(item.Value) }
+                            };
+                            array.Add(obj);
+                        }
+
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+
                     }
                 //custom JSON converter available
                 case IToJson iToJson:

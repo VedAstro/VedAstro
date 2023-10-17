@@ -1657,6 +1657,21 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Gets list of all planets that's in a house/bhava at a given time based on sign the house and planet is in
+        /// </summary>
+        public static List<PlanetName> PlanetsInHouseBasedOnSign(HouseName houseNumber, Time time)
+        {
+            //get house sign
+            var houseSign = Calculate.HouseSignName(houseNumber, time);
+
+            //get all planets in sign
+            var planetsInSign = Calculate.PlanetsInSign(houseSign, time);
+
+            //return list
+            return planetsInSign;
+        }
+
+        /// <summary>
         /// Gets list of all planets that's in a sign at a given time
         /// </summary>
         public static List<PlanetName> PlanetsInSign(ZodiacName signName, Time time)
@@ -1864,6 +1879,31 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// List of all planets and the houses they are located in at a given time based on zodiac sign.
+        /// </summary>
+        public static Dictionary<PlanetName, HouseName> AllPlanetHousePositionsBasedOnSign(Time time)
+        {
+            //get all the signs of the planets
+            var planetSigns = Calculate.AllPlanetSigns(time);
+
+            //get all signs of houses at middle longitude 
+            var houseSigns = Calculate.AllHouseSignName(time);
+
+            //make new list combined data
+            var returnList = new Dictionary<PlanetName, HouseName>();
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                var planetSign = planetSigns[planet];
+
+                var foundHouse = houseSigns.Where(yy => yy.Value == planetSign.GetSignName()).FirstOrDefault();
+
+                returnList.Add(planet, foundHouse.Key);
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
         /// List of all planets and the houses they are located in at a given time
         /// </summary>
         public static Dictionary<PlanetName, HouseName> AllPlanetHousePositions(Time time)
@@ -1873,44 +1913,6 @@ namespace VedAstro.Library
             foreach (var planet in PlanetName.All9Planets)
             {
                 var houseIsIn = HousePlanetIsIn(time, planet);
-                returnList.Add(planet, houseIsIn);
-            }
-
-            return returnList;
-        }
-
-        /// <summary>
-        /// List of all planets and the zodiac signs they are located in at a given time
-        /// </summary>
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSigns(Time time)
-        {
-            var returnList = new Dictionary<PlanetName, ZodiacSign>();
-
-            foreach (var planet in PlanetName.All9Planets)
-            {
-                var houseIsIn = Calculate.PlanetSignName(planet, time);
-                returnList.Add(planet, houseIsIn);
-            }
-
-            return returnList;
-        }
-
-
-        /// <summary>
-        /// List of all planets and the zodiac signs they are located in at a given time
-        /// using KP Krishnamurti system, note KP ayanamsa is hard set
-        /// </summary>
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSignsKP(Time time)
-        {
-
-            //hard set KP ayanamsa to match commercial software default output
-            Calculate.Ayanamsa = (int)SimpleAyanamsa.KrishnamurtiKP;
-
-            var returnList = new Dictionary<PlanetName, ZodiacSign>();
-
-            foreach (var planet in PlanetName.All9Planets)
-            {
-                var houseIsIn = Calculate.PlanetSignName(planet, time);
                 returnList.Add(planet, houseIsIn);
             }
 
@@ -1936,6 +1938,45 @@ namespace VedAstro.Library
 
             return returnList;
         }
+
+
+        /// <summary>
+        /// List of all planets and the zodiac signs they are located in at a given time
+        /// </summary>
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSigns(Time time)
+        {
+            var returnList = new Dictionary<PlanetName, ZodiacSign>();
+
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                var houseIsIn = Calculate.PlanetSignName(planet, time);
+                returnList.Add(planet, houseIsIn);
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
+        /// List of all planets and the zodiac signs they are located in at a given time
+        /// using KP Krishnamurti system, note KP ayanamsa is hard set
+        /// </summary>
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSignsKP(Time time)
+        {
+
+            //hard set KP ayanamsa to match commercial software default output
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.KrishnamurtiKP;
+
+            var returnList = new Dictionary<PlanetName, ZodiacSign>();
+
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                var houseIsIn = Calculate.PlanetSignName(planet, time);
+                returnList.Add(planet, houseIsIn);
+            }
+
+            return returnList;
+        }
+
 
         /// <summary>
         /// Gets planet lord of given house at given time
@@ -1995,6 +2036,42 @@ namespace VedAstro.Library
 
             //return the name of house sign
             return houseSignName;
+        }
+
+        /// <summary>
+        /// Gets the zodiac sign at middle longitude of the house.
+        /// </summary>
+        public static Dictionary<HouseName, ZodiacName> AllHouseSignName(Time time)
+        {
+            //get all houses
+            var allHouses = new Dictionary<HouseName, ZodiacName>();
+
+            //get for all houses
+            foreach (var house in VedAstro.Library.House.AllHouses)
+            {
+                var calcHouseSign = Calculate.HouseSignName(house, time);
+                allHouses.Add(house, calcHouseSign);
+            }
+
+            return allHouses;
+        }
+
+        /// <summary>
+        /// Gets the zodiac sign at middle longitude of the house.
+        /// </summary>
+        public static Dictionary<HouseName, List<PlanetName>> AllHousePlanetsInHouseBasedOnSign(Time time)
+        {
+            //get all houses
+            var allHouses = new Dictionary<HouseName, List<PlanetName>>();
+
+            //get for all houses
+            foreach (var house in VedAstro.Library.House.AllHouses)
+            {
+                var calcHouseSign = Calculate.PlanetsInHouseBasedOnSign(house, time);
+                allHouses.Add(house, calcHouseSign);
+            }
+
+            return allHouses;
         }
 
         /// <summary>

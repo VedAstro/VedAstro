@@ -11,6 +11,7 @@ using static VedAstro.Library.HouseName;
 using static VedAstro.Library.ZodiacName;
 using static VedAstro.Library.Ayanamsa;
 using System.Numerics;
+using ExCSS;
 
 
 namespace VedAstro.Library
@@ -334,9 +335,77 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
+        /// Calculate Lord of Star (Constellation) given Constellation. Returns Star Lord Name
         /// </summary>
-        public static int FortunePoint(ZodiacName ascZodiacSignName, PlanetName moon, PlanetName sun, Time time)
+        public static PlanetName LordOfConstellation(ConstellationName constellation)
+        {
+            var x = constellation;
+
+            switch (constellation)
+            {
+                case ConstellationName.Aswini:
+                case ConstellationName.Makha:
+                case ConstellationName.Moola:
+                    return VedAstro.Library.PlanetName.Ketu;
+                    break;
+                case ConstellationName.Bharani:
+                case ConstellationName.Pubba:
+                case ConstellationName.Poorvashada:
+                    return VedAstro.Library.PlanetName.Venus;
+                    break;
+                case ConstellationName.Krithika:
+                case ConstellationName.Uttara:
+                case ConstellationName.Uttarashada:
+                    return VedAstro.Library.PlanetName.Sun;
+                    break;
+                case ConstellationName.Rohini:
+                case ConstellationName.Hasta:
+                case ConstellationName.Sravana:
+                    return VedAstro.Library.PlanetName.Moon;
+                    break;
+                case ConstellationName.Mrigasira:
+                case ConstellationName.Chitta:
+                case ConstellationName.Dhanishta:
+                    return VedAstro.Library.PlanetName.Mars;
+                    break;
+                case ConstellationName.Aridra:
+                case ConstellationName.Swathi:
+                case ConstellationName.Satabhisha:
+                    return VedAstro.Library.PlanetName.Rahu;
+                    break;
+                case ConstellationName.Punarvasu:
+                case ConstellationName.Vishhaka:
+                case ConstellationName.Poorvabhadra:
+                    return VedAstro.Library.PlanetName.Jupiter;
+                    break;
+                case ConstellationName.Pushyami:
+                case ConstellationName.Anuradha: 
+                case ConstellationName.Uttarabhadra:
+                    return VedAstro.Library.PlanetName.Saturn;
+                    break;
+                case ConstellationName.Aslesha:
+                case ConstellationName.Jyesta:
+                case ConstellationName.Revathi:
+                    return VedAstro.Library.PlanetName.Mercury;
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(constellation), constellation, null);
+            }
+
+            throw new Exception("End of Line");
+
+        }
+    
+
+
+
+
+
+    /// <summary>
+    /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
+    /// </summary>
+    public static int FortunePoint(ZodiacName ascZodiacSignName, PlanetName moon, PlanetName sun, Time time)
         {
             //Fortune Point is calculated as Asc Degrees + Moon Degrees - Sun Degrees
 

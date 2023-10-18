@@ -66,7 +66,7 @@ namespace API
 
 
             //2 : SEND TO CALLER
-            return APITools.PassMessage((XElement)parsedGeoLocation.ToXml(), incomingRequest);
+            return APITools.PassMessageJson(parsedGeoLocation.ToJson(), incomingRequest);
         }
 
         /// <summary>
@@ -142,17 +142,17 @@ namespace API
         private static void AddToCache(GeoLocation parsedGeoLocation, string rowKeyData = "", string timezone = "")
         {
 
-			//if cleaned name is same with user input name (RowKey), than remove cleaned name (save space)
-			var cleanedName = CreateSearchableName(parsedGeoLocation.Name());
-			cleanedName = cleanedName == rowKeyData ? "" : cleanedName;
+            //if cleaned name is same with user input name (RowKey), than remove cleaned name (save space)
+            var cleanedName = CreateSearchableName(parsedGeoLocation.Name());
+            cleanedName = cleanedName == rowKeyData ? "" : cleanedName;
 
-			//package the data
-			GeoLocationCacheEntity customerEntity = new()
+            //package the data
+            GeoLocationCacheEntity customerEntity = new()
             {
                 PartitionKey = parsedGeoLocation.Name(), //name given by Google API
                 CleanedName = cleanedName, //used for fuzzy search on query side
                 RowKey = rowKeyData, //row key data can be time or name inputed by caller
-				Timezone = timezone,
+                Timezone = timezone,
                 Latitude = parsedGeoLocation.Latitude(),
                 Longitude = parsedGeoLocation.Longitude()
             };
@@ -185,7 +185,7 @@ namespace API
             //search cache table
             //NOTE: don't search by location name, because geo location name might be empty
             Expression<Func<GeoLocationCacheEntity, bool>> expression = call => call.RowKey == timeTicks
-																				&& call.Latitude == geoLocation.Latitude()
+                                                                                && call.Latitude == geoLocation.Latitude()
                                                                                 && call.Longitude == geoLocation.Longitude();
 
             var linqEntities = tableClient.Query<GeoLocationCacheEntity>(expression);
@@ -208,7 +208,7 @@ namespace API
             //NOTE: to make search more likely to hit, text that was inputed before by user is also cached as "UserLocationName"
             Expression<Func<GeoLocationCacheEntity, bool>> expression = call => call.RowKey == searchText
                                                                             || call.CleanedName == searchText;
-            
+
             Pageable<GeoLocationCacheEntity> linqEntities = tableClient.Query(expression);
 
 
@@ -229,7 +229,7 @@ namespace API
             var longitudeParsed = double.Parse(longitude);
             var latitudeParsed = double.Parse(latitude);
 
-			var linqEntities =
+            var linqEntities =
                 tableClient.Query<GeoLocationCacheEntity>(
                     call => call.Longitude == longitudeParsed && call.Latitude == latitudeParsed);
 

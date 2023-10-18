@@ -7035,7 +7035,7 @@ namespace VedAstro.Library
         /// Gets the Gochara House number which is the count from birth Moon sign (janma rasi)
         /// to the sign the planet is at the current time. Gochara == Transits
         /// </summary>
-        public static int GocharaHouse(Time birthTime, Time currentTime, PlanetName planet)
+        public static int GocharaZodiacSignCountFromMoon(Time birthTime, Time currentTime, PlanetName planet)
         {
             //get moon sign at birth (janma rasi)
             var janmaSign = Calculate.MoonSignName(birthTime);
@@ -7055,23 +7055,32 @@ namespace VedAstro.Library
         /// Gets all the constellation start time for a given planet
         /// Set to an accuracy of 1 minute
         /// </summary>
-        public static List<Tuple<ConstellationName, Time>> GetConstellationTransitStartTime(PlanetName planetName, TimeRange timeRange)
+        public static List<Tuple<ConstellationName, Time, ZodiacSign>> GetConstellationTransitStartTime(PlanetName planetName, TimeRange timeRange)
         {
             //make slices to scan
             var accuracyInHours = 0.0166666; // 1 minute
             var timeSlices = Time.GetTimeListFromRange(timeRange.start, timeRange.end, accuracyInHours);
 
-            var returnList = new List<Tuple<ConstellationName, Time>>();
+            var returnList = new List<Tuple<ConstellationName, Time, ZodiacSign>>();
 
             var startConstellation = Calculate.PlanetConstellation(timeRange.start, planetName);
             var previousConstellation = startConstellation.GetConstellationName();
+
+            
+
             foreach (var timeSlice in timeSlices)
             {
                 //if constellation changes mark the time
                 var tempConstellationName = Calculate.PlanetConstellation(timeSlice, planetName).GetConstellationName();
+                
+                //CPJ Added for Planet's Zodiac Sign
+                var planetLongitude = Calculate.PlanetNirayanaLongitude(timeSlice, planetName);
+                var planetZodiacSign = Calculate.ZodiacSignAtLongitude(planetLongitude);
+                //-------
+
                 if (tempConstellationName != previousConstellation)
                 {
-                    returnList.Add(new Tuple<ConstellationName, Time>(tempConstellationName, timeSlice));
+                    returnList.Add(new Tuple<ConstellationName, Time, ZodiacSign>(tempConstellationName, timeSlice, planetZodiacSign));
                 }
 
                 //update value for next check
@@ -7122,13 +7131,13 @@ namespace VedAstro.Library
         public static List<PlanetName> PlanetsInGocharaHouse(Time birthTime, Time currentTime, int gocharaHouse)
         {
             //get the gochara house for every planet at current time
-            var gocharaSun = GocharaHouse(birthTime, currentTime, Library.PlanetName.Sun);
-            var gocharaMoon = GocharaHouse(birthTime, currentTime, Library.PlanetName.Moon);
-            var gocharaMars = GocharaHouse(birthTime, currentTime, Library.PlanetName.Mars);
-            var gocharaMercury = GocharaHouse(birthTime, currentTime, Library.PlanetName.Mercury);
-            var gocharaJupiter = GocharaHouse(birthTime, currentTime, Library.PlanetName.Jupiter);
-            var gocharaVenus = GocharaHouse(birthTime, currentTime, Library.PlanetName.Venus);
-            var gocharaSaturn = GocharaHouse(birthTime, currentTime, Library.PlanetName.Saturn);
+            var gocharaSun = GocharaZodiacSignCountFromMoon(birthTime, currentTime, Library.PlanetName.Sun);
+            var gocharaMoon = GocharaZodiacSignCountFromMoon(birthTime, currentTime, Library.PlanetName.Moon);
+            var gocharaMars = GocharaZodiacSignCountFromMoon(birthTime, currentTime, Library.PlanetName.Mars);
+            var gocharaMercury = GocharaZodiacSignCountFromMoon(birthTime, currentTime, Library.PlanetName.Mercury);
+            var gocharaJupiter = GocharaZodiacSignCountFromMoon(birthTime, currentTime, Library.PlanetName.Jupiter);
+            var gocharaVenus = GocharaZodiacSignCountFromMoon(birthTime, currentTime, Library.PlanetName.Venus);
+            var gocharaSaturn = GocharaZodiacSignCountFromMoon(birthTime, currentTime, Library.PlanetName.Saturn);
 
             //add every planet name to return list that matches input Gochara house number
             var planetList = new List<PlanetName>();
@@ -7318,7 +7327,7 @@ namespace VedAstro.Library
         public static bool IsGocharaOccurring(Time birthTime, Time time, PlanetName planet, int gocharaHouse)
         {
             //check if planet is in the specified gochara house
-            var planetGocharaMatch = Calculate.GocharaHouse(birthTime, time, planet) == gocharaHouse;
+            var planetGocharaMatch = Calculate.GocharaZodiacSignCountFromMoon(birthTime, time, planet) == gocharaHouse;
 
             //NOTE: only use Vedha point by default, but allow disable if needed (LONG LEVER DESIGN)
             bool obstructionNotFound = true; //default to true, so if disabled Vedha point will still work
@@ -7341,7 +7350,7 @@ namespace VedAstro.Library
         public static bool IsPlanetGocharaBindu(Time birthTime, Time nowTime, PlanetName planet, int bindu)
         {
             //house the planet is transiting now
-            var gocharaHouse = Calculate.GocharaHouse(birthTime, nowTime, planet);
+            var gocharaHouse = Calculate.GocharaZodiacSignCountFromMoon(birthTime, nowTime, planet);
 
             //check if there is any planet obstructing this transit prediction via Vedhasthana
             var obstructionFound = Calculate.IsGocharaObstructed(planet, gocharaHouse, birthTime, nowTime);

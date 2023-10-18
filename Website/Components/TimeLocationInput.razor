@@ -11,9 +11,11 @@
     public string? LabelText { get; set; } = "Time";
 
     private TimeInputSimple _timeInput;
+    
     private GeoLocationInput _geoLocationInput;
 
     public async Task<DateTimeOffset> GetDateTimeOffset() => await _timeInput.GetDateTimeOffset();
+
     public async Task<string> GetFullTimeString() => await _timeInput.GetFullTimeString();
 
     /// <summary>
@@ -49,7 +51,6 @@
 
         return placeHolder;
     }
-
 
     public async Task<Time> GetTime()
     {

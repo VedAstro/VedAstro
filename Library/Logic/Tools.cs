@@ -1355,15 +1355,15 @@ namespace VedAstro.Library
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {
             //get location data from VedAstro API
-            var webResult = await Tools.ReadFromServerXmlReply(URL.AddressToGeoLocationAPIStable + $"/{address}");
+            //var webResult = await Tools.ReadFromServerXmlReply(URL.AddressToGeoLocationAPIStable + $"/{address}");
+            var webResult = await Tools.ReadFromServerJsonReply(URL.AddressToGeoLocationAPIStable + $"/{address}");
 
             //if fail to make call, end here
             if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
 
             //if success, get the reply data out
-            var rootXml = webResult.Payload;
-            Console.WriteLine(rootXml);
-            var parsed = GeoLocation.FromXml(rootXml);
+            var rootJson = webResult.Payload;
+            var parsed = GeoLocation.FromJson(rootJson);
 
             //return to caller pass
             return new WebResult<GeoLocation>(true, parsed);
@@ -1516,7 +1516,7 @@ namespace VedAstro.Library
         /// - if JSON auto adds "Root" as first element, unless specified
         /// for XML data root element name is ignored
         /// </summary>
-        public static async Task<WebResult<XElement>> ReadFromServerXmlReply(string apiUrl, string rootElementName = "Root")
+        public static async Task<WebResult<XElement>> ReadFromServerXmlReply(string apiUrl)
         {
             //send request to API server
             var result = await RequestServer(apiUrl);
@@ -1534,8 +1534,6 @@ namespace VedAstro.Library
 
 
             return parsed;
-
-
 
 
             //----------------------------------------------------------
@@ -1601,6 +1599,73 @@ namespace VedAstro.Library
                 return response;
             }
 
+        }
+
+
+        public static async Task<WebResult<JToken>> ReadFromServerJsonReply(string apiUrl)
+        {
+            //send request to API server
+            var result = await RequestServer(apiUrl);
+
+            //get raw reply from the server response
+            var rawMessage = await result.Content?.ReadAsStringAsync() ?? "";
+
+            //only good reply from server is accepted, anything else is marked invalid
+            //stops invalid replies from being passed as valid
+            if (!result.IsSuccessStatusCode) { return new WebResult<JToken>(false, new JObject("RawErrorData", rawMessage)); }
+
+            //tries to parse the raw data received into XML or JSON
+            //if all fail will return raw data with fail status
+            var parsed = ParseData(rawMessage);
+
+
+            return parsed;
+
+
+            //----------------------------------------------------------
+            // FUNCTIONS
+
+            WebResult<JToken> ParseData(string inputRawString)
+            {
+                try
+                {
+                    //make JSON data readable
+                    var parsedJson = JObject.Parse(inputRawString);
+                    var returnVal = WebResult<JObject>.FromJson(parsedJson);
+                    
+                    //if did not pass, raise exception so can check other methods
+                    if (!returnVal.IsPass) { throw new InvalidOperationException(); }
+                    return returnVal;
+                }
+                catch (Exception e1)
+                {
+
+                    //send all exception data to server
+                    LibLogger.Error(e1, inputRawString);
+
+                    //if control reaches here all has failed
+                    return new WebResult<JToken>(false, new JObject("Failed"));
+                }
+            }
+
+            //note uses GET request
+            async Task<HttpResponseMessage> RequestServer(string receiverAddress)
+            {
+                //prepare the data to be sent
+                var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+
+                //get the data sender 
+                using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
+
+                //tell sender to wait for complete reply before exiting
+                var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+                //send the data on its way
+                var response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+                //return the raw reply to caller
+                return response;
+            }
 
         }
 
@@ -2660,7 +2725,7 @@ namespace VedAstro.Library
                     }
                 case Dictionary<HouseName, List<PlanetName>> dictionary:
                     {
-                        
+
                         var array = new JArray();
                         foreach (var item in dictionary)
                         {

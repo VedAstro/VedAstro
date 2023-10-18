@@ -24,12 +24,12 @@ namespace Website
         /// Note: if JSON auto adds "Root" as first element, unless specified
         /// for XML data root element name is ignored
         /// </summary>
-        public static async Task<WebResult<XElement>> ReadFromServerXmlReply(string apiUrl, IJSRuntime? jsRuntime, string rootElementName = "Root")
+        public static async Task<WebResult<XElement>> ReadFromServerXmlReply(string apiUrl, IJSRuntime? jsRuntime)
         {
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
 
-            var parsed = await Tools.ReadFromServerXmlReply(apiUrl, rootElementName);
+            var parsed = await Tools.ReadFromServerXmlReply(apiUrl);
 
             return parsed;
 

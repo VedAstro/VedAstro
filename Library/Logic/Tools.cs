@@ -2630,6 +2630,24 @@ namespace VedAstro.Library
             JProperty rootPayloadJson;
             switch (anyTypeData)
             {
+                case List<House> dictionary:
+                {
+                    var array = new JArray();
+                    foreach (var item in dictionary)
+                    {
+                        var obj = new JObject
+                        {
+                            { "House", item.GetHouseName().ToString() },
+                            { "Begin", item.GetBeginLongitude().ToString() },
+                            { "Mid", item.GetMiddleLongitude().ToString() },
+                            { "End", item.GetEndLongitude().ToString() }
+                        };
+                        array.Add(obj);
+                    }
+
+                    rootPayloadJson = new JProperty(dataName, array);
+                    break;
+                }
                 //handles results that have many props from 1 call, exp : SwissEphemeris
                 case List<APIFunctionResult> apiList:
                     {
@@ -2698,6 +2716,38 @@ namespace VedAstro.Library
                         rootPayloadJson = new JProperty(dataName, array);
                         break;
                     }
+                case Dictionary<HouseName, ZodiacSign> dictionary:
+                {
+                    var array = new JArray();
+                    foreach (var item in dictionary)
+                    {
+                        var obj = new JObject
+                        {
+                            { "House", item.Key.ToString() },
+                            { "ZodiacSign", item.Value.ToString() }
+                        };
+                        array.Add(obj);
+                    }
+
+                    rootPayloadJson = new JProperty(dataName, array);
+                    break;
+                }
+                case Dictionary<HouseName, PlanetName> dictionary:
+                {
+                    var array = new JArray();
+                    foreach (var item in dictionary)
+                    {
+                        var obj = new JObject
+                        {
+                            { "House", item.Key.ToString() },
+                            { "Lord", item.Value.ToString() }
+                        };
+                        array.Add(obj);
+                    }
+
+                    rootPayloadJson = new JProperty(dataName, array);
+                    break;
+                }
                 case Dictionary<HouseName, ZodiacName> dictionary:
                     {
                         var array = new JArray();
@@ -2707,6 +2757,22 @@ namespace VedAstro.Library
                             {
                                 { "House", item.Key.ToString() },
                                 { "ZodiacSign", item.Value.ToString() }
+                            };
+                            array.Add(obj);
+                        }
+
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+                    }
+                case Dictionary<HouseName, PlanetConstellation> dictionary:
+                    {
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
+                            {
+                                { "House", item.Key.ToString() },
+                                { "Constellation", item.Value.ToString() }
                             };
                             array.Add(obj);
                         }

@@ -304,6 +304,27 @@ namespace VedAstro.Library
 
         #region GENERAL
 
+        ///// <summary>
+        ///// This method exists mainly for testing internal time calculation of LMT
+        ///// Important that this method passes the test at all times, so much depends on this
+        ///// </summary>
+        //public static DateTimeOffset LocalMeanTime(Time time) => time.GetLmtDateTimeOffset();
+
+
+        /// <summary>
+        /// Given a standard time (STD) and location will get Local mean time
+        /// </summary>
+        public static string LocalMeanTime(Time time) => time.GetLmtDateTimeOffsetText();
+
+        /// <summary>
+        /// Given a standard time (STD) and location will get local standard time based on location
+        /// Offset auto set by Google Offset API 
+        /// </summary>
+        public static string LocalStandardTime(Time time) => time.GetStdDateTimeOffsetText();
+
+        /// <summary>
+        /// Given a specified constellation name and pada, brute force find ayanamsa
+        /// </summary>
         public static double AyanamsaFinder(PlanetName inputPlanet, ConstellationName expectedConstellation, int expectedPada, Time time)
         {
             var isMatch = false;
@@ -1939,7 +1960,6 @@ namespace VedAstro.Library
             return returnList;
         }
 
-
         /// <summary>
         /// List of all planets and the zodiac signs they are located in at a given time
         /// </summary>
@@ -1976,7 +1996,6 @@ namespace VedAstro.Library
 
             return returnList;
         }
-
 
         /// <summary>
         /// Gets planet lord of given house at given time
@@ -2046,8 +2065,7 @@ namespace VedAstro.Library
             return houseSign;
         }
 
-       
-
+        
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
@@ -3077,12 +3095,6 @@ namespace VedAstro.Library
             }
 
         }
-
-        /// <summary>
-        /// This method exists mainly for testing internal time calculation of LMT
-        /// Important that this method passes the test at all times, so much depends on this
-        /// </summary>
-        public static DateTimeOffset LocalMeanTime(Time time) => time.GetLmtDateTimeOffset();
 
         /// <summary>
         /// House start middle and end longitudes

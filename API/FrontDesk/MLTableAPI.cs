@@ -1,16 +1,7 @@
-﻿using System.Linq.Expressions;
-using Azure.Data.Tables;
-using Azure;
-using Microsoft.Azure.Functions.Worker;
+﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
-using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
-using System.Text.RegularExpressions;
-using Google.Protobuf.WellKnownTypes;
-using Azure.Core;
-using Azure.Storage.Blobs;
-using System.Net;
 
 namespace API
 {

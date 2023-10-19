@@ -1,4 +1,3 @@
-using System.Xml.Linq;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;

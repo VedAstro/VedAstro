@@ -7,6 +7,7 @@ using VedAstro.Library;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
+using Time = VedAstro.Library.Time;
 
 namespace API
 {
@@ -110,19 +111,36 @@ namespace API
             //log ip address, call time and URL
             var call = APILogger.Visit(incomingRequest);
 
-            //1 : GET DATA OUT TODO NEEDS CHECKING
-            Time x = await Time.FromUrl(timeUrl);
-            var timeAtLocation = x.GetStdDateTimeOffset();
-            var geoLocation = x.GetGeoLocation();
+            //1 : GET DATA OUT
+            //NOTE: at this point we only can create a date time offset object with UTC0 without location since no offset
+            //              0         1       2    3    4  5  6      7
+            // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/+08:00/"
+            string[] parts = timeUrl.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var timeStr = $"{parts[3]} {parts[4]}/{parts[5]}/{parts[6]} +00:00";
 
-            //2 : CALCULATE
-            var timezoneStr = GeoLocationToTimezone_Vedastro(geoLocation, timeAtLocation);
+            //if fail raise alarm
+            var timeInputPassed = Time.TryParseStd(timeStr, out var parsedSTDInputTime);
+            if (!timeInputPassed) { throw new Exception("Failed to get timezone!"); }
+
+            //get coordinates for location (API)
+            var locationName = parts[1];
+            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
+            var geoLocation = geoLocationResult.Payload;
+
+
+            //2 : Use cache if available else Google it
+            var timezoneStr = GeoLocationToTimezone_Vedastro(geoLocation, parsedSTDInputTime);
             //use google only if no cache in VedAstro
             if (string.IsNullOrEmpty(timezoneStr))
             {
-                timezoneStr = await GeoLocationToTimezone_Google(geoLocation, timeAtLocation);
-                //add new data to cache, for future speed up
-                AddToCache(geoLocation, rowKeyData: timeAtLocation.Ticks.ToString(), timezone: timezoneStr);
+                timezoneStr = await GeoLocationToTimezone_Google(geoLocation, parsedSTDInputTime);
+
+                //NOTE :reduce accuracy to days so time is removed (this only writes, another checks)
+                //      done to reduce cache clogging, so might miss offset by hours but not days
+                //      !!DO NOT lower accuracy below time as needed for Western day light saving changes!! 
+                DateTimeOffset roundedTime = new DateTimeOffset(parsedSTDInputTime.Year, parsedSTDInputTime.Month, parsedSTDInputTime.Day, 0, 0, 0, parsedSTDInputTime.Offset);
+                var timeTicks = roundedTime.Ticks.ToString();
+                AddToCache(geoLocation, rowKeyData: timeTicks, timezone: timezoneStr);
             }
 
 
@@ -177,9 +195,11 @@ namespace API
         {
 
             //time that is linked to timezone
-            //NOTE :Search from +/- 1 year, as not to clog cache book
-            //      Possibility to miss timezone changes that occurred within 1 year
-            var timeTicks = timeAtLocation.Ticks.ToString();
+            //NOTE :reduce accuracy to days so time is removed (this only checks, another writes)
+            //      done to reduce cache clogging, so might miss offset by hours but not days
+            //      !!DO NOT lower accuracy below time as needed for Western day light saving changes!! 
+            DateTimeOffset roundedTime = new DateTimeOffset(timeAtLocation.Year, timeAtLocation.Month, timeAtLocation.Day, 0, 0, 0, timeAtLocation.Offset);
+            var timeTicks = roundedTime.Ticks.ToString();
 
 
             //search cache table
@@ -187,6 +207,7 @@ namespace API
             Expression<Func<GeoLocationCacheEntity, bool>> expression = call => call.RowKey == timeTicks
                                                                                 && call.Latitude == geoLocation.Latitude()
                                                                                 && call.Longitude == geoLocation.Longitude();
+
 
             var linqEntities = tableClient.Query<GeoLocationCacheEntity>(expression);
 

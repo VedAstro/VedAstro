@@ -29,7 +29,14 @@
 	{
 		<div class="input-group">
 			<span class="input-group-text" id="basic-addon1">Degrees</span>
-			<input @bind="_inputTotalDegrees" type="text" class="form-control" placeholder="23.456" aria-label="Degrees" aria-describedby="basic-addon1">
+			<input @bind="_inputTotalDegrees" type="text" class="form-control" placeholder="23.456">
+		</div>
+	}
+	else if (_apiCallData == typeof(string))
+	{
+		<div class="input-group">
+			<span class="input-group-text" id="basic-addon1">Text</span>
+			<input @bind="_inputText" type="text" class="form-control" placeholder="...">
 		</div>
 	}
 	else if (_apiCallData.IsEnum)
@@ -66,6 +73,7 @@
 	private static string InstanceId = Guid.NewGuid().ToString();
 	private Type _apiCallData;
 	private double _inputTotalDegrees;
+	private string _inputText;
 	private string _inputPlanetName;
 	private string _inputEnumName;
 	private TimeLocationInput _inputTimeLocation;
@@ -84,6 +92,7 @@
 		if (_apiCallData == typeof(Time)) { combinedUrl = await _inputTimeLocation.ToApiUrl(); }
 		else if (_apiCallData == typeof(PlanetName)) { combinedUrl = $"/PlanetName/{_inputPlanetName}"; }
 		else if (_apiCallData == typeof(Angle)) { combinedUrl = $"/Angle/{_inputTotalDegrees}"; }
+		else if (_apiCallData == typeof(string)) { combinedUrl = $"/Text/{_inputText}"; }
 		else if (_apiCallData?.IsEnum ?? false) { combinedUrl = $"/{_apiCallData.Name}/{_inputEnumName}"; }
 
 

@@ -1,4 +1,4 @@
-using VedAstro.Library;
+﻿using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
@@ -137,9 +137,10 @@ namespace API
                                                        //cut the string based on parameter type
             foreach (var parameterType in parameterTypes)
             {
-                //get inches to cut based on Type of cloth (ask the cloth)
+                //get inches to cut based on Type of cloth (ask the cloth aka type)
                 var nameOfField = nameof(IFromUrl.OpenAPILength);
                 FieldInfo fieldInfo = parameterType.GetField(nameOfField, BindingFlags.Public | BindingFlags.Static);
+
                 //note: enums can't set this, so default to 2 /{EnumName}/{EnumAsString}
                 var cutCount = (int)(fieldInfo?.GetValue(null) ?? 2);
 
@@ -152,13 +153,41 @@ namespace API
                 //convert URL to understandable data (magic!)
                 var nameOfMethod = nameof(IFromUrl.FromUrl);
                 var parsedParamInstance = parameterType.GetMethod(nameOfMethod, BindingFlags.Public | BindingFlags.Static);
-                //if not found then probably Enum, so use special Enum converter
-                if (parsedParamInstance == null) { parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static); }
 
-                //execute param parser
-                Task task = (Task)parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
-                await task; //getting person and location is async, so all same 
-                dynamic parsedParam = task.GetType().GetProperty("Result").GetValue(task, null);
+                //if not found then probably special types, like Enum & string, so use special Enum converter
+                dynamic parsedParam;
+                if (parsedParamInstance == null)
+                {
+                    //STRING
+                    if (parameterType == typeof(string))
+                    {
+                        parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.StringFromUrl), BindingFlags.Public | BindingFlags.Static);
+
+                        //execute param parser
+                        parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+
+                    }
+                    //ENUM
+                    else if (parameterType.IsEnum)
+                    {
+                        parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static);
+
+                        //execute param parser
+                        parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                    }
+
+                    //UNPREPARED TYPES
+                    else
+                        throw new Exception($"Type URL Parser not implemented! {parameterType.Name}");
+                }
+                //if not NULL process as normal
+                else
+                {
+                    //execute param parser
+                    Task task = (Task)parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                    await task; //getting person and location is async, so all same 
+                    parsedParam = task.GetType().GetProperty("Result").GetValue(task, null);
+                }
 
                 //ACT 5:
                 //add to main list IF NOT AYANAMSA (used later for main final execution)

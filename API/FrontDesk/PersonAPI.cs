@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
@@ -142,6 +141,7 @@ namespace API
 
         }
 
+
         /// <summary>
         /// Intelligible gets a person's image
         /// </summary>
@@ -202,8 +202,6 @@ namespace API
             }
 
         }
-
-
 
 
         [Function(nameof(AddPerson))]
@@ -349,11 +347,6 @@ namespace API
                 return APITools.FailMessage(e, req);
             }
         }
-
-
-
-
-
 
 
     }

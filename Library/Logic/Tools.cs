@@ -1858,12 +1858,12 @@ namespace VedAstro.Library
         /// <summary>
         /// Converts any Enum from URL epx : ../EnumName/EnumValue
         /// </summary>
-        public static dynamic EnumFromUrl(string url, string enumName = "")
+        public static dynamic EnumFromUrl(string url)
         {
             string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
             //enum has simple structure ../ZodiacName/Leo
-            enumName = string.IsNullOrEmpty(enumName) ? parts[0] : enumName; //override enum name of specified
+            var enumName = parts[0] ;
             var enumValue = parts[1];
 
             //get the type of the enum
@@ -1882,6 +1882,21 @@ namespace VedAstro.Library
             }
 
             return parsedZodiac;
+        }
+
+
+        /// <summary>
+        /// Converts any String from URL epx : ../Text/Juliet
+        /// </summary>
+
+		public static string StringFromUrl(string url)
+        {
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //string has simple structure ../Text/Juliet
+            var stringValue = parts[1];
+
+            return stringValue;
         }
 
         private static readonly Random Random = new Random();

@@ -41,13 +41,8 @@ namespace API
                 var remainderParamString = rawOut.Item2; //remainder of chopped string
 
                 //2 : CUSTOM AYANAMSA
-                var isCustomAyanamsa = remainderParamString.Contains(nameof(Ayanamsa));
-                if (isCustomAyanamsa)
-                {
-                    VedAstro.Library.Calculate.Ayanamsa = (int)await Tools.EnumFromUrl(remainderParamString);
-                }
-
-
+                await ParseAndSetAyanamsa(remainderParamString);
+                
                 //3 : EXECUTE COMMAND
                 object rawPlanetData;
                 //when calculator return an async result
@@ -114,6 +109,30 @@ namespace API
 
 
         //-----------------------------------------------PRIVATE-----------------------------------------------
+
+
+        /// <summary>
+        /// takes Ayanamsa from URL to sets it
+        /// </summary>
+        private static async Task ParseAndSetAyanamsa(string remainderParamString)
+        {
+            //if url contains word "ayanamsa" than process it
+            var isCustomAyanamsa = remainderParamString.Contains(nameof(Ayanamsa));
+            if (isCustomAyanamsa)
+            {
+                //try normal ayanamsa, else try special simplified ayanamsa names
+                try
+                {
+                    VedAstro.Library.Calculate.Ayanamsa = (int)await Tools.EnumFromUrl(remainderParamString);
+                }
+                catch (Exception e)
+                {
+                    VedAstro.Library.Calculate.Ayanamsa = (int)await Tools.EnumFromUrl(remainderParamString, "SimpleAyanamsa");
+                }
+
+            }
+        }
+
 
         /// <summary>
         /// Reads URL data to instances

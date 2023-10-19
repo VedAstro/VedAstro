@@ -123,11 +123,11 @@ namespace API
                 //try normal ayanamsa, else try special simplified ayanamsa names
                 try
                 {
-                    VedAstro.Library.Calculate.Ayanamsa = (int)await Tools.EnumFromUrl(remainderParamString);
+                    VedAstro.Library.Calculate.Ayanamsa = (int)Tools.EnumFromUrl(remainderParamString);
                 }
                 catch (Exception e)
                 {
-                    VedAstro.Library.Calculate.Ayanamsa = (int)await Tools.EnumFromUrl(remainderParamString, "SimpleAyanamsa");
+                    VedAstro.Library.Calculate.Ayanamsa = (int)Tools.EnumFromUrl(remainderParamString, "SimpleAyanamsa");
                 }
 
             }

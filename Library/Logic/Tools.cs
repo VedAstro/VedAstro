@@ -1847,12 +1847,12 @@ namespace VedAstro.Library
         /// <summary>
         /// Converts any Enum from URL epx : ../EnumName/EnumValue
         /// </summary>
-        public static async Task<dynamic> EnumFromUrl(string url)
+        public static dynamic EnumFromUrl(string url, string enumName = "")
         {
             string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
             //enum has simple structure ../ZodiacName/Leo
-            var enumName = parts[0];
+            enumName = string.IsNullOrEmpty(enumName) ? parts[0] : enumName; //override enum name of specified
             var enumValue = parts[1];
 
             //get the type of the enum

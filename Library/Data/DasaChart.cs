@@ -168,7 +168,7 @@ namespace VedAstro.Library
             if (isCustomAya)
             {
                 var ayaRaw = $"{parts[^2]}/{parts[^1]}"; //get last since that will be ayanamsa in text or number int
-                var enumFromUrl = await Tools.EnumFromUrl(ayaRaw);
+                var enumFromUrl = Tools.EnumFromUrl(ayaRaw);
                 Calculate.Ayanamsa = (int)enumFromUrl;
             }
 

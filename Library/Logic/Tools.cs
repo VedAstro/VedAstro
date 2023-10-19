@@ -501,20 +501,32 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Converts raw call from API via URL to parsed Time
+        /// Note: Timezone/Offset auto get from API based on location
         /// </summary>
         public static async Task<Time> ParseTime(string locationName,
             string hhmmStr,
             string dateStr,
             string monthStr,
-            string yearStr,
-            string offsetStr)
+            string yearStr)
         {
+            //get coordinates for location (API)
             WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
             var geoLocation = geoLocationResult.Payload;
 
-            //clean time text
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
+            //compile the time string into standard format
+            //NOTE : offset hard set to UTC 0, because not used, only format filler (will be overriden later)
+            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} +00:00";
+
+            //get standard UTC Timezone offset at location at time (API) 
+            var timeInputPassed = Time.TryParseStd(timeStr, out var parsedInputTime);
+
+            //get timezone as text
+            var timezoneSTDOffsetResult = await Tools.GetTimezoneOffsetApi(geoLocation, parsedInputTime);
+            var timeZone = timezoneSTDOffsetResult.Payload;
+
+            //create time with perfect coordinates & time zone
+            var correctTimeString = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {timeZone}";
+            var parsedTime = new Time(correctTimeString, geoLocation);
 
             return parsedTime;
         }
@@ -1355,7 +1367,6 @@ namespace VedAstro.Library
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {
             //get location data from VedAstro API
-            //var webResult = await Tools.ReadFromServerXmlReply(URL.AddressToGeoLocationAPIStable + $"/{address}");
             var webResult = await Tools.ReadFromServerJsonReply(URL.AddressToGeoLocationAPIStable + $"/{address}");
 
             //if fail to make call, end here

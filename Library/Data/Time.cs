@@ -482,6 +482,8 @@ namespace VedAstro.Library
         /// <summary>
         /// Given Time instance in URL form will convert to instance
         /// Location/Singapore/Time/23:59/31/12/2000/+08:00/
+        /// TODO Offset no longer used can be removed on call by parent
+        /// Offset auto set based on location & time
         /// </summary>
         public static async Task<dynamic> FromUrl(string url)
         {
@@ -494,8 +496,7 @@ namespace VedAstro.Library
                 hhmmStr: parts[3], //note skip "Time"
                 dateStr: parts[4],
                 monthStr: parts[5],
-                yearStr: parts[6],
-                offsetStr: parts[7]);
+                yearStr: parts[6]);
 
             return parsedTime;
         }

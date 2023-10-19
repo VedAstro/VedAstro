@@ -280,6 +280,7 @@ namespace API
 
 			try
 			{
+
                 //so long as respond as OK 200, then will pass (Render server)
                 //todo real health check please
                 //check if all data files are accessible

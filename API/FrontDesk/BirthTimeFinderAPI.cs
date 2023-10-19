@@ -283,9 +283,8 @@ namespace API
             {
 
                 //parse time range from caller (possible to fail)
-                var startTime = await Tools.ParseTime(locationName, hhmmStart, dateStart, monthStart, yearStart, offsetStart);
-                var endTime = await Tools.ParseTime(locationName, hhmmEnd, dateEnd, monthEnd, yearEnd, offsetEnd);
-
+                var startTime = await Tools.ParseTime(locationName, hhmmStart, dateStart, monthStart, yearStart);
+                var endTime = await Tools.ParseTime(locationName, hhmmEnd, dateEnd, monthEnd, yearEnd);
 
                 //get list of possible birth time slice in the current birth day
                 var timeSlices = Time.GetTimeListFromRange(startTime, endTime, 1);

@@ -1362,7 +1362,7 @@ namespace VedAstro.Library
 
 
         /// <summary>
-        /// Given a place's name, using API will get location
+        /// Given a place's name, using VedAstro API will get location
         /// </summary>
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {

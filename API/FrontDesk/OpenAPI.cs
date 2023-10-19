@@ -1,9 +1,8 @@
-﻿using VedAstro.Library;
+using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
-using Microsoft.Extensions.DependencyModel;
 
 
 namespace API
@@ -42,7 +41,7 @@ namespace API
 
                 //2 : CUSTOM AYANAMSA
                 await ParseAndSetAyanamsa(remainderParamString);
-                
+
                 //3 : EXECUTE COMMAND
                 object rawPlanetData;
                 //when calculator return an async result
@@ -120,16 +119,7 @@ namespace API
             var isCustomAyanamsa = remainderParamString.Contains(nameof(Ayanamsa));
             if (isCustomAyanamsa)
             {
-                //try normal ayanamsa, else try special simplified ayanamsa names
-                try
-                {
-                    VedAstro.Library.Calculate.Ayanamsa = (int)Tools.EnumFromUrl(remainderParamString);
-                }
-                catch (Exception e)
-                {
-                    VedAstro.Library.Calculate.Ayanamsa = (int)Tools.EnumFromUrl(remainderParamString, "SimpleAyanamsa");
-                }
-
+                VedAstro.Library.Calculate.Ayanamsa = (int)Tools.EnumFromUrl(remainderParamString);
             }
         }
 

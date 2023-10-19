@@ -12,7 +12,7 @@ namespace VedAstro.Library
     /// Simple data type to contain a person's details
     /// NOTE: try to maintain as struct, for unmutable data
     /// </summary>
-    public struct Person : IToXml, IFromUrl
+    public struct Person : IToXml, IFromUrl, IToJson
     {
 
         /// <summary>
@@ -520,5 +520,6 @@ namespace VedAstro.Library
             return newPerson;
         }
 
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
     }
 }

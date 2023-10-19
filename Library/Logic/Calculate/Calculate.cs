@@ -1238,17 +1238,17 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all houses with their constelation for KP Krishnamurti system
         /// </summary>
-        public static Dictionary<House, PlanetConstellation> AllHouseConstellationKP(Time time)
+        public static Dictionary<HouseName, PlanetConstellation> AllHouseConstellationKP(Time time)
         {
             //get all house positions
             var housePositions = AllHouseLongitudesKP(time);
 
             //fill the planet constellations
-            var returnList = new Dictionary<House, PlanetConstellation>();
+            var returnList = new Dictionary<HouseName, PlanetConstellation>();
             foreach (var house in housePositions)
             {
                 var constellation = Calculate.ConstellationAtLongitude(house.GetBeginLongitude());
-                returnList.Add(house, constellation);
+                returnList.Add(house.GetHouseName(), constellation);
             }
 
             return returnList;
@@ -1887,7 +1887,7 @@ namespace VedAstro.Library
             var planetSigns = Calculate.AllPlanetSigns(time);
 
             //get all signs of houses at middle longitude 
-            var houseSigns = Calculate.AllHouseSignName(time);
+            var houseSigns = Calculate.AllHouseSign(time);
 
             //make new list combined data
             var returnList = new Dictionary<PlanetName, HouseName>();
@@ -1895,7 +1895,7 @@ namespace VedAstro.Library
             {
                 var planetSign = planetSigns[planet];
 
-                var foundHouse = houseSigns.Where(yy => yy.Value == planetSign.GetSignName()).FirstOrDefault();
+                var foundHouse = houseSigns.Where(yy => yy.Value.GetSignName() == planetSign.GetSignName()).FirstOrDefault();
 
                 returnList.Add(planet, foundHouse.Key);
             }
@@ -2017,13 +2017,21 @@ namespace VedAstro.Library
         public static bool IsHouseSignName(HouseName house, ZodiacName sign, Time time) => HouseSignName(house, time) == sign;
 
         /// <summary>
-        /// Gets the zodiac sign at middle longitude of the house.
+        /// Gets only the the zodiac sign name at middle longitude of the house.
         /// </summary>
         public static ZodiacName HouseSignName(HouseName houseNumber, Time time)
         {
             //if empty return aries, can't give empty because no Empty for ZodiacName
             if (houseNumber == HouseName.Empty) { return ZodiacName.Aries; }
 
+            return Calculate.HouseSign(houseNumber, time).GetSignName();
+        }
+        
+        /// <summary>
+        /// Gets the zodiac sign at middle longitude of the house with degrees data
+        /// </summary>
+        public static ZodiacSign HouseSign(HouseName houseNumber, Time time)
+        {
             //get all houses
             var allHouses = AllHouseLongitudes(time);
 
@@ -2032,25 +2040,50 @@ namespace VedAstro.Library
 
             //get sign of the specified house
             var middleLongitude = specifiedHouse.GetMiddleLongitude();
-            var houseSignName = ZodiacSignAtLongitude(middleLongitude).GetSignName();
+            var houseSign = ZodiacSignAtLongitude(middleLongitude);
 
             //return the name of house sign
-            return houseSignName;
+            return houseSign;
         }
+
+       
 
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
-        public static Dictionary<HouseName, ZodiacName> AllHouseSignName(Time time)
+        public static Dictionary<HouseName, ZodiacSign> AllHouseSign(Time time)
         {
             //get all houses
-            var allHouses = new Dictionary<HouseName, ZodiacName>();
+            var allHouses = new Dictionary<HouseName, ZodiacSign>();
 
             //get for all houses
             foreach (var house in VedAstro.Library.House.AllHouses)
             {
-                var calcHouseSign = Calculate.HouseSignName(house, time);
+                var calcHouseSign = Calculate.HouseSign(house, time);
                 allHouses.Add(house, calcHouseSign);
+            }
+
+            return allHouses;
+        }
+
+        /// <summary>
+        /// For all houses.
+        /// Calculate Lord of Star (Constellation) given Constellation. Returns Star Lord Name
+        /// </summary>
+        public static Dictionary<HouseName, PlanetName> AllHouseConstellationLord(Time time)
+        {
+            //get all houses
+            var allHouses = new Dictionary<HouseName, PlanetName>();
+
+            //get for all houses
+            foreach (var house in VedAstro.Library.House.AllHouses)
+            {
+                // get constellation house is in middle longitude
+                var houseConste = Calculate.HouseConstellation(house, time);
+
+                //get lord based on constellation
+                var calcResult = Calculate.LordOfConstellation(houseConste.GetConstellationName());
+                allHouses.Add(house, calcResult);
             }
 
             return allHouses;

@@ -59,15 +59,6 @@ namespace VedAstro.Library
 
         //----------------------------------------CORE CODE---------------------------------------------
 
-        #region PERSON
-
-        /// <summary>
-        /// http://localhost:7071/api/AddPerson/OwnerId/101/Name/Juliet/Gender/Female/Location/Peru/Time/00:00/01/06/1949/-05:00/
-        /// </summary>
-        public static string AddPerson(string ownerId, string name, Gender gender, Time birthTime) { return ""; }
-
-        #endregion
-
         #region AVASTA
 
         /// <summary>

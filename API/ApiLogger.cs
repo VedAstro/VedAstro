@@ -79,17 +79,24 @@ public static class APILogger
     /// </summary>
     public static void Error(string message)
     {
-        var errorLog = new OpenAPIErrorBookEntity()
+        try
         {
-            PartitionKey = IpAddress,
-            RowKey = DateTimeOffset.UtcNow.Ticks.ToString(),
-            Branch = ThisAssembly.Version,
-            URL = URL,
-            Message = message
-        };
+            var errorLog = new OpenAPIErrorBookEntity()
+            {
+                PartitionKey = IpAddress,
+                RowKey = DateTimeOffset.UtcNow.Ticks.ToString(),
+                Branch = ThisAssembly.Version,
+                URL = URL,
+                Message = message
+            };
 
-        //creates record if no exist, update if already there
-        ErrorBookClient.UpsertEntity(errorLog);
+            //creates record if no exist, update if already there
+            ErrorBookClient.UpsertEntity(errorLog);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("ERROR LOGGING FAILED!");
+        }
 
     }
 

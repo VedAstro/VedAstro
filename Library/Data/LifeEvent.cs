@@ -14,19 +14,11 @@ namespace VedAstro.Library
     /// </summary>
     public class LifeEvent : IToXml
     {
-        public static LifeEvent Empty = new LifeEvent()
-        {
-            Name = "New Life Event",
-            Description = "Event Description",
-            StartTime = Time.Empty,
-            Id = Tools.GenerateId(),
-            Nature = "Neutral",
-            Weight = "Normal"
-        };
+        public static LifeEvent Empty = new LifeEvent("Empty", "Empty", Time.Empty, "New Life Event",
+            "Event Description", "Neutral", "Normal");
+
         private string _name;
         private string _description;
-
-
 
         //░█▀▀▄ ─█▀▀█ ▀▀█▀▀ ─█▀▀█ 
         //░█─░█ ░█▄▄█ ─░█── ░█▄▄█ 
@@ -40,7 +32,6 @@ namespace VedAstro.Library
         /// Note: since all view of this in HTML, special charters
         /// like "&" will cause errors otherwise 
         /// </summary>
-        [JsonPropertyName("Name")]
         public string Name
         {
             get => HttpUtility.HtmlDecode(_name);
@@ -51,33 +42,33 @@ namespace VedAstro.Library
         /// Description of life event
         /// HTML safety included
         /// </summary>
-        [JsonPropertyName("Description")]
         public string Description
         {
             get => HttpUtility.HtmlDecode(_description);
             set => _description = HttpUtility.HtmlEncode(value);
         }
 
-        [JsonPropertyName("StartTime")]
         public Time StartTime { get; set; }
 
         /// <summary>
         /// must be Good, Neutral or Bad only
         /// </summary>
-        [JsonPropertyName("Nature")]
         public string Nature { get; set; }
 
         /// <summary>
         /// must be Major, Normal and Minor
         /// </summary>
-        [JsonPropertyName("Weight")]
         public string Weight { get; set; }
 
         /// <summary>
         /// unique ID stamped at creation
         /// </summary>
-        [JsonPropertyName("Id")]
         public string Id { get; set; }
+
+        /// <summary>
+        /// Id of person it is connected to
+        /// </summary>
+        public string PersonId { get; set; }
 
         /// <summary>
         /// combined all text in life event used for search
@@ -106,6 +97,19 @@ namespace VedAstro.Library
         //░█──░█ ░█▄▄▄ ─░█── ░█─░█ ░█▄▄▄█ ░█▄▄▀ ░█▄▄▄█
 
 
+        //CTOR
+        public LifeEvent(string personId, string uniqueId, Time startTime, string name, string description, string nature, string weight)
+        {
+            PersonId = personId;
+            Id = uniqueId;
+            Name = name;
+            StartTime = startTime;
+            Description = description;
+            Nature = nature;
+            Weight = weight;
+        }
+
+
         public JObject ToJson()
         {
             var temp = new JObject();
@@ -121,18 +125,51 @@ namespace VedAstro.Library
 
         }
 
+        public LifeEventRow ToAzureRow()
+        {
+            //make the cache row to be added
+            var newRow = new LifeEventRow()
+            {
+                //can have many IP as partition key
+                PartitionKey = this.PersonId, //person linked to
+                RowKey = Id, //time of creation
+                StartTime = this.StartTime.ToJson().ToString(),
+                Name = this.Name,
+                Description = this.Description,
+                Nature = this.Nature,
+                Weight = this.Weight,
+            };
+
+            return newRow;
+        }
+
+        public static LifeEvent FromAzureRow(LifeEventRow rowData)
+        {
+            var startTime = Time.FromJson(JToken.Parse(rowData.StartTime));
+            var newPerson = new LifeEvent(
+                personId: rowData.PartitionKey,
+                uniqueId: rowData.RowKey,
+                startTime: startTime,
+                name: rowData.Name,
+                description: rowData.Description,
+                nature: rowData.Nature,
+                weight: rowData.Weight);
+
+            return newPerson;
+        }
 
         public XElement ToXml()
         {
             var lifeEventXml = new XElement("LifeEvent");
             var idXml = new XElement("Id", this.Id);
+            var personIdXml = new XElement("PersonId", this.PersonId);
             var nameXml = new XElement("Name", this.Name);
             var startTimeXml = new XElement("StartTime", this.StartTime.ToXml());
             var descriptionXml = new XElement("Description", this.Description);
             var natureXml = new XElement("Nature", this.Nature);
             var weightXml = new XElement("Weight", this?.Weight ?? "Normal");
 
-            lifeEventXml.Add(idXml, nameXml, startTimeXml, descriptionXml, natureXml, weightXml);
+            lifeEventXml.Add(personIdXml, idXml, nameXml, startTimeXml, descriptionXml, natureXml, weightXml);
 
             return lifeEventXml;
         }
@@ -148,18 +185,19 @@ namespace VedAstro.Library
         /// </summary>
         public static LifeEvent FromXml(XElement lifeEventXml)
         {
-            var lifeEventParsed = new LifeEvent();
 
             //try get data from xml else use empty string
-            lifeEventParsed.Id = !string.IsNullOrEmpty(lifeEventXml.Element("Id")?.Value) ? lifeEventXml?.Element("Id")?.Value : ""; //leave empty to detect
-            lifeEventParsed.Name = !string.IsNullOrEmpty(lifeEventXml.Element("Name")?.Value) ? lifeEventXml?.Element("Name")?.Value : "";
-            lifeEventParsed.Description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml?.Element("Description")?.Value : "";
-            lifeEventParsed.Nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml?.Element("Nature")?.Value : "";
-            lifeEventParsed.Weight = !string.IsNullOrEmpty(lifeEventXml.Element("Weight")?.Value) ? lifeEventXml?.Element("Weight")?.Value : "Normal";
-            lifeEventParsed.StartTime = Time.FromXml(lifeEventXml.Element("StartTime")?.Element("Time"));
+            var Id = !string.IsNullOrEmpty(lifeEventXml.Element("Id")?.Value) ? lifeEventXml?.Element("Id")?.Value : ""; //leave empty to detect
+            var PersonId = !string.IsNullOrEmpty(lifeEventXml.Element("PersonId")?.Value) ? lifeEventXml?.Element("PersonIdId")?.Value : ""; //leave empty to detect
+            var Name = !string.IsNullOrEmpty(lifeEventXml.Element("Name")?.Value) ? lifeEventXml?.Element("Name")?.Value : "";
+            var Description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml?.Element("Description")?.Value : "";
+            var Nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml?.Element("Nature")?.Value : "";
+            var Weight = !string.IsNullOrEmpty(lifeEventXml.Element("Weight")?.Value) ? lifeEventXml?.Element("Weight")?.Value : "Normal";
+            var StartTime = Time.FromXml(lifeEventXml.Element("StartTime")?.Element("Time"));
+
+            var lifeEventParsed = new LifeEvent(PersonId, Id, StartTime, Name, Description, Nature, Weight);
 
             return lifeEventParsed;
-
         }
 
         /// <summary>
@@ -171,14 +209,16 @@ namespace VedAstro.Library
 
             foreach (var lifeEvent in lifeEventList)
             {
-                var temp = new LifeEvent();
 
-                temp.Id = lifeEvent["Id"].Value<string>();
-                temp.Name = lifeEvent["Name"].Value<string>();
-                temp.StartTime = Time.FromJson(lifeEvent["StartTime"]); ;
-                temp.Description = lifeEvent["Description"].Value<string>();
-                temp.Nature = lifeEvent["Nature"].Value<string>();
-                temp.Weight = lifeEvent["Weight"]?.Value<string>() ?? "Normal";
+                var PersonId = lifeEvent["PersonId"].Value<string>();
+                var Id = lifeEvent["Id"].Value<string>();
+                var Name = lifeEvent["Name"].Value<string>();
+                var StartTime = Time.FromJson(lifeEvent["StartTime"]); ;
+                var Description = lifeEvent["Description"].Value<string>();
+                var Nature = lifeEvent["Nature"].Value<string>();
+                var Weight = lifeEvent["Weight"]?.Value<string>() ?? "Normal";
+
+                var temp = new LifeEvent(PersonId, Id, StartTime, Name, Description, Nature, Weight);
 
                 returnList.Add(temp);
             }

@@ -294,7 +294,7 @@
         var newPersonProfileId = await AppData.API.Person.GetNewPersonId(nameInput, birthTime.StdYear());
 
         //create the new complete person profile
-        return new Person(newPersonProfileId, nameInput, birthTime, gender, new[] { newPersonOwnerId });
+        return new Person(newPersonOwnerId, newPersonProfileId, nameInput, birthTime, gender);
 
         //----------LOCAL FUNCTION ---------------------
     }

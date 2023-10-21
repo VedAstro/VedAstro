@@ -21,11 +21,11 @@ namespace VedAstro.Console
             var x = Calculate.GetConstellationTransitStartTime(PlanetName.Moon, new TimeRange(timeSample1, timeSample2));
 
             var chart = Calculate.SouthIndianChart(timeSample);
-            var longitudes = Calculate.AllHouseLongitudesKP(timeSample);
-            var constellations = Calculate.AllHouseConstellationKP(timeSample);
+            var longitudes = CalculateKP.AllHouseLongitudesKP(timeSample);
+            var constellations = CalculateKP.AllHouseConstellationKP(timeSample);
             var housesPlanets = Calculate.AllPlanetHousePositions(timeSample);
             var housesPlanet2s = CalculateKP.AllPlanetHousePositionsKP(timeSample);
-            var signsPlanets = Calculate.AllPlanetZodiacSignsKP(timeSample);
+            var signsPlanets = CalculateKP.AllPlanetZodiacSignsKP(timeSample);
 
 
             //var yy = Calculate.AllHouseData(HouseName.House1, timeSample);

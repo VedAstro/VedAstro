@@ -31,7 +31,7 @@ public class PersonTools
 
         //STAGE 1 :get person list for current user, can be empty
         //tell API to get started
-        var url = $"{_api.URL.GetPersonList}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
+        var url = $"{_api.URL.GetPersonList}/OwnerId/{_api.UserId}";
 
         //no wait for speed
         //we get call status and id to get data from when ready
@@ -39,7 +39,7 @@ public class PersonTools
 
         //STAGE 2 : get person list for public, example profiles
         //tell API to get started
-        url = $"{_api.URL.GetPersonList}/UserId/101/VisitorId/101";
+        url = $"{_api.URL.GetPersonList}/OwnerId/101";
 
         //no wait for speed
         //API gives a url to check on poll fo results
@@ -58,7 +58,7 @@ public class PersonTools
         if (CachedPersonList.Any()) { return CachedPersonList; }
 
         //prepare url to call
-        var url = $"{_api.URL.GetPersonList}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
+        var url = $"{_api.URL.GetPersonList}/OwnerId/{_api.UserId}";
         CachedPersonList = await _api.GetList(url, Person.FromJsonList);
 
         return CachedPersonList;
@@ -71,7 +71,7 @@ public class PersonTools
         if (CachedPublicPersonList.Any()) { return CachedPublicPersonList; }
 
         //tell API to get started
-        var url2 = $"{_api.URL.GetPersonList}/UserId/101/VisitorId/101";
+        var url2 = $"{_api.URL.GetPersonList}/OwnerId/101/";
         CachedPublicPersonList = await _api.GetList(url2, Person.FromJsonList);
 
         return CachedPublicPersonList;
@@ -85,7 +85,11 @@ public class PersonTools
         //send newly created person to API server
         var personJson = person.ToJson();
         //pass in user id to make sure user has right to delete
-        var url = $"{_api.URL.AddPerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
+        //http://localhost:7071/api/AddPerson/OwnerId/234324x24/Name/Romeo/Gender/Female/Location/London/Time/13:45/01/06/1990
+        var url = $"{_api.URL.AddPerson}/OwnerId/{_api.UserId}/Name/{person.Name}" +
+                  $"/Gender/{person.Gender}" +
+                  $"/Location/{person.GetBirthLocation()}" +
+                  $"/Time/{person.BirthDateMonthYear}";
         var jsonResult = await Tools.WriteServer<JObject, JToken>(HttpMethod.Post, url, personJson);
 
 #if DEBUG
@@ -110,7 +114,7 @@ public class PersonTools
     {
         //tell API to get started
         //pass in user id to make sure user has right to delete
-        var url = $"{_api.URL.DeletePerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}/PersonId/{personToDelete.Id}";
+        var url = $"{_api.URL.DeletePerson}/OwnerId/{_api.UserId}/PersonId/{personToDelete.Id}";
 
         //API gives a url to check on poll fo results
         var jsonResult = await Tools.WriteServer<JObject, object>(HttpMethod.Get, url);
@@ -137,7 +141,7 @@ public class PersonTools
 
         //prepare and send updated person to API server
         var updatedPerson = person.ToJson();
-        var url = $"{_api.URL.UpdatePerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
+        var url = $"{_api.URL.UpdatePerson}";
         var jsonResult = await Tools.WriteServer<JObject, JToken>(HttpMethod.Post, url, updatedPerson);
 
 

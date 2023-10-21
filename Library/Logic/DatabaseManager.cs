@@ -10,8 +10,6 @@ namespace VedAstro.Library
     /// </summary>
     public static class DatabaseManager
     {
-
-
         /// <summary>
         /// Gets a list of all event data from database
         /// Note: element names used here correspond to the ones found in the XML file
@@ -78,8 +76,6 @@ namespace VedAstro.Library
 
         }
 
-
-
         /// <summary>
         /// Gets all event data/types that match the inputed tag
         /// </summary>
@@ -114,89 +110,6 @@ namespace VedAstro.Library
 
             return filteredEventDataList;
         }
-
-
-        //TODO MARKED FOR DELETION
-        /// <summary>
-        /// Gets a list of all persons from database
-        /// Note: element names used here corespond to the ones found in the XML file
-        ///       if change here, than change in XML as well
-        /// </summary>
-        public static List<Person> GetPersonList(Data personListFile)
-        {
-            //create a place to store the list
-            var eventDataList = new List<Person>();
-
-            //get all the raw person data into a list
-            var rawPersonList = personListFile.GetAllRecords();
-
-            //parse each raw person data in list
-            foreach (var personXml in rawPersonList)
-            {
-                //add it to the return list
-                eventDataList.Add(Person.FromXml(personXml));
-            }
-
-
-            //return the list to caller
-            return eventDataList;
-
-        }
-
-        //TODO MARKED FOR DELETION
-        //overload for above method
-        public static List<Person> GetPersonList(string filePath)
-        {
-            //get the person list file
-            Data personListFile = new Data(filePath);
-
-            return GetPersonList(personListFile);
-        }
-
-
-
-        ///// <summary>
-        ///// Gets a list of all persons from database
-        ///// Note: element names used here corespond to the ones found in the XML file
-        /////       if change here, than change in XML as well
-        ///// </summary>
-        //public static List<Person> GetPersonList(string filePath)
-        //{
-        //    //get the person list file
-        //    Data personListFile = new Data(filePath);
-
-        //    //create a place to store the list
-        //    var eventDataList = new List<Person>();
-
-        //    //get all the raw person data into a list
-        //    var rawPersonList = personListFile.GetAllRecords();
-
-        //    //parse each raw person data in list
-        //    foreach (var personXml in rawPersonList)
-        //    {
-        //        //extract the individual data out & convert it to the correct type
-        //        var nameString = personXml.Element("Name").Value;
-        //        var birthTime = getBirthTime(personXml.Element("BirthTime"));
-        //        var rawGender = personXml.Element("Gender").Value;
-        //        Enum.TryParse(rawGender, out Gender gender);
-
-        //        //place the data into an event data structure
-        //        var person = new Person(nameString, birthTime, gender);
-
-        //        //add it to the return list
-        //        eventDataList.Add(person);
-        //    }
-
-
-        //    //return the list to caller
-        //    return eventDataList;
-
-        //
-        // //--------------FUNCTIONS
-        //    //converts xml representative of birth time to object instance of it
-        //    Time getBirthTime(XElement birthTimeXml) => Time.FromXml(birthTimeXml.Element("Time"));
-
-        //}
 
 
         //DEMO METHOD

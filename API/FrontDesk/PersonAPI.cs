@@ -23,38 +23,9 @@ namespace API
         private const string PersonListUri = $"https://vedastrocentralstorage.table.core.windows.net/{PersonListName}";
         private const string PersonListRecycleBinUri = $"https://vedastrocentralstorage.table.core.windows.net/{PersonListRecycleBinName}";
         private const string LifeEventListUri = $"https://vedastrocentralstorage.table.core.windows.net/{LifeEventListName}";
-        private static readonly TableClient? PersonListTable = (new TableServiceClient(new Uri(PersonListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonListName);
+        public static readonly TableClient? PersonListTable = (new TableServiceClient(new Uri(PersonListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonListName);
         private static readonly TableClient? PersonListRecycleBinTable = (new TableServiceClient(new Uri(PersonListRecycleBinUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonListRecycleBinName);
         private static readonly TableClient? LifeEventListTable = (new TableServiceClient(new Uri(LifeEventListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(LifeEventListName);
-
-
-        /// <summary>
-        /// Generate a human readable Person ID
-        /// 
-        /// </summary>
-        [Function(nameof(GetNewPersonId))]
-        public static async Task<HttpResponseData> GetNewPersonId([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetNewPersonId/Name/{personName}/BirthYear/{birthYear}")] HttpRequestData incomingRequest,
-            string personName, string birthYear)
-        {
-
-            try
-            {
-                //special ID made for human brains
-                var brandNewHumanReadyId = await APITools.GeneratePersonId(personName, birthYear);
-
-                return APITools.PassMessageJson(brandNewHumanReadyId, incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-        }
 
 
         /// <summary>
@@ -164,6 +135,11 @@ namespace API
 
             try
             {
+
+                //special ID made for human brains
+                var brandNewHumanReadyId = await APITools.GeneratePersonId(ownerId, inputName, inputYear);
+
+
                 //parse time given by caller
                 var inputBirthTime = await Tools.ParseTime(
                     locationName: inputLocation,
@@ -176,7 +152,7 @@ namespace API
                 var parsedGender = Enum.Parse<Gender>(inputGender);
 
                 //make new person
-                var newPerson = new Person(ownerId, Tools.GenerateId(), inputName, inputBirthTime, parsedGender, "");
+                var newPerson = new Person(ownerId, brandNewHumanReadyId, inputName, inputBirthTime, parsedGender, "");
 
                 //possible old cache of person with same id lived, so clear cache if any
                 //delete data related to person (NOT USER, PERSON PROFILE)
@@ -239,64 +215,29 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = nameof(UpdatePerson))] HttpRequestData req)
         {
 
-            //get data out of call
-            var rootJson = await APITools.ExtractDataFromRequestJson(req);
+            try
+            {
+                //get data out of call
+                var rootJson = await APITools.ExtractDataFromRequestJson(req);
 
-            //api key to ID the call
-            var personParsed = Person.FromJson(rootJson);
+                //api key to ID the call
+                var personParsed = Person.FromJson(rootJson);
 
+                //delete data related to person (NOT USER, PERSON PROFILE)
+                await AzureCache.DeleteStuffRelatedToPerson(personParsed);
 
-            PersonListTable.UpsertEntity(personParsed.ToAzureRow());
+                await PersonListTable?.UpsertEntityAsync(personParsed.ToAzureRow());
 
-            return APITools.PassMessageJson(req);
-            throw new NotImplementedException();
-            //STAGE 1 : GET DATA OUT
-            //var parsedRequest = new CallerInfo(visitorId, userId);
+                return APITools.PassMessageJson(req);
+            }
+            catch (Exception e)
+            {
+                //log error
+                APILogger.Error(e, req);
 
-            //await AzureCache.Delete(parsedRequest.CallerId);
-
-            ////STAGE 2 : NOW WE WORK
-            //try
-            //{
-            //    //get new person data out of incoming request
-            //    //note: inside new person xml already contains user id
-            //    var personJson = await APITools.ExtractDataFromRequestJson(req);
-            //    var updatedPerson = Person.FromJson(personJson);
-
-
-            //    //only owner can delete so make sure here
-            //    var isOwner = Tools.IsUserIdMatch(updatedPerson.OwnerId, parsedRequest.CallerId);
-            //    if (isOwner)
-            //    {
-            //        //delete data related to person (NOT USER, PERSON PROFILE)
-            //        await AzureCache.DeleteStuffRelatedToPerson(updatedPerson);
-
-            //        //save a copy of the original person record in recycle bin, just in-case accidental update
-            //        var originalPerson = await Tools.GetPersonById(updatedPerson.Id);
-            //        await Tools.AddXElementToXDocumentAzure(originalPerson.ToXml(), APITools.RecycleBinFile, Tools.BlobContainerName);
-
-            //        //directly updates and saves new person record to main list (does all the work, sleep easy)
-            //        await Tools.UpdatePersonRecord(updatedPerson);
-
-            //        //all is good baby
-            //        return APITools.PassMessageJson(req);
-
-            //    }
-            //    else
-            //    {
-            //        return APITools.FailMessageJson("Only owner can update, you are not.", req);
-            //    }
-
-
-            //}
-            //catch (Exception e)
-            //{
-            //    //log error
-            //    APILogger.Error(e, req);
-
-            //    //format error nicely to show user
-            //    return APITools.FailMessageJson(e, req);
-            //}
+                //format error nicely to show user
+                return APITools.FailMessageJson(e, req);
+            }
 
         }
 
@@ -313,19 +254,13 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DeletePerson/OwnerId/{ownerId}/PersonId/{personId}")] HttpRequestData req,
             string ownerId, string personId)
         {
-            //STAGE 1 : GET DATA OUT
-            //var parsedRequest = new CallerInfo(visitorId, userId);
-
-            //await AzureCache.Delete(parsedRequest.CallerId);
-
-            //STAGE 2 : NOW WE WORK
             try
             {
                 //# get full person copy to place in recycle bin
                 //query the database
-                var foundCalls = PersonListTable.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+                var foundCalls = PersonListTable?.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
                 //make into readable format
-                var personAzureRow = foundCalls.FirstOrDefault();
+                var personAzureRow = foundCalls?.FirstOrDefault();
                 var personToDelete = Person.FromAzureRow(personAzureRow);
 
                 //# delete data related to person (NOT USER, PERSON PROFILE)
@@ -346,7 +281,7 @@ namespace API
                 APILogger.Error(e, req);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e, req);
+                return APITools.FailMessageJson(e, req);
             }
         }
 

@@ -243,7 +243,7 @@ namespace API
                 var nameInput = Tools.CleanAndFormatNameText(name);
 
                 //new person ID made from thin air 
-                var brandNewHumanReadyId = await APITools.GeneratePersonId(nameInput, birthTime.StdYear().ToString());
+                var brandNewHumanReadyId = await APITools.GeneratePersonId(ownerId, nameInput, birthTime.StdYear().ToString());
 
                 //get gender from gender string
                 var gender = Enum.Parse<Gender>(genderText);

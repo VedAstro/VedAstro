@@ -49,7 +49,7 @@ public class URL
         AddPerson = ApiUrl + "/AddPerson";
         DeletePerson = ApiUrl + "/DeletePerson";
         UpdatePerson = ApiUrl + "/UpdatePerson";
-        GetPerson = ApiUrl + "/getperson";
+        GetPerson = ApiUrl + "/GetPerson";
         GetPersonImage = ApiUrl + "/GetPersonImage/PersonId";
         GetNewPersonId = ApiUrl + "/GetNewPersonId";
 

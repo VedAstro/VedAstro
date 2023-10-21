@@ -657,7 +657,7 @@ namespace API
         /// Uses name and birth year to generate human readable ID for a new person record
         /// created so that user can type ID direct into URL based on only memory of name and birth year
         /// </summary>
-        public static async Task<string> GeneratePersonId(string personName, string birthYear)
+        public static async Task<string> GeneratePersonId(string ownerId, string personName, string birthYear)
         {
             //remove all space from name : Jamés Brown > JamésBrown
             var spaceLessName = Tools.RemoveWhiteSpace(personName);
@@ -668,7 +668,7 @@ namespace API
             //check if ID is really unique, else it would need a number at the back 
             //try to find a person, if null then no new id is unique
             //jamesbrown and JamesBrown, both should by common sense work
-            var idIsSafe = await CheckBothCase(humanId);
+            var idIsSafe = IsUniquePersonId(humanId);
 
             //if id NOT safe, add nonce and try again, possible nonce has been used
             //JamésBrown > JamésBrown1
@@ -681,9 +681,13 @@ namespace API
                 noncedId += nonceCount;
                 nonceCount++; //increment for next if needed
                               //try again
-                idIsSafe = await CheckBothCase(noncedId);
-                ; //anybody with same id found?
-                goto TryAgain;
+                idIsSafe = IsUniquePersonId(noncedId);
+
+                //if unique found, end here
+                if (idIsSafe) { return noncedId; }
+
+                //try again with higher nonce
+                else { goto TryAgain; }
             }
 
             //once control reaches here id should be all good
@@ -692,13 +696,14 @@ namespace API
 
             //---------------LOCAL FUNCTIONS-------------------------------
 
-            //check both case to allow user to make mistake of adding in
-            //jamesbrown and JamesBrown, both should by common sense work
-            async Task<bool> CheckBothCase(string checkThis)
+            //returns true if no other record exist with same id
+            //note search without owner ID, thus making person ID unique without owner ID for easy linking with images & other data
+            bool IsUniquePersonId(string personId)
             {
-                var x = (await Tools.FindPersonXMLById(checkThis)) == null;
-                var y = (await Tools.FindPersonXMLById(checkThis.ToLower())) == null;
-                return x || y;
+                var findPersonXmlById = PersonAPI.PersonListTable?.Query<PersonRow>(row => row.RowKey == personId);
+                var x = !findPersonXmlById.Any();
+
+                return x;
             }
 
 

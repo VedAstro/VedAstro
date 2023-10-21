@@ -9,7 +9,7 @@ using VedAstro.Library;
 namespace API
 {
     /// <summary>
-    /// cache manager for storing in Azure Tables
+    /// cache manager for storing in Azure blobs as cache
     /// </summary>
     public static class AzureCache
     {

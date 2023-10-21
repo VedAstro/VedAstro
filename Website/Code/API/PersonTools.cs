@@ -155,7 +155,7 @@ public class PersonTools
     /// </summary>
     public async Task<Person> GetPerson(string personId)
     {
-        var url = $"{_api.URL.GetPerson}/PersonId/{personId}";
+        var url = $"{_api.URL.GetPerson}/OwnerId/{AppData.CurrentUser.Id}/PersonId/{personId}";
         var result = await Tools.ReadServerRaw<JObject>(url);
 
         //get parsed payload from raw result

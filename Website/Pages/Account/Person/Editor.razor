@@ -29,12 +29,6 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#lifeEvents" class="nav-link" data-bs-toggle="tab">
-                <Icon IconName="material-symbols:note-alt-outline" />
-                Life Events
-            </a>
-        </li>
-        <li class="nav-item">
             <a href="#advanced" class="nav-link" data-bs-toggle="tab">
                 <Icon IconName="material-symbols:note-alt-outline" />
                 Advanced
@@ -88,11 +82,6 @@
             </div>
         </div>
 
-        @*LIFE EVENTS*@
-        <div class="tab-pane fade" id="lifeEvents">
-            <LifeEventViewer @ref="lifeEventViewer" />
-        </div>
-
         @*ADVANCED TAB CONTENT*@
         <div class="tab-pane fade" id="advanced">
             <div class="px-2">
@@ -107,8 +96,8 @@
                         <li class="list-group-item">@SelectedPerson.BirthTime.GetStdDateTimeOffsetText()</li>
                     </ul>
                     <ul class="list-group list-group-horizontal">
-                        <li class="list-group-item">Owners</li>
-                        <li class="list-group-item">@SelectedPerson.UserIdString</li>
+                        <li class="list-group-item">Owner</li>
+                        <li class="list-group-item">@SelectedPerson.OwnerId</li>
                     </ul>
                 </ul>
             </div>
@@ -151,7 +140,6 @@
     string _genderInput = "";
     string _pageTitle = "";
     private GeoLocationInput _geoLocationInput;
-    private LifeEventViewer lifeEventViewer;
 
 
 
@@ -210,8 +198,6 @@
         );
         _geoLocationInput.UpdateData(geoLocation);
 
-        //life events
-        await lifeEventViewer.SetData(SelectedPerson);
 
         //todo check if needed
         this.StateHasChanged();
@@ -305,31 +291,16 @@
     {
         //parse data received from user
         var geoLocation = _geoLocationInput.GetGeoLocation();
-        var lifeEventList = lifeEventViewer.GetData();
 
         //get gender from gender string
         var gender = Enum.Parse<Gender>(_genderInput);
 
         //create a new person from the inputed data
         var birthTime = _timeInput.GetTime(geoLocation);
-        //if user not signed in, use their visitor id as user ID
-        //done so that public list is not clouded
-        var currentUserId = AppData.CurrentUser?.Id == UserData.Guest.Id ? AppData.VisitorId : AppData.CurrentUser?.Id;
-
-        //get all owner list & add this user id if not included
-        //this way 1 user does not delete other users when click save
-        var userFound = SelectedPerson.UserId.Contains(currentUserId);
-        string[] allUserIdList;
-        //use old list since, only updating
-        if (userFound) { allUserIdList = SelectedPerson.UserId; }
-        //add current user to person's owner list
-        else { allUserIdList = SelectedPerson.UserId?.Append(currentUserId)?.ToArray(); }
 
         //note: person id does NOT change
-        return new Person(SelectedPerson.Id, _nameInput, birthTime, gender, allUserIdList, _notesInput, lifeEventList);
+        return new Person(AppData.CurrentUser.Id, SelectedPerson.Id, _nameInput, birthTime, gender, _notesInput);
 
-
-        //----------LOCAL FUNCTION ---------------------
     }
 
     private async Task UpdateExistingPerson()

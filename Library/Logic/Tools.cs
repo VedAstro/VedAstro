@@ -1643,7 +1643,7 @@ namespace VedAstro.Library
                     //make JSON data readable
                     var parsedJson = JObject.Parse(inputRawString);
                     var returnVal = WebResult<JObject>.FromJson(parsedJson);
-                    
+
                     //if did not pass, raise exception so can check other methods
                     if (!returnVal.IsPass) { throw new InvalidOperationException(); }
                     return returnVal;
@@ -1863,7 +1863,7 @@ namespace VedAstro.Library
             string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
             //enum has simple structure ../ZodiacName/Leo
-            var enumName = parts[0] ;
+            var enumName = parts[0];
             var enumValue = parts[1];
 
             //get the type of the enum
@@ -1889,7 +1889,7 @@ namespace VedAstro.Library
         /// Converts any String from URL epx : ../Text/Juliet
         /// </summary>
 
-		public static string StringFromUrl(string url)
+        public static string StringFromUrl(string url)
         {
             string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -2280,7 +2280,7 @@ namespace VedAstro.Library
                     if (parameterType == typeof(Angle)) { sampleData = Angle.Degrees180; }
                     if (parameterType == typeof(PlanetName)) { sampleData = PlanetName.Sun; }
                     if (parameterType == typeof(PlanetConstellation)) { sampleData = new PlanetConstellation(1, 1, Angle.FromDegrees(13)); }
-                    if (parameterType == typeof(Person)) { sampleData = new Person("", "Juliet", Time.StandardHoroscope(), Gender.Female, new[] { "" }); }
+                    if (parameterType == typeof(Person)) { sampleData = new Person("101", "12312323", "Juliet", Time.StandardHoroscope(), Gender.Female); }
                     if (parameterType == typeof(HouseName)) { sampleData = HouseName.House4; }
                     if (parameterType == typeof(TimeSpan)) { sampleData = new TimeSpan(1, 0, 0); }
                     if (parameterType == typeof(List<HouseName>)) { sampleData = new List<HouseName>() { HouseName.House1, HouseName.House4 }; }
@@ -2657,23 +2657,23 @@ namespace VedAstro.Library
             switch (anyTypeData)
             {
                 case List<House> dictionary:
-                {
-                    var array = new JArray();
-                    foreach (var item in dictionary)
                     {
-                        var obj = new JObject
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
                         {
                             { "House", item.GetHouseName().ToString() },
                             { "Begin", item.GetBeginLongitude().ToString() },
                             { "Mid", item.GetMiddleLongitude().ToString() },
                             { "End", item.GetEndLongitude().ToString() }
                         };
-                        array.Add(obj);
-                    }
+                            array.Add(obj);
+                        }
 
-                    rootPayloadJson = new JProperty(dataName, array);
-                    break;
-                }
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+                    }
                 //handles results that have many props from 1 call, exp : SwissEphemeris
                 case List<APIFunctionResult> apiList:
                     {
@@ -2743,37 +2743,37 @@ namespace VedAstro.Library
                         break;
                     }
                 case Dictionary<HouseName, ZodiacSign> dictionary:
-                {
-                    var array = new JArray();
-                    foreach (var item in dictionary)
                     {
-                        var obj = new JObject
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
                         {
                             { "House", item.Key.ToString() },
                             { "ZodiacSign", item.Value.ToString() }
                         };
-                        array.Add(obj);
-                    }
+                            array.Add(obj);
+                        }
 
-                    rootPayloadJson = new JProperty(dataName, array);
-                    break;
-                }
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+                    }
                 case Dictionary<HouseName, PlanetName> dictionary:
-                {
-                    var array = new JArray();
-                    foreach (var item in dictionary)
                     {
-                        var obj = new JObject
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
                         {
                             { "House", item.Key.ToString() },
                             { "Lord", item.Value.ToString() }
                         };
-                        array.Add(obj);
-                    }
+                            array.Add(obj);
+                        }
 
-                    rootPayloadJson = new JProperty(dataName, array);
-                    break;
-                }
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+                    }
                 case Dictionary<HouseName, ZodiacName> dictionary:
                     {
                         var array = new JArray();

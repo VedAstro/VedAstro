@@ -249,7 +249,7 @@ namespace API
                 var gender = Enum.Parse<Gender>(genderText);
 
                 //create the new complete person profile
-                var newPerson = new Person(brandNewHumanReadyId, nameInput, birthTime, gender, new[] { ownerId });
+                var newPerson = new Person(ownerId, brandNewHumanReadyId, nameInput, birthTime, gender, "");
 
                 //add to list
                 returnList.Add(newPerson);
@@ -385,7 +385,7 @@ namespace API
 
             //FILTER
             //needs to meets minimum score to make into list
-            var finalList = 
+            var finalList =
                 from matchReport in resultListOrdered
                 where matchReport.KutaScore >= minimumScore
                 select matchReport;
@@ -404,7 +404,7 @@ namespace API
                 var age = matchPerson.GetAge();
                 return new PersonKutaScore(id, name, gender, age, matchReport.KutaScore);
             }).ToList();
-            
+
             return personList2;
         }
 

@@ -29,7 +29,7 @@ namespace VedAstro.Library
     /// Collection of astronomical calculator functions
     /// Note : Many of the functions here use cacheing machanism
     /// </summary>
-    public static partial class Calculate
+    public partial class Calculate
     {
 
         #region SETTINGS
@@ -1934,26 +1934,6 @@ namespace VedAstro.Library
             foreach (var planet in PlanetName.All9Planets)
             {
                 var houseIsIn = HousePlanetIsIn(time, planet);
-                returnList.Add(planet, houseIsIn);
-            }
-
-            return returnList;
-        }
-
-        /// <summary>
-        /// List of all planets and the houses they are located in at a given time
-        /// using KP Krishnamurti system, note KP ayanamsa is hard set
-        /// </summary>
-        public static Dictionary<PlanetName, HouseName> AllPlanetHousePositionsKP(Time time)
-        {
-            //hard set KP ayanamsa to match commercial software default output
-            Calculate.Ayanamsa = (int)Library.Ayanamsa.KRISHNAMURTI;
-
-            var returnList = new Dictionary<PlanetName, HouseName>();
-
-            foreach (var planet in PlanetName.All9Planets)
-            {
-                var houseIsIn = HousePlanetIsInKP(time, planet);
                 returnList.Add(planet, houseIsIn);
             }
 

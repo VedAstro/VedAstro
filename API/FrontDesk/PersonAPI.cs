@@ -241,6 +241,43 @@ namespace API
 
         }
 
+        /// <summary>
+        /// Updates a person's record, uses hash to identify person to overwrite
+        /// </summary>
+        [Function(nameof(Migrate))]
+        public static async Task<HttpResponseData> Migrate(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = nameof(Migrate))] HttpRequestData req)
+        {
+
+            try
+            {
+
+
+
+                //get data out of call
+                var rootJson = await APITools.ExtractDataFromRequestJson(req);
+
+                //api key to ID the call
+                var personParsed = Person.FromJson(rootJson);
+
+                //delete data related to person (NOT USER, PERSON PROFILE)
+                await AzureCache.DeleteStuffRelatedToPerson(personParsed);
+
+                await PersonListTable?.UpsertEntityAsync(personParsed.ToAzureRow());
+
+                return APITools.PassMessageJson(req);
+            }
+            catch (Exception e)
+            {
+                //log error
+                APILogger.Error(e, req);
+
+                //format error nicely to show user
+                return APITools.FailMessageJson(e, req);
+            }
+
+        }
+
 
         /// <summary>
         /// Deletes a person's record, uses hash to identify person

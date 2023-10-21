@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace VedAstro.Library
 {
@@ -14,6 +15,8 @@ namespace VedAstro.Library
         private const int QuarterMin = 1;
 
         public static PlanetConstellation Empty = new PlanetConstellation(1, 1, Angle.FromDegrees(0));
+
+        public static List<ConstellationName> AllConstellation => new List<ConstellationName>((ConstellationName[])Enum.GetValues(typeof(ConstellationName)));
 
 
         //DATA FIELDS

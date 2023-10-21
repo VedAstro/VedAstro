@@ -11021,6 +11021,8 @@ namespace VedAstro.Library
                 // Convert DOB to ET
                 var jul_day_ET = Calculate.TimeToEphemerisTime(time);
 
+                //ephemeris.swe_calc(jul_day_ET, SwissEph.SE_ECL_NUT, 0, x, ref err);
+
                 ephemeris.swe_calc(jul_day_ET, SwissEph.SE_ECL_NUT, 0, x, ref err);
 
                 eps = x[0];

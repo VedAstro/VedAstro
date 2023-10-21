@@ -33,6 +33,7 @@
 		<!--<PackageReference Include="VedAstro.Library" Version="1.2.0" />-->
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\KPSystem\KPSystem.csproj" />
 		<ProjectReference Include="..\Library\Library.csproj" />
 	</ItemGroup>
 	<ItemGroup>

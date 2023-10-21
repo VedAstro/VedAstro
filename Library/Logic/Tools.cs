@@ -3178,9 +3178,8 @@ namespace VedAstro.Library
         /// Given a method name in string form, will get it's reference to code
         /// gets from Calculate.cs class
         /// </summary>
-        public static MethodInfo MethodNameToMethodInfo(string methodName)
+        public static MethodInfo MethodNameToMethodInfo(string methodName, Type calculatorClass)
         {
-            var calculatorClass = typeof(Calculate);
             var foundList = calculatorClass.GetMethods().Where(x => x.Name == methodName);
             var foundMethod = foundList.FirstOrDefault();
 

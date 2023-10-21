@@ -26,16 +26,6 @@ namespace VedAstro.Library
 
 		}
 
-		/// <summary>
-		/// Given a list of already found calcs will execute it
-		/// </summary>
-		public static JToken ExecuteFunctionsJSON(string methodName, params object[] paramInput)
-		{
-			var methodInfo = Tools.MethodNameToMethodInfo(methodName);
-			var list = new List<MethodInfo> { methodInfo };
-
-			return ExecuteFunctionsJSON(list, paramInput);
-		}
 
 		/// <summary>
 		/// Given a method info of already found calcs will execute it

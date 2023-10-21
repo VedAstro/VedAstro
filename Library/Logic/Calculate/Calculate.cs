@@ -5706,9 +5706,6 @@ namespace VedAstro.Library
                 //get constellation number (rounds up)
                 var constellationNumber = (int)Math.Ceiling(roughConstellationNumber);
 
-                //if constellation number = 0, then its 1 - CPJ Added to handle 0 degree longitude items
-                if (constellationNumber == 0){constellationNumber = 1;}
-
                 //calculate quarter from remainder
                 int quarter;
 
@@ -5763,37 +5760,27 @@ namespace VedAstro.Library
                 //round number (too high accuracy causes equality mismtach because of minute difference)
                 var degreesInSign = Math.Round(degreesInSignRaw, 7);
 
-                /*
                 //if degrees in sign is 0, it means 30 degrees
                 if (degreesInSign == 0)
                 {
                     //change value to 30 degrees
                     degreesInSign = 30;
-                } 
-                */
+                }
 
-                
                 //Get name of zodiac sign
                 //round to ceiling to get integer zodiac number
                 var zodiacNumber = (int)Math.Ceiling(roughZodiacNumber);
 
-                if (longitude.TotalDegrees == 0.00)
-                {
-                    zodiacNumber = 1;
-                }
-
-                
                 //convert zodiac number to zodiac name
                 var calculatedZodiac = (ZodiacName)zodiacNumber;
 
-                
                 //if rough zodiac number is less than or equal 0, then return Pisces else return calculated zodiac
-                //// ZodiacName currentSignName = (roughZodiacNumber <= 0) ? ZodiacName.Pisces : calculatedZodiac;
+                ZodiacName currentSignName = (roughZodiacNumber <= 0) ? ZodiacName.Pisces : calculatedZodiac;
 
                 //return new instance of planet sign
                 var degreesAngle = Angle.FromDegrees(Math.Abs(degreesInSign)); //make always positive
 
-                var zodiacSignAtLongitude = new ZodiacSign(calculatedZodiac, degreesAngle);
+                var zodiacSignAtLongitude = new ZodiacSign(currentSignName, degreesAngle);
 
                 return zodiacSignAtLongitude;
             }

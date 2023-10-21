@@ -23,15 +23,14 @@ namespace VedAstro.Library
         public static int OpenAPILength = 2;
 
 
-        private static string[] DefaultUserId = new[] { "101" };
+        private static string DefaultUserId = "101";
 
         /// <summary>
         /// Empty instance for null use cases
         /// All internal properties are initialized with empty values
         /// so use that to detect
         /// </summary>
-        public static Person Empty = new Person("0", "Empty", Time.Empty, Gender.Empty, DefaultUserId,
-            "Empty", new List<LifeEvent>());
+        public static Person Empty = new Person(DefaultUserId, "0", "Empty", Time.Empty, Gender.Empty, "Empty");
 
         private string _notes;
 
@@ -47,32 +46,8 @@ namespace VedAstro.Library
 
         /// <summary>
         /// User ID is used by website. Multiple supported, Shows owner of person's profile
-        /// todo owner ID might be better
         /// </summary>
-        public string[] UserId { get; set; }
-
-        /// <summary>
-        /// Comma sperated string of Person's all user ID
-        /// </summary>
-        public string UserIdString
-        {
-            get
-            {
-                var userIdString = "";
-
-                //joining can fail, so return error note if that happens
-                try
-                {
-                    userIdString = string.Join(",", UserId);
-                }
-                catch (Exception e)
-                {
-                    userIdString = e.Message;
-                }
-
-                return userIdString;
-            }
-        }
+        public string OwnerId { get; set; }
 
         /// <summary>
         /// Misc. notes about the person
@@ -96,34 +71,29 @@ namespace VedAstro.Library
 
 
         //CTOR
-        public Person(string id, string name, Time birthTime, Gender gender, string[] userId, string notes = "",
-            List<LifeEvent> lifeEventList = null)
+        public Person(string ownerId, string id, string name, Time birthTime, Gender gender, string notes = "")
         {
             Id = id;
             Name = name;
             BirthTime = birthTime;
             Gender = gender;
-            UserId = userId.Any() ? userId : DefaultUserId;
+            OwnerId = ownerId;
             Notes = notes;
-            LifeEventList = lifeEventList ?? new List<LifeEvent>(); //empty list if not specified
         }
 
         /// <summary>
         /// shortcut method to make person when database not needed
         /// made for easy 3rd party lib code 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="birthTime"></param>
-        /// <param name="gender"></param>
         public Person(string name, Time birthTime, Gender gender)
         {
             Id = Tools.GenerateId();
             Name = name;
             BirthTime = birthTime;
             Gender = gender;
-            UserId = DefaultUserId;
+            OwnerId = DefaultUserId;
             Notes = "";
-            LifeEventList =  new List<LifeEvent>(); //empty list if not specified
+            LifeEventList = new List<LifeEvent>(); //empty list if not specified
         }
 
         /// <summary>
@@ -265,7 +235,7 @@ namespace VedAstro.Library
             //get hash of all the fields & combine them
             var hash1 = Tools.GetStringHashCode(this.Name);
             var hash2 = BirthTime.GetHashCode();
-            var hash3 = Tools.GetStringHashCode(this.UserIdString);
+            var hash3 = Tools.GetStringHashCode(this.OwnerId);
 
             //take out negative before returning
             return Math.Abs(hash1 + hash2 + hash3);
@@ -308,7 +278,7 @@ namespace VedAstro.Library
             temp["Notes"] = this.Notes;
             temp["BirthTime"] = this.BirthTime.ToJson();
             temp["Gender"] = this.GenderString;
-            temp["UserId"] = this.UserIdString;
+            temp["OwnerId"] = this.OwnerId;
             temp["LifeEventList"] = this.LifeEventListJson; //json array
 
             return temp;
@@ -344,10 +314,10 @@ namespace VedAstro.Library
             var notes = new XElement("Notes", this.Notes);
             var gender = new XElement("Gender", this.Gender.ToString());
             var birthTime = new XElement("BirthTime", this.BirthTime.ToXml());
-            var userId = new XElement("UserId", this.UserIdString);
+            var ownerId = new XElement("OwnerId", this.OwnerId);
             var lifeEventListXml = getLifeEventListXml(LifeEventList);
 
-            person.Add(id, name, gender, birthTime, userId, lifeEventListXml, notes);
+            person.Add(id, name, gender, birthTime, ownerId, lifeEventListXml, notes);
 
             return person;
 
@@ -394,43 +364,13 @@ namespace VedAstro.Library
             var notes = personXml.Element("Notes")?.Value;
             var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
             var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
-            var userId = Tools.GetUserIdFromData(personXml);
-            var lifeEventList = getLifeEventListFromXml();
+            var ownerId = personXml.Element("OwnerId")?.Value;
 
-            var parsedPerson = new Person(id, name, time, gender, userId, notes, lifeEventList);
+            var parsedPerson = new Person(ownerId, id, name, time, gender, notes);
 
             return parsedPerson;
 
             //-------------------LOCAL FUNCTION--------
-            List<LifeEvent> getLifeEventListFromXml()
-            {
-                //Try to get data from xml
-                //there is a possibility that xml doesn't exist
-                try
-                {
-                    var lifeEventListXml = personXml.Element("LifeEventList")?.Elements();
-                    var returnList = new List<LifeEvent>();
-
-                    //is null when no life events exist for user, so to avoid exception this is
-                    if (lifeEventListXml != null)
-                    {
-                        foreach (var lifeEventXml in lifeEventListXml)
-                        {
-                            returnList.Add(LifeEvent.FromXml(lifeEventXml));
-                        }
-                    }
-
-                    return returnList;
-
-                }
-                //if fail, probably xml doesn't exist so just send empty list
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                    Console.WriteLine("No Valid Life Events Found! Empty list used!");//debug
-                    return new List<LifeEvent>();
-                }
-            }
         }
 
         /// <summary>
@@ -464,10 +404,9 @@ namespace VedAstro.Library
                 var notes = personInput["Notes"].Value<string>();
                 var time = Time.FromJson(personInput["BirthTime"]);
                 var gender = Enum.Parse<Gender>(personInput["Gender"].Value<string>());
-                var userId = Tools.GetUserIdFromData(personInput);
-                var lifeEventList = LifeEvent.FromJsonList(personInput["LifeEventList"]); //json array
+                var ownerId = personInput["OwnerId"].Value<string>();
 
-                var parsedPerson = new Person(id, name, time, gender, userId, notes, lifeEventList);
+                var parsedPerson = new Person(ownerId, id, name, time, gender, notes);
 
                 return parsedPerson;
             }
@@ -501,13 +440,6 @@ namespace VedAstro.Library
             return person;
         }
 
-        /// <summary>
-        /// Replaces life event list and returns new Person with modified val
-        /// note:
-        /// - done so because it's a struct
-        /// - maintains all other person props
-        /// </summary>
-        public Person SetNewLifeEvents(List<LifeEvent> updatedLifeEventList) => new Person(Id, Name, BirthTime, Gender, UserId, Notes, updatedLifeEventList);
 
         /// <summary>
         /// Returns a new instance person with modified birth time
@@ -516,10 +448,43 @@ namespace VedAstro.Library
         public Person ChangeBirthTime(Time newBirthTime)
         {
             //make a copy of person details except birth time
-            var newPerson = new Person(this.Id, Name, newBirthTime, Gender, UserId, Notes, LifeEventList);
+            var newPerson = new Person(OwnerId, this.Id, Name, newBirthTime, Gender, Notes);
             return newPerson;
         }
 
         JObject IToJson.ToJson() => (JObject)this.ToJson();
+
+        /// <summary>
+        /// This makes owner ID as primary key and person id as 
+        /// </summary>
+        /// <returns></returns>
+        public PersonRow ToAzureRow()
+        {
+            //make the cache row to be added
+            var newRow = new PersonRow()
+            {
+                //can have many IP as partition key
+                PartitionKey = this.OwnerId,
+                RowKey = this.Id,
+                Name = this.Name,
+                BirthTime = this.BirthTime.ToJson().ToString(),
+                Gender = this.Gender.ToString(),
+                Notes = "",
+            };
+
+            return newRow;
+        }
+
+        /// <summary>
+        /// Brings back Owner ID from Primary key & 
+        /// </summary>
+        public static Person FromAzureRow(PersonRow rowData)
+        {
+            var birthTime = Time.FromJson(JToken.Parse(rowData.BirthTime));
+            var rowDataGender = Enum.Parse<Gender>(rowData.Gender);
+            var newPerson = new Person(rowData.PartitionKey, rowData.RowKey, rowData.Name, birthTime, rowDataGender);
+
+            return newPerson;
+        }
     }
 }

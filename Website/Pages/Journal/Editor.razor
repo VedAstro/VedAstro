@@ -93,15 +93,8 @@
 
 
         //get data of life event
-        var newLifeEvent = new LifeEvent()
-            {
-                Id = LifeEventIdUrl, //use id from URL, given by caller
-                Name = "",
-                Description = "", // possible to be left empty
-                Nature = "",
-                Weight = "Normal", // default to normal to speed up
-                StartTime = SelectedPerson.TimeNowAtBirthLocation
-            };
+        var newLifeEvent = new LifeEvent(PersonIdUrl, LifeEventIdUrl, SelectedPerson.TimeNowAtBirthLocation, "", "", "", "Normal");
+
         SelectedLifeEvent = SelectedPerson.LifeEventList.Where(lE => lE.Id == LifeEventIdUrl).FirstOrDefault() ?? newLifeEvent;
 
         //place data into fields
@@ -215,15 +208,8 @@
     private async Task<LifeEvent> GetLifeEventFromInputs()
     {
         //get event from fields
-        var newEvent = new LifeEvent()
-            {
-                Id = SelectedLifeEvent.Id,
-                Name = inputName,
-                Description = inputDescription,
-                Nature = inputNature,
-                StartTime = await _timeInput.GetTime(_geoLocationInput.GetGeoLocation()),
-                Weight = inputWeight
-            };
+        var time = await _timeInput.GetTime(_geoLocationInput.GetGeoLocation());
+        var newEvent = new LifeEvent("", SelectedLifeEvent.Id, time, inputName, inputDescription, inputNature, inputWeight);
 
         return newEvent;
     }

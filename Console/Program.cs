@@ -23,7 +23,8 @@ namespace VedAstro.Console
             var chart = Calculate.SouthIndianChart(timeSample);
             var longitudes = Calculate.AllHouseLongitudesKP(timeSample);
             var constellations = Calculate.AllHouseConstellationKP(timeSample);
-            var housesPlanets = Calculate.AllPlanetHousePositionsKP(timeSample);
+            var housesPlanets = Calculate.AllPlanetHousePositions(timeSample);
+            var housesPlanet2s = CalculateKP.AllPlanetHousePositionsKP(timeSample);
             var signsPlanets = Calculate.AllPlanetZodiacSignsKP(timeSample);
 
 

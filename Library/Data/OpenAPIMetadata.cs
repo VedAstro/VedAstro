@@ -248,7 +248,7 @@ public class OpenAPIMetadata : IToJson
     {
         //get method info from calc name
         var calcName = funcResult.Name;
-        var methodInfo = Tools.MethodNameToMethodInfo(calcName);
+        var methodInfo = Tools.MethodNameToMethodInfo(calcName, typeof(Calculate));
 
         //convert method info to meta data
         var converted = OpenAPIMetadata.FromMethodInfoList(new List<MethodInfo>() { methodInfo })[0];

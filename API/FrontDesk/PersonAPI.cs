@@ -1,4 +1,4 @@
-﻿using System.Net.Mime;
+using System.Net.Mime;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
@@ -18,14 +18,17 @@ namespace API
         private static readonly string StorageAccountKey = Secrets.VedAstroCentralStorageKey;
 
         private const string PersonListName = "PersonList";
+        private const string PersonShareListName = "PersonShareList";
         private const string PersonListRecycleBinName = "PersonListRecycleBin";
         private const string LifeEventListName = "LifeEventList";
         private const string PersonListUri = $"https://vedastrocentralstorage.table.core.windows.net/{PersonListName}";
+        private const string PersonShareListUri = $"https://vedastrocentralstorage.table.core.windows.net/{PersonShareListName}";
         private const string PersonListRecycleBinUri = $"https://vedastrocentralstorage.table.core.windows.net/{PersonListRecycleBinName}";
         private const string LifeEventListUri = $"https://vedastrocentralstorage.table.core.windows.net/{LifeEventListName}";
         public static readonly TableClient? PersonListTable = (new TableServiceClient(new Uri(PersonListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonListName);
         private static readonly TableClient? PersonListRecycleBinTable = (new TableServiceClient(new Uri(PersonListRecycleBinUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonListRecycleBinName);
         private static readonly TableClient? LifeEventListTable = (new TableServiceClient(new Uri(LifeEventListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(LifeEventListName);
+        private static readonly TableClient? PersonShareListTable = (new TableServiceClient(new Uri(PersonShareListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonShareListName);
 
 
         /// <summary>

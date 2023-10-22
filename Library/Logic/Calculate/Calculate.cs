@@ -237,6 +237,82 @@ namespace VedAstro.Library
 
         #endregion
 
+        #region PLANET TRANSITS
+
+        public static List<Tuple<Time, Time, ZodiacName, PlanetName>> PlanetSignTransit(Time startTime, Time endTime, PlanetName planetName)
+        {
+            //make slices to scan
+            var accuracyInHours = 0.0166666; // 1 minute
+            var timeSlices = Time.GetTimeListFromRange(startTime, endTime, accuracyInHours);
+
+            //prepare place to store data
+            var returnList = new List<Tuple<Time, Time, ZodiacName, PlanetName>>();
+
+            //get the start sign
+            var startZodiacSign = Calculate.PlanetSignName(planetName, startTime);
+            var previousZodiacName = startZodiacSign.GetSignName();
+            var startTimeSlice = timeSlices[0]; //set start slice for 1st change
+            foreach (var timeSlice in timeSlices)
+            {
+                var tempZodiacName = Calculate.PlanetSignName(planetName, timeSlice).GetSignName();
+
+                //if constellation changes mark the time as start for one and end for another
+                if (tempZodiacName != previousZodiacName)
+                {   
+                    //add previous, with current slice as end time
+                    returnList.Add(new Tuple<Time, Time, ZodiacName, PlanetName>(startTimeSlice, timeSlice, previousZodiacName, planetName));
+
+                    //save current slice as start for next
+                    startTimeSlice = timeSlice;
+                }
+
+                //update value for next check
+                previousZodiacName = tempZodiacName;
+            }
+
+            return returnList;
+
+        }
+
+        /// <summary>
+        /// Gets all the constellation start time for a given planet
+        /// Set to an accuracy of 1 minute
+        /// </summary>
+        public static List<Tuple<Time, ConstellationName, ZodiacSign>> GetConstellationTransitStartTime(Time startTime, Time endTime, PlanetName planetName)
+        {
+            //make slices to scan
+            var accuracyInHours = 0.0166666; // 1 minute
+            var timeSlices = Time.GetTimeListFromRange(startTime, endTime, accuracyInHours);
+
+            var returnList = new List<Tuple<Time, ConstellationName, ZodiacSign>>();
+
+            var startConstellation = Calculate.PlanetConstellation(startTime, planetName);
+            var previousConstellation = startConstellation.GetConstellationName();
+
+            foreach (var timeSlice in timeSlices)
+            {
+                //if constellation changes mark the time
+                var tempConstellationName = Calculate.PlanetConstellation(timeSlice, planetName).GetConstellationName();
+
+                //CPJ Added for Planet's Zodiac Sign
+                var planetLongitude = Calculate.PlanetNirayanaLongitude(timeSlice, planetName);
+                var planetZodiacSign = Calculate.ZodiacSignAtLongitude(planetLongitude);
+                //-------
+
+                if (tempConstellationName != previousConstellation)
+                {
+                    returnList.Add(new Tuple<Time, ConstellationName, ZodiacSign>(timeSlice, tempConstellationName, planetZodiacSign));
+                }
+
+                //update value for next check
+                previousConstellation = tempConstellationName;
+            }
+
+            return returnList;
+        }
+
+        #endregion
+
         #region ALL DATA
 
         /// <summary>
@@ -5708,7 +5784,7 @@ namespace VedAstro.Library
                 var constellationNumber = (int)Math.Ceiling(roughConstellationNumber);
 
                 //if constellation number = 0, then its 1 - CPJ Added to handle 0 degree longitude items
-                if (constellationNumber == 0){constellationNumber = 1;}
+                if (constellationNumber == 0) { constellationNumber = 1; }
 
                 //calculate quarter from remainder
                 int quarter;
@@ -5773,7 +5849,7 @@ namespace VedAstro.Library
                 } 
                 */
 
-                
+
                 //Get name of zodiac sign
                 //round to ceiling to get integer zodiac number
                 var zodiacNumber = (int)Math.Ceiling(roughZodiacNumber);
@@ -5783,11 +5859,11 @@ namespace VedAstro.Library
                     zodiacNumber = 1;
                 }
 
-                
+
                 //convert zodiac number to zodiac name
                 var calculatedZodiac = (ZodiacName)zodiacNumber;
 
-                
+
                 //if rough zodiac number is less than or equal 0, then return Pisces else return calculated zodiac
                 //// ZodiacName currentSignName = (roughZodiacNumber <= 0) ? ZodiacName.Pisces : calculatedZodiac;
 
@@ -6951,47 +7027,6 @@ namespace VedAstro.Library
             var count = Calculate.CountFromSignToSign(janmaSign, planetSign);
 
             return count;
-        }
-
-
-
-        /// <summary>
-        /// Gets all the constellation start time for a given planet
-        /// Set to an accuracy of 1 minute
-        /// </summary>
-        public static List<Tuple<ConstellationName, Time, ZodiacSign>> GetConstellationTransitStartTime(PlanetName planetName, TimeRange timeRange)
-        {
-            //make slices to scan
-            var accuracyInHours = 0.0166666; // 1 minute
-            var timeSlices = Time.GetTimeListFromRange(timeRange.start, timeRange.end, accuracyInHours);
-
-            var returnList = new List<Tuple<ConstellationName, Time, ZodiacSign>>();
-
-            var startConstellation = Calculate.PlanetConstellation(timeRange.start, planetName);
-            var previousConstellation = startConstellation.GetConstellationName();
-
-
-
-            foreach (var timeSlice in timeSlices)
-            {
-                //if constellation changes mark the time
-                var tempConstellationName = Calculate.PlanetConstellation(timeSlice, planetName).GetConstellationName();
-
-                //CPJ Added for Planet's Zodiac Sign
-                var planetLongitude = Calculate.PlanetNirayanaLongitude(timeSlice, planetName);
-                var planetZodiacSign = Calculate.ZodiacSignAtLongitude(planetLongitude);
-                //-------
-
-                if (tempConstellationName != previousConstellation)
-                {
-                    returnList.Add(new Tuple<ConstellationName, Time, ZodiacSign>(tempConstellationName, timeSlice, planetZodiacSign));
-                }
-
-                //update value for next check
-                previousConstellation = tempConstellationName;
-            }
-
-            return returnList;
         }
 
         /// <summary>

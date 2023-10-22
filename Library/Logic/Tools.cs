@@ -2674,6 +2674,24 @@ namespace VedAstro.Library
                         rootPayloadJson = new JProperty(dataName, array);
                         break;
                     }
+                case List<Tuple<Time, Time, ZodiacName, PlanetName>> dictionary:
+                    {
+                        var array = new JArray();
+                        foreach (var item in dictionary)
+                        {
+                            var obj = new JObject
+                        {
+                            { "Start", item.Item1.ToJson() },
+                            { "End", item.Item2.ToJson() },
+                            { "ZodiacSign", item.Item3.ToString() },
+                            { "Planet", item.Item4.ToString() }
+                        };
+                            array.Add(obj);
+                        }
+
+                        rootPayloadJson = new JProperty(dataName, array);
+                        break;
+                    }
                 //handles results that have many props from 1 call, exp : SwissEphemeris
                 case List<APIFunctionResult> apiList:
                     {

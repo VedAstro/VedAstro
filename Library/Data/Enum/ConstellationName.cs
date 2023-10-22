@@ -31,7 +31,8 @@
         Satabhisha = 24,
         Poorvabhadra = 25,
         Uttarabhadra = 26,
-        Revathi = 27
+        Revathi = 27,
+        Abhijit = 28
     }
 
 }

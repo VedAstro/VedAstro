@@ -1,4 +1,4 @@
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
@@ -6,6 +6,7 @@ using Azure.Storage.Blobs;
 using Person = VedAstro.Library.Person;
 using Azure.Data.Tables;
 using Newtonsoft.Json.Linq;
+using System.Dynamic;
 
 namespace API
 {
@@ -186,6 +187,14 @@ namespace API
         {
             try
             {
+                //TODO
+                ////STAGE 2 : SWAP DATA
+                ////swap visitor ID with user ID if any (data follows user when log in)
+                //if (!callerInfo.Both101) //only swap if needed
+                //{
+                //    bool didSwap = await APITools.SwapUserId(callerInfo, Tools.PersonListFile);
+                //    //if (didSwap) { APILogger.LogBookClient()} //TODO change to .Data()
+                //}
 
                 var foundCalls = PersonListTable.Query<PersonRow>(call => call.PartitionKey == ownerId);
 
@@ -255,7 +264,23 @@ namespace API
             try
             {
 
+                //get latest all match reports
+                var personListXml = await Tools.GetXmlFileFromAzureStorage(Tools.PersonListFile, Tools.BlobContainerName);
 
+                foreach (var personXml in personListXml.Root.Elements())
+                {
+                    var LifeEventListXML = personXml?.Element("LifeEventList");
+
+                    if (LifeEventListXML?.Elements() == null) { continue; }
+
+                    foreach (var lifeEventXml in LifeEventListXML?.Elements())
+                    {
+                        var lifeEvt = LifeEvent.FromXml(lifeEventXml);
+                        //save to table
+                        lifeEvt.PersonId = personXml.Element("PersonId")?.Value ?? "0";
+                        LifeEventListTable.UpsertEntity(lifeEvt.ToAzureRow());
+                    }
+                }
 
                 //get data out of call
                 var rootJson = await APITools.ExtractDataFromRequestJson(req);

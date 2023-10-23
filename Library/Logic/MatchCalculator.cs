@@ -1955,10 +1955,10 @@ namespace VedAstro.Library
 
 
             //get the data needed (borrow horoscope calculator)
-            var maleStrongSex = HoroscopeCalculatorMethods.MarsVenusIn7th(male.BirthTime).Occuring;
-            var femaleStrongSex = HoroscopeCalculatorMethods.MarsVenusIn7th(female.BirthTime).Occuring;
-            var maleUnderSex = HoroscopeCalculatorMethods.MercuryOrJupiterIn7th(male.BirthTime).Occuring;
-            var femaleUnderSex = HoroscopeCalculatorMethods.MercuryOrJupiterIn7th(female.BirthTime).Occuring;
+            var maleStrongSex = CalculateHoroscope.MarsVenusIn7th(male.BirthTime).Occuring;
+            var femaleStrongSex = CalculateHoroscope.MarsVenusIn7th(female.BirthTime).Occuring;
+            var maleUnderSex = CalculateHoroscope.MercuryOrJupiterIn7th(male.BirthTime).Occuring;
+            var femaleUnderSex = CalculateHoroscope.MercuryOrJupiterIn7th(female.BirthTime).Occuring;
 
             //fill extra info
             if (maleStrongSex) { prediction.MaleInfo = "Strong Sex"; }

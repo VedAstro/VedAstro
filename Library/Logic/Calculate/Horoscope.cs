@@ -25,7 +25,7 @@ namespace VedAstro.Library
 	/// Calculators specific for Horoscope events
 	/// Only a person's birth time is needed
 	/// </summary>
-	public class HoroscopeCalculatorMethods
+	public class CalculateHoroscope
 	{
 
 		#region 300 IMPORTANT YOGAS (RAMAN)

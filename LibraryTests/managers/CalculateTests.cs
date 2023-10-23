@@ -13,6 +13,12 @@ namespace VedAstro.Library.Tests
     {
         public static Time StandardHoroscope = new("14:20 16/10/1918 +05:30", GeoLocation.Bangalore);
 
+        /// <summary>
+        /// Chart No. 1 -- Born on 08-08-1912 at 07:35 p.m. (I.M.T.)
+        /// Lat. 13 N; Long. 77' 34"E.
+        /// </summary>
+        public static Time Chart1 = new("19:35 08/08/1912 +05:30",
+            new GeoLocation("", Angle.ConvertDegreeMinuteToTotalDegrees(77, 34), 13));
 
         /// <summary>
         /// ChartNo.2.-Born on 13-8-1894, at 2:30 pm (LMT)
@@ -334,6 +340,15 @@ namespace VedAstro.Library.Tests
         public void ParvataYogaTest()
         {
             var horoscope1 = CalculateHoroscope.ParvataYoga(SakataYogaHoroscope1);
+
+            Assert.IsTrue(horoscope1.Occuring);
+        }
+
+        [TestMethod()]
+        public void KahalaYogaTest()
+        {
+            //note chart used as example by BV Raman
+            var horoscope1 = CalculateHoroscope.KahalaYoga(Chart1);
 
             Assert.IsTrue(horoscope1.Occuring);
         }

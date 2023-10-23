@@ -329,6 +329,7 @@ namespace VedAstro.Library
             return CalculatorResult.New(isOccuring);
 
         }
+
         /// <summary>
         /// Definition: Benefics being disposed in Kendras,
         /// the 6th and 8th houses should either be unoccupied
@@ -356,6 +357,37 @@ namespace VedAstro.Library
 
             return CalculatorResult.New(isOccuring);
 
+        }
+
+        /// <summary>
+        /// Definition:  Lords of the fourth and ninth houses
+        /// should be in Kendras from each other and the lord
+        /// of Lagna should be strongly disposed.
+        /// </summary>
+        [HoroscopeCalculator(HoroscopeName.KahalaYoga)]
+        public static CalculatorResult KahalaYoga(Time birthTime)
+        {
+            //# Condition 1
+            //get lords of the 4th and 9th houses
+            var lordOf4th = Calculate.LordOfHouse(House4, birthTime);
+            var lordOf9th = Calculate.LordOfHouse(House9, birthTime);
+
+            //should be in Kendras from each other
+            var possibleKendra1 = Calculate.IsPlanetInKendraFromPlanet(lordOf9th, lordOf4th, birthTime);
+            var possibleKendra2 = Calculate.IsPlanetInKendraFromPlanet(lordOf4th, lordOf9th, birthTime);
+            var isKendraFromEachOther = possibleKendra1 || possibleKendra2;
+
+            //# Condition 2
+            //lord of Lagna should be strongly disposed.
+            var lagnaLord = Calculate.LordOfHouse(House1, birthTime);
+
+            //strength here is based on minimum point set by BV Raman in Bala book
+            var lagnaLordIsStrong = Calculate.IsPlanetStrongInShadbala(lagnaLord, birthTime);
+
+            //is occurring if conditions meet
+            var isOccuring = isKendraFromEachOther && lagnaLordIsStrong;
+
+            return CalculatorResult.New(isOccuring);
         }
 
 

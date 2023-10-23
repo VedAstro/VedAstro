@@ -403,6 +403,7 @@
         VanchanaChoraBheethiYoga,
         SakataYoga,
         AmalaYoga,
-        ParvataYoga
+        ParvataYoga,
+        KahalaYoga
     }
 }

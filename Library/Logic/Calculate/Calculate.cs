@@ -4992,7 +4992,7 @@ namespace VedAstro.Library
 
             //find accurate planet strength relative to others
             //if above limit than strong else weak below 0
-            var isBenefic = IsPlanetBeneficInShadbala(inputPlanet, personBirthTime);
+            var isBenefic = IsPlanetStrongInShadbala(inputPlanet, personBirthTime);
             //var rangeBasedScore = 0.0;
 
             var x = isBenefic ? 1 : -1;
@@ -9356,7 +9356,7 @@ namespace VedAstro.Library
         /// which has the greatest Sbadbala, influences the
         /// bhava most.
         /// Powerful Planets.-Ravi is befd to be
-        /// powerful when hi~Shadbala Pinda is 5 or more
+        /// powerful when his Shadbala Pinda is 5 or more
         /// rupas. Chandra becomes strong when his Shadbala
         /// Pinda is 6 or more rupas. Kuja becomes powerful
         /// when bis Shadbala Pinda does not fall short of
@@ -9365,11 +9365,11 @@ namespace VedAstro.Library
         /// become thoroughly powerful if their Shadbala
         /// Pindas are 6.5, 5.5 and 5 rupas or more respectively.
         /// </summary>
-        public static bool IsPlanetBeneficInShadbala(PlanetName planet, Time time)
+        public static bool IsPlanetStrongInShadbala(PlanetName planet, Time time)
         {
 
             var limit = 0.0;
-            if (planet == Library.PlanetName.Sun) { limit = 5; }
+            if (planet == Sun) { limit = 5; }
             else if (planet == Library.PlanetName.Moon) { limit = 6; }
             else if (planet == Library.PlanetName.Mars) { limit = 5; }
             else if (planet == Library.PlanetName.Mercury) { limit = 7; }
@@ -9392,6 +9392,10 @@ namespace VedAstro.Library
             return isBenefic;
         }
 
+
+        /// <summary>
+        /// sets benefic if above 450 score
+        /// </summary>
         public static bool IsHouseBeneficInShadbala(HouseName house, Time birthTime, double threshold)
         {
             //get house strength
@@ -10165,7 +10169,6 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Shadvarga bala: This is the strength of a
         /// planet due to its residence in the 6 sub-divisions
@@ -10307,26 +10310,6 @@ namespace VedAstro.Library
             }
 
         }
-
-        /// <summary>
-        /// TODO : use of shadvarga bala might be wrong here, needs clarification
-        /// problem is too much of time goes under bad, doesnt seem right
-        /// for now we put it 140 threhold so guarenteed to be strong
-        /// and doesn not occur all the time
-        /// </summary>
-        public static bool IsPlanetStrongInShadvarga(PlanetName planet, Time time)
-        {
-            //get planet shadvarga bala
-            var planetBala = Calculate.PlanetShadvargaBala(planet, time).ToDouble();
-
-            //Note: To determine if shadvarga bala value is strong or weak
-            //a neutral point is set, anything above is strong & below is weak
-            var neutralPoint = Calculate.PlanetShadvargaBalaNeutralPoint(planet);
-
-            //if above neutral number, is strong else it is weak
-            return planetBala > 140;
-        }
-
 
         /// <summary>
         /// residence of the planet and as such a certain degree of strength or weakness attends on it

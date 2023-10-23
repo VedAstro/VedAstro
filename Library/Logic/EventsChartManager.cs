@@ -1891,7 +1891,7 @@ namespace VedAstro.Library
             {
                 //all planets in event is bad
                 var planetList = foundEvent.GetRelatedPlanet();
-                bool isAllPlanetBad = planetList.All(pln => Calculate.IsPlanetBeneficInShadbala(pln, person.BirthTime) == false);
+                bool isAllPlanetBad = planetList.All(pln => Calculate.IsPlanetStrongInShadbala(pln, person.BirthTime) == false);
 
                 //if all not bad, end here  
                 if (!isAllPlanetBad) { return 0; }

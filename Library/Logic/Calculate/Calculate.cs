@@ -3767,6 +3767,28 @@ namespace VedAstro.Library
 
         }
 
+        /// <summary>
+        /// Checks if any good/benefic planets are in kendra houses house
+        /// </summary>
+        public static bool IsBeneficsInKendra(Time time)
+        {
+            //get all good planets
+            var goodPlanets = BeneficPlanetList(time);
+
+            //check if any one of the good planets is in a kendra
+            foreach (var planet in goodPlanets)
+            {
+                var isInKendra = IsPlanetInKendra(planet, time);
+
+                //if planet found in kendra, end here as true (found)
+                if (isInKendra) { return true; }
+            }
+
+            //if control reaches here than no benefic in kendra found, return false
+            return false;
+
+        }
+
 
         /// <summary>
         /// Checks if any evil/malefic planets are in a sign
@@ -5132,7 +5154,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all planets in certain sign from the Lagna/Ascendant. Exp: get planets 3rd from the Lagna/Ascendant
         /// </summary>
-        public static List<PlanetName> AllPlanetsSignsFromLagna(int signsFromLagna, Time birthTime)
+        public static List<PlanetName> AllPlanetsInASignFromLagna(int signsFromLagna, Time birthTime)
         {
             //get the sign to check
             var lagnaNthSign = SignCountedFromLagnaSign(signsFromLagna, birthTime);
@@ -5206,7 +5228,7 @@ namespace VedAstro.Library
             foreach (var sigsFrom in signsFromList)
             {
                 //get all planets in given number (house) from moon
-                var temp = AllPlanetsSignsFromLagna(sigsFrom, birthTime);
+                var temp = AllPlanetsInASignFromLagna(sigsFrom, birthTime);
                 returnList.AddRange(temp);
             }
 

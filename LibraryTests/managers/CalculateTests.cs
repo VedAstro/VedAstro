@@ -31,14 +31,14 @@ namespace VedAstro.Library.Tests
         /// Lat. 13 N; Long. 77' 34"E.
         /// </summary>
         public static Time SunaphaYogaHoroscope1 = new("13:21 31/10/1910 +05:30",
-            new GeoLocation("", Angle.ConvertDegreeMinuteToTotalMinutes(77, 34), 13));
+            new GeoLocation("", Angle.ConvertDegreeMinuteToTotalDegrees(77, 34), 13));
 
         /// <summary>
         /// Chart No 5 : Born on 28-5-1903 st 1:19 am, (L.M.T)
         /// Lat 9" N.; Long. 77" 42' E.
         /// </summary>
         public static Time SunaphaYogaHoroscope2 = new("13:21 28/05/1903 +05:30",
-            new GeoLocation("", Angle.ConvertDegreeMinuteToTotalMinutes(77, 42), 9));
+            new GeoLocation("", Angle.ConvertDegreeMinuteToTotalDegrees(77, 42), 9));
 
         /// <summary>
         /// Chart No 6 : Born on 20-8-1902 at 11:33 am, (L.M.T)
@@ -46,8 +46,8 @@ namespace VedAstro.Library.Tests
         /// </summary>
         public static Time AnaphaYogaHoroscope1 = new("11:33 20/08/1902 +05:30",
             new GeoLocation("",
-                Angle.ConvertDegreeMinuteToTotalMinutes(78, 10),
-                Angle.ConvertDegreeMinuteToTotalMinutes(9, 58)));
+                Angle.ConvertDegreeMinuteToTotalDegrees(78, 10),
+                Angle.ConvertDegreeMinuteToTotalDegrees(9, 58)));
 
         /// <summary>
         /// Chart No 7 : Born on 31-7-1910 at Gh. 32-15 after Sunrise
@@ -55,8 +55,8 @@ namespace VedAstro.Library.Tests
         /// </summary>
         public static Time DhurdhuraYogaHoroscope1 = new("07:33 31/07/1910 +05:30",
             new GeoLocation("",
-                Angle.ConvertDegreeMinuteToTotalMinutes(77, 44),
-                Angle.ConvertDegreeMinuteToTotalMinutes(8, 44)));
+                Angle.ConvertDegreeMinuteToTotalDegrees(77, 44),
+                Angle.ConvertDegreeMinuteToTotalDegrees(8, 44)));
 
         /// <summary>
         /// Chart No 8 : Born on 28-7-1896 at Gh. 10 after Sunrise
@@ -64,7 +64,7 @@ namespace VedAstro.Library.Tests
         /// </summary>
         public static Time KemadrumaYogaHoroscope1 = new("07:10 28/07/1896 +05:30",
             new GeoLocation("",
-                Angle.ConvertDegreeMinuteToTotalMinutes(77, 35),
+                Angle.ConvertDegreeMinuteToTotalDegrees(77, 35),
                 13));
 
         /// <summary>
@@ -73,8 +73,8 @@ namespace VedAstro.Library.Tests
         /// </summary>
         public static Time KemadrumaYogaHoroscope2 = new("14:56 26/02/1908 +05:30",
             new GeoLocation("",
-                Angle.ConvertDegreeMinuteToTotalMinutes(72, 54),
-                Angle.ConvertDegreeMinuteToTotalMinutes(18, 55)));
+                Angle.ConvertDegreeMinuteToTotalDegrees(72, 54),
+                Angle.ConvertDegreeMinuteToTotalDegrees(18, 55)));
 
         /// <summary>
         /// Chart No 10 : Born on 24-8-1890 at Gh. 37-10 after Sunrise
@@ -82,7 +82,7 @@ namespace VedAstro.Library.Tests
         /// </summary>
         public static Time ChandraMangalaYogaHoroscope1 = new("07:37 24/08/1890 +05:30",
             new GeoLocation("",
-                Angle.ConvertDegreeMinuteToTotalMinutes(77, 34),
+                Angle.ConvertDegreeMinuteToTotalDegrees(77, 34),
                 13));
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace VedAstro.Library.Tests
         /// </summary>
         public static Time AdhiYogaHoroscope1 = new("07:07 24/09/1871 +05:30",
             new GeoLocation("",
-                Angle.ConvertDegreeMinuteToTotalMinutes(77, 34),
+                Angle.ConvertDegreeMinuteToTotalDegrees(77, 34),
                 10));
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace VedAstro.Library.Tests
         /// </summary>
         public static Time AdhiYogaHoroscope2 = new("13:30 07/08/1887 +05:30",
             new GeoLocation("",
-                Angle.ConvertDegreeMinuteToTotalMinutes(77, 2),
+                Angle.ConvertDegreeMinuteToTotalDegrees(77, 2),
                 11));
 
         /// <summary>
@@ -123,8 +123,8 @@ namespace VedAstro.Library.Tests
         /// </summary>
         public static Time VasumathiYogaHoroscope1 = new("19:00 31/10/1915 +05:30",
             new GeoLocation("",
-                Angle.ConvertDegreeMinuteToTotalMinutes(74, 26),
-                Angle.ConvertDegreeMinuteToTotalMinutes(31, 27)));
+                Angle.ConvertDegreeMinuteToTotalDegrees(74, 26),
+                Angle.ConvertDegreeMinuteToTotalDegrees(31, 27)));
 
         /// <summary>
         /// Name: Bal Thackeray (has Sakata Yoga google)
@@ -136,8 +136,24 @@ namespace VedAstro.Library.Tests
         /// </summary>
         public static Time SakataYogaHoroscope1 = new("22:30 23/01/1927 +05:30",
             new GeoLocation("",
-                Angle.ConvertDegreeMinuteToTotalMinutes(73, 58),
-                Angle.ConvertDegreeMinuteToTotalMinutes(18, 34)));
+                Angle.ConvertDegreeMinuteToTotalDegrees(73, 58),
+                Angle.ConvertDegreeMinuteToTotalDegrees(18, 34)));
+
+        /// <summary>
+        /// Chart No 16 : Born on 12-02-1856 at 12:21pm 
+        /// Lat 18" N ; Long. 84" E.
+        /// </summary>
+        public static Time AmalaYogaHoroscope1 = new("12:21 12/02/1856 +05:30",
+                                                 new GeoLocation("", 84, 18));
+        /// <summary>
+        /// Chart No 17 : Born on 07-09-1904 at 01:55 PM 
+        /// Lat 18" 54' N ; Long. 62" 46' E.
+        /// </summary>
+        public static Time AmalaYogaHoroscope2 = new("13:55 07/09/1904 +05:30",
+            new GeoLocation("",
+                Angle.ConvertDegreeMinuteToTotalDegrees(62, 46),
+                Angle.ConvertDegreeMinuteToTotalDegrees(18, 54)));
+
 
         [TestMethod()]
         public void GeoLocationTest()
@@ -298,6 +314,20 @@ namespace VedAstro.Library.Tests
             var horoscope1 = CalculateHoroscope.SakataYoga(SakataYogaHoroscope1);
 
             Assert.IsTrue(horoscope1.Occuring);
+        }
+
+        [TestMethod()]
+        public void AmalaYogaTest()
+        {
+            Calculate.Ayanamsa = (int)Ayanamsa.RAMAN;
+
+            var horoscope1 = CalculateHoroscope.AmalaYoga(AmalaYogaHoroscope1);
+
+            Assert.IsTrue(horoscope1.Occuring);
+
+            var horoscope2 = CalculateHoroscope.AmalaYoga(AmalaYogaHoroscope2);
+
+            Assert.IsTrue(horoscope2.Occuring);
         }
 
 

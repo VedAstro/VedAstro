@@ -258,7 +258,7 @@ namespace VedAstro.Library
 
                 //if constellation changes mark the time as start for one and end for another
                 if (tempZodiacName != previousZodiacName)
-                {   
+                {
                     //add previous, with current slice as end time
                     returnList.Add(new Tuple<Time, Time, ZodiacName, PlanetName>(startTimeSlice, timeSlice, previousZodiacName, planetName));
 
@@ -2159,10 +2159,10 @@ namespace VedAstro.Library
         /// <summary>
         /// Exp : Get 4th sign from Moon
         /// </summary>
-        public static ZodiacName SignCountedFromMoonSign(int countToNextSign, Time inputTime)
+        public static ZodiacName SignCountedFromPlanetSign(int countToNextSign, PlanetName startPlanet, Time inputTime)
         {
-            var moonSignName = MoonSignName(inputTime);
-            return SignCountedFromInputSign(moonSignName, countToNextSign);
+            var planetSignName = PlanetSignName(startPlanet, inputTime).GetSignName();
+            return SignCountedFromInputSign(planetSignName, countToNextSign);
         }
 
         /// <summary>
@@ -5117,10 +5117,10 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all planets in certain sign from the moon. Exp: get planets 3rd from the moon
         /// </summary>
-        public static List<PlanetName> AllPlanetsSignsFromMoon(int signsFromMoon, Time birthTime)
+        public static List<PlanetName> AllPlanetsSignsFromPlanet(int signsFromMoon, PlanetName startPlanet, Time birthTime)
         {
             //get the sign to check
-            var moonNthSign = SignCountedFromMoonSign(signsFromMoon, birthTime);
+            var moonNthSign = SignCountedFromPlanetSign(signsFromMoon, startPlanet, birthTime);
 
             //get all the planets in the sign
             var planetsIn = PlanetsInSign(moonNthSign, birthTime);
@@ -5147,14 +5147,14 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all planets in certain sign from the moon, given list of signs. Exp: get planets 3rd from the moon
         /// </summary>
-        public static List<PlanetName> AllPlanetsSignsFromMoon(int[] signsFromList, Time birthTime)
+        public static List<PlanetName> AllPlanetsSignsFromPlanet(int[] signsFromList, PlanetName startPlanet, Time birthTime)
         {
             var returnList = new List<PlanetName>();
 
             foreach (var sigsFrom in signsFromList)
             {
                 //get all planets in given number (house) from moon
-                var temp = AllPlanetsSignsFromMoon(sigsFrom, birthTime);
+                var temp = AllPlanetsSignsFromPlanet(sigsFrom, startPlanet, birthTime);
                 returnList.AddRange(temp);
             }
 
@@ -5215,34 +5215,6 @@ namespace VedAstro.Library
 
         }
 
-
-
-        /// <summary>
-        /// Checks if a given list of planets are found in any inputed signs from moon
-        /// Exp: Is Sun or Moon in 6 or 7th from Moon
-        /// </summary>
-        public static bool IsPlanetsInSignsFromMoon(int[] signsFromList, PlanetName[] planetList, Time birthTime)
-        {
-            //get all planets in given list of signs from moon
-            var planetsFromMoon = AllPlanetsSignsFromMoon(signsFromList, birthTime);
-
-            var isOccuring = false; //default to false
-
-            //if planet is found will be set by checks below and retured as occuring
-            foreach (var planet in planetsFromMoon)
-            {
-                //check given list if contains planets 
-                var isFound = planetList.Contains(planet);
-                if (isFound)
-                {
-                    isOccuring = true;
-                    break; //stop looking
-                }
-            }
-
-            return isOccuring;
-        }
-
         /// <summary>
         /// Checks if a given list of planets are found in any inputed signs from another planet
         /// Exp: Is Sun or Moon in 6 or 7th from Moon
@@ -5268,7 +5240,6 @@ namespace VedAstro.Library
 
             return isOccuring;
         }
-
 
 
         /// <summary>
@@ -5301,13 +5272,13 @@ namespace VedAstro.Library
         /// Checks if benefics are found in any inputed signs from moon
         /// Exp: Is benefics in 6 & 7th from moon
         /// </summary>
-        public static bool IsBeneficsInSignsFromMoon(int[] signsFromList, Time birthTime)
+        public static bool IsBeneficsInSignsFromPlanet(int[] signsFromList, PlanetName startPlanet, Time birthTime)
         {
             //get all planets that are standard benefics at given time
             var beneficList = BeneficPlanetList(birthTime).ToArray();
 
             //get all planets in given list of signs from moon
-            var isOccuring = IsPlanetsInSignsFromMoon(signsFromList, beneficList, birthTime);
+            var isOccuring = IsPlanetsInSignsFromPlanet(signsFromList, beneficList, startPlanet, birthTime);
 
             return isOccuring;
         }

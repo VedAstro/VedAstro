@@ -3196,19 +3196,25 @@ namespace VedAstro.Library
         /// Given a method name in string form, will get it's reference to code
         /// gets from Calculate.cs class
         /// </summary>
-        public static MethodInfo MethodNameToMethodInfo(string methodName, Type calculatorClass)
+        public static MethodInfo MethodNameToMethodInfo(string methodName, Type[] calculatorClass)
         {
-            var foundList = calculatorClass.GetMethods().Where(x => x.Name == methodName);
-            var foundMethod = foundList.FirstOrDefault();
-
-            //if more than 1 method found major internal error, crash it!
-            if (foundList.Count() > 1)
+            foreach (var classType in calculatorClass)
             {
-                Console.WriteLine($"POTENTIAL ERROR: Duplicate API Names : {methodName}");
+                var foundList = classType.GetMethods().Where(x => x.Name == methodName);
+                var foundMethod = foundList?.FirstOrDefault();
+
+                //if method found, stop looking end here
+                if (foundMethod != null)
+                {
+                    //if more than 1 method found major internal error, crash it!
+                    if (foundList.Count() > 1) { Console.WriteLine($"POTENTIAL ERROR: Duplicate API Names : {methodName}"); }
+
+                    return foundMethod;
+                }
             }
 
-            return foundMethod;
-
+            //end of line
+            throw new Exception("Calculator method not found!");
         }
 
 

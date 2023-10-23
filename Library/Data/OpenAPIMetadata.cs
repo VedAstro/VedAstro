@@ -243,19 +243,6 @@ public class OpenAPIMetadata : IToJson
         return clonedDolly;
     }
 
-
-    public static OpenAPIMetadata FromAPIFunctionResult(APIFunctionResult funcResult)
-    {
-        //get method info from calc name
-        var calcName = funcResult.Name;
-        var methodInfo = Tools.MethodNameToMethodInfo(calcName, typeof(Calculate));
-
-        //convert method info to meta data
-        var converted = OpenAPIMetadata.FromMethodInfoList(new List<MethodInfo>() { methodInfo })[0];
-
-        return converted;
-    }
-
     /// <summary>
     /// Given a list of OpenAPIMeta wrapped in json will convert to instance
     /// used for transferring between server & client

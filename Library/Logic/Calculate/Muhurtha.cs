@@ -2340,9 +2340,9 @@ namespace VedAstro.Library
         [EventCalculator(EventName.Papashadvargas)]
         public static CalculatorResult IsPapashadvargasOccuring(Time time, Person person)
         {
-            //TODO ALWAYS ON
-            //DISABLE FOR NOW
-            return CalculatorResult.NotOccuring();
+            ////TODO ALWAYS ON
+            ////DISABLE FOR NOW
+            //return CalculatorResult.NotOccuring();
 
 
             //Papashadvargs. - Malefics should not be strong in shadvargas in an election chart.
@@ -2365,7 +2365,7 @@ namespace VedAstro.Library
             foreach (var malefic in allMalefics)
             {
                 //check if planet is strong
-                var isStrong = Calculate.IsPlanetStrongInShadvarga(malefic, time);
+                var isStrong = Calculate.IsPlanetStrongInShadbala(malefic, time);
 
                 //if any one malefic is strong, end here as occuring
                 if (isStrong) { return CalculatorResult.IsOccuring(); }

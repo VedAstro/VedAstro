@@ -11,7 +11,6 @@ namespace API
     {
         //.../Calculate/Karana/Location/Singapore/Time/23:59/31/12/2000/+08:00
         private const string CalculateRoute = $"{nameof(Calculate)}/{{calculatorName}}/{{*fullParamString}}"; //* that captures the rest of the URL path
-        private const string CalculateKPRoute = $"{nameof(CalculateKP)}/{{calculatorName}}/{{*fullParamString}}"; //* that captures the rest of the URL path
 
 
         /// <summary>
@@ -31,7 +30,7 @@ namespace API
                 var callLog = await APILogger.Visit(incomingRequest);
 
                 //1 : GET INPUT DATA
-                var calculator = Tools.MethodNameToMethodInfo(calculatorName, typeof(Calculate)); //get calculator name
+                var calculator = Tools.MethodNameToMethodInfo(calculatorName, new[] { typeof(Calculate), typeof(CalculateKP) }); //get calculator name
                 var parameterTypes = calculator.GetParameters().Select(p => p.ParameterType).ToList();
 
                 //get inputed parameters
@@ -85,79 +84,6 @@ namespace API
             }
 
         }
-
-        /// <summary>
-        /// Main Open API method to handle all calls
-        /// /.../Calculator/DistanceBetweenPlanets/PlanetName/Sun/PlanetName/Moon/Location/Singapore/Time/23:59/31/12/2000/+08:00
-        /// </summary>
-        [Function(nameof(CalculateKP))]
-        public static async Task<HttpResponseData> CalculateKP([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = CalculateKPRoute)]
-            HttpRequestData incomingRequest,
-            string calculatorName,
-            string fullParamString
-            )
-        {
-            try
-            {
-                //0 : LOG CALL : used later for throttle limit
-                var callLog = await APILogger.Visit(incomingRequest);
-
-                //1 : GET INPUT DATA
-                var calculator = Tools.MethodNameToMethodInfo(calculatorName, typeof(VedAstro.Library.CalculateKP)); //get calculator name
-                var parameterTypes = calculator.GetParameters().Select(p => p.ParameterType).ToList();
-
-                //get inputed parameters
-                var rawOut = await ParseUrlParameters(fullParamString, parameterTypes);
-                var parsedParamList = rawOut.Item1;
-                var remainderParamString = rawOut.Item2; //remainder of chopped string
-
-                //2 : CUSTOM AYANAMSA
-                await ParseAndSetAyanamsa(remainderParamString);
-
-                //3 : EXECUTE COMMAND
-                object rawPlanetData;
-                //when calculator return an async result
-                if (calculator.ReturnType.IsGenericType && calculator.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
-                {
-                    dynamic task = calculator.Invoke(null, parsedParamList.ToArray());
-                    await task;
-                    rawPlanetData = task.Result;
-                }
-                //when calculator return a normal result
-                else
-                {
-                    rawPlanetData = calculator?.Invoke(null, parsedParamList.ToArray());
-                }
-
-                //4 : OVERLOAD LIMIT
-                await APITools.AutoControlOpenAPIOverload(callLog);
-
-                //5 : SEND DATA TO CALLER
-                //some calculators return SVG & binary data, so need to send to caller directly
-                switch (calculatorName)
-                {
-                    //handle SVG string
-                    case nameof(VedAstro.Library.Calculate.SkyChart):
-                    case nameof(VedAstro.Library.Calculate.SouthIndianChart):
-                    case nameof(VedAstro.Library.Calculate.NorthIndianChart):
-                        return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawPlanetData), incomingRequest, "image/svg+xml");
-
-                    default:
-                        return APITools.SendAnyToCaller(calculatorName, rawPlanetData, incomingRequest);
-                }
-
-
-            }
-
-            //if any failure, show error in payload
-            catch (Exception e)
-            {
-                APILogger.Error(e, incomingRequest);
-                return APITools.FailMessageJson(e.Message, incomingRequest);
-            }
-
-        }
-
 
         /// <summary>
         /// Backup function to catch invalid calls, say gracefully fails

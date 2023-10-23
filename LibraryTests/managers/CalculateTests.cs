@@ -330,6 +330,14 @@ namespace VedAstro.Library.Tests
             Assert.IsTrue(horoscope2.Occuring);
         }
 
+        [TestMethod()]
+        public void ParvataYogaTest()
+        {
+            var horoscope1 = CalculateHoroscope.ParvataYoga(SakataYogaHoroscope1);
+
+            Assert.IsTrue(horoscope1.Occuring);
+        }
+
 
 
         [TestMethod()]

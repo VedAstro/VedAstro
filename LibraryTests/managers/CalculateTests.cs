@@ -126,6 +126,19 @@ namespace VedAstro.Library.Tests
                 Angle.ConvertDegreeMinuteToTotalMinutes(74, 26),
                 Angle.ConvertDegreeMinuteToTotalMinutes(31, 27)));
 
+        /// <summary>
+        /// Name: Bal Thackeray (has Sakata Yoga google)
+        ///Date of Birth: Sunday, January 23, 1927
+        ///Time of Birth: 22:30:00
+        ///Place of Birth: Pune
+        ///    Longitude: 73 E 58
+        ///Latitude: 18 N 34
+        /// </summary>
+        public static Time SakataYogaHoroscope1 = new("22:30 23/01/1927 +05:30",
+            new GeoLocation("",
+                Angle.ConvertDegreeMinuteToTotalMinutes(73, 58),
+                Angle.ConvertDegreeMinuteToTotalMinutes(18, 34)));
+
         [TestMethod()]
         public void GeoLocationTest()
         {
@@ -278,6 +291,16 @@ namespace VedAstro.Library.Tests
 
             Assert.IsTrue(horoscope1.Occuring);
         }
+
+        [TestMethod()]
+        public void SakataYogaTest()
+        {
+            var horoscope1 = CalculateHoroscope.SakataYoga(SakataYogaHoroscope1);
+
+            Assert.IsTrue(horoscope1.Occuring);
+        }
+
+
 
         [TestMethod()]
         public void DestinyPointTest()

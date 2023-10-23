@@ -5199,7 +5199,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all planets in certain sign from the Lagna/Ascendant, given list of signs. Exp: get planets 3rd from the Lagna/Ascendant
         /// </summary>
-        public static List<PlanetName> AllPlanetsSignsFromLagna(int[] signsFromList, Time birthTime)
+        public static List<PlanetName> AllPlanetsInSignsFromLagna(int[] signsFromList, Time birthTime)
         {
             var returnList = new List<PlanetName>();
 
@@ -5249,7 +5249,7 @@ namespace VedAstro.Library
         public static bool IsPlanetsInSignsFromLagna(int[] signsFromList, PlanetName[] planetList, Time birthTime)
         {
             //get all planets in given list of signs from Lagna
-            var planetsFromLagna = AllPlanetsSignsFromLagna(signsFromList, birthTime);
+            var planetsFromLagna = AllPlanetsInSignsFromLagna(signsFromList, birthTime);
 
             var isOccuring = false; //default to false
 

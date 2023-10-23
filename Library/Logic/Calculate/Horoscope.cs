@@ -268,7 +268,7 @@ namespace VedAstro.Library
             //is any of the planet in Lagna/Ascendant
             var isInLagna = Calculate.IsAnyPlanetInHouse(birthTime, planetList.ToList(), House1);
 
-            //is ocurring if either is true
+            //is occurring if either is true
             var isOccuring = isInKendra || isInLagna;
 
             return CalculatorResult.New(isOccuring);
@@ -307,6 +307,26 @@ namespace VedAstro.Library
             var isOccuring = Calculate.IsPlanetsInSignsFromPlanet(signsFromList, planetList, Jupiter, birthTime);
 
             return CalculatorResult.New(isOccuring, new[] { Moon, Jupiter }, birthTime);
+
+        }
+
+        /// <summary>
+        /// Definition: The 10th from the Moon or Lagna should be occupied by a benefic planet
+        /// </summary>
+        [HoroscopeCalculator(HoroscopeName.AmalaYoga)]
+        public static CalculatorResult AmalaYoga(Time birthTime)
+        {
+            //The 10th from the Moon should be occupied by a benefic planet
+            int[] _10thFrom = new[] { 10 };
+            var _10thMoonIsBenefics = Calculate.IsBeneficsInSignsFromPlanet(_10thFrom, Moon, birthTime);
+
+            //The 10th from the Lagna should be occupied by a benefic planet
+            var _10thLagnaIsBenefics = Calculate.IsBeneficsInSignsFromLagna(_10thFrom, birthTime);
+
+            //is occurring if either is true
+            var isOccuring = _10thMoonIsBenefics || _10thLagnaIsBenefics;
+
+            return CalculatorResult.New(isOccuring);
 
         }
 

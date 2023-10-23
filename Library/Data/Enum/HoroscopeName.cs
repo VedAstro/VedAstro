@@ -401,6 +401,7 @@
 		VasumathiYoga,
         RajalakshanaYoga,
         VanchanaChoraBheethiYoga,
-        SakataYoga
+        SakataYoga,
+        AmalaYoga
     }
 }

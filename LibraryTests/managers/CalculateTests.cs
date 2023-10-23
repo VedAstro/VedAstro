@@ -170,11 +170,11 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void GajakesariYogaTest()
         {
-            var horoscope1 = HoroscopeCalculatorMethods.GajakesariYoga(GajakesariYogaHoroscope1);
+            var horoscope1 = CalculateHoroscope.GajakesariYoga(GajakesariYogaHoroscope1);
 
             Assert.IsTrue(horoscope1.Occuring);
 
-            var horoscope2 = HoroscopeCalculatorMethods.GajakesariYoga(GajakesariYogaHoroscope2);
+            var horoscope2 = CalculateHoroscope.GajakesariYoga(GajakesariYogaHoroscope2);
 
             Assert.IsTrue(horoscope2.Occuring);
         }
@@ -185,12 +185,12 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void SunaphaYogaTest()
         {
-            var horoscope1 = HoroscopeCalculatorMethods.SunaphaYoga(SunaphaYogaHoroscope1);
+            var horoscope1 = CalculateHoroscope.SunaphaYoga(SunaphaYogaHoroscope1);
 
             //NOTE: weak yoga, matches as in BV Raman book, but Sun in 2nd so no yoga
             //Assert.IsTrue(horoscope1.Occuring);
 
-            var horoscope2 = HoroscopeCalculatorMethods.SunaphaYoga(SunaphaYogaHoroscope2);
+            var horoscope2 = CalculateHoroscope.SunaphaYoga(SunaphaYogaHoroscope2);
             //
             //Assert.IsTrue(horoscope2.Occuring);
         }
@@ -201,11 +201,11 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void AnaphaYogaTest()
         {
-            var horoscope1 = HoroscopeCalculatorMethods.AnaphaYoga(AnaphaYogaHoroscope1);
+            var horoscope1 = CalculateHoroscope.AnaphaYoga(AnaphaYogaHoroscope1);
 
             Assert.IsTrue(horoscope1.Occuring);
 
-            var horoscope2 = HoroscopeCalculatorMethods.AnaphaYoga(GajakesariYogaHoroscope2);
+            var horoscope2 = CalculateHoroscope.AnaphaYoga(GajakesariYogaHoroscope2);
 
             Assert.IsTrue(horoscope2.Occuring);
         }
@@ -216,7 +216,7 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void DhurdhuraYogaTest()
         {
-            var horoscope1 = HoroscopeCalculatorMethods.DhurdhuraYoga(DhurdhuraYogaHoroscope1);
+            var horoscope1 = CalculateHoroscope.DhurdhuraYoga(DhurdhuraYogaHoroscope1);
 
             Assert.IsTrue(horoscope1.Occuring);
 
@@ -225,11 +225,11 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void KemadrumaYogaTest()
         {
-            var horoscope1 = HoroscopeCalculatorMethods.KemadrumaYoga(KemadrumaYogaHoroscope1);
+            var horoscope1 = CalculateHoroscope.KemadrumaYoga(KemadrumaYogaHoroscope1);
 
             Assert.IsTrue(horoscope1.Occuring);
 
-            var horoscope2 = HoroscopeCalculatorMethods.KemadrumaYoga(KemadrumaYogaHoroscope2);
+            var horoscope2 = CalculateHoroscope.KemadrumaYoga(KemadrumaYogaHoroscope2);
 
             Assert.IsTrue(horoscope2.Occuring);
 
@@ -238,7 +238,7 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void ChandraMangalaYogaTest()
         {
-            var horoscope1 = HoroscopeCalculatorMethods.ChandraMangalaYoga(ChandraMangalaYogaHoroscope1);
+            var horoscope1 = CalculateHoroscope.ChandraMangalaYoga(ChandraMangalaYogaHoroscope1);
 
             Assert.IsTrue(horoscope1.Occuring);
 
@@ -250,11 +250,11 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void AdhiYogaTest()
         {
-            var horoscope1 = HoroscopeCalculatorMethods.AdhiYoga(AdhiYogaHoroscope1);
+            var horoscope1 = CalculateHoroscope.AdhiYoga(AdhiYogaHoroscope1);
 
             Assert.IsTrue(horoscope1.Occuring);
 
-            var horoscope2 = HoroscopeCalculatorMethods.AdhiYoga(AdhiYogaHoroscope2);
+            var horoscope2 = CalculateHoroscope.AdhiYoga(AdhiYogaHoroscope2);
 
             Assert.IsTrue(horoscope2.Occuring);
 
@@ -266,7 +266,7 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void ChatussagaraYogaTest()
         {
-            var horoscope1 = HoroscopeCalculatorMethods.ChatussagaraYoga(ChatussagaraYogaHoroscope1);
+            var horoscope1 = CalculateHoroscope.ChatussagaraYoga(ChatussagaraYogaHoroscope1);
 
             Assert.IsTrue(horoscope1.Occuring);
         }
@@ -274,7 +274,7 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void VasumathiYogaTest()
         {
-            var horoscope1 = HoroscopeCalculatorMethods.VasumathiYoga(VasumathiYogaHoroscope1);
+            var horoscope1 = CalculateHoroscope.VasumathiYoga(VasumathiYogaHoroscope1);
 
             Assert.IsTrue(horoscope1.Occuring);
         }

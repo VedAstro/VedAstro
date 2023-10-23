@@ -226,7 +226,7 @@ namespace VedAstro.Library
         public static HoroscopeCalculatorDelegate GetHoroscopeCalculatorMethod(HoroscopeName inputEventName)
         {
             //get all event calculator methods
-            var horoscopeCalculatorList = typeof(HoroscopeCalculatorMethods).GetMethods();
+            var horoscopeCalculatorList = typeof(CalculateHoroscope).GetMethods();
 
             //loop through all calculators
             foreach (var horoscopeCalculator in horoscopeCalculatorList)

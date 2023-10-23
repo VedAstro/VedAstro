@@ -39,41 +39,6 @@ namespace VedAstro.Library
         public int ColumnsCount => ColumnData.Count;
 
         /// <summary>
-        /// This will update the underlying HTML
-        /// </summary>
-        public static MLTable FromData(List<MLTableRow> tableRowList, List<OpenAPIMetadata> selectedMetaList)
-        {
-
-            //#PROCESS DATA
-            //need to bump up hidden many results calcs
-            var correctedList = new List<OpenAPIMetadata>();
-            foreach (var selectedMethod in selectedMetaList)
-            {
-                //detect if underlying list of results exist
-                if (selectedMethod?.MethodInfo?.ReturnType == typeof(List<APIFunctionResult>))
-                {
-                    //take first row and get columns names out that way
-                    var mlTableRow1st = tableRowList.FirstOrDefault();
-                    foreach (var funcResult in mlTableRow1st.DataColumns)
-                    {
-                        var temp = OpenAPIMetadata.FromAPIFunctionResult(funcResult);
-                        temp.SelectedPlanet = selectedMethod.SelectedPlanet; //inject planet from above main method
-                        correctedList.Add(temp);
-                    }
-                }
-                //else add like normal
-                else
-                {
-                    correctedList.Add(selectedMethod);
-                }
-            }
-
-            var tempNew = new MLTable(tableRowList, correctedList);
-
-            return tempNew;
-        }
-
-        /// <summary>
         /// Given a raw data from User selection in GUI, generate ML Table
         /// </summary>
         public static MLTable FromData(List<Time> timeSlices, List<OpenAPIMetadata> columnData)

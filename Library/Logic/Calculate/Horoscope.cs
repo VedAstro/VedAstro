@@ -329,6 +329,34 @@ namespace VedAstro.Library
             return CalculatorResult.New(isOccuring);
 
         }
+        /// <summary>
+        /// Definition: Benefics being disposed in Kendras,
+        /// the 6th and 8th houses should either be unoccupied
+        /// or occupied by benefic planets. This combination
+        /// goes under the name of Parvata Yoga
+        /// </summary>
+        [HoroscopeCalculator(HoroscopeName.ParvataYoga)]
+        public static CalculatorResult ParvataYoga(Time birthTime)
+        {
+            //Benefics being disposed in Kendras
+            var beneficsInKendra = Calculate.IsBeneficsInKendra(birthTime);
+
+            //the 6th and 8th must be free
+            var _6thEmpty = Calculate.PlanetsInHouse(House6, birthTime).Count == 0;
+            var _8thEmpty = Calculate.PlanetsInHouse(House8, birthTime).Count == 0;
+            var _6th8thIsEmpty = _6thEmpty && _8thEmpty;
+
+            //the 6th and 8th occupied by benefics
+            var _6thHasBenefics = Calculate.IsBeneficPlanetInHouse(House6, birthTime);
+            var _8thHasBenefics = Calculate.IsBeneficPlanetInHouse(House8, birthTime);
+            var _6th8thHasBenefics = _6thHasBenefics && _8thHasBenefics;
+
+            //is occurring if conditions meet
+            var isOccuring = beneficsInKendra && (_6th8thIsEmpty || _6th8thHasBenefics);
+
+            return CalculatorResult.New(isOccuring);
+
+        }
 
 
 

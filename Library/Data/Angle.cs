@@ -86,7 +86,7 @@ namespace VedAstro.Library
 		/// <summary>
 		/// Convert from degrees and minutes like Long. 77' 34"E.
 		/// </summary>
-		public static double ConvertDegreeMinuteToTotalMinutes(double degree, double minute)
+		public static double ConvertDegreeMinuteToTotalDegrees(double degree, double minute)
 		{
 			return new Angle(degree, minute).TotalDegrees;
 		}

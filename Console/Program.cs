@@ -13,9 +13,13 @@ namespace VedAstro.Console
         static async Task Main(string[] args)
         {
 
-            Time timeSample1 = new("00:00 15/10/2023 +05:30", GeoLocation.Bangalore);
+            Time timeSample1 = new("17:10 15/10/2023 +05:30", new GeoLocation("", 77.583, 12.983));
             Time timeSample2 = new("00:00 15/11/2023 +05:30", GeoLocation.Bangalore);
             Time timeSample = new("11:00 25/07/1984 +05:30", new GeoLocation("", 77.2, 28.6));
+            
+            Calculate.Ayanamsa = (int)Ayanamsa.KRISHNAMURTI;
+
+            CalculateKP.KpPrintHouseCuspLong(timeSample1);
 
             var x = Calculate.GetConstellationTransitStartTime(timeSample1, timeSample2, PlanetName.Moon);
 

@@ -242,7 +242,7 @@ namespace VedAstro.Library
         public static List<Tuple<Time, Time, ZodiacName, PlanetName>> PlanetSignTransit(Time startTime, Time endTime, PlanetName planetName)
         {
             //make slices to scan
-            var accuracyInHours = 0.0166666; // 1 minute
+            var accuracyInHours = 0.05; // 3 minute
             var timeSlices = Time.GetTimeListFromRange(startTime, endTime, accuracyInHours);
 
             //prepare place to store data
@@ -281,7 +281,7 @@ namespace VedAstro.Library
         public static List<Tuple<Time, ConstellationName, ZodiacSign>> GetConstellationTransitStartTime(Time startTime, Time endTime, PlanetName planetName)
         {
             //make slices to scan
-            var accuracyInHours = 0.0166666; // 1 minute
+            var accuracyInHours = 0.05; // 3 minute
             var timeSlices = Time.GetTimeListFromRange(startTime, endTime, accuracyInHours);
 
             var returnList = new List<Tuple<Time, ConstellationName, ZodiacSign>>();

@@ -33,9 +33,9 @@ namespace VedAstro.Library
             Console.WriteLine(" ====== ");
             foreach (var h in cusps)
             {
-                var cuspDMS = Angle.FromDegrees(h);
+                var cuspDMS = h.Value;
 
-                var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(h));
+                var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(cuspDMS);
 
                 Console.WriteLine("House{0} Start Longitude {1} in DMS: {2} Deg {3} Mins {4} Secs; Zodiac {5} {6} Deg {7} Mins {8} Secs",
                     cnt, h,
@@ -68,15 +68,15 @@ namespace VedAstro.Library
                 var planetConstellation = Calculate.PlanetConstellation(birthtime, planet);
 
                 x = 1;
-                while ((x + 1) <= cusps.Length) //check each house for the logic below
+                while ((x + 1) <= cusps.Count) //check each house for the logic below
                 {
-                    if ((x + 1) < cusps.Length) //Do not exceed the bounds of the array
+                    if ((x + 1) < cusps.Count) //Do not exceed the bounds of the array
                     {
-                        if (cusps[x + 1] > cusps[x]) //check if cusp longitude is smaller than next cusp longitude
+                        if (cusps[(HouseName)x + 1] > cusps[(HouseName)x]) //check if cusp longitude is smaller than next cusp longitude
                                                      //because the last house will have cusp long larger then next house start
                         {
-                            if ((planetNirayanaDegrees.TotalDegrees >= cusps[x]) &&
-                                (planetNirayanaDegrees.TotalDegrees <= cusps[x + 1])) //this means that the planet falls in between these house cusps
+                            if ((planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)x].TotalDegrees) &&
+                                (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)x + 1].TotalDegrees)) //this means that the planet falls in between these house cusps
                             {
                                 var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
                                 var lordOfZodiac = Calculate.LordOfZodiacSign(zodiacSignAtLong.GetSignName());
@@ -90,8 +90,8 @@ namespace VedAstro.Library
                         }
                         else //if next cusp start long is smaller than current cusp we are rotating through 360 deg
                         {
-                            if ((planetNirayanaDegrees.TotalDegrees >= cusps[x]) ||
-                                (planetNirayanaDegrees.TotalDegrees <= cusps[x + 1]))
+                            if ((planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)x].TotalDegrees) ||
+                                (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)x + 1].TotalDegrees))
                             {
                                 var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
                                 var lordOfZodiac = Calculate.LordOfZodiacSign(zodiacSignAtLong.GetSignName());

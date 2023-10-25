@@ -12,9 +12,9 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Azure.Communication.Email" Version="1.0.0" />
+		<PackageReference Include="Azure.Communication.Email" Version="1.0.1" />
 		<PackageReference Include="Azure.Data.Tables" Version="12.8.1" />
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.16.0" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
 		<PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
 		<PackageReference Include="Microsoft.Bing.Search.ImageSearch" Version="1.0.0" />
@@ -25,9 +25,9 @@
 		<PackageReference Include="Svg" Version="3.4.4" />
 		<PackageReference Include="SwissEphNet" Version="2.8.0.2" />
 
-		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.14.1" />
-		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
-		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.10.0" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.19.0" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.1.0" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.15.1" />
 
 
 		<!--<PackageReference Include="VedAstro.Library" Version="1.2.0" />-->

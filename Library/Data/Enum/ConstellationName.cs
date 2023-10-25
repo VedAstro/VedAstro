@@ -32,7 +32,7 @@
         Poorvabhadra = 25,
         Uttarabhadra = 26,
         Revathi = 27,
-        Abhijit = 28
+        //Abhijit = 28
     }
 
 }

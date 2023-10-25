@@ -212,15 +212,15 @@ namespace VedAstro.Library
         /// Gets all KP (Placidus) House Cusps 
         /// using Swiss Epehemris swe_houses_ex
         /// </summary>
-        public static double[] GetKPHoraryHouseLongitudes(int Ayanamsa, Time time, int horaryNumber)
+        public static Dictionary<HouseName, Angle> GetKPHoraryHouseLongitudes(int Ayanamsa, Time time, int horaryNumber)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(GetKPHoraryHouseLongitudes), time, Ayanamsa),
+            return CacheManager.GetCache(new CacheKey(nameof(GetKPHoraryHouseLongitudes), Ayanamsa, time, horaryNumber),
                 _getHouseKPHoraryLongitudes);
 
 
             //UNDERLYING FUNCTION
-            double[] _getHouseKPHoraryLongitudes()
+            Dictionary <HouseName, Angle> _getHouseKPHoraryLongitudes()
             {
                 //get location at place of time
                 var location = time.GetGeoLocation();
@@ -260,7 +260,18 @@ namespace VedAstro.Library
                 Console.WriteLine("armc {0} eps {1} tropAsc {2} lat {3}", armc, eps, tropAsc, lat);
 
                 swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
-                return cusps;
+
+                //Create Dictionary for return
+                var housesDictionary = new Dictionary<HouseName, Angle>();
+                foreach (var house in House.AllHouses)
+                {
+                    //start of house longitude of 0-360
+                    var hseLong = cusps[(int)house];
+                    housesDictionary.Add(house, Angle.FromDegrees(hseLong));
+                }
+
+                //return cusps;
+                return housesDictionary;
             }
 
 

@@ -7,13 +7,9 @@
 </a>
 <span align="center">
 
-[![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
-[![NuGet](https://img.shields.io/static/v1?style=for-the-badge&message=NuGet&color=004880&logo=NuGet&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
-[![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
 [![Ko-fi](https://img.shields.io/static/v1?style=for-the-badge&message=Ko-fi&color=FF5E5B&logo=Ko-fi&logoColor=FFFFFF&label=)](https://ko-fi.com/vedastro)
 [![Patreon](https://img.shields.io/static/v1?style=for-the-badge&message=Patreon&color=FF424D&logo=Patreon&logoColor=FFFFFF&label=)](https://www.patreon.com/vedastro)
 [![Slack](https://img.shields.io/static/v1?style=for-the-badge&message=Slack&color=4A154B&logo=Slack&logoColor=FFFFFF&label=)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_vedastro/)
 [![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/vedastro.org)
 [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/_VedAstro)
 [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
@@ -28,12 +24,23 @@
 </span>
 
 
-<h2 align="center"><a href="https://vedastro.org">VedAstro</a></h2>
-<h4 align="center">
-  Astrology enables one to see subtle phenomena across time.</br>
-       Which to the mortal man is invisible in action,
-       and only visible in its reaction.</h4>
+# 😎 How VedAstro can help you...
 
+- [Website](https://vedastro.org/Docs/QuickGuide) --> easy & fast astrology data for **normal users**
+- [Open API](https://vedastro.org/APIBuilder) --> free astrology data for your app or website with a simple `HTTP GET`
+- [Swiss Ephemeris API](https://vedastro.org/APIBuilder) --> free advanced astronomy data from NASA's JPL Ephemeris
+- [Learn Astro Computation](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> learn exact math & logic used in astrology via **`Free Open Source`** code
+- [ML Table Generator](https://vedastro.org/TableGenerator) --> easily generate large astronomical tables for use in ML/AI Model training and Data Science
+- [Match Finder](https://vedastro.org/Match/Finder) --> find your astrologically perfect match in our global database
+- [Life Predictor](https://vedastro.org/LifePredictor) --> accurate algorithmic prediction of a human life's past and future
+- [Build On Top](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> import VedAstro code directly into your existing projects
+
+[![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library) [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://pypi.org/project/VedAstro/)  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
+
+# 🆓 100% Open Source
+We strongly believe in `FREE Astrology Knowledge`. Exactly in the same way as the sages of ancient times. The great sage **Parashara** taught everybody the ways of astrology without asking money, as such VedAstro does the same.
+
+![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
 
 
 # 🎯 Perfect Predictions
@@ -43,7 +50,7 @@
 [![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/StarsAboveMe)   
 
 
-# 📊 64 Data Points via Open API & FREE (yeah you read right!)
+# 📊 +200 Astro API Calls & FREE (yeah you read right!)
 Below is sample API call result for data related to "**Sun**" on "**30/06/2023**" at "**Singapore**"
 --> [Watch Video Guide](https://www.youtube.com/watch?v=y110RAgIorY)
 ```json
@@ -121,12 +128,6 @@ Below is sample API call result for data related to "**Sun**" on "**30/06/2023**
 ```
 
 
-# 🌍 Links
-- [Quick Guide](https://vedastro.org/Docs/QuickGuide) learn how to use
-- [Open API](https://vedastro.org/APIBuilder) easily get astrology data for your app or website with a simple `HTTP GET`
-- [Swiss Ephemeris API](https://vedastro.org/APIBuilder) free and simple API to get advanced astronomical data
-- [Match Finder](https://vedastro.org/Match/Finder) find your astrologically perfect match in our global database
-- [Life Predictor](https://vedastro.org/LifePredictor) algorithmic prediction of a human life's past and future
 
 
 <!--
@@ -142,6 +143,7 @@ The chart takes alot of computational power to generate, so please be patient af
 [![](GithubImages/elizabeth-dasa-chart.png)](https://vedastro.org)
  -->
 
+ 
 
 # 📜 About
 Anybody who has studied Vedic Astrology knows well how accurate it can be.
@@ -157,7 +159,7 @@ With continued support from users, this project has steadily grown to what it is
 Helping people from all over the world.
     
 # 📚 Credits &amp; Reference 
-![bv-raman-rao](https://user-images.githubusercontent.com/43817262/226793913-493ca156-cb69-4109-bbe4-3007f57a3941.png)
+![credits](https://vedastro.org/images/bv-raman-rao.png)
 
 Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao
 for pioneering easy to read astrology books. 
@@ -167,6 +169,7 @@ for proving the efficacy of free and open work for the benefit all.
 Astronomical calculation was made possible by [NASA JPL](https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html)
 data via "SWISS EPHEMERIS" ported by "SwissEphNet".
 Last but not least, we thank users like you who keep this project going.
+
 
 # ❤️ How can I help?
 Just **Like** & **Share** our social pages and it'll be a **big** help already!

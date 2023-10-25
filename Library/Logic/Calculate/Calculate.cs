@@ -450,7 +450,7 @@ namespace VedAstro.Library
                 case ConstellationName.Krithika:
                 case ConstellationName.Uttara:
                 case ConstellationName.Uttarashada:
-                case ConstellationName.Abhijit:
+                //case ConstellationName.Abhijit:
                     return VedAstro.Library.PlanetName.Sun;
                 case ConstellationName.Rohini:
                 case ConstellationName.Hasta:

@@ -19,7 +19,7 @@ namespace VedAstro.Console
             
             Calculate.Ayanamsa = (int)Ayanamsa.KRISHNAMURTI;
 
-            CalculateKP.KpPrintHouseCuspLong(timeSample1);
+            //CalculateKP.KpPrintHouseCuspLong(timeSample1);
 
             var x = Calculate.GetConstellationTransitStartTime(timeSample1, timeSample2, PlanetName.Moon);
 

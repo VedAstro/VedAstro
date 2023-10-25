@@ -232,18 +232,19 @@ namespace VedAstro.Library
         [HoroscopeCalculator(HoroscopeName.VasumathiYoga)]
         public static CalculatorResult VasumathiYoga(Time birthTime)
         {
-            //upachayas (3,6,10 and 11)
+            //list upachayas houses (3,6,10 and 11)
             var upachayasList = new[] { 3, 6, 10, 11 };
 
-            //get benefics in upachayas from the ascendant
+            //is there benefics in upachayas from the ascendant/lagna
             var beneficsFoundInUpachFromLagna = Calculate.IsBeneficsInSignsFromLagna(upachayasList, birthTime);
 
-            //get benefics in upachayas from the Moon
+            //is there benefics in upachayas from the Moon
             var beneficsFoundInUpachFromMoon = Calculate.IsBeneficsInSignsFromPlanet(upachayasList, Moon, birthTime);
 
-            //is ocurring if either is true
+            //check if benefics are in upachayas in either one case
             var isOccuring = beneficsFoundInUpachFromLagna || beneficsFoundInUpachFromMoon;
 
+            //tell caller if Vasumathi Yoga is present in horoscope
             return CalculatorResult.New(isOccuring);
         }
 

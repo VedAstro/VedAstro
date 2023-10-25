@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KPSystem\KPSystem.csproj" />
     <ProjectReference Include="..\Library\Library.csproj" />
   </ItemGroup>
 

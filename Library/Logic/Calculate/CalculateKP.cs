@@ -10,12 +10,9 @@ namespace VedAstro.Library
     public static class CalculateKP
     {
         /// <summary>
-        /// Gets all KP (Placidus) House Cusps 
-        /// using Swiss Epehemris swe_houses_ex
-        /// this is simply a test method to test the KPHoraryLongitudes and KPBirthtimLongitudes methods
+        /// Gets all KP (Placidus) House Cusps (start longitude) zodiac signs for all houses
         /// </summary>
-        // Kp Cusp Calculations
-        public static Dictionary<HouseName, ZodiacSign> KpPrintHouseCuspLong(Time birthTime, int horaryNumber)
+        public static Dictionary<HouseName, ZodiacSign> HouseCuspZodiacSigns(Time birthTime, int horaryNumber)
         {
             //get house start longitudes for KP system
             var allHouseCuspsRaw = GetKPHoraryHouseLongitudes(birthTime, horaryNumber);
@@ -23,7 +20,6 @@ namespace VedAstro.Library
             //list of house name & start longitude of house
             var returnDictionary = new Dictionary<HouseName, ZodiacSign>();
 
-            Console.WriteLine(" ====== ");
             foreach (var cuspData in allHouseCuspsRaw)
             {
                 //get zodiac sign at house start longitude longitude
@@ -45,16 +41,8 @@ namespace VedAstro.Library
             Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName)> planetTableData = new Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName)>();
 
             var allPlanets = VedAstro.Library.PlanetName.All9Planets;
-            var x = 0;
-            var allPlanetConstellation = Calculate.AllPlanetConstellation(birthtime);
-            /*
-            foreach (var planetConstellation in allPlanetConstellation)
-            {
-                Console.WriteLine(" {0} {1}", planetConstellation.Key, planetConstellation.Value.GetConstellationName().ToString()); //allPlanetConstellation[0].GetQuarter().ToString());
-                var yy = Calculate.LordOfConstellation(planetConstellation.Value.GetConstellationName());
-            } */
 
-            var cusps = GetKPHoraryHouseLongitudes(Calculate.Ayanamsa, birthtime, horNum);
+            var cusps = GetKPHoraryHouseLongitudes(birthtime, horNum);
 
             Console.WriteLine("Processing Planet Data now....");
             //Process Planet Data
@@ -66,7 +54,7 @@ namespace VedAstro.Library
                             planetNirayanaDegrees.Seconds);
                 var planetConstellation = Calculate.PlanetConstellation(birthtime, planet);
 
-                x = 1;
+                var x = 1; //start house at 1
                 while ((x + 1) <= cusps.Count) //check each house for the logic below
                 {
                     if ((x + 1) < cusps.Count) //Do not exceed the bounds of the array
@@ -131,57 +119,6 @@ namespace VedAstro.Library
             return planetTableData;
         }
 
-
-        /// <summary>
-        /// Gets the House number a given planet is in at a time
-        /// </summary>
-        public static HouseName HousePlanetIsInKP(Time time, PlanetName planetName)
-        {
-
-            //get the planets longitude
-            var planetLongitude = PlanetNirayanaLongitude(time, planetName);
-
-            //get all houses
-            var houseList = AllHouseLongitudesKP(time);
-
-            //loop through all houses
-            foreach (var house in houseList)
-            {
-                //check if planet is in house's range
-                var planetIsInHouse = house.IsLongitudeInHouseRange(planetLongitude);
-
-                //if planet is in house
-                if (planetIsInHouse)
-                {
-                    //return house's number
-                    return house.GetHouseName();
-                }
-            }
-
-            //if planet not found in any house, raise error
-            throw new Exception("Planet not in any house, error!");
-
-        }
-
-
-        /// <summary>
-        /// List of all planets and the houses they are located in at a given time
-        /// using KP Krishnamurti system, note KP ayanamsa is hard set
-        /// </summary>
-        public static Dictionary<PlanetName, HouseName> AllPlanetHousePositionsKP(Time time)
-        {
-            //hard set KP ayanamsa to match commercial software default output
-            Calculate.Ayanamsa = (int)Ayanamsa.KRISHNAMURTI;
-            var returnList = new Dictionary<PlanetName, HouseName>();
-            foreach (var planet in PlanetName.All9Planets)
-            {
-                var houseIsIn = HousePlanetIsInKP(time, planet);
-                returnList.Add(planet, houseIsIn);
-            }
-            return returnList;
-        }
-
-
         /// <summary>
         /// Gets all KP (Placidus) House Cusps 
         /// using Swiss Epehemris swe_houses_ex
@@ -225,203 +162,35 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
-        /// Moves Lagna to a Long Degree (the new Ascendant and gets new KP (Placidus) House Cusps 
-        /// using Swiss Epehemris swe_houses_ex
+        /// This method is used to convert the tropical ascendant to the ARMC (Ascendant Right Meridian Circle).
+        /// It first calculates the right ascension and declination using the provided tropical ascendant and
+        /// obliquity of the ecliptic. Then, it calculates the oblique ascension by subtracting a value derived
+        /// from the declination and geographic latitude from the right ascension. Finally, it calculates the ARMC
+        /// based on the value of the tropical ascendant and the oblique ascension.
         /// </summary>
-        public static Dictionary<HouseName, Angle> MoveLagnaToSpecificLongGetNewHouseCusps(int Ayanamsa, Time time, int horNum, double tropAsc)
+        public static double ConvertTropicalAscToARMC(double tropicalAscendant, double obliquityOfEcliptic, double geographicLatitude, Time time)
         {
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(MoveLagnaToSpecificLongGetNewHouseCusps), Ayanamsa, time, horNum, tropAsc),
-                _getNewCuspLongitudes);
-
-
-            //UNDERLYING FUNCTION
-            Dictionary<HouseName, Angle> _getNewCuspLongitudes()
-            {
-                //get location at place of time
-                var location = time.GetGeoLocation();
-
-                //Convert DOB to Julian Day
-                var jul_day_UT = TimeToJulianDay(time);
-
-
-                SwissEph swissEph = new SwissEph();
-
-                double[] cusps = new double[13];
-
-                //we have to supply ascmc to make the function run
-                double[] ascmc = new double[10];
-
-                //set ayanamsa
-                swissEph.swe_set_sid_mode(Ayanamsa, 0, 0);
-
-                //CPJ - set this flag and use the swe_houses_ex method - it returns SIDEREAL KP Longitudes diretly.
-                //No need for additional step of deducting ayanmsa from Sayana Longitudes
-                var iflag = SwissEph.SEFLG_SIDEREAL;
-
-                //NOTE:
-                //if you use P which is Placidus there is a high chances you will get unequal houses from the SwissEph library itself...
-                // you have to use V - 'V'Vehlow equal (Asc. in middle of house 1)
-                // swissEph.swe_houses(jul_day_UT, location.Latitude(), location.Longitude(), 'P', cusps, ascmc);
-                // swissEph.swe_houses_ex(jul_day_UT, iflag, location.Latitude(), location.Longitude(), 'P', cusps, ascmc);
-                //we only return cusps, cause that is what is used for now
-
-                var eps = Calculate.EclipticObliquity(time);
-
-                var tropAscFromHorNum = HoraryNumberTropicalAsc(horNum);
-                var armc = ConvertTropicalAscToARMC(tropAscFromHorNum, eps, location.Latitude(), time);
-
-                var lat = location.Latitude();
-
-                Console.WriteLine("armc {0} eps {1} tropAsc {2} lat {3}", armc, eps, tropAscFromHorNum, lat);
-
-                swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
-
-                //base cusps created - now repeat now with provided Long Lagna needs to be moved to
-                armc = ConvertTropicalAscToARMC(tropAsc, eps, location.Latitude(), time);
-                swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
-
-
-                //Create Dictionary for return
-                var housesDictionary = new Dictionary<HouseName, Angle>();
-                foreach (var house in House.AllHouses)
-                {
-                    //start of house longitude of 0-360
-                    var hseLong = cusps[(int)house];
-                    housesDictionary.Add(house, Angle.FromDegrees(hseLong));
-                }
-
-                //return cusps;
-                return housesDictionary;
-            }
-
-
-            //special function localized to allow caching
-            //note: there is another version that does caching
-            double TimeToJulianDay(Time time)
-            {
-                //get lmt time
-                var lmtDateTime = time.GetLmtDateTimeOffset();
-
-                //Converts LMT to UTC (GMT)
-                DateTimeOffset utcDateTime = lmtDateTime.ToUniversalTime();
-
-                SwissEph swissEph = new SwissEph();
-
-                double jul_day_UT;
-                jul_day_UT = swissEph.swe_julday(utcDateTime.Year, utcDateTime.Month, utcDateTime.Day,
-                    utcDateTime.TimeOfDay.TotalHours, SwissEph.SE_GREG_CAL);
-                return jul_day_UT;
-
-            }
-        }
-
-        /// <summary>
-        /// Moves Lagna to the start of a Cusp (the new Ascendant) and gets new KP (Placidus) House Cusps 
-        /// using Swiss Epehemris swe_houses_ex
-        /// </summary>
-        public static Dictionary<HouseName, Angle> MoveLagnaToACuspStartGetNewHouseCusps(int Ayanamsa, Time time, int horNum, int cuspNumber)
-        {
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(MoveLagnaToACuspStartGetNewHouseCusps), Ayanamsa, time, horNum, cuspNumber),
-                _getNewCuspLongitudes);
-
-
-            //UNDERLYING FUNCTION
-            Dictionary<HouseName, Angle> _getNewCuspLongitudes()
-            {
-                //get location at place of time
-                var location = time.GetGeoLocation();
-
-                //Convert DOB to Julian Day
-                var jul_day_UT = TimeToJulianDay(time);
-
-
-                SwissEph swissEph = new SwissEph();
-
-                double[] cusps = new double[13];
-
-                //we have to supply ascmc to make the function run
-                double[] ascmc = new double[10];
-
-                //set ayanamsa
-                swissEph.swe_set_sid_mode(Ayanamsa, 0, 0);
-
-                //CPJ - set this flag and use the swe_houses_ex method - it returns SIDEREAL KP Longitudes diretly.
-                //No need for additional step of deducting ayanmsa from Sayana Longitudes
-                var iflag = SwissEph.SEFLG_SIDEREAL;
-
-                //NOTE:
-                //if you use P which is Placidus there is a high chances you will get unequal houses from the SwissEph library itself...
-                // you have to use V - 'V'Vehlow equal (Asc. in middle of house 1)
-                // swissEph.swe_houses(jul_day_UT, location.Latitude(), location.Longitude(), 'P', cusps, ascmc);
-                // swissEph.swe_houses_ex(jul_day_UT, iflag, location.Latitude(), location.Longitude(), 'P', cusps, ascmc);
-                //we only return cusps, cause that is what is used for now
-
-                var eps = Calculate.EclipticObliquity(time);
-
-                var tropAscFromhorNum = HoraryNumberTropicalAsc(horNum);
-                var armc = ConvertTropicalAscToARMC(tropAscFromhorNum, eps, location.Latitude(), time);
-
-                var lat = location.Latitude();
-
-                Console.WriteLine("armc {0} eps {1} tropAsc {2} lat {3}", armc, eps, tropAscFromhorNum, lat);
-
-                swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
-
-                //base cusps created - now repeat now with provided Cusp that Lagna needs to be moved to
-                armc = ConvertTropicalAscToARMC(cusps[(int)cuspNumber], eps, location.Latitude(), time);
-                swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
-
-                //Create Dictionary for return
-                var housesDictionary = new Dictionary<HouseName, Angle>();
-                foreach (var house in House.AllHouses)
-                {
-                    //start of house longitude of 0-360
-                    var hseLong = cusps[(int)house];
-                    housesDictionary.Add(house, Angle.FromDegrees(hseLong));
-                }
-
-                //return cusps;
-                return housesDictionary;
-            }
-
-            //special function localized to allow caching
-            //note: there is another version that does caching
-            double TimeToJulianDay(Time time)
-            {
-                //get lmt time
-                var lmtDateTime = time.GetLmtDateTimeOffset();
-
-                //Converts LMT to UTC (GMT)
-                DateTimeOffset utcDateTime = lmtDateTime.ToUniversalTime();
-
-                SwissEph swissEph = new SwissEph();
-
-                double jul_day_UT;
-                jul_day_UT = swissEph.swe_julday(utcDateTime.Year, utcDateTime.Month, utcDateTime.Day,
-                    utcDateTime.TimeOfDay.TotalHours, SwissEph.SE_GREG_CAL);
-                return jul_day_UT;
-
-            }
-        }
-        
-        public static double ConvertTropicalAscToARMC(double tropicalAscendant, double obliquityOfEcliptic, double geographicLatitude,Time time)
-        {
-            //Main method from Group.IO posted by K S Upendra 2019
+            // The main method is taken from a post by K S Upendra on Group.IO in 2019
+            // Calculate the right ascension using the formula:
+            // atan(cos(obliquityOfEcliptic) * tan(tropicalAscendant))
             double rightAscension =
                 Math.Atan(Math.Cos(obliquityOfEcliptic * Math.PI / 180) * Math.Tan(tropicalAscendant * Math.PI / 180)) *
                 180 / Math.PI;
+            // Calculate the declination using the formula:
+            // asin(sin(obliquityOfEcliptic) * sin(tropicalAscendant))
             double declination =
                 Math.Asin(Math.Sin(obliquityOfEcliptic * Math.PI / 180) * Math.Sin(tropicalAscendant * Math.PI / 180)) *
                 180 / Math.PI;
+            // Calculate the oblique ascension by subtracting the result of the following formula from the right ascension:
+            // asin(tan(declination) * tan(geographicLatitude))
             double obliqueAscension = rightAscension -
                                       (Math.Asin(Math.Tan(declination * Math.PI / 180) *
                                                  Math.Tan(geographicLatitude * Math.PI / 180)) * 180 / Math.PI);
+            // Initialize the armc variable
             double armc = 0;
-
+            // Depending on the value of the tropical ascendant, calculate the armc using the formula:
+            // armc = 270 + obliqueAscension or armc = 90 + obliqueAscension
             if (tropicalAscendant > 0 && tropicalAscendant < 90)
             {
                 armc = 270 + obliqueAscension;
@@ -438,30 +207,29 @@ namespace VedAstro.Library
             {
                 armc = 270 + obliqueAscension;
             }
-
+            // Return the calculated armc value
             return armc;
         }
 
-
-
-        //Horary Number Generation
-        //Convert Given Horary Number to TropAsc Longitude
+        /// <summary>
+        /// This method calculates the tropical ascendant for a given horary number.
+        /// It does this by iterating over all constellations and planets, calculating
+        /// various parameters before and after adding a certain degree to the tropical
+        /// ascendant (tropAsc), and handling special cases such as when tropAsc is 0 or
+        /// when there are overlapping signs. The tropical ascendant corresponding to the
+        /// given horary number is then returned.
+        /// </summary>
         public static double HoraryNumberTropicalAsc(int horaryNumber)
         {
-            var horaryNumbertropAscList = new List<Tuple<double, ConstellationName, PlanetName, PlanetName, double>>();
-            var padaSize = 30.00 / 9;
-            var count = 1;
-            var padaNumber = 1;
+            // Initialize variables
             var tropAscDeg = 0.00;
-            var x = PlanetName.Ketu;
             var all9Planets = PlanetName.All9Planets;
-            var allZodiacs = ZodiacSign.All12ZodiacNames;
             var allConstellations = PlanetConstellation.AllConstellation;
-
             var constellationList = new List<Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>>();
             var cntA = 0;
             var tropAsc = 0.000;
 
+            // Iterate over all constellations
             foreach (var constellation in allConstellations)
             {
                 var tempConstel = constellation;
@@ -470,6 +238,7 @@ namespace VedAstro.Library
                 int cntB = 0;
                 int index = 0;
 
+                // Find the index of the lord of the constellation in the planet array
                 while (cntB <= 8)
                 {
                     if (planetnameArray[cntB] == lordofConstel)
@@ -479,9 +248,10 @@ namespace VedAstro.Library
                     }
                     cntB++;
                 }
-
-                PlanetName[] planetnameArrayB = new PlanetName[9];
+                var planetnameArrayB = new PlanetName[9];
                 int cntC = 0;
+
+                // Reorder the planet array based on the index of the lord of the constellation
                 while (cntC <= 8)
                 {
                     planetnameArrayB[cntC] = planetnameArray[index];
@@ -492,13 +262,12 @@ namespace VedAstro.Library
                         index = 0;
                     }
                 }
-
+                // Iterate over the reordered planet array
                 foreach (var planetName in planetnameArrayB)
                 {
-
                     var constellationA = tempConstel;
                     lordofConstel = Calculate.LordOfConstellation(constellationA);
-
+                    // Assign tropAscDeg based on the planet name
                     switch (planetName.Name)
                     {
                         case PlanetName.PlanetNameEnum.Ketu:
@@ -529,42 +298,32 @@ namespace VedAstro.Library
                             tropAscDeg = new Angle(1, 53, 20).TotalDegrees;
                             break;
                     }
-
+                    // Calculate various parameters before and after adding tropAscDeg to tropAsc
                     var zSignAtLongBefore = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
                     var constellationBefore = Calculate.ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
-                    var constellationLordBefore =
-                        Calculate.LordOfConstellation(constellationBefore.GetConstellationName());
-
+                    var constellationLordBefore = Calculate.LordOfConstellation(constellationBefore.GetConstellationName());
+                    // Special handling for tropAsc == 0.00
                     if (tropAsc == 0.00)
                     {
                         var longBefore = tropAsc - 0.00001 + 360;
                         zSignAtLongBefore = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(longBefore));
                         constellationBefore = Calculate.ConstellationAtLongitude(Angle.FromDegrees(longBefore));
-                        constellationLordBefore =
-                            Calculate.LordOfConstellation(constellationBefore.GetConstellationName());
+                        constellationLordBefore = Calculate.LordOfConstellation(constellationBefore.GetConstellationName());
                     }
                     else
                     {
                         zSignAtLongBefore = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
                         constellationBefore = Calculate.ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
-                        constellationLordBefore =
-                            Calculate.LordOfConstellation(constellationBefore.GetConstellationName());
+                        constellationLordBefore = Calculate.LordOfConstellation(constellationBefore.GetConstellationName());
                     }
-
                     tropAsc = tropAsc + tropAscDeg;
-
                     var zSignAtLongAfter = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
                     var zSignAfterLord = Calculate.LordOfZodiacSign(zSignAtLongAfter.GetSignName());
                     var constellationAfter = Calculate.ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
-                    var constellationLordAfter =
-                        Calculate.LordOfConstellation(constellationAfter.GetConstellationName());
-
-                    //does tropAsc end on 30, 60, 90, 120....
+                    var constellationLordAfter = Calculate.LordOfConstellation(constellationAfter.GetConstellationName());
+                    // Check if tropAsc ends on 30, 60, 90, 120....
                     var tropAscSpansSigns = Math.Round(tropAsc % 30, 6);
-
-                    // REFACTOR - Calculate.IsFireSign(zSignAtLongAfter.GetSignName());
-
-                    //overlapping signs issue
+                    // Handle overlapping signs issue
                     if ((zSignAtLongAfter.GetSignName() != zSignAtLongBefore.GetSignName()) &&
                         (constellationLordAfter == constellationLordBefore)
                         && ((zSignAtLongBefore.GetSignName() == ZodiacName.Aries) ||
@@ -576,139 +335,42 @@ namespace VedAstro.Library
                     {
                         var remainderFromDivBy30 = (tropAsc % 30.00); //past signchange degree amount
                         var preSignChangeDegrees = tropAscDeg - remainderFromDivBy30;
-                        tropAsc = tropAsc - tropAscDeg +
-                                  preSignChangeDegrees; //this is one Entry into the List. this get us to Sign engpoint
-                                                        //log entry into List
-                        constellationList.Add(
-                            new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(
-                                cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord,
-                                constellationA, constellationLordAfter, planetName, tropAsc));
-
-                       /* Console.WriteLine(
-                            "Horary# {0},Zodiac {1} ZSign Lord {2} Constel/Star {3}, StarLord {4}, SubLord {5} Asc {6} AscDMS: {7:000}D {8:00}M {9:00}S",
-                            cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellation,
-                            constellationLordAfter, planetName, tropAsc, Angle.FromDegrees(tropAsc).Degrees,
-                            Angle.FromDegrees(tropAsc).Minutes, Angle.FromDegrees(tropAsc).Seconds);
-                        */
-
+                        tropAsc = tropAsc - tropAscDeg + preSignChangeDegrees; //this is one Entry into the List. this get us to Sign engpoint
+                                                                               //log entry into List
+                        constellationList.Add(new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellationA, constellationLordAfter, planetName, tropAsc));
                         cntA++;
                         //next process the balance into the nextSign
                         var tropAscB = tropAsc + remainderFromDivBy30;
                         //log entry into List
-                        constellationList.Add(
-                            new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(
-                                cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord,
-                                constellationA, constellationLordAfter, planetName, tropAscB));
-
-                        /*Console.WriteLine(
-                            "Horary# {0},Zodiac {1} ZSign Lord {2} Constel/Star {3}, StarLord {4}, SubLord {5} Asc {6} AscDMS: {7:000}D {8:00}M {9:00}S",
-                            cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellation,
-                            constellationLordAfter, planetName, tropAscB, Angle.FromDegrees(tropAscB).Degrees,
-                            Angle.FromDegrees(tropAscB).Minutes, Angle.FromDegrees(tropAscB).Seconds);
-                        */
+                        constellationList.Add(new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellationA, constellationLordAfter, planetName, tropAscB));
                         cntA++;
                         tropAsc = tropAscB;
                     }
                     else
                     {
-                        constellationList.Add(
-                            new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(
-                                cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord,
-                                constellationA, constellationLordAfter, planetName, tropAsc));
-
-                        /*Console.WriteLine(
-                            "Horary# {0},Zodiac {1} ZSign Lord {2} Constel/Star {3}, StarLord {4}, SubLord {5} Asc {6} AscDMS: {7:000}D {8:00}M {9:00}S",
-                            cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellation,
-                            constellationLordAfter, planetName, tropAsc, Angle.FromDegrees(tropAsc).Degrees,
-                            Angle.FromDegrees(tropAsc).Minutes, Angle.FromDegrees(tropAsc).Seconds);
-                        */
+                        constellationList.Add(new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellationA, constellationLordAfter, planetName, tropAsc));
                         cntA++;
                     }
-
                 }
             }
+            
+            // Find the horary number in the constellation list and return the corresponding tropAsc
             var countX = 0;
             while (countX <= 248)
             {
                 if (constellationList[countX].Item1 == horaryNumber)
                 {
-                    tropAsc = constellationList[countX - 1].Item7;  //the -1 because in the list we record end longitudes.
-                    Console.WriteLine("Horary Asc {0}", tropAsc);                                                //We have to return start longitudes.
-                                                                    //the end longitude of the previous one is the start of the current one. 
+                    //NOTE:
+                    //the -1 because in the list we record end longitudes.
+                    //We have to return start longitudes.
+                    //the end longitude of the previous one is the start of the current one. 
+                    tropAsc = constellationList[countX - 1].Item7;
                 }
-
                 countX++;
             }
 
+
             return tropAsc;
-        }
-
-        /// <summary>
-        /// Gets longitudes for houses under Krishnamurti (KP) astrology system
-        /// Note: Ayanamsa hard set to Krishnamurti
-        /// </summary>
-        public static List<House> AllHouseLongitudesKP(Time time)
-        {
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(AllHouseLongitudesKP), time, Calculate.Ayanamsa), _allHouseLongitudesKP);
-
-
-            //UNDERLYING FUNCTION
-
-            List<House> _allHouseLongitudesKP()
-            {
-                //get house positions modified for KP system in raw 
-                var swissEphCusps = _houseLongitudesKP();
-
-                //4.0 Initialize houses into list
-                var houseList = new List<House>();
-
-                foreach (var house in House.AllHouses)
-                {
-                    var houseNumber = (int)house;
-                    var houseBegin = swissEphCusps[houseNumber];
-                    var nextHseNumber = houseNumber + 1;
-                    nextHseNumber = nextHseNumber >= 12 ? 1 : nextHseNumber; //goto house 1 once hit house 12
-                    var houseEnd = swissEphCusps[nextHseNumber];//start of next house is end of this
-                    var houseMid = houseBegin + ((houseEnd - houseBegin) / 2);
-                    houseList.Add(new House(house, Angle.FromDegrees(houseBegin), Angle.FromDegrees(houseMid), Angle.FromDegrees(houseEnd)));
-                }
-
-                return houseList;
-
-            }
-
-            double[] _houseLongitudesKP()
-            {
-                //get location at place of time
-                var location = time.GetGeoLocation();
-
-                //Convert DOB to Julian Day
-                var jul_day_UT = TimeToJulianDay(time);
-
-                SwissEph swissEph = new SwissEph();
-
-                double[] cusps = new double[13];
-
-                //we have to supply ascmc to make the function run
-                double[] ascmc = new double[10];
-
-                //set ayanamsa
-                swissEph.swe_set_sid_mode((int)Ayanamsa.KRISHNAMURTI, 0, 0);
-
-                var iflag = SwissEph.SEFLG_SIDEREAL;
-
-                //NOTE:
-                //if you use P which is Placidus there for Krishamurti system
-                swissEph.swe_houses_ex(jul_day_UT, iflag, location.Latitude(), location.Longitude(), 'P', cusps, ascmc);
-
-                //we only return cusps, cause that is what is used for now
-                return cusps;
-            }
-
-
-
-
         }
 
     }

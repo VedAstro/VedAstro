@@ -2654,6 +2654,7 @@ namespace VedAstro.Library
         {
             //process list differently
             JProperty rootPayloadJson = null;
+
             switch (anyTypeData)
             {
                 case List<House> dictionary:
@@ -2714,9 +2715,13 @@ namespace VedAstro.Library
                     }
 
                 //handles results that have many props from 1 call, exp : SwissEphemeris
-                case Dictionary<PlanetName, ZodiacSign> dictionary: RootPayloadJson("Planet", dataName, dictionary); break;
-                case Dictionary<PlanetName, PlanetConstellation> dictionary: RootPayloadJson("Planet", dataName, dictionary); break;
-                case Dictionary<PlanetName, HouseName> dictionary: RootPayloadJson("Planet", dataName, dictionary); break;
+                case Dictionary<PlanetName, ZodiacSign> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
+                case Dictionary<PlanetName, Angle> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
+                case Dictionary<PlanetName, PlanetName> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
+                case Dictionary<PlanetName, ZodiacName> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
+                case Dictionary<PlanetName, PlanetConstellation> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
+                case Dictionary<PlanetName, HouseName> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
+
                 case Dictionary<HouseName, Angle> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
                 case Dictionary<HouseName, ZodiacSign> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
                 case Dictionary<HouseName, PlanetName> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
@@ -2740,6 +2745,7 @@ namespace VedAstro.Library
                         break;
 
                     }
+
                 case Dictionary<ZodiacName, int> dictionary:
                     {
                         //convert list to comma separated string

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using SwissEphNet;
 using VedAstro.Library;
@@ -9,13 +10,16 @@ namespace VedAstro.Library
 {
     public static class CalculateKP
     {
+        
+        #region WEBSITE METHODS
+
         /// <summary>
         /// Gets all KP (Placidus) House Cusps (start longitude) zodiac signs for all houses
         /// </summary>
-        public static Dictionary<HouseName, ZodiacSign> HouseCuspZodiacSigns(Time birthTime, int horaryNumber)
+        public static Dictionary<HouseName, ZodiacSign> AllHouseZodiacSignsKP(Time birthTime, int horaryNumber)
         {
             //get house start longitudes for KP system
-            var allHouseCuspsRaw = GetKPHoraryHouseLongitudes(birthTime, horaryNumber);
+            var allHouseCuspsRaw = HouseCuspLongitudesHorary(birthTime, horaryNumber);
 
             //list of house name & start longitude of house
             var returnDictionary = new Dictionary<HouseName, ZodiacSign>();
@@ -23,7 +27,7 @@ namespace VedAstro.Library
             foreach (var cuspData in allHouseCuspsRaw)
             {
                 //get zodiac sign at house start longitude longitude
-                var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(cuspData.Value);
+                var zodiacSignAtLong = ZodiacSignAtLongitude(cuspData.Value);
                 var houseName = cuspData.Key;
                 returnDictionary.Add(houseName, zodiacSignAtLong);
 
@@ -33,97 +37,156 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// Process planet positions and returns Dictionary for webpage table
-        /// </summary>
-        public static Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName)> PlanetData(int Ayanamsa, Time birthtime, int horNum)
+        public static Dictionary<PlanetName, PlanetName> AllPlanetLordOfConstellationKP(Time birthTime, int horNum)
         {
-            Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName)> planetTableData = new Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName)>();
+            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
+            var cusps = HouseCuspLongitudesHorary(birthTime, horNum);
 
-            var allPlanets = VedAstro.Library.PlanetName.All9Planets;
-
-            var cusps = GetKPHoraryHouseLongitudes(birthtime, horNum);
-
-            Console.WriteLine("Processing Planet Data now....");
-            //Process Planet Data
-            foreach (PlanetName planet in allPlanets)
-            {
-                Angle planetNirayanaDegrees = Calculate.PlanetNirayanaLongitude(birthtime, planet);
-                Console.Write("{0} {1} {2} Deg {3} Min {4} Secs ; ", planet.Name, planetNirayanaDegrees.TotalDegrees,
-                            planetNirayanaDegrees.Degrees, planetNirayanaDegrees.Minutes,
-                            planetNirayanaDegrees.Seconds);
-                var planetConstellation = Calculate.PlanetConstellation(birthtime, planet);
-
-                var x = 1; //start house at 1
-                while ((x + 1) <= cusps.Count) //check each house for the logic below
+            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
+            // Filter out the planets that are not in any of the houses.
+            // Then, create a dictionary mapping each planet to its constellation lord at that longitude.
+            var allPlanetZodiacSignKp = PlanetName.All9Planets
+                .Select(planet => new
                 {
-                    if ((x + 1) < cusps.Count) //Do not exceed the bounds of the array
+                    Planet = planet,
+                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
+                })
+                .Where(planetData => Enumerable.Range(1, cusps.Count)
+                    .Any(houseIndex => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, houseIndex)))
+                .ToDictionary(
+                    //planet name set as KEY
+                    planetData => planetData.Planet,
+                    //constellation lord set as VALUE
+                    planetData => LordOfConstellation(ConstellationAtLongitude(planetData.NirayanaDegrees).GetConstellationName()));
+
+            return allPlanetZodiacSignKp;
+        }
+
+        public static Dictionary<PlanetName, PlanetConstellation> AllPlanetConstellationKP(Time birthTime, int horNum)
+        {
+            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
+            var cusps = HouseCuspLongitudesHorary(birthTime, horNum);
+
+            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
+            // Filter out the planets that are not in any of the houses.
+            // Then, create a dictionary mapping each planet to its constellation at that longitude.
+            var allPlanetZodiacSignKp = PlanetName.All9Planets
+                .Select(planet => new
+                {
+                    Planet = planet,
+                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
+                })
+                .Where(planetData => Enumerable.Range(1, cusps.Count)
+                    .Any(houseIndex => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, houseIndex)))
+                .ToDictionary(
+                    //planet name set as KEY
+                    planetData => planetData.Planet,
+                    //constellation set as VALUE
+                    planetData => ConstellationAtLongitude(planetData.NirayanaDegrees));
+
+            return allPlanetZodiacSignKp;
+        }
+
+        public static Dictionary<PlanetName, PlanetName> AllPlanetLordOfZodiacSignKP(Time birthTime, int horNum)
+        {
+            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
+            var cusps = HouseCuspLongitudesHorary(birthTime, horNum);
+
+            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
+            // Filter out the planets that are not in any of the houses.
+            // Then, create a dictionary mapping each planet to its Lord of Zodiac Sign at that longitude.
+            var allPlanetZodiacSignKp = PlanetName.All9Planets
+                .Select(planet => new
+                {
+                    Planet = planet,
+                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
+                })
+                .Where(planetData => Enumerable.Range(1, cusps.Count)
+                    .Any(houseIndex => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, houseIndex)))
+                .ToDictionary(
+                    //planet name set as KEY
+                    planetData => planetData.Planet,
+                    //Lord of zodiac sign set as VALUE
+                    planetData =>
                     {
-                        if (cusps[(HouseName)x + 1] > cusps[(HouseName)x]) //check if cusp longitude is smaller than next cusp longitude
-                                                                           //because the last house will have cusp long larger then next house start
-                        {
-                            if ((planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)x].TotalDegrees) &&
-                                (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)x + 1].TotalDegrees)) //this means that the planet falls in between these house cusps
-                            {
-                                var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
-                                var lordOfZodiac = Calculate.LordOfZodiacSign(zodiacSignAtLong.GetSignName());
-                                var constellationAtLong = Calculate.ConstellationAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
-                                var lordOfConstellation = Calculate.LordOfConstellation(planetConstellation.GetConstellationName());
+                        var zodiacSign = ZodiacSignAtLongitude(planetData.NirayanaDegrees);
+                        return LordOfZodiacSign(zodiacSign.GetSignName());
+                    });
 
-                                Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6}; StarL {7}", planet.Name, x, zodiacSignAtLong.GetSignName(),
-                                                            zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
-                                                            zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation);
-                                planetTableData.Add(planet, (Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees), zodiacSignAtLong.GetSignName(),
-                                    constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation));
+            return allPlanetZodiacSignKp;
+        }
 
-                                break;
-                            }
-                        }
-                        else //if next cusp start long is smaller than current cusp we are rotating through 360 deg
-                        {
-                            if ((planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)x].TotalDegrees) ||
-                                (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)x + 1].TotalDegrees))
-                            {
-                                var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
-                                var lordOfZodiac = Calculate.LordOfZodiacSign(zodiacSignAtLong.GetSignName());
-                                var constellationAtLong = Calculate.ConstellationAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
-                                var lordOfConstellation = Calculate.LordOfConstellation(planetConstellation.GetConstellationName());
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSignKP(Time birthTime, int horNum)
+        {
+            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
+            var cusps = HouseCuspLongitudesHorary(birthTime, horNum);
 
-                                Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S; SignL {6} StarL {7} ", planet.Name, x, zodiacSignAtLong.GetSignName(),
-                                    zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
-                                    zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation);
-                                planetTableData.Add(planet, (Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees), zodiacSignAtLong.GetSignName(),
-                                    constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation));
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
-                        var lordOfZodiac = Calculate.LordOfZodiacSign(zodiacSignAtLong.GetSignName());
-                        var constellationAtLong = Calculate.ConstellationAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
-                        var lordOfConstellation = Calculate.LordOfConstellation(planetConstellation.GetConstellationName());
+            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
+            // Filter out the planets that are not in any of the houses.
+            // Then, create a dictionary mapping each planet to its Zodiac Sign at that longitude.
+            var allPlanetZodiacSignKp = PlanetName.All9Planets
+                .Select(planet => new
+                {
+                    Planet = planet,
+                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
+                })
+                .Where(planetData => Enumerable.Range(1, cusps.Count)
+                    .Any(houseIndex => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, houseIndex)))
+                .ToDictionary(
+                    //planet name set as KEY
+                    planetData => planetData.Planet,
+                    //zodiac sign set as VALUE
+                    planetData => ZodiacSignAtLongitude(planetData.NirayanaDegrees)
+                );
 
-                        Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6} StarL {0}", planet.Name, x, zodiacSignAtLong.GetSignName(),
-                            zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
-                            zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation);
+            return allPlanetZodiacSignKp;
+        }
 
-                        planetTableData.Add(planet, (Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees), zodiacSignAtLong.GetSignName(),
-                            constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation));
-                        break;
-                    }
-                    x++;
+        public static Dictionary<PlanetName, HouseName> AllPlanetHouseKP(Time birthTime, int horNum)
+        {
+            //get house start longitudes
+            var cusps = HouseCuspLongitudesHorary(birthTime, horNum);
+
+            var allPlanetHouseKp = PlanetName.All9Planets.ToDictionary(
+                // The first function takes a 'planet' as a parameter and simply returns it. This is used to generate the keys of the dictionary.
+                planet => planet,
+
+                // The second function also takes a 'planet' as a parameter. It returns the first 'houseIndex' for which 'IsPlanetInHouseKP' returns true.
+                // 'IsPlanetInHouseKP' is called with 'cusps', the result of 'Calculate.PlanetNirayanaLongitude(birthtime, planet)', and 'houseIndex' as parameters.
+                planet => (HouseName)Enumerable.Range(1, cusps.Count)
+                    .First(houseIndex => IsPlanetInHouseKP(cusps, PlanetNirayanaLongitude(birthTime, planet), houseIndex)));
+
+            return allPlanetHouseKp;
+        }
+
+        #endregion
+
+
+        #region KP SPECIFIC CALCS
+
+        public static bool IsPlanetInHouseKP(Dictionary<HouseName, Angle> cusps, Angle planetNirayanaDegrees, int houseIndex)
+        {
+            if (houseIndex + 1 < cusps.Count) //Do not exceed the bounds of the array
+            {
+                if (cusps[(HouseName)houseIndex + 1] > cusps[(HouseName)houseIndex]) //check if cusp longitude is smaller than next cusp longitude
+                {
+                    return (planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)houseIndex].TotalDegrees) &&
+                           (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)houseIndex + 1].TotalDegrees); //this means that the planet falls in between these house cusps
+                }
+                else //if next cusp start long is smaller than current cusp we are rotating through 360 deg
+                {
+                    return (planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)houseIndex].TotalDegrees) ||
+                           (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)houseIndex + 1].TotalDegrees);
                 }
             }
-            return planetTableData;
+            return false;
         }
 
         /// <summary>
         /// Gets all KP (Placidus) House Cusps 
         /// using Swiss Epehemris swe_houses_ex
         /// </summary>
-        public static Dictionary<HouseName, Angle> GetKPHoraryHouseLongitudes(Time time, int horaryNumber)
+        public static Dictionary<HouseName, Angle> HouseCuspLongitudesHorary(Time time, int horaryNumber)
         {
             //get location at place of time
             var location = time.GetGeoLocation();
@@ -138,7 +201,7 @@ namespace VedAstro.Library
             //set ayanamsa
             swissEph.swe_set_sid_mode(Calculate.Ayanamsa, 0, 0);
 
-            var eps = Calculate.EclipticObliquity(time);
+            var eps = EclipticObliquity(time);
 
             //convert horary number inputed by user to Tropical Ascendant degrees
             var tropAsc = HoraryNumberTropicalAsc(horaryNumber);
@@ -233,7 +296,7 @@ namespace VedAstro.Library
             foreach (var constellation in allConstellations)
             {
                 var tempConstel = constellation;
-                var lordofConstel = Calculate.LordOfConstellation(tempConstel);
+                var lordofConstel = LordOfConstellation(tempConstel);
                 var planetnameArray = all9Planets.ToArray();
                 int cntB = 0;
                 int index = 0;
@@ -266,7 +329,7 @@ namespace VedAstro.Library
                 foreach (var planetName in planetnameArrayB)
                 {
                     var constellationA = tempConstel;
-                    lordofConstel = Calculate.LordOfConstellation(constellationA);
+                    lordofConstel = LordOfConstellation(constellationA);
                     // Assign tropAscDeg based on the planet name
                     switch (planetName.Name)
                     {
@@ -299,28 +362,28 @@ namespace VedAstro.Library
                             break;
                     }
                     // Calculate various parameters before and after adding tropAscDeg to tropAsc
-                    var zSignAtLongBefore = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
-                    var constellationBefore = Calculate.ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
-                    var constellationLordBefore = Calculate.LordOfConstellation(constellationBefore.GetConstellationName());
+                    var zSignAtLongBefore = ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
+                    var constellationBefore = ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
+                    var constellationLordBefore = LordOfConstellation(constellationBefore.GetConstellationName());
                     // Special handling for tropAsc == 0.00
                     if (tropAsc == 0.00)
                     {
                         var longBefore = tropAsc - 0.00001 + 360;
-                        zSignAtLongBefore = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(longBefore));
-                        constellationBefore = Calculate.ConstellationAtLongitude(Angle.FromDegrees(longBefore));
-                        constellationLordBefore = Calculate.LordOfConstellation(constellationBefore.GetConstellationName());
+                        zSignAtLongBefore = ZodiacSignAtLongitude(Angle.FromDegrees(longBefore));
+                        constellationBefore = ConstellationAtLongitude(Angle.FromDegrees(longBefore));
+                        constellationLordBefore = LordOfConstellation(constellationBefore.GetConstellationName());
                     }
                     else
                     {
-                        zSignAtLongBefore = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
-                        constellationBefore = Calculate.ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
-                        constellationLordBefore = Calculate.LordOfConstellation(constellationBefore.GetConstellationName());
+                        zSignAtLongBefore = ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
+                        constellationBefore = ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
+                        constellationLordBefore = LordOfConstellation(constellationBefore.GetConstellationName());
                     }
                     tropAsc = tropAsc + tropAscDeg;
-                    var zSignAtLongAfter = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
-                    var zSignAfterLord = Calculate.LordOfZodiacSign(zSignAtLongAfter.GetSignName());
-                    var constellationAfter = Calculate.ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
-                    var constellationLordAfter = Calculate.LordOfConstellation(constellationAfter.GetConstellationName());
+                    var zSignAtLongAfter = ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
+                    var zSignAfterLord = LordOfZodiacSign(zSignAtLongAfter.GetSignName());
+                    var constellationAfter = ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
+                    var constellationLordAfter = LordOfConstellation(constellationAfter.GetConstellationName());
                     // Check if tropAsc ends on 30, 60, 90, 120....
                     var tropAscSpansSigns = Math.Round(tropAsc % 30, 6);
                     // Handle overlapping signs issue
@@ -336,7 +399,7 @@ namespace VedAstro.Library
                         var remainderFromDivBy30 = (tropAsc % 30.00); //past signchange degree amount
                         var preSignChangeDegrees = tropAscDeg - remainderFromDivBy30;
                         tropAsc = tropAsc - tropAscDeg + preSignChangeDegrees; //this is one Entry into the List. this get us to Sign engpoint
-                                                                               //log entry into List
+                        //log entry into List
                         constellationList.Add(new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellationA, constellationLordAfter, planetName, tropAsc));
                         cntA++;
                         //next process the balance into the nextSign
@@ -353,7 +416,7 @@ namespace VedAstro.Library
                     }
                 }
             }
-            
+
             // Find the horary number in the constellation list and return the corresponding tropAsc
             var countX = 0;
             while (countX <= 248)
@@ -372,6 +435,8 @@ namespace VedAstro.Library
 
             return tropAsc;
         }
+
+        #endregion
 
     }
 }

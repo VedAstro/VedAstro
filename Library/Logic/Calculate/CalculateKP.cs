@@ -10,7 +10,7 @@ namespace VedAstro.Library
 {
     public static class CalculateKP
     {
-        
+
         #region WEBSITE METHODS
 
         /// <summary>
@@ -168,17 +168,22 @@ namespace VedAstro.Library
         {
             if (houseIndex + 1 < cusps.Count) //Do not exceed the bounds of the array
             {
-                if (cusps[(HouseName)houseIndex + 1] > cusps[(HouseName)houseIndex]) //check if cusp longitude is smaller than next cusp longitude
+                //check if cusp longitude is smaller than next cusp longitude
+                if (cusps[(HouseName)houseIndex + 1] > cusps[(HouseName)houseIndex])
                 {
                     return (planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)houseIndex].TotalDegrees) &&
-                           (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)houseIndex + 1].TotalDegrees); //this means that the planet falls in between these house cusps
+                           //this means that the planet falls in between these house cusps
+                           (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)houseIndex + 1].TotalDegrees); 
                 }
-                else //if next cusp start long is smaller than current cusp we are rotating through 360 deg
+
+                //if next cusp start long is smaller than current cusp we are rotating through 360 deg
+                else
                 {
                     return (planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)houseIndex].TotalDegrees) ||
                            (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)houseIndex + 1].TotalDegrees);
                 }
             }
+
             return false;
         }
 

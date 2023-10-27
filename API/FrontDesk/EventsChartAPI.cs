@@ -136,7 +136,7 @@ namespace API
                 var chartSpecsOnly = await EventsChart.FromJson(requestJson);
 
                 //PREPARE THE CALL
-                var foundPerson = await Tools.GetPersonById(chartSpecsOnly.Person.Id);
+                var foundPerson = Tools.GetPersonById(chartSpecsOnly.Person.Id);
                 var chartSvg = await EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
 
                 //string to binary
@@ -213,7 +213,7 @@ namespace API
                 var eventsChartViewerHtml = await Tools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
 
                 //insert person name into page, to show ready page faster
-                var personName = (await Tools.FindPersonXMLById(personId)).Name;
+                var personName = Tools.GetPersonById(personId).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
                 jsVariables += $@"window.PersonId = ""{personId}"";";
@@ -271,7 +271,7 @@ namespace API
             //EXTRACT & PREPARE DATA
 
             //get the person instance by id
-            var foundPerson = await Tools.GetPersonById(personId);
+            var foundPerson = Tools.GetPersonById(personId);
 
             //TIME
             var timeRange = EventChartTools.AutoCalculateTimeRange(foundPerson, timePreset, timezone);

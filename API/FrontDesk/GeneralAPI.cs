@@ -21,7 +21,7 @@ namespace API
 				var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
 				var personId = rootXml.Value;
 
-				var person = await VedAstro.Library.Tools.GetPersonById(personId);
+				var person = Tools.GetPersonById(personId);
 
 				//calculate predictions for current person
 				var predictionList = await VedAstro.Library.Tools.GetHoroscopePrediction(person.BirthTime, APITools.HoroscopeDataListFile);

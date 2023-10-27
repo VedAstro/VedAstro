@@ -324,12 +324,15 @@ public class OpenAPIMetadata : IToJson
 
         //place each property in nicely in Json
         var package = new JObject();
-        foreach (var xx in this.SelectedParams)
+        if (this?.SelectedParams != null)
         {
-            var typeNameStr = xx.GetType().Name;
-            var valueStr = xx.ToString();
-            var yy = new JProperty(typeNameStr, valueStr);
-            package.Add(yy);
+            foreach (var xx in this?.SelectedParams)
+            {
+                var typeNameStr = xx.GetType().Name;
+                var valueStr = xx.ToString();
+                var yy = new JProperty(typeNameStr, valueStr);
+                package.Add(yy);
+            }
         }
 
         temp[nameof(this.SelectedParams)] = package;

@@ -51,7 +51,7 @@ namespace API
             try
             {
                 //get person record
-                var foundPerson = await Tools.GetPersonById(personId);
+                var foundPerson = Tools.GetPersonById(personId);
 
                 //get list of possible birth time slice in the current birth day
                 var timeSlices = Tools.GetTimeSlicesOnBirthDay(foundPerson, 1);
@@ -97,7 +97,7 @@ namespace API
             try
             {
                 //get person specified by caller
-                var foundPerson = await Tools.GetPersonById(personId);
+                var foundPerson = Tools.GetPersonById(personId);
 
                 //generate the needed charts
                 var chartList = new List<EventsChart>();
@@ -174,7 +174,7 @@ namespace API
             try
             {
                 //get person record
-                var foundPerson = await Tools.GetPersonById(personId);
+                var foundPerson = Tools.GetPersonById(personId);
 
                 //get list of possible birth time slice in the current birth day
                 var timeSlices = Tools.GetTimeSlicesOnBirthDay(foundPerson, 1);
@@ -218,7 +218,7 @@ namespace API
             try
             {
                 //get person record
-                var foundPerson = await Tools.GetPersonById(personId);
+                var foundPerson = Tools.GetPersonById(personId);
 
                 //get list of possible birth time slice in the current birth day
                 var timeSlices = Tools.GetTimeSlicesOnBirthDay(foundPerson, 1);

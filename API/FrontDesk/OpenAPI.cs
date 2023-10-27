@@ -82,22 +82,18 @@ namespace API
                     rawPlanetData = new JArray();
                     foreach (var callUrl in callList)
                     {
+                        //# get data out
                         var variedDataName = callUrl.Key.ToString(); //planet or house name
                         var variedURL = callUrl.Value; //planet or house name
 
-                        var xx = await SingleAPICallData(calculatorName, variedURL);
-                        var jProperty = Tools.AnyToJSON(variedDataName, xx);
+                        //# make the call, and the JSON data 
+                        var rawData = await SingleAPICallData(calculatorName, variedURL);
+                        var jProperty = Tools.AnyToJSON(variedDataName, rawData);
 
-                        // Create a new JObject
+                        //# combine the data with the rest
                         JObject obj = new JObject();
-                        // Add a JProperty to the JObject
                         obj.Add(jProperty);
-                        // Add the JObject to the JArray
-                        //array.Add(obj);
-
                         rawPlanetData.Add(obj);
-                        //temp[variedDataName] = xx;// Tools.AnyToJSON(calculatorName, ); ;
-                        //rawPlanetData.Add(temp); //compile all together
                     }
                 }
                 else
@@ -122,7 +118,6 @@ namespace API
                     default:
                         return APITools.SendAnyToCaller(calculatorName, rawPlanetData, incomingRequest);
                 }
-
 
             }
 

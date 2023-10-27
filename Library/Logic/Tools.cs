@@ -1410,13 +1410,14 @@ namespace VedAstro.Library
                 //get location data from VedAstro API
                 var timePackage = new Time(timeAtLocation, geoLocation);
                 var url = URL.GeoLocationToTimezoneAPIStable + timePackage.ToUrl();
-                var webResult = await Tools.ReadFromServerXmlReply(url);
+                //var webResult = await Tools.ReadFromServerXmlReply(url);
+                var webResult = await Tools.ReadFromServerJsonReply(url);
 
                 //if fail to make call, end here
                 if (!webResult.IsPass) { return new WebResult<string>(false, ""); }
 
                 //if success, get the reply data out
-                var data = webResult.Payload.Value;
+                var data = webResult.Payload.Value<string>();
 
                 //return to caller pass
                 return new WebResult<string>(true, data);
@@ -3397,6 +3398,19 @@ namespace VedAstro.Library
                 Console.WriteLine(item.ToString());
             }
         }
+
+        public static bool IsMethodReturnAsync(MethodInfo method)
+        {
+            // Null-checking omitted for brevity
+            if (method.ReturnType == typeof(Task) ||
+                (method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
     }
 
 

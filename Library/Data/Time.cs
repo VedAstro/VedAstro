@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ExCSS;
 using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
@@ -485,20 +486,27 @@ namespace VedAstro.Library
         /// TODO Offset no longer used can be removed on call by parent
         /// Offset auto set based on location & time
         /// </summary>
-        public static async Task<dynamic> FromUrl(string url)
+        public static Task<dynamic> FromUrl(string url)
         {
-            // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/+08:00/"
-            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-            //parse time range from caller (possible to fail)
-            var parsedTime = await Tools.ParseTime(
-                locationName: parts[1], //note skip "Location"
-                hhmmStr: parts[3], //note skip "Time"
-                dateStr: parts[4],
-                monthStr: parts[5],
-                yearStr: parts[6]);
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey("Time.FromUrl", url), NewFunction);
 
-            return parsedTime;
+            Task<dynamic> NewFunction()
+            {
+                // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/+08:00/"
+                string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+                //parse time range from caller (possible to fail)
+                var parsedTime = Tools.ParseTime(
+                    locationName: parts[1], //note skip "Location"
+                    hhmmStr: parts[3], //note skip "Time"
+                    dateStr: parts[4],
+                    monthStr: parts[5],
+                    yearStr: parts[6]).Result;
+
+                return Task.FromResult<dynamic>(parsedTime);
+            }
         }
 
         /// <summary>

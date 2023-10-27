@@ -153,8 +153,10 @@ namespace API
 
             //3 : EXECUTE COMMAND
             object rawPlanetData;
+            var isAsyncReturn1 = calculator.ReturnType.IsGenericType && calculator.ReturnType.GetGenericTypeDefinition() == typeof(Task<>);
+            var isAsyncReturn2 = Tools.IsMethodReturnAsync(calculator);
             //when calculator return an async result
-            if (calculator.ReturnType.IsGenericType && calculator.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
+            if (isAsyncReturn1 || isAsyncReturn2)
             {
                 dynamic task = calculator.Invoke(null, parsedParamList.ToArray());
                 await task;

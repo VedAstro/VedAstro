@@ -39,86 +39,24 @@ namespace API
                 //0 : LOG CALL : used later for throttle limit
                 var callLog = await APILogger.Visit(incomingRequest);
 
-                //detect if ALL needs to be applied
-                var allCalls = new[] { "PlanetName/All/", "HouseName/All/" };
-                var isAllCall = allCalls.Any(call => fullParamString.Contains(call));
+                //process call smartly
+                var rawPlanetData = await HandleOpenAPICalls(calculatorName, fullParamString);
 
-                dynamic rawPlanetData;
-
-                //# FOR ALL PLANETS OR HOUSES
-                if (isAllCall)
-                {
-                    //store newly generated URLs simulate "All" function
-                    var callList = new Dictionary<dynamic, string>();
-
-                    //# MAKE NEW CALLS
-                    //get name of type
-                    var splitParamString = fullParamString.Split('/');
-                    var allTypeNameLocation = Array.IndexOf(splitParamString, "All") - 1;
-                    var typeName = splitParamString[allTypeNameLocation];
-
-                    //based on type make call list
-                    switch (typeName)
-                    {
-                        case nameof(PlanetName):
-                            foreach (var planet in PlanetName.All9Planets)
-                            {
-                                var newUrl = fullParamString.Replace("/All/", $"/{planet}/");
-                                callList.Add(planet, newUrl);
-                            }
-                            break;
-                        case nameof(HouseName):
-                            foreach (var house in House.AllHouses)
-                            {
-                                var newUrl = fullParamString.Replace("/All/", $"/{house}/");
-                                callList.Add(house, newUrl);
-                            }
-                            break;
-                        default:
-                            throw new Exception($"Support for All with type {typeName} not built!");
-                    }
-
-                    //start calculation for each generate URL
-                    rawPlanetData = new JArray();
-                    foreach (var callUrl in callList)
-                    {
-                        //# get data out
-                        var variedDataName = callUrl.Key.ToString(); //planet or house name
-                        var variedURL = callUrl.Value; //planet or house name
-
-                        //# make the call, and the JSON data 
-                        var rawData = await SingleAPICallData(calculatorName, variedURL);
-                        var jProperty = Tools.AnyToJSON(variedDataName, rawData);
-
-                        //# combine the data with the rest
-                        JObject obj = new JObject();
-                        obj.Add(jProperty);
-                        rawPlanetData.Add(obj);
-                    }
-                }
-                else
-                {
-                    //# INDIVIDUAL CALLS
-                    rawPlanetData = await SingleAPICallData(calculatorName, fullParamString);
-                }
-
-                //4 : OVERLOAD LIMIT
+                // Control API overload
                 await APITools.AutoControlOpenAPIOverload(callLog);
 
-                //5 : SEND DATA TO CALLER
-                //some calculators return SVG & binary data, so need to send to caller directly
+                // Send data to the caller
+                // Some calculators return SVG & binary data, so need to send to caller directly
                 switch (calculatorName)
                 {
-                    //handle SVG string
+                    // Handle SVG string
                     case nameof(VedAstro.Library.Calculate.SkyChart):
                     case nameof(VedAstro.Library.Calculate.SouthIndianChart):
                     case nameof(VedAstro.Library.Calculate.NorthIndianChart):
                         return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawPlanetData), incomingRequest, "image/svg+xml");
-
                     default:
                         return APITools.SendAnyToCaller(calculatorName, rawPlanetData, incomingRequest);
                 }
-
             }
 
             //if any failure, show error in payload
@@ -129,6 +67,91 @@ namespace API
             }
 
         }
+
+
+
+        /// <summary>
+        /// This code is handling API calls for either all planets or houses or for individual ones.
+        /// It first checks if the call is for all planets or houses,
+        /// if yes then it creates a list of calls for each planet or house and then makes the API call for each one,
+        /// combines the data and adds it to rawPlanetData.
+        /// If the call is for an individual planet or house, it directly makes the API call and adds
+        /// the data to rawPlanetData. Finally, it sends the data to the caller.
+        /// </summary>
+        private static async Task<dynamic> HandleOpenAPICalls(string calculatorName, string fullParamString)
+        {
+            const string allKeyword = "All";
+            var allCalls = new[] { "PlanetName/All/", "HouseName/All/" };
+            var isAllCall = allCalls.Any(call => fullParamString.Contains(call));
+            dynamic rawPlanetData;
+            if (isAllCall)
+            {
+                //generate new list of URL with the Planet name or house name changed from All to Sun, House1
+                var callList = GenerateCallList(fullParamString);
+
+                //make new calculation for all planets or houses 
+                rawPlanetData = await ProcessAllCalls(calculatorName, callList);
+            }
+            else
+            {
+                rawPlanetData = await SingleAPICallData(calculatorName, fullParamString);
+            }
+
+            return rawPlanetData;
+        }
+
+        /// <summary>
+        /// generate new list of URL with the Planet name or house name changed from All to Sun, House1
+        /// </summary>
+        private static Dictionary<dynamic, string> GenerateCallList(string fullParamString)
+        {
+            var splitParamString = fullParamString.Split('/');
+            var allTypeNameLocation = Array.IndexOf(splitParamString, "All") - 1;
+            var typeName = splitParamString[allTypeNameLocation];
+            var callList = new Dictionary<dynamic, string>();
+            switch (typeName)
+            {
+                case nameof(PlanetName):
+                    foreach (var planet in PlanetName.All9Planets)
+                    {
+                        var newUrl = fullParamString.Replace("/All/", $"/{planet}/");
+                        callList.Add(planet, newUrl);
+                    }
+                    break;
+                case nameof(HouseName):
+                    foreach (var house in House.AllHouses)
+                    {
+                        var newUrl = fullParamString.Replace("/All/", $"/{house}/");
+                        callList.Add(house, newUrl);
+                    }
+                    break;
+                default:
+                    throw new Exception($"Support for All with type {typeName} not built!");
+            }
+            return callList;
+        }
+        
+        /// <summary>
+        /// Make call one by one for URL provided and return combined results
+        /// </summary>
+        private static async Task<JArray> ProcessAllCalls(string calculatorName, Dictionary<dynamic, string> callList)
+        {
+            var rawPlanetData = new JArray();
+            //TODO can be made PARALLEL for speed, but disordered data
+            foreach (var callUrl in callList)
+            {
+                var variedDataName = callUrl.Key.ToString();
+                var variedURL = callUrl.Value;
+                var rawData = await SingleAPICallData(calculatorName, variedURL);
+                var jProperty = Tools.AnyToJSON(variedDataName, rawData);
+                JObject obj = new JObject();
+                obj.Add(jProperty);
+                rawPlanetData.Add(obj);
+            }
+            return rawPlanetData;
+        }
+
+
 
         private static async Task<object?> SingleAPICallData(string calculatorName, string fullParamString)
         {

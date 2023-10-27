@@ -145,7 +145,7 @@ namespace API
 
 
             //3 : SEND TO CALLER
-            return APITools.PassMessage(timezoneStr, incomingRequest);
+            return APITools.PassMessageJson(timezoneStr, incomingRequest);
         }
 
 

@@ -1,4 +1,4 @@
-﻿@using VedAstro.Library
+@using VedAstro.Library
 @attribute [Route(PageRoute.UserAccount)]
 
 <PageTitle>User Account | VedAstro</PageTitle>
@@ -85,22 +85,24 @@
 
     protected override async Task OnInitializedAsync()
     {
+        //TODO disable check for easy local debug with breakpoint without login 
+        // //if not logged in tell user why, and send them to right place
+        // if (AppData.IsGuestUser)
+        // {
+        //     //show nice dynamic message
+        //     await _jsRuntime.ShowAlert("info", $"Please login, {AlertText.RandomNoun()}", "");
 
-        //if not logged in tell user why, and send them to right place
-        if (AppData.IsGuestUser)
-        {
-            //show nice dynamic message
-            await _jsRuntime.ShowAlert("info", $"Please login, {AlertText.RandomNoun()}", "");
+        //     //send to login page, with command to come back here! after login
+        //     AppData.Go(url: PageRoute.Login, rememberMe: true);
+        // }
 
-            //send to login page, with command to come back here! after login
-            AppData.Go(url: PageRoute.Login, rememberMe: true);
-        }
+        // //if user logged in than try get debug mode selection from memory
+        // else
+        // {
+        //     SelectedDebugMode = await WebsiteTools.GetDebugModeText();
+        // }
 
-        //if user logged in than try get debug mode selection from memory
-        else
-        {
-            SelectedDebugMode = await WebsiteTools.GetDebugModeText();
-        }
+        SelectedDebugMode = await WebsiteTools.GetDebugModeText();
 
 
     }

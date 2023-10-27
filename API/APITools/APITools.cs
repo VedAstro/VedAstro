@@ -165,6 +165,10 @@ namespace API
             {
                 finalPayloadJson["Payload"] = payloadStr;
             }
+            else if (payload is List<OpenAPIMetadata> payloadList)
+            {
+                finalPayloadJson["Payload"] = Tools.ListToJson(payloadList);
+            }
             //if not special type than assign direct
             else
             {
@@ -463,22 +467,6 @@ namespace API
             return response;
         }
 
-        public static async Task UpdateRecordInDoc<T>(XElement updatedPersonXml, string cloudFileName) where T : IToXml
-        {
-            var allListXmlDoc = await Tools.GetXmlFileFromAzureStorage(cloudFileName, Tools.BlobContainerName);
-
-            var updatedPerson = Person.FromXml(updatedPersonXml);
-
-            //get the person record that needs to be updated
-            var personToUpdate = await Tools.FindPersonXMLById(updatedPerson.Id);
-
-            //delete the previous person record,
-            //and insert updated record in the same place
-            personToUpdate?.ReplaceWith(updatedPersonXml);
-
-            //upload modified list file to storage
-            await SaveXDocumentToAzure(allListXmlDoc, cloudFileName, Tools.BlobContainerName);
-        }
 
         public static async Task<List<Person>> GetAllPersonList()
         {
@@ -700,7 +688,7 @@ namespace API
             //note search without owner ID, thus making person ID unique without owner ID for easy linking with images & other data
             bool IsUniquePersonId(string personId)
             {
-                var findPersonXmlById = PersonAPI.PersonListTable?.Query<PersonRow>(row => row.RowKey == personId);
+                var findPersonXmlById = AzureTable.PersonList?.Query<PersonRow>(row => row.RowKey == personId);
                 var x = !findPersonXmlById.Any();
 
                 return x;
@@ -1047,6 +1035,12 @@ namespace API
                 var mimeType = GetMimeType(rawFileData);
 
                 return APITools.SendFileToCaller(rawFileData, incomingRequest, mimeType);
+            }
+
+            //if array pass directly
+            else if(rawPlanetData is JArray rawPlanetDataJson)
+            {
+                return APITools.PassMessageJson(rawPlanetDataJson, incomingRequest);
             }
 
             //probably data that can be sent as JSON text

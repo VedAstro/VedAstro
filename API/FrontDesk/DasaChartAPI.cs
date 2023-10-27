@@ -136,7 +136,7 @@ namespace API
                 var chartSpecsOnly = await DasaChart.FromJson(requestJson);
 
                 //PREPARE THE CALL
-                var foundPerson = await Tools.GetPersonById(chartSpecsOnly.Person.Id);
+                var foundPerson = Tools.GetPersonById(chartSpecsOnly.Person.Id);
                 var chartSvg = await DasaChartManager.GenerateDasaChartSvg(chartSpecsOnly);
 
                 //string to binary

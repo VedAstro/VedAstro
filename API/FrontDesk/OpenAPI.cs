@@ -11,7 +11,17 @@ namespace API
     {
         //.../Calculate/Karana/Location/Singapore/Time/23:59/31/12/2000/+08:00
         private const string CalculateRoute = $"{nameof(Calculate)}/{{calculatorName}}/{{*fullParamString}}"; //* that captures the rest of the URL path
+        private const string ListRoute = $"{nameof(ListCalls)}"; //* that captures the rest of the URL path
 
+        [Function(nameof(ListCalls))]
+        public static async Task<HttpResponseData> ListCalls(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ListRoute)] HttpRequestData incomingRequest
+        )
+        {
+            var apiCallListJson = OpenAPIMetadata.FromMethodInfoList();
+
+            return APITools.PassMessageJson(apiCallListJson, incomingRequest);
+        }
 
         /// <summary>
         /// Main Open API method to handle all calls
@@ -20,40 +30,80 @@ namespace API
         [Function(nameof(Calculate))]
         public static async Task<HttpResponseData> Calculate([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = CalculateRoute)]
             HttpRequestData incomingRequest,
-            string calculatorName,
-            string fullParamString
-            )
+        string calculatorName,
+        string fullParamString
+        )
         {
             try
             {
                 //0 : LOG CALL : used later for throttle limit
                 var callLog = await APILogger.Visit(incomingRequest);
 
-                //1 : GET INPUT DATA
-                var calculator = Tools.MethodNameToMethodInfo(calculatorName, new[] { typeof(Calculate), typeof(CalculateKP) }); //get calculator name
-                var parameterTypes = calculator.GetParameters().Select(p => p.ParameterType).ToList();
+                //detect if ALL needs to be applied
+                var allCalls = new[] { "PlanetName/All/", "HouseName/All/" };
+                var isAllCall = allCalls.Any(call => fullParamString.Contains(call));
 
-                //get inputed parameters
-                var rawOut = await ParseUrlParameters(fullParamString, parameterTypes);
-                var parsedParamList = rawOut.Item1;
-                var remainderParamString = rawOut.Item2; //remainder of chopped string
+                dynamic rawPlanetData;
 
-                //2 : CUSTOM AYANAMSA
-                await ParseAndSetAyanamsa(remainderParamString);
-
-                //3 : EXECUTE COMMAND
-                object rawPlanetData;
-                //when calculator return an async result
-                if (calculator.ReturnType.IsGenericType && calculator.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
+                //# FOR ALL PLANETS OR HOUSES
+                if (isAllCall)
                 {
-                    dynamic task = calculator.Invoke(null, parsedParamList.ToArray());
-                    await task;
-                    rawPlanetData = task.Result;
+                    //store newly generated URLs simulate "All" function
+                    var callList = new Dictionary<dynamic, string>();
+
+                    //# MAKE NEW CALLS
+                    //get name of type
+                    var splitParamString = fullParamString.Split('/');
+                    var allTypeNameLocation = Array.IndexOf(splitParamString, "All") - 1;
+                    var typeName = splitParamString[allTypeNameLocation];
+
+                    //based on type make call list
+                    switch (typeName)
+                    {
+                        case nameof(PlanetName):
+                            foreach (var planet in PlanetName.All9Planets)
+                            {
+                                var newUrl = fullParamString.Replace("/All/", $"/{planet}/");
+                                callList.Add(planet, newUrl);
+                            }
+                            break;
+                        case nameof(HouseName):
+                            foreach (var house in House.AllHouses)
+                            {
+                                var newUrl = fullParamString.Replace("/All/", $"/{house}/");
+                                callList.Add(house, newUrl);
+                            }
+                            break;
+                        default:
+                            throw new Exception($"Support for All with type {typeName} not built!");
+                    }
+
+                    //start calculation for each generate URL
+                    rawPlanetData = new JArray();
+                    foreach (var callUrl in callList)
+                    {
+                        var variedDataName = callUrl.Key.ToString(); //planet or house name
+                        var variedURL = callUrl.Value; //planet or house name
+
+                        var xx = await SingleAPICallData(calculatorName, variedURL);
+                        var jProperty = Tools.AnyToJSON(variedDataName, xx);
+
+                        // Create a new JObject
+                        JObject obj = new JObject();
+                        // Add a JProperty to the JObject
+                        obj.Add(jProperty);
+                        // Add the JObject to the JArray
+                        //array.Add(obj);
+
+                        rawPlanetData.Add(obj);
+                        //temp[variedDataName] = xx;// Tools.AnyToJSON(calculatorName, ); ;
+                        //rawPlanetData.Add(temp); //compile all together
+                    }
                 }
-                //when calculator return a normal result
                 else
                 {
-                    rawPlanetData = calculator?.Invoke(null, parsedParamList.ToArray());
+                    //# INDIVIDUAL CALLS
+                    rawPlanetData = await SingleAPICallData(calculatorName, fullParamString);
                 }
 
                 //4 : OVERLOAD LIMIT
@@ -83,6 +133,40 @@ namespace API
                 return APITools.FailMessageJson(e.Message, incomingRequest);
             }
 
+        }
+
+        private static async Task<object?> SingleAPICallData(string calculatorName, string fullParamString)
+        {
+            //1 : GET INPUT DATA
+            var calculator =
+                Tools.MethodNameToMethodInfo(calculatorName,
+                    new[] { typeof(Calculate), typeof(CalculateKP) }); //get calculator name
+            var parameterTypes = calculator.GetParameters().Select(p => p.ParameterType).ToList();
+
+            //get inputed parameters
+            var rawOut = await ParseUrlParameters(fullParamString, parameterTypes);
+            var parsedParamList = rawOut.Item1;
+            var remainderParamString = rawOut.Item2; //remainder of chopped string
+
+            //2 : CUSTOM AYANAMSA
+            await ParseAndSetAyanamsa(remainderParamString);
+
+            //3 : EXECUTE COMMAND
+            object rawPlanetData;
+            //when calculator return an async result
+            if (calculator.ReturnType.IsGenericType && calculator.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
+            {
+                dynamic task = calculator.Invoke(null, parsedParamList.ToArray());
+                await task;
+                rawPlanetData = task.Result;
+            }
+            //when calculator return a normal result
+            else
+            {
+                rawPlanetData = calculator?.Invoke(null, parsedParamList.ToArray());
+            }
+
+            return rawPlanetData;
         }
 
         /// <summary>

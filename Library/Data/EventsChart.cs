@@ -89,7 +89,7 @@ namespace VedAstro.Library
         {
             //get all the data needed out of the incoming request
             var personId = requestJson["PersonId"]?.Value<string>() ?? "101";
-            var foundPerson = await Tools.GetPersonById(personId);
+            var foundPerson = Tools.GetPersonById(personId);
             var eventTagListJson = requestJson["EventTagList"];
             var eventTags = EventTagExtensions.FromJsonList(eventTagListJson);
             var startTimeJson = requestJson["StartTime"];
@@ -147,7 +147,7 @@ namespace VedAstro.Library
             var personId = parts[0];
 
             //use birth location for chart time (needs testing)
-            var person = await Tools.GetPersonById(personId);
+            var person = Tools.GetPersonById(personId);
             var location = person.GetBirthLocation();
 
             //combine time parts to be parsed easy

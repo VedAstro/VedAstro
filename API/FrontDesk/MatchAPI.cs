@@ -189,14 +189,14 @@ namespace API
         public static async Task<HttpResponseData> FindMatch([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "FindMatch/PersonId/{personId}")] HttpRequestData incomingRequest, string personId)
         {
 
-            var person = await Tools.GetPersonById(personId);
+            var person = Tools.GetPersonById(personId);
 
             var personList = await GetAllPersonByMatchStrength(person);
 
             var returnJson = PersonKutaScore.ToJsonList(personList);
 
-            var x = await APITools.SendPassHeaderToCaller(returnJson.ToString(Formatting.None), incomingRequest, MediaTypeNames.Application.Json);
-            return x;
+
+            return APITools.PassMessageJson(returnJson, incomingRequest);
         }
 
 
@@ -264,8 +264,8 @@ namespace API
         /// </summary>
         public static async Task<MatchReport> GetNewMatchReport(string maleId, string femaleId, string userId)
         {
-            var male = await Tools.GetPersonById(maleId);
-            var female = await Tools.GetPersonById(femaleId);
+            var male = Tools.GetPersonById(maleId);
+            var female = Tools.GetPersonById(femaleId);
 
             //if male & female profile found, make report and return caller
             var notEmpty = !Person.Empty.Equals(male) && !Person.Empty.Equals(female);

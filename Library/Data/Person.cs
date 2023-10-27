@@ -435,7 +435,7 @@ namespace VedAstro.Library
             // INPUT -> "/Person/JesusHChrist0000/"
             string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var person = await Tools.GetPersonById(parts[1]);
+            var person = Tools.GetPersonById(parts[1]);
 
             return person;
         }

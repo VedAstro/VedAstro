@@ -31,6 +31,7 @@ using static Azure.Core.HttpHeader;
 using Newtonsoft.Json.Linq;
 using HtmlAgilityPack;
 using System.Collections.Generic;
+using Azure;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -76,8 +77,6 @@ namespace VedAstro.Library
             var methodInfo = declaringType?.GetMethod(methodName, parameters);
             return methodInfo;
         }
-
-
 
 
         /// <summary>
@@ -466,7 +465,6 @@ namespace VedAstro.Library
             }
         }
 
-
         /// <summary>
         /// Extension method to get null when out of range, instead of exception
         /// </summary>
@@ -481,7 +479,6 @@ namespace VedAstro.Library
                 return default(T); // Returns null for reference types and zero for numeric value types
             }
         }
-
 
         /// <summary>
         /// gets last day of any month at any time
@@ -532,28 +529,6 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// deletes old person record by ID and saves in new one as updated
-        /// </summary>
-        public static async Task UpdatePersonRecord(Person updatedPersonData)
-        {
-            //get the person record that needs to be updated
-            var originalPerson = await Tools.FindPersonXMLById(updatedPersonData.Id);
-
-            //NOTE:
-            //only way it works is to
-            //delete the previous person record
-            //add new record at bottom
-
-            //delete the old person record,
-            await Tools.DeleteXElementFromXDocumentAzure(originalPerson, Tools.PersonListFile, Tools.BlobContainerName);
-
-            //and insert updated record in the updated as new
-            //add new person to main list
-            await Tools.AddXElementToXDocumentAzure(updatedPersonData.ToXml(), Tools.PersonListFile, Tools.BlobContainerName);
-
-        }
-
-        /// <summary>
         /// Adds an XML element to XML document in by file & container name
         /// and saves files directly to Azure blob store
         /// </summary>
@@ -568,6 +543,7 @@ namespace VedAstro.Library
             //upload modified list to storage
             await OverwriteBlobData(fileClient, updatedListXml);
         }
+        
         public static void AddXElementToXDocumentAzure(XElement dataXml, ref XDocument xDocument)
         {
 
@@ -575,7 +551,6 @@ namespace VedAstro.Library
             AddXElementToXDocument(dataXml, ref xDocument);
 
         }
-
 
         /// <summary>
         /// Overwrites new XML data to a blob file
@@ -599,6 +574,7 @@ namespace VedAstro.Library
             var blobHttpHeaders = new BlobHttpHeaders { ContentType = "text/xml" };
             await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
         }
+        
         public static Stream GenerateStreamFromString(string s)
         {
             var stream = new MemoryStream();
@@ -608,7 +584,6 @@ namespace VedAstro.Library
             stream.Position = 0;
             return stream;
         }
-
 
         /// <summary>
         /// Adds an XML element to XML document in blob form
@@ -623,6 +598,7 @@ namespace VedAstro.Library
 
             return xDocument;
         }
+       
         public static void AddXElementToXDocument(XElement newElement, ref XDocument xDocument)
         {
             //add new person to list
@@ -674,8 +650,6 @@ namespace VedAstro.Library
             foundRecords.First().Remove();
 
         }
-
-
 
         /// <summary>
         /// used for finding uncertain time in certain birth day
@@ -3146,131 +3120,33 @@ namespace VedAstro.Library
         /// <summary>
         /// Given a id will return parsed person from main list
         /// Returns empty person if, no person found
+        /// NOTE: use owner id if provided else skip it
         /// </summary>
-        public static async Task<Person> GetPersonById(string personId)
+        public static Person GetPersonById(string personId, string ownerId = "")
         {
-            //get the raw data of person
-            var foundPersonXml = await FindPersonXMLById(personId);
+            //query the database
+            Pageable<PersonRow> foundCalls;
 
-            if (foundPersonXml == null) { return Person.Empty; }
+            //make call without owner ID
+            //NOTE : possible to return multiple values
+            if (string.IsNullOrEmpty(ownerId)) { foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.RowKey == personId); }
 
-            var foundPerson = Person.FromXml(foundPersonXml);
+            //make call with both owner ID and person ID (accurate hit)
+            else { foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId); }
 
-            return foundPerson;
+            //if more than 1 person found, duplicate DETECTED, silent warning
+            if (foundCalls.Count() > 1) { LibLogger.Error($"More than 1 Person found : PersonId -> {personId} OwnerId -> {ownerId}"); }
+
+            //make into readable format
+            var personToReturn = Person.FromAzureRow(foundCalls.FirstOrDefault());
+
+            return personToReturn;
         }
-
-        /// <summary>
-        /// Gets person XML given ID direct from storage
-        /// </summary>
-        public static async Task<XElement?> FindPersonXMLById(string personIdToFind)
-        {
-            try
-            {
-                //get latest file from server
-                //note how this creates & destroys per call to method
-                //might cost little extra cycles but it's a functionality
-                //to always get the latest list
-                var personListXmlDoc = await GetPersonListFile();
-
-                //list of person XMLs
-                var personXmlList = personListXmlDoc?.Root?.Elements() ?? new List<XElement>();
-
-                //do the finding (default empty)
-                var foundPerson = personXmlList?.Where(MatchPersonId)?.First();
-
-                //log it (should not occur all the time)
-                if (foundPerson == null)
-                {
-                    await LibLogger.Error($"No person found with ID : {personIdToFind}");
-                    //return empty value so caller will know
-                    foundPerson = null;
-                }
-
-                return foundPerson;
-            }
-            catch (Exception e)
-            {
-                //if fail log it and return empty value so caller will know
-                await LibLogger.Error(e);
-                return null;
-            }
-
-            //--------
-            //do the finding, for id both case should match, but stored in upper case because looks nice
-            //but user might pump in with mixed case, who knows, so compensate.
-            bool MatchPersonId(XElement personXml)
-            {
-                if (personXml == null) { return false; }
-
-                var inputPersonId = personXml?.Element("PersonId")?.Value ?? ""; //todo PersonId has to be just Id
-
-                //lower case it before checking
-                var isMatch = inputPersonId == personIdToFind; //hoisting alert
-
-                return isMatch;
-            }
-        }
-
-        /// <summary>
-        /// Reference version of above method
-        /// used in scripts
-        /// </summary>
-        public static XElement FindPersonXMLById(string personIdToFind, ref XDocument personListXmlDoc)
-        {
-            try
-            {
-                //list of person XMLs
-                var personXmlList = personListXmlDoc?.Root?.Elements() ?? new List<XElement>();
-
-                //do the finding (default empty)
-                var foundPerson = personXmlList?.Where(MatchPersonId)?.First();
-
-                //log it (should not occur all the time)
-                if (foundPerson == null)
-                {
-                    //return empty value so caller will know
-                    foundPerson = null;
-                }
-
-                return foundPerson;
-            }
-            catch (Exception e)
-            {
-                //if fail log it and return empty value so caller will know
-                return null;
-            }
-
-            //--------
-            //do the finding, for id both case should match, but stored in upper case because looks nice
-            //but user might pump in with mixed case, who knows, so compensate.
-            bool MatchPersonId(XElement personXml)
-            {
-                if (personXml == null) { return false; }
-
-                var inputPersonId = personXml?.Element("PersonId")?.Value ?? ""; //todo PersonId has to be just Id
-
-                //lower case it before checking
-                var isMatch = inputPersonId == personIdToFind; //hoisting alert
-
-                return isMatch;
-            }
-        }
-
 
         public const string BlobContainerName = "vedastro-site-data";
 
         public const string PersonListFile = "PersonList.xml";
 
-        /// <summary>
-        /// Gets main person list xml doc file
-        /// </summary>
-        /// <returns></returns>
-        public static async Task<XDocument> GetPersonListFile()
-        {
-            var personListXml = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
-
-            return personListXml;
-        }
 
         /// <summary>
         /// Gets XML file from Azure blob storage

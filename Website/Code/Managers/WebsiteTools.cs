@@ -778,7 +778,6 @@ namespace Website
         public static async Task<JToken?> ReadOnlyIfPassJSJson(string receiverAddress, IJSRuntime jsRuntime, string callMethod = "GET")
         {
             //this call will take you to NetworkThread.js
-            //todo handle empty response, and move JS file to API.Library
             var rawPayloadStr = await jsRuntime.InvokeAsync<JsonElement>("Interop.ReadOnlyIfPassJson", receiverAddress, callMethod);
             var status = rawPayloadStr.GetProperty("Status").GetString();
             var payload = rawPayloadStr.GetProperty("Payload").GetString() ?? "{}";

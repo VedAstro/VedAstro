@@ -15,23 +15,6 @@ namespace API
     /// </summary>
     public class PersonAPI
     {
-        private const string AccountName = "vedastrocentralstorage";
-        private static readonly string StorageAccountKey = Secrets.VedAstroCentralStorageKey;
-
-        private const string PersonListName = "PersonList";
-        private const string PersonShareListName = "PersonShareList";
-        private const string PersonListRecycleBinName = "PersonListRecycleBin";
-        private const string LifeEventListName = "LifeEventList";
-        private const string PersonListUri = $"https://vedastrocentralstorage.table.core.windows.net/{PersonListName}";
-        private const string PersonShareListUri = $"https://vedastrocentralstorage.table.core.windows.net/{PersonShareListName}";
-        private const string PersonListRecycleBinUri = $"https://vedastrocentralstorage.table.core.windows.net/{PersonListRecycleBinName}";
-        private const string LifeEventListUri = $"https://vedastrocentralstorage.table.core.windows.net/{LifeEventListName}";
-        public static readonly TableClient? PersonListTable = (new TableServiceClient(new Uri(PersonListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonListName);
-        private static readonly TableClient? PersonListRecycleBinTable = (new TableServiceClient(new Uri(PersonListRecycleBinUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonListRecycleBinName);
-        private static readonly TableClient? LifeEventListTable = (new TableServiceClient(new Uri(LifeEventListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(LifeEventListName);
-        private static readonly TableClient? PersonShareListTable = (new TableServiceClient(new Uri(PersonShareListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonShareListName);
-
-
         /// <summary>
         /// Gets person all details from only hash
         /// </summary>
@@ -43,14 +26,11 @@ namespace API
 
             try
             {
-                //query the database
-                var foundCalls = PersonListTable.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
-
-                //make into readable format
-                var personToReturn = Person.FromAzureRow(foundCalls.FirstOrDefault());
+                //get person from database matching user & owner ID
+                var foundPerson = Tools.GetPersonById(personId, ownerId);
 
                 //send person to caller
-                return APITools.PassMessageJson(personToReturn.ToJson(), req);
+                return APITools.PassMessageJson(foundPerson.ToJson(), req);
 
             }
             catch (Exception e)
@@ -61,7 +41,6 @@ namespace API
                 //let caller know fail, include exception info for easy debugging
                 return APITools.FailMessageJson(e, req);
             }
-
 
         }
 
@@ -94,8 +73,7 @@ namespace API
                 else
                 {
                     //get the person record by ID
-                    var foundPersonXml = await Tools.FindPersonXMLById(personId);
-                    personToImage = Person.FromXml(foundPersonXml);
+                    personToImage = Tools.GetPersonById(personId);
                     byte[] foundImage = await APITools.GetSearchImage(personToImage); //gets most probable fitting person image
 
                     //save copy of image under profile, so future calls don't spend BING search quota
@@ -163,7 +141,7 @@ namespace API
                 await AzureCache.DeleteStuffRelatedToPerson(newPerson);
 
                 //creates record if no exist, update if already there
-                PersonListTable.UpsertEntity(newPerson.ToAzureRow());
+                AzureTable.PersonList.UpsertEntity(newPerson.ToAzureRow());
 
                 //return ID of newly created person so caller can get use it
                 return APITools.PassMessageJson(newPerson.Id, req);
@@ -196,7 +174,7 @@ namespace API
                 //    //if (didSwap) { APILogger.LogBookClient()} //TODO change to .Data()
                 //}
 
-                var foundCalls = PersonListTable.Query<PersonRow>(call => call.PartitionKey == ownerId);
+                var foundCalls = AzureTable.PersonList.Query<PersonRow>(call => call.PartitionKey == ownerId);
 
                 var personJsonList = new JArray();
                 foreach (var call in foundCalls)
@@ -204,8 +182,8 @@ namespace API
                     personJsonList.Add(Person.FromAzureRow(call).ToJson());
                 }
 
-                return APITools.PassMessageJson(personJsonList, req);
 
+                return APITools.PassMessageJson(personJsonList, req);
             }
 
             //if any failure, show error in payload
@@ -214,8 +192,6 @@ namespace API
                 APILogger.Error(e, req);
                 return APITools.FailMessageJson(e.Message, req);
             }
-
-
         }
 
 
@@ -238,7 +214,7 @@ namespace API
                 //delete data related to person (NOT USER, PERSON PROFILE)
                 await AzureCache.DeleteStuffRelatedToPerson(personParsed);
 
-                await PersonListTable?.UpsertEntityAsync(personParsed.ToAzureRow());
+                await AzureTable.PersonList?.UpsertEntityAsync(personParsed.ToAzureRow());
 
                 return APITools.PassMessageJson(req);
             }
@@ -270,7 +246,7 @@ namespace API
             {
                 //# get full person copy to place in recycle bin
                 //query the database
-                var foundCalls = PersonListTable?.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+                var foundCalls = AzureTable.PersonList?.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
                 //make into readable format
                 var personAzureRow = foundCalls?.FirstOrDefault();
                 var personToDelete = Person.FromAzureRow(personAzureRow);
@@ -279,10 +255,10 @@ namespace API
                 await AzureCache.DeleteStuffRelatedToPerson(personToDelete);
 
                 //# add deleted person to recycle bin
-                await PersonListRecycleBinTable.UpsertEntityAsync(personAzureRow);
+                await AzureTable.PersonListRecycleBin.UpsertEntityAsync(personAzureRow);
 
                 //# do final delete from MAIN DATABASE
-                await PersonListTable.DeleteEntityAsync(ownerId, personId);
+                await AzureTable.PersonList.DeleteEntityAsync(ownerId, personId);
 
                 return APITools.PassMessageJson(req);
 

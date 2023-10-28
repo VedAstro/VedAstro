@@ -59,7 +59,7 @@ public class PersonTools
 
         //prepare url to call
         var url = $"{_api.URL.GetPersonList}/OwnerId/{_api.UserId}";
-        CachedPersonList = await _api.GetList(url, Person.FromJsonList);
+        CachedPersonList = await _api.GetListNoPolling(url, Person.FromJsonList);
 
         return CachedPersonList;
     }
@@ -72,7 +72,7 @@ public class PersonTools
 
         //tell API to get started
         var url2 = $"{_api.URL.GetPersonList}/OwnerId/101/";
-        CachedPublicPersonList = await _api.GetList(url2, Person.FromJsonList);
+        CachedPublicPersonList = await _api.GetListNoPolling(url2, Person.FromJsonList);
 
         return CachedPublicPersonList;
     }
@@ -167,7 +167,7 @@ public class PersonTools
 
         return person;
     }
-        
+
     /// <summary>
     /// calls API to generate a new person ID, unique and human readable
     /// NOTE:

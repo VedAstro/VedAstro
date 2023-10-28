@@ -74,6 +74,9 @@ namespace VedAstro.Library
                                 $"{Tools.ListToString(EventTagList, "-")}-" +
                                 $"{Options}";
 
+            //remove white space that might have gotten in
+            dataSignature = dataSignature.Replace(" ", "");
+
             //needed else cache can't be created 
             var cleaned = new string(dataSignature
                 .Where(ch => !Path.GetInvalidFileNameChars().Contains(ch))

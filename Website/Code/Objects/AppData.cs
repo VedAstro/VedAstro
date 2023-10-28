@@ -52,7 +52,7 @@ namespace Website
         /// Place where global event data list is stored for quick access
         /// loaded in main layout
         /// </summary>
-        public static List<XElement> EventDataList { get; set; }
+        public static List<XElement> EventDataListXML { get; set; }
 
         /// <summary>
         /// global ReferenceList.xml data list is stored for quick access
@@ -222,7 +222,7 @@ namespace Website
             if (AppData.HoroscopeDataList != null) return AppData.HoroscopeDataList;
 
             //else get fresh copy from server
-            AppData.HoroscopeDataList = await WebsiteTools.GetXmlFile("data/HoroscopeDataList.xml");
+            AppData.HoroscopeDataList = await Tools.GetXmlFile("data/HoroscopeDataList.xml");
             return AppData.HoroscopeDataList;
         }
 
@@ -295,9 +295,9 @@ namespace Website
         public static async Task LoadSearchFiles()
         {
             //this data is used later search for fast loading
-            AppData.HoroscopeDataList = await WebsiteTools.GetXmlFile("data/HoroscopeDataList.xml");
-            AppData.EventDataList = await WebsiteTools.GetXmlFile("data/EventDataList.xml");
-            AppData.ReferenceList = await WebsiteTools.GetXmlFile("data/ReferenceList.xml");
+            AppData.HoroscopeDataList = await Tools.GetXmlFile("data/HoroscopeDataList.xml", AppData.HttpClient);
+            AppData.EventDataListXML = await Tools.GetXmlFile("data/EventDataList.xml", AppData.HttpClient);
+            AppData.ReferenceList = await Tools.GetXmlFile("data/ReferenceList.xml", AppData.HttpClient);
 
             //mark as loaded so on next search won't reload
             AppData.SearchFilesLoaded = true;
@@ -311,7 +311,7 @@ namespace Website
         public static async Task LoadReferenceSearchFiles()
         {
             //this data is used later search for fast loading
-            AppData.ReferenceList = await WebsiteTools.GetXmlFile("data/ReferenceList.xml");
+            AppData.ReferenceList = await Tools.GetXmlFile("data/ReferenceList.xml");
 
             //mark as loaded so on next search won't reload
             AppData.ReferenceSearchFilesLoaded = true;

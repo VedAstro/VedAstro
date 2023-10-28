@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Xml.Linq;
 
 namespace VedAstro.Library
@@ -52,6 +53,41 @@ namespace VedAstro.Library
             };
 
             return returnVal;
+        }
+
+
+        public static SpecializedNature FromJson(JObject jsonObject)
+        {
+            //if null then return default, with all neutral which equates to 0
+            if (jsonObject == null) { return SpecializedNature.Empty; }
+            //if not filled in JSON, value autos to neutral
+            var body = jsonObject["Body"]?.Value<string>() ?? "Neutral";
+            var mind = jsonObject["Mind"]?.Value<string>() ?? "Neutral";
+            var finance = jsonObject["Finance"]?.Value<string>() ?? "Neutral";
+            var family = jsonObject["Family"]?.Value<string>() ?? "Neutral";
+            //package data together
+            var returnVal = new SpecializedNature()
+            {
+                Body = (EventNature)Enum.Parse(typeof(EventNature), body),
+                Family = (EventNature)Enum.Parse(typeof(EventNature), family),
+                Finance = (EventNature)Enum.Parse(typeof(EventNature), finance),
+                Mind = (EventNature)Enum.Parse(typeof(EventNature), mind)
+            };
+            return returnVal;
+        }
+
+
+        public static JObject ToJson(SpecializedNature specializedNature)
+        {
+            if (specializedNature == null) { return null; }
+            var jsonObject = new JObject
+            {
+                ["Body"] = specializedNature.Body.ToString(),
+                ["Mind"] = specializedNature.Mind.ToString(),
+                ["Finance"] = specializedNature.Finance.ToString(),
+                ["Family"] = specializedNature.Family.ToString()
+            };
+            return jsonObject;
         }
 
 

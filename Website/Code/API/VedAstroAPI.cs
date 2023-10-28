@@ -1,10 +1,12 @@
 ﻿
 
 
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 
@@ -111,7 +113,7 @@ namespace Website
             return cachedPersonList;
 
         }
-       
+
         /// <summary>
         /// Shows alert using sweet alert js
         /// </summary>
@@ -187,26 +189,87 @@ namespace Website
         }
 
         /// <summary>
-        /// Calls API till surrender
+        /// This method continuously polls a specified API until it receives data,
+        /// with a delay between each poll, and then returns the data.
         /// Defaults to GET request when payload is null
-        /// POST/GET request with URL and payload needed
+        /// NOTE : 5S delay timeout
         /// </summary>
-        public async Task<string?> PollApiTillData(string inputUrl, string dataToSend = null)
+        public async Task<string?> PollApiTillDataEVENTSChart(string inputUrl, string dataToSend = null)
         {
-
-            //call until data appears, API takes care of everything
             string? parsedJsonReply = null;
             var pollRate = 5000;
             var notReady = true;
             while (notReady)
             {
-                await Task.Delay(pollRate);
-                parsedJsonReply = await WebsiteTools.ReadOnlyIfPassJSString(inputUrl, dataToSend, JsRuntime);
-                notReady = parsedJsonReply == null; //if null no data, continue wait
+                var cts = new CancellationTokenSource(pollRate);
+                try
+                {
+                    parsedJsonReply = await ReadOnlyIfPassJSString(inputUrl, dataToSend, cts.Token).WithCancellation(cts.Token);
+                    notReady = parsedJsonReply == null; //if null no data, continue wait
+                }
+                catch (OperationCanceledException)
+                {
+                    // The operation didn't finish within the timeout.
+                }
+                if (notReady)
+                {
+                    // If no data, wait for the poll rate before trying again.
+                    await Task.Delay(pollRate);
+                }
             }
-
             return parsedJsonReply;
-
+            async Task<string> ReadOnlyIfPassJSString(string url, object dataToSend, CancellationToken cancellationToken)
+            {
+                // Determine the HTTP method based on whether dataToSend is null or not
+                var httpMethod = dataToSend == null ? HttpMethod.Get : HttpMethod.Post;
+                // Define the headers for the HTTP request
+                var requestHeaders = new Dictionary<string, string>
+        {
+            {"Accept", "*/*"},
+            {"Connection", "keep-alive"}
+        };
+                // Start a loop that will continue making requests until the 'Call-Status' is 'Pass'
+                while (true)
+                {
+                    try
+                    {
+                        // Create the HTTP request
+                        var request = new HttpRequestMessage(httpMethod, url)
+                        {
+                            Content = dataToSend != null ? new StringContent(JsonConvert.SerializeObject(dataToSend), Encoding.UTF8, "application/json") : null
+                        };
+                        // Add headers to the request
+                        foreach (var header in requestHeaders)
+                        {
+                            request.Headers.Add(header.Key, header.Value);
+                        }
+                        // Make the HTTP request
+                        using (var client = new HttpClient())
+                        {
+                            var response = await client.SendAsync(request, cancellationToken);
+                            // Get the 'Call-Status' from the response headers
+                            var callStatus = response.Headers.GetValues("Call-Status").FirstOrDefault();
+                            Console.WriteLine($"API SAID : {callStatus}");
+                            // If 'Call-Status' is 'Pass', return the response text
+                            if (callStatus == "Pass")
+                            {
+                                return await response.Content.ReadAsStringAsync();
+                            }
+                            // If 'Call-Status' is 'Fail', stop making requests and return null
+                            if (callStatus == "Fail")
+                            {
+                                return null;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // If an error occurs during the fetch operation, log the error and return null
+                        Console.Error.WriteLine($"Error occurred while making HTTP request: {ex}");
+                        return null;
+                    }
+                }
+            }
         }
 
         /// <summary>

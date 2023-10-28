@@ -3,6 +3,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Azure.Storage.Blobs;
 using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace API
 {
@@ -21,6 +22,39 @@ namespace API
 
         //▄▀█ █▀█ █   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
         //█▀█ █▀▀ █   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
+
+        /// <summary>
+        /// Gets GetEventDataList 
+        /// </summary>
+        [Function(nameof(GetEventDataList))]
+        public static async Task<HttpResponseData> GetEventDataList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(GetEventDataList)}")] HttpRequestData req)
+        {
+            try
+            {
+                var _eventDataList = await Tools.GetXmlFile("https://vedastro.org/data/EventDataList.xml");
+
+                var xx = await Tools.ConvertXmlListFileToInstanceList<EventData>(_eventDataList);
+
+                var eventDataList = new JArray();
+                foreach (var x in xx)
+                {
+                    eventDataList.Add(x.ToJson());
+                }
+
+
+                return APITools.PassMessageJson(eventDataList, req);
+            }
+
+            //if any failure, show error in payload
+            catch (Exception e)
+            {
+                APILogger.Error(e, req);
+                return APITools.FailMessageJson(e.Message, req);
+            }
+        }
+
+
 
 
         /// <summary>

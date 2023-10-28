@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -11,10 +13,11 @@ namespace VedAstro.Library
     /// Data structure to encapsulate an event before it's calculated
     /// In other words an object instance of the event data as stored in file
     /// </summary>
-    public struct EventData :  IToXml
+    public struct EventData :  IToXml, IToJson
     {
         /** FIELDS **/
 
+        public static EventData Empty = new();
 
         private string _description = "";
 
@@ -103,70 +106,55 @@ namespace VedAstro.Library
         /// </summary>
         public static EventData FromXml(XElement eventData)
         {
-            //extract the individual data out & convert it to the correct type
-            //NOTE : some XML elements like nature & description is filled
-            //       by code, so is empty  tag like <Nature/>
-
-            //set defaults, so that wont fail when hit empty tags
-            EventName name = EventName.Empty;
-            EventNature nature = EventNature.Empty;
-
-            var nameString = eventData.Element("Name")?.Value ?? "Empty";
-            Enum.TryParse(nameString, out name);
-            var natureString = eventData.Element("Nature")?.Value ?? "Empty";
-            Enum.TryParse(natureString, out nature);
-            var specializedNature = SpecializedNature.FromXml(eventData?.Element("SpecializedNature"));
+            // Check if eventData is null
+            if (eventData == null)
+            {
+                throw new ArgumentNullException(nameof(eventData));
+            }
+            // Try to parse EventName and EventNature from XML, use Empty as default
+            Enum.TryParse(eventData.Element("Name")?.Value ?? "Empty", out EventName name);
+            Enum.TryParse(eventData.Element("Nature")?.Value ?? "Empty", out EventNature nature);
+            // Extract SpecializedNature from XML
+            var specializedNature = SpecializedNature.FromXml(eventData.Element("SpecializedNature"));
+            // Clean the description text
             var rawDescription = eventData.Element("Description")?.Value ?? "Empty";
-            var description = CleanText(rawDescription); //with proper formatting
+            var description = CleanText(rawDescription);
+            // Get the list of tags, split by comma and parse each tag
             var tagString = eventData.Element("Tag")?.Value;
-            var tagList = getEventTags(tagString); //multiple tags are possible ',' separated
+            var tagList = GetEventTags(tagString);
+            // Get the calculator method for the event
             var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
-
-            //place the data into an event data structure
+            // Create and return the EventData object
             var eventX = new EventData(name, nature, specializedNature, description, tagList, calculatorMethod);
-
             return eventX;
-
-
-            //Gets a list of tags in string form & changes it a structured list of tags
-            //Multiple tags can be used by 1 event, separated by comma in in the Tag element
-            List<EventTag> getEventTags(string rawTags)
+        }
+        
+        private static List<EventTag> GetEventTags(string rawTags)
+        {
+            if (string.IsNullOrEmpty(rawTags))
             {
-                //create a place to store the parsed tags
-                var returnTags = new List<EventTag>();
-
-                //split the string by comma "," (tag separator)
-                var splitedRawTags = rawTags.Split(',');
-
-                //parse each raw tag
-                foreach (var rawTag in splitedRawTags)
-                {
-                    //parse
-                    var result = Enum.TryParse(rawTag, out EventTag eventTag);
-                    //raise error if could not parse
-                    if (!result) throw new Exception("Event tag not found!");
-
-                    //add the parsed tag to the return list
-                    returnTags.Add(eventTag);
-                }
-
-                return returnTags;
+                return new List<EventTag>();
             }
-
-            //little function to format the description coming from the file
-            //so that the description wraps nicely when rendered also HTML Decode
-            string CleanText(string text)
-            {
-                //remove all special characters
-                var cleaned = Regex.Replace(text, @"\s+", " ");
-
-                //decode special HTML character, exp: &,'
-                cleaned = HttpUtility.HtmlDecode(cleaned);
-
-                return cleaned;
-            }
-
-
+            // Split the string by comma and parse each tag
+            var returnTags = rawTags.Split(',')
+                                    .Select(rawTag =>
+                                    {
+                                        if (!Enum.TryParse(rawTag, out EventTag eventTag))
+                                        {
+                                            throw new Exception($"Event tag '{rawTag}' not found!");
+                                        }
+                                        return eventTag;
+                                    })
+                                    .ToList();
+            return returnTags;
+        }
+       
+        private static string CleanText(string text)
+        {
+            // Remove all special characters and decode HTML
+            var cleaned = Regex.Replace(text, @"\s+", " ");
+            cleaned = HttpUtility.HtmlDecode(cleaned);
+            return cleaned;
         }
 
         /// <summary>
@@ -232,6 +220,86 @@ namespace VedAstro.Library
         public static bool operator !=(EventData left, EventData right)
         {
             return !(left == right);
+        }
+
+        /// <summary>
+        /// Given a json list of eventData will convert to instance
+        /// used for transferring between server & client
+        /// </summary>
+        public static List<EventData> FromJsonList(JToken eventDataList)
+        {
+            //if null empty list please
+            if (eventDataList == null) { return new List<EventData>(); }
+
+            var returnList = new List<EventData>();
+
+            foreach (var eventDataJson in eventDataList)
+            {
+                returnList.Add(EventData.FromJson(eventDataJson));
+            }
+
+            return returnList;
+        }
+
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
+
+        public JObject ToJson()
+        {
+            // Check if eventData is null
+            if (this == null) { return new JObject(); }
+            
+            // Create a new JObject
+            var json = new JObject();
+            
+            // Convert EventName and EventNature to string and add to JObject
+            json["Name"] = this.Name.ToString();
+            json["Nature"] = this.Nature.ToString();
+            
+            // Convert SpecializedNature to JObject and add to JObject
+            json["SpecializedNature"] = SpecializedNature.ToJson(this.SpecializedNature);
+            
+            // Add the description text to JObject
+            json["Description"] = this.Description;
+            
+            // Convert the list of tags to a comma-separated string and add to JObject
+            var tagString = string.Join(",", this.EventTags);
+            json["Tag"] = tagString;
+            
+            // Convert the calculator method to string (if possible) and add to JObject
+            // Note: This assumes that the calculator method can be represented as a string. 
+            // If it can't, you might need to remove this line or handle it differently.
+            json["CalculatorMethod"] = this.EventCalculator.Method.Name;
+            
+            // Return the JObject
+            return json;
+        }
+
+        public static EventData FromJson(JToken eventData)
+        {
+            // Check if eventData is null
+            if (eventData == null) { return EventData.Empty; }
+
+            // Try to parse EventName and EventNature from JSON, use Empty as default
+            Enum.TryParse(eventData["Name"]?.Value<string>() ?? "Empty", out EventName name);
+            Enum.TryParse(eventData["Nature"]?.Value<string>() ?? "Empty", out EventNature nature);
+            
+            // Extract SpecializedNature from JSON
+            var specializedNature = SpecializedNature.FromJson(eventData["SpecializedNature"] as JObject);
+            
+            // Clean the description text
+            var rawDescription = eventData["Description"]?.Value<string>() ?? "Empty";
+            var description = CleanText(rawDescription);
+            
+            // Get the list of tags, split by comma and parse each tag
+            var tagString = eventData["Tag"]?.Value<string>();
+            var tagList = GetEventTags(tagString);
+
+            // Get the calculator method for the event
+            var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
+            
+            // Create and return the EventData object
+            var eventX = new EventData(name, nature, specializedNature, description, tagList, calculatorMethod);
+            return eventX;
         }
 
     }

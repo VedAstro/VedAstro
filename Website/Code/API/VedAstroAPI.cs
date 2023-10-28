@@ -89,13 +89,10 @@ namespace Website
         /// Makes direct call to API and waits tills she replies, could fail if call wait time is long
         ///  header with value pass is not checked for
         /// </summary>
-        public async Task<List<T>> GetListNoPolling<T>(string inputUrl, byte[] byteData, Func<JToken, List<T>> converter)
+        public async Task<List<T>> GetListNoPolling<T, Y>(string inputUrl, Y byteData, Func<JToken, List<T>> converter)
         {
 
-            //call until data appears, API takes care of everything
-            JToken? xListJson = null;
-
-            xListJson = await Tools.WriteServer<JObject, byte[]>(HttpMethod.Post, inputUrl, byteData);
+            JToken? xListJson = await Tools.WriteServer<JObject, Y>(HttpMethod.Post, inputUrl, byteData);
 
             //var cachedPersonList = Person.FromJsonList(personListJson);
             var timeListJson = xListJson["Payload"];
@@ -104,7 +101,17 @@ namespace Website
             return cachedPersonList;
 
         }
+        public async Task<List<T>> GetListNoPolling<T>(string inputUrl, Func<JToken, List<T>> converter)
+        {
+            JToken? xListJson = await Tools.ReadServerRaw<JObject>(inputUrl);
 
+            var timeListJson = xListJson["Payload"];
+            var cachedPersonList = converter.Invoke(timeListJson);
+
+            return cachedPersonList;
+
+        }
+       
         /// <summary>
         /// Shows alert using sweet alert js
         /// </summary>

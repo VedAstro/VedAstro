@@ -3135,6 +3135,16 @@ namespace VedAstro.Library
             //make call with both owner ID and person ID (accurate hit)
             else { foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId); }
 
+            //if person still not found, than check shared list
+            if (!foundCalls.Any())
+            {
+                //check share list, if count same share was found
+                var rawSharedList= AzureTable.PersonShareList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+                
+                //share found, get person direct, without original owner ID
+                if (rawSharedList.Any()) { foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.RowKey == personId); }
+            }
+
             //if more than 1 person found, duplicate DETECTED, silent warning
             if (foundCalls.Count() > 1) { LibLogger.Error($"More than 1 Person found : PersonId -> {personId} OwnerId -> {ownerId}"); }
 

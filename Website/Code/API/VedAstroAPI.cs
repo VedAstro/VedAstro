@@ -50,23 +50,38 @@ namespace Website
         /// </summary>
         public async Task<List<T>> GetList<T>(string inputUrl, Func<JToken, List<T>> converter)
         {
-
-            //call until data appears, API takes care of everything
-            JToken? xListJson = null;
-            var pollRate = 2000;
-            var notReady = true;
-            while (notReady)
+            // Check if inputUrl or converter is null and throw an exception if they are
+            if (string.IsNullOrEmpty(inputUrl))
             {
-                await Task.Delay(pollRate);
-                xListJson = await WebsiteTools.ReadOnlyIfPassJSJson(inputUrl, JsRuntime);
-                notReady = xListJson == null;
+                throw new ArgumentNullException(nameof(inputUrl));
+            }
+            if (converter == null)
+            {
+                throw new ArgumentNullException(nameof(converter));
             }
 
-            //var cachedPersonList = Person.FromJsonList(personListJson);
-            var cachedPersonList = converter.Invoke(xListJson);
+            // Define the polling rate in milliseconds
+            const int pollRate = 3000;
+            JToken? xListJson;
 
+            // Keep polling the API until data is returned
+            do
+            {
+                // Wait for the specified poll rate before making the next request
+                await Task.Delay(pollRate);
+                // Make a request to the API and get the JSON response
+                xListJson = await WebsiteTools.ReadOnlyIfPassJSJson(inputUrl, JsRuntime);
+            }
+            while (xListJson == null); // Continue polling as long as the response is null
+
+            // Extract the payload from the JSON response
+            var payloadJson = xListJson["Payload"];
+
+            // Convert the payload to a list of type T using the provided converter function
+            var cachedPersonList = converter(payloadJson);
+
+            // Return the converted list
             return cachedPersonList;
-
         }
 
 
@@ -89,7 +104,7 @@ namespace Website
             return cachedPersonList;
 
         }
-       
+
         /// <summary>
         /// Shows alert using sweet alert js
         /// </summary>
@@ -232,7 +247,7 @@ namespace Website
         public static async Task<WebResult<JToken>> WriteToServerJsonReply(string apiUrl, string stringData, int timeout = 60)
         {
 
-            TryAgain:
+        TryAgain:
 
             //ACT 1:
             //send data to URL, using JS for reliability & speed

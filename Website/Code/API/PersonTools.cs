@@ -8,14 +8,12 @@ public class PersonTools
 
     private readonly VedAstroAPI _api;
 
-
-
-    private List<Person> CachedPersonList { get; set; } = new List<Person>(); //if empty que to get new list
+    private static List<Person> CachedPersonList { get; set; } = new List<Person>(); //if empty que to get new list
 
     /// <summary>
     /// public examples profiles always here if needed, list should never be empty, bad UX
     /// </summary>
-    private List<Person> CachedPublicPersonList { get; set; } = new List<Person>(); //if empty que to get new list
+    private static List<Person> CachedPublicPersonList { get; set; } = new List<Person>(); //if empty que to get new list
 
     //PUBLIC
 
@@ -205,7 +203,7 @@ public class PersonTools
         {
 
             //1: clear stored person list
-            this.CachedPersonList.Clear();
+            PersonTools.CachedPersonList.Clear();
 
             //let user know person has been updates
             await _api.ShowAlert("success", $"{personInQuestion.Name} {task} complete!", false, timer: 1000);

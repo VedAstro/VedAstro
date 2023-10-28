@@ -365,63 +365,34 @@ export class EventsChart {
         //and modifying its prop as needed, as such any major edit needs to
         //be done in API code
         function generateTimeLegend(mousePosition) {
-            //x axis is rounded because axis value in rect is whole numbers
-            //and it has to be exact match to get it
-            var mouseRoundedX = Math.round(mousePosition.xAxis);
-            var mouseRoundedY = Math.round(mousePosition.yAxis);
 
-            //use the mouse position to get all event rects
-            //dasa elements at same X position inside the dasa svg
-            //note: faster and less erroneous than using mouse.path (fruits of time)
-            //- get only with event name
-            var allElementsAtX = instance.$SvgChartElm.children().find(`[x=${mouseRoundedX}]`);
-            var allEventRectsAtX = [];
-            allElementsAtX.each(
-                (index, element) => {
-                    var eventName = element.getAttribute("eventname");
-                    //if no "eventname" exist, wrong elm skip it
-                    if (eventName) { allEventRectsAtX.push(element); }
-                });
+            // Round mouse position to match with axis values in rect
+            const mouseRoundedX = Math.round(mousePosition.xAxis);
+            const mouseRoundedY = Math.round(mousePosition.yAxis);
 
-            //delete previously generated legend rows
-            var previousClones = instance.$SvgChartElm.find(ID.CursorLineLegendCloneCls); //get latest ones by direct call
-            previousClones.remove();
+            // Get all event rects at the mouse's X position
+            const allElementsAtX = instance.$SvgChartElm.children().find(`[x=${mouseRoundedX}]`);
+            const allEventRectsAtX = getAllEventRectsAtX(allElementsAtX);
 
-            //count good and bad events for summary row
-            var goodCount = 0;
-            var badCount = 0;
-            instance.showDescription = false;//default description not shown
+            // Remove previously generated legend rows
+            removePreviousClones();
 
-            //extract event data out and place it in legend
-            $(allEventRectsAtX).each((index, element) => drawEventRow(element, mouseRoundedY, allElementsAtX));
+            //if no elements, don't create summary row, end here (note check only after remove)
+            if (!(allEventRectsAtX.length > 0)) { return; }
 
-            //auto show/hide description box based on mouse position
-            if (instance.showDescription) {
-                SVG(instance.$CursorLineLegendDescriptionHolder[0]).show();
-            } else {
-                SVG(instance.$CursorLineLegendDescriptionHolder[0]).hide();
-            }
+            // Initialize counts for summary row
+            let goodCount = 0;
+            let badCount = 0;
+            instance.showDescription = false; // Default description not shown
 
-            //5 GENERATE LAST SUMMARY ROW
-            //generate summary row at the bottom show count of good & bad
-            //make a copy of template for this event
-            var newSummaryRow = instance.$CursorLineLegendTemplate.clone();
-            newSummaryRow.removeAttr('id'); //remove the clone template id
-            newSummaryRow.addClass(ID.CursorLineLegendClone); //to delete it on next run
-            newSummaryRow.appendTo(instance.$CursorLineLegendHolder); //place new legend into parent
-            SVG(newSummaryRow[0]).show();//make cloned visible
+            // Extract event data and place it in legend
+            allEventRectsAtX.forEach(element => drawEventRow(element, mouseRoundedY, allElementsAtX));
 
-            //position summary at bottom
-            var lastEvent = allEventRectsAtX[allEventRectsAtX.length - 1];
-            var lastEvtRowYAxis = parseInt(lastEvent.getAttribute("y"));
-            var summaryRowYAxis = lastEvtRowYAxis + EventsChart.RowHeight - 1;
-            newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${summaryRowYAxis})`);//minus 1 for perfect alignment
+            // Show or hide description box based on mouse position
+            toggleDescriptionBox();
 
-            //set event name text & color element
-            var textElm = newSummaryRow.children("text");
-            textElm.text(` Good : ${goodCount}   Bad : ${badCount}`); //spacing set nicely
-            //change icon to summary icon
-            newSummaryRow.children("use").attr("xlink:href", ID.CursorLineSumIcon);
+            // Generate summary row at the bottom showing count of good & bad
+            generateSummaryRow(allEventRectsAtX, goodCount, badCount);
 
 
             //-----------------------------------------LOCAL FUNCS-------------------------------
@@ -618,6 +589,65 @@ export class EventsChart {
                     //replace circle with clock icon
                     newTimeLegend.children("use").attr("xlink:href", ID.CursorLineClockIcon);
                 }
+            }
+
+            function getAllEventRectsAtX(allElementsAtX) {
+                const allEventRectsAtX = [];
+                allElementsAtX.each((index, element) => {
+                    const eventName = element.getAttribute("eventname");
+                    if (eventName) {
+                        allEventRectsAtX.push(element);
+                    }
+                });
+                return allEventRectsAtX;
+            }
+
+            function removePreviousClones() {
+                const previousClones = instance.$SvgChartElm.find(ID.CursorLineLegendCloneCls);
+                previousClones.remove();
+            }
+
+            function toggleDescriptionBox() {
+                if (instance.showDescription) {
+                    SVG(instance.$CursorLineLegendDescriptionHolder[0]).show();
+                } else {
+                    SVG(instance.$CursorLineLegendDescriptionHolder[0]).hide();
+                }
+            }
+
+            /**
+             * Generates a summary row for event rectangles.
+             * 
+             * @param {Array} allEventRectsAtX - All event rectangles at a given x-coordinate.
+             * @param {number} goodCount - The count of good events.
+             * @param {number} badCount - The count of bad events.
+             */
+            function generateSummaryRow(allEventRectsAtX, goodCount, badCount) {
+                // Clone the template and remove its id
+                const newSummaryRow = instance.$CursorLineLegendTemplate.clone().removeAttr('id');
+
+                // Add class to the new summary row and append it to the holder
+                newSummaryRow.addClass(ID.CursorLineLegendClone).appendTo(instance.$CursorLineLegendHolder);
+
+                // Show the new summary row
+                SVG(newSummaryRow[0]).show();
+
+                // Get the last event and its y-axis
+                const lastEvent = allEventRectsAtX[allEventRectsAtX.length - 1];
+                const lastEvtRowYAxis = parseInt(lastEvent.getAttribute("y"));
+
+                // Calculate the y-axis for the summary row
+                const summaryRowYAxis = lastEvtRowYAxis + EventsChart.RowHeight - 1;
+
+                // Transform the new summary row
+                newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${summaryRowYAxis})`);
+
+                // Get the text element and set its text
+                const textElm = newSummaryRow.children("text");
+                textElm.text(` Good : ${goodCount}   Bad : ${badCount}`);
+
+                // Set the href for the use element
+                newSummaryRow.children("use").attr("xlink:href", ID.CursorLineSumIcon);
             }
         }
     }

@@ -48,6 +48,7 @@ namespace VedAstro.Library
     /// </summary>
     public static class Tools
     {
+        public const string BlobContainerName = "vedastro-site-data";
 
         /// <summary>
         /// Gets XML file from any URL and parses it into xelement list
@@ -66,10 +67,10 @@ namespace VedAstro.Library
             // Load xml event data files before hand to be used quickly later for search
             // Get main horoscope prediction file (located in wwwroot)
             var fileStream = await httpClient.GetStreamAsync(url);
-            
+
             // Parse raw file to xml doc
             var document = XDocument.Load(fileStream);
-            
+
             // Get all records in document
             return document.Root.Elements().ToList();
         }
@@ -580,7 +581,7 @@ namespace VedAstro.Library
             //upload modified list to storage
             await OverwriteBlobData(fileClient, updatedListXml);
         }
-        
+
         public static void AddXElementToXDocumentAzure(XElement dataXml, ref XDocument xDocument)
         {
 
@@ -611,7 +612,7 @@ namespace VedAstro.Library
             var blobHttpHeaders = new BlobHttpHeaders { ContentType = "text/xml" };
             await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
         }
-        
+
         public static Stream GenerateStreamFromString(string s)
         {
             var stream = new MemoryStream();
@@ -635,7 +636,7 @@ namespace VedAstro.Library
 
             return xDocument;
         }
-       
+
         public static void AddXElementToXDocument(XElement newElement, ref XDocument xDocument)
         {
             //add new person to list
@@ -3162,38 +3163,49 @@ namespace VedAstro.Library
         /// </summary>
         public static Person GetPersonById(string personId, string ownerId = "")
         {
-            //query the database
-            Pageable<PersonRow> foundCalls;
+            // Initialize foundCalls to null
+            Pageable<PersonRow> foundCalls = null;
 
-            //make call without owner ID
-            //NOTE : possible to return multiple values
-            if (string.IsNullOrEmpty(ownerId)) { foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.RowKey == personId); }
-
-            //make call with both owner ID and person ID (accurate hit)
-            else { foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId); }
-
-            //if person still not found, than check shared list
-            if (!foundCalls.Any())
+            // Query the database based on ownerId
+            if (string.IsNullOrEmpty(ownerId))
             {
-                //check share list, if count same share was found
-                var rawSharedList= AzureTable.PersonShareList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
-                
-                //share found, get person direct, without original owner ID
-                if (rawSharedList.Any()) { foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.RowKey == personId); }
+                // Query without person Id, possible to return multiple values
+                foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.RowKey == personId);
+            }
+            else
+            {
+                // Query with both ownerId and personId for accurate hit
+                foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
             }
 
-            //if more than 1 person found, duplicate DETECTED, silent warning
-            if (foundCalls.Count() > 1) { LibLogger.Error($"More than 1 Person found : PersonId -> {personId} OwnerId -> {ownerId}"); }
+            // If person not found, check shared list
+            if (!foundCalls.Any())
+            {
+                var rawSharedList = AzureTable.PersonShareList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+                // If share found, get person directly without original ownerId
+                if (rawSharedList.Any())
+                {
+                    foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.RowKey == personId);
+                }
+            }
+            // Log error if more than 1 person found
+            if (foundCalls.Count() > 1)
+            {
+                LibLogger.Error($"More than 1 Person found : PersonId -> {personId} OwnerId -> {ownerId}");
+            }
 
-            //make into readable format
+            // Log error and return empty if person not found
+            if (!foundCalls.Any())
+            {
+                LibLogger.Error($"Person NOT FOUND : {personId} OwnerID :{ownerId}, EMPTY GIVEN");
+                return Person.Empty;
+            }
+
+            // Convert to readable format and return
             var personToReturn = Person.FromAzureRow(foundCalls.FirstOrDefault());
-
             return personToReturn;
         }
 
-        public const string BlobContainerName = "vedastro-site-data";
-
-        public const string PersonListFile = "PersonList.xml";
 
 
         /// <summary>

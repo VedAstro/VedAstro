@@ -67,8 +67,7 @@
         await _jsRuntime.ShowLoading();
         _isReady = false;
 
-        //get all people from API server
-        //auto checks if people list already loaded before
+        //get life events list attached to person
         _lifeEventListAsync = selectedPerson.LifeEventList;
 
         //make copy for search

@@ -450,7 +450,7 @@ namespace VedAstro.Library
                 case ConstellationName.Krithika:
                 case ConstellationName.Uttara:
                 case ConstellationName.Uttarashada:
-                //case ConstellationName.Abhijit:
+                    //case ConstellationName.Abhijit:
                     return VedAstro.Library.PlanetName.Sun;
                 case ConstellationName.Rohini:
                 case ConstellationName.Hasta:
@@ -1964,7 +1964,11 @@ namespace VedAstro.Library
             //if empty return aries, can't give empty because no Empty for ZodiacName
             if (houseNumber == HouseName.Empty) { return ZodiacName.Aries; }
 
-            return Calculate.HouseSign(houseNumber, time).GetSignName();
+            //get full sign data
+            var zodiacSign = Calculate.HouseSign(houseNumber, time);
+
+            //only return name
+            return zodiacSign.GetSignName();
         }
 
         /// <summary>
@@ -5820,51 +5824,30 @@ namespace VedAstro.Library
             {
                 //max degrees of each sign
                 const double maxDegreesInSign = 30.0;
-
+                // Adjust longitude to be within 0-360 range
+                double adjustedLongitude = longitude.TotalDegrees;
+                while (adjustedLongitude < 0)
+                {
+                    adjustedLongitude += 360.0;
+                }
                 //get rough zodiac number
-                double roughZodiacNumber = (longitude.TotalDegrees % 360.0) / maxDegreesInSign;
-
+                double roughZodiacNumber = (adjustedLongitude % 360.0) / maxDegreesInSign;
                 //Calculate degrees in zodiac sign
                 //get remainder from rough zodiac number
                 var roughZodiacNumberRemainder = roughZodiacNumber - Math.Truncate(roughZodiacNumber);
-
                 //convert remainder to degrees in current sign
                 var degreesInSignRaw = roughZodiacNumberRemainder * maxDegreesInSign;
                 //round number (too high accuracy causes equality mismtach because of minute difference)
                 var degreesInSign = Math.Round(degreesInSignRaw, 7);
-
-                /*
-                //if degrees in sign is 0, it means 30 degrees
-                if (degreesInSign == 0)
-                {
-                    //change value to 30 degrees
-                    degreesInSign = 30;
-                } 
-                */
-
-
                 //Get name of zodiac sign
                 //round to ceiling to get integer zodiac number
                 var zodiacNumber = (int)Math.Ceiling(roughZodiacNumber);
-
-                if (longitude.TotalDegrees == 0.00)
-                {
-                    zodiacNumber = 1;
-                }
-
-
+                if (adjustedLongitude == 0.00) { zodiacNumber = 1; }
                 //convert zodiac number to zodiac name
                 var calculatedZodiac = (ZodiacName)zodiacNumber;
-
-
-                //if rough zodiac number is less than or equal 0, then return Pisces else return calculated zodiac
-                //// ZodiacName currentSignName = (roughZodiacNumber <= 0) ? ZodiacName.Pisces : calculatedZodiac;
-
                 //return new instance of planet sign
                 var degreesAngle = Angle.FromDegrees(Math.Abs(degreesInSign)); //make always positive
-
                 var zodiacSignAtLongitude = new ZodiacSign(calculatedZodiac, degreesAngle);
-
                 return zodiacSignAtLongitude;
             }
 

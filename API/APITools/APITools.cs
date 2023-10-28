@@ -468,13 +468,17 @@ namespace API
         }
 
 
-        public static async Task<List<Person>> GetAllPersonList()
+        public static List<Person> GetAllPersonList()
         {
-            //get all person list from storage
-            var personListXml = await Tools.GetXmlFileFromAzureStorage(Tools.PersonListFile, Tools.BlobContainerName);
-            var allPersonList = personListXml.Root?.Elements();
+            //get all
+            var foundCalls = AzureTable.PersonList.Query<PersonRow>();
 
-            var returnList = Person.FromXml(allPersonList);
+            var returnList = new List<Person>();
+            foreach (var call in foundCalls)
+            {
+                returnList.Add(Person.FromAzureRow(call));
+            }
+
 
             return returnList;
         }
@@ -1038,7 +1042,7 @@ namespace API
             }
 
             //if array pass directly
-            else if(rawPlanetData is JArray rawPlanetDataJson)
+            else if (rawPlanetData is JArray rawPlanetDataJson)
             {
                 return APITools.PassMessageJson(rawPlanetDataJson, incomingRequest);
             }

@@ -262,7 +262,7 @@ namespace API
         /// <summary>
         /// given person id as string will calculate new match report
         /// </summary>
-        public static async Task<MatchReport> GetNewMatchReport(string maleId, string femaleId, string userId)
+        public static Task<MatchReport> GetNewMatchReport(string maleId, string femaleId, string userId)
         {
             var male = Tools.GetPersonById(maleId);
             var female = Tools.GetPersonById(femaleId);
@@ -271,7 +271,7 @@ namespace API
             var notEmpty = !Person.Empty.Equals(male) && !Person.Empty.Equals(female);
             if (notEmpty)
             {
-                return MatchCalculator.GetNewMatchReport(male, female, userId);
+                return Task.FromResult(MatchCalculator.GetNewMatchReport(male, female, userId));
             }
             else
             {
@@ -279,62 +279,6 @@ namespace API
             }
         }
 
-        private static async Task PrintOneVsList(Person person)
-        {
-            //get all the people
-            var peopleList = await APITools.GetAllPersonList();
-
-            //given a list of people find good matches
-            //var goodMatches = FindGoodMatches(peopleList);
-            var goodMatches = GetAllMatchesForPersonByStrength(person, peopleList);
-
-            //show final results to user
-            printResultList(ref goodMatches);
-
-            void printResultList(ref List<MatchReport> reportList)
-            {
-                foreach (var report in reportList)
-                {
-                    Console.WriteLine($"{report.Male.Name}\t{report.Female.Name}\t{report.KutaScore}");
-                }
-
-                Console.ReadLine();
-            }
-        }
-
-        private static List<MatchReport> GetAllMatchesForPersonByStrength(Person inputPerson, List<Person> personList)
-        {
-            var returnList = new List<MatchReport>();
-
-            //this makes sure each person is cross checked against this person correctly
-            foreach (var personMatch in personList)
-            {
-                //get needed details
-                var inputPersonIsMale = inputPerson.Gender == Gender.Male;
-                var inputPersonIsFemale = inputPerson.Gender == Gender.Female;
-                var personMatchIsMale = personMatch.Gender == Gender.Male;
-                var personMatchIsFemale = personMatch.Gender == Gender.Female;
-
-                if (inputPersonIsMale && personMatchIsFemale)
-                {
-                    //add report to list
-                    var report = MatchCalculator.GetNewMatchReport(inputPerson, personMatch, "101");
-                    returnList.Add(report);
-                }
-
-                if (inputPersonIsFemale && personMatchIsMale)
-                {
-                    //add report to list
-                    var report = MatchCalculator.GetNewMatchReport(personMatch, inputPerson, "101");
-                    returnList.Add(report);
-                }
-            }
-
-            //order the list by strength, highest at 0 index
-            var SortedList = returnList.OrderBy(o => o.KutaScore).ToList();
-
-            return SortedList;
-        }
 
         /// <summary>
         /// Gets all people ordered by kuta total strength 0 is highest kuta score
@@ -348,7 +292,7 @@ namespace API
             var inputPersonIsMale = inputPerson.Gender == Gender.Male;
 
             //get everybody
-            var everybody = await APITools.GetAllPersonList();
+            var everybody = APITools.GetAllPersonList();
 
             //this makes sure each person is cross checked against this person correctly
             foreach (var personMatch in everybody)
@@ -408,36 +352,6 @@ namespace API
             return personList2;
         }
 
-        /// <summary>
-        /// Finds good matches from a list of people who meet the criteria
-        /// </summary>
-        private static List<MatchReport> FindGoodMatches(List<Person> peopleList)
-        {
-            //from a list of people find good matches
-
-            //split the sexes
-            var femaleList = peopleList.FindAll(person => person.Gender == Gender.Female);
-            var maleList = peopleList.FindAll(person => person.Gender == Gender.Male);
-
-            var goodReports = new List<MatchReport>();
-
-            //cross reference male & female list
-            foreach (var female in femaleList)
-            {
-                foreach (var male in maleList)
-                {
-                    var report = MatchCalculator.GetNewMatchReport(male, female, "101");
-                    //if report meets criteria save it
-                    if (report.KutaScore > 50)
-                    {
-                        goodReports.Add(report);
-                    }
-                }
-            }
-
-            //return reports that got saved
-            return goodReports;
-        }
     }
 
 

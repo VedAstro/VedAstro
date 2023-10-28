@@ -321,11 +321,10 @@
 
     }
 
-
     protected override async Task OnInitializedAsync()
     {
         //NOTE: small needed else, components rendering gets messed up (time to pop)
-        await _jsRuntime.ShowLoading(100);
+        await _jsRuntime.ShowLoading(50);
 
         SimpleAyanamsaAll = new List<SimpleAyanamsa>()
         {
@@ -432,7 +431,6 @@
 
             Ayanamsa.LAHIRI_ICRC,
         };
-
 
         //other components can start loading now (heavy computation starts)
         _mainPageInitDone = true;

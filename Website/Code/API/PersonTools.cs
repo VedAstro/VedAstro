@@ -78,14 +78,14 @@ public class PersonTools
     public async Task<JToken> AddPerson(Person person)
     {
         //send newly created person to API server
-        var personJson = person.ToJson();
+        //var personJson = person.ToJson();
         //pass in user id to make sure user has right to delete
         //http://localhost:7071/api/AddPerson/OwnerId/234324x24/Name/Romeo/Gender/Female/Location/London/Time/13:45/01/06/1990
         var url = $"{_api.URL.AddPerson}/OwnerId/{_api.UserId}/Name/{person.Name}" +
                   $"/Gender/{person.Gender}" +
-                  $"/Location/{person.GetBirthLocation()}" +
-                  $"/Time/{person.BirthDateMonthYear}";
-        var jsonResult = await Tools.WriteServer<JObject, JToken>(HttpMethod.Post, url, personJson);
+                  $"/Location/{Tools.RemoveWhiteSpace(person.GetBirthLocation().Name())}" +
+                  $"/Time/{person.BirthHourMinute}/{person.BirthDateMonthYear}";
+        var jsonResult = await Tools.WriteServer<JObject, JToken>(HttpMethod.Get, url);
 
 #if DEBUG
         Console.WriteLine($"SERVER SAID:\n{jsonResult}");

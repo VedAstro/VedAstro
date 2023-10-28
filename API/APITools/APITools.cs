@@ -383,7 +383,7 @@ namespace API
         }
 
         /// <summary>
-        /// Given a user data it will find mathcing user email and replace the existing UserData with inputed
+        /// Given a user data it will find matching user email and replace the existing UserData with inputed
         /// Note :
         /// - Uses UserDataList.xml
         /// </summary>

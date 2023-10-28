@@ -87,10 +87,8 @@
             await _jsRuntime.ShowAlert("info", "Remember!", $"You have not {loginLink}, continue as <strong>Guest</strong>?");
         }
 
-
         await _jsRuntime.ShowLoading();
         _nothingToShow = true; //compensate for multiple popups, hides the input elm via css
-
 
         //only continue if passed input field validation
         if (!(await IsValidationPassed())) { _nothingToShow = false; return; } //if nothing than back to normal
@@ -113,7 +111,6 @@
         _jsRuntime.PlayDoneSound();//tactile feedback
 
         //wait a little and send user back to previous page
-        // await Task.Delay(500);
         await _jsRuntime.ShowAlert("info", $"Going back to previous page", false, 500);
         _jsRuntime?.GoBack();
     }

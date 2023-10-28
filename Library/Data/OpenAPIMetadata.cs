@@ -67,6 +67,8 @@ namespace VedAstro.Library;
 /// </summary>
 public class OpenAPIMetadata : IToJson
 {
+    public static List<OpenAPIMetadata> CachedAllMethoInfoList { get; set; } = new();
+
     public static readonly OpenAPIMetadata Empty = new OpenAPIMetadata("Empty", "Empty", "Empty");
 
     private PlanetName _selectedPlanet = PlanetName.Sun; //set default so dropdown has something on load
@@ -179,31 +181,47 @@ public class OpenAPIMetadata : IToJson
     /// </summary>
     public static List<OpenAPIMetadata> FromMethodInfoList(IEnumerable<MethodInfo> calcList = null)
     {
-        //if null include all API methods
-        calcList = calcList ?? Tools.GetAllApiCalculatorsMethodInfo();
+        // Return cached list if available
+        if (OpenAPIMetadata.CachedAllMethoInfoList.Any()) { return OpenAPIMetadata.CachedAllMethoInfoList; }
+        
+        // Calculate new list if cache is not available
+        OpenAPIMetadata.CachedAllMethoInfoList = GenerateMetadataList();
 
-        var finalList = new List<OpenAPIMetadata>();
-        //make final list with API description
-        //get nice API calc name, shown in builder dropdown
-        foreach (var calc in calcList)
+        return OpenAPIMetadata.CachedAllMethoInfoList;
+        
+        //-----------------------------------------------------------
+        List<OpenAPIMetadata> GenerateMetadataList()
         {
-            //using the method's signature ID get the pre created comments
-            var signature = calc.GetMethodSignature();
-            var metadata = OpenAPIStaticTable.Rows.Where(x => x.Signature == signature).FirstOrDefault();
+            // Include all API methods if calcList is null
+            calcList ??= Tools.GetAllApiCalculatorsMethodInfo();
+            var finalList = new List<OpenAPIMetadata>();
+            // Populate final list with API description
+            foreach (var calc in calcList)
+            {
+                // Get pre-created comments using the method's signature ID
+                var signature = calc.GetMethodSignature();
+                var metadata = OpenAPIStaticTable.Rows.FirstOrDefault(x => x.Signature == signature);
 
-            //if null than raise silent alarm!, don't add to return list todo log to server
-            if (metadata == null) { Console.WriteLine($"METHOD NOT FOUND!!!! --> {signature}"); continue; }
-
-            //add link to current code instance
-            metadata.MethodInfo = calc;
-
-            //add to final list
-            finalList.Add(metadata);
+                // Log to server and skip current iteration if metadata is null
+                if (metadata == null)
+                {
+                    LibLogger.Error($"METHOD NOT FOUND!!!! --> {signature}");
+                    continue;
+                }
+                
+                // Link current code instance
+                metadata.MethodInfo = calc;
+                
+                // Add to final list
+                finalList.Add(metadata);
+            }
+            
+            // Sort the list alphabetically based on the Name property
+            finalList.Sort((metadata1, metadata2) => metadata1.Name.CompareTo(metadata2.Name));
+            return finalList;
         }
-        // Sort the list alphabetically based on the Name property
-        finalList = finalList.OrderBy(metadata => metadata.Name).ToList();
-        return finalList;
     }
+
 
     /// <summary>
     /// Given a type will return is most relevant name

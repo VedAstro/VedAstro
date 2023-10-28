@@ -45,12 +45,6 @@
 @*list that will be shown after calculate*@
 <div class="vstack gap-2 p-2" style="@(_isReady?"":"display:none;")">
 
-    @*SEARCH*@
-    @*<div class="hstack gap-3">
-    <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
-    <IconButton SmallSize="true" ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
-    </div>*@
-
     @*LIST OF PREDICTIONS*@
     <LifeEventViewer @ref="lifeEventViewer" />
 

@@ -79,6 +79,7 @@ public class URL
         GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
         GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
         SaveEventsChart = ApiUrl + "/SaveEventsChart";
+        GetEventDataList = ApiUrl + "/GetEventDataList";
         GetEventsApi = ApiUrl + "/getevents";
         SignInGoogle = ApiUrl + "/SignInGoogle";
         SignInFacebook = ApiUrl + "/SignInFacebook"; 
@@ -148,6 +149,7 @@ public class URL
     public readonly string GetSavedEventsChart;
     public readonly string GetSavedEventsChartIdList;
     public readonly string SaveEventsChart;
+    public readonly string GetEventDataList;
     public readonly string GetEventsApi;
     public readonly string SignInGoogle;
     public readonly string SignInFacebook;

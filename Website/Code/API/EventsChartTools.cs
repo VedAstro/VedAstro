@@ -6,6 +6,8 @@ public class EventsChartTools
 {
     private readonly VedAstroAPI _api;
 
+    private static List<EventData> CachedEventDataList { get; set; } = new(); //if empty que to get new list
+
     public EventsChartTools(VedAstroAPI vedAstroApi) => _api = vedAstroApi;
 
     public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, ChartOptions options)
@@ -14,10 +16,10 @@ public class EventsChartTools
         if (Person.Empty.Equals(person)) { throw new InvalidOperationException("NO CHART FOR EMPTY PERSON!"); }
 
         //generate URL to get chart from API
-        var eventsChartApiCallUrl = GetEventsChartApiUrl(person,timeRange,inputedEventTags, maxWidth, options);
+        var eventsChartApiCallUrl = GetEventsChartApiUrl(person, timeRange, inputedEventTags, maxWidth, options);
 
         //make the call to API, NOTE:call is held here
-        var chartString = await _api.PollApiTillData(eventsChartApiCallUrl);
+        var chartString = await _api.PollApiTillDataEVENTSChart(eventsChartApiCallUrl);
 
         return chartString;
     }
@@ -38,4 +40,29 @@ public class EventsChartTools
         return finalUrl;
     }
 
+
+    /// <summary>
+    /// calls server for a list of EventDataList.xml in nice JSON form
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<EventData>> GetEventDataList()
+    {
+
+        //CHECK CACHE
+        //cache will be cleared when update is needed
+        if (CachedEventDataList.Any())
+        {
+            return CachedEventDataList;
+        }
+
+        //prepare url to call
+        var url = $"{_api.URL.GetEventDataList}";
+        var listNoPolling = await _api.GetListNoPolling(url, EventData.FromJsonList);
+
+        //NOTE: ToList is needed to make clone, else copies by ref and is lost
+        CachedEventDataList = listNoPolling.ToList();
+
+        return CachedEventDataList;
+
+    }
 }

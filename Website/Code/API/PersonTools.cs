@@ -29,21 +29,10 @@ public class PersonTools
     {
         //send the calls end of story, dont expect to check on it until needed let server handle it
 
-        //STAGE 1 :get person list for current user, can be empty
-        //tell API to get started
-        var url = $"{_api.URL.GetPersonList}/OwnerId/{_api.UserId}";
+        //get person list from server or cache and stores reference for later use
+        AppData.API.Person.GetPersonList();
+        AppData.API.Person.GetPublicPersonList();
 
-        //no wait for speed
-        //we get call status and id to get data from when ready
-        Tools.ReadServerRaw<JObject>(url);
-
-        //STAGE 2 : get person list for public, example profiles
-        //tell API to get started
-        url = $"{_api.URL.GetPersonList}/OwnerId/101";
-
-        //no wait for speed
-        //API gives a url to check on poll fo results
-        Tools.ReadServerRaw<JObject>(url);
 
     }
 
@@ -59,7 +48,10 @@ public class PersonTools
 
         //prepare url to call
         var url = $"{_api.URL.GetPersonList}/OwnerId/{_api.UserId}";
-        CachedPersonList = await _api.GetListNoPolling(url, Person.FromJsonList);
+        var listNoPolling = await _api.GetListNoPolling(url, Person.FromJsonList);
+
+        //NOTE: ToList is needed to make clone, else copies by ref and is lost
+        CachedPersonList = listNoPolling.ToList();
 
         return CachedPersonList;
     }
@@ -72,7 +64,10 @@ public class PersonTools
 
         //tell API to get started
         var url2 = $"{_api.URL.GetPersonList}/OwnerId/101/";
-        CachedPublicPersonList = await _api.GetListNoPolling(url2, Person.FromJsonList);
+        var listNoPolling = await _api.GetListNoPolling(url2, Person.FromJsonList);
+
+        //NOTE: ToList is needed to make clone, else copies by ref and is lost
+        CachedPublicPersonList = listNoPolling.ToList();
 
         return CachedPublicPersonList;
     }

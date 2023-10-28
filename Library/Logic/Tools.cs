@@ -48,6 +48,43 @@ namespace VedAstro.Library
     /// </summary>
     public static class Tools
     {
+
+        /// <summary>
+        /// Gets XML file from any URL and parses it into xelement list
+        /// </summary>
+        /// <param name="url">The URL of the XML file</param>
+        /// <param name="httpClient">An optional HttpClient instance to use for the request</param>
+        /// <returns>A list of XElement objects representing the elements in the XML file</returns>
+        public static async Task<List<XElement>> GetXmlFile(string url, HttpClient httpClient = null)
+        {
+            // If no HttpClient is provided, create a new one
+            if (httpClient == null)
+            {
+                httpClient = new HttpClient();
+            }
+
+            // Load xml event data files before hand to be used quickly later for search
+            // Get main horoscope prediction file (located in wwwroot)
+            var fileStream = await httpClient.GetStreamAsync(url);
+            
+            // Parse raw file to xml doc
+            var document = XDocument.Load(fileStream);
+            
+            // Get all records in document
+            return document.Root.Elements().ToList();
+        }
+
+        public static async Task<T> WithCancellation<T>(this Task<T> task, CancellationToken cancellationToken)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            using (cancellationToken.Register(s => ((TaskCompletionSource<bool>)s).TrySetResult(true), tcs))
+            {
+                if (task != await Task.WhenAny(task, tcs.Task))
+                    throw new OperationCanceledException(cancellationToken);
+            }
+            return await task;
+        }
+
         /// <summary>
         /// public static string ToJson(this MethodInfo methodInfo)
         /// </summary>

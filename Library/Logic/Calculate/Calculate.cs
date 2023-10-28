@@ -7282,16 +7282,16 @@ namespace VedAstro.Library
         public static bool IsPlanetGocharaBindu(Time birthTime, Time nowTime, PlanetName planet, int bindu)
         {
             //house the planet is transiting now
-            var gocharaHouse = Calculate.GocharaZodiacSignCountFromMoon(birthTime, nowTime, planet);
+            var gocharaSignCount = Calculate.GocharaZodiacSignCountFromMoon(birthTime, nowTime, planet);
 
             //check if there is any planet obstructing this transit prediction via Vedhasthana
-            var obstructionFound = Calculate.IsGocharaObstructed(planet, gocharaHouse, birthTime, nowTime);
+            var obstructionFound = Calculate.IsGocharaObstructed(planet, gocharaSignCount, birthTime, nowTime);
 
             //if obstructed end here
             if (obstructionFound) { return false; }
 
             //gochara ongoing, get sign of house to get planet's bindu score for said transit
-            var gocharaSign = HouseSignName((HouseName)gocharaHouse, nowTime);
+            var gocharaSign = HouseSignName((HouseName)gocharaSignCount, nowTime);
 
             //get planet's current bindu
             var planetBindu = Calculate.PlanetAshtakvargaBindu(planet, gocharaSign, nowTime);

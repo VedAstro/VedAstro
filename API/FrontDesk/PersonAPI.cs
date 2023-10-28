@@ -26,7 +26,7 @@ namespace API
 
             try
             {
-                //get person from database matching user & owner ID
+                //get person from database matching user & owner ID (also checks shared list)
                 var foundPerson = Tools.GetPersonById(personId, ownerId);
 
                 //send person to caller

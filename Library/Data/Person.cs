@@ -480,9 +480,20 @@ namespace VedAstro.Library
         /// </summary>
         public static Person FromAzureRow(PersonRow rowData)
         {
+            //parse the person only
             var birthTime = Time.FromJson(JToken.Parse(rowData.BirthTime));
             var rowDataGender = Enum.Parse<Gender>(rowData.Gender);
-            var newPerson = new Person(rowData.PartitionKey, rowData.RowKey, rowData.Name, birthTime, rowDataGender);
+            var personId = rowData.RowKey;
+            var newPerson = new Person(rowData.PartitionKey, personId, rowData.Name, birthTime, rowDataGender);
+
+            //get person life event list (partition key = person id)
+            var lifeEvents = AzureTable.PersonList.Query<LifeEventRow>(call => call.PartitionKey == personId);
+
+            //convert to list
+            var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();
+
+            //add to person data
+            newPerson.LifeEventList = personJsonList;
 
             return newPerson;
         }

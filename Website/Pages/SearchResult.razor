@@ -148,7 +148,7 @@ else
         //search file
         var horoscopeDataListCached = await AppData.GetHoroscopeDataListCached(); //todo clean
         foundPrediction = horoscopeDataListCached?.Where(IsFound) ?? Array.Empty<XElement>();
-        foundEvents = AppData.EventDataList.Where(IsFound);
+        foundEvents = AppData.EventDataListXML.Where(IsFound);
         foundReference = AppData.ReferenceList.Where(IsFound);
 
         //show search result count

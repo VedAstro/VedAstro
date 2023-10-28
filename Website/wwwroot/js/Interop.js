@@ -363,40 +363,59 @@ export async function ReadOnlyIfPassJson(url, callMethod = "GET") {
 
 }
 
-//will auto set GET or POST on if data to send is provided
-//only gets data once done
+/**
+ * This function makes an HTTP request to a specified URL. It uses GET or POST method based on the provided data.
+ * The function keeps making requests until the 'Call-Status' header in the response is 'Pass'.
+ * If the 'Call-Status' is 'Fail', the function stops making requests and returns null.
+ * 
+ * @param {string} url - The URL to make the request to.
+ * @param {Object} dataToSend - The data to send with the request. If this is null, a GET request is made. Otherwise, a POST request is made.
+ * @returns {Promise<string|null>} - The response text if the 'Call-Status' is 'Pass'. Null if the 'Call-Status' is 'Fail'.
+ */
 export async function ReadOnlyIfPassString(url, dataToSend) {
-    console.log("JS > Read Only If Pass String...");
+    // Determine the HTTP method based on whether dataToSend is null or not
+    const httpMethod = dataToSend == null ? "GET" : "POST";
 
-    //make get or post based on if got data to send or not
-    var httpCallProtocol = dataToSend == null ? "GET" : "POST";
+    // Define the headers for the HTTP request
+    const requestHeaders = {
+        accept: "*/*",
+        Connection: "keep-alive"
+    };
 
-    var callStatus = "";
-    while (callStatus !== "Pass") { //must be pass
+    // Start a loop that will continue making requests until the 'Call-Status' is 'Pass'
+    while (true) {
+        try {
+            // Make the HTTP request
+            const response = await fetch(url, {
+                headers: requestHeaders,
+                method: httpMethod,
+                body: dataToSend
+            });
 
+            // Get the 'Call-Status' from the response headers
+            const callStatus = response.headers.get('Call-Status');
+            console.log(`API SAID : ${callStatus}`);
 
-        //make call
-        var response = await fetch(url, {
-            "headers": { "accept": "*/*", "Connection": "keep-alive" },
-            "method": httpCallProtocol,
-            "body": dataToSend
-        });
+            // If 'Call-Status' is 'Pass', return the response text
+            if (callStatus === "Pass") {
+                return await response.text();
+            }
 
-        var callStatus = response.headers.get('Call-Status');
+            // If 'Call-Status' is 'Fail', stop making requests and return null
+            if (callStatus === "Fail") {
+                return null;
+            }
 
-        //easy debug
-        console.log(`API SAID : ${callStatus}`);
+        } catch (error) {
 
-        //if pass end here send data to caller
-        if (callStatus === "Pass") {
-            var responseText = await response?.text();
-
-            return responseText;
+            //TODO log to server
+            // If an error occurs during the fetch operation, log the error and return null
+            console.error(`Error occurred while making HTTP request: ${error}`);
+            return null;
         }
-        if (callStatus === "Fail") { return null; } //don't bang API if said fail, tell caller with null
     }
-
 }
+
 
 //gets current page url
 export function getUrl() {

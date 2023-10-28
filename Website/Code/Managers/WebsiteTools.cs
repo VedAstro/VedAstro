@@ -392,22 +392,6 @@ namespace Website
             }
         }
 
-        /// <summary>
-        /// Gets XML file from any URL and parses it into xelement list
-        /// </summary>
-        public static async Task<List<XElement>> GetXmlFile(string url)
-        {
-
-            //load xml event data files before hand to be used quickly later for search
-            //get main horoscope prediction file (located in wwwroot)
-            var fileStream = await AppData.HttpClient.GetStreamAsync(url);
-
-            //parse raw file to xml doc
-            var document = XDocument.Load(fileStream);
-
-            //get all records in document
-            return document.Root.Elements().ToList();
-        }
 
         /// <summary>
         /// Tries to get visitor ID from browser else makes new Visitor ID
@@ -802,6 +786,7 @@ namespace Website
 
         /// <summary>
         /// give null data to send to get auto use GET instead of POST done by JS side
+        /// TODO MARKED FOR DELETION
         /// </summary>
         public static async Task<string?> ReadOnlyIfPassJSString(string receiverUrl, string? dataToSend, IJSRuntime jsRuntime)
         {
@@ -811,6 +796,7 @@ namespace Website
 
             return rawPayloadStr;
         }
+
 
 
 

@@ -22,6 +22,7 @@ KEEP IT REAL
 @using VedAstro.Library;
 @using System.Xml.Linq
 @using System.Collections
+@using Newtonsoft.Json.Linq
 
 @*Component shows combo box with people list*@
 
@@ -38,7 +39,7 @@ KEEP IT REAL
 
             @* DROPDOWN BUTTON *@
             <button type="button" @onclick="OnClickTrigger" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
-                @if (!SelectedPerson.Equals(Person.Empty))
+                @if (IsReady && !SelectedPerson.Equals(Person.Empty))
                 {
                     <PersonTooltip Person="@SelectedPerson" />
                 }
@@ -244,6 +245,19 @@ KEEP IT REAL
         PersonListDisplay = PersonList;
         PublicPersonListDisplay = PublicPersonList;
 
+        //try get previously set value from storage for better UX
+        //NOTE: update direct to field to avoid duplicate set local storage
+        var rawJson = await _jsRuntime.GetProperty(BrowserStorageKey);
+        if (!string.IsNullOrEmpty(rawJson))
+        {
+            //programmatically select the person
+            var fromJson = Person.FromJson(JToken.Parse(rawJson));
+            //simulate click
+            OnClickPersonName(fromJson);
+        }
+
+
+
         IsReady = true;
 
         //need to propagate changes
@@ -271,10 +285,18 @@ KEEP IT REAL
     }
 
     /// <summary>
+    /// Key used to store selected person in storage
+    /// </summary>
+    private static string BrowserStorageKey = "SelectedPerson";
+
+    /// <summary>
     /// when a person in tooltip drop down menu is clicked
     /// </summary>
-    private void OnClickPersonName(Person person)
+    private async Task OnClickPersonName(Person person)
     {
+        //set for later use
+        await _jsRuntime.SetProperty(BrowserStorageKey, person.ToJson().ToString());
+
         //set tooltip as well
         SelectedPerson = person;
 

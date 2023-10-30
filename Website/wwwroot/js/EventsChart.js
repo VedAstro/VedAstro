@@ -117,7 +117,7 @@ export class EventsChart {
         });
 
         //get selected event by user
-        $(".EventChartContent rect").one("click", (eventData) => EventsChart.onClickSelectedGoogleCalendarEvent(eventData, this));
+        $(".EventChartContent").one("click", (eventData) => EventsChart.onClickSelectedGoogleCalendarEvent(eventData, this));
 
     }
 
@@ -364,7 +364,7 @@ export class EventsChart {
         return mousePosition;
     }
 
-    //control comes from Page here for adding events to google
+    //control comes from Page to here for adding events to google
     static onClickSelectedGoogleCalendarEvent(eventObject, instance) {
 
         //get details on the selected event
@@ -415,7 +415,6 @@ export class EventsChart {
 
         request.execute(function (event) {
 
-            console.log(event);
             //STATE: events successfully created and updated to Google
             //tell user about it
             Swal.fire({
@@ -425,11 +424,7 @@ export class EventsChart {
                 iconHtml: '<span class="iconify" data-icon="streamline:interface-calendar-check-approve-calendar-check-date-day-month-success" data-inline="false"></span>',
                 showCloseButton: true,
                 focusConfirm: false,
-                confirmButtonText: 'Great!',
-                didOpen: () => {
-                    // This will ensure Iconify icons are visible
-                    Iconify.scanDocument();
-                }
+                confirmButtonText: 'Great!'
             });
 
         });

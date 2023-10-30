@@ -4,8 +4,8 @@ namespace VedAstro.Library
 {
     /// <summary>
     /// increase efficiency by using struct
-    /// note : the lack of GetDurationMinutes compared to the other Event class
     /// struct shaves a few seconds vs classes
+    /// note : the lack of GetDurationMinutes compared to the other Event class
     /// </summary>
     public class EventSlice 
     {

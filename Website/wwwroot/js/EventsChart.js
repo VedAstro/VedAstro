@@ -103,6 +103,24 @@ export class EventsChart {
 
     }
 
+    //on click add events to google calendar,
+    //ask user to select event and take from there
+    AddEventsToGoogleCalendar() {
+        console.log("Adding events to Google Calendar");
+
+        //tell user to select an event
+        Swal.fire({
+            title: 'Select an event',
+            text: 'The selected event will be sent to your Google Calendar',
+            icon: 'info',
+            confirmButtonText: 'OK'
+        });
+
+        //get selected event by user
+        $(".EventChartContent rect").one("click", (eventData) => EventsChart.onClickSelectedGoogleCalendarEvent(eventData, this));
+
+    }
+
     //highlights all events rects in chart by
     //the inputed keyword in the event name
     highlightByEventName(keyword) {
@@ -299,6 +317,153 @@ export class EventsChart {
         $verticalLine.css('filter', '');
     }
 
+    //Gets a mouses x axis relative inside the given element
+    //used to get mouse location on SVG chart, zoom auto corrected 
+    static getMousePositionInElement(mouseEventData, instance) {
+
+        //get relative position of mouse in Dasa view
+        //after zoom pixels on screen change, but when rendering
+        //SVG description box we need x, y before zoom (AI's code!)
+        var holder = instance.$EventsChartSvgHolder[0]; //zoom is done on main holder in Blazor side
+
+        var mousePosition = {};
+        if (holder != null) {
+            var zoom = parseFloat(window.getComputedStyle(holder).zoom);
+            mousePosition = {
+                xAxis: mouseEventData.originalEvent.offsetX / zoom,
+                yAxis: mouseEventData.originalEvent.offsetY / zoom
+            };
+        }
+        //in svg direct browser we don't have DIV holder, so no zoom correction
+        else {
+            mousePosition = {
+                xAxis: mouseEventData.originalEvent.offsetX,
+                yAxis: mouseEventData.originalEvent.offsetY
+            };
+        }
+
+        return mousePosition;
+    }
+
+    static onClickSelectedGoogleCalendarEvent(eventObject, instance) {
+
+        //get details on the selected event
+        var targetRect = eventObject.target;
+        var eventName = targetRect.getAttribute("eventname");
+        var eventDescription = targetRect.getAttribute("eventdescription");
+        var eventStdTime = targetRect.getAttribute("stdtime");
+
+        //show event that was selected
+        console.log(`EventSelected: ${eventName}`);
+
+        //debugger;
+        //EventsChart.LoginGoogleCalendarUser(instance);
+        EventsChart.handleAuthClick();
+    }
+
+
+
+    static addEventToGoogleCalendar() {
+
+        const event = {
+            'summary': 'Google I/O 2015',
+            'location': '800 Howard St., San Francisco, CA 94103',
+            'description': 'A chance to hear more about Google\'s developer products.',
+            'start': {
+                'dateTime': '2015-05-28T09:00:00-07:00',
+                'timeZone': 'America/Los_Angeles'
+            },
+            'end': {
+                'dateTime': '2015-05-28T17:00:00-07:00',
+                'timeZone': 'America/Los_Angeles'
+            },
+            'recurrence': [
+                'RRULE:FREQ=DAILY;COUNT=2'
+            ],
+            'attendees': [
+                { 'email': 'lpage@example.com' },
+                { 'email': 'sbrin@example.com' }
+            ],
+            'reminders': {
+                'useDefault': false,
+                'overrides': [
+                    { 'method': 'email', 'minutes': 24 * 60 },
+                    { 'method': 'popup', 'minutes': 10 }
+                ]
+            }
+        };
+
+        const request = window.gapi.client.calendar.events.insert({
+            'calendarId': 'primary',
+            'resource': event
+        });
+
+        request.execute(function (event) {
+            alert('Event created: ' + event.htmlLink);
+        });
+    }
+
+    /**
+       *  Sign in the user upon button click.
+       */
+    static handleAuthClick() {
+        window.tokenClient.callback = async (resp) => {
+            if (resp.error !== undefined) {
+                throw (resp);
+            }
+            //document.getElementById('signout_button').style.visibility = 'visible';
+            //document.getElementById('authorize_button').innerText = 'Refresh';
+
+            EventsChart.addEventToGoogleCalendar();
+
+            //await listUpcomingEvents();
+        };
+
+        if (window.gapi.client.getToken() === null) {
+            // Prompt the user to select a Google Account and ask for consent to share their data
+            // when establishing a new session.
+            window.tokenClient.requestAccessToken({ prompt: 'consent' });
+        } else {
+            // Skip display of account chooser and consent dialog for an existing session.
+            window.tokenClient.requestAccessToken({ prompt: '' });
+        }
+    }
+
+
+    /**
+      * Print the summary and start datetime/date of the next ten events in
+      * the authorized user's calendar. If no events are found an
+      * appropriate message is printed.
+      */
+    static async listUpcomingEvents() {
+        let response;
+        try {
+            const request = {
+                'calendarId': 'primary',
+                'timeMin': (new Date()).toISOString(),
+                'showDeleted': false,
+                'singleEvents': true,
+                'maxResults': 10,
+                'orderBy': 'startTime',
+            };
+            response = await window.gapi.client.calendar.events.list(request);
+        } catch (err) {
+            document.getElementById('content').innerText = err.message;
+            return;
+        }
+
+        const events = response.result.items;
+        if (!events || events.length == 0) {
+            console.log('No events found.');
+            return;
+        }
+        // Flatten to string to display
+        const output = events.reduce(
+            (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
+            'Events:\n');
+        console.log(output);
+    }
+
     //fired when mouse moves over dasa view box
     //used to auto update cursor line & time legend
     static onMouseMoveHandler(mouse, instance) {
@@ -306,7 +471,7 @@ export class EventsChart {
         //get relative position of mouse in Dasa view
         //after zoom pixels on screen change, but when rendering
         //SVG description box we need x, y before zoom (AI's code!)
-        var mousePosition = getMousePositionInElement(mouse); //todo no work in zoom
+        var mousePosition = EventsChart.getMousePositionInElement(mouse, instance); //todo no work in zoom
 
         //if cursor is out of chart view hide cursor and end here
         if (mousePosition === 0) { SVG(instance.$CursorLine[0]).hide(); return; }
@@ -321,33 +486,6 @@ export class EventsChart {
 
         //-------------------------LOCAL FUNCS--------------------------
 
-        //Gets a mouses x axis relative inside the given element
-        //used to get mouse location on SVG chart, zoom auto corrected 
-        function getMousePositionInElement(mouseEventData) {
-
-            //get relative position of mouse in Dasa view
-            //after zoom pixels on screen change, but when rendering
-            //SVG description box we need x, y before zoom (AI's code!)
-            var holder = instance.$EventsChartSvgHolder[0]; //zoom is done on main holder in Blazor side
-
-            var mousePosition = {};
-            if (holder != null) {
-                var zoom = parseFloat(window.getComputedStyle(holder).zoom);
-                mousePosition = {
-                    xAxis: mouse.originalEvent.offsetX / zoom,
-                    yAxis: mouse.originalEvent.offsetY / zoom
-                };
-            }
-            //in svg direct browser we don't have DIV holder, so no zoom correction
-            else {
-                mousePosition = {
-                    xAxis: mouse.originalEvent.offsetX,
-                    yAxis: mouse.originalEvent.offsetY
-                };
-            }
-
-            return mousePosition;
-        }
 
         function autoMoveCursorLine(relativeMouseX) {
             //give a tiny delay so user can aim better at event

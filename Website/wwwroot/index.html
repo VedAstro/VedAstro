@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 
 <!--
@@ -188,9 +188,64 @@ Allen Mullen
 
     </script>
 
+    <!-- GOOGLE CALENDAR LOGIN -->
+    <script type="text/javascript">
+        /* exported gapiLoaded */
+        /* exported gisLoaded */
+
+        const API_KEY = 'AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE';
+        const CLIENT_ID = '19638836771-oflt5g9mnkft6chkl04vp4m5qpu5h569.apps.googleusercontent.com';
+
+        // Discovery doc URL for APIs used by the quickstart
+        const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+
+        // Authorization scopes required by the API; multiple scopes can be
+        // included, separated by spaces.
+        const SCOPES = 'https://www.googleapis.com/auth/calendar.events';
+
+        // window.tokenClient;
+        window.gapiInited = false;
+        window.gisInited = false;
+
+
+        /**
+         * Callback after api.js is loaded.
+         */
+        function gapiLoaded() {
+            window.gapi.load('client', initializeGapiClient);
+        }
+
+        /**
+         * Callback after the API client is loaded. Loads the
+         * discovery doc to initialize the API.
+         */
+        async function initializeGapiClient() {
+            await window.gapi.client.init({
+                apiKey: API_KEY,
+                discoveryDocs: [DISCOVERY_DOC],
+            });
+            window.gapiInited = true;
+        }
+
+        /**
+         * Callback after Google Identity Services are loaded.
+         */
+        function gisLoaded() {
+            //token client is accessed later upon user click to choose account calendar
+            window.tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPES,
+                callback: '', // defined later
+            });
+            window.gisInited = true;
+        }
+
+
+    </script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+
 </head>
-
-
 
 <body style="background: #F0F2F5;">
 
@@ -259,7 +314,6 @@ Allen Mullen
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
 
-
     <!--Tooltip Lib -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/tippy.js/dist/tippy.umd.min.js"></script>
@@ -268,7 +322,6 @@ Allen Mullen
     <!-- DATE PICKER  (Vanilla Calendar) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@2.4.0/build/vanilla-calendar.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@2.4.0/build/vanilla-calendar.min.js"></script>
-
 
     <!--Chart JS  : used in planet strength chart-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>

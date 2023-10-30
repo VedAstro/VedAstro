@@ -380,15 +380,125 @@ namespace VedAstro.Library
 
         #region GENERAL
 
-        ///// <summary>
-        ///// This method exists mainly for testing internal time calculation of LMT
-        ///// Important that this method passes the test at all times, so much depends on this
-        ///// </summary>
-        //public static DateTimeOffset LocalMeanTime(Time time) => time.GetLmtDateTimeOffset();
+        /// <summary>
+        /// Given a birth time, current time and event name, gets the event data occuring at current time
+        /// Easy way to check if Gochara is occuring at given time, with start and end time calculated
+        /// Precision hard set to 1 hour TODO
+        /// </summary>
+        public static async Task<Event> EventDataAtTime(Time birthTime, Time checkTime, EventName nameOfEvent)
+        {
+            //from event name, get full event data
+            if (EventManager.EventDataList == null || !EventManager.EventDataList.Any()) { EventManager.EventDataList = await Tools.ConvertXmlListFileToInstanceList<EventData>(EventManager.UrlEventDataListXml); }
+            EventData eventData = EventManager.EventDataList.Where(x => x.Name == nameOfEvent).FirstOrDefault();
+
+            //TODO should be changeable for fine events
+            var precisionInHours = 1;
+
+            //check if event is occuring
+            //NOTE: hack to enter birth time with existing code
+            var birthTimeWrapped = new Person("", birthTime, Gender.Male);
+            var isOccuringAtCheckTime = EventManager.ConvertToEventSlice(checkTime, eventData, birthTimeWrapped).IsOccuring;
+
+            //if occuring, start scanning for start & end times
+            if (isOccuringAtCheckTime)
+            {
+                //scan for start time given event data
+                var eventStartTime = Calculate.EventStartTime(birthTime, checkTime, eventData, precisionInHours);
+
+                //scan for end time given event data
+                var eventEndTime = Calculate.EventEndTime(birthTime, checkTime, eventData, precisionInHours);
+
+                var finalEvent = new Event(eventData.Name, eventData.Nature, eventData.Description, eventStartTime, eventEndTime);
+
+                return finalEvent;
+            }
+
+            //if not occuring, let user know with empty event
+            else { return Event.Empty; }
+
+        }
+
+        public static Time EventStartTime(Time birthTime, Time checkTime, EventData eventData, int precisionInHours)
+        {
+            //NOTE: hack to enter birth time with existing code
+            var birthTimeWrapped = new Person("", birthTime, Gender.Male);
+
+            //check time will be used as possible start time
+            var possibleStartTime = checkTime;
+            var previousPossibleStartTime = possibleStartTime;
+
+            //start as not found
+            var isFound = false;
+            while (!isFound) //run while not found
+            {
+                //check possible start time if event occurring (heavy computation)
+                var updatedEventData = EventManager.ConvertToEventSlice(possibleStartTime, eventData, birthTimeWrapped);
+
+                //if occuring than continue to next, start time not found
+                if (updatedEventData != null && updatedEventData.IsOccuring)
+                {
+                    //save a copy of possible time, to be used when we go too far
+                    previousPossibleStartTime = possibleStartTime;
+
+                    //decrement entered time, to check next possible start time in the past
+                    possibleStartTime = possibleStartTime.SubtractHours(precisionInHours);
+                }
+                //start time found!, event has stopped occuring (too far)
+                else
+                {
+                    //return possible start time as confirmed!
+                    possibleStartTime = previousPossibleStartTime;
+                    isFound = true; //stop looking
+                }
+            }
+
+            //if control reaches here than start time found
+            return possibleStartTime;
+
+        }
+        
+        public static Time EventEndTime(Time birthTime, Time checkTime, EventData eventData, int precisionInHours)
+        {
+            //NOTE: hack to enter birth time with existing code
+            var birthTimeWrapped = new Person("", birthTime, Gender.Male);
+
+            //check time will be used as possible end time
+            var possibleEndTime = checkTime;
+            var previousPossibleEndTime = possibleEndTime;
+
+            //end as not found
+            var isFound = false;
+            while (!isFound) //run while not found
+            {
+                //check possible end time if event occurring (heavy computation)
+                var updatedEventData = EventManager.ConvertToEventSlice(possibleEndTime, eventData, birthTimeWrapped);
+
+                //if occuring than continue to next, end time not found
+                if (updatedEventData != null && updatedEventData.IsOccuring)
+                {
+                    //save a copy of possible time, to be used when we go too far
+                    previousPossibleEndTime = possibleEndTime;
+
+                    //increment possible end time, to check next possible end time in the future
+                    possibleEndTime = possibleEndTime.AddHours(precisionInHours);
+                }
+                //end time found!, event has stopped occuring (too far)
+                else
+                {
+                    //return possible end time as confirmed!
+                    possibleEndTime = previousPossibleEndTime;
+                    isFound = true; //stop looking
+                }
+            }
+
+            //if control reaches here than end time found
+            return possibleEndTime;
+
+        }
 
 
         /// <summary>
-        /// Given a standard time (STD) and location will get Local mean time
+        /// Given a standard time (LMT) and location will get Local mean time
         /// </summary>
         public static string LocalMeanTime(Time time) => time.GetLmtDateTimeOffsetText();
 
@@ -1144,7 +1254,7 @@ namespace VedAstro.Library
                 var currentSunSign = SunSign(time);
 
                 //if entered time not yet found
-                while (true)
+                while (true) //breaks when found
                 {
                     //get the sign at possible entered time
                     var possibleSunSign = SunSign(possibleEnteredTime);

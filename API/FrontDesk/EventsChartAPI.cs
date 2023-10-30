@@ -68,6 +68,8 @@ namespace API
 
             try
             {
+                //SET ayanamsa to RAMAN
+                Calculate.Ayanamsa = (int)Ayanamsa.RAMAN;
 
                 //get basic spec on how to make chart
                 //check if the specs given is correct and readable
@@ -127,6 +129,9 @@ namespace API
 
             try
             {
+                //SET ayanamsa to RAMAN
+                Calculate.Ayanamsa = (int)Ayanamsa.RAMAN;
+
                 //check if the specs given is correct and readable
                 //this is partially filled chart with no generated svg content only specs
                 var chartSpecsOnly = await EventsChart.FromUrl(settingsUrl);
@@ -162,6 +167,9 @@ namespace API
 
             try
             {
+                //SET ayanamsa to RAMAN
+                Calculate.Ayanamsa = (int)Ayanamsa.RAMAN;
+
                 //data comes out of caller, basic spec on how the chart should be
                 var requestJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
 

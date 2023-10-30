@@ -22,6 +22,7 @@ export var showAccordion = (id) => $(id).collapse("show");
 export var toggleAccordion = (id) => $(id).collapse("toggle"); //Uses Bootstrap Jquery plugin to toggle any collapsible component by id
 export var scrollIntoView = (id) => $(id)[0].scrollIntoView(); //scrolls element by id into view
 export var highlightByEventName = (keyword) => window.EventsChartLoaded.highlightByEventName(keyword);
+export var AddEventsToGoogleCalendar = () => window.EventsChartLoaded.AddEventsToGoogleCalendar();
 export var unhighlightByEventName = (keyword) => window.EventsChartLoaded.unhighlightByEventName(keyword);
 
 const RETRY_COUNT = 5;

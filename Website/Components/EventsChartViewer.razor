@@ -10,10 +10,10 @@
     @* BUTTON ROW *@
     <div class="hstack gap-2 mb-2">
         <IconButton SmallSize="true" IconName="icon-park-outline:full-screen-one" TooltipText="Maximize" OnClickCallback="OnClickMaximize" />
-        <IconButton SmallSize="true" IconName="iconamoon:zoom-in" TooltipText="Zoom In" OnClickCallback="OnClickZoomIn"/>
-        <IconButton SmallSize="true" IconName="iconamoon:zoom-out" TooltipText="Zoom Out" OnClickCallback="OnClickZoomOut"/>
-        <IconButton SmallSize="true" ButtonText="Horoscope" OpenNewTab="true" IconName="fluent:book-star-20-filled" ClickUrl="@($"{PageRoute.Horoscope}/{SelectedPerson.Id}")"/>
-        <IconButton SmallSize="true" ButtonText="Show/Hide" IconName="bx:hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))"/>
+        <IconButton SmallSize="true" IconName="iconamoon:zoom-in" TooltipText="Zoom In" OnClickCallback="OnClickZoomIn" />
+        <IconButton SmallSize="true" IconName="iconamoon:zoom-out" TooltipText="Zoom Out" OnClickCallback="OnClickZoomOut" />
+        <IconButton SmallSize="true" ButtonText="Horoscope" OpenNewTab="true" IconName="fluent:book-star-20-filled" ClickUrl="@($"{PageRoute.Horoscope}/{SelectedPerson.Id}")" />
+        <IconButton SmallSize="true" ButtonText="Show/Hide" IconName="bx:hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))" />
         <IconButton SmallSize="true" DropDownWidthPx="@GR.W255px" ButtonText="Highlight" IconName="fluent:highlight-16-filled">
             <DropDownList>
                 <div class="d-flex flex-wrap gap-1">
@@ -29,32 +29,33 @@
                 </div>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" ButtonText="Life Events" IconName="mdi:calendar-outline" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}{SelectedPerson.Id}")"/>
-        <IconButton SmallSize="true" ButtonText="Download" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg"/>
-        <IconButton SmallSize="true" TooltipText="Print" IconName="ic:round-print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))"/>
+        <IconButton SmallSize="true" ButtonText="Life Events" IconName="mdi:calendar-outline" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}{SelectedPerson.Id}")" />
+        <IconButton SmallSize="true" ButtonText="Add to Google" IconName="logos:google-calendar" OnClickCallback="OnClickAddToGoogleEvents" />
+        <IconButton SmallSize="true" ButtonText="Download" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg" />
+        <IconButton SmallSize="true" TooltipText="Print" IconName="ic:round-print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))" />
         <IconButton SmallSize="true" TooltipText="Share" IconName="tabler:share-2">
             <DropDownList>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("ShareEmailEventsChart"))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email"/>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email" />
                         <span>Email PDF</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.ShareCurrentPageOnFacebook())">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook"/>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook" />
                         <span>Facebook</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => Website.AppData.Go(URL.Instagram, newTab: true))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:instagram"/>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:instagram" />
                         <span>Instagram</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => Website.AppData.Go(URL.Twitter, newTab: true))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:twitter"/>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:twitter" />
                         <span>Twitter</span>
                     </a>
                 </li>
@@ -64,13 +65,13 @@
             <DropDownList>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="OnClickCopyPOSTCall">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mingcute:copy-3-line"/>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mingcute:copy-3-line" />
                         <span>Copy API</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("ShareEmailEventsChart"))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mdi:gear"/>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mdi:gear" />
                         <span>Ayanamsa</span>
                     </a>
                 </li>
@@ -350,6 +351,12 @@
     }
 
 
+    private void OnClickAddToGoogleEvents()
+    {
+        //calls Google events added in EventCharts.js, based on what is loaded
+        _jsRuntime.InvokeVoidAsync(JS.AddEventsToGoogleCalendar);
+    }
+
     /// <summary>
     /// Toggle highlight of events upon click of checkbox
     /// </summary>
@@ -362,12 +369,14 @@
         //calling this via JS
         if (toggled)
         {
+            //calls highlighter in EventCharts.js, based on what is loaded
             _jsRuntime.InvokeVoidAsync(JS.highlightByEventName, keyword);
         }
 
         //UNHIGHLIGHT
         else
         {
+            //calls highlighter in EventCharts.js, based on what is loaded
             _jsRuntime.InvokeVoidAsync(JS.unhighlightByEventName, keyword);
         }
     }

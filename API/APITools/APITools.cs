@@ -974,7 +974,7 @@ namespace API
 
             //rate set in runtime settings is multiplied
             var msDelayRate = int.Parse(Secrets.OpenAPICallDelayMs);
-            var freeCallRate = 100;//allowed high speed calls per minute //int.Parse(Secrets.OpenAPICallDelayMs); TODO add to Secrets
+            var freeCallRate = 25;//allowed high speed calls per minute //int.Parse(Secrets.OpenAPICallDelayMs); TODO add to Secrets
 
 
             //if delay applied then let caller know

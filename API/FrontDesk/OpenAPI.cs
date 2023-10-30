@@ -200,8 +200,11 @@ namespace API
         )
         {
             //0 : LOG CALL
-            //log ip address, call time and URL
-            var call = APILogger.Visit(incomingRequest);
+            //log ip address, call time and URL,  used later for throttle limit
+            var callLog = await APILogger.Visit(incomingRequest);
+
+            // Control API overload, even this if hit hard can COST Money via CDN
+            await APITools.AutoControlOpenAPIOverload(callLog);
 
             var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
             return APITools.FailMessageJson(message, incomingRequest);

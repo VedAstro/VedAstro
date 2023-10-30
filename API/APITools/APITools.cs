@@ -30,6 +30,7 @@ using SuperConvert.Extensions;
 using VedAstro.Library;
 using Microsoft.Bing.ImageSearch.Models;
 using Microsoft.Bing.ImageSearch;
+using Microsoft.Extensions.DependencyModel;
 using Person = VedAstro.Library.Person;
 
 using MimeDetective;
@@ -969,19 +970,32 @@ namespace API
         public static async Task AutoControlOpenAPIOverload(OpenAPILogBookEntity callData)
         {
             var minute1 = 1;
+            var minute30 = 30;
             var ipAddress = callData.PartitionKey;
             var lastCallsCount = APILogger.GetAllCallsWithinLastTimeperiod(ipAddress, minute1);
 
             //rate set in runtime settings is multiplied
             var msDelayRate = int.Parse(Secrets.OpenAPICallDelayMs);
-            var freeCallRate = 25;//allowed high speed calls per minute //int.Parse(Secrets.OpenAPICallDelayMs); TODO add to Secrets
+            var freeCallRate = 50;//allowed high speed calls per minute //int.Parse(Secrets.OpenAPICallDelayMs); TODO add to Secrets
 
+            //if more than 1 abuse count in the last 10 minutes than end the call here with no reply
+            //NOTE : no default way in Azure Function to cut connection, so THROW EXCEPTION cuts call
+            var abuseCount = APILogger.GetAbuseCountWithinLastTimeperiod(ipAddress, minute30);
+            if (abuseCount > 2)
+            {
+                //drop the call
+                await Task.Delay(9999999); //12min
+                throw new Exception();
+            }
 
             //if delay applied then let caller know
             //NOTE : other words allowed 1 call every 30 seconds
             var userCallRate = lastCallsCount / minute1; //calls per minute
             if (userCallRate > freeCallRate)
             {
+                //make a mark in API abuse list, to detect excessive non-stop calls
+                await AzureTable.APIAbuseList.UpsertEntityAsync(new APIAbuseRow() { PartitionKey = ipAddress, RowKey = Tools.GenerateId() });
+
                 //every additional call within specified time limit gets slowed accordingly
                 //exp: last 3 calls x 800ms = 4th call delay --> 2400ms
                 var msDelay = lastCallsCount * msDelayRate;
@@ -989,13 +1003,6 @@ namespace API
                 //todo shorten link
                 APITools.ApiExtraNote = $"Donate To Increase Speed : " +
                                         $"{URL.Donate}";
-
-                //APITools.ApiExtraNote = $"Call Slowed Down {msDelay}ms:" +
-                //						$"\nSorry for now public API quota is {freeCallRate} calls/min." +
-                //						$"\nYou made {lastCallsCount} calls in 1 min." +
-                //						$"\nPlease buy unlimited for only $1 :" +
-                //						$"https://ko-fi.com/summary/f17451bf-7509-4e59-8471-2f7ce446c9ae";
-
 
                 await Task.Delay(msDelay);
 #if DEBUG

@@ -106,45 +106,57 @@ public static class APILogger
     /// </summary>
     public static async Task<OpenAPILogBookEntity> Visit(HttpRequestData httpRequestData)
     {
-        //var get ip address & URL and save it for future use
-        APILogger.IpAddress = httpRequestData?.GetCallerIp()?.ToString() ?? "no ip";
-        APILogger.URL = httpRequestData?.Url.ToString() ?? "no URL";
-        
-        //# extract out the body data (POST/GET/...)
-        var streamReader = new StreamReader(httpRequestData?.Body);
-        var payload = await streamReader?.ReadToEndAsync();
-        var bodyData = "no Body";
-        var generateRowKey = Tools.GenerateId();// random so each call is logged without conflict
+        //adds log to DB and returns saved data for checking
+        var openApiLogBookEntity = await OpenApiLogBookEntity();
 
-        // Check if the payload is a valid string or binary
-        if (payload != null)
+        return openApiLogBookEntity;
+
+        async Task<OpenAPILogBookEntity> OpenApiLogBookEntity()
         {
-            bool isBinary = payload.Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n');
-            bodyData = isBinary ? $"Binary data stored in cache : {generateRowKey}" : payload; //link to cache
-            if (isBinary)
+            //var get ip address & URL and save it for future use
+            APILogger.IpAddress = httpRequestData?.GetCallerIp()?.ToString() ?? "no ip";
+            APILogger.URL = httpRequestData?.Url.ToString() ?? "no URL";
+
+            //# extract out the body data (POST/GET/...)
+            var streamReader = new StreamReader(httpRequestData?.Body);
+            var payload = await streamReader?.ReadToEndAsync();
+            var bodyData = "no Body";
+            var generateRowKey = Tools.GenerateId(); // random so each call is logged without conflict
+
+            // Check if the payload is a valid string or binary
+            if (payload != null)
             {
-                var chartBytes = Encoding.UTF8.GetBytes(payload); // Convert the payload to bytes
-                var mimeType = "application/octet-stream"; // This is a general MIME type for binary data. Don't waste time detecting file type, just logging.
-                //add Binary file to cache location (debugging & reference purposes)
-                var cacheBinaryBody = $"BinaryBody_{IpAddress}_{generateRowKey}";
-                await AzureCache.Add(cacheBinaryBody, chartBytes, mimeType);
+                bool isBinary = payload.Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n');
+                bodyData = isBinary ? $"Binary data stored in cache : {generateRowKey}" : payload; //link to cache
+                if (isBinary)
+                {
+                    var chartBytes = Encoding.UTF8.GetBytes(payload); // Convert the payload to bytes
+                    var mimeType =
+                        "application/octet-stream"; // This is a general MIME type for binary data. Don't waste time detecting file type, just logging.
+                    //add Binary file to cache location (debugging & reference purposes)
+                    var cacheBinaryBody = $"BinaryBody_{IpAddress}_{generateRowKey}";
+                    await AzureCache.Add(cacheBinaryBody, chartBytes, mimeType);
+                }
             }
+
+            //make the cache row to be added
+            var customerEntity = new OpenAPILogBookEntity()
+            {
+                //can have many IP as partition key
+                PartitionKey = IpAddress,
+                RowKey = generateRowKey,
+                URL = URL,
+                Body = bodyData,
+                Timestamp = DateTimeOffset.UtcNow //utc used later to check for overload control
+            };
+
+            //NOTE: control here, ramming here can raise TABLE STORAGE prices too
+            await APITools.AutoControlOpenAPIOverload(customerEntity);
+
+            //creates record if no exist, update if already there
+            LogBookClient.UpsertEntity(customerEntity);
+            return customerEntity;
         }
-
-        //make the cache row to be added
-        var customerEntity = new OpenAPILogBookEntity()
-        {
-            //can have many IP as partition key
-            PartitionKey = IpAddress,
-            RowKey = generateRowKey,
-            URL = URL,
-            Body = bodyData,
-            Timestamp = DateTimeOffset.UtcNow //utc used later to check for overload control
-        };
-
-        //creates record if no exist, update if already there
-        LogBookClient.UpsertEntity(customerEntity);
-        return customerEntity;
     }
 
 
@@ -160,6 +172,17 @@ public static class APILogger
         //get all IP address records in the last specified time period
         DateTimeOffset aMomentAgo = DateTimeOffset.UtcNow.AddMinutes(-timeMinute);
         Pageable<OpenAPILogBookEntity> linqEntities = LogBookClient.Query<OpenAPILogBookEntity>(call => call.PartitionKey == ipAddress && call.Timestamp >= aMomentAgo);
+
+        //return the number of last calls found
+        return linqEntities.Count();
+    }
+
+
+    public static int GetAbuseCountWithinLastTimeperiod(string ipAddress, double timeMinute)
+    {
+        //get all IP address records in the last specified time period
+        var aMomentAgo = DateTimeOffset.UtcNow.AddMinutes(-timeMinute);
+        var linqEntities = AzureTable.APIAbuseList.Query<APIAbuseRow>(apiAbs => apiAbs.PartitionKey == ipAddress && apiAbs.Timestamp >= aMomentAgo);
 
         //return the number of last calls found
         return linqEntities.Count();

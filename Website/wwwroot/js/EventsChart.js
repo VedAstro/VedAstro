@@ -297,6 +297,25 @@ export class EventsChart {
 
     }
 
+    //converts VedAstro date format to Google Calendar format
+    static convertDateFormat(dateStr) {
+        // Split the date and time parts
+        let [timePart, datePart, zonePart] = dateStr.split(' ');
+        // Split the date into day, month, and year
+        let [day, month, year] = datePart.split('/');
+        // Combine the parts into a new date string and create a new Date object
+        let dateObj = new Date(`${year}-${month}-${day}T${timePart}${zonePart}`);
+
+        // TODO: Convert offset to timezone. This is not straightforward because multiple timezones can have the same offset.
+        const timeZone = '';
+
+        // Return the JSON object
+        return {
+            'dateTime': dateObj.toISOString(), // Return the date in ISO 8601 format
+            'timeZone': timeZone
+        };
+    }
+
     //on mouse leave life event name label, unhighlight event line
     static onMouseLeaveLifeEventHandler(mouse, instance) {
 
@@ -345,45 +364,41 @@ export class EventsChart {
         return mousePosition;
     }
 
+    //control comes from Page here for adding events to google
     static onClickSelectedGoogleCalendarEvent(eventObject, instance) {
 
         //get details on the selected event
         var targetRect = eventObject.target;
-        var eventName = targetRect.getAttribute("eventname");
-        var eventDescription = targetRect.getAttribute("eventdescription");
-        var eventStdTime = targetRect.getAttribute("stdtime");
+
+        //debugger;
+        EventsChart.SelectAccountAndAddEvent(targetRect);
+    }
+
+    static addEventToGoogleCalendar(clickedRect) {
+
+        var eventName = clickedRect.getAttribute("eventname");
+        var eventDescription = clickedRect.getAttribute("eventdescription");
+        var eventStdTime = clickedRect.getAttribute("stdtime");
 
         //show event that was selected
         console.log(`EventSelected: ${eventName}`);
 
-        //debugger;
-        //EventsChart.LoginGoogleCalendarUser(instance);
-        EventsChart.handleAuthClick();
-    }
-
-
-
-    static addEventToGoogleCalendar() {
+        //convert to format supported by Google Calendar
+        var parsedStartTime = EventsChart.convertDateFormat(eventStdTime);
 
         const event = {
-            'summary': 'Google I/O 2015',
-            'location': '800 Howard St., San Francisco, CA 94103',
-            'description': 'A chance to hear more about Google\'s developer products.',
-            'start': {
-                'dateTime': '2015-05-28T09:00:00-07:00',
-                'timeZone': 'America/Los_Angeles'
-            },
-            'end': {
-                'dateTime': '2015-05-28T17:00:00-07:00',
-                'timeZone': 'America/Los_Angeles'
-            },
-            'recurrence': [
-                'RRULE:FREQ=DAILY;COUNT=2'
-            ],
-            'attendees': [
-                { 'email': 'lpage@example.com' },
-                { 'email': 'sbrin@example.com' }
-            ],
+            'summary': eventName,
+            //'location': '',
+            'description': eventDescription,
+            'start': parsedStartTime,
+            'end': parsedStartTime,
+            //'recurrence': [
+            //    'RRULE:FREQ=DAILY;COUNT=2'
+            //],
+            //'attendees': [
+            //    { 'email': 'lpage@example.com' },
+            //    { 'email': 'sbrin@example.com' }
+            //],
             'reminders': {
                 'useDefault': false,
                 'overrides': [
@@ -399,24 +414,40 @@ export class EventsChart {
         });
 
         request.execute(function (event) {
-            alert('Event created: ' + event.htmlLink);
+
+            console.log(event);
+            //STATE: events successfully created and updated to Google
+            //tell user about it
+            Swal.fire({
+                title: 'Event added!',
+                text: `Added ${event.summary}, view here ${event.htmlLink}`,
+                icon: 'info',
+                iconHtml: '<span class="iconify" data-icon="streamline:interface-calendar-check-approve-calendar-check-date-day-month-success" data-inline="false"></span>',
+                showCloseButton: true,
+                focusConfirm: false,
+                confirmButtonText: 'Great!',
+                didOpen: () => {
+                    // This will ensure Iconify icons are visible
+                    Iconify.scanDocument();
+                }
+            });
+
         });
     }
 
     /**
-       *  Sign in the user upon button click.
+       *  Sign in the user to select calendar account and then add event immediately
        */
-    static handleAuthClick() {
+    static SelectAccountAndAddEvent(clickedRect) {
+
         window.tokenClient.callback = async (resp) => {
             if (resp.error !== undefined) {
                 throw (resp);
             }
-            //document.getElementById('signout_button').style.visibility = 'visible';
-            //document.getElementById('authorize_button').innerText = 'Refresh';
 
-            EventsChart.addEventToGoogleCalendar();
+            //now already logged in continue to add events
+            EventsChart.addEventToGoogleCalendar(clickedRect);
 
-            //await listUpcomingEvents();
         };
 
         if (window.gapi.client.getToken() === null) {

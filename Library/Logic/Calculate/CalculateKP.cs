@@ -14,299 +14,119 @@ namespace VedAstro.Library
 
         #region HORARY
 
-        public static Dictionary<HouseName, ZodiacSign> AllHouseZodiacSignsHorary(Time birthTime, int horaryNumber)
+        public static ZodiacSign HouseZodiacSignHorary(HouseName inputHouse, Time birthTime, int horaryNumber)
         {
             //get house start longitudes for KP system
             var allHouseCuspsRaw = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
 
-            //list of house name & start longitude of house
-            var returnDictionary = new Dictionary<HouseName, ZodiacSign>();
+            //get zodiac sign at house start longitude longitude
+            var zodiacSignAtLong = ZodiacSignAtLongitude(allHouseCuspsRaw[inputHouse]);
 
-            foreach (var cuspData in allHouseCuspsRaw)
-            {
-                //get zodiac sign at house start longitude longitude
-                var zodiacSignAtLong = ZodiacSignAtLongitude(cuspData.Value);
-                var houseName = cuspData.Key;
-                returnDictionary.Add(houseName, zodiacSignAtLong);
-
-            }
-
-            return returnDictionary;
+            return zodiacSignAtLong;
 
         }
 
-        public static Dictionary<PlanetName, PlanetName> AllPlanetLordOfConstellationHorary(Time birthTime, int horaryNumber)
+        public static HouseName PlanetHouseHorary(PlanetName inputPlanet, Time birthTime, int horaryNumber)
         {
-            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
+            // Get the starting longitudes of all houses.
             var cusps = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
 
-            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
-            // Filter out the planets that are not in any of the houses.
-            // Then, create a dictionary mapping each planet to its constellation lord at that longitude.
-            var allPlanetZodiacSignKp = PlanetName.All9Planets
-                .Select(planet => new
-                {
-                    Planet = planet,
-                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
-                })
-                .Where(planetData => House.AllHouses.Any(house => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, house)))
-                .ToDictionary(
-                    //planet name set as KEY
-                    planetData => planetData.Planet,
-                    //constellation lord set as VALUE
-                    planetData => LordOfConstellation(ConstellationAtLongitude(planetData.NirayanaDegrees).GetConstellationName()));
+            // Calculate the Nirayana longitude of the current planet.
+            var planetLongitude = PlanetNirayanaLongitude(birthTime, inputPlanet);
 
-            return allPlanetZodiacSignKp;
-        }
-
-        public static Dictionary<PlanetName, PlanetConstellation> AllPlanetConstellationHorary(Time birthTime, int horaryNumber)
-        {
-            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
-            var cusps = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
-
-            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
-            // Filter out the planets that are not in any of the houses.
-            // Then, create a dictionary mapping each planet to its constellation at that longitude.
-            var allPlanetZodiacSignKp = PlanetName.All9Planets
-                .Select(planet => new
-                {
-                    Planet = planet,
-                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
-                })
-                .Where(planetData => House.AllHouses.Any(house => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, house)))
-                .ToDictionary(
-                    //planet name set as KEY
-                    planetData => planetData.Planet,
-                    //constellation set as VALUE
-                    planetData => ConstellationAtLongitude(planetData.NirayanaDegrees));
-
-            return allPlanetZodiacSignKp;
-        }
-
-        public static Dictionary<PlanetName, PlanetName> AllPlanetLordOfZodiacSignHorary(Time birthTime, int horaryNumber)
-        {
-            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
-            var cusps = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
-
-            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
-            // Filter out the planets that are not in any of the houses.
-            // Then, create a dictionary mapping each planet to its Lord of Zodiac Sign at that longitude.
-            var allPlanetZodiacSignKp = PlanetName.All9Planets
-                .Select(planet => new
-                {
-                    Planet = planet,
-                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
-                })
-                .Where(planetData => House.AllHouses.Any(house => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, house)))
-                .ToDictionary(
-                    //planet name set as KEY
-                    planetData => planetData.Planet,
-                    //Lord of zodiac sign set as VALUE
-                    planetData =>
-                    {
-                        var zodiacSign = ZodiacSignAtLongitude(planetData.NirayanaDegrees);
-                        return LordOfZodiacSign(zodiacSign.GetSignName());
-                    });
-
-            return allPlanetZodiacSignKp;
-        }
-
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSignHorary(Time birthTime, int horaryNumber)
-        {
-            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
-            var cusps = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
-
-            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
-            // Filter out the planets that are not in any of the houses.
-            // Then, create a dictionary mapping each planet to its Zodiac Sign at that longitude.
-            var allPlanetZodiacSignKp = PlanetName.All9Planets
-                .Select(planet => new
-                {
-                    Planet = planet,
-                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
-                })
-                //if any of it matches than add to return list
-                .Where(planetData => House.AllHouses.Any(house => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, house)))
-                .ToDictionary(
-                    //planet name set as KEY
-                    planetData => planetData.Planet,
-                    //zodiac sign set as VALUE
-                    planetData => ZodiacSignAtLongitude(planetData.NirayanaDegrees)
-                );
-
-            return allPlanetZodiacSignKp;
-        }
-
-        public static Dictionary<PlanetName, HouseName> AllPlanetHouseHorary(Time birthTime, int horaryNumber)
-        {
-            //get house start longitudes
-            var cusps = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
-
-            var allPlanetHouseKp = PlanetName.All9Planets.ToDictionary(
-                // The first function takes a 'planet' as a parameter and simply returns it. This is used to generate the keys of the dictionary.
-                planet => planet,
-
-                // The second function also takes a 'planet' as a parameter. It returns the first 'houseIndex' for which 'IsPlanetInHouseKP' returns true.
-                // 'IsPlanetInHouseKP' is called with 'cusps', the result of 'Calculate.PlanetNirayanaLongitude(birthtime, planet)', and 'houseIndex' as parameters.
-                planet => House.AllHouses.First(house => IsPlanetInHouseKP(cusps, PlanetNirayanaLongitude(birthTime, planet), house)));
+            // Find the first house that contains the current planet.
+            var houseForPlanet = House.AllHouses.FirstOrDefault(house => IsPlanetInHouseKP(cusps, planetLongitude, house));
 
 
-            return allPlanetHouseKp;
+            return houseForPlanet;
         }
 
         #endregion
 
         #region KUNDALI
 
-        public static Dictionary<HouseName, ZodiacSign> AllHouseZodiacSignsKundali(Time birthTime)
+        public static ZodiacSign HouseZodiacSignsKundali(HouseName inputHouse, Time birthTime)
         {
             //get house start longitudes for KP system
             var allHouseCuspsRaw = AllHouseCuspLongitudesKundali(birthTime);
 
-            //list of house name & start longitude of house
-            var returnDictionary = new Dictionary<HouseName, ZodiacSign>();
+            //get zodiac sign at house start longitude longitude
+            var zodiacSignAtLong = ZodiacSignAtLongitude(allHouseCuspsRaw[inputHouse]);
 
-            foreach (var cuspData in allHouseCuspsRaw)
-            {
-                //get zodiac sign at house start longitude longitude
-                var zodiacSignAtLong = ZodiacSignAtLongitude(cuspData.Value);
-                var houseName = cuspData.Key;
-                returnDictionary.Add(houseName, zodiacSignAtLong);
-
-            }
-
-            return returnDictionary;
+            return zodiacSignAtLong;
 
         }
 
-        public static Dictionary<PlanetName, PlanetName> AllPlanetLordOfConstellationKundali(Time birthTime)
-        {
-            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
-            var cusps = AllHouseCuspLongitudesKundali(birthTime);
-
-            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
-            // Filter out the planets that are not in any of the houses.
-            // Then, create a dictionary mapping each planet to its constellation lord at that longitude.
-            var allPlanetZodiacSignKp = PlanetName.All9Planets
-                .Select(planet => new
-                {
-                    Planet = planet,
-                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
-                })
-                .Where(planetData => House.AllHouses.Any(house => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, house)))
-                .ToDictionary(
-                    //planet name set as KEY
-                    planetData => planetData.Planet,
-                    //constellation lord set as VALUE
-                    planetData => LordOfConstellation(ConstellationAtLongitude(planetData.NirayanaDegrees).GetConstellationName()));
-
-            return allPlanetZodiacSignKp;
-        }
-
-        public static Dictionary<PlanetName, PlanetConstellation> AllPlanetConstellationKundali(Time birthTime)
-        {
-            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
-            var cusps = AllHouseCuspLongitudesKundali(birthTime);
-
-            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
-            // Filter out the planets that are not in any of the houses.
-            // Then, create a dictionary mapping each planet to its constellation at that longitude.
-            var allPlanetZodiacSignKp = PlanetName.All9Planets
-                .Select(planet => new
-                {
-                    Planet = planet,
-                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
-                })
-                .Where(planetData => House.AllHouses.Any(house => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, house)))
-                .ToDictionary(
-                    //planet name set as KEY
-                    planetData => planetData.Planet,
-                    //constellation set as VALUE
-                    planetData => ConstellationAtLongitude(planetData.NirayanaDegrees));
-
-            return allPlanetZodiacSignKp;
-        }
-
-        public static Dictionary<PlanetName, PlanetName> AllPlanetLordOfZodiacSignKundali(Time birthTime)
-        {
-            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
-            var cusps = AllHouseCuspLongitudesKundali(birthTime);
-
-            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
-            // Filter out the planets that are not in any of the houses.
-            // Then, create a dictionary mapping each planet to its Lord of Zodiac Sign at that longitude.
-            var allPlanetZodiacSignKp = PlanetName.All9Planets
-                .Select(planet => new
-                {
-                    Planet = planet,
-                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
-                })
-                .Where(planetData => House.AllHouses.Any(house => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, house)))
-                .ToDictionary(
-                    //planet name set as KEY
-                    planetData => planetData.Planet,
-                    //Lord of zodiac sign set as VALUE
-                    planetData =>
-                    {
-                        var zodiacSign = ZodiacSignAtLongitude(planetData.NirayanaDegrees);
-                        return LordOfZodiacSign(zodiacSign.GetSignName());
-                    });
-
-            return allPlanetZodiacSignKp;
-        }
-
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSignKundali(Time birthTime)
-        {
-            // Calculate the cusps (boundaries between houses in an astrological chart) based on the birth time and horoscope number.
-            var cusps = AllHouseCuspLongitudesKundali(birthTime);
-
-            // For each planet, calculate its Nirayana longitude (sidereal longitude in Vedic astrology) at the birth time.
-            // Filter out the planets that are not in any of the houses.
-            // Then, create a dictionary mapping each planet to its Zodiac Sign at that longitude.
-            var allPlanetZodiacSignKp = PlanetName.All9Planets
-                .Select(planet => new
-                {
-                    Planet = planet,
-                    NirayanaDegrees = PlanetNirayanaLongitude(birthTime, planet)
-                })
-                .Where(planetData => House.AllHouses.Any(house => IsPlanetInHouseKP(cusps, planetData.NirayanaDegrees, house)))
-                .ToDictionary(
-                    //planet name set as KEY
-                    planetData => planetData.Planet,
-                    //zodiac sign set as VALUE
-                    planetData => ZodiacSignAtLongitude(planetData.NirayanaDegrees)
-                );
-
-            return allPlanetZodiacSignKp;
-        }
-
-        public static Dictionary<PlanetName, HouseName> AllPlanetHouseKundali(Time birthTime)
+        public static HouseName AllPlanetHouseKundali(PlanetName inputPlanet, Time birthTime)
         {
             //get house start longitudes
             var cusps = AllHouseCuspLongitudesKundali(birthTime);
 
-            var returnData = new Dictionary<PlanetName, HouseName>();
 
-            //find house for each planet
-            foreach (var planet in PlanetName.All9Planets)
+            foreach (var house in House.AllHouses)
             {
-                foreach (var house in House.AllHouses)
+                //if planet is in house than add to list and exit, don't check others
+                var planetLongitude = PlanetNirayanaLongitude(birthTime, inputPlanet);
+                var isAddToList = IsPlanetInHouseKP(cusps, planetLongitude, house);
+
+                if (isAddToList)//exit once house found
                 {
-                    //if planet is in house than add to list and exit, don't check others
-                    var planetLongitude = PlanetNirayanaLongitude(birthTime, planet);
-                    var isAddToList = IsPlanetInHouseKP(cusps, planetLongitude, house);
-                    if (isAddToList) { returnData.Add(planet, house); break; } //exit
+                    return house;
                 }
             }
 
-
-            return returnData;
+            //when no house found
+            return HouseName.Empty;
         }
 
         #endregion
 
         #endregion
 
+        #region GENERAL
+
+        public static PlanetName PlanetLordOfConstellation(PlanetName inputPlanet, Time birthTime)
+        {
+            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
+            // of the current planet at the birth time.
+            var nirayanaDegrees = PlanetNirayanaLongitude(birthTime, inputPlanet);
+
+            // The value is the lord of the constellation at the planet's longitude
+            var value = LordOfConstellation(ConstellationAtLongitude(nirayanaDegrees).GetConstellationName());
+
+            // Add the key-value pair to the dictionary
+            return value;
+        }
+
+        public static Constellation PlanetConstellation(PlanetName inputPlanet, Time birthTime)
+        {
+
+            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
+            // of the current planet at the birth time.
+            var nirayanaDegrees = PlanetNirayanaLongitude(birthTime, inputPlanet);
+
+            // The value is the lord of the constellation at the planet's longitude
+            var value = ConstellationAtLongitude(nirayanaDegrees);
+
+            // Add the key-value pair to the dictionary
+            return value;
+
+        }
+
+        public static PlanetName PlanetLordOfZodiacSign(PlanetName inputPlanet, Time birthTime)
+        {
+            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
+            // of the current planet at the birth time.
+            var nirayanaDegrees = PlanetNirayanaLongitude(birthTime, inputPlanet);
+
+            var zodiacSign = ZodiacSignAtLongitude(nirayanaDegrees);
+
+            return LordOfZodiacSign(zodiacSign.GetSignName());
+
+        }
+
+
+        #endregion
 
         #region KP SPECIFIC CALCS
 
@@ -337,8 +157,12 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets all KP (Placidus) House Cusps 
-        /// using Swiss Epehemris swe_houses_ex
+        /// Calculates the astrological house cusps for a given time and horary number.
+        /// It uses the Swiss Ephemeris to compute high precision astronomical data.
+        /// The method converts the horary number to Tropical Ascendant degrees,
+        /// then to ARMC (Sidereal Time), which is used to calculate house cusps.
+        /// The house system is calculated using the ARMC, latitude, and obliquity of the ecliptic.
+        /// The results are packaged into a dictionary mapping each house to its corresponding angle
         /// </summary>
         public static Dictionary<HouseName, Angle> AllHouseCuspLongitudesHorary(Time time, int horaryNumber)
         {
@@ -386,6 +210,18 @@ namespace VedAstro.Library
 
         }
 
+        /// <summary>
+        /// Calculates the astrological house cusps for a specific time and location,
+        /// which is a key aspect in the creation of a Kundali (astrological chart).
+        /// 
+        /// The function swe_houses_ex from the Swiss Ephemeris library is used to calculate the
+        /// house cusps and the ascmc values (which include the Ascendant, Midheaven, etc.).
+        /// The house system used is 'P' (Placidus).
+        /// 
+        /// The longitudes of the house cusps are then stored in a dictionary, with the house
+        /// names as keys and the longitudes as values (converted to degrees). This dictionary is
+        /// returned by the function, providing the longitudes of all houses in the Kundali.
+        /// </summary>
         public static Dictionary<HouseName, Angle> AllHouseCuspLongitudesKundali(Time time)
         {
             //get location at place of time
@@ -484,7 +320,7 @@ namespace VedAstro.Library
             // Initialize variables
             var tropAscDeg = 0.00;
             var all9Planets = PlanetName.All9Planets;
-            var allConstellations = PlanetConstellation.AllConstellation;
+            var allConstellations = Constellation.AllConstellation;
             var constellationList = new List<Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>>();
             var cntA = 0;
             var tropAsc = 0.000;

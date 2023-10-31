@@ -8,13 +8,13 @@ namespace VedAstro.Library
     /// Usually a point (longitude) behind a planet.
     /// </summary>
     [Serializable()]
-    public struct PlanetConstellation
+    public struct Constellation
     {
         //CONST FIELDS
         private const int QuarterMax = 4;
         private const int QuarterMin = 1;
 
-        public static PlanetConstellation Empty = new PlanetConstellation(1, 1, Angle.FromDegrees(0));
+        public static Constellation Empty = new Constellation(1, 1, Angle.FromDegrees(0));
 
         public static List<ConstellationName> AllConstellation => new List<ConstellationName>((ConstellationName[])Enum.GetValues(typeof(ConstellationName)));
 
@@ -26,7 +26,7 @@ namespace VedAstro.Library
 
 
         //CTOR
-        public PlanetConstellation(int constellationNumber, int quarter, Angle degreeInConstellation)
+        public Constellation(int constellationNumber, int quarter, Angle degreeInConstellation)
         {
             //convert constellation number to constellation name
             _name = (ConstellationName)constellationNumber;
@@ -68,12 +68,12 @@ namespace VedAstro.Library
 
 
         //OPERATORS OVERRIDES
-        public static bool operator ==(PlanetConstellation left, PlanetConstellation right)
+        public static bool operator ==(Constellation left, Constellation right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(PlanetConstellation left, PlanetConstellation right)
+        public static bool operator !=(Constellation left, Constellation right)
         {
             return !(left == right);
         }
@@ -84,10 +84,10 @@ namespace VedAstro.Library
         public override bool Equals(object value)
         {
 
-            if (value.GetType() == typeof(PlanetConstellation))
+            if (value.GetType() == typeof(Constellation))
             {
                 //cast to constellation
-                var parsedValue = (PlanetConstellation)value;
+                var parsedValue = (Constellation)value;
 
                 //Check equality
                 bool returnValue = (this.GetHashCode() == parsedValue.GetHashCode());

@@ -12,9 +12,9 @@
         <IconButton SmallSize="true" IconName="icon-park-outline:full-screen-one" TooltipText="Maximize" OnClickCallback="OnClickMaximize" />
         <IconButton SmallSize="true" IconName="iconamoon:zoom-in" TooltipText="Zoom In" OnClickCallback="OnClickZoomIn" />
         <IconButton SmallSize="true" IconName="iconamoon:zoom-out" TooltipText="Zoom Out" OnClickCallback="OnClickZoomOut" />
-        <IconButton SmallSize="true" ButtonText="Horoscope" OpenNewTab="true" IconName="fluent:book-star-20-filled" ClickUrl="@($"{PageRoute.Horoscope}/{SelectedPerson.Id}")" />
-        <IconButton SmallSize="true" ButtonText="Show/Hide" IconName="bx:hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))" />
-        <IconButton SmallSize="true" DropDownWidthPx="@GR.W255px" ButtonText="Highlight" IconName="fluent:highlight-16-filled">
+        <IconButton SmallSize="true" IconName="fluent:book-star-20-filled" TooltipText="Horoscope" ClickUrl="@($"{PageRoute.Horoscope}/{SelectedPerson.Id}")" OpenNewTab="true" />
+        <IconButton SmallSize="true" IconName="bx:hide" TooltipText="Show/Hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))" />
+        <IconButton SmallSize="true" IconName="fluent:highlight-16-filled" TooltipText="Highlight" DropDownWidthPx="@GR.W255px">
             <DropDownList>
                 <div class="d-flex flex-wrap gap-1">
                     @foreach (var eventNameKeyword in SelectedHighlightDictionary.Keys)
@@ -29,11 +29,11 @@
                 </div>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" ButtonText="Life Events" IconName="mdi:calendar-outline" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}{SelectedPerson.Id}")" />
-        <IconButton SmallSize="true" ButtonText="Add to Google" IconName="logos:google-calendar" OnClickCallback="OnClickAddToGoogleEvents" />
-        <IconButton SmallSize="true" ButtonText="Download" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg" />
-        <IconButton SmallSize="true" TooltipText="Print" IconName="ic:round-print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))" />
-        <IconButton SmallSize="true" TooltipText="Share" IconName="tabler:share-2">
+        <IconButton SmallSize="true" IconName="logos:google-calendar" TooltipText="Add to Google Calendar" OnClickCallback="OnClickAddToGoogleEvents" />
+        <IconButton SmallSize="true" IconName="mdi:calendar-outline" ButtonText="Life Events" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}{SelectedPerson.Id}")" />
+        <IconButton SmallSize="true" IconName="ic:outline-save" ButtonText="Download" OnClickCallback="OnClickSaveChartSvg" />
+        <IconButton SmallSize="true" IconName="ic:round-print" TooltipText="Print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))" />
+        <IconButton SmallSize="true" IconName="tabler:share-2" TooltipText="Share">
             <DropDownList>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("ShareEmailEventsChart"))">

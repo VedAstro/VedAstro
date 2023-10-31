@@ -39,6 +39,13 @@
 			<input @bind="_inputText" type="text" class="form-control" placeholder="...">
 		</div>
 	}
+	else if (_apiCallData == typeof(int))
+	{
+		<div class="input-group">
+			<span class="input-group-number" id="basic-addon1">Number</span>
+			<input @bind="_inputNumber" type="number" class="form-control" placeholder="...">
+		</div>
+	}
 	else if (_apiCallData.IsEnum)
 	{
 		<div class="input-group">
@@ -74,6 +81,7 @@
 	private Type _apiCallData;
 	private double _inputTotalDegrees;
 	private string _inputText;
+	private int _inputNumber;
 	private string _inputPlanetName;
 	private string _inputEnumName;
 	private TimeLocationInput _inputTimeLocation;
@@ -93,6 +101,7 @@
 		else if (_apiCallData == typeof(PlanetName)) { combinedUrl = $"/PlanetName/{_inputPlanetName}"; }
 		else if (_apiCallData == typeof(Angle)) { combinedUrl = $"/Angle/{_inputTotalDegrees}"; }
 		else if (_apiCallData == typeof(string)) { combinedUrl = $"/Text/{_inputText}"; }
+		else if (_apiCallData == typeof(int)) { combinedUrl = $"/Number/{_inputNumber}"; }
 		else if (_apiCallData?.IsEnum ?? false) { combinedUrl = $"/{_apiCallData.Name}/{_inputEnumName}"; }
 
 

@@ -397,7 +397,7 @@ namespace VedAstro.Library
             //check if event is occuring
             //NOTE: hack to enter birth time with existing code
             var birthTimeWrapped = new Person("", birthTime, Gender.Male);
-            var isOccuringAtCheckTime = EventManager.ConvertToEventSlice(checkTime, eventData, birthTimeWrapped).IsOccuring;
+            var isOccuringAtCheckTime = EventManager.ConvertToEventSlice(checkTime, eventData, birthTimeWrapped)?.IsOccuring ?? false; //not found default to false
 
             //if occuring, start scanning for start & end times
             if (isOccuringAtCheckTime)
@@ -456,7 +456,7 @@ namespace VedAstro.Library
             return possibleStartTime;
 
         }
-        
+
         public static Time EventEndTime(Time birthTime, Time checkTime, EventData eventData, int precisionInHours)
         {
             //NOTE: hack to enter birth time with existing code
@@ -945,12 +945,12 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets name of Constellation behind the moon at a given time
         /// </summary>
-        public static PlanetConstellation MoonConstellation(Time time) => PlanetConstellation(time, Moon);
+        public static Constellation MoonConstellation(Time time) => PlanetConstellation(time, Moon);
 
         /// <summary>
         /// Gets the constellation behind a planet at a given time
         /// </summary>
-        public static PlanetConstellation PlanetConstellation(Time time, PlanetName planet)
+        public static Constellation PlanetConstellation(Time time, PlanetName planet)
         {
             //get position of planet in longitude
             var planetLongitude = PlanetNirayanaLongitude(time, planet);
@@ -1834,9 +1834,9 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets list of all planets and the constellation they are in
         /// </summary>
-        public static Dictionary<PlanetName, PlanetConstellation> AllPlanetConstellation(Time time)
+        public static Dictionary<PlanetName, Constellation> AllPlanetConstellation(Time time)
         {
-            var returnList = new Dictionary<PlanetName, PlanetConstellation>();
+            var returnList = new Dictionary<PlanetName, Constellation>();
 
             //check each planet if in sign
             foreach (var planet in All9Planets)
@@ -2164,7 +2164,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
-        public static PlanetConstellation HouseConstellation(HouseName houseNumber, Time time)
+        public static Constellation HouseConstellation(HouseName houseNumber, Time time)
         {
             //get all houses
             var allHouses = AllHouseLongitudes(time);
@@ -4158,7 +4158,7 @@ namespace VedAstro.Library
         /// Counts from start Constellation to end Constellation
         /// Example : Aquarius to Taurus is 4
         /// </summary>
-        public static int CountFromConstellationToConstellation(PlanetConstellation start, PlanetConstellation end)
+        public static int CountFromConstellationToConstellation(Constellation start, Constellation end)
         {
 
             //get the number equivalent of the constellation
@@ -5862,7 +5862,7 @@ namespace VedAstro.Library
         /// Gets info about the constellation at a given longitude, ie. Constellation Name,
         /// Quarter, Degrees in constellation, etc.
         /// </summary>
-        public static PlanetConstellation ConstellationAtLongitude(Angle planetLongitude)
+        public static Constellation ConstellationAtLongitude(Angle planetLongitude)
         {
 
             //CACHE MECHANISM
@@ -5870,9 +5870,9 @@ namespace VedAstro.Library
 
 
             //UNDERLYING FUNCTION
-            PlanetConstellation _constellationAtLongitude()
+            Constellation _constellationAtLongitude()
             {
-                if (planetLongitude == null) { return Library.PlanetConstellation.Empty; }
+                if (planetLongitude == null) { return Library.Constellation.Empty; }
 
                 //if planet longitude is negative means, it before aries at 0, starts back at 360 pieces
                 if (planetLongitude.TotalDegrees < 0)
@@ -5910,7 +5910,7 @@ namespace VedAstro.Library
 
 
                 //put together all the info of this point in the constellation
-                var constellation = new PlanetConstellation(constellationNumber, quarter, degreesInConstellation);
+                var constellation = new Constellation(constellationNumber, quarter, degreesInConstellation);
 
                 //return constellation value
                 return constellation;
@@ -8728,7 +8728,7 @@ namespace VedAstro.Library
         ///  Note : Returned years can only be 0 or above
         ///  Start constellation can be of moon or Lagna
         /// </summary>
-        public static double TimeLeftInBirthDasa(Time birthTime, PlanetConstellation startConstellation)
+        public static double TimeLeftInBirthDasa(Time birthTime, Constellation startConstellation)
         {
             //get years already passed in birth dasa
             var yearsTraversed = YearsTraversedInBirthDasa(birthTime, startConstellation);
@@ -8750,7 +8750,7 @@ namespace VedAstro.Library
         /// Gets the time in years traversed in Dasa at birth
         /// Start constellation can of Moon's or Lagna lord
         /// </summary>
-        public static double YearsTraversedInBirthDasa(Time birthTime, PlanetConstellation startConstellation)
+        public static double YearsTraversedInBirthDasa(Time birthTime, Constellation startConstellation)
         {
             //get longitude minutes the Moon/Lagna already traveled in the constellation 
             var minutesTraversed = startConstellation.GetDegreesInConstellation().TotalMinutes;

@@ -2292,7 +2292,7 @@ namespace VedAstro.Library
                     if (parameterType == typeof(Time)) { sampleData = Time.StandardHoroscope(); }
                     if (parameterType == typeof(Angle)) { sampleData = Angle.Degrees180; }
                     if (parameterType == typeof(PlanetName)) { sampleData = PlanetName.Sun; }
-                    if (parameterType == typeof(PlanetConstellation)) { sampleData = new PlanetConstellation(1, 1, Angle.FromDegrees(13)); }
+                    if (parameterType == typeof(Constellation)) { sampleData = new Constellation(1, 1, Angle.FromDegrees(13)); }
                     if (parameterType == typeof(Person)) { sampleData = new Person("101", "12312323", "Juliet", Time.StandardHoroscope(), Gender.Female); }
                     if (parameterType == typeof(HouseName)) { sampleData = HouseName.House4; }
                     if (parameterType == typeof(TimeSpan)) { sampleData = new TimeSpan(1, 0, 0); }
@@ -2749,14 +2749,14 @@ namespace VedAstro.Library
                 case Dictionary<PlanetName, Angle> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
                 case Dictionary<PlanetName, PlanetName> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
                 case Dictionary<PlanetName, ZodiacName> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
-                case Dictionary<PlanetName, PlanetConstellation> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
+                case Dictionary<PlanetName, Constellation> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
                 case Dictionary<PlanetName, HouseName> dictionary: rootPayloadJson = RootPayloadJson("Planet", dataName, dictionary); break;
 
                 case Dictionary<HouseName, Angle> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
                 case Dictionary<HouseName, ZodiacSign> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
                 case Dictionary<HouseName, PlanetName> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
                 case Dictionary<HouseName, ZodiacName> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
-                case Dictionary<HouseName, PlanetConstellation> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
+                case Dictionary<HouseName, Constellation> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
                 case Dictionary<HouseName, IList> dictionary:
                     {
 
@@ -2843,7 +2843,7 @@ namespace VedAstro.Library
                 case Dictionary<PlanetName, ZodiacSign> dictPZodiacSign:
                     AppendDictionary(sb, dictPZodiacSign);
                     break;
-                case Dictionary<PlanetName, PlanetConstellation> dictPConstellation:
+                case Dictionary<PlanetName, Constellation> dictPConstellation:
                     AppendDictionary(sb, dictPConstellation);
                     break;
                 case Dictionary<PlanetName, Dictionary<ZodiacName, int>> dictPDZ:

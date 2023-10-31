@@ -1912,6 +1912,22 @@ namespace VedAstro.Library
             return stringValue;
         }
 
+        /// <summary>
+        /// Converts any Int from URL epx : ../Number/5
+        /// </summary>
+
+        public static int IntFromUrl(string url)
+        {
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //string has simple structure ../Number/5
+            var stringValue = parts[1];
+
+            var intFromUrl = int.Parse(stringValue);
+
+            return intFromUrl;
+        }
+
         private static readonly Random Random = new Random();
 
         /// <summary>

@@ -68,6 +68,11 @@ namespace VedAstro.Library
 
         public static async Task Error(string errorMessage)
         {
+
+#if DEBUG
+            Console.WriteLine(errorMessage);
+#endif
+
             //place error data into visitor tag
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");

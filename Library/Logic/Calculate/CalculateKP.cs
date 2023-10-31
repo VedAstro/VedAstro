@@ -45,7 +45,7 @@ namespace VedAstro.Library
 
         #region KUNDALI
 
-        public static ZodiacSign HouseZodiacSignsKundali(HouseName inputHouse, Time birthTime)
+        public static ZodiacSign HouseZodiacSignKundali(HouseName inputHouse, Time birthTime)
         {
             //get house start longitudes for KP system
             var allHouseCuspsRaw = AllHouseCuspLongitudesKundali(birthTime);
@@ -57,7 +57,7 @@ namespace VedAstro.Library
 
         }
 
-        public static HouseName AllPlanetHouseKundali(PlanetName inputPlanet, Time birthTime)
+        public static HouseName PlanetHouseKundali(PlanetName inputPlanet, Time birthTime)
         {
             //get house start longitudes
             var cusps = AllHouseCuspLongitudesKundali(birthTime);

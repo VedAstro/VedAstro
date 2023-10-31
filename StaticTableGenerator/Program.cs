@@ -34,7 +34,11 @@ namespace StaticTableGenerator
         /// dynamically fill in the place the location of the files, somewhat
         /// </summary>
         static string userFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        static string CalculatorCodeFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Logic\Calculate\Calculate.cs");
+        static string[] CalculatorCodeFile = new[]
+        {
+            Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Logic\Calculate\Calculate.cs") ,
+            Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Logic\Calculate\CalculateKP.cs")
+        };
         static string MetadataStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\OpenAPIStaticTable.cs");
         static string PythonCalculateStubFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro.Python\VedAstro\Library.pyi");
 
@@ -243,49 +247,54 @@ namespace StaticTableGenerator
         /// Given a path to a CS class file, will parse it and extract method name and comments above and return as list
         /// used to get metadata for Open API calculators
         /// </summary>
-        public static Dictionary<string, string> ExtractSummaries(string filePath)
+        public static Dictionary<string, string> ExtractSummaries(string[] filePaths)
         {
-            string fileContent = File.ReadAllText(filePath);
-            var tree = CSharpSyntaxTree.ParseText(fileContent);
-            var root = tree.GetRoot();
-
-            // Create a compilation that contains this tree
-            var compilation = CSharpCompilation.Create("VedAstro.Library", new[] { tree });
-            var semanticModel = compilation.GetSemanticModel(tree);
-
+            // Initialize a dictionary to hold the method signatures and their corresponding summaries
             Dictionary<string, string> summaries = new Dictionary<string, string>();
-            //loop through only comments above methods
-            foreach (var method in root.DescendantNodes().OfType<MethodDeclarationSyntax>())
+            // Loop through each file path provided
+            foreach (var filePath in filePaths)
             {
-                var trivia = method.GetLeadingTrivia().Where(x => x.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia);
-                var xmlComments = trivia.Select(x => x.GetStructure()).OfType<DocumentationCommentTriviaSyntax>();
-                var summary = xmlComments.SelectMany(x => x.ChildNodes()).OfType<XmlElementSyntax>()
-                    .FirstOrDefault(x => x.StartTag.Name.ToString() == "summary");
-
-                //unique ID of the method in text
-                var methodSignature = method.GetMethodSignature(semanticModel);
-
-                if (summary != null)
+                // Read the content of the file
+                string fileContent = File.ReadAllText(filePath);
+                // Parse the file content into a syntax tree
+                var tree = CSharpSyntaxTree.ParseText(fileContent);
+                // Get the root of the syntax tree
+                var root = tree.GetRoot();
+                // Create a compilation that contains this tree
+                var compilation = CSharpCompilation.Create("VedAstro.Library", new[] { tree });
+                // Get the semantic model of the tree
+                var semanticModel = compilation.GetSemanticModel(tree);
+                // Loop through all the methods in the syntax tree
+                foreach (var method in root.DescendantNodes().OfType<MethodDeclarationSyntax>())
                 {
-                    var rawComments = summary.Content.ToString().Trim();
-
-                    //clean comments, since it can be wild
-                    //will remove all non-alphanumeric characters except for space, underscore, and dot.
-                    //It will also replace all new lines and multiple spaces with a single space. 
-                    string safeDescription = Regex.Replace(rawComments, "[^a-zA-Z0-9 _.]+", "");
-
-                    //clean double white space or more
-                    safeDescription = Regex.Replace(safeDescription, @"\s{2,}", " ");
-
-                    //add to return list
-                    summaries.Add(methodSignature, safeDescription);
-                }
-                else
-                {
-
-                    summaries.Add(methodSignature, "Empty sample text");
+                    // Get the leading trivia (comments) of the method
+                    var trivia = method.GetLeadingTrivia().Where(x => x.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia);
+                    // Parse the trivia into XML comments
+                    var xmlComments = trivia.Select(x => x.GetStructure()).OfType<DocumentationCommentTriviaSyntax>();
+                    // Get the summary tag from the XML comments
+                    var summary = xmlComments.SelectMany(x => x.ChildNodes()).OfType<XmlElementSyntax>()
+                        .FirstOrDefault(x => x.StartTag.Name.ToString() == "summary");
+                    // Get the unique ID of the method
+                    var methodSignature = method.GetMethodSignature(semanticModel);
+                    if (summary != null)
+                    {
+                        // Get the raw content of the summary
+                        var rawComments = summary.Content.ToString().Trim();
+                        // Clean the comments by removing all non-alphanumeric characters except for space, underscore, and dot
+                        string safeDescription = Regex.Replace(rawComments, "[^a-zA-Z0-9 _.]+", "");
+                        // Replace all new lines and multiple spaces with a single space
+                        safeDescription = Regex.Replace(safeDescription, @"\s{2,}", " ");
+                        // Add the method signature and cleaned summary to the dictionary
+                        summaries.Add(methodSignature, safeDescription);
+                    }
+                    else
+                    {
+                        // If there is no summary, add the method signature with a default text to the dictionary
+                        summaries.Add(methodSignature, "Empty sample text");
+                    }
                 }
             }
+            // Return the dictionary containing the method signatures and their summaries
             return summaries;
         }
 

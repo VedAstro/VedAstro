@@ -116,7 +116,7 @@ export class EventsChart {
             confirmButtonText: 'OK'
         });
 
-        //get selected event by user
+        //attach one time trigger to catch the event user clicked on
         $(".EventChartContent").one("click", (eventData) => EventsChart.onClickSelectedGoogleCalendarEvent(eventData, this));
 
     }
@@ -364,32 +364,62 @@ export class EventsChart {
         return mousePosition;
     }
 
-    //control comes from Page to here for adding events to google
-    static onClickSelectedGoogleCalendarEvent(eventObject, instance) {
+    //called by trigger when clicked on event, after asking user to select
+    //to here for adding events to google
+    static async onClickSelectedGoogleCalendarEvent(eventObject, instance) {
 
         //get details on the selected event
         var targetRect = eventObject.target;
 
-        //debugger;
-        EventsChart.SelectAccountAndAddEvent(targetRect);
+        //given the SVG rect that was clicked on, process and extract full event data
+        var parsedEvent = EventsChart.ParseEventFromSVGRect(targetRect);
+
+        //ask user if selected event is correct and want to continue to google login
+        var userReply = await Swal.fire({
+            title: 'Send event to Google?',
+            html: '<ul class="list-group">' +
+                `<li class="list-group-item">Name : <strong>${parsedEvent.Name}</strong></li>` +
+                `<li class="list-group-item">Start : <strong>${parsedEvent.StartTime}</strong></li>` +
+                `<li class="list-group-item">Start : <strong>${parsedEvent.EndTime}</strong></li>` +
+                '</ul>',
+            icon: 'info',
+            iconHtml: '<span class="iconify" data-icon="fluent:calendar-add-20-regular" data-inline="false"></span>',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        });
+
+        //based on what user clicked process
+        if (userReply.isConfirmed) {
+            // User clicked 'Yes', continue to Google login page
+            EventsChart.SelectAccountAndAddEvent(parsedEvent);
+        } else {
+            // User clicked 'No', end silently
+            console.log('User clicked No on sending to Google');
+        }
     }
 
-    static addEventToGoogleCalendar(clickedRect) {
+    //given an SVG rect of an event, extract event data from it, with start and end time (use API)
+    static ParseEventFromSVGRect() {
 
-        var eventName = clickedRect.getAttribute("eventname");
-        var eventDescription = clickedRect.getAttribute("eventdescription");
-        var eventStdTime = clickedRect.getAttribute("stdtime");
+        //call API and get the needed data
+        //https://api.vedastro.org/Calculate/EventDataAtTime/Location/Ipoh,Perak,Malaysia/Time/12:44/23/04/1994/+08:00/Location/Ipoh,Perak,Malaysia/Time/12:44/23/04/2023/+08:00/EventName/ScorpioRahuPD1
+
+    }
+
+    static addEventToGoogleCalendar(parsedEvent) {
 
         //show event that was selected
-        console.log(`EventSelected: ${eventName}`);
+        console.log(`EventSelected: ${parsedEvent.Name}`);
 
         //convert to format supported by Google Calendar
-        var parsedStartTime = EventsChart.convertDateFormat(eventStdTime);
+        var parsedStartTime = EventsChart.convertDateFormat(parsedEvent.StartTime);
+        var parsedEndTime = EventsChart.convertDateFormat(parsedEvent.EndTime);
 
         const event = {
-            'summary': eventName,
+            'summary': parsedEvent.Name,
             //'location': '',
-            'description': eventDescription,
+            'description': parsedEvent.Description,
             'start': parsedStartTime,
             'end': parsedStartTime,
             //'recurrence': [
@@ -409,7 +439,7 @@ export class EventsChart {
         };
 
         const request = window.gapi.client.calendar.events.insert({
-            'calendarId': 'primary',
+            'calendarId': 'primary', //set default calendar todo future select calendar
             'resource': event
         });
 
@@ -433,7 +463,7 @@ export class EventsChart {
     /**
        *  Sign in the user to select calendar account and then add event immediately
        */
-    static SelectAccountAndAddEvent(clickedRect) {
+    static SelectAccountAndAddEvent(parsedEvent) {
 
         window.tokenClient.callback = async (resp) => {
             if (resp.error !== undefined) {
@@ -441,7 +471,7 @@ export class EventsChart {
             }
 
             //now already logged in continue to add events
-            EventsChart.addEventToGoogleCalendar(clickedRect);
+            EventsChart.addEventToGoogleCalendar(parsedEvent);
 
         };
 

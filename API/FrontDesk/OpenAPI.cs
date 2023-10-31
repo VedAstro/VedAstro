@@ -280,6 +280,14 @@ namespace API
                         //execute param parser
                         parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
                     }
+                    //ENUM
+                    else if (parameterType == typeof(int))
+                    {
+                        parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.IntFromUrl), BindingFlags.Public | BindingFlags.Static);
+
+                        //execute param parser
+                        parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                    }
 
                     //UNPREPARED TYPES
                     else

@@ -1480,7 +1480,7 @@ namespace VedAstro.Library
         {
 
             //get house 1 middle longitude
-            var house1MiddleLongitude = Calculate.House(HouseName.House1, time).GetMiddleLongitude();
+            var house1MiddleLongitude = Calculate.HouseDegrees(HouseName.House1, time).GetMiddleLongitude();
 
             //get zodiac sign at lagna (middle longitude)
             var house1ZodiacSign = Calculate.ZodiacSignAtLongitude(house1MiddleLongitude);

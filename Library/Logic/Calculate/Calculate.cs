@@ -3135,10 +3135,10 @@ namespace VedAstro.Library
         /// <summary>
         /// House start middle and end longitudes
         /// </summary>
-        public static House House(HouseName houseNumber, Time time)
+        public static House HouseDegrees(HouseName houseNumber, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(House), houseNumber, time, Ayanamsa), _getHouse);
+            return CacheManager.GetCache(new CacheKey(nameof(HouseDegrees), houseNumber, time, Ayanamsa), _getHouse);
 
             //UNDERLYING FUNCTION
             House _getHouse()
@@ -11434,28 +11434,28 @@ namespace VedAstro.Library
             //subtract the longitude of the 4th house from the longitudes of the Sun and Mars.
             if (planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Mars)
             {
-                powerlessHouse = Calculate.House(HouseName.House4, time);
+                powerlessHouse = Calculate.HouseDegrees(HouseName.House4, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
             //Subtract the 7th house, from Jupiter and Mercury.
             if (planetName == Library.PlanetName.Jupiter || planetName == Library.PlanetName.Mercury)
             {
-                powerlessHouse = Calculate.House(HouseName.House7, time);
+                powerlessHouse = Calculate.HouseDegrees(HouseName.House7, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
             //Subtracc the 10th house from Venus and the Moon
             if (planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Moon)
             {
-                powerlessHouse = Calculate.House(HouseName.House10, time);
+                powerlessHouse = Calculate.HouseDegrees(HouseName.House10, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
             //from Saturn, the ascendant.
             if (planetName == Library.PlanetName.Saturn)
             {
-                powerlessHouse = Calculate.House(HouseName.House1, time);
+                powerlessHouse = Calculate.HouseDegrees(HouseName.House1, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
@@ -11635,7 +11635,7 @@ namespace VedAstro.Library
                         foreach (var houseNo in Library.House.AllHouses)
                         {
                             //house is considered as a Drusya Graha (aspected body)
-                            var houseMid = Calculate.House(houseNo, time1).GetMiddleLongitude();
+                            var houseMid = Calculate.HouseDegrees(houseNo, time1).GetMiddleLongitude();
                             var plantLong = Calculate.PlanetNirayanaLongitude(time1, planet);
 
                             //Subtract the longitude of the Drishti (aspecting)
@@ -11693,7 +11693,7 @@ namespace VedAstro.Library
                 //falling in a particular kind of sign.
 
                 //so get mid point of house
-                var mid = Calculate.House(houseNumber, time).GetMiddleLongitude().TotalDegrees;
+                var mid = Calculate.HouseDegrees(houseNumber, time).GetMiddleLongitude().TotalDegrees;
                 var houseSign = Calculate.HouseSignName(houseNumber, time);
 
                 //Therefore first find the number of a given Bhava Madhya and subtract

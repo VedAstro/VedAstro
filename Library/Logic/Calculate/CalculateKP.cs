@@ -98,20 +98,6 @@ namespace VedAstro.Library
             return value;
         }
 
-        public static Constellation PlanetConstellation(PlanetName inputPlanet, Time birthTime)
-        {
-
-            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
-            // of the current planet at the birth time.
-            var nirayanaDegrees = PlanetNirayanaLongitude(birthTime, inputPlanet);
-
-            // The value is the lord of the constellation at the planet's longitude
-            var value = ConstellationAtLongitude(nirayanaDegrees);
-
-            // Add the key-value pair to the dictionary
-            return value;
-
-        }
 
         public static PlanetName PlanetLordOfZodiacSign(PlanetName inputPlanet, Time birthTime)
         {

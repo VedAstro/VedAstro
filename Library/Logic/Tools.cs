@@ -33,6 +33,7 @@ using HtmlAgilityPack;
 using System.Collections.Generic;
 using Azure;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.JSInterop;
 
 
 
@@ -49,6 +50,8 @@ namespace VedAstro.Library
     public static class Tools
     {
         public const string BlobContainerName = "vedastro-site-data";
+
+
 
         /// <summary>
         /// Gets XML file from any URL and parses it into xelement list

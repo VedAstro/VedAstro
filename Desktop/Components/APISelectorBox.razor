@@ -1,0 +1,322 @@
+@*⠀⠀⠀⠀⠀⠀⠀⢠⣶⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⢀⣴⣾⣶⣄⠘⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠈⢿⣿⣿⣿⣷⣄⠙⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠙⢿⣿⣿⣿⣷⣄⠙⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣷⣄⠙⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣾⣿⣿⣿⠿⠿⠓⢀⣀⣠⣤⣤⣄⠀⠀⠀
+⠀⣀⣤⡀⠀⠀⢀⣤⣶⣤⡙⢿⣿⣿⣿⡟⣩⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀
+⢸⣿⣿⣿⣦⡀⠸⣿⣿⣿⣿⣦⡙⢿⣿⡇⣿⣿⣿⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⡆
+⠈⠻⣿⣿⣿⣿⣦⡉⢿⣿⣿⣿⣿⣦⡙⢿⣬⣉⣩⣭⣤⣴⣶⣿⣿⣿⣿⣿⣿⣧
+⠀⠀⠈⠻⣿⣿⣿⣿⣦⡉⠻⣿⣿⣿⣿⣦⡙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟
+⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣷⣍⠻⣿⣿⣿⠇⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇
+⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣷⣬⣭⣥⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⣿⣿⣿⡿⠿⠿⠛⠉⠀⠀⠀⠀⠀⠀
+KEEP IT REAL
+*@
+
+@namespace Desktop.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+@using System.Collections
+@using System.Timers
+@using FuzzySharp
+
+<div @ref="mainElementRef" class="hstack @ExtraClass">
+    @*Component shows combo box with people list*@
+    <div class="btn-group" style="width: @GR.W412px;">
+        @* DROPDOWN BUTTON *@
+        <button type="button" @onclick="OnClickTrigger" style="text-align-last: center;font-size: 16px; font-weight: 500;" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown">
+            @FormattedMethodName
+        </button>
+
+        @* DROPDOWN SECTION *@
+        <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; width: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
+
+            @* SEARCH *@
+            <div class="hstack gap-2">
+                <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                <Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() => AppData.Go(PageRoute.APICallList))" />
+            </div>
+
+            @* LIST OF METHODS *@
+            @if (_isReady)
+            {
+                @foreach (var apiMethod in MethodListFiltered)
+                {
+                    <li class="dropdown-item d-flex gap-2 w-100" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">
+                        <span style=" font-size: 16px; font-weight: 500; ">@(Format.FormatName(apiMethod.Name))</span>
+                        <IconTooltip Opacity="0.3" Interactive="false" ShowOnHover="true" Size="16" TooltipText="@apiMethod.Description" SmallIcon="true" />
+                    </li>
+                }
+            }
+            @* LOADING ICON *@
+            @* loading icon when list is being made, no loading popup because reduces user UX *@
+            else
+            {
+                <div class="d-flex flex-column align-items-center mt-5">
+                    <strong>Loading...</strong>
+                    <div class="spinner-border" role="status" aria-hidden="true"></div>
+                </div>
+            }
+
+
+        </ul>
+    </div>
+
+    @*ADD NEW FUNCTION ICON*@
+    @if (!HideButton)
+    {
+        <IconButton ExtraClass="ms-2" TooltipText="Suggest New API" IconName="fluent:person-feedback-28-regular" OnClickCallback="OnClickSuggestNewApi" />
+    }
+</div>
+
+
+@code {
+
+    [Parameter]
+    public List<OpenAPIMetadata> CustomAllMethodList { get; set; } = new List<OpenAPIMetadata>(); //set empty list so can detect
+
+    /// <summary>
+    /// add extra styles to SVG icon parent div
+    /// </summary>
+    [Parameter]
+    public string ExtraClass { get; set; } = "";
+
+    private ElementReference mainElementRef;
+
+    /// <summary>
+    /// if set true will hide button, default is false
+    /// </summary>
+    [Parameter]
+    public bool HideButton { get; set; } = false;
+
+    public void Show() { _jsRuntime.Show(mainElementRef); StateHasChanged(); }
+
+    public void Hide() { _jsRuntime.Hide(mainElementRef); StateHasChanged(); }
+
+    /// <summary>
+    /// This delay helps to wait for user to finish typing before starting to render list
+    /// reduces lag and makes for better UX
+    /// </summary>
+    private static Timer _onKeyUpWaitTimer = new(3500);
+
+    //data used to track search timer
+    private static bool _timerInitialized = false;
+    private static bool _isShow = true;
+    private static bool _searchIsRunning = false;
+
+    private ElementReference _resultsBox;
+    private ElementReference _loadingBox;
+
+    /// <summary>
+    /// Name of selected method to show
+    /// </summary>
+    private string FormattedMethodName { get; set; }   //used to detect if selected
+
+    [Parameter]
+    public string DefaultMessage { get; set; } = "Make a choice...";  //used to detect if selected
+
+    /// <summary>
+    /// only this way of marking works
+    /// </summary>
+    private bool _isReady = false;
+
+    private ElementReference _searchInput;
+
+    /// <summary>
+    /// list that is shown to user and is changed by search
+    /// </summary>
+    private List<OpenAPIMetadata?> MethodListFiltered { get; set; } = new();
+
+    public OpenAPIMetadata? SelectedMethod { get; set; }
+
+    private List<OpenAPIMetadata?> MethodListALL = new();
+
+    /// <summary>
+    /// extracted search text for faster search
+    /// </summary>
+    private string[] MethodListALLSearchText;
+
+    /// <summary>
+    /// Event fired when selection of method is changed
+    /// </summary>
+    public event EventHandler OnChangeSelectMethod;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //hide display
+        _isReady = false;
+
+        FormattedMethodName = DefaultMessage; //init default message since can't direct
+
+        //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
+        //if custom list specified use that else default to all from Open API
+        MethodListALL = CustomAllMethodList.Any() ? CustomAllMethodList : OpenAPIMetadata.FromMethodInfoList();
+
+        //to speed up search array of description
+        MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
+
+        //make copy for search
+        MethodListFiltered = MethodListALL;
+
+        //show data on display
+        _isReady = true;
+    }
+
+    /// <summary>
+    /// checks if OnChangeSelectMethod is not null (meaning it has at least one subscriber)
+    /// </summary>
+    public void RaiseOnChangeSelectMethod()
+    {
+        OnChangeSelectMethod?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
+    /// Return true if drop down is selected, else false
+    /// </summary>
+    /// <returns></returns>
+    public async Task<bool> IsSelected() => FormattedMethodName != DefaultMessage && !string.IsNullOrEmpty(FormattedMethodName);
+
+    /// <summary>
+    /// resets selected method as though not selected
+    /// </summary>
+    public void Reset()
+    {
+    //set value for reference
+        SelectedMethod = null;
+        FormattedMethodName = DefaultMessage;
+
+    //fire event, so parent listening can update other elements
+        RaiseOnChangeSelectMethod();
+
+    //needed to make change appear
+        StateHasChanged();
+    }
+    
+    /// <summary>
+    /// if not selected will return empty
+    /// </summary>
+    public string GetSelectedMethodName() => SelectedMethod?.Name ?? "";
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    /// <summary>
+    /// when a method name in tooltip drop down menu is clicked
+    /// </summary>
+    private void OnClickMethodName(OpenAPIMetadata? method)
+    {
+        //set value for reference
+        SelectedMethod = method;
+        FormattedMethodName = Format.FormatName(SelectedMethod.Name);
+
+        //fire event, so parent listening can update other elements
+        RaiseOnChangeSelectMethod();
+
+        //needed to make change appear
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// called when user key up (AI code)
+    /// uses a timer to delay the search operation until the user has stopped typing,
+    /// improving the user experience by not triggering a search on every keystroke
+    /// </summary>
+    private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
+    {
+        //if arrow keys than obviously don't count
+        //if arrow keys, space, or control keys then obviously don't count
+        if (keyEventArgs.Code == "ArrowUp" || keyEventArgs.Code == "ArrowDown" ||
+            keyEventArgs.Code == "ArrowLeft" || keyEventArgs.Code == "ArrowRight" ||
+            keyEventArgs.Code == "Space" || keyEventArgs.Code == "ControlLeft" ||
+            keyEventArgs.Code == "ControlRight" || keyEventArgs.Code == "AltLeft" ||
+            keyEventArgs.Code == "AltRight" || keyEventArgs.Code == "ShiftLeft" ||
+            keyEventArgs.Code == "ShiftRight" || keyEventArgs.Code == "Enter" ||
+            keyEventArgs.Code == "Tab" || keyEventArgs.Code == "Escape")
+        {
+            return;
+        }
+
+        if (!_timerInitialized)
+        {
+            _onKeyUpWaitTimer.Elapsed += OnKeyUpWaitTimerElapsed;
+            _timerInitialized = true;
+        }
+        if (!_searchIsRunning)
+        {
+            _searchIsRunning = true;
+            _isReady = false; // show loading icon
+            _onKeyUpWaitTimer.Stop();
+            _onKeyUpWaitTimer.Start();
+        }
+    }
+
+    private async void OnKeyUpWaitTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        _onKeyUpWaitTimer.Stop();
+        var searchText = (await _jsRuntime.GetValue(_searchInput)).ToLower();
+        if (string.IsNullOrEmpty(searchText))
+        {
+            MethodListFiltered = MethodListALL;
+        }
+        else
+        {
+            //uses special search library to search through text
+            var results = Process.ExtractAll(searchText, MethodListALLSearchText, cutoff: 60).OrderByDescending(r => r.Score);
+            MethodListFiltered = results.Select(yy => MethodListALL[yy.Index]).ToList();
+        }
+
+        await InvokeAsync(StateHasChanged);
+
+        _isReady = true; //hide loading, show results
+
+        _searchIsRunning = false;
+
+        //needed to make change appear
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// When main button is clicked to trigger auto focus to search bar
+    /// </summary>
+    private void OnClickTrigger()
+    {
+        _searchInput.FocusAsync();
+    }
+
+    private async Task OnClickSuggestNewApi()
+    {
+        //get suggestion from user via js sweet alert lib
+        var newApiDesc = await AppData.JsRuntime.PopupTextInput("Suggest a new API Call", "textarea", "name or describe");
+
+        //loading box show
+        await _jsRuntime.ShowLoading();
+
+        //if empty or nothing more than 3 chars than ask user if is awake
+        var isInvalidInput = string.IsNullOrEmpty(newApiDesc) || newApiDesc.Length < 3;
+
+        if (isInvalidInput)
+        {
+            var msg = "You clicked <strong>Add Suggestion</strong> and then added <strong>nothing</strong>. Please try again...";
+            await _jsRuntime.ShowAlert("question", $"No suggestions, {AlertText.RandomNoun()}?", msg);
+        }
+        else
+        {
+            //add message to API Messages book
+            await WebsiteTools.SendMailToAPI(AppData.CurrentUser.Id, $"Add new API : {newApiDesc}");
+
+            //say thank you and will get back
+            var msg = "<iconify-icon icon=\"noto:love-letter\"></iconify-icon> <a target=\\\"_blank\\\" style=\\\"text-decoration-line: none;\\\" href=\\\"https://vedastro.org/Donate/\\\" class=\\\"link-primary fw-bold\\\">Fund</a> this feature for faster development";
+            await _jsRuntime.ShowAlert("success", "We will add soon!", msg);
+        }
+
+    }
+
+
+}

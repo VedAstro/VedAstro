@@ -1,4 +1,3 @@
-using AspNetMonsters.Blazor.Geolocation;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using System.Runtime.CompilerServices;
@@ -32,9 +31,6 @@ namespace Website
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             builder.Services.AddScoped(sp => httpClient);
 
-            //setup for getting location from browser
-            //used by geolocation input
-            builder.Services.AddSingleton<LocationService>();
             
 
             //ERROR HANDLING

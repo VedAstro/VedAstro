@@ -11,8 +11,6 @@
 @using System.Xml.Linq
 @using VedAstro.Library
 
-@* get reference from program *@
-@inject LocationService _locationService
 
 <div class="hstack gap-1">
     <div class="input-group">
@@ -271,12 +269,14 @@
 
         try
         {
-            //try get location from Browser
-            var locationCoordinates = await _locationService.GetLocationAsync();
+            //TODO CLEAN UP CODE
+            var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
+            AppData.ClientLocation = await WebsiteTools.GetClientLocation(apiKey);
+
 
             //set new coordinates into view
-            Longitude = (double)locationCoordinates.Longitude;
-            Latitude = (double)locationCoordinates.Latitude;
+            Longitude = AppData.ClientLocation.Longitude();
+            Latitude = AppData.ClientLocation.Latitude();
 
             //if no location data available set default location
             //will return 0 when permission not given
@@ -284,8 +284,8 @@
             if (Longitude == 0 && Latitude == 0) { goto SetDefault; }
 
             //set gotten location name into view
-            var geoLocation = await GeoLocation.CoordinatesToGeoLocation((double)locationCoordinates.Longitude, (double)locationCoordinates.Latitude);
-            LocationName = geoLocation.Name();
+            //var geoLocation = await GeoLocation.CoordinatesToGeoLocation(Longitude, (double)locationCoordinates.Latitude);
+            LocationName = AppData.ClientLocation.Name();
 
             //exit
             return;

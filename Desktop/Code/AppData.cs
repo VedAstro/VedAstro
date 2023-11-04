@@ -254,7 +254,7 @@ namespace Desktop
             //_waitingInLineCount = 0;
         }
 
-
+        [Inject] private static NavigationManager _NavigationManager { get; set; }
 
         /// <summary>
         /// Simple blazor navigation wrapper with standard logging

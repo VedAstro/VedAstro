@@ -1,13 +1,15 @@
-﻿using VedAstro.Library;
+﻿using System;
+using System.IO;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using VedAstro.Library;
 using System.Xml.Linq;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using Newtonsoft.Json.Linq;
 
 //A LIE IS JUST A GREAT STORY THAT SOMEONE RUINED WITH THE TRUTH -- Barnabus Stinson
 
-namespace Website
+namespace VedAstro.Library
 {
 
     /// <summary>
@@ -24,11 +26,8 @@ namespace Website
         /// Note: if JSON auto adds "Root" as first element, unless specified
         /// for XML data root element name is ignored
         /// </summary>
-        public static async Task<WebResult<XElement>> ReadFromServerXmlReply(string apiUrl, IJSRuntime? jsRuntime)
+        public static async Task<WebResult<XElement>> ReadFromServerXmlReply(string apiUrl)
         {
-            //if js runtime available & browser offline show error
-            jsRuntime?.CheckInternet();
-
             var parsed = await Tools.ReadFromServerXmlReply(apiUrl);
 
             return parsed;
@@ -38,11 +37,8 @@ namespace Website
         /// <summary>
         /// Send xml as string to server and returns stream as response
         /// </summary>
-        public static async Task<Stream> WriteToServerStreamReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
+        public static async Task<Stream> WriteToServerStreamReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime, HttpClient httpClient)
         {
-
-            //if js runtime available & browser offline show error
-            jsRuntime?.CheckInternet();
 
             try
             {
@@ -55,7 +51,7 @@ namespace Website
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
 
                 //send the data on its way
-                var response = await AppData.HttpClient.SendAsync(httpRequestMessage, waitForContent);
+                var response = await httpClient.SendAsync(httpRequestMessage, waitForContent);
 
                 //extract the content of the reply data
                 var rawMessage = response.Content.ReadAsStreamAsync().Result;
@@ -76,13 +72,10 @@ namespace Website
         /// - No timeout! Will wait forever
         /// - failure is logged here
         /// </summary>
-        public static async Task<WebResult<XElement>> WriteToServerXmlReplyDotNet(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
+        public static async Task<WebResult<XElement>> WriteToServerXmlReplyDotNet(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime, HttpClient httpClient)
         {
 
             WebResult<XElement> returnVal;
-
-            //if js runtime available & browser offline show error
-            jsRuntime?.CheckInternet();
 
             string rawMessage = "";
             var statusCode = "";
@@ -97,7 +90,7 @@ namespace Website
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
 
                 //send the data on its way 
-                var response = await AppData.HttpClient.SendAsync(httpRequestMessage, waitForContent);
+                var response = await httpClient.SendAsync(httpRequestMessage, waitForContent);
 
                 //keep for error logging if needed
                 statusCode = response?.StatusCode.ToString();
@@ -130,7 +123,7 @@ namespace Website
             }
 
             //if fail log it
-            if (!returnVal.IsPass) { await WebLogger.Error(returnVal.Payload); }
+            if (!returnVal.IsPass) { await LibLogger.Error(returnVal.Payload); }
 
             return returnVal;
         }
@@ -155,7 +148,7 @@ namespace Website
             {
                 var debugInfo = $"Call to \"{apiUrl}\" timeout at : {timeout}s";
 
-                WebLogger.Data(debugInfo);
+                LibLogger.Debug(debugInfo);
 #if DEBUG
                 Console.WriteLine(debugInfo);
 #endif
@@ -167,7 +160,7 @@ namespace Website
             if (string.IsNullOrEmpty(receivedData))
             {
                 //log it
-                await WebLogger.Error($"BLZ > Call returned empty\n To:{apiUrl} with payload:\n{xmlData}");
+                await LibLogger.Error($"BLZ > Call returned empty\n To:{apiUrl} with payload:\n{xmlData}");
 
                 //send failed empty data to caller, it should know what to do with it
                 return new WebResult<XElement>(false, new XElement("CallEmptyError"));
@@ -185,14 +178,24 @@ namespace Website
         }
 
 
-        public static async Task<string> Post(string apiUrl, string stringData)
+        public static async Task<string> Post(string apiUrl, string data)
         {
-            //this call will take you to NetworkThread.js
-            var rawPayload = await AppData.JsRuntime.InvokeAsync<string>(JS.postWrapper, apiUrl, stringData);
-
-            //todo proper checking of status needed
-            return rawPayload;
+            using (var httpClient = new HttpClient())
+            {
+                var content = new StringContent(data, Encoding.UTF8, "application/xml");
+                HttpResponseMessage response = await httpClient.PostAsync(apiUrl, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception($"Error in Post method: {response.StatusCode}");
+                }
+            }
         }
+
 
         //public static async Task<WebResult<JToken>> WriteToServerJsonReply(string apiUrl, JObject xmlData, int timeout = 60)
         //{
@@ -231,7 +234,6 @@ namespace Website
 
 
         //PRIVATE METHODS
-
 
 
     }

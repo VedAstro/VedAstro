@@ -1,5 +1,7 @@
 ﻿using Desktop.Data;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 namespace Desktop
 {
@@ -42,7 +44,25 @@ namespace Desktop
             //FOR F12 Debug console
             builder.Services.AddBlazorWebViewDeveloperTools();
 
-            return builder.Build();
+
+
+            //The last thing that the Main method does is to take all of the configuration
+            //specified with the WebAssemblyHostBuilder and call its Build method. This will
+            //create an instance of a WebAssemblyHost which is the heart of the Blazor app.
+            //It contains all of the application configuration and services needed to run your app.
+            var webAssemblyHost = builder.Build();
+
+
+            //make the JS runtime globally accessible
+            var jsRuntime = webAssemblyHost.Services.GetRequiredService<IJSRuntime>();
+            AppData.JsRuntime = jsRuntime;
+
+            //make wrapping for BLAZOR navigation easy, also overrides 
+            var navigation = webAssemblyHost.Services.GetRequiredService<NavigationManager>();
+            AppData.Navigation = navigation;
+
+
+            return webAssemblyHost;
         }
     }
 }

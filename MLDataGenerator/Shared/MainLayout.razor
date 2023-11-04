@@ -1,0 +1,29 @@
+﻿@using MLDataGenerator.Pages
+@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components;
+@inject NavigationManager NavManager
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a @onclick="Callback">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code
+{
+
+    private async Task Callback()
+    {
+        NavManager.NavigateTo($"/{nameof(DataGenerator)}");
+    }
+}

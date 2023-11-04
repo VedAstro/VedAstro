@@ -331,13 +331,23 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<(bool, GeoLocation)> TryParse(string cellValue)
         {
-            //should return empty 
-            var tryParsed = await GeoLocation.FromName(cellValue);
+            try
+            {
+                //should return empty 
+                var tryParsed = await GeoLocation.FromName(cellValue);
 
-            //if empty than parse failed
-            var isParsed = !(tryParsed.Equals(Empty));
+                //if empty than parse failed
+                var isParsed = !(tryParsed.Equals(Empty));
 
-            return (isParsed, tryParsed);
+                return (isParsed, tryParsed);
+
+            }
+            //if fail for any reason, than empty so caller can know
+            //NOTE: avoid exception or logging here, since failure is expected pattern
+            catch
+            {
+                return (false, Empty);
+            }
         }
 
         /// <summary>

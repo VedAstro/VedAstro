@@ -6,3 +6,9 @@
 @using Microsoft.JSInterop
 @using Desktop
 @using Desktop.Shared
+
+
+@*Vars declared in program.cs inject so accessible in page*@
+@inject IJSRuntime _jsRuntime
+@inject NavigationManager _navigation
+@inject HttpClient _client

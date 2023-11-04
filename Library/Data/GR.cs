@@ -1,4 +1,6 @@
-﻿namespace Website
+﻿using System;
+
+namespace VedAstro.Library
 {
 
     //█░░ ▄▀█ █▄█ █▀█ █░█ ▀█▀   █▀ █ ▀█ █▀▀

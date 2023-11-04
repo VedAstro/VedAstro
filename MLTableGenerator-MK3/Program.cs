@@ -40,8 +40,8 @@ namespace MLTableGenerator
             Console.WriteLine($"Selected File:\n{sourceFilePath}");
 
             //# STEP 2
-            Console.WriteLine("STEP 2:", Color.Yellow);
-            Console.WriteLine("Processing file...");
+            Console.WriteLine("\nSTEP 2:", Color.Yellow);
+            Console.WriteLine("Processing file...\n");
 
             int totalTicks = 10;
             var options = new ProgressBarOptions
@@ -51,21 +51,23 @@ namespace MLTableGenerator
             };
             using (var pbar = new ProgressBar(totalTicks, "initial message", options))
             {
-                for (int i = 0; i <= totalTicks; i++)
-                {
-                    pbar.Tick("Updating... " + i + " of " + totalTicks);
-                    // Simulate work being done
-                    System.Threading.Thread.Sleep(1000);
-                }
+
+                //get file as binary
+                pbar.Tick($"Reading file... {1} of {totalTicks}");
+                var inputedFile = File.OpenRead(sourceFilePath);
+
+                pbar.Tick($"Parsing Time Column... {2} of {totalTicks}");
+                var foundRawTimeList = Tools.ExtractTimeColumnFromExcel(inputedFile).Result;
+
+                pbar.Tick($"Parsing Location Column... {3} of {totalTicks}");
+                var foundGeoLocationList = Tools.ExtractLocationColumnFromExcel(inputedFile).Result;
+
+                //3 : COMBINE DATA
+                pbar.Tick($"Combining Time & Location... {4} of {totalTicks}");
+                var returnList = foundRawTimeList.Select(dateTimeOffset => new Time(dateTimeOffset, foundGeoLocationList[foundRawTimeList.IndexOf(dateTimeOffset)])).ToList();
+
+
             }
-
-            //get file as binary
-            var inputedFile = File.OpenRead(sourceFilePath);
-            var foundRawTimeList = Tools.ExtractTimeColumnFromExcel(inputedFile).Result;
-            var foundGeoLocationList =  Tools.ExtractLocationColumnFromExcel(inputedFile).Result;
-
-            //3 : COMBINE DATA
-            var returnList = foundRawTimeList.Select(dateTimeOffset => new Time(dateTimeOffset, foundGeoLocationList[foundRawTimeList.IndexOf(dateTimeOffset)])).ToList();
 
 
             Console.ReadLine();

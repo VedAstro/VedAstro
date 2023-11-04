@@ -62,6 +62,10 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0-rc.1.23419.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Library\Library.csproj" />
+    </ItemGroup>
+
   <!-- Build Properties must be defined within these property groups to ensure successful publishing
        to the Mac App Store. See: https://aka.ms/maui-publish-app-store#define-build-properties-in-your-project-file -->
   <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Debug'">

@@ -1,4 +1,4 @@
-﻿namespace Website
+﻿namespace VedAstro.Library
 {
 
     /// <summary>

@@ -188,55 +188,59 @@ namespace VedAstro.Library
         public static async Task<List<GeoLocation>> ExtractLocationColumnFromExcel(Stream excelBinary)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set the license context for EPPlus
-            var timeList = new List<GeoLocation>();
-            int timeColumnIndex = -1;
-
-            excelBinary.Position = 0; //important to reset else, no file error
-            var excelFileStream = new MemoryStream();
-            await excelBinary.CopyToAsync(excelFileStream);
-            excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning
-
-            using (var package = new ExcelPackage(excelFileStream))
+            var geoLocations = new List<GeoLocation>();
+            int geoLocationColumnIndex = -1;
+            // Reset the position of the Stream to the beginning
+            excelBinary.Position = 0;
+            // Use 'using' statement to ensure the MemoryStream is disposed off after use
+            using (var excelFileStream = new MemoryStream())
             {
-                var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
-                                                                // Start from the second row (index 2) to skip the header
-                for (int rowIndex = 2; rowIndex <= worksheet.Dimension.Rows; rowIndex++)
+                await excelBinary.CopyToAsync(excelFileStream);
+                excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning
+                using (var package = new ExcelPackage(excelFileStream))
                 {
-                    // If we haven't found the time column yet, search for it
-                    if (timeColumnIndex == -1)
+                    var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
+                                                                    // Start from the second row (index 2) to skip the header
+                    for (int rowIndex = 2; rowIndex <= worksheet.Dimension.Rows; rowIndex++)
                     {
-                        for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
+                        // If we haven't found the geoLocation column yet, search for it
+                        if (geoLocationColumnIndex == -1)
                         {
-                            var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
-                            // If the cell value can be parsed as a Time, this is the time column
-                            var tryParse = await GeoLocation.TryParse(cellValue);
-                            if (tryParse.Item1) //is parsed, we no need the parsed val
-                            {
-                                timeColumnIndex = colIndex;
-                                break;
-                            }
+                            geoLocationColumnIndex = await FindGeoLocationColumnIndex(worksheet, rowIndex);
                         }
-                    }
-                    // If we've found the time column, add the cell value to the list
-                    if (timeColumnIndex != -1)
-                    {
-                        var cellValue = worksheet.Cells[rowIndex, timeColumnIndex].Value?.ToString();
-                        var tryParse = await GeoLocation.TryParse(cellValue);
-                        if (tryParse.Item1)
+                        // If we've found the geoLocation column, add the cell value to the list
+                        if (geoLocationColumnIndex != -1)
                         {
-                            //add in the final parsed location into return list
-                            timeList.Add(tryParse.Item2);
+                            var cellValue = worksheet.Cells[rowIndex, geoLocationColumnIndex].Value?.ToString();
+                            var tryParse = await GeoLocation.TryParse(cellValue);
+                            if (tryParse.Item1)
+                            {
+                                //add in the final parsed location into return list
+                                geoLocations.Add(tryParse.Item2);
+                            }
                         }
                     }
                 }
             }
-
 #if DEBUG
             Console.WriteLine($"File Size : {excelBinary.Length}");
-            Console.WriteLine($"Rows Found : {timeList.Count}");
+            Console.WriteLine($"Rows Found : {geoLocations.Count}");
 #endif
-
-            return timeList;
+            return geoLocations;
+        }
+        private static async Task<int> FindGeoLocationColumnIndex(ExcelWorksheet worksheet, int rowIndex)
+        {
+            for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
+            {
+                var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
+                // If the cell value can be parsed as a GeoLocation, this is the geoLocation column
+                var tryParse = await GeoLocation.TryParse(cellValue);
+                if (tryParse.Item1) //is parsed, we no need the parsed val
+                {
+                    return colIndex;
+                }
+            }
+            return -1;
         }
 
 

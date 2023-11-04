@@ -595,6 +595,7 @@ namespace VedAstro.Library
 
         }
 
+
         /// <summary>
         /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
         /// </summary>

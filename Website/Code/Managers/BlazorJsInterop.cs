@@ -452,21 +452,6 @@ namespace Website
         public static async Task ReloadPageToUrl(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync(JS.window_location_assign, url);
         public static async Task ReloadPage(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync(JS.window_location_reload);
 
-        /// <summary>
-        /// Checks if browser is online
-        /// </summary>
-        public static async Task<bool> IsOnline(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<bool>(JS.IsOnline);
-
-        /// <summary>
-        /// Raises exception if not online
-        /// else lets control pass through silently
-        /// Note: exception is designed to be caught by central error handler
-        /// </summary>
-        public static async Task CheckInternet(this IJSRuntime jsRuntime)
-        {
-            var isOnline = await jsRuntime.IsOnline();
-            if (!isOnline) { throw new NoInternetError(); }
-        }
 
         /// <summary>
         /// Gets the previous page/origin url from JS

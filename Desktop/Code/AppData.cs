@@ -254,8 +254,6 @@ namespace Desktop
             //_waitingInLineCount = 0;
         }
 
-        [Inject] private static NavigationManager _NavigationManager { get; set; }
-
         /// <summary>
         /// Simple blazor navigation wrapper with standard logging
         /// if going to login page will auto set come back url
@@ -289,6 +287,7 @@ namespace Desktop
         }
 
 
+        public static SearchResult SearchPage { get; set; }
 
         public static async Task LoadSearchFiles()
         {

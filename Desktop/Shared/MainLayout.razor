@@ -1,17 +1,121 @@
-﻿@inherits LayoutComponentBase
+﻿@using VedAstro.Library
+@using Desktop.Pages
+@using ThisAssembly = Desktop.ThisAssembly
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+@inherits LayoutComponentBase
+
+@inject NavigationManager NavManager
+
+
+@* <div class="page">
+    <NavMenu />
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+ *@
+
+<div class="row flex-md-nowrap">
+
+    <!-- DESKTOP ONLY : SIDEBAR -->
+    <div @ref="AppData.DesktopSidebar" class="col-auto align-items-start d-none d-md-block">
+        <!--only visible in Desktop-->
+        <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 999;">
+            <!-- special style to make appear in night mode dispite bg-white -->
+            @* SEARCH *@
+            <SearchBox />
+            <SideBarButtons />
+        </div>
+
+        <!-- DEPLOYMENT STAMP : Not visible in mobile, no space to joke around -->
+        <div class="sticky-bottom position-fixed mb-3 ms-5" style="color:@AppData.Grey; font-size: 8px; z-index: 1;">
+            @*stack below other elms*@
+            <div style="cursor: pointer;" @onclick="()=>_navigation.NavigateTo(PageRoute.MadeOnEarth)" class="hstack gap-1">
+                <span class="iconify" data-icon="ion:earth" data-width="10"></span>
+                <span>Made on Earth</span>
+            </div>
+            <div class="hstack gap-1">
+                <span class="iconify" data-icon="bi:rocket-fill" data-width="10"></span>
+                <!-- Stamped build version during deployment, used to identify code in the WILD -->
+                <span>@ThisAssembly.Version</span>
+            </div>
+            <div class="hstack gap-1">
+                <span class="iconify" data-icon="material-symbols:copyright-outline" data-width="11"></span>
+                <!-- Stamped build version during deployment, used to identify code in cloud -->
+                <span>2014 - 2023 VedAstro</span>
+            </div>
+            <div @onclick="OnClickStamp" style="cursor: pointer;" class="mt-1">
+                <img src="images/ce-fcc-recycle.svg">
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE ONLY : SIDEBAR -->
+    <div class="col-auto d-md-none">
+        <nav class="navbar fixed-top" style="background:#1877f2;">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white ps-3 fs-4" href="@PageRoute.Home">VedAstro</a>
+                <button class="navbar-toggler text-white border-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                    <Icon IconName="material-symbols:menu-open-rounded" Size="30" />
+                </button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-body" data-bs-dismiss="offcanvas">
+                        <!--Needed close mobile menu onclick-->
+                        <div class="d-flex flex-wrap gap-2 mb-2 p-2 rounded-3 border shadow"><TopBarButtons /></div>
+                        <hr />
+                        <div class="vstack gap-2 mb-2 p-2 rounded-3 border shadow"><SideBarButtons /></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- CONTENT + REF BUTTONS -->
+    <!-- in mobile push down to make room for mobile menu-->
+    <div class="col mt-5 mt-md-0">
+
+        <!-- REFERENCE BUTTONS : buttons placed here are
+        linked to places not needed all the time, like About and Docs -->
+        <!--only visible in Desktop-->
+        <div style="min-width:954px;" class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white">
+            <TopBarButtons />
+        </div>
+
+        <!-- PAGE CONTENT INSERTED HERE -->
+        <div>@Body</div>
+
+        <!-- FOOTER LINE AND SPACING -->
+        <hr class="mt-5" style="margin-bottom:@GR.W255px;">
+    </div>
+</div>
+
+
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        //NOTE:
+        //NAV MANAGER needs to plugged in from here
+        //if plugged from Program.cs won't work
+        AppData.Navigation = NavManager;
+    }
+
+
+    private async Task OnClickStamp()
+    {
+    //count click
+        AppData.StampClickCount++;
+
+        switch (AppData.StampClickCount)
+        {
+            case 2: await _jsRuntime.ShowAlert("success", $"You clicked this 2x times, why?", true); break;
+            case 4: await _jsRuntime.ShowAlert("success", $"Stop clicking! There is no \"Cake\" here.", true); break;
+            case 6: AppData.Go(PageRoute.EasterEgg, true); break;
+        }
+    }
+
+}

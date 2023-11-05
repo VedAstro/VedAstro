@@ -77,5 +77,75 @@ namespace Desktop
             await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
         }
 
-    }
+
+		/// <summary>
+		/// Special function to catch async exceptions, but has to be called correctly
+		/// Note:
+		/// - If caught here overwrites default blazor error handling 
+		/// - Not all await calls need this only the top level needs this,
+		/// example use inside OnClick or OnInitialized will do.
+		/// example: await InvokeAsync(async () => await DeletePerson()).HandleErrors();
+		/// </summary>
+		public static async Task Try(this Task invocation, IJSRuntime jsRuntime)
+		{
+			//counts of failure before force refresh page
+			const int failureThreshold = 3;
+
+			try
+			{
+				//try to make call normally
+				await invocation;
+			}
+			catch (Exception e)
+			{
+
+				//based on error show the appropriate message
+				switch (e)
+				{
+					//no internet just, just show dialog box and do nothing
+					case NoInternetError:
+						await jsRuntime.ShowAlert("error", AlertText.NoInternet, true);
+						break;
+
+					//here we have internet but somehow failed when talking to API server
+					//possible cause:
+					// - code mismatch between client & server
+					// - slow or unstable internet connection
+					//best choice is to redirect 
+					case ApiCommunicationFailed:
+						await jsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
+						break;
+
+					//failure here can't be recovered, so best choice is to refresh page to home
+					//redirect with reload to clear memory & restart app
+					default:
+						//note : for unknown reason, when app starts multiple failures occur, for now
+						if (AppData.FailureCount > failureThreshold)
+						{
+							await jsRuntime.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true);
+							await jsRuntime.LoadPage(PageRoute.Home);
+						}
+						else
+						{
+							AppData.FailureCount++;
+							Console.WriteLine($"BLZ: Failure Count: {AppData.FailureCount}");
+						}
+						break;
+				}
+
+#if DEBUG
+				//if running locally, print error to console
+				Console.WriteLine(e.ToString());
+#else
+                //if Release log error & end silently
+                WebLogger.Error(e, "Error from WebsiteTools.Try()");
+#endif
+
+				//note exception will not go past this point,
+				//even calling throw will do nothing
+				//throw;
+			}
+		}
+
+	}
 }

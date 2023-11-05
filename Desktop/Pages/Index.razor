@@ -1,5 +1,67 @@
-﻿@page "/"
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.Home)]
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<PageTitle>VedAstro | Vedic Astrology</PageTitle>
+
+
+<PageTop ImageName="good-time-finder.png"
+         Title="VedAstro Desktop"
+         DescriptionText="Powerful astrology calculations using your computer's raw CPU & RAM power.">
+</PageTop>
+
+
+<!--SLIDE SHOW-->
+
+
+<!--QUICK LINKS-->
+<style>
+    /*to make card look clickable*/
+    .card:hover {
+        border: 2px solid #3E7DC0 !important;
+    }
+</style>
+
+<div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
+
+    @* done so for dynamic UX *@
+    @foreach (var quickLink in _quickLinkList)
+    {
+
+        <div @onclick="() => AppData.Go(quickLink.PageRoute)" style="cursor: pointer;" class="col">
+            <div class="card">
+                <img src="images/@(quickLink.ImageName)" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">@quickLink.Title</h5>
+                    <p class="card-text">@quickLink.Description</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+
+    private List<QuickLink> _quickLinkList = new List<QuickLink>();
+
+
+    protected override void OnInitialized()
+    {
+        var niceOrder = new List<QuickLink>()
+        {
+            new(PageRoute.TableGenerator, "table-generator-card.jpg", "ML Data Generator", "Easy create large ML & AI data tables"),
+            new(PageRoute.LifePredictor, "dasa-card.jpg", "Life Predictor HD", "Know good and bad periods of your life years ahead"),
+            new(PageRoute.BirthTimeFinder, "birth-time-finder-card.jpg", "Birth Time Finder", "Find forgotten or lost birth time using astrological"),
+        };
+
+        //mix the list up for newness effect
+        var randotron = new Random();
+        _quickLinkList = niceOrder.OrderBy(quickLink => randotron.Next()).ToList();
+
+    }
+
+    public record QuickLink(string PageRoute, string ImageName, string Title, string Description);
+
+}
+

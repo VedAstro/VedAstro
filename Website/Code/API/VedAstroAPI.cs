@@ -311,51 +311,6 @@ namespace Website
 
         }
 
-        /// <summary>
-        /// HTTP Post via JS interop
-        /// </summary>
-        public static async Task<WebResult<JToken>> WriteToServerJsonReply(string apiUrl, string stringData, int timeout = 60)
-        {
-
-        TryAgain:
-
-            //ACT 1:
-            //send data to URL, using JS for reliability & speed
-            //also if call does not respond in time, we replay the call over & over
-            string receivedData;
-            try { receivedData = await Tools.TaskWithTimeoutAndException(ServerManager.Post(apiUrl, stringData), TimeSpan.FromSeconds(timeout)); }
-
-            //if fail replay and log it
-            catch (Exception e)
-            {
-                var debugInfo = $"Call to \"{apiUrl}\" timeout at : {timeout}s";
-
-                WebLogger.Data(debugInfo);
-#if DEBUG
-                Console.WriteLine(debugInfo);
-#endif
-                goto TryAgain;
-            }
-
-            //ACT 2:
-            //check raw data 
-            if (string.IsNullOrEmpty(receivedData))
-            {
-                //log it
-                await WebLogger.Error($"BLZ > Call returned empty\n To:{apiUrl} with payload:\n{stringData}");
-
-                //send failed empty data to caller, it should know what to do with it
-                return new WebResult<JToken>(false, new JObject("CallEmptyError"));
-            }
-
-            //ACT 3:
-            //return data as Json
-            var writeToServerXmlReply = JObject.Parse(receivedData);
-            var returnVal = WebResult<XElement>.FromJson(writeToServerXmlReply);
-
-            //ACT 4:
-            return returnVal;
-        }
 
     }
 }

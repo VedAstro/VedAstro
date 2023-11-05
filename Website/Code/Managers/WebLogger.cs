@@ -270,7 +270,7 @@ namespace Website
 
             //because call to 3rd party API, call not reliable from all locations on earth
             //known to fail from time to time, as such compensate!
-            var resultLocation = await ServerManager.ReadFromServerXmlReply(URL.GeoJsApiUrl, AppData.JsRuntime);
+            var resultLocation = await ServerManager.ReadFromServerXmlReply(URL.GeoJsApiUrl);
             if (resultLocation.IsPass)
             {
                 locationXml = resultLocation.Payload;

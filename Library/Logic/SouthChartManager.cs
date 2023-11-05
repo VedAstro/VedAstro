@@ -38,21 +38,40 @@ namespace VedAstro.Library
                 { ZodiacName.Pisces, 0 },
             };
 
-        private static Dictionary<ZodiacName, dynamic> ChartSignCoordinates { get; set; } =
+        private static Dictionary<ZodiacName, dynamic> ChartPlanetStartCoordinates { get; set; } =
             new Dictionary<ZodiacName, dynamic>()
             {
                 { ZodiacName.Aries, new { xAxis = 310, yAxis = 100 } },
-                { ZodiacName.Taurus, new { xAxis = 530, yAxis = 100 } },
                 { ZodiacName.Gemini, new { xAxis = 750, yAxis = 100 } },
                 { ZodiacName.Cancer, new { xAxis = 750, yAxis = 320 } },
                 { ZodiacName.Leo, new { xAxis = 750, yAxis = 540 } },
-                { ZodiacName.Virgo, new { xAxis = 750, yAxis = 760 } },
-                { ZodiacName.Libra, new { xAxis = 530, yAxis = 760 } },
-                { ZodiacName.Scorpio, new { xAxis = 310, yAxis = 760 } },
-                { ZodiacName.Sagittarius, new { xAxis = 90, yAxis = 760 } },
+                { ZodiacName.Virgo, new { xAxis = 750, yAxis = 740 } },
+                { ZodiacName.Taurus, new { xAxis = 530, yAxis = 100 } },
+                { ZodiacName.Libra, new { xAxis = 530, yAxis = 740 } },
+                { ZodiacName.Scorpio, new { xAxis = 310, yAxis = 740 } },
+                { ZodiacName.Sagittarius, new { xAxis = 90, yAxis = 740 } },
                 { ZodiacName.Capricorn, new { xAxis = 90, yAxis = 540 } },
                 { ZodiacName.Aquarius, new { xAxis = 90, yAxis = 320 } },
                 { ZodiacName.Pisces, new { xAxis = 90, yAxis = 100 } },
+            };
+
+
+        private static Dictionary<ZodiacName, dynamic> ChartHouseStartCoordinates { get; set; } =
+            new Dictionary<ZodiacName, dynamic>()
+            {
+                //translate(437 212) 127 112
+                { ZodiacName.Aries, new { xAxis = 437, yAxis = 212 } },
+                { ZodiacName.Taurus, new { xAxis = 657, yAxis = 212 } },
+                { ZodiacName.Gemini, new { xAxis = 877, yAxis = 212 } },
+                { ZodiacName.Cancer, new { xAxis = 877, yAxis = 432 } },
+                { ZodiacName.Leo, new { xAxis = 877, yAxis = 652 } },
+                { ZodiacName.Virgo, new { xAxis = 877, yAxis = 872 } },
+                { ZodiacName.Libra, new { xAxis = 657, yAxis = 872 } },
+                { ZodiacName.Scorpio, new { xAxis = 437, yAxis = 872 } },
+                { ZodiacName.Sagittarius, new { xAxis = 217, yAxis = 872 } },
+                { ZodiacName.Capricorn, new { xAxis = 217, yAxis = 652 } },
+                { ZodiacName.Aquarius, new { xAxis = 217, yAxis = 432 } },
+                { ZodiacName.Pisces, new { xAxis = 217, yAxis = 212 } },
             };
 
 
@@ -73,7 +92,6 @@ namespace VedAstro.Library
 
             //PART II : fill the components in order
             GenerateComponents();
-
 
 
             //PART III : compile in right placement
@@ -119,17 +137,24 @@ namespace VedAstro.Library
 
         }
 
+
+        /// <summary>
+        /// Given a time will name all the house boxes
+        /// </summary>
         private static string GetHouseNumberLayer(Time time)
         {
 
             var compiled = "";
-            var allPlanetsSigns = Calculate.AllPlanetSigns(time);
+           // var allHousesSigns = Calculate.allhouse .AllHouseSigns(time);
 
-            foreach (var planetSign in allPlanetsSigns)
+            foreach (var houseName in House.AllHouses )
             {
-                var zodiacSign = planetSign.Value;
-                var coordinates = GetPositionForHouseSouth(zodiacSign.GetSignName());
-                var xx = $"<text  transform=\"translate({coordinates.xAxis} {coordinates.yAxis})\" style=\"fill:#d0edf5; font-family:Arial-BoldMT, Arial; font-size:26.65px; font-weight:700;\">{planetSign.Key}</text>";
+                //get 
+                var houseSign = Calculate.HouseSignName(houseName, time);
+                var coordinates = GetHousePositionForSignBox(houseSign);
+                var xx = $"<text  transform=\"translate({coordinates.xAxis} {coordinates.yAxis})\"" +
+                         $" style=\"fill:#d0edf5; font-family:Arial-BoldMT, Arial; font-size:26.65px; font-weight:700;\">" +
+                         $"{(int)houseName}</text>";
                 compiled += xx;
             }
 
@@ -146,7 +171,7 @@ namespace VedAstro.Library
             foreach (var planetSign in allPlanetsSigns)
             {
                 var zodiacSign = planetSign.Value;
-                var coordinates = GetPositionForHouseSouth(zodiacSign.GetSignName());
+                var coordinates = GetPlanetPositionForSignBox(zodiacSign.GetSignName());
                 var xx = $"<text  transform=\"matrix(1 0 0 1 {coordinates.xAxis} {coordinates.yAxis})\" font-size=\"35\" fill=\"black\">{planetSign.Key}</text>";
                 compiled += xx;
             }
@@ -156,12 +181,14 @@ namespace VedAstro.Library
             return finalGroup;
         }
 
-        private static dynamic GetPositionForHouseSouth(ZodiacName zodiacName)
+        /// <summary>
+        /// given a house zodiac sign will return x & y where it starts
+        /// </summary>
+        private static dynamic GetPlanetPositionForSignBox(ZodiacName zodiacName)
         {
 
             var xAxis = 0;
             var yAxis = 0;
-
 
             //check if occupancy number
             var occupancy = ChartOccupiedMarker[zodiacName];
@@ -170,9 +197,24 @@ namespace VedAstro.Library
             //increment for next check
             ChartOccupiedMarker[zodiacName]++;
 
-            xAxis = ChartSignCoordinates[zodiacName].xAxis;
-            yAxis = ChartSignCoordinates[zodiacName].yAxis + jumpCount; //if any will go next row
+            xAxis = ChartPlanetStartCoordinates[zodiacName].xAxis;
+            yAxis = ChartPlanetStartCoordinates[zodiacName].yAxis + jumpCount; //if any will go next row
 
+            return new { xAxis = xAxis, yAxis = yAxis };
+        }
+
+        /// <summary>
+        /// given a house zodiac sign will return x & y where it starts for placing house number
+        /// </summary>
+        private static dynamic GetHousePositionForSignBox(ZodiacName zodiacName)
+        {
+
+            var xAxis = 0;
+            var yAxis = 0;
+
+
+            xAxis = ChartHouseStartCoordinates[zodiacName].xAxis;
+            yAxis = ChartHouseStartCoordinates[zodiacName].yAxis;
 
             return new { xAxis = xAxis, yAxis = yAxis };
         }

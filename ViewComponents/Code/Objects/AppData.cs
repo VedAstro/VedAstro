@@ -2,9 +2,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Xml.Linq;
 using VedAstro.Library;
-using Desktop.Pages;
 
-namespace Desktop
+namespace Website
 {
 
     /// <summary>
@@ -58,7 +57,6 @@ namespace Desktop
         /// loaded in main layout
         /// </summary>
         public static List<XElement> ReferenceList { get; set; }
-
 
         /// <summary>
         /// Note access via try get person list
@@ -195,9 +193,7 @@ namespace Desktop
         /// <summary>
         /// manager to access everything API
         /// </summary>
-        //public static VedAstroAPI API;
-
-        //private static PersonSelectorBox _personSelectorBox;
+        public static VedAstroAPI API;
 
 
         /// <summary>
@@ -254,6 +250,8 @@ namespace Desktop
             //_waitingInLineCount = 0;
         }
 
+
+
         /// <summary>
         /// Simple blazor navigation wrapper with standard logging
         /// if going to login page will auto set come back url
@@ -287,7 +285,6 @@ namespace Desktop
         }
 
 
-        public static SearchResult SearchPage { get; set; }
 
         public static async Task LoadSearchFiles()
         {

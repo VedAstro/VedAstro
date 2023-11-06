@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -120,25 +120,28 @@ namespace VedAstro.Library
         {
             //get house number
             var houseNumber = (int)house;
-
-            if (houseNumber + 1 < cusps.Count) //Do not exceed the bounds of the array
+            // Check if houseNumber is within the bounds of the array
+            if (houseNumber >= 0 && houseNumber < cusps.Count)
             {
                 //check if cusp longitude is smaller than next cusp longitude
-                if (cusps[(HouseName)houseNumber + 1] > cusps[(HouseName)houseNumber])
+                if (houseNumber + 1 < cusps.Count && cusps[(HouseName)houseNumber + 1] > cusps[(HouseName)houseNumber])
                 {
                     return (planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)houseNumber].TotalDegrees) &&
                            //this means that the planet falls in between these house cusps
                            (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)houseNumber + 1].TotalDegrees);
                 }
-
                 //if next cusp start long is smaller than current cusp we are rotating through 360 deg
-                else
+                else if (houseNumber + 1 < cusps.Count)
                 {
                     return (planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)houseNumber].TotalDegrees) ||
                            (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)houseNumber + 1].TotalDegrees);
                 }
+                // If houseNumber is the last index in the cusps array
+                else
+                {
+                    return planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)houseNumber].TotalDegrees;
+                }
             }
-
             return false;
         }
 

@@ -286,13 +286,13 @@ namespace VedAstro.Library
 
             var returnList = new List<Tuple<Time, ConstellationName, ZodiacSign>>();
 
-            var startConstellation = Calculate.PlanetConstellation(startTime, planetName);
+            var startConstellation = Calculate.PlanetConstellation(planetName, startTime);
             var previousConstellation = startConstellation.GetConstellationName();
 
             foreach (var timeSlice in timeSlices)
             {
                 //if constellation changes mark the time
-                var tempConstellationName = Calculate.PlanetConstellation(timeSlice, planetName).GetConstellationName();
+                var tempConstellationName = Calculate.PlanetConstellation(planetName, timeSlice).GetConstellationName();
 
                 //CPJ Added for Planet's Zodiac Sign
                 var planetLongitude = Calculate.PlanetNirayanaLongitude(timeSlice, planetName);
@@ -518,7 +518,7 @@ namespace VedAstro.Library
             double ayanamsaYear = 0;
             while (ayanamsaYear < 2000)
             {
-                var planetConste = PlanetConstellation(time, inputPlanet);
+                var planetConste = PlanetConstellation(inputPlanet, time);
                 var testQuarter = planetConste.GetQuarter();
                 var testConstellationName = planetConste.GetConstellationName();
                 isMatch = expectedConstellation == testConstellationName && expectedPada == testQuarter;
@@ -946,12 +946,12 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets name of Constellation behind the moon at a given time
         /// </summary>
-        public static Constellation MoonConstellation(Time time) => PlanetConstellation(time, Moon);
+        public static Constellation MoonConstellation(Time time) => PlanetConstellation(Moon, time);
 
         /// <summary>
         /// Gets the constellation behind a planet at a given time
         /// </summary>
-        public static Constellation PlanetConstellation(Time time, PlanetName planet)
+        public static Constellation PlanetConstellation(PlanetName planet, Time time)
         {
             //get position of planet in longitude
             var planetLongitude = PlanetNirayanaLongitude(time, planet);
@@ -1842,7 +1842,7 @@ namespace VedAstro.Library
             //check each planet if in sign
             foreach (var planet in All9Planets)
             {
-                var planetSign = PlanetConstellation(time, planet);
+                var planetSign = PlanetConstellation(planet, time);
 
                 returnList[planet] = planetSign;
             }
@@ -8373,7 +8373,7 @@ namespace VedAstro.Library
             //    : GetMoonConstellation(birthTime);
 
             //get dasa planet at birth
-            var moonConstellation = PlanetConstellation(birthTime, Library.PlanetName.Moon);
+            var moonConstellation = PlanetConstellation(Library.PlanetName.Moon, birthTime);
             //var risingConstellation = GetHouseConstellation(1, birthTime);
             var birthDasaPlanetMoon = ConstellationDasaPlanet(moonConstellation.GetConstellationName());
             //var birthDasaPlanet = GetConstellationDasaPlanet(risingConstellation.GetConstellationName());

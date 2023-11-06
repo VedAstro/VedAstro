@@ -309,7 +309,8 @@ KEEP IT REAL
         else
         {
             //add message to API Messages book
-            await WebsiteTools.SendMailToAPI(AppData.CurrentUser.Id, $"Add new API : {newApiDesc}");
+            var callUrl = AppData.URL.AddMessageApi;
+            await WebsiteTools.SendMailToAPI( "API Suggestion", $"Add new API : {newApiDesc}");
 
             //say thank you and will get back
             var msg = "<iconify-icon icon=\"noto:love-letter\"></iconify-icon> <a target=\\\"_blank\\\" style=\\\"text-decoration-line: none;\\\" href=\\\"https://vedastro.org/Donate/\\\" class=\\\"link-primary fw-bold\\\">Fund</a> this feature for faster development";

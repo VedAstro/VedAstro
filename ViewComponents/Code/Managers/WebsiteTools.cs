@@ -2,8 +2,6 @@ using System.Xml.Linq;
 using VedAstro.Library;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Threading;
-using Website.Pages;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using System.Text.Json;
@@ -526,35 +524,6 @@ namespace Website
         }
 
 
-        /// <summary>
-        /// tries to get location from local storage, if not found
-        /// gets from API and saves a copy for future
-        /// </summary>
-        /// <returns></returns>
-        public static async Task<GeoLocation> GetClientLocation(string apiKey)
-        {
-            //try get from browser storage
-            var clientLocXml = await AppData.JsRuntime.GetProperty("ClientLocation");
-            var isFound = clientLocXml != null;
-            //if got cache, then just parse that and return (1 http call saved)
-            GeoLocation parsedLocation;
-            if (isFound)
-            {
-                var locationXml = XElement.Parse(clientLocXml);
-                parsedLocation = GeoLocation.FromXml(locationXml);
-            }
-            //no cache, call Google API with IP
-            else
-            {
-                parsedLocation = await GeoLocation.FromIpAddress(apiKey);
-                //save for future use
-                await AppData.JsRuntime.SetProperty("ClientLocation", parsedLocation.ToXml().ToString());
-            }
-
-            Console.WriteLine($"Client Location:{parsedLocation.Name()}");
-
-            return parsedLocation;
-        }
 
         public static void OnClickGotoGithubCode(string methodName)
         {

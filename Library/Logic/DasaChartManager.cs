@@ -1931,7 +1931,7 @@ namespace VedAstro.Library
                 //get house that the event is related to
                 var relatedHouse = foundEvent.GetRelatedHouse().FirstOrDefault(); //for now assume only one
                 //get nature of house based on shadbala
-                var houseNatureScore = Calculate.HouseNatureScore(person.BirthTime, relatedHouse);
+                var houseNatureScore = Calculate.HouseNatureScore(relatedHouse, person.BirthTime);
 
                 //get houses and planet that the event is related to
                 var relatedPlanet = foundEvent.GetRelatedPlanet().FirstOrDefault(); //for now assume only one

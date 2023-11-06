@@ -798,9 +798,9 @@ namespace VedAstro.Library
         /// </summary>
         public static string SouthIndianChart(Time time)
         {
-            var x = SouthChartManager.GenerateChart(time, 1000, 1000);
+            var svgString = SouthChartManager.GenerateChart(time, 1000, 1000);
 
-            return x;
+            return svgString;
         }
 
         /// <summary>

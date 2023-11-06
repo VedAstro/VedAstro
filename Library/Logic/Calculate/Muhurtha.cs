@@ -900,7 +900,7 @@ namespace VedAstro.Library
             // associated with benefics, such a disposition is not approved.
 
             //get house venus is in
-            var houseVenusIsIn = Calculate.HousePlanetIsIn(time, PlanetName.Venus);
+            var houseVenusIsIn = Calculate.HousePlanetIsIn(PlanetName.Venus, time);
 
             //if venus is in 6th house
             if (houseVenusIsIn == HouseName.House6)
@@ -927,7 +927,7 @@ namespace VedAstro.Library
             // should not occupy the 8th house.
 
             //get house mars is in
-            var houseMarsIsIn = Calculate.HousePlanetIsIn(time, PlanetName.Mars);
+            var houseMarsIsIn = Calculate.HousePlanetIsIn(PlanetName.Mars, time);
 
             //if mars is in 8th house
             if (houseMarsIsIn == HouseName.House8)
@@ -1027,7 +1027,7 @@ namespace VedAstro.Library
             // rising in an election chart.
 
             //get house moon is in
-            var houseMoonIsIn = Calculate.HousePlanetIsIn(time, PlanetName.Moon);
+            var houseMoonIsIn = Calculate.HousePlanetIsIn(PlanetName.Moon, time);
 
             //if house moon is in is 6, 8 or 12
             if (houseMoonIsIn == HouseName.House6 || houseMoonIsIn == HouseName.House8 || houseMoonIsIn == HouseName.House12)
@@ -1048,7 +1048,7 @@ namespace VedAstro.Library
             // applicable in case of marriage.
 
             //get planets in conjunction with the moon
-            var planetsInConjunct = Calculate.PlanetsInConjuction(time, PlanetName.Moon);
+            var planetsInConjunct = Calculate.PlanetsInConjuction(PlanetName.Moon, time);
 
             //if any planets are in conjunct with moon, event is occuring
             if (planetsInConjunct.Count > 0) { return CalculatorResult.IsOccuring(); }
@@ -1661,7 +1661,7 @@ namespace VedAstro.Library
                 //make sure each is in 3, 6 or 11th house
                 foreach (var malefic in allMalefics)
                 {
-                    var planetHouse = Calculate.HousePlanetIsIn(time, malefic);
+                    var planetHouse = Calculate.HousePlanetIsIn(malefic, time);
 
                     //if not in 3, 6 or 11, end here as not occuring
                     if (!(planetHouse == HouseName.House3 || planetHouse == HouseName.House6 || planetHouse == HouseName.House11)) { return false; }
@@ -9771,17 +9771,17 @@ namespace VedAstro.Library
 
 			//condition 1
 			//is bukti lord in 6th house at birth
-			var bhuktiLordIn6th = Calculate.IsPlanetInHouse(person.BirthTime, buhktiLord, HouseName.House6);
+			var bhuktiLordIn6th = Calculate.IsPlanetInHouse(buhktiLord, HouseName.House6, person.BirthTime);
 			//is dasa lord in 8th house at birth
-			var dasaLordIn8th = Calculate.IsPlanetInHouse(person.BirthTime, dasaLord, HouseName.House8);
+			var dasaLordIn8th = Calculate.IsPlanetInHouse(dasaLord, HouseName.House8, person.BirthTime);
 			//check if both planets are in bad houses at the same time
 			var buhktiDasaIn6And8 = bhuktiLordIn6th && dasaLordIn8th;
 
 			//condition 2
 			//is bukti lord in 12th house at birth
-			var bhuktiLordIn12th = Calculate.IsPlanetInHouse(person.BirthTime, buhktiLord, HouseName.House12);
+			var bhuktiLordIn12th = Calculate.IsPlanetInHouse(buhktiLord, HouseName.House12, person.BirthTime);
 			//is dasa lord in 2nd house at birth
-			var dasaLordIn2nd = Calculate.IsPlanetInHouse(person.BirthTime, dasaLord, HouseName.House2);
+			var dasaLordIn2nd = Calculate.IsPlanetInHouse(dasaLord, HouseName.House2, person.BirthTime);
 			//check if both planets are in bad houses at the same time
 			var buhktiDasaIn12And2 = bhuktiLordIn12th && dasaLordIn2nd;
 
@@ -9913,11 +9913,11 @@ namespace VedAstro.Library
 			var isSunDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//is sun in own house
-			var sunInOwn = Calculate.IsPlanetInOwnHouse(person.BirthTime, PlanetName.Sun);
+			var sunInOwn = Calculate.IsPlanetInOwnHouse(PlanetName.Sun, person.BirthTime);
 
 			//is sun joined (same house) with lord 9 or 10
-			var a = Calculate.IsPlanetSameHouseWithHouseLord(person.BirthTime, 9, PlanetName.Sun);
-			var b = Calculate.IsPlanetSameHouseWithHouseLord(person.BirthTime, 10, PlanetName.Sun);
+			var a = Calculate.IsPlanetSameHouseWithHouseLord(9, PlanetName.Sun, person.BirthTime);
+			var b = Calculate.IsPlanetSameHouseWithHouseLord(10, PlanetName.Sun, person.BirthTime);
 			var sunJoined9Or10 = a || b;
 
 			var sunInGoodPosition = sunInOwn || sunJoined9Or10;
@@ -9937,7 +9937,7 @@ namespace VedAstro.Library
 			var isSunDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//is sun with lord of 5th
-			var sunWithLord5th = Calculate.IsPlanetSameHouseWithHouseLord(person.BirthTime, 5, PlanetName.Sun);
+			var sunWithLord5th = Calculate.IsPlanetSameHouseWithHouseLord(5, PlanetName.Sun, person.BirthTime);
 
 			//occuring if one of the conditions met
 			var occuring = isSunDasa && sunWithLord5th;
@@ -9955,7 +9955,7 @@ namespace VedAstro.Library
 			var isSunDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//is sun with lord of 2nd
-			var sunWithLord2nd = Calculate.IsPlanetSameHouseWithHouseLord(person.BirthTime, 2, PlanetName.Sun);
+			var sunWithLord2nd = Calculate.IsPlanetSameHouseWithHouseLord(2, PlanetName.Sun, person.BirthTime);
 
 			//occuring if one of the conditions met
 			var occuring = isSunDasa && sunWithLord2nd;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -32,7 +32,7 @@ namespace VedAstro.Library
             var cusps = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
 
             // Calculate the Nirayana longitude of the current planet.
-            var planetLongitude = PlanetNirayanaLongitude(birthTime, inputPlanet);
+            var planetLongitude = PlanetNirayanaLongitude(inputPlanet, birthTime);
 
             // Find the first house that contains the current planet.
             var houseForPlanet = House.AllHouses.FirstOrDefault(house => IsPlanetInHouseKP(cusps, planetLongitude, house));
@@ -66,7 +66,7 @@ namespace VedAstro.Library
             foreach (var house in House.AllHouses)
             {
                 //if planet is in house than add to list and exit, don't check others
-                var planetLongitude = PlanetNirayanaLongitude(birthTime, inputPlanet);
+                var planetLongitude = PlanetNirayanaLongitude(inputPlanet, birthTime);
                 var isAddToList = IsPlanetInHouseKP(cusps, planetLongitude, house);
 
                 if (isAddToList)//exit once house found
@@ -89,7 +89,7 @@ namespace VedAstro.Library
         {
             // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
             // of the current planet at the birth time.
-            var nirayanaDegrees = PlanetNirayanaLongitude(birthTime, inputPlanet);
+            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, birthTime);
 
             // The value is the lord of the constellation at the planet's longitude
             var value = LordOfConstellation(ConstellationAtLongitude(nirayanaDegrees).GetConstellationName());
@@ -103,7 +103,7 @@ namespace VedAstro.Library
         {
             // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
             // of the current planet at the birth time.
-            var nirayanaDegrees = PlanetNirayanaLongitude(birthTime, inputPlanet);
+            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, birthTime);
 
             var zodiacSign = ZodiacSignAtLongitude(nirayanaDegrees);
 
@@ -670,11 +670,11 @@ namespace VedAstro.Library
             //Process Planet Data
             foreach (PlanetName planet in allPlanets)
             {
-                Angle planetNirayanaDegrees = Calculate.PlanetNirayanaLongitude(birthtime, planet);
+                Angle planetNirayanaDegrees = Calculate.PlanetNirayanaLongitude(planet, birthtime);
                 Console.Write("{0} {1} {2} Deg {3} Min {4} Secs ; ", planet.Name, planetNirayanaDegrees.TotalDegrees,
                             planetNirayanaDegrees.Degrees, planetNirayanaDegrees.Minutes,
                             planetNirayanaDegrees.Seconds);
-                var planetConstellation = Calculate.PlanetConstellation(birthtime, planet);
+                var planetConstellation = Calculate.PlanetConstellation(planet, birthtime);
 
                 x = 1;
                 while ((x + 1) <= cusps.Count) //check each house for the logic below

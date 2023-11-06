@@ -1580,7 +1580,7 @@ namespace VedAstro.Library
             {
                 //1. GET DETAILS
                 //get planets house details
-                var planetHouse = Calculate.HousePlanetIsIn(birthTime, planet);
+                var planetHouse = Calculate.HousePlanetIsIn(planet, birthTime);
                 var planetSign = Calculate.PlanetZodiacSign(planet, birthTime).GetSignName();
                 var planetIn7Or8 = planetHouse == HouseName.House7 || planetHouse == HouseName.House8;
                 var planetIn2Or4Or12 = planetHouse == HouseName.House2 || planetHouse == HouseName.House4 || planetHouse == HouseName.House12;
@@ -1630,8 +1630,8 @@ namespace VedAstro.Library
                 if (marsJupterConjunct && marsMoonConjunct) { return 0; }
 
                 //2.8   or by the presence of Jupiter or Venus in the ascendant.
-                var jupiterInLagna = Calculate.IsPlanetInHouse(birthTime, PlanetName.Jupiter, HouseName.House1);
-                var venusInLagna = Calculate.IsPlanetInHouse(birthTime, PlanetName.Venus, HouseName.House1);
+                var jupiterInLagna = Calculate.IsPlanetInHouse(PlanetName.Jupiter, HouseName.House1, birthTime);
+                var venusInLagna = Calculate.IsPlanetInHouse(PlanetName.Venus, HouseName.House1, birthTime);
                 if (jupiterInLagna || venusInLagna) { return 0; }
 
 

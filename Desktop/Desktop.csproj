@@ -1,85 +1,164 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <PropertyGroup>
-        <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
-        <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-        <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
+	<PropertyGroup>
+		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
-         <!-- Note for MacCatalyst:
+		<!-- Note for MacCatalyst:
             The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
             When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifer>.
             The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
             either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
-         <!-- ex. <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
+		<!-- ex. <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
-        <OutputType>Exe</OutputType>
-        <RootNamespace>Desktop</RootNamespace>
-        <UseMaui>true</UseMaui>
-        <SingleProject>true</SingleProject>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <EnableDefaultCssItems>false</EnableDefaultCssItems>
+		<OutputType>Exe</OutputType>
+		<RootNamespace>Desktop</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<EnableDefaultCssItems>false</EnableDefaultCssItems>
 
-        <!-- Display name -->
-        <ApplicationTitle>Desktop</ApplicationTitle>
+		<!-- Display name -->
+		<ApplicationTitle>Desktop</ApplicationTitle>
 
-        <!-- App Identifier -->
-        <ApplicationId>com.companyname.desktop</ApplicationId>
+		<!-- App Identifier -->
+		<ApplicationId>com.companyname.desktop</ApplicationId>
 
-        <!-- Versions -->
-        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-        <ApplicationVersion>1</ApplicationVersion>
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
 
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-        <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-    </PropertyGroup>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+		<Title>VedAstro Desktop</Title>
+		<Copyright>VedAstro</Copyright>
+		<PackageProjectUrl>vedastro.org</PackageProjectUrl>
+		<PackageIcon>vedastro-api-logo.png</PackageIcon>
+		<RepositoryUrl>https://github.com/VedAstro/VedAstro</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>vedic astrology, muhurtha, dasa, pachaka, horary, kundali, open source</PackageTags>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+	<ItemGroup>
+		<!-- App Icon -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
-        <!-- Splash Screen -->
-        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
-        <!-- Images -->
-        <MauiImage Include="Resources\Images\*" />
-        <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
-        <!-- Custom Fonts -->
-        <MauiFont Include="Resources\Fonts\*" />
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
 
-        <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-    </ItemGroup>
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0-rc.1.23419.4" />
-    </ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\ViewComponents\Code\API\EventsChartTools.cs" Link="Code\API\EventsChartTools.cs" />
+		<Compile Include="..\ViewComponents\Code\API\MatchTools.cs" Link="Code\API\MatchTools.cs" />
+		<Compile Include="..\ViewComponents\Code\API\MLTableTools.cs" Link="Code\API\MLTableTools.cs" />
+		<Compile Include="..\ViewComponents\Code\API\PersonTools.cs" Link="Code\API\PersonTools.cs" />
+		<Compile Include="..\ViewComponents\Code\API\VedAstroAPI.cs" Link="Code\API\VedAstroAPI.cs" />
+		<Compile Include="..\ViewComponents\Code\Objects\AppData.cs" Link="Code\Objects\AppData.cs" />
+		<Compile Include="..\ViewComponents\Code\Managers\BlazorJsInterop.cs" Link="Code\Managers\BlazorJsInterop.cs" />
+		<Compile Include="..\ViewComponents\Code\Objects\JS.cs" Link="Code\Objects\JS.cs" />
+		<Compile Include="..\ViewComponents\Code\Managers\TaskExtensions.cs" Link="Code\Managers\TaskExtensions.cs" />
+		<Compile Include="..\ViewComponents\Code\Managers\UnhandledExceptionSender.cs" Link="Code\Managers\UnhandledExceptionSender.cs" />
+		<Compile Include="..\ViewComponents\Code\Managers\PageRoute.cs" Link="Code\Managers\PageRoute.cs" />
+		<Compile Include="..\ViewComponents\Code\Managers\WebLogger.cs" Link="Code\Managers\WebLogger.cs" />
+		<Compile Include="..\ViewComponents\Code\Managers\WebsiteTools.cs" Link="Code\Managers\WebsiteTools.cs" />
+	</ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Library\Library.csproj" />
-    </ItemGroup>
+	<ItemGroup>
+		<Content Include="..\Website\Pages\Calculator\Match\Index.razor" Link="Pages\Calculator\Match\Index.razor" />
+		<Content Include="..\ViewComponents\Components\AIPrediction.razor" Link="ViewComponents\AIPrediction.razor" />
+		<Content Include="..\ViewComponents\Components\APICallList.razor" Link="ViewComponents\APICallList.razor" />
+		<Content Include="..\ViewComponents\Components\APISelectorBox.razor" Link="ViewComponents\APISelectorBox.razor" />
+		<Content Include="..\ViewComponents\Components\ArticleBlock.razor" Link="ViewComponents\ArticleBlock.razor" />
+		<Content Include="..\ViewComponents\Components\BoldLink.razor" Link="ViewComponents\BoldLink.razor" />
+		<Content Include="..\ViewComponents\Components\DataColumnSelector.razor" Link="ViewComponents\DataColumnSelector.razor" />
+		<Content Include="..\ViewComponents\Components\DonationBalanceViewer.razor" Link="ViewComponents\DonationBalanceViewer.razor" />
+		<Content Include="..\ViewComponents\Components\DropCap.razor" Link="ViewComponents\DropCap.razor" />
+		<Content Include="..\ViewComponents\Components\DropDownButton.razor" Link="ViewComponents\DropDownButton.razor" />
+		<Content Include="..\ViewComponents\Components\EasyMatchReport.razor" Link="ViewComponents\EasyMatchReport.razor" />
+		<Content Include="..\ViewComponents\Components\EventsChartViewer.razor" Link="ViewComponents\EventsChartViewer.razor" />
+		<Content Include="..\ViewComponents\Components\FoundMatchList.razor" Link="ViewComponents\FoundMatchList.razor" />
+		<Content Include="..\ViewComponents\Components\GeoLocationInput.razor" Link="ViewComponents\GeoLocationInput.razor" />
+		<Content Include="..\ViewComponents\Components\HelpIconTooltip.razor" Link="ViewComponents\HelpIconTooltip.razor" />
+		<Content Include="..\ViewComponents\Components\HoroscopeInfoView.razor" Link="ViewComponents\HoroscopeInfoView.razor" />
+		<Content Include="..\ViewComponents\Components\HoroscopeReferenceList.razor" Link="ViewComponents\HoroscopeReferenceList.razor" />
+		<Content Include="..\ViewComponents\Components\HouseAPIBuilderPanel.razor" Link="ViewComponents\HouseAPIBuilderPanel.razor" />
+		<Content Include="..\ViewComponents\Components\Icon.razor" Link="ViewComponents\Icon.razor" />
+		<Content Include="..\ViewComponents\Components\IconButton.razor" Link="ViewComponents\IconButton.razor" />
+		<Content Include="..\ViewComponents\Components\IconText.razor" Link="ViewComponents\IconText.razor" />
+		<Content Include="..\ViewComponents\Components\IconTitle.razor" Link="ViewComponents\IconTitle.razor" />
+		<Content Include="..\ViewComponents\Components\IconTooltip.razor" Link="ViewComponents\IconTooltip.razor" />
+		<Content Include="..\ViewComponents\Components\InfoBox.razor" Link="ViewComponents\InfoBox.razor" />
+		<Content Include="..\ViewComponents\Components\LifeEventViewer.razor" Link="ViewComponents\LifeEventViewer.razor" />
+		<Content Include="..\ViewComponents\Components\MatchReportListViewer.razor" Link="ViewComponents\MatchReportListViewer.razor" />
+		<Content Include="..\ViewComponents\Components\MonthYearTimeRangeSelector.razor" Link="ViewComponents\MonthYearTimeRangeSelector.razor" />
+		<Content Include="..\ViewComponents\Components\NotificationSound.razor" Link="ViewComponents\NotificationSound.razor" />
+		<Content Include="..\ViewComponents\Components\PageHelpSection.razor" Link="ViewComponents\PageHelpSection.razor" />
+		<Content Include="..\ViewComponents\Components\PageTop.razor" Link="ViewComponents\PageTop.razor" />
+		<Content Include="..\ViewComponents\Components\PageTopSideImage.razor" Link="ViewComponents\PageTopSideImage.razor" />
+		<Content Include="..\ViewComponents\Components\ParameterInputPanel.razor" Link="ViewComponents\ParameterInputPanel.razor" />
+		<Content Include="..\ViewComponents\Components\PersonSelectorBox.razor" Link="ViewComponents\PersonSelectorBox.razor" />
+		<Content Include="..\ViewComponents\Components\PersonTooltip.razor" Link="ViewComponents\PersonTooltip.razor" />
+		<Content Include="..\ViewComponents\Components\PlanetAPIBuilderPanel.razor" Link="ViewComponents\PlanetAPIBuilderPanel.razor" />
+		<Content Include="..\ViewComponents\Components\PlanetChart.razor" Link="ViewComponents\PlanetChart.razor" />
+		<Content Include="..\ViewComponents\Components\PlanetHouseInfoViewer.razor" Link="ViewComponents\PlanetHouseInfoViewer.razor" />
+		<Content Include="..\ViewComponents\Components\QuoteTextBlock.razor" Link="ViewComponents\QuoteTextBlock.razor" />
+		<Content Include="..\ViewComponents\Components\SearchBox.razor" Link="ViewComponents\SearchBox.razor" />
+		<Content Include="..\ViewComponents\Components\SignInButton.razor" Link="ViewComponents\SignInButton.razor" />
+		<Content Include="..\ViewComponents\Components\SkyChartViewer.razor" Link="ViewComponents\SkyChartViewer.razor" />
+		<Content Include="..\ViewComponents\Components\StrengthChart.razor" Link="ViewComponents\StrengthChart.razor" />
+		<Content Include="..\ViewComponents\Components\SubArticleBlock.razor" Link="ViewComponents\SubArticleBlock.razor" />
+		<Content Include="..\ViewComponents\Components\TimeInput.razor" Link="ViewComponents\TimeInput.razor" />
+		<Content Include="..\ViewComponents\Components\TimeInputSimple.razor" Link="ViewComponents\TimeInputSimple.razor" />
+		<Content Include="..\ViewComponents\Components\TimeLocationInput.razor" Link="ViewComponents\TimeLocationInput.razor" />
+		<Content Include="..\ViewComponents\Components\TopBarButtons.razor" Link="ViewComponents\TopBarButtons.razor" />
+		<Content Include="..\ViewComponents\Components\TypeSpecificInput.razor" Link="ViewComponents\TypeSpecificInput.razor" />
+		<Content Include="..\ViewComponents\Components\UnderConstructionHeader.razor" Link="ViewComponents\UnderConstructionHeader.razor" />
+		<Content Include="..\ViewComponents\Pages\SearchResult.razor" Link="Pages\SearchResult.razor" />
+		<None Include="wwwroot\images\vedastro-api-logo.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-    <ItemGroup>
-      <Content Update="Components\SearchBox.razor">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      </Content>
-    </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0-rc.1.23419.4" />
+	</ItemGroup>
 
-  <!-- Build Properties must be defined within these property groups to ensure successful publishing
+	<ItemGroup>
+		<ProjectReference Include="..\Library\Library.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Code\API\" />
+		<Folder Include="Pages\Calculator\Match\" />
+	</ItemGroup>
+
+	<!-- Build Properties must be defined within these property groups to ensure successful publishing
        to the Mac App Store. See: https://aka.ms/maui-publish-app-store#define-build-properties-in-your-project-file -->
-  <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Debug'">
-    <CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Debug.plist</CodesignEntitlements>
-  </PropertyGroup>
+	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Debug'">
+		<CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Debug.plist</CodesignEntitlements>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Release'">
-    <CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Release.plist</CodesignEntitlements>
-    <UseHardenedRuntime>true</UseHardenedRuntime>
-  </PropertyGroup>
+	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Release'">
+		<CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Release.plist</CodesignEntitlements>
+		<UseHardenedRuntime>true</UseHardenedRuntime>
+	</PropertyGroup>
 </Project>

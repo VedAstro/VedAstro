@@ -494,18 +494,28 @@ namespace VedAstro.Library
 
             Task<dynamic> NewFunction()
             {
-                // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/+08:00/"
-                string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                try
+                {
+                    // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/+08:00/"
+                    string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-                //parse time range from caller (possible to fail)
-                var parsedTime = Tools.ParseTime(
-                    locationName: parts[1], //note skip "Location"
-                    hhmmStr: parts[3], //note skip "Time"
-                    dateStr: parts[4],
-                    monthStr: parts[5],
-                    yearStr: parts[6]).Result;
+                    //parse time range from caller (possible to fail)
+                    var parsedTime = Tools.ParseTime(
+                        locationName: parts[1], //note skip "Location"
+                        hhmmStr: parts[3], //note skip "Time"
+                        dateStr: parts[4],
+                        monthStr: parts[5],
+                        yearStr: parts[6]).Result;
 
-                return Task.FromResult<dynamic>(parsedTime);
+                    return Task.FromResult<dynamic>(parsedTime);
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return Task.FromResult<dynamic>(Time.Empty);
+                }
+
             }
         }
 

@@ -54,33 +54,47 @@ namespace VedAstro.Library
 
         public static async Task Error(XElement errorXml, string extraInfo = "")
         {
-            //place error data into visitor tag
-            //this is done because visitor data might hold "Blue's Clues"
-            //to why it all went down hill, hence easier to fix
-            //so take the time & data to log
-            var visitorXml = new XElement("Visitor");
-            var dataXml = new XElement("Data", extraInfo);
-            visitorXml.Add(BranchXml, SourceXml, errorXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            try
+            {
+                //place error data into visitor tag
+                //this is done because visitor data might hold "Blue's Clues"
+                //to why it all went down hill, hence easier to fix
+                //so take the time & data to log
+                var visitorXml = new XElement("Visitor");
+                var dataXml = new XElement("Data", extraInfo);
+                visitorXml.Add(BranchXml, SourceXml, errorXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
-            //send to server for storage
-            await SendLogToServer(visitorXml);
+                //send to server for storage
+                await SendLogToServer(visitorXml);
+
+            }
+            //if fail let it slide!
+            catch (Exception e) { Console.WriteLine(e); }
+
         }
 
         public static async Task Error(string errorMessage)
         {
-
+            try
+            {
 #if DEBUG
-            Console.WriteLine(errorMessage);
+                Console.WriteLine(errorMessage);
 #endif
 
-            //place error data into visitor tag
-            //this is done because visitor data might hold clues to error
-            var visitorXml = new XElement("Visitor");
-            var dataXml = new XElement("Error", errorMessage);
-            visitorXml.Add(BranchXml, SourceXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+                //place error data into visitor tag
+                //this is done because visitor data might hold clues to error
+                var visitorXml = new XElement("Visitor");
+                var dataXml = new XElement("Error", errorMessage);
+                visitorXml.Add(BranchXml, SourceXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
-            //send to server for storage
-            await SendLogToServer(visitorXml);
+                //send to server for storage
+                await SendLogToServer(visitorXml);
+
+            }
+
+            //if fail let it slide!
+            catch (Exception e) { Console.WriteLine(e); }
+
 
         }
 

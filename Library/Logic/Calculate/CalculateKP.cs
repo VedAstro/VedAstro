@@ -459,6 +459,172 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// This method calculates the SubLord for a given PlanetLongitude.
+        /// It does this by iterating over all constellations and planets, calculating
+        /// various parameters before and after adding a certain degree to the tropical
+        /// ascendant (tropAsc), and handling special cases such as when tropAsc is 0 or
+        /// when there are overlapping signs.
+        /// The subLord pertaining to a Planet given Longitude is returned
+        /// </summary>
+        public static PlanetName SubLordAtPlanetLongitude(double planetLongitude)
+        {
+            // Initialize variables
+            var tropAscDeg = 0.00;
+            var all9Planets = PlanetName.All9Planets;
+            var allConstellations = Constellation.AllConstellation;
+            var constellationList = new List<Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>>();
+            var cntA = 0;
+            var tropAsc = 0.000;
+
+            // Iterate over all constellations
+            foreach (var constellation in allConstellations)
+            {
+                var tempConstel = constellation;
+                var lordofConstel = LordOfConstellation(tempConstel);
+                var planetnameArray = all9Planets.ToArray();
+                int cntB = 0;
+                int index = 0;
+
+                // Find the index of the lord of the constellation in the planet array
+                while (cntB <= 8)
+                {
+                    if (planetnameArray[cntB] == lordofConstel)
+                    {
+                        index = cntB;
+                        break;
+                    }
+                    cntB++;
+                }
+                var planetnameArrayB = new PlanetName[9];
+                int cntC = 0;
+
+                // Reorder the planet array based on the index of the lord of the constellation
+                while (cntC <= 8)
+                {
+                    planetnameArrayB[cntC] = planetnameArray[index];
+                    cntC++;
+                    index++;
+                    if (index == planetnameArray.Length)
+                    {
+                        index = 0;
+                    }
+                }
+                // Iterate over the reordered planet array
+                foreach (var planetName in planetnameArrayB)
+                {
+                    var constellationA = tempConstel;
+                    lordofConstel = LordOfConstellation(constellationA);
+                    // Assign tropAscDeg based on the planet name
+                    switch (planetName.Name)
+                    {
+                        case PlanetName.PlanetNameEnum.Ketu:
+                            tropAscDeg = new Angle(0, 46, 40).TotalDegrees;
+                            break;
+                        case PlanetName.PlanetNameEnum.Venus:
+                            tropAscDeg = new Angle(2, 13, 20).TotalDegrees;
+                            break;
+                        case PlanetName.PlanetNameEnum.Sun:
+                            tropAscDeg = new Angle(0, 40, 0).TotalDegrees;
+                            break;
+                        case PlanetName.PlanetNameEnum.Moon:
+                            tropAscDeg = new Angle(1, 06, 40).TotalDegrees;
+                            break;
+                        case PlanetName.PlanetNameEnum.Mars:
+                            tropAscDeg = new Angle(0, 46, 40).TotalDegrees;
+                            break;
+                        case PlanetName.PlanetNameEnum.Rahu:
+                            tropAscDeg = new Angle(2, 00, 00).TotalDegrees;
+                            break;
+                        case PlanetName.PlanetNameEnum.Jupiter:
+                            tropAscDeg = new Angle(1, 46, 40).TotalDegrees;
+                            break;
+                        case PlanetName.PlanetNameEnum.Saturn:
+                            tropAscDeg = new Angle(2, 06, 40).TotalDegrees;
+                            break;
+                        case PlanetName.PlanetNameEnum.Mercury:
+                            tropAscDeg = new Angle(1, 53, 20).TotalDegrees;
+                            break;
+                    }
+                    // Calculate various parameters before and after adding tropAscDeg to tropAsc
+                    var zSignAtLongBefore = ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
+                    var constellationBefore = ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
+                    var constellationLordBefore = LordOfConstellation(constellationBefore.GetConstellationName());
+                    // Special handling for tropAsc == 0.00
+                    if (tropAsc == 0.00)
+                    {
+                        var longBefore = tropAsc - 0.00001 + 360;
+                        zSignAtLongBefore = ZodiacSignAtLongitude(Angle.FromDegrees(longBefore));
+                        constellationBefore = ConstellationAtLongitude(Angle.FromDegrees(longBefore));
+                        constellationLordBefore = LordOfConstellation(constellationBefore.GetConstellationName());
+                    }
+                    else
+                    {
+                        zSignAtLongBefore = ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
+                        constellationBefore = ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
+                        constellationLordBefore = LordOfConstellation(constellationBefore.GetConstellationName());
+                    }
+                    tropAsc = tropAsc + tropAscDeg;
+                    var zSignAtLongAfter = ZodiacSignAtLongitude(Angle.FromDegrees(tropAsc));
+                    var zSignAfterLord = LordOfZodiacSign(zSignAtLongAfter.GetSignName());
+                    var constellationAfter = ConstellationAtLongitude(Angle.FromDegrees(tropAsc));
+                    var constellationLordAfter = LordOfConstellation(constellationAfter.GetConstellationName());
+                    // Check if tropAsc ends on 30, 60, 90, 120....
+                    var tropAscSpansSigns = Math.Round(tropAsc % 30, 6);
+                    // Handle overlapping signs issue
+                    if ((zSignAtLongAfter.GetSignName() != zSignAtLongBefore.GetSignName()) &&
+                        (constellationLordAfter == constellationLordBefore)
+                        && ((zSignAtLongBefore.GetSignName() == ZodiacName.Aries) ||
+                            (zSignAtLongBefore.GetSignName() == ZodiacName.Leo) ||
+                            (zSignAtLongBefore.GetSignName() == ZodiacName.Sagittarius) ||
+                            (zSignAtLongBefore.GetSignName() == ZodiacName.Gemini) ||
+                            (zSignAtLongBefore.GetSignName() == ZodiacName.Libra) ||
+                            (zSignAtLongBefore.GetSignName() == ZodiacName.Aquarius)))
+                    {
+                        var remainderFromDivBy30 = (tropAsc % 30.00); //past signchange degree amount
+                        var preSignChangeDegrees = tropAscDeg - remainderFromDivBy30;
+                        tropAsc = tropAsc - tropAscDeg + preSignChangeDegrees; //this is one Entry into the List. this get us to Sign engpoint
+                        //log entry into List
+                        constellationList.Add(new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellationA, constellationLordAfter, planetName, tropAsc));
+                        cntA++;
+                        //next process the balance into the nextSign
+                        var tropAscB = tropAsc + remainderFromDivBy30;
+                        //log entry into List
+                        constellationList.Add(new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellationA, constellationLordAfter, planetName, tropAscB));
+                        cntA++;
+                        tropAsc = tropAscB;
+                    }
+                    else
+                    {
+                        constellationList.Add(new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellationA, constellationLordAfter, planetName, tropAsc));
+                        cntA++;
+                    }
+                }
+            }
+
+            // Find the horary number in the constellation list and return the corresponding tropAsc
+            var countX = 0;
+           
+
+            var planetSubLord = constellationList[countX].Item6;
+
+            while (countX <= 248)
+            {
+                if  ((constellationList[countX].Item7 <= planetLongitude) &&
+                    (planetLongitude <= constellationList[countX+1].Item7))
+                {
+                    //NOTE:
+                    //the -1 because in the list we record end longitudes.
+                    //We have to return start longitudes.
+                    //the end longitude of the previous one is the start of the current one. 
+                    planetSubLord = constellationList[countX].Item6;
+                }
+                countX++;
+            }
+
+            return planetSubLord;
+        }
+
+        /// <summary>
         /// THIS IS NOT A COPY - THIS ONE ROTATES THE CHART TO PROVIDED NEW LAGNA - LAST Param in Signature
         /// Hence the call twice to calculate cusps, first one to get base cusps based on HorNUm and then Rotate to provided Lagna tropAsc
         /// Moves Lagna to a Long Degree (the new Ascendant and gets new KP (Placidus) House Cusps 
@@ -695,9 +861,11 @@ namespace VedAstro.Library
                                 var constellationAtLong = Calculate.ConstellationAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
                                 var lordOfConstellation = Calculate.LordOfConstellation(planetConstellation.GetConstellationName());
 
-                                Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6}; StarL {7}", planet.Name, x, zodiacSignAtLong.GetSignName(),
+                                var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees.TotalDegrees);
+                               
+                                Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6}; StarL {7}; SubL {8}", planet.Name, x, zodiacSignAtLong.GetSignName(),
                                                             zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
-                                                            zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation);
+                                                            zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation, subLordAtLongitude);
                                 planetTableData.Add(planet, (Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees), zodiacSignAtLong.GetSignName(),
                                     constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation));
 
@@ -730,9 +898,11 @@ namespace VedAstro.Library
                         var constellationAtLong = Calculate.ConstellationAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
                         var lordOfConstellation = Calculate.LordOfConstellation(planetConstellation.GetConstellationName());
 
-                        Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6} StarL {0}", planet.Name, x, zodiacSignAtLong.GetSignName(),
+                        var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees.TotalDegrees);
+
+                        Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6} StarL {7} ; SubL {8}", planet.Name, x, zodiacSignAtLong.GetSignName(),
                             zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
-                            zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation);
+                            zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation, subLordAtLongitude);
 
                         planetTableData.Add(planet, (Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees), zodiacSignAtLong.GetSignName(),
                             constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation));

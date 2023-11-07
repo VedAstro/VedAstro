@@ -2045,6 +2045,9 @@ namespace VedAstro.Library
             return lordOfHouseSign;
         }
 
+
+
+
         /// <summary>
         /// The lord of a bhava is
         /// the Graha (planet) in whose Rasi (sign) the Bhavamadhya falls
@@ -6306,54 +6309,86 @@ namespace VedAstro.Library
         public static PlanetName LordOfZodiacSign(ZodiacName signName)
         {
 
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(LordOfZodiacSign), signName, Ayanamsa), _getLordOfZodiacSign);
-
-
-            //UNDERLYING FUNCTION
-            PlanetName _getLordOfZodiacSign()
+            switch (signName)
             {
-                switch (signName)
-                {
-                    //Aries and Scorpio are ruled by Mars;
-                    case ZodiacName.Aries:
-                    case ZodiacName.Scorpio:
-                        return Library.PlanetName.Mars;
+                //Aries and Scorpio are ruled by Mars;
+                case ZodiacName.Aries:
+                case ZodiacName.Scorpio:
+                    return Library.PlanetName.Mars;
 
-                    //Taurus and Libra by Venus;
-                    case ZodiacName.Taurus:
-                    case ZodiacName.Libra:
-                        return Library.PlanetName.Venus;
+                //Taurus and Libra by Venus;
+                case ZodiacName.Taurus:
+                case ZodiacName.Libra:
+                    return Library.PlanetName.Venus;
 
-                    //Gemini and Virgo by Mercury;
-                    case ZodiacName.Gemini:
-                    case ZodiacName.Virgo:
-                        return Library.PlanetName.Mercury;
+                //Gemini and Virgo by Mercury;
+                case ZodiacName.Gemini:
+                case ZodiacName.Virgo:
+                    return Library.PlanetName.Mercury;
 
-                    //Cancer by the Moon;
-                    case ZodiacName.Cancer:
-                        return Library.PlanetName.Moon;
+                //Cancer by the Moon;
+                case ZodiacName.Cancer:
+                    return Library.PlanetName.Moon;
 
-                    //Leo by the Sun ;
-                    case ZodiacName.Leo:
-                        return Library.PlanetName.Sun;
+                //Leo by the Sun ;
+                case ZodiacName.Leo:
+                    return Library.PlanetName.Sun;
 
-                    //Sagittarius and Pisces by Jupiter
-                    case ZodiacName.Sagittarius:
-                    case ZodiacName.Pisces:
-                        return Library.PlanetName.Jupiter;
+                //Sagittarius and Pisces by Jupiter
+                case ZodiacName.Sagittarius:
+                case ZodiacName.Pisces:
+                    return Library.PlanetName.Jupiter;
 
-                    //Capricorn and Aquarius by Saturn.
-                    case ZodiacName.Capricorn:
-                    case ZodiacName.Aquarius:
-                        return Library.PlanetName.Saturn;
-                    default:
-                        throw new Exception("Lord of sign not found, error!");
-                }
-
+                //Capricorn and Aquarius by Saturn.
+                case ZodiacName.Capricorn:
+                case ZodiacName.Aquarius:
+                    return Library.PlanetName.Saturn;
+                default:
+                    throw new Exception("Lord of sign not found, error!");
             }
-
         }
+
+        /// <summary>
+        /// Given a planet name will return list of signs that the planet rules
+        /// </summary>
+        public static List<ZodiacName> ZodiacSignsOwnedByPlanet(PlanetName planetName)
+        {
+            List<ZodiacName> zodiacNames = new List<ZodiacName>();
+            switch (planetName.Name)
+            {
+                case PlanetNameEnum.Mars:
+                    zodiacNames.Add(ZodiacName.Aries);
+                    zodiacNames.Add(ZodiacName.Scorpio);
+                    break;
+                case PlanetNameEnum.Venus:
+                    zodiacNames.Add(ZodiacName.Taurus);
+                    zodiacNames.Add(ZodiacName.Libra);
+                    break;
+                case PlanetNameEnum.Mercury:
+                    zodiacNames.Add(ZodiacName.Gemini);
+                    zodiacNames.Add(ZodiacName.Virgo);
+                    break;
+                case PlanetNameEnum.Moon:
+                    zodiacNames.Add(ZodiacName.Cancer);
+                    break;
+                case PlanetNameEnum.Sun:
+                    zodiacNames.Add(ZodiacName.Leo);
+                    break;
+                case PlanetNameEnum.Jupiter:
+                    zodiacNames.Add(ZodiacName.Sagittarius);
+                    zodiacNames.Add(ZodiacName.Pisces);
+                    break;
+                case PlanetNameEnum.Saturn:
+                    zodiacNames.Add(ZodiacName.Capricorn);
+                    zodiacNames.Add(ZodiacName.Aquarius);
+                    break;
+                default:
+                    zodiacNames.Add(ZodiacName.Empty);
+                    break;
+            }
+            return zodiacNames;
+        }
+
 
         /// <summary>
         /// Gets next zodiac sign after input sign

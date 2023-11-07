@@ -11,6 +11,7 @@ namespace VedAstro.Library
     [Serializable()]
     public enum ZodiacName
     {
+        Empty = 0,
         Aries = 1,
         Taurus = 2,
         Gemini = 3,

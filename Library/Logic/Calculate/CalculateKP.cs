@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using ExCSS;
 using SwissEphNet;
 using static VedAstro.Library.Calculate;
 
@@ -25,6 +26,18 @@ namespace VedAstro.Library
             return zodiacSignAtLong;
 
         }
+        
+        public static Constellation HouseConstellationHorary(HouseName inputHouse, Time birthTime, int horaryNumber)
+        {
+            //get house start longitudes for KP system
+            var allHouseCuspsRaw = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
+
+            //get Constellation at house start longitude longitude
+            var constellationAtLong = ConstellationAtLongitude(allHouseCuspsRaw[inputHouse]);
+
+            return constellationAtLong;
+
+        }
 
         public static HouseName PlanetHouseHorary(PlanetName inputPlanet, Time birthTime, int horaryNumber)
         {
@@ -41,9 +54,41 @@ namespace VedAstro.Library
             return houseForPlanet;
         }
 
+        public static List<PlanetName> PlanetsInHouseHorary(HouseName inputHouse, Time birthTime, int horaryNumber)
+        {
+            // Get the starting longitudes of all houses.
+            var cusps = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
+
+            // Find the first house that contains the current planet.
+            var houseForPlanet = PlanetName.All9Planets.Where(planet =>
+            {
+                // Calculate the Nirayana longitude of the current planet.
+                var planetLongitude = PlanetNirayanaLongitude(planet, birthTime);
+
+                return IsPlanetInHouseKP(cusps, planetLongitude, inputHouse);
+            }).ToList();
+
+            return houseForPlanet;
+        }
+
         #endregion
 
         #region KUNDALI
+
+        public static Dictionary<HouseName, ZodiacSign> AllHouseZodiacSignKundali(Time time)
+        {
+            //get all houses
+            var allHouses = new Dictionary<HouseName, ZodiacSign>();
+
+            //get for all houses
+            foreach (var house in Library.House.AllHouses)
+            {
+                var calcHouseSign = CalculateKP.HouseZodiacSignKundali(house, time);
+                allHouses.Add(house, calcHouseSign);
+            }
+
+            return allHouses;
+        }
 
         public static ZodiacSign HouseZodiacSignKundali(HouseName inputHouse, Time birthTime)
         {
@@ -54,6 +99,18 @@ namespace VedAstro.Library
             var zodiacSignAtLong = ZodiacSignAtLongitude(allHouseCuspsRaw[inputHouse]);
 
             return zodiacSignAtLong;
+
+        }
+
+        public static Constellation HouseConstellationKundali(HouseName inputHouse, Time birthTime)
+        {
+            //get house start longitudes for KP system
+            var allHouseCuspsRaw = AllHouseCuspLongitudesKundali(birthTime);
+
+            //get Constellation at house start longitude
+            var constellationAtLong = ConstellationAtLongitude(allHouseCuspsRaw[inputHouse]);
+
+            return constellationAtLong;
 
         }
 
@@ -79,6 +136,24 @@ namespace VedAstro.Library
             return HouseName.Empty;
         }
 
+        public static List<PlanetName> PlanetsInHouseKundali(HouseName inputHouse, Time birthTime)
+        {
+            // Get the starting longitudes of all houses.
+            var cusps = AllHouseCuspLongitudesKundali(birthTime);
+
+            // Find the first house that contains the current planet.
+            var houseForPlanet = PlanetName.All9Planets.Where(planet =>
+            {
+                // Calculate the Nirayana longitude of the current planet.
+                var planetLongitude = PlanetNirayanaLongitude(planet, birthTime);
+
+                return IsPlanetInHouseKP(cusps, planetLongitude, inputHouse);
+            }).ToList();
+
+            return houseForPlanet;
+        }
+
+
         #endregion
 
         #endregion
@@ -98,7 +173,6 @@ namespace VedAstro.Library
             return value;
         }
 
-
         public static PlanetName PlanetLordOfZodiacSign(PlanetName inputPlanet, Time birthTime)
         {
             // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
@@ -109,6 +183,44 @@ namespace VedAstro.Library
 
             return LordOfZodiacSign(zodiacSign.GetSignName());
 
+        }
+        
+        public static PlanetName PlanetLordOfSubLord(PlanetName inputPlanet, Time birthTime)
+        {
+            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
+            // of the current planet at the birth time.
+            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, birthTime);
+
+            var subLord = SubLordAtPlanetLongitude(nirayanaDegrees.TotalDegrees);
+
+            return subLord;
+        }
+
+        public static List<HouseName> HousesOwnedByPlanet(PlanetName inputPlanet, Time time)
+        {
+            //Given a planet, return Zodiac Signs owned by it Ex. Ju, returns Sag an Pis
+            var signsOwned = Calculate.ZodiacSignsOwnedByPlanet(inputPlanet);
+
+            //given a Zodiac Sign, return, House Number (or Cusp number as its actually called)
+            var houseList = new List<HouseName>();
+            //get signs of all houses
+            var houseSigns = AllHouseZodiacSignKundali(time);
+            foreach (var zodiacName in signsOwned)
+            {
+
+                //get all houses that have inputed zodiac name
+                List<HouseName> matchingHouses = houseSigns
+                    .Where(pair => pair.Value.GetSignName() == zodiacName)
+                    .Select(pair => pair.Key)
+                    .ToList();
+
+                //add to return list
+                houseList.AddRange(matchingHouses);
+            }
+
+
+            //Next present these houses as Owned by a planet.
+            return houseList;
         }
 
 
@@ -702,15 +814,15 @@ namespace VedAstro.Library
 
         #endregion
 
-            #region TEMPMETHODS
+        #region TEMP METHODS
 
-            /// <summary>
-            /// Gets all KP (Placidus) House Cusps 
-            /// using Swiss Epehemris swe_houses_ex
-            /// this is simply a test method to test the KPHoraryLongitudes and KPBirthtimLongitudes methods
-            /// </summary>
-            // Kp Cusp Calculations
-            public static void KpPrintHouseCuspLong(int Ayanamsa, Time birthtime, int horNum)
+        /// <summary>
+        /// Gets all KP (Placidus) House Cusps 
+        /// using Swiss Epehemris swe_houses_ex
+        /// this is simply a test method to test the KPHoraryLongitudes and KPBirthtimLongitudes methods
+        /// </summary>
+        // Kp Cusp Calculations
+        public static void KpPrintHouseCuspLong(int Ayanamsa, Time birthtime, int horNum)
         {
             Console.WriteLine("Birth Time is {0} ", birthtime);
             Console.WriteLine("Ayanamsa is {0} ", Calculate.Ayanamsa);
@@ -760,7 +872,7 @@ namespace VedAstro.Library
                     planetNirayanaDegrees.Degrees, planetNirayanaDegrees.Minutes,
                     planetNirayanaDegrees.Seconds);
                 var planetConstellation = Calculate.PlanetConstellation(birthtime, planet);
-                
+
                 x = 1;
                 while ((x + 1) <= cusps.Count) //check each house for the logic below
                 {
@@ -916,8 +1028,6 @@ namespace VedAstro.Library
 
 
         #endregion
-
-
 
     }
 }

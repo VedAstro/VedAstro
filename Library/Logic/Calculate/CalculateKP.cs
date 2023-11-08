@@ -812,6 +812,20 @@ namespace VedAstro.Library
             }
         }
 
+
+        public static ZodiacSign HouseSignName(double houseCuspStartDeg)
+        {
+            var hZSign = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(houseCuspStartDeg));
+            return hZSign;
+        }
+
+        public static Constellation HouseConstellatoonName(double houseCuspStartDeg)
+        {
+            var hConstellation = Calculate.ConstellationAtLongitude(Angle.FromDegrees(houseCuspStartDeg));
+            return hConstellation;
+        }
+
+
         #endregion
 
         #region TEMP METHODS
@@ -931,9 +945,9 @@ namespace VedAstro.Library
         /// <summary>
         /// Process planet positions and returns Dictionary for webpage table
         /// </summary>
-        public static Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName)> PlanetData(int Ayanamsa, Time birthtime, int horNum)
+        public static Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName, PlanetName)> PlanetData(int Ayanamsa, Time birthtime, int horNum)
         {
-            Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName)> planetTableData = new Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName)>();
+            Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName, PlanetName)> planetTableData = new Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName, PlanetName)>();
 
             var allPlanets = VedAstro.Library.PlanetName.All9Planets;
             var x = 0;
@@ -979,7 +993,7 @@ namespace VedAstro.Library
                                                             zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
                                                             zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation, subLordAtLongitude);
                                 planetTableData.Add(planet, (Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees), zodiacSignAtLong.GetSignName(),
-                                    constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation));
+                                    constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation, subLordAtLongitude));
 
                                 break;
                             }
@@ -994,11 +1008,13 @@ namespace VedAstro.Library
                                 var constellationAtLong = Calculate.ConstellationAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
                                 var lordOfConstellation = Calculate.LordOfConstellation(planetConstellation.GetConstellationName());
 
-                                Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S; SignL {6} StarL {7} ", planet.Name, x, zodiacSignAtLong.GetSignName(),
+                                var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees.TotalDegrees);
+
+                                Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S; SignL {6} StarL {7} SubL {8} ", planet.Name, x, zodiacSignAtLong.GetSignName(),
                                     zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
-                                    zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation);
+                                    zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation, subLordAtLongitude);
                                 planetTableData.Add(planet, (Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees), zodiacSignAtLong.GetSignName(),
-                                    constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation));
+                                    constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation, subLordAtLongitude));
                                 break;
                             }
                         }
@@ -1017,7 +1033,7 @@ namespace VedAstro.Library
                             zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation, subLordAtLongitude);
 
                         planetTableData.Add(planet, (Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees), zodiacSignAtLong.GetSignName(),
-                            constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation));
+                            constellationAtLong.GetConstellationName(), lordOfZodiac, lordOfConstellation, subLordAtLongitude));
                         break;
                     }
                     x++;

@@ -1062,9 +1062,13 @@ namespace VedAstro.Library
         /// <summary>
         /// Process planet positions and returns Dictionary for webpage table
         /// </summary>
-        public static Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName, PlanetName)> PlanetData(int Ayanamsa, Time birthtime, int horNum)
+        public static Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName, PlanetName)>
+            PlanetData(int Ayanamsa, Time birthtime, int horNum)
         {
-            Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName, PlanetName)> planetTableData = new Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName, PlanetName)>();
+            Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName, PlanetName)>
+                planetTableData =
+                    new Dictionary<PlanetName, (Angle, ZodiacName, ConstellationName, PlanetName, PlanetName, PlanetName
+                        )>();
 
             var allPlanets = VedAstro.Library.PlanetName.All9Planets;
             var x = 0;
@@ -1076,9 +1080,18 @@ namespace VedAstro.Library
                 var yy = Calculate.LordOfConstellation(planetConstellation.Value.GetConstellationName());
             } */
 
-            var cusps = AllHouseCuspLongitudesHorary(birthtime, horNum);
+            var cusps = new Dictionary<HouseName, Angle>();
 
-            Console.WriteLine("Processing Planet Data now....");
+            if (horNum == 0)
+            {
+                cusps = AllHouseCuspLongitudesKundali(birthtime);
+            }
+            else 
+            {
+                cusps = AllHouseCuspLongitudesHorary(birthtime, horNum);
+            }
+
+        Console.WriteLine("Processing Planet Data now....");
             //Process Planet Data
             foreach (PlanetName planet in allPlanets)
             {
@@ -1145,7 +1158,7 @@ namespace VedAstro.Library
 
                         var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees.TotalDegrees);
 
-                        Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6} StarL {7} ; SubL {8}", planet.Name, x, zodiacSignAtLong.GetSignName(),
+                        Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6} StarL {7} ; SubL {8}", planet.Name, x+1, zodiacSignAtLong.GetSignName(),
                             zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
                             zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation, subLordAtLongitude);
 

@@ -24,12 +24,11 @@ namespace API
 				var person = Tools.GetPersonById(personId);
 
 				//calculate predictions for current person
-				var predictionList = await VedAstro.Library.Tools.GetHoroscopePrediction(person.BirthTime, APITools.HoroscopeDataListFile);
+				var predictionList = await Tools.GetHoroscopePrediction(person.BirthTime, URL.HoroscopeDataListFile);
 
-				var sortedList = SortPredictionData(predictionList);
 
 				//convert list to xml string in root elm
-				return APITools.PassMessage(VedAstro.Library.Tools.AnyTypeToXmlList(sortedList), incomingRequest);
+				return APITools.PassMessage(Tools.AnyTypeToXmlList(predictionList), incomingRequest);
 
 			}
 			catch (Exception e)
@@ -42,15 +41,6 @@ namespace API
 
 
 
-			List<HoroscopePrediction> SortPredictionData(List<HoroscopePrediction> horoscopePredictions)
-			{
-				//put rising sign at top
-				horoscopePredictions.MoveToBeginning((horPre) => horPre.FormattedName.ToLower().Contains("rising"));
-
-				//todo followed by planet in sign prediction ordered by planet strength 
-
-				return horoscopePredictions;
-			}
 
 		}
 

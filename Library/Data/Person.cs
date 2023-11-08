@@ -59,6 +59,7 @@ namespace VedAstro.Library
         }
 
         public Gender Gender { get; set; }
+
         public Time BirthTime { get; set; }
 
         /// <summary>
@@ -242,9 +243,6 @@ namespace VedAstro.Library
         }
 
 
-
-
-
         //METHODS
 
         /// <summary>
@@ -268,20 +266,6 @@ namespace VedAstro.Library
 
 
             return returnArray;
-        }
-
-        public JToken ToJson()
-        {
-            var temp = new JObject();
-            temp["PersonId"] = this.Id;
-            temp["Name"] = this.Name;
-            temp["Notes"] = this.Notes;
-            temp["BirthTime"] = this.BirthTime.ToJson();
-            temp["Gender"] = this.GenderString;
-            temp["OwnerId"] = this.OwnerId;
-            temp["LifeEventList"] = this.LifeEventListJson; //json array
-
-            return temp;
         }
 
         /// <summary>
@@ -374,6 +358,101 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Parses a list of person's
+        /// </summary>
+        /// <param name="personXmlList"></param>
+        /// <returns></returns>
+        public static List<Person> FromXml(IEnumerable<XElement> personXmlList) => personXmlList.Select(personXml => Person.FromXml(personXml)).ToList();
+
+        /// <summary>
+        /// Given Time instance in URL form will convert to instance
+        /// /Person/JesusHChrist0000/
+        /// </summary>
+        public static async Task<dynamic> FromUrl(string url)
+        {
+            // INPUT -> "/Person/JesusHChrist0000/"
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var person = Tools.GetPersonById(parts[1]);
+
+            return person;
+        }
+
+        /// <summary>
+        /// Returns a new instance person with modified birth time
+        /// everything else including ID stays the same
+        /// </summary>
+        public Person ChangeBirthTime(Time newBirthTime)
+        {
+            //make a copy of person details except birth time
+            var newPerson = new Person(OwnerId, this.Id, Name, newBirthTime, Gender, Notes);
+            return newPerson;
+        }
+
+        /// <summary>
+        /// This makes owner ID as primary key and person id as 
+        /// </summary>
+        /// <returns></returns>
+        public PersonRow ToAzureRow()
+        {
+            //make the cache row to be added
+            var newRow = new PersonRow()
+            {
+                //can have many IP as partition key
+                PartitionKey = this.OwnerId,
+                RowKey = this.Id,
+                Name = this.Name,
+                BirthTime = this.BirthTime.ToJson().ToString(),
+                Gender = this.Gender.ToString(),
+                Notes = "",
+            };
+
+            return newRow;
+        }
+
+        /// <summary>
+        /// Brings back Owner ID from Primary key & 
+        /// </summary>
+        public static Person FromAzureRow(PersonRow rowData)
+        {
+            //parse the person only
+            var birthTime = Time.FromJson(JToken.Parse(rowData.BirthTime));
+            var rowDataGender = Enum.Parse<Gender>(rowData.Gender);
+            var personId = rowData.RowKey;
+            var newPerson = new Person(rowData.PartitionKey, personId, rowData.Name, birthTime, rowDataGender);
+
+            //get person life event list (partition key = person id)
+            var lifeEvents = AzureTable.PersonList.Query<LifeEventRow>(call => call.PartitionKey == personId);
+
+            //convert to list
+            var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();
+
+            //add to person data
+            newPerson.LifeEventList = personJsonList;
+
+            return newPerson;
+        }
+
+        #region JSON SUPPORT
+
+
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
+
+        public JToken ToJson()
+        {
+            var temp = new JObject();
+            temp["PersonId"] = this.Id;
+            temp["Name"] = this.Name;
+            temp["Notes"] = this.Notes;
+            temp["BirthTime"] = this.BirthTime.ToJson();
+            temp["Gender"] = this.GenderString;
+            temp["OwnerId"] = this.OwnerId;
+            temp["LifeEventList"] = this.LifeEventListJson; //json array
+
+            return temp;
+        }
+
+        /// <summary>
         /// Given a json list of person will convert to instance
         /// used for transferring between server & client
         /// </summary>
@@ -419,83 +498,7 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// Parses a list of person's
-        /// </summary>
-        /// <param name="personXmlList"></param>
-        /// <returns></returns>
-        public static List<Person> FromXml(IEnumerable<XElement> personXmlList) => personXmlList.Select(personXml => Person.FromXml(personXml)).ToList();
+        #endregion
 
-        /// <summary>
-        /// Given Time instance in URL form will convert to instance
-        /// /Person/JesusHChrist0000/
-        /// </summary>
-        public static async Task<dynamic> FromUrl(string url)
-        {
-            // INPUT -> "/Person/JesusHChrist0000/"
-            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-            var person = Tools.GetPersonById(parts[1]);
-
-            return person;
-        }
-
-
-        /// <summary>
-        /// Returns a new instance person with modified birth time
-        /// everything else including ID stays the same
-        /// </summary>
-        public Person ChangeBirthTime(Time newBirthTime)
-        {
-            //make a copy of person details except birth time
-            var newPerson = new Person(OwnerId, this.Id, Name, newBirthTime, Gender, Notes);
-            return newPerson;
-        }
-
-        JObject IToJson.ToJson() => (JObject)this.ToJson();
-
-        /// <summary>
-        /// This makes owner ID as primary key and person id as 
-        /// </summary>
-        /// <returns></returns>
-        public PersonRow ToAzureRow()
-        {
-            //make the cache row to be added
-            var newRow = new PersonRow()
-            {
-                //can have many IP as partition key
-                PartitionKey = this.OwnerId,
-                RowKey = this.Id,
-                Name = this.Name,
-                BirthTime = this.BirthTime.ToJson().ToString(),
-                Gender = this.Gender.ToString(),
-                Notes = "",
-            };
-
-            return newRow;
-        }
-
-        /// <summary>
-        /// Brings back Owner ID from Primary key & 
-        /// </summary>
-        public static Person FromAzureRow(PersonRow rowData)
-        {
-            //parse the person only
-            var birthTime = Time.FromJson(JToken.Parse(rowData.BirthTime));
-            var rowDataGender = Enum.Parse<Gender>(rowData.Gender);
-            var personId = rowData.RowKey;
-            var newPerson = new Person(rowData.PartitionKey, personId, rowData.Name, birthTime, rowDataGender);
-
-            //get person life event list (partition key = person id)
-            var lifeEvents = AzureTable.PersonList.Query<LifeEventRow>(call => call.PartitionKey == personId);
-
-            //convert to list
-            var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();
-
-            //add to person data
-            newPerson.LifeEventList = personJsonList;
-
-            return newPerson;
-        }
     }
 }

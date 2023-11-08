@@ -59,9 +59,6 @@ namespace API
         public const string RecycleBinFile = "RecycleBin.xml";
         public const string UserDataListXml = "UserDataList.xml";
 
-        public const string
-            HoroscopeDataListFile =
-                "https://vedastro.org/data/HoroscopeDataList.xml"; //todo should be getting beta version
 
         public static URL Url { get; set; } //instance of beta or stable URLs
 

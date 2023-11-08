@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -10,9 +11,10 @@ namespace VedAstro.Library
     /// Simple data wrapper for an instance of Horoscope Prediction (data)
     /// Note : EventData + Time = HoroscopePrediction
     /// </summary>
-    public class HoroscopePrediction : IToXml
+    public class HoroscopePrediction : IToXml, IToJson
     {
         //FIELDS
+        public static readonly HoroscopePrediction Empty = new(HoroscopeName.Empty, "Empty", new RelatedBody());
 
 
         //CTOR
@@ -23,7 +25,6 @@ namespace VedAstro.Library
             Description = description;
             RelatedBody = relatedBody;
         }
-
 
 
         //PROPERTIES
@@ -144,8 +145,6 @@ namespace VedAstro.Library
             return $"{FormattedName} - {Description}";
         }
 
-
-
         /// <summary>
         /// Searches all text in prediction for input
         /// </summary>
@@ -160,5 +159,82 @@ namespace VedAstro.Library
             return searchResult;
 
         }
+
+
+        #region JSON SUPPORT
+
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
+
+        public JToken ToJson()
+        {
+            var temp = new JObject();
+            temp["Name"] = this.Name.ToString();
+            temp["Description"] = this.Description;
+            temp["RelatedBody"] = this.RelatedBody.ToJson();
+
+            return temp;
+        }
+
+        /// <summary>
+        /// Given a json list of person will convert to instance
+        /// used for transferring between server & client
+        /// </summary>
+        public static List<HoroscopePrediction> FromJsonList(JToken personList)
+        {
+            //if null empty list please
+            if (personList == null) { return new List<HoroscopePrediction>(); }
+
+            var returnList = new List<HoroscopePrediction>();
+
+            foreach (var personJson in personList)
+            {
+                returnList.Add(HoroscopePrediction.FromJson(personJson));
+            }
+
+            return returnList;
+        }
+
+        public static JArray ToJsonList(List<HoroscopePrediction> predictionList)
+        {
+            var jsonList = new JArray();
+
+            foreach (var hrcPrediction in predictionList)
+            {
+                jsonList.Add(hrcPrediction.ToJson());
+            }
+
+            return jsonList;
+        }
+
+        public static HoroscopePrediction FromJson(JToken horoscopeInput)
+        {
+            //if null return empty, end here
+            if (horoscopeInput == null) { return HoroscopePrediction.Empty; }
+
+            try
+            {
+                var nameStr = horoscopeInput["Name"].Value<string>();
+                var name = (HoroscopeName)Enum.Parse(typeof(HoroscopeName), nameStr);
+
+                var description = horoscopeInput["Description"].Value<string>();
+
+                var relatedBody = Library.RelatedBody.FromJson(horoscopeInput["RelatedBody"]);
+
+                var parsedHoroscope = new HoroscopePrediction(name, description, relatedBody);
+
+                return parsedHoroscope;
+            }
+            catch (Exception e)
+            {
+                LibLogger.Error($"Failed to parse Person:\n{horoscopeInput.ToString()}");
+
+                return HoroscopePrediction.Empty;
+            }
+
+        }
+
+
+        #endregion
+
     }
 }

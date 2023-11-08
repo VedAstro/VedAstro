@@ -396,20 +396,24 @@ namespace VedAstro.Library
 
             //set ayanamsa
             swissEph.swe_set_sid_mode(Calculate.Ayanamsa, 0, 0);
+            Console.WriteLine("Ayanamsa {0}; Ayanamsa Degrees {1}", Calculate.Ayanamsa, Calculate.AyanamsaDegree(time));
 
             // The obliquity of the ecliptic is the angle between the ecliptic and the celestial equator. 
             // It changes over time and is calculated for a specific time.
             var eps = EclipticObliquity(time);
+            Console.WriteLine("Ecliptic Obliquity eps {0}", eps);
 
             // The horary number is converted to Tropical Ascendant degrees.
             // The Tropical Ascendant is the degree of the zodiac that is rising
             // on the eastern horizon at the time for which the horoscope is cast.
             var tropAsc = HoraryNumberTropicalAsc(horaryNumber);
+            Console.WriteLine("tropAsc Degrees {0}", tropAsc);
 
             // The Ascendant degree is then converted to the ARMC (Sidereal Time).
             // The ARMC is used in the calculation of house cusps.
             var armc = ConvertTropicalAscToARMC(tropAsc, eps, location.Latitude(), time);
-
+            Console.WriteLine("armc {0}", armc);
+            Console.WriteLine("Latitude {0}", location.Latitude());
             // The house system is calculated using the ARMC, latitude, and obliquity of the ecliptic.
             // The 'P' parameter specifies the Placidus house system.
             swissEph.swe_houses_armc(armc, location.Latitude(), eps, 'P', cusps, ascmc);
@@ -963,9 +967,18 @@ namespace VedAstro.Library
                 ayanamsaDegree.Minutes, ayanamsaDegree.Seconds);
 
             Console.WriteLine("================== KP Houses and Planets - From SWISS EPH Modified Method ===================");
-            //Choose one of the following statements. Comment the other one out for testing
-            var cusps = AllHouseCuspLongitudesKundali(birthtime);
-            //var cusps = AllHouseCuspLongitudesHorary(birthtime, horNum);
+            
+
+            var cusps = new Dictionary<HouseName, Angle>();
+            if (horNum == 0)
+            {
+                cusps = AllHouseCuspLongitudesKundali(birthtime);
+            }
+            else
+            {
+                cusps = AllHouseCuspLongitudesHorary(birthtime, horNum);
+            }
+            
 
             int cnt = 0;
 
@@ -987,6 +1000,7 @@ namespace VedAstro.Library
             }
             //House Processing Complete ------------------------------
 
+           
             //Now Process the Planets
             var planetDataDict = CalculateKP.PlanetData(Calculate.Ayanamsa, birthtime, horNum);
 
@@ -1102,13 +1116,18 @@ namespace VedAstro.Library
                 var planetConstellation = Calculate.PlanetConstellation(planet, birthtime);
 
                 x = 1;
-                while ((x + 1) <= cusps.Count) //check each house for the logic below
+                while (x <= cusps.Count) //check each house for the logic below
                 {
-                    if ((x + 1) < cusps.Count) //Do not exceed the bounds of the array
+                    Console.WriteLine("Counter x {0}", x);
+                    if (x < cusps.Count) //if there is 'next cusp' still left to compare with;(without exceeding the bounds of the array)
                     {
+                        Console.WriteLine("not at the near end of array");
                         if (cusps[(HouseName)x + 1] > cusps[(HouseName)x]) //check if cusp longitude is smaller than next cusp longitude
-                                                                           //because the last house will have cusp long larger then next house start
+                                                                           //because the last house will have cusp long larger then next house start long
                         {
+                            Console.WriteLine("Next Cusp Long is greater than current Cusp Long");
+                            Console.WriteLine("planet degrees {0}; cusp x degrees {1} cusp x+1 degrees {2}", planetNirayanaDegrees.TotalDegrees, cusps[(HouseName)x].TotalDegrees, cusps[(HouseName)x + 1].TotalDegrees);
+                            //if the planet longitude falls between this cusp long AND next cusp long, perform process
                             if ((planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)x].TotalDegrees) &&
                                 (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)x + 1].TotalDegrees)) //this means that the planet falls in between these house cusps
                             {
@@ -1128,8 +1147,12 @@ namespace VedAstro.Library
                                 break;
                             }
                         }
-                        else //if next cusp start long is smaller than current cusp we are rotating through 360 deg
+                        else //if next cusp start long is smaller than current cusp - means that we are rotating through 360 deg mark
+                             //hence use the OR condition
                         {
+                            Console.WriteLine("Next Cusp Long is greater than current Cusp Long");
+                            Console.WriteLine("planet degrees {0}; cusp x degrees {1} cusp x+1 degrees {2}", planetNirayanaDegrees.TotalDegrees, cusps[(HouseName)x].TotalDegrees, cusps[(HouseName)x + 1].TotalDegrees);
+
                             if ((planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)x].TotalDegrees) ||
                                 (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)x + 1].TotalDegrees))
                             {
@@ -1140,7 +1163,7 @@ namespace VedAstro.Library
 
                                 var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees.TotalDegrees);
 
-                                Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S; SignL {6} StarL {7} SubL {8} ", planet.Name, x, zodiacSignAtLong.GetSignName(),
+                                Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S; SignL {6} StarL {7} SubL {8} ", planet.Name, x+1, zodiacSignAtLong.GetSignName(),
                                     zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
                                     zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation, subLordAtLongitude);
                                 planetTableData.Add(planet, (Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees), zodiacSignAtLong.GetSignName(),
@@ -1149,8 +1172,13 @@ namespace VedAstro.Library
                             }
                         }
                     }
-                    else
+                    else //this means that there is NO 'next cusp' still left to compare with;(without exceeding the bounds of the array)
+                        // we are in the 12th house now; planet is in the 12th house
                     {
+                        Console.WriteLine("Arrived in teh else conditon for 12th house, no next cusp available to compare");
+                        
+                        Console.WriteLine("planet degrees {0}; cusp x degrees {1} ", planetNirayanaDegrees.TotalDegrees, cusps[(HouseName)x].TotalDegrees);
+
                         var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
                         var lordOfZodiac = Calculate.LordOfZodiacSign(zodiacSignAtLong.GetSignName());
                         var constellationAtLong = Calculate.ConstellationAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
@@ -1158,7 +1186,8 @@ namespace VedAstro.Library
 
                         var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees.TotalDegrees);
 
-                        Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6} StarL {7} ; SubL {8}", planet.Name, x+1, zodiacSignAtLong.GetSignName(),
+                        //we use x+1 in the Console.Writeline becuase the counter is still at 11th house, but the else condition has brought us to the 12th house
+                        Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6} StarL {7} ; SubL {8}", planet.Name, x, zodiacSignAtLong.GetSignName(),
                             zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
                             zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation, subLordAtLongitude);
 

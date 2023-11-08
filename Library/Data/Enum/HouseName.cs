@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static VedAstro.Library.PlanetName;
 
 namespace VedAstro.Library
 {
@@ -108,6 +110,65 @@ namespace VedAstro.Library
 
             return parsedAngle;
         }
+
+        #region JSON SUPPORT
+
+        
+        /// <summary>
+        /// Given a json list of person will convert to instance
+        /// used for transferring between server & client
+        /// </summary>
+        public static List<HouseName> FromJsonList(JToken personList)
+        {
+            //if null empty list please
+            if (personList == null) { return new List<HouseName>(); }
+
+            var returnList = new List<HouseName>();
+
+            foreach (var personJson in personList)
+            {
+                returnList.Add(HouseNameExtensions.FromJson(personJson));
+            }
+
+            return returnList;
+        }
+
+        public static JArray ToJsonList(List<HouseName> houseNameList)
+        {
+            var jsonList = new JArray();
+
+            foreach (var eventTag in houseNameList)
+            {
+                jsonList.Add(eventTag.ToString());
+            }
+
+            return jsonList;
+        }
+
+
+        public static HouseName FromJson(JToken planetInput)
+        {
+            //if null return empty, end here
+            if (planetInput == null) { return HouseName.Empty; }
+
+            try
+            {
+                var valueStr = planetInput.Value<string>();
+                var parsedEnum = (HouseName)Enum.Parse(typeof(HouseName), valueStr);
+
+                return parsedEnum;
+            }
+            catch (Exception e)
+            {
+                LibLogger.Error($"Failed to parse:\n{planetInput.ToString()}");
+
+                return HouseName.Empty;
+            }
+
+        }
+
+        #endregion
+
 
     }
 

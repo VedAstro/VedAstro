@@ -381,6 +381,17 @@ namespace VedAstro.Library
         #region GENERAL
 
         /// <summary>
+        /// Given a birth time will calculate all predictions that match for given birth time and return the data
+        /// </summary>
+        public static async Task<List<HoroscopePrediction>> HoroscopePredictions(Time birthTime)
+        {
+            //calculate predictions for current person
+            var predictionList = await Tools.GetHoroscopePrediction(birthTime, URL.HoroscopeDataListFile);
+
+            return predictionList;
+        }
+
+        /// <summary>
         /// Given a birth time, current time and event name, gets the event data occuring at current time
         /// Easy way to check if Gochara is occuring at given time, with start and end time calculated
         /// Precision hard set to 1 hour TODO

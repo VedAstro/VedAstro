@@ -767,15 +767,18 @@ namespace VedAstro.Library
             var horoscopeDataList = await GetHoroscopeDataList(fileUrl);
 
             //start calculating predictions (mix with time by person's birth date)
-            var predictionList = calculate(birthTime, horoscopeDataList);
+            var predictionList = CalculatePredictions(birthTime, horoscopeDataList);
 
-            return predictionList;
+            //place important predictions at the top
+            var sorted = SortPredictionData(predictionList);
+
+            return sorted;
 
             /// <summary>
             /// Get list of predictions occurring in a time period for all the
             /// inputed prediction types aka "prediction data"
             /// </summary>
-            List<HoroscopePrediction> calculate(Time birthTime, List<HoroscopeData> horoscopeDataList)
+            List<HoroscopePrediction> CalculatePredictions(Time birthTime, List<HoroscopeData> horoscopeDataList)
             {
                 //get data to instantiate muhurtha time period
                 //get start & end times
@@ -807,6 +810,17 @@ namespace VedAstro.Library
                 //return calculated event list
                 return horoscopeList;
             }
+
+            List<HoroscopePrediction> SortPredictionData(List<HoroscopePrediction> horoscopePredictions)
+            {
+                //put rising sign at top
+                horoscopePredictions.MoveToBeginning((horPre) => horPre.FormattedName.ToLower().Contains("rising"));
+
+                //todo followed by planet in sign prediction ordered by planet strength 
+
+                return horoscopePredictions;
+            }
+
         }
 
 
@@ -2756,7 +2770,12 @@ namespace VedAstro.Library
                         return parsed;
                     }
 
-                //handles results that have many props from 1 call, exp : SwissEphemeris
+                case List<HoroscopePrediction> apiList:
+                    {
+                        var parsed = HoroscopePrediction.ToJsonList(apiList);
+                        return parsed;
+                    }
+
                 case IList iList:
                     {
                         //convert list to comma separated string

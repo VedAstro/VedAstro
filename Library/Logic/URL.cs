@@ -212,4 +212,6 @@ public class URL
     public const string APIGuideNextStep = "https://youtu.be/y110RAgIorY?t=127";
     public const string Donate = "https://vedastro.org/Donate";
     public const string VSLifeSharePublicSession = "https://prod.liveshare.vsengsaas.visualstudio.com/join?CBAE0FED0D849DD2E74F90CD7F4DC639AA89";
+    public const string HoroscopeDataListFile = "https://vedastro.org/data/HoroscopeDataList.xml"; //todo should be getting beta version
+
 }

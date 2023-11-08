@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -101,6 +102,65 @@ namespace VedAstro.Library
 
             return returnVal;
         }
+
+        #region JSON SUPPORT
+
+
+        /// <summary>
+        /// Given a json list of person will convert to instance
+        /// used for transferring between server & client
+        /// </summary>
+        public static List<ZodiacName> FromJsonList(JToken personList)
+        {
+            //if null empty list please
+            if (personList == null) { return new List<ZodiacName>(); }
+
+            var returnList = new List<ZodiacName>();
+
+            foreach (var personJson in personList)
+            {
+                returnList.Add(ZodiacNameExtensions.FromJson(personJson));
+            }
+
+            return returnList;
+        }
+
+        public static JArray ToJsonList(List<ZodiacName> zodiacNameList)
+        {
+            var jsonList = new JArray();
+
+            foreach (var eventTag in zodiacNameList)
+            {
+                jsonList.Add(eventTag.ToString());
+            }
+
+            return jsonList;
+        }
+
+
+        public static ZodiacName FromJson(JToken planetInput)
+        {
+            //if null return empty, end here
+            if (planetInput == null) { return ZodiacName.Empty; }
+
+            try
+            {
+                var valueStr = planetInput.Value<string>();
+                var parsedEnum = (ZodiacName)Enum.Parse(typeof(ZodiacName), valueStr);
+
+                return parsedEnum;
+            }
+            catch (Exception e)
+            {
+                LibLogger.Error($"Failed to parse:\n{planetInput.ToString()}");
+
+                return ZodiacName.Empty;
+            }
+
+        }
+
+        #endregion
+
 
     }
 

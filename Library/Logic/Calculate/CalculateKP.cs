@@ -15,6 +15,22 @@ namespace VedAstro.Library
 
         #region HORARY
 
+        public static Dictionary<HouseName, ZodiacSign> AllHouseZodiacSignHorary(Time time, int horaryNumber)
+        {
+            //get all houses
+            var allHouses = new Dictionary<HouseName, ZodiacSign>();
+
+            //get for all houses
+            foreach (var house in Library.House.AllHouses)
+            {
+                var calcHouseSign = CalculateKP.HouseZodiacSignHorary(house, time, horaryNumber);
+                allHouses.Add(house, calcHouseSign);
+            }
+
+            return allHouses;
+        }
+
+
         public static ZodiacSign HouseZodiacSignHorary(HouseName inputHouse, Time birthTime, int horaryNumber)
         {
             //get house start longitudes for KP system
@@ -26,7 +42,7 @@ namespace VedAstro.Library
             return zodiacSignAtLong;
 
         }
-        
+
         public static Constellation HouseConstellationHorary(HouseName inputHouse, Time birthTime, int horaryNumber)
         {
             //get house start longitudes for KP system
@@ -54,6 +70,42 @@ namespace VedAstro.Library
             return houseForPlanet;
         }
 
+        public static PlanetName HouseLordOfZodiacSignHorary(HouseName inputHouse, Time birthTime, int horaryNumber)
+        {
+            //get house start longitudes for KP system
+            var allHouseCuspsRaw = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
+            var houseStartLong = allHouseCuspsRaw[inputHouse];
+
+            var zodiacSign = ZodiacSignAtLongitude(houseStartLong);
+
+            return LordOfZodiacSign(zodiacSign.GetSignName());
+        }
+
+        public static PlanetName HouseLordOfConstellationHorary(HouseName inputHouse, Time birthTime, int horaryNumber)
+        {
+            //get house start longitudes for KP system
+            var allHouseCuspsRaw = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
+            var houseStartLong = allHouseCuspsRaw[inputHouse];
+
+            // The value is the lord of the constellation at the house's longitude
+            var value = LordOfConstellation(ConstellationAtLongitude(houseStartLong).GetConstellationName());
+
+            // Add the key-value pair to the dictionary
+            return value;
+        }
+
+        public static PlanetName HouseSubLordHorary(HouseName inputHouse, Time birthTime, int horaryNumber)
+        {
+            //get house start longitudes for KP system
+            var allHouseCuspsRaw = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
+            var houseStartLong = allHouseCuspsRaw[inputHouse].TotalDegrees;
+
+            //special calc to get sub lord
+            var subLord = SubLordAtPlanetLongitude(houseStartLong);
+
+            return subLord;
+        }
+
         public static List<PlanetName> PlanetsInHouseHorary(HouseName inputHouse, Time birthTime, int horaryNumber)
         {
             // Get the starting longitudes of all houses.
@@ -70,6 +122,35 @@ namespace VedAstro.Library
 
             return houseForPlanet;
         }
+
+        public static List<HouseName> HousesOwnedByPlanetHorary(PlanetName inputPlanet, Time time, int horaryNumber)
+        {
+            //Given a planet, return Zodiac Signs owned by it Ex. Ju, returns Sag an Pis
+            var signsOwned = Calculate.ZodiacSignsOwnedByPlanet(inputPlanet);
+
+            //given a Zodiac Sign, return, House Number (or Cusp number as its actually called)
+            var houseList = new List<HouseName>();
+
+            //get signs of all houses
+            var houseSigns = AllHouseZodiacSignHorary(time, horaryNumber);
+            foreach (var zodiacName in signsOwned)
+            {
+
+                //get all houses that have inputed zodiac name
+                List<HouseName> matchingHouses = houseSigns
+                    .Where(pair => pair.Value.GetSignName() == zodiacName)
+                    .Select(pair => pair.Key)
+                    .ToList();
+
+                //add to return list
+                houseList.AddRange(matchingHouses);
+            }
+
+
+            //Next present these houses as Owned by a planet.
+            return houseList;
+        }
+
 
         #endregion
 
@@ -136,6 +217,42 @@ namespace VedAstro.Library
             return HouseName.Empty;
         }
 
+        public static PlanetName HouseLordOfZodiacSignKundali(HouseName inputHouse, Time birthTime)
+        {
+            //get house start longitudes for KP system
+            var allHouseCuspsRaw = AllHouseCuspLongitudesKundali(birthTime);
+            var houseStartLong = allHouseCuspsRaw[inputHouse];
+
+            var zodiacSign = ZodiacSignAtLongitude(houseStartLong);
+
+            return LordOfZodiacSign(zodiacSign.GetSignName());
+        }
+
+        public static PlanetName HouseLordOfConstellationKundali(HouseName inputHouse, Time birthTime)
+        {
+            //get house start longitudes for KP system
+            var allHouseCuspsRaw = AllHouseCuspLongitudesKundali(birthTime);
+            var houseStartLong = allHouseCuspsRaw[inputHouse];
+
+            // The value is the lord of the constellation at the house's longitude
+            var value = LordOfConstellation(ConstellationAtLongitude(houseStartLong).GetConstellationName());
+
+            // Add the key-value pair to the dictionary
+            return value;
+        }
+
+        public static PlanetName HouseSubLordKundali(HouseName inputHouse, Time birthTime)
+        {
+            //get house start longitudes for KP system
+            var allHouseCuspsRaw = AllHouseCuspLongitudesKundali(birthTime);
+            var houseStartLong = allHouseCuspsRaw[inputHouse].TotalDegrees;
+
+            //special calc to get sub lord
+            var subLord = SubLordAtPlanetLongitude(houseStartLong);
+
+            return subLord;
+        }
+
         public static List<PlanetName> PlanetsInHouseKundali(HouseName inputHouse, Time birthTime)
         {
             // Get the starting longitudes of all houses.
@@ -153,6 +270,32 @@ namespace VedAstro.Library
             return houseForPlanet;
         }
 
+        public static List<HouseName> HousesOwnedByPlanetKundali(PlanetName inputPlanet, Time time)
+        {
+            //Given a planet, return Zodiac Signs owned by it Ex. Ju, returns Sag an Pis
+            var signsOwned = Calculate.ZodiacSignsOwnedByPlanet(inputPlanet);
+
+            //given a Zodiac Sign, return, House Number (or Cusp number as its actually called)
+            var houseList = new List<HouseName>();
+            //get signs of all houses
+            var houseSigns = AllHouseZodiacSignKundali(time);
+            foreach (var zodiacName in signsOwned)
+            {
+
+                //get all houses that have inputed zodiac name
+                List<HouseName> matchingHouses = houseSigns
+                    .Where(pair => pair.Value.GetSignName() == zodiacName)
+                    .Select(pair => pair.Key)
+                    .ToList();
+
+                //add to return list
+                houseList.AddRange(matchingHouses);
+            }
+
+
+            //Next present these houses as Owned by a planet.
+            return houseList;
+        }
 
         #endregion
 
@@ -184,8 +327,8 @@ namespace VedAstro.Library
             return LordOfZodiacSign(zodiacSign.GetSignName());
 
         }
-        
-        public static PlanetName PlanetLordOfSubLord(PlanetName inputPlanet, Time birthTime)
+
+        public static PlanetName PlanetSubLord(PlanetName inputPlanet, Time birthTime)
         {
             // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
             // of the current planet at the birth time.
@@ -196,32 +339,6 @@ namespace VedAstro.Library
             return subLord;
         }
 
-        public static List<HouseName> HousesOwnedByPlanet(PlanetName inputPlanet, Time time)
-        {
-            //Given a planet, return Zodiac Signs owned by it Ex. Ju, returns Sag an Pis
-            var signsOwned = Calculate.ZodiacSignsOwnedByPlanet(inputPlanet);
-
-            //given a Zodiac Sign, return, House Number (or Cusp number as its actually called)
-            var houseList = new List<HouseName>();
-            //get signs of all houses
-            var houseSigns = AllHouseZodiacSignKundali(time);
-            foreach (var zodiacName in signsOwned)
-            {
-
-                //get all houses that have inputed zodiac name
-                List<HouseName> matchingHouses = houseSigns
-                    .Where(pair => pair.Value.GetSignName() == zodiacName)
-                    .Select(pair => pair.Key)
-                    .ToList();
-
-                //add to return list
-                houseList.AddRange(matchingHouses);
-            }
-
-
-            //Next present these houses as Owned by a planet.
-            return houseList;
-        }
 
 
         #endregion
@@ -715,14 +832,14 @@ namespace VedAstro.Library
 
             // Find the horary number in the constellation list and return the corresponding tropAsc
             var countX = 0;
-           
+
 
             var planetSubLord = constellationList[countX].Item6;
 
             while (countX <= 248)
             {
-                if  ((constellationList[countX].Item7 <= planetLongitude) &&
-                    (planetLongitude <= constellationList[countX+1].Item7))
+                if ((constellationList[countX].Item7 <= planetLongitude) &&
+                    (planetLongitude <= constellationList[countX + 1].Item7))
                 {
                     //NOTE:
                     //the -1 because in the list we record end longitudes.
@@ -988,7 +1105,7 @@ namespace VedAstro.Library
                                 var lordOfConstellation = Calculate.LordOfConstellation(planetConstellation.GetConstellationName());
 
                                 var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees.TotalDegrees);
-                               
+
                                 Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6}; StarL {7}; SubL {8}", planet.Name, x, zodiacSignAtLong.GetSignName(),
                                                             zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
                                                             zodiacSignAtLong.GetDegreesInSign().Seconds, lordOfZodiac, lordOfConstellation, subLordAtLongitude);

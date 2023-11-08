@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -11,7 +12,7 @@ namespace VedAstro.Library
     /// A list of planet names, with string parsing & comparison
     /// </summary>
     [TypeConverter(typeof(PlanetNameTypeConverter))]
-    public class PlanetName : IToXml, IFromUrl
+    public class PlanetName : IToXml, IFromUrl, IToJson
     {
         /// <summary>
         /// The number of pieces the URL version of this instance needs to be cut for processing
@@ -228,6 +229,75 @@ namespace VedAstro.Library
         }
 
 
+        #region JSON SUPPORT
+
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
+
+        public JToken ToJson()
+        {
+            var temp = new JObject();
+            temp["Name"] = this.Name.ToString();
+
+            return temp;
+        }
+
+        /// <summary>
+        /// Given a json list of person will convert to instance
+        /// used for transferring between server & client
+        /// </summary>
+        public static List<PlanetName> FromJsonList(JToken personList)
+        {
+            //if null empty list please
+            if (personList == null) { return new List<PlanetName>(); }
+
+            var returnList = new List<PlanetName>();
+
+            foreach (var personJson in personList)
+            {
+                returnList.Add(PlanetName.FromJson(personJson));
+            }
+
+            return returnList;
+        }
+
+        public static JArray ToJsonList(List<PlanetName> planetNameList)
+        {
+            var jsonList = new JArray();
+
+            foreach (var eventTag in planetNameList)
+            {
+                jsonList.Add(eventTag.ToString());
+            }
+
+            return jsonList;
+        }
+
+        public static PlanetName FromJson(JToken planetInput)
+        {
+            //if null return empty, end here
+            if (planetInput == null) { return PlanetName.Empty; }
+
+            try
+            {
+                var nameStr = planetInput["Name"].Value<string>();
+                var name = (PlanetNameEnum)Enum.Parse(typeof(PlanetNameEnum), nameStr);
+
+                var parsedHoroscope = new PlanetName(name);
+
+                return parsedHoroscope;
+            }
+            catch (Exception e)
+            {
+                LibLogger.Error($"Failed to parse:\n{planetInput.ToString()}");
+
+                return PlanetName.Empty;
+            }
+
+        }
+
+        #endregion
+
+
 
         //OPERATOR OVERRIDES
         public static bool operator ==(PlanetName left, PlanetName right)
@@ -245,6 +315,9 @@ namespace VedAstro.Library
         {
             return !(left == right);
         }
+
+
+
 
         //METHOD OVERRIDES
         public override string ToString() => Name.ToString();
@@ -282,6 +355,8 @@ namespace VedAstro.Library
 
             return hash1;
         }
+
+
 
     }
 

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace VedAstro.Library
@@ -8,8 +10,11 @@ namespace VedAstro.Library
     /// Simple class to wrap all related bodies (Planets, Houses & Signs)
     /// to Calculator Result
     /// </summary>
-    public class RelatedBody : IToXml
+    public class RelatedBody : IToXml, IToJson
     {
+        public static readonly RelatedBody Empty = new RelatedBody();
+
+
         /// <summary>
         /// List of planets related to this calculation result
         /// </summary>
@@ -66,7 +71,6 @@ namespace VedAstro.Library
 
         public XElement ToXml()
         {
-            //todo improve conformatiy if possible, PlanetName has to 
             var relatedPlanetsXml = PlanetName.ToXmlList(this.RelatedPlanets);
             var relatedHousesXml = HouseNameExtensions.ToXmlList(this.RelatedHouses);
             var relatedSignsXml = ZodiacNameExtensions.ToXmlList(this.RelatedZodiac);
@@ -75,5 +79,72 @@ namespace VedAstro.Library
             return returnXml;
 
         }
+
+
+        #region JSON SUPPORT
+
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
+
+        public JToken ToJson()
+        {
+            var temp = new JObject();
+            temp["Planets"] = PlanetName.ToJsonList(this.RelatedPlanets);
+            temp["Houses"] = HouseNameExtensions.ToJsonList(this.RelatedHouses);
+            temp["Zodiacs"] = ZodiacNameExtensions.ToJsonList(this.RelatedZodiac);
+
+            return temp;
+        }
+
+        /// <summary>
+        /// Given a json list of person will convert to instance
+        /// used for transferring between server & client
+        /// </summary>
+        public static List<RelatedBody> FromJsonList(JToken personList)
+        {
+            //if null empty list please
+            if (personList == null) { return new List<RelatedBody>(); }
+
+            var returnList = new List<RelatedBody>();
+
+            foreach (var personJson in personList)
+            {
+                returnList.Add(RelatedBody.FromJson(personJson));
+            }
+
+            return returnList;
+        }
+
+        public static RelatedBody FromJson(JToken horoscopeInput)
+        {
+            //if null return empty, end here
+            if (horoscopeInput == null) { return RelatedBody.Empty; }
+
+            try
+            {
+                var relatedPlanets = PlanetName.FromJsonList(horoscopeInput["Planets"]);
+                var relatedHouses = HouseNameExtensions.FromJsonList(horoscopeInput["Houses"]);
+                var relatedZodiacs = ZodiacNameExtensions.FromJsonList(horoscopeInput["Zodiacs"]);
+                
+                var parsedHoroscope = new RelatedBody()
+                {
+                    RelatedPlanets = relatedPlanets,
+                    RelatedHouses = relatedHouses,
+                    RelatedZodiac = relatedZodiacs
+                };
+
+                return parsedHoroscope;
+            }
+            catch (Exception e)
+            {
+                LibLogger.Error($"Failed to parse Person:\n{horoscopeInput.ToString()}");
+
+                return RelatedBody.Empty;
+            }
+
+        }
+
+
+        #endregion
+
     }
 }

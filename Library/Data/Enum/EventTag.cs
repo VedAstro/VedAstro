@@ -116,6 +116,7 @@ namespace VedAstro.Library
 
             return eventTagListXml;
         }
+        
         /// <summary>
         /// Note: Root element must be named EventTagList
         /// </summary>

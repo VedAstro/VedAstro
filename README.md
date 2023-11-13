@@ -38,7 +38,7 @@
 [![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library) [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://pypi.org/project/VedAstro/)  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
 
 # 🆓 100% Open Source
-We strongly believe in `FREE Astrology Knowledge`. Exactly in the same way as the sages of ancient times. The great sage **Parashara** taught everybody the ways of astrology without asking money, as such VedAstro does the same.
+The great sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
 
 ![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
 
@@ -189,8 +189,10 @@ We discuss & share ideas on astrology and computation. And ways you can integrat
 [![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
 
 # 🎯 Sponsors
-![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png)
-Built with Software Sponsored by JetBrains
+Built with Software Sponsored by **[JetBrains](https://www.jetbrains.com/)** 
+
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="250"/>
+
 
 # 🧰 Gonzo Development Pattern
 This development style celebrates the methodology of chaotic development at the benefit of low cost and fast paced prototyping.

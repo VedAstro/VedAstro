@@ -55,8 +55,6 @@ namespace API
         }
 
 
-
-
         /// <summary>
         /// Main func to generate event charts used by site, via awesome built in cache mechanism
         /// </summary>

@@ -98,7 +98,7 @@ namespace VedAstro.Library
         {
             //get house start longitudes for KP system
             var allHouseCuspsRaw = AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
-            var houseStartLong = allHouseCuspsRaw[inputHouse].TotalDegrees;
+            var houseStartLong = allHouseCuspsRaw[inputHouse];
 
             //special calc to get sub lord
             var subLord = SubLordAtPlanetLongitude(houseStartLong);
@@ -245,7 +245,7 @@ namespace VedAstro.Library
         {
             //get house start longitudes for KP system
             var allHouseCuspsRaw = AllHouseCuspLongitudesKundali(birthTime);
-            var houseStartLong = allHouseCuspsRaw[inputHouse].TotalDegrees;
+            var houseStartLong = allHouseCuspsRaw[inputHouse];
 
             //special calc to get sub lord
             var subLord = SubLordAtPlanetLongitude(houseStartLong);
@@ -334,7 +334,7 @@ namespace VedAstro.Library
             // of the current planet at the birth time.
             var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, birthTime);
 
-            var subLord = SubLordAtPlanetLongitude(nirayanaDegrees.TotalDegrees);
+            var subLord = SubLordAtPlanetLongitude(nirayanaDegrees);
 
             return subLord;
         }
@@ -699,7 +699,7 @@ namespace VedAstro.Library
         /// when there are overlapping signs.
         /// The subLord pertaining to a Planet given Longitude is returned
         /// </summary>
-        public static PlanetName SubLordAtPlanetLongitude(double planetLongitude)
+        public static PlanetName SubLordAtPlanetLongitude(Angle planetLongitude)
         {
             // Initialize variables
             var tropAscDeg = 0.00;
@@ -842,8 +842,8 @@ namespace VedAstro.Library
 
             while (countX <= 248)
             {
-                if ((constellationList[countX].Item7 <= planetLongitude) &&
-                    (planetLongitude <= constellationList[countX + 1].Item7))
+                if ((constellationList[countX].Item7 <= planetLongitude.TotalDegrees) &&
+                    (planetLongitude.TotalDegrees <= constellationList[countX + 1].Item7))
                 {
                     //NOTE:
                     //the -1 because in the list we record end longitudes.
@@ -1136,7 +1136,7 @@ namespace VedAstro.Library
                                 var constellationAtLong = Calculate.ConstellationAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
                                 var lordOfConstellation = Calculate.LordOfConstellation(planetConstellation.GetConstellationName());
 
-                                var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees.TotalDegrees);
+                                var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees);
 
                                 Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6}; StarL {7}; SubL {8}", planet.Name, x, zodiacSignAtLong.GetSignName(),
                                                             zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
@@ -1161,7 +1161,7 @@ namespace VedAstro.Library
                                 var constellationAtLong = Calculate.ConstellationAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
                                 var lordOfConstellation = Calculate.LordOfConstellation(planetConstellation.GetConstellationName());
 
-                                var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees.TotalDegrees);
+                                var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees);
 
                                 Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S; SignL {6} StarL {7} SubL {8} ", planet.Name, x+1, zodiacSignAtLong.GetSignName(),
                                     zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
@@ -1184,7 +1184,7 @@ namespace VedAstro.Library
                         var constellationAtLong = Calculate.ConstellationAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
                         var lordOfConstellation = Calculate.LordOfConstellation(planetConstellation.GetConstellationName());
 
-                        var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees.TotalDegrees);
+                        var subLordAtLongitude = CalculateKP.SubLordAtPlanetLongitude(planetNirayanaDegrees);
 
                         //we use x+1 in the Console.Writeline becuase the counter is still at 11th house, but the else condition has brought us to the 12th house
                         Console.WriteLine("Planet {0} is in House {1} {2} {3} D {4} M {5} S ; SignL {6} StarL {7} ; SubL {8}", planet.Name, x, zodiacSignAtLong.GetSignName(),

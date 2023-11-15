@@ -2776,6 +2776,14 @@ namespace VedAstro.Library
                         return parsed;
                     }
 
+                case List<PlanetName> planetList:
+                    {
+                        var parsed = PlanetName.ToJsonList(planetList);
+                        rootPayloadJson = new JProperty(dataName, parsed);
+
+                        return rootPayloadJson;
+                    }
+
                 case IList iList:
                     {
                         //convert list to comma separated string

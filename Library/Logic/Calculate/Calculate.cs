@@ -4822,6 +4822,9 @@ namespace VedAstro.Library
         /// </summary>
         public static bool IsPlanetYogakarakaToLagna(PlanetName planetName, ZodiacName lagna)
         {
+            //handle empty
+            return false;
+
             switch (lagna)
             {
                 case ZodiacName.Aries:
@@ -6319,6 +6322,8 @@ namespace VedAstro.Library
         /// </summary>
         public static PlanetName LordOfZodiacSign(ZodiacName signName)
         {
+            //handle empty
+            if (signName == Library.ZodiacName.Empty) { return Library.PlanetName.Empty; }
 
             switch (signName)
             {
@@ -7782,11 +7787,44 @@ namespace VedAstro.Library
         #region DASA CALCUATIONS
 
         /// <summary>
+        /// Given a start time and end time and birth time will calculate all dasa periods
+        /// in nice JSON table format
+        /// You can also set how many levels of dasa you want to calculate, default is 6
+        /// Accuracy set to 24 hours
+        /// </summary>
+        public static async Task<List<Event>> DasaPeriods(Time birthTime, Time startTime, Time endTime, int levels = 6)
+        {
+            //# set how accurately the start & end time of each event is calculated
+            //# exp: setting 1 hour, means given in a time range of 1 day, it will be checked 24 times 
+            var precisionInHours = 24;
+
+            //set what dasa levels to include based on input level
+            var tagList = new List<EventTag>
+            {
+                EventTag.PD1,EventTag.PD2, EventTag.PD3, EventTag.PD4,EventTag.PD5, //dasa, antar, pratuantar, prana, sookshma
+            };
+
+            // TEMP hack to place time in Person (wrapped) 
+            var johnDoe = new Person("", birthTime, Gender.Empty);
+
+            //do calculation (heavy computation)
+            List<Event> eventList = await EventManager.CalculateEvents(precisionInHours,
+                                                                        startTime,
+                                                                        endTime,
+                                                                        birthTime.GetGeoLocation(),
+                                                                        johnDoe,
+                                                                        tagList);
+
+            return eventList;
+
+        }
+
+        /// <summary>
         /// Gets the relationship between a mojor period planet and minor period planet based solely on relationship between
         /// the planets and nothing to do with the signs yet
         /// based on cyclic relationship between planets
         /// </summary>
-        public static (EventNature eventNature, string desciption) GetPlanetDasaMajorPlanetAndMinorRelationship(PlanetName majorPlanet, PlanetName minorPlanet)
+        public static (EventNature eventNature, string desciption) PlanetDasaMajorPlanetAndMinorRelationship(PlanetName majorPlanet, PlanetName minorPlanet)
         {
             //------ Code Poetry ------
             // lets take a moment to appreciate this piece of code
@@ -8438,7 +8476,6 @@ namespace VedAstro.Library
             return wholeDasa;
         }
 
-
         /// <summary>
         /// Counts from inputed dasa by years to dasa, bhukti & antaram
         /// Inputed planet is taken as birth dasa ("starting dasa" to count from)
@@ -8747,7 +8784,6 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Gets next planet in Dasa order
         /// This order is also used for Bhukti & Antaram
@@ -8810,7 +8846,6 @@ namespace VedAstro.Library
 
             return traversedYears;
         }
-
 
         /// <summary>
         /// Gets the Dasa time period each longitude minute in a constellation represents,
@@ -8892,9 +8927,6 @@ namespace VedAstro.Library
             //if it reaches here something wrong
             throw new Exception("Dasa planet for constellation not found!");
         }
-
-
-
 
         /// <summary>
         /// Gets the full Dasa years for a given planet
@@ -12062,6 +12094,8 @@ namespace VedAstro.Library
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        public static string GetPlanetTags(List<PlanetName> planetList) => planetList.Aggregate("", (current, planet) => current + GetPlanetTags(planet));
 
         /// <summary>
         /// Get keywords related to a planet.

@@ -10023,7 +10023,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.GetPlanetDasaMajorPlanetAndMinorRelationship(bhuktiPlanet, antaramPlanet);
+				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(bhuktiPlanet, antaramPlanet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -10056,7 +10056,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.GetPlanetDasaMajorPlanetAndMinorRelationship(antaramPlanet, sukshmaPlanet);
+				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(antaramPlanet, sukshmaPlanet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -10089,7 +10089,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.GetPlanetDasaMajorPlanetAndMinorRelationship(PD4Planet, PD5Planet);
+				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(PD4Planet, PD5Planet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -10122,7 +10122,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.GetPlanetDasaMajorPlanetAndMinorRelationship(PD5Planet, PD6Planet);
+				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(PD5Planet, PD6Planet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -10155,7 +10155,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.GetPlanetDasaMajorPlanetAndMinorRelationship(PD6Planet, PD7Planet);
+				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(PD6Planet, PD7Planet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -10188,7 +10188,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.GetPlanetDasaMajorPlanetAndMinorRelationship(PD7Planet, PD8Planet);
+				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(PD7Planet, PD8Planet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 

@@ -392,6 +392,22 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Given a birth time will calculate all prediction name's that match for given birth time
+        /// example : "Moon House 8", "10th Lord in 8th House"
+        /// note : used by AI Chat, when talking to Astro tuned LLM server
+        /// </summary>
+        public static async Task<List<string>> HoroscopePredictionNames(Time birthTime)
+        {
+            //calculate predictions for current person
+            var predictionList = await Tools.GetHoroscopePrediction(birthTime, URL.HoroscopeDataListFile);
+
+            //take out only name
+            var namesOnly = predictionList.Select(x=>x.Name.ToString()).ToList();
+
+            return namesOnly;
+        }
+
+        /// <summary>
         /// Given a birth time, current time and event name, gets the event data occuring at current time
         /// Easy way to check if Gochara is occuring at given time, with start and end time calculated
         /// Precision hard set to 1 hour TODO

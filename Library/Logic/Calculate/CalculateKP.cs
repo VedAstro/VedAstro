@@ -1071,6 +1071,22 @@ namespace VedAstro.Library
                     x++;
                 }
             } */
+
+            var allPlanets = VedAstro.Library.PlanetName.All9Planets;
+            int planetcnt = 0;
+            foreach (var planet in allPlanets)
+            {
+                planetcnt = 0;
+                foreach (var planetKey in allPlanets)
+                {
+                    
+                    if (planetDataDict[planetKey].Item5 == planet)
+                    {
+                        planetcnt++;
+                    }
+                }
+                Console.WriteLine("Planet {0} appears {1} times as StarLord", planet, planetcnt);
+            }
         }
 
         /// <summary>

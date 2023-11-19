@@ -58,7 +58,6 @@ namespace VedAstro.Library
                 { ZodiacName.Pisces, new { xAxis = 115.1002, yAxis = 116.4543 } }, //115.1002 116.4543
             };
 
-
         /// <summary>
         /// This goes under group "HouseNumberLayer"
         /// </summary>
@@ -79,8 +78,6 @@ namespace VedAstro.Library
                 { ZodiacName.Aquarius, new { xAxis = 81.6, yAxis = 314.3319 } },
                 { ZodiacName.Pisces, new { xAxis = 84.3926, yAxis = 80.7979 } },
             };
-
-
 
         /// <summary>
         /// Sweet heart takes this away!
@@ -143,7 +140,6 @@ namespace VedAstro.Library
             }
 
         }
-
 
         /// <summary>
         /// Given a time will name all the house boxes

@@ -91,6 +91,8 @@
         public const string TaskEditor = "/TaskEditor";
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";
         public const string About = "/About";
+        public const string PrivacyPolicy = "/PrivacyPolicy";
+        public const string TermsOfService = "/TermsOfService";
         public const string Chat = "/Chat";
         public const string Payment = "/Payment";
         public const string Sponsor = "/Sponsor";

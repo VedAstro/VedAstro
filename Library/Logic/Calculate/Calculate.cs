@@ -12,6 +12,7 @@ using static VedAstro.Library.ZodiacName;
 using static VedAstro.Library.Ayanamsa;
 using System.Numerics;
 using ExCSS;
+using Newtonsoft.Json.Linq;
 
 
 namespace VedAstro.Library
@@ -380,6 +381,33 @@ namespace VedAstro.Library
 
         #region GENERAL
 
+
+        /// <summary>
+        /// All horoscope predictions as Alpaca Template ready for LoRA training in JSON
+        /// </summary>
+        public static async Task<List<JObject>> HoroscopePredictionAlpacaTemplateLoRA(Time birthTime)
+        {
+
+            //get list of horoscope data (file from wwwroot)
+            var horoscopeDataList = await Tools.GetHoroscopeDataList(URL.HoroscopeDataListFile);
+
+            var returnList = new List<JObject>();
+            foreach (var horoscopeData in horoscopeDataList)
+            {
+                JObject jObject = new JObject
+                {
+                    ["instruction"] = horoscopeData.Name.ToString(),
+                    ["input"] = "",
+                    ["output"] = horoscopeData.Description
+                };
+
+                returnList.Add(jObject);
+            }
+
+            return returnList;
+        }
+
+
         /// <summary>
         /// Given a birth time will calculate all predictions that match for given birth time and return the data
         /// </summary>
@@ -402,7 +430,7 @@ namespace VedAstro.Library
             var predictionList = await Tools.GetHoroscopePrediction(birthTime, URL.HoroscopeDataListFile);
 
             //take out only name
-            var namesOnly = predictionList.Select(x=>x.Name.ToString()).ToList();
+            var namesOnly = predictionList.Select(x => x.Name.ToString()).ToList();
 
             return namesOnly;
         }

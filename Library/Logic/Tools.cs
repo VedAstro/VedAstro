@@ -2784,6 +2784,15 @@ namespace VedAstro.Library
                         return rootPayloadJson;
                     }
 
+                case List<JObject> jObjectList:
+                    {
+
+                        var parsed = ListToJson(jObjectList);
+                        rootPayloadJson = new JProperty(dataName, parsed);
+
+                        return rootPayloadJson;
+                    }
+
                 case IList iList:
                     {
                         //convert list to comma separated string
@@ -2972,6 +2981,10 @@ namespace VedAstro.Library
                 else if (item is IToJson toJson)
                 {
                     arrayJson.Add(toJson.ToJson());
+                }
+                else if (item is JObject toJobject)
+                {
+                    arrayJson.Add(toJobject);
                 }
                 //do it normal string way
                 else

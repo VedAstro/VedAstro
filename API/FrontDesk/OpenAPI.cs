@@ -3,6 +3,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
+using Azure;
 
 
 namespace API
@@ -130,7 +131,7 @@ namespace API
             }
             return callList;
         }
-        
+
         /// <summary>
         /// Make call one by one for URL provided and return combined results
         /// </summary>
@@ -159,15 +160,15 @@ namespace API
             var calculator =
                 Tools.MethodNameToMethodInfo(calculatorName,
                     new[] { typeof(Calculate), typeof(CalculateKP) }); //get calculator name
-            var parameterTypes = calculator.GetParameters().Select(p => p.ParameterType).ToList();
+
+            //2 : CUSTOM AYANAMSA
+            fullParamString = ParseAndSetAyanamsa(fullParamString);
 
             //get inputed parameters
-            var rawOut = await ParseUrlParameters(fullParamString, parameterTypes);
+            var rawOut = await ParseUrlParameters(fullParamString, calculator);
             var parsedParamList = rawOut.Item1;
             var remainderParamString = rawOut.Item2; //remainder of chopped string
 
-            //2 : CUSTOM AYANAMSA
-            await ParseAndSetAyanamsa(remainderParamString);
 
             //3 : EXECUTE COMMAND
             object rawPlanetData;
@@ -216,15 +217,33 @@ namespace API
 
 
         /// <summary>
-        /// takes Ayanamsa from URL to sets it
+        /// takes out Ayanamsa from URL and returns remainder of URL
+        /// allows /Ayanamsa/Raman to be used anywhere in URL
         /// </summary>
-        private static async Task ParseAndSetAyanamsa(string remainderParamString)
+        private static string ParseAndSetAyanamsa(string fullParamString)
         {
             //if url contains word "ayanamsa" than process it
-            var isCustomAyanamsa = remainderParamString.Contains(nameof(Ayanamsa));
+            var isCustomAyanamsa = fullParamString.Contains(nameof(Ayanamsa));
             if (isCustomAyanamsa)
             {
-                VedAstro.Library.Calculate.Ayanamsa = (int)Tools.EnumFromUrl(remainderParamString);
+                //scan URL and take out ayanamsa and set it
+                var splitParamString = fullParamString.Split('/');
+                var ayanamsaLocation = Array.IndexOf(splitParamString, nameof(Ayanamsa));
+                var ayanamsaUrl = $"/{splitParamString[ayanamsaLocation]}/{splitParamString[ayanamsaLocation + 1]}";
+
+                //set ayanamsa
+                VedAstro.Library.Calculate.Ayanamsa = (int)Tools.EnumFromUrl(ayanamsaUrl);
+
+                //remove ayanamsa from URL
+                fullParamString = fullParamString.Replace(ayanamsaUrl, "");
+
+                return fullParamString;
+            }
+
+            //if no ayanamsa, then return as is
+            else
+            {
+                return fullParamString;
             }
         }
 
@@ -233,14 +252,74 @@ namespace API
         /// Reads URL data to instances
         /// returns parsed list and remained of chopped up URL for enum processing
         /// </summary>
-        private static async Task<(List<dynamic>, string)> ParseUrlParameters(string fullParamString, List<Type> parameterTypes)
+        private static async Task<(List<dynamic>, string)> ParseUrlParameters(string fullParamString, MethodInfo calculator)
         {
             //Based on the calculator method we prepare to cut the string into parameters as text
+            var allNeededParams = calculator.GetParameters().Select(p => p.ParameterType).ToList();
 
             //place to store ready params
-            var parsedParamList = new List<dynamic>(); //exact number as specified (performance)
-                                                       //cut the string based on parameter type
-            foreach (var parameterType in parameterTypes)
+            var parsedInputParamList = new List<dynamic>(); //exact number as specified (performance)
+                                                            //cut the string based on parameter type
+
+            //process 1 parameter at a time from start
+            foreach (var parameterType in allNeededParams)
+            {
+                //check if paramUrlString is empty, possible that last param is optional or invalid call
+                if (fullParamString == "//" || string.IsNullOrEmpty(fullParamString))
+                {
+                    goto EndCall;
+                }
+
+                var parsedParam = await ParseUrlParameter(parameterType);
+
+                //ACT 5:
+                //add to main list IF NOT AYANAMSA (used later for main final execution)
+                parsedInputParamList.Add(parsedParam);
+            }
+
+
+
+        //control comes here once all inputed from URL has been parsed
+        EndCall:
+
+            //add in optional missing parameters, since needed for final execution (only if missing save time)
+            if (parsedInputParamList.Count < allNeededParams.Count)
+            {
+                var parameters = calculator.GetParameters();
+                var args = new object[parameters.Length];
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    //if parameter is provided, use it
+                    if (i < parsedInputParamList.Count)
+                    {
+                        args[i] = parsedInputParamList[i];
+                    }
+                    //if no val provided but has default value, use that
+                    else if (parameters[i].HasDefaultValue)
+                    {
+                        args[i] = parameters[i].DefaultValue;
+                    }
+                    //let caller know failed
+                    else
+                    {
+                        throw new ArgumentException($"Parameter {parameters[i].Name} has no default value and no value was provided.");
+                    }
+                }
+
+
+                // send full list with missing params
+                return (args.ToList(), fullParamString);
+            }
+            //inputed params is complete, send as is
+            else { return (parsedInputParamList, fullParamString); }
+
+
+
+
+            //------LOCAL FUNCTIONS------
+
+            //note: placed inside to use same fullParamString 
+            async Task<dynamic> ParseUrlParameter(Type parameterType)
             {
                 //get inches to cut based on Type of cloth (ask the cloth aka type)
                 var nameOfField = nameof(IFromUrl.OpenAPILength);
@@ -302,13 +381,12 @@ namespace API
                     parsedParam = task.GetType().GetProperty("Result").GetValue(task, null);
                 }
 
-                //ACT 5:
-                //add to main list IF NOT AYANAMSA (used later for main final execution)
-                parsedParamList.Add(parsedParam);
+                return parsedParam;
             }
 
-            return (parsedParamList, fullParamString);
         }
+
+
 
 
     }

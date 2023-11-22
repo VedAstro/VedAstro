@@ -28,15 +28,15 @@ namespace VedAstro.Library
             return allHouses;
         }
 
-        public static ZodiacSign HouseZodiacSign(HouseName inputHouse, Time birthTime, int horaryNumber = 0)
+        public static ZodiacSign HouseZodiacSign(HouseName inputHouse, Time time, int horaryNumber = 0)
         {
             //if is horary use horary method
             var isHorary = horaryNumber != 0;
 
             //get house start longitudes for KP system
             var allHouseCuspsRaw = isHorary
-                                                        ? AllHouseCuspLongitudesHorary(birthTime, horaryNumber)
-                                                        : AllHouseCuspLongitudesKundali(birthTime);
+                                                        ? AllHouseCuspLongitudesHorary(time, horaryNumber)
+                                                        : AllHouseCuspLongitudesKundali(time);
 
             //get zodiac sign at house start longitude longitude
             var zodiacSignAtLong = ZodiacSignAtLongitude(allHouseCuspsRaw[inputHouse]);
@@ -45,7 +45,7 @@ namespace VedAstro.Library
 
         }
 
-        public static Constellation HouseConstellation(HouseName inputHouse, Time birthTime, int horaryNumber = 0)
+        public static Constellation HouseConstellation(HouseName inputHouse, Time time, int horaryNumber = 0)
         {
 
             //if is horary use horary method
@@ -53,8 +53,8 @@ namespace VedAstro.Library
 
             //get house start longitudes for KP system (horary or kundali)
             var allHouseCuspsRaw = isHorary
-                                    ? AllHouseCuspLongitudesKundali(birthTime)
-                                    : AllHouseCuspLongitudesHorary(birthTime, horaryNumber);
+                                    ? AllHouseCuspLongitudesKundali(time)
+                                    : AllHouseCuspLongitudesHorary(time, horaryNumber);
 
             //get Constellation at house start longitude
             var constellationAtLong = ConstellationAtLongitude(allHouseCuspsRaw[inputHouse]);
@@ -63,15 +63,15 @@ namespace VedAstro.Library
 
         }
 
-        public static PlanetName HouseSubLord(HouseName inputHouse, Time birthTime, int horaryNumber = 0)
+        public static PlanetName HouseSubLord(HouseName inputHouse, Time time, int horaryNumber = 0)
         {
             //if is horary use horary method
             var isHorary = horaryNumber != 0;
 
             //get house start longitudes for KP system
             var allHouseCuspsRaw = isHorary
-                ? AllHouseCuspLongitudesHorary(birthTime, horaryNumber)
-                : AllHouseCuspLongitudesKundali(birthTime);
+                ? AllHouseCuspLongitudesHorary(time, horaryNumber)
+                : AllHouseCuspLongitudesKundali(time);
 
             //get start long for inputed house
             var houseStartLong = allHouseCuspsRaw[inputHouse];
@@ -82,18 +82,18 @@ namespace VedAstro.Library
             return subLord;
         }
 
-        public static HouseName PlanetHouse(PlanetName inputPlanet, Time birthTime, int horaryNumber = 0)
+        public static HouseName PlanetHouse(PlanetName inputPlanet, Time time, int horaryNumber = 0)
         {
             //if is horary use horary method
             var isHorary = horaryNumber != 0;
 
             // Get the starting longitudes of all houses.
             var cusps = isHorary
-                ? AllHouseCuspLongitudesHorary(birthTime, horaryNumber)
-                : AllHouseCuspLongitudesKundali(birthTime);
+                ? AllHouseCuspLongitudesHorary(time, horaryNumber)
+                : AllHouseCuspLongitudesKundali(time);
 
             // Calculate the Nirayana longitude of the current planet.
-            var planetLongitude = PlanetNirayanaLongitude(inputPlanet, birthTime);
+            var planetLongitude = PlanetNirayanaLongitude(inputPlanet, time);
 
             // Find the first house that contains the current planet.
             var houseForPlanet = House.AllHouses.FirstOrDefault(house => IsPlanetInHouseKP(cusps, planetLongitude, house));
@@ -101,15 +101,15 @@ namespace VedAstro.Library
             return houseForPlanet;
         }
 
-        public static PlanetName HouseLordOfZodiacSign(HouseName inputHouse, Time birthTime, int horaryNumber = 0)
+        public static PlanetName HouseLordOfZodiacSign(HouseName inputHouse, Time time, int horaryNumber = 0)
         {
             //if is horary use horary method
             var isHorary = horaryNumber != 0;
 
             //get house start longitudes for KP system
             var allHouseCuspsRaw = isHorary
-                                                        ? AllHouseCuspLongitudesHorary(birthTime, horaryNumber)
-                                                        : AllHouseCuspLongitudesKundali(birthTime);
+                                                        ? AllHouseCuspLongitudesHorary(time, horaryNumber)
+                                                        : AllHouseCuspLongitudesKundali(time);
 
             //get start long for inputed house
             var houseStartLong = allHouseCuspsRaw[inputHouse];
@@ -152,51 +152,15 @@ namespace VedAstro.Library
             return houseList;
         }
 
-        public static PlanetName PlanetLordOfConstellation(PlanetName inputPlanet, Time birthTime)
-        {
-            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
-            // of the current planet at the birth time.
-            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, birthTime);
-
-            // The value is the lord of the constellation at the planet's longitude
-            var value = LordOfConstellation(ConstellationAtLongitude(nirayanaDegrees).GetConstellationName());
-
-            // Add the key-value pair to the dictionary
-            return value;
-        }
-
-        public static PlanetName PlanetLordOfZodiacSign(PlanetName inputPlanet, Time birthTime)
-        {
-            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
-            // of the current planet at the birth time.
-            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, birthTime);
-
-            var zodiacSign = ZodiacSignAtLongitude(nirayanaDegrees);
-
-            return LordOfZodiacSign(zodiacSign.GetSignName());
-
-        }
-
-        public static PlanetName PlanetSubLord(PlanetName inputPlanet, Time birthTime)
-        {
-            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
-            // of the current planet at the birth time.
-            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, birthTime);
-
-            var subLord = SubLordAtPlanetLongitude(nirayanaDegrees);
-
-            return subLord;
-        }
-
-        public static PlanetName HouseLordOfConstellation(HouseName inputHouse, Time birthTime, int horaryNumber = 0)
+        public static PlanetName HouseLordOfConstellation(HouseName inputHouse, Time time, int horaryNumber = 0)
         {
             //if is horary use horary method
             var isHorary = horaryNumber != 0;
 
             //get house start longitudes for KP system
             var allHouseCuspsRaw = isHorary
-                ? AllHouseCuspLongitudesHorary(birthTime, horaryNumber)
-                : AllHouseCuspLongitudesKundali(birthTime);
+                ? AllHouseCuspLongitudesHorary(time, horaryNumber)
+                : AllHouseCuspLongitudesKundali(time);
 
             //get start long for inputed house
             var houseStartLong = allHouseCuspsRaw[inputHouse];
@@ -207,21 +171,21 @@ namespace VedAstro.Library
             return value;
         }
 
-        public static List<PlanetName> PlanetsInHouse(HouseName inputHouse, Time birthTime, int horaryNumber = 0)
+        public static List<PlanetName> PlanetsInHouse(HouseName inputHouse, Time time, int horaryNumber = 0)
         {
             //if is horary use horary method
             var isHorary = horaryNumber != 0;
 
             // Get the starting longitudes of all houses.
             var cusps = isHorary
-                ? AllHouseCuspLongitudesHorary(birthTime, horaryNumber)
-                : AllHouseCuspLongitudesKundali(birthTime);
+                ? AllHouseCuspLongitudesHorary(time, horaryNumber)
+                : AllHouseCuspLongitudesKundali(time);
 
             // Find the first house that contains the current planet.
             var houseForPlanet = PlanetName.All9Planets.Where(planet =>
             {
                 // Calculate the Nirayana longitude of the current planet.
-                var planetLongitude = PlanetNirayanaLongitude(planet, birthTime);
+                var planetLongitude = PlanetNirayanaLongitude(planet, time);
 
                 return IsPlanetInHouseKP(cusps, planetLongitude, inputHouse);
             }).ToList();
@@ -229,10 +193,43 @@ namespace VedAstro.Library
             return houseForPlanet;
         }
 
+        public static PlanetName PlanetLordOfConstellation(PlanetName inputPlanet, Time time)
+        {
+            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
+            // of the current planet at the birth time.
+            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, time);
 
+            // The value is the lord of the constellation at the planet's longitude
+            var value = LordOfConstellation(ConstellationAtLongitude(nirayanaDegrees).GetConstellationName());
+
+            // Add the key-value pair to the dictionary
+            return value;
+        }
+
+        public static PlanetName PlanetLordOfZodiacSign(PlanetName inputPlanet, Time time)
+        {
+            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
+            // of the current planet at the birth time.
+            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, time);
+
+            var zodiacSign = ZodiacSignAtLongitude(nirayanaDegrees);
+
+            return LordOfZodiacSign(zodiacSign.GetSignName());
+
+        }
+
+        public static PlanetName PlanetSubLord(PlanetName inputPlanet, Time time)
+        {
+            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
+            // of the current planet at the birth time.
+            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, time);
+
+            var subLord = SubLordAtPlanetLongitude(nirayanaDegrees);
+
+            return subLord;
+        }
 
         #endregion
-
 
         #region KP SPECIFIC CALCS
 
@@ -754,76 +751,48 @@ namespace VedAstro.Library
         /// Moves Lagna to a Long Degree (the new Ascendant and gets new KP (Placidus) House Cusps 
         /// using Swiss Epehemris swe_houses_ex
         /// </summary>
-        public static Dictionary<HouseName, Angle> MoveLagnaToSpecificLongGetNewHouseCusps(int Ayanamsa, Time time,
-            int horNum, double tropAsc)
+        public static Dictionary<HouseName, Angle> MoveLagnaToSpecificLongGetNewHouseCusps(Time time, double rotateDegrees)
         {
-            //CACHE MECHANISM
-            return CacheManager.GetCache(
-                new CacheKey(nameof(MoveLagnaToSpecificLongGetNewHouseCusps), Ayanamsa, time, horNum, tropAsc),
-                _getNewCuspLongitudes);
+            //get location at place of time
+            var location = time.GetGeoLocation();
+
+            SwissEph swissEph = new SwissEph();
+
+            double[] cusps = new double[13];
+
+            //we have to supply ascmc to make the function run
+            double[] ascmc = new double[10];
+
+            //set ayanamsa
+            swissEph.swe_set_sid_mode(Calculate.Ayanamsa, 0, 0);
 
 
-            //UNDERLYING FUNCTION
-            Dictionary<HouseName, Angle> _getNewCuspLongitudes()
+            var eps = Calculate.EclipticObliquity(time);
+
+            var armc = ConvertTropicalAscToARMC(rotateDegrees, eps, location.Latitude(), time);
+
+            var lat = location.Latitude();
+
+            swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
+
+            //base cusps created - now repeat now with provided Long Lagna needs to be moved to
+            armc = ConvertTropicalAscToARMC(rotateDegrees, eps, location.Latitude(), time);
+            swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
+
+
+            //Create Dictionary for return
+            var housesDictionary = new Dictionary<HouseName, Angle>();
+            foreach (var house in House.AllHouses)
             {
-                //get location at place of time
-                var location = time.GetGeoLocation();
-
-                //Convert DOB to Julian Day
-                var jul_day_UT = TimeToJulianDay(time);
-
-
-                SwissEph swissEph = new SwissEph();
-
-                double[] cusps = new double[13];
-
-                //we have to supply ascmc to make the function run
-                double[] ascmc = new double[10];
-
-                //set ayanamsa
-                swissEph.swe_set_sid_mode(Ayanamsa, 0, 0);
-
-                //CPJ - set this flag and use the swe_houses_ex method - it returns SIDEREAL KP Longitudes diretly.
-                //No need for additional step of deducting ayanmsa from Sayana Longitudes
-                var iflag = SwissEph.SEFLG_SIDEREAL;
-
-                //NOTE:
-                //if you use P which is Placidus there is a high chances you will get unequal houses from the SwissEph library itself...
-                // you have to use V - 'V'Vehlow equal (Asc. in middle of house 1)
-                // swissEph.swe_houses(jul_day_UT, location.Latitude(), location.Longitude(), 'P', cusps, ascmc);
-                // swissEph.swe_houses_ex(jul_day_UT, iflag, location.Latitude(), location.Longitude(), 'P', cusps, ascmc);
-                //we only return cusps, cause that is what is used for now
-
-                var eps = Calculate.EclipticObliquity(time);
-
-                var tropAscFromHorNum = HoraryNumberTropicalAsc(horNum);
-                var armc = ConvertTropicalAscToARMC(tropAscFromHorNum, eps, location.Latitude(), time);
-
-                var lat = location.Latitude();
-
-                Console.WriteLine("armc {0} eps {1} tropAsc {2} lat {3}", armc, eps, tropAscFromHorNum, lat);
-
-                swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
-
-                //base cusps created - now repeat now with provided Long Lagna needs to be moved to
-                armc = ConvertTropicalAscToARMC(tropAsc, eps, location.Latitude(), time);
-                swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
-
-
-                //Create Dictionary for return
-                var housesDictionary = new Dictionary<HouseName, Angle>();
-                foreach (var house in House.AllHouses)
-                {
-                    //start of house longitude of 0-360
-                    var hseLong = cusps[(int)house];
-                    housesDictionary.Add(house, Angle.FromDegrees(hseLong));
-                }
-
-                //return cusps;
-                return housesDictionary;
+                //start of house longitude of 0-360
+                var hseLong = cusps[(int)house];
+                housesDictionary.Add(house, Angle.FromDegrees(hseLong));
             }
-        }
 
+            //return cusps;
+            return housesDictionary;
+
+        }
 
         public static ZodiacSign HouseSignName(double houseCuspStartDeg)
         {
@@ -831,7 +800,7 @@ namespace VedAstro.Library
             return hZSign;
         }
 
-        public static Constellation HouseConstellatoonName(double houseCuspStartDeg)
+        public static Constellation HouseConstellationName(double houseCuspStartDeg)
         {
             var hConstellation = Calculate.ConstellationAtLongitude(Angle.FromDegrees(houseCuspStartDeg));
             return hConstellation;

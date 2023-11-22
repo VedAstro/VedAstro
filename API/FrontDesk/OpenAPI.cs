@@ -38,13 +38,13 @@ namespace API
             try
             {
                 //0 : LOG CALL : used later for throttle limit
-                var callLog = await APILogger.Visit(incomingRequest);
+                //var callLog = await APILogger.Visit(incomingRequest);
 
                 //process call smartly
                 var rawPlanetData = await HandleOpenAPICalls(calculatorName, fullParamString);
 
                 // Control API overload
-                await APITools.AutoControlOpenAPIOverload(callLog);
+                //await APITools.AutoControlOpenAPIOverload(callLog);
 
                 // Send data to the caller
                 // Some calculators return SVG & binary data, so need to send to caller directly

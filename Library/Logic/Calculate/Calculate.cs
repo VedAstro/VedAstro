@@ -5528,17 +5528,29 @@ namespace VedAstro.Library
             {
                 //This would request sidereal positions calculated using the Swiss Ephemeris.
                 int iflag = SwissEph.SEFLG_SIDEREAL;
+                //int iflag = SwissEph.SEFLG_NONUT;
                 double jul_day_ET;
                 SwissEph ephemeris = new SwissEph();
 
                 // Convert DOB to ET
                 jul_day_ET = TimeToEphemerisTime(time);
-
+                
                 //set ayanamsa
                 ephemeris.swe_set_sid_mode(Ayanamsa, 0, 0);
-                var ayanamsaDegree = ephemeris.swe_get_ayanamsa(jul_day_ET);
 
-                return Angle.FromDegrees(ayanamsaDegree);
+
+
+                //var ayanamsaDegree = ephemeris.swe_get_ayanamsa(jul_day_ET);
+                //return Angle.FromDegrees(ayanamsaDegree);
+
+                //USE this newer method in Swiss Eph intrduced in Ver 2.0. See Swiss Eph for Documentation
+                //CPJ Add/Change Nov 22 2023 because Ayanamsa not precise compared to other software products
+                //this provides higher precision Ayanamsa
+                string serr = "";
+                double daya;
+                var ayanamsaDegree = ephemeris.swe_get_ayanamsa_ex(jul_day_ET, iflag, out daya, ref serr);
+
+                return Angle.FromDegrees(daya);
 
             }
 

@@ -1189,7 +1189,6 @@ namespace VedAstro.Library
 
             Console.WriteLine("================== KP Houses and Planets - From SWISS EPH Modified Method ===================");
 
-
             var cusps = new Dictionary<HouseName, Angle>();
             if (horNum == 0)
             {
@@ -1210,11 +1209,16 @@ namespace VedAstro.Library
 
                 var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(cuspDMS);
 
-                Console.WriteLine("House{0} Start Longitude {1} in DMS: {2} Deg {3} Mins {4} Secs; Zodiac {5} {6} Deg {7} Mins {8} Secs",
-                    cnt, h,
+                Console.WriteLine("Long {0} in DMS: {1} Deg {2} Mins {3} Secs; Zodiac {4} {5} Deg {6} Mins {7} Secs",
+                    h,
                     cuspDMS.Degrees, cuspDMS.Minutes, cuspDMS.Seconds, zodiacSignAtLong.GetSignName(),
                     zodiacSignAtLong.GetDegreesInSign().Degrees, zodiacSignAtLong.GetDegreesInSign().Minutes,
                     zodiacSignAtLong.GetDegreesInSign().Seconds);
+
+                Console.WriteLine("SignL: {0}, StarL: {1}, SubL: {2}",
+                    LordOfZodiacSign(zodiacSignAtLong.GetSignName()),
+                    LordOfConstellation(ConstellationAtLongitude(cuspDMS).GetConstellationName()),
+                    SubLordAtPlanetLongitude(cuspDMS));
 
                 cnt++;
 
@@ -1345,6 +1349,7 @@ namespace VedAstro.Library
                 cusps = AllHouseCuspLongitudesHorary(birthtime, horNum);
             }
 
+            Console.WriteLine("");
             Console.WriteLine("Processing Planet Data now....");
             //Process Planet Data
             foreach (PlanetName planet in allPlanets)
@@ -1417,7 +1422,7 @@ namespace VedAstro.Library
                     {
                         //Console.WriteLine("Arrived in teh else conditon for 12th house, no next cusp available to compare");
                         
-                        Console.WriteLine("planet degrees {0}; cusp x degrees {1} ", planetNirayanaDegrees.TotalDegrees, cusps[(HouseName)x].TotalDegrees);
+                        //Console.WriteLine("planet degrees {0}; cusp x degrees {1} ", planetNirayanaDegrees.TotalDegrees, cusps[(HouseName)x].TotalDegrees);
 
                         var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(Angle.FromDegrees(planetNirayanaDegrees.TotalDegrees));
                         var lordOfZodiac = Calculate.LordOfZodiacSign(zodiacSignAtLong.GetSignName());
@@ -1437,7 +1442,11 @@ namespace VedAstro.Library
                     }
                     x++;
                 }
+                
+                
             }
+            Console.WriteLine("Processing Planet Data Complete....");
+            Console.WriteLine("");
             return planetTableData;
         }
 

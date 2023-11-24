@@ -125,7 +125,7 @@ namespace VedAstro.Library
             {
                 //extract the data out
                 //store planets, houses & signs related to result
-                //todo related body data needs to pumped into slice
+                //TODO related body data needs to pumped into slice
                 var RelatedBody = predictionData.RelatedBody;
 
                 //override event nature from xml if specified
@@ -177,7 +177,13 @@ namespace VedAstro.Library
                 var startTime = startSlice.Time;
                 var endTime = eventSliceList[range.End].Time;
 
-                var convertedEvent = new Event(startSlice.Name, startSlice.Nature, startSlice.Description, startTime, endTime);
+                //NOTE: this should be the only place event is created
+
+                //TODO : temp hack to add in tags into events for easy sorting later
+
+                var tags = GetTagsByEventName(startSlice.Name);
+
+                var convertedEvent = new Event(startSlice.Name, startSlice.Nature, startSlice.Description, startTime, endTime, tags);
 
                 return convertedEvent;
             }
@@ -333,8 +339,9 @@ namespace VedAstro.Library
                     newStartTime = new Time(startStdTime, geoLocation);
 
                     //create a new event
-                    newEvent = new Event(name, eventNature,
-                        description, newStartTime, newEndTime);
+                    //todo temp
+                    var tags2 = EventManager.GetTagsByEventName(name);
+                    newEvent = new Event(name, eventNature, description, newStartTime, newEndTime, tags2);
 
                     //place the event inside the return list
                     splitedEventList.Add(newEvent);
@@ -352,8 +359,9 @@ namespace VedAstro.Library
                 newStartTime = new Time(startStdTime, geoLocation);
 
                 //create a new event
-                newEvent = new Event(name, eventNature,
-                    description, newStartTime, endTime); //use the original end time
+                //todo temp
+                var tags = EventManager.GetTagsByEventName(name);
+                newEvent = new Event(name, eventNature, description, newStartTime, endTime, tags); //use the original end time
 
                 //place the event inside the return list
                 splitedEventList.Add(newEvent);
@@ -433,6 +441,18 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Gets all tags for a given event name
+        /// </summary>
+        public static List<EventTag> GetTagsByEventName(EventName eventName)
+        {
+
+            //filter IN event data list by tag
+            var tags = EventDataList.Find(eventData => eventData.Name == eventName).EventTags;
+
+            return tags;
+        }
+
+        /// <summary>
         /// Parallel already built in
         /// </summary>
         public static async Task<List<Event>> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, GeoLocation getBirthLocation, Person inputPerson, List<EventTag> inputedEventTags)
@@ -467,15 +487,20 @@ namespace VedAstro.Library
 
         public static List<Event> CalculateEventsForTag(double eventsPrecision, Time startTime, Time endTime, GeoLocation geoLocation, Person person, EventTag tag)
         {
-            
+
             //get all event data/types which has the inputed tag (FILTER)
             var eventDataListFiltered = EventManager.GetEventDataListByTag(tag);
 
             //start calculating events
             var eventList = EventManager.GetEventsInTimePeriod(startTime.GetStdDateTimeOffset(), endTime.GetStdDateTimeOffset(), geoLocation, person, eventsPrecision, eventDataListFiltered);
 
+            //remove all events with 0 duration
+            var cleaned = from dasaEvent in eventList
+                          where dasaEvent.DurationMin > 0
+                          select dasaEvent;
+
             //sort the list by time before sending view
-            var orderByAscResult = from dasaEvent in eventList
+            var orderByAscResult = from dasaEvent in cleaned
                                    orderby dasaEvent.StartTime.GetStdDateTimeOffset()
                                    select dasaEvent;
 

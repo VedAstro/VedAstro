@@ -129,7 +129,10 @@ namespace VedAstro.Library
             return eventX;
         }
         
-        private static List<EventTag> GetEventTags(string rawTags)
+        /// <summary>
+        /// Handles nulls nicely
+        /// </summary>
+        public static List<EventTag> GetEventTags(string rawTags)
         {
             if (string.IsNullOrEmpty(rawTags))
             {

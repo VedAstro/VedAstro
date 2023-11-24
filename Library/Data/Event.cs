@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
+using static VedAstro.Library.PlanetName;
 
 
 //█▄█ █▀█ █░█ ▀ █▀█ █▀▀   ▄▀█ █░░ █░█░█ ▄▀█ █▄█ █▀   █░█░█ █ ▀█▀ █░█   █▄█ █▀█ █░█ █▀█   █▀ █░█░█ █▀▀ █▀▀ ▀█▀
@@ -18,13 +21,13 @@ namespace VedAstro.Library
     /// <summary>
     /// Represents a period of time "Event" with start, end time and data related
     /// </summary>
-    public class Event : IToXml
+    public class Event : IToXml, IToJson
     {
         /// <summary>
         /// Returns an Empty Time instance meant to be used as null/void filler
         /// for debugging and generating empty dasa svg lines
         /// </summary>
-        public static Event Empty = new Event(EventName.Empty, EventNature.Empty, "", Time.Empty, Time.Empty);
+        public static Event Empty = new Event(EventName.Empty, EventNature.Empty, "", Time.Empty, Time.Empty, new List<EventTag>());
 
         //FIELDS
         private readonly EventName _name;
@@ -32,10 +35,11 @@ namespace VedAstro.Library
         private readonly EventNature _nature;
         private readonly Time _startTime;
         private readonly Time _endTime;
+        private readonly List<EventTag> _eventTags;
 
 
         //CTOR
-        public Event(EventName name, EventNature nature, string description, Time startTime, Time endTime)
+        public Event(EventName name, EventNature nature, string description, Time startTime, Time endTime, List<EventTag> eventTags)
         {
             //initialize fields
             _name = name;
@@ -43,6 +47,7 @@ namespace VedAstro.Library
             _description = HttpUtility.HtmlEncode(description); //HTML character safe
             _startTime = startTime;
             _endTime = endTime;
+            _eventTags = eventTags;
         }
 
 
@@ -54,6 +59,7 @@ namespace VedAstro.Library
         public EventNature Nature => _nature;
         public Time StartTime => _startTime;
         public Time EndTime => _endTime;
+        public List<EventTag> EventTags => _eventTags;
 
         /// <summary>
         /// total duration of event in minutes
@@ -134,7 +140,6 @@ namespace VedAstro.Library
             return $"{GetName()} - {_nature} - {_startTime} - {_endTime} - {GetDurationMinutes()}";
         }
 
-
         /// <summary>
         /// Gets the duration of the event from start to end time
         /// </summary>
@@ -155,13 +160,11 @@ namespace VedAstro.Library
             return difference.TotalHours;
         }
 
-
         /// <summary>
         /// The root element is expected to be Person
         /// Note: Special method done to implement IToXml
         /// </summary>
         public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
-
 
         /// <summary>
         /// Convert an XML representation of Event to an Event instance
@@ -216,14 +219,16 @@ namespace VedAstro.Library
                 var endTimeXml = eventXml.Element("EndTime").Element("Time");
                 var endTime = Time.FromXml(endTimeXml);
 
+                // Get the list of tags, split by comma and parse each tag
+                var tagString = eventXml.Element("Tag")?.Value;
+                var tagList = EventData.GetEventTags(tagString);
 
-                var parsedPerson = new Event(name, nature, description, startTime, endTime);
+                var parsedPerson = new Event(name, nature, description, startTime, endTime, tagList);
 
                 return parsedPerson;
 
             }
         }
-
 
         /// <summary>
         /// converts the current instance of Event to its XML version
@@ -315,6 +320,92 @@ namespace VedAstro.Library
             //return to caller
             return houseList;
         }
+
+
+
+        #region JSON SUPPORT
+
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
+
+        public JToken ToJson()
+        {
+            var temp = new JObject();
+            temp["Name"] = this.Name.ToString();
+            temp["Nature"] = this.Name.ToString();
+            temp["Description"] = this.Name.ToString();
+            temp["StartTime"] = this.StartTime.ToJson();
+            temp["EndTime"] = this.EndTime.ToJson();
+
+            return temp;
+        }
+
+        /// <summary>
+        /// Given a json list of person will convert to instance
+        /// used for transferring between server & client
+        /// </summary>
+        public static List<Event> FromJsonList(JToken personList)
+        {
+            //if null empty list please
+            if (personList == null) { return new List<Event>(); }
+
+            var returnList = new List<Event>();
+
+            foreach (var personJson in personList)
+            {
+                returnList.Add(Event.FromJson(personJson));
+            }
+
+            return returnList;
+        }
+
+        public static JArray ToJsonList(List<Event> eventList)
+        {
+            var jsonList = new JArray();
+
+            foreach (var eventInstance in eventList)
+            {
+                jsonList.Add(eventInstance.ToJson());
+            }
+
+            return jsonList;
+        }
+
+        public static Event FromJson(JToken planetInput)
+        {
+            //if null return empty, end here
+            if (planetInput == null) { return Event.Empty; }
+
+            try
+            {
+                var nameStr = planetInput["Name"].Value<string>();
+                var name = (EventName)Enum.Parse(typeof(EventName), nameStr);
+
+                var natureStr = planetInput["Nature"].Value<string>();
+                var nature = (EventNature)Enum.Parse(typeof(EventNature), natureStr);
+
+                var description = planetInput["Description"].Value<string>();
+                
+                var startTime = Time.FromJson(planetInput["StartTime"]);
+                var endTime = Time.FromJson(planetInput["EndTime"]);
+
+                // Get the list of tags, split by comma and parse each tag
+                var tagString = planetInput["Tag"]?.Value<string>();
+                var tagList = EventData.GetEventTags(tagString);
+
+                var parsedHoroscope = new Event(name, nature, description, startTime, endTime, tagList);
+
+                return parsedHoroscope;
+            }
+            catch (Exception e)
+            {
+                LibLogger.Error($"Failed to parse:\n{planetInput.ToString()}");
+
+                return Event.Empty;
+            }
+
+        }
+
+        #endregion
 
 
     }

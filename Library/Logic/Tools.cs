@@ -2767,7 +2767,8 @@ namespace VedAstro.Library
                         //converts into JSON list with property names
                         //NOTE: uses back this AnyToJSON to convert nested types
                         var parsed = APIFunctionResult.ToJsonList(apiList);
-                        return parsed;
+                        rootPayloadJson = new JProperty(dataName, parsed);
+                        return rootPayloadJson;
                     }
 
                 case List<HoroscopePrediction> apiList:
@@ -2780,7 +2781,6 @@ namespace VedAstro.Library
                     {
                         var parsed = PlanetName.ToJsonList(planetList);
                         rootPayloadJson = new JProperty(dataName, parsed);
-
                         return rootPayloadJson;
                     }
 
@@ -2794,12 +2794,12 @@ namespace VedAstro.Library
                     }
 
                 case List<DasaEvent> dasaEventList:
-                {
-                    var parsed = DasaEvent.ToJsonList(dasaEventList);
-                    rootPayloadJson = new JProperty(dataName, parsed);
+                    {
+                        var parsed = DasaEvent.ToJsonList(dasaEventList);
+                        rootPayloadJson = new JProperty(dataName, parsed);
 
-                    return rootPayloadJson;
-                }
+                        return rootPayloadJson;
+                    }
 
                 case IList iList:
                     {

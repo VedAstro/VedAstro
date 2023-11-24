@@ -13,6 +13,7 @@ using static VedAstro.Library.Ayanamsa;
 using System.Numerics;
 using ExCSS;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 
 namespace VedAstro.Library
@@ -463,7 +464,9 @@ namespace VedAstro.Library
                 //scan for end time given event data
                 var eventEndTime = Calculate.EventEndTime(birthTime, checkTime, eventData, precisionInHours);
 
-                var finalEvent = new Event(eventData.Name, eventData.Nature, eventData.Description, eventStartTime, eventEndTime);
+                //TODO: temp
+                var tags = EventManager.GetTagsByEventName(eventData.Name);
+                var finalEvent = new Event(eventData.Name, eventData.Nature, eventData.Description, eventStartTime, eventEndTime, tags);
 
                 return finalEvent;
             }
@@ -7847,17 +7850,24 @@ namespace VedAstro.Library
         /// in nice JSON table format
         /// You can also set how many levels of dasa you want to calculate, default is 6
         /// Accuracy set to 24 hours
+        /// 7 Levels : Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
         /// </summary>
-        public static async Task<List<Event>> DasaPeriods(Time birthTime, Time startTime, Time endTime, int levels = 6)
+        public static async Task<List<DasaEvent>> DasaPeriods(Time birthTime, int levels = 4, int scanYears = 120)
         {
+
+            //based on scan years, set start & end time
+            Time startTime = birthTime;
+            Time endTime = birthTime.AddYears(scanYears);
+
             //# set how accurately the start & end time of each event is calculated
             //# exp: setting 1 hour, means given in a time range of 1 day, it will be checked 24 times 
-            var precisionInHours = 24;
+            var precisionInHours = 504;
 
             //set what dasa levels to include based on input level
             var tagList = new List<EventTag>
             {
-                EventTag.PD1,EventTag.PD2, EventTag.PD3, EventTag.PD4,EventTag.PD5, //dasa, antar, pratuantar, prana, sookshma
+                //Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
+                EventTag.PD1,EventTag.PD2, EventTag.PD3, EventTag.PD4, 
             };
 
             // TEMP hack to place time in Person (wrapped) 
@@ -7870,8 +7880,20 @@ namespace VedAstro.Library
                                                                         birthTime.GetGeoLocation(),
                                                                         johnDoe,
                                                                         tagList);
+            
 
-            return eventList;
+            //convert to Dasa Events
+            var result = new List<DasaEvent>();
+            foreach (var e in eventList)
+            {
+                //cast to dasa event
+                var dasaEvent = new DasaEvent(e);
+
+                //add to list
+                result.Add(dasaEvent);
+            }
+
+            return result;
 
         }
 

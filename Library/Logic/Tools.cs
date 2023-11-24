@@ -2793,6 +2793,14 @@ namespace VedAstro.Library
                         return rootPayloadJson;
                     }
 
+                case List<DasaEvent> dasaEventList:
+                {
+                    var parsed = DasaEvent.ToJsonList(dasaEventList);
+                    rootPayloadJson = new JProperty(dataName, parsed);
+
+                    return rootPayloadJson;
+                }
+
                 case IList iList:
                     {
                         //convert list to comma separated string
@@ -3549,6 +3557,30 @@ namespace VedAstro.Library
             return false;
         }
 
+
+        /// <summary>
+        /// "JupiterSunPD3" --> "Jupiter"
+        /// </summary>
+        public static string GetFirstCamelCaseWord(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return string.Empty;
+            }
+            var words = new List<string>();
+            var word = new StringBuilder();
+            foreach (var ch in input)
+            {
+                if (char.IsUpper(ch) && word.Length > 0)
+                {
+                    words.Add(word.ToString());
+                    word.Clear();
+                }
+                word.Append(ch);
+            }
+            words.Add(word.ToString());
+            return words.FirstOrDefault();
+        }
 
     }
 

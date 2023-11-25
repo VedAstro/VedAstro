@@ -106,6 +106,27 @@ namespace VedAstro.Library
             }
         }
 
+        /// <summary>
+        /// Planet lord of the parent sub dasa/dasa
+        /// </summary>
+        public PlanetName ParentDasaLord
+        {
+            get
+            {
+                //try get 2nd word as planet name, else get second word
+                var stringName = sourceEvent.Name.ToString();
+                var planetName = Tools.GetCamelCaseWord(stringName, 1);
+
+                //try parse planet name, if fail will return empty Planet
+                var parsed = PlanetName.Parse(planetName);
+
+                //not found, return empty
+                return parsed;
+            }
+        }
+
+        public Event SourceEvent => sourceEvent;
+
 
         #region JSON SUPPORT
 

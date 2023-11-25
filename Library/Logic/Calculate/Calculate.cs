@@ -5537,7 +5537,7 @@ namespace VedAstro.Library
 
                 // Convert DOB to ET
                 jul_day_ET = TimeToEphemerisTime(time);
-                
+
                 //set ayanamsa
                 ephemeris.swe_set_sid_mode(Ayanamsa, 0, 0);
 
@@ -7852,7 +7852,66 @@ namespace VedAstro.Library
         /// Accuracy set to 24 hours
         /// 7 Levels : Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
         /// </summary>
-        public static async Task<List<DasaEvent>> DasaPeriods(Time birthTime, int levels = 4, int scanYears = 120)
+        public static async Task<JObject> DasaPeriods(Time birthTime, int levels = 4, int scanYears = 120)
+        {
+            //based on scan years, set start & end time
+            Time startTime = birthTime;
+            Time endTime = birthTime.AddYears(scanYears);
+
+            //# set how accurately the start & end time of each event is calculated
+            //# exp: setting 1 hour, means given in a time range of 1 day, it will be checked 24 times 
+            var precisionInHours = 504;
+
+            //set what dasa levels to include based on input level
+            var tagList = new List<EventTag>
+            {
+                //Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
+                EventTag.PD1,EventTag.PD2, EventTag.PD3, EventTag.PD4,
+            };
+
+            // TEMP hack to place time in Person (wrapped) 
+            var johnDoe = new Person("", birthTime, Gender.Empty);
+
+            //do calculation (heavy computation)
+            List<Event> eventList = await EventManager.CalculateEvents(precisionInHours,
+                                                                        startTime,
+                                                                        endTime,
+                                                                        birthTime.GetGeoLocation(),
+                                                                        johnDoe,
+                                                                        tagList);
+
+
+
+            //convert to Dasa Events
+            var dasaEventList = new List<DasaEvent>();
+            foreach (var e in eventList)
+            {
+                //cast to dasa event
+                var dasaEvent = new DasaEvent(e);
+
+                //add to list
+                dasaEventList.Add(dasaEvent);
+            }
+
+
+            //format raw events into nested JSON format
+            var finalJson = new JObject();
+
+            //get all PD1 and print into as level 1
+            var pD1EventList = dasaEventList.FindAll(dasaEvt => dasaEvt.DasaLevel == 1);
+            foreach (var evt in pD1EventList)
+            {
+
+                JObject durationObject = new JObject { { "Duration", evt.Duration } };
+                JProperty jProp = new JProperty(evt.PlanetLord.ToString(), durationObject);
+                finalJson.Add(jProp);
+
+            }
+
+            return finalJson;
+
+        }
+        public static async Task<List<DasaEvent>> DasaPeriodsOld(Time birthTime, int levels = 4, int scanYears = 120)
         {
 
             //based on scan years, set start & end time
@@ -7867,7 +7926,7 @@ namespace VedAstro.Library
             var tagList = new List<EventTag>
             {
                 //Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
-                EventTag.PD1,EventTag.PD2, EventTag.PD3, EventTag.PD4, 
+                EventTag.PD1,EventTag.PD2, EventTag.PD3, EventTag.PD4,
             };
 
             // TEMP hack to place time in Person (wrapped) 
@@ -7880,7 +7939,7 @@ namespace VedAstro.Library
                                                                         birthTime.GetGeoLocation(),
                                                                         johnDoe,
                                                                         tagList);
-            
+
 
             //convert to Dasa Events
             var result = new List<DasaEvent>();

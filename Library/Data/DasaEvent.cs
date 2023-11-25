@@ -48,7 +48,7 @@ namespace VedAstro.Library
         /// dasa name has to be intelligently converted to classic dasa name
         /// exp: "JupiterSunPD3" -> "Jupiter Antaram" 
         /// </summary>
-        private static string ConvertToClassicDasaName(Event inputEvent)
+        private string ConvertToClassicDasaName(Event inputEvent)
         {
             var newName = "";
 
@@ -62,13 +62,7 @@ namespace VedAstro.Library
 
             //based on PD tag set the name of sub dasa
             //Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
-            if (inputEvent.EventTags.Contains(EventTag.PD1)) { newName += "Dasa"; }
-            if (inputEvent.EventTags.Contains(EventTag.PD2)) { newName += "Bhukti"; }
-            if (inputEvent.EventTags.Contains(EventTag.PD3)) { newName += "Antaram"; }
-            if (inputEvent.EventTags.Contains(EventTag.PD4)) { newName += "Sukshma"; }
-            if (inputEvent.EventTags.Contains(EventTag.PD5)) { newName += "Prana"; }
-            if (inputEvent.EventTags.Contains(EventTag.PD6)) { newName += "Avi Prana"; }
-            if (inputEvent.EventTags.Contains(EventTag.PD7)) { newName += "Viprana"; }
+            newName += this.DasaName;
 
             return newName;
         }
@@ -79,7 +73,7 @@ namespace VedAstro.Library
         /// Given a json list of person will convert to instance
         /// used for transferring between server & client
         /// </summary>
-        public  static List<DasaEvent> FromJsonList(JToken personList)
+        public static List<DasaEvent> FromJsonList(JToken personList)
         {
             //if null empty list please
             if (personList == null) { return new List<DasaEvent>(); }
@@ -94,7 +88,7 @@ namespace VedAstro.Library
             return returnList;
         }
 
-        public  static JArray ToJsonList(List<DasaEvent> eventList)
+        public static JArray ToJsonList(List<DasaEvent> eventList)
         {
             var jsonList = new JArray();
 
@@ -106,7 +100,7 @@ namespace VedAstro.Library
             return jsonList;
         }
 
-        public  static DasaEvent FromJson(JToken planetInput)
+        public static DasaEvent FromJson(JToken planetInput)
         {
 
             throw new NotImplementedException();
@@ -116,5 +110,67 @@ namespace VedAstro.Library
         #endregion
 
 
+        /// <summary>
+        /// based on PD tag will get dasa level number
+        /// </summary>
+        public int DasaLevel
+        {
+            get
+            {
+                //based on PD tag set the name of sub dasa
+                //Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
+                if (sourceEvent.EventTags.Contains(EventTag.PD1)) { return 1; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD2)) { return 2; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD3)) { return 3; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD4)) { return 4; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD5)) { return 5; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD6)) { return 6; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD7)) { return 7; }
+
+                throw new Exception("Dasa level not found");
+            }
+        }
+
+
+        /// <summary>
+        /// based on PD tag will get dasa level name
+        /// </summary>
+        public string DasaName
+        {
+            get
+            {
+                //based on PD tag set the name of sub dasa
+                //Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
+                if (sourceEvent.EventTags.Contains(EventTag.PD1)) { return "Dasa"; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD2)) { return "Bhukti"; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD3)) { return "Antaram"; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD4)) { return "Sukshma"; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD5)) { return "Prana"; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD6)) { return "Avi Prana"; }
+                if (sourceEvent.EventTags.Contains(EventTag.PD7)) { return "Viprana"; }
+
+                throw new Exception("Dasa level not found");
+            }
+        }
+
+        /// <summary>
+        /// Duration in hours
+        /// </summary>
+        public double Duration => sourceEvent.DurationHour;
+
+        /// <summary>
+        /// Name of the planet lord of the sub dasa/dasa
+        /// </summary>
+        public PlanetName PlanetLord
+        {
+            get
+            {
+                var planetName = Tools.GetFirstCamelCaseWord(sourceEvent.Name.ToString());
+
+                var parsed = PlanetName.Parse(planetName);
+
+                return parsed;
+            }
+        }
     }
 }

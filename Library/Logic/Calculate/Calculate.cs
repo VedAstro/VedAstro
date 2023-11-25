@@ -7845,41 +7845,45 @@ namespace VedAstro.Library
 
         #region DASA CALCUATIONS
 
+
+
         /// <summary>
         /// Given a start time and end time and birth time will calculate all dasa periods
         /// in nice JSON table format
-        /// You can also set how many levels of dasa you want to calculate, default is 6
-        /// Accuracy set to 24 hours
+        /// You can also set how many levels of dasa you want to calculate, default is 4
         /// 7 Levels : Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
         /// </summary>
-        public static async Task<JObject> DasaPeriods(Time birthTime, int levels = 4, int scanYears = 100)
+        /// <param name="birthTime"></param>
+        /// <param name="levels">range 1 to 7, lower is faster</param>
+        /// <param name="scanYears">time span to calculate, defaults 100 years, average life</param>
+        /// <param name="precisionHours"> defaults to 21 days, higher is faster
+        /// set how accurately the start & end time of each event is calculated
+        /// exp: setting 1 hour, means given in a time range of 100 years, it will be checked 876600 times 
+        /// </param>
+        public static async Task<JObject> DasaPeriods(Time birthTime, int levels = 4, int scanYears = 100, int precisionHours = 504)
         {
             //based on scan years, set start & end time
             Time startTime = birthTime;
             Time endTime = birthTime.AddYears(scanYears);
 
-            //# set how accurately the start & end time of each event is calculated
-            //# exp: setting 1 hour, means given in a time range of 1 day, it will be checked 24 times 
-            var precisionInHours = 504;
-
             //set what dasa levels to include based on input level
-            var tagList = new List<EventTag>
+            var tagList = new List<EventTag>();
+            for (int i = 1; i <= levels; i++)
             {
-                //Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
-                EventTag.PD1,EventTag.PD2, EventTag.PD3, EventTag.PD4,
-            };
+                tagList.Add((EventTag)Enum.Parse(typeof(EventTag), $"PD{i}"));
+            }
 
             // TEMP hack to place time in Person (wrapped) 
             var johnDoe = new Person("", birthTime, Gender.Empty);
 
             //do calculation (heavy computation)
-            List<Event> eventList = await EventManager.CalculateEvents(precisionInHours,
+            List<Event> eventList = await EventManager.CalculateEvents(precisionHours,
                                                                         startTime,
                                                                         endTime,
                                                                         birthTime.GetGeoLocation(),
                                                                         johnDoe,
                                                                         tagList);
-            
+
             //convert to Dasa Events for special Dasa related formating
             var dasaEventList = eventList.Select(e => new DasaEvent(e)).ToList();
 
@@ -7905,12 +7909,12 @@ namespace VedAstro.Library
                     : allDasaEvents.FindAll(dasaEvt => dasaEvt.DasaLevel == level);
 
                 //if no events found then max level reached
-                if (!dasaEvents.Any()) { return new JObject(new JProperty("message", "No more dasa levels found")); }
+                if (!dasaEvents.Any()) { return new JObject(new JProperty("message", "Last generated dasa level, set parameter level to change")); }
 
                 foreach (var evt in dasaEvents)
                 {
                     //make the sub dasa data (+1 level down)
-                    var subDasaJson = GetDasaJson(allDasaEvents, level+1, evt.PlanetLord);
+                    var subDasaJson = GetDasaJson(allDasaEvents, level + 1, evt.PlanetLord);
 
                     var jObject = new JObject
                     {
@@ -7918,6 +7922,7 @@ namespace VedAstro.Library
                         { "Start", evt.StartTime.GetStdDateTimeOffsetText() },
                         { "End", evt.EndTime.GetStdDateTimeOffsetText() },
                         { "DurationHours", evt.Duration },
+                        { "DurationDays", Math.Round(evt.Duration / 24, 2) },
                         { "DurationMonths", Math.Round(evt.Duration / 24 / 30, 2) },
                         { "DurationYears", Math.Round(evt.Duration / (24 * 365), 2) },
                         { "TechnicalName", evt.SourceEvent.Name.ToString() },

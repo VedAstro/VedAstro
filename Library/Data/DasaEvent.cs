@@ -20,7 +20,7 @@ using System.Xml.Linq;
 namespace VedAstro.Library
 {
     /// <summary>
-    /// Represents a period of time "Event" with start, end time and data related
+    /// A logical wrapper around Event class to make specific to Dasas
     /// </summary>
     public class DasaEvent(Event sourceEvent)
     {
@@ -88,21 +88,17 @@ namespace VedAstro.Library
         {
             get
             {
-                //try get first word as planet name, else get second word
-                for (var wordPos = 0; wordPos < 2; wordPos++)
-                {
-                    var stringName = sourceEvent.Name.ToString();
-                    var planetName = Tools.GetCamelCaseWord(stringName, wordPos);
+                //1st word is Parent, 2nd word is Current
+                //try get 2nd word as planet name
+                var stringName = sourceEvent.Name.ToString();
+                var planetName = Tools.GetCamelCaseWord(stringName, 1);
 
-                    //try parse planet name, if fail will return empty Planet
-                    var parsed = PlanetName.Parse(planetName);
-
-                    //once planet found, stop searching
-                    if (parsed != PlanetName.Empty) { return parsed; }
-                }
+                //try parse planet name, if fail will return empty Planet
+                var parsed = PlanetName.Parse(planetName);
 
                 //not found, return empty
-                return PlanetName.Empty;
+                return parsed;
+
             }
         }
 
@@ -115,7 +111,7 @@ namespace VedAstro.Library
             {
                 //try get 2nd word as planet name, else get second word
                 var stringName = sourceEvent.Name.ToString();
-                var planetName = Tools.GetCamelCaseWord(stringName, 1);
+                var planetName = Tools.GetCamelCaseWord(stringName, 0);
 
                 //try parse planet name, if fail will return empty Planet
                 var parsed = PlanetName.Parse(planetName);

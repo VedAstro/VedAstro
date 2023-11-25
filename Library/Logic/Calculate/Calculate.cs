@@ -7852,7 +7852,7 @@ namespace VedAstro.Library
         /// Accuracy set to 24 hours
         /// 7 Levels : Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
         /// </summary>
-        public static async Task<JObject> DasaPeriods(Time birthTime, int levels = 4, int scanYears = 120)
+        public static async Task<JObject> DasaPeriods(Time birthTime, int levels = 4, int scanYears = 100)
         {
             //based on scan years, set start & end time
             Time startTime = birthTime;
@@ -7895,29 +7895,54 @@ namespace VedAstro.Library
 
 
             //format raw events into nested JSON format
-            var finalJson = new JObject();
 
-            //get all PD1 and print into as level 1
-            var pD1EventList = dasaEventList.FindAll(dasaEvt => dasaEvt.DasaLevel == 1);
-            foreach (var evt in pD1EventList)
+            var dasaEvents1 = NewFunction(dasaEventList, 1);
+
+
+            return dasaEvents1;
+
+
+            //----------------- LOCAL FUNCTIONS -----------------
+
+            JObject NewFunction(List<DasaEvent> allDasaEvents, int level, PlanetName inputParentLord = null)
             {
+                var parentDasaJson = new JObject();
 
-                finalJson[evt.PlanetLord.ToString()] = new JObject
+                //get only events for the current dasa level (type)
+                //if not specid=fied than must 
+                var isSpecified = inputParentLord != null;
+                var dasaEvents = isSpecified
+                    ? allDasaEvents.FindAll(dasaEvt => dasaEvt.DasaLevel == level && dasaEvt.ParentDasaLord == inputParentLord)
+                    : allDasaEvents.FindAll(dasaEvt => dasaEvt.DasaLevel == level);
+
+                //if no events found then max level reached
+                if (!dasaEvents.Any()) { return new JObject("No more dasa levels found"); }
+
+                foreach (var evt in dasaEvents)
                 {
-                    { "Type", evt.DasaName },
-                    { "Start", evt.StartTime.GetStdDateTimeOffsetText() },
-                    { "End", evt.EndTime.GetStdDateTimeOffsetText() },
-                    { "DurationHours", evt.Duration },
-                    { "Description", evt.Description },
-                    { "Nature", evt.Nature.ToString() },
-                };
+                    //make the dasa data
+                    //var newFunction = NewFunction(allDasaEvents, level+1, evt.PlanetLord);
+
+                    var jObject = new JObject
+                    {
+                        { "Type", evt.DasaName },
+                        { "Start", evt.StartTime.GetStdDateTimeOffsetText() },
+                        { "End", evt.EndTime.GetStdDateTimeOffsetText() },
+                        { "DurationHours", evt.Duration },
+                        { "DurationYears", Math.Round(evt.Duration / (24 * 365), 2) },
+                        { "TechnicalName", evt.SourceEvent.Name.ToString() },
+                        { "Description", evt.Description },
+                        { "Nature", evt.Nature.ToString() }
+                    };
 
 
+                    parentDasaJson[evt.PlanetLord.ToString()] = jObject;
+                }
+
+                return parentDasaJson;
             }
-
-            return finalJson;
-
         }
+
         public static async Task<List<DasaEvent>> DasaPeriodsOld(Time birthTime, int levels = 4, int scanYears = 120)
         {
 

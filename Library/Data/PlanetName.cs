@@ -77,7 +77,10 @@ namespace VedAstro.Library
         /// </summary>
         public static readonly List<PlanetName> All9Planets = new List<PlanetName>()
         {
-            Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury
+            Sun, Moon,
+            Mars, Mercury,
+            Jupiter, Venus,
+            Saturn, Rahu, Ketu
         };
 
         /// <summary>

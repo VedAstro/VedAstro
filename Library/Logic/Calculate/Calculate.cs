@@ -7879,49 +7879,38 @@ namespace VedAstro.Library
                                                                         birthTime.GetGeoLocation(),
                                                                         johnDoe,
                                                                         tagList);
-
-
-
-            //convert to Dasa Events
-            var dasaEventList = new List<DasaEvent>();
-            foreach (var e in eventList)
-            {
-                //cast to dasa event
-                var dasaEvent = new DasaEvent(e);
-
-                //add to list
-                dasaEventList.Add(dasaEvent);
-            }
-
+            
+            //convert to Dasa Events for special Dasa related formating
+            var dasaEventList = eventList.Select(e => new DasaEvent(e)).ToList();
 
             //format raw events into nested JSON format
-
-            var dasaEvents1 = NewFunction(dasaEventList, 1);
-
+            var dasaEvents1 = GetDasaJson(dasaEventList, 1);
 
             return dasaEvents1;
 
 
             //----------------- LOCAL FUNCTIONS -----------------
 
-            JObject NewFunction(List<DasaEvent> allDasaEvents, int level, PlanetName inputParentLord = null)
+            //note: used recursively to generate nested JSON for Dasa
+            //feeds on given allDasaEvents list, till last level
+            JObject GetDasaJson(List<DasaEvent> allDasaEvents, int level, PlanetName inputParentLord = null)
             {
                 var parentDasaJson = new JObject();
 
                 //get only events for the current dasa level (type)
-                //if not specid=fied than must 
+                //if not specified than must be 1 level dasa
                 var isSpecified = inputParentLord != null;
                 var dasaEvents = isSpecified
                     ? allDasaEvents.FindAll(dasaEvt => dasaEvt.DasaLevel == level && dasaEvt.ParentDasaLord == inputParentLord)
                     : allDasaEvents.FindAll(dasaEvt => dasaEvt.DasaLevel == level);
 
                 //if no events found then max level reached
-                if (!dasaEvents.Any()) { return new JObject("No more dasa levels found"); }
+                if (!dasaEvents.Any()) { return new JObject(new JProperty("message", "No more dasa levels found")); }
 
                 foreach (var evt in dasaEvents)
                 {
-                    //make the dasa data
-                    //var newFunction = NewFunction(allDasaEvents, level+1, evt.PlanetLord);
+                    //make the sub dasa data (+1 level down)
+                    var subDasaJson = GetDasaJson(allDasaEvents, level+1, evt.PlanetLord);
 
                     var jObject = new JObject
                     {
@@ -7929,13 +7918,15 @@ namespace VedAstro.Library
                         { "Start", evt.StartTime.GetStdDateTimeOffsetText() },
                         { "End", evt.EndTime.GetStdDateTimeOffsetText() },
                         { "DurationHours", evt.Duration },
+                        { "DurationMonths", Math.Round(evt.Duration / 24 / 30, 2) },
                         { "DurationYears", Math.Round(evt.Duration / (24 * 365), 2) },
                         { "TechnicalName", evt.SourceEvent.Name.ToString() },
                         { "Description", evt.Description },
-                        { "Nature", evt.Nature.ToString() }
+                        { "Nature", evt.Nature.ToString() },
+                        { "SubDasas", subDasaJson },
                     };
 
-
+                    //place nicely in bigger "SubDasas" object for caller
                     parentDasaJson[evt.PlanetLord.ToString()] = jObject;
                 }
 

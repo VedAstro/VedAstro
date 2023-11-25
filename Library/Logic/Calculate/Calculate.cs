@@ -7902,9 +7902,16 @@ namespace VedAstro.Library
             foreach (var evt in pD1EventList)
             {
 
-                JObject durationObject = new JObject { { "Duration", evt.Duration } };
-                JProperty jProp = new JProperty(evt.PlanetLord.ToString(), durationObject);
-                finalJson.Add(jProp);
+                finalJson[evt.PlanetLord.ToString()] = new JObject
+                {
+                    { "Type", evt.DasaName },
+                    { "Start", evt.StartTime.GetStdDateTimeOffsetText() },
+                    { "End", evt.EndTime.GetStdDateTimeOffsetText() },
+                    { "DurationHours", evt.Duration },
+                    { "Description", evt.Description },
+                    { "Nature", evt.Nature.ToString() },
+                };
+
 
             }
 

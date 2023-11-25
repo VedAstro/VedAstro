@@ -2724,6 +2724,10 @@ namespace VedAstro.Library
 
             switch (anyTypeData)
             {
+                case JObject jObject:
+                    rootPayloadJson = new JProperty(dataName, jObject);
+                    break;
+
                 case List<House> dictionary:
                     {
                         var array = new JArray();
@@ -3560,8 +3564,9 @@ namespace VedAstro.Library
 
         /// <summary>
         /// "JupiterSunPD3" --> "Jupiter"
+        /// 0 based word position, default is 0 for first word
         /// </summary>
-        public static string GetFirstCamelCaseWord(string input)
+        public static string GetCamelCaseWord(string input, int wordPosition = 0)
         {
             if (string.IsNullOrEmpty(input))
             {
@@ -3579,7 +3584,7 @@ namespace VedAstro.Library
                 word.Append(ch);
             }
             words.Add(word.ToString());
-            return words.FirstOrDefault();
+            return words[wordPosition];
         }
 
     }

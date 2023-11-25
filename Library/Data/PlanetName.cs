@@ -107,12 +107,14 @@ namespace VedAstro.Library
 
 
         //METHODS
-        
+
         /// <summary>
         /// Given a planet name in string will give back an instance, caps auto corrected
         /// </summary>
         public static PlanetName Parse(string name)
         {
+            //if null or empty return empty
+            if (string.IsNullOrEmpty(name)) { return Empty; }
 
             //Convert string to PlanetName type
             switch (name.ToLower())
@@ -137,10 +139,8 @@ namespace VedAstro.Library
                     return Rahu;
             }
 
-            //if could not parse assert error and return null
-            LibLogger.Error($"Could not parse planet string name! : {name}");
-
-            return null;
+            //could not parse, return empty
+            return Empty;
         }
 
         /// <summary>

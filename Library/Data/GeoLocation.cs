@@ -207,7 +207,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Tries to get location from IP address of fail uses sample location
+        /// Tries to get location from IP address if fail uses sample location
         /// important is to always have some location for app to use
         /// </summary>
         /// <returns></returns>
@@ -215,6 +215,7 @@ namespace VedAstro.Library
         {
             try
             {
+                //TODO switch to using VedAstro API
                 //get only coordinates 1st
                 var coordinates = await GetCoordinatesFromIpAddressGoogle(apiKey);
 
@@ -257,7 +258,6 @@ namespace VedAstro.Library
         /// Will get longitude and latitude from IP using google API
         /// NOTE: The only place so far Google API outside VedAstro API
         /// </summary>
-        /// <returns></returns>
         private static async Task<GeoLocation> GetCoordinatesFromIpAddressGoogle(string apiKey)
         {
             var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={apiKey}";

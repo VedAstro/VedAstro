@@ -3588,6 +3588,35 @@ namespace VedAstro.Library
             return words[wordPosition];
         }
 
+
+        /// <summary>
+        /// takes a duration in hours and
+        /// returns a string that represents the duration in
+        /// a more human-readable format (hours, days, months, or years). 
+        /// </summary>
+        public static string TimeDurationToHumanText(double durationInHours)
+        {
+            const double hoursInDay = 24;
+            const double daysInMonth = 30;
+            const double monthsInYear = 12;
+            if (durationInHours < hoursInDay)
+            {
+                return $"{Math.Round(durationInHours, 1)} hours";
+            }
+            double durationInDays = durationInHours / hoursInDay;
+            if (durationInDays < daysInMonth)
+            {
+                return $"{Math.Round(durationInDays, 1)} days";
+            }
+            double durationInMonths = durationInDays / daysInMonth;
+            if (durationInMonths < monthsInYear)
+            {
+                return $"{Math.Round(durationInMonths, 1)} months";
+            }
+            double durationInYears = durationInMonths / monthsInYear;
+            return $"{Math.Round(durationInYears, 1)} years";
+        }
+
     }
 
 

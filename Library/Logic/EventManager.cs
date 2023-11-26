@@ -453,9 +453,10 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Calculates events for given person, tags, time period
         /// Parallel already built in
         /// </summary>
-        public static async Task<List<Event>> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, GeoLocation getBirthLocation, Person inputPerson, List<EventTag> inputedEventTags)
+        public static async Task<List<Event>> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, Person inputPerson, List<EventTag> inputedEventTags, bool filter0Duration = true)
         {
             //load fresh data list if not loaded already
             //since list does not change often, it should be save to cache it between calls to azure function
@@ -474,7 +475,7 @@ namespace VedAstro.Library
             Parallel.ForEach(inputedEventTags, (eventTag, state) =>
             {
                 //get all events for a specific tag
-                var tempEventList = CalculateEventsForTag(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag);
+                var tempEventList = CalculateEventsForTag(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag, filter0Duration);
 
                 //adding to list needs to be synced for thread safety
                 lock (sync) { EventList.AddRange(tempEventList); }
@@ -485,29 +486,21 @@ namespace VedAstro.Library
 
         }
 
-        public static List<Event> CalculateEventsForTag(double eventsPrecision, Time startTime, Time endTime, GeoLocation geoLocation, Person person, EventTag tag)
+        public static List<Event> CalculateEventsForTag(double eventsPrecision, Time startTime, Time endTime, GeoLocation geoLocation, Person person, EventTag tag, bool filter0Duration = true)
         {
-
-            //get all event data/types which has the inputed tag (FILTER)
+            // Get all event data/types which has the inputed tag (FILTER)
             var eventDataListFiltered = EventManager.GetEventDataListByTag(tag);
-
-            //start calculating events
+            // Start calculating events
             var eventList = EventManager.GetEventsInTimePeriod(startTime.GetStdDateTimeOffset(), endTime.GetStdDateTimeOffset(), geoLocation, person, eventsPrecision, eventDataListFiltered);
-
-            //remove all events with 0 duration
-            var cleaned = from dasaEvent in eventList
-                          where dasaEvent.DurationMin > 0
-                          select dasaEvent;
-
-            //sort the list by time before sending view
-            var orderByAscResult = from dasaEvent in cleaned
-                                   orderby dasaEvent.StartTime.GetStdDateTimeOffset()
-                                   select dasaEvent;
-
-
-            //send sorted events to view
-            return orderByAscResult.ToList();
-
+            // If filter0Duration is true, remove all events with 0 duration
+            if (filter0Duration)
+            {
+                eventList = eventList.Where(dasaEvent => dasaEvent.DurationMin > 0).ToList();
+            }
+            // Sort the list by time before sending view
+            var sortedEventList = eventList.OrderBy(dasaEvent => dasaEvent.StartTime.GetStdDateTimeOffset()).ToList();
+            // Send sorted events to view
+            return sortedEventList;
         }
 
 

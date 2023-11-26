@@ -84,7 +84,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Name of the planet lord of the sub dasa/dasa
         /// </summary>
-        public PlanetName PlanetLord
+        public PlanetName Lord
         {
             get
             {
@@ -105,7 +105,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Planet lord of the parent sub dasa/dasa
         /// </summary>
-        public PlanetName ParentDasaLord
+        public PlanetName ParentLord
         {
             get
             {

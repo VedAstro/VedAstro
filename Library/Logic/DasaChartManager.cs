@@ -129,7 +129,7 @@ namespace VedAstro.Library
 
                 //rows are dynamically generated as needed, hence the extra logic below
                 //list of rows to generate
-                DasaChartManager.UnsortedEventList = await EventManager.CalculateEvents(eventsPrecisionHours, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, inputedEventTags);
+                DasaChartManager.UnsortedEventList = await EventManager.CalculateEvents(eventsPrecisionHours, startTime, endTime, inputPerson, inputedEventTags);
 
 
                 //STEP 2: DATA > SVG COMPONENTS

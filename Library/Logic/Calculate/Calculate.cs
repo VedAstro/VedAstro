@@ -7845,8 +7845,6 @@ namespace VedAstro.Library
 
         #region DASA CALCUATIONS
 
-
-
         /// <summary>
         /// Given a start time and end time and birth time will calculate all dasa periods
         /// in nice JSON table format
@@ -7860,8 +7858,11 @@ namespace VedAstro.Library
         /// set how accurately the start & end time of each event is calculated
         /// exp: setting 1 hour, means given in a time range of 100 years, it will be checked 876600 times 
         /// </param>
-        public static async Task<JObject> DasaPeriods(Time birthTime, int levels = 4, int scanYears = 100, int precisionHours = 504)
+        public static async Task<JObject> DasaForLife(Time birthTime, int levels = 3, int precisionHours = 100, int scanYears = 100)
         {
+            //TODO NOTE:
+            //precisionHours limits the levels that can be calculated (because of 0 filtering)
+
             //based on scan years, set start & end time
             Time startTime = birthTime;
             Time endTime = birthTime.AddYears(scanYears);
@@ -7880,7 +7881,6 @@ namespace VedAstro.Library
             List<Event> eventList = await EventManager.CalculateEvents(precisionHours,
                                                                         startTime,
                                                                         endTime,
-                                                                        birthTime.GetGeoLocation(),
                                                                         johnDoe,
                                                                         tagList);
 
@@ -7892,51 +7892,129 @@ namespace VedAstro.Library
 
             return dasaEvents1;
 
+        }
 
-            //----------------- LOCAL FUNCTIONS -----------------
+        public static async Task<JObject> DasaAtRange(Time birthTime, Time startTime, Time endTime, int levels = 3, int precisionHours = 100)
+        {
+            //TODO NOTE:
+            //precisionHours limits the levels that can be calculated (because of 0 filtering)
 
-            //note: used recursively to generate nested JSON for Dasa
-            //feeds on given allDasaEvents list, till last level
-            JObject GetDasaJson(List<DasaEvent> allDasaEvents, int level, PlanetName inputParentLord = null)
+            //based on scan years, set start & end time
+
+            //set what dasa levels to include based on input level
+            var tagList = new List<EventTag>();
+            for (int i = 1; i <= levels; i++)
             {
-                var parentDasaJson = new JObject();
+                tagList.Add((EventTag)Enum.Parse(typeof(EventTag), $"PD{i}"));
+            }
 
-                //get only events for the current dasa level (type)
-                //if not specified than must be 1 level dasa
-                var isSpecified = inputParentLord != null;
-                var dasaEvents = isSpecified
-                    ? allDasaEvents.FindAll(dasaEvt => dasaEvt.DasaLevel == level && dasaEvt.ParentDasaLord == inputParentLord)
-                    : allDasaEvents.FindAll(dasaEvt => dasaEvt.DasaLevel == level);
+            // TEMP hack to place time in Person (wrapped) 
+            var johnDoe = new Person("", birthTime, Gender.Empty);
 
-                //if no events found then max level reached
-                if (!dasaEvents.Any()) { return new JObject(new JProperty("message", "Last generated dasa level, set parameter level to change")); }
+            //do calculation (heavy computation)
+            List<Event> eventList = await EventManager.CalculateEvents(precisionHours,
+                                                                        startTime,
+                                                                        endTime,
+                                                                        johnDoe,
+                                                                        tagList);
 
-                foreach (var evt in dasaEvents)
+            //convert to Dasa Events for special Dasa related formating
+            var dasaEventList = eventList.Select(e => new DasaEvent(e)).ToList();
+
+            //format raw events into nested JSON format
+            var dasaEvents1 = GetDasaJson(dasaEventList, 1);
+
+            return dasaEvents1;
+        }
+
+        public static async Task<JObject> DasaAtTime(Time birthTime, Time checkTime, int levels = 3)
+        {
+            //TODO NOTE:
+            //precisionHours limits the levels that can be calculated (because of 0 filtering)
+            //based on scan years, set start & end time
+
+            //set what dasa levels to include based on input level
+            var tagList = new List<EventTag>();
+            for (int i = 1; i <= levels; i++)
+            {
+                tagList.Add((EventTag)Enum.Parse(typeof(EventTag), $"PD{i}"));
+            }
+
+            // TEMP hack to place time in Person (wrapped) 
+            var johnDoe = new Person("", birthTime, Gender.Empty);
+
+            //do calculation (heavy computation)
+            List<Event> eventList = await EventManager.CalculateEvents(1,
+                                                                        checkTime,
+                                                                        checkTime,
+                                                                        johnDoe,
+                                                                        tagList, false);
+
+            //convert to Dasa Events for special Dasa related formating
+            var dasaEventList = eventList.Select(e => new DasaEvent(e)).ToList();
+
+            //format raw events into nested JSON format
+            var dasaEvents1 = GetDasaJson(dasaEventList, 1);
+
+            return dasaEvents1;
+
+        }
+
+        /// <summary>
+        /// note: used recursively to generate nested JSON for Dasa
+        /// feeds on given allDasaEvents list, till last level
+        /// </summary>
+        private static JObject GetDasaJson(List<DasaEvent> allDasaEvents, int level, DasaEvent parentDasa = null)
+        {
+            var parentDasaJson = new JObject();
+
+            //get only events for the current dasa level (type)
+            //if not specified than must be 1 level dasa
+            var isSpecified = parentDasa != null;
+            var dasaEvents = isSpecified
+                ? allDasaEvents.FindAll(delegate (DasaEvent dasaEvt)
                 {
-                    //make the sub dasa data (+1 level down)
-                    var subDasaJson = GetDasaJson(allDasaEvents, level + 1, evt.PlanetLord);
+                    var levelMatch = dasaEvt.DasaLevel == level;
+                    var parentMatch = dasaEvt.ParentLord == parentDasa.Lord;
 
-                    var jObject = new JObject
+                    //make sure sub dasa are within parent dasa time period (before end of parent)
+                    var withinTime = dasaEvt.EndTime.GetStdDateTimeOffset() <= parentDasa.EndTime.GetStdDateTimeOffset();
+
+                    return levelMatch && parentMatch && withinTime;
+                })
+                : allDasaEvents.FindAll(dasaEvt => dasaEvt.DasaLevel == level);
+
+            //if no events found then max level reached
+            if (!dasaEvents.Any()) { return null; }
+
+            foreach (var evt in dasaEvents)
+            {
+
+                var dasaDataJson = new JObject
                     {
                         { "Type", evt.DasaName },
                         { "Start", evt.StartTime.GetStdDateTimeOffsetText() },
                         { "End", evt.EndTime.GetStdDateTimeOffsetText() },
                         { "DurationHours", evt.Duration },
-                        { "DurationDays", Math.Round(evt.Duration / 24, 2) },
-                        { "DurationMonths", Math.Round(evt.Duration / 24 / 30, 2) },
-                        { "DurationYears", Math.Round(evt.Duration / (24 * 365), 2) },
+                        { "DurationText", Tools.TimeDurationToHumanText(evt.Duration) },
                         { "TechnicalName", evt.SourceEvent.Name.ToString() },
+                        { "Lord", evt.Lord.ToString() },
+                        { "ParentLord", evt.ParentLord.ToString() },
                         { "Description", evt.Description },
                         { "Nature", evt.Nature.ToString() },
-                        { "SubDasas", subDasaJson },
                     };
 
-                    //place nicely in bigger "SubDasas" object for caller
-                    parentDasaJson[evt.PlanetLord.ToString()] = jObject;
-                }
+                //make the sub dasa data (+1 level down) (will be null once last PD level)
+                var subDasaJson = GetDasaJson(allDasaEvents, level + 1, evt);
 
-                return parentDasaJson;
+                //if null means this last PD level, so no more sub dasas
+                if (subDasaJson != null) { dasaDataJson.Add("SubDasas", subDasaJson); }
+
+                //place nicely in bigger "SubDasas" object for caller
+                parentDasaJson[evt.Lord.ToString()] = dasaDataJson;
             }
+
+            return parentDasaJson;
         }
 
         public static async Task<List<DasaEvent>> DasaPeriodsOld(Time birthTime, int levels = 4, int scanYears = 120)
@@ -7964,7 +8042,6 @@ namespace VedAstro.Library
             List<Event> eventList = await EventManager.CalculateEvents(precisionInHours,
                                                                         startTime,
                                                                         endTime,
-                                                                        birthTime.GetGeoLocation(),
                                                                         johnDoe,
                                                                         tagList);
 

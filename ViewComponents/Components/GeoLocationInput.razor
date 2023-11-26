@@ -271,7 +271,7 @@
         {
             //TODO CLEAN UP CODE
             var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
-            AppData.ClientLocation = await  WebsiteTools.GetClientLocation(apiKey, _jsRuntime);
+            AppData.ClientLocation = await  WebsiteTools.GetClientLocation(apiKey);
 
             //set new coordinates into view
             Longitude = AppData.ClientLocation.Longitude();

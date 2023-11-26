@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Xml.Linq;
 using VedAstro.Library;
+using Website.Pages;
 
 namespace Website
 {
@@ -12,6 +13,8 @@ namespace Website
     public static class AppData
     {
         //-----------------------------FIELDS
+
+        public static SearchResult SearchPage { get; set; }
 
         public static int FailureCount = 0;
 

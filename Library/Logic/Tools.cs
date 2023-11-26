@@ -2326,6 +2326,7 @@ namespace VedAstro.Library
                     //HACK to handle custom types, since can't extend class
                     if (parameterType == typeof(object)) { sampleData = new object(); }
                     if (parameterType == typeof(ZodiacSign)) { sampleData = new ZodiacSign(ZodiacName.Aquarius, Angle.FromDegrees(15)); }
+                    if (parameterType == typeof(ZodiacName)) { sampleData = ZodiacName.Aquarius; }
                     if (parameterType == typeof(Time)) { sampleData = Time.StandardHoroscope(); }
                     if (parameterType == typeof(Angle)) { sampleData = Angle.Degrees180; }
                     if (parameterType == typeof(PlanetName)) { sampleData = PlanetName.Sun; }

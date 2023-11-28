@@ -12560,7 +12560,7 @@ namespace VedAstro.Library
 
             return returnString;
         }
-
+        
         /// <summary>
         /// Get general planetary info for person's dasa (hardcoded table)
         /// It is intended to be used to interpret dasa predictions

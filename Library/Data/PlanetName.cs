@@ -66,10 +66,8 @@ namespace VedAstro.Library
         /// </summary>
         public static readonly List<PlanetName> All7Planets = new List<PlanetName>()
         {
-            Sun, Moon,
-            Mars, Mercury,
-            Jupiter, Venus,
-            Saturn
+            Venus, Sun, Moon,
+            Mars,Jupiter, Saturn, Mercury
         };
 
         /// <summary>
@@ -77,10 +75,9 @@ namespace VedAstro.Library
         /// </summary>
         public static readonly List<PlanetName> All9Planets = new List<PlanetName>()
         {
-            Sun, Moon,
-            Mars, Mercury,
-            Jupiter, Venus,
-            Saturn, Rahu, Ketu
+            Ketu, Venus, Sun, Moon,
+            Mars,Rahu,Jupiter, Saturn, Mercury
+            
         };
 
         /// <summary>
@@ -88,10 +85,8 @@ namespace VedAstro.Library
         /// </summary>
         public static readonly List<PlanetName> All12Planets = new List<PlanetName>()
         {
-            Sun, Moon,
-            Mars, Mercury,
-            Jupiter, Venus,
-            Saturn, Rahu, Ketu
+            Ketu, Venus, Sun, Moon,
+            Mars,Rahu,Jupiter, Saturn, Mercury
         };
 
 

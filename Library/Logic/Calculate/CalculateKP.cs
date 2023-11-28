@@ -301,7 +301,7 @@ namespace VedAstro.Library
 
             // The Ascendant degree is then converted to the ARMC (Sidereal Time).
             // The ARMC is used in the calculation of house cusps.
-            var armc = ConvertTropicalAscToARMC(tropAsc, eps, location.Latitude(), time);
+            var armc = ConvertAscToARMC(tropAsc, eps, location.Latitude(), time);
            // armc = 341.65;// hard set for testing
             
             Console.WriteLine("armc {0}", armc);
@@ -327,6 +327,7 @@ namespace VedAstro.Library
             //Convert back to Sidereal below by deducting Ayanamsa.
             
             //package data before sending
+            //revert back to idereal by minussing Ayanamsa
             var housesDictionary = new Dictionary<HouseName, Angle>();
             foreach (var house in House.AllHouses)
             {
@@ -400,63 +401,6 @@ namespace VedAstro.Library
 
         }
 
-        public static double ConvertTropicalAscToARMCv2(double tropicalAscendant, double obliquityOfEcliptic,
-            double geographicLatitude, Time time)
-        {
-            var ra = Math.Atan(Math.Cos(obliquityOfEcliptic) * Math.Tan(tropicalAscendant));
-            var d = Math.Asin(Math.Sin(obliquityOfEcliptic) * Math.Sin(tropicalAscendant));
-            var oa = ra - Math.Asin(Math.Tan(d) * Math.Tan(geographicLatitude));
-            var armc = oa - 90;
-            return armc;
-        }
-        /// <summary>
-        /// This method is used to convert the tropical ascendant to the ARMC (Ascendant Right Meridian Circle).
-        /// It first calculates the right ascension and declination using the provided tropical ascendant and
-        /// obliquity of the ecliptic. Then, it calculates the oblique ascension by subtracting a value derived
-        /// from the declination and geographic latitude from the right ascension. Finally, it calculates the ARMC
-        /// based on the value of the tropical ascendant and the oblique ascension.
-        /// </summary>
-        public static double ConvertTropicalAscToARMCv3(double tropicalAscendant, double obliquityOfEcliptic, double geographicLatitude, Time time)
-        {
-            // The main method is taken from a post by K S Upendra on Group.IO in 2019
-            // Calculate the right ascension using the formula:
-            // atan(cos(obliquityOfEcliptic) * tan(tropicalAscendant))
-            double rightAscension =
-                Math.Atan(Math.Cos(obliquityOfEcliptic) * Math.Tan(tropicalAscendant));
-            // Calculate the declination using the formula:
-            // asin(sin(obliquityOfEcliptic) * sin(tropicalAscendant))
-            double declination =
-                Math.Asin(Math.Sin(obliquityOfEcliptic) * Math.Sin(tropicalAscendant));
-            // Calculate the oblique ascension by subtracting the result of the following formula from the right ascension:
-            // asin(tan(declination) * tan(geographicLatitude))
-            double obliqueAscension = rightAscension -
-                                      (Math.Asin(Math.Tan(declination) *
-                                                 Math.Tan(geographicLatitude)));
-            // Initialize the armc variable
-            double armc = 0;
-            // Depending on the value of the tropical ascendant, calculate the armc using the formula:
-            // armc = 270 + obliqueAscension or armc = 90 + obliqueAscension
-            if (tropicalAscendant >= 0 && tropicalAscendant < 90)
-            {
-                armc = 270 + obliqueAscension;
-            }
-            else if (tropicalAscendant >= 90 && tropicalAscendant < 180)
-            {
-                armc = 90 + obliqueAscension;
-            }
-            else if (tropicalAscendant >= 180 && tropicalAscendant < 270)
-            {
-                armc = 90 + obliqueAscension;
-            }
-            else if (tropicalAscendant >= 270 && tropicalAscendant < 360)
-            {
-                armc = 270 + obliqueAscension;
-            }
-
-            // Return the calculated armc value
-            return armc;
-        }
-
         /// <summary>
         /// THIS IS NOT A COPY - THIS ONE ROTATES THE CHART TO PROVIDED NEW LAGNA - LAST Param in Signature
         /// Hence the call twice to calculate cusps, first one to get base cusps based on HorNUm and then Rotate to provided Lagna tropAsc
@@ -481,14 +425,14 @@ namespace VedAstro.Library
 
             var eps = Calculate.EclipticObliquity(time);
 
-            var armc = ConvertTropicalAscToARMC(rotateDegrees, eps, location.Latitude(), time);
+            var armc = ConvertAscToARMC(rotateDegrees, eps, location.Latitude(), time);
 
             var lat = location.Latitude();
 
             swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
 
             //base cusps created - now repeat now with provided Long Lagna needs to be moved to
-            armc = ConvertTropicalAscToARMC(rotateDegrees, eps, location.Latitude(), time);
+            armc = ConvertAscToARMC(rotateDegrees, eps, location.Latitude(), time);
             swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
 
 
@@ -529,7 +473,7 @@ namespace VedAstro.Library
             var eps = Calculate.EclipticObliquity(time);
 
             var tropAscFromHorNum = HoraryNumberSiderealAsc(horaryNumber);
-            var armc = ConvertTropicalAscToARMC(tropAscFromHorNum, eps, location.Latitude(), time);
+            var armc = ConvertAscToARMC(tropAscFromHorNum, eps, location.Latitude(), time);
 
             var lat = location.Latitude();
 
@@ -538,7 +482,7 @@ namespace VedAstro.Library
             swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
 
             //base cusps created - now repeat now with provided Long Lagna needs to be moved to
-            armc = ConvertTropicalAscToARMC(rotateDegrees, eps, location.Latitude(), time);
+            armc = ConvertAscToARMC(rotateDegrees, eps, location.Latitude(), time);
             swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
 
 
@@ -564,18 +508,18 @@ namespace VedAstro.Library
         /// from the declination and geographic latitude from the right ascension. Finally, it calculates the ARMC
         /// based on the value of the tropical ascendant and the oblique ascension.
         /// </summary>
-        public static double ConvertTropicalAscToARMC(double tropicalAscendant, double obliquityOfEcliptic, double geographicLatitude, Time time)
+        public static double ConvertAscToARMC(double Ascendant, double obliquityOfEcliptic, double geographicLatitude, Time time)
         {
             // The main method is taken from a post by K S Upendra on Group.IO in 2019
             // Calculate the right ascension using the formula:
             // atan(cos(obliquityOfEcliptic) * tan(tropicalAscendant))
             double rightAscension =
-                Math.Atan(Math.Cos(obliquityOfEcliptic * Math.PI / 180) * Math.Tan(tropicalAscendant * Math.PI / 180)) *
+                Math.Atan(Math.Cos(obliquityOfEcliptic * Math.PI / 180) * Math.Tan(Ascendant * Math.PI / 180)) *
                 180 / Math.PI;
             // Calculate the declination using the formula:
             // asin(sin(obliquityOfEcliptic) * sin(tropicalAscendant))
             double declination =
-                Math.Asin(Math.Sin(obliquityOfEcliptic * Math.PI / 180) * Math.Sin(tropicalAscendant * Math.PI / 180)) *
+                Math.Asin(Math.Sin(obliquityOfEcliptic * Math.PI / 180) * Math.Sin(Ascendant * Math.PI / 180)) *
                 180 / Math.PI;
             // Calculate the oblique ascension by subtracting the result of the following formula from the right ascension:
             // asin(tan(declination) * tan(geographicLatitude))
@@ -586,19 +530,19 @@ namespace VedAstro.Library
             double armc = 0;
             // Depending on the value of the tropical ascendant, calculate the armc using the formula:
             // armc = 270 + obliqueAscension or armc = 90 + obliqueAscension
-            if (tropicalAscendant >= 0 && tropicalAscendant < 90)
+            if (Ascendant >= 0 && Ascendant < 90)
             {
                 armc = 270 + obliqueAscension;
             }
-            else if (tropicalAscendant >= 90 && tropicalAscendant < 180)
+            else if (Ascendant >= 90 && Ascendant < 180)
             {
                 armc = 90 + obliqueAscension;
             }
-            else if (tropicalAscendant >= 180 && tropicalAscendant < 270)
+            else if (Ascendant >= 180 && Ascendant < 270)
             {
                 armc = 90 + obliqueAscension;
             }
-            else if (tropicalAscendant >= 270 && tropicalAscendant < 360)
+            else if (Ascendant >= 270 && Ascendant < 360)
             {
                 armc = 270 + obliqueAscension;
             }
@@ -607,11 +551,11 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// This method calculates the tropical ascendant for a given horary number.
+        /// This method calculates the sidereal ascendant for a given horary number.
         /// It does this by iterating over all constellations and planets, calculating
-        /// various parameters before and after adding a certain degree to the tropical
-        /// ascendant (tropAsc), and handling special cases such as when tropAsc is 0 or
-        /// when there are overlapping signs. The tropical ascendant corresponding to the
+        /// various parameters before and after adding a certain degree to the sidereal
+        /// ascendant (siderealAsc), and handling special cases such as when sidAsc is 0 or
+        /// when there are overlapping signs. The sidereal ascendant corresponding to the
         /// given horary number is then returned.
         /// </summary>
         public static double HoraryNumberSiderealAsc(int horaryNumber)
@@ -662,7 +606,7 @@ namespace VedAstro.Library
                 {
                     var constellationA = tempConstel;
                     lordofConstel = LordOfConstellation(constellationA);
-                    // Assign tropAscDeg based on the planet name
+                    // Assign sidAscDeg based on the planet name
                     switch (planetName.Name)
                     {
                         case PlanetName.PlanetNameEnum.Ketu:
@@ -697,6 +641,7 @@ namespace VedAstro.Library
                     var zSignAtLongBefore = ZodiacSignAtLongitude(Angle.FromDegrees(siderealAsc));
                     var constellationBefore = ConstellationAtLongitude(Angle.FromDegrees(siderealAsc));
                     var constellationLordBefore = LordOfConstellation(constellationBefore.GetConstellationName());
+
                     // Special handling for siderealAsc == 0.00
                     if (siderealAsc == 0.00)
                     {
@@ -730,7 +675,7 @@ namespace VedAstro.Library
                     {
                         var remainderFromDivBy30 = (siderealAsc % 30.00); //past signchange degree amount
                         var preSignChangeDegrees = siderealAscDeg - remainderFromDivBy30;
-                        siderealAsc = siderealAsc - siderealAscDeg + preSignChangeDegrees; //this is one Entry into the List. this get us to Sign engpoint
+                        siderealAsc = siderealAsc - siderealAscDeg + preSignChangeDegrees; //this is one Entry into the List. this get us to the zodiac Sign endpoint
                         //log entry into List
                         constellationList.Add(new Tuple<int, ZodiacName, PlanetName, ConstellationName, PlanetName, PlanetName, double>(cntA + 1, zSignAtLongAfter.GetSignName(), zSignAfterLord, constellationA, constellationLordAfter, planetName, siderealAsc));
                         cntA++;
@@ -1320,14 +1265,14 @@ namespace VedAstro.Library
 
                 var eps = Calculate.EclipticObliquity(time);
 
-                var armc = ConvertTropicalAscToARMC(siderealAsc, eps, location.Latitude(), time);
+                var armc = ConvertAscToARMC(siderealAsc, eps, location.Latitude(), time);
 
                 var lat = location.Latitude();
 
                 swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
 
                 //base cusps created - now repeat now with provided Long Lagna needs to be moved to
-                armc = ConvertTropicalAscToARMC(siderealAsc, eps, location.Latitude(), time);
+                armc = ConvertAscToARMC(siderealAsc, eps, location.Latitude(), time);
                 swissEph.swe_houses_armc(armc, lat, eps, 'P', cusps, ascmc);
 
 

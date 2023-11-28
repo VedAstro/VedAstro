@@ -112,8 +112,7 @@ namespace VedAstro.Library.Tests
             //do calculation (heavy computation)
             var eventList = await EventManager.CalculateEvents(precisionInHours,
                 startTime,
-                endTime,
-                GeoLocation.Bangkok, johnDoe, tagList);
+                endTime, johnDoe, tagList);
 
             //# print out each event
             foreach (var _event in eventList) { Console.WriteLine(_event.ToString()); }

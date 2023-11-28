@@ -161,7 +161,7 @@ namespace API
                 Tools.MethodNameToMethodInfo(calculatorName,
                     new[] { typeof(Calculate), typeof(CalculateKP) }); //get calculator name
 
-            //2 : CUSTOM AYANAMSA
+            //2 : CUSTOM AYANAMSA (removes ayanamsa once read)
             fullParamString = ParseAndSetAyanamsa(fullParamString);
 
             //get inputed parameters
@@ -265,15 +265,11 @@ namespace API
             foreach (var parameterType in allNeededParams)
             {
                 //check if paramUrlString is empty, possible that last param is optional or invalid call
-                if (fullParamString == "//" || string.IsNullOrEmpty(fullParamString))
-                {
-                    goto EndCall;
-                }
+                if (fullParamString == "//" || string.IsNullOrEmpty(fullParamString)) { goto EndCall; }
 
-                var parsedParam = await ParseUrlParameter(parameterType);
+                var parsedParam = await ParseUrlParameterByType(parameterType);
 
-                //ACT 5:
-                //add to main list IF NOT AYANAMSA (used later for main final execution)
+                //add to main list
                 parsedInputParamList.Add(parsedParam);
             }
 
@@ -310,16 +306,14 @@ namespace API
                 // send full list with missing params
                 return (args.ToList(), fullParamString);
             }
+            
             //inputed params is complete, send as is
             else { return (parsedInputParamList, fullParamString); }
 
 
 
-
-            //------LOCAL FUNCTIONS------
-
             //note: placed inside to use same fullParamString 
-            async Task<dynamic> ParseUrlParameter(Type parameterType)
+            async Task<dynamic> ParseUrlParameterByType(Type parameterType)
             {
                 //get inches to cut based on Type of cloth (ask the cloth aka type)
                 var nameOfField = nameof(IFromUrl.OpenAPILength);

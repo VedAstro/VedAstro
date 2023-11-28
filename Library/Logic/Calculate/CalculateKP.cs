@@ -528,7 +528,7 @@ namespace VedAstro.Library
 
             var eps = Calculate.EclipticObliquity(time);
 
-            var tropAscFromHorNum = HoraryNumberTropicalAsc(horaryNumber);
+            var tropAscFromHorNum = HoraryNumberSiderealAsc(horaryNumber);
             var armc = ConvertTropicalAscToARMC(tropAscFromHorNum, eps, location.Latitude(), time);
 
             var lat = location.Latitude();

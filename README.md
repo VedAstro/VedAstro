@@ -228,6 +228,17 @@ But the database will be shared between these. Meaning data changes in Beta will
  But it is far more difficult and **rewarding** to make the UI intuitive & easy.
  A "no manuals" and "no brainer" approach to design.
 
+ # 🥀 Poem On the Future of Vedic Astrology
+The wisdom of ages, once passed down by word,
+Now stored in circuits, rarely heard.
+
+Once this knowledge was held in minds so keen,
+Now it's coded in machines unseen.
+
+The human touch, that once gave knowledge birth,
+Replaced by algorithms, shaping future's girth,
+
+
 
 # ⚙️ Project Structure
 ![vedastro-4-parts](https://vedastro.org/images/4-parts-of-vedastro.jpg)

@@ -34,9 +34,12 @@ namespace VedAstro.Library
     {
 
         /// <summary>
-        /// Gets all zodiac names in a list
+        /// All 12 zodiac signs in order
         /// </summary>
-        public static List<ZodiacName> AllZodiacSigns = Enum.GetValues(typeof(ZodiacName)).Cast<ZodiacName>().ToList();
+        public static List<ZodiacName> AllZodiacSigns = Enum.GetValues(typeof(ZodiacName))
+                                                            .Cast<ZodiacName>()
+                                                            .Where(z => z != ZodiacName.Empty) //remove empty
+                                                            .ToList();
 
         /// <summary>
         /// Note: Root element must be named ZodiacName
@@ -91,7 +94,7 @@ namespace VedAstro.Library
         /// Gets all zodiac signs in order in an dictionary with a  value,
         /// used for making astavarga charts
         /// </summary>
-        public static Dictionary<ZodiacName, T> GetDictionary<T>(T defaultValue)
+        public static Dictionary<ZodiacName, T> AllZodiacSignsDictionary<T>(T defaultValue)
         {
             var returnVal = new Dictionary<ZodiacName, T>();
 

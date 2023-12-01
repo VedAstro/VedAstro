@@ -376,3 +376,5 @@ Website/ThisAssembly.cs
 API/local.settings.json
 /API/local.settings.latest.json
 .DS_Store
+
+Library/Logic/Calculate/CalculateKP.cs

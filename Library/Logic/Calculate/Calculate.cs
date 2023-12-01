@@ -381,6 +381,22 @@ namespace VedAstro.Library
 
         #region GENERAL
 
+        /// <summary>
+        /// Given a sign name and time will get the house that it is in, based on middle longitude.
+        /// </summary>
+        public static HouseName HouseFromSignName(ZodiacName zodiacName, Time inputTime)
+        {
+            //get signs for all houses
+            //TODO cache down
+            var houses = Calculate.AllHouseSign(inputTime);
+
+            //pick out and return only for input sign
+            HouseName houseName = houses.Where(e => e.Value.GetSignName() == zodiacName).Select(e => e.Key).FirstOrDefault();
+
+            return houseName;
+
+        }
+
 
         /// <summary>
         /// All horoscope predictions as Alpaca Template ready for LoRA training in JSON

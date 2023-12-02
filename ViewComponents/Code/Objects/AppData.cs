@@ -262,7 +262,7 @@ namespace Website
         /// </summary>
         public static void Go(string url, bool forceReload = false, bool newTab = false, bool rememberMe = false)
         {
-            WebLogger.Data($"NAVIGATE -> {url}"); //log
+            //WebLogger.Data($"NAVIGATE -> {url}"); //log
 
             //if going to login page then obviously enable auto comeback
             //NOTE: this only sets data into browser storage, page as to start comeback

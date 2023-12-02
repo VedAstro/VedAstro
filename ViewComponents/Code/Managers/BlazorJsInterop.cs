@@ -60,7 +60,7 @@ namespace Website
         public static void HideAlert(this IJSRuntime jsRuntime)
         {
             //log this, don't await to reduce lag
-            WebLogger.Data("Alert Close");
+            //WebLogger.Data("Alert Close");
 
             jsRuntime.InvokeVoidAsync(JS.Swal_close);
         }
@@ -193,7 +193,7 @@ namespace Website
         public static void HideLoading(this IJSRuntime jsRuntime)
         {
             //log it
-            WebLogger.Data("Hide Loading Box");
+            //WebLogger.Data("Hide Loading Box");
 
             jsRuntime.HideAlert();
 

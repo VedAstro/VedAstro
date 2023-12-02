@@ -176,7 +176,7 @@ namespace Website
             };
 
             //log it
-            await WebLogger.Data("Show Loading Box");
+            //await WebLogger.Data("Show Loading Box");
 
             //don't wait here
             jsRuntime.ShowAlert(alertData);

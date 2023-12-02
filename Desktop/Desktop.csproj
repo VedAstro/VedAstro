@@ -66,7 +66,6 @@
 	<ItemGroup>
 		<Compile Include="..\ViewComponents\Code\API\EventsChartTools.cs" Link="Code\API\EventsChartTools.cs" />
 		<Compile Include="..\ViewComponents\Code\API\MatchTools.cs" Link="Code\API\MatchTools.cs" />
-		<Compile Include="..\ViewComponents\Code\API\MLTableTools.cs" Link="Code\API\MLTableTools.cs" />
 		<Compile Include="..\ViewComponents\Code\API\PersonTools.cs" Link="Code\API\PersonTools.cs" />
 		<Compile Include="..\ViewComponents\Code\API\VedAstroAPI.cs" Link="Code\API\VedAstroAPI.cs" />
 		<Compile Include="..\ViewComponents\Code\Objects\AppData.cs" Link="Code\Objects\AppData.cs" />

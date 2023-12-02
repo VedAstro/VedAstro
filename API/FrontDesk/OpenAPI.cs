@@ -85,6 +85,7 @@ namespace API
             var allCalls = new[] { "PlanetName/All/", "HouseName/All/" };
             var isAllCall = allCalls.Any(call => fullParamString.Contains(call));
             dynamic rawPlanetData;
+            //ALL
             if (isAllCall)
             {
                 //generate new list of URL with the Planet name or house name changed from All to Sun, House1
@@ -93,6 +94,7 @@ namespace API
                 //make new calculation for all planets or houses 
                 rawPlanetData = await ProcessAllCalls(calculatorName, callList);
             }
+            //SINGLE / NORMAL
             else
             {
                 rawPlanetData = await SingleAPICallData(calculatorName, fullParamString);
@@ -153,7 +155,9 @@ namespace API
         }
 
 
-
+        /// <summary>
+        /// Main method that handles all API calls, be it SINGLE or ALL
+        /// </summary>
         private static async Task<object?> SingleAPICallData(string calculatorName, string fullParamString)
         {
             //1 : GET INPUT DATA
@@ -164,13 +168,14 @@ namespace API
             //2 : CUSTOM AYANAMSA (removes ayanamsa once read)
             fullParamString = ParseAndSetAyanamsa(fullParamString);
 
-            //get inputed parameters
+
+            //3: GET INPUTED PARAMETERS
             var rawOut = await ParseUrlParameters(fullParamString, calculator);
             var parsedParamList = rawOut.Item1;
             var remainderParamString = rawOut.Item2; //remainder of chopped string
 
 
-            //3 : EXECUTE COMMAND
+            //4 : EXECUTE COMMAND
             object rawPlanetData;
             var isAsyncReturn1 = calculator.ReturnType.IsGenericType && calculator.ReturnType.GetGenericTypeDefinition() == typeof(Task<>);
             var isAsyncReturn2 = Tools.IsMethodReturnAsync(calculator);
@@ -255,18 +260,17 @@ namespace API
         private static async Task<(List<dynamic>, string)> ParseUrlParameters(string fullParamString, MethodInfo calculator)
         {
             //Based on the calculator method we prepare to cut the string into parameters as text
-            var allNeededParams = calculator.GetParameters().Select(p => p.ParameterType).ToList();
+
+            //STAGE 1 : HANDLE COMPULSORY PARAMETERS (has to be in sequence)
+            //get all compulsory parameters needed for the calculator to execute
+            var allNeededParams = calculator.GetParameters().Where(p => !p.HasDefaultValue).Select(p => p.ParameterType).ToList();
 
             //place to store ready params
             var parsedInputParamList = new List<dynamic>(); //exact number as specified (performance)
                                                             //cut the string based on parameter type
-
-            //process 1 parameter at a time from start
+                                                            //process 1 parameter at a time from start
             foreach (var parameterType in allNeededParams)
             {
-                //check if paramUrlString is empty, possible that last param is optional or invalid call
-                if (fullParamString == "//" || string.IsNullOrEmpty(fullParamString)) { goto EndCall; }
-
                 var parsedParam = await ParseUrlParameterByType(parameterType);
 
                 //add to main list
@@ -274,43 +278,89 @@ namespace API
             }
 
 
-
-        //control comes here once all inputed from URL has been parsed
-        EndCall:
-
-            //add in optional missing parameters, since needed for final execution (only if missing save time)
-            if (parsedInputParamList.Count < allNeededParams.Count)
+            //STAGE 2 : HANDLE OPTIONAL PARAMETERS (can be in any order)
+            var optionalParsedInputParamList = new Dictionary<string, dynamic>();
+            
+            //only continue if param string still has data
+            if (!IsNoURLDataLeft(fullParamString))
             {
-                var parameters = calculator.GetParameters();
-                var args = new object[parameters.Length];
-                for (int i = 0; i < parameters.Length; i++)
+                //break down the optional params
+                //NOTE: all optional params are expected to be only in 1 format "ParamName/ParamValue"
+                var brokenParams = fullParamString.Split('/');
+
+                //time to parse for each optional param
+                //NOTE: this allows wrong optional params to be ignored, for only what is needed is checked
+                //get all optional parameters
+                var allOptionalParams = calculator.GetParameters().Where(p => p.HasDefaultValue).Select(p => p).ToList();
+                foreach (var optionalParam in allOptionalParams)
                 {
-                    //if parameter is provided, use it
-                    if (i < parsedInputParamList.Count)
-                    {
-                        args[i] = parsedInputParamList[i];
-                    }
-                    //if no val provided but has default value, use that
-                    else if (parameters[i].HasDefaultValue)
-                    {
-                        args[i] = parameters[i].DefaultValue;
-                    }
-                    //let caller know failed
-                    else
-                    {
-                        throw new ArgumentException($"Parameter {parameters[i].Name} has no default value and no value was provided.");
-                    }
+                    var lookingForName = optionalParam.Name.ToLower();
+                    
+                    //get index of param name that matches
+                    var foundIndex = brokenParams.ToList().FindIndex(p => p.ToLower() == lookingForName);
+
+                    //if none found, continue to next
+                    if (foundIndex == -1) { continue; }
+
+                    //get value of param name that matches 
+                    var valueToParse = brokenParams[foundIndex + 1]; //always next, hence plus 1
+
+                    //get the correct parser (can be for double, int or string)
+                    var parser = GetParser(optionalParam.ParameterType);
+                    
+                    //parse the data
+                    var parsedData = parser(valueToParse);
+
+                    //add to list
+                    optionalParsedInputParamList.Add(optionalParam.Name, parsedData);
+                }
+            }
+
+            //get all params to check if any optional params left
+            var allParams = calculator.GetParameters().Select(p => p).ToList();
+
+            //rebuild the params order
+            foreach (var param in allParams)
+            {
+                //if mandatory param, skip it since already processed & placed in order
+                if (!param.IsOptional) { continue; }
+
+                //since optional param, check if any was inputed
+                var foundOptionalParam = FindOptionalParam(param);
+
+                var isInputed = foundOptionalParam != null;
+                if (isInputed) { parsedInputParamList.Add(foundOptionalParam); }
+
+                //else if none was inputed, then use default value
+                else { parsedInputParamList.Add(param.DefaultValue); }
+
+            }
+
+
+            //inputed params is complete, send as is
+            return (parsedInputParamList, fullParamString);
+
+
+            //-------LOCAL FUNCTIONS-------
+
+            //find optional param from parsed list (based on name)
+            dynamic FindOptionalParam(ParameterInfo parameterInfo)
+            {
+                //get param name to compare
+                var neededParamName = parameterInfo.Name.ToLower();
+
+                //check if 1 name is found in other and vice versa
+                foreach (var parsedParam in optionalParsedInputParamList)
+                {
+                    var isFound = parsedParam.Key.ToLower() == neededParamName;
+
+                    //once found, return it
+                    if (isFound) { return parsedParam.Value; }
                 }
 
-
-                // send full list with missing params
-                return (args.ToList(), fullParamString);
+                //if control comes here, then no match found
+                return null;
             }
-            
-            //inputed params is complete, send as is
-            else { return (parsedInputParamList, fullParamString); }
-
-
 
             //note: placed inside to use same fullParamString 
             async Task<dynamic> ParseUrlParameterByType(Type parameterType)
@@ -378,6 +428,30 @@ namespace API
                 return parsedParam;
             }
 
+            //checks if URL is empty or has only "//"
+            bool IsNoURLDataLeft(string s) => s == "//" || string.IsNullOrEmpty(s);
+        }
+
+
+
+        private static Func<string, object> GetParser(Type type)
+        {
+            if (type == typeof(string))
+            {
+                return (input) => input;
+            }
+            else if (type.IsEnum)
+            {
+                return (input) => Enum.Parse(type, input, true);
+            }
+            else if (type == typeof(int))
+            {
+                return (input) => int.Parse(input);
+            }
+            else
+            {
+                throw new Exception($"Type Parser not implemented! {type.Name}");
+            }
         }
 
 

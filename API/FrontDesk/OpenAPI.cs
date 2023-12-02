@@ -433,20 +433,30 @@ namespace API
         }
 
 
-
+        /// <summary>
+        /// Given a type, will return a parser for it
+        /// </summary>
         private static Func<string, object> GetParser(Type type)
         {
+            //handle string
             if (type == typeof(string))
             {
                 return (input) => input;
             }
+            //handle enum
             else if (type.IsEnum)
             {
                 return (input) => Enum.Parse(type, input, true);
             }
+            //handle int
             else if (type == typeof(int))
             {
                 return (input) => int.Parse(input);
+            }
+            //handle double
+            else if (type == typeof(double))
+            {
+                return (input) => double.Parse(input);
             }
             else
             {

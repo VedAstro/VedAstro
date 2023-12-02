@@ -22,7 +22,6 @@ namespace Website
         public MatchTools Match;
         public PersonTools Person;
         public EventsChartTools EventsChart;
-        public MLTableTools MLTable;
 
         public readonly string UserId;
         public readonly string VisitorID;
@@ -41,7 +40,6 @@ namespace Website
             Match = new MatchTools(this);
             Person = new PersonTools(this);
             EventsChart = new EventsChartTools(this);
-            MLTable = new MLTableTools(this);
         }
 
 

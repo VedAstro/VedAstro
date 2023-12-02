@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,12 +8,17 @@ using System.Threading.Tasks;
 
 namespace VedAstro.Library
 {
-    public class Prastaraka : IToJson
+
+    /// <summary>
+    /// Data wrapper for Bhinnashtakavarga
+    /// Bhinnashtakavarga is a table of 7 rows and 12 columns
+    /// </summary>
+    public class Bhinnashtakavarga : IToJson
     {
 
-        private readonly Dictionary<string, Dictionary<ZodiacName, int>> _dictionary = new();
+        private readonly Dictionary<PlanetName, Dictionary<ZodiacName, int>> _dictionary = new();
 
-        public Dictionary<ZodiacName, int> this[string index]
+        public Dictionary<ZodiacName, int> this[PlanetName index]
         {
             get
             {
@@ -30,31 +36,8 @@ namespace VedAstro.Library
                 _dictionary[index] = value;
             }
         }
-        
-        /// <summary>
-        /// Calculated from Prastaraka rows
-        /// </summary>
-        public Dictionary<ZodiacName, int> BhinnashtakaRow()
-        {
-            //prepare empty row
-            var bhinnashtakaRow = ZodiacNameExtensions.AllZodiacSignsDictionary(0);
 
-            //create each bhinnashtaka cell 1 by 1
-            foreach (var bhinnashtakaCell in bhinnashtakaRow)
-            {
-                var totalSum = 0;   
-                //add to all the points for each zodiac
-                foreach (var prastarakaRow in _dictionary)
-                {
-                    totalSum += prastarakaRow.Value[bhinnashtakaCell.Key];
-                }
-
-                //add the total sum to the bhinnashtaka cell
-                bhinnashtakaRow[bhinnashtakaCell.Key] = totalSum;
-            }
-
-            return bhinnashtakaRow;
-        }
+        public Dictionary<PlanetName, Dictionary<ZodiacName, int>> Dictionary => _dictionary;
 
 
         #region JSON SUPPORT
@@ -65,7 +48,7 @@ namespace VedAstro.Library
         {
             var holder = new JObject();
 
-            //add in the rows for each planet & lagna
+            //add in the rows for each planet (only 7 for Bhinnashtakavarga)
             foreach (var item in _dictionary)
             {
                 //make all zodiacs as 1 to 12, with benefics valued 1
@@ -79,24 +62,9 @@ namespace VedAstro.Library
                 };
 
                 //put into main holder
-                holder[item.Key] = valueHolder;
+                holder[item.Key.ToString()] = valueHolder;
             }
 
-            //add in the final Bhinnashtaka row
-            var bhinnashtakaRowData = this.BhinnashtakaRow();
-
-            //make all zodiacs as 1 to 12, with benefics valued 1
-            var bhinnashtakaRowJson = RowToJArray(bhinnashtakaRowData, out var bhinnashtakaRowTotal);
-
-            //package the row
-            var bhinnashtakaRowHolder = new JObject
-            {
-                ["Total"] = bhinnashtakaRowTotal,
-                ["Rows"] = bhinnashtakaRowJson
-            };
-
-            //put into main holder
-            holder["Bhinnashtaka"] = bhinnashtakaRowHolder;
 
             return holder;
         }
@@ -120,22 +88,22 @@ namespace VedAstro.Library
         /// Given a json list of person will convert to instance
         /// used for transferring between server & client
         /// </summary>
-        public static List<Prastaraka> FromJsonList(JToken personList)
+        public static List<Bhinnashtakavarga> FromJsonList(JToken personList)
         {
             //if null empty list please
-            if (personList == null) { return new List<Prastaraka>(); }
+            if (personList == null) { return new List<Bhinnashtakavarga>(); }
 
-            var returnList = new List<Prastaraka>();
+            var returnList = new List<Bhinnashtakavarga>();
 
             foreach (var personJson in personList)
             {
-                returnList.Add(Prastaraka.FromJson(personJson));
+                returnList.Add(Bhinnashtakavarga.FromJson(personJson));
             }
 
             return returnList;
         }
 
-        public static Prastaraka FromJson(JToken personInput)
+        public static Bhinnashtakavarga FromJson(JToken personInput)
         {
             throw new NotImplementedException();
 

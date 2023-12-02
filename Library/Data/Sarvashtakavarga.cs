@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,18 +8,19 @@ using System.Threading.Tasks;
 
 namespace VedAstro.Library
 {
-    public class Prastaraka : IToJson
+    public class Sarvashtakavarga : IToJson
     {
+        public Dictionary<string, int[]> Rows => _rows;
 
-        private readonly Dictionary<string, Dictionary<ZodiacName, int>> _dictionary = new();
+        private readonly Dictionary<string, int[]> _rows = new();
 
-        public Dictionary<ZodiacName, int> this[string index]
+        public int[] this[string index]
         {
             get
             {
-                if (_dictionary.ContainsKey(index))
+                if (_rows.ContainsKey(index))
                 {
-                    return _dictionary[index];
+                    return _rows[index];
                 }
                 else
                 {
@@ -27,34 +29,11 @@ namespace VedAstro.Library
             }
             set
             {
-                _dictionary[index] = value;
+                _rows[index] = value;
             }
         }
-        
-        /// <summary>
-        /// Calculated from Prastaraka rows
-        /// </summary>
-        public Dictionary<ZodiacName, int> BhinnashtakaRow()
-        {
-            //prepare empty row
-            var bhinnashtakaRow = ZodiacNameExtensions.AllZodiacSignsDictionary(0);
 
-            //create each bhinnashtaka cell 1 by 1
-            foreach (var bhinnashtakaCell in bhinnashtakaRow)
-            {
-                var totalSum = 0;   
-                //add to all the points for each zodiac
-                foreach (var prastarakaRow in _dictionary)
-                {
-                    totalSum += prastarakaRow.Value[bhinnashtakaCell.Key];
-                }
-
-                //add the total sum to the bhinnashtaka cell
-                bhinnashtakaRow[bhinnashtakaCell.Key] = totalSum;
-            }
-
-            return bhinnashtakaRow;
-        }
+        public Dictionary<ZodiacName, int> SarvashtakavargaRow { get; set; } = ZodiacNameExtensions.AllZodiacSignsDictionary(0);
 
 
         #region JSON SUPPORT
@@ -66,7 +45,7 @@ namespace VedAstro.Library
             var holder = new JObject();
 
             //add in the rows for each planet & lagna
-            foreach (var item in _dictionary)
+            foreach (var item in _rows)
             {
                 //make all zodiacs as 1 to 12, with benefics valued 1
                 var zodiacRowPoints = RowToJArray(item.Value, out var rowTotal);
@@ -83,20 +62,20 @@ namespace VedAstro.Library
             }
 
             //add in the final Bhinnashtaka row
-            var bhinnashtakaRowData = this.BhinnashtakaRow();
+            var sarvashtakavargaRowData = this.SarvashtakavargaRow;
 
             //make all zodiacs as 1 to 12, with benefics valued 1
-            var bhinnashtakaRowJson = RowToJArray(bhinnashtakaRowData, out var bhinnashtakaRowTotal);
+            var sarvashtakavargaRowJson = RowToJArray(sarvashtakavargaRowData, out var sarvashtakavargaRowTotal);
 
             //package the row
-            var bhinnashtakaRowHolder = new JObject
+            var sarvashtakavargaRowHolder = new JObject
             {
-                ["Total"] = bhinnashtakaRowTotal,
-                ["Rows"] = bhinnashtakaRowJson
+                ["Total"] = sarvashtakavargaRowTotal,
+                ["Rows"] = sarvashtakavargaRowJson
             };
 
             //put into main holder
-            holder["Bhinnashtaka"] = bhinnashtakaRowHolder;
+            holder["Sarvashtakavarga"] = sarvashtakavargaRowHolder;
 
             return holder;
         }
@@ -116,26 +95,40 @@ namespace VedAstro.Library
             return zodiacRowPoints;
         }
 
+        private static JArray RowToJArray(int[] item, out int rowTotal)
+        {
+            JArray zodiacRowPoints = new JArray();
+            rowTotal = 0;
+            foreach (var value in item)
+            {
+                zodiacRowPoints.Add(value);
+                //add all the points for total (easy validation)
+                rowTotal += value;
+            }
+            return zodiacRowPoints;
+        }
+
+
         /// <summary>
         /// Given a json list of person will convert to instance
         /// used for transferring between server & client
         /// </summary>
-        public static List<Prastaraka> FromJsonList(JToken personList)
+        public static List<Sarvashtakavarga> FromJsonList(JToken personList)
         {
             //if null empty list please
-            if (personList == null) { return new List<Prastaraka>(); }
+            if (personList == null) { return new List<Sarvashtakavarga>(); }
 
-            var returnList = new List<Prastaraka>();
+            var returnList = new List<Sarvashtakavarga>();
 
             foreach (var personJson in personList)
             {
-                returnList.Add(Prastaraka.FromJson(personJson));
+                returnList.Add(Sarvashtakavarga.FromJson(personJson));
             }
 
             return returnList;
         }
 
-        public static Prastaraka FromJson(JToken personInput)
+        public static Sarvashtakavarga FromJson(JToken personInput)
         {
             throw new NotImplementedException();
 

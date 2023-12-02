@@ -1,10 +1,6 @@
 ﻿@using VedAstro.Library
-@using System.Reflection
 @using System.Text
-@using System;
-@using System.Collections.Generic;
 @using System.IO;
-@using OfficeOpenXml;
 @attribute [Route(PageRoute.TableGenerator)]
 
 <PageTitle>Data Generator | VedAstro</PageTitle>
@@ -31,35 +27,11 @@
                 <label class="input-group-text gap-2" for="SourceSelectInput" style="width: 165px;"><Icon IconName="flat-color-icons:data-recovery" Size="34" />Source</label>
                 <select @bind="SelectedSource" class="form-select" id="SourceSelectInput" style="font-weight: 600; font-size: 17px;">
                     <option value="" selected>Select...</option>
-                    <option value="generate">Generate New</option>
                     <option value="upload">Upload CSV or Excel</option>
                     <option value="sample">Public +10k Horoscopes</option>
                 </select>
             </div>
 
-            @* TIME RANGE GENERATE *@
-            <div @ref="timeRangeGenerateInputHtml" style="display:none;">
-                <div class="vstack gap-3">
-                    <TimeLocationInput LabelText="Start Time" @ref="_inputTimeLocation" />
-
-                    @* TIME RANGE *@
-                    <div class="input-group">
-                        <label class="input-group-text gap-2" for="TimeRangeInput" style="width: 165px;"><Icon IconName="flat-color-icons:calendar" Size="34" />End Time</label>
-                        <select @bind="SelectedTimeRangePreset" class="form-select" id="TimeRangeInput" style="font-weight: 600; font-size: 17px;">
-                            <option value="" selected>Make a choice...</option>
-                            <option value="1month">+/- 1 Month</option>
-                            <option value="2month">+/- 2 Month</option>
-                            <option value="3month">+/- 3 Months</option>
-                            <option value="6month">+/- 6 Months</option>
-                            <option value="1year">+/- 1 Year</option>
-                            <option value="3year">+/- 3 Year</option>
-                            <option value="5year">+/- 5 Year</option>
-                            <option value="10year">+/- 10 Year</option>
-                            <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
 
             @* TIME RANGE UPLOAD *@
             <div @ref="timeRangeUploadInputHtml" style="display:none;">
@@ -230,8 +202,6 @@
 
     private ElementReference timeRangeSampleInputHtml;
 
-    private ElementReference timeRangeGenerateInputHtml;
-
     private APISelectorBox ApiSelectorBox;
 
     private DataColumnSelector _DataColumnSelector;
@@ -278,20 +248,13 @@
             //hide & show the correct inputs
             switch (value)
             {
-                case "generate":
-                    _jsRuntime.Show(timeRangeGenerateInputHtml);
-                    _jsRuntime.Hide(timeRangeUploadInputHtml);
-                    _jsRuntime.Hide(timeRangeSampleInputHtml);
-                    break;
                 case "upload":
                     _jsRuntime.Show(timeRangeUploadInputHtml);
-                    _jsRuntime.Hide(timeRangeGenerateInputHtml);
                     _jsRuntime.Hide(timeRangeSampleInputHtml);
                     break;
                 case "sample":
                     _jsRuntime.Show(timeRangeSampleInputHtml);
                     _jsRuntime.Hide(timeRangeUploadInputHtml);
-                    _jsRuntime.Hide(timeRangeGenerateInputHtml);
                     break;
             }
 

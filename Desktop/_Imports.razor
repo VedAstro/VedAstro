@@ -1,9 +1,16 @@
 ﻿@using System.Net.Http
-@using System.Net.Http.Json
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.JSInterop
 @using Desktop
-@using Desktop.Components
+@using Desktop.Shared
+@using Website.Pages
+@using Website
+
+
+@*Vars declared in program.cs inject so accessible in page*@
+@inject IJSRuntime _jsRuntime
+@inject NavigationManager _navigation
+@inject HttpClient _client

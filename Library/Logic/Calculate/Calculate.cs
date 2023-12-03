@@ -7,13 +7,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using SwissEphNet;
 using static VedAstro.Library.PlanetName;
-using static VedAstro.Library.HouseName;
-using static VedAstro.Library.ZodiacName;
-using static VedAstro.Library.Ayanamsa;
-using System.Numerics;
 using ExCSS;
 using Newtonsoft.Json.Linq;
-using System.IO;
 
 
 namespace VedAstro.Library

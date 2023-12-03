@@ -27,13 +27,8 @@ using Azure.Storage.Blobs;
 using Svg;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
-using static Azure.Core.HttpHeader;
-using Newtonsoft.Json.Linq;
 using HtmlAgilityPack;
-using System.Collections.Generic;
 using Azure;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Microsoft.JSInterop;
 
 
 

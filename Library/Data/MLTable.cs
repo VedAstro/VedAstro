@@ -8,9 +8,6 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
-using Parquet;
-using Parquet.Data;
-using Parquet.Schema;
 
 namespace VedAstro.Library
 {
@@ -147,49 +144,50 @@ namespace VedAstro.Library
 
         public async Task<byte[]> ToParquet()
         {
-            var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(this.ToHtml());
+            throw new NotImplementedException();
+            //var htmlDocument = new HtmlDocument();
+            //htmlDocument.LoadHtml(this.ToHtml());
 
-            // Create a new Parquet file
-            using var memoryStream = new MemoryStream();
+            //// Create a new Parquet file
+            //using var memoryStream = new MemoryStream();
 
-            // Write the header (columns)
-            var header = htmlDocument.DocumentNode.SelectSingleNode("//tr");
-            var columnNames = header.Elements("th").Select(th => th.InnerText).ToList();
+            //// Write the header (columns)
+            //var header = htmlDocument.DocumentNode.SelectSingleNode("//tr");
+            //var columnNames = header.Elements("th").Select(th => th.InnerText).ToList();
 
-            // create file schema (columns)
-            var parsedColumnNames = columnNames.Select(columnName => new DataField<int>(columnName)).ToArray();
-            var schema = new ParquetSchema(parsedColumnNames);
+            //// create file schema (columns)
+            //var parsedColumnNames = columnNames.Select(columnName => new DataField<int>(columnName)).ToArray();
+            //var schema = new ParquetSchema(parsedColumnNames);
 
-            using var parquetWriter = await ParquetWriter.CreateAsync(schema, memoryStream);
+            //using var parquetWriter = await ParquetWriter.CreateAsync(schema, memoryStream);
 
 
-            // Write the rows
-            var rows = htmlDocument.DocumentNode.SelectNodes("//tr[position()>1]");
-            foreach (var row in rows)
-            {
-                using (ParquetRowGroupWriter groupWriter = parquetWriter.CreateRowGroup())
-                {
-                    var htmlNodes = row.Elements("td").ToArray();
-                    for (int i = 0; i < htmlNodes.Count(); i++)
-                    {
-                        var td = htmlNodes[i];
+            //// Write the rows
+            //var rows = htmlDocument.DocumentNode.SelectNodes("//tr[position()>1]");
+            //foreach (var row in rows)
+            //{
+            //    using (ParquetRowGroupWriter groupWriter = parquetWriter.CreateRowGroup())
+            //    {
+            //        var htmlNodes = row.Elements("td").ToArray();
+            //        for (int i = 0; i < htmlNodes.Count(); i++)
+            //        {
+            //            var td = htmlNodes[i];
 
-                        //parsedColumnNames;
-                        var idColumn = new DataColumn(
-                            schema.DataFields[i],
-                            new string[] { td.InnerText });
-                        await groupWriter.WriteColumnAsync(idColumn);
+            //            //parsedColumnNames;
+            //            var idColumn = new DataColumn(
+            //                schema.DataFields[i],
+            //                new string[] { td.InnerText });
+            //            await groupWriter.WriteColumnAsync(idColumn);
 
-                    }
+            //        }
 
-                }
+            //    }
 
-            }
-            parquetWriter.Dispose();
-            var parquet = memoryStream.ToArray();
+            //}
+            //parquetWriter.Dispose();
+            //var parquet = memoryStream.ToArray();
 
-            return parquet;
+            //return parquet;
         }
 
         public byte[] ToExcel()

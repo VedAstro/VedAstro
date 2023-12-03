@@ -1,12 +1,11 @@
-﻿namespace Desktop
-{
-    public partial class App : Application
-    {
-        public App()
-        {
-            InitializeComponent();
+﻿namespace Desktop;
 
-            MainPage = new MainPage();
-        }
-    }
+public partial class App : Application
+{
+	public App()
+	{
+		InitializeComponent();
+
+		MainPage = new MainPage();
+	}
 }

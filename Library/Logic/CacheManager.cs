@@ -159,7 +159,9 @@ namespace VedAstro.Library
             {
                 //get the cache file from disk
                 using var stream = File.OpenRead(file);
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 var formatter = new BinaryFormatter();
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
 
                 //get name of the method the cache belongs to
                 var rawName = file.Split('_');
@@ -277,7 +279,9 @@ namespace VedAstro.Library
             {
                 //create/overwrite the cache file
                 FileStream stream = File.Create(newFileName);
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 var formatter = new BinaryFormatter();
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
 
                 //save cache from memory to disk
 #pragma warning disable SYSLIB0011

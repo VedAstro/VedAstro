@@ -8,9 +8,10 @@
 @using Desktop.Shared
 @using Website.Pages
 @using Website
-
+@using CommunityToolkit.Maui.Storage
 
 @*Vars declared in program.cs inject so accessible in page*@
 @inject IJSRuntime _jsRuntime
+@inject IFileSaver _fileSaver
 @inject NavigationManager _navigation
 @inject HttpClient _client

@@ -1,4 +1,6 @@
-﻿using Desktop.Data;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
+using Desktop.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
@@ -13,10 +15,14 @@ namespace Desktop
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
+
+            //enable dialog to save file
+            builder.Services.AddSingleton<IFileSaver>(FileSaver.Default);
 
             builder.Services.AddMauiBlazorWebView();
 

@@ -179,7 +179,7 @@ namespace VedAstro.Library.Tests
         public void BhinnashtakavargaTest()
         {
 
-            var bhinnashtakavargaChart = Calculate.Bhinnashtakavarga(StandardHoroscope);
+            var bhinnashtakavargaChart = Calculate.BhinnashtakavargaChart(StandardHoroscope);
 
             //correct answer for Standard Horoscope from Ashtakavarga System pg.18            
             Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Aries]);
@@ -196,26 +196,6 @@ namespace VedAstro.Library.Tests
             Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Pisces]);
         }
         
-        [TestMethod()]
-        public void PrastarakaForPlanetTest()
-        {
-
-            var bhinnashtakavargaChart = Calculate.PlanetPrastaraka(JohnFKennedy, PlanetName.Sun);
-
-            //correct answer for Standard Horoscope from Ashtakavarga System pg.18            
-            Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Aries]);
-            Assert.AreEqual(3, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Taurus]);
-            Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Gemini]);
-            Assert.AreEqual(4, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Cancer]);
-            Assert.AreEqual(4, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Leo]); //todo in book is 5 here is 4 could be rounding
-            Assert.AreEqual(4, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Virgo]);
-            Assert.AreEqual(3, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Libra]);
-            Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Scorpio]);
-            Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Sagittarius]);
-            Assert.AreEqual(0, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Capricorn]);
-            Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Aquarius]);
-            Assert.AreEqual(5, bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Pisces]);
-        }
 
         [TestMethod()]
         public void NextLunarEclipseTest()

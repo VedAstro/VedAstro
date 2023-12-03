@@ -1,12 +1,6 @@
 ﻿using Azure.Data.Tables;
 using Azure;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-    using Azure.Data.Tables;
-    using Newtonsoft.Json;
 
 namespace VedAstro.Library
 {

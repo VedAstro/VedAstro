@@ -1,0 +1,91 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library
+
+
+@*
+    BUTTONS USED IN TOP BAR
+- have been separated so that can render unique nav bar for mobile
+- REFERENCE BUTTONS : buttons placed here are linked to places not needed all the time, like About and Docs -->
+*@
+
+<IconButton SmallSize="true" IconName="lucide:panel-left-close" OnClickCallback="OnClickHideSidebar" TooltipText="Hide Sidebar" />
+<IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Dark/Light Mode" />
+
+@*show links to beta & stable from vice versa
+@if (@WebsiteTools.GetIsBetaRuntime())
+{
+    <IconButton RetinaText="NOW BETA" SmallSize="true" Color="warning" IconName="mdi:bench-back" OnClickCallback="() => ChangeDomainMaintainURL(URL.WebStable)" TooltipText="Old version" />
+}
+else
+{
+    <IconButton RetinaText="NOW STABLE" SmallSize="true" Color="warning" IconName="icomoon-free:lab" OnClickCallback="() => ChangeDomainMaintainURL(URL.WebBeta)" TooltipText="Latest version" />
+}*@
+
+<IconButton ExtraClass="ms-md-auto" SmallSize="true" Outline="true" ButtonText="Guide" IconName="mdi:book-open-page-variant-outline" ClickUrl="@PageRoute.QuickGuide" />
+<IconButton SmallSize="true" Outline="true" ButtonText="Open API" IconName="carbon:gateway-api" ClickUrl="@PageRoute.APIBuilder" />
+<IconButton SmallSize="true" Color="warning" ButtonText="Donate" IconName="openmoji:love-letter" ClickUrl="@PageRoute.Donate" />
+<IconButton SmallSize="true" Outline="true" IconName="ep:guide">
+@*     <DropDownList>
+        <li><a class="dropdown-item" href="@PageRoute.Contact">Contact Us</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.About">About</a></li>
+        <li><a class="dropdown-item" href="@URL.YoutubeChannel" target="_blank">Video Guides</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.JoinOurFamily">Join Us</a></li>
+        <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Blog</a></li>
+        <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Forum</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.Glossary">Glossary</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.CalculatorList">Calculators</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.PersonList">Person List</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.TrainAIAstrologer">Train AI</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.Remedy">Remedy</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.Download">Download</a></li>
+        <li><a class="dropdown-item" href="@AppData.URL.ApiUrl">API Live Status</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.AskAstrologer">Ask Astrologer</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.TableGenerator">Table Generator</a></li>
+    </DropDownList>
+ *@</IconButton>
+
+
+
+@code {
+
+    private async Task OnClickHideSidebar()
+    {
+        //sidebar is already set hide in mobile, only made visible via md block class
+        _jsRuntime.ToggleClass(AppData.DesktopSidebar, "d-md-block");
+    }
+
+    private async Task OnClickDarkModeButton()
+    {
+        //using JS lib toggle the dark mode
+        await _jsRuntime.InvokeVoidAsync(JS.DarkMode_toggle);
+
+        //get dark mode value and store it for use by event chart
+        await AppData.UpdateDarkMode(_jsRuntime);
+
+        //special for event chart, if exist on page change vis JS for instant correction
+        //note : this makes chart appear normal in dark/normal mode
+        var value = AppData.DarkMode ? "difference" : "normal";
+        await _jsRuntime.SetCss("#EventsChartSvgHolder", "mix-blend-mode", value);
+
+    }
+
+    /// <summary>
+    /// Allows to switch between STABLE and BETA in the same page
+    /// </summary>
+    private void ChangeDomainMaintainURL(string newDomain)
+    {
+
+        //get current url without domain
+        var domain = _navigation.BaseUri; //domain
+        var fullUrl = _navigation.Uri; //full url
+                                            //remove domain, to get url without domain
+        var pathUrl = fullUrl.Remove(0, (domain.Length - 1)); //note we don't delete last slash
+
+        //add in new new domain
+        var newUrl = newDomain + pathUrl;
+
+        //goto new URL (same tab, but refresh)
+       AppData.Go(newUrl, true);
+    }
+
+}

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
         <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
@@ -128,7 +128,6 @@
 		<Content Include="..\ViewComponents\Components\TimeInput.razor" Link="ViewComponents\TimeInput.razor" />
 		<Content Include="..\ViewComponents\Components\TimeInputSimple.razor" Link="ViewComponents\TimeInputSimple.razor" />
 		<Content Include="..\ViewComponents\Components\TimeLocationInput.razor" Link="ViewComponents\TimeLocationInput.razor" />
-		<Content Include="..\ViewComponents\Components\TopBarButtons.razor" Link="ViewComponents\TopBarButtons.razor" />
 		<Content Include="..\ViewComponents\Components\TypeSpecificInput.razor" Link="ViewComponents\TypeSpecificInput.razor" />
 		<Content Include="..\ViewComponents\Components\UnderConstructionHeader.razor" Link="ViewComponents\UnderConstructionHeader.razor" />
 		<Content Include="..\ViewComponents\Pages\SearchResult.razor" Link="Pages\SearchResult.razor" />

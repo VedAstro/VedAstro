@@ -3617,6 +3617,22 @@ namespace VedAstro.Library
             return $"{Math.Round(durationInYears, 1)} years";
         }
 
+
+        /// <summary>
+        /// Given bytes in long will convert to human readable text, exp : 1.2 GB
+        /// </summary>
+        public static string BytesToHumanText(long bytes)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            int order = 0;
+            while (bytes >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                bytes = bytes / 1024;
+            }
+            // Format the output to 2 decimal places
+            return string.Format("{0:0.##} {1}", bytes, sizes[order]);
+        }
     }
 
 

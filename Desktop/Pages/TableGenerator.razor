@@ -36,19 +36,22 @@
             @* TIME RANGE UPLOAD *@
             <div @ref="timeRangeUploadInputHtml" style="display:none;">
                 <div class="vstack gap-2 input-group mb-3">
-                    <div class="form-control">
+                    <div class="form-control" style=" width: 100%; border-radius: 6px; ">
                         <InputFile id="inputGroupFile02" OnChange="@OnInputFileChange" />
                     </div>
-                    <div>
+                    <div @ref="SampleInstructHolder">
                         1.<BoldLink URL="@URL.ExcelSampleMLFile">Download</BoldLink> sample EXCEL file.<br />
                         2. Modify excel file and upload back here.
                     </div>
                 </div>
                 <div @ref="uploadFileInfoHolder" class="hstack gap-3" style="display:none;">
-                    <span>File Read Complete!</span>
+                    <div class="hstack gap-2">
+                        <Icon IconName="icon-park:file-success" Size="25" />
+                        Read Complete!
+                    </div>
                     <span class="mt-1">Rows : <strong>@_timeList.Count</strong></span>
                     @* <span class="mt-1">Type : <strong>@UploadedFile?.ContentType</strong></span> *@
-                    <span class="mt-1">Size : <strong>@UploadedFile?.Size</strong></span>
+                    <span class="mt-1">Size : <strong>@Tools.BytesToHumanText(UploadedFile?.Size ?? 0)</strong></span>
                 </div>
 
             </div>
@@ -200,6 +203,8 @@
 
     private ElementReference timeRangeUploadInputHtml;
 
+    private ElementReference SampleInstructHolder;
+
     private ElementReference timeRangeSampleInputHtml;
 
     private APISelectorBox ApiSelectorBox;
@@ -315,6 +320,9 @@
 
             if (_timeList.Any() && _timeList != null)
             {
+                //hide distracting sample info
+                _jsRuntime.Hide(SampleInstructHolder);
+
                 //show info about parsed file
                 _jsRuntime.Show(uploadFileInfoHolder);
 
@@ -424,7 +432,7 @@
 
         //convert created table to Excel file
         var _columnNameList = _DataColumnSelector.SelectedMethodMetaList;
-        var excelFileBytes = new byte[]{};
+        var excelFileBytes = new byte[] { };
         //var excelFileBytes = await AppData.API.MLTable.GenerateMLTable<byte[]>(_timeList, _columnNameList, "EXCEL");
 
         var base64Raw = Convert.ToBase64String(excelFileBytes);

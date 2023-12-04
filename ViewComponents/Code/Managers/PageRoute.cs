@@ -37,6 +37,7 @@
         //CALCULATORS
         public const string CalculatorList = "Calculator/";
         public const string LifePredictor = "LifePredictor";
+        public const string LifePredictorHD = "LifePredictorHD";
         public const string LifePredictorParam = "LifePredictor/{PersonIdUrl}";
         public const string GoodTimeFinder = "GoodTimeFinder";
         public const string StarsAboveMe = "StarsAboveMe";

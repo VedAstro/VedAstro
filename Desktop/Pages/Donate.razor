@@ -1,0 +1,22 @@
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.Donate)]
+
+<PageTitle>Donate</PageTitle>
+
+@code {
+
+
+    //temp code to redirect to browser and return app back
+    //TODO can be improved, preprocessor directives for platform
+    protected override async Task OnInitializedAsync()
+    {
+        if (await Launcher.CanOpenAsync(URL.Donate))
+        {
+            await Launcher.OpenAsync(URL.Donate);
+        }
+
+        _jsRuntime?.GoBack();
+
+    }
+
+}

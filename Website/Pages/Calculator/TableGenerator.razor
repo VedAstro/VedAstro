@@ -15,476 +15,98 @@
 </PageTop>
 
 <div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
-    @* INPUT *@
-    <div class="vstack gap-5" style="max-width: @GR.W412px;">
 
-        @* SOURCE SELECTOR *@
-        <div class="vstack gap-3">
-            <IconTitle IconName="flat-color-icons:list" Title="Time List" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
-                <ButtonRow>
-                    <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.Column1MLData" SmallIcon="true" />
-                </ButtonRow>
-            </IconTitle>
-
-            @* SOURCE SELECT *@
-            <div class="input-group">
-                <label class="input-group-text gap-2" for="SourceSelectInput" style="width: 165px;"><Icon IconName="flat-color-icons:data-recovery" Size="34" />Source</label>
-                <select @bind="SelectedSource" class="form-select" id="SourceSelectInput" style="font-weight: 600; font-size: 17px;">
-                    <option value="" selected>Select...</option>
-                    <option value="generate">Generate New</option>
-                    <option value="upload">Upload CSV or Excel</option>
-                    <option value="sample">Public +10k Horoscopes</option>
-                </select>
-            </div>
-
-            @* TIME RANGE GENERATE *@
-            <div @ref="timeRangeGenerateInputHtml" style="display:none;">
-                <div class="vstack gap-3">
-                    <TimeLocationInput LabelText="Start Time" @ref="_inputTimeLocation" />
-
-                    @* TIME RANGE *@
-                    <div class="input-group">
-                        <label class="input-group-text gap-2" for="TimeRangeInput" style="width: 165px;"><Icon IconName="flat-color-icons:calendar" Size="34" />End Time</label>
-                        <select @bind="SelectedTimeRangePreset" class="form-select" id="TimeRangeInput" style="font-weight: 600; font-size: 17px;">
-                            <option value="" selected>Make a choice...</option>
-                            <option value="1month">+/- 1 Month</option>
-                            <option value="2month">+/- 2 Month</option>
-                            <option value="3month">+/- 3 Months</option>
-                            <option value="6month">+/- 6 Months</option>
-                            <option value="1year">+/- 1 Year</option>
-                            <option value="3year">+/- 3 Year</option>
-                            <option value="5year">+/- 5 Year</option>
-                            <option value="10year">+/- 10 Year</option>
-                            <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
-                        </select>
+    <ArticleBlock Title="How To Use?" IconName="flat-color-icons:close-up-mode">
+        <TextHTML>
+            <div class="container ">
+                <div class="row row-cols-3 align-items-center justify-content-start">
+                    <div class="col-auto p-0 align-self-start">
+                        <kbd>STEP 1</kbd>
+                    </div>
+                    <div class="col-6">
+                        <span>Download &amp; install <strong>VedAstro Desktop</strong></span>
+                    </div>
+                    <div class="col">
+                        <IconButton SmallSize="true" ButtonText="Download" OnClickCallback="OnClickDownload" TooltipText="Download .exe file" TextCenter="true" IconName="line-md:download-loop"/>
+                    </div>
+                </div>
+                <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                    <div class="col-auto p-0 align-self-start">
+                        <kbd>STEP 2</kbd>
+                    </div>
+                    <div class="col-6">
+                        <span>Select <strong>Table Generator</strong> from side menu.</span>
+                        <img src="images/table-generator-guide-step-2.png" class="mt-2 img-fluid rounded border border-secondary" />
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                    <div class="col-auto p-0 align-self-start">
+                        <kbd>STEP 3</kbd>
+                    </div>
+                    <div class="col-6">
+                        <span>Upload time list, sample provided.</span>
+                        <img src="images/table-generator-guide-step-3.png" class="mt-2 img-fluid rounded border border-secondary" />
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                    <div class="col-auto p-0 align-self-start">
+                        <kbd>STEP 4</kbd>
+                    </div>
+                    <div class="col-6">
+                        <span>Select <strong>astro data</strong> points as <strong>columns</strong></span>
+                        <img src="images/table-generator-guide-step-4.png" class="mt-2 img-fluid rounded border border-secondary" />
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                    <div class="col-auto p-0 align-self-start">
+                        <kbd>STEP 5</kbd>
+                    </div>
+                    <div class="col-6">
+                        <span>Click <strong>Generate</strong> &amp; download table.<strong style="color: #007e21;">Easy!</strong></span>
+                        <img src="images/table-generator-guide-step-5.png" class="mt-2 img-fluid rounded border border-secondary" />
+                    </div>
+                    <div class="col">
                     </div>
                 </div>
             </div>
+        </TextHTML>
+    </ArticleBlock>
 
-            @* TIME RANGE UPLOAD *@
-            <div @ref="timeRangeUploadInputHtml" style="display:none;">
-                <div class="vstack gap-2 input-group mb-3">
-                    <div class="form-control">
-                        <InputFile id="inputGroupFile02" OnChange="@OnInputFileChange" />
-                    </div>
-                    <div>
-                        1.<BoldLink URL="@URL.ExcelSampleMLFile">Download</BoldLink> sample EXCEL file.<br />
-                        2. Modify excel file and upload back here.
-                    </div>
-                </div>
-                <div @ref="uploadFileInfoHolder" class="hstack gap-3" style="display:none;">
-                    <span>File Read Complete!</span>
-                    <span class="mt-1">Rows : <strong>@_timeList.Count</strong></span>
-                    <span class="mt-1">Type : <strong>@UploadedFile?.ContentType</strong></span>
-                    <span class="mt-1">Size : <strong>@UploadedFile?.Size</strong></span>
-                </div>
+    <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
+        <TextHTML>
+            After download. You can input to a ML model maker, to generate modals like below.
+            <img src="images/ml-modal-graph-sample-2.png" class="mt-2 img-fluid rounded border border-secondary" />
+        </TextHTML>
+    </ArticleBlock>
 
-            </div>
+    <ArticleBlock Title="Price" IconName="flat-color-icons:money-transfer">
+        <ButtonRow>
+            <IconButton PlaceBottom="true" SmallSize="true" Color="warning" ButtonText="Donate" IconName="openmoji:love-letter" ClickUrl="@PageRoute.Donate" />
+        </ButtonRow>
+        <TextHTML>
+            This service will run for <kbd>FREE</kbd>, so long there is money in the <strong>donation box</strong>.
+            Below is the <strong>live</strong> balance with auto deducting server &amp; maintenance costs.
 
-            @* TIME RANGE SAMPLE HOROSCOPES *@
-            <div @ref="timeRangeSampleInputHtml" style="display:none;">
-                <div>
-                    <Icon IconName="noto-v1:construction" />
-                    <p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
-                </div>
-            </div>
+            <DonationBalanceViewer />
 
-
-        </div>
-
-        @* DATA POINT / METHOD SELECT *@
-        <DataColumnSelector CustomAllMethodList="@MethodListALL" @ref="_DataColumnSelector" />
-
-        @* GENERATE BUTTON *@
-        <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGenerateHTML" />
-    </div>
-
-    @* OUTPUT TABLE *@
-    <div class="vstack gap-3 mt-4">
-        @*dont wrap table, looks untidy*@
-        <style>
-            th {
-                white-space: nowrap;
-            }
-
-            td {
-                white-space: nowrap;
-            }
-        </style>
-
-        @if (_isReady)
-        {
-            @* TITLE & OPTIONS *@
-            <div class="hstack gap-4">
-
-                <div class="hstack gap-3">
-                    <IconButton SmallSize="true" IconName="iconamoon:zoom-in" TooltipText="Zoom In" OnClickCallback="OnClickZoomIn" />
-                    <IconButton SmallSize="true" IconName="iconamoon:zoom-out" TooltipText="Zoom Out" OnClickCallback="OnClickZoomOut" />
-                    <IconButton SmallSize="true" ButtonText="Download" IconName="line-md:cloud-download-loop">
-                        <DropDownList>
-                            <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadCSV">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="eos-icons:csv-file" />
-                                    <span>CSV</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadJson">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="bxs:file-json" />
-                                    <span>JSON</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mdi:microsoft-excel" />
-                                    <span>Excel</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="simple-icons:apacheparquet" />
-                                    <span>Parquet</span>
-                                </a>
-                            </li>
-                            @*  <li>
-                        <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="tabler:file-database" />
-                        <span>HDF5</span>
-                        </a>
-                        </li> *@
-                        </DropDownList>
-                    </IconButton>
-                </div>
-                <div class="hstack gap-3">
-                    <span class="mt-1">Rows : <strong>Coming soon...</strong></span>
-                    <span class="mt-1">Columns : <strong>Coming soon...</strong></span>
-                </div>
-            </div>
-
-
-            @* TABLE *@
-            <div id="MLTableHolder">
-                @((MarkupString)HtmlTable)
-            </div>
-        }
-        else
-        {
-            <hr class="mt-5" />
-
-            @* PLACE HOLDER MESSAGE *@
-            @* hide when loaded *@
-            <div class="d-flex justify-content-center" style="@((!_isReady) ? "" : "display:none !important;")">
-                @* important needed to override flex *@
-                <span style="color: @AppData.Grey; font-size: 14px;">
-                    Table will appear here after <strong>Generate</strong><br />
-                    Export as <strong>CSV</strong> or <strong>Excel</strong>
-                </span>
-                <span style="color: @AppData.Grey; font-size: 14px;"></span>
-            </div>
-            <hr class="" />
-
-        }
-
-    </div>
-
-    @* DOCS *@
-    <div class="">
-
-        <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
-            <TextHTML>
-                After download table in suitable format. You can feed it into an ML model maker, this can be done Python.
-                You can also run <kbd>pip install vedastro</kbd> in your local or cloud environment.
-            </TextHTML>
-        </ArticleBlock>
-
-        <ArticleBlock Title="Price" IconName="flat-color-icons:money-transfer">
-            <ButtonRow>
-                <IconButton PlaceBottom="true" SmallSize="true" Color="warning" ButtonText="Donate" IconName="openmoji:love-letter" ClickUrl="@PageRoute.Donate" />
-            </ButtonRow>
-            <TextHTML>
-                This service will run for <kbd>FREE</kbd>, so long there is money in the <strong>donation box</strong>.
-                Below is the <strong>live</strong> balance with auto deducting server &amp; maintenance costs.
-
-                <DonationBalanceViewer />
-
-                Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to keep this service running for yourself and others.
-            </TextHTML>
-        </ArticleBlock>
-
-    </div>
+            Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to keep this service running for yourself and others.
+        </TextHTML>
+    </ArticleBlock>
 </div>
 
 
 @code {
 
-    #region FIELDS
-
-    /// <summary>
-    /// generated after upload or after selecting time range
-    /// </summary>
-    List<Time> _timeList = new List<Time>();
-
-    private int CurrentZoomLevel = 100; //defaults to 100 on start
-
-    private ElementReference timeRangeUploadInputHtml;
-
-    private ElementReference timeRangeSampleInputHtml;
-
-    private ElementReference timeRangeGenerateInputHtml;
-
-    private APISelectorBox ApiSelectorBox;
-
-    private DataColumnSelector _DataColumnSelector;
-
-    private TimeLocationInput _inputTimeLocation;
-
-    private static List<OpenAPIMetadata> MethodListALL
+    private void OnClickDownload()
     {
-        get
-        {
+        _jsRuntime.FunFeaturePopUp("TableGen");
 
-            //get all the calc for time & planet (possible data points)
-            var foundCalcs = AutoCalculator.FindCalcs(null, Time.Empty, PlanetName.Sun); //note data does not matter
-            var tempAll = OpenAPIMetadata.FromMethodInfoList(foundCalcs);
-            return tempAll;
-        }
-    }
-
-    private bool _isReady;
-    public IBrowserFile? UploadedFile { get; set; }
-    private ElementReference uploadFileInfoHolder;
-
-    public string? SelectedTimeRangePreset
-    {
-        get => _selectedTimeRangePreset;
-        set
-        {
-            //if user selected some value than only show data input
-            //NOTE: this is done reduce clutter until last needed (better UX, sweet heart's idea)
-            if (!string.IsNullOrEmpty(value)) { _DataColumnSelector.Show(); }
-
-            //auto scroll for user lower, so user can see better
-            AppData.Go(PageRoute.DataColumnSelector);
-
-            _selectedTimeRangePreset = value;
-        }
-    }
-
-    public string? SelectedSource
-    {
-        get => _selectedSource;
-        set
-        {
-            //hide & show the correct inputs
-            switch (value)
-            {
-                case "generate":
-                    _jsRuntime.Show(timeRangeGenerateInputHtml);
-                    _jsRuntime.Hide(timeRangeUploadInputHtml);
-                    _jsRuntime.Hide(timeRangeSampleInputHtml);
-                    break;
-                case "upload":
-                    _jsRuntime.Show(timeRangeUploadInputHtml);
-                    _jsRuntime.Hide(timeRangeGenerateInputHtml);
-                    _jsRuntime.Hide(timeRangeSampleInputHtml);
-                    break;
-                case "sample":
-                    _jsRuntime.Show(timeRangeSampleInputHtml);
-                    _jsRuntime.Hide(timeRangeUploadInputHtml);
-                    _jsRuntime.Hide(timeRangeGenerateInputHtml);
-                    break;
-            }
-
-            _selectedSource = value;
-        }
-    }
-
-    private List<MLTableRow> TableRowList { get; set; } = new List<MLTableRow>();
-
-    private TimeRange timeRange = TimeRange.Empty;
-
-    private string? _selectedSource;
-
-    /// <summary>
-    /// Filled with data when Generate button is clicked
-    /// </summary>
-    private string? HtmlTable;
-
-    private string? _selectedTimeRangePreset = ""; //leave default empty to detect later
-
-
-    #endregion
-
-    protected override async Task OnInitializedAsync()
-    {
-        //give time to pop, because next is heavy
-        await _jsRuntime.ShowLoading(100);
-
-        _DataColumnSelector.Hide();
-
-        _jsRuntime.HideLoading();
-
-    }
-
-
-    //// <summary>
-    /// Once received file send for processing (API) to extract time list for later use
-    /// </summary>
-    private async Task OnInputFileChange(InputFileChangeEventArgs e)
-    {
-        var file = e.File;
-        if (file != null)
-        {
-            //keep a copy of the file to be used later
-            UploadedFile = file;
-
-            //show icon that file is being processed hold tight
-            await _jsRuntime.ShowLoading();
-
-            //once updated here, files rows count can be seen by user
-            using var ms = new MemoryStream();
-            await UploadedFile.OpenReadStream().CopyToAsync(ms);
-            ms.Position = 0;
-            var inputedFile = ms.ToArray();
-            _timeList = await AppData.API.MLTable.GetTimeListFromExcel(inputedFile);
-
-            if (_timeList.Any() && _timeList != null)
-            {
-                //let user know upload success
-                _jsRuntime.Show(uploadFileInfoHolder);
-
-                //now show data column input
-                //NOTE: this is done reduce clutter until last needed (better UX, sweet heart's idea)
-                _DataColumnSelector.Show();
-
-                _jsRuntime.HideLoading();
-            }
-            else
-            {
-                //mark invalid & alert user
-                await _jsRuntime.ShowAlert("error", AlertText.FailedFileProcess, true);
-            }
-
-        }
-    }
-
-
-    /// <summary>
-    /// Only generates
-    /// </summary>
-    /// <returns></returns>
-    private async Task OnClickGenerateHTML()
-    {
-
-        await _jsRuntime.ShowLoading();
-
-        //hide & also regenerates table
-        _isReady = false;
-
-        //convert inputed data via API into fully calculated html table (conversion to CSV,.. on client side)
-        //note: Time list should be generated by previous API call and should be ready for use
-        var _columnNameList = _DataColumnSelector.SelectedMethodMetaList;
-        HtmlTable = await AppData.API.MLTable.GenerateMLTable<string>(_timeList, _columnNameList, "HTML");
-
-        //can show now also regenerates table
-        _isReady = true;
-
-        //tactile feedback to user
-        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
-
-        _jsRuntime.PlayDoneSound();
-
-        //update view
-        StateHasChanged();
-
-
-        //auto scroll to URL display out, so user can see better
-        AppData.Go(PageRoute.GeneratedTableOut);
-
-    }
-
-    private async Task OnClickDownloadCSV()
-    {
-        //show loading
-        await _jsRuntime.ShowLoading(100);
-
-        //convert created table to CSV string
-        var _columnNameList = _DataColumnSelector.SelectedMethodMetaList;
-        var csvString = await AppData.API.MLTable.GenerateMLTable<string>(_timeList, _columnNameList, "CSV");
-
-        // convert string to file
-        var bytes = Encoding.UTF8.GetBytes(csvString);
-        var base64Raw = Convert.ToBase64String(bytes);
-
-        //start download using JS
-        var base64 = $"data:text/csv;base64,{base64Raw}";
-        var filename = $"DataTable.csv"; //todo better name
-        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, base64);
-
-        //tactile feedback to user
-        _jsRuntime.PlayDoneSound();
-        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
-    }
-
-    private async Task OnClickDownloadJson()
-    {
-        //show loading
-        await _jsRuntime.ShowLoading(100);
-
-        //convert created table to CSV string
-        var _columnNameList = _DataColumnSelector.SelectedMethodMetaList;
-        var csvString = await AppData.API.MLTable.GenerateMLTable<string>(_timeList, _columnNameList, "JSON");
-
-        // convert string to file
-        var bytes = Encoding.UTF8.GetBytes(csvString);
-        var base64Raw = Convert.ToBase64String(bytes);
-
-        //start download using JS
-        var base64 = $"data:application/json;base64,{base64Raw}";
-        var filename = $"DataTable.json"; //todo better name
-        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, base64);
-
-        //tactile feedback to user
-        _jsRuntime.PlayDoneSound();
-        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
-    }
-
-    private async Task OnClickDownloadExcel()
-    {
-        //show loading
-        await _jsRuntime.ShowLoading(100);
-
-        //convert created table to Excel file
-        var _columnNameList = _DataColumnSelector.SelectedMethodMetaList;
-        var excelFileBytes = await AppData.API.MLTable.GenerateMLTable<byte[]>(_timeList, _columnNameList, "EXCEL");
-
-        var base64Raw = Convert.ToBase64String(excelFileBytes);
-        //start download using JS
-        var base64 = $"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64Raw}";
-        var filename = $"DataTable.xlsx"; //todo better name
-        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, base64);
-        //tactile feedback to user
-        _jsRuntime.PlayDoneSound();
-        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
-
-    }
-
-    private async Task OnClickZoomIn()
-    {
-        //increment current zoom level
-        CurrentZoomLevel += 10;
-
-        //note : beautiful JS use without call to JS file (AI's awesome "eval" method)
-        await _jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('MLTableHolder').style.zoom = '{CurrentZoomLevel}%'");
-    }
-
-    private async Task OnClickZoomOut()
-    {
-        //increment current zoom level
-        CurrentZoomLevel -= 10;
-
-        //note : beautiful JS use without call to JS file (AI's awesome "eval" method)
-        await _jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('MLTableHolder').style.zoom = '{CurrentZoomLevel}%'");
     }
 
 }

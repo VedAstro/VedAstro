@@ -11,6 +11,7 @@ public class URL
     public const string ApiStableDirect = "https://vedastroapi.azurewebsites.net";
     public const string WebBeta = "https://beta.vedastro.org";
     public const string WebStable = "https://vedastro.org";
+    public const string WebDirect = "https://vedastrowebsitestorage.z5.web.core.windows.net";
 
     /// <summary>
     /// I know its tedious to make it a instance but shows that URLS are
@@ -25,6 +26,7 @@ public class URL
         ApiUrl = isBetaRuntime ? ApiBeta : ApiStable;
         ApiUrlDirect = isBetaRuntime ? ApiBetaDirect : ApiStableDirect;
         WebUrl = isBetaRuntime ? WebBeta : WebStable;
+        WebUrlDirect = WebDirect;
 
         //if DEBUG MODE set all to local (bye bye Postman! we don't need you anymore!)
         if (debugMode)
@@ -83,8 +85,9 @@ public class URL
         GetEventsApi = ApiUrl + "/getevents";
         SignInGoogle = ApiUrl + "/SignInGoogle";
         SignInFacebook = ApiUrl + "/SignInFacebook"; 
-        HoroscopeDataListXml = $"{WebUrl}/data/HoroscopeDataList.xml";//used in horoscope prediction
-        EventsChartViewerHtml = $"{WebUrl}/data/EventsChartViewer.html";
+        //NOTE: special use of "direct" url for max speed (no CDN)
+        HoroscopeDataListXml = $"{WebUrlDirect}/data/HoroscopeDataList.xml";//used in horoscope prediction
+        EventsChartViewerHtml = $"{WebUrlDirect}/data/EventsChartViewer.html";
         ToolbarSvgAzure = $"{WebUrl}/svg/Toolbar.svg";// Toolbar.svg used in when rendering events chart
         APIHomePageTxt = $"{WebUrl}/data/APIHomePage.html";
 
@@ -104,6 +107,7 @@ public class URL
     public readonly string ApiUrl;
     public readonly string ApiUrlDirect;
     public readonly string WebUrl;
+    public readonly string WebUrlDirect;
     public readonly string GetHoroscope;
     public readonly string AddLifeEventApi;
     public readonly string AddMessageApi;
@@ -212,6 +216,7 @@ public class URL
     public const string APIGuideNextStep = "https://youtu.be/y110RAgIorY?t=127";
     public const string Donate = "https://vedastro.org/Donate";
     public const string VSLifeSharePublicSession = "https://prod.liveshare.vsengsaas.visualstudio.com/join?CBAE0FED0D849DD2E74F90CD7F4DC639AA89";
-    public const string HoroscopeDataListFile = "https://vedastro.org/data/HoroscopeDataList.xml"; //todo should be getting beta version
+    public const string HoroscopeDataListFile = "https://vedastrowebsitestorage.z5.web.core.windows.net/data/HoroscopeDataList.xml";
+    public const string DownloadDesktopAppWindows = "#"; //todo should be getting beta version
 
 }

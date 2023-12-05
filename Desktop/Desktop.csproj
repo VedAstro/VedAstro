@@ -46,6 +46,47 @@
         <GenerateTestArtifacts>True</GenerateTestArtifacts>
         <AppInstallerUri>C:\Users\ASUS\Desktop\Projects\VedAstro\Desktop\Installer</AppInstallerUri>
         <HoursBetweenUpdateChecks>24</HoursBetweenUpdateChecks>
+        <Description>An open source vedic astrology calculator</Description>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
+      <ApplicationTitle>VedAstro Desktop</ApplicationTitle>
+      <ApplicationId>org.vedastro.desktop</ApplicationId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+      <ApplicationTitle>VedAstro Desktop</ApplicationTitle>
+      <ApplicationId>org.vedastro.desktop</ApplicationId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
+      <ApplicationTitle>VedAstro Desktop</ApplicationTitle>
+      <ApplicationId>org.vedastro.desktop</ApplicationId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
+      <ApplicationTitle>VedAstro Desktop</ApplicationTitle>
+      <ApplicationId>org.vedastro.desktop</ApplicationId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
+      <ApplicationTitle>VedAstro Desktop</ApplicationTitle>
+      <ApplicationId>org.vedastro.desktop</ApplicationId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
+      <ApplicationTitle>VedAstro Desktop</ApplicationTitle>
+      <ApplicationId>org.vedastro.desktop</ApplicationId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
+      <ApplicationTitle>VedAstro Desktop</ApplicationTitle>
+      <ApplicationId>org.vedastro.desktop</ApplicationId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
+      <ApplicationTitle>VedAstro Desktop</ApplicationTitle>
+      <ApplicationId>org.vedastro.desktop</ApplicationId>
     </PropertyGroup>
 
     <ItemGroup>

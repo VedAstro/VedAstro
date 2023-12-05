@@ -13,6 +13,7 @@ export var setProperty = (key, value) => { localStorage[key] = JSON.stringify(va
 export var removeClassWrapper = (element, classString) => $(element).removeClass(classString);
 export var addClassWrapper = (element, classString) => $(element).addClass(classString);
 export var toggleClassWrapper = (element, classString) => $(element).toggleClass(classString);
+export var setTextWrapper = (element, value) => $(element).text(value);
 export var getTextWrapper = (element) => $(element).text();
 export var getValueWrapper = (element) => $(element).val();
 export var setValueWrapper = (element, value) => $(element).val(value);

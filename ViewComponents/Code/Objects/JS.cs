@@ -19,6 +19,7 @@
         public const string addClassWrapper = "Interop.addClassWrapper";
         public const string toggleClassWrapper = "Interop.toggleClassWrapper";
         public const string getTextWrapper = "Interop.getTextWrapper";
+        public const string setTextWrapper = "Interop.setTextWrapper";
         public const string getValueWrapper = "Interop.getValueWrapper";
         public const string setValueWrapper = "Interop.setValueWrapper";
         public const string IsOnline = "Interop.IsOnline";

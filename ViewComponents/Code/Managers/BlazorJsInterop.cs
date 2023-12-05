@@ -434,7 +434,15 @@ namespace Website
         /// </summary>
         public static async Task<string> GetText(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>(JS.getTextWrapper, element);
 
+        /// <summary>
+        /// wrapper for JQuery .text() get only
+        /// </summary>
         public static async Task<string> GetText(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>(JS.getTextWrapper, jquerySelector);
+
+        /// <summary>
+        /// wrapper for JQuery .text() set only
+        /// </summary>
+        public static async void SetText(this IJSRuntime jsRuntime, string jquerySelector, string value) => await jsRuntime.InvokeVoidAsync(JS.setTextWrapper, jquerySelector, value);
 
         public static async Task<string> GetValue(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>(JS.getValueWrapper, element);
 

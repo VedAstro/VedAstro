@@ -45,7 +45,8 @@ public class PersonTools
         if (CachedPersonList.Any()) { return CachedPersonList; }
 
         //prepare url to call
-        var url = $"{_api.URL.GetPersonList}/OwnerId/{_api.UserId}";
+        var ownerId = _api.UserId == "101" ? _api.VisitorID : _api.UserId;
+        var url = $"{_api.URL.GetPersonList}/OwnerId/{ownerId}";
         var listNoPolling = await _api.GetListNoPolling(url, Person.FromJsonList);
 
         //NOTE: ToList is needed to make clone, else copies by ref and is lost
@@ -75,11 +76,15 @@ public class PersonTools
     /// </summary>
     public async Task<JToken> AddPerson(Person person)
     {
+        //create id that will own person, if logged in use "user id" else use "session id"
+        var ownerId = _api.UserId == "101" ? _api.VisitorID : _api.UserId;
+
+
         //send newly created person to API server
         //var personJson = person.ToJson();
         //pass in user id to make sure user has right to delete
         //http://localhost:7071/api/AddPerson/OwnerId/234324x24/Name/Romeo/Gender/Female/Location/London/Time/13:45/01/06/1990
-        var url = $"{_api.URL.AddPerson}/OwnerId/{_api.UserId}/Name/{person.Name}" +
+        var url = $"{_api.URL.AddPerson}/OwnerId/{ownerId}/Name/{person.Name}" +
                   $"/Gender/{person.Gender}" +
                   $"/Location/{Tools.RemoveWhiteSpace(person.GetBirthLocation().Name())}" +
                   $"/Time/{person.BirthHourMinute}/{person.BirthDateMonthYear}";

@@ -74,25 +74,34 @@
     private string MaxWidthGRCss => $" max-width:{GR.W667px};";
 
     /// <summary>
-    /// auto set width of description based on text length
+    /// auto set width of description based on text length or use provided width
     /// </summary>
     private string DescriptionWidthCss
     {
         get
         {
-            var charCount = DescriptionText?.Length ?? 0;
-            var countThreshold = 120;
-            var isShortText = charCount < countThreshold;
+            //if Description Width provided then use that, else calculate based on text length
+            var finalWidth = DescriptionWidth != 0 ? DescriptionWidth : CalculatedFinalWidth();
 
-#if DEBUG
-    Console.WriteLine(isShortText ? "PAGE TOP : LONG VERSION" : "PAGE TOP : SHORT VERSION");
-#endif
+            return $" max-width:{finalWidth}px;";
 
-            var finalWidth = isShortText ? GR.W352 : GR.W509;
+            double CalculatedFinalWidth()
+            {
+                var charCount = DescriptionText?.Length ?? 0;
+                var countThreshold = 120;
+                var isShortText = charCount < countThreshold;
+                var calculatedFinalWidth = isShortText ? GR.W352 : GR.W509;
 
-            return $" max-width:{finalWidth};";
+                return calculatedFinalWidth;
+            }
         }
     }
+
+    /// <summary>
+    /// Custom description width, if not set will auto calculate based on text length
+    /// </summary>
+    [Parameter]
+    public double DescriptionWidth { get; set; } = 0;
 
     /// <summary>
     /// If true, then buttons row data provided

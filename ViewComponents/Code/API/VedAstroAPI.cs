@@ -40,6 +40,12 @@ namespace Website
             Match = new MatchTools(this);
             Person = new PersonTools(this);
             EventsChart = new EventsChartTools(this);
+
+#if DEBUG
+            Console.WriteLine("ID's Set");
+            Console.WriteLine($"UserId : {UserId}");
+            Console.WriteLine($"VisitorID : {VisitorID}");
+#endif
         }
 
 

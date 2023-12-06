@@ -1,5 +1,4 @@
-﻿
-@namespace Desktop.Pages
+﻿@namespace Desktop.Pages
 
 @using VedAstro.Library
 
@@ -10,52 +9,15 @@
 - have been separated so that can render unique nav bar for mobile
 *@
 <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Home" IconName="ant-design:home-twotone" ClickUrl="@PageRoute.Home" />
-<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="ML Table Generator" IconName="bx:table" ClickUrl="@PageRoute.TableGenerator"/>
-<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Life Predictor HD" IconName="gis:map-time" ClickUrl="@PageRoute.LifePredictorHD"/>
-<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Birth Time Finder" IconName="icon-park-outline:time" ClickUrl="@PageRoute.BirthTimeFinder"/>
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="ML Table Generator" IconName="bx:table" ClickUrl="@PageRoute.TableGenerator" />
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Life Predictor HD" IconName="gis:map-time" ClickUrl="@PageRoute.LifePredictorHD" />
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Birth Time Finder" IconName="icon-park-outline:time" ClickUrl="@PageRoute.BirthTimeFinder" />
 
 
 @code {
 
     private ElementReference MatchTooltip;
 
-    private async Task OnClickSignOutButton() => await InvokeAsync(async () => await _OnClickSignOutButton()).Try(_jsRuntime);
-
-    /// <summary>
-    /// note will auto direct to caller page after login
-    /// </summary>
-    private void OnClickNavBarLoginButton() => AppData.Go(PageRoute.Login);
-
-
-    private async Task _OnClickSignOutButton()
-    {
-        //NOTE: don't use show loading box here, for some reason breaks the whole thing
-
-        //log this
-        WebLogger.Click("Sign Out");
-
-        //clear local storage of user data
-        //since login status is basically the existence of user data in localstorage
-        //removing it removes user's login
-        await _jsRuntime.RemoveProperty("UserData");
-
-        //put api access back in guest mode
-        AppData.CurrentUser = UserData.Guest;
-        //AppData.API = new VedAstroAPI(AppData.CurrentUser.Id, AppData.VisitorId, _jsRuntime, AppData.URL);
-
-        //before reload page let user know log out went well
-        var possibles = new[]
-        {
-            "we hope you come back",
-            "we will miss you"
-        };
-        var randoText = VedAstro.Library.Tools.RandomSelect(possibles);
-        await _jsRuntime.ShowAlert("success", $"Logged out, {randoText}", false, 3000);
-
-        //refresh page
-        await _jsRuntime.LoadPage(PageRoute.Home);
-
-    }
 
 
 }

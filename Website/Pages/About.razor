@@ -23,7 +23,7 @@
     <SubArticleBlock Title="Goal">
         Our goal is to make Vedic Astrology easily accessible to anybody.
         So that people can use it in their daily lives for their benefit.
-        Vedic Astrology in Sanskrit mean <strong>"Light"</strong> And that is exactly what it is.
+        Vedic Astrology in Sanskrit means <strong>"Light"</strong> and that is exactly what it is.
         It lights our future so we can change it. And it lights our past, to understand our mistakes.
     </SubArticleBlock>
     <SubArticleBlock Title="How">
@@ -33,7 +33,7 @@
         allowing you to make <strong>accurate predictions</strong> with little to no knowledge.
     </SubArticleBlock>
 
-    <ArticleBlock Title="9 Years Old" IconName="emojione:birthday-cake">
+    <ArticleBlock Title="@PreciseAge" IconName="emojione:birthday-cake">
         <TextHTML>
             The first line of code for this project was written in late <strong>2014</strong> at Itä-Pasila. Back then it was a simple desktop software,
             with no UI and only text display. With continued support from users, this project has steadily developed to what it is today.
@@ -46,7 +46,7 @@
         <TextHTML>
             <p>
                 Thanks to <BoldLink URL="@URL.BVRamanWiki">B.V. Raman</BoldLink> and his grandfather B. Suryanarain Rao
-                for pioneering easy to read astrology books. 
+                for pioneering easy to read astrology books.
                 Credit also goes to <BoldLink URL="@URL.LaSalleWiki">St. Jean-Baptiste de La Salle</BoldLink>
                 for proving the efficacy of free and open work for the benefit all.
             </p>
@@ -89,5 +89,24 @@
 </div>
 
 @code {
+
+    /// <summary>
+    /// Dynamically calculate age for always uptodateness
+    /// </summary>
+    private string PreciseAge
+    {
+        get
+        {
+            var birthDate = new DateTime(2014, 12, 1);
+            var age = DateTime.Now - birthDate;
+
+            //show age in years with 2 decimal places
+            var preciseAge = $"{Math.Round(age.TotalDays / 365.25, 2)}";
+
+            //add in decoration text
+            preciseAge += " Years Old";
+            return preciseAge;
+        }
+    }
 
 }

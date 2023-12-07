@@ -38,7 +38,7 @@
 [![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library) [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://pypi.org/project/VedAstro/)  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
 
 # 🆓 100% Open Source
-The great sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
+The sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
 
 ![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
 
@@ -128,8 +128,6 @@ Below is sample API call result for data related to "**Sun**" on "**30/06/2023**
 ```
 
 
-
-
 <!--
 
 # Examples of Accurate Predictions
@@ -143,7 +141,6 @@ The chart takes alot of computational power to generate, so please be patient af
 [![](GithubImages/elizabeth-dasa-chart.png)](https://vedastro.org)
  -->
 
- 
 
 # 📜 About
 Anybody who has studied Vedic Astrology knows well how accurate it can be.
@@ -154,44 +151,17 @@ This project is an effort to change that. [Read More](https://vedastro.org/About
 
 # 🎂 9 Years Old 
 The first line of code for this project was written in **late 2014** at **Itä-Pasila**.
-Back then it was a simple desktop software, with no UI and only text display.
-With continued support from users, this project has steadily grown to what it is today.
-Helping people from all over the world.
+Started as a simple desktop software, with no UI and only text display.
+With continued support from users, this project has steadily grown to what it is today. Helping people from all over the world.
     
 # 📚 Credits &amp; Reference 
 ![credits](https://vedastro.org/images/bv-raman-rao.png)
 
-Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao
-for pioneering easy to read astrology books. 
-Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle)
-for proving the efficacy of free and open work for the benefit all.
-
-Astronomical calculation was made possible by [NASA JPL](https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html)
-data via "SWISS EPHEMERIS" ported by "SwissEphNet".
-Last but not least, we thank users like you who keep this project going.
+Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao for pioneering easy to read astrology books. Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle) for proving the **efficacy of free and open work** for the benefit all...[Read More](https://vedastro.org/About).
 
 
-# ❤️ How can I help?
-Just **Like** & **Share** our social pages and it'll be a **big** help already!
-
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_vedastro/)
-[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/vedastro.org)
-[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/_VedAstro)
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
-
-# 👪 Join our family
-If you want to do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily)  
-We're always looking for somebody to **[improve code.](https://vedastro.org/JoinOurFamily)** or **[help with funding](https://vedastro.org/Donate)**.
-
-# 🙋‍♂️ Come say "Hi", we don't bite!
-We discuss & share ideas on astrology and computation. And ways you can integrate VedAstro into your own project.
-<!-- SLACK JOIN IMAGE -->
-[![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
-
-# 🎯 Sponsors
-Built with Software Sponsored by **[JetBrains](https://www.jetbrains.com/)** 
-
-<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="250"/>
+# 💌 Support
+[![membership](https://vedastro.org/images/kofi-membership-page.png)](https://ko-fi.com/vedastro/tiers)
 
 
 # 🧰 Gonzo Development Pattern
@@ -228,7 +198,8 @@ But the database will be shared between these. Meaning data changes in Beta will
  But it is far more difficult and **rewarding** to make the UI intuitive & easy.
  A "no manuals" and "no brainer" approach to design.
 
- # 🥀 Poem On the Future of Vedic Astrology
+
+ # 🥀 Digital Astrology
 The wisdom of ages, once passed down by word,
 Now stored in circuits, rarely heard.
 
@@ -236,8 +207,31 @@ Once this knowledge was held in minds so keen,
 Now it's coded in machines unseen.
 
 The human touch, that once gave knowledge birth,
-Replaced by algorithms, shaping future's girth,
+Replaced by algorithms, shaping future's girth.
 
+# 🙏 Special Thanks
+Built with Software Sponsored by **[JetBrains](https://www.jetbrains.com/)** 
+
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="200"/>
+
+
+# ❤️ Social
+Just **Like** & **Share** our social pages and it'll be a **big** help already!
+
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_vedastro/)
+[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/vedastro.org)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/_VedAstro)
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
+
+
+# 👪 Join our family
+If you want to do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily)  
+We're always looking for somebody to **[improve code.](https://vedastro.org/JoinOurFamily)** or **[help with funding](https://vedastro.org/Donate)**.
+
+# 🙋‍♂️ Come say "Hi", we don't bite!
+We discuss & share ideas on astrology and computation. And ways you can integrate VedAstro into your own project.
+<!-- SLACK JOIN IMAGE -->
+[![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
 
 
 # ⚙️ Project Structure

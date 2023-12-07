@@ -525,10 +525,13 @@ namespace Website
 
 
 
-        public static void OnClickGotoGithubCode(string methodName)
+        public static void OnClickGotoGithubCode(OpenAPIMetadata metadata)
         {
+            //get line number where code starts
+            var lineNumber = metadata.LineNumber;
+
             //make the GitHub link
-            var searchLink = $"https://github.com/search?q=repo%3AVedAstro%2FVedAstro+symbol%3A{methodName}+&type=code";
+            var searchLink = $"https://github.com/VedAstro/VedAstro/blob/master/Library/Logic/Calculate/Calculate.cs#L{lineNumber}";
 
             //open link in new tab
             AppData.Go(searchLink, newTab: true);

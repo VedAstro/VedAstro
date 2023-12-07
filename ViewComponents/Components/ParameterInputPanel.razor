@@ -11,6 +11,7 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 @using System.Reflection
+@using System.Collections.Generic
 
 <div class="vstack gap-3">
 
@@ -18,6 +19,7 @@
 	<TypeSpecificInput @ref="param2" />
 	<TypeSpecificInput @ref="param3" />
 	<TypeSpecificInput @ref="param4" />
+	<TypeSpecificInput @ref="param5" />
 
 </div>
 
@@ -28,6 +30,7 @@
 	TypeSpecificInput param2;
 	TypeSpecificInput param3;
 	TypeSpecificInput param4;
+	TypeSpecificInput param5;
 	List<TypeSpecificInput> paramList;
 
 
@@ -35,20 +38,34 @@
 	{
 		if (firstRender)
 		{
-			paramList = new() { param1, param2, param3, param4 };
+			paramList = new() { param1, param2, param3, param4, param5 };
 		}
 
 	}
 
-	public void Show(List<Type> paramTypeList)
+	//given data on params shows them on screen
+	//input format List(param name, description, type)
+	public void Show(List<(string, string, Type)> paramTypeList)
 	{
-		//get value if any, else pass in Null, which will render nothing
-		param1.SetValue(paramTypeList.GetValueOrNull(0));
-		param2.SetValue(paramTypeList.GetValueOrNull(1));
-		param3.SetValue(paramTypeList.GetValueOrNull(2));
-		param4.SetValue(paramTypeList.GetValueOrNull(3));
+		//list of all the inputs on screen
+	    paramList = new() { param1, param2, param3, param4, param5 };
 
-		paramList = new() { param1, param2, param3, param4 };
+        //clear inputs from previous method (if any)
+        foreach (var paramInput in paramList){ paramInput?.Hide();}
+
+
+	    int index = 0;
+	    foreach (var item in paramTypeList)
+	    {
+			//make visible with data
+	        var paramName = item.Item1;
+			var paramDescription = item.Item2;
+	        var paramType = item.Item3;
+	        paramList[index].SetValue(paramType, paramName, paramDescription);
+
+			//goto next
+	        index++;
+	    }
 
 		StateHasChanged(); //needed to propagate updates
 	}

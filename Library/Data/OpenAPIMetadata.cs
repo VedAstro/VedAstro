@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -7,59 +7,19 @@ using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library;
 
-///// <summary>
-///// Data structure to hold api call method's name and description
-///// INT = Outputs: Int32, List<string> = List of String
-///// </summary>
-//public readonly record struct APICallData(string Name, string Description, List<Type> ParamTypeList, string ReturnType, string SearchText)
-//{
-//    /// <summary>
-//    /// Given a type will return is most relevant name
-//    /// </summary>
-//    public static string GetTypeName(Type type)
-//    {
-//        if (type.IsGenericType)
-//        {
-//            Type itemType = type.GetGenericArguments()[0];
-//            return type.Name.Split('`')[0] + " of " + itemType.Name;
-//        }
-//        else
-//        {
-//            return type.Name;
-//        }
-//    }
+// Class to hold method documentation
+public class MethodDocumentation
+{
+	public string Description { get; set; } // Property to hold the summary of the method
+	public Dictionary<string, string> Params { get; set; } // Property to hold the parameters and their comments
+	public int LineNumber { get; set; } // Property to hold the line number of the method signature
+	public string Signature { get; set; }
 
-
-//    /// <summary>
-//    /// Given a list of method info will convert to a list of API call Data
-//    /// </summary>
-//    public static List<APICallData> FromMethodInfoList(IEnumerable<MethodInfo> calcList)
-//    {
-//        var finalList = new List<APICallData>();
-
-//        //make final list with API description
-//        //get nice API calc name, shown in builder dropdown
-//        foreach (var calc in calcList)
-//        {
-//            List<Type> parameterTypes = calc.GetParameters()
-//                .Select(param => param.ParameterType)
-//                .ToList();
-
-//            var apiSpecialName = calc.Name;
-
-//            var apiSpecialDescription = Tools.GetAPISpecialDescription(calc);
-//            finalList.Add(new APICallData(
-//                Name: apiSpecialName,
-//                Description: apiSpecialDescription,
-//                ParamTypeList: parameterTypes,
-//                ReturnType: GetTypeName(calc.ReturnType), //gets type name nicely formatted
-//                SearchText: calc.GetAllDataAsText() + apiSpecialDescription + apiSpecialName));
-//        }
-
-//        return finalList;
-//    }
-
-//}
+	public MethodDocumentation()
+	{
+		Params = new Dictionary<string, string>(); // Initialize the Params dictionary
+	}
+}
 
 /// <summary>
 /// static meta data for a given method in Open API
@@ -68,7 +28,7 @@ public class OpenAPIMetadata : IToJson
 {
     public static List<OpenAPIMetadata> CachedAllMethoInfoList { get; set; } = new();
 
-    public static readonly OpenAPIMetadata Empty = new OpenAPIMetadata("Empty", "Empty", "Empty");
+    public static readonly OpenAPIMetadata Empty = new OpenAPIMetadata("Empty", "Empty", "Empty", "Empty", "Empty");
 
     private PlanetName _selectedPlanet = PlanetName.Sun; //set default so dropdown has something on load
 
@@ -77,12 +37,14 @@ public class OpenAPIMetadata : IToJson
     /// </summary>
     public string MLTableName(object resultOverride = null) => Tools.GetSpecialMLTableName(this, resultOverride);
 
-    public OpenAPIMetadata(string signature, string description, string exampleOutput, MethodInfo methodInfo = null)
+    public OpenAPIMetadata(string signature, string lineNumber, string paramDescription, string description, string exampleOutput, MethodInfo methodInfo = null)
     {
         Description = description;
         ExampleOutput = exampleOutput;
         Signature = signature;
         MethodInfo = methodInfo;
+        LineNumber = lineNumber;
+        ParameterDescription = paramDescription;
     }
 
     public OpenAPIMetadata() { }
@@ -92,11 +54,10 @@ public class OpenAPIMetadata : IToJson
     /// </summary>
     public string Signature { get; set; }
 
-
     /// <summary>
     /// Combined text of signature and comments above code
     /// </summary>
-    public string SearchText => Description + Signature;
+    public string SearchText => Description + ParameterDescription + Signature;
 
     /// <summary>
     /// The live reference to the method, only loaded later 
@@ -112,6 +73,18 @@ public class OpenAPIMetadata : IToJson
     /// comment from above method in C# code injected here
     /// </summary>
     public string Description { get; set; }
+
+    /// <summary>
+    /// Line number in code where method is located
+    /// used for navigating to code in GitHub
+    /// </summary>
+    public string LineNumber { get; set; }
+
+    /// <summary>
+    /// All parameters and their comments in a single string, format: "param1: comment1, param2: comment2"
+    /// Note use of ExtractValue method to get the comment for a given parameter
+    /// </summary>
+    public string ParameterDescription { get; set; }
 
     /// <summary>
     /// Example output of the method printed as JSON
@@ -150,7 +123,6 @@ public class OpenAPIMetadata : IToJson
             _selectedPlanet = value;
         }
     }
-
 
     /// <summary>
     /// generates python method stub declaration code
@@ -221,7 +193,6 @@ public class OpenAPIMetadata : IToJson
         }
     }
 
-
     /// <summary>
     /// Given a type will return is most relevant name
     /// </summary>
@@ -255,7 +226,7 @@ public class OpenAPIMetadata : IToJson
     /// </summary>
     public OpenAPIMetadata Clone()
     {
-        var clonedDolly = new OpenAPIMetadata(Signature, Description, ExampleOutput, MethodInfo);
+        var clonedDolly = new OpenAPIMetadata(Signature, LineNumber, ParameterDescription,Description, ExampleOutput, MethodInfo);
 
         return clonedDolly;
     }
@@ -284,12 +255,14 @@ public class OpenAPIMetadata : IToJson
         try
         {
             var signatureString = timeJson["Signature"].Value<string>();
+            var lineNumberString = timeJson["LineNumber"].Value<string>();
+            var parameterDescriptionString = timeJson["ParameterDescription"].Value<string>();
             var descriptionString = timeJson["Description"].Value<string>();
             var exampleOutputString = timeJson["ExampleOutput"].Value<string>();
 
             //# SELECTED PARAMS
             var selectedParamsString = timeJson["SelectedParams"];
-            var parsedTime = new OpenAPIMetadata(signatureString, descriptionString, exampleOutputString);
+            var parsedTime = new OpenAPIMetadata(signatureString, lineNumberString, parameterDescriptionString, descriptionString, exampleOutputString);
             var parsedParamList = new List<object>();
             foreach (var xx in selectedParamsString)
             {
@@ -363,5 +336,25 @@ public class OpenAPIMetadata : IToJson
         return temp;
     }
 
-
+    /// <summary>
+    /// Given a parameter name will return the comment for that parameter
+    /// </summary>
+    public string GetParamDesc(string paramName)
+    {
+        //raw format is "param1: comment1, param2: comment2"
+        string[] pairs = ParameterDescription.Split(',');
+        foreach (string pair in pairs)
+        {
+            string[] keyValue = pair.Split(':');
+            var nameInDesc = keyValue[0].Trim().ToLower();
+            var inputedName = paramName.ToLower();
+            var isMatch = nameInDesc == inputedName;
+            if (keyValue.Length == 2 && isMatch)
+            {
+                //return the C# comments for the parameter
+                return keyValue[1].Trim();
+            }
+        }
+        return "";
+    }
 }

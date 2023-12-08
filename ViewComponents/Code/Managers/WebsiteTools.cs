@@ -5,6 +5,7 @@ using Microsoft.JSInterop;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using System.Text.Json;
+using Microsoft.CodeAnalysis;
 
 namespace Website
 {
@@ -527,6 +528,16 @@ namespace Website
 
         public static void OnClickGotoGithubCode(OpenAPIMetadata metadata)
         {
+            //if null, tell user to get act together
+            if (metadata == null)
+            {
+                var msg = "You need to choose a calculator to view it's source code.";
+                AppData.JsRuntime.ShowAlert("warning", $"Select a calculator first, {AlertText.RandomNoun()}!", msg);
+
+                //end here
+                return;
+            }
+            
             //get line number where code starts
             var lineNumber = metadata.LineNumber;
 
@@ -539,6 +550,16 @@ namespace Website
 
         public static async Task OnClickCopyPythonSnippet(OpenAPIMetadata? methodData, dynamic component = null)
         {
+            //if null, tell user to get act together
+            if (methodData == null)
+            {
+                var msg = "You need to choose a calculator to auto generate Python code.";
+                AppData.JsRuntime.ShowAlert("warning", $"Select a calculator first, {AlertText.RandomNoun()}!", msg);
+
+                //end here
+                return;
+            }
+
             //only continue if passed input field validation
             if (component != null && !(await component.IsValidationPassed())) { return; }
 

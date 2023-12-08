@@ -21,14 +21,14 @@
         <div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
 
             @*GENERATOR*@
-            <div class="vstack gap-4" style="max-width: @GR.W412px;">
+            <div class="vstack gap-3" style="max-width: @GR.W412px;">
 
                 <div class="vstack gap-4">
 
                     @* FUNCTION NAME SELECT *@
                     <div>
                         <IconTitle IconName="flat-color-icons:calculator" Title="Calculator" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
-                        <APISelectorBox @ref="ApiSelectorBox" />
+                        <APISelectorBox @ref="_apiSelectorBox" />
                     </div>
 
 
@@ -38,107 +38,80 @@
                         <ParameterInputPanel @ref="_parameterInputPanel" />
                     </div>
 
-
-                    @* ADVANCED *@
-                    <div @ref="_paramInputHolderElement2" style="display: none">
-                        <span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:300;">
-                            <Icon IconName="gala:settings" Size="30" /> Advanced (optional)
-                            <Icon ExtraClass="ms-auto" IconName="icon-park-solid:down-c" OnClickCallback="OnClickShowAdvanced" />
-                        </span>
-                        @* AYANAMSA *@
-                        <div id="AyanamsaInputHolder" style="display: none">
-                            <div class="input-group mb-2">
-                                <label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
-                                <select @bind="_selectedAyanamsa" class="form-select">
-
-                                    <optgroup label="Easy">
-                                        @foreach (var ayanamsa in @SimpleAyanamsaAll)
-                                        {
-                                            <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
-                                        }
-                                    </optgroup>
-                                    <optgroup label="Advanced">
-                                        @foreach (var ayanamsa in @AdvancedAyanamsaAll)
-                                        {
-                                            <option value="@ayanamsa">@ayanamsa</option>
-                                        }
-                                    </optgroup>
-                                </select>
-                            </div>
-                            <div class="input-group" style="display: none">
-                                <span class="input-group-text">Year of Zero Coincidence</span>
-                                <input type="text" class="form-control" placeholder="397">
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
 
                 @* -------- BOTTOM BUTTONS --------*@
                 <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />
+                
+                @* hidden until Generate button is clicked *@
+                <div @ref="_paramOutputOptionsPanel" class="vstack gap-3" style="display: none;">
+                    @*OUTPUT ARROW ICON*@
+                    <Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="80" />
 
-                @*OUTPUT ARROW ICON*@
-                <Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="80" />
+                    @*URL DISPLAY OUT*@
+                    @* id so we can scroll to on complete *@
+                    <div class="vstack gap-1" style="margin-top: -32px;">
+                        <span style="font-size: 14px; color: @AppData.Grey;">URL</span>
+                        <kbd id="UrlDisplayOut" style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">@_finalApiGetCall</kbd>
+                    </div>
 
-                @*URL DISPLAY OUT*@
-                @* id so we can scroll to on complete *@
-                <div class="vstack gap-1" style="margin-top: -32px;">
-                    <span style="font-size: 14px; color: @AppData.Grey;">URL</span>
-                    <kbd id="UrlDisplayOut" style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">@_finalApiGetCall</kbd>
+                    @*COPY AND CALL BUTTON*@
+                    <div class="d-flex justify-content-center gap-3">
+                        <IconButton  TooltipPosition="bottom" TooltipText="View Source Code" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(()=>WebsiteTools.OnClickGotoGithubCode(_apiSelectorBox.SelectedMethod))" SmallSize="true" />
+
+                        <IconButton TooltipPosition="bottom" TooltipText="Quick Start Snippet" SmallSize="true" ButtonText="Snippet" IconName="ph:code-fill">
+                            <DropDownList>
+                                <li>
+                                    <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.OnClickCopyPythonSnippet(_apiSelectorBox.SelectedMethod, this))">
+                                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="vscode-icons:file-type-python" />
+                                        <span>Python</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("JavaScript"))">
+                                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="skill-icons:javascript" />
+                                        <span>JavaScript</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("Swift"))">
+                                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:swift" />
+                                        <span>Swift</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("Java"))">
+                                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:java" />
+                                        <span>Java</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("C#"))">
+                                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:csharp" />
+                                        <span>C# .NET</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("PHP"))">
+                                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:php" />
+                                        <span>PHP</span>
+                                    </a>
+                                </li>
+                            </DropDownList>
+                        </IconButton>
+                        <IconButton ButtonText="URL" TooltipPosition="bottom" TooltipText="Copy above URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
+                        <IconButton FullWidth="true" Color="success" ButtonText="Test Call" TooltipPosition="bottom" TooltipText="Demo call to see output" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
+                    </div>
+
                 </div>
+                
 
-                @*COPY AND CALL BUTTON*@
-                <div class="d-flex justify-content-center gap-3">
-
-                    <IconButton TooltipPosition="bottom" TooltipText="Copy code snippet" SmallSize="true" ButtonText="Copy Code" IconName="ph:code-fill">
-                        <DropDownList>
-                            <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.OnClickCopyPythonSnippet(ApiSelectorBox.SelectedMethod, this))">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="vscode-icons:file-type-python" />
-                                    <span>Python</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("JavaScript"))">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="skill-icons:javascript" />
-                                    <span>JavaScript</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("Swift"))">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:swift" />
-                                    <span>Swift</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("Java"))">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:java" />
-                                    <span>Java</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("C#"))">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:csharp" />
-                                    <span>C# .NET</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("PHP"))">
-                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="devicon:php" />
-                                    <span>PHP</span>
-                                </a>
-                            </li>
-                        </DropDownList>
-                    </IconButton>
-                    <IconButton ButtonText="Copy URL" TooltipPosition="bottom" TooltipText="Copy HTTP GET request URL" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
-                    <IconButton ButtonText="Test Call" TooltipPosition="bottom" TooltipText="Demo call to see output" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
-                </div>
             </div>
 
             @*GUIDE TEXT*@
             <div class="vstack gap-3">
-                <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
+                <ArticleBlock @ref="_nextStepArticleBlock" Title="Next Step" IconName="mdi:foot-print">
                     <ButtonRow>
                         <IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep" />
                     </ButtonRow>
@@ -170,7 +143,6 @@
                         Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to keep this service running for yourself and others.
                     </TextHTML>
                 </ArticleBlock>
-
 
                 <ArticleBlock Title="Simple Response" IconName="bi:filetype-json">
                     <TextHTML>
@@ -230,24 +202,14 @@
 
     #region FIELDS
 
-    /// <summary>
-    /// if not specified will not be included in final URL
-    /// default set to Raman, as used system wide
-    /// </summary>
-    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
 
-    /// <summary>
-    /// list that is shown to user and is changed by search
-    /// </summary>
-    private List<OpenAPIMetadata> MethodListFiltered { get; set; } = new List<OpenAPIMetadata>();
-
-    private List<OpenAPIMetadata> MethodListALL = new List<OpenAPIMetadata>();
-
-    private APISelectorBox ApiSelectorBox;
+    private APISelectorBox? _apiSelectorBox = null;
 
     private ElementReference _paramInputHolderElement;
-    private ElementReference _paramInputHolderElement2;
-    private ParameterInputPanel _parameterInputPanel;
+    private ArticleBlock _nextStepArticleBlock;
+    private ElementReference _paramOutputOptionsPanel;
+
+    private ParameterInputPanel? _parameterInputPanel;
 
     private string _finalApiGetCall = "https://api.vedastro.org/Home";
 
@@ -262,175 +224,14 @@
     /// </summary>
     private bool _isEventAttached = false;
 
-    private List<SimpleAyanamsa> SimpleAyanamsaAll { get; set; }
-
-    private List<Ayanamsa> AdvancedAyanamsaAll { get; set; }
 
 
     #endregion
-
-    /// <summary>
-    /// For use in websites
-    /// </summary>
-    private enum SimpleAyanamsa
-    {
-        /// <summary>
-        ///
-        /// </summary>
-        LahiriChitrapaksha = 1,
-
-        /// <summary>
-        /// Krishnamurti: This is another popular ayanamsa in Vedic astrology, especially among the followers of the Krishnamurti Paddhati (KP) system. It is based on the position of the star Ashwini at 0 degrees Aries, as proposed by K.S. Krishnamurti.
-        /// It is also known as KP Ayanamsa, and it has been widely
-        /// used for horary astrology and stellar astrology
-        /// </summary>
-        KrishnamurtiKP = 5,
-
-        /// <summary>
-        /// This is a well-known ayanamsa in Vedic astrology, especially among the followers of B.V. Raman. It is based on the position of the star Revati at 0 degrees Pisces, as suggested by B.V. Raman.
-        /// It is also known as Revati Paksha Ayanamsa,
-        /// and it has been used for natal astrology and mundane astrology
-        /// </summary>
-        Raman = 3,
-
-        /// <summary>
-        /// This is a prominent ayanamsa in Western sidereal astrology, especially among the followers of Cyril Fagan and Donald Bradley. It is based on the position of the star Aldebaran at 15 degrees Taurus, as advocated by Cyril Fagan.
-        /// It is also known as Aldebaran 15 Tau Ayanamsa,
-        /// and it has been used for tropical-sidereal conversion
-        /// and zodiacal releasing.
-        /// </summary>
-        FaganBradley = 0,
-
-        /// <summary>
-        /// J2000: This is a standard ayanamsa in modern astronomy,
-        /// especially for celestial coordinate systems. It is based on the position of the vernal equinox at 0 degrees Aries at noon on January 1st, 2000 (J2000 epoch).
-        /// It is also known as J2000 Equinox Ayanamsa,
-        /// and it has been used for astronomical calculations
-        /// and observations.
-        /// </summary>
-        J2000 = 18,
-
-        /// <summary>
-        /// Yukteshwar: This is a spiritual ayanamsa in Vedic astrology, especially for
-        /// Yogananda's teachings. It is based on the position of the star Dhanishta at 0 degrees Aquarius,
-        /// as proposed by Sri Yukteshwar.
-        /// It is also known as Dhanishta Paksha Ayanamsa,
-        /// and it has been used for esoteric astrology and cosmic cycles.
-        /// </summary>
-        Yukteshwar = 7,
-
-    }
 
     protected override async Task OnInitializedAsync()
     {
         //NOTE: small needed else, components rendering gets messed up (time to pop)
         await _jsRuntime.ShowLoading(50);
-
-        SimpleAyanamsaAll = new List<SimpleAyanamsa>()
-        {
-            SimpleAyanamsa.LahiriChitrapaksha,
-            SimpleAyanamsa.KrishnamurtiKP,
-            SimpleAyanamsa.Raman,
-            SimpleAyanamsa.FaganBradley,
-            SimpleAyanamsa.J2000,
-            SimpleAyanamsa.Yukteshwar,
-
-        };
-
-        AdvancedAyanamsaAll = new List<Ayanamsa>()
-        {
-
-            Ayanamsa.FAGAN_BRADLEY,
-
-            Ayanamsa.LAHIRI,
-
-            Ayanamsa.DELUCE,
-
-            Ayanamsa.RAMAN,
-
-            Ayanamsa.USHASHASHI,
-
-            Ayanamsa.KRISHNAMURTI,
-
-            Ayanamsa.DJWHAL_KHUL,
-
-            Ayanamsa.YUKTESHWAR,
-
-            Ayanamsa.JN_BHASIN,
-
-            Ayanamsa.BABYL_KUGLER1,
-
-            Ayanamsa.BABYL_KUGLER2,
-
-            Ayanamsa.BABYL_KUGLER3,
-
-            Ayanamsa.BABYL_HUBER,
-
-            Ayanamsa.BABYL_ETPSC,
-
-            Ayanamsa.ALDEBARAN_15TAU,
-
-            Ayanamsa.HIPPARCHOS,
-
-            Ayanamsa.SASSANIAN,
-
-            Ayanamsa.GALCENT_0SAG,
-
-            Ayanamsa.J1900,
-
-            Ayanamsa.B1950,
-
-            Ayanamsa.SURYASIDDHANTA,
-
-            Ayanamsa.SURYASIDDHANTA_MSUN,
-
-            Ayanamsa.ARYABHATA,
-
-            Ayanamsa.ARYABHATA_MSUN,
-
-            Ayanamsa.SS_REVATI ,
-
-            Ayanamsa.SS_CITRA,
-
-            Ayanamsa.TRUE_CITRA,
-
-            Ayanamsa.TRUE_REVATI,
-
-            Ayanamsa.TRUE_PUSHYA,
-
-            Ayanamsa.GALCENT_RGBRAND ,
-
-            Ayanamsa.GALEQU_IAU1958,
-
-            Ayanamsa.GALEQU_TRUE,
-
-            Ayanamsa.GALEQU_MULA,
-            Ayanamsa.GALALIGN_MARDYKS,
-
-            Ayanamsa.TRUE_MULA ,
-
-            Ayanamsa.GALCENT_MULA_WILHELM,
-
-            Ayanamsa.ARYABHATA_522,
-
-            Ayanamsa.BABYL_BRITTON,
-
-            Ayanamsa.TRUE_SHEORAN,
-
-            Ayanamsa.GALCENT_COCHRANE,
-
-            Ayanamsa.GALEQU_FIORENZA,
-
-            Ayanamsa.VALENS_MOON,
-
-            Ayanamsa.LAHIRI_1940,
-
-            Ayanamsa.LAHIRI_VP285,
-
-            Ayanamsa.KRISHNAMURTI_VP291,
-
-            Ayanamsa.LAHIRI_ICRC,
-        };
 
         //other components can start loading now (heavy computation starts)
         _mainPageInitDone = true;
@@ -440,13 +241,17 @@
 
     }
 
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (ApiSelectorBox != null && !_isEventAttached)
+        if (_apiSelectorBox != null && !_isEventAttached)
         {
             //sub event: when an method is selected, auto show inputs panel
-            ApiSelectorBox.OnChangeSelectMethod += OnChangeSelectMethod;
+            _apiSelectorBox.OnChangeSelectMethod += OnChangeSelectMethod;
             _isEventAttached = true;
+
+    //hide next step article block
+            _jsRuntime.Hide(_nextStepArticleBlock.ElementReference);
         }
     }
 
@@ -456,7 +261,7 @@
     public async Task<bool> IsValidationPassed()
     {
         //TEST 1 : Calculator name
-        var isSelected = await ApiSelectorBox.IsSelected();
+        var isSelected = _apiSelectorBox.IsSelected();
         if (!isSelected)
         {
             //mark invalid & alert user
@@ -475,7 +280,6 @@
     }
 
 
-
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
@@ -485,18 +289,18 @@
     private void OnChangeSelectMethod(object sender, EventArgs e)
     {
         //only continue if user has selected a method
-        if (ApiSelectorBox.GetSelectedMethodName() != "")
+        if (_apiSelectorBox.GetSelectedMethodName() != "")
         {
             //set new params
-            var openApiMetadata = ApiSelectorBox.SelectedMethod;
+            var openApiMetadata = _apiSelectorBox.SelectedMethod;
             var methodInf = openApiMetadata?.MethodInfo;
 
             //extract data of param types and their names in C# code (which will be displayed)
-            var paramTypeList = new List<(string, string, Type)>(); //name, description, type
+            var paramTypeList = new List<ParameterMetadata>();
             foreach (var param in methodInf.GetParameters())
             {
                 var paramDescription = openApiMetadata?.GetParamDesc(param.Name) ?? "";
-                paramTypeList.Add((param.Name, paramDescription, param.ParameterType));
+                paramTypeList.Add(new(param, paramDescription));
             }
 
             //inject the data into the input panel
@@ -504,7 +308,7 @@
 
             //make param input panel visible
             _jsRuntime.Show(_paramInputHolderElement);
-            _jsRuntime.Show(_paramInputHolderElement2);
+
         }
     }
 
@@ -523,14 +327,12 @@
         //combine the call
         var domain = AppData.URL.ApiUrl; //get stable or beta as needed
 
-
         //format of the API call
         //.../Calculator/DistanceBetweenPlanets/PlanetName/Sun/PlanetName/Moon/Location/Singapore/Time/23:59/31/12/2000/+08:00
         var placeHolder = "";
-        var calcName = $"/Calculate/{ApiSelectorBox.GetSelectedMethodName()}";
+        var calcName = $"/Calculate/{_apiSelectorBox.GetSelectedMethodName()}";
         var paramInput = await _parameterInputPanel.ToApiUrl();
-        var ayanamsaUrl = _selectedAyanamsa == SimpleAyanamsa.LahiriChitrapaksha.ToString() ? "" : $"/Ayanamsa/{_selectedAyanamsa}";
-        placeHolder = domain + calcName + paramInput + ayanamsaUrl;
+        placeHolder = domain + calcName + paramInput;
 
 
         _finalApiGetCall = placeHolder;
@@ -539,6 +341,9 @@
         await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
 
         _jsRuntime.PlayDoneSound();
+
+        //show output options panel
+        _jsRuntime.Show(_paramOutputOptionsPanel);
 
         //auto scroll to URL display out, so user can see better
         AppData.Go(PageRoute.UrlDisplayOut);
@@ -559,28 +364,7 @@
         await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);
     }
 
-    private async Task FilterMethodList(string searchKeyword)
-    {
 
-        //if no search text then show all
-        if (string.IsNullOrEmpty(searchKeyword) || searchKeyword == "All")
-        {
-            MethodListFiltered = MethodListALL;
-        }
-        else
-        {
-            MethodListFiltered = MethodListALL.FindAll(apiCalc => apiCalc.SearchText.SearchText(searchKeyword));
-        }
-
-        // User has stopped typing, perform your action here
-        await InvokeAsync(StateHasChanged); // To refresh the UI
-
-    }
-
-    private void OnClickShowAdvanced()
-    {
-        //advanced inputs visible
-        _jsRuntime.ToggleDisplay("AyanamsaInputHolder");
-    }
+    
 
 }

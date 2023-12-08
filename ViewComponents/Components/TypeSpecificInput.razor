@@ -3,11 +3,12 @@
 @using System.Text.RegularExpressions
 @using System.Globalization
 
-<div class="vstack gap-1">
-    @if (_apiCallData != null)
+    @if (paramType != null)
     {
+        @* Note: place inside as not to render when not needed *@
+        <div class="vstack gap-1">
 
-        @if (_apiCallData == typeof(Time))
+        @if (paramType == typeof(Time))
         {
             <span class="hstack gap2-2" style="font-weight: 600; color: red;">
                 @ParamName
@@ -15,7 +16,7 @@
             </span>
             <TimeLocationInput @ref="_inputTimeLocation" />
         }
-        else if (_apiCallData == typeof(PlanetName))
+        else if (paramType == typeof(PlanetName))
         {
             <div class="input-group">
                 <label class="input-group-text" style="font-weight: 600; color: red;" for="@InstanceId">
@@ -25,7 +26,7 @@
                 <select @bind="_inputPlanetName" class="form-select" id="@InstanceId">
                     <option selected>Choose...</option>
                     @{
-                        <option value="All" style="color: blue">All</option>
+                        <option value="All" style="color: blue;font-weight: 600;">All</option>
                         <option value="Sun">Sun</option>
                         <option value="Moon">Moon</option>
                         <option value="Mars">Mars</option>
@@ -39,17 +40,17 @@
                 </select>
             </div>
         }
-        else if (_apiCallData == typeof(HouseName))
+        else if (paramType == typeof(HouseName))
         {
             <div class="input-group">
                 <label class="input-group-text" style="font-weight: 600; color: red;" for="@InstanceId">
                     @ParamName
                     <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" />
                 </label>
-                <select @bind="_inputPlanetName" class="form-select" id="@InstanceId">
+                <select @bind="_inputHouseName" class="form-select" id="@InstanceId">
                     <option selected>Choose...</option>
                     @{
-                        <option value="All" style="color: blue">All</option>
+                        <option value="All" style="color: blue;font-weight: 600;">All</option>
                         <option value="House1">House 1</option>
                         <option value="House2">House 2</option>
                         <option value="House3">House 3</option>
@@ -66,7 +67,7 @@
                 </select>
             </div>
         }
-        else if (_apiCallData == typeof(Angle))
+        else if (paramType == typeof(Angle))
         {
             <div class="input-group">
                 <span class="input-group-text" style="font-weight: 600; color: red;" id="@InstanceId">
@@ -76,7 +77,7 @@
                 <input @bind="_inputTotalDegrees" type="text" class="form-control" placeholder="23.456">
             </div>
         }
-        else if (_apiCallData == typeof(string))
+        else if (paramType == typeof(string))
         {
             <div class="input-group">
                 <span class="input-group-text" style="font-weight: 600; color: red;" id="@InstanceId">
@@ -86,7 +87,7 @@
                 <input @bind="_inputText" type="text" class="form-control" placeholder="...">
             </div>
         }
-        else if (_apiCallData == typeof(int))
+        else if (paramType == typeof(int) || paramType == typeof(double))
         {
             <div class="input-group">
                 <span class="input-group-text" style="font-weight: 600; color: red;" id="@InstanceId">
@@ -96,14 +97,14 @@
                 <input @bind="_inputNumber" type="number" class="form-control" placeholder="...">
             </div>
         }
-        else if (_apiCallData.IsEnum)
+        else if (paramType.IsEnum)
         {
             <div class="input-group">
-                <label class="input-group-text" style="font-weight: 600; color: red;" for="@InstanceId">@(Format.FormatName(_apiCallData.Name))</label>
+                <label class="input-group-text" style="font-weight: 600; color: red;" for="@InstanceId">@(Format.FormatName(paramType.Name))</label>
                 <select @bind="_inputEnumName" class="form-select" id="@InstanceId">
                     <option selected>Choose...</option>
                     @{
-                        foreach (var value in Enum.GetValues(_apiCallData))
+                        foreach (var value in Enum.GetValues(paramType))
                         {
                             <option value="@value">@value</option>
                         }
@@ -116,26 +117,30 @@
             <div>
                 <Icon IconName="noto-v1:construction" />
                 <p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
-                <span style="font-size=4px;">@_apiCallData.FullName</span>
+                <span style="font-size=4px;">@paramType.FullName</span>
             </div>
         }
 
+        </div>
     }
-</div>
 
 @code {
     /// <summary>
     /// id used to sync labels and inputs, for HTML sake
     /// </summary>
     private static string InstanceId = Guid.NewGuid().ToString();
-    private Type _apiCallData;
+    private Type paramType;
     private double _inputTotalDegrees;
     private string _inputText;
-    private int _inputNumber;
+    private double _inputNumber;
     private string _inputPlanetName;
+    private string _inputHouseName;
     private string _inputEnumName;
     private TimeLocationInput _inputTimeLocation;
-    
+
+    //default values used by optional params
+    public string DefaultValue { get; set; } = "";
+
     /// <summary>
     /// text shown inside help icon tooltip for param comes from c# code
     /// </summary>
@@ -147,18 +152,71 @@
     [Parameter]
     public string ParamName { get; set; }
 
-    public void SetValue(Type apiCallData, string paramName, string paramDescription)
+    public void SetValue(ParameterMetadata item)
     {
-        this._apiCallData = apiCallData;
+        var paramName = item.Name;
+        var paramDescription = item.Description;
+
+        this.paramType = item.ParamType;
         this.ParamName = ConvertCamelCaseToSpaces(paramName);
         this.ParamDescription = paramDescription;
+        this.DefaultValue = item.DefaultValue;
+
+
+        //set default values into input fields
+        if (!string.IsNullOrEmpty(item.DefaultValue)){SetValueIntoInputField(item.DefaultValue);}
+        
 
         StateHasChanged(); //needed to propagate updates
     }
 
+    //used to set optional param data
+    //note all all types supported
+    private void SetValueIntoInputField(string value)
+    {
+        // if (paramType == typeof(Time)) { combinedUrl = await _inputTimeLocation.ToApiUrl(); }
+        // else if (paramType == typeof(PlanetName)) { combinedUrl = $"/PlanetName/{_inputPlanetName}"; }
+        // else if (paramType == typeof(Angle)) { combinedUrl = $"/Angle/{_inputTotalDegrees}"; }
+        if (paramType == typeof(string))
+        {
+            _inputText = value;
+        }
+        else if (paramType == typeof(int))
+        {
+            _inputNumber = int.Parse(value);
+        }
+        else if (paramType == typeof(double))
+        {
+            _inputNumber = double.Parse(value);
+        }
+        else if (paramType?.IsEnum ?? false)
+        {
+            _inputEnumName = value;
+        }
+
+    }
+
+    public string GetValueFromInputField()
+    {
+        if (paramType == typeof(string))
+        {
+            return _inputText;
+        }
+        else if (paramType == typeof(int) || paramType == typeof(double))
+        {
+            return _inputNumber.ToString();
+        }
+        else if (paramType?.IsEnum ?? false)
+        {
+            return _inputEnumName;
+        }
+
+        return "";
+    }
+
     public async Task Hide()
     {
-        this._apiCallData = null;
+        this.paramType = null;
         this.ParamName = null;
         this.ParamDescription = null;
 
@@ -176,13 +234,24 @@
     {
         var combinedUrl = "";
 
-        if (_apiCallData == typeof(Time)) { combinedUrl = await _inputTimeLocation.ToApiUrl(); }
-        else if (_apiCallData == typeof(PlanetName)) { combinedUrl = $"/PlanetName/{_inputPlanetName}"; }
-        else if (_apiCallData == typeof(Angle)) { combinedUrl = $"/Angle/{_inputTotalDegrees}"; }
-        else if (_apiCallData == typeof(string)) { combinedUrl = $"/Text/{_inputText}"; }
-        else if (_apiCallData == typeof(int)) { combinedUrl = $"/Number/{_inputNumber}"; }
-        else if (_apiCallData?.IsEnum ?? false) { combinedUrl = $"/{_apiCallData.Name}/{_inputEnumName}"; }
+        var paramNameForUrl = "";
+        //remove spaces from param name to masuk URL
+        if (!string.IsNullOrEmpty(ParamName))
+        {
+            paramNameForUrl = ParamName.Replace(" ", "");
+        }
 
+        //NOTE : for these we use order to determine which is which, so no need to use paramNameForUrl
+        //       also means can't use these types for optional params
+        if (paramType == typeof(Time)) { combinedUrl = await _inputTimeLocation.ToApiUrl(); }
+        else if (paramType == typeof(PlanetName)) { combinedUrl = $"/PlanetName/{_inputPlanetName}"; }
+        else if (paramType == typeof(HouseName)) { combinedUrl = $"/HouseName/{_inputHouseName}"; }
+
+        //NOTE : only below is suitable for OPTIONAL PARAMS
+        else if (paramType == typeof(Angle)) { combinedUrl = $"/{paramNameForUrl}/{_inputTotalDegrees}"; }
+        else if (paramType == typeof(string)) { combinedUrl = $"/{paramNameForUrl}/{_inputText}"; }
+        else if (paramType == typeof(int) || paramType == typeof(double)) { combinedUrl = $"/{paramNameForUrl}/{_inputNumber}"; }
+        else if (paramType?.IsEnum ?? false) { combinedUrl = $"/{paramNameForUrl}/{_inputEnumName}"; }
 
         return combinedUrl;
     }
@@ -193,23 +262,22 @@
     /// <returns></returns>
     public async Task<bool> IsValidationPassed()
     {
-        //TEST 1 : ENUM
-        if (_apiCallData?.IsEnum ?? false)
-        {
-            var isNotSelected = string.IsNullOrEmpty(_inputEnumName);
 
-            if (isNotSelected)
+            //TEST 2 : PLANET NAME
+            if (paramType == typeof(HouseName))
             {
-                //mark invalid & alert user
-                await _jsRuntime.ShowAlert("error", $"Please select a {_apiCallData.Name} first!", true);
-                return false;
-
+                var isNotSelected = string.IsNullOrEmpty(_inputHouseName);
+                if (isNotSelected)
+                {
+                    //mark invalid & alert user
+                    await _jsRuntime.ShowAlert("error", $"Please select a House first!", true);
+                    return false;
+                }
             }
-        }
 
 
         //TEST 2 : PLANET NAME
-        if (_apiCallData == typeof(PlanetName))
+        else if (paramType == typeof(PlanetName))
         {
             var isNotSelected = string.IsNullOrEmpty(_inputPlanetName);
             if (isNotSelected)
@@ -220,6 +288,21 @@
 
             }
         }
+
+    //TEST 1 : ENUM
+        else if (paramType?.IsEnum ?? false)
+        {
+            var isNotSelected = string.IsNullOrEmpty(_inputEnumName);
+
+            if (isNotSelected)
+            {
+    //mark invalid & alert user
+                await _jsRuntime.ShowAlert("error", $"Please select a {paramType.Name} first!", true);
+                return false;
+
+            }
+        }
+
 
 
         //if control reaches here than, it's valid

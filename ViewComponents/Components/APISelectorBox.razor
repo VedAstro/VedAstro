@@ -23,7 +23,7 @@ KEEP IT REAL
 @using System.Timers
 @using FuzzySharp
 
-<div @ref="mainElementRef" class="hstack @ExtraClass">
+<div @ref="mainElementRef" class="hstack gap-2 @ExtraClass">
     @*Component shows combo box with people list*@
     <div class="btn-group" style="width: @GR.W412px;">
         @* DROPDOWN BUTTON *@
@@ -68,7 +68,28 @@ KEEP IT REAL
     @*ADD NEW FUNCTION ICON*@
     @if (!HideButton)
     {
-        <IconButton ExtraClass="ms-2" TooltipText="Suggest New API" IconName="fluent:person-feedback-28-regular" OnClickCallback="OnClickSuggestNewApi" />
+        <IconButton DropDownWidthPx="" DisableDropdownArrow="true" TooltipPosition="bottom" TooltipText="Do Stuff" SmallSize="true" IconName="mingcute:more-3-line">
+            <DropDownList>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(()=>WebsiteTools.OnClickGotoGithubCode(SelectedMethod))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket"/>
+                        <span>View Source Code</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="@OnClickSuggestNewApi">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="fluent:person-feedback-28-regular"/>
+                        <span>Suggest New API</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.OnClickCopyPythonSnippet(SelectedMethod, this))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="vscode-icons:file-type-python"/>
+                        <span>Python Snippet</span>
+                    </a>
+                </li>
+            </DropDownList>
+        </IconButton>
     }
 </div>
 
@@ -130,7 +151,7 @@ KEEP IT REAL
     /// </summary>
     private List<OpenAPIMetadata?> MethodListFiltered { get; set; } = new();
 
-    public OpenAPIMetadata? SelectedMethod { get; set; }
+    public OpenAPIMetadata? SelectedMethod { get; set; } = null;
 
     private List<OpenAPIMetadata?> MethodListALL = new();
 
@@ -178,22 +199,21 @@ KEEP IT REAL
     /// <summary>
     /// Return true if drop down is selected, else false
     /// </summary>
-    /// <returns></returns>
-    public async Task<bool> IsSelected() => FormattedMethodName != DefaultMessage && !string.IsNullOrEmpty(FormattedMethodName);
+    public bool IsSelected() => FormattedMethodName != DefaultMessage && !string.IsNullOrEmpty(FormattedMethodName);
 
     /// <summary>
     /// resets selected method as though not selected
     /// </summary>
     public void Reset()
     {
-    //set value for reference
+        //set value for reference
         SelectedMethod = null;
         FormattedMethodName = DefaultMessage;
 
-    //fire event, so parent listening can update other elements
+        //fire event, so parent listening can update other elements
         RaiseOnChangeSelectMethod();
 
-    //needed to make change appear
+        //needed to make change appear
         StateHasChanged();
     }
     

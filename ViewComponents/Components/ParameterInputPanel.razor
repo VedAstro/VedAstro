@@ -13,95 +13,300 @@
 @using System.Reflection
 @using System.Collections.Generic
 
-<div class="vstack gap-3">
+<div class="vstack gap-4">
+    
+    <div class="vstack gap-3">
 
-	<TypeSpecificInput @ref="param1" />
-	<TypeSpecificInput @ref="param2" />
-	<TypeSpecificInput @ref="param3" />
-	<TypeSpecificInput @ref="param4" />
-	<TypeSpecificInput @ref="param5" />
+        <TypeSpecificInput @ref="_param1" />
+        <TypeSpecificInput @ref="_param2" />
+        <TypeSpecificInput @ref="_param3" />
+        <TypeSpecificInput @ref="_param4" />
+        <TypeSpecificInput @ref="_param5" />
 
+    </div>
+
+    @* ADVANCED *@
+    <div>
+        <span class="mb-3 p-1 hstack gap-2 border-bottom" style="font-size:18px; font-weight:300;">
+            <Icon IconName="gala:settings" Size="30" /> Advanced (optional)
+            <Icon ExtraClass="ms-auto" IconName="icon-park-solid:down-c" OnClickCallback="OnClickShowAdvanced" />
+        </span>
+
+        @* ADVANCED PANEL DROP *@
+        <div id="AdvancedInputHolder" class="vstack gap-2" style="display: none">
+
+            <TypeSpecificInput @ref="_optionalParam1" />
+            <TypeSpecificInput @ref="_optionalParam2" />
+            <TypeSpecificInput @ref="_optionalParam3" />
+            <TypeSpecificInput @ref="_optionalParam4" />
+            <TypeSpecificInput @ref="_optionalParam5" />
+
+            @* AYANAMSA *@
+            <div class="input-group mb-2">
+                <label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
+                <select @bind="_selectedAyanamsa" class="form-select">
+
+                    <optgroup label="Easy">
+                        @foreach (var ayanamsa in @SimpleAyanamsaAll)
+                        {
+                                <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
+                        }
+                    </optgroup>
+                    <optgroup label="Advanced">
+                        @foreach (var ayanamsa in @AdvancedAyanamsaAll)
+                        {
+                                <option value="@ayanamsa">@ayanamsa</option>
+                        }
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="input-group" style="display: none">
+                <span class="input-group-text">Year of Zero Coincidence</span>
+                <input type="text" class="form-control" placeholder="397">
+            </div>
+        </div>
+    </div>
 </div>
 
-
-
 @code {
-	TypeSpecificInput param1;
-	TypeSpecificInput param2;
-	TypeSpecificInput param3;
-	TypeSpecificInput param4;
-	TypeSpecificInput param5;
-	List<TypeSpecificInput> paramList;
+
+    private List<SimpleAyanamsa> SimpleAyanamsaAll = new()
+    {
+        SimpleAyanamsa.LahiriChitrapaksha,
+        SimpleAyanamsa.KrishnamurtiKP,
+        SimpleAyanamsa.Raman,
+        SimpleAyanamsa.FaganBradley,
+        SimpleAyanamsa.J2000,
+        SimpleAyanamsa.Yukteshwar,
+
+    };
+
+    private List<Ayanamsa> AdvancedAyanamsaAll = new()
+    {
+
+        Ayanamsa.FAGAN_BRADLEY,
+
+        Ayanamsa.LAHIRI,
+
+        Ayanamsa.DELUCE,
+
+        Ayanamsa.RAMAN,
+
+        Ayanamsa.USHASHASHI,
+
+        Ayanamsa.KRISHNAMURTI,
+
+        Ayanamsa.DJWHAL_KHUL,
+
+        Ayanamsa.YUKTESHWAR,
+
+        Ayanamsa.JN_BHASIN,
+
+        Ayanamsa.BABYL_KUGLER1,
+
+        Ayanamsa.BABYL_KUGLER2,
+
+        Ayanamsa.BABYL_KUGLER3,
+
+        Ayanamsa.BABYL_HUBER,
+
+        Ayanamsa.BABYL_ETPSC,
+
+        Ayanamsa.ALDEBARAN_15TAU,
+
+        Ayanamsa.HIPPARCHOS,
+
+        Ayanamsa.SASSANIAN,
+
+        Ayanamsa.GALCENT_0SAG,
+
+        Ayanamsa.J1900,
+
+        Ayanamsa.B1950,
+
+        Ayanamsa.SURYASIDDHANTA,
+
+        Ayanamsa.SURYASIDDHANTA_MSUN,
+
+        Ayanamsa.ARYABHATA,
+
+        Ayanamsa.ARYABHATA_MSUN,
+
+        Ayanamsa.SS_REVATI ,
+
+        Ayanamsa.SS_CITRA,
+
+        Ayanamsa.TRUE_CITRA,
+
+        Ayanamsa.TRUE_REVATI,
+
+        Ayanamsa.TRUE_PUSHYA,
+
+        Ayanamsa.GALCENT_RGBRAND ,
+
+        Ayanamsa.GALEQU_IAU1958,
+
+        Ayanamsa.GALEQU_TRUE,
+
+        Ayanamsa.GALEQU_MULA,
+        Ayanamsa.GALALIGN_MARDYKS,
+
+        Ayanamsa.TRUE_MULA ,
+
+        Ayanamsa.GALCENT_MULA_WILHELM,
+
+        Ayanamsa.ARYABHATA_522,
+
+        Ayanamsa.BABYL_BRITTON,
+
+        Ayanamsa.TRUE_SHEORAN,
+
+        Ayanamsa.GALCENT_COCHRANE,
+
+        Ayanamsa.GALEQU_FIORENZA,
+
+        Ayanamsa.VALENS_MOON,
+
+        Ayanamsa.LAHIRI_1940,
+
+        Ayanamsa.LAHIRI_VP285,
+
+        Ayanamsa.KRISHNAMURTI_VP291,
+
+        Ayanamsa.LAHIRI_ICRC,
+    };
 
 
-	protected async override Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			paramList = new() { param1, param2, param3, param4, param5 };
-		}
 
-	}
 
-	//given data on params shows them on screen
-	//input format List(param name, description, type)
-	public void Show(List<(string, string, Type)> paramTypeList)
-	{
-		//list of all the inputs on screen
-	    paramList = new() { param1, param2, param3, param4, param5 };
+    /// <summary>
+    /// if not specified will not be included in final URL
+    /// default set to Raman, as used system wide
+    /// </summary>
+    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
+
+
+
+    TypeSpecificInput _param1;
+    TypeSpecificInput _param2;
+    TypeSpecificInput _param3;
+    TypeSpecificInput _param4;
+    TypeSpecificInput _param5;
+
+    TypeSpecificInput _optionalParam1;
+    TypeSpecificInput _optionalParam2;
+    TypeSpecificInput _optionalParam3;
+    TypeSpecificInput _optionalParam4;
+    TypeSpecificInput _optionalParam5;
+
+    //used later to generate final URL
+    private List<ParameterMetadata> _requiredParams;
+    private List<ParameterMetadata> _optionalParams;
+    //list of all the inputs on screen
+    List<TypeSpecificInput> paramListOptional;
+    List<TypeSpecificInput> paramList;
+
+
+    //TODO MARKED FOR DELETION
+    protected override async Task OnInitializedAsync()
+    {
+        //NOTE: small needed else, components rendering gets messed up (time to pop)
+        await _jsRuntime.ShowLoading(50);
+
+        //other components can start loading now (heavy computation starts)
+        // _mainPageInitDone = true;
+
+        //show data on display
+        _jsRuntime.HideAlert();
+
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            paramList =  new() { _param1, _param2, _param3, _param4, _param5 };
+            paramListOptional = new() { _optionalParam1, _optionalParam2, _optionalParam3, _optionalParam4, _optionalParam5 };
+        }
+
+    }
+
+    private void OnClickShowAdvanced()
+    {
+        //advanced inputs visible
+        _jsRuntime.ToggleDisplay("AdvancedInputHolder");
+    }
+
+
+    //given data on params shows them on screen
+    //input format List(param name, description, type)
+    public void Show(List<ParameterMetadata> paramInfoList)
+    {
+        //split into 2 lists, required and optional
+        _requiredParams = paramInfoList.Where(x => x.IsOptional == false).ToList();
+        _optionalParams = paramInfoList.Where(x => x.IsOptional == true).ToList();
 
         //clear inputs from previous method (if any)
-        foreach (var paramInput in paramList){ paramInput?.Hide();}
+        foreach (var paramInput in paramList) { paramInput?.Hide(); }
+
+        for (int index = 0; index < _requiredParams.Count; index++){paramList[index].SetValue(_requiredParams[index]);}
 
 
-	    int index = 0;
-	    foreach (var item in paramTypeList)
-	    {
-			//make visible with data
-	        var paramName = item.Item1;
-			var paramDescription = item.Item2;
-	        var paramType = item.Item3;
-	        paramList[index].SetValue(paramType, paramName, paramDescription);
+        //clear inputs from previous method (if any)
+        foreach (var paramInput in paramListOptional) { paramInput?.Hide(); }
 
-			//goto next
-	        index++;
-	    }
+        for (int index = 0; index < _optionalParams.Count; index++){paramListOptional[index].SetValue(_optionalParams[index]);}
 
-		StateHasChanged(); //needed to propagate updates
-	}
+        StateHasChanged(); //needed to propagate updates
+    }
 
-	public async Task<string> ToApiUrl()
-	{
-		var compiledUrl = "";
+    public async Task<string> ToApiUrl()
+    {
+        var compiledUrl = "";
 
-		//combine all the URLs of the inputs
-		foreach (var paramInput in paramList)
-		{
-			if (paramInput != null)
-			{
-				compiledUrl += await paramInput.ToApiUrl() ?? "";
-			}
-		}
+        //combine all the required param URLs
+        foreach (var paramInput in paramList)
+        {
+            if (paramInput != null)
+            {
+                compiledUrl += await paramInput.ToApiUrl() ?? "";
+            }
+        }
 
-		return compiledUrl;
+        //combine all the optional param URLs that was modified (not same with default value)
+        foreach (var paramInput in paramListOptional)
+        {
+            //not null and not same as default value
+            if (paramInput != null && paramInput.DefaultValue != paramInput.GetValueFromInputField())
+            {
+                compiledUrl += await paramInput.ToApiUrl() ?? "";
+            }
+        }
 
-	}
+        //add ayanamsa if selected
+        var ayanamsaUrl = _selectedAyanamsa == SimpleAyanamsa.LahiriChitrapaksha.ToString() ? "" : $"/Ayanamsa/{_selectedAyanamsa}";
+        compiledUrl += ayanamsaUrl;
 
-	/// <summary>
-	/// Check if all fields has been filled
-	/// </summary>
-	/// <returns></returns>
-	public async Task<bool> IsValidationPassed()
-	{
-		//TEST 1 :
-		foreach (var typeSpecificInput in paramList)
-		{
-			var isValid = await typeSpecificInput.IsValidationPassed(); //will raise own error
-			if (!isValid) { return false; }
-		}
+        return compiledUrl;
 
-		//if control reaches here than, it's valid
-		return true;
-	}
+    }
+
+    /// <summary>
+    /// Check if all fields has been filled
+    /// </summary>
+    /// <returns></returns>
+    public async Task<bool> IsValidationPassed()
+    {
+        //TEST 1 :
+        foreach (var typeSpecificInput in paramList)
+        {
+            var isValid = await typeSpecificInput.IsValidationPassed(); //will raise own error
+            if (!isValid) { return false; }
+        }
+
+        //if control reaches here than, it's valid
+        return true;
+    }
 
 }

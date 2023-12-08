@@ -2,6 +2,11 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
+<style>
+    .no-dropdown-arrow.dropdown-toggle::after {
+        display: none !important;
+    }
+</style>
 
 @*DROP DOWN VERSION*@
 @if (IsDropDownMode)
@@ -76,6 +81,7 @@ else
             //add outline class if specified
             string compiledClass = "";
             compiledClass += (SmallSize ? "btn-sm " : ""); //remember space between class names
+            compiledClass += (DisableDropdownArrow ? "no-dropdown-arrow " : "");
             compiledClass += (IsIconOnly ? "iconOnlyButton " : "");
             compiledClass += (FullWidth ? "w-100 " : "");
             compiledClass += (IsDropDownMode ? "dropdown-toggle " : ""); //drop down bootstrap class
@@ -208,6 +214,13 @@ else
     /// </summary>
     [Parameter]
     public RenderFragment? DropDownList { get; set; }
+
+    /// <summary>
+    /// If enabled, will not show drop down arrow
+    /// default is false
+    /// </summary>
+    [Parameter]
+    public bool DisableDropdownArrow { get; set; } = false;
 
     /// <summary>
     /// If Drop down list is provided then this turn true

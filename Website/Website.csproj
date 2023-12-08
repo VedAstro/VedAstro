@@ -39,7 +39,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Code\API\" />
 	  <Folder Include="ViewComponents\" />
 	</ItemGroup>
 

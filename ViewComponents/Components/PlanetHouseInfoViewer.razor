@@ -151,7 +151,7 @@
 
             var _permanentStrength = isRahuKetu ? 0 : Math.Round(Calculate.PlanetNaisargikaBala(planetName, _time).ToDouble(), 2);
 
-            var _planetCurrentHouse = Calculate.HousePlanetIsIn(planetName, _time);
+            var _planetCurrentHouse = Calculate.HousePlanetOccupies(planetName, _time);
 
             var _planetRasiSign = Calculate.PlanetZodiacSign(planetName, _time);
 
@@ -180,9 +180,9 @@
 
             var _currentSignDescription = Calculate.GetSignTags(_planetRasiSign.GetSignName());
 
-            var _currentHouseDescription = Calculate.GetHouseTags(Calculate.HousePlanetIsIn(planetName, _time));
+            var _currentHouseDescription = Calculate.GetHouseTags(Calculate.HousePlanetOccupies(planetName, _time));
 
-            var _planetCurrentHouseType = Calculate.GetHouseType(Calculate.HousePlanetIsIn(planetName, _time));
+            var _planetCurrentHouseType = Calculate.GetHouseType(Calculate.HousePlanetOccupies(planetName, _time));
 
             var _planetInfo = Calculate.GetPlanetTags(planetName);
 

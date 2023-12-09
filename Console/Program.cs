@@ -46,10 +46,10 @@ namespace VedAstro.Console
 
 
             //do the test
-            var testResult = Calculate.AyanamsaFinder(PlanetName.Sun, ConstellationName.Swathi, 3, timeSample);
-            var testResult1 = Calculate.AyanamsaFinder(PlanetName.Moon, ConstellationName.Rohini, 3, timeSample);
-            var testResult2 = Calculate.AyanamsaFinder(PlanetName.Mars, ConstellationName.Swathi, 4, timeSample);
-            var testResult3 = Calculate.AyanamsaFinder(PlanetName.Mercury, ConstellationName.Vishhaka, 1, timeSample);
+            //var testResult = Calculate.AyanamsaFinder(PlanetName.Sun, ConstellationName.Swathi, 3, timeSample);
+            //var testResult1 = Calculate.AyanamsaFinder(PlanetName.Moon, ConstellationName.Rohini, 3, timeSample);
+            //var testResult2 = Calculate.AyanamsaFinder(PlanetName.Mars, ConstellationName.Swathi, 4, timeSample);
+            //var testResult3 = Calculate.AyanamsaFinder(PlanetName.Mercury, ConstellationName.Vishhaka, 1, timeSample);
 
             //check the test
 

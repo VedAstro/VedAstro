@@ -122,7 +122,7 @@ namespace VedAstro.Library
         private static string GetPlanetsPositionLayer(Time time)
         {
             var compiled = "";
-            var allPlanetsSigns = Calculate.AllPlanetHousePositions(time);
+            var allPlanetsSigns = Calculate.HouseAllPlanetOccupies(time);
 
             foreach (var planetSign in allPlanetsSigns)
             {

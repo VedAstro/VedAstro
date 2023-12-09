@@ -36,8 +36,7 @@ namespace StaticTableGenerator
 		static string userFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 		static string[] CalculatorCodeFile = new[]
 		{
-			Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Logic\Calculate\Calculate.cs") ,
-			Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Logic\Calculate\CalculateKP.cs")
+			Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Logic\Calculate\Calculate.cs")
 		};
 		static string MetadataStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\OpenAPIStaticTable.cs");
 		static string PythonCalculateStubFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro.Python\VedAstro\Library.pyi");
@@ -46,8 +45,7 @@ namespace StaticTableGenerator
 		static void Main(string[] args)
 		{
 			//get all open api calcs summary comments and use as description with name
-			//var calcDescriptionList = ExtractSummaries(CalculatorCodeFile);
-			var calcDescriptionList2 = ExtractSummaries2(CalculatorCodeFile);
+			var calcDescriptionList2 = ExtractSummaries(CalculatorCodeFile);
 
 			var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
 
@@ -85,8 +83,8 @@ namespace StaticTableGenerator
                           {
                           
                               /// <summary>
-                              /// This list is auto generated from code when running StaticTableGenerator,
-                              /// so that Open API methods have a metadata. Regenerate when files Calculate.cs gets updated
+                              /// Auto generated code by StaticTableGenerator, so that Open API methods have a metadata.
+                              /// Regenerate when files Calculate.cs gets updated. ✝️Amen for automation!
                               /// </summary>
                               {{classAsText}}
                           }
@@ -258,62 +256,11 @@ namespace StaticTableGenerator
 			return sb.ToString();
 		}
 
-		/// <summary>
-		/// Given a path to a CS class file, will parse it and extract method name and comments above and return as list
-		/// used to get metadata for Open API calculators
-		/// </summary>
-		public static Dictionary<string, string> ExtractSummaries(string[] filePaths)
-		{
-			// Initialize a dictionary to hold the method signatures and their corresponding summaries
-			Dictionary<string, string> summaries = new Dictionary<string, string>();
-			// Loop through each file path provided
-			foreach (var filePath in filePaths)
-			{
-				// Read the content of the file
-				string fileContent = File.ReadAllText(filePath);
-				// Parse the file content into a syntax tree
-				var tree = CSharpSyntaxTree.ParseText(fileContent);
-				// Get the root of the syntax tree
-				var root = tree.GetRoot();
-				// Create a compilation that contains this tree
-				var compilation = CSharpCompilation.Create("VedAstro.Library", new[] { tree });
-				// Get the semantic model of the tree
-				var semanticModel = compilation.GetSemanticModel(tree);
-				// Loop through all the methods in the syntax tree
-				foreach (var method in root.DescendantNodes().OfType<MethodDeclarationSyntax>())
-				{
-					// Get the leading trivia (comments) of the method
-					var trivia = method.GetLeadingTrivia().Where(x => x.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia);
-					// Parse the trivia into XML comments
-					var xmlComments = trivia.Select(x => x.GetStructure()).OfType<DocumentationCommentTriviaSyntax>();
-					// Get the summary tag from the XML comments
-					var summary = xmlComments.SelectMany(x => x.ChildNodes()).OfType<XmlElementSyntax>()
-						.FirstOrDefault(x => x.StartTag.Name.ToString() == "summary");
-					// Get the unique ID of the method
-					var methodSignature = method.GetMethodSignature(semanticModel);
-					if (summary != null)
-					{
-						// Get the raw content of the summary
-						var rawComments = summary.Content.ToString().Trim();
-						// Clean the comments by removing all non-alphanumeric characters except for space, underscore, and dot
-						string safeDescription = Regex.Replace(rawComments, "[^a-zA-Z0-9 _.]+", "");
-						// Replace all new lines and multiple spaces with a single space
-						safeDescription = Regex.Replace(safeDescription, @"\s{2,}", " ");
-						// Add the method signature and cleaned summary to the dictionary
-						summaries.Add(methodSignature, safeDescription);
-					}
-					else
-					{
-						// If there is no summary, add the method signature with a default text to the dictionary
-						summaries.Add(methodSignature, "Empty sample text");
-					}
-				}
-			}
-			// Return the dictionary containing the method signatures and their summaries
-			return summaries;
-		}
-
-		public static List<MethodDocumentation> ExtractSummaries2(string[] filePaths)
+        /// <summary>
+        /// Given a path to a CS class file, will parse it and extract method name and comments above and return as list
+        /// used to get metadata for Open API calculators
+        /// </summary>
+        public static List<MethodDocumentation> ExtractSummaries(string[] filePaths)
 		{
 			// Dictionary to hold the method signatures and their documentation
 			List<MethodDocumentation> summaries = new List<MethodDocumentation>();

@@ -163,7 +163,7 @@ namespace API
             //1 : GET INPUT DATA
             var calculator =
                 Tools.MethodNameToMethodInfo(calculatorName,
-                    new[] { typeof(Calculate), typeof(CalculateKP) }); //get calculator name
+                    new[] { typeof(Calculate), /*typeof(CalculateKP)*/ }); //get calculator name
 
             //2 : CUSTOM AYANAMSA (removes ayanamsa once read)
             fullParamString = ParseAndSetAyanamsa(fullParamString);

@@ -327,16 +327,16 @@ namespace API
         }
 
 
-        /// <summary>
-        /// If there is binary file in request it will take it out,
-        /// not support multipart form
-        /// </summary>
-        public static async Task<byte[]> ExtractFileFromRequest(HttpRequestData request)
-        {
-            request.Body.Position = 0; //need to set to 0 else will get 0 bytes
-            var x = request.Body.ToByteArray();
-            return x;
-        }
+        ///// <summary>
+        ///// If there is binary file in request it will take it out,
+        ///// not support multipart form
+        ///// </summary>
+        //public static async Task<byte[]> ExtractFileFromRequest(HttpRequestData request)
+        //{
+        //    request.Body.Position = 0; //need to set to 0 else will get 0 bytes
+        //    var x = request.Body.ToByteArray();
+        //    return x;
+        //}
 
 
         /// <summary>

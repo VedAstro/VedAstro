@@ -2578,19 +2578,6 @@ namespace VedAstro.Library
                 .ToList();
 
 
-            //-----------KP
-            //get all calculators that can work with the inputed data
-            var calculatorKPClass = typeof(CalculateKP);
-
-            //fine tune, what methods gets set as calculators
-            //remove auto properties methods and base methods
-            var finalListKP = calculatorKPClass.GetMethods()
-                .Where(m => !m.Name.StartsWith("get_") && !m.Name.StartsWith("set_") && m.DeclaringType != typeof(object))
-                .ToList();
-
-            //combine both
-            finalList.AddRange(finalListKP);
-
             return finalList;
 
         }

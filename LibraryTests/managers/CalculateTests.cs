@@ -365,7 +365,7 @@ namespace VedAstro.Library.Tests
         public void DestinyPointTest()
         {
             //do the test
-            var testResult = Calculate.DestinyPoint(StandardHoroscope, ZodiacName.Pisces, PlanetName.Rahu, PlanetName.Moon);
+            var testResult = Calculate.DestinyPoint(StandardHoroscope, ZodiacName.Pisces);
 
             //check the test
             Assert.Fail();
@@ -375,24 +375,12 @@ namespace VedAstro.Library.Tests
         public void FortunePointTest()
         {
             //do the test
-            var testResult = Calculate.FortunePoint(ZodiacName.Pisces, PlanetName.Rahu, PlanetName.Moon, StandardHoroscope);
+            var testResult = Calculate.FortunaPoint(ZodiacName.Pisces, StandardHoroscope);
 
             //check the test
             Assert.Fail();
         }
 
-        [TestMethod()]
-        public void AyanamsaFinderTest()
-        {
-
-            Time timeSample = new("00:00 10/10/2023 +05:30", GeoLocation.Bangalore);
-
-            //do the test
-            var testResult = Calculate.AyanamsaFinder(PlanetName.Sun, ConstellationName.Rohini, 3, timeSample);
-
-            //check the test
-            Assert.Fail();
-        }
 
 
     }

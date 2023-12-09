@@ -4835,7 +4835,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -4850,7 +4850,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -4865,7 +4865,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -4880,7 +4880,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -4895,7 +4895,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -4910,7 +4910,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -4925,7 +4925,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -4940,7 +4940,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -4955,7 +4955,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -4970,7 +4970,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -4985,7 +4985,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5000,7 +5000,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5019,7 +5019,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5034,7 +5034,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5049,7 +5049,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5064,7 +5064,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5079,7 +5079,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5094,7 +5094,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5109,7 +5109,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5124,7 +5124,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5139,7 +5139,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5154,7 +5154,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5169,7 +5169,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5184,7 +5184,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5203,7 +5203,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5218,7 +5218,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5233,7 +5233,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5248,7 +5248,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5263,7 +5263,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5278,7 +5278,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5293,7 +5293,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5308,7 +5308,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5323,7 +5323,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5338,7 +5338,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5353,7 +5353,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5368,7 +5368,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5387,7 +5387,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5402,7 +5402,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5417,7 +5417,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5432,7 +5432,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5447,7 +5447,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5462,7 +5462,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5477,7 +5477,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5492,7 +5492,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5507,7 +5507,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5522,7 +5522,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5537,7 +5537,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5552,7 +5552,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5571,7 +5571,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5586,7 +5586,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5601,7 +5601,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5616,7 +5616,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5631,7 +5631,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5646,7 +5646,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5661,7 +5661,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5676,7 +5676,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5691,7 +5691,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5706,7 +5706,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5721,7 +5721,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5736,7 +5736,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5755,7 +5755,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5770,7 +5770,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5785,7 +5785,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5800,7 +5800,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5815,7 +5815,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5830,7 +5830,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5845,7 +5845,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5860,7 +5860,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5875,7 +5875,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5890,7 +5890,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5905,7 +5905,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5920,7 +5920,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5939,7 +5939,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5954,7 +5954,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5969,7 +5969,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5984,7 +5984,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -5999,7 +5999,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6014,7 +6014,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6029,7 +6029,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6044,7 +6044,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6059,7 +6059,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6074,7 +6074,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6089,7 +6089,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6104,7 +6104,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6123,7 +6123,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6138,7 +6138,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6153,7 +6153,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6168,7 +6168,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6183,7 +6183,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6198,7 +6198,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6213,7 +6213,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6228,7 +6228,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6243,7 +6243,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6258,7 +6258,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6273,7 +6273,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6288,7 +6288,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6307,7 +6307,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6322,7 +6322,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6337,7 +6337,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6352,7 +6352,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6367,7 +6367,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6382,7 +6382,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6397,7 +6397,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6412,7 +6412,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6427,7 +6427,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6442,7 +6442,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6457,7 +6457,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6472,7 +6472,7 @@ namespace VedAstro.Library
 			var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
 			//current dasa is of planet
-			var planetPD1Ocurring = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+			var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
 			//occuring if all conditions met
 			var occuring = planetInSign && planetPD1Ocurring;
@@ -6492,7 +6492,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SunSunPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var dasa = currentPlanetDasas.PD1 == PlanetName.Sun;
@@ -6510,7 +6510,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SunMoonPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Sun;
@@ -6528,7 +6528,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SunMarsPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Sun;
@@ -6546,7 +6546,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SunRahuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Sun;
@@ -6564,7 +6564,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SunJupiterPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Sun;
@@ -6582,7 +6582,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SunSaturnPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Sun;
@@ -6600,7 +6600,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SunMercuryPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Sun;
@@ -6618,7 +6618,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SunKetuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Sun;
@@ -6636,7 +6636,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SunVenusPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Sun;
@@ -6658,7 +6658,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MoonSunPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var dasa = currentPlanetDasas.PD1 == PlanetName.Moon;
@@ -6676,7 +6676,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MoonMoonPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Moon;
@@ -6694,7 +6694,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MoonMarsPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Moon;
@@ -6712,7 +6712,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MoonRahuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Moon;
@@ -6730,7 +6730,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MoonJupiterPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Moon;
@@ -6748,7 +6748,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MoonSaturnPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Moon;
@@ -6766,7 +6766,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MoonMercuryPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Moon;
@@ -6784,7 +6784,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MoonKetuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Moon;
@@ -6802,7 +6802,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MoonVenusPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Moon;
@@ -6824,7 +6824,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MarsSunPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var dasa = currentPlanetDasas.PD1 == PlanetName.Mars;
@@ -6842,7 +6842,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MarsMoonPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mars;
@@ -6860,7 +6860,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MarsMarsPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mars;
@@ -6878,7 +6878,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MarsRahuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mars;
@@ -6896,7 +6896,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MarsJupiterPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mars;
@@ -6914,7 +6914,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MarsSaturnPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mars;
@@ -6932,7 +6932,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MarsMercuryPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mars;
@@ -6950,7 +6950,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MarsKetuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mars;
@@ -6968,7 +6968,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MarsVenusPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mars;
@@ -6990,7 +6990,7 @@ namespace VedAstro.Library
 		public static CalculatorResult RahuSunPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var dasa = currentPlanetDasas.PD1 == PlanetName.Rahu;
@@ -7008,7 +7008,7 @@ namespace VedAstro.Library
 		public static CalculatorResult RahuMoonPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Rahu;
@@ -7026,7 +7026,7 @@ namespace VedAstro.Library
 		public static CalculatorResult RahuMarsPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Rahu;
@@ -7044,7 +7044,7 @@ namespace VedAstro.Library
 		public static CalculatorResult RahuRahuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Rahu;
@@ -7062,7 +7062,7 @@ namespace VedAstro.Library
 		public static CalculatorResult RahuJupiterPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Rahu;
@@ -7080,7 +7080,7 @@ namespace VedAstro.Library
 		public static CalculatorResult RahuSaturnPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Rahu;
@@ -7098,7 +7098,7 @@ namespace VedAstro.Library
 		public static CalculatorResult RahuMercuryPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Rahu;
@@ -7116,7 +7116,7 @@ namespace VedAstro.Library
 		public static CalculatorResult RahuKetuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Rahu;
@@ -7134,7 +7134,7 @@ namespace VedAstro.Library
 		public static CalculatorResult RahuVenusPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Rahu;
@@ -7156,7 +7156,7 @@ namespace VedAstro.Library
 		public static CalculatorResult JupiterSunPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var dasa = currentPlanetDasas.PD1 == PlanetName.Jupiter;
@@ -7174,7 +7174,7 @@ namespace VedAstro.Library
 		public static CalculatorResult JupiterMoonPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Jupiter;
@@ -7192,7 +7192,7 @@ namespace VedAstro.Library
 		public static CalculatorResult JupiterMarsPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Jupiter;
@@ -7210,7 +7210,7 @@ namespace VedAstro.Library
 		public static CalculatorResult JupiterRahuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Jupiter;
@@ -7228,7 +7228,7 @@ namespace VedAstro.Library
 		public static CalculatorResult JupiterJupiterPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Jupiter;
@@ -7246,7 +7246,7 @@ namespace VedAstro.Library
 		public static CalculatorResult JupiterSaturnPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Jupiter;
@@ -7264,7 +7264,7 @@ namespace VedAstro.Library
 		public static CalculatorResult JupiterMercuryPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Jupiter;
@@ -7282,7 +7282,7 @@ namespace VedAstro.Library
 		public static CalculatorResult JupiterKetuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Jupiter;
@@ -7300,7 +7300,7 @@ namespace VedAstro.Library
 		public static CalculatorResult JupiterVenusPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Jupiter;
@@ -7322,7 +7322,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SaturnSunPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var dasa = currentPlanetDasas.PD1 == PlanetName.Saturn;
@@ -7340,7 +7340,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SaturnMoonPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Saturn;
@@ -7358,7 +7358,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SaturnMarsPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Saturn;
@@ -7376,7 +7376,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SaturnRahuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Saturn;
@@ -7394,7 +7394,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SaturnJupiterPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Saturn;
@@ -7412,7 +7412,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SaturnSaturnPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Saturn;
@@ -7430,7 +7430,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SaturnMercuryPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Saturn;
@@ -7448,7 +7448,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SaturnKetuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Saturn;
@@ -7466,7 +7466,7 @@ namespace VedAstro.Library
 		public static CalculatorResult SaturnVenusPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Saturn;
@@ -7488,7 +7488,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MercurySunPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var dasa = currentPlanetDasas.PD1 == PlanetName.Mercury;
@@ -7506,7 +7506,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MercuryMoonPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mercury;
@@ -7524,7 +7524,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MercuryMarsPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mercury;
@@ -7542,7 +7542,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MercuryRahuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mercury;
@@ -7560,7 +7560,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MercuryJupiterPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mercury;
@@ -7578,7 +7578,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MercurySaturnPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mercury;
@@ -7596,7 +7596,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MercuryMercuryPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mercury;
@@ -7614,7 +7614,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MercuryKetuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mercury;
@@ -7632,7 +7632,7 @@ namespace VedAstro.Library
 		public static CalculatorResult MercuryVenusPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Mercury;
@@ -7654,7 +7654,7 @@ namespace VedAstro.Library
 		public static CalculatorResult KetuSunPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var dasa = currentPlanetDasas.PD1 == PlanetName.Ketu;
@@ -7672,7 +7672,7 @@ namespace VedAstro.Library
 		public static CalculatorResult KetuMoonPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Ketu;
@@ -7690,7 +7690,7 @@ namespace VedAstro.Library
 		public static CalculatorResult KetuMarsPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Ketu;
@@ -7708,7 +7708,7 @@ namespace VedAstro.Library
 		public static CalculatorResult KetuRahuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Ketu;
@@ -7726,7 +7726,7 @@ namespace VedAstro.Library
 		public static CalculatorResult KetuJupiterPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Ketu;
@@ -7744,7 +7744,7 @@ namespace VedAstro.Library
 		public static CalculatorResult KetuSaturnPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Ketu;
@@ -7762,7 +7762,7 @@ namespace VedAstro.Library
 		public static CalculatorResult KetuMercuryPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Ketu;
@@ -7780,7 +7780,7 @@ namespace VedAstro.Library
 		public static CalculatorResult KetuKetuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Ketu;
@@ -7798,7 +7798,7 @@ namespace VedAstro.Library
 		public static CalculatorResult KetuVenusPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Ketu;
@@ -7820,7 +7820,7 @@ namespace VedAstro.Library
 		public static CalculatorResult VenusSunPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var dasa = currentPlanetDasas.PD1 == PlanetName.Venus;
@@ -7838,7 +7838,7 @@ namespace VedAstro.Library
 		public static CalculatorResult VenusMoonPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Venus;
@@ -7856,7 +7856,7 @@ namespace VedAstro.Library
 		public static CalculatorResult VenusMarsPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Venus;
@@ -7874,7 +7874,7 @@ namespace VedAstro.Library
 		public static CalculatorResult VenusRahuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Venus;
@@ -7892,7 +7892,7 @@ namespace VedAstro.Library
 		public static CalculatorResult VenusJupiterPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Venus;
@@ -7910,7 +7910,7 @@ namespace VedAstro.Library
 		public static CalculatorResult VenusSaturnPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Venus;
@@ -7928,7 +7928,7 @@ namespace VedAstro.Library
 		public static CalculatorResult VenusMercuryPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Venus;
@@ -7946,7 +7946,7 @@ namespace VedAstro.Library
 		public static CalculatorResult VenusKetuPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Venus;
@@ -7964,7 +7964,7 @@ namespace VedAstro.Library
 		public static CalculatorResult VenusVenusPD2(Time time, Person person)
 		{
 			//get dasas for current time
-			var currentPlanetDasas = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetDasas = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check dasa
 			var isCorrect = currentPlanetDasas.PD1 == PlanetName.Venus;
@@ -9682,13 +9682,13 @@ namespace VedAstro.Library
 			var lord6th = Calculate.LordOfHouse(HouseName.House6, person.BirthTime);
 
 			//is lord 6th dasa occuring
-			var isLord6thDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord6th;
+			var isLord6thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord6th;
 
 			//get lord 8th house
 			var lord8th = Calculate.LordOfHouse(HouseName.House8, person.BirthTime);
 
 			//is lord 8th dasa occuring
-			var isLord8thDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord8th;
+			var isLord8thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord8th;
 
 			//occuring if one of the conditions met
 			var occuring = isLord6thDasa || isLord8thDasa;
@@ -9708,13 +9708,13 @@ namespace VedAstro.Library
 			var lord5th = Calculate.LordOfHouse(HouseName.House5, person.BirthTime);
 
 			//is lord 5th dasa occuring
-			var isLord5thDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord5th;
+			var isLord5thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord5th;
 
 			//get lord 9th house
 			var lord9th = Calculate.LordOfHouse(HouseName.House9, person.BirthTime);
 
 			//is lord 8th dasa occuring
-			var isLord9thDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord9th;
+			var isLord9thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord9th;
 
 			//occuring if one of the conditions met
 			var occuring = isLord5thDasa || isLord9thDasa;
@@ -9735,12 +9735,12 @@ namespace VedAstro.Library
 			var lord9th = Calculate.LordOfHouse(HouseName.House9, person.BirthTime);
 
 			//is lord 5th dasa occuring
-			var isLord5thDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord5th;
-			var isLord5thBhukti = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD2 == lord5th;
+			var isLord5thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord5th;
+			var isLord5thBhukti = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD2 == lord5th;
 
 			//is lord 9th dasa occuring
-			var isLord9thDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord9th;
-			var isLord9thBhukti = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD2 == lord9th;
+			var isLord9thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord9th;
+			var isLord9thBhukti = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD2 == lord9th;
 
 			//condition 1
 			//bhukti 5th lord & dasa 9th lord
@@ -9764,10 +9764,10 @@ namespace VedAstro.Library
 			// the 12th and the 2nd from each other respectively.
 
 			//get bukti lord
-			var buhktiLord = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD2;
+			var buhktiLord = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD2;
 
 			//get dasa lord =
-			var dasaLord = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1;
+			var dasaLord = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1;
 
 			//condition 1
 			//is bukti lord in 6th house at birth
@@ -9800,7 +9800,7 @@ namespace VedAstro.Library
 			var lordHouse2 = Calculate.LordOfHouse(HouseName.House2, person.BirthTime);
 
 			//is lord 2nd dasa occuring
-			var isLord2Dasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == lordHouse2;
+			var isLord2Dasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lordHouse2;
 
 			//occuring if one of the conditions met
 			var occuring = isLord2Dasa;
@@ -9818,7 +9818,7 @@ namespace VedAstro.Library
 			var lordHouse3 = Calculate.LordOfHouse(HouseName.House3, person.BirthTime);
 
 			//is lord 3rd dasa occuring
-			var isLord3Dasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == lordHouse3;
+			var isLord3Dasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lordHouse3;
 
 			//occuring if one of the conditions met
 			var occuring = isLord3Dasa;
@@ -9839,7 +9839,7 @@ namespace VedAstro.Library
 			var lordHouse1 = Calculate.LordOfHouse(HouseName.House1, person.BirthTime);
 
 			//is lord 1st house dasa occuring
-			var isLord1Dasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == lordHouse1;
+			var isLord1Dasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lordHouse1;
 
 			//occuring if one of the conditions met
 			var occuring = isLord1Dasa;
@@ -9855,10 +9855,10 @@ namespace VedAstro.Library
 			// the evil effects get considerably modified.
 
 			//is saturn dasa occuring
-			var isSaturnDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+			var isSaturnDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
 			//is the 4th dasa
-			var is4thDasa = Calculate.CurrentDasaCountFromBirth(person.BirthTime, time) == 4;
+			var is4thDasa = VimshottariDasa.CurrentDasaCountFromBirth(person.BirthTime, time) == 4;
 
 			//occuring if one of the conditions met
 			var occuring = isSaturnDasa && is4thDasa;
@@ -9873,10 +9873,10 @@ namespace VedAstro.Library
 			// happens to be the 6th Dasa.
 
 			//is jupiter dasa occuring
-			var isJupiterDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+			var isJupiterDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
 			//is the 6th dasa
-			var is6thDasa = Calculate.CurrentDasaCountFromBirth(person.BirthTime, time) == 6;
+			var is6thDasa = VimshottariDasa.CurrentDasaCountFromBirth(person.BirthTime, time) == 6;
 
 			//occuring if one of the conditions met
 			var occuring = isJupiterDasa && is6thDasa;
@@ -9891,7 +9891,7 @@ namespace VedAstro.Library
 			//money, attains fame and happiness
 
 			//is sun dasa occuring
-			var isSunDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//is sun elevated
 			//todo what is elvated?
@@ -9910,7 +9910,7 @@ namespace VedAstro.Library
 			//10 - happiness, gains, riches, honours
 
 			//is sun dasa occuring
-			var isSunDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//is sun in own house
 			var sunInOwn = Calculate.IsPlanetInOwnHouse(PlanetName.Sun, person.BirthTime);
@@ -9934,7 +9934,7 @@ namespace VedAstro.Library
 			//the Sun with lord of 5 - birth of children.
 
 			//is sun dasa occuring
-			var isSunDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//is sun with lord of 5th
 			var sunWithLord5th = Calculate.IsPlanetSameHouseWithHouseLord(5, PlanetName.Sun, person.BirthTime);
@@ -9952,7 +9952,7 @@ namespace VedAstro.Library
 			//property, gains, favours from influential persons.
 
 			//is sun dasa occuring
-			var isSunDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			//is sun with lord of 2nd
 			var sunWithLord2nd = Calculate.IsPlanetSameHouseWithHouseLord(2, PlanetName.Sun, person.BirthTime);
@@ -9988,7 +9988,7 @@ namespace VedAstro.Library
 			//parties and lovely women.
 
 			//is sun dasa occuring
-			var isSunDasa = Calculate.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+			var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
 			var isSunExalted = Calculate.IsPlanetExalted(PlanetName.Sun, time);
 
@@ -10008,7 +10008,7 @@ namespace VedAstro.Library
 		private static CalculatorResult PlanetPD2PlanetPD3(Time time, Person person, PlanetName bhuktiPlanet, PlanetName antaramPlanet)
 		{
 			//get dasas for current time
-			var currentPlanetPeriod = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetPeriod = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check bhukti
 			var isCorrectBhukti = currentPlanetPeriod.PD2 == bhuktiPlanet;
@@ -10023,7 +10023,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(bhuktiPlanet, antaramPlanet);
+				var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(bhuktiPlanet, antaramPlanet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -10041,7 +10041,7 @@ namespace VedAstro.Library
 		private static CalculatorResult PlanetPD3PlanetPD4(Time time, Person person, PlanetName antaramPlanet, PlanetName sukshmaPlanet)
 		{
 			//get dasas for current time
-			var currentPlanetPeriod = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetPeriod = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check Antaram
 			var isCorrectAntaram = currentPlanetPeriod.PD3 == antaramPlanet;
@@ -10056,7 +10056,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(antaramPlanet, sukshmaPlanet);
+				var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(antaramPlanet, sukshmaPlanet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -10074,7 +10074,7 @@ namespace VedAstro.Library
 		private static CalculatorResult PlanetPD4PlanetPD5(Time time, Person person, PlanetName PD4Planet, PlanetName PD5Planet)
 		{
 			//get whole dasa for current time
-			var currentPlanetPeriod = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetPeriod = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check PD4
 			var isCorrectPD4 = currentPlanetPeriod.PD4 == PD4Planet;
@@ -10089,7 +10089,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(PD4Planet, PD5Planet);
+				var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(PD4Planet, PD5Planet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -10107,7 +10107,7 @@ namespace VedAstro.Library
 		private static CalculatorResult PlanetPD5PlanetPD6(Time time, Person person, PlanetName PD5Planet, PlanetName PD6Planet)
 		{
 			//get whole dasa for current time
-			var currentPlanetPeriod = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetPeriod = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check PD5
 			var isCorrectPD5 = currentPlanetPeriod.PD5 == PD5Planet;
@@ -10122,7 +10122,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(PD5Planet, PD6Planet);
+				var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(PD5Planet, PD6Planet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -10140,7 +10140,7 @@ namespace VedAstro.Library
 		private static CalculatorResult PlanetPD6PlanetPD7(Time time, Person person, PlanetName PD6Planet, PlanetName PD7Planet)
 		{
 			//get whole dasa for current time
-			var currentPlanetPeriod = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetPeriod = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check PD6
 			var isCorrectPD6 = currentPlanetPeriod.PD6 == PD6Planet;
@@ -10155,7 +10155,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(PD6Planet, PD7Planet);
+				var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(PD6Planet, PD7Planet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -10173,7 +10173,7 @@ namespace VedAstro.Library
 		private static CalculatorResult PlanetPD7PlanetPD8(Time time, Person person, PlanetName PD7Planet, PlanetName PD8Planet)
 		{
 			//get whole dasa for current time
-			var currentPlanetPeriod = Calculate.CurrentDasa8Levels(person.BirthTime, time);
+			var currentPlanetPeriod = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time);
 
 			//check PD7
 			var isCorrectPD7 = currentPlanetPeriod.PD7 == PD7Planet;
@@ -10188,7 +10188,7 @@ namespace VedAstro.Library
 			if (occuring)
 			{
 				//nature & description override, based on cyclic relationship between planets
-				var periodPrediction = Calculate.PlanetDasaMajorPlanetAndMinorRelationship(PD7Planet, PD8Planet);
+				var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(PD7Planet, PD8Planet);
 
 				var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 

@@ -4,28 +4,38 @@
     <title>Basic HTML Page</title>
     <!-- JQUERY -->
     <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
-
-    <!-- BOOTSTRAP STYLING -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
+    
     <!-- ASTRO TABLE MAKER-->
-    <script src="AstroTable.js"></script>
+    <script src="VedAstro.js"></script>
 
 </head>
 <body>
 
-    <table id="PlanetDataTable" class="table table-striped table-hover table-bordered  text-nowrap" style="width: 100%"></table>
+    <table id="PlanetDataTable" class="table table-striped table-hover table-bordered text-nowrap" style="width: 100%"></table>
 
     <script>
         //initialize astro table
-        var astroTable = new AstroTable("PlanetDataTable", "Planet", PlanetColumns);
+        var settings = {
+            TableId : "PlanetDataTable",
+            KeyColumn : "Planet",
+            ShowHeader : true,
+            HeaderIcon : "",
+            ColumnData : PlanetColumns, //columns names to create table
+            EnableSorting : false
+        };
 
-        //PLANET
-        var timeUrl = "Location/Bengaluru/Time/11:00/25/07/1984/+00:00/";
-        var horaryNumber = 0;
-        var rotateDegrees = 0;
-        astroTable.GenerateHTMLTableFromAPI(timeUrl, horaryNumber, rotateDegrees);
+        var planetDataTable = new AstroTable(settings);
+
+        //data used to generate table
+        var inputArguments = {
+            TimeUrl : "Location/Bengaluru/Time/11:00/25/07/1984/+00:00/",
+            HoraryNumber : 0, 
+            RotateDegrees: 0,
+            Ayanamsa: "KRISHNAMURTI", //default is Lahiri
+        };
+
+        //generate table
+        planetDataTable.GenerateTable(inputArguments);
 
     </script>
 </body>

@@ -1,3 +1,79 @@
+//LOAD DEPENDENCIES
+
+// Check if jQuery is loaded
+if (typeof jQuery == 'undefined') {
+    // jQuery is not loaded, load it
+    var script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js';
+    script.type = 'text/javascript';
+    document.getElementsByTagName('head')[0].appendChild(script);
+    console.log("jQuery loaded");
+
+}
+// Check if Bootstrap is loaded
+if (typeof $().modal == 'undefined') {
+    // Bootstrap is not loaded, load it
+    // Load CSS
+    var link = document.createElement('link');
+    link.href = 'https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css';
+    link.rel = 'stylesheet';
+    document.getElementsByTagName('head')[0].appendChild(link);
+    // Load JS
+    var script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js';
+    script.type = 'text/javascript';
+    document.getElementsByTagName('head')[0].appendChild(script);
+    console.log("Bootstrap loaded");
+
+}
+
+// Check if Iconify is loaded
+if (typeof Iconify == 'undefined') {
+    // Iconify is not loaded, load it
+    var script = document.createElement('script');
+    script.src = 'https://code.iconify.design/3/3.1.0/iconify.min.js';
+    script.type = 'text/javascript';
+    document.getElementsByTagName('head')[0].appendChild(script);
+    console.log("Iconify loaded");
+}
+
+// Check if SweetAlert2 is loaded
+if (typeof Swal == 'undefined') {
+    // SweetAlert2 is not loaded, load it
+    // Load CSS
+    var link = document.createElement('link');
+    link.href = 'https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css';
+    link.rel = 'stylesheet';
+    document.getElementsByTagName('head')[0].appendChild(link);
+    // Load JS
+    var script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js';
+    script.type = 'text/javascript';
+    document.getElementsByTagName('head')[0].appendChild(script);
+    console.log("SweetAlert2 loaded");
+}
+
+// Check if Selectize is loaded
+if (typeof $.fn.selectize == 'undefined') {
+    // Selectize is not loaded, load it
+    // Load CSS
+    var link = document.createElement('link');
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css';
+    link.rel = 'stylesheet';
+    link.integrity = 'sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ==';
+    link.crossOrigin = 'anonymous';
+    document.getElementsByTagName('head')[0].appendChild(link);
+    // Load JS
+    var script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js';
+    script.integrity = 'sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==';
+    script.crossOrigin = 'anonymous';
+    script.type = 'text/javascript';
+    document.getElementsByTagName('head')[0].appendChild(script);
+    console.log("Selectize loaded");
+}
+
+
 //DEFAULT COLUMNS FOR PLANET TABLE
 PlanetColumns = [
     { API: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
@@ -11,23 +87,31 @@ PlanetColumns = [
     { API: "Empty", Enabled: false, Name: "Empty" },
 ];
 
+/**
+ * Helps to create a table with astro data columns
+ */
 class AstroTable {
 
-    Ayanamsa = "KRISHNAMURTI"
     //# LOCAL <--> LIVE Switch
-    APIDomain = "https://vedastroapi.azurewebsites.net/api";
+    APIDomain = "https://vedastroapibeta.azurewebsites.net/api";
+    //APIDomain = "https://vedastroapi.azurewebsites.net/api";
     //APIDomain = "http://localhost:7071/api";
 
     // Class fields
+    Ayanamsa = "Lahiri";
     TableId = ""; //ID of table set in HTML, injected during init
+    ShowHeader = true; //default enabled, header with title, icon and edit button
     KeyColumn = ""; //Planet or House
+    EditButtonId = ""; //used to hook up edit button to show popup
     ColumnData = []; //data on selected columns
     EnableSorting = false; //sorting disabled by default
     APICalls = []; //list of API calls that can be used in table (filled on load)
 
-    constructor(tableId, keyColumn, columnData, enableSorting = false) {
+    constructor(settings) {
 
-        this.TableId = tableId;
+        //expand data inside settings input
+        this.TableId = settings.TableId;
+        this.ShowHeader = settings.ShowHeader;
 
         //based on table ID try get any settings if saved from before
         var savedTableSettings = false; //TODO TEMP HARD SET DEFAULTS ON REFRESH --> localStorage.getItem(this.TableId);
@@ -43,13 +127,16 @@ class AstroTable {
         }
         //if null use data pumped in via constructor (defaults, when click Reset)
         else {
-            this.KeyColumn = keyColumn;
-            this.ColumnData = columnData;
-            this.EnableSorting = enableSorting;
+            this.KeyColumn = settings.KeyColumn;
+            this.ColumnData = settings.ColumnData;
+            this.EnableSorting = settings.EnableSorting;
         }
     }
 
     async ShowEditTableOptions() {
+
+        // show loading
+        CommonTools.ShowLoading();
 
         //pump in data about table settings to show in popup
         var htmlPopup = await AstroTable.GenerateTableEditorHtml(this.ColumnData, this.KeyColumn, this.APIDomain);
@@ -195,10 +282,50 @@ class AstroTable {
         return selectedMethodInfo;
     }
 
-    async GenerateHTMLTableFromAPI(timeUrlParam, horaryNumber, rotateDegrees) {
+    async GenerateTable(userInputParams) {
 
-        //extract endpoints that have been enabled
-        var endpoints = this.GetAllEnabledEndpoints();
+        //convert input param to URL format
+        //in URL format it's ready to use in final URL
+        var userInputURLParams = this.ConvertRawParamsToURL(userInputParams);
+
+        //show header with title, icon and edit button
+        if (this.ShowHeader) {
+            //random ID for edit button
+            this.EditButtonId = Math.floor(Math.random() * 1000000);
+
+            var htmlContent = `
+                    <h3 style="margin-bottom: -11px;">
+                        <span class="iconify me-2" data-icon="twemoji:ringed-planet" data-width="25" data-height="25"></span>
+                        Planets
+                        <button id="${this.EditButtonId}" style="scale: 0.6;" class="ms-1 mb-1 btn btn-sm btn-outline-primary">
+                            <span class="iconify" data-icon="majesticons:edit-pen-2-line" data-width="30" data-height="30"></span>
+                        </button>
+                    </h3>
+                    <hr />`;
+
+            //inject into page
+            $(`#${this.TableId}`).before(htmlContent);
+
+            //attach event handler to edit button
+            $(`#${this.EditButtonId}`).on("click", async () => {
+                await this.ShowEditTableOptions();
+            });
+        }
+
+        //generate table from inputed data
+        await this.GenerateHTMLTableFromAPI(userInputURLParams)
+    }
+
+    ConvertRawParamsToURL(userInputParams) {
+
+        //extract from input
+        var timeUrlParam = userInputParams.TimeUrl;
+        var horaryNumber = userInputParams.HoraryNumber;
+        var rotateDegrees = userInputParams.RotateDegrees;
+
+        //SPECIAL CASE:
+        //store ayanamsa as setting will be injected later into final URL
+        this.Ayanamsa = userInputParams.Ayanamsa;
 
         // load the needed data from API for each column based
         var keyColumnParam = `${this.KeyColumn}Name/All/`;
@@ -211,18 +338,25 @@ class AstroTable {
         };
 
         //only add horary if user inputed (defaults to 0)
-        var horaryParam = `Number/${horaryNumber}/`;
-        if (horaryNumber !== 0) { userInputParams["horary"] = horaryParam; }
+        var horaryParam = `HoraryNumber/${horaryNumber}/`;
+        if (horaryNumber !== 0) { userInputParams["HoraryNumber"] = horaryParam; }
 
         //only add rotate degrees if user inputed (defaults to 0)
         var rotateParam = `RotateDegrees/${rotateDegrees}/`;
-        if (rotateDegrees !== 0) { userInputParams["rotate"] = rotateParam; }
+        if (rotateDegrees !== 0) { userInputParams["RotateDegrees"] = rotateParam; }
 
+        return userInputParams;
+    }
+
+    async GenerateHTMLTableFromAPI(userInputURLParams) {
+
+        //extract endpoints that have been enabled
+        var endpoints = this.GetAllEnabledEndpoints();
 
         //each API calculator listed is called (parallel)
         var payloads = await Promise.all(endpoints.map(
             async (endpoint) => {
-                var apiPayload = await AstroTable.GetPayLoad2(endpoint, userInputParams, this);
+                var apiPayload = await AstroTable.GetPayLoad2(endpoint, userInputURLParams, this);
                 return apiPayload;
             }));
 
@@ -610,6 +744,42 @@ class AstroTable {
         while (table.rows.length > 0) {
             table.deleteRow(0);
         }
+    }
+
+}
+
+
+/**
+ * Creates south or north indian chart
+ */
+class NatalChart {
+
+}
+
+/**
+ * Tools used by others in this repo
+ */
+class CommonTools {
+
+     static ShowLoading() {
+
+        Swal.fire({
+            showConfirmButton: false,
+            width: "280px",
+            padding: "1px",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            stopKeydownPropagation: true,
+            keydownListenerCapture: true,
+            html: `<img src="https://vedastrowebsitestorage.z5.web.core.windows.net/images/loading-animation-progress-transparent.gif">`
+        });
+
+    }
+
+    static HideLoading() {
+
+        //hide loading box
+        Swal.close();
     }
 
 }

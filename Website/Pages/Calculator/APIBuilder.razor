@@ -1,4 +1,4 @@
-﻿@using VedAstro.Library
+@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
 
@@ -110,7 +110,7 @@
             </div>
 
             @*GUIDE TEXT*@
-            <div class="vstack gap-3">
+            <div class="vstack gap-3 mt-4">
                 <ArticleBlock @ref="_nextStepArticleBlock" Title="Next Step" IconName="mdi:foot-print">
                     <ButtonRow>
                         <IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep" />
@@ -187,7 +187,7 @@
                         To maximize the use of the API, you need to understand its <strong>basic structure</strong>.
                         And the best way todo so is to <strong>play with it</strong>. Try modifying the API URL in your browser,
                         and see what data you get. Experiment with different data formats.
-                        The API is designed to handle this, so don't worry about breaking it. Have fun 🎈
+                        The API is designed to handle this, so don't worry about breaking it.🎈Have fun.
                     </TextHTML>
                 </ArticleBlock>
 
@@ -250,7 +250,7 @@
             _apiSelectorBox.OnChangeSelectMethod += OnChangeSelectMethod;
             _isEventAttached = true;
 
-    //hide next step article block
+            //hide next step article block
             _jsRuntime.Hide(_nextStepArticleBlock.ElementReference);
         }
     }

@@ -1289,7 +1289,7 @@ namespace VedAstro.Library
 
             //if 2nd lord not in second, end here
             var lord = Calculate.LordOfHouse(HouseName.House2, time);
-            var lordPlace = Calculate.HousePlanetIsIn(lord, time);
+            var lordPlace = Calculate.HousePlanetOccupies(lord, time);
             if (lordPlace != HouseName.House2) { return CalculatorResult.NotOccuring(); }
 
             //evil planet in house 2, prediction occuring
@@ -1310,7 +1310,7 @@ namespace VedAstro.Library
             //Ordinary wealth is indicated if Saturn is in the 2nd aspected by Venus.
 
             //if saturn not in 2nd end here
-            var saturnHouse = Calculate.HousePlanetIsIn(PlanetName.Saturn, time);
+            var saturnHouse = Calculate.HousePlanetOccupies(PlanetName.Saturn, time);
             var saturnIn2 = saturnHouse == HouseName.House2;
             if (!saturnIn2) { return CalculatorResult.NotOccuring(); }
 
@@ -1328,8 +1328,8 @@ namespace VedAstro.Library
             //he suffers from a peculiar skin disease.
 
             //moon and mars in 2nd
-            var moonIn2 = Calculate.HousePlanetIsIn(PlanetName.Moon, time) == HouseName.House2;
-            var marsIn2 = Calculate.HousePlanetIsIn(PlanetName.Mars, time) == HouseName.House2;
+            var moonIn2 = Calculate.HousePlanetOccupies(PlanetName.Moon, time) == HouseName.House2;
+            var marsIn2 = Calculate.HousePlanetOccupies(PlanetName.Mars, time) == HouseName.House2;
 
             //saturn aspects 2nd House
             var saturnAspects2nd =
@@ -1348,7 +1348,7 @@ namespace VedAstro.Library
             //Even if there is any ancestral wealth, it will be spent—rather wasted on extravagant purposes.
 
             //is mercury in 2nd house
-            var mercuryIn2 = Calculate.HousePlanetIsIn(PlanetName.Mercury, time) == HouseName.House2;
+            var mercuryIn2 = Calculate.HousePlanetOccupies(PlanetName.Mercury, time) == HouseName.House2;
 
             //evil planet in 2nd house
             var evilPlanetIn2 = Calculate.IsMaleficPlanetInHouse(HouseName.House2, time);
@@ -1369,7 +1369,7 @@ namespace VedAstro.Library
             //The Sun in the 2nd without being aspected by Saturn is favourable for a steady fortune.
 
             //sun in 2nd
-            var sunIn2 = Calculate.HousePlanetIsIn(PlanetName.Sun, time) == HouseName.House2;
+            var sunIn2 = Calculate.HousePlanetOccupies(PlanetName.Sun, time) == HouseName.House2;
 
             //saturn aspects 2nd House
             var saturnNotAspects2nd = !Calculate.IsHouseAspectedByPlanet(HouseName.House2, PlanetName.Saturn, time);
@@ -1386,7 +1386,7 @@ namespace VedAstro.Library
             //The Moon being placed in the 2nd and aspected by Mercury is favourable for earning money by self-exertion.
 
             //moon in 2nd
-            var moonIn2 = Calculate.HousePlanetIsIn(PlanetName.Moon, time) == HouseName.House2;
+            var moonIn2 = Calculate.HousePlanetOccupies(PlanetName.Moon, time) == HouseName.House2;
 
             //mercury aspects 2nd House
             var mercuryAspects2nd =
@@ -1405,11 +1405,11 @@ namespace VedAstro.Library
 
             //lord 2 in 6th
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In6 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House6;
+            var lord2In6 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House6;
 
             //lord 3 in 6th
             var lord3 = Calculate.LordOfHouse(HouseName.House3, time);
-            var lord3In6 = Calculate.HousePlanetIsIn(lord3, time) == HouseName.House6;
+            var lord3In6 = Calculate.HousePlanetOccupies(lord3, time) == HouseName.House6;
 
             //evil planets in 6th house OR aspecting the 6th
             var evilPlanetIn6 = Calculate.IsMaleficPlanetInHouse(HouseName.House6, time);
@@ -1429,7 +1429,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 1
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In1 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House1;
+            var lord2In1 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House1;
 
             //check if all conditions met
             var occuring = lord2In1;
@@ -1447,11 +1447,11 @@ namespace VedAstro.Library
 
             //lord 1 in house 2
             var lord1 = Calculate.LordOfHouse(HouseName.House1, time);
-            var lord1In2 = Calculate.HousePlanetIsIn(lord1, time) == HouseName.House2;
+            var lord1In2 = Calculate.HousePlanetOccupies(lord1, time) == HouseName.House2;
 
             //lord 2 in house 1
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In1 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House1;
+            var lord2In1 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House1;
 
             //check if all conditions met
             var occuring = lord2In1 && lord1In2;
@@ -1466,7 +1466,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 3
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In3 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House3;
+            var lord2In3 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House3;
 
             //check if all conditions met
             var occuring = lord2In3;
@@ -1481,7 +1481,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 4
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In4 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House4;
+            var lord2In4 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House4;
 
             //check if all conditions met
             var occuring = lord2In4;
@@ -1496,7 +1496,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 5
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In5 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House5;
+            var lord2In5 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House5;
 
             //check if all conditions met
             var occuring = lord2In5;
@@ -1511,7 +1511,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 6
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In6 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House6;
+            var lord2In6 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House6;
 
             //check if all conditions met
             var occuring = lord2In6;
@@ -1526,7 +1526,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 7
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In7 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House7;
+            var lord2In7 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House7;
 
             //check if all conditions met
             var occuring = lord2In7;
@@ -1541,7 +1541,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 8
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In8 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House8;
+            var lord2In8 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House8;
 
             //check if all conditions met
             var occuring = lord2In8;
@@ -1556,7 +1556,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 9
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In9 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House9;
+            var lord2In9 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House9;
 
             //check if all conditions met
             var occuring = lord2In9;
@@ -1572,7 +1572,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 10
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In10 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House10;
+            var lord2In10 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House10;
 
             //check if all conditions met
             var occuring = lord2In10;
@@ -1587,7 +1587,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 11
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In11 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House11;
+            var lord2In11 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House11;
 
             //check if all conditions met
             var occuring = lord2In11;
@@ -1602,7 +1602,7 @@ namespace VedAstro.Library
 
             //lord 2 in house 12
             var lord2 = Calculate.LordOfHouse(HouseName.House2, time);
-            var lord2In12 = Calculate.HousePlanetIsIn(lord2, time) == HouseName.House12;
+            var lord2In12 = Calculate.HousePlanetOccupies(lord2, time) == HouseName.House12;
 
             //check if all conditions met
             var occuring = lord2In12;

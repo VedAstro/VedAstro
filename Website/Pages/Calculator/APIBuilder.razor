@@ -1,4 +1,4 @@
-@using VedAstro.Library
+﻿@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
 
@@ -344,6 +344,9 @@
 
         //show output options panel
         _jsRuntime.Show(_paramOutputOptionsPanel);
+
+        //show next step article block
+        _jsRuntime.Show(_nextStepArticleBlock.ElementReference);
 
         //auto scroll to URL display out, so user can see better
         AppData.Go(PageRoute.UrlDisplayOut);

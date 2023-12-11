@@ -1,4 +1,4 @@
-@using VedAstro.Library
+﻿@using VedAstro.Library
 @attribute [Route(PageRoute.Home)]
 
 
@@ -34,6 +34,7 @@
         border: 2px solid #3E7DC0 !important;
     }
 </style>
+
 <div class="py-4" id="icon-grid">
     <IconTitle Title="Quick Links" IconName="flat-color-icons:mind-map" TitleHolder="h4">
         <ButtonRow><IconButton ButtonText="View All" ClickUrl="@PageRoute.CalculatorList" SmallSize="true" ExtraClass="ms-3" Outline="true" /></ButtonRow>
@@ -68,6 +69,7 @@
 
     private List<QuickLink> _quickLinkList = new List<QuickLink>();
 
+    public record QuickLink(string PageRoute, string ImageName, string Title, string Description);
 
     protected override void OnInitialized()
     {
@@ -91,8 +93,6 @@
         _quickLinkList = niceOrder.OrderBy(quickLink => randotron.Next()).ToList();
 
     }
-
-    public record QuickLink(string PageRoute, string ImageName, string Title, string Description);
 
 }
 

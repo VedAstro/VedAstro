@@ -91,10 +91,10 @@
             <div>@Body</div>
 
             <!-- FOOTER LINE AND SPACING -->
-            <footer id="LegalComplianceFooter" class="mb-2 py-4 border-top" style="margin-top: @GR.W134px; font-size: 12.5px !important;">
+            <footer id="LegalComplianceFooter" class="mb-2 pt-4 border-top" style="opacity: 0.65; margin-top: @GR.W194px; font-size: 12px !important;">
                 <div class="row">
                     <div class="col-6 col-md-3 mb-2">
-                        <h5>Links 🔗</h5>
+                        <h6>Links 🔗</h6>
                         <ul class="nav flex-column">
                             <li class="nav-item mb-1"><a target="_blank" href="@PageRoute.Sitemap" class="nav-link p-0 text-body-secondary">Sitemap</a></li>
                             <li class="nav-item mb-1"><a href="@PageRoute.Contact" class="nav-link p-0 text-body-secondary">Contact Us</a></li>
@@ -103,7 +103,7 @@
                     </div>
 
                     <div class="col-6 col-md-3 mb-2">
-                        <h5>Legal ⚖️</h5>
+                        <h6>Legal ⚖️</h6>
                         <ul class="nav flex-column">
                             <li class="nav-item mb-1"><a href="@PageRoute.TermsOfService" class="nav-link p-0 text-body-secondary">Terms and Conditions</a></li>
                             <li class="nav-item mb-1"><a href="@PageRoute.PrivacyPolicy" class="nav-link p-0 text-body-secondary">Privacy Policy</a></li>
@@ -113,7 +113,7 @@
 
                     <div class="col-md-4 offset-md-1 mb-2">
                         @* SOCIAL ICONS *@
-                        <ul class="list-unstyled d-flex mb-3">
+                        <ul class="list-unstyled d-flex mb-2">
                             <li class=""><a target="_blank" class="link-body-emphasis" href="@URL.Twitter"><Icon IconName="skill-icons:twitter" Size="24" /></a></li>
                             <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.Instagram"><Icon IconName="skill-icons:instagram" Size="24" /></a></li>
                             <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.FacebookPage"><Icon IconName="devicon:facebook" Size="24" /></a></li>
@@ -123,7 +123,7 @@
                         </ul>
 
                         <form>
-                            <h5>Subscribe Newsletter 📧</h5>
+                            <h6>Subscribe Newsletter 📧</h6>
                             <div class="d-flex flex-column flex-sm-row w-100 gap-2">
                                 <label for="newsletter1" class="visually-hidden">Email address</label>
                                 <input @bind="@subscribeEmailInput" id="newsletter1" type="text" class="form-control form-control-sm" placeholder="Email address">

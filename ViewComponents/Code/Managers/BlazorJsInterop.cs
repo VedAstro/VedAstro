@@ -118,7 +118,7 @@ namespace Website
         public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, string descriptionText)
         {
             //log this, don't await to reduce lag
-            WebLogger.Data($"Alert : {title} : {descriptionText}");
+            //WebLogger.Data($"Alert : {title} : {descriptionText}");
 
             //call SweetAlert lib directly via constructor
             await jsRuntime.InvokeVoidAsync(JS.Swal_fire, title, descriptionText, icon);

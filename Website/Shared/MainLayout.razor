@@ -91,17 +91,58 @@
             <div>@Body</div>
 
             <!-- FOOTER LINE AND SPACING -->
-            <hr class="mt-5" style="margin-bottom:@GR.W255px;">
+            <footer id="LegalComplianceFooter" class="mb-2 py-4 border-top" style="margin-top: @GR.W134px; font-size: 12.5px !important;">
+                <div class="row">
+                    <div class="col-6 col-md-3 mb-2">
+                        <h5>Links 🔗</h5>
+                        <ul class="nav flex-column">
+                            <li class="nav-item mb-1"><a target="_blank" href="@PageRoute.Sitemap" class="nav-link p-0 text-body-secondary">Sitemap</a></li>
+                            <li class="nav-item mb-1"><a href="@PageRoute.Contact" class="nav-link p-0 text-body-secondary">Contact Us</a></li>
+                            <li class="nav-item mb-1"><a href="@PageRoute.ShippingDelivery" class="nav-link p-0 text-body-secondary">Shipping &amp; Delivery</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-6 col-md-3 mb-2">
+                        <h5>Legal ⚖️</h5>
+                        <ul class="nav flex-column">
+                            <li class="nav-item mb-1"><a href="@PageRoute.TermsOfService" class="nav-link p-0 text-body-secondary">Terms and Conditions</a></li>
+                            <li class="nav-item mb-1"><a href="@PageRoute.PrivacyPolicy" class="nav-link p-0 text-body-secondary">Privacy Policy</a></li>
+                            <li class="nav-item mb-1"><a href="@PageRoute.CancellationRefund" class="nav-link p-0 text-body-secondary">Cancellation &amp; Refund</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-4 offset-md-1 mb-2">
+                        @* SOCIAL ICONS *@
+                        <ul class="list-unstyled d-flex mb-3">
+                            <li class=""><a target="_blank" class="link-body-emphasis" href="@URL.Twitter"><Icon IconName="skill-icons:twitter" Size="24" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.Instagram"><Icon IconName="skill-icons:instagram" Size="24" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.FacebookPage"><Icon IconName="devicon:facebook" Size="24" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.YoutubeChannel"><Icon IconName="logos:youtube-icon" Size="24" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.PatreonPage"><Icon IconName="logos:patreon" Size="24" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon IconName="simple-icons:kofi" Size="24" /></a></li>
+                        </ul>
+
+                        <form>
+                            <h5>Subscribe Newsletter 📧</h5>
+                            <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                                <label for="newsletter1" class="visually-hidden">Email address</label>
+                                <input @bind="@subscribeEmailInput" id="newsletter1" type="text" class="form-control form-control-sm" placeholder="Email address">
+                                <button @onclick="OnClickSubscribeNewsletter" class="btn btn-sm btn-success" type="button">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </footer>
+
         </div>
     </div>
-
-
 }
 
 
 
 @code
 {
+    private string subscribeEmailInput;
     private bool _loadExtra = true;
 
     /// <summary>
@@ -124,7 +165,6 @@
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
 
 
-
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
@@ -132,6 +172,7 @@
     {
         if (firstRender)
         {
+            //TODO maybe called all the time not needed to be so
             await _jsRuntime.InvokeVoidAsync(JS.InitErrorCatcher);
 
             //log visit only 1 once when page is rendered
@@ -139,6 +180,7 @@
 
             _loadExtra = false;
             Console.WriteLine("ORI TAKEN OUT OF DOM!!!!!!!!!!!!");
+
         }
     }
 
@@ -277,8 +319,6 @@
         }
     }
 
-
-
     private async Task OnClickStamp()
     {
         //count click
@@ -290,6 +330,32 @@
             case 4: await _jsRuntime.ShowAlert("success", $"Stop clicking! There is no \"Cake\" here.", true); break;
             case 6: AppData.Go(PageRoute.EasterEgg, true); break;
         }
+    }
+
+    private async Task OnClickSubscribeNewsletter()
+    {
+
+        //loading box show
+        await _jsRuntime.ShowLoading();
+
+        //if empty or nothing more than 3 chars than ask user if is awake
+        var isInvalidInput = string.IsNullOrEmpty(subscribeEmailInput) || subscribeEmailInput.Length < 3;
+
+        if (isInvalidInput)
+        {
+            var msg = "You clicked <strong>Subscribe</strong> and then didn't input an email. Please try again...";
+            await _jsRuntime.ShowAlert("question", $"No email, {AlertText.RandomNoun()}?", msg);
+        }
+        else
+        {
+            //add message to API Messages book
+            await WebsiteTools.SendMailToAPI("Email Subscribe", $"EMAIL : {subscribeEmailInput}");
+
+            //say thank you and will get back
+            var msg = "We'll update you on latest VedAstro news 📰 and we promise never to spam you. 🙏";
+            await _jsRuntime.ShowAlert("success", "Subscribed! 📧", msg);
+        }
+
     }
 }
 

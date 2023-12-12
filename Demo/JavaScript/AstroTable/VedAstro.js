@@ -10,22 +10,36 @@ if (typeof jQuery == 'undefined') {
     console.log("jQuery loaded");
 
 }
-// Check if Bootstrap is loaded
-if (typeof $().modal == 'undefined') {
-    // Bootstrap is not loaded, load it
-    // Load CSS
+
+// Create a hidden element with a Bootstrap-specific class
+var testElement = document.createElement('div');
+testElement.className = 'hidden d-none'; // 'd-none' is a Bootstrap 4/5 class
+document.body.appendChild(testElement);
+// Check the computed style of the element
+var isBootstrapCSSLoaded = window.getComputedStyle(testElement).display === 'none';
+// Clean up the test element
+document.body.removeChild(testElement);
+if (!isBootstrapCSSLoaded) {
+    // Bootstrap CSS is not loaded, load it
     var link = document.createElement('link');
     link.href = 'https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css';
     link.rel = 'stylesheet';
     document.getElementsByTagName('head')[0].appendChild(link);
-    // Load JS
+    console.log("Bootstrap CSS loaded");
+}
+
+// Check if Bootstrap's JavaScript is loaded
+var isBootstrapJSLoaded = typeof bootstrap !== 'undefined';
+if (!isBootstrapJSLoaded) {
+    // Bootstrap JS is not loaded, load it
     var script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js';
     script.type = 'text/javascript';
     document.getElementsByTagName('head')[0].appendChild(script);
-    console.log("Bootstrap loaded");
-
+    console.log("Bootstrap JS loaded");
 }
+
+
 
 // Check if Iconify is loaded
 if (typeof Iconify == 'undefined') {
@@ -456,6 +470,33 @@ class AstroTable {
 
     /*--------------------STATIC METHODS--------------------------------*/
 
+    static InitAstroTable(settings) {
+        debugger;
+        //initialize astro table
+        var settings = {
+            TableId: "PlanetDataTable",
+            KeyColumn: "Planet",
+            ShowHeader: true,
+            HeaderIcon: "",
+            ColumnData: PlanetColumns, //columns names to create table
+            EnableSorting: false
+        };
+
+        var planetDataTable = new AstroTable(settings);
+
+        //data used to generate table
+        var inputArguments = {
+            TimeUrl: "Location/Bengaluru/Time/11:00/25/07/1984/+00:00/",
+            HoraryNumber: 0,
+            RotateDegrees: 0,
+            Ayanamsa: "KRISHNAMURTI", //default is Lahiri
+        };
+
+        //generate table
+        planetDataTable.GenerateTable(inputArguments);
+
+    }
+
     static async GetPayLoad2(endpoint, userInputParams, instance) {
 
         //given a API name, get the metadata of the API call
@@ -761,7 +802,7 @@ class NatalChart {
  */
 class CommonTools {
 
-     static ShowLoading() {
+    static ShowLoading() {
 
         Swal.fire({
             showConfirmButton: false,

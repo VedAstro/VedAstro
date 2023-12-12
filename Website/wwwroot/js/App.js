@@ -5,7 +5,7 @@
 //PRODUCTIONS FUNCTION IN USE CALLED FROM BLAZOR CODE
 
 import { URLS } from '/js/URLS.js';
-import { VedAstro } from '/js/VedAstro.js';
+import { VedAstro } from '/js/tempVedAstro.js';
 import * as Tools from '/js/Tools.js';
 import * as Interop from '/js/Interop.js';
 

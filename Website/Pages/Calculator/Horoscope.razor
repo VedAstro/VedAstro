@@ -1,4 +1,4 @@
-﻿@using VedAstro.Library
+@using VedAstro.Library
 @attribute [Route(PageRoute.Horoscope)]
 @attribute [Route(PageRoute.HoroscopeParam)]
 
@@ -11,7 +11,6 @@
 </PageTop>
 
 
-
 <div class="gap-3" style="max-width: @GR.W824px;">
 
     @*SELECTOR & BUTTON*@
@@ -19,13 +18,15 @@
     <div class="d-flex flex-wrap">
         <div class="vstack gap-3">
             <PersonSelectorBox @ref="_peopleSelectorBox" />
-            <IconButton IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked"/>
+            <IconButton IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" />
         </div>
     </div>
 
-    
+
     <div class="mt-5 vstack gap-4">
-        
+
+        <table id="PlanetDataTable" class="table table-striped table-hover table-bordered text-nowrap" style="width: 100%"></table>
+
         @*divider*@
         <SkyChartViewer @ref="skyChartViewer" />
 
@@ -33,10 +34,10 @@
         <HoroscopeInfoView @ref="_horoscopeInfoView" />
 
         @* EXPERIMENTAL *@
-        <PlanetChart @ref="planetChart"/>
+        <PlanetChart @ref="planetChart" />
 
     </div>
-    
+
 
     @*HELP SECTION*@
     <PageHelpSection @ref="_helpSection">
@@ -141,6 +142,8 @@
         return true;
     }
 
+
+    //when calculate button is clicked
     private async Task _CalculateAndUpdateEvents()
     {
         await _jsRuntime.ShowLoading();
@@ -154,7 +157,7 @@
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data
         PersonIdUrl = _selectedPerson.Id; //save local copy
-       AppData.Go($"{PageRoute.Horoscope}/{PersonIdUrl}"); //change url
+        AppData.Go($"{PageRoute.Horoscope}/{PersonIdUrl}"); //change url
 
         //put person name into tab title for easy multi-tabbing
         _pageTitle = $"Horoscope | {_selectedPerson.Name}";

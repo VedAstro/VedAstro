@@ -99,7 +99,6 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Garvita, proud : Planet in exaltation sign or moolatrikona zone, happiness and gains
         /// </summary>
@@ -315,9 +314,26 @@ namespace VedAstro.Library
         #region ALL DATA
 
         /// <summary>
+        /// Gets all possible calculations for a given Time
+        /// </summary>
+        /// <param name="time">can be birth or query time</param>
+        public static List<APIFunctionResult> AllTimeData(Time time)
+        {
+            //exclude this method from getting included in "Find" and Execute below
+            MethodBase method = MethodBase.GetCurrentMethod();
+            MethodInfo methodToExclude = method as MethodInfo;
+
+            //do calculation
+            var raw = AutoCalculator.FindAndExecuteFunctions(methodToExclude, time);
+
+            return raw;
+        }
+
+
+        /// <summary>
         /// Gets all possible calculations for a Planet at a given Time
         /// </summary>
-        /// <param name="time">time to base calculation on</param>
+        /// <param name="time">can be birth or query time</param>
         public static List<APIFunctionResult> AllPlanetData(PlanetName planetName, Time time)
         {
             //exclude this method from getting included in "Find" and Execute below
@@ -333,6 +349,7 @@ namespace VedAstro.Library
         /// <summary>
         /// All possible calculations for a House at a given Time
         /// </summary>
+        /// <param name="time">can be birth or query time</param>
         public static List<APIFunctionResult> AllHouseData(HouseName houseName, Time time)
         {
             //exclude this method from getting included in "Find" and Execute below
@@ -348,6 +365,7 @@ namespace VedAstro.Library
         /// <summary>
         /// All possible calculations for a Planet and House at a given Time
         /// </summary>
+        /// <param name="time">can be birth or query time</param>
         public static List<APIFunctionResult> AllPlanetHouseData(PlanetName planetName, HouseName houseName, Time time)
         {
             //exclude this method from getting included in "Find" and Execute below
@@ -363,6 +381,7 @@ namespace VedAstro.Library
         /// <summary>
         /// All possible calculations for a Zodiac Sign at a given Time
         /// </summary>
+        /// <param name="time">can be birth or query time</param>
         public static List<APIFunctionResult> AllZodiacSignData(ZodiacName zodiacName, Time time)
         {
             //exclude this method from getting included in "Find" and Execute below
@@ -375,10 +394,97 @@ namespace VedAstro.Library
             return raw;
         }
 
-
         #endregion
 
         #region GENERAL
+
+        /// <summary>
+        /// Gets all houses owned by a planet at a given time for KP astrology (Horary & Kundali)
+        /// </summary>
+        /// <param name="horaryNumber">if more than 0, will use Horary instead of Kundali calculation</param>
+        /// <returns></returns>
+        public static List<HouseName> HousesOwnedByPlanetKP(PlanetName inputPlanet, Time time, int horaryNumber = 0)
+        {
+            //Given a planet, return Zodiac Signs owned by it Ex. Ju, returns Sag an Pis
+            var signsOwned = Calculate.ZodiacSignsOwnedByPlanet(inputPlanet);
+
+            //given a Zodiac Sign, return, House Number (or Cusp number as its actually called)
+            var houseList = new List<HouseName>();
+
+
+            //get signs of all houses
+            var houseSigns = _AllHouseZodiacSignKP(time, horaryNumber);
+
+
+            foreach (var zodiacName in signsOwned)
+            {
+
+                //get all houses that have inputed zodiac name
+                List<HouseName> matchingHouses = houseSigns
+                    .Where(pair => pair.Value.GetSignName() == zodiacName)
+                    .Select(pair => pair.Key)
+                    .ToList();
+
+                //add to return list
+                houseList.AddRange(matchingHouses);
+            }
+
+
+            //Next present these houses as Owned by a planet.
+            return houseList;
+
+
+            //calculates special for Krishnamurti system
+            static Dictionary<HouseName, ZodiacSign> _AllHouseZodiacSignKP(Time time, int horaryNumber = 0)
+            {
+                //get all houses
+                var allHouses = new Dictionary<HouseName, ZodiacSign>();
+
+                //get for all houses
+                foreach (var house in Library.House.AllHouses)
+                {
+                    var calcHouseSign = Calculate.HouseZodiacSignKP(house, time, horaryNumber);
+                    allHouses.Add(house, calcHouseSign);
+                }
+
+                return allHouses;
+            }
+
+        }
+
+        /// <summary>
+        /// Gets all houses owned by a planet at a given time 
+        /// </summary>
+        public static List<HouseName> HousesOwnedByPlanet(PlanetName inputPlanet, Time time)
+        {
+            //Given a planet, return Zodiac Signs owned by it Ex. Ju, returns Sag an Pis
+            var signsOwned = Calculate.ZodiacSignsOwnedByPlanet(inputPlanet);
+
+            //given a Zodiac Sign, return, House Number (or Cusp number as its actually called)
+            var houseList = new List<HouseName>();
+
+
+            //get signs of all houses
+            var houseSigns = Calculate.AllHouseSign(time);
+
+
+            foreach (var zodiacName in signsOwned)
+            {
+
+                //get all houses that have inputed zodiac name
+                List<HouseName> matchingHouses = houseSigns
+                    .Where(pair => pair.Value.GetSignName() == zodiacName)
+                    .Select(pair => pair.Key)
+                    .ToList();
+
+                //add to return list
+                houseList.AddRange(matchingHouses);
+            }
+
+
+            //Next present these houses as Owned by a planet.
+            return houseList;
+        }
 
         /// <summary>
         /// Given a sign name and time will get the house that it is in, based on middle longitude.
@@ -634,14 +740,39 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
+        /// Gets lord of constellation for a given KP House (horary or kundali)
+        /// also know as "House Star Lord"
         /// </summary>
-        public static int FortunePoint(ZodiacName ascZodiacSignName, Time time)
+        /// <param name="inputHouse">house to check</param>
+        /// <param name="time">query or birth time to check</param>
+        /// <param name="horaryNumber">if more than 0, will use Horary instead of Kundali calculation</param>
+        /// <param name="rotateDegrees">if more than 0, will rotate house cups by that degree</param>
+        /// <returns></returns>
+        public static PlanetName LordOfConstellationKP(HouseName inputHouse, Time time, int horaryNumber = 0, double rotateDegrees = 0)
+        {
+            //get house start longitudes for KP system (horary or kundali)
+            var allHouseCuspsRaw = Krishnamurti.AllHouseCuspLongitudes(time, horaryNumber, rotateDegrees);
+
+            //get start long for inputed house
+            var houseStartLong = allHouseCuspsRaw[inputHouse];
+
+            // The value is the lord of the constellation at the house's longitude
+            var value = LordOfConstellation(ConstellationAtLongitude(houseStartLong).GetConstellationName());
+
+            return value;
+        }
+
+
+        /// <summary>
+        /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
+        /// for KP system a fast-moving point which can differentiate between two early births as twins.
+        /// </summary>
+        public static int FortunaPoint(ZodiacName ascZodiacSignName, Time time)
         {
             //Fortune Point is calculated as Asc Degrees + Moon Degrees - Sun Degrees
 
             //Find Lagna, Moon and Sun longitude degree
-            var _asc_Degrees = Calculate.AllHouseLongitudes(time)[0].GetMiddleLongitude().TotalDegrees;
+            var _asc_Degrees = Calculate.AllHouseMiddleLongitudes(time)[0].GetMiddleLongitude().TotalDegrees;
             var _moonDegrees = Calculate.PlanetNirayanaLongitude(PlanetName.Moon, time).TotalDegrees;
             var _sunDegrees = Calculate.PlanetNirayanaLongitude(PlanetName.Sun, time).TotalDegrees;
 
@@ -1436,12 +1567,12 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Calculates & creates all houses as list
+        /// Gives the middle longitude of all houses at a give time
         /// </summary>
-        public static List<House> AllHouseLongitudes(Time time)
+        public static List<House> AllHouseMiddleLongitudes(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(AllHouseLongitudes), time, Ayanamsa), _getHouses);
+            return CacheManager.GetCache(new CacheKey(nameof(AllHouseMiddleLongitudes), time, Ayanamsa), _getHouses);
 
 
             //UNDERLYING FUNCTION
@@ -1601,8 +1732,6 @@ namespace VedAstro.Library
                 return houseList;
 
             }
-
-
 
         }
 
@@ -1783,15 +1912,15 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Gets list of all planets that's in a house/bhava at a given time
+        /// based on house longitudes and not sign
         /// </summary>
         public static List<PlanetName> PlanetsInHouse(HouseName houseNumber, Time time)
         {
-
             //declare empty list of planets
             var listOfPlanetInHouse = new List<PlanetName>();
 
             //get all houses
-            var houseList = AllHouseLongitudes(time);
+            var houseList = AllHouseMiddleLongitudes(time);
 
             //find house that matches input house number
             var house = houseList.Find(h => h.GetHouseName() == houseNumber);
@@ -1817,7 +1946,28 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets list of all planets that's in a house/bhava at a given time based on sign the house and planet is in
+        /// Gets list of all planets that's in a house/bhava at a given time
+        /// for KP Astrology (horary & kundali)
+        /// </summary>
+        public static List<PlanetName> PlanetsInHouseKP(HouseName inputHouse, Time time, int horaryNumber = 0, double rotateDegrees = 0)
+        {
+            var allHouseCuspsRaw = Krishnamurti.AllHouseCuspLongitudes(time, horaryNumber, rotateDegrees);
+
+            // Find the first house that contains the current planet.
+            var houseForPlanet = PlanetName.All9Planets.Where(planet =>
+            {
+                // Calculate the Nirayana longitude of the current planet.
+                var planetLongitude = PlanetNirayanaLongitude(planet, time);
+
+                return IsPlanetInHouseKP(allHouseCuspsRaw, planetLongitude, inputHouse);
+            }).ToList();
+
+            return houseForPlanet;
+        }
+
+        /// <summary>
+        /// Gets list of all planets that's in a house at a given time
+        /// based on sign the house and planet is in and not house longitudes
         /// </summary>
         public static List<PlanetName> PlanetsInHouseBasedOnSign(HouseName houseNumber, Time time)
         {
@@ -1861,24 +2011,6 @@ namespace VedAstro.Library
             foreach (var planet in All9Planets)
             {
                 var planetSign = PlanetZodiacSign(planet, time);
-
-                returnList[planet] = planetSign;
-            }
-
-            return returnList;
-        }
-
-        /// <summary>
-        /// Gets list of all planets and the constellation they are in
-        /// </summary>
-        public static Dictionary<PlanetName, Constellation> AllPlanetConstellation(Time time)
-        {
-            var returnList = new Dictionary<PlanetName, Constellation>();
-
-            //check each planet if in sign
-            foreach (var planet in All9Planets)
-            {
-                var planetSign = PlanetConstellation(planet, time);
 
                 returnList[planet] = planetSign;
             }
@@ -1979,14 +2111,13 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the House number a given planet is in at a time
         /// </summary>
-        public static HouseName HousePlanetIsIn(PlanetName planetName, Time time)
+        public static HouseName HousePlanetOccupies(PlanetName planetName, Time time)
         {
-
             //get the planets longitude
             var planetLongitude = PlanetNirayanaLongitude(planetName, time);
 
             //get all houses
-            var houseList = AllHouseLongitudes(time);
+            var houseList = AllHouseMiddleLongitudes(time);
 
             //loop through all houses
             foreach (var house in houseList)
@@ -2007,11 +2138,33 @@ namespace VedAstro.Library
 
         }
 
+        /// <summary>
+        /// Given a planet will return the house it is specific for KP Astrology
+        /// </summary>
+        /// <param name="inputPlanet"></param>
+        /// <param name="time"></param>
+        /// <param name="horaryNumber">if more than 0, will use Horary instead of Kundali calculation</param>
+        /// <param name="rotateDegrees">if more than 0, will rotate house cups by that degree</param>
+        /// <returns></returns>
+        public static HouseName HousePlanetOccupiesKP(PlanetName inputPlanet, Time time, int horaryNumber = 0, double rotateDegrees = 0)
+        {
+            // Get all house cusps
+            var allHouseCuspsRaw = Krishnamurti.AllHouseCuspLongitudes(time, horaryNumber, rotateDegrees);
+
+            // Calculate the Nirayana longitude of the current planet.
+            var planetLongitude = PlanetNirayanaLongitude(inputPlanet, time);
+
+            // Find the first house that contains the current planet.
+            var houseForPlanet = House.AllHouses.FirstOrDefault(house => IsPlanetInHouseKP(allHouseCuspsRaw, planetLongitude, house));
+
+            return houseForPlanet;
+        }
+
 
         /// <summary>
         /// List of all planets and the houses they are located in at a given time based on zodiac sign.
         /// </summary>
-        public static Dictionary<PlanetName, HouseName> AllPlanetHousePositionsBasedOnSign(Time time)
+        public static Dictionary<PlanetName, HouseName> HouseAllPlanetOccupiesBasedOnSign(Time time)
         {
             //get all the signs of the planets
             var planetSigns = Calculate.AllPlanetSigns(time);
@@ -2036,13 +2189,13 @@ namespace VedAstro.Library
         /// <summary>
         /// List of all planets and the houses they are located in at a given time
         /// </summary>
-        public static Dictionary<PlanetName, HouseName> AllPlanetHousePositions(Time time)
+        public static Dictionary<PlanetName, HouseName> HouseAllPlanetOccupies(Time time)
         {
             var returnList = new Dictionary<PlanetName, HouseName>();
 
             foreach (var planet in PlanetName.All9Planets)
             {
-                var houseIsIn = HousePlanetIsIn(planet, time);
+                var houseIsIn = HousePlanetOccupies(planet, time);
                 returnList.Add(planet, houseIsIn);
             }
 
@@ -2050,35 +2203,66 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// List of all planets and the zodiac signs they are located in at a given time
-        /// </summary>
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetZodiacSigns(Time time)
-        {
-            var returnList = new Dictionary<PlanetName, ZodiacSign>();
-
-            foreach (var planet in PlanetName.All9Planets)
-            {
-                var houseIsIn = Calculate.PlanetZodiacSign(planet, time);
-                returnList.Add(planet, houseIsIn);
-            }
-
-            return returnList;
-        }
-
-        /// <summary>
-        /// Gets planet lord of given house at given time
-        /// The lord of a bhava is
-        /// the Graha (planet) in whose Rasi (sign) the Bhavamadhya falls
+        /// Gets lord of given house at given time
+        /// The lord is the Graha (planet) in whose Rasi (sign) the Bhavamadhya falls
         /// </summary>
         public static PlanetName LordOfHouse(HouseName houseNumber, Time time)
         {
-            //get sign name based on house number //TODO Change to use house name instead of casting to int
+            //get sign name based on house number
             var houseSignName = HouseSignName(houseNumber, time);
 
             //get the lord of the house sign
             var lordOfHouseSign = LordOfZodiacSign(houseSignName);
 
             return lordOfHouseSign;
+        }
+
+        /// <summary>
+        /// Gets lord of given house at given time, aka "House Sign Lord"
+        /// for KP astrology (Horary & Kundali)
+        /// </summary>
+        public static PlanetName LordOfHouseKP(HouseName inputHouse, Time time, int horaryNumber = 0, double rotateDegrees = 0)
+        {
+            var allHouseCuspsRaw = Krishnamurti.AllHouseCuspLongitudes(time, horaryNumber, rotateDegrees);
+
+            //get start long for inputed house
+            var houseStartLong = allHouseCuspsRaw[inputHouse];
+
+            //from long get zodiac sign
+            var zodiacSign = ZodiacSignAtLongitude(houseStartLong);
+
+            //return lord of zodiac sign
+            return LordOfZodiacSign(zodiacSign.GetSignName());
+        }
+
+        /// <summary>
+        /// Gets the lord of zodiac sign planet is in, aka "Planet Sign Lord"
+        /// </summary>
+        public static PlanetName PlanetLordOfZodiacSign(PlanetName inputPlanet, Time time)
+        {
+            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
+            // of the current planet at the birth time.
+            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, time);
+
+            var zodiacSign = ZodiacSignAtLongitude(nirayanaDegrees);
+
+            return LordOfZodiacSign(zodiacSign.GetSignName());
+        }
+
+        /// <summary>
+        /// Gets the lord of constellation planet is in, aka "Planet Star Lord"
+        /// </summary>
+        public static PlanetName PlanetLordOfConstellation(PlanetName inputPlanet, Time time)
+        {
+            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
+            // of the current planet at the birth time.
+            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, time);
+
+            // The value is the lord of the constellation at the planet's longitude
+            var value = LordOfConstellation(ConstellationAtLongitude(nirayanaDegrees).GetConstellationName());
+
+            // Add the key-value pair to the dictionary
+            return value;
         }
 
 
@@ -2113,7 +2297,7 @@ namespace VedAstro.Library
             if (houseNumber == HouseName.Empty) { return ZodiacName.Aries; }
 
             //get full sign data
-            var zodiacSign = Calculate.HouseSign(houseNumber, time);
+            var zodiacSign = Calculate.HouseZodiacSign(houseNumber, time);
 
             //only return name
             return zodiacSign.GetSignName();
@@ -2122,10 +2306,10 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house with degrees data
         /// </summary>
-        public static ZodiacSign HouseSign(HouseName houseNumber, Time time)
+        public static ZodiacSign HouseZodiacSign(HouseName houseNumber, Time time)
         {
             //get all houses
-            var allHouses = AllHouseLongitudes(time);
+            var allHouses = AllHouseMiddleLongitudes(time);
 
             //get the house specified 
             var specifiedHouse = allHouses.Find(house => house.GetHouseName() == houseNumber);
@@ -2139,6 +2323,25 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Gets sign of house at a given time for KP astrology (Horary & Kundali)
+        /// </summary>
+        /// <param name="horaryNumber">if more than 0, will use Horary instead of Kundali calculation</param>
+        /// <param name="rotateDegrees">if more than 0, will rotate house cups by that degree</param>
+        /// <returns></returns>
+        public static ZodiacSign HouseZodiacSignKP(HouseName inputHouse, Time time, int horaryNumber = 0, double rotateDegrees = 0)
+        {
+            var allHouseCuspsRaw = Krishnamurti.AllHouseCuspLongitudes(time, horaryNumber, rotateDegrees);
+
+            //get zodiac sign at house start longitude longitude
+            var zodiacSignAtLong = Calculate.ZodiacSignAtLongitude(allHouseCuspsRaw[inputHouse]);
+
+            return zodiacSignAtLong;
+
+        }
+
+
+
+        /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
         public static Dictionary<HouseName, ZodiacSign> AllHouseSign(Time time)
@@ -2149,7 +2352,7 @@ namespace VedAstro.Library
             //get for all houses
             foreach (var house in Library.House.AllHouses)
             {
-                var calcHouseSign = Calculate.HouseSign(house, time);
+                var calcHouseSign = Calculate.HouseZodiacSign(house, time);
                 allHouses.Add(house, calcHouseSign);
             }
 
@@ -2179,6 +2382,51 @@ namespace VedAstro.Library
             return allHouses;
         }
 
+
+        /// <summary>
+        /// Gets the constellation specific for KP system (horary or kundali)
+        /// uses cusps of houses instead of middle longitudes and Placidus House system
+        /// </summary>
+        /// <param name="inputHouse">house to check</param>
+        /// <param name="time">query or birth time to check</param>
+        /// <param name="horaryNumber">if more than 0, will use Horary instead of Kundali calculation</param>
+        /// <param name="rotateDegrees">if more than 0, will rotate house cups by that degree</param>
+        /// <returns></returns>
+        public static Constellation HouseConstellationKP(HouseName inputHouse, Time time, int horaryNumber = 0, double rotateDegrees = 0)
+        {
+            //get house start longitudes for KP system (horary or kundali)
+            var allHouseCuspsRaw = Krishnamurti.AllHouseCuspLongitudes(time, horaryNumber, rotateDegrees);
+
+            //get Constellation at house start longitude
+            var constellationAtLong = ConstellationAtLongitude(allHouseCuspsRaw[inputHouse]);
+
+            return constellationAtLong;
+        }
+
+        /// <summary>
+        /// Gets the constellation at middle longitude of the house.
+        /// </summary>
+        public static Constellation HouseConstellation(HouseName houseNumber, Time time)
+        {
+            //get all houses
+            var allHouses = AllHouseMiddleLongitudes(time);
+
+            //get the house specified 
+            var specifiedHouse = allHouses.Find(house => house.GetHouseName() == houseNumber);
+
+            //get sign of the specified house
+            //Note :
+            //When the middle longitude has just entered a new sign,
+            //rounding the longitude shows better accuracy.
+            //Example, with middle longitude 90.4694, becomes Cancer (0°28'9"),
+            //but predictive results points to Gemini (30°0'0"), so rounding is implemented
+            var middleLongitude = specifiedHouse.GetMiddleLongitude();
+            var houseConstellation = ConstellationAtLongitude(middleLongitude);
+
+            //return the name of house sign
+            return houseConstellation;
+        }
+
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
@@ -2195,30 +2443,6 @@ namespace VedAstro.Library
             }
 
             return allHouses;
-        }
-
-        /// <summary>
-        /// Gets the zodiac sign at middle longitude of the house.
-        /// </summary>
-        public static Constellation HouseConstellation(HouseName houseNumber, Time time)
-        {
-            //get all houses
-            var allHouses = AllHouseLongitudes(time);
-
-            //get the house specified 
-            var specifiedHouse = allHouses.Find(house => house.GetHouseName() == houseNumber);
-
-            //get sign of the specified house
-            //Note :
-            //When the middle longitude has just entered a new sign,
-            //rounding the longitude shows better accuracy.
-            //Example, with middle longitude 90.4694, becomes Cancer (0°28'9"),
-            //but predictive results points to Gemini (30°0'0"), so rounding is implemented
-            var middleLongitude = specifiedHouse.GetMiddleLongitude();
-            var houseConstellation = ConstellationAtLongitude(middleLongitude);
-
-            //return the name of house sign
-            return houseConstellation;
         }
 
         /// <summary>
@@ -2349,6 +2573,49 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Gets sub lord of a house at a given time based on KP Astrology
+        /// The Sub lord of a house is the final authority or happening of event
+        /// related to that house which is fixed at the time of birth.
+        /// </summary>
+        /// <param name="inputHouse"></param>
+        /// <param name="time"></param>
+        /// <param name="horaryNumber"></param>
+        /// <param name="rotateDegrees"></param>
+        /// <returns></returns>
+        public static PlanetName HouseSubLordKP(HouseName inputHouse, Time time, int horaryNumber = 0, double rotateDegrees = 0)
+        {
+            //get house start longitudes for KP system (horary or kundali)
+            var allHouseCuspsRaw = Krishnamurti.AllHouseCuspLongitudes(time, horaryNumber, rotateDegrees);
+
+            //get start long for inputed house
+            var houseStartLong = allHouseCuspsRaw[inputHouse];
+
+            //special calc to get sub lord
+            var subLord = Krishnamurti.SubLordAtLongitude(houseStartLong);
+
+            return subLord;
+        }
+
+        /// <summary>
+        /// Gets sub lord of a planet at a given time based on KP Astrology
+        /// Sub lord is the deciding factor of any event and the
+        /// nature of the event is indicated by the Star or constellation lord.
+        /// </summary>
+        /// <param name="inputPlanet"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public static PlanetName PlanetSubLordKP(PlanetName inputPlanet, Time time)
+        {
+            // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
+            // of the current planet at the birth time.
+            var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, time);
+
+            var subLord = Krishnamurti.SubLordAtLongitude(nirayanaDegrees);
+
+            return subLord;
+        }
+
+        /// <summary>
         /// Get zodiac sign planet is in.
         /// </summary>
         public static ZodiacSign PlanetZodiacSign(PlanetName planetName, Time time)
@@ -2475,7 +2742,7 @@ namespace VedAstro.Library
             if (house == HouseName.Empty) { return ZodiacName.Aries; }
 
             //get all houses
-            var allHouseList = AllHouseLongitudes(time);
+            var allHouseList = AllHouseMiddleLongitudes(time);
 
             //get house mid longitude
             var houseMiddleLongitude = allHouseList.Find(hs => hs.GetHouseName() == house).GetMiddleLongitude();
@@ -3180,7 +3447,7 @@ namespace VedAstro.Library
             House _getHouse()
             {
                 //get all house list
-                var allHouses = AllHouseLongitudes(time);
+                var allHouses = AllHouseMiddleLongitudes(time);
 
                 //get required house from list
                 var requiredHouse = allHouses.Find(h => h.GetHouseName() == houseNumber);
@@ -3731,7 +3998,7 @@ namespace VedAstro.Library
         public static bool IsPlanetInKendra(PlanetName planet, Time time)
         {
             //The 4th, the 7th and the 10th are the Kendras
-            var planetHouse = HousePlanetIsIn(planet, time);
+            var planetHouse = HousePlanetOccupies(planet, time);
 
             //check if planet is in kendra
             var isPlanetInKendra = planetHouse == HouseName.House1 || planetHouse == HouseName.House4 || planetHouse == HouseName.House7 || planetHouse == HouseName.House10;
@@ -3801,7 +4068,7 @@ namespace VedAstro.Library
             var houseLord = LordOfHouse(lordHouse, time);
 
             //get house the lord is in
-            var houseIsIn = HousePlanetIsIn(houseLord, time);
+            var houseIsIn = HousePlanetOccupies(houseLord, time);
 
             //if it matches then occuring
             return houseIsIn == occupiedHouse;
@@ -4235,7 +4502,43 @@ namespace VedAstro.Library
         /// </summary>
         public static bool IsPlanetInHouse(PlanetName planet, HouseName houseNumber, Time time)
         {
-            return HousePlanetIsIn(planet, time) == houseNumber;
+            return HousePlanetOccupies(planet, time) == houseNumber;
+        }
+
+        /// <summary>
+        /// Checks if a planet is in a given house at a specified time, using KP method
+        /// </summary>
+        /// <param name="cusps">can be both Horary & Kundali house cusps (point between houses)</param>
+        /// <param name="planetNirayanaDegrees"></param>
+        /// <param name="house"></param>
+        /// <returns></returns>
+        public static bool IsPlanetInHouseKP(Dictionary<HouseName, Angle> cusps, Angle planetNirayanaDegrees, HouseName house)
+        {
+            //get house number
+            var houseNumber = (int)house;
+            // Check if houseNumber is within the bounds of the array
+            if (houseNumber >= 0 && houseNumber < cusps.Count)
+            {
+                //check if cusp longitude is smaller than next cusp longitude
+                if (houseNumber + 1 < cusps.Count && cusps[(HouseName)houseNumber + 1] > cusps[(HouseName)houseNumber])
+                {
+                    return (planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)houseNumber].TotalDegrees) &&
+                           //this means that the planet falls in between these house cusps
+                           (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)houseNumber + 1].TotalDegrees);
+                }
+                //if next cusp start long is smaller than current cusp we are rotating through 360 deg
+                else if (houseNumber + 1 < cusps.Count)
+                {
+                    return (planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)houseNumber].TotalDegrees) ||
+                           (planetNirayanaDegrees.TotalDegrees <= cusps[(HouseName)houseNumber + 1].TotalDegrees);
+                }
+                // If houseNumber is the last index in the cusps array
+                else
+                {
+                    return planetNirayanaDegrees.TotalDegrees >= cusps[(HouseName)houseNumber].TotalDegrees;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -4572,7 +4875,7 @@ namespace VedAstro.Library
             //note: generaly speaking a neutral planet shloud not exist, either good or bad
             if (planetNature == EventNature.Neutral)
             {
-                var _planetCurrentHouse = HousePlanetIsIn(planet, person.BirthTime);
+                var _planetCurrentHouse = HousePlanetOccupies(planet, person.BirthTime);
 
                 var _currentHouseRelation = PlanetRelationshipWithHouse(_planetCurrentHouse, planet, person.BirthTime);
 
@@ -4926,7 +5229,7 @@ namespace VedAstro.Library
             var isRahuKetu = planetName == Rahu || planetName == Ketu;
 
             //get current house
-            var _planetCurrentHouse = HousePlanetIsIn(planetName, time);
+            var _planetCurrentHouse = HousePlanetOccupies(planetName, time);
 
             //relationship with current house
             var _currentHouseRelation = isRahuKetu ? 0 : PlanetRelationshipWithHouse(_planetCurrentHouse, planetName, time);
@@ -4951,7 +5254,7 @@ namespace VedAstro.Library
             var isRahuKetu = planetName == Rahu || planetName == Ketu;
 
             //get current house
-            var _planetCurrentHouse = HousePlanetIsIn(planetName, time);
+            var _planetCurrentHouse = HousePlanetOccupies(planetName, time);
 
             //relationship with current house
             var _currentHouseRelation = isRahuKetu ? 0 : PlanetRelationshipWithHouse(_planetCurrentHouse, planetName, time);
@@ -4978,7 +5281,7 @@ namespace VedAstro.Library
             var isRahuKetu = planetName == Rahu || planetName == Ketu;
 
             //get current house
-            var _planetCurrentHouse = HousePlanetIsIn(planetName, time);
+            var _planetCurrentHouse = HousePlanetOccupies(planetName, time);
 
             //relationship with current house
             var _currentHouseRelation = isRahuKetu ? 0 : PlanetRelationshipWithHouse(_planetCurrentHouse, planetName, time);
@@ -5047,10 +5350,10 @@ namespace VedAstro.Library
         {
             //get house of the lord in question
             var houseLord = LordOfHouse((HouseName)houseNumber, birthTime);
-            var houseLordHouse = HousePlanetIsIn(houseLord, birthTime);
+            var houseLordHouse = HousePlanetOccupies(houseLord, birthTime);
 
             //get house of input planet
-            var inputPlanetHouse = HousePlanetIsIn(planet, birthTime);
+            var inputPlanetHouse = HousePlanetOccupies(planet, birthTime);
 
             //check if both are in same house
             if (inputPlanetHouse == houseLordHouse)
@@ -5476,6 +5779,68 @@ namespace VedAstro.Library
         //       Only functions that don't call other cached functions are allowed to be cached
         //       otherwise, it's erroneous in parallel
 
+        /// <summary>
+        /// Gets nutation from Swiss Ephemeris
+        public static double Nutation(Time time)
+        {
+            SwissEph swissEph = new SwissEph();
+            double[] x = new double[6];
+            string serr = "";
+
+            var julDayUt = Calculate.TimeToJulianDay(time);
+
+            swissEph.swe_calc(julDayUt, SwissEph.SE_ECL_NUT, 0, x, ref serr);
+            return x[2]; //See SWISS EPH docs and confirm array location - is it 1 or 2??
+        }
+
+        /// <summary>
+        /// This method is used to convert the tropical ascendant to the ARMC (Ascendant Right Meridian Circle).
+        /// It first calculates the right ascension and declination using the provided tropical ascendant and
+        /// obliquity of the ecliptic. Then, it calculates the oblique ascension by subtracting a value derived
+        /// from the declination and geographic latitude from the right ascension. Finally, it calculates the ARMC
+        /// based on the value of the tropical ascendant and the oblique ascension.
+        /// </summary>
+        public static double AscendantDegreesToARMC(double ascendant, double obliquityOfEcliptic, double geographicLatitude, Time time)
+        {
+            // The main method is taken from a post by K S Upendra on Group.IO in 2019
+            // Calculate the right ascension using the formula:
+            // atan(cos(obliquityOfEcliptic) * tan(tropicalAscendant))
+            double rightAscension =
+                Math.Atan(Math.Cos(obliquityOfEcliptic * Math.PI / 180) * Math.Tan(ascendant * Math.PI / 180)) *
+                180 / Math.PI;
+            // Calculate the declination using the formula:
+            // asin(sin(obliquityOfEcliptic) * sin(tropicalAscendant))
+            double declination =
+                Math.Asin(Math.Sin(obliquityOfEcliptic * Math.PI / 180) * Math.Sin(ascendant * Math.PI / 180)) *
+                180 / Math.PI;
+            // Calculate the oblique ascension by subtracting the result of the following formula from the right ascension:
+            // asin(tan(declination) * tan(geographicLatitude))
+            double obliqueAscension = rightAscension -
+                                      (Math.Asin(Math.Tan(declination * Math.PI / 180) *
+                                                 Math.Tan(geographicLatitude * Math.PI / 180)) * 180 / Math.PI);
+            // Initialize the armc variable
+            double armc = 0;
+            // Depending on the value of the tropical ascendant, calculate the armc using the formula:
+            // armc = 270 + obliqueAscension or armc = 90 + obliqueAscension
+            if (ascendant >= 0 && ascendant < 90)
+            {
+                armc = 270 + obliqueAscension;
+            }
+            else if (ascendant >= 90 && ascendant < 180)
+            {
+                armc = 90 + obliqueAscension;
+            }
+            else if (ascendant >= 180 && ascendant < 270)
+            {
+                armc = 90 + obliqueAscension;
+            }
+            else if (ascendant >= 270 && ascendant < 360)
+            {
+                armc = 270 + obliqueAscension;
+            }
+            // Return the calculated armc value
+            return armc;
+        }
 
         /// <summary>
         /// The distance between the Hindu First Point and the Vernal Equinox, measured at an epoch, is known as the Ayanamsa
@@ -6042,12 +6407,6 @@ namespace VedAstro.Library
 
         }
 
-        #region Longitude Converters
-
-
-
-        #endregion
-
         /// <summary>
         /// Get Day Of Week
         /// </summary>
@@ -6393,6 +6752,7 @@ namespace VedAstro.Library
             }
         }
 
+
         /// <summary>
         /// Given a planet name will return list of signs that the planet rules
         /// </summary>
@@ -6433,7 +6793,6 @@ namespace VedAstro.Library
             }
             return zodiacNames;
         }
-
 
         /// <summary>
         /// Gets next zodiac sign after input sign
@@ -7234,7 +7593,6 @@ namespace VedAstro.Library
 
             return bindu;
         }
-
 
 
         #endregion
@@ -8333,7 +8691,7 @@ namespace VedAstro.Library
         /// </summary>
         private static PlanetName LordOfHousePlanetIsIn(PlanetName planetName, Time time)
         {
-            var currentHouse = Calculate.HousePlanetIsIn(planetName, time);
+            var currentHouse = Calculate.HousePlanetOccupies(planetName, time);
             var houseLord = Calculate.LordOfHouse((HouseName)currentHouse, time);
 
             return houseLord;

@@ -841,18 +841,27 @@ export function DrawHouseStrengthChart(_house1,
 //todo check for functionality
 
 //scrolls to div on page and flashes div using JS
+//can input both Element ref or CSS selector
 export function scrollToDiv(elmInput) {
     var $elm = $(elmInput);
 
     //scroll to element
     $elm[0].scrollIntoView();
-    //document.getElementById(elemId).scrollIntoView();
 
-    //use JS to attarct attention to div
-    //var idString = `#${elmId}`;
+    animateHighlightElement(elmInput);
+}
+
+//flashes div using JS
+//can input both Element ref or CSS selector
+export function animateHighlightElement(elmInput) {
+
+    var $elm = $(elmInput);
+
+    //use JS to attract attention to div
     $elm.fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
 
     $elm.fadeTo(100, 0.4, function () { $(this).fadeTo(500, 1.0); });
+
 }
 
 export async function htmlToEmail(elmInput, fileName, fileFormat, receiverEmail) {

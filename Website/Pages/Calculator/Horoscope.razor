@@ -1,4 +1,4 @@
-@using VedAstro.Library
+﻿@using VedAstro.Library
 @attribute [Route(PageRoute.Horoscope)]
 @attribute [Route(PageRoute.HoroscopeParam)]
 
@@ -13,19 +13,83 @@
 
 <div class="gap-3" style="max-width: @GR.W824px;">
 
-    @*SELECTOR & BUTTON*@
-
-    <div class="d-flex flex-wrap">
+    @*INPUT*@
+    <div class="d-flex flex-wrap" style="max-width: @GR.W352px;">
         <div class="vstack gap-3">
-            <PersonSelectorBox @ref="_peopleSelectorBox" />
-            <IconButton IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" />
+            <PersonSelectorBox Width="100%" @ref="_peopleSelectorBox" />
+
+            @* ADVANCED PANEL DROP *@
+            <div id="HoroscopeAdvancedInputHolder" class="vstack gap-1 mt-2 pt-2 border-top" style="display: none">
+                @* HEADER TEXT *@
+                <span style="font-size: 9.5px;color: grey;margin-top: -18px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
+
+                @* AYANAMSA *@
+                <div class="input-group mb-2">
+                    <label style="width: @GR.W134px;" class="input-group-text">
+                        <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
+                    </label>
+                    <select @bind="SelectedAyanamsa" class="form-select">
+
+                        <optgroup label="Easy">
+                            @foreach (var ayanamsa in @AppData.SimpleAyanamsaAll)
+                            {
+                                <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
+                            }
+                        </optgroup>
+                        <optgroup label="Advanced">
+                            @foreach (var ayanamsa in @AppData.AdvancedAyanamsaAll)
+                            {
+                                <option value="@ayanamsa">@ayanamsa</option>
+                            }
+                        </optgroup>
+                    </select>
+                </div>
+
+                @* CHART STYLE *@
+                <div class="input-group">
+                    <label style="width: 134.4px;" class="input-group-text">
+                        <span class="iconify me-2" data-icon="gridicons:types" data-width="25" data-height="25"></span>
+                        Chart
+                    </label>
+                    <select @bind="SelectedChartStyle" id="ChartStyleSelectElement" class="form-select">
+                        <option value="South" selected="">South Style</option>
+                        <option value="North">North Style</option>
+                    </select>
+                </div>
+
+                @* HORARY NUMBER *@
+                @*                 <div class="input-group">
+                <span class="input-group-text" style="font-weight: 600; color: red;" id="2defe66d-ab03-4275-ba36-1c35a008063b">
+                Horary Number
+                <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" _bl_2596="" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
+                </div>
+                </span>
+                <input type="number" class="form-control" placeholder="0">
+                </div>
+                *@
+                @* YEAR OF ZERO COINCIDENCE *@
+                <div class="input-group" style="display: none">
+                    <span class="input-group-text">Year of Zero Coincidence</span>
+                    <input type="text" class="form-control" placeholder="397">
+                </div>
+            </div>
+
+            @* BUTTONS *@
+            <div class="mt-2 d-flex justify-content-between">
+                <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="OnClickShowAdvanced" SmallSize="true" />
+                <IconButton @ref="_calculateButton" Id="HoroscopeCalculateButton" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" />
+            </div>
+
         </div>
     </div>
 
 
+    @* OUTPUT *@
     <div class="mt-5 vstack gap-4">
 
-        <table id="PlanetDataTable" class="table table-striped table-hover table-bordered text-nowrap" style="width: 100%"></table>
+        <div id="PlanetDataTable2" />
+        <div id="HouseDataTable2" />
 
         @*divider*@
         <SkyChartViewer @ref="skyChartViewer" />
@@ -64,6 +128,50 @@
 
 
 @code {
+
+    /// <summary>
+    /// if not specified will not be included in final URL
+    /// default set to Raman, as used system wide
+    /// </summary>
+    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
+
+    private string _selectedChartStyle = "South";
+
+    public string SelectedChartStyle
+    {
+        get => _selectedChartStyle;
+        set
+        {
+            _selectedChartStyle = value;
+
+            //highlight regenerate button to let user know needs recalculation
+            _jsRuntime.AnimateHighlightElement("HoroscopeCalculateButton");
+
+            //also add * to button text to let user know needs recalculation
+            _calculateButton.UpdateButtonText("Calculate*");
+        }
+    }
+
+    /// <summary>
+    /// if not specified will not be included in final URL
+    /// default set to Raman, as used system wide
+    /// </summary>
+    public string SelectedAyanamsa
+    {
+        get => _selectedAyanamsa;
+        set
+        {
+            _selectedAyanamsa = value;
+
+            //highlight regenerate button to let user know needs recalculation
+            _jsRuntime.AnimateHighlightElement("HoroscopeCalculateButton");
+
+            //also add * to button text to let user know needs recalculation
+            _calculateButton.UpdateButtonText("Calculate*");
+        }
+    }
+
+    private IconButton _calculateButton;
 
     private PlanetChart planetChart;
 
@@ -142,7 +250,6 @@
         return true;
     }
 
-
     //when calculate button is clicked
     private async Task _CalculateAndUpdateEvents()
     {
@@ -166,16 +273,71 @@
         await skyChartViewer.Update(_selectedPerson.BirthTime);
 
         //update planet chart
-         planetChart.UpdateTime(_selectedPerson.BirthTime);
+        planetChart.UpdateTime(_selectedPerson.BirthTime);
 
         //inject selected person into component to show horoscope data
         await _horoscopeInfoView.SetPerson(_selectedPerson);
+
+        //init planet data table
+        await _InitPlanetDataTable();
 
         //play sound for better ux
         _jsRuntime.PlayDoneSound();
 
     }
 
+    private async Task _InitPlanetDataTable()
+    {
+        //load vedastro.js planet table
+        var PlanetColumns = new[]
+        {
+            new { API = "PlanetZodiacSign", Enabled = true, Name = "Sign" },
+            new { API = "PlanetConstellation", Enabled = true, Name = "Star" },
+            new { API = "HousePlanetOccupiesKP", Enabled = false, Name = "Occupies" },
+            new { API = "HousesOwnedByPlanetKP", Enabled = false, Name = "Owns" },
+            new { API = "PlanetLordOfZodiacSign", Enabled = false, Name = "Sign Lord" },
+            new { API = "PlanetLordOfConstellation", Enabled = false, Name = "Star Lord" },
+            new { API = "PlanetSubLordKP", Enabled = false, Name = "Sub Lord" },
+            new { API = "Empty", Enabled = false, Name = "Empty" },
+            new { API = "Empty", Enabled = false, Name = "Empty" },
+        };
 
+        var settings = new
+        {
+            ElementID = "PlanetDataTable2",
+            KeyColumn = "Planet",
+            ShowHeader = true,
+            HeaderIcon = "",
+            ColumnData = PlanetColumns, //columns names to create table
+            EnableSorting = false,
+            SaveSettings = false,
+        };
+
+        //get time in url format
+        var timeUrl = _selectedPerson.BirthTime.ToUrl();
+        timeUrl = timeUrl.Substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
+
+        //data used to generate table
+        var inputArguments = new
+        {
+            TimeUrl = timeUrl,
+            HoraryNumber = 0,
+            RotateDegrees = 0,
+            Ayanamsa = _selectedAyanamsa, //default is Lahiri
+        };
+
+        //call VedAstro.js to generate table
+        await _jsRuntime.InvokeVoidAsync("GenerateAstroTable", settings, inputArguments);
+
+    }
+
+    /// <summary>
+    /// toggles slide out of advanced options
+    /// </summary>
+    private async Task OnClickShowAdvanced()
+    {
+        //make options slide out from below
+        await _jsRuntime.SlideToggle("HoroscopeAdvancedInputHolder");
+    }
 
 }

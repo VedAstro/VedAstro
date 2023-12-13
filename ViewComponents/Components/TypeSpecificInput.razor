@@ -1,12 +1,12 @@
-﻿@namespace Website.Pages
+@namespace Website.Pages
 @using VedAstro.Library;
 @using System.Text.RegularExpressions
 @using System.Globalization
 
-    @if (paramType != null)
-    {
-        @* Note: place inside as not to render when not needed *@
-        <div class="vstack gap-1">
+@if (paramType != null)
+{
+    @* Note: place inside as not to render when not needed *@
+    <div class="vstack gap-1">
 
         @if (paramType == typeof(Time))
         {
@@ -121,8 +121,8 @@
             </div>
         }
 
-        </div>
-    }
+    </div>
+}
 
 @code {
     /// <summary>
@@ -164,8 +164,8 @@
 
 
         //set default values into input fields
-        if (!string.IsNullOrEmpty(item.DefaultValue)){SetValueIntoInputField(item.DefaultValue);}
-        
+        if (!string.IsNullOrEmpty(item.DefaultValue)) { SetValueIntoInputField(item.DefaultValue); }
+
 
         StateHasChanged(); //needed to propagate updates
     }
@@ -263,17 +263,17 @@
     public async Task<bool> IsValidationPassed()
     {
 
-            //TEST 2 : PLANET NAME
-            if (paramType == typeof(HouseName))
+        //TEST 2 : PLANET NAME
+        if (paramType == typeof(HouseName))
+        {
+            var isNotSelected = string.IsNullOrEmpty(_inputHouseName);
+            if (isNotSelected)
             {
-                var isNotSelected = string.IsNullOrEmpty(_inputHouseName);
-                if (isNotSelected)
-                {
-                    //mark invalid & alert user
-                    await _jsRuntime.ShowAlert("error", $"Please select a House first!", true);
-                    return false;
-                }
+                //mark invalid & alert user
+                await _jsRuntime.ShowAlert("error", $"Please select a House first!", true);
+                return false;
             }
+        }
 
 
         //TEST 2 : PLANET NAME
@@ -289,14 +289,14 @@
             }
         }
 
-    //TEST 1 : ENUM
+        //TEST 1 : ENUM
         else if (paramType?.IsEnum ?? false)
         {
             var isNotSelected = string.IsNullOrEmpty(_inputEnumName);
 
             if (isNotSelected)
             {
-    //mark invalid & alert user
+                //mark invalid & alert user
                 await _jsRuntime.ShowAlert("error", $"Please select a {paramType.Name} first!", true);
                 return false;
 

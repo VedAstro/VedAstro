@@ -14,6 +14,113 @@ namespace Website
     {
         //-----------------------------FIELDS
 
+        public static List<SimpleAyanamsa> SimpleAyanamsaAll = new()
+        {
+            SimpleAyanamsa.LahiriChitrapaksha,
+            SimpleAyanamsa.KrishnamurtiKP,
+            SimpleAyanamsa.Raman,
+            SimpleAyanamsa.FaganBradley,
+            SimpleAyanamsa.J2000,
+            SimpleAyanamsa.Yukteshwar,
+
+        };
+
+        public static List<Ayanamsa> AdvancedAyanamsaAll = new()
+        {
+
+            Ayanamsa.FAGAN_BRADLEY,
+
+            Ayanamsa.LAHIRI,
+
+            Ayanamsa.DELUCE,
+
+            Ayanamsa.RAMAN,
+
+            Ayanamsa.USHASHASHI,
+
+            Ayanamsa.KRISHNAMURTI,
+
+            Ayanamsa.DJWHAL_KHUL,
+
+            Ayanamsa.YUKTESHWAR,
+
+            Ayanamsa.JN_BHASIN,
+
+            Ayanamsa.BABYL_KUGLER1,
+
+            Ayanamsa.BABYL_KUGLER2,
+
+            Ayanamsa.BABYL_KUGLER3,
+
+            Ayanamsa.BABYL_HUBER,
+
+            Ayanamsa.BABYL_ETPSC,
+
+            Ayanamsa.ALDEBARAN_15TAU,
+
+            Ayanamsa.HIPPARCHOS,
+
+            Ayanamsa.SASSANIAN,
+
+            Ayanamsa.GALCENT_0SAG,
+
+            Ayanamsa.J1900,
+
+            Ayanamsa.B1950,
+
+            Ayanamsa.SURYASIDDHANTA,
+
+            Ayanamsa.SURYASIDDHANTA_MSUN,
+
+            Ayanamsa.ARYABHATA,
+
+            Ayanamsa.ARYABHATA_MSUN,
+
+            Ayanamsa.SS_REVATI ,
+
+            Ayanamsa.SS_CITRA,
+
+            Ayanamsa.TRUE_CITRA,
+
+            Ayanamsa.TRUE_REVATI,
+
+            Ayanamsa.TRUE_PUSHYA,
+
+            Ayanamsa.GALCENT_RGBRAND ,
+
+            Ayanamsa.GALEQU_IAU1958,
+
+            Ayanamsa.GALEQU_TRUE,
+
+            Ayanamsa.GALEQU_MULA,
+            Ayanamsa.GALALIGN_MARDYKS,
+
+            Ayanamsa.TRUE_MULA ,
+
+            Ayanamsa.GALCENT_MULA_WILHELM,
+
+            Ayanamsa.ARYABHATA_522,
+
+            Ayanamsa.BABYL_BRITTON,
+
+            Ayanamsa.TRUE_SHEORAN,
+
+            Ayanamsa.GALCENT_COCHRANE,
+
+            Ayanamsa.GALEQU_FIORENZA,
+
+            Ayanamsa.VALENS_MOON,
+
+            Ayanamsa.LAHIRI_1940,
+
+            Ayanamsa.LAHIRI_VP285,
+
+            Ayanamsa.KRISHNAMURTI_VP291,
+
+            Ayanamsa.LAHIRI_ICRC,
+        };
+
+
         public static SearchResult SearchPage { get; set; }
 
         public static int FailureCount = 0;

@@ -300,7 +300,8 @@ export class EventsChart {
     //converts VedAstro date format to Google Calendar format
     static convertDateFormat(dateStr) {
         // Split the date and time parts
-        let [timePart, datePart, zonePart] = dateStr.split(' ');
+        // NOTE: location is ignored here
+        let [timePart, datePart, zonePart] = dateStr.StdTime.split(' ');
         // Split the date into day, month, and year
         let [day, month, year] = datePart.split('/');
         // Combine the parts into a new date string and create a new Date object
@@ -372,15 +373,15 @@ export class EventsChart {
         var targetRect = eventObject.target;
 
         //given the SVG rect that was clicked on, process and extract full event data
-        var parsedEvent = EventsChart.ParseEventFromSVGRect(targetRect);
+        var parsedEvent = (await EventsChart.ParseEventFromSVGRect(targetRect, instance))["EventDataAtTime"];
 
         //ask user if selected event is correct and want to continue to google login
         var userReply = await Swal.fire({
             title: 'Send event to Google?',
             html: '<ul class="list-group">' +
                 `<li class="list-group-item">Name : <strong>${parsedEvent.Name}</strong></li>` +
-                `<li class="list-group-item">Start : <strong>${parsedEvent.StartTime}</strong></li>` +
-                `<li class="list-group-item">Start : <strong>${parsedEvent.EndTime}</strong></li>` +
+                `<li class="list-group-item">Start : <strong>${parsedEvent.StartTime.StdTime}</strong></li>` +
+                `<li class="list-group-item">End : <strong>${parsedEvent.EndTime.StdTime}</strong></li>` +
                 '</ul>',
             icon: 'info',
             iconHtml: '<span class="iconify" data-icon="fluent:calendar-add-20-regular" data-inline="false"></span>',
@@ -400,12 +401,77 @@ export class EventsChart {
     }
 
     //given an SVG rect of an event, extract event data from it, with start and end time (use API)
-    static ParseEventFromSVGRect() {
+    static async ParseEventFromSVGRect(targetRect, instance) {
 
-        //call API and get the needed data
-        //https://api.vedastro.org/Calculate/EventDataAtTime/Location/Ipoh,Perak,Malaysia/Time/12:44/23/04/1994/+08:00/Location/Ipoh,Perak,Malaysia/Time/12:44/23/04/2023/+08:00/EventName/ScorpioRahuPD1
+        //prepare the URL
+        var domain = "https://api.vedastro.org";
 
+        //get birth time from main svg element
+        var birthTimeAry = instance.$SvgChartElm[0].getAttribute("birthtime").split(" ");
+        var birthLocationTxt = instance.$SvgChartElm[0].getAttribute("birthlocation");
+        var birthTime = `/Location/${birthLocationTxt}/Time/${birthTimeAry[0]}/${birthTimeAry[1]}/${birthTimeAry[2]}`;
+
+        //get check time & event name from clicked rect,
+        //start and end time should be before and after from this
+        var checkTimeAry = targetRect.getAttribute("stdtime").split(" ");
+        //TODO Location set based on where user is
+        var checkTime = `/Location/${birthLocationTxt.replace(/\s/g, "")}/Time/${checkTimeAry[0]}/${checkTimeAry[1]}/${checkTimeAry[2]}`;
+
+        //get name of event
+        var withSpaces = targetRect.getAttribute("eventname");
+        var eventName = `/EventName/${withSpaces.replace(/\s/g, "")}`; //remove spaces
+
+        //put together final API call URL
+        var finalUrl = `${domain}/Calculate/EventDataAtTime${birthTime}${checkTime}${eventName}`;
+        
+        //make call to API, replies JSON of Event
+        var eventDataAtTime = await EventsChart.GetAPIPayload(finalUrl);
+
+        return eventDataAtTime;
     }
+
+    //given a vedastro API url, will auto call via POST or GET
+    //and return only passed payloads as JSON
+    static async GetAPIPayload(url, payload = null) {
+        try {
+            // If a payload is provided, prepare options for a POST request
+            const options = payload
+                ? {
+                    method: 'POST', // Specify the HTTP method as POST
+                    headers: { 'Content-Type': 'application/json' }, // Set the content type of the request to JSON
+                    body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
+                }
+                : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
+
+            // Send the request to the specified URL with the prepared options
+            const response = await fetch(url, options);
+
+            // If the response is not ok (status is not in the range 200-299), throw an error
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // Parse the response body as JSON
+            const data = await response.json();
+
+            // If the 'Status' property of the parsed data is not 'Pass', throw an error
+            if (data.Status !== "Pass") {
+                throw new Error(data.Payload);
+            }
+
+            // If everything is ok, return the 'Payload' property of the parsed data
+            return data.Payload;
+        } catch (error) {
+            // If an error is caught, display an error message using Swal.fire
+            Swal.fire({
+                icon: 'error',
+                title: 'App Crash!',
+                text: error,
+                confirmButtonText: 'OK'
+            });
+        }
+    }
+
 
     static addEventToGoogleCalendar(parsedEvent) {
 
@@ -421,7 +487,7 @@ export class EventsChart {
             //'location': '',
             'description': parsedEvent.Description,
             'start': parsedStartTime,
-            'end': parsedStartTime,
+            'end': parsedEndTime,
             //'recurrence': [
             //    'RRULE:FREQ=DAILY;COUNT=2'
             //],

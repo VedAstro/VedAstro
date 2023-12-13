@@ -1772,31 +1772,96 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Converts any Enum from URL epx : ../EnumName/EnumValue
+        /// NOTE: Handles special SimpleAyanamsa enum as Ayanamsa
         /// </summary>
-        public static dynamic EnumFromUrl(string url)
+        public static object EnumFromUrl(string url)
         {
+            // Constants for namespace and special enum name
+            const string Namespace = "VedAstro.Library.";
+            const string SpecialEnumName = "Ayanamsa";
+
+            // Split the URL into parts
             string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-            //enum has simple structure ../ZodiacName/Leo
+            // If there are less than 2 parts, the URL is invalid
+            if (parts.Length < 2) { throw new ArgumentException("Invalid URL format.", nameof(url)); }
+
+            // Get the enum name and value from the URL parts
             var enumName = parts[0];
             var enumValue = parts[1];
-
-            //get the type of the enum
-            var enumType = Type.GetType("VedAstro.Library." + enumName);
-
-            object parsedZodiac;
+            
+            // Get the type of the enum from the namespace and enum name
+            var enumType = Type.GetType(Namespace + enumName);
+            
+            // If the enum type is null, it was not found in the namespace
+            if (enumType == null) { throw new ArgumentException($"Enum type '{enumName}' not found in namespace '{Namespace}'.", nameof(url)); }
+            
             try
             {
-                //parse the string to an enum value
-                parsedZodiac = Enum.Parse(enumType, enumValue);
+                // Try to parse the enum value
+                return Enum.Parse(enumType, enumValue);
             }
-            catch (Exception e)
+            catch (ArgumentException)
             {
-                //enum value could is a number
-                parsedZodiac = double.Parse(enumValue);
-            }
+                // If parsing failed and the enum name is "Ayanamsa", try to parse as a SimpleAyanamsa enum
+                if (enumName == SpecialEnumName)
+                {
+                    return Enum.Parse(typeof(SimpleAyanamsa), enumValue);
+                }
+                // If parsing as SimpleAyanamsa also failed, try to parse the value as a double
+                if (double.TryParse(enumValue, out var number))
+                {
+                    return number;
+                }
 
-            return parsedZodiac;
+                // If all parsing attempts failed, rethrow the original exception
+                throw;
+            }
+        }
+        
+        public static object EnumFromUrl(string url, Type enumType)
+        {
+            // Constants for namespace and special enum name
+            const string Namespace = "VedAstro.Library.";
+            const string SpecialEnumName = "Ayanamsa";
+
+            // Split the URL into parts
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // If there are less than 2 parts, the URL is invalid
+            if (parts.Length < 2) { throw new ArgumentException("Invalid URL format.", nameof(url)); }
+
+            // Get the enum name and value from the URL parts
+            var paramName = parts[0];
+            var enumValue = parts[1];
+            
+            // Get the type of the enum from the namespace and enum name
+            //var enumType = Type.GetType(Namespace + enumName);
+            
+            // If the enum type is null, it was not found in the namespace
+            if (enumType == null) { throw new ArgumentException($"Enum type '{paramName}' not found in namespace '{Namespace}'.", nameof(url)); }
+            
+            try
+            {
+                // Try to parse the enum value
+                return Enum.Parse(enumType, enumValue);
+            }
+            catch (ArgumentException)
+            {
+                // If parsing failed and the enum name is "Ayanamsa", try to parse as a SimpleAyanamsa enum
+                if (paramName == SpecialEnumName)
+                {
+                    return Enum.Parse(typeof(SimpleAyanamsa), enumValue);
+                }
+                // If parsing as SimpleAyanamsa also failed, try to parse the value as a double
+                if (double.TryParse(enumValue, out var number))
+                {
+                    return number;
+                }
+
+                // If all parsing attempts failed, rethrow the original exception
+                throw;
+            }
         }
 
 

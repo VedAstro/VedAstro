@@ -118,6 +118,9 @@ namespace VedAstro.Library
         /// </summary>
         public static EventSlice? ConvertToEventSlice(Time time, EventData eventData, Person person)
         {
+            //if event is Empty than not occuring
+            if (eventData == EventData.Empty) { return EventSlice.Empty; }
+
             //do calculation for this event to get prediction data
             var predictionData = eventData.EventCalculator(time, person);
 

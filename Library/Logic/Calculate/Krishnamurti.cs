@@ -11,6 +11,7 @@ namespace VedAstro.Library
     {
         /// <summary>
         /// Special order of planets for KP system
+        /// NOTE: - extracted out to make unambigious
         /// NOTE: Starts with Ketu and very important to keep this order (below code depend)
         /// </summary>
         public static readonly List<PlanetName> All9Planets = new()

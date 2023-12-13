@@ -47,13 +47,13 @@
                 <select @bind="_selectedAyanamsa" class="form-select">
 
                     <optgroup label="Easy">
-                        @foreach (var ayanamsa in @SimpleAyanamsaAll)
+                        @foreach (var ayanamsa in @AppData.SimpleAyanamsaAll)
                         {
                                 <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
                         }
                     </optgroup>
                     <optgroup label="Advanced">
-                        @foreach (var ayanamsa in @AdvancedAyanamsaAll)
+                        @foreach (var ayanamsa in @AppData.AdvancedAyanamsaAll)
                         {
                                 <option value="@ayanamsa">@ayanamsa</option>
                         }
@@ -71,112 +71,7 @@
 
 @code {
 
-    private List<SimpleAyanamsa> SimpleAyanamsaAll = new()
-    {
-        SimpleAyanamsa.LahiriChitrapaksha,
-        SimpleAyanamsa.KrishnamurtiKP,
-        SimpleAyanamsa.Raman,
-        SimpleAyanamsa.FaganBradley,
-        SimpleAyanamsa.J2000,
-        SimpleAyanamsa.Yukteshwar,
-
-    };
-
-    private List<Ayanamsa> AdvancedAyanamsaAll = new()
-    {
-
-        Ayanamsa.FAGAN_BRADLEY,
-
-        Ayanamsa.LAHIRI,
-
-        Ayanamsa.DELUCE,
-
-        Ayanamsa.RAMAN,
-
-        Ayanamsa.USHASHASHI,
-
-        Ayanamsa.KRISHNAMURTI,
-
-        Ayanamsa.DJWHAL_KHUL,
-
-        Ayanamsa.YUKTESHWAR,
-
-        Ayanamsa.JN_BHASIN,
-
-        Ayanamsa.BABYL_KUGLER1,
-
-        Ayanamsa.BABYL_KUGLER2,
-
-        Ayanamsa.BABYL_KUGLER3,
-
-        Ayanamsa.BABYL_HUBER,
-
-        Ayanamsa.BABYL_ETPSC,
-
-        Ayanamsa.ALDEBARAN_15TAU,
-
-        Ayanamsa.HIPPARCHOS,
-
-        Ayanamsa.SASSANIAN,
-
-        Ayanamsa.GALCENT_0SAG,
-
-        Ayanamsa.J1900,
-
-        Ayanamsa.B1950,
-
-        Ayanamsa.SURYASIDDHANTA,
-
-        Ayanamsa.SURYASIDDHANTA_MSUN,
-
-        Ayanamsa.ARYABHATA,
-
-        Ayanamsa.ARYABHATA_MSUN,
-
-        Ayanamsa.SS_REVATI ,
-
-        Ayanamsa.SS_CITRA,
-
-        Ayanamsa.TRUE_CITRA,
-
-        Ayanamsa.TRUE_REVATI,
-
-        Ayanamsa.TRUE_PUSHYA,
-
-        Ayanamsa.GALCENT_RGBRAND ,
-
-        Ayanamsa.GALEQU_IAU1958,
-
-        Ayanamsa.GALEQU_TRUE,
-
-        Ayanamsa.GALEQU_MULA,
-        Ayanamsa.GALALIGN_MARDYKS,
-
-        Ayanamsa.TRUE_MULA ,
-
-        Ayanamsa.GALCENT_MULA_WILHELM,
-
-        Ayanamsa.ARYABHATA_522,
-
-        Ayanamsa.BABYL_BRITTON,
-
-        Ayanamsa.TRUE_SHEORAN,
-
-        Ayanamsa.GALCENT_COCHRANE,
-
-        Ayanamsa.GALEQU_FIORENZA,
-
-        Ayanamsa.VALENS_MOON,
-
-        Ayanamsa.LAHIRI_1940,
-
-        Ayanamsa.LAHIRI_VP285,
-
-        Ayanamsa.KRISHNAMURTI_VP291,
-
-        Ayanamsa.LAHIRI_ICRC,
-    };
-
+    
 
 
 
@@ -234,8 +129,8 @@
 
     private void OnClickShowAdvanced()
     {
-        //advanced inputs visible
-        _jsRuntime.ToggleDisplay("AdvancedInputHolder");
+        //make options slide out from below
+        _jsRuntime.SlideToggle("AdvancedInputHolder");
     }
 
 

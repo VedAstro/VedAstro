@@ -277,6 +277,25 @@ KEEP IT REAL
         }
     }
 
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    public async Task<bool> IsValidationPassed()
+    {
+        //TEST 1 : select calculator
+        if (!IsSelected())
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", "Select a calculator!", AlertText.FunnyPleaseSelectText("Calculator"));
+            return false;
+        }
+
+        //if control reaches here than, it's valid
+        return true;
+
+    }
+
+
     private async void OnKeyUpWaitTimerElapsed(object sender, ElapsedEventArgs e)
     {
         _onKeyUpWaitTimer.Stop();

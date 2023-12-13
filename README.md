@@ -309,6 +309,39 @@ throughout the progam.
                     +------------------------+                +------------------+
 ```
 
+# ⚙️ Setup Guide
+
+### Prerequisite
+- Visual Studio 2022
+- Target .Net 8.0
+
+### Steps
+- Fork the project and Checkout in your local.
+- Go to history and checkout commit tagged with stable otherwise you might face API to webside mismatch
+- Open the project in Visual Studio
+- Right click and unload below projects (as you don't need these for general project work)
+  - API.Python
+  - Console
+  - Library.API
+  - StaticTableGenerator
+- Right click on project and 'Build Solution' (If face any issues please post in Slack channel for support)
+- If you want to run against server running API you need to set "Website" as "startup project" by right click
+  - Now from Run menu in toolbar (dark Green Arrow) select "IISExpress" (dont select Website)
+  - this will open a browser window, you can copy the URL and paste to open in other main browser window so that you can use logged in Google/Facebook Auth 
+- If you want to run against your local running VedAstro APIs then 
+  - stop the running website in local and then do below steps  
+  - you need to open one more instance of VS2022 
+  - open same project, and now set API as "startup project" for that VS instance 
+  - find local.settings.sample.json file  (contact Slack Channel to get these properties - these are sensitive so not need to be checked in)
+  - and rename it by removing "sample" from the name and it become "local.settings.json"
+  - Now from Run menu in toolbar (dark Green Arrow) select "API" (not need to select Docker) 
+  - this will open a command window and show APIs initialized (if any error please connect @ Slack Vedastro channel)
+  - run the website using above steps and then login using your Facebook or Google OAuth 
+  - go to provide and Enable Debug, save (this will instruct the code to look for API in local).
+
+Now you can have fun with VedAstro, ;-) try making horoscope and share your feedback in Slack channel. 
+
+
 # Code Edit Guide
 
 ### Internal Project Linking

@@ -33,7 +33,7 @@
 
 
                     @* INPUT PARAM NAME SELECT *@
-                    <div @ref="_paramInputHolderElement" style="display: none">
+                    <div id="ParamInputHolderElement" style="display: none">
                         <IconTitle IconName="flat-color-icons:multiple-inputs" Title="Input Parameters" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
                         <ParameterInputPanel @ref="_parameterInputPanel" />
                     </div>
@@ -45,7 +45,7 @@
                 <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />
                 
                 @* hidden until Generate button is clicked *@
-                <div @ref="_paramOutputOptionsPanel" class="vstack gap-3" style="display: none;">
+                <div id="ParamOutputOptionsPanel" class="vstack gap-3" style="display: none;">
                     @*OUTPUT ARROW ICON*@
                     <Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="80" />
 
@@ -205,9 +205,7 @@
 
     private APISelectorBox? _apiSelectorBox = null;
 
-    private ElementReference _paramInputHolderElement;
     private ArticleBlock _nextStepArticleBlock;
-    private ElementReference _paramOutputOptionsPanel;
 
     private ParameterInputPanel? _parameterInputPanel;
 
@@ -307,7 +305,7 @@
             _parameterInputPanel.Show(paramTypeList);
 
             //make param input panel visible
-            _jsRuntime.Show(_paramInputHolderElement);
+            _jsRuntime.SlideDown("ParamInputHolderElement");
 
         }
     }
@@ -343,7 +341,7 @@
         _jsRuntime.PlayDoneSound();
 
         //show output options panel
-        _jsRuntime.Show(_paramOutputOptionsPanel);
+        _jsRuntime.SlideDown("ParamOutputOptionsPanel");
 
         //show next step article block
         _jsRuntime.Show(_nextStepArticleBlock.ElementReference);

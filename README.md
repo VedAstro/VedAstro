@@ -7,13 +7,9 @@
 </a>
 <span align="center">
 
-[![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
-[![NuGet](https://img.shields.io/static/v1?style=for-the-badge&message=NuGet&color=004880&logo=NuGet&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
-[![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
 [![Ko-fi](https://img.shields.io/static/v1?style=for-the-badge&message=Ko-fi&color=FF5E5B&logo=Ko-fi&logoColor=FFFFFF&label=)](https://ko-fi.com/vedastro)
 [![Patreon](https://img.shields.io/static/v1?style=for-the-badge&message=Patreon&color=FF424D&logo=Patreon&logoColor=FFFFFF&label=)](https://www.patreon.com/vedastro)
 [![Slack](https://img.shields.io/static/v1?style=for-the-badge&message=Slack&color=4A154B&logo=Slack&logoColor=FFFFFF&label=)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_vedastro/)
 [![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/vedastro.org)
 [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/_VedAstro)
 [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
@@ -28,12 +24,23 @@
 </span>
 
 
-<h2 align="center"><a href="https://vedastro.org">VedAstro</a></h2>
-<h4 align="center">
-  Astrology enables one to see subtle phenomena across time.</br>
-       Which to the mortal man is invisible in action,
-       and only visible in its reaction.</h4>
+# 😎 How VedAstro can help you...
 
+- [Website](https://vedastro.org/Docs/QuickGuide) --> easy & fast astrology data for **normal users**
+- [Open API](https://vedastro.org/APIBuilder) --> free astrology data for your app or website with a simple `HTTP GET`
+- [Swiss Ephemeris API](https://vedastro.org/APIBuilder) --> free advanced astronomy data from NASA's JPL Ephemeris
+- [Learn Astro Computation](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> learn exact math & logic used in astrology via **`Free Open Source`** code
+- [ML Table Generator](https://vedastro.org/TableGenerator) --> easily generate large astronomical tables for use in ML/AI Model training and Data Science
+- [Match Finder](https://vedastro.org/Match/Finder) --> find your astrologically perfect match in our global database
+- [Life Predictor](https://vedastro.org/LifePredictor) --> accurate algorithmic prediction of a human life's past and future
+- [Build On Top](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> import VedAstro code directly into your existing projects
+
+[![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library) [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://pypi.org/project/VedAstro/)  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
+
+# 🆓 100% Open Source
+The sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
+
+![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
 
 
 # 🎯 Perfect Predictions
@@ -43,7 +50,7 @@
 [![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/StarsAboveMe)   
 
 
-# 📊 64 Data Points via Open API & FREE (yeah you read right!)
+# 📊 +200 Astro API Calls & FREE (yeah you read right!)
 Below is sample API call result for data related to "**Sun**" on "**30/06/2023**" at "**Singapore**"
 --> [Watch Video Guide](https://www.youtube.com/watch?v=y110RAgIorY)
 ```json
@@ -121,14 +128,6 @@ Below is sample API call result for data related to "**Sun**" on "**30/06/2023**
 ```
 
 
-# 🌍 Links
-- [Quick Guide](https://vedastro.org/Docs/QuickGuide) learn how to use
-- [Open API](https://vedastro.org/APIBuilder) easily get astrology data for your app or website with a simple `HTTP GET`
-- [Swiss Ephemeris API](https://vedastro.org/APIBuilder) free and simple API to get advanced astronomical data
-- [Match Finder](https://vedastro.org/Match/Finder) find your astrologically perfect match in our global database
-- [Life Predictor](https://vedastro.org/LifePredictor) algorithmic prediction of a human life's past and future
-
-
 <!--
 
 # Examples of Accurate Predictions
@@ -152,39 +151,17 @@ This project is an effort to change that. [Read More](https://vedastro.org/About
 
 # 🎂 9 Years Old 
 The first line of code for this project was written in **late 2014** at **Itä-Pasila**.
-Back then it was a simple desktop software, with no UI and only text display.
-With continued support from users, this project has steadily grown to what it is today.
-Helping people from all over the world.
+Started as a simple desktop software, with no UI and only text display.
+With continued support from users, this project has steadily grown to what it is today. Helping people from all over the world.
     
 # 📚 Credits &amp; Reference 
-![bv-raman-rao](https://user-images.githubusercontent.com/43817262/226793913-493ca156-cb69-4109-bbe4-3007f57a3941.png)
+![credits](https://vedastro.org/images/bv-raman-rao.png)
 
-Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao
-for pioneering easy to read astrology books. 
-Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle)
-for proving the efficacy of free and open work for the benefit all.
-
-Astronomical calculation was made possible by [NASA JPL](https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html)
-data via "SWISS EPHEMERIS" ported by "SwissEphNet".
-Last but not least, we thank users like you who keep this project going.
-
-# ❤️ How can I help?
-Just **Like** & **Share** our social pages and it'll be a **big** help already!
-
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_vedastro/)
-[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/vedastro.org)
-[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/_VedAstro)
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
-
-# 👪 Join our family
-If you want to do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily)  
-We're always looking for somebody to **[improve code.](https://vedastro.org/JoinOurFamily)** or **[help with funding](https://vedastro.org/Donate)**.
+Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao for pioneering easy to read astrology books. Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle) for proving the **efficacy of free and open work** for the benefit all...[Read More](https://vedastro.org/About).
 
 
-# 🙋‍♂️ Come say "Hi", we don't bite!
-We discuss & share ideas on astrology and computation. And ways you can integrate VedAstro into your own project.
-<!-- SLACK JOIN IMAGE -->
-[![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
+# 💌 Support
+[![membership](https://vedastro.org/images/kofi-membership-page.png)](https://ko-fi.com/vedastro/tiers)
 
 
 # 🧰 Gonzo Development Pattern
@@ -220,6 +197,41 @@ But the database will be shared between these. Meaning data changes in Beta will
  It is all too easy during development to make a complicated UI that only coders understand.
  But it is far more difficult and **rewarding** to make the UI intuitive & easy.
  A "no manuals" and "no brainer" approach to design.
+
+
+ # 🥀 Digital Astrology
+The wisdom of ages, once passed down by word,
+Now stored in circuits, rarely heard.
+
+Once this knowledge was held in minds so keen,
+Now it's coded in machines unseen.
+
+The human touch, that once gave knowledge birth,
+Replaced by algorithms, shaping future's girth.
+
+# 🙏 Special Thanks
+Built with Software Sponsored by **[JetBrains](https://www.jetbrains.com/)** 
+
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="200"/>
+
+
+# ❤️ Social
+Just **Like** & **Share** our social pages and it'll be a **big** help already!
+
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_vedastro/)
+[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/vedastro.org)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/_VedAstro)
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
+
+
+# 👪 Join our family
+If you want to do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily)  
+We're always looking for somebody to **[improve code.](https://vedastro.org/JoinOurFamily)** or **[help with funding](https://vedastro.org/Donate)**.
+
+# 🙋‍♂️ Come say "Hi", we don't bite!
+We discuss & share ideas on astrology and computation. And ways you can integrate VedAstro into your own project.
+<!-- SLACK JOIN IMAGE -->
+[![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
 
 
 # ⚙️ Project Structure
@@ -296,38 +308,6 @@ throughout the progam.
                     |                        |                |                  |
                     +------------------------+                +------------------+
 ```
-
-# ⚙️ Setup Guide
-
-### Prerequisite
-- Visual Studio 2022
-- Target .Net 8.0
-
-### Steps
-- Fork the project and Checkout in your local.
-- Go to history and checkout commit tagged with stable otherwise you might face API to webside mismatch
-- Open the project in Visual Studio
-- Right click and unload below projects (as you don't need these for general project work)
-  - API.Python
-  - Console
-  - Library.API
-  - StaticTableGenerator
-- Right click on project and 'Build Solution' (If face any issues please post in Slack channel for support)
-- If you want to run against server running API you need to set "Website" as "startup project" by right click
-  - Now from Run menu in toolbar (dark Green Arrow) select "IISExpress" (dont select Website)
-  - this will open a browser window, you can copy the URL and paste to open in other main browser window so that you can use logged in Google/Facebook Auth 
-- If you want to run against your local running VedAstro APIs then 
-  - stop the running website in local and then do below steps  
-  - you need to open one more instance of VS2022 
-  - open same project, and now set API as "startup project" for that VS instance 
-  - find local.settings.sample.json file  (contact Slack Channel to get these properties - these are sensitive so not need to be checked in)
-  - and rename it by removing "sample" from the name and it become "local.settings.json"
-  - Now from Run menu in toolbar (dark Green Arrow) select "API" (not need to select Docker) 
-  - this will open a command window and show APIs initialized (if any error please connect @ Slack Vedastro channel)
-  - run the website using above steps and then login using your Facebook or Google OAuth 
-  - go to provide and Enable Debug, save (this will instruct the code to look for API in local).
-
-Now you can have fun with VedAstro, ;-) try making horoscope and share your feedback in Slack channel. 
 
 # Code Edit Guide
 

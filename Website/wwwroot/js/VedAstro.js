@@ -88,18 +88,18 @@ if (typeof $.fn.selectize == 'undefined') {
 }
 
 
-//DEFAULT COLUMNS FOR PLANET TABLE
-PlanetColumns = [
-    { API: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
-    { API: "PlanetConstellation", Enabled: true, Name: "Star" },
-    { API: "HousePlanetOccupiesKP", Enabled: false, Name: "Occupies" },
-    { API: "HousesOwnedByPlanetKP", Enabled: false, Name: "Owns" },
-    { API: "PlanetLordOfZodiacSign", Enabled: true, Name: "Sign Lord" },
-    { API: "PlanetLordOfConstellation", Enabled: true, Name: "Star Lord" },
-    { API: "PlanetSubLordKP", Enabled: false, Name: "Sub Lord" },
-    { API: "Empty", Enabled: false, Name: "Empty" },
-    { API: "Empty", Enabled: false, Name: "Empty" },
-];
+/**
+ * Shortcut method to initialize and generate table in 1 static call.
+ * Used by Blazor to call JS code.
+ * @param {Object} settings - The settings for the AstroTable.
+ * @param {Object} inputArguments - The Time and other data needed to generate table.
+ */
+window.GenerateAstroTable = (settings, inputArguments) => {
+    // Initialize astro table
+    var planetDataTable = new AstroTable(settings);
+    // Generate table
+    planetDataTable.GenerateTable(inputArguments);
+};
 
 /**
  * Helps to create a table with astro data columns
@@ -113,6 +113,7 @@ class AstroTable {
 
     // Class fields
     Ayanamsa = "Lahiri";
+    ElementID = ""; //ID of main div where table & header will be injected
     TableId = ""; //ID of table set in HTML, injected during init
     ShowHeader = true; //default enabled, header with title, icon and edit button
     KeyColumn = ""; //Planet or House
@@ -120,17 +121,41 @@ class AstroTable {
     ColumnData = []; //data on selected columns
     EnableSorting = false; //sorting disabled by default
     APICalls = []; //list of API calls that can be used in table (filled on load)
+    SaveSettings = true; //save settings to browser storage or not, enabled by default
 
-    constructor(settings) {
+    //DEFAULT COLUMNS when no column data is supplied or when reset button is clicked
+    DefaultColumns = [
+        { API: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
+        { API: "PlanetConstellation", Enabled: true, Name: "Star" },
+        { API: "HousePlanetOccupiesKP", Enabled: true, Name: "Occupies" },
+        { API: "HousesOwnedByPlanetKP", Enabled: true, Name: "Owns" },
+        { API: "PlanetLordOfZodiacSign", Enabled: true, Name: "Sign Lord" },
+        { API: "PlanetLordOfConstellation", Enabled: true, Name: "Star Lord" },
+        { API: "PlanetSubLordKP", Enabled: true, Name: "Sub Lord" },
+        { API: "Empty", Enabled: false, Name: "Empty" },
+        { API: "Empty", Enabled: false, Name: "Empty" },
+    ];
+
+
+    constructor(rawSettings) {
+
+        //correct if property names is camel case (for Blazor)
+        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+
+        //if column data is not supplied use default
+        if (!settings.ColumnData) { settings.ColumnData = AstroTable.DefaultColumns; }
 
         //expand data inside settings input
-        this.TableId = settings.TableId;
+        this.ElementID = settings.ElementID;
+        this.TableId = `${this.ElementID}_Table`;
         this.ShowHeader = settings.ShowHeader;
+        this.SaveSettings = settings.SaveSettings;
 
         //based on table ID try get any settings if saved from before
-        var savedTableSettings = false; //TODO TEMP HARD SET DEFAULTS ON REFRESH --> localStorage.getItem(this.TableId);
+        var savedTableSettings = localStorage.getItem(this.TableId);
 
-        if (savedTableSettings) {
+        //only continue if settings are saved and featured enabled in settings
+        if (this.SaveSettings || savedTableSettings) {
             //parse the data
             let jsonObject = JSON.parse(savedTableSettings);
 
@@ -265,14 +290,14 @@ class AstroTable {
         let enabledColumns = this.ColumnData.filter(column => column.Enabled);
 
         // Map the enabledColumns to their respective API and return the result
-        let apis = enabledColumns.map(column => column.API);
+        let apis = enabledColumns.map(column => column.Api);
 
         return apis;
     }
 
     GetNiceColumnNameFromRawAPIName(rawApiName) {
         for (let i = 0; i < this.ColumnData.length; i++) {
-            if (this.ColumnData[i].API === rawApiName) {
+            if (this.ColumnData[i].Api === rawApiName) {
                 return this.ColumnData[i].Name;
             }
         }
@@ -302,6 +327,10 @@ class AstroTable {
         //in URL format it's ready to use in final URL
         var userInputURLParams = this.ConvertRawParamsToURL(userInputParams);
 
+        //clear old data if any
+        $(`#${this.ElementID}`).empty();
+
+        //# HEADER
         //show header with title, icon and edit button
         if (this.ShowHeader) {
             //random ID for edit button
@@ -318,7 +347,7 @@ class AstroTable {
                     <hr />`;
 
             //inject into page
-            $(`#${this.TableId}`).before(htmlContent);
+            $(`#${this.ElementID}`).append(htmlContent);
 
             //attach event handler to edit button
             $(`#${this.EditButtonId}`).on("click", async () => {
@@ -326,11 +355,19 @@ class AstroTable {
             });
         }
 
+        //# TABLE
+        //create empty table inside main holder
+        //table will be filled below
+        $(`#${this.ElementID}`).append(`<table id="${this.TableId}" class="table table-striped table-hover table-bordered text-nowrap" style="width: 100%"></table>`);
+
         //generate table from inputed data
-        await this.GenerateHTMLTableFromAPI(userInputURLParams)
+        await this.GenerateHTMLTableFromAPI(userInputURLParams);
     }
 
     ConvertRawParamsToURL(userInputParams) {
+
+        //handle camel case to pascal case (for blazor only)
+        userInputParams = CommonTools.ConvertCamelCaseKeysToPascalCase(userInputParams);
 
         //extract from input
         var timeUrlParam = userInputParams.TimeUrl;
@@ -470,33 +507,6 @@ class AstroTable {
 
     /*--------------------STATIC METHODS--------------------------------*/
 
-    static InitAstroTable(settings) {
-        debugger;
-        //initialize astro table
-        var settings = {
-            TableId: "PlanetDataTable",
-            KeyColumn: "Planet",
-            ShowHeader: true,
-            HeaderIcon: "",
-            ColumnData: PlanetColumns, //columns names to create table
-            EnableSorting: false
-        };
-
-        var planetDataTable = new AstroTable(settings);
-
-        //data used to generate table
-        var inputArguments = {
-            TimeUrl: "Location/Bengaluru/Time/11:00/25/07/1984/+00:00/",
-            HoraryNumber: 0,
-            RotateDegrees: 0,
-            Ayanamsa: "KRISHNAMURTI", //default is Lahiri
-        };
-
-        //generate table
-        planetDataTable.GenerateTable(inputArguments);
-
-    }
-
     static async GetPayLoad2(endpoint, userInputParams, instance) {
 
         //given a API name, get the metadata of the API call
@@ -505,31 +515,42 @@ class AstroTable {
         //construct the base url
         var finalUrl = `${instance.APIDomain}/Calculate/${endpoint}/`;
 
+        //if metadata not found, alert user
         if (selectedMethodInfo === undefined) {
-            alert(`API call ${endpoint} not found!`);
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Column',
+                text: `API call ${endpoint} not found!`,
+                confirmButtonText: 'OK'
+            });
         }
 
-        //go through each parameter and add to the final URL
-        for (var param of selectedMethodInfo.Parameters) {
+        //only process if API call meta was found
+        else {
 
-            //get param name declared in C# code
-            var paramName = param.Name;
+            //go through each parameter and add to the final URL
+            for (var param of selectedMethodInfo.Parameters) {
 
-            //find param from user with same or similar name (intelligently finds the param)
-            //note: if not found return empty string
-            var paramUrl = AstroTable.FindParamMatch(paramName, userInputParams);
+                //get param name declared in C# code
+                var paramName = param.Name;
 
-            //add to back of final URL
-            finalUrl += paramUrl;
+                //find param from user with same or similar name (intelligently finds the param)
+                //note: if not found return empty string
+                var paramUrl = AstroTable.FindParamMatch(paramName, userInputParams);
+
+                //add to back of final URL
+                finalUrl += paramUrl;
+            }
+
+            //note: Ayanamsa is added here as system param
+            var ayanamsaSysParam = `Ayanamsa/${instance.Ayanamsa}`;
+            finalUrl += ayanamsaSysParam;
+
+            //make the final API call in the perfect URL format
+            var apiPayload = await AstroTable.GetAPIPayload(finalUrl);
+            return apiPayload;
         }
 
-        //note: Ayanamsa is added here as system param
-        var ayanamsaSysParam = `Ayanamsa/${instance.Ayanamsa}`;
-        finalUrl += ayanamsaSysParam;
-
-        //make the final API call in the perfect URL format
-        var apiPayload = await AstroTable.GetAPIPayload(finalUrl);
-        return apiPayload;
 
     }
 
@@ -613,7 +634,7 @@ class AstroTable {
                         <div class="w-50">
                             <select id="SelecteAPI${columnNumber}Dropdown"  class="mt-1">
                                 <option value=""></option>
-                                ${await AstroTable.GetAPICallsListSelectOptionHTML(columnData[columnNumber].API, keyColumnName, apiDomain)}
+                                ${await AstroTable.GetAPICallsListSelectOptionHTML(columnData[columnNumber].Api, keyColumnName, apiDomain)}
                             </select>
                         </div>
                     </div>
@@ -709,7 +730,7 @@ class AstroTable {
     // Function to update the array based on the Swal form
     static async UpdateDateColumns(dataColumns) {
         for (var i = 0; i < dataColumns.length; i++) {
-            dataColumns[i].API = $(`#SelecteAPI${i}Dropdown`).val();
+            dataColumns[i].Api = $(`#SelecteAPI${i}Dropdown`).val();
             dataColumns[i].Enabled = $('#Enabled' + i).is(':checked');
             dataColumns[i].Name = $('#Name' + i).val();
         }
@@ -745,6 +766,8 @@ class AstroTable {
         return foundParam;
     }
 
+    //given a vedastro API url, will auto call via POST or GET
+    //and return only passed payloads as JSON
     static async GetAPIPayload(url, payload = null) {
         try {
             // If a payload is provided, prepare options for a POST request
@@ -755,18 +778,23 @@ class AstroTable {
                     body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
                 }
                 : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
+
             // Send the request to the specified URL with the prepared options
             const response = await fetch(url, options);
+
             // If the response is not ok (status is not in the range 200-299), throw an error
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+
             // Parse the response body as JSON
             const data = await response.json();
+
             // If the 'Status' property of the parsed data is not 'Pass', throw an error
             if (data.Status !== "Pass") {
                 throw new Error(data.Payload);
             }
+
             // If everything is ok, return the 'Payload' property of the parsed data
             return data.Payload;
         } catch (error) {
@@ -802,7 +830,7 @@ class NatalChart {
  */
 class CommonTools {
 
-     static ShowLoading() {
+    static ShowLoading() {
 
         Swal.fire({
             showConfirmButton: false,
@@ -823,4 +851,17 @@ class CommonTools {
         Swal.close();
     }
 
+    //converts camel case to pascal case, like "settings.keyColumn" to "settings.KeyColumn"
+    static ConvertCamelCaseKeysToPascalCase(obj) {
+        let newObj = Array.isArray(obj) ? [] : {};
+        for (let key in obj) {
+            let value = obj[key];
+            let newKey = key.charAt(0).toUpperCase() + key.slice(1);
+            if (value && typeof value === "object") {
+                value = CommonTools.ConvertCamelCaseKeysToPascalCase(value);
+            }
+            newObj[newKey] = value;
+        }
+        return newObj;
+    }
 }

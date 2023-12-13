@@ -13,7 +13,7 @@
 {
     <div style="font-family: '@AppData.TitleFont', serif !important;" class="dropdown @ExtraClass">
         @*extra class for dropdown direct to parent div*@
-        <button style="@FinalCss" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button id="@Id" style="@FinalCss" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             @*only show icon if specified*@
             @if (IconName != null)
             {
@@ -30,7 +30,7 @@
 @*NORMAL BUTTON*@
 else
 {
-    <button style="@FinalCss font-family: '@AppData.TitleFont', serif !important;" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr">
+    <button id="@Id" style="@FinalCss font-family: '@AppData.TitleFont', serif !important;" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr">
         @*SPECIAL LITTLE EXTRA INFO TEXT*@
         @if (!string.IsNullOrEmpty(RetinaText))
         {
@@ -157,6 +157,12 @@ else
     /// </summary>
     [Parameter]
     public string? IconName { get; set; }
+
+    /// <summary>
+    /// ID added to button HTML
+    /// </summary>
+    [Parameter]
+    public string? Id { get; set; }
 
     /// <summary>
     /// If specified extra, added directly to button class attribute
@@ -306,10 +312,15 @@ else
     private ElementReference _tooltipHtml;
 
 
-
     //------------------------------------------------------------FUNCTION
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
+
+    public void UpdateButtonText(string newText)
+    {
+        ButtonText = newText;
+        StateHasChanged();
+    }
 
     private async Task _OnAfterRender(bool firstRender)
     {
@@ -458,6 +469,11 @@ else
         this.IconName = newIconName;
 
         StateHasChanged();
+    }
+
+    public async Task AnimateHighlight()
+    {
+        await _jsRuntime.AnimateHighlightElement(ElementReference);
     }
 
 }

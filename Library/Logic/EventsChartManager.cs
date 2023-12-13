@@ -166,7 +166,10 @@ namespace VedAstro.Library
                 height:{svgTotalHeight}px;
                 background:{svgBackgroundColor};";
 
-                svgHead = $"<svg class=\"EventChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
+                //place birth time in chart to be used by EventsChart.js for google event detection
+                var birthTimeStdText = inputPerson.BirthTimeString;
+
+                svgHead = $"<svg birthtime=\"{birthTimeStdText}\" birthlocation=\"{inputPerson.GetBirthLocation().Name()}\" class=\"EventChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 
                 jsCode = GetJsCodeSvg(randomId);
 

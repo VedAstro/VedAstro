@@ -1,4 +1,4 @@
-@namespace Website.Pages
+﻿@namespace Website.Pages
 @using VedAstro.Library;
 @using System.Text.RegularExpressions
 @using System.Globalization
@@ -230,28 +230,46 @@
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text);
     }
 
+
     public async Task<string> ToApiUrl()
     {
-        var combinedUrl = "";
+        //NOTE : required params are detected by position
+        //       and optional params are detected by name
+        //       name of param is needed by "optional params" to detect their type
 
-        var paramNameForUrl = "";
-        //remove spaces from param name to masuk URL
+        string combinedUrl = "";
+
         if (!string.IsNullOrEmpty(ParamName))
         {
-            paramNameForUrl = ParamName.Replace(" ", "");
+            //remove spaces from param name to masuk URL nicely
+
+            var paramNameForUrl = ParamName.Replace(" ", "");
+
+            switch (paramType)
+            {
+                case Type type when type == typeof(Time):
+                    combinedUrl = await _inputTimeLocation.ToApiUrl();
+                    break;
+                case Type type when type == typeof(PlanetName):
+                    combinedUrl = $"/PlanetName/{_inputPlanetName}";
+                    break;
+                case Type type when type == typeof(HouseName):
+                    combinedUrl = $"/HouseName/{_inputHouseName}";
+                    break;
+                case Type type when type.IsEnum:
+                    combinedUrl = $"/{paramNameForUrl}/{_inputEnumName}";
+                    break;
+                case Type type when type == typeof(Angle):
+                    combinedUrl = $"/{paramNameForUrl}/{_inputTotalDegrees}";
+                    break;
+                case Type type when type == typeof(string):
+                    combinedUrl = $"/{paramNameForUrl}/{_inputText}";
+                    break;
+                case Type type when type == typeof(int) || type == typeof(double):
+                    combinedUrl = $"/{paramNameForUrl}/{_inputNumber}";
+                    break;
+            }
         }
-
-        //NOTE : for these we use order to determine which is which, so no need to use paramNameForUrl
-        //       also means can't use these types for optional params
-        if (paramType == typeof(Time)) { combinedUrl = await _inputTimeLocation.ToApiUrl(); }
-        else if (paramType == typeof(PlanetName)) { combinedUrl = $"/PlanetName/{_inputPlanetName}"; }
-        else if (paramType == typeof(HouseName)) { combinedUrl = $"/HouseName/{_inputHouseName}"; }
-
-        //NOTE : only below is suitable for OPTIONAL PARAMS
-        else if (paramType == typeof(Angle)) { combinedUrl = $"/{paramNameForUrl}/{_inputTotalDegrees}"; }
-        else if (paramType == typeof(string)) { combinedUrl = $"/{paramNameForUrl}/{_inputText}"; }
-        else if (paramType == typeof(int) || paramType == typeof(double)) { combinedUrl = $"/{paramNameForUrl}/{_inputNumber}"; }
-        else if (paramType?.IsEnum ?? false) { combinedUrl = $"/{paramNameForUrl}/{_inputEnumName}"; }
 
         return combinedUrl;
     }

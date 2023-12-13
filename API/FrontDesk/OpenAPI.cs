@@ -81,7 +81,6 @@ namespace API
         /// </summary>
         private static async Task<dynamic> HandleOpenAPICalls(string calculatorName, string fullParamString)
         {
-            const string allKeyword = "All";
             var allCalls = new[] { "PlanetName/All/", "HouseName/All/" };
             var isAllCall = allCalls.Any(call => fullParamString.Contains(call));
             dynamic rawPlanetData;
@@ -362,6 +361,7 @@ namespace API
                 return null;
             }
 
+            //parse data in URL and modifies the full URL string
             //note: placed inside to use same fullParamString 
             async Task<dynamic> ParseUrlParameterByType(Type parameterType)
             {
@@ -398,10 +398,10 @@ namespace API
                     //ENUM
                     else if (parameterType.IsEnum)
                     {
-                        parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static);
+                        //parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static);
 
                         //execute param parser
-                        parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                        parsedParam = Tools.EnumFromUrl(extractedUrl, parameterType); //pass in extracted URL
                     }
                     //ENUM
                     else if (parameterType == typeof(int))

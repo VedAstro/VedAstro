@@ -35,7 +35,7 @@ KEEP IT REAL
     }
     <div class="hstack">
 
-        <div class="btn-group" style="width: @GR.W255px;">
+        <div class="btn-group" style="width:@Width;">
 
             @* DROPDOWN BUTTON *@
             <button type="button" @onclick="OnClickTrigger" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
@@ -116,6 +116,12 @@ KEEP IT REAL
     /// </summary>
     [Parameter]
     public string? ExtraClass { get; set; }
+
+    /// <summary>
+    /// default is GR.W255px, can set string like 100% or 100px
+    /// </summary>
+    [Parameter]
+    public string? Width { get; set; } = GR.W255px;
 
 
     /// <summary>

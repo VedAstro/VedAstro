@@ -12,6 +12,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Returns an Empty Time instance meant to be used as null/void filler
         /// for debugging and generating empty dasa svg lines
+        /// marked as not occuring
         /// </summary>
         public static EventSlice Empty = new EventSlice(EventName.Empty, EventNature.Empty, "", Time.Empty, false);
 

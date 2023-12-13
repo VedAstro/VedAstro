@@ -304,6 +304,40 @@ namespace Website
         }
 
         /// <summary>
+        /// Jquery wrapper for .slideToggle("slow")
+        /// </summary>
+        public static async Task SlideToggle(this IJSRuntime jsRuntime, string elementID)
+        {
+            await jsRuntime.InvokeVoidAsync("eval", $"$('#{elementID}').slideToggle(\"slow\")");
+        }
+
+        /// <summary>
+        /// Jquery wrapper for .slideDown("slow")
+        /// </summary>
+        public static async Task SlideDown(this IJSRuntime jsRuntime, string elementID)
+        {
+            await jsRuntime.InvokeVoidAsync("eval", $"$('#{elementID}').slideDown(\"slow\")");
+        }
+
+        /// <summary>
+        /// Jquery wrapper for highlight div animate
+        /// </summary>
+        public static async Task AnimateHighlightElement(this IJSRuntime jsRuntime, string elementID)
+        {
+            //make scroll movement to place
+            await jsRuntime.InvokeVoidAsync(JS.animateHighlightElement, "#" + elementID);
+        }
+
+        /// <summary>
+        /// Jquery wrapper for highlight div animate
+        /// </summary>
+        public static async Task AnimateHighlightElement(this IJSRuntime jsRuntime, ElementReference element)
+        {
+            //make scroll movement to place
+            await jsRuntime.InvokeVoidAsync(JS.animateHighlightElement, element);
+        }
+
+        /// <summary>
         /// Uses jQuery to show element via selector (#ID,.class)
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, elementSelector);

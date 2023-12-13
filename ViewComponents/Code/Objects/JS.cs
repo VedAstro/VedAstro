@@ -49,6 +49,7 @@
         public const string generateHouseDataTable = "Interop.generateHouseDataTable";
         public const string generateHouseDataInfoTable = "Interop.generateHouseDataInfoTable";
         public const string scrollToDiv = "Interop.scrollToDiv";
+        public const string animateHighlightElement = "Interop.animateHighlightElement";
         public const string htmlToPdfAutoDownload = "Interop.htmlToPdfAutoDownload";
         public const string pdfToEmail = "Interop.pdfToEmail";
         public const string htmlToEmail = "Interop.htmlToEmail";

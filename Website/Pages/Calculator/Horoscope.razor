@@ -12,6 +12,8 @@
 
 
 <div class="gap-3" style="max-width: @GR.W824px;">
+    
+
 
     @*INPUT*@
     <div class="d-flex flex-wrap" style="max-width: @GR.W352px;">
@@ -25,7 +27,7 @@
 
                 @* AYANAMSA *@
                 <div class="input-group mb-2">
-                    <label style="width: @GR.W134px;" class="input-group-text">
+                    <label style="width:@GR.W134px;" class="input-group-text">
                         <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
                     </label>
                     <select @bind="SelectedAyanamsa" class="form-select">
@@ -77,12 +79,13 @@
 
             @* BUTTONS *@
             <div class="mt-2 d-flex justify-content-between">
-                <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="OnClickShowAdvanced" SmallSize="true" />
+                <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SlideToggle("HoroscopeAdvancedInputHolder"))" SmallSize="true" />
                 <IconButton @ref="_calculateButton" Id="HoroscopeCalculateButton" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" />
             </div>
 
         </div>
     </div>
+    
 
 
     @* OUTPUT *@
@@ -129,11 +132,6 @@
 
 @code {
 
-    /// <summary>
-    /// if not specified will not be included in final URL
-    /// default set to Raman, as used system wide
-    /// </summary>
-    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
 
     private string _selectedChartStyle = "South";
 
@@ -152,9 +150,11 @@
         }
     }
 
+    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
+
     /// <summary>
     /// if not specified will not be included in final URL
-    /// default set to Raman, as used system wide
+    /// default set to Lahiri Chitrapaksha, as used system wide
     /// </summary>
     public string SelectedAyanamsa
     {
@@ -258,6 +258,9 @@
         //only continue if passed input field validation
         if (!await ValidationPassed()) { return; }
 
+        //reset button text, since * can be added later
+        _calculateButton.UpdateButtonText("Calculate");
+
         //get person from person dropdown
         _selectedPerson = await _peopleSelectorBox?.GetSelectedPerson();
 
@@ -289,15 +292,15 @@
     private async Task _InitPlanetDataTable()
     {
         //load vedastro.js planet table
-        var PlanetColumns = new[]
+        var planetColumns = new[]
         {
             new { API = "PlanetZodiacSign", Enabled = true, Name = "Sign" },
-            new { API = "PlanetConstellation", Enabled = true, Name = "Star" },
-            new { API = "HousePlanetOccupiesKP", Enabled = false, Name = "Occupies" },
-            new { API = "HousesOwnedByPlanetKP", Enabled = false, Name = "Owns" },
-            new { API = "PlanetLordOfZodiacSign", Enabled = false, Name = "Sign Lord" },
-            new { API = "PlanetLordOfConstellation", Enabled = false, Name = "Star Lord" },
-            new { API = "PlanetSubLordKP", Enabled = false, Name = "Sub Lord" },
+            new { API = "PlanetConstellation", Enabled = true, Name = "Constellation" },
+            new { API = "HousePlanetOccupies", Enabled = true, Name = "Occupies" },
+            new { API = "HousesOwnedByPlanet", Enabled = true, Name = "Owns" },
+            new { API = "PlanetLordOfZodiacSign", Enabled = true, Name = "Sign Lord" },
+            new { API = "PlanetLordOfConstellation", Enabled = true, Name = "Const. Lord" },
+            new { API = "Empty", Enabled = false, Name = "Empty" },
             new { API = "Empty", Enabled = false, Name = "Empty" },
             new { API = "Empty", Enabled = false, Name = "Empty" },
         };
@@ -308,7 +311,7 @@
             KeyColumn = "Planet",
             ShowHeader = true,
             HeaderIcon = "",
-            ColumnData = PlanetColumns, //columns names to create table
+            ColumnData = planetColumns, //columns names to create table
             EnableSorting = false,
             SaveSettings = false,
         };
@@ -331,13 +334,5 @@
 
     }
 
-    /// <summary>
-    /// toggles slide out of advanced options
-    /// </summary>
-    private async Task OnClickShowAdvanced()
-    {
-        //make options slide out from below
-        await _jsRuntime.SlideToggle("HoroscopeAdvancedInputHolder");
-    }
 
 }

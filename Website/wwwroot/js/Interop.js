@@ -864,6 +864,49 @@ export function animateHighlightElement(elmInput) {
 
 }
 
+//similar to JQuery's .slideToggle("slow")
+// note that this function uses CSS transitions for the
+//sliding effect, which are smoother than jQuery’s animations but might not be supported in all browsers
+export function smoothSlideToggle(elementSelector, speed=1000) {
+
+    // Select the element
+    let el = document.querySelector(elementSelector);
+
+    // Check if the element is currently not displayed
+    if (window.getComputedStyle(el).display === 'none') {
+        // Set the initial display to block
+        el.style.display = 'block';
+
+        // Capture the height of the element
+        let height = el.offsetHeight;
+
+        // Set the initial height to 0 and overflow to hidden
+        el.style.height = 0;
+        el.style.overflow = 'hidden';
+
+        // Set the transition property for smooth animation
+        el.style.transition = 'height 1s ease-in-out';
+
+        // After a short delay, set the height to the element's original height
+        setTimeout(() => el.style.height = height + 'px', 0);
+    } else {
+        // If the element is currently displayed, set the transition property
+        el.style.transition = 'height 1s ease-in-out';
+
+        // Animate the height to 0
+        el.style.height = 0;
+
+        // After the transition is complete, set the display to none and remove the added styles
+        setTimeout(() => {
+            el.style.display = 'none';
+            el.style.removeProperty('height');
+            el.style.removeProperty('overflow');
+            el.style.removeProperty('transition');
+        }, speed);
+    }
+}
+
+
 export async function htmlToEmail(elmInput, fileName, fileFormat, receiverEmail) {
 
     //converts to pdf

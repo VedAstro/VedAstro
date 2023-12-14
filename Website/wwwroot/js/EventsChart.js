@@ -177,7 +177,6 @@ export class EventsChart {
 
     }
 
-
     //-----------------------------STATIC----------------------------------------
 
     //for highlighting events by name
@@ -375,6 +374,13 @@ export class EventsChart {
         //given the SVG rect that was clicked on, process and extract full event data
         var parsedEvent = (await EventsChart.ParseEventFromSVGRect(targetRect, instance))["EventDataAtTime"];
 
+        //if no event found then possible wrongly clicked elm skip, END HERE
+        if (parsedEvent?.Name !== undefined) {
+            // User clicked 'No', end silently
+            console.log('No Event Data found!!');
+            return;
+        }
+
         //ask user if selected event is correct and want to continue to google login
         var userReply = await Swal.fire({
             title: 'Send event to Google?',
@@ -550,7 +556,6 @@ export class EventsChart {
             window.tokenClient.requestAccessToken({ prompt: '' });
         }
     }
-
 
     /**
       * Print the summary and start datetime/date of the next ten events in

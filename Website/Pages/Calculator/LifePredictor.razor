@@ -1,6 +1,7 @@
 @attribute [Route(PageRoute.LifePredictor)]
 @attribute [Route(PageRoute.LifePredictorParam)]
 @using VedAstro.Library
+@using System.Reflection
 
 <PageTitle>@_pageTitle</PageTitle>
 
@@ -18,10 +19,10 @@ Know good and bad periods of your life years ahead.*@
 <div class="d-md-flex justify-content-between">
 
     @*SELECTOR*@
-    <div class="me-5">
-        <div class="vstack gap-3 p-3">
+    <div class="d-flex flex-wrap" style="width: @GR.W352px;">
+        <div class="vstack gap-3">
 
-            <PersonSelectorBox @ref="_easyPersonSelectorBox" @bind-SelectedPersonId="@SelectedPersonId" />
+            <PersonSelectorBox Width="100%" @ref="_easyPersonSelectorBox" @bind-SelectedPersonId="@SelectedPersonId" />
 
             <div>
                 <label class="form-label">Time Range<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.DasaTimeRange" /></label>
@@ -77,7 +78,135 @@ Know good and bad periods of your life years ahead.*@
                 </div>
             }
 
-            <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
+            @* ADVANCED PANEL DROP *@
+            <div id="LifePredictorAdvancedInputHolder" class="border-top mt-2 pt-2" style="display: none;">
+                @* HEADER TEXT *@
+                <span style="font-size: 9.5px;color: grey;margin-top: -18px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
+
+                @* AYANAMSA *@
+                <div class="input-group mb-2">
+                    <label style="width:@GR.W134px;" class="input-group-text">
+                        <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
+                    </label>
+                    <select @bind="SelectedAyanamsa" class="form-select">
+
+                        <optgroup label="Easy">
+                            @foreach (var ayanamsa in @AppData.SimpleAyanamsaAll)
+                            {
+                                <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
+                            }
+                        </optgroup>
+                        <optgroup label="Advanced">
+                            @foreach (var ayanamsa in @AppData.AdvancedAyanamsaAll)
+                            {
+                                <option value="@ayanamsa">@ayanamsa</option>
+                            }
+                        </optgroup>
+                    </select>
+                </div>
+
+                @* DASA TYPE *@
+                <div class="input-group mb-2">
+                    <label style="width:@GR.W134px;" class="input-group-text">
+                        <Icon ExtraClass="me-2" IconName="lucide:layout-list" /> Dasa Type
+                    </label>
+                    <select @bind="SelectedDasaType" class="form-select">
+                        @foreach (var dasaType in AllDasaTypes)
+                        {
+                            <option value="@dasaType">@dasaType</option>
+                        }
+                    </select>
+                </div>
+
+                @* EVENT SELECT *@
+                <div class="input-group vstack mb-2">
+                    <label style="min-width:@GR.W134px;" class="input-group-text rounded">
+                        <Icon ExtraClass="me-2" IconName="lucide:calendar-range" /> Events
+                        <HelpIconTooltip ShowOnHover="true" HelpText="Type of events to calculate, more events takes longer" SmallIcon="true" />
+                    </label>
+
+                    <div class="form-control d-flex flex-wrap gap-2 rounded" style="width: fit-content;">
+                        @if (_isResultReady)
+                        {
+                            @* 7 Levels : Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana *@
+                            <div class="form-check">
+                                <input @bind="@(SelectedEventTagsDictionary[EventTag.PD1])" class="form-check-input" type="checkbox" value="" id="checkbox_PD1"><!--!-->
+                                <label class="form-check-label" for="checkbox_PD1">Dasa</label>
+                            </div>
+                            <div class="form-check">
+                                <input @bind="@(SelectedEventTagsDictionary[EventTag.PD2])" class="form-check-input" type="checkbox" value="" id="checkbox_PD2"><!--!-->
+                                <label class="form-check-label" for="checkbox_PD2">Bhukti</label>
+                            </div>
+                            <div class="form-check">
+                                <input @bind="@(SelectedEventTagsDictionary[EventTag.PD3])" class="form-check-input" type="checkbox" value="" id="checkbox_PD3"><!--!-->
+                                <label class="form-check-label" for="checkbox_PD3">Antaram</label>
+                            </div>
+                            <div class="form-check">
+                                <input @bind="@(SelectedEventTagsDictionary[EventTag.PD4])" class="form-check-input" type="checkbox" value="" id="checkbox_PD4"><!--!-->
+                                <label class="form-check-label" for="checkbox_PD4">Sukshma</label>
+                            </div>
+                            <div class="form-check">
+                                <input @bind="@(SelectedEventTagsDictionary[EventTag.PD5])" class="form-check-input" type="checkbox" value="" id="checkbox_PD5"><!--!-->
+                                <label class="form-check-label" for="checkbox_PD5">Prana</label>
+                            </div>
+                            <div class="form-check">
+                                <input @bind="@(SelectedEventTagsDictionary[EventTag.PD6])" class="form-check-input" type="checkbox" value="" id="checkbox_PD6"><!--!-->
+                                <label class="form-check-label" for="checkbox_PD6">Avi Prana</label>
+                            </div>
+                            <div class="form-check">
+                                <input @bind="@(SelectedEventTagsDictionary[EventTag.PD7])" class="form-check-input" type="checkbox" value="" id="checkbox_PD7"><!--!-->
+                                <label class="form-check-label" for="checkbox_PD7">Viprana</label>
+                            </div>
+@*                             <div class="form-check">
+                                <input @bind="@(SelectedEventTagsDictionary[EventTag.PD1])" class="form-check-input" type="checkbox" value="" id="checkbox_PD8"><!--!-->
+                                <label class="form-check-label" for="checkbox_PD8">PD8</label>
+                            </div>
+ *@                            <div class="form-check">
+                                <input @bind="@(SelectedEventTagsDictionary[EventTag.AshtakvargaGochara])" class="form-check-input" type="checkbox" value="" id="checkbox_AshtakvargaGochara"><!--!-->
+                                <label class="form-check-label" for="checkbox_AshtakvargaGochara">AshtakvargaGochara</label>
+                            </div>
+                            <div class="form-check">
+                                <input @bind="@(SelectedEventTagsDictionary[EventTag.Gochara])" class="form-check-input" type="checkbox" value="" id="checkbox_Gochara"><!--!-->
+                                <label class="form-check-label" for="checkbox_Gochara">Gochara</label>
+                            </div>
+                        }
+                        
+
+                    </div>
+                </div>
+                
+                @* ALGORITHM SELECT *@
+                <div class="input-group vstack">
+                    <label style="min-width:@GR.W134px;" class="input-group-text rounded">
+                        <Icon ExtraClass="me-2" IconName="fluent:math-symbols-24-filled" /> Algorithms
+                        <HelpIconTooltip ShowOnHover="true" HelpText="Algorithms used in making final summary prediction" SmallIcon="true" />
+                    </label>
+
+                    <div class="form-control d-flex flex-wrap gap-2 rounded" style="width: fit-content;">
+                        @if (_isResultReady)
+                        {
+                            @foreach (var algorithmFunc in EventsChartManager.Algorithm.All)
+                            {
+                                <div class="form-check">
+                                    <input @bind="@(SelectedAlgorithmDictionary[algorithmFunc])" class="form-check-input" type="checkbox" value="" id="checkbox_@algorithmFunc.Name">
+                                    <label class="form-check-label" for="checkbox_@algorithmFunc.Name">
+                                        @algorithmFunc.Name
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            @* BUTTONS *@
+            <div class="mt-2 d-flex justify-content-between">
+                <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle("LifePredictorAdvancedInputHolder"))" SmallSize="true" />
+                <IconButton Id="LifePredictorCalculateButton" @ref="_calculateButton" SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculate" ShowDelayWarning="true"></IconButton>
+            </div>
+
+
         </div>
     </div>
 
@@ -253,8 +382,8 @@ Know good and bad periods of your life years ahead.*@
                 Never has has there been a time in human history, where the need has been greater.
             </p>
             <p>
-                More and more is at stake at dime's turn. In our age a mere moment of lapse
-                in judgment of a human can cost more to the whole of humanity then it ever did before.
+                More and more is at stake at dime's turn. In our modern age a mere momentary lapse
+                in judgment can cost more to the whole of humanity then it ever did before.
                 Imagine a world where laughter abounds &amp; fear stands still.
                 "<strong>You may say I'm a dreamer, but I'm not the only one</strong>", John Lenon.
             </p>
@@ -303,12 +432,42 @@ Know good and bad periods of your life years ahead.*@
 
 @code {
 
+    private List<DasaType> AllDasaTypes = new List<DasaType>((DasaType[])Enum.GetValues(typeof(DasaType)));
+    private List<EventTag> AllLifePredictorEventTags = new List<EventTag>
+    {
+        EventTag.PD1,EventTag.PD2, EventTag.PD3, EventTag.PD4,EventTag.PD5,EventTag.PD6,EventTag.PD7,EventTag.PD8,
+        EventTag.AshtakvargaGochara,
+        EventTag.Gochara
+    };
+
     /// <summary>
     /// shortcut for red text
     /// NOTE : awesome way of using render fragments
     /// </summary>
     private RenderFragment RED = @<span style="color: red; font-weight: 900;">RED</span>;
     private RenderFragment GREEN = @<span style="color: green; font-weight: 900;">GREEN</span>;
+
+    /// <summary>
+    /// data from HTML when selection changes is auto updated here
+    /// </summary>
+    private Dictionary<MethodInfo, bool> SelectedAlgorithmDictionary;
+
+
+    /// <summary>
+    /// Gets all tags that have been selected in checkbox
+    /// </summary>
+    public List<MethodInfo> SelectedAlgorithms => SelectedAlgorithmDictionary.Where(pair => pair.Value).Select(pair => pair.Key).ToList();
+
+    /// <summary>
+    /// data from HTML when selection changes is auto updated here
+    /// </summary>
+    private Dictionary<EventTag, bool> SelectedEventTagsDictionary;
+
+
+    /// <summary>
+    /// Gets all tags that have been selected in checkbox
+    /// </summary>
+    public List<EventTag> SelectedEventTags => SelectedEventTagsDictionary.Where(pair => pair.Value).Select(pair => pair.Key).ToList();
 
 
     private List<string> lifeAgeList = GetAgeSelectionRange();
@@ -360,8 +519,6 @@ Know good and bad periods of your life years ahead.*@
     //linked to selector box
     public string? SelectedPersonId { get; set; }
 
-
-
     /// <summary>
     /// Gets possible age list for selection 120 years
     /// </summary>
@@ -378,11 +535,71 @@ Know good and bad periods of your life years ahead.*@
         return compiledList;
     }
 
+    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
+
+    /// <summary>
+    /// if not specified will not be included in final URL
+    /// default set to Lahiri Chitrapaksha, as used system wide
+    /// </summary>
+    public string SelectedAyanamsa
+    {
+        get => _selectedAyanamsa;
+        set
+        {
+            _selectedAyanamsa = value;
+
+            //highlight regenerate button to let user know needs recalculation
+            _jsRuntime.AnimateHighlightElement("LifePredictorCalculateButton");
+
+            //also add * to button text to let user know needs recalculation
+            _calculateButton.UpdateButtonText("Calculate*");
+        }
+    }
+
+    public string SelectedDasaType
+    {
+        get => "Vimshottari";
+        set => _jsRuntime.FunFeaturePopUp("Dasa Types");
+    }
+
+    private IconButton _calculateButton;
+
+
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRenderAsync(firstRender)).Try(_jsRuntime);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _jsRuntime.ShowLoading();
+
+        //place holder for data from checkboxes for Algorithms and Events
+        SelectedAlgorithmDictionary = EventsChartManager.Algorithm.All.ToDictionary(methodInfo => methodInfo, methodInfo => false);
+        SelectedEventTagsDictionary = AllLifePredictorEventTags.ToDictionary(eventTag => eventTag, eventTag => false);
+
+        //select default Algorithms
+        var generalMf = SelectedAlgorithmDictionary.Where(x => x.Key.Name == "General").First().Key;
+        SelectedAlgorithmDictionary[generalMf] = true;
+
+        //select default Algorithms
+        SelectedEventTagsDictionary[EventTag.PD1] = true;
+        SelectedEventTagsDictionary[EventTag.PD2] = true;
+        SelectedEventTagsDictionary[EventTag.PD3] = true;
+        SelectedEventTagsDictionary[EventTag.PD4] = true;
+        SelectedEventTagsDictionary[EventTag.PD5] = true;
+        SelectedEventTagsDictionary[EventTag.PD6] = true;
+        SelectedEventTagsDictionary[EventTag.PD7] = true;
+        SelectedEventTagsDictionary[EventTag.Gochara] = true;
+        // SelectedEventTagsDictionary[EventTag.PD7] = true;
+
+
+        _jsRuntime.HideLoading();
+        _isResultReady = true;
+
+    }
+
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -408,7 +625,7 @@ Know good and bad periods of your life years ahead.*@
         }
     }
 
-    private async Task OnClickCalculateEasy()
+    private async Task OnClickCalculate()
     {
         //keep copy of selected time range else gets reset, on re-render
         var backUpSelection = SelectedTimeRangePreset;
@@ -430,23 +647,19 @@ Know good and bad periods of your life years ahead.*@
         //set data into dasa viewer
         var timeRange = GetTimeRange();
 
-        //generate the events row & time header row
-        var dasaEventTags = new List<EventTag>
+        //get selected algorithms
+        //TODO raise alarm if no algorithms selected
+        var algorithmFuncsList = new List<AlgorithmFuncs>();
+        foreach (var methodInfo in SelectedAlgorithms)
         {
-            EventTag.PD1,EventTag.PD2, EventTag.PD3, EventTag.PD4,EventTag.PD5,EventTag.PD6,EventTag.PD7,EventTag.PD8,
-            EventTag.AshtakvargaGochara,
-            EventTag.Gochara
-        };
+            var del = (AlgorithmFuncs)Delegate.CreateDelegate(typeof(AlgorithmFuncs), methodInfo);
+            algorithmFuncsList.Add(del);
+        }
 
-        //set algorithm options (long lever design)
-        var algorithmFuncsList = new List<AlgorithmFuncs>()
-        {
-            EventsChartManager.Algorithm.General,
-        };
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, dasaEventTags, summaryOptions);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedEventTags, summaryOptions);
 
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data
@@ -516,3 +729,4 @@ Know good and bad periods of your life years ahead.*@
 
 
 }
+

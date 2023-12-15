@@ -38,6 +38,9 @@
         public const string setCssWrapper = "Interop.setCssWrapper";
         public const string showWrapper = "Interop.showWrapper";
         public const string hideWrapper = "Interop.hideWrapper";
+        public const string FunFeaturePopUp = "Interop.FunFeaturePopUp";
+        public const string getRandomText = "Interop.getRandomText";
+        public const string InitializeInPageNav = "Interop.InitializeInPageNav";
         public const string addEventListenerWrapper = "Interop.addEventListenerWrapper";
         public const string addEventListenerByClass = "Interop.addEventListenerByClass";
         public const string InjectIntoElement = "Interop.InjectIntoElement";

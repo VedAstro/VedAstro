@@ -8,58 +8,58 @@
     }
 </style>
 
-@*DROP DOWN VERSION*@
+   @*DROP DOWN VERSION*@
 @if (IsDropDownMode)
 {
-    <div style="font-family: '@AppData.TitleFont', serif !important;" class="dropdown @ExtraClass">
+        <div style="font-family: '@AppData.TitleFont', serif !important;" class="dropdown @ExtraClass">
         @*extra class for dropdown direct to parent div*@
-        <button id="@Id" style="@FinalCss" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button id="@Id" style="@FinalCss" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @*only show icon if specified*@
+            @if (IconName != null)
+            {
+                        <span class="iconify" data-icon="@IconName" data-width="25" />
+            }
+            @ButtonText
+            </button>
+            <ul style="cursor: pointer; width: @DropDownWidthPx;" class="dropdown-menu @ExtraDropdownClass">
+            @*auto match size with button width*@
+            @DropDownList
+            </ul>
+        </div>
+}
+@*NORMAL BUTTON*@
+else
+{        
+        <button id="@Id" style="@FinalCss font-family: '@AppData.TitleFont', serif !important;" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr">
+            @*SPECIAL LITTLE EXTRA INFO TEXT*@
+            @if (!string.IsNullOrEmpty(RetinaText))
+            {
+                <span style=" position: absolute; margin-top: -3px; margin-left: 35px; font-size: 6px; writing-mode: tb-rl; font-weight: 700; ">@RetinaText</span>
+            }
+
             @*only show icon if specified*@
             @if (IconName != null)
             {
                 <span class="iconify" data-icon="@IconName" data-width="25" />
             }
             @ButtonText
+
+            @*TEXT BELOW BUTTON*@
+            @if (ShowDelayWarning)
+            {
+                <IconText ExtraStyle="margin-top: 37px;position: absolute; margin-left: -8px;" FontColor="@AppData.Grey" FontSize="11" IconName="mdi:snail">Warning Slow</IconText>
+            }
         </button>
-        <ul style="cursor: pointer; width: @DropDownWidthPx;" class="dropdown-menu @ExtraDropdownClass">
-            @*auto match size with button width*@
-            @DropDownList
-        </ul>
-    </div>
-}
-@*NORMAL BUTTON*@
-else
-{
-    <button id="@Id" style="@FinalCss font-family: '@AppData.TitleFont', serif !important;" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr">
-        @*SPECIAL LITTLE EXTRA INFO TEXT*@
-        @if (!string.IsNullOrEmpty(RetinaText))
-        {
-            <span style=" position: absolute; margin-top: -3px; margin-left: 35px; font-size: 6px; writing-mode: tb-rl; font-weight: 700; ">@RetinaText</span>
-        }
-
-        @*only show icon if specified*@
-        @if (IconName != null)
-        {
-            <span class="iconify" data-icon="@IconName" data-width="25" />
-        }
-        @ButtonText
-    </button>
-
 }
 
-@*TEXT BELOW BUTTON*@
-@if (ShowDelayWarning)
-{
-    <IconText ExtraStyle="margin-top:-10px" FontColor="@AppData.Grey" FontSize="11" IconName="mdi:snail">Warning Slow</IconText>
-}
+
 
 @* TOOLTIP *@
 @if (ChildContent != null)
 {
     @* wrap in div to get reference to dynamic element, z needed to make top *@
-    <div style="z-index: 999;" @ref="@TooltipHTML">@ChildContent</div>
+        <div style="z-index: 999;" @ref="@TooltipHTML">@ChildContent</div>
 }
-
 @code {
 
     /// <summary>
@@ -183,11 +183,11 @@ else
     [Parameter]
     public string? TooltipText { get; set; }
 
-	/// <summary>
-	/// bottom, right, left, top
-	/// </summary>
-	[Parameter]
-	public string? TooltipPosition { get; set; } = "right";
+    /// <summary>
+    /// bottom, right, left, top
+    /// </summary>
+    [Parameter]
+    public string? TooltipPosition { get; set; } = "right";
 
     /// <summary>
     /// Tooltip text in HTML format
@@ -316,10 +316,11 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
 
+    //update button text directly via JS
+    //since blazor is a HTML pop system
     public void UpdateButtonText(string newText)
     {
-        ButtonText = newText;
-        StateHasChanged();
+        _jsRuntime.SetText(ElementReference, newText);
     }
 
     private async Task _OnAfterRender(bool firstRender)
@@ -417,7 +418,7 @@ else
         {
             switch (inputRelativeUrl)
             {
-                
+
                 // case PageRoute.OpenApi: returnVal = PageRoute.APIBuilder; break;
                 // case PageRoute.APIBuilder: returnVal = PageRoute.OpenApi; break;
                 //case PageRoute.OpenApi:

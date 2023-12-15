@@ -107,8 +107,8 @@ window.GenerateAstroTable = (settings, inputArguments) => {
 class AstroTable {
 
     //# LOCAL <--> LIVE Switch
-    APIDomain = "https://vedastroapibeta.azurewebsites.net/api";
-    //APIDomain = "https://vedastroapi.azurewebsites.net/api";
+    //APIDomain = "https://vedastroapibeta.azurewebsites.net/api";
+    APIDomain = "https://vedastroapi.azurewebsites.net/api";
     //APIDomain = "http://localhost:7071/api";
 
     // Class fields
@@ -116,6 +116,7 @@ class AstroTable {
     ElementID = ""; //ID of main div where table & header will be injected
     TableId = ""; //ID of table set in HTML, injected during init
     ShowHeader = true; //default enabled, header with title, icon and edit button
+    HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
     KeyColumn = ""; //Planet or House
     EditButtonId = ""; //used to hook up edit button to show popup
     ColumnData = []; //data on selected columns
@@ -149,6 +150,7 @@ class AstroTable {
         this.ElementID = settings.ElementID;
         this.TableId = `${this.ElementID}_Table`;
         this.ShowHeader = settings.ShowHeader;
+        this.HeaderIcon = settings.HeaderIcon;
         this.SaveSettings = settings.SaveSettings;
 
         //based on table ID try get any settings if saved from before
@@ -338,8 +340,8 @@ class AstroTable {
 
             var htmlContent = `
                     <h3 style="margin-bottom: -11px;">
-                        <span class="iconify me-2" data-icon="twemoji:ringed-planet" data-width="25" data-height="25"></span>
-                        Planets
+                        <span class="iconify me-2" data-icon="${this.HeaderIcon}" data-width="38" data-height="38"></span>
+                        ${this.KeyColumn}
                         <button id="${this.EditButtonId}" style="scale: 0.6;" class="ms-1 mb-1 btn btn-sm btn-outline-primary">
                             <span class="iconify" data-icon="majesticons:edit-pen-2-line" data-width="30" data-height="30"></span>
                         </button>

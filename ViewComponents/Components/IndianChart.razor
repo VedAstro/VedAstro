@@ -3,36 +3,12 @@
 @using System.Xml.Linq
 
 
-
 <div id="@Id" class="@ExtraClass">
-    @if (isReady)
-    {
-        <IconTitle Title="Sky Chart" IconName="twemoji:ringed-planet" TitleHolder="h4" />
-    }
+    <IconTitle Title="Chart" IconName="twemoji:dotted-six-pointed-star" TitleHolder="h4" />
     <div class="vstack">
-        <div @ref="imageHolder" class="vstack" style="width: fit-content;">
-        </div>
-        <div id="SkyChartLoadingIcon" style="display: none;">
-            @AppData.LoadingImage
-        </div>
-
-        @if (isReady)
-        {
-            @*BUTTON ROW*@
-            @*         <div class="hstack gap-2 px-1 p-1 ms-1 rounded-3 border shadow d-flex  align-items-center">
-        <IconButton SmallSize="true" TooltipText="Play" IconName="ph:play-bold" />
-        <IconButton SmallSize="true" TooltipText="Previous" IconName="fluent:previous-24-filled" />
-        <IconButton SmallSize="true" TooltipText="Next" IconName="fluent:next-24-filled" />
-
-        <IconButton SmallSize="true" Outline="true" TooltipText="Print" IconName="flat-color-icons:print" />
-        <IconButton SmallSize="true" Outline="true" TooltipText="Save as Image" IconName="emojione:floppy-disk" />
-        <IconButton SmallSize="true" Outline="true" TooltipText="Embed in app or website" IconName="dashicons:embed-photo" />
-        </div>
-        *@  }
+        <img id="ChartImageElementKundali" style="width: 352px;" src="https://vedastroapi.azurewebsites.net/api/Calculate/SouthIndianChart/Location/Bengaluru/Time/11:00/25/07/1984/+00:00/">
     </div>
-
 </div>
-
 
 
 @code {
@@ -52,7 +28,7 @@
 
     private string GetUrl(string ending)
     {
-        
+
 
         //if null end here
         //if (string.IsNullOrEmpty(stringWithSpace)) { return ""; }

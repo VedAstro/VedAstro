@@ -32,6 +32,14 @@ const RETRY_COUNT = 5;
 //when run will attach events to all with .scrollspy
 //this then will used to highlight the Index link
 export function InitializeInPageNav() {
+
+    //set the nav menu to nicely appear at mid center vertically
+    var windowHeight = $(window).height();
+    var divHeight = $("#inPageNavBar").height();
+    var divOffset = (windowHeight - divHeight) / 2;
+    $("#inPageNavBar").css("top", divOffset + "px");
+
+    //attaches a handler when scroll
     $(window).bind('scroll', function () {
         var currentTop = $(window).scrollTop();
         var elems = $('.scrollspy');

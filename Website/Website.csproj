@@ -93,6 +93,7 @@
 	  <Content Include="..\ViewComponents\Components\TypeSpecificInput.razor" Link="ViewComponents\TypeSpecificInput.razor" />
 	  <Content Include="..\ViewComponents\Components\UnderConstructionHeader.razor" Link="ViewComponents\UnderConstructionHeader.razor" />
 	  <Content Include="..\ViewComponents\Components\IndianChart.razor" Link="ViewComponents\IndianChart.razor" />
+	  <Content Include="..\ViewComponents\Components\AshtakvargaTable.razor" Link="ViewComponents\AshtakvargaTable.razor" />
 	</ItemGroup>
 
 	<ItemGroup>

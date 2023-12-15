@@ -1,28 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Basic HTML Page</title>
-    <!-- JQUERY -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
-    
-    <!-- ASTRO TABLE MAKER-->
-    <script src="VedAstro.js"></script>
+    <head>
+        <title>Basic HTML Page</title>
+        <!-- JQUERY -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
 
-</head>
-<body>
+        <!-- ASTRO TABLE MAKER-->
+        <script src="VedAstro.js"></script>
 
-    <table id="PlanetDataTable" class="table table-striped table-hover table-bordered text-nowrap" style="width: 100%"></table>
+    </head>
+    <body>
 
-    <script>
+        <div id="PlanetDataTable" />
+
+        <script>
+
+        //DEFAULT COLUMNS when no column data is supplied or when reset button is clicked
+        var planetColumns = [
+            { Api: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
+            { Api: "PlanetConstellation", Enabled: true, Name: "Star" },
+            { Api: "HousePlanetOccupiesKP", Enabled: true, Name: "Occupies" },
+            { Api: "HousesOwnedByPlanetKP", Enabled: true, Name: "Owns" },
+            { Api: "PlanetLordOfZodiacSign", Enabled: true, Name: "Sign Lord" },
+            { Api: "PlanetLordOfConstellation", Enabled: true, Name: "Star Lord" },
+            { Api: "PlanetSubLordKP", Enabled: true, Name: "Sub Lord" },
+            { Api: "Empty", Enabled: false, Name: "Empty" },
+            { Api: "Empty", Enabled: false, Name: "Empty" },
+        ];
+
         //initialize astro table
         var settings = {
-            TableId : "PlanetDataTable",
+            ElementID : "PlanetDataTable",
             KeyColumn : "Planet",
             ShowHeader : true,
-            HeaderIcon : "",
-            ColumnData : PlanetColumns, //columns names to create table
-            EnableSorting : false
+            HeaderIcon : "twemoji:ringed-planet",
+            ColumnData : planetColumns, //columns names to create table
+            EnableSorting : false,
+            SaveSettings : false,
         };
+
 
         var planetDataTable = new AstroTable(settings);
 
@@ -38,5 +54,5 @@
         planetDataTable.GenerateTable(inputArguments);
 
     </script>
-</body>
+    </body>
 </html>

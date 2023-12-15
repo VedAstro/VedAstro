@@ -14,7 +14,7 @@
 <div class="gap-3" style="max-width: @GR.W824px;">
 
     @* IN PAGE NAV BAR *@
-    <div id="" style="position: fixed;right: 69px;font-family: 'Lexend Deca';font-weight: bold;font-size: 14px;" class="vstack gap-1 mt-2 pt-2 border-top d-none d-lg-block">
+    <div id="inPageNavBar" style="display: none !important; position: fixed;right: 69px;font-family: 'Lexend Deca';font-weight: bold;font-size: 14px; width: fit-content;" class="vstack gap-1 mt-2 pt-2 border-top d-none d-lg-block">
         @* HEADER TEXT *@
         <span style="font-size: 11.5px;margin-left: 44px;color: grey;margin-top: -19px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">INDEX</span>
         
@@ -33,14 +33,14 @@
     </div>
 
     @*INPUT*@
-    <div class="d-flex flex-wrap" style="max-width: @GR.W352px;">
+    <div class="d-flex flex-wrap mb-5" style="max-width: @GR.W352px;">
         <div class="vstack gap-3">
             <PersonSelectorBox Width="100%" @ref="_peopleSelectorBox" />
 
             @* ADVANCED PANEL DROP *@
             <div id="HoroscopeAdvancedInputHolder" class="vstack gap-1 mt-2 pt-2 border-top" style="display: none">
                 @* HEADER TEXT *@
-                <span style="font-size: 11.5px;margin-left: 40px;color: grey;margin-top: -22px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
+                <span style="font-size: 11.5px;margin-left: 0px;color: grey;margin-top: -20px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
 
                 @* AYANAMSA *@
                 <div class="input-group mb-2">
@@ -104,7 +104,7 @@
     </div>
 
     @* OUTPUT *@
-    <div id="outputHoroscope" class="mt-5 vstack gap-4">
+    <div id="outputHoroscope" class="vstack gap-4" style="display: none;">
         
         @* Auto Prediction *@
         <div id="AutoPrediction" class="scrollspy">
@@ -118,14 +118,16 @@
             @*only show when all is loaded*@
             <StrengthChart @ref="_strengthChart" />
         </div>
-        
+         
         <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
         
         <IndianChart Id="IndianChart" ExtraClass="scrollspy"/>
 
-        <div id="PlanetDataTable2" class="scrollspy" />
+        <div id="PlanetDataTable2" class="scrollspy" ></div>
 
-        <div id="HouseDataTable2" class="scrollspy" />
+        <div id="HouseDataTable2" class="scrollspy" ></div>
+        
+        <div id="Ashtakvarga" class="scrollspy" ></div>
 
         @* Reference *@
         <div id="Reference" class="scrollspy">
@@ -137,26 +139,6 @@
 
     </div>
 
-    @*HELP SECTION*@
-    <PageHelpSection @ref="_helpSection">
-        <Content>
-            <h4 class="fw-bold">How to use these predictions?</h4>
-            <p class="text-justify mb-4">
-                For accurate predictions, results must be duly modified
-                or qualified according to the affliction or otherwise of the
-                planets concerned. For example, predictions involving planets with
-                high strength (Bhava Bala), is often accurate.
-            </p>
-
-            <h4 class="fw-bold">Where are these predictions from?</h4>
-            <p class="text-justify mb-4">
-                Prediction data come from books by renowned astrologer B.V. Raman.
-                Books such as <span class="fw-bold">How to Judge Horoscope</span> and
-                <span class="fw-bold">Hindu Predictive Astrology</span>,
-                were used to make this calculator.
-            </p>
-        </Content>
-    </PageHelpSection>
 
 </div>
 
@@ -259,7 +241,7 @@
             //todo loading box disappears here, needs fix
             await _CalculateAndUpdateEvents();
 
-            //initialize in page nav bar
+            //initialize in page nav bar, only after the content is ready
             await _jsRuntime.InvokeVoidAsync(JS.InitializeInPageNav);
 
             //needed to see updates because any changes in OnAfterRender
@@ -296,6 +278,10 @@
         //only continue if passed input field validation
         if (!await ValidationPassed()) { return; }
 
+        //make output visible (hidden by default)
+        _jsRuntime.Show("#outputHoroscope");
+        _jsRuntime.Show("#inPageNavBar");
+
         //reset button text, since * can be added later
         _calculateButton.UpdateButtonText("Calculate");
 
@@ -327,9 +313,16 @@
         //init planet data table
         await _InitPlanetDataTable();
         await _InitHouseDataTable();
+        await _InitAshtakvargaTable();
+
+        //scroll page to top of results so "index" legend can show nicely, plus saves user 10ms in scrolling
+        _jsRuntime.ScrollToDivById("AutoPrediction");
 
         //play sound for better ux
         _jsRuntime.PlayDoneSound();
+
+        //this is needed when called from click
+        _jsRuntime.HideLoading();
 
     }
 
@@ -377,6 +370,7 @@
         await _jsRuntime.InvokeVoidAsync("GenerateAstroTable", settings, inputArguments);
 
     }
+    
     private async Task _InitHouseDataTable()
     {
         //load vedastro.js planet table
@@ -421,6 +415,34 @@
         await _jsRuntime.InvokeVoidAsync("GenerateAstroTable", settings, inputArguments);
 
     }
+
+    private async Task _InitAshtakvargaTable()
+    {
+
+        var settings = new
+        {
+            ElementID = "Ashtakvarga", //id here matches div in page
+            KeyColumn = "Ashtakvarga",
+            ShowHeader = true,
+            HeaderIcon = "fluent:table-28-filled",
+        };
+
+        //get time in url format
+        var timeUrl = _selectedPerson.BirthTime.ToUrl();
+        timeUrl = timeUrl.Substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
+
+        //data used to generate table
+        var inputArguments = new
+        {
+            TimeUrl = timeUrl,
+            Ayanamsa = _selectedAyanamsa, //default is Lahiri
+        };
+
+        //call VedAstro.js to generate table
+        await _jsRuntime.InvokeVoidAsync("GenerateAshtakvargaTable", settings, inputArguments);
+
+    }
+
 
 
 }

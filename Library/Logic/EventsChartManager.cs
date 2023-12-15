@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Drawing;
+using System.Reflection;
 
 
 namespace VedAstro.Library
@@ -1745,6 +1747,14 @@ namespace VedAstro.Library
         public static class Algorithm
         {
             private static double topPlanetScore = 1;
+
+            /// <summary>
+            /// Gets all algorithm methods in nice string for selection in Website
+            /// </summary>
+            public static MethodInfo[] All => typeof(Algorithm)
+                .GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(m => !m.Name.StartsWith("get_") && !m.Name.StartsWith("set_"))
+                .ToArray();
 
             public static double General(Event foundEvent, Person person)
             {

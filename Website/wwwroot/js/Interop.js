@@ -25,12 +25,57 @@ export var scrollIntoView = (id) => $(id)[0].scrollIntoView(); //scrolls element
 export var highlightByEventName = (keyword) => window.EventsChartLoaded.highlightByEventName(keyword);
 export var AddEventsToGoogleCalendar = () => window.EventsChartLoaded.AddEventsToGoogleCalendar();
 export var unhighlightByEventName = (keyword) => window.EventsChartLoaded.unhighlightByEventName(keyword);
-
 const RETRY_COUNT = 5;
 
 
+//SCROLL SPY NAV
+//when run will attach events to all with .scrollspy
+//this then will used to highlight the Index link
+export function InitializeInPageNav() {
+    $(window).bind('scroll', function () {
+        var currentTop = $(window).scrollTop();
+        var elems = $('.scrollspy');
+        elems.each(function (index) {
+            var elemTop = $(this).offset().top;
+            var elemBottom = elemTop + $(this).height();
+            var offset = 200; // Adjust this value to your needs
+            if (currentTop >= elemTop - offset && currentTop <= elemBottom) {
+                var contentId = $(this).attr('id');
+                var navLink = $(`#${contentId}-Link`);
+                navLink.addClass('active').siblings().removeClass('active');
+            }
+        });
+    });
+}
 
+//gets random text from given list
+export function getRandomText(possibleTextsArray) {
+    var index = Math.floor(Math.random() * possibleTextsArray.length);
+    return possibleTextsArray[index];
+}
 
+//simple pop up for coming soon, with encouraged donation :D
+export function FunFeaturePopUp() {
+
+    //get interesting donate prompt text
+    var texts = ["Build it faster!", "Speed Up Development", "Support Development"];
+    var donateText = getRandomText(texts);
+
+    Swal.fire({
+        html: "<a target=\"_blank\" style=\"text-decoration-line: none;\" href=\"https://vedastro.org/Donate/\" class=\"link-primary fw-bold\">Fund</a> this feature for faster development",
+        iconHtml : "<span class=\"iconify\" data-icon=\"openmoji:love-letter\" data-inline=\"false\"></span>",
+        title : "Coming soon...",
+        showConfirmButton : true,
+        confirmButtonText: donateText,
+        showCancelButton : true,
+        cancelButtonText : "I can wait"
+    }).then((result) => {
+        
+        if (result.isConfirmed) {
+            window.open('https://vedastro.org/Donate', '_blank').focus();
+        };
+    });
+}
 
 //--------------------------CALENDAR INPUT SELECTOR CODE
 //DESCRIPTION
@@ -905,7 +950,6 @@ export function smoothSlideToggle(elementSelector, speed=1000) {
         }, speed);
     }
 }
-
 
 export async function htmlToEmail(elmInput, fileName, fileFormat, receiverEmail) {
 

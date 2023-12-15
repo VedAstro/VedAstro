@@ -12,8 +12,25 @@
 
 
 <div class="gap-3" style="max-width: @GR.W824px;">
-    
 
+    @* IN PAGE NAV BAR *@
+    <div id="" style="position: fixed;right: 69px;font-family: 'Lexend Deca';font-weight: bold;font-size: 14px;" class="vstack gap-1 mt-2 pt-2 border-top d-none d-lg-block">
+        @* HEADER TEXT *@
+        <span style="font-size: 11.5px;margin-left: 44px;color: grey;margin-top: -19px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">INDEX</span>
+        
+        @* NAV LINKS *@
+        @* js function will set active by ID *@
+        <div class="list-group">
+            <a id="AutoPrediction-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#AutoPrediction">Auto Prediction</a>
+            <a id="Strength-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Strength">Strength</a>
+            <a id="SkyChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#SkyChart">Sky Chart</a>
+            <a id="IndianChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#IndianChart">Birth Chart</a>
+            <a id="PlanetDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#PlanetDataTable2">Planet Table</a>
+            <a id="HouseDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#HouseDataTable2">House Table</a>
+            <a id="Ashtakvarga-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Ashtakvarga">Ashtakvarga</a>
+            <a id="Reference-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Reference">Reference</a>
+        </div>
+    </div>
 
     @*INPUT*@
     <div class="d-flex flex-wrap" style="max-width: @GR.W352px;">
@@ -23,7 +40,7 @@
             @* ADVANCED PANEL DROP *@
             <div id="HoroscopeAdvancedInputHolder" class="vstack gap-1 mt-2 pt-2 border-top" style="display: none">
                 @* HEADER TEXT *@
-                <span style="font-size: 9.5px;color: grey;margin-top: -18px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
+                <span style="font-size: 11.5px;margin-left: 40px;color: grey;margin-top: -22px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
 
                 @* AYANAMSA *@
                 <div class="input-group mb-2">
@@ -79,32 +96,46 @@
 
             @* BUTTONS *@
             <div class="mt-2 d-flex justify-content-between">
-                <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SlideToggle("HoroscopeAdvancedInputHolder"))" SmallSize="true" />
+                <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle("HoroscopeAdvancedInputHolder"))" SmallSize="true" />
                 <IconButton @ref="_calculateButton" Id="HoroscopeCalculateButton" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" />
             </div>
 
         </div>
     </div>
-    
-
 
     @* OUTPUT *@
-    <div class="mt-5 vstack gap-4">
+    <div id="outputHoroscope" class="mt-5 vstack gap-4">
+        
+        @* Auto Prediction *@
+        <div id="AutoPrediction" class="scrollspy">
+            <IconTitle Title="Auto Prediction" IconName="twemoji:robot" TitleHolder="h4" />
+            <AIPrediction @ref="_aiPrediction" />
+        </div>
+    
+        @* Strength *@
+        <div id="Strength" class="scrollspy">
+            <IconTitle Title="Strength" IconName="twemoji:antenna-bars" TitleHolder="h4" />
+            @*only show when all is loaded*@
+            <StrengthChart @ref="_strengthChart" />
+        </div>
+        
+        <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
+        
+        <IndianChart Id="IndianChart" ExtraClass="scrollspy"/>
 
-        <div id="PlanetDataTable2" />
-        <div id="HouseDataTable2" />
+        <div id="PlanetDataTable2" class="scrollspy" />
 
-        @*divider*@
-        <SkyChartViewer @ref="skyChartViewer" />
+        <div id="HouseDataTable2" class="scrollspy" />
 
-        @*SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS*@
-        <HoroscopeInfoView @ref="_horoscopeInfoView" />
-
-        @* EXPERIMENTAL *@
+        @* Reference *@
+        <div id="Reference" class="scrollspy">
+            <IconTitle Title="Reference" IconName="twemoji:books" TitleHolder="h4" />
+            <HoroscopeReferenceList @ref="_horoscopeReferenceList" />
+        </div>
+        
         <PlanetChart @ref="planetChart" />
 
     </div>
-
 
     @*HELP SECTION*@
     <PageHelpSection @ref="_helpSection">
@@ -130,7 +161,11 @@
 </div>
 
 
+
 @code {
+    private HoroscopeReferenceList _horoscopeReferenceList = null;
+    private AIPrediction _aiPrediction = null;
+    private StrengthChart _strengthChart = null;
 
 
     private string _selectedChartStyle = "South";
@@ -224,6 +259,9 @@
             //todo loading box disappears here, needs fix
             await _CalculateAndUpdateEvents();
 
+            //initialize in page nav bar
+            await _jsRuntime.InvokeVoidAsync(JS.InitializeInPageNav);
+
             //needed to see updates because any changes in OnAfterRender
             //have to be manually set
             StateHasChanged();
@@ -278,11 +316,17 @@
         //update planet chart
         planetChart.UpdateTime(_selectedPerson.BirthTime);
 
-        //inject selected person into component to show horoscope data
-        await _horoscopeInfoView.SetPerson(_selectedPerson);
+        //load prediction data (from API)
+        await _horoscopeReferenceList.ShowPrediction(_selectedPerson);
+
+        //show ai prediction
+        await _aiPrediction?.ShowPrediction(_selectedPerson);
+
+        await _strengthChart.Show(_selectedPerson);
 
         //init planet data table
         await _InitPlanetDataTable();
+        await _InitHouseDataTable();
 
         //play sound for better ux
         _jsRuntime.PlayDoneSound();
@@ -310,8 +354,52 @@
             ElementID = "PlanetDataTable2",
             KeyColumn = "Planet",
             ShowHeader = true,
-            HeaderIcon = "",
+            HeaderIcon = "twemoji:ringed-planet",
             ColumnData = planetColumns, //columns names to create table
+            EnableSorting = false,
+            SaveSettings = false,
+        };
+
+        //get time in url format
+        var timeUrl = _selectedPerson.BirthTime.ToUrl();
+        timeUrl = timeUrl.Substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
+
+        //data used to generate table
+        var inputArguments = new
+        {
+            TimeUrl = timeUrl,
+            HoraryNumber = 0,
+            RotateDegrees = 0,
+            Ayanamsa = _selectedAyanamsa, //default is Lahiri
+        };
+
+        //call VedAstro.js to generate table
+        await _jsRuntime.InvokeVoidAsync("GenerateAstroTable", settings, inputArguments);
+
+    }
+    private async Task _InitHouseDataTable()
+    {
+        //load vedastro.js planet table
+        var houseColumns = new[]
+        {
+            new { API = "HouseZodiacSign", Enabled = true, Name = "Sign" },
+            new { API = "HouseConstellation", Enabled = true, Name = "Constellation" },
+            new { API = "PlanetsInHouse", Enabled = true, Name = "Planets In" },
+            new { API = "LordOfHouse", Enabled = true, Name = "Sign Lord" },
+            new { API = "LordOfConstellation", Enabled = false, Name = "Const. Lord" },
+            new { API = "PlanetsAspectingHouse", Enabled = true, Name = "Aspects" },
+            new { API = "Empty", Enabled = false, Name = "Empty" },
+            new { API = "Empty", Enabled = false, Name = "Empty" },
+            new { API = "Empty", Enabled = false, Name = "Empty" },
+        };
+
+        var settings = new
+        {
+            ElementID = "HouseDataTable2",
+            KeyColumn = "House",
+            ShowHeader = true,
+            HeaderIcon = "fluent-emoji-flat:house",
+            ColumnData = houseColumns, //columns names to create table
             EnableSorting = false,
             SaveSettings = false,
         };

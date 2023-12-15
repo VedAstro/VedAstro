@@ -312,6 +312,16 @@ namespace Website
         }
 
         /// <summary>
+        /// Improved Jquery wrapper for .slideToggle("slow")
+        /// </summary>
+        public static async Task SmoothSlideToggle(this IJSRuntime jsRuntime, string elementID)
+        {
+            //make scroll movement to place
+            await jsRuntime.InvokeVoidAsync(JS.smoothSlideToggle, "#" + elementID);
+        }
+
+
+        /// <summary>
         /// Jquery wrapper for .slideDown("slow")
         /// </summary>
         public static async Task SlideDown(this IJSRuntime jsRuntime, string elementID)
@@ -350,8 +360,7 @@ namespace Website
             //log this
             WebLogger.Click($"Fund : {featureName}");
 
-            var descriptionText = "<a target=\"_blank\" style=\"text-decoration-line: none;\" href=\"https://vedastro.org/Donate/\" class=\"link-primary fw-bold\">Fund</a> this feature for faster development";
-            await jsRuntime.ShowAlert("info", "Coming soon", descriptionText);
+            await jsRuntime.InvokeVoidAsync(JS.FunFeaturePopUp);
         }
 
 
@@ -477,6 +486,11 @@ namespace Website
         /// wrapper for JQuery .text() set only
         /// </summary>
         public static async void SetText(this IJSRuntime jsRuntime, string jquerySelector, string value) => await jsRuntime.InvokeVoidAsync(JS.setTextWrapper, jquerySelector, value);
+
+        /// <summary>
+        /// wrapper for JQuery .text() set only
+        /// </summary>
+        public static async void SetText(this IJSRuntime jsRuntime, ElementReference element, string value) => await jsRuntime.InvokeVoidAsync(JS.setTextWrapper, element, value);
 
         public static async Task<string> GetValue(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>(JS.getValueWrapper, element);
 

@@ -92,6 +92,7 @@
 	  <Content Include="..\ViewComponents\Components\TopBarButtons.razor" Link="ViewComponents\TopBarButtons.razor" />
 	  <Content Include="..\ViewComponents\Components\TypeSpecificInput.razor" Link="ViewComponents\TypeSpecificInput.razor" />
 	  <Content Include="..\ViewComponents\Components\UnderConstructionHeader.razor" Link="ViewComponents\UnderConstructionHeader.razor" />
+	  <Content Include="..\ViewComponents\Components\IndianChart.razor" Link="ViewComponents\IndianChart.razor" />
 	</ItemGroup>
 
 	<ItemGroup>

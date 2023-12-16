@@ -5,7 +5,7 @@
 @using System.Text
 
 
-<div @ref="MainElement" class="vstack gap-1">
+<div @ref="MainElement" class="vstack gap-1" style="display: none;">
 
     @* BUTTON ROW *@
     <div class="hstack gap-2 mb-2">
@@ -90,6 +90,16 @@
 
 </div>
 
+@* PLACE HOLDER MESSAGE *@
+@* hide when loaded *@
+<div @ref="PlaceholderMessageHolder" >
+    <div class="d-flex justify-content-center">
+        @* important needed to override flex *@
+        <span class="" style="color: @AppData.Grey; font-size: 14px;">Chart will appear here after you click calculate</span>
+    </div>
+</div>
+
+
 @code {
 
 
@@ -101,6 +111,8 @@
     /// </summary>
     public ElementReference MainElement;
     public ElementReference eventsChartSvgHolder;
+
+    public ElementReference PlaceholderMessageHolder { get; set; }
 
     private string PdfFileName = "";
 
@@ -233,6 +245,10 @@
 
             //render html
             _isReady = true;
+
+            //make visible & hide place holder
+            _jsRuntime.Show(MainElement);
+            _jsRuntime.Hide(PlaceholderMessageHolder);
 
             //reset highlight check box from previous
             ResetHighLightCheckboxDictionary();
@@ -438,5 +454,7 @@
         for (int i = 0; i < 4; i++) { await x.Invoke(); }
 
     }
+
+
 }
 

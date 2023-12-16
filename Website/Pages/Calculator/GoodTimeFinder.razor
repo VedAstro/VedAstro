@@ -42,7 +42,7 @@
 
                 @* EVENT SELECT *@
                 <IconTitle Title="Event Type" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
-                <div style="width: @GR.W667px; margin-top:-14px;" class="d-flex flex-wrap gap-1 mb-3">
+                <div style="width: @GR.W667px;margin-top:-14px;font-size: 15px;font-family: 'Lexend Deca';" class="d-flex flex-wrap gap-1 mb-3">
                     <div style="width: @GR.W255px;" class="form-check hstack gap-2">
                         <input @bind="@(SelectedTagsDictionary[EventTag.General])" id="@EventTag.General" style=" width: 40px; height: 28px;" class="form-check-input" type="checkbox">
                         <label class="form-check-label d-flex gap-2 w-100" for="@EventTag.General">
@@ -252,9 +252,51 @@
                         </IconTooltip>
                     </div>
                 </div>
+                
+                @* ADVANCED PANEL DROP *@
+                <div id="GoodTimeFinderAdvancedInputHolder" class="border-top mt-2 pt-2" style="display: none;">
+                    @* HEADER TEXT *@
+                    <span style="font-size: 11.5px;margin-left: 0px;color: grey;margin-top: -20px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
 
-                @* CALCULATE BUTTON *@
-                <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true" />
+                    @* AYANAMSA *@
+                    <div class="input-group mb-2">
+                        <label style="width:@GR.W134px;" class="input-group-text">
+                            <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
+                        </label>
+                        <select @bind="SelectedAyanamsaName" class="form-select">
+
+                            <optgroup label="Easy">
+                                @foreach (var ayanamsa in @AppData.SimpleAyanamsaAll)
+                                {
+                                    <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
+                                }
+                            </optgroup>
+                            <optgroup label="Advanced">
+                                @foreach (var ayanamsa in @AppData.AdvancedAyanamsaAll)
+                                {
+                                    <option value="@ayanamsa">@ayanamsa</option>
+                                }
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    @* PRECISION *@
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">
+                            <Icon ExtraClass="me-2" IconName="lucide:microscope" /> Precision
+                            <HelpIconTooltip ShowOnHover="true" HelpText="Days per pixel, low value is high precision larger chart for same time span. Warning! If number too low, chart will not generate. Use offline Desktop app for HD charts." SmallIcon="true"/>
+                        </span>
+
+                        <input @bind="daysPerPixelInput" type="number" class="form-control">
+                    </div>
+                </div>
+
+                
+                @* BUTTONS *@
+                <div class="mt-2 d-flex justify-content-between">
+                    <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle("GoodTimeFinderAdvancedInputHolder"))" SmallSize="true" />
+                    <IconButton @ref="_calculateButton" Id="GoodTimeFinderCalculateButton" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="OnClickCalculate" ShowDelayWarning="true"/>
+                </div>
             </div>
         </div>
 
@@ -265,25 +307,14 @@
 @* CHART DISPLAY HERE *@
 <div>
     <hr>
-    @*hide until ready but initialized as well*@
-    <div style="@(_isResultReady?"":"display:none;")">
-        <div @ref="_holderDiv">
-            <EventsChartViewer @ref="_eventsChartViewer" />
-        </div>
-    </div>
-
-    @* PLACE HOLDER MESSAGE *@
-    @* hide when loaded *@
-    <div class="d-flex justify-content-center" style="@((!_isResultReady) ? "" : "display:none !important;")">
-        @* important needed to override flex *@
-        <span class="" style="color: @AppData.Grey; font-size: 14px;">Chart will appear here after you click calculate</span>
-    </div>
+    <EventsChartViewer @ref="_eventsChartViewer" />
     <hr />
 </div>
 
 
 @code {
 
+    private double daysPerPixelInput;
     private string pageTitle;
     private bool _isResultReady = false;
     private ElementReference _holderDiv;
@@ -313,7 +344,28 @@
 
     public Person SelectedPerson { get; set; }
 
+    private string _selectedAyanamsaName = SimpleAyanamsa.Raman.ToString();
 
+    private IconButton _calculateButton;
+
+    /// <summary>
+    /// if not specified will not be included in final URL
+    /// default set to Raman, different from system wide
+    /// </summary>
+    public string SelectedAyanamsaName
+    {
+        get => _selectedAyanamsaName;
+        set
+        {
+            _selectedAyanamsaName = value;
+
+            //highlight regenerate button to let user know needs recalculation
+            _jsRuntime.AnimateHighlightElement("GoodTimeFinderCalculateButton");
+
+            //also add * to button text to let user know needs recalculation
+            _calculateButton.UpdateButtonText("Calculate*");
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -362,7 +414,7 @@
         return compiledList;
     }
 
-    private async Task OnClickCalculateEasy()
+    private async Task OnClickCalculate()
     {
         //keep copy of selected time range else gets reset, on re-render
         var backUpSelection = SelectedTimeRangePreset;
@@ -370,7 +422,10 @@
         _jsRuntime.ShowLoading();
 
         //only continue if passed input field validation
-        if (!EasyValidationPassed()) { return; }
+        if (!IsValid()) { return; }
+
+        //reset button text, since * can be added later
+        _calculateButton.UpdateButtonText("Calculate");
 
         //mark page as NOT ready (when button clicked 2nd time)
         _isResultReady = false;
@@ -389,7 +444,7 @@
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions, SelectedAyanamsaName);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -420,7 +475,7 @@
     /// <summary>
     /// Checks if validation of all input fields
     /// </summary>
-    private bool EasyValidationPassed()
+    private bool IsValid()
     {
         //TEST 1
         //if person not selected, invalid

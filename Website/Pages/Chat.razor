@@ -24,7 +24,7 @@
         <button onclick="" style="display: none; height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
             <span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span>
         </button>
-        <button onclick="OnClickChatSettings()" style="height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
+        <button  @onclick="@(() => _jsRuntime.FunFeaturePopUp("Chat"))" style="height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
             <span class="iconify" data-icon="iconamoon:settings-fill" data-width="25" data-height="25"></span>
         </button>
     </div>
@@ -66,7 +66,7 @@
         <li class="bg-white mb-3">
             <textarea class="form-control" id="UserChatInputElement" rows="4"></textarea>
         </li>
-        <button onclick="OnClickSendChat()" type="button" class="btn btn-primary btn-rounded float-end">
+        <button @onclick="@(() => _jsRuntime.FunFeaturePopUp("Chat"))" type="button" class="btn btn-primary btn-rounded float-end">
             <span class="iconify me-2" data-icon="fluent-mdl2:processing-run" data-width="25" data-height="25"></span>
             Send
         </button>

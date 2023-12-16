@@ -17,8 +17,12 @@
 
 @code {
 
+    protected override async Task OnInitializedAsync()
+    {
+        await _jsRuntime.FunFeaturePopUp("Under Construction");
+    }
 
-	/// <summary>
+    /// <summary>
 	/// Page name used when sending message to server
 	/// </summary>
 	[Parameter]

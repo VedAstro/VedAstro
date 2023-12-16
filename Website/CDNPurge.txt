@@ -1,0 +1,1 @@
+az cdn endpoint purge --resource-group VedAstro --profile-name CDNProfile --name vedastro --content-paths "/*"

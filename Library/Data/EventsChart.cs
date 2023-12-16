@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -137,7 +137,8 @@ namespace VedAstro.Library
         /// /5.439                              : 12 DaysPerPixel
         /// /PD1,PD2,PD3,PD4,PD5,AshtakvargaGochara,Gochara :13 EventTagList
         /// /GetGeneralScore,GocharaAshtakvargaBindu        :14 SelectedAlgorithm
-        ///
+        /// /Ayanamsa/LahiriChitrapaksha                    :15 Optional Ayanamsa, must be last
+        /// 
         /// Note: format was heavily modified to squeeze as much data into 260 char URL server limit
         /// </summary>
         public static async Task<EventsChart> FromUrl(string url)

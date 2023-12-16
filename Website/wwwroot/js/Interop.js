@@ -31,28 +31,45 @@ const RETRY_COUNT = 5;
 //SCROLL SPY NAV
 //when run will attach events to all with .scrollspy
 //this then will used to highlight the Index link
-export function InitializeInPageNav() {
+export async function InitializeInPageNav() {
 
+    //TODO below code causes 
     //set the nav menu to nicely appear at mid center vertically
-    var windowHeight = $(window).height();
-    var divHeight = $("#inPageNavBar").height();
-    var divOffset = (windowHeight - divHeight) / 2;
-    $("#inPageNavBar").css("top", divOffset + "px");
+    //var windowHeight = $(window).height();
+    //var divHeight = $("#inPageNavBar").height();
+    //var divOffset = (windowHeight - divHeight) / 2;
+    //$("#inPageNavBar").css("top", divOffset + "px");
+    //setTimeout(function () {
+    //    // Your code here
+    //    console.log("This message will be displayed after 5 seconds");
+    //}, 5000);
 
     //attaches a handler when scroll
-    $(window).bind('scroll', function () {
+    $(window).bind('scroll', async function () {
         var currentTop = $(window).scrollTop();
         var elems = $('.scrollspy');
-        elems.each(function (index) {
-            var elemTop = $(this).offset().top;
-            var elemBottom = elemTop + $(this).height();
+        for (let index = 0; index < elems.length; index++) {
+            var elemTop = $(elems[index]).offset().top;
+            var elemBottom = elemTop + $(elems[index]).height();
             var offset = 200; // Adjust this value to your needs
             if (currentTop >= elemTop - offset && currentTop <= elemBottom) {
-                var contentId = $(this).attr('id');
+                var contentId = $(elems[index]).attr('id');
                 var navLink = $(`#${contentId}-Link`);
-                navLink.addClass('active').siblings().removeClass('active');
+
+                //remove previous selected active
+                navLink.siblings().removeClass('active');
+
+                //make current active
+                navLink.addClass('active');
+
+                //set the nav menu to nicely appear at mid center vertically
+                var windowHeight = $(window).height();
+                var divHeight = $("#inPageNavBar").height();
+                var divOffset = (windowHeight - divHeight) / 2;
+                $("#inPageNavBar").css("top", divOffset + "px");
+
             }
-        });
+        }
     });
 }
 

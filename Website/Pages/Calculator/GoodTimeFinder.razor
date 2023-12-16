@@ -17,7 +17,7 @@
     <div class="d-md-flex justify-content-between">
 
         @*SELECTOR*@
-        <div class="me-5">
+        <div class="me-5" style="width: @GR.W546px;">
             <div class="vstack gap-3 p-3">
 
                 @* PERSON AND TIME INPUT *@
@@ -103,11 +103,11 @@
                                 <TooltipHtml>
                                     Coming Soon!
                                     @* <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
-                                @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Agriculture))
-                                {
-                                <span>@x.FormattedName</span>
-                                }
-                                </div> *@
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Agriculture))
+                                        {
+                                        <span>@x.FormattedName</span>
+                                        }
+                                        </div> *@
                                 </TooltipHtml>
                             </IconTooltip>
                         </label>
@@ -121,11 +121,11 @@
                                 <TooltipHtml>
                                     Coming Soon!
                                     @* <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
-                                @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Agriculture))
-                                {
-                                <span>@x.FormattedName</span>
-                                }
-                                </div> *@
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Agriculture))
+                                        {
+                                        <span>@x.FormattedName</span>
+                                        }
+                                        </div> *@
                                 </TooltipHtml>
                             </IconTooltip>
                         </label>
@@ -139,12 +139,12 @@
                                 <TooltipHtml>
                                     Coming Soon!
                                     @*
-                                <div style="max-height: @GR.W157px; overflow: auto;" class="vstack gap-1">
-                                @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Travel))
-                                {
-                                <span>@x.FormattedName</span>
-                                }
-                                </div> *@
+                                        <div style="max-height: @GR.W157px; overflow: auto;" class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Travel))
+                                        {
+                                        <span>@x.FormattedName</span>
+                                        }
+                                        </div> *@
                                 </TooltipHtml>
                             </IconTooltip>
                         </label>
@@ -252,7 +252,7 @@
                         </IconTooltip>
                     </div>
                 </div>
-                
+                        
                 @* ADVANCED PANEL DROP *@
                 <div id="GoodTimeFinderAdvancedInputHolder" class="border-top mt-2 pt-2" style="display: none;">
                     @* HEADER TEXT *@
@@ -290,8 +290,7 @@
                         <input @bind="daysPerPixelInput" type="number" class="form-control">
                     </div>
                 </div>
-
-                
+               
                 @* BUTTONS *@
                 <div class="mt-2 d-flex justify-content-between">
                     <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle("GoodTimeFinderAdvancedInputHolder"))" SmallSize="true" />
@@ -300,12 +299,24 @@
             </div>
         </div>
 
+        @*SIDEBAR*@
+        <div class="mt-md-0 mt-4 me-md-5">
+            <InfoBox Title="Accurate" FullWidth="true" MaxWidth="@GR.W412" IconName="noto-v1:direct-hit">
+                <DescriptionHTML>
+                    Easy manipulation of your life events
+                </DescriptionHTML>
+                <ImageHTML>
+                    <img class="img-thumbnail" src="images/life-predictor-alertbox-examples.jpg" />
+                </ImageHTML>
+            </InfoBox>
+        </div>
+
     </div>
 
 }
 
 @* CHART DISPLAY HERE *@
-<div>
+<div style=" margin-top: 76px; ">
     <hr>
     <EventsChartViewer @ref="_eventsChartViewer" />
     <hr />

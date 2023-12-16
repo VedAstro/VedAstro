@@ -8,69 +8,72 @@
 		 DescriptionText="Info of stars and planets above you now. View pure astronomical and inteprated Vedic data for past and future anywhere in the world.">
 </PageTop>
 
+<UnderConstructionHeader></UnderConstructionHeader>
 
-<div class="vstack gap-3 mt-4 mb-5" style="max-width:@GR.W412px;">
-	<TimeInputSimple @ref="_timeInput" LabelText="Date &amp; Time" /> @*todo default to now*@
-	<GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
-	<IconButton ButtonText="Refresh" Color="success" ExtraClass="align-self-end" IconName="uim:process" OnClickCallback="RefreshData" />
+<div style="width: @GR.W824px">
+    <div class="vstack gap-3 mt-4 mb-5" style="max-width:@GR.W412px;">
+        <TimeInputSimple @ref="_timeInput" LabelText="Date &amp; Time" /> @*todo default to now*@
+        <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
+        <IconButton ButtonText="Refresh" Color="success" ExtraClass="align-self-end" IconName="uim:process" OnClickCallback="RefreshData" />
+    </div>
+
+
+    <SkyChartViewer @ref="skyChartViewer" />
+
+    @if (isReady)
+    {
+        <IconTitle Title="Vedic" IconName="ph:star-of-david-duotone" />
+        <table class="table-striped table-hover table-bordered mb-5" style="text-wrap: nowrap;">
+            <thead>
+            <tr>
+                <th scope="col" class="p-1">Data</th>
+                <th scope="col" class="p-1">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var calcResult in astrologyCalcs)
+            {
+                <tr>
+                    <th scope="row" class="p-1">@Format.FormatName(calcResult.Name)</th>
+                    <td class="p-1">@calcResult.ToString()</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+
+
+        <IconTitle Title="Astronomy" IconName="streamline:ecology-science-planet-solar-system-ring-planet-saturn-space-astronomy" />
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var calcResult in astronomyCalcs)
+            {
+                <tr>
+                    <th scope="row">@calcResult.Name</th>
+                    <td>@calcResult.ToString()</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        @AppData.LoadingImage
+    }
+
+    <hr />
+
+
+    <QuoteTextBlock Author="Carl Sagan" URL="@URL.CarlSaganWiki">
+        We're made of star stuff
+    </QuoteTextBlock>
+
 </div>
-
-
-<SkyChartViewer @ref="skyChartViewer" />
-
-@if (isReady)
-{
-	<IconTitle Title="Vedic" IconName="ph:star-of-david-duotone" />
-	<table class="table-striped table-hover table-bordered mb-5" style="text-wrap: nowrap;">
-		<thead>
-			<tr>
-				<th scope="col" class="p-1">Data</th>
-				<th scope="col" class="p-1">Value</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var calcResult in astrologyCalcs)
-			{
-				<tr>
-					<th scope="row" class="p-1">@Format.FormatName(calcResult.Name)</th>
-					<td class="p-1">@calcResult.ToString()</td>
-				</tr>
-			}
-		</tbody>
-	</table>
-
-
-	<IconTitle Title="Astronomy" IconName="streamline:ecology-science-planet-solar-system-ring-planet-saturn-space-astronomy" />
-	<table class="table table-striped table-hover table-bordered">
-		<thead>
-			<tr>
-				<th scope="col">Data</th>
-				<th scope="col">Value</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var calcResult in astronomyCalcs)
-			{
-				<tr>
-					<th scope="row">@calcResult.Name</th>
-					<td>@calcResult.ToString()</td>
-				</tr>
-			}
-		</tbody>
-	</table>
-}
-else
-{
-	@AppData.LoadingImage
-}
-
-<hr />
-
-
-<QuoteTextBlock Author="Carl Sagan" URL="@URL.CarlSaganWiki">
-	We're made of star stuff
-</QuoteTextBlock>
-
 
 
 @code {
@@ -91,7 +94,8 @@ else
 	{
 		//page should auto show data for user at current location
 		//we wait after render to get ready time and location
-		if (firstRender) { await RefreshData(); }
+		//TODO temp disable
+		//if (firstRender) { await RefreshData(); }
 
 	}
 

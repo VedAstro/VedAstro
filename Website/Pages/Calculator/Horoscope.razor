@@ -16,7 +16,7 @@
     @* IN PAGE NAV BAR *@
     <div id="inPageNavBar" style="display: none !important; position: fixed;right: 69px;font-family: 'Lexend Deca';font-weight: bold;font-size: 14px; width: fit-content;" class="vstack gap-1 mt-2 pt-2 border-top d-none d-lg-block">
         @* HEADER TEXT *@
-        <span style="font-size: 11.5px;margin-left: 44px;color: grey;margin-top: -19px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">INDEX</span>
+        <span @onclick="@(() => _jsRuntime.ScrollToDivById("HoroscopeMainInputHolder"))" style="cursor: pointer; font-size: 11.5px;margin-left: 44px;color: grey;margin-top: -19px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">INDEX</span>
         
         @* NAV LINKS *@
         @* js function will set active by ID *@
@@ -34,7 +34,7 @@
 
     @*INPUT*@
     <div class="d-flex flex-wrap mb-5" style="max-width: @GR.W352px;">
-        <div class="vstack gap-3">
+        <div id="HoroscopeMainInputHolder" class="vstack gap-3">
             <PersonSelectorBox Width="100%" @ref="_peopleSelectorBox" />
 
             @* ADVANCED PANEL DROP *@
@@ -278,9 +278,6 @@
         //only continue if passed input field validation
         if (!await ValidationPassed()) { return; }
 
-        //make output visible (hidden by default)
-        _jsRuntime.Show("#outputHoroscope");
-        _jsRuntime.Show("#inPageNavBar");
 
         //reset button text, since * can be added later
         _calculateButton.UpdateButtonText("Calculate");
@@ -314,6 +311,10 @@
         await _InitPlanetDataTable();
         await _InitHouseDataTable();
         await _InitAshtakvargaTable();
+
+        //make output visible (hidden by default)
+        _jsRuntime.Show("#outputHoroscope");
+        _jsRuntime.Show("#inPageNavBar");
 
         //scroll page to top of results so "index" legend can show nicely, plus saves user 10ms in scrolling
         _jsRuntime.ScrollToDivById("AutoPrediction");

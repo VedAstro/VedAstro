@@ -91,38 +91,29 @@
             <div>@Body</div>
 
             <!-- FOOTER LINE AND SPACING -->
-            <footer id="LegalComplianceFooter" class="mb-2 pt-4 border-top" style="opacity: 0.65; margin-top: @GR.W194px; font-size: 12px !important;">
-                <div class="row">
-                    <div class="col-6 col-md-3 mb-2">
-                        <ul class="nav flex-column">
-                            <li class="nav-item mb-1"><a href="@PageRoute.TermsOfService" class="nav-link p-0 text-body-secondary">Terms and Conditions</a></li>
-                            <li class="nav-item mb-1"><a href="@PageRoute.PrivacyPolicy" class="nav-link p-0 text-body-secondary">Privacy Policy</a></li>
-                        </ul>
+            <footer id="LegalComplianceFooter" class="mb-2 pt-3 border-top" style="opacity: 0.65; margin-top: @GR.W231px; font-size: 11px !important;">
+                <div class="d-flex justify-content-between">
+
+                    <div class="">
+                        <div class="hstack gap-4">
+                            <a href="@PageRoute.TermsOfService" class="nav-link p-0 text-body-secondary">Terms &amp; Conditions</a>
+                            <a href="@PageRoute.PrivacyPolicy" class="nav-link p-0 text-body-secondary">Privacy Policy</a>
+                        </div>
                     </div>
 
-                    <div class="col-6 col-md-3 mb-2">
+                    <div class="me-5">
                         @* SOCIAL ICONS *@
-                        <ul class="list-unstyled d-flex mb-2">
-                            <li class=""><a target="_blank" class="link-body-emphasis" href="@URL.Twitter"><Icon IconName="skill-icons:twitter" Size="24" /></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.GitHubRepo"><Icon IconName="skill-icons:github-dark" Size="24" /></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.Instagram"><Icon IconName="skill-icons:instagram" Size="24" /></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.FacebookPage"><Icon IconName="devicon:facebook" Size="24" /></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.YoutubeChannel"><Icon IconName="logos:youtube-icon" Size="24" /></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.PatreonPage"><Icon IconName="logos:patreon" Size="24" /></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon IconName="simple-icons:kofi" Size="24" /></a></li>
+                        <ul class="list-unstyled d-flex">
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon TooltipText="Buy me Coffee" IconName="medical-icon:coffee-shop" Size="22" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon TooltipText="Buy Beer" IconName="twemoji:beer-mug" Size="22"/></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.Twitter"><Icon TooltipText="Updates via Twitter" IconName="skill-icons:twitter" Size="22"/></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.GitHubRepo"><Icon TooltipText="View Awesome Source Code" IconName="skill-icons:github-dark" Size="22"/></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.Instagram"><Icon TooltipText="Updates via Instagram" IconName="skill-icons:instagram" Size="22"/></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.FacebookPage"><Icon TooltipText="Updates via Facebook" IconName="devicon:facebook" Size="22"/></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.YoutubeChannel"><Icon TooltipText="Watch How To Guide" IconName="logos:youtube-icon" Size="22"/></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.PatreonPage"><Icon TooltipText="Become Patron" IconName="logos:patreon" Size="22"/></a></li>
                         </ul>
-                    </div>
 
-                    <div class="col-md-4 offset-md-1 mb-2">
-
-                        <form>
-                            <h6>Subscribe Newsletter 📧</h6>
-                            <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                                <label for="newsletter1" class="visually-hidden">Email address</label>
-                                <input @bind="@subscribeEmailInput" id="newsletter1" type="text" class="form-control form-control-sm" placeholder="Email address">
-                                <button @onclick="OnClickSubscribeNewsletter" class="btn btn-sm btn-success" type="button">Subscribe</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </footer>

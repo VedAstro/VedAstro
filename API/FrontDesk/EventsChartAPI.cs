@@ -66,8 +66,9 @@ namespace API
 
             try
             {
-                //SET ayanamsa to RAMAN
-                Calculate.Ayanamsa = (int)Ayanamsa.RAMAN;
+                //1 : CUSTOM AYANAMSA (removes ayanamsa once read)
+                settingsUrl = OpenAPI.ParseAndSetAyanamsa(settingsUrl);
+
 
                 //get basic spec on how to make chart
                 //check if the specs given is correct and readable

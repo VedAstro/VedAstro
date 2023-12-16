@@ -10,13 +10,16 @@ public class EventsChartTools
 
     public EventsChartTools(VedAstroAPI vedAstroApi) => _api = vedAstroApi;
 
-    public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, ChartOptions options)
+    /// <summary>
+    /// Calls API till get events chart
+    /// </summary>
+    public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, ChartOptions options, string ayanamsaName)
     {
         //no person no entry!
         if (Person.Empty.Equals(person)) { throw new InvalidOperationException("NO CHART FOR EMPTY PERSON!"); }
 
         //generate URL to get chart from API
-        var eventsChartApiCallUrl = GetEventsChartApiUrl(person, timeRange, inputedEventTags, maxWidth, options);
+        var eventsChartApiCallUrl = GetEventsChartApiUrl(person, timeRange, inputedEventTags, maxWidth, options, ayanamsaName);
 
         //make the call to API, NOTE:call is held here
         var chartString = await _api.PollApiTillDataEVENTSChart(eventsChartApiCallUrl);
@@ -29,13 +32,13 @@ public class EventsChartTools
     /// note: used as a shortcut in website rather going into network tab in F12 
     /// </summary>
     public string GetEventsChartApiUrl(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth,
-        ChartOptions summaryOptions)
+        ChartOptions summaryOptions, string ayanamsaName)
     {
         //put specs to make chart into a URL format
         var chartSpecsUrl = EventsChart.FromData(person, timeRange, inputedEventTags, maxWidth, summaryOptions).ToUrl();
 
         //add in server address & API call name
-        var finalUrl = _api.URL.GetEventsChart + chartSpecsUrl;
+        var finalUrl = _api.URL.GetEventsChart + chartSpecsUrl+$"/Ayanamsa/{ayanamsaName}";
 
         return finalUrl;
     }

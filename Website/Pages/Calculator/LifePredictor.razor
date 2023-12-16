@@ -88,7 +88,7 @@ Know good and bad periods of your life years ahead.*@
                     <label style="width:@GR.W134px;" class="input-group-text">
                         <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
                     </label>
-                    <select @bind="SelectedAyanamsa" class="form-select">
+                    <select @bind="SelectedAyanamsaName" class="form-select">
 
                         <optgroup label="Easy">
                             @foreach (var ayanamsa in @AppData.SimpleAyanamsaAll)
@@ -535,18 +535,18 @@ Know good and bad periods of your life years ahead.*@
         return compiledList;
     }
 
-    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
+    private string _selectedAyanamsaName = SimpleAyanamsa.LahiriChitrapaksha.ToString();
 
     /// <summary>
     /// if not specified will not be included in final URL
     /// default set to Lahiri Chitrapaksha, as used system wide
     /// </summary>
-    public string SelectedAyanamsa
+    public string SelectedAyanamsaName
     {
-        get => _selectedAyanamsa;
+        get => _selectedAyanamsaName;
         set
         {
-            _selectedAyanamsa = value;
+            _selectedAyanamsaName = value;
 
             //highlight regenerate button to let user know needs recalculation
             _jsRuntime.AnimateHighlightElement("LifePredictorCalculateButton");
@@ -656,10 +656,11 @@ Know good and bad periods of your life years ahead.*@
             algorithmFuncsList.Add(del);
         }
 
+        //add in selected algorithms & ayanamsa as options
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedEventTags, summaryOptions);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedEventTags, summaryOptions, SelectedAyanamsaName);
 
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data

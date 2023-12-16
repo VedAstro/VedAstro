@@ -118,6 +118,7 @@
 
     public string _timePreset { get; set; }
     public string _eventPreset { get; set; }
+    public string SelectedAyanamsaName { get; set; }
 
     ElementReference _eventsChartSvgHolder;
     public Time StartTime { get; set; }
@@ -200,7 +201,7 @@
     /// Sets the data that is processed and fill the content
     /// - Parent element calls here to start display chart process
     /// </summary>
-    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, ChartOptions chartOptions)
+    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, ChartOptions chartOptions, string ayanamsaName)
     {
         //stop if empty person
         if (Person.Empty.Equals(person)) { throw new InvalidOperationException("PERSON CAN'T BE EMPTY!!!"); }
@@ -212,12 +213,13 @@
 
             //saved to be accessed later
             SelectedPerson = person;
+            SelectedAyanamsaName = ayanamsaName;
             SelectedTimeRange = timeRange;
             SelectedEventTags = inputedEventTags;
             SelectedChartOptions = chartOptions;
 
             //get raw SVG chart from API as string
-            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, _maxWidth, chartOptions);
+            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, _maxWidth, chartOptions, SelectedAyanamsaName);
 
             //bring chart to live with EventsChart.js
             await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, RawChartSvg);
@@ -245,6 +247,7 @@
         }
 
     }
+
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -311,7 +314,7 @@
             int maxWidth = 940;
             var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
-            string chartSvg = await AppData.API.EventsChart.GetEventsChart(SelectedPerson, SelectedTimeRange, SelectedEventTags, maxWidth, summaryOptions);
+            string chartSvg = await AppData.API.EventsChart.GetEventsChart(SelectedPerson, SelectedTimeRange, SelectedEventTags, maxWidth, summaryOptions,SelectedAyanamsaName);
 
             //control reaches here than already complete
             await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, chartSvg);
@@ -387,7 +390,7 @@
     private async Task OnClickCopyPOSTCall()
     {
         //get call exactly as for API
-        var postData = AppData.API.EventsChart.GetEventsChartApiUrl(SelectedPerson, SelectedTimeRange, SelectedEventTags, _maxWidth, SelectedChartOptions);
+        var postData = AppData.API.EventsChart.GetEventsChartApiUrl(SelectedPerson, SelectedTimeRange, SelectedEventTags, _maxWidth, SelectedChartOptions, SelectedAyanamsaName);
 
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, postData);

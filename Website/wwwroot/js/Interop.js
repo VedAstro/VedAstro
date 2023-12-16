@@ -33,17 +33,6 @@ const RETRY_COUNT = 5;
 //this then will used to highlight the Index link
 export async function InitializeInPageNav() {
 
-    //TODO below code causes 
-    //set the nav menu to nicely appear at mid center vertically
-    //var windowHeight = $(window).height();
-    //var divHeight = $("#inPageNavBar").height();
-    //var divOffset = (windowHeight - divHeight) / 2;
-    //$("#inPageNavBar").css("top", divOffset + "px");
-    //setTimeout(function () {
-    //    // Your code here
-    //    console.log("This message will be displayed after 5 seconds");
-    //}, 5000);
-
     //attaches a handler when scroll
     $(window).bind('scroll', async function () {
         var currentTop = $(window).scrollTop();

@@ -376,8 +376,7 @@ export class EventsChart {
 
         //if no event found then possible wrongly clicked elm skip, END HERE
         if (parsedEvent?.Name !== undefined) {
-            // User clicked 'No', end silently
-            console.log('No Event Data found!!');
+            Swal.fire("Could not detect event", "", "warning");
             return;
         }
 

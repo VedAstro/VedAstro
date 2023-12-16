@@ -234,12 +234,10 @@
     private async Task _OnClickSignInEmail()
     {
         //log this
-        WebLogger.Click("Email Sign In");
+        //WebLogger.Click("Email Sign In");
 
+        _jsRuntime.FunFeaturePopUp("Email Sign In");
 
-        _jsRuntime.ShowAlert("info", "Coming soon", "Minions are still working on this, come back later");
-
-        //await _jsRuntime.InvokeVoidAsync(JS.facebookLogin);
     }
 
 

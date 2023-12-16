@@ -176,7 +176,7 @@ Know good and bad periods of your life years ahead.*@
                 </div>
                 
                 @* ALGORITHM SELECT *@
-                <div class="input-group vstack">
+                <div class="input-group vstack mb-3">
                     <label style="min-width:@GR.W134px;" class="input-group-text rounded">
                         <Icon ExtraClass="me-2" IconName="fluent:math-symbols-24-filled" /> Algorithms
                         <HelpIconTooltip ShowOnHover="true" HelpText="Algorithms used in making final summary prediction" SmallIcon="true" />
@@ -197,7 +197,16 @@ Know good and bad periods of your life years ahead.*@
                         }
                     </div>
                 </div>
+                
+                @* PRECISION *@
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">
+                        <Icon ExtraClass="me-2" IconName="lucide:microscope" /> Precision
+                        <HelpIconTooltip ShowOnHover="true" HelpText="Days per pixel, low value is high precision larger chart for same time span. Warning! If number too low, chart will not generate. Use offline Desktop app for HD charts." SmallIcon="true"/>
+                    </span>
 
+                    <input @bind="daysPerPixelInput" type="number" class="form-control">
+                </div>
             </div>
 
             @* BUTTONS *@
@@ -227,19 +236,7 @@ Know good and bad periods of your life years ahead.*@
 @* CHART DISPLAY HERE *@
 <div>
     <hr>
-    @*hide until ready but initialized as well*@
-    <div style="@(_isResultReady?"":"display:none;")">
-        <div @ref="_holderDiv">
-            <EventsChartViewer @ref="_eventsChartViewer" />
-        </div>
-    </div>
-
-    @* PLACE HOLDER MESSAGE *@
-    @* hide when loaded *@
-    <div class="d-flex justify-content-center" style="@((!_isResultReady) ? "" : "display:none !important;")">
-        @* important needed to override flex *@
-        <span class="" style="color: @AppData.Grey; font-size: 14px;">Chart will appear here after you click calculate</span>
-    </div>
+        <EventsChartViewer @ref="_eventsChartViewer" />
     <hr />
 </div>
 
@@ -432,6 +429,7 @@ Know good and bad periods of your life years ahead.*@
 
 @code {
 
+    private double daysPerPixelInput;
     private List<DasaType> AllDasaTypes = new List<DasaType>((DasaType[])Enum.GetValues(typeof(DasaType)));
     private List<EventTag> AllLifePredictorEventTags = new List<EventTag>
     {
@@ -480,10 +478,6 @@ Know good and bad periods of your life years ahead.*@
     /// </summary>
     [Parameter]
     public string PersonIdUrl { get; set; } = "";
-
-    //private HoroscopeInfoView? horoscopeInfoView;
-
-    private ElementReference _holderDiv;
 
     private string _pageTitle = "Life Predictor";
     //--------------------FIELDS
@@ -535,11 +529,11 @@ Know good and bad periods of your life years ahead.*@
         return compiledList;
     }
 
-    private string _selectedAyanamsaName = SimpleAyanamsa.LahiriChitrapaksha.ToString();
+    private string _selectedAyanamsaName = SimpleAyanamsa.Raman.ToString();
 
     /// <summary>
     /// if not specified will not be included in final URL
-    /// default set to Lahiri Chitrapaksha, as used system wide
+    /// default set to Raman, different from system wide
     /// </summary>
     public string SelectedAyanamsaName
     {
@@ -633,10 +627,13 @@ Know good and bad periods of your life years ahead.*@
         await _jsRuntime.ShowLoading();
 
         //only continue if passed input field validation
-        if (!EasyValidationPassed()) { return; }
+        if (!IsValid()) { return; }
 
         //mark page as NOT ready (when button clicked 2nd time)
         _isResultReady = false;
+
+        //reset button text, since * can be added later
+        _calculateButton.UpdateButtonText("Calculate");
 
         //get data from inputs and save it for use by other components
         SelectedPerson = await _easyPersonSelectorBox.GetSelectedPerson();
@@ -648,7 +645,6 @@ Know good and bad periods of your life years ahead.*@
         var timeRange = GetTimeRange();
 
         //get selected algorithms
-        //TODO raise alarm if no algorithms selected
         var algorithmFuncsList = new List<AlgorithmFuncs>();
         foreach (var methodInfo in SelectedAlgorithms)
         {
@@ -705,7 +701,7 @@ Know good and bad periods of your life years ahead.*@
     /// <summary>
     /// Checks if validation of all input fields
     /// </summary>
-    private bool EasyValidationPassed()
+    private bool IsValid()
     {
         //TEST 1
         //if person not selected, invalid
@@ -723,6 +719,25 @@ Know good and bad periods of your life years ahead.*@
         {
             return false;
         }
+
+        //TEST 3
+        //must 1 algorithm selected
+        if (!SelectedAlgorithms.Any())
+        {
+            //mark invalid & alert user
+            _jsRuntime.ShowAlert("error", "Select at least 1 algorithm", true);
+            return false;
+        }
+
+        //TEST 4
+        //must 1 event selected
+        if (!SelectedEventTags.Any())
+        {
+            //mark invalid & alert user
+            _jsRuntime.ShowAlert("error", "Select at least 1 event", true);
+            return false;
+        }
+
 
         //if control reaches here than, it's valid
         return true;

@@ -224,7 +224,7 @@ namespace API
         /// takes out Ayanamsa from URL and returns remainder of URL
         /// allows /Ayanamsa/Raman to be used anywhere in URL
         /// </summary>
-        private static string ParseAndSetAyanamsa(string fullParamString)
+        public static string ParseAndSetAyanamsa(string fullParamString)
         {
             //if url contains word "ayanamsa" than process it
             var isCustomAyanamsa = fullParamString.Contains(nameof(Ayanamsa));

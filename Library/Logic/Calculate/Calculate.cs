@@ -3628,6 +3628,8 @@ namespace VedAstro.Library
             //if birth time is exactly as sunrise time hora will be zero here, meaning 1st hora
             if (hora == 0) { hora = 1; }
 
+            //ensure hora is within 1 to 24
+            if (hora > 24) { hora = 24; }
 
             return (int)hora;
 

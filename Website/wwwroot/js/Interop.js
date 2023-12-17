@@ -36,7 +36,10 @@ export async function InitializeInPageNav() {
     //attaches a handler when scroll
     $(window).bind('scroll', async function () {
         var currentTop = $(window).scrollTop();
+
+        //all content element with class "scrollspy"
         var elems = $('.scrollspy');
+
         for (let index = 0; index < elems.length; index++) {
             var elemTop = $(elems[index]).offset().top;
             var elemBottom = elemTop + $(elems[index]).height();

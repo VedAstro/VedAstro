@@ -1,6 +1,147 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<!--This is the ULTIMATE DATA list for MUHURTHA Events-->
+
+	<!--TRAVEL-->
+	<Event>
+		<Name>GoodLunarDayForTravel</Name>
+		<Nature>Good</Nature>
+		<Description>
+			For journeys/travel the best lunar days are the 2nd, 3rd, 5th, 7th, 10th, 11th and 13th.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>BadLunarDayForTravel</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			For journeys/travel the 14th lunar day and Full and New Moon days should be avoided at any cost.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>GoodConstellationForTravel</Name>
+		<Nature>Good</Nature>
+		<Description>
+			If a journey is undertaken in the following constellations, the person is
+			supposed to return back early after satisfactorily completing his work:
+			Mrigasira, Aswini, Pushya, Punarvasu, Hasta, Anuradha, Sravana,
+			Moola, Dhanishta and Revati. It is better that the journey is commenced
+			in the 2nd, 3rd or last quarter of the constellation. The first quarter may
+			be avoided as far as possible.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>BadConstellationForTravel</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			No journey should be undertaken on days ruled by Krithika, Bharani.
+			Aslesha. Visakha, Pubba, Poorvabhadra and Aridra. Of these, the
+			following nakshatras may be deemed fit for travelling beyond the
+			spheres of evil influence: - Krittika - 13 ghatis; Bharani - 7; Makha - 14;
+			Pubba, Poorvashadha and Poorvabhadra - 16; Swati, Aslesha and
+			Visakha - 14. In our humble experience, it is found that Bharani and
+			Krithika should always be avoided while the other stars given in this
+			paragraph, journeys can be undertaken in.
+			We have to emphasize that Bharani and Krithika should be invariably
+			rejected.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>BadWeekdayForTravelEast</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Do not travel towards the East on Saturday and Monday
+			Provided the journey is timed to begin
+			beyond 8 ghatis on Saturday and Monday, the
+			above restriction does not hold good.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>BadWeekdayForTravelSouth</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Do not travel towards South on Thursday.
+			Provided the journey is timed to begin
+			beyond 22 ghatis on Thursday, the
+			above restriction does not hold good.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>BadWeekdayForTravelWest</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Do not travel towards West on Sunday and Friday.
+			Provided the journey is timed to begin
+			beyond 15 ghatis on Friday and Sunday, the
+			above restriction does not hold good.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>BadWeekdayForTravelNorth</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Do not travel towards North on Wednesday and Tuesday.
+			Provided the journey is timed to begin
+			beyond 12 ghatis on Tuesday and Wednesday, the
+			above restriction does not hold good
+			
+			In our view, Tuesday must
+			preferably be avoided.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>GoodLagnaForTravel</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Aries, Taurus, Cancer, Leo, Libra and Sagittarius are favorable signs
+			for starting on a journey.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>BestLagnaForTravel</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Rising sign at the time of journey being one's Janma Rasi is highly
+			favoured.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>WorstLagnaForTravel</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Rising sign at the time of journey should never be the sign of one's Janma Lagna.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>BadLagnaForTravel</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Journey should not also be undertaken when the Lagna is the 5th, 7th
+			or the 9th from one's Janma Lagna.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>GoodPlanetsInLagnaForTravel</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Let Jupiter or Venus be well placed in Lagna at the time of starting. This
+			makes the journey successful.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	
+
 	<Event>
 		<Name>AmritaSiddhaYoga</Name>
 		<Nature>Good</Nature>
@@ -993,8 +1134,6 @@
 	</Event>
 
 
-
-
 	<!--CHANDRABALA-->
 	<Event>
 		<Name>GoodChandrabala</Name>
@@ -1327,7 +1466,6 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 
-
 	<!--Others-->
 	<Event>
 
@@ -1339,7 +1477,6 @@
 		</Description>
 		<Tag>General</Tag>
 	</Event>
-
 
 	<!--Buying & Selling-->
 	<Event>
@@ -1371,7 +1508,6 @@
 		</Description>
 		<Tag>GocharaSummary</Tag>
 	</Event>
-
 
 	<!--Gochara Sun-->
 	<Event>

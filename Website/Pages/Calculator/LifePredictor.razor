@@ -30,7 +30,6 @@ Know good and bad periods of your life years ahead.*@
                     <option value="FullLife">Full Life</option>
                     <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
                     <option style=" font-weight: bold; color: #0d6efd; " value="selectage">Custom Age</option>
-                    <optgroup label=""></optgroup>
                     <option value="1day">+/- 1 Day</option>
                     <option value="1week">+/- 1 Week</option>
                     <option value="1month">+/- 1 Month</option>
@@ -671,12 +670,14 @@ Know good and bad periods of your life years ahead.*@
         //place time preset value back
         SelectedTimeRangePreset = backUpSelection;
 
+        //scroll to chart
+        _jsRuntime.ScrollToDivById("EventsChartMainElement");
+
     }
 
     /// <summary>
     /// Gets parsed time from users crazy input
     /// </summary>
-    /// <returns></returns>
     private TimeRange GetTimeRange()
     {
         var systemTimezone = Tools.GetSystemTimezone();

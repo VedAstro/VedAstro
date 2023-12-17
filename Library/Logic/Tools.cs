@@ -1531,7 +1531,7 @@ namespace VedAstro.Library
         public static async Task<WebResult<JToken>> ReadFromServerJsonReply(string apiUrl)
         {
             //send request to API server
-            var result = await RequestServer(apiUrl);
+            var result = await RequestServer(apiUrl, 3);
 
             //get raw reply from the server response
             var rawMessage = await result.Content?.ReadAsStringAsync() ?? "";
@@ -1575,22 +1575,30 @@ namespace VedAstro.Library
             }
 
             //note uses GET request
-            async Task<HttpResponseMessage> RequestServer(string receiverAddress)
+            //tries several times, note if all tries fail will return null
+            //small delay between calls
+            async Task<HttpResponseMessage> RequestServer(string receiverAddress, int retryCount)
             {
-                //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
-
-                //get the data sender 
                 using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
-
-                //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
 
-                //send the data on its way
-                var response = await client.SendAsync(httpRequestMessage, waitForContent);
+                for (int attempt = 0; attempt < retryCount; attempt++)
+                {
+                    try
+                    {
+                        var response = await client.SendAsync(httpRequestMessage, waitForContent);
+                        return response;
+                    }
+                    catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
+                    {
+                        // Wait before next attempt.
+                        await Task.Delay(350);
+                    }
+                }
 
-                //return the raw reply to caller
-                return response;
+                // All attempts have failed, return null.
+                return null;
             }
 
         }

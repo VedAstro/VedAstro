@@ -180,7 +180,6 @@
 
         #endregion
 
-
         #region ASHTAKVARGA_GOCHARA
 
         SunTransit8Bindu,
@@ -247,7 +246,6 @@
         SaturnTransit1Bindu,
         SaturnTransit0Bindu,
         #endregion
-
 
         #region GOCHARA_TRANSITS
 
@@ -1068,5 +1066,22 @@
 
         #endregion
 
+        #region TRAVEL
+
+        GoodLunarDayForTravel,
+        BadLunarDayForTravel,
+        GoodConstellationForTravel,
+        BadConstellationForTravel,
+        BadWeekdayForTravelNorth,
+        BadWeekdayForTravelWest,
+        BadWeekdayForTravelSouth,
+        BadWeekdayForTravelEast,
+        GoodLagnaForTravel,
+        BestLagnaForTravel,
+        WorstLagnaForTravel,
+        BadLagnaForTravel,
+        GoodPlanetsInLagnaForTravel,
+
+        #endregion
     }
 }

@@ -39,6 +39,13 @@
                         <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
                     </select>
                 </div>
+            
+                @* YEAR SELECTOR *@
+                @if (SelectedTimeRangePreset == "selectyear")
+                {
+                    <MonthYearTimeRangeSelector @ref="monthYearTimeRangeSelector" />
+                }
+
 
                 @* EVENT SELECT *@
                 <IconTitle Title="Event Type" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
@@ -324,6 +331,7 @@
 
 
 @code {
+    private MonthYearTimeRangeSelector? monthYearTimeRangeSelector;
 
     private double daysPerPixelInput;
     private string pageTitle;
@@ -454,7 +462,7 @@
         var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General };
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
-        //pump data into chart
+        //pump data into chart (will auto scroll to chart when done)
         await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions, SelectedAyanamsaName);
 
         //mark page as ready to show results
@@ -464,24 +472,52 @@
 
         //place time preset value back
         SelectedTimeRangePreset = backUpSelection;
+
+        //scroll to chart
+        _jsRuntime.ScrollToDivById("EventsChartMainElement");
+
     }
+
+    // /// <summary>
+    // /// Gets parsed time from users crazy input
+    // /// </summary>
+    // /// <returns></returns>
+    // private TimeRange GetTimeRange()
+    // {
+    //     var systemTimezone = Tools.GetSystemTimezone();
+
+    //     //if user selected indiviual year than make new preset is placed in format that can be read by parser
+    //     if (SelectedTimeRangePreset == "selectyear") { SelectedTimeRangePreset = $"{SelectedLifeYearStart}-{SelectedLifeYearEnd}"; } //exp 2000-2010
+    //                                                                                                                                  //else if (SelectedTimeRangePreset == "selectage") { SelectedTimeRangePreset = $"age{SelectedLifeAgeStart}to{SelectedLifeAgeEnd}"; } //exp age4to50
+
+    //     var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRangePreset, systemTimezone);
+
+    //     return timeRange;
+    // }
 
     /// <summary>
     /// Gets parsed time from users crazy input
     /// </summary>
-    /// <returns></returns>
     private TimeRange GetTimeRange()
     {
-        var systemTimezone = Tools.GetSystemTimezone();
+
+        TimeRange timeRange = null;
 
         //if user selected indiviual year than make new preset is placed in format that can be read by parser
-        if (SelectedTimeRangePreset == "selectyear") { SelectedTimeRangePreset = $"{SelectedLifeYearStart}-{SelectedLifeYearEnd}"; } //exp 2000-2010
-                                                                                                                                     //else if (SelectedTimeRangePreset == "selectage") { SelectedTimeRangePreset = $"age{SelectedLifeAgeStart}to{SelectedLifeAgeEnd}"; } //exp age4to50
-
-        var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRangePreset, systemTimezone);
+        if (SelectedTimeRangePreset == "selectyear") //input coming from
+        {
+            timeRange = monthYearTimeRangeSelector.GetTimeRange(SelectedPerson.GetBirthLocation());
+        }
+        else
+        {
+            //if (SelectedTimeRangePreset == "selectage") { SelectedTimeRangePreset = $"age{SelectedLifeAgeStart}to{SelectedLifeAgeEnd}"; } //exp age4to50
+            var systemTimezone = Tools.GetSystemTimezone();
+            timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRangePreset, systemTimezone);
+        }
 
         return timeRange;
     }
+
 
     /// <summary>
     /// Checks if validation of all input fields

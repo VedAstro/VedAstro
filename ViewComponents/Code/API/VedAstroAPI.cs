@@ -198,80 +198,61 @@ namespace Website
         /// Defaults to GET request when payload is null
         /// NOTE : 5S delay timeout
         /// </summary>
-        public async Task<string?> PollApiTillDataEVENTSChart(string inputUrl, string dataToSend = null)
+        
+        public async Task<string> PollApiTillDataEventsChart(string url, object dataToSend = null)
         {
-            string? parsedJsonReply = null;
-            var pollRate = 5000;
-            var notReady = true;
-            while (notReady)
+            var pollRate = TimeSpan.FromMilliseconds(5000);
+
+            // Determine the HTTP method based on whether dataToSend is null or not
+            var httpMethod = dataToSend == null ? HttpMethod.Get : HttpMethod.Post;
+
+            // Define the headers for the HTTP request
+            var requestHeaders = new Dictionary<string, string>
+                                {
+                                    {"Accept", "*/*"},
+                                    {"Connection", "keep-alive"}
+                                };
+
+            // Start a loop that will continue making requests until the 'Call-Status' is 'Pass'
+            while (true)
             {
-                var cts = new CancellationTokenSource(pollRate);
-                try
+                // Create the HTTP request
+                var request = new HttpRequestMessage(httpMethod, url)
                 {
-                    parsedJsonReply = await ReadOnlyIfPassJSString(inputUrl, dataToSend, cts.Token).WithCancellation(cts.Token);
-                    notReady = parsedJsonReply == null; //if null no data, continue wait
+                    Content = dataToSend != null ? new StringContent(JsonConvert.SerializeObject(dataToSend), Encoding.UTF8, "application/json") : null
+                };
+
+                // Add headers to the request
+                foreach (var header in requestHeaders)
+                {
+                    request.Headers.Add(header.Key, header.Value);
                 }
-                catch (OperationCanceledException)
+
+                // Make the HTTP request
+                using (var client = new HttpClient())
                 {
-                    // The operation didn't finish within the timeout.
-                }
-                if (notReady)
-                {
-                    // If no data, wait for the poll rate before trying again.
-                    await Task.Delay(pollRate);
-                }
-            }
-            return parsedJsonReply;
-            async Task<string> ReadOnlyIfPassJSString(string url, object dataToSend, CancellationToken cancellationToken)
-            {
-                // Determine the HTTP method based on whether dataToSend is null or not
-                var httpMethod = dataToSend == null ? HttpMethod.Get : HttpMethod.Post;
-                // Define the headers for the HTTP request
-                var requestHeaders = new Dictionary<string, string>
-        {
-            {"Accept", "*/*"},
-            {"Connection", "keep-alive"}
-        };
-                // Start a loop that will continue making requests until the 'Call-Status' is 'Pass'
-                while (true)
-                {
-                    try
+                    var response = await client.SendAsync(request);
+                    // Get the 'Call-Status' from the response headers
+                    var callStatus = response.Headers.GetValues("Call-Status").FirstOrDefault();
+                    Console.WriteLine($"API SAID : {callStatus}");
+
+                    // If 'Call-Status' is 'Pass', return the response text
+                    if (callStatus == "Pass")
                     {
-                        // Create the HTTP request
-                        var request = new HttpRequestMessage(httpMethod, url)
-                        {
-                            Content = dataToSend != null ? new StringContent(JsonConvert.SerializeObject(dataToSend), Encoding.UTF8, "application/json") : null
-                        };
-                        // Add headers to the request
-                        foreach (var header in requestHeaders)
-                        {
-                            request.Headers.Add(header.Key, header.Value);
-                        }
-                        // Make the HTTP request
-                        using (var client = new HttpClient())
-                        {
-                            var response = await client.SendAsync(request, cancellationToken);
-                            // Get the 'Call-Status' from the response headers
-                            var callStatus = response.Headers.GetValues("Call-Status").FirstOrDefault();
-                            Console.WriteLine($"API SAID : {callStatus}");
-                            // If 'Call-Status' is 'Pass', return the response text
-                            if (callStatus == "Pass")
-                            {
-                                return await response.Content.ReadAsStringAsync();
-                            }
-                            // If 'Call-Status' is 'Fail', stop making requests and return null
-                            if (callStatus == "Fail")
-                            {
-                                return null;
-                            }
-                        }
+                        return await response.Content.ReadAsStringAsync();
                     }
-                    catch (Exception ex)
+
+                    // If 'Call-Status' is 'Fail', stop making requests and return null
+                    if (callStatus == "Fail")
                     {
-                        // If an error occurs during the fetch operation, log the error and return null
-                        Console.Error.WriteLine($"Error occurred while making HTTP request: {ex}");
                         return null;
                     }
+
+                    //control comes here
+                    //If 'Call-Status' is 'Running'
+                    //wait some time before trying again
+                    await Task.Delay(pollRate);
+
                 }
             }
         }

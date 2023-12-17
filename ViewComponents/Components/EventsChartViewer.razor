@@ -5,7 +5,7 @@
 @using System.Text
 
 
-<div @ref="MainElement" class="vstack gap-1" style="display: none;">
+<div @ref="MainElement" id="EventsChartMainElement" class="vstack gap-1" style="display: none;">
 
     @* BUTTON ROW *@
     <div class="hstack gap-2 mb-2">
@@ -95,7 +95,7 @@
 <div @ref="PlaceholderMessageHolder" >
     <div class="d-flex justify-content-center">
         @* important needed to override flex *@
-        <span class="" style="color: @AppData.Grey; font-size: 14px;">Chart will appear here after you click calculate</span>
+        <span class="" style="color: @AppData.Grey; font-size: 14px;">Chart will appear <strong>here</strong> after <strong>calculate</strong></span>
     </div>
 </div>
 
@@ -250,7 +250,7 @@
             _jsRuntime.Show(MainElement);
             _jsRuntime.Hide(PlaceholderMessageHolder);
 
-            //reset highlight check box from previous
+            //reset highlight (planet/house) checkbox from previous if any
             ResetHighLightCheckboxDictionary();
 
             //needed to make save button appear again

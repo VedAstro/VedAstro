@@ -22,7 +22,7 @@ public class EventsChartTools
         var eventsChartApiCallUrl = GetEventsChartApiUrl(person, timeRange, inputedEventTags, maxWidth, options, ayanamsaName);
 
         //make the call to API, NOTE:call is held here
-        var chartString = await _api.PollApiTillDataEVENTSChart(eventsChartApiCallUrl);
+        var chartString = await _api.PollApiTillDataEventsChart(eventsChartApiCallUrl);
 
         return chartString;
     }

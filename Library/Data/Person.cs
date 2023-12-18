@@ -422,7 +422,7 @@ namespace VedAstro.Library
             var newPerson = new Person(rowData.PartitionKey, personId, rowData.Name, birthTime, rowDataGender);
 
             //get person life event list (partition key = person id)
-            var lifeEvents = AzureTable.PersonList.Query<LifeEventRow>(call => call.PartitionKey == personId);
+            var lifeEvents = AzureTable.LifeEventList.Query<LifeEventRow>(call => call.PartitionKey == personId);
 
             //convert to list
             var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();

@@ -140,8 +140,72 @@
 		</Description>
 		<Tag>Travel</Tag>
 	</Event>
-	
+	<Event>
+		<Name>GoodMoonJupiterTravelYoga</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The Moon should be in the 3rd, 6th, 9th or 12th and Jupiter in a
+			kendra from Lagna.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>FortifiedMoonTravelYoga</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Start when the Moon is in Lagna fortified by the disposition of Jupiter
+			or Venus in a kendra.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>StrongJupiterTravelYoga</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Jupiter strong in Lagna and the Moon in any place other than the 8th
+			would be a strong combination.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>EasyPeacefulTravelYoga</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The journey will be easy and peaceful if the Moon be in the 7th and
+			Venus and Mercury be in the 4th.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>NeutralizeBadTravelYoga</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Mercury in the 4th, Jupiter in the 2nd or 7th will neutralize all the
+			other adverse influences.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>StrongBeneficsTravelYoga</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Benefics dignified in kendras or trikonas act as powerful antidotes for
+			all evils.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
+	<Event>
+		<Name>IdealPlanetsTravelYoga</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Jupiter in Lagna, malefics in Upachayas and Venus in any house
+			other than the 7th would be an ideal combinations.
+		</Description>
+		<Tag>Travel</Tag>
+	</Event>
 
+	
+	<!--GENERAL-->
 	<Event>
 		<Name>AmritaSiddhaYoga</Name>
 		<Nature>Good</Nature>
@@ -265,7 +329,6 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-
 		<Name>SakunaKarana</Name>
 		<Nature>Good</Nature>
 		<Description>For getting initiations into mantras Sakini Karana is propitious</Description>

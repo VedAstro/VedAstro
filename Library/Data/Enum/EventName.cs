@@ -1081,6 +1081,14 @@
         WorstLagnaForTravel,
         BadLagnaForTravel,
         GoodPlanetsInLagnaForTravel,
+        GoodMoonJupiterTravelYoga,
+        FortifiedMoonTravelYoga,
+        StrongJupiterTravelYoga,
+        EasyPeacefulTravelYoga,
+        NeutralizeBadTravelYoga,
+        StrongBeneficsTravelYoga,
+        IdealPlanetsTravelYoga,
+
 
         #endregion
     }

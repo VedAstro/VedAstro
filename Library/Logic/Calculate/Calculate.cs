@@ -2141,8 +2141,6 @@ namespace VedAstro.Library
         /// <summary>
         /// Given a planet will return the house it is specific for KP Astrology
         /// </summary>
-        /// <param name="inputPlanet"></param>
-        /// <param name="time"></param>
         /// <param name="horaryNumber">if more than 0, will use Horary instead of Kundali calculation</param>
         /// <param name="rotateDegrees">if more than 0, will rotate house cups by that degree</param>
         /// <returns></returns>
@@ -3995,7 +3993,25 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Checks if a planet is in a Trikona house (trines)(1,5,9)
+        /// Equals to "Is Jupiter in Trine from Lagna"
+        /// </summary>
+        public static bool IsPlanetInTrikona(PlanetName planet, Time time)
+        {
+            //get current planet house
+            var planetHouse = HousePlanetOccupies(planet, time);
+
+            //check if planet is in Trine
+            var isPlanetInTrine = planetHouse == HouseName.House1 ||
+                                  planetHouse == HouseName.House5 ||
+                                  planetHouse == HouseName.House9;
+
+            return isPlanetInTrine;
+        }
+
+        /// <summary>
         /// Checks if a planet is in a kendra house (1,4,7,10)
+        /// Equals to "Is Jupiter in Kendra from Lagna"
         /// </summary>
         public static bool IsPlanetInKendra(PlanetName planet, Time time)
         {
@@ -4008,8 +4024,27 @@ namespace VedAstro.Library
             return isPlanetInKendra;
         }
 
+
         /// <summary>
-        /// Checks if any given planet is in a kendra house (1,4,7,10)
+        /// Checks if a planet is in a Upachayas (3rd, 6th, 10th, and 11th)
+        /// </summary>
+        public static bool IsPlanetInUpachaya(PlanetName planet, Time time)
+        {
+            //get current house
+            var planetHouse = HousePlanetOccupies(planet, time);
+
+            //check if planet is in 3rd, 6th, 10th, or 11th
+            var isPlanetInUpachayas = planetHouse == HouseName.House3 ||
+                                      planetHouse == HouseName.House6 ||
+                                      planetHouse == HouseName.House10 ||
+                                      planetHouse == HouseName.House11;
+
+            return isPlanetInUpachayas;
+        }
+
+        /// <summary>
+        /// Checks if any 1 given planet is in a kendra house (1,4,7,10)
+        /// Equals to "Is Jupiter or Venus in Kendra from Lagna"
         /// </summary>
         public static bool IsPlanetInKendra(PlanetName[] planetList, Time time)
         {
@@ -4204,6 +4239,32 @@ namespace VedAstro.Library
 
             //if control reaches here than no benefic in kendra found, return false
             return false;
+
+        }
+
+        /// <summary>
+        /// Checks if all malefics are in places in Upachayas.
+        /// Malefic planets are those that are generally considered to bring challenges or difficulties.
+        /// The Upachayas are the 3rd, 6th, 10th, and 11th houses.
+        /// These houses are known as the houses of growth and expansion.
+        /// When malefic planets are in these houses, they can drive ambition and personal growth.
+        /// </summary>
+        public static bool IsAllMaleficsInUpachayas(Time time)
+        {
+            //get all bad planets
+            var badPlanets = MaleficPlanetList(time);
+
+            //all planets must be in
+            foreach (var planet in badPlanets)
+            {
+                var isInUpachaya = IsPlanetInUpachaya(planet, time);
+
+                //if not in, then end as not occuring
+                if (!isInUpachaya) { return false; }
+            }
+
+            //if control reaches true
+            return true;
 
         }
 
@@ -4502,6 +4563,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Checks if a planet is in a given house at a specified time 
         /// </summary>
+        /// <param name="houseNumber">house number to check</param>
         public static bool IsPlanetInHouse(PlanetName planet, HouseName houseNumber, Time time)
         {
             return HousePlanetOccupies(planet, time) == houseNumber;

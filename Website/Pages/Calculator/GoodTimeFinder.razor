@@ -144,14 +144,12 @@
                             @(Format.FormatName(EventTag.Travel.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
                                 <TooltipHtml>
-                                    Coming Soon!
-                                    @*
-                                        <div style="max-height: @GR.W157px; overflow: auto;" class="vstack gap-1">
+                                    <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
                                         @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Travel))
                                         {
-                                        <span>@x.FormattedName</span>
+                                            <span>@x.FormattedName</span>
                                         }
-                                        </div> *@
+                                    </div>
                                 </TooltipHtml>
                             </IconTooltip>
                         </label>

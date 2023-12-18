@@ -202,22 +202,20 @@ namespace VedAstro.Library
         /// <summary>
         /// input is json array
         /// </summary>
-        public static List<LifeEvent> FromJsonList(JToken lifeEventList)
+        public static List<LifeEvent> FromJsonList(JToken lifeEventList, string personId)
         {
             var returnList = new List<LifeEvent>();
 
             foreach (var lifeEvent in lifeEventList)
             {
+                var id = lifeEvent["Id"].Value<string>();
+                var name = lifeEvent["Name"].Value<string>();
+                var startTime = Time.FromJson(lifeEvent["StartTime"]); ;
+                var description = lifeEvent["Description"].Value<string>();
+                var nature = lifeEvent["Nature"].Value<string>();
+                var weight = lifeEvent["Weight"]?.Value<string>() ?? "Normal";
 
-                var PersonId = lifeEvent["PersonId"].Value<string>();
-                var Id = lifeEvent["Id"].Value<string>();
-                var Name = lifeEvent["Name"].Value<string>();
-                var StartTime = Time.FromJson(lifeEvent["StartTime"]); ;
-                var Description = lifeEvent["Description"].Value<string>();
-                var Nature = lifeEvent["Nature"].Value<string>();
-                var Weight = lifeEvent["Weight"]?.Value<string>() ?? "Normal";
-
-                var temp = new LifeEvent(PersonId, Id, StartTime, Name, Description, Nature, Weight);
+                var temp = new LifeEvent(personId, id, startTime, name, description, nature, weight);
 
                 returnList.Add(temp);
             }

@@ -66,13 +66,13 @@ namespace VedAstro.Library
         /// List of events that mark important moments in a persons life
         /// This is used later by calculators like Dasa to show against astrological predictions
         /// </summary>
-        public List<LifeEvent> LifeEventList { get; set; } =
-            new List<LifeEvent>(); //default empty list to stop null errors
+        public List<LifeEvent> LifeEventList { get; set; } = new List<LifeEvent>(); //default empty list to stop null errors
 
 
 
         //CTOR
-        public Person(string ownerId, string id, string name, Time birthTime, Gender gender, string notes = "")
+        public Person(string ownerId, string id, string name, Time birthTime, Gender gender, string notes = "",
+            List<LifeEvent> lifeEventList = null)
         {
             Id = id;
             Name = name;
@@ -80,6 +80,7 @@ namespace VedAstro.Library
             Gender = gender;
             OwnerId = ownerId;
             Notes = notes;
+            LifeEventList = lifeEventList ?? new List<LifeEvent>(); //no nulls in list
         }
 
         /// <summary>
@@ -478,19 +479,27 @@ namespace VedAstro.Library
 
             try
             {
-                var id = personInput["PersonId"].Value<string>();
+                var personId = personInput["PersonId"].Value<string>();
                 var name = personInput["Name"].Value<string>();
                 var notes = personInput["Notes"].Value<string>();
                 var time = Time.FromJson(personInput["BirthTime"]);
                 var gender = Enum.Parse<Gender>(personInput["Gender"].Value<string>());
                 var ownerId = personInput["OwnerId"].Value<string>();
 
-                var parsedPerson = new Person(ownerId, id, name, time, gender, notes);
+                //note person ID injected into each life event
+                var lifeEventList = LifeEvent.FromJsonList(personInput["LifeEventList"], personId);
+
+                var parsedPerson = new Person(ownerId, personId, name, time, gender, notes, lifeEventList);
 
                 return parsedPerson;
             }
             catch (Exception e)
             {
+
+                #region DEBUG
+                Console.WriteLine(e);
+                #endregion
+
                 LibLogger.Error($"Failed to parse Person:\n{personInput.ToString()}");
 
                 return Person.Empty;

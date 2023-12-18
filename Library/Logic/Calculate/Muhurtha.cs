@@ -373,7 +373,6 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Let Jupiter or Venus be well placed in Lagna at the time of starting. This
         /// makes the journey successful.
@@ -405,6 +404,173 @@ namespace VedAstro.Library
 
             //if control comes here than not occuring
             return CalculatorResult.NotOccuring();
+        }
+
+        /// <summary>
+        /// The Moon should be in the 3rd, 6th, 9th or 12th and Jupiter in a
+        /// kendra from Lagna.
+        /// </summary>
+        [EventCalculator(EventName.GoodMoonJupiterTravelYoga)]
+        public static CalculatorResult GoodMoonJupiterTravelYoga(Time time, Person person)
+        {
+            //Moon should be in the 3rd, 6th, 9th or 12th
+            var moonIn3_6_9_12 = Calculate.IsPlanetInHouse(PlanetName.Moon, HouseName.House3, time) ||
+                                 Calculate.IsPlanetInHouse(PlanetName.Moon, HouseName.House6, time) ||
+                                 Calculate.IsPlanetInHouse(PlanetName.Moon, HouseName.House9, time) ||
+                                 Calculate.IsPlanetInHouse(PlanetName.Moon, HouseName.House12, time);
+
+            //Jupiter in a kendra from Lagna.
+            var isJupiterInKendra = Calculate.IsPlanetInKendra(PlanetName.Jupiter, time);
+
+            //both conditions need to be met
+            var occuring = isJupiterInKendra && moonIn3_6_9_12;
+
+            return new() { Occuring = occuring };
+
+        }
+
+        /// <summary>
+        /// Start when the Moon is in Lagna fortified by the disposition of Jupiter 
+        /// or Venus in a kendra.
+        /// </summary>
+        [EventCalculator(EventName.FortifiedMoonTravelYoga)]
+        public static CalculatorResult FortifiedMoonTravelYoga(Time time, Person person)
+        {
+            //moon in lagna
+            var isMoonInLagna = Calculate.IsPlanetInHouse(PlanetName.Moon, HouseName.House1, time);
+
+            //venus or jupiter in Kendra
+            var planetNames = new PlanetName[]{PlanetName.Jupiter, PlanetName.Venus};
+            var isVenusJupiterKendra = Calculate.IsPlanetInKendra(planetNames, time);
+
+            //both conditions need to be met to fortify moon
+            var occuring = isMoonInLagna && isVenusJupiterKendra;
+
+            return new() { Occuring = occuring };
+
+        }
+
+        
+        /// <summary>
+        /// Jupiter strong in Lagna and the Moon in any place other than the 8th 
+        /// would be a strong combination. 
+        /// </summary>
+        [EventCalculator(EventName.StrongJupiterTravelYoga)]
+        public static CalculatorResult StrongJupiterTravelYoga(Time time, Person person)
+        {
+            //check if jupiter is in lagna
+            var jupiterInLagna = Calculate.IsPlanetInHouse(PlanetName.Jupiter, HouseName.House1, time);
+
+            //check if jupiter is strong (shadbala)
+            var jupiterIsStrong = Calculate.IsPlanetStrongInShadbala(PlanetName.Jupiter, time);
+
+            //moon NOT in 8th house
+            var moonNotIn8 = !Calculate.IsPlanetInHouse(PlanetName.Moon, HouseName.House8, time);
+
+            //all conditions need to meet
+            var occuring = jupiterInLagna && jupiterIsStrong && moonNotIn8;
+
+            return new() { Occuring = occuring };
+
+        }
+
+        /// <summary>
+        /// The journey will be easy and peaceful if the Moon be in the 7th and
+        /// Venus and Mercury be in the 4th. 
+        /// </summary>
+        [EventCalculator(EventName.EasyPeacefulTravelYoga)]
+        public static CalculatorResult EasyPeacefulTravelYoga(Time time, Person person)
+        {
+            //moon in the 7th
+            var isMoonIn7th = Calculate.IsPlanetInHouse(PlanetName.Moon, HouseName.House7, time);
+            
+            //venus & mercury in 4th
+            var isVenusIn4th = Calculate.IsPlanetInHouse(PlanetName.Venus, HouseName.House4, time);
+            var isMercuryIn4th = Calculate.IsPlanetInHouse(PlanetName.Mercury, HouseName.House4, time);
+
+            //all conditions need to meet
+            var occuring = isMoonIn7th && isVenusIn4th && isMercuryIn4th;
+
+            return new() { Occuring = occuring };
+
+        }
+
+        /// <summary>
+        /// Mercury in the 4th, Jupiter in the 2nd or 7th will neutralise all the 
+        /// other adverse influences.
+        /// </summary>
+        [EventCalculator(EventName.NeutralizeBadTravelYoga)]
+        public static CalculatorResult NeutralizeBadTravelYoga(Time time, Person person)
+        {
+            //Mercury in the 4th
+            var isMercuryIn4th = Calculate.IsPlanetInHouse(PlanetName.Mercury, HouseName.House4, time);
+
+            //Jupiter in the 2nd
+            var isJupiterIn2nd = Calculate.IsPlanetInHouse(PlanetName.Jupiter, HouseName.House2, time);
+
+            //Jupiter in the 7th
+            var isJupiterIn7th = Calculate.IsPlanetInHouse(PlanetName.Jupiter, HouseName.House7, time);
+            
+            //either 1 conditions meets 
+            var occuring = isMercuryIn4th || isJupiterIn2nd || isJupiterIn7th;
+
+            return new() { Occuring = occuring };
+
+        }
+
+        /// <summary>
+        /// Benefics dignified in kendras or trikonas act as powerful antidotes for 
+        /// all evils. 
+        /// </summary>
+        [EventCalculator(EventName.StrongBeneficsTravelYoga)]
+        public static CalculatorResult StrongBeneficsTravelYoga(Time time, Person person)
+        {
+            //get all benefic planets at current time
+            var beneficPlanets = Calculate.BeneficPlanetList(time);
+
+            //check if any of the benefic is in kendra or trikona and is strong as well
+            //else event not occuring
+            foreach (var planet in beneficPlanets)
+            {
+                //in trine or kendra
+                var isInKendra = Calculate.IsPlanetInKendra(planet, time);
+                var isInTrikona = Calculate.IsPlanetInTrikona(planet, time);
+                var trikonaOrKendra = isInKendra || isInTrikona;
+
+                //strong
+                var isStrong = Calculate.IsPlanetStrongInShadbala(planet, time);
+
+                //both conditions met, event occuring
+                if (trikonaOrKendra && isStrong) { return CalculatorResult.IsOccuring(); }
+
+            }
+
+            //if control reache here than not occuring
+            return CalculatorResult.NotOccuring();
+
+        }
+
+        /// <summary>
+        /// Jupiter in Lagna, malefics in Upachayas and Venus in any house
+        /// other than the 7th would be an ideal combinations.
+        /// </summary>
+        [EventCalculator(EventName.IdealPlanetsTravelYoga)]
+        public static CalculatorResult IdealPlanetsTravelYoga(Time time, Person person)
+        {
+            //check if jupiter is in lagna 
+            var isJupiterInLagna = Calculate.IsPlanetInHouse(PlanetName.Jupiter, HouseName.House1, time);
+
+            //malefics in Upachayas  ( 3rd, 6th, 10th, and 11th)
+            var isMaleficsInUpachayas = Calculate.IsAllMaleficsInUpachayas(time);
+
+            //Venus in any house other than the 7th
+            var venusNotIn7th = !Calculate.IsPlanetInHouse(PlanetName.Venus, HouseName.House7, time);
+
+            //all has to meet
+            var occuring = isJupiterInLagna && isMaleficsInUpachayas && venusNotIn7th;
+
+            return new() { Occuring = occuring };
+
         }
 
 

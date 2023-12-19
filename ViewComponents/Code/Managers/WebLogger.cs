@@ -147,10 +147,10 @@ namespace Website
             //if running code locally, end here
             //since in local errors will show in console
             //and also not to clog server's error log
-#if DEBUG
-            Console.WriteLine($"BLZ > LogAlert > DEBUG > skipped logging > {alertData}");
-            return;
-#endif
+//#if DEBUG
+//            Console.WriteLine($"BLZ > LogAlert > DEBUG > skipped logging > {alertData}");
+//            return;
+//#endif
 
             //all alerts except loading box, visitor list popup (use of html instead of title)
             // only visitor list page & loading box uses "html" and not "title",

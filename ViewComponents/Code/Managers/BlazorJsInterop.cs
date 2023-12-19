@@ -41,7 +41,7 @@ namespace Website
             try
             {
                 //log this, don't await to reduce lag
-                WebLogger.Alert(alertData);
+                //WebLogger.Alert(alertData);
 
                 await jsRuntime.InvokeVoidAsync(JS.Swal_fire, alertData);
             }
@@ -72,7 +72,7 @@ namespace Website
         public static async Task<JsonElement> ShowAlertResult(this IJSRuntime jsRuntime, object alertData)
         {
             //log this, don't await to reduce lag
-            WebLogger.Alert(alertData);
+            //WebLogger.Alert(alertData);
 
             return await jsRuntime.InvokeAsync<JsonElement>(JS.Swal_fire, alertData);
         }
@@ -255,9 +255,9 @@ namespace Website
         {
             var value = await jsRuntime.InvokeAsync<string>(JS.getProperty, propName);
 
-#if DEBUG
-            Console.WriteLine($"GET Prop : {propName} = {value}");
-#endif
+//#if DEBUG
+//            Console.WriteLine($"GET Prop : {propName} = {value}");
+//#endif
 
             return value;
         }
@@ -267,9 +267,9 @@ namespace Website
         /// </summary>
         public static async Task SetProperty(this IJSRuntime jsRuntime, string propName, string value)
         {
-#if DEBUG
-            Console.WriteLine($"SET Prop : {propName} = {value}");
-#endif
+//#if DEBUG
+//            Console.WriteLine($"SET Prop : {propName} = {value}");
+//#endif
             await jsRuntime.InvokeVoidAsync(JS.setProperty, propName, value);
         }
 

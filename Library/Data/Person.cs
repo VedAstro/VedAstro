@@ -487,7 +487,7 @@ namespace VedAstro.Library
                 var ownerId = personInput["OwnerId"].Value<string>();
 
                 //note person ID injected into each life event
-                var lifeEventList = LifeEvent.FromJsonList(personInput["LifeEventList"], personId);
+                var lifeEventList = LifeEvent.FromJsonList(personInput["LifeEventList"]);
 
                 var parsedPerson = new Person(ownerId, personId, name, time, gender, notes, lifeEventList);
 
@@ -509,5 +509,18 @@ namespace VedAstro.Library
 
         #endregion
 
+        /// <summary>
+        /// Given a parsed list of person will convert to JSON
+        /// </summary>
+        public static JArray ListToJson(List<Person> personList)
+        {
+            var returnValue = new JArray();
+            foreach (var person in personList)
+            {
+                returnValue.Add(person.ToJson());
+            }
+
+            return returnValue;
+        }
     }
 }

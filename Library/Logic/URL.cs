@@ -51,6 +51,7 @@ public class URL
         AddPerson = ApiUrl + "/AddPerson";
         DeletePerson = ApiUrl + "/DeletePerson";
         UpdatePerson = ApiUrl + "/UpdatePerson";
+        UpsertLifeEvent = ApiUrl + "/UpsertLifeEvent";
         GetPerson = ApiUrl + "/GetPerson";
         GetPersonImage = ApiUrl + "/GetPersonImage/PersonId";
         GetNewPersonId = ApiUrl + "/GetNewPersonId";
@@ -143,6 +144,7 @@ public class URL
     public readonly string GetNewPersonId;
     public readonly string GetPersonIdFromSavedChartId;
     public readonly string UpdatePerson;
+    public readonly string UpsertLifeEvent;
 
     public readonly string GetTaskListApi;
     public readonly string GetVisitorList;

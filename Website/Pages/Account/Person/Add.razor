@@ -93,18 +93,22 @@
         //only continue if passed input field validation
         if (!(await IsValidationPassed())) { _nothingToShow = false; return; } //if nothing than back to normal
 
-        StateHasChanged();//needed to make change appear instantly, work
+        StateHasChanged(); //needed to make change appear instantly, works
 
         //make a new person from the details in the input
         //NOTE : element has to be in DOM when called to get date info from calendar
-        //      hence the the use of css to hide loading
+        //      hence the use of css to hide loading
         _person = await GetPersonInstanceFromInput();
 
         //send newly created person to API server
-        var result = await AppData.API.Person.AddPerson(_person);
+        await AppData.API.Person.AddPerson(_person);
+
+        //after adding new person set person, as selected to make life easier for user (UX)
+        await _jsRuntime.SetProperty("SelectedPerson", _person.ToJson().ToString());
 
         //page ready
         _jsRuntime.HideAlert();
+
         //hide final loading, needed because SweetAlert fails when to many calls
         _nothingToShow = false;
 

@@ -112,6 +112,7 @@ namespace VedAstro.Library
         public JObject ToJson()
         {
             var temp = new JObject();
+            temp["PersonId"] = this.PersonId;
             temp["Id"] = this.Id;
             temp["Name"] = this.Name;
             temp["StartTime"] = this.StartTime.ToJson();
@@ -186,15 +187,15 @@ namespace VedAstro.Library
         {
 
             //try get data from xml else use empty string
-            var Id = !string.IsNullOrEmpty(lifeEventXml.Element("Id")?.Value) ? lifeEventXml?.Element("Id")?.Value : ""; //leave empty to detect
-            var PersonId = !string.IsNullOrEmpty(lifeEventXml.Element("PersonId")?.Value) ? lifeEventXml?.Element("PersonIdId")?.Value : ""; //leave empty to detect
-            var Name = !string.IsNullOrEmpty(lifeEventXml.Element("Name")?.Value) ? lifeEventXml?.Element("Name")?.Value : "";
-            var Description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml?.Element("Description")?.Value : "";
-            var Nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml?.Element("Nature")?.Value : "";
-            var Weight = !string.IsNullOrEmpty(lifeEventXml.Element("Weight")?.Value) ? lifeEventXml?.Element("Weight")?.Value : "Normal";
-            var StartTime = Time.FromXml(lifeEventXml.Element("StartTime")?.Element("Time"));
+            var id = !string.IsNullOrEmpty(lifeEventXml.Element("Id")?.Value) ? lifeEventXml?.Element("Id")?.Value : ""; //leave empty to detect
+            var personId = !string.IsNullOrEmpty(lifeEventXml.Element("PersonId")?.Value) ? lifeEventXml?.Element("PersonIdId")?.Value : ""; //leave empty to detect
+            var name = !string.IsNullOrEmpty(lifeEventXml.Element("Name")?.Value) ? lifeEventXml?.Element("Name")?.Value : "";
+            var description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml?.Element("Description")?.Value : "";
+            var nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml?.Element("Nature")?.Value : "";
+            var weight = !string.IsNullOrEmpty(lifeEventXml.Element("Weight")?.Value) ? lifeEventXml?.Element("Weight")?.Value : "Normal";
+            var startTime = Time.FromXml(lifeEventXml.Element("StartTime")?.Element("Time"));
 
-            var lifeEventParsed = new LifeEvent(PersonId, Id, StartTime, Name, Description, Nature, Weight);
+            var lifeEventParsed = new LifeEvent(personId, id, startTime, name, description, nature, weight);
 
             return lifeEventParsed;
         }
@@ -202,29 +203,32 @@ namespace VedAstro.Library
         /// <summary>
         /// input is json array
         /// </summary>
-        public static List<LifeEvent> FromJsonList(JToken lifeEventList, string personId)
+        public static List<LifeEvent> FromJsonList(JToken lifeEventList)
         {
             var returnList = new List<LifeEvent>();
 
             foreach (var lifeEvent in lifeEventList)
             {
-                var id = lifeEvent["Id"].Value<string>();
-                var name = lifeEvent["Name"].Value<string>();
-                var startTime = Time.FromJson(lifeEvent["StartTime"]); ;
-                var description = lifeEvent["Description"].Value<string>();
-                var nature = lifeEvent["Nature"].Value<string>();
-                var weight = lifeEvent["Weight"]?.Value<string>() ?? "Normal";
-
-                var temp = new LifeEvent(personId, id, startTime, name, description, nature, weight);
-
-                returnList.Add(temp);
+                returnList.Add(LifeEvent.FromJson(lifeEvent));
             }
 
             return returnList;
         }
 
+        public static LifeEvent FromJson(JToken lifeEvent)
+        {
+            var personId = lifeEvent["PersonId"].Value<string>();
+            var id = lifeEvent["Id"].Value<string>();
+            var name = lifeEvent["Name"].Value<string>();
+            var startTime = Time.FromJson(lifeEvent["StartTime"]); ;
+            var description = lifeEvent["Description"].Value<string>();
+            var nature = lifeEvent["Nature"].Value<string>();
+            var weight = lifeEvent["Weight"]?.Value<string>() ?? "Normal";
 
+            var parsed = new LifeEvent(personId, id, startTime, name, description, nature, weight);
 
+            return parsed;
+        }
 
 
         //░█▀▀▀█ ░█──░█ ░█▀▀▀ ░█▀▀█ ░█▀▀█ ▀█▀ ░█▀▀▄ ░█▀▀▀ 　 ░█▀▄▀█ ░█▀▀▀ ▀▀█▀▀ ░█─░█ ░█▀▀▀█ ░█▀▀▄ ░█▀▀▀█ 

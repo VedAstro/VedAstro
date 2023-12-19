@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 using Website.Pages;
 
@@ -429,5 +430,65 @@ namespace Website
         /// HTML reference to desktop sidebar div, used to show and hide by button
         /// </summary>
         public static ElementReference DesktopSidebar { get; set; }
+
+
+
+
+        /// <summary>
+        /// gets cached person list stored in browser memory
+        /// </summary>
+        public static async Task<List<Person>> GetCachedPersonList(bool isPublic = false)
+        {
+            //get raw cache if any
+            //set either public or private list
+            var propName = isPublic ? "CachedPublicPersonList" : "CachedPersonList";
+
+            var listJson = await _jsRuntime.GetProperty(propName);
+
+            if (listJson is not null or "")
+            {
+#if DEBUG
+                Console.WriteLine("BLZ: Using cached person list");
+#endif
+                //convert string to parsed list
+                var parsedList = Person.FromJsonList(JToken.Parse(listJson));
+
+                return parsedList;
+            }
+
+            return new List<Person>();
+        }
+
+        public static async Task SetCachedPersonList(List<Person> personList, bool isPublic = false)
+        {
+            //convert to storable format in browser memory
+            JArray personJson = Person.ListToJson(personList);
+            var jsonString = personJson.ToString();
+
+            //set either public or private list
+            var propName = isPublic? "CachedPublicPersonList":"CachedPersonList";
+            await _jsRuntime.SetProperty(propName, jsonString);
+
+#if DEBUG
+            Console.WriteLine("BLZ: New person cache set in memory");
+#endif
+        }
+
+        public static async Task ClearCachedPersonList()
+        {
+            //clear both saved list in memory
+            await _jsRuntime.RemoveProperty("CachedPersonList");
+            await _jsRuntime.RemoveProperty("CachedPublicPersonList");
+
+            //also clear last "selected person" (will set later once button saved)
+            await _jsRuntime.RemoveProperty("SelectedPerson");
+
+
+#if DEBUG
+            Console.WriteLine("BLZ: Person list cache cleared");
+#endif
+        }
+
+
     }
 }

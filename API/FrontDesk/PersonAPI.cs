@@ -1,4 +1,4 @@
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
@@ -138,7 +138,7 @@ namespace API
 
                 //possible old cache of person with same id lived, so clear cache if any
                 //delete data related to person (NOT USER, PERSON PROFILE)
-                await AzureCache.DeleteStuffRelatedToPerson(newPerson);
+                await AzureCache.DeleteCacheRelatedToPerson(newPerson);
 
                 //creates record if no exist, update if already there
                 AzureTable.PersonList.UpsertEntity(newPerson.ToAzureRow());
@@ -212,7 +212,7 @@ namespace API
                 var personParsed = Person.FromJson(rootJson);
 
                 //delete data related to person (NOT USER, PERSON PROFILE)
-                await AzureCache.DeleteStuffRelatedToPerson(personParsed);
+                await AzureCache.DeleteCacheRelatedToPerson(personParsed);
 
                 await AzureTable.PersonList?.UpsertEntityAsync(personParsed.ToAzureRow());
 
@@ -285,7 +285,7 @@ namespace API
                 var personToDelete = Person.FromAzureRow(personAzureRow);
 
                 //# delete data related to person (NOT USER, PERSON PROFILE)
-                await AzureCache.DeleteStuffRelatedToPerson(personToDelete);
+                await AzureCache.DeleteCacheRelatedToPerson(personToDelete);
 
                 //# add deleted person to recycle bin
                 await AzureTable.PersonListRecycleBin.UpsertEntityAsync(personAzureRow);

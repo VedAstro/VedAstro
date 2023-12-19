@@ -8,13 +8,6 @@ public class PersonTools
 
     private readonly VedAstroAPI _api;
 
-    private static List<Person> CachedPersonList { get; set; } = new List<Person>(); //if empty que to get new list
-
-    /// <summary>
-    /// public examples profiles always here if needed, list should never be empty, bad UX
-    /// </summary>
-    private static List<Person> CachedPublicPersonList { get; set; } = new List<Person>(); //if empty que to get new list
-
     //PUBLIC
 
     public PersonTools(VedAstroAPI vedAstroApi) => _api = vedAstroApi;
@@ -34,15 +27,17 @@ public class PersonTools
 
     }
 
+
     /// <summary>
     /// person will be auto prepared, but might be slow
-    /// as such prepare before hand if possible, like when app load
+    /// as such prepare beforehand if possible, like when app load
     /// </summary>
     public async Task<List<Person>> GetPersonList()
     {
         //CHECK CACHE
-        //cache will be cleared when update is needed
-        if (CachedPersonList.Any()) { return CachedPersonList; }
+        //will be cleared when update is needed   
+        var cachedPersonList = await AppData.GetCachedPersonList();
+        if (cachedPersonList.Any()) { return cachedPersonList; }
 
         //prepare url to call
         var ownerId = _api.UserId == "101" ? _api.VisitorID : _api.UserId;
@@ -50,38 +45,37 @@ public class PersonTools
         var listNoPolling = await _api.GetListNoPolling(url, Person.FromJsonList);
 
         //NOTE: ToList is needed to make clone, else copies by ref and is lost
-        CachedPersonList = listNoPolling.ToList();
+        await AppData.SetCachedPersonList(listNoPolling.ToList());
 
-        return CachedPersonList;
+        return await AppData.GetCachedPersonList();
     }
 
     public async Task<List<Person>> GetPublicPersonList()
     {
         //CHECK CACHE
-        //cache will be cleared when update is needed
-        if (CachedPublicPersonList.Any()) { return CachedPublicPersonList; }
+        //will be cleared when update is needed
+        var cachedPersonList = await AppData.GetCachedPersonList(true);
+        if (cachedPersonList.Any()) { return cachedPersonList; }
 
         //tell API to get started
         var url2 = $"{_api.URL.GetPersonList}/OwnerId/101/";
         var listNoPolling = await _api.GetListNoPolling(url2, Person.FromJsonList);
 
         //NOTE: ToList is needed to make clone, else copies by ref and is lost
-        CachedPublicPersonList = listNoPolling.ToList();
+        await AppData.SetCachedPersonList(listNoPolling.ToList(), true);
 
-        return CachedPublicPersonList;
+        return await AppData.GetCachedPersonList(true);
     }
 
     /// <summary>
     /// Adds new person to API server main list
     /// </summary>
-    public async Task<JToken> AddPerson(Person person)
+    public async Task AddPerson(Person person)
     {
         //create id that will own person, if logged in use "user id" else use "session id"
         var ownerId = _api.UserId == "101" ? _api.VisitorID : _api.UserId;
 
-
         //send newly created person to API server
-        //var personJson = person.ToJson();
         //pass in user id to make sure user has right to delete
         //http://localhost:7071/api/AddPerson/OwnerId/234324x24/Name/Romeo/Gender/Female/Location/London/Time/13:45/01/06/1990
         var url = $"{_api.URL.AddPerson}/OwnerId/{ownerId}/Name/{person.Name}" +
@@ -94,11 +88,9 @@ public class PersonTools
         Console.WriteLine($"SERVER SAID:\n{jsonResult}");
 #endif
 
-        //if pass, clear local person cache
-        await HandleResultClearLocalCache(person, jsonResult, "add");
+        //if pass, clear local person cache & show appropriate done message to user
+        await HandleResultClearLocalCache(person.DisplayName, jsonResult, "add");
 
-        //up to caller to interpret data, can be failed one also
-        return jsonResult;
     }
 
     /// <summary>
@@ -122,7 +114,26 @@ public class PersonTools
 #endif
 
         //if pass, clear local person cache
-        await HandleResultClearLocalCache(personToDelete, jsonResult, "delete"); //task is for message box
+        await HandleResultClearLocalCache(personToDelete.DisplayName, jsonResult, "delete"); //task is for message box
+
+    }
+
+    
+    public async Task DeleteLifeEvent(LifeEvent lifeEventToDelete)
+    {
+        //tell API to get started
+        //pass in user id to make sure user has right to delete
+        var url = $"{_api.URL.DeletePerson}/OwnerId/{_api.UserId}/PersonId/{lifeEventToDelete.Id}";
+
+        //API gives a url to check on poll fo results
+        var jsonResult = await Tools.WriteServer<JObject, object>(HttpMethod.Get, url);
+
+#if DEBUG
+        Console.WriteLine($"SERVER SAID:\n{jsonResult}");
+#endif
+
+        //if pass, clear local person cache
+        await HandleResultClearLocalCache("Life event", jsonResult, "delete"); //task is for message box
 
     }
 
@@ -148,8 +159,27 @@ public class PersonTools
 #endif
 
         //if pass, clear local person cache
-        await HandleResultClearLocalCache(person, jsonResult, "update");
+        await HandleResultClearLocalCache(person.DisplayName, jsonResult, "update");
 
+    }
+
+    /// <summary>
+    /// Person is needed to clear local cache. Not sent to server.
+    /// </summary>
+    public async Task UpsertLifeEvent(Person person, LifeEvent lifeEvent)
+    {
+        //prepare and send updated person to API server
+        var eventJson = lifeEvent.ToJson();
+        var url = $"{_api.URL.UpsertLifeEvent}";
+        var jsonResult = await Tools.WriteServer<JObject, JToken>(HttpMethod.Post, url, eventJson);
+
+
+#if DEBUG
+        Console.WriteLine($"SERVER SAID:\n{jsonResult}");
+#endif
+
+        //if pass, clear local person cache
+        await HandleResultClearLocalCache(person.DisplayName, jsonResult, "update");
     }
 
     /// <summary>
@@ -193,26 +223,29 @@ public class PersonTools
     //---------------------------------------------PRIVATE
     /// <summary>
     /// checks status, if pass clears person list cache, for update, delete and add
+    /// extra data needed to show pop up message
     /// </summary>
-    private async Task HandleResultClearLocalCache(Person personInQuestion, JToken jsonResult, string task)
+    private async Task HandleResultClearLocalCache(string personName, JToken jsonResult, string task)
     {
 
         //if anything but pass, raise alarm
         var status = jsonResult["Status"]?.Value<string>() ?? "";
-        if (status != "Pass") //FAIL
+
+        //FAIL
+        if (status != "Pass") 
         {
             var failMessage = jsonResult["Payload"]?.Value<string>() ?? "Server didn't give reason, pls try later.";
             await _api.ShowAlert("error", $"Server said no to your request! Why?", failMessage);
         }
-        else //PASS
-        {
 
+        //PASS
+        else
+        {
             //1: clear stored person list
-            PersonTools.CachedPersonList.Clear();
+            await AppData.ClearCachedPersonList();
 
             //let user know person has been updates
-            await _api.ShowAlert("success", $"{personInQuestion.Name} {task} complete!", false, timer: 1000);
-
+            await _api.ShowAlert("success", $"{personName} {task} complete!", false, timer: 1000);
         }
     }
 

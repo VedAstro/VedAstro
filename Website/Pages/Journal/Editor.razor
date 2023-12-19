@@ -129,16 +129,16 @@
         //get updated life event
         var updatedLifeEvent = await GetLifeEventFromInputs();
 
-        //update or add this life event to caller
+        //# update or add this life event to caller
+        //if old event exist, delete first
         var alreadyExist = SelectedPerson.LifeEventList.Where(le => le.Id == updatedLifeEvent.Id).Any();
-        //delete old
         if (alreadyExist) { SelectedPerson.LifeEventList.RemoveAll(le => le.Id == updatedLifeEvent.Id); }
-
-        //add updated as new
+        
+        //add updated/new life event
         SelectedPerson.LifeEventList.Add(updatedLifeEvent);
 
         //update person in API, includes message
-        await AppData.API.Person.UpdatePerson(SelectedPerson);
+        await AppData.API.Person.UpsertLifeEvent(SelectedPerson, updatedLifeEvent);
 
         _jsRuntime.PlayDoneSound();
 
@@ -209,7 +209,7 @@
     {
         //get event from fields
         var time = await _timeInput.GetTime(_geoLocationInput.GetGeoLocation());
-        var newEvent = new LifeEvent("", SelectedLifeEvent.Id, time, inputName, inputDescription, inputNature, inputWeight);
+        var newEvent = new LifeEvent(SelectedPerson.Id, SelectedLifeEvent.Id, time, inputName, inputDescription, inputNature, inputWeight);
 
         return newEvent;
     }
@@ -228,13 +228,16 @@
         if (!(await IsValidationPassed())) { return; }
 
         //update or add this life event to caller
-        var alreadyExist = SelectedPerson.LifeEventList.Where(le => le.Id == LifeEventIdUrl).Any();
+        //var alreadyExist = SelectedPerson.LifeEventList.Where(le => le.Id == LifeEventIdUrl).Any();
 
         //delete old
-        if (alreadyExist) { SelectedPerson.LifeEventList.RemoveAll(le => le.Id == LifeEventIdUrl); }
+        //if (alreadyExist) { SelectedPerson.LifeEventList.RemoveAll(le => le.Id == LifeEventIdUrl); }
+
+    //get updated life event
+        var updatedLifeEvent = await GetLifeEventFromInputs();
 
         //update person in API, includes message
-        await AppData.API.Person.UpdatePerson(SelectedPerson);
+        await AppData.API.Person.DeleteLifeEvent(updatedLifeEvent);
         _jsRuntime.PlayDoneSound();
 
         //send back to previous page

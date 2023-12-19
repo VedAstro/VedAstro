@@ -597,13 +597,13 @@ export function addWidthToEveryChild(element, widthToAdd) {
 
 export function getPropWrapper(element, propName) {
     let propVal = $(element).prop(propName);
-    console.log(`JS: getPropWrapper : ${propName} : ${propVal}`);
+    //console.log(`JS: getPropWrapper : ${propName} : ${propVal}`);
     return propVal;
 }
 
 export function setPropWrapper(element, propName, propVal) {
     $(element).prop(propName, propVal);
-    console.log(`JS: setPropWrapper : ${propName} : ${propVal}`);
+    //console.log(`JS: setPropWrapper : ${propName} : ${propVal}`);
     return propVal;
 }
 

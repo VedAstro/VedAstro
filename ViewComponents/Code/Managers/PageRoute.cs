@@ -28,7 +28,7 @@
         public const string NuGet = "https://github.com/VedAstro/VedAstro/discussions/18";
 
         //JOURNAL
-        public const string Journal = "Journal/";
+        public const string Journal = "Journal";
         public const string JournalParam = "/Journal/{PersonIdUrl}";
         public const string JournalEditorParam = "Journal/Editor/{PersonIdUrl}/{LifeEventIdUrl}"; //for page declaration
         public const string JournalEditor = "Journal/Editor"; //for page URL generation

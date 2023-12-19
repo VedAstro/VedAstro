@@ -1,4 +1,4 @@
-﻿using System.Net.Mime;
+using System.Net.Mime;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
@@ -229,6 +229,39 @@ namespace API
 
         }
 
+        [Function(nameof(UpsertLifeEvent))]
+        public static async Task<HttpResponseData> UpsertLifeEvent(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = nameof(UpsertLifeEvent))] HttpRequestData req)
+        {
+
+            try
+            {
+                //get data out of call
+                var rootJson = await APITools.ExtractDataFromRequestJson(req);
+
+                //read the life event that "literally" just came under the oceans
+                var parsedLifeEvent = LifeEvent.FromJson(rootJson);
+
+                //delete data related to person (NOT USER, PERSON PROFILE)
+                await AzureCache.DeleteCacheRelatedToPerson(parsedLifeEvent.PersonId);
+
+                //upsert to database
+                var tableRow = parsedLifeEvent.ToAzureRow();
+                await AzureTable.LifeEventList?.UpsertEntityAsync(tableRow);
+
+                return APITools.PassMessageJson(req);
+            }
+            catch (Exception e)
+            {
+                //log error
+                APILogger.Error(e, req);
+
+                //format error nicely to show user
+                return APITools.FailMessageJson(e, req);
+            }
+
+        }
+
 
         /// <summary>
         /// Deletes a person's record, uses hash to identify person
@@ -259,6 +292,45 @@ namespace API
 
                 //# do final delete from MAIN DATABASE
                 await AzureTable.PersonList.DeleteEntityAsync(ownerId, personId);
+
+                return APITools.PassMessageJson(req);
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                APILogger.Error(e, req);
+
+                //format error nicely to show user
+                return APITools.FailMessageJson(e, req);
+            }
+        }
+
+        
+        [Function(nameof(DeleteLifeEvent))]
+        public static async Task<HttpResponseData> DeleteLifeEvent(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DeleteLifeEvent/PersonId/{personId}/LifeEventId/{lifeEventId}")] HttpRequestData req,
+            string personId, string lifeEventId)
+        {
+            try
+            {
+                //# get full person copy to place in recycle bin
+                
+                //query the database
+                //var foundCalls = AzureTable.PersonList?.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+                
+                //make into readable format
+                //var personAzureRow = foundCalls?.FirstOrDefault();
+                //var personToDelete = Person.FromAzureRow(personAzureRow);
+
+                //# delete data related to person (NOT USER, PERSON PROFILE)
+                await AzureCache.DeleteCacheRelatedToPerson(personId);
+
+                //# add deleted person to recycle bin
+                //await AzureTable.PersonListRecycleBin.UpsertEntityAsync(personAzureRow);
+
+                //# do final delete from MAIN DATABASE
+                await AzureTable.LifeEventList.DeleteEntityAsync(personId, lifeEventId);
 
                 return APITools.PassMessageJson(req);
 

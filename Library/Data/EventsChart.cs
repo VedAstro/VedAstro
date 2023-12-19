@@ -65,8 +65,9 @@ namespace VedAstro.Library
 
             //include all data into the name of the cache,
             //so easy to ID en mass and genocide them when needed
-            var dataSignature = $"{nameof(EventsChart)}-" +
-                                $"{this.Person.Id}-" +
+            //NOTE: person ID must be first, to be detected by "cache cleaner" when person is updated
+            var dataSignature = $"{this.Person.Id}-" +
+                                $"{nameof(EventsChart)}-" +
                                 $"{startTime}-{endTime}-" +
                                 $"{this.DaysPerPixel}-" +
                                 $"{(Ayanamsa)Calculate.Ayanamsa}-" +

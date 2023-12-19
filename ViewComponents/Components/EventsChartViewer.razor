@@ -5,7 +5,9 @@
 @using System.Text
 
 
-<div @ref="MainElement" id="EventsChartMainElement" class="vstack gap-1" style="display: none;">
+<div style="margin-top:@GR.W60px; ">
+    <hr>
+    <div @ref="MainElement" id="EventsChartMainElement" class="vstack gap-1" style="display: none;">
 
     @* BUTTON ROW *@
     <div class="hstack gap-2 mb-2">
@@ -98,6 +100,12 @@
         <span class="" style="color: @AppData.Grey; font-size: 14px;">Chart will appear <strong>here</strong> after <strong>calculate</strong></span>
     </div>
 </div>
+
+
+    <hr />
+</div>
+
+
 
 
 @code {

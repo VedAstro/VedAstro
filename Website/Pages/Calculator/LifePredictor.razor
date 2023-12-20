@@ -45,10 +45,7 @@ Know good and bad periods of your life years ahead.*@
             </div>
 
             @* YEAR SELECTOR *@
-            @if (SelectedTimeRangePreset == "selectyear")
-            {
-                <MonthYearTimeRangeSelector @ref="monthYearTimeRangeSelector" />
-            }
+            <MonthYearTimeRangeSelector @ref="monthYearTimeRangeSelector" />
 
             @* AGE SELECTOR *@
             @if (SelectedTimeRangePreset == "selectage")
@@ -214,7 +211,6 @@ Know good and bad periods of your life years ahead.*@
                 <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle("LifePredictorAdvancedInputHolder"))" SmallSize="true" />
                 <IconButton Id="LifePredictorCalculateButton" @ref="_calculateButton" SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculate" ShowDelayWarning="true"></IconButton>
             </div>
-
 
         </div>
     </div>
@@ -501,7 +497,10 @@ Know good and bad periods of your life years ahead.*@
 
             _selectedTimeRange = value;
 
-            //auto fill precision
+            //show if select year menu, since hidden by default
+            if (value == "selectyear") { monthYearTimeRangeSelector?.Show(); }
+
+            //auto update precision
             var timeRange = GetTimeRange();
             var maxWidth = _eventsChartViewer?.MaxWidth ?? 0;
             daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
@@ -594,9 +593,27 @@ Know good and bad periods of your life years ahead.*@
         var timeRange = GetTimeRange();
         daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);
 
+        //hidden by default
+        monthYearTimeRangeSelector.Hide();
+
+        //attach event handler to update precision when month/year is changed
+        monthYearTimeRangeSelector.MonthYearChanged += OnUpdateMonthYearSelection;
+
         _jsRuntime.HideLoading();
         _isResultReady = true;
 
+    }
+
+    // Event handler
+    public void OnUpdateMonthYearSelection()
+    {
+        //auto update precision
+        var timeRange = GetTimeRange();
+        var maxWidth = _eventsChartViewer?.MaxWidth ?? 0;
+        daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
+
+        //needed to propagate changes
+        StateHasChanged();
     }
 
 
@@ -693,7 +710,7 @@ Know good and bad periods of your life years ahead.*@
         //if user selected indiviual year than make new preset is placed in format that can be read by parser
         if (SelectedTimeRangePreset == "selectyear") //input coming from
         {
-            timeRange = monthYearTimeRangeSelector?.GetTimeRange(SelectedPerson.GetBirthLocation()) ?? TimeRange.Empty;
+            timeRange = monthYearTimeRangeSelector?.GetTimeRange(SelectedPerson.GetBirthLocation()); //?? TimeRange.Empty;
         }
         else
         {

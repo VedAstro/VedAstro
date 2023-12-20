@@ -1,4 +1,4 @@
-@attribute [Route(PageRoute.GoodTimeFinder)]
+﻿@attribute [Route(PageRoute.GoodTimeFinder)]
 @using VedAstro.Library
 @using System.Collections
 
@@ -41,11 +41,7 @@
                 </div>
             
                 @* YEAR SELECTOR *@
-                @if (SelectedTimeRangePreset == "selectyear")
-                {
-                    <MonthYearTimeRangeSelector @ref="monthYearTimeRangeSelector" />
-                }
-
+                <MonthYearTimeRangeSelector @ref="monthYearTimeRangeSelector" />
 
                 @* EVENT SELECT *@
                 <IconTitle Title="Event Type" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
@@ -298,7 +294,7 @@
                
                 @* BUTTONS *@
                 <div class="mt-2 d-flex justify-content-between">
-                    <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle("GoodTimeFinderAdvancedInputHolder"))" SmallSize="true" />
+                    <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@OnClickShowAdvanced" SmallSize="true" />
                     <IconButton @ref="_calculateButton" Id="GoodTimeFinderCalculateButton" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="OnClickCalculate" ShowDelayWarning="true"/>
                 </div>
             </div>
@@ -332,7 +328,27 @@
     private bool _isResultReady = false;
     private ElementReference _holderDiv;
     private EventsChartViewer _eventsChartViewer;
-    public string? SelectedTimeRangePreset { get; set; } = "3month"; //default to 3 months
+
+    //default to 3 months
+    private string? _selectedTimeRangePreset = "3month";
+
+    public string? SelectedTimeRangePreset
+    {
+        get => _selectedTimeRangePreset;
+        set
+        {
+            _selectedTimeRangePreset = value;
+
+            //show if select year menu, since hidden by default
+            if (value == "selectyear") { monthYearTimeRangeSelector?.Show(); }
+
+            //auto fill precision
+            var timeRange = GetTimeRange();
+            var maxWidth = _eventsChartViewer?.MaxWidth ?? 0;
+            daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
+            
+        }
+    }
 
     private PersonSelectorBox _easyPersonSelectorBox;
     public string SelectedPersonId { get; set; }
@@ -400,17 +416,40 @@
         //get list of all event nicely formatted via API
         EventManager.EventDataList = await AppData.API.EventsChart.GetEventDataList();
 
+        //fill default precision
+        var timeRange = GetTimeRange();
+        daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);
+
+        //hidden by default
+        monthYearTimeRangeSelector.Hide();
+
+        //attach event handler to update precision when month/year is changed
+        monthYearTimeRangeSelector.MonthYearChanged += OnUpdateMonthYearSelection;
+
         _jsRuntime.HideLoading();
         _isResultReady = true;
 
-
     }
+
 
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
+    // Event handler
+    public void OnUpdateMonthYearSelection()
+    {
+        //auto update precision
+        var timeRange = GetTimeRange();
+        var maxWidth = _eventsChartViewer?.MaxWidth ?? 0;
+        daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
+
+        //needed to propagate changes
+        StateHasChanged();
+    }
+
+    
     /// <summary>
     /// Gets possible age list for selection 120 years
     /// </summary>
@@ -457,7 +496,7 @@
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart (will auto scroll to chart when done)
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions, SelectedAyanamsaName);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions, SelectedAyanamsaName, daysPerPixelInput);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -472,22 +511,6 @@
 
     }
 
-    // /// <summary>
-    // /// Gets parsed time from users crazy input
-    // /// </summary>
-    // /// <returns></returns>
-    // private TimeRange GetTimeRange()
-    // {
-    //     var systemTimezone = Tools.GetSystemTimezone();
-
-    //     //if user selected indiviual year than make new preset is placed in format that can be read by parser
-    //     if (SelectedTimeRangePreset == "selectyear") { SelectedTimeRangePreset = $"{SelectedLifeYearStart}-{SelectedLifeYearEnd}"; } //exp 2000-2010
-    //                                                                                                                                  //else if (SelectedTimeRangePreset == "selectage") { SelectedTimeRangePreset = $"age{SelectedLifeAgeStart}to{SelectedLifeAgeEnd}"; } //exp age4to50
-
-    //     var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRangePreset, systemTimezone);
-
-    //     return timeRange;
-    // }
 
     /// <summary>
     /// Gets parsed time from users crazy input
@@ -560,6 +583,12 @@
         }
 
         return combined;
+    }
+
+    private void OnClickShowAdvanced()
+    {
+        //slide oout
+        _jsRuntime.SmoothSlideToggle("GoodTimeFinderAdvancedInputHolder");
     }
 
 }

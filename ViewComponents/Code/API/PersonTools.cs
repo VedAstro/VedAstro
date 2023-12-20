@@ -209,7 +209,7 @@ public class PersonTools
         var jsonResult = await Tools.WriteServer<JObject, object>(HttpMethod.Get, url);
 
         //get parsed payload from raw result
-        string personId = VedAstroAPI.GetPayload<string>(jsonResult, null);
+        string personId = Tools.GetPayload<string>(jsonResult, null);
 
         return personId;
     }

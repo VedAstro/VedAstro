@@ -121,7 +121,7 @@ Know good and bad periods of your life years ahead.*@
                         <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.PrecisionHelp" SmallIcon="true"/>
                     </span>
 
-                    <input @bind="daysPerPixelInput" type="number" step="0.01" class="form-control">
+                    <input @bind="DaysPerPixelInput" type="number" step="0.01" class="form-control">
                 </div>
 
                 @* EVENT SELECT *@
@@ -420,9 +420,10 @@ Know good and bad periods of your life years ahead.*@
 
 @code {
 
-    private double daysPerPixelInput;
-    private List<DasaType> AllDasaTypes = new List<DasaType>((DasaType[])Enum.GetValues(typeof(DasaType)));
-    private List<EventTag> AllLifePredictorEventTags = new List<EventTag>
+    private double DaysPerPixelInput { get; set; }
+
+    private List<DasaType> AllDasaTypes = new((DasaType[])Enum.GetValues(typeof(DasaType)));
+    private List<EventTag> AllLifePredictorEventTags = new()
     {
         EventTag.PD1,EventTag.PD2, EventTag.PD3, EventTag.PD4,EventTag.PD5,EventTag.PD6,EventTag.PD7,EventTag.PD8,
         EventTag.AshtakvargaGochara,
@@ -441,7 +442,6 @@ Know good and bad periods of your life years ahead.*@
     /// </summary>
     private Dictionary<MethodInfo, bool> SelectedAlgorithmDictionary;
 
-
     /// <summary>
     /// Gets all tags that have been selected in checkbox
     /// </summary>
@@ -452,12 +452,10 @@ Know good and bad periods of your life years ahead.*@
     /// </summary>
     private Dictionary<EventTag, bool> SelectedEventTagsDictionary;
 
-
     /// <summary>
     /// Gets all tags that have been selected in checkbox
     /// </summary>
     public List<EventTag> SelectedEventTags => SelectedEventTagsDictionary.Where(pair => pair.Value).Select(pair => pair.Key).ToList();
-
 
     private List<string> lifeAgeList = GetAgeSelectionRange();
     private string SelectedLifeAgeStart = "1";
@@ -497,13 +495,14 @@ Know good and bad periods of your life years ahead.*@
 
             _selectedTimeRange = value;
 
-            //show if select year menu, since hidden by default
+            //show/hide if select year menu, since hidden by default
             if (value == "selectyear") { monthYearTimeRangeSelector?.Show(); }
+            else { monthYearTimeRangeSelector?.Hide(); }
 
             //auto update precision
             var timeRange = GetTimeRange();
             var maxWidth = _eventsChartViewer?.MaxWidth ?? 0;
-            daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
+            DaysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
 
         }
     }
@@ -557,6 +556,7 @@ Know good and bad periods of your life years ahead.*@
         set => _jsRuntime.FunFeaturePopUp("Dasa Types");
     }
 
+
     private IconButton _calculateButton;
 
 
@@ -591,7 +591,7 @@ Know good and bad periods of your life years ahead.*@
 
         //fill default precision
         var timeRange = GetTimeRange();
-        daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);
+        DaysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);
 
         //hidden by default
         monthYearTimeRangeSelector.Hide();
@@ -610,7 +610,7 @@ Know good and bad periods of your life years ahead.*@
         //auto update precision
         var timeRange = GetTimeRange();
         var maxWidth = _eventsChartViewer?.MaxWidth ?? 0;
-        daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
+        DaysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
 
         //needed to propagate changes
         StateHasChanged();
@@ -644,7 +644,8 @@ Know good and bad periods of your life years ahead.*@
     private async Task OnClickCalculate()
     {
         //keep copy of selected time range else gets reset, on re-render
-        var backUpSelection = SelectedTimeRangePreset;
+        var backUpSelectedTimeRangePreset = SelectedTimeRangePreset;
+        var backUpDaysPerPixelInput = DaysPerPixelInput;
 
         await _jsRuntime.ShowLoading();
 
@@ -678,7 +679,7 @@ Know good and bad periods of your life years ahead.*@
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedEventTags, summaryOptions, SelectedAyanamsaName, daysPerPixelInput);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedEventTags, summaryOptions, SelectedAyanamsaName, DaysPerPixelInput);
 
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data
@@ -690,8 +691,9 @@ Know good and bad periods of your life years ahead.*@
 
         _jsRuntime.HideAlert();
 
-        //place time preset value back
-        SelectedTimeRangePreset = backUpSelection;
+        //on re-render user inputed values are reset, so need to set here again
+        SelectedTimeRangePreset = backUpSelectedTimeRangePreset;
+        DaysPerPixelInput = backUpDaysPerPixelInput;
 
         //scroll to chart
         _jsRuntime.ScrollToDivById("EventsChartMainElement");

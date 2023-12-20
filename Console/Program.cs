@@ -13,17 +13,17 @@ namespace VedAstro.Console
         static async Task Main(string[] args)
         {
 
-            Time timeSample1 = new("17:10 15/10/2023 +05:30", new GeoLocation("", 77.583, 12.983));
-            Time timeSample2 = new("00:00 15/11/2023 +05:30", GeoLocation.Bangalore);
-            Time timeSample = new("11:00 25/07/1984 +05:30", new GeoLocation("", 77.2, 28.6));
+            //Time timeSample1 = new("17:10 15/10/2023 +05:30", new GeoLocation("", 77.583, 12.983));
+            //Time timeSample2 = new("00:00 15/11/2023 +05:30", GeoLocation.Bangalore);
+            //Time timeSample = new("11:00 25/07/1984 +05:30", new GeoLocation("", 77.2, 28.6));
 
-            var xx = await Time.FromUrl("Location/Japan/11:11/10/10/2020/+08:00");
+            //var xx = await Time.FromUrl("Location/Japan/11:11/10/10/2020/+08:00");
 
-            Calculate.Ayanamsa = (int)Ayanamsa.KRISHNAMURTI;
+            //Calculate.Ayanamsa = (int)Ayanamsa.KRISHNAMURTI;
 
-            //CalculateKP.KpPrintHouseCuspLong(timeSample1);
+            ////CalculateKP.KpPrintHouseCuspLong(timeSample1);
 
-            var x = Calculate.GetConstellationTransitStartTime(timeSample1, timeSample2, PlanetName.Moon);
+            //var x = Calculate.GetConstellationTransitStartTime(timeSample1, timeSample2, PlanetName.Moon);
 
             //var chart = Calculate.SouthIndianChart(timeSample);
             //var longitudes = CalculateKP.AllHouseLongitudesKP(timeSample);
@@ -54,7 +54,7 @@ namespace VedAstro.Console
             //check the test
 
             //make instance to store variables from input nicely
-            //var thisInstance = await Program.CreateInstance();
+            var thisInstance = await Program.CreateInstance();
         }
 
         public static async Task<Program> CreateInstance()
@@ -134,8 +134,8 @@ namespace VedAstro.Console
                         var startYear = GetInputFromUser("Enter Start Year : 0001-9999");
                         var endYear = GetInputFromUser("Enter End Year : 0001-9999");
                         System.Console.WriteLine("Start & End of Possible Birth Hour");
-                        var startHour = GetInputFromUser("Enter Start 24Hour : 00-24");
-                        var endHour = GetInputFromUser("Enter End 24Hour : 00-24");
+                        var startHour = GetInputFromUser("Enter Start 24Hour : 00-23");
+                        var endHour = GetInputFromUser("Enter End 24Hour : 00-23");
 
                         await FindBirthTimeEventsChartPerson(personId, maxWidth, precisionInHours, startYear, endYear, startHour, endHour);
 
@@ -165,7 +165,7 @@ namespace VedAstro.Console
 
             //ACT 1 : Generate data needed to make charts
             //get person specified by caller
-            var foundPerson = Tools.GetPersonById(personId);
+            var foundPerson = await Tools.GetPersonByIdViaAPI(personId, "102111269113114363117");
 
             //generate the needed charts
             var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.Gochara };

@@ -288,7 +288,7 @@
                             <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.PrecisionHelp" SmallIcon="true"/>
                         </span>
 
-                        <input @bind="daysPerPixelInput" type="number" step="0.01" class="form-control">
+                        <input @bind="DaysPerPixelInput" type="number" step="0.01" class="form-control">
                     </div>
                 </div>
                
@@ -323,7 +323,7 @@
 @code {
     private MonthYearTimeRangeSelector? monthYearTimeRangeSelector;
 
-    private double daysPerPixelInput;
+    private double DaysPerPixelInput { get; set; }
     private string pageTitle;
     private bool _isResultReady = false;
     private ElementReference _holderDiv;
@@ -339,14 +339,14 @@
         {
             _selectedTimeRangePreset = value;
 
-            //show if select year menu, since hidden by default
+            //show/hide if select year menu, since hidden by default
             if (value == "selectyear") { monthYearTimeRangeSelector?.Show(); }
+            else { monthYearTimeRangeSelector?.Hide(); }
 
             //auto fill precision
             var timeRange = GetTimeRange();
             var maxWidth = _eventsChartViewer?.MaxWidth ?? 0;
-            daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
-            
+            DaysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
         }
     }
 
@@ -418,7 +418,7 @@
 
         //fill default precision
         var timeRange = GetTimeRange();
-        daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);
+        DaysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);
 
         //hidden by default
         monthYearTimeRangeSelector.Hide();
@@ -443,7 +443,7 @@
         //auto update precision
         var timeRange = GetTimeRange();
         var maxWidth = _eventsChartViewer?.MaxWidth ?? 0;
-        daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
+        DaysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
 
         //needed to propagate changes
         StateHasChanged();
@@ -469,7 +469,9 @@
     private async Task OnClickCalculate()
     {
         //keep copy of selected time range else gets reset, on re-render
-        var backUpSelection = SelectedTimeRangePreset;
+        var backUpSelectedTimeRangePreset = SelectedTimeRangePreset;
+        var backUpDaysPerPixelInput = DaysPerPixelInput;
+
 
         _jsRuntime.ShowLoading();
 
@@ -496,15 +498,16 @@
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart (will auto scroll to chart when done)
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions, SelectedAyanamsaName, daysPerPixelInput);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions, SelectedAyanamsaName, DaysPerPixelInput);
 
         //mark page as ready to show results
         _isResultReady = true;
 
         _jsRuntime.HideAlert();
 
-        //place time preset value back
-        SelectedTimeRangePreset = backUpSelection;
+        //on re-render user inputed values are reset, so need to set here again
+        SelectedTimeRangePreset = backUpSelectedTimeRangePreset;
+        DaysPerPixelInput = backUpDaysPerPixelInput;
 
         //scroll to chart
         _jsRuntime.ScrollToDivById("EventsChartMainElement");

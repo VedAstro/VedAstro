@@ -191,7 +191,7 @@ public class PersonTools
         var result = await Tools.ReadServerRaw<JObject>(url);
 
         //get parsed payload from raw result
-        var person = VedAstroAPI.GetPayload(result, Person.FromJson);
+        var person = Tools.GetPayload(result, Person.FromJson);
 
         return person;
     }

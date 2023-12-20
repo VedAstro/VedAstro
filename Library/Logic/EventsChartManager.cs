@@ -1746,7 +1746,10 @@ namespace VedAstro.Library
         /// </summary>
         public static class Algorithm
         {
-            private static double topPlanetScore = 1;
+            /// <summary>
+            /// the amount of score to minus/add when weak/strong planet
+            /// </summary>
+            private static double _scoreStepSize = 1;
 
             /// <summary>
             /// Gets all algorithm methods in nice string for selection in Website
@@ -1774,7 +1777,8 @@ namespace VedAstro.Library
             }
 
             /// <summary>
-            /// Adds ashtakvarga bindu to only gochara events 
+            /// Adds ashtakvarga bindu to only gochara events
+            /// can give a varied score from +3 to -3
             /// </summary>
             public static double GocharaAshtakvargaBindu(Event foundEvent, Person person)
             {
@@ -1810,7 +1814,9 @@ namespace VedAstro.Library
                 throw new Exception("Not meant to hit here");
             }
 
-            //if strongest planet, gets an extra point
+            /// <summary>
+            /// if strongest planet, gets an extra point
+            /// </summary>
             public static double StrongestPlanet(Event foundEvent, Person person)
             {
                 //get top planet
@@ -1826,7 +1832,7 @@ namespace VedAstro.Library
                     //if top planet than give score
                     if (isTopPlanet)
                     {
-                        planetNatureScore += topPlanetScore;
+                        planetNatureScore += _scoreStepSize;
                     }
                 }
 
@@ -1848,7 +1854,7 @@ namespace VedAstro.Library
                     //if bottom planet than give score
                     if (isBottomPlanet)
                     {
-                        planetNatureScore += -topPlanetScore;
+                        planetNatureScore += -_scoreStepSize;
                     }
                 }
 
@@ -1870,7 +1876,7 @@ namespace VedAstro.Library
                     //if top house than give score
                     if (isTopHouse)
                     {
-                        houseNatureScore += topPlanetScore;
+                        houseNatureScore += _scoreStepSize;
                     }
                 }
 
@@ -1892,14 +1898,16 @@ namespace VedAstro.Library
                     //if bottom house than give score
                     if (isBottomHouse)
                     {
-                        houseNatureScore += -topPlanetScore;
+                        houseNatureScore += -_scoreStepSize;
                     }
                 }
 
                 return houseNatureScore;
             }
 
-            //all planets and house is bad, with no good
+            /// <summary>
+            /// If all planets bad, negative step size
+            /// </summary>
             public static double CombinedBad(Event foundEvent, Person person)
             {
                 //all planets in event is bad
@@ -1917,11 +1925,13 @@ namespace VedAstro.Library
                 if (!isAllHouseBad) { return 0; }
 
                 //if control reaches here than all is bad
-                return -0.5;
+                return -_scoreStepSize;
 
             }
 
-            //only dasa events get good bad score based on ishata and kashata, bala book pg 110
+            /// <summary>
+            /// only dasa events get good bad score based on ishata and kashata, bala book pg 110
+            /// </summary>
             public static double IshtaKashtaPhala(Event foundEvent, Person person)
             {
                 //must be a dasa event, has PD in event name
@@ -1938,191 +1948,6 @@ namespace VedAstro.Library
                 return score;
             }
 
-            //------------------------------------
-            public static double GetEventScoreFromShadvargaMK3(Event foundEvent, Person person)
-            {
-                //get house that the event is related to
-                var relatedHouse = foundEvent.GetRelatedHouse().FirstOrDefault(); //for now assume only one
-                //get nature of house based on shadbala
-                var houseNatureScore = Calculate.HouseNatureScore(relatedHouse, person.BirthTime);
-
-                //get houses and planet that the event is related to
-                var relatedPlanet = foundEvent.GetRelatedPlanet().FirstOrDefault(); //for now assume only one
-                //get nature of planet based on shadbala
-                var planetNatureScore = Calculate.PlanetNatureScore(person.BirthTime, relatedPlanet);
-
-                var final = 0;
-                final += houseNatureScore;
-                final += planetNatureScore;
-
-                return final;
-
-            }
-
-            public static double GetEventScoreFromShadvargaMK4(Event foundEvent, Person person)
-            {
-                //double houseNatureScore = 0;
-                //foreach (var relatedHouse in foundEvent.GetRelatedHouse())
-                //{
-                //    houseNatureScore = AstronomicalCalculator.GetHouseNatureScoreMK4(person.BirthTime, relatedHouse);
-                //}
-
-
-                //get houses and planet that the event is related to
-                double planetNatureScore = 0;
-                foreach (var relatedPlanet in foundEvent.GetRelatedPlanet())
-                {
-                    planetNatureScore = Calculate.PlanetNatureScoreMK4(person.BirthTime, relatedPlanet);
-                }
-
-                var final = 0.0;
-                //final += houseNatureScore;
-                final += planetNatureScore;
-
-                return final;
-
-            }
-
-            public static double GetEventScoreFromShadvargaPlanetOrHouse(Event foundEvent, Person person)
-            {
-                var finalScore = 0;
-
-                //get all planets used in making event
-                var planetInEventList = foundEvent.GetRelatedPlanet();
-
-                //get top 3 planets as good
-                var beneficPlanetList = Calculate.BeneficPlanetListByShadbala(person.BirthTime);
-                //var beneficPlanetList2 = AstronomicalCalculator.GetBeneficPlanetListByShadbala(person.BirthTime, 500);
-                var maleficPlanetList = Calculate.MaleficPlanetListByShadbala(person.BirthTime);
-                //var maleficPlanetList2 = AstronomicalCalculator.GetMaleficPlanetListByShadbala(person.BirthTime, 300);
-
-                //add and remove score based on planet good and bad todo add remove by voting power
-                foreach (var planetInEvent in planetInEventList)
-                {
-                    //has good planet plus 1
-                    var beneficFound = beneficPlanetList.Contains(planetInEvent);
-                    if (beneficFound) { finalScore += 1; }
-
-                    //has good planet plus 1
-                    //var beneficFound2 = beneficPlanetList2.Contains(planetInEvent);
-                    //if (beneficFound2) { finalScore += 1; }
-
-                    //has bad planet minus 1
-                    var maleficFound = maleficPlanetList.Contains(planetInEvent);
-                    if (maleficFound) { finalScore += -1; }
-
-                    //has bad planet minus 1
-                    //var maleficFound2 = maleficPlanetList2.Contains(planetInEvent);
-                    //if (maleficFound2) { finalScore += -1; }
-
-                }
-
-
-                //only use houses when planets empty
-                var noPlanets = !planetInEventList.Any();
-                if (noPlanets)
-                {
-                    var houseInEventList = foundEvent.GetRelatedHouse();
-
-                    var beneficHouseList = Calculate.BeneficHouseListByShadbala(person.BirthTime);
-                    // var beneficHouseList2 = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime, 550);
-                    var maleficHouseList = Calculate.MaleficHouseListByShadbala(person.BirthTime);
-                    //var maleficHouseList2 = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime, 250);
-
-                    foreach (var houseName in houseInEventList)
-                    {
-                        //has good planet plus 1
-                        var beneficFound = beneficHouseList.Contains(houseName);
-                        if (beneficFound) { finalScore += 1; }
-
-                        //has good planet plus 1
-                        //var beneficFound2 = beneficHouseList2.Contains(houseName);
-                        //if (beneficFound2) { finalScore += 1; }
-
-                        //has bad planet minus 1
-                        var maleficFound = maleficHouseList.Contains(houseName);
-                        if (maleficFound) { finalScore += -1; }
-
-                        //has bad planet minus 1
-                        //var maleficFound2 = maleficHouseList2.Contains(houseName);
-                        //if (maleficFound2) { finalScore += -1; }
-
-                    }
-
-                }
-
-
-                //return the compiled score to caller
-                return finalScore;
-            }
-
-            public static double GetEventScoreFromShadvargaTop3(Event foundEvent, Person person)
-            {
-                var finalScore = 0;
-
-                //get all planets used in making event
-                var planetInEventList = foundEvent.GetRelatedPlanet();
-
-                //get top 3 planets as good
-                var beneficPlanetList = Calculate.BeneficPlanetListByShadbala(person.BirthTime);
-                //var beneficPlanetList2 = AstronomicalCalculator.GetBeneficPlanetListByShadbala(person.BirthTime, 500);
-                var maleficPlanetList = Calculate.MaleficPlanetListByShadbala(person.BirthTime);
-                //var maleficPlanetList2 = AstronomicalCalculator.GetMaleficPlanetListByShadbala(person.BirthTime, 300);
-
-                //add and remove score based on planet good and bad todo add remove by voting power
-                foreach (var planetInEvent in planetInEventList)
-                {
-                    //has good planet plus 1
-                    var beneficFound = beneficPlanetList.Contains(planetInEvent);
-                    if (beneficFound) { finalScore += 1; }
-
-                    //has good planet plus 1
-                    //var beneficFound2 = beneficPlanetList2.Contains(planetInEvent);
-                    //if (beneficFound2) { finalScore += 1; }
-
-                    //has bad planet minus 1
-                    var maleficFound = maleficPlanetList.Contains(planetInEvent);
-                    if (maleficFound) { finalScore += -1; }
-
-                    //has bad planet minus 1
-                    //var maleficFound2 = maleficPlanetList2.Contains(planetInEvent);
-                    //if (maleficFound2) { finalScore += -1; }
-
-                }
-
-
-
-                var houseInEventList = foundEvent.GetRelatedHouse();
-
-                var beneficHouseList = Calculate.BeneficHouseListByShadbala(person.BirthTime);
-                // var beneficHouseList2 = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime, 550);
-                var maleficHouseList = Calculate.MaleficHouseListByShadbala(person.BirthTime);
-                //var maleficHouseList2 = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime, 250);
-
-                foreach (var houseName in houseInEventList)
-                {
-                    //has good planet plus 1
-                    var beneficFound = beneficHouseList.Contains(houseName);
-                    if (beneficFound) { finalScore += 1; }
-
-                    //has good planet plus 1
-                    //var beneficFound2 = beneficHouseList2.Contains(houseName);
-                    //if (beneficFound2) { finalScore += 1; }
-
-                    //has bad planet minus 1
-                    var maleficFound = maleficHouseList.Contains(houseName);
-                    if (maleficFound) { finalScore += -1; }
-
-                    //has bad planet minus 1
-                    //var maleficFound2 = maleficHouseList2.Contains(houseName);
-                    //if (maleficFound2) { finalScore += -1; }
-
-                }
-
-
-                //return the compiled score to caller
-                return finalScore;
-            }
 
         }
 

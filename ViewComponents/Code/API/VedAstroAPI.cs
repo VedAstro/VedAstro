@@ -257,44 +257,6 @@ namespace Website
             }
         }
 
-        /// <summary>
-        /// takes in raw response from API and
-        /// gets payload after checking status and shows error if status "Fail"
-        /// note :  no parser use direct, support for string, int and double
-        /// </summary>
-        public static T GetPayload<T>(JToken rawResult, Func<JToken, T>? parser)
-        {
-            //result must say Pass, else it has failed
-            var isPass = rawResult["Status"]?.Value<string>() == "Pass";
-            var payloadJson = rawResult["Payload"] ?? new JObject();
-
-            if (isPass)
-            {
-#if DEBUG
-                Console.WriteLine("API SAID: PASS"); //debug to know all went well
-#endif
-
-                //use parser if available, use that, end here
-                if (parser != null)
-                {
-                    var personJson = parser(payloadJson);
-                    return personJson;
-                }
-
-                //if no parser use direct, support for string, int and double
-                return payloadJson.Value<T>();
-
-            }
-            else
-            {
-#if DEBUG
-                Console.WriteLine($"API SAID : FAIL :\n{payloadJson}");
-#endif
-                //for now this should notify errors nicely, todo maybe exceptions is not best 
-                throw new Exception($"Failed to get {typeof(T).AssemblyQualifiedName} from API payload");
-            }
-
-        }
 
 
     }

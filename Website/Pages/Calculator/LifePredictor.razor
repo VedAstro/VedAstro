@@ -83,7 +83,7 @@ Know good and bad periods of your life years ahead.*@
                 <span style="font-size: 11.5px;margin-left: 0px;color: grey;margin-top: -20px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
 
                 @* AYANAMSA *@
-                <div class="input-group mb-2">
+                <div class="input-group mb-3">
                     <label style="width:@GR.W134px;" class="input-group-text">
                         <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
                     </label>
@@ -115,6 +115,16 @@ Know good and bad periods of your life years ahead.*@
                             <option value="@dasaType">@dasaType</option>
                         }
                     </select>
+                </div>
+                
+                @* PRECISION *@
+                <div class="input-group mb-3">
+                    <span class="input-group-text" >
+                        <Icon ExtraClass="me-2" IconName="lucide:microscope" /> Precision
+                        <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.PrecisionHelp" SmallIcon="true"/>
+                    </span>
+
+                    <input @bind="daysPerPixelInput" type="number" class="form-control">
                 </div>
 
                 @* EVENT SELECT *@
@@ -197,15 +207,6 @@ Know good and bad periods of your life years ahead.*@
                     </div>
                 </div>
                 
-                @* PRECISION *@
-                <div class="input-group">
-                    <span class="input-group-text" id="basic-addon1">
-                        <Icon ExtraClass="me-2" IconName="lucide:microscope" /> Precision
-                        <HelpIconTooltip ShowOnHover="true" HelpText="Days per pixel, low value is high precision larger chart for same time span. Warning! If number too low, chart will not generate. Use offline Desktop app for HD charts." SmallIcon="true"/>
-                    </span>
-
-                    <input @bind="daysPerPixelInput" type="number" class="form-control">
-                </div>
             </div>
 
             @* BUTTONS *@
@@ -220,7 +221,7 @@ Know good and bad periods of your life years ahead.*@
 
     @*SIDEBAR*@
     <div class="mt-md-0 mt-4 me-md-5">
-        <InfoBox Title="Accurate" FullWidth="true" MaxWidth="@GR.W412" IconName="noto-v1:direct-hit">
+        <InfoBox Title="Accurate" FullWidth="true" MaxWidth="@GR.W352" IconName="noto-v1:direct-hit">
             <DescriptionHTML>
                 Easy prediction of your life events
             </DescriptionHTML>
@@ -318,22 +319,6 @@ Know good and bad periods of your life years ahead.*@
         </TextHTML>
     </ArticleBlock>
 
-    <ArticleBlock Title="Mind Predict" IconName="icon-park:brain">
-        <TextHTML>
-            <p>
-                We use the aspect of "<strong>Mind</strong>" in astrology to make this chart. <strong>Why?</strong>
-                because anything that effects your mind will make a difference to you. For your awareness of reality
-                is through your mind.
-            </p>
-            <p>
-                For instance we can make a chart to predict only "<strong>Weather</strong>" over your head,
-                but if you live in the city and don't really care about rain or shine.
-                Than what use is that complex chart to you. Most people will say the prediction is wrong.
-                Of course it never effected them, can't tell even if correct.
-            </p>
-        </TextHTML>
-    </ArticleBlock>
-
     <ArticleBlock Title="Fear Death Date?" IconName="mdi:death">
         <TextHTML>
             <p>
@@ -355,16 +340,12 @@ Know good and bad periods of your life years ahead.*@
     <ArticleBlock Title="Winning The Lotto" IconName="noto-v1:money-bag">
         <TextHTML>
             <p>
-                Since it is without doubt that we can predict when will a person smile or frown. Than it is possible to predict when a person
-                will win the lottery. The "<strong>lottery prize</strong>" is different for every person. Not everybody wants money. Some people are very
-                happy when they are with others. When lonely they are sad and dont't like it.
+                Predicting when someone will smile or frown may seem certain, leading to the idea that we can predict lottery wins.
+                However, the <strong>"lottery prize"</strong> varies for each person; not everyone values money alone. 
             </p>
             <p>
-                For example, for this person we can accurately predict
-                that when @RED lines appear that this person will most likely be left alone,
-                hence causing their <strong>lottery loss</strong>. Ergo we predict with confidence, that a person will win a <strong>real cash lottery</strong>
-                if only money is equal to happiness to him. The fact is, most people want not just "cash", but also good <strong>Wife or Fame or Career or Education</strong>
-                for actual happiness. Hence also proving why most people don't win the lottery in real life.
+                Predicting a real cash lottery win becomes possible only if money equals happiness for them. In reality, most people seek happiness
+                in relationships, fame, career, or education, not just cash. This explains why winning the lottery is <strong>rare in real life</strong>.
             </p>
         </TextHTML>
     </ArticleBlock>
@@ -384,7 +365,6 @@ Know good and bad periods of your life years ahead.*@
             </p>
         </TextHTML>
     </ArticleBlock>
-
 
     <ArticleBlock Title="Source of Code" IconName="noto-v1:backhand-index-pointing-up">
         <TextHTML>
@@ -421,6 +401,23 @@ Know good and bad periods of your life years ahead.*@
     That hand wrote a number of elliptic integrals. They stuck to my mind. As soon as I woke up,
     I committed them to writing.</QuoteTextBlock>
     *@
+    
+@*     <ArticleBlock Title="Mind Predict" IconName="icon-park:brain">
+        <TextHTML>
+            <p>
+                We use the aspect of "<strong>Mind</strong>" in astrology to make this chart. <strong>Why?</strong>
+                because anything that effects your mind will make a difference to you. For your awareness of reality
+                is through your mind.
+            </p>
+            <p>
+                For instance we can make a chart to predict only "<strong>Weather</strong>" over your head,
+                but if you live in the city and don't really care about rain or shine.
+                Than what use is that complex chart to you. Most people will say the prediction is wrong.
+                Of course it never effected them, can't tell even if correct.
+            </p>
+        </TextHTML>
+    </ArticleBlock>
+ *@
 
 </div>
 
@@ -467,8 +464,8 @@ Know good and bad periods of your life years ahead.*@
 
 
     private List<string> lifeAgeList = GetAgeSelectionRange();
-    private string SelectedLifeAgeStart;
-    private string SelectedLifeAgeEnd;
+    private string SelectedLifeAgeStart = "1";
+    private string SelectedLifeAgeEnd  = "50";
 
     /// <summary>
     /// Param used in URL to set Person ID via URL
@@ -500,9 +497,15 @@ Know good and bad periods of your life years ahead.*@
         set
         {
             //log it or better analytics
-            WebLogger.Data($"Selected Time Range:{value}");
+            //WebLogger.Data($"Selected Time Range:{value}");
 
             _selectedTimeRange = value;
+
+            //auto fill precision
+            var timeRange = GetTimeRange();
+            var maxWidth = _eventsChartViewer?.MaxWidth ?? 0;
+            daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, maxWidth);
+
         }
     }
 
@@ -527,11 +530,12 @@ Know good and bad periods of your life years ahead.*@
         return compiledList;
     }
 
+    //default set to Raman, different from system-wide
     private string _selectedAyanamsaName = SimpleAyanamsa.Raman.ToString();
 
     /// <summary>
     /// if not specified will not be included in final URL
-    /// default set to Raman, different from system wide
+    /// default set to Raman, different from system-wide
     /// </summary>
     public string SelectedAyanamsaName
     {
@@ -567,7 +571,7 @@ Know good and bad periods of your life years ahead.*@
     {
         await _jsRuntime.ShowLoading();
 
-        //place holder for data from checkboxes for Algorithms and Events
+        //placeholder for data from checkboxes for Algorithms and Events
         SelectedAlgorithmDictionary = EventsChartManager.Algorithm.All.ToDictionary(methodInfo => methodInfo, methodInfo => false);
         SelectedEventTagsDictionary = AllLifePredictorEventTags.ToDictionary(eventTag => eventTag, eventTag => false);
 
@@ -586,6 +590,9 @@ Know good and bad periods of your life years ahead.*@
         SelectedEventTagsDictionary[EventTag.Gochara] = true;
         // SelectedEventTagsDictionary[EventTag.PD7] = true;
 
+        //fill default precision
+        var timeRange = GetTimeRange();
+        daysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);
 
         _jsRuntime.HideLoading();
         _isResultReady = true;
@@ -654,7 +661,7 @@ Know good and bad periods of your life years ahead.*@
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedEventTags, summaryOptions, SelectedAyanamsaName);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedEventTags, summaryOptions, SelectedAyanamsaName, daysPerPixelInput);
 
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data
@@ -686,7 +693,7 @@ Know good and bad periods of your life years ahead.*@
         //if user selected indiviual year than make new preset is placed in format that can be read by parser
         if (SelectedTimeRangePreset == "selectyear") //input coming from
         {
-            timeRange = monthYearTimeRangeSelector.GetTimeRange(SelectedPerson.GetBirthLocation());
+            timeRange = monthYearTimeRangeSelector?.GetTimeRange(SelectedPerson.GetBirthLocation()) ?? TimeRange.Empty;
         }
         else
         {

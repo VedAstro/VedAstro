@@ -11,12 +11,11 @@
 
     @* BUTTON ROW *@
     <div class="hstack gap-2 mb-2">
-        <IconButton SmallSize="true" IconName="icon-park-outline:full-screen-one" TooltipText="Maximize" OnClickCallback="OnClickMaximize" />
-        <IconButton SmallSize="true" IconName="iconamoon:zoom-in" TooltipText="Zoom In" OnClickCallback="OnClickZoomIn" />
-        <IconButton SmallSize="true" IconName="iconamoon:zoom-out" TooltipText="Zoom Out" OnClickCallback="OnClickZoomOut" />
-        <IconButton SmallSize="true" IconName="fluent:book-star-20-filled" TooltipText="Horoscope" ClickUrl="@($"{PageRoute.Horoscope}/{SelectedPerson.Id}")" OpenNewTab="true" />
-        <IconButton SmallSize="true" IconName="bx:hide" TooltipText="Show/Hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))" />
-        <IconButton SmallSize="true" IconName="fluent:highlight-16-filled" TooltipText="Highlight" DropDownWidthPx="@GR.W255px">
+        <IconButton SmallSize="true" IconName="icon-park-outline:full-screen-one" TooltipText="Maximize to view better" OnClickCallback="OnClickMaximize"  TooltipPosition="top" />
+        <IconButton SmallSize="true" IconName="iconamoon:zoom-in" TooltipText="Zoom In" OnClickCallback="OnClickZoomIn"  TooltipPosition="top" />
+        <IconButton SmallSize="true" IconName="iconamoon:zoom-out" TooltipText="Zoom Out" OnClickCallback="OnClickZoomOut" TooltipPosition="top"  />
+        <IconButton SmallSize="true" IconName="bx:hide" TooltipText="Show/Hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))" TooltipPosition="top"  />
+        <IconButton SmallSize="true" IconName="fluent:highlight-16-filled" TooltipText="Highlight events" DropDownWidthPx="@GR.W255px" TooltipPosition="top" >
             <DropDownList>
                 <div class="d-flex flex-wrap gap-1">
                     @foreach (var eventNameKeyword in SelectedHighlightDictionary.Keys)
@@ -31,11 +30,10 @@
                 </div>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" IconName="logos:google-calendar" TooltipText="Add to Google Calendar" OnClickCallback="OnClickAddToGoogleEvents" />
-        <IconButton SmallSize="true" IconName="mdi:calendar-outline" ButtonText="Life Events" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}{SelectedPerson.Id}")" />
-        <IconButton SmallSize="true" IconName="ic:outline-save" ButtonText="Download" OnClickCallback="OnClickSaveChartSvg" />
-        <IconButton SmallSize="true" IconName="ic:round-print" TooltipText="Print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))" />
-        <IconButton SmallSize="true" IconName="tabler:share-2" TooltipText="Share">
+        <IconButton SmallSize="true" IconName="logos:google-calendar" TooltipText="Add to Google Calendar" OnClickCallback="OnClickAddToGoogleEvents" TooltipPosition="top"  />
+        <IconButton SmallSize="true" IconName="material-symbols:download" TooltipText="Download as SVG image file" OnClickCallback="OnClickSaveChartSvg" TooltipPosition="top"  />
+        <IconButton SmallSize="true" IconName="ic:round-print" TooltipText="Print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))" TooltipPosition="top"  />
+        <IconButton SmallSize="true" IconName="tabler:share-2" TooltipText="Share"  TooltipPosition="top" >
             <DropDownList>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("ShareEmailEventsChart"))">
@@ -63,22 +61,24 @@
                 </li>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" TooltipText="Code Options" IconName="ph:code-fill">
+        <IconButton SmallSize="true" TooltipText="Copy API" IconName="ph:code-fill" OnClickCallback="OnClickCopyPOSTCall" TooltipPosition="top" />
+        <IconButton SmallSize="true" IconName="gravity-ui:person" TooltipText="Person" ButtonText="Person"  TooltipPosition="top" >
             <DropDownList>
                 <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="OnClickCopyPOSTCall">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mingcute:copy-3-line" />
-                        <span>Copy API</span>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => AppData.Go($"{PageRoute.Horoscope}/{SelectedPerson.Id}", newTab: true))" >
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="fluent:book-star-20-filled"/>
+                        <span>Horoscope</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("ShareEmailEventsChart"))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mdi:gear" />
-                        <span>Ayanamsa</span>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => AppData.Go($"{PageRoute.Journal}/{SelectedPerson.Id}", newTab: true))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mdi:calendar-outline"/>
+                        <span>Journal</span>
                     </a>
                 </li>
             </DropDownList>
         </IconButton>
+
 
     </div>
 
@@ -113,6 +113,11 @@
 
     //█▀▄ ▄▀█ ▀█▀ ▄▀█
     //█▄▀ █▀█ ░█░ █▀█
+    
+    /// <summary>
+    /// max width of chart for fit on page
+    /// </summary>
+    public int MaxWidth { get; set; } = 940;
 
     /// <summary>
     /// Reference to main holder div
@@ -164,10 +169,6 @@
 
     public Dictionary<string, bool> SelectedHighlightDictionary { get; set; } = new Dictionary<string, bool>();
 
-    /// <summary>
-    /// max width of chart for fit on page
-    /// </summary>
-    private int _maxWidth = 940;
 
 
     //█▀█ █░█ █▄▄ █░░ █ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -221,7 +222,7 @@
     /// Sets the data that is processed and fill the content
     /// - Parent element calls here to start display chart process
     /// </summary>
-    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, ChartOptions chartOptions, string ayanamsaName)
+    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, ChartOptions chartOptions, string ayanamsaName, double daysPerPixelRaw)
     {
         //stop if empty person
         if (Person.Empty.Equals(person)) { throw new InvalidOperationException("PERSON CAN'T BE EMPTY!!!"); }
@@ -239,7 +240,7 @@
             SelectedChartOptions = chartOptions;
 
             //get raw SVG chart from API as string
-            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, _maxWidth, chartOptions, SelectedAyanamsaName);
+            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, daysPerPixelRaw, chartOptions, SelectedAyanamsaName);
 
             //bring chart to live with EventsChart.js
             await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, RawChartSvg);
@@ -413,8 +414,11 @@
     /// </summary>
     private async Task OnClickCopyPOSTCall()
     {
+        //auto calculate precision
+        var daysPerPixelRaw = EventsChart.GetDayPerPixel(SelectedTimeRange, MaxWidth);
+
         //get call exactly as for API
-        var postData = AppData.API.EventsChart.GetEventsChartApiUrl(SelectedPerson, SelectedTimeRange, SelectedEventTags, _maxWidth, SelectedChartOptions, SelectedAyanamsaName);
+        var postData = AppData.API.EventsChart.GetEventsChartApiUrl(SelectedPerson, SelectedTimeRange, SelectedEventTags, daysPerPixelRaw, SelectedChartOptions, SelectedAyanamsaName);
 
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, postData);
@@ -462,6 +466,7 @@
         for (int i = 0; i < 4; i++) { await x.Invoke(); }
 
     }
+
 
 
 }

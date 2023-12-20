@@ -122,6 +122,9 @@ else
         //clear selected person
         await _jsRuntime.RemoveProperty("SelectedPerson");
 
+        //clear person list (keep public since, nicely shared by all)
+        await _jsRuntime.RemoveProperty("CachedPersonList");
+
         //put api access back in guest mode
         AppData.CurrentUser = UserData.Guest;
 

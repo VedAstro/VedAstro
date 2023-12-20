@@ -929,12 +929,13 @@ export function animateHighlightElement(elmInput) {
 //similar to JQuery's .slideToggle("slow")
 // note that this function uses CSS transitions for the
 //sliding effect, which are smoother than jQuery’s animations but might not be supported in all browsers
-export function smoothSlideToggle(elementSelector, speed=1000) {
+export function smoothSlideToggle(elementSelector, speed = 1000) {
 
     // Select the element
     let el = document.querySelector(elementSelector);
 
     // Check if the element is currently not displayed
+    //SHOW
     if (window.getComputedStyle(el).display === 'none') {
         // Set the initial display to block
         el.style.display = 'block';
@@ -950,8 +951,27 @@ export function smoothSlideToggle(elementSelector, speed=1000) {
         el.style.transition = 'height 1s ease-in-out';
 
         // After a short delay, set the height to the element's original height
-        setTimeout(() => el.style.height = height + 'px', 0);
-    } else {
+        setTimeout(() => {
+            return el.style.height = height + 'px';
+        }, 0);
+
+        //once animation complete, make "help text" not cut when exceed div width
+        //this is done by removing overflow property, which needs to be "hidden" during animation 
+        el.addEventListener('transitionend', function transitionEnd(event) {
+            // Remove the event listener
+            event.target.removeEventListener('transitionend', transitionEnd);
+
+            // Set the overflow to visible
+            el.style.removeProperty('overflow');
+        });
+    }
+
+    //HIDE
+    else {
+
+        //before animation starts, set overflow back to "hidden", for beautiful UX animation
+        el.style.overflow = 'hidden';
+
         // If the element is currently displayed, set the transition property
         el.style.transition = 'height 1s ease-in-out';
 

@@ -1,4 +1,4 @@
-﻿@attribute [Route(PageRoute.GoodTimeFinder)]
+@attribute [Route(PageRoute.GoodTimeFinder)]
 @using VedAstro.Library
 @using System.Collections
 
@@ -264,7 +264,7 @@
                     <span style="font-size: 11.5px;margin-left: 0px;color: grey;margin-top: -20px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
 
                     @* AYANAMSA *@
-                    <div class="input-group mb-2">
+                    <div class="input-group mb-3">
                         <label style="width:@GR.W134px;" class="input-group-text">
                             <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
                         </label>
@@ -287,9 +287,9 @@
 
                     @* PRECISION *@
                     <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">
+                        <span class="input-group-text">
                             <Icon ExtraClass="me-2" IconName="lucide:microscope" /> Precision
-                            <HelpIconTooltip ShowOnHover="true" HelpText="Days per pixel, low value is high precision larger chart for same time span. Warning! If number too low, chart will not generate. Use offline Desktop app for HD charts." SmallIcon="true"/>
+                            <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.PrecisionHelp" SmallIcon="true"/>
                         </span>
 
                         <input @bind="daysPerPixelInput" type="number" class="form-control">

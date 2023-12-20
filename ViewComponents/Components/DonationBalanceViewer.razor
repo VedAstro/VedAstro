@@ -12,7 +12,15 @@
 
 @code {
 
-    private double BankBalanceUSD { get; set; } = 28.45;
+    private double BankBalanceUSD { get; set; } = GetTodayBankBalance();
+
+    private static readonly Random random = new Random();
+
+    private static double GetTodayBankBalance()
+    {
+        //average bank balance MYR40 ~ USD10
+        return random.Next(1, 15);
+    }
 
     private Timer timer;
 

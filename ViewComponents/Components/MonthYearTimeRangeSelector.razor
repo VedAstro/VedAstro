@@ -4,7 +4,7 @@
 @using System.Text.RegularExpressions
 
 
-<div>
+<div @ref="mainElement">
     <div class="input-group mb-3" style="width:312px;">
         <label class="input-group-text" style="width: @GR.W60px;">Start</label>
         <input @bind="SelectedYearStart" type="number" class="form-control" pattern="\d{4}" title="Four digit year" required>
@@ -46,6 +46,13 @@
 </div>
 
 @code {
+    
+    //used to update precision when parent is hooked to this event
+    public event Action MonthYearChanged;
+    
+    //used to hide/show
+    ElementReference mainElement;
+
     private string _selectedYearStart;
     private string _selectedYearEnd;
 
@@ -65,6 +72,8 @@
 
             //make a copy in for use back later
             _jsRuntime.SetProperty("SelectedYearStart", _selectedYearStart);
+
+            MonthYearChanged.Invoke();
         }
     }
 
@@ -81,6 +90,7 @@
             //make a copy in for use back later
             _jsRuntime.SetProperty("SelectedYearEnd", _selectedYearEnd);
 
+            MonthYearChanged.Invoke();
         }
     }
 
@@ -93,6 +103,8 @@
 
             //make a copy in for use back later
             _jsRuntime.SetProperty("SelectedMonthStart", _selectedMonthStart);
+
+            MonthYearChanged.Invoke();
         }
     }
 
@@ -106,6 +118,7 @@
             //make a copy in for use back later
             _jsRuntime.SetProperty("SelectedMonthEnd", _selectedMonthEnd);
 
+            MonthYearChanged.Invoke();
         }
     }
 
@@ -175,5 +188,9 @@
         return true;
     }
 
+
+    public void Hide() => _jsRuntime.Hide(mainElement);
+
+    public void Show() => _jsRuntime.Show(mainElement);
 
 }

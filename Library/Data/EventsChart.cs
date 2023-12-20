@@ -113,11 +113,9 @@ namespace VedAstro.Library
         /// <summary>
         /// From user inputed data make specs for event 
         /// </summary>
-        public static EventsChart FromData(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, ChartOptions options)
+        public static EventsChart FromData(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags, double daysPerPixelRaw, ChartOptions options)
         {
 
-            //auto calculate precision
-            var daysPerPixelRaw = EventsChart.GetDayPerPixel(timeRange, maxWidth);
             //if not defined, use input
             double daysPerPixelInput = 30;
             daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
@@ -226,7 +224,6 @@ namespace VedAstro.Library
         /// </summary>
         public static double GetDayPerPixel(TimeRange timeRange, int maxWidth)
         {
-
             var daysPerPixel = Math.Round(timeRange.daysBetween / maxWidth, 3); //small val = higher precision
             //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
             //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px

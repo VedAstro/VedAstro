@@ -6,6 +6,7 @@
     /// </summary>
     public static class HelpText
     {
+        public const string PrecisionHelp = @"The number of days in a pixel, more days in 1 pixel equals less precision. If the number is too low, the chart will take too long and will not generate. Change in small steps. For very high precision use Desktop App. Linked to time range, this number will auto update when time range is changed.";
         public const string GeoLocationName = @"Enter city or state name, will auto detect location";
         public const string DasaTimeRange = @"Start and end time for chart";
         public const string Gender = @"Gender is used in predicting marriage compatibility and horoscope";
@@ -27,7 +28,7 @@
         public const string Column1MLData = @"Data in 1st column of table, can be birth time list or time list from range";
         public const string Column2MLData = @"Astro data in each column after Time, column read by ML/AI for learning";
         public const string SearchEvents = @"These are Muhurtha events that have been programmed into VedAstro";
-        public const string HouseStrength = @"Good and bad aspects of life, higher score is better";
-        public const string PlanetStrength = @"Degree of planet's effect on you, higher score is stronger positive influence";
+        public const string HouseStrength = @"Good and bad aspects of life, higher score is better. Also known as Bhava Bala.";
+        public const string PlanetStrength = @"Degree of planet's effect on you, higher score is stronger positive influence. Also known as Shadbala.";
     }
 }

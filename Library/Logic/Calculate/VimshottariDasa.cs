@@ -1,4 +1,4 @@
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -747,9 +747,9 @@ namespace VedAstro.Library
         {
             //todo strength determined by constellation rules not shad or bhava bala
             //lagna lord or moon constellation used based on which is stronger
-            //var isLagnaLordStronger = AstronomicalCalculator.LagnaLordVsMoonStrength(birthTime);
+            //var isLagnaLordStronger = Calculate.LagnaLordVsMoonStrength(birthTime);
             //var finalConstellation = isLagnaLordStronger
-            //    ? GetPlanetConstellation(birthTime, AstronomicalCalculator.GetLordOfHouse(HouseName.House1, birthTime)) 
+            //    ? GetPlanetConstellation(birthTime, Calculate.GetLordOfHouse(HouseName.House1, birthTime))
             //    : GetMoonConstellation(birthTime);
 
             //get dasa planet at birth

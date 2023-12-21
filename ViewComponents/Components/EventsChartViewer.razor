@@ -222,7 +222,7 @@
     /// Sets the data that is processed and fill the content
     /// - Parent element calls here to start display chart process
     /// </summary>
-    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, ChartOptions chartOptions, string ayanamsaName, double daysPerPixelRaw)
+    public async Task<bool> ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, ChartOptions chartOptions, string ayanamsaName, double daysPerPixelRaw)
     {
         //stop if empty person
         if (Person.Empty.Equals(person)) { throw new InvalidOperationException("PERSON CAN'T BE EMPTY!!!"); }
@@ -264,11 +264,19 @@
 
             //needed to make save button appear again
             StateHasChanged();
+
+            //return true for all went well
+            return true;
         }
         catch (Exception e)
         {
+            _jsRuntime.ShowAlert("error", "Something broke!", "Please refresh page and try again.");
             WebLogger.Error(e);
             Console.WriteLine(e.Message);
+
+            //return true for failure
+            return false;
+
         }
 
     }

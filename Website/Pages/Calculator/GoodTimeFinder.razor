@@ -498,19 +498,28 @@
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart (will auto scroll to chart when done)
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions, SelectedAyanamsaName, DaysPerPixelInput);
+        var result = await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions, SelectedAyanamsaName, DaysPerPixelInput);
 
-        //mark page as ready to show results
-        _isResultReady = true;
+        //PASS
+        if (result)
+        {
+            //mark page as ready to show results
+            _isResultReady = true;
 
-        _jsRuntime.HideAlert();
+            _jsRuntime.HideAlert();
 
-        //on re-render user inputed values are reset, so need to set here again
-        SelectedTimeRangePreset = backUpSelectedTimeRangePreset;
-        DaysPerPixelInput = backUpDaysPerPixelInput;
+            //on re-render user inputed values are reset, so need to set here again
+            SelectedTimeRangePreset = backUpSelectedTimeRangePreset;
+            DaysPerPixelInput = backUpDaysPerPixelInput;
 
-        //scroll to chart
-        _jsRuntime.ScrollToDivById("EventsChartMainElement");
+            //scroll to chart
+            _jsRuntime.ScrollToDivById("EventsChartMainElement");
+        }
+        //FAIL
+        else
+        {
+            _jsRuntime.ShowAlert("info", "Try again.", "");
+        }
 
     }
 

@@ -679,24 +679,34 @@ Know good and bad periods of your life years ahead.*@
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedEventTags, summaryOptions, SelectedAyanamsaName, DaysPerPixelInput);
+        var result = await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedEventTags, summaryOptions, SelectedAyanamsaName, DaysPerPixelInput);
 
-        //only set url if not already set
-        //note:this improves UX, as links can lead faster to data
-        PersonIdUrl = SelectedPerson.Id; //save local copy
-        AppData.Go($"{PageRoute.LifePredictor}/{PersonIdUrl}"); //change url
+        //PASS
+        if (result)
+        {
+            //only set url if not already set
+            //note:this improves UX, as links can lead faster to data
+            PersonIdUrl = SelectedPerson.Id; //save local copy
+            AppData.Go($"{PageRoute.LifePredictor}/{PersonIdUrl}"); //change url
 
-        //mark page as ready to show results
-        _isResultReady = true;
+            //mark page as ready to show results
+            _isResultReady = true;
 
-        _jsRuntime.HideAlert();
+            _jsRuntime.HideAlert();
 
-        //on re-render user inputed values are reset, so need to set here again
-        SelectedTimeRangePreset = backUpSelectedTimeRangePreset;
-        DaysPerPixelInput = backUpDaysPerPixelInput;
+            //on re-render user inputed values are reset, so need to set here again
+            SelectedTimeRangePreset = backUpSelectedTimeRangePreset;
+            DaysPerPixelInput = backUpDaysPerPixelInput;
 
-        //scroll to chart
-        _jsRuntime.ScrollToDivById("EventsChartMainElement");
+            //scroll to chart
+            _jsRuntime.ScrollToDivById("EventsChartMainElement");
+        }
+        //FAIL
+        else
+        {
+            _jsRuntime.ShowAlert("info", "Try again.", "");
+        }
+
 
     }
 

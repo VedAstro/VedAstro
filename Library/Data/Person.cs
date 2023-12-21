@@ -386,7 +386,7 @@ namespace VedAstro.Library
         public Person ChangeBirthTime(Time newBirthTime)
         {
             //make a copy of person details except birth time
-            var newPerson = new Person(OwnerId, this.Id, Name, newBirthTime, Gender, Notes);
+            var newPerson = new Person(OwnerId, this.Id, Name, newBirthTime, Gender, Notes, LifeEventList);
             return newPerson;
         }
 

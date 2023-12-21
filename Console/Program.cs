@@ -162,14 +162,15 @@ namespace VedAstro.Console
 
         private static async Task FindBirthTimeEventsChartPerson(string personId, int maxWidth, double precisionInHours, string startYear, string endYear, string startHour, string endHour)
         {
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.Raman;
 
             //ACT 1 : Generate data needed to make charts
             //get person specified by caller
             var foundPerson = await Tools.GetPersonByIdViaAPI(personId, "102111269113114363117");
 
             //generate the needed charts
-            var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.Gochara };
-            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General };
+            var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.PD6, EventTag.Gochara };
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General, EventsChartManager.Algorithm.StrongestPlanet, EventsChartManager.Algorithm.WeakestPlanet };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
 
             //time range is preset to full life 100 years from birth
@@ -233,12 +234,13 @@ namespace VedAstro.Console
                 //replace original birth time
                 var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
                 var newChartSvg = dict[possibleTime];
-                var adjustedBirth = personAdjusted.BirthTimeString;
+                var adjustedBirthStd = personAdjusted.BirthTimeString;
+                var adjustedBirthLmt = personAdjusted.BirthTime.GetLmtDateTimeOffsetText();
 
                 //place in group with time above the chart
                 var wrappedChart = $@"
                             <g transform=""matrix(1, 0, 0, 1, {leftPadding}, {chartYPosition})"">
-                                <text style=""font-size: 16px; white-space: pre-wrap;"" x=""2"" y=""-6.727"">{adjustedBirth}</text>
+                                <text style=""font-size: 16px; white-space: pre-wrap;"" x=""2"" y=""-6.727"">STD{adjustedBirthStd} - LMT{adjustedBirthLmt}</text>
                                 {newChartSvg}
                               </g>
                             ";

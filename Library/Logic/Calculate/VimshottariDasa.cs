@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -761,8 +761,10 @@ namespace VedAstro.Library
             //get time traversed in birth dasa 
             var timeTraversedInDasa = YearsTraversedInBirthDasa(moonConstellation, birthTime);
 
-            //get time from birth to current time (converted to Dasa years ie. 365.25 days per year)
-            var timeBetween = currentTime.Subtract(birthTime).TotalDays / 365.25;
+            //get time from birth to current time 
+            //NOTE: much debate on this number. Tests prove Raman's 360 is accurate.
+            //      365.25 is used by 3rd party astrology software like LoKPA
+            var timeBetween = currentTime.Subtract(birthTime).TotalDays / 360; //365.25;
 
             //combine years traversed at birth and years to current time
             //this is done to easily calculate to current dasa, bhukti & antaram

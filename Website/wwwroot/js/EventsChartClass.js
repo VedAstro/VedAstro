@@ -103,6 +103,24 @@ class EventsChart {
 
     }
 
+    //on click add events to google calendar,
+    //ask user to select event and take from there
+    AddEventsToGoogleCalendar() {
+        console.log("Adding events to Google Calendar");
+
+        //tell user to select an event
+        Swal.fire({
+            title: 'Select an event',
+            text: 'The selected event will be sent to your Google Calendar',
+            icon: 'info',
+            confirmButtonText: 'OK'
+        });
+
+        //attach one time trigger to catch the event user clicked on
+        $(".EventChartContent").one("click", (eventData) => EventsChart.onClickSelectedGoogleCalendarEvent(eventData, this));
+
+    }
+
     //highlights all events rects in chart by
     //the inputed keyword in the event name
     highlightByEventName(keyword) {
@@ -158,7 +176,6 @@ class EventsChart {
         });
 
     }
-
 
     //-----------------------------STATIC----------------------------------------
 
@@ -279,6 +296,26 @@ class EventsChart {
 
     }
 
+    //converts VedAstro date format to Google Calendar format
+    static convertDateFormat(dateStr) {
+        // Split the date and time parts
+        // NOTE: location is ignored here
+        let [timePart, datePart, zonePart] = dateStr.StdTime.split(' ');
+        // Split the date into day, month, and year
+        let [day, month, year] = datePart.split('/');
+        // Combine the parts into a new date string and create a new Date object
+        let dateObj = new Date(`${year}-${month}-${day}T${timePart}${zonePart}`);
+
+        // TODO: Convert offset to timezone. This is not straightforward because multiple timezones can have the same offset.
+        const timeZone = '';
+
+        // Return the JSON object
+        return {
+            'dateTime': dateObj.toISOString(), // Return the date in ISO 8601 format
+            'timeZone': timeZone
+        };
+    }
+
     //on mouse leave life event name label, unhighlight event line
     static onMouseLeaveLifeEventHandler(mouse, instance) {
 
@@ -299,6 +336,260 @@ class EventsChart {
         $verticalLine.css('filter', '');
     }
 
+    //Gets a mouses x axis relative inside the given element
+    //used to get mouse location on SVG chart, zoom auto corrected 
+    static getMousePositionInElement(mouseEventData, instance) {
+
+        //get relative position of mouse in Dasa view
+        //after zoom pixels on screen change, but when rendering
+        //SVG description box we need x, y before zoom (AI's code!)
+        var holder = instance.$EventsChartSvgHolder[0]; //zoom is done on main holder in Blazor side
+
+        var mousePosition = {};
+        if (holder != null) {
+            var zoom = parseFloat(window.getComputedStyle(holder).zoom);
+            mousePosition = {
+                xAxis: mouseEventData.originalEvent.offsetX / zoom,
+                yAxis: mouseEventData.originalEvent.offsetY / zoom
+            };
+        }
+        //in svg direct browser we don't have DIV holder, so no zoom correction
+        else {
+            mousePosition = {
+                xAxis: mouseEventData.originalEvent.offsetX,
+                yAxis: mouseEventData.originalEvent.offsetY
+            };
+        }
+
+        return mousePosition;
+    }
+
+    //called by trigger when clicked on event, after asking user to select
+    //to here for adding events to google
+    static async onClickSelectedGoogleCalendarEvent(eventObject, instance) {
+
+        //get details on the selected event
+        var targetRect = eventObject.target;
+
+        //given the SVG rect that was clicked on, process and extract full event data
+        var parsedEvent = (await EventsChart.ParseEventFromSVGRect(targetRect, instance))["EventDataAtTime"];
+
+        //if no event found then possible wrongly clicked elm skip, END HERE
+        if (parsedEvent?.Name !== undefined) {
+            Swal.fire("Could not detect event", "", "warning");
+            return;
+        }
+
+        //ask user if selected event is correct and want to continue to google login
+        var userReply = await Swal.fire({
+            title: 'Send event to Google?',
+            html: '<ul class="list-group">' +
+                `<li class="list-group-item">Name : <strong>${parsedEvent.Name}</strong></li>` +
+                `<li class="list-group-item">Start : <strong>${parsedEvent.StartTime.StdTime}</strong></li>` +
+                `<li class="list-group-item">End : <strong>${parsedEvent.EndTime.StdTime}</strong></li>` +
+                '</ul>',
+            icon: 'info',
+            iconHtml: '<span class="iconify" data-icon="fluent:calendar-add-20-regular" data-inline="false"></span>',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        });
+
+        //based on what user clicked process
+        if (userReply.isConfirmed) {
+            // User clicked 'Yes', continue to Google login page
+            EventsChart.SelectAccountAndAddEvent(parsedEvent);
+        } else {
+            // User clicked 'No', end silently
+            console.log('User clicked No on sending to Google');
+        }
+    }
+
+    //given an SVG rect of an event, extract event data from it, with start and end time (use API)
+    static async ParseEventFromSVGRect(targetRect, instance) {
+
+        //prepare the URL
+        var domain = "https://api.vedastro.org";
+
+        //get birth time from main svg element
+        var birthTimeAry = instance.$SvgChartElm[0].getAttribute("birthtime").split(" ");
+        var birthLocationTxt = instance.$SvgChartElm[0].getAttribute("birthlocation");
+        var birthTime = `/Location/${birthLocationTxt}/Time/${birthTimeAry[0]}/${birthTimeAry[1]}/${birthTimeAry[2]}`;
+
+        //get check time & event name from clicked rect,
+        //start and end time should be before and after from this
+        var checkTimeAry = targetRect.getAttribute("stdtime").split(" ");
+        //TODO Location set based on where user is
+        var checkTime = `/Location/${birthLocationTxt.replace(/\s/g, "")}/Time/${checkTimeAry[0]}/${checkTimeAry[1]}/${checkTimeAry[2]}`;
+
+        //get name of event
+        var withSpaces = targetRect.getAttribute("eventname");
+        var eventName = `/EventName/${withSpaces.replace(/\s/g, "")}`; //remove spaces
+
+        //put together final API call URL
+        var finalUrl = `${domain}/Calculate/EventDataAtTime${birthTime}${checkTime}${eventName}`;
+
+        //make call to API, replies JSON of Event
+        var eventDataAtTime = await EventsChart.GetAPIPayload(finalUrl);
+
+        return eventDataAtTime;
+    }
+
+    //given a vedastro API url, will auto call via POST or GET
+    //and return only passed payloads as JSON
+    static async GetAPIPayload(url, payload = null) {
+        try {
+            // If a payload is provided, prepare options for a POST request
+            const options = payload
+                ? {
+                    method: 'POST', // Specify the HTTP method as POST
+                    headers: { 'Content-Type': 'application/json' }, // Set the content type of the request to JSON
+                    body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
+                }
+                : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
+
+            // Send the request to the specified URL with the prepared options
+            const response = await fetch(url, options);
+
+            // If the response is not ok (status is not in the range 200-299), throw an error
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // Parse the response body as JSON
+            const data = await response.json();
+
+            // If the 'Status' property of the parsed data is not 'Pass', throw an error
+            if (data.Status !== "Pass") {
+                throw new Error(data.Payload);
+            }
+
+            // If everything is ok, return the 'Payload' property of the parsed data
+            return data.Payload;
+        } catch (error) {
+            // If an error is caught, display an error message using Swal.fire
+            Swal.fire({
+                icon: 'error',
+                title: 'App Crash!',
+                text: error,
+                confirmButtonText: 'OK'
+            });
+        }
+    }
+
+
+    static addEventToGoogleCalendar(parsedEvent) {
+
+        //show event that was selected
+        console.log(`EventSelected: ${parsedEvent.Name}`);
+
+        //convert to format supported by Google Calendar
+        var parsedStartTime = EventsChart.convertDateFormat(parsedEvent.StartTime);
+        var parsedEndTime = EventsChart.convertDateFormat(parsedEvent.EndTime);
+
+        const event = {
+            'summary': parsedEvent.Name,
+            //'location': '',
+            'description': parsedEvent.Description,
+            'start': parsedStartTime,
+            'end': parsedEndTime,
+            //'recurrence': [
+            //    'RRULE:FREQ=DAILY;COUNT=2'
+            //],
+            //'attendees': [
+            //    { 'email': 'lpage@example.com' },
+            //    { 'email': 'sbrin@example.com' }
+            //],
+            'reminders': {
+                'useDefault': false,
+                'overrides': [
+                    { 'method': 'email', 'minutes': 24 * 60 },
+                    { 'method': 'popup', 'minutes': 10 }
+                ]
+            }
+        };
+
+        const request = window.gapi.client.calendar.events.insert({
+            'calendarId': 'primary', //set default calendar todo future select calendar
+            'resource': event
+        });
+
+        request.execute(function (event) {
+
+            //STATE: events successfully created and updated to Google
+            //tell user about it
+            Swal.fire({
+                title: 'Event added!',
+                text: `Added ${event.summary}, view here ${event.htmlLink}`,
+                icon: 'info',
+                iconHtml: '<span class="iconify" data-icon="streamline:interface-calendar-check-approve-calendar-check-date-day-month-success" data-inline="false"></span>',
+                showCloseButton: true,
+                focusConfirm: false,
+                confirmButtonText: 'Great!'
+            });
+
+        });
+    }
+
+    /**
+       *  Sign in the user to select calendar account and then add event immediately
+       */
+    static SelectAccountAndAddEvent(parsedEvent) {
+
+        window.tokenClient.callback = async (resp) => {
+            if (resp.error !== undefined) {
+                throw (resp);
+            }
+
+            //now already logged in continue to add events
+            EventsChart.addEventToGoogleCalendar(parsedEvent);
+
+        };
+
+        if (window.gapi.client.getToken() === null) {
+            // Prompt the user to select a Google Account and ask for consent to share their data
+            // when establishing a new session.
+            window.tokenClient.requestAccessToken({ prompt: 'consent' });
+        } else {
+            // Skip display of account chooser and consent dialog for an existing session.
+            window.tokenClient.requestAccessToken({ prompt: '' });
+        }
+    }
+
+    /**
+      * Print the summary and start datetime/date of the next ten events in
+      * the authorized user's calendar. If no events are found an
+      * appropriate message is printed.
+      */
+    static async listUpcomingEvents() {
+        let response;
+        try {
+            const request = {
+                'calendarId': 'primary',
+                'timeMin': (new Date()).toISOString(),
+                'showDeleted': false,
+                'singleEvents': true,
+                'maxResults': 10,
+                'orderBy': 'startTime',
+            };
+            response = await window.gapi.client.calendar.events.list(request);
+        } catch (err) {
+            document.getElementById('content').innerText = err.message;
+            return;
+        }
+
+        const events = response.result.items;
+        if (!events || events.length == 0) {
+            console.log('No events found.');
+            return;
+        }
+        // Flatten to string to display
+        const output = events.reduce(
+            (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
+            'Events:\n');
+        console.log(output);
+    }
+
     //fired when mouse moves over dasa view box
     //used to auto update cursor line & time legend
     static onMouseMoveHandler(mouse, instance) {
@@ -306,7 +597,7 @@ class EventsChart {
         //get relative position of mouse in Dasa view
         //after zoom pixels on screen change, but when rendering
         //SVG description box we need x, y before zoom (AI's code!)
-        var mousePosition = getMousePositionInElement(mouse); //todo no work in zoom
+        var mousePosition = EventsChart.getMousePositionInElement(mouse, instance); //todo no work in zoom
 
         //if cursor is out of chart view hide cursor and end here
         if (mousePosition === 0) { SVG(instance.$CursorLine[0]).hide(); return; }
@@ -321,33 +612,6 @@ class EventsChart {
 
         //-------------------------LOCAL FUNCS--------------------------
 
-        //Gets a mouses x axis relative inside the given element
-        //used to get mouse location on SVG chart, zoom auto corrected 
-        function getMousePositionInElement(mouseEventData) {
-
-            //get relative position of mouse in Dasa view
-            //after zoom pixels on screen change, but when rendering
-            //SVG description box we need x, y before zoom (AI's code!)
-            var holder = instance.$EventsChartSvgHolder[0]; //zoom is done on main holder in Blazor side
-
-            var mousePosition = {};
-            if (holder != null) {
-                var zoom = parseFloat(window.getComputedStyle(holder).zoom);
-                mousePosition = {
-                    xAxis: mouse.originalEvent.offsetX / zoom,
-                    yAxis: mouse.originalEvent.offsetY / zoom
-                };
-            }
-            //in svg direct browser we don't have DIV holder, so no zoom correction
-            else {
-                mousePosition = {
-                    xAxis: mouse.originalEvent.offsetX,
-                    yAxis: mouse.originalEvent.offsetY
-                };
-            }
-
-            return mousePosition;
-        }
 
         function autoMoveCursorLine(relativeMouseX) {
             //give a tiny delay so user can aim better at event
@@ -365,63 +629,34 @@ class EventsChart {
         //and modifying its prop as needed, as such any major edit needs to
         //be done in API code
         function generateTimeLegend(mousePosition) {
-            //x axis is rounded because axis value in rect is whole numbers
-            //and it has to be exact match to get it
-            var mouseRoundedX = Math.round(mousePosition.xAxis);
-            var mouseRoundedY = Math.round(mousePosition.yAxis);
 
-            //use the mouse position to get all event rects
-            //dasa elements at same X position inside the dasa svg
-            //note: faster and less erroneous than using mouse.path (fruits of time)
-            //- get only with event name
-            var allElementsAtX = instance.$SvgChartElm.children().find(`[x=${mouseRoundedX}]`);
-            var allEventRectsAtX = [];
-            allElementsAtX.each(
-                (index, element) => {
-                    var eventName = element.getAttribute("eventname");
-                    //if no "eventname" exist, wrong elm skip it
-                    if (eventName) { allEventRectsAtX.push(element); }
-                });
+            // Round mouse position to match with axis values in rect
+            const mouseRoundedX = Math.round(mousePosition.xAxis);
+            const mouseRoundedY = Math.round(mousePosition.yAxis);
 
-            //delete previously generated legend rows
-            var previousClones = instance.$SvgChartElm.find(ID.CursorLineLegendCloneCls); //get latest ones by direct call
-            previousClones.remove();
+            // Get all event rects at the mouse's X position
+            const allElementsAtX = instance.$SvgChartElm.children().find(`[x=${mouseRoundedX}]`);
+            const allEventRectsAtX = getAllEventRectsAtX(allElementsAtX);
 
-            //count good and bad events for summary row
-            var goodCount = 0;
-            var badCount = 0;
-            instance.showDescription = false;//default description not shown
+            // Remove previously generated legend rows
+            removePreviousClones();
 
-            //extract event data out and place it in legend
-            $(allEventRectsAtX).each((index, element) => drawEventRow(element, mouseRoundedY, allElementsAtX));
+            //if no elements, don't create summary row, end here (note check only after remove)
+            if (!(allEventRectsAtX.length > 0)) { return; }
 
-            //auto show/hide description box based on mouse position
-            if (instance.showDescription) {
-                SVG(instance.$CursorLineLegendDescriptionHolder[0]).show();
-            } else {
-                SVG(instance.$CursorLineLegendDescriptionHolder[0]).hide();
-            }
+            // Initialize counts for summary row
+            let goodCount = 0;
+            let badCount = 0;
+            instance.showDescription = false; // Default description not shown
 
-            //5 GENERATE LAST SUMMARY ROW
-            //generate summary row at the bottom show count of good & bad
-            //make a copy of template for this event
-            var newSummaryRow = instance.$CursorLineLegendTemplate.clone();
-            newSummaryRow.removeAttr('id'); //remove the clone template id
-            newSummaryRow.addClass(ID.CursorLineLegendClone); //to delete it on next run
-            newSummaryRow.appendTo(instance.$CursorLineLegendHolder); //place new legend into parent
-            SVG(newSummaryRow[0]).show();//make cloned visible
+            // Extract event data and place it in legend
+            allEventRectsAtX.forEach(element => drawEventRow(element, mouseRoundedY, allElementsAtX));
 
-            //position summary at bottom
-            var lastEvent = allEventRectsAtX[allEventRectsAtX.length - 1];
-            var lastEvtRowYAxis = parseInt(lastEvent.getAttribute("y"));
-            var summaryRowYAxis = lastEvtRowYAxis + EventsChart.RowHeight - 1;
-            newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${summaryRowYAxis})`);//minus 1 for perfect alignment
+            // Show or hide description box based on mouse position
+            toggleDescriptionBox();
 
-            //set event name text & color element
-            var textElm = newSummaryRow.children("text");
-            textElm.text(` Good : ${goodCount}   Bad : ${badCount}`); //spacing set nicely
-            //change icon to summary icon
-            newSummaryRow.children("use").attr("xlink:href", ID.CursorLineSumIcon);
+            // Generate summary row at the bottom showing count of good & bad
+            generateSummaryRow(allEventRectsAtX, goodCount, badCount);
 
 
             //-----------------------------------------LOCAL FUNCS-------------------------------
@@ -618,6 +853,65 @@ class EventsChart {
                     //replace circle with clock icon
                     newTimeLegend.children("use").attr("xlink:href", ID.CursorLineClockIcon);
                 }
+            }
+
+            function getAllEventRectsAtX(allElementsAtX) {
+                const allEventRectsAtX = [];
+                allElementsAtX.each((index, element) => {
+                    const eventName = element.getAttribute("eventname");
+                    if (eventName) {
+                        allEventRectsAtX.push(element);
+                    }
+                });
+                return allEventRectsAtX;
+            }
+
+            function removePreviousClones() {
+                const previousClones = instance.$SvgChartElm.find(ID.CursorLineLegendCloneCls);
+                previousClones.remove();
+            }
+
+            function toggleDescriptionBox() {
+                if (instance.showDescription) {
+                    SVG(instance.$CursorLineLegendDescriptionHolder[0]).show();
+                } else {
+                    SVG(instance.$CursorLineLegendDescriptionHolder[0]).hide();
+                }
+            }
+
+            /**
+             * Generates a summary row for event rectangles.
+             * 
+             * @param {Array} allEventRectsAtX - All event rectangles at a given x-coordinate.
+             * @param {number} goodCount - The count of good events.
+             * @param {number} badCount - The count of bad events.
+             */
+            function generateSummaryRow(allEventRectsAtX, goodCount, badCount) {
+                // Clone the template and remove its id
+                const newSummaryRow = instance.$CursorLineLegendTemplate.clone().removeAttr('id');
+
+                // Add class to the new summary row and append it to the holder
+                newSummaryRow.addClass(ID.CursorLineLegendClone).appendTo(instance.$CursorLineLegendHolder);
+
+                // Show the new summary row
+                SVG(newSummaryRow[0]).show();
+
+                // Get the last event and its y-axis
+                const lastEvent = allEventRectsAtX[allEventRectsAtX.length - 1];
+                const lastEvtRowYAxis = parseInt(lastEvent.getAttribute("y"));
+
+                // Calculate the y-axis for the summary row
+                const summaryRowYAxis = lastEvtRowYAxis + EventsChart.RowHeight - 1;
+
+                // Transform the new summary row
+                newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${summaryRowYAxis})`);
+
+                // Get the text element and set its text
+                const textElm = newSummaryRow.children("text");
+                textElm.text(` Good : ${goodCount}   Bad : ${badCount}`);
+
+                // Set the href for the use element
+                newSummaryRow.children("use").attr("xlink:href", ID.CursorLineSumIcon);
             }
         }
     }

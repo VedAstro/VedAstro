@@ -5631,8 +5631,19 @@ namespace VedAstro.Library
 
         public static double PlanetKashtaScore(PlanetName planet, Time birthTime)
         {
-            return 0;
-            throw new NotImplementedException();
+            //The Ochcha Bala (exaltation strength) of a planet
+            //is multiplied by its Chesta Bala(motional strength)
+            //and then the square root of the product extracted.
+            var ochchaBala = PlanetOchchaBala(planet, birthTime).ToDouble();
+            var chestaBala = PlanetChestaBala(planet, birthTime).ToDouble();
+            var product = (60 - ochchaBala) * (60 - chestaBala);
+
+            //Square root of the product extracted.
+            //the result would represent the Kashta Phala.
+            var ishtaScore = Math.Sqrt(product);
+
+            return ishtaScore;
+
         }
 
         /// <summary>
@@ -5644,7 +5655,7 @@ namespace VedAstro.Library
             //is multiplied by its Chesta Bala(motional strength)
             //and then the square root of the product extracted.
             var ochchaBala = PlanetOchchaBala(planet, birthTime).ToDouble();
-            var chestaBala = PlanetChestaBala(planet, birthTime, includeSunMoon: true).ToDouble();
+            var chestaBala = PlanetChestaBala(planet, birthTime).ToDouble();
             var product = ochchaBala * chestaBala;
 
             //Square root of the product extracted.
@@ -8984,17 +8995,14 @@ namespace VedAstro.Library
         /// from the Sun, it gradually loses the power
         /// of the Sun's gravitation and consequently, 
         /// </summary>
-        public static Shashtiamsa PlanetChestaBala(PlanetName planetName, Time time, bool includeSunMoon = false)
+        public static Shashtiamsa PlanetChestaBala(PlanetName planetName, Time time)
         {
             //if include Sun/Moon specified, then use special function (used for Ishta/Kashta score)
-            var isSunMoon = planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon;
-            if (isSunMoon && includeSunMoon)
-            {
-                return SunMoonChestaBala(planetName);
-            }
+            if (planetName == Sun) { return SunChestaBala(time); }
+            if (planetName == Moon) { return MoonChestaBala(time); }
 
             //the Sun,Moon,Rahu and Ketu does not not retrograde, so 0 chesta bala
-            if (isSunMoon || planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu) { return Shashtiamsa.Zero; }
+            if (planetName == Rahu || planetName == Ketu) { return Shashtiamsa.Zero; }
 
             //get the interval between birth date and the date of the epoch (1900)
             //verified standard horoscope = 6862.579
@@ -9079,11 +9087,50 @@ namespace VedAstro.Library
         /// <summary>
         /// special function to get chesta score for Ishta/Kashta score
         /// Bala book pg. 108
+        ///
+        /// Sun has no Chesta kendra or Chesta bala
+        /// as he never gets into retrogression. But still a
+        /// method is prescribed to find his Chesla Bala which
+        /// is necessary to ascertain the lshta and Kashta·
+        /// Phalas. 
         /// </summary>
-        public static Shashtiamsa SunMoonChestaBala(PlanetName planetName)
+        public static Shashtiamsa SunChestaBala(Time inputTime)
         {
-            return Shashtiamsa.Zero;
-            throw new NotImplementedException();
+            //Add 90° to Sun's Sayana longitude.
+            var sunSayana = Calculate.PlanetSayanaLatitude(Sun, inputTime);
+
+            //The result is Sun's Chesta kendra
+            var chestaKendra = (sunSayana + Angle.Degrees90).TotalDegrees;
+
+            //if chesta kendra execeeds 180 substract from 360
+            if (chestaKendra > 180) { chestaKendra = 360 - chestaKendra; }
+
+            //dividing this by 3 we get his Chesta bala in Shashtiamsa
+            var chestaBala = chestaKendra / 3.0;
+
+            return new Shashtiamsa(chestaBala);
+        }
+
+        /// <summary>
+        /// special function to get chesta score for Ishta/Kashta score
+        /// Bala book pg. 108
+        /// </summary>
+        public static Shashtiamsa MoonChestaBala(Time inputTime)
+        {
+
+            //Subtract the Sun's longitude from that of the Moon and the 
+            //latter's Chesta Kendra is obtained.
+            var sunNirayana = Calculate.PlanetNirayanaLongitude(Sun, inputTime);
+            var moonNirayana = Calculate.PlanetNirayanaLongitude(Moon, inputTime);
+            var chestaKendra = moonNirayana.GetDifference(sunNirayana).TotalDegrees;
+
+            //if chesta kendra execeeds 180 substract from 360
+            if (chestaKendra > 180) { chestaKendra = 360 - chestaKendra; }
+
+            //dividing this by 3 we get his Chesta bala. in Shashtiamsa
+            var chestaBala = chestaKendra / 3.0;
+
+            return new Shashtiamsa(chestaBala);
         }
 
         /// <summary>
@@ -11354,6 +11401,30 @@ namespace VedAstro.Library
         public static string BouncBackInputAsString(PlanetName planetName, Time time) => planetName.ToString();
 
 #endif
+
+
+        /// <summary>
+        /// Given a list of planets will pick out the strongest planet based on Shadbala
+        /// </summary>
+        public static PlanetName PickOutStrongestPlanet(List<PlanetName> relatedPlanets, Time birthTime)
+        {
+            //if only 1 planet than no need to check
+            if (relatedPlanets.Count == 1) { return relatedPlanets[0]; }
+
+            //calculare strength for all given planets
+            var powerList = new Dictionary<PlanetName, double>();
+            foreach (var relatedPlanet in relatedPlanets)
+            {
+                var strength = Calculate.PlanetStrength(relatedPlanet, birthTime);
+                powerList.Add(relatedPlanet, strength.ToDouble());
+            }
+
+            //pickout highest value
+            var strongest = powerList.Aggregate((l, r) => l.Value > r.Value ? l : r);
+
+            //return strongest planet name
+            return strongest.Key;
+        }
     }
 }
 

@@ -205,11 +205,13 @@ namespace VedAstro.Library
             var isDasaEvent = foundEvent.Name.ToString().Contains("PD");
             if (!isDasaEvent) { return 0; }
 
-            //get first planet, as lord of current dasa, exp: Venus in Rahu Dasa = Venus only
-            var dasaMainPlanet = foundEvent.GetRelatedPlanet()[0];
+            //get the strongest planet of person's birth found in Event
+            //NOTE: refer pg.110 Graha & Bhava bala, how planets trump each other
+            var relatedPlanets = foundEvent.GetRelatedPlanet();
+            var strongestPlanet = Calculate.PickOutStrongestPlanet(relatedPlanets, person.BirthTime);
 
             //get good or bad based on Ishta and Kashta, if former is more than good
-            var score = Calculate.PlanetIshtaKashtaScore(dasaMainPlanet, person.BirthTime);
+            var score = Calculate.PlanetIshtaKashtaScore(strongestPlanet, person.BirthTime);
 
             //-1 bad, +1 good, no neutral
             return score;

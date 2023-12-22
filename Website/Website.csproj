@@ -78,7 +78,6 @@
 	  <Content Include="..\ViewComponents\Components\PersonTooltip.razor" Link="ViewComponents\PersonTooltip.razor" />
 	  <Content Include="..\ViewComponents\Components\PlanetAPIBuilderPanel.razor" Link="ViewComponents\PlanetAPIBuilderPanel.razor" />
 	  <Content Include="..\ViewComponents\Components\PlanetChart.razor" Link="ViewComponents\PlanetChart.razor" />
-	  <Content Include="..\ViewComponents\Components\PlanetHouseInfoViewer.razor" Link="ViewComponents\PlanetHouseInfoViewer.razor" />
 	  <Content Include="..\ViewComponents\Components\QuoteTextBlock.razor" Link="ViewComponents\QuoteTextBlock.razor" />
 	  <Content Include="..\ViewComponents\Components\SearchBox.razor" Link="ViewComponents\SearchBox.razor" />
 	  <Content Include="..\ViewComponents\Components\SideBarButtons.razor" Link="ViewComponents\SideBarButtons.razor" />

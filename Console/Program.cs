@@ -131,11 +131,11 @@ namespace VedAstro.Console
                         var maxWidth = int.Parse(GetInputFromUser("Enter Max Width in Px"));
                         var precisionInHours = double.Parse(GetInputFromUser("Enter Scan Precision in Hours"));
                         System.Console.WriteLine("Start & End of Chart");
-                        var startYear = GetInputFromUser("Enter Start Year : 0001-9999");
-                        var endYear = GetInputFromUser("Enter End Year : 0001-9999");
+                        var startYear = GetInputFromUser("START Year (0001-9999) ?");
+                        var endYear = GetInputFromUser("END Year (0001-9999) ?");
                         System.Console.WriteLine("Start & End of Possible Birth Hour");
-                        var startHour = GetInputFromUser("Enter Start 24Hour : 00-23");
-                        var endHour = GetInputFromUser("Enter End 24Hour : 00-23");
+                        var startHour = GetInputFromUser("START TIME (00:00-23:59) ?");
+                        var endHour = GetInputFromUser("END TIME (00:00-23:59) ?");
 
                         await FindBirthTimeEventsChartPerson(personId, maxWidth, precisionInHours, startYear, endYear, startHour, endHour);
 
@@ -169,8 +169,8 @@ namespace VedAstro.Console
             var foundPerson = await Tools.GetPersonByIdViaAPI(personId, "102111269113114363117");
 
             //generate the needed charts
-            var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.PD6, EventTag.Gochara };
-            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General, EventsChartManager.Algorithm.StrongestPlanet, EventsChartManager.Algorithm.WeakestPlanet };
+            var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.PD6, EventTag.PD7 };
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General, Algorithm.IshtaKashtaPhala };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
 
             //time range is preset to full life 100 years from birth
@@ -182,9 +182,9 @@ namespace VedAstro.Console
             var daysPerPixel = EventsChart.GetDayPerPixel(timeRange, maxWidth);
 
 
-            //get list of possible birth time slice in the current birth day by inputed hour
-            var startHourParsed = new Time($"{startHour}:00 {foundPerson.BirthDateMonthYearOffset}", foundPerson.GetBirthLocation());
-            var endHourParsed = new Time($"{endHour}:00 {foundPerson.BirthDateMonthYearOffset}", foundPerson.GetBirthLocation());
+            //get list of possible birth time slice in the current birthday by inputed hour
+            var startHourParsed = new Time($"{startHour} {foundPerson.BirthDateMonthYearOffset}", foundPerson.GetBirthLocation());
+            var endHourParsed = new Time($"{endHour} {foundPerson.BirthDateMonthYearOffset}", foundPerson.GetBirthLocation());
             var possibleTimeList = Time.GetTimeListFromRange(startHourParsed, endHourParsed, precisionInHours);
 
             //ACT 3 : Generate charts (Parallel)
@@ -207,7 +207,6 @@ namespace VedAstro.Console
 
                 chart = await EventsChartManager.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
                 dict.Add(possibleTime, chart.ContentSvg);
-
             }
 
             //List<Task> tasks = possibleTimeList.Select(async possibleTime =>
@@ -223,10 +222,28 @@ namespace VedAstro.Console
             //await Task.WhenAll(tasks);
 
 
-
-
-
             //ACT 4 : Package to be vied together
+
+            // Break the list into smaller lists of 144 items each
+            var smallerLists = possibleTimeList.Select((item, index) => new { item, index })
+                .GroupBy(x => x.index / 144)
+                .Select(g => g.Select(x => x.item).ToList())
+                .ToList();
+
+            var count = 0;
+            foreach (var brokenList in smallerLists)
+            {
+                await GenerateSVGFile(maxWidth, brokenList, foundPerson, dict, chart, count);
+                count++;
+            }
+
+            //let user know
+            System.Console.WriteLine("File Done & Saved to Desktop!");
+        }
+
+        private static async Task GenerateSVGFile(int maxWidth, List<Time> possibleTimeList, Person foundPerson, Dictionary<Time, string> dict,
+            EventsChart? chart, int nonce)
+        {
             var combinedSvg = "";
             var chartYPosition = 30; //start with top padding
             var leftPadding = 10;
@@ -241,7 +258,7 @@ namespace VedAstro.Console
                 //place in group with time above the chart
                 var wrappedChart = $@"
                             <g transform=""matrix(1, 0, 0, 1, {leftPadding}, {chartYPosition})"">
-                                <text style=""font-size: 16px; white-space: pre-wrap;"" x=""2"" y=""-6.727"">STD{adjustedBirthStd} - LMT{adjustedBirthLmt}</text>
+                                <text style=""font-size: 10px; white-space: pre-wrap;"" x=""2"" y=""-6.727"">STD:{adjustedBirthStd} - LMT:{adjustedBirthLmt}</text>
                                 {newChartSvg}
                               </g>
                             ";
@@ -270,7 +287,7 @@ namespace VedAstro.Console
             //a hash to id the chart's specs (caching)
             var chartId = chart?.GetEventsChartSignature() ?? "test";
 
-            var fileName = $"{chartId}.svg";
+            var fileName = $"{chartId}-{nonce}.svg";
             var folderName = $"VedAstro Console";
 
             //save to desktop, easy to spot
@@ -283,11 +300,7 @@ namespace VedAstro.Console
             //save to local file
             string fullPath = Path.Combine(folderPath, fileName);
             await File.WriteAllTextAsync(fullPath, finalSvg);
-
-            //let user know
-            System.Console.WriteLine("File Done & Saved to Desktop!");
         }
-
     }
 }
 

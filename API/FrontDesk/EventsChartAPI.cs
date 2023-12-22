@@ -301,9 +301,8 @@ namespace API
             maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
             
             //todo needs to be pumped in from input
-            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General };
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
-
 
             //minus 7% from width for side padding
             //so that chart not squeezed to side of page

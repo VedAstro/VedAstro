@@ -10,9 +10,7 @@
                   DescriptionText="Find the right time for wedding, job interview, buying house and etc. Muhurtha is sanskrit for Good Time or Electional Astrology." />
 
 
-@* NEEDS TO BE LOADED INSIDE SO THAT LIST READY WHEN NEEDED *@
-@if (_isResultReady)
-{
+
     @* SELECTOR AND INFO BOXES*@
     <div class="d-md-flex justify-content-between">
 
@@ -43,7 +41,10 @@
                 @* YEAR SELECTOR *@
                 <MonthYearTimeRangeSelector @ref="monthYearTimeRangeSelector" />
 
-                @* EVENT SELECT *@
+                @* NEEDS TO BE LOADED INSIDE SO THAT LIST READY WHEN NEEDED *@
+                @if (_isResultReady)
+                {
+                                    @* EVENT SELECT *@
                 <IconTitle Title="Event Type" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
                 <div style="width: @GR.W667px;margin-top:-14px;font-size: 15px;font-family: 'Lexend Deca';" class="d-flex flex-wrap gap-1 mb-3">
                     <div style="width: @GR.W255px;" class="form-check hstack gap-2">
@@ -253,6 +254,9 @@
                         </IconTooltip>
                     </div>
                 </div>
+
+                }
+
                         
                 @* ADVANCED PANEL DROP *@
                 <div id="GoodTimeFinderAdvancedInputHolder" class="border-top mt-2 pt-2" style="display: none;">
@@ -314,10 +318,9 @@
 
     </div>
 
-}
+    @* CHART DISPLAY HERE *@
+    <EventsChartViewer @ref="_eventsChartViewer" />
 
-@* CHART DISPLAY HERE *@
-<EventsChartViewer @ref="_eventsChartViewer" />
 
 
 @code {
@@ -400,6 +403,12 @@
     {
         await _jsRuntime.ShowLoading();
 
+        //hidden by default
+        monthYearTimeRangeSelector.Hide();
+
+        //attach event handler to update precision when month/year is changed
+        monthYearTimeRangeSelector.MonthYearChanged += OnUpdateMonthYearSelection;
+
         //set all not selected as default
         //load tag extenstion list
         FullList = EventTagExtensions.GetAll();
@@ -420,15 +429,6 @@
         var timeRange = GetTimeRange();
         DaysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);
 
-
-        //hidden by default
-        monthYearTimeRangeSelector?.Hide();
-
-        //attach event handler to update precision when month/year is changed
-        if (monthYearTimeRangeSelector != null)
-        {
-            monthYearTimeRangeSelector.MonthYearChanged += OnUpdateMonthYearSelection;
-        }
 
         _jsRuntime.HideLoading();
         _isResultReady = true;

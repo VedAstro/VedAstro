@@ -69,6 +69,11 @@ namespace VedAstro.Library
         /// </summary>
         public double DurationHour => GetDurationHours();
 
+        /// <summary>
+        /// Score linked to the nature of the event,
+        /// calculated & inject separately using Algorithms like Ishta Kashta Score
+        /// </summary>
+        public double NatureScore { get; set; }
 
 
         //PUBLIC METHODS

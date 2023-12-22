@@ -24,6 +24,8 @@ namespace VedAstro.Library
         private const double DegreesPerSecond = 1.0 / SecondsPerDegree;
 
         public static readonly Angle Zero = new Angle(0, 0, 0);
+        public static readonly Angle Degrees45 = new Angle(45);
+        public static readonly Angle Degrees90 = new Angle(90);
         public static readonly Angle Degrees180 = new Angle(180);
         public static readonly Angle Degrees360 = new Angle(360);
 

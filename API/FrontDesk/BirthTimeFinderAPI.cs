@@ -100,9 +100,9 @@ namespace API
                 var foundPerson = Tools.GetPersonById(personId);
 
                 //generate the needed charts
-                var chartList = new List<EventsChart>();
+                //var chartList = new List<EventsChart>();
                 var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.Gochara };
-                var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General };
+                var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General };
                 var summaryOptions = new ChartOptions(algorithmFuncsList);
 
                 //time range is preset to full life 100 years from birth

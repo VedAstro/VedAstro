@@ -395,6 +395,21 @@ namespace VedAstro.Library
         private static string GetColor(EventNature? eventNature) => GetColor(eventNature.ToString());
 
         /// <summary>
+        /// Get color based on event same summary color
+        /// </summary>
+        private static string GetColor(Event inputEvent, Person inputPerson,
+            List<AlgorithmFuncs> selectedAlgorithm)
+        {
+            var natureScore = CalculateNatureScore(inputEvent, inputPerson, selectedAlgorithm);
+
+            Console.WriteLine($"EVT{inputEvent.Name} NS:{natureScore}");
+
+            var finalColor = GetSummaryColor(natureScore, -3, 3);
+
+            return finalColor;
+        }
+
+        /// <summary>
         /// Get color based on nature
         /// </summary>
         private static string GetColor(string nature)
@@ -1538,7 +1553,7 @@ namespace VedAstro.Library
                         int finalYAxis = yAxis + verticalPosition;
                         var prevExist = prevEventList.TryGetValue(finalYAxis, out var prevEventName);
                         var isNewEvent = prevExist && (prevEventName != foundEvent.Name);
-                        var color = isNewEvent ? "black" : GetColor(foundEvent?.Nature);
+                        var color = isNewEvent ? "black" : GetColor(foundEvent, inputPerson, summaryOptions.SelectedAlgorithm);
 
                         //save current event to previous, to draw border later
                         //border ONLY for top 3 rows (long duration events), lower row borders block color
@@ -1570,7 +1585,7 @@ namespace VedAstro.Library
                         double natureScore = 0;
 
                         //calculate accurate nature score
-                        natureScore = CalculateNatureScore(foundEvent, inputPerson, summaryOptions);
+                        natureScore = CalculateNatureScore(foundEvent, inputPerson, summaryOptions.SelectedAlgorithm);
 
                         //compile nature score for making summary row later (defaults to 0)
                         var previousNatureScoreSum = (SummaryRowData.ContainsKey(horizontalPosition) ? SummaryRowData[horizontalPosition].NatureScore : 0);
@@ -1724,11 +1739,11 @@ namespace VedAstro.Library
         /// <summary>
         /// Intelligently calculates summary score
         /// </summary>
-        private static double CalculateNatureScore(Event foundEvent, Person person, ChartOptions chartOptions)
+        private static double CalculateNatureScore(Event foundEvent, Person person, List<AlgorithmFuncs> selectedAlgorithm)
         {
             //add together all score of selected algorithms
             var final = 0.0;
-            foreach (var algorithm in chartOptions.SelectedAlgorithm)
+            foreach (var algorithm in selectedAlgorithm)
             {
                 final += algorithm.Invoke(foundEvent, person);
             }

@@ -200,11 +200,12 @@ namespace VedAstro.Console
             //    dict.Add(possibleTime, chart.ContentSvg);
             //});
 
+            EventsChart? chart = null;
             foreach (var possibleTime in possibleTimeList)
             {
                 var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
 
-                var chart = await EventsChartManager.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
+                chart = await EventsChartManager.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
                 dict.Add(possibleTime, chart.ContentSvg);
 
             }
@@ -266,7 +267,10 @@ namespace VedAstro.Console
             //ACT 5 : Save to file
             //This is the part that could not be done in cloud, cost and time
             //recognizable name for file
-            var fileName = $"BirthTimeFinder-EventsChart-{foundPerson.Name}-{foundPerson.BirthYear}-{precisionInHours}PiH.svg";
+            //a hash to id the chart's specs (caching)
+            var chartId = chart?.GetEventsChartSignature() ?? "test";
+
+            var fileName = $"{chartId}.svg";
             var folderName = $"VedAstro Console";
 
             //save to desktop, easy to spot

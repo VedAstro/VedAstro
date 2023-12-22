@@ -456,8 +456,41 @@ namespace Website
                 return parsedList;
             }
 
+            //no data return empty to be detected
             return new List<Person>();
         }
+
+        //private static List<EventData> CachedEventDataList { get; set; } = new(); //if empty que to get new list
+
+//        public static async Task<List<EventData>> GetCachedEventDataList()
+//        {
+//            //check cache is expired
+//            var creationDate = await _jsRuntime.GetProperty("CachedEventDataList_SetDate");
+//            creationDate = string.IsNullOrEmpty(creationDate) ? DateTime.Now.ToString() : creationDate;
+//            var timeSinceCreation = DateTime.Now - DateTime.Parse(creationDate);
+//            var isExpired = timeSinceCreation.TotalDays > 7; //1 week expired
+
+//            //get raw cache if any
+//            var listJson = await _jsRuntime.GetProperty("CachedEventDataList");
+//            var cacheExist = listJson is not null or "";
+
+//            //use cache exist if not expired, less the 1 week
+//            if (cacheExist && !isExpired)
+//            {
+//#if DEBUG
+//                Console.WriteLine("BLZ: Using Cached Event DataList");
+//#endif
+//                //convert string to parsed list
+//                var parsedList = EventData.FromJsonList(JToken.Parse(listJson));
+
+//                return parsedList;
+//            }
+
+//            //if expired
+//            //no data return empty to be detected
+//            return new List<EventData>();
+//        }
+
 
         public static async Task SetCachedPersonList(List<Person> personList, bool isPublic = false)
         {
@@ -473,6 +506,27 @@ namespace Website
             Console.WriteLine("BLZ: New person cache set in memory");
 #endif
         }
+
+
+//        /// <summary>
+//        /// also auto sets creation date to check expiry when read
+//        /// </summary>
+//        public static async Task SetCachedEventDataList(List<EventData> eventDataList)
+//        {
+//            //convert to storable format in browser memory
+//            JArray personJson = EventData.ListToJson(eventDataList);
+//            var jsonString = personJson.ToString();
+
+//            //set either public or private list
+//            await _jsRuntime.SetProperty("CachedEventDataList", jsonString);
+
+//            //set cache date, as to delete if not needed
+//            await _jsRuntime.SetProperty("CachedEventDataList_SetDate", DateTime.Now.ToString());
+
+//#if DEBUG
+//            Console.WriteLine("BLZ: New Cached EventData List set in memory");
+//#endif
+//        }
 
         public static async Task ClearCachedPersonList()
         {

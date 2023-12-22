@@ -305,5 +305,19 @@ namespace VedAstro.Library
             return eventX;
         }
 
+        /// <summary>
+        /// Given a parsed list of EventData will convert to JSON
+        /// </summary>
+        public static JArray ListToJson(List<EventData> eventDataList)
+        {
+            var returnValue = new JArray();
+            foreach (var eventData in eventDataList)
+            {
+                returnValue.Add(eventData.ToJson());
+            }
+
+            return returnValue;
+        }
+
     }
 }

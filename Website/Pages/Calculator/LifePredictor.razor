@@ -643,6 +643,9 @@ Know good and bad periods of your life years ahead.*@
 
     private async Task OnClickCalculate()
     {
+        //come back here of fail
+        TryAgain:
+
         //keep copy of selected time range else gets reset, on re-render
         var backUpSelectedTimeRangePreset = SelectedTimeRangePreset;
         var backUpDaysPerPixelInput = DaysPerPixelInput;
@@ -704,7 +707,12 @@ Know good and bad periods of your life years ahead.*@
         //FAIL
         else
         {
-            _jsRuntime.ShowAlert("info", "Try again.", "");
+            Console.WriteLine("BLZ: Getting Events charts Failed! Auto trying again!");
+
+            //come back here of fail
+            goto TryAgain;
+
+            //_jsRuntime.ShowAlert("info", "", "");
         }
 
 

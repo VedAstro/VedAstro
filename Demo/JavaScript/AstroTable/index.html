@@ -14,10 +14,12 @@
         <div id="PlanetDataTable"></div>
 
         <div id="AshtakvargaTable"></div>
+        
+        <div id="AIChat"></div>
 
         <script defer>
 
-            //DEFAULT COLUMNS when no column data is supplied or when reset button is clicked
+            //----------------------PLANET DATA----------------------------
             var planetColumns = [
                 { Api: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
                 { Api: "PlanetConstellation", Enabled: true, Name: "Star" },
@@ -55,9 +57,7 @@
             //generate table
             planetDataTable.GenerateTable(inputArguments);
 
-            //----------------------
-            //make new Ashtakvarga Table
-            //initialize astro table
+            //----------------------Ashtakvarga Table----------------------------
             var settingsAshtakvarga = {
                 ElementID : "AshtakvargaTable",
                 KeyColumn : "Ashtakvarga",
@@ -74,6 +74,27 @@
             };
 
             ashtakvargaTable.GenerateTable(inputArguments);
+
+
+            //----------------------AI CHAT----------------------------
+            var settingsAIChat = {
+                ElementID : "AIChat",
+                KeyColumn : "AIChat",
+                ShowHeader : true,
+                HeaderIcon : "fluent:table-28-filled",
+            };
+
+            var aIChat = new AIChat(settingsAIChat);
+
+            //data used to generate table
+            var inputArguments = {
+                TimeUrl : "Location/Bengaluru/Time/11:00/25/07/1984/+00:00/",
+                Ayanamsa: "KRISHNAMURTI", //default is Lahiri
+            };
+
+            aIChat.GenerateView(inputArguments);
+
+
     
         </script>
     </body>

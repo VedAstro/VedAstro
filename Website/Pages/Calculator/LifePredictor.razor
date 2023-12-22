@@ -556,7 +556,6 @@ Know good and bad periods of your life years ahead.*@
         set => _jsRuntime.FunFeaturePopUp("Dasa Types");
     }
 
-
     private IconButton _calculateButton;
 
 
@@ -594,7 +593,7 @@ Know good and bad periods of your life years ahead.*@
         DaysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);
 
         //hidden by default
-        monthYearTimeRangeSelector.Hide();
+        monthYearTimeRangeSelector?.Hide();
 
         //attach event handler to update precision when month/year is changed
         monthYearTimeRangeSelector.MonthYearChanged += OnUpdateMonthYearSelection;

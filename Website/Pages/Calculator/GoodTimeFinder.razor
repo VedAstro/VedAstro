@@ -420,11 +420,15 @@
         var timeRange = GetTimeRange();
         DaysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);
 
+
         //hidden by default
-        monthYearTimeRangeSelector.Hide();
+        monthYearTimeRangeSelector?.Hide();
 
         //attach event handler to update precision when month/year is changed
-        monthYearTimeRangeSelector.MonthYearChanged += OnUpdateMonthYearSelection;
+        if (monthYearTimeRangeSelector != null)
+        {
+            monthYearTimeRangeSelector.MonthYearChanged += OnUpdateMonthYearSelection;
+        }
 
         _jsRuntime.HideLoading();
         _isResultReady = true;
@@ -468,10 +472,12 @@
 
     private async Task OnClickCalculate()
     {
+        //come back here of fail
+        TryAgain:
+
         //keep copy of selected time range else gets reset, on re-render
         var backUpSelectedTimeRangePreset = SelectedTimeRangePreset;
         var backUpDaysPerPixelInput = DaysPerPixelInput;
-
 
         _jsRuntime.ShowLoading();
 
@@ -518,7 +524,12 @@
         //FAIL
         else
         {
-            _jsRuntime.ShowAlert("info", "Try again.", "");
+            Console.WriteLine("BLZ: Getting Events charts Failed! Auto trying again!");
+
+            //come back here of fail
+            goto TryAgain;
+
+            //_jsRuntime.ShowAlert("info", "", "");
         }
 
     }

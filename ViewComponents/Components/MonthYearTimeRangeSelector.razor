@@ -73,7 +73,7 @@
             //make a copy in for use back later
             _jsRuntime.SetProperty("SelectedYearStart", _selectedYearStart);
 
-            MonthYearChanged.Invoke();
+            MonthYearChanged?.Invoke();
         }
     }
 
@@ -90,7 +90,7 @@
             //make a copy in for use back later
             _jsRuntime.SetProperty("SelectedYearEnd", _selectedYearEnd);
 
-            MonthYearChanged.Invoke();
+            MonthYearChanged?.Invoke();
         }
     }
 
@@ -104,7 +104,7 @@
             //make a copy in for use back later
             _jsRuntime.SetProperty("SelectedMonthStart", _selectedMonthStart);
 
-            MonthYearChanged.Invoke();
+            MonthYearChanged?.Invoke();
         }
     }
 
@@ -118,7 +118,7 @@
             //make a copy in for use back later
             _jsRuntime.SetProperty("SelectedMonthEnd", _selectedMonthEnd);
 
-            MonthYearChanged.Invoke();
+            MonthYearChanged?.Invoke();
         }
     }
 

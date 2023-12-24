@@ -62,6 +62,8 @@ namespace VedAstro.Library
             //NOTE: Below we mix radical horoscope with now time = future prediction/muhurtha
             //get ashtakvarga bindu points to predict good/bad nature of ongoing gochara (percentage possible)
             //note here "Start Time" should be fine, since all throughout the event the house sign will be same as start
+            //TODO NOT SURE WHICH sign to use
+            //var houseSign = Calculate.PlanetZodiacSign(gocharaPlanet, foundEvent.StartTime);
             var houseSign = Calculate.HouseSignName(gocharaHouse, foundEvent.StartTime); //time here is current time, not birth
                                                                                          //here is birth time because ashtakvarga is based on birth
             var binduPoints = Calculate.PlanetAshtakvargaBindu(gocharaPlanet, houseSign, person.BirthTime);//here is birth

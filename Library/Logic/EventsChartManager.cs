@@ -21,6 +21,12 @@ namespace VedAstro.Library
         public const int SummaryRowHeight = 22;
 
         /// <summary>
+        /// Width of the blue background behind life event descriptions
+        /// </summary>
+        private const int DescriptionBackgroundWidth = 100; //for 24 characters
+
+
+        /// <summary>
         /// max Y axis used in chart set by life events, and other as generated
         /// used to make final SVG height
         /// </summary>
@@ -133,7 +139,6 @@ namespace VedAstro.Library
                 //list of rows to generate
                 EventsChartManager.UnsortedEventList = await EventManager.CalculateEvents(eventsPrecisionHours, startTime, endTime, inputPerson, inputedEventTags);
 
-
                 //STEP 2: DATA > SVG COMPONENTS
                 timeHeader = GenerateTimeHeaderRow(timeSlices, daysPerPixel, widthPerSlice, ref verticalYAxis);
 
@@ -159,7 +164,7 @@ namespace VedAstro.Library
                 MaxYAxis = verticalYAxis > MaxYAxis ? verticalYAxis : MaxYAxis;
 
                 //note: if width & height not hard set, parent div clips it
-                var svgTotalHeight = MaxYAxis + 45; //little padding
+                var svgTotalHeight = MaxYAxis + 80; //little padding
 
                 //set custom/global styles for main SVG element
                 var svgStyle = $@"
@@ -173,6 +178,7 @@ namespace VedAstro.Library
 
                 svgHead = $"<svg birthtime=\"{birthTimeStdText}\" birthlocation=\"{inputPerson.GetBirthLocation().Name()}\" class=\"EventChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 
+                //inject JS code to be able to run direct in browser without website
                 jsCode = GetJsCodeSvg(randomId);
 
                 //place all content except border & cursor time legend inside group for padding
@@ -396,18 +402,29 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Get color based on event same summary color
+        /// return in CSS #FFFFFF
         /// </summary>
-        private static string GetColor(Event inputEvent, Person inputPerson,
-            List<AlgorithmFuncs> selectedAlgorithm)
+        public static string GetColor(double value, double min = -2, double max = 2)
         {
-            var natureScore = CalculateNatureScore(inputEvent, inputPerson, selectedAlgorithm);
+            if (value < min || value > max)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "Value must be within the range of min and max.");
+            }
 
-            Console.WriteLine($"EVT{inputEvent.Name} NS:{natureScore}");
+            // Normalize the value to a 0-1 range
+            double normalizedValue = (value - min) / (max - min);
 
-            var finalColor = GetSummaryColor(natureScore, -3, 3);
+            // Calculate the RGB components based on the normalized value
+            int r = (int)(255 * Math.Max(0, 1 - normalizedValue));
+            int g = (int)(255 * Math.Max(0, normalizedValue));
+            int b = 0;
 
-            return finalColor;
+            // Convert the RGB components to a CSS color string
+            string color = $"#{r:X2}{g:X2}{b:X2}";
+
+            return color;
         }
+
 
         /// <summary>
         /// Get color based on nature
@@ -424,6 +441,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// return in CSS #FFFFFF
         /// convert value coming in, to a percentage based on min & max
         /// this will make setting color based on value easier & accurate
         /// note, this will cause color to be relative to only what is visible in chart atm!
@@ -460,14 +478,15 @@ namespace VedAstro.Library
 
         }
 
+
         /// <summary>
         /// Generates individual life event line svg
         /// Incrementing line height also increments icon position below
         /// </summary>
-        private static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime, int positionX)
+        private static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime, int positionX, out int totalHeight)
         {
             //shorten the event name if too long & add ellipsis at end
-            //else text goes out side box
+            //else text goes outside box
             var formattedEventName = ShortenName(lifeEvent.Name);
 
             int iconYAxis = lineHeight + 7; //start icon at end of line + 7 padding
@@ -485,9 +504,16 @@ namespace VedAstro.Library
 
             string descriptionTextSvg = StringToSvgTextBox(lifeEvent.Description, out var boxHeightPx);
 
-            //special space saving background for Normal with desc box underneath
-            var nameBackgroundWidth = isMajor ? 82 : GetTextWidthPx(formattedEventName);
-            var descriptionBackgroundWidth = 100; //for 24 characters
+            //set width of event name box based on if desc box is shown below (only shows for Major type)
+            var withoutDescBox = (GetTextWidthPx(formattedEventName) + 10);
+            var withDescBox = 82;  //82 = 100 - icon = text space left
+            var nameBackgroundWidth = isMajor ? withDescBox : withoutDescBox;
+
+            //background height set according to text
+            var descBackgroundHeight = boxHeightPx + 5; //5 for padding
+
+            //set total height so caller can mark occupied space
+            totalHeight = (isMajor ? descBackgroundHeight : 0) + nameTextHeight;
 
             var iconSvg = $@"
                                 <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{iconYAxis}""></rect>
@@ -507,7 +533,7 @@ namespace VedAstro.Library
                                     </g>
                                     <!-- DESCRIPTION -->
 		                            <g class=""description-label"" style=""{descriptionDisplayStyle}"" transform=""translate(0,{17})"">
-                                        <rect class=""background"" style=""fill: blue; opacity: 0.8;"" width=""{descriptionBackgroundWidth}"" height=""{boxHeightPx + 5}"" rx=""2"" ry=""2""/>
+                                        <rect class=""background"" style=""fill: blue; opacity: 0.8;"" width=""{DescriptionBackgroundWidth}"" height=""{descBackgroundHeight}"" rx=""2"" ry=""2""/>
                                         <text transform=""translate(2,11)"">
                                             {descriptionTextSvg}
 			                            </text>
@@ -608,25 +634,22 @@ namespace VedAstro.Library
         /// </summary>
         private static string GetLifeEventLinesSvg(Person person, int verticalYAxis, Time startTime, List<Time> timeSlices)
         {
+            //add 1 to offset 0 index
+            //each 1 cell is 1 px
+            var maxSlices = timeSlices.Count + 1;
+
+            // place to keep track of occupied space represents pixels
+            bool[,] virtualSpace = new bool[maxSlices, 5000];
+
             //use offset of input time, this makes sure life event lines
             //are placed on event chart correctly, since event chart is based on input offset
             var lineHeight = verticalYAxis + 9; //space between icon & last row
             var inputOffset = startTime.GetStdDateTimeOffset().Offset; //timezone the chart will be in
 
-            //add 1 to offset 0 index
-            //each 1 cell is 1 px
-            var maxSlices = timeSlices.Count + 1;
-            var rowList = new List<bool[]>();
-
-            //space smaller than this is set as crowded
-            const int minSpaceBetween = 80;//px
-            //var halfWidth = minSpaceBetween / 2; //icon
-
             //sort by earliest to latest event
             var lifeEventList = person.LifeEventList;
             lifeEventList.Sort((x, y) => x.CompareTo(y));
 
-            var incrementRate = 20; //for overcrowded jump
             var positionY = lineHeight; //keep copy for resetting after overcrowded jam
 
             var listRowData = new List<string>();
@@ -644,17 +667,17 @@ namespace VedAstro.Library
                 //no print minor events
                 if (lifeEvent.Weight == "Minor") { continue; }
 
-                //get row number, assign row number that is free to occupy
+                //gets row number (pixel), that is free to occupy
                 var rowNumber = GetRowNumber(positionX); //start at 0 index
 
-                //mark as occupied for future ref
-                MarkRowNumber(positionX, rowNumber);
-
                 //calculate final event icon height avoiding other icons 
-                positionY += rowNumber * incrementRate;
+                positionY += rowNumber;
 
                 //put together icon + line + event data
-                var generateLifeEventLine = GenerateLifeEventLine(lifeEvent, positionY, lifeEvtTime, positionX);
+                var generateLifeEventLine = GenerateLifeEventLine(lifeEvent, positionY, lifeEvtTime, positionX, out var lifeEventHeight);
+
+                //mark as occupied for future ref
+                MarkRowNumber(positionX, rowNumber, DescriptionBackgroundWidth, lifeEventHeight);
 
                 //save position Y if it is the highest so far, save it to be used to draw final SVG height
                 MaxYAxis = positionY > MaxYAxis ? positionY : MaxYAxis;
@@ -690,70 +713,46 @@ namespace VedAstro.Library
 
             //-------------------------
 
-            void MarkRowNumber(int startX, int rowNumber)
+            void MarkRowNumber(int columnNumber, int rowNumber, int widthPx, int heightPx)
             {
-                //var startX = middleX - halfWidth;
-                var endX = startX + minSpaceBetween;
+                //mark all occupied space
+                var lastColumn = columnNumber + widthPx;
+                var lastRow = rowNumber + heightPx;
 
-                //set limits
-                startX = startX < 0 ? 0 : startX;
-                endX = endX > (maxSlices - 1) ? (maxSlices - 1) : endX;
-
-
-                for (int i = startX; i <= endX; i++)
+                //mark all columns
+                for (int i = columnNumber; i <= lastColumn; i++)
                 {
-                    //mark as occupied
-                    rowList[rowNumber][i] = true;
-                }
-            }
-
-            //start at 0 index
-            int GetRowNumber(int startX)
-            {
-                //var startX = middleX - halfWidth;
-                var endX = startX + minSpaceBetween;
-
-                //set limits
-                startX = startX < 0 ? 0 : startX;
-                endX = endX > (maxSlices - 1) ? (maxSlices - 1) : endX;
-
-            TryAgain:
-                //check if space is free in rows
-                foreach (var row in rowList)
-                {
-                    var startFree = row[startX] == false;
-                    var endFree = row[endX] == false;
-                    if (startFree && endFree)
+                    //mark all rows
+                    for (int j = 0; j <= lastRow; j++)
                     {
-                        return rowList.IndexOf(row);
+                        //mark true for occupied
+                        virtualSpace[i, j] = true; 
                     }
                 }
 
-                //if control comes here, than not enough rows so add some
-                rowList.Add(new bool[maxSlices]);
-                goto TryAgain;
-
-                throw new Exception("Row count exceed!");
             }
 
-            //check if current event icon position will block previous life event icon
-            //expects next event to be chronologically next event
-            bool IsEventIconSpaceCrowded(int previousX, int currentX)
+            //given a column number will find row in it that is free (row = pixel)
+            //start at 0 index
+            int GetRowNumber(int startX)
             {
-                //if previous 0, then obviously not crowded
-                if (previousX <= 0) { return false; }
+                //padding between event boxes (vertical axis)
+                var padding = 10;
 
-                //space smaller than this is set crowded
-                const int minSpaceBetween = 110;//px
+                //scan till find row that is empty at fixed column (x axis)
+                for (int i = 0; i < virtualSpace.Length; i++)
+                {
+                    var isOccupied = virtualSpace[startX, i];
+                    
+                    //not occupied return as available number
+                    if (!isOccupied) { return i + padding; }
+                }
 
-                //previous X axis should be lower than current
-                //difference shows space between these 2 icons
-                var difference = currentX - previousX;
-                var isOverLapping = difference < minSpaceBetween;
-                return isOverLapping;
+                throw new Exception("End of Virtual Rows!");
             }
-        }
 
+        }
+        
         /// <summary>
         /// add in the cursor line (moves with cursor via JS)
         /// note: template cursor line is duplicated to dynamically generate legend box
@@ -1549,13 +1548,34 @@ namespace VedAstro.Library
                     //generate rect for each event & stack from top to bottom (vertical)
                     foreach (var foundEvent in foundEventList)
                     {
+                        //every time a rect is added, we keep track of it in a list to generate the summary row at last
+                        //based on event nature minus or plus 1
+                        double natureScore = 0;
+
+                        //calculate accurate nature score
+                        natureScore = CalculateNatureScore(foundEvent, inputPerson, summaryOptions.SelectedAlgorithm);
+
+                        foundEvent.NatureScore = natureScore;
+                    }
+
+                    //get max & min to set color boundaries, helps to render dynamic color range based on changing algo count
+                    double maxNatureScore = 0;
+                    double minNatureScore = 0;
+                    if (foundEventList.Any())
+                    {
+                        maxNatureScore = foundEventList.Aggregate((l, r) => l.NatureScore > r.NatureScore ? l : r).NatureScore;
+                        minNatureScore = foundEventList.Aggregate((l, r) => l.NatureScore < r.NatureScore ? l : r).NatureScore;
+                    }
+
+                    foreach (var foundEvent in foundEventList)
+                    {
                         //if current event is different than event has changed, so draw a black line
                         int finalYAxis = yAxis + verticalPosition;
                         var prevExist = prevEventList.TryGetValue(finalYAxis, out var prevEventName);
                         var isNewEvent = prevExist && (prevEventName != foundEvent.Name);
-                        var color = isNewEvent ? "black" : GetColor(foundEvent, inputPerson, summaryOptions.SelectedAlgorithm);
+                        var color = isNewEvent ? "black" : GetSummaryColor(foundEvent.NatureScore, minNatureScore, maxNatureScore);
 
-                        //save current event to previous, to draw border later
+                        //save current event too previous to draw border later
                         //border ONLY for top 3 rows (long duration events), lower row borders block color
                         if (finalYAxis <= 29)
                         {
@@ -1580,12 +1600,6 @@ namespace VedAstro.Library
 
 
                         //STAGE 2 : SAVE SUMMARY DATA
-                        //every time a rect is added, we keep track of it in a list to generate the summary row at last
-                        //based on event nature minus or plus 1
-                        double natureScore = 0;
-
-                        //calculate accurate nature score
-                        natureScore = CalculateNatureScore(foundEvent, inputPerson, summaryOptions.SelectedAlgorithm);
 
                         //compile nature score for making summary row later (defaults to 0)
                         var previousNatureScoreSum = (SummaryRowData.ContainsKey(horizontalPosition) ? SummaryRowData[horizontalPosition].NatureScore : 0);
@@ -1594,7 +1608,7 @@ namespace VedAstro.Library
                         {
                             BirthTime = inputPerson.BirthTime,
                             Planet = Tools.GetPlanetFromName(foundEvent.FormattedName),
-                            NatureScore = natureScore + previousNatureScoreSum //combine current with other events on same time slice
+                            NatureScore = foundEvent.NatureScore + previousNatureScoreSum //combine current with other events on same time slice
                         };
                         SummaryRowData[horizontalPosition] = x;
 
@@ -1604,7 +1618,10 @@ namespace VedAstro.Library
                         verticalPosition += SingleRowHeight + spaceBetweenRow;
 
                         multipleEventCount++; //include this in count
+
                     }
+
+
 
                     //set position for next element in time slice
                     horizontalPosition += widthPerSlice;

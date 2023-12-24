@@ -156,6 +156,7 @@ namespace VedAstro.Library.Tests
         /// </summary>
         public static Time AmalaYogaHoroscope1 = new("12:21 12/02/1856 +05:30",
                                                  new GeoLocation("", 84, 18));
+
         /// <summary>
         /// Chart No 17 : Born on 07-09-1904 at 01:55 PM 
         /// Lat 18" 54' N ; Long. 62" 46' E.
@@ -465,5 +466,60 @@ namespace VedAstro.Library.Tests
             Assert.AreEqual(-1, venusScore);
 
         }
+
+        [TestMethod()]
+        public void PlanetAshtakvargaBinduTest()
+        {
+            // In the horoscope of a person born on 8th 
+            // August st 1912 A.D., at 7-35 p.m. (I S.T.) at
+            // Bangalore, the Sun is in Cancer in the 6th from 
+            // Lagna aspected by Jupiter from Scorpio, having 
+            // 6 bindus in his own Ashtakavarga. The father 
+            // died in the 31st year of the native,· i.e., after the
+            // 25th year. 
+
+            Time testHoroscope = new("19:35 08/08/1912 +05:30", GeoLocation.Bangalore);
+
+            var bindu = Calculate.PlanetAshtakvargaBindu(PlanetName.Sun, ZodiacName.Cancer, testHoroscope);
+
+            // 6 bindus in his own Ashtakavarga.
+            Assert.AreEqual(6, bindu);
+
+        }
+
+
+        [TestMethod()]
+        public void PlanetAshtakvargaBinduTest2()
+        {
+            // In the horoscope of Karl Marx, Moon as
+            // 6tb lord is in the 3rd. with only 2 bindus and is 
+            // associated with Rāhu. Marx is said to have ruined bis health by overwork. 
+
+            Time KarlMarx = new("02:00 05/05/1818 +02:00", new GeoLocation("", 6.637, 49.75));
+
+            var house3Sign = Calculate.PlanetZodiacSign(PlanetName.Moon, KarlMarx);
+
+            var bindu = Calculate.PlanetAshtakvargaBindu(PlanetName.Moon, house3Sign.GetSignName(), KarlMarx);
+
+            // with only 2 bindus
+            Assert.AreEqual(2, bindu);
+
+        }
+
+        [TestMethod()]
+        public void PlanetAshtakvargaBinduTest3()
+        {
+
+            Time HavelockEllis = new("08:15 02/02/1859 +00:00", new GeoLocation("", 0.0957, 51.377));
+
+            var house3Sign = Calculate.PlanetZodiacSign(PlanetName.Moon, HavelockEllis);
+
+            var bindu = Calculate.PlanetAshtakvargaBindu(PlanetName.Moon, house3Sign.GetSignName(), HavelockEllis);
+
+            // with only 2 bindus
+            Assert.AreEqual(3, bindu);
+
+        }
+
     }
 }

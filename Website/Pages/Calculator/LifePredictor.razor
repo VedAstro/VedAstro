@@ -191,7 +191,7 @@ Know good and bad periods of your life years ahead.*@
                     <div class="form-control d-flex flex-wrap gap-2 rounded" style="width: fit-content;">
                         @if (_isResultReady)
                         {
-                            @foreach (var algorithmFunc in EventsChartManager.Algorithm.All)
+                            @foreach (var algorithmFunc in Algorithm.All)
                             {
                                 <div class="form-check">
                                     <input @bind="@(SelectedAlgorithmDictionary[algorithmFunc])" class="form-check-input" type="checkbox" value="" id="checkbox_@algorithmFunc.Name">
@@ -570,12 +570,14 @@ Know good and bad periods of your life years ahead.*@
         await _jsRuntime.ShowLoading();
 
         //placeholder for data from checkboxes for Algorithms and Events
-        SelectedAlgorithmDictionary = EventsChartManager.Algorithm.All.ToDictionary(methodInfo => methodInfo, methodInfo => false);
+        SelectedAlgorithmDictionary = Algorithm.All.ToDictionary(methodInfo => methodInfo, methodInfo => false);
         SelectedEventTagsDictionary = AllLifePredictorEventTags.ToDictionary(eventTag => eventTag, eventTag => false);
 
         //select default Algorithms
         var generalMf = SelectedAlgorithmDictionary.Where(x => x.Key.Name == "General").First().Key;
+        var ishtaKashtaPhalaMf = SelectedAlgorithmDictionary.Where(x => x.Key.Name == "IshtaKashtaPhala").First().Key;
         SelectedAlgorithmDictionary[generalMf] = true;
+        SelectedAlgorithmDictionary[ishtaKashtaPhalaMf] = true;
 
         //select default Algorithms
         SelectedEventTagsDictionary[EventTag.PD1] = true;
@@ -585,7 +587,7 @@ Know good and bad periods of your life years ahead.*@
         SelectedEventTagsDictionary[EventTag.PD5] = true;
         SelectedEventTagsDictionary[EventTag.PD6] = true;
         SelectedEventTagsDictionary[EventTag.PD7] = true;
-        SelectedEventTagsDictionary[EventTag.Gochara] = true;
+        //SelectedEventTagsDictionary[EventTag.Gochara] = true;
         // SelectedEventTagsDictionary[EventTag.PD7] = true;
 
         //fill default precision

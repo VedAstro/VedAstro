@@ -404,6 +404,10 @@
         SakataYoga,
         AmalaYoga,
         ParvataYoga,
-        KahalaYoga
+        KahalaYoga,
+        MoonAshtakavargaYoga,
+        MoonAshtakavargaYoga3,
+        MoonAshtakavargaYoga2,
+        MoonAshtakavargaYoga4
     }
 }

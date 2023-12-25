@@ -27,6 +27,105 @@ namespace VedAstro.Library
     /// </summary>
     public class CalculateHoroscope
     {
+        //yoga's from BV Raman's Ashtakavarga System Book
+        #region ASHTAKAVARGA YOGAS
+
+        /// <summary>
+        /// If the Rasi occupied by the Moon is 
+        /// associated with 1,2,3 bindus (in his own Ashtakavarga),
+        /// the person suffers from distress, diseases, litigation and ill-health.
+        /// In addition to this, if two or three planets join the Moon,
+        /// the native is likely to pass away in his 37th year.
+        /// </summary>
+        [HoroscopeCalculator(HoroscopeName.MoonAshtakavargaYoga)]
+        public static CalculatorResult MoonAshtakavargaYoga(Time birthTime)
+        {
+            //get moon sign
+            var moonRasi = Calculate.PlanetZodiacSign(PlanetName.Moon, birthTime);
+
+            //get bindus for sign by moon
+            var bindus = Calculate.PlanetAshtakvargaBindu(PlanetName.Moon, moonRasi.GetSignName(), birthTime);
+
+            //associated with 1,2,3 bindus
+            var isOccuring = bindus == 1 || bindus == 2 || bindus == 3;
+
+            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
+        }
+
+
+        /// <summary>
+        /// If the particular Bhava occupied by the 
+        /// Moon happens to be a Kendra, Trikona or the
+        /// 11th and the Moon is debilitated or waning, and
+        /// associated with 2 or 3 bindus, the Bhava in
+        /// question will suffer annihilation.
+        /// </summary>
+        [HoroscopeCalculator(HoroscopeName.MoonAshtakavargaYoga2)]
+        public static CalculatorResult MoonAshtakavargaYoga2(Time birthTime)
+        {
+           return CalculatorResult.NotOccuring();
+        }
+
+        /// <summary>
+        /// The Moon in the 6th or 11th associated with 
+        /// more than 6 bindus is found to make one rich 
+        /// and when there is Jupiter's aspect, philanthropic
+        /// also. In the horoscope of a dozen millionaires 
+        /// studied by me, the Moon was invariably in the
+        /// 6th, 9th or 11th having 6 to 7 bindus. The lord­
+        /// ship of the Moon seems to play an important
+        /// part.
+        /// </summary>
+        [HoroscopeCalculator(HoroscopeName.MoonAshtakavargaYoga3)]
+        public static CalculatorResult MoonAshtakavargaYoga3(Time birthTime)
+        {
+            //Moon in the 6th or 11th 
+            var moonHouse = Calculate.HousePlanetOccupies(Moon, birthTime);
+            var isMoonIn6th11th = moonHouse == House6 || moonHouse == House11;
+
+            //associated with more than 6 bindus
+            //get moon sign
+            var moonRasi = Calculate.PlanetZodiacSign(PlanetName.Moon, birthTime);
+            //get bindus for sign by moon
+            var bindus = Calculate.PlanetAshtakvargaBindu(PlanetName.Moon, moonRasi.GetSignName(), birthTime);
+            var moreThan6 = bindus >= 6;
+
+            //both condition meet
+            var isOccuring = isMoonIn6th11th && moreThan6;
+
+            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
+        }
+
+        /// <summary>
+        /// The Moon as lord of the 5th or 9th and 
+        /// occupying places other than the 8th or 12th,
+        /// appears to make one strong-minded, idealistic
+        /// and philosophical.
+        /// </summary>
+        [HoroscopeCalculator(HoroscopeName.MoonAshtakavargaYoga4)]
+        public static CalculatorResult MoonAshtakavargaYoga4(Time birthTime)
+        {
+            //Moon in the 6th or 11th 
+            var moonHouse = Calculate.HousePlanetOccupies(Moon, birthTime);
+            var isMoonIn6th11th = moonHouse == House6 || moonHouse == House11;
+
+            //associated with more than 6 bindus
+            //get moon sign
+            var moonRasi = Calculate.PlanetZodiacSign(PlanetName.Moon, birthTime);
+            //get bindus for sign by moon
+            var bindus = Calculate.PlanetAshtakvargaBindu(PlanetName.Moon, moonRasi.GetSignName(), birthTime);
+            var moreThan6 = bindus >= 6;
+
+            //both condition meet
+            var isOccuring = isMoonIn6th11th && moreThan6;
+
+            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
+        }
+
+
+
+
+        #endregion
 
         #region 300 IMPORTANT YOGAS (RAMAN)
 

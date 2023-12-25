@@ -119,7 +119,7 @@
             <StrengthChart @ref="_strengthChart" />
         </div>
          
-        <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
+        <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="_skyChartViewer" />
         
         <IndianChart Id="IndianChart" ExtraClass="scrollspy"/>
 
@@ -135,7 +135,7 @@
             <HoroscopeReferenceList @ref="_horoscopeReferenceList" />
         </div>
         
-        <PlanetChart @ref="planetChart" />
+        <PlanetChart @ref="_planetChart" />
 
     </div>
 
@@ -167,7 +167,7 @@
         }
     }
 
-    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
+    private string _selectedAyanamsa = SimpleAyanamsa.Raman.ToString();
 
     /// <summary>
     /// if not specified will not be included in final URL
@@ -190,9 +190,9 @@
 
     private IconButton _calculateButton;
 
-    private PlanetChart planetChart;
+    private PlanetChart _planetChart;
 
-    private SkyChartViewer skyChartViewer;
+    private SkyChartViewer _skyChartViewer;
 
     /// <summary>
     /// Param used in URL to set Person ID via URL
@@ -292,10 +292,10 @@
         _pageTitle = $"Horoscope | {_selectedPerson.Name}";
 
         //update sky chart
-        await skyChartViewer.Update(_selectedPerson.BirthTime);
+        await _skyChartViewer.Update(_selectedPerson.BirthTime);
 
         //update planet chart
-        planetChart.UpdateTime(_selectedPerson.BirthTime);
+        _planetChart.UpdateTime(_selectedPerson.BirthTime);
 
         //load prediction data (from API)
         await _horoscopeReferenceList.ShowPrediction(_selectedPerson);
@@ -315,7 +315,7 @@
         _jsRuntime.Show("#inPageNavBar");
 
         //scroll page to top of results so "index" legend can show nicely, plus saves user 10ms in scrolling
-        _jsRuntime.ScrollToDivById("AutoPrediction");
+        await _jsRuntime.ScrollToDivById("AutoPrediction");
 
         //play sound for better ux
         _jsRuntime.PlayDoneSound();
@@ -407,7 +407,7 @@
             TimeUrl = timeUrl,
             HoraryNumber = 0,
             RotateDegrees = 0,
-            Ayanamsa = _selectedAyanamsa, //default is Lahiri
+            Ayanamsa = SelectedAyanamsa, //default is Lahiri
         };
 
         //call VedAstro.js to generate table

@@ -5984,9 +5984,6 @@ namespace VedAstro.Library
 
             Angle _getPlanetSayanaLongitude()
             {
-                //Converts LMT to UTC (GMT)
-                //DateTimeOffset utcDate = lmtDateTime.ToUniversalTime();
-
                 int iflag = SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
                 double[] results = new double[6];
                 string err_msg = "";
@@ -6002,8 +5999,6 @@ namespace VedAstro.Library
                 //Get planet long
                 int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
 
-
-
                 //data in results at index 0 is longitude
                 var planetSayanaLongitude = new Angle(degrees: results[0]);
 
@@ -6015,7 +6010,6 @@ namespace VedAstro.Library
                 }
 
                 return planetSayanaLongitude;
-
             }
 
 

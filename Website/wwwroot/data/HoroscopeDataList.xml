@@ -3,6 +3,40 @@
 
 	<!--THIS IS THE DATA LIST FOR HOROSCOPE-->
 
+	<!--ASHTAKAVARGA YOGAS-->
+	<Event>
+		<Name>MoonAshtakavargaYoga</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			If the Rasi occupied by the Moon is
+			associated with 1,2,3 bindus (in his own Ashtakavarga),
+			the person suffers from distress, diseases, litigation and ill-health.
+			In addition to this, if two or three planets join the Moon,
+			the native is likely to pass away in his 37th year.
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MoonAshtakavargaYoga2</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MoonAshtakavargaYoga3</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The Moon in the 6th or 11th associated with
+			more than 6 bindus is found to make one rich
+			and when there is Jupiter's aspect, philanthropic
+			also. 
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+
+
 
 	<!--YOGA DETECTOR RESULTS-->
 	<Event>

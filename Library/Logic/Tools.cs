@@ -2050,6 +2050,10 @@ namespace VedAstro.Library
             {
                 planet = SwissEph.SE_SATURN;
             }
+            else if (planetName == PlanetName.Earth)
+            {
+                planet = SwissEph.SE_EARTH;
+            }
             else if (planetName == PlanetName.Rahu)
             {
                 //set based on user preference

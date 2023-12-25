@@ -980,11 +980,11 @@ class AshtakvargaTable {
         //create empty table inside main holder
         //table will be filled later
         $(`#${this.ElementID}`).append(
-            `<table id="${this.SarvashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=""></table>`
+            `<table id="${this.SarvashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
         );
 
         $(`#${this.ElementID}`).append(
-            `<table id="${this.BhinnashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=""></table>`
+            `<table id="${this.BhinnashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
         );
 
         //generate table from inputed data

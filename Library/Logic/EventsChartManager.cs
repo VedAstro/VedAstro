@@ -636,7 +636,7 @@ namespace VedAstro.Library
         {
             //add 1 to offset 0 index
             //each 1 cell is 1 px
-            var maxSlices = timeSlices.Count + 1;
+            var maxSlices = timeSlices.Count + 50;
 
             // place to keep track of occupied space represents pixels
             bool[,] virtualSpace = new bool[maxSlices, 5000];

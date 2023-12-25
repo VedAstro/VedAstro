@@ -1291,7 +1291,7 @@ namespace VedAstro.Library
             var lord = Calculate.LordOfHouse(HouseName.House2, time);
             var lordPlace = Calculate.HousePlanetOccupies(lord, time);
             if (lordPlace != HouseName.House2) { return CalculatorResult.NotOccuring(); }
-
+            
             //evil planet in house 2, prediction occuring
             var evilInHouse2 = Calculate.IsMaleficPlanetInHouse(HouseName.House2, time);
 

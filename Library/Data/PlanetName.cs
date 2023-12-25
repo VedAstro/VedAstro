@@ -40,7 +40,8 @@ namespace VedAstro.Library
             /// <summary>
             ///  true osculating apogee, which is the point where the Moon is farthest from the Earth in its elliptical orbit.
             /// </summary>
-            Ketu
+            Ketu,
+            Earth
         }
 
         //CONST FIELDS
@@ -51,6 +52,8 @@ namespace VedAstro.Library
         public static readonly PlanetName Jupiter = new PlanetName(PlanetNameEnum.Jupiter);
         public static readonly PlanetName Venus = new PlanetName(PlanetNameEnum.Venus);
         public static readonly PlanetName Saturn = new PlanetName(PlanetNameEnum.Saturn);
+        public static readonly PlanetName Earth = new PlanetName(PlanetNameEnum.Earth);
+
         /// <summary>
         /// the true node, which is the point where the Moon's orbit crosses the ecliptic plane
         /// </summary>

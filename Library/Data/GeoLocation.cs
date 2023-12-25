@@ -24,6 +24,7 @@ namespace VedAstro.Library
         public static GeoLocation Tokyo = new GeoLocation("Tokyo, Japan", 139.83, 35.65);
         public static GeoLocation Bangkok = new GeoLocation("Bangkok, Thailand", 100.50, 13.75);
         public static GeoLocation Bangalore = new GeoLocation("Bangalore, India", 77.5946, 12.9716);
+        public static GeoLocation Ahmedabad = new GeoLocation("Ahmedabad, India", 72.5714, 23.0225);
         public static GeoLocation Ujjain = new GeoLocation("Ujjain, India", 75.7167, 23.1667);
         public static GeoLocation WashingtonDC = new GeoLocation("Washington D.C., USA", -77.0369, 38.9072);
         public static GeoLocation London = new GeoLocation("London, UK", -0.1276, 51.5074);

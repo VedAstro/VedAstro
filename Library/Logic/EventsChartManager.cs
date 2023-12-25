@@ -21,10 +21,15 @@ namespace VedAstro.Library
         public const int SummaryRowHeight = 22;
 
         /// <summary>
+        /// Height used in virtual space for generating life events,
+        /// will throw error if exceeds, hence 10k pixel space
+        /// </summary>
+        private const int MaxLifeEventCanvasHeight = 10000;
+
+        /// <summary>
         /// Width of the blue background behind life event descriptions
         /// </summary>
         private const int DescriptionBackgroundWidth = 100; //for 24 characters
-
 
         /// <summary>
         /// max Y axis used in chart set by life events, and other as generated
@@ -35,14 +40,7 @@ namespace VedAstro.Library
         //px width & height of each slice of time
         //used when generating dasa rows
         //note: changes needed only here
-        private const int widthPerSlice = 1;
-
-        private const int maxChartHeightPx = 1000;
-
-        /// <summary>
-        /// place to keep track where components are placed
-        /// </summary>
-        private static bool[] verticalYAxisManifest = new bool[maxChartHeightPx];
+        private const int WidthPerSlice = 1;
 
         /// <summary>
         /// Filled when first events come out fresh from oven unsorted
@@ -140,7 +138,7 @@ namespace VedAstro.Library
                 EventsChartManager.UnsortedEventList = await EventManager.CalculateEvents(eventsPrecisionHours, startTime, endTime, inputPerson, inputedEventTags);
 
                 //STEP 2: DATA > SVG COMPONENTS
-                timeHeader = GenerateTimeHeaderRow(timeSlices, daysPerPixel, widthPerSlice, ref verticalYAxis);
+                timeHeader = GenerateTimeHeaderRow(timeSlices, daysPerPixel, WidthPerSlice, ref verticalYAxis);
 
                 //note : avg speed 30s
                 eventRows = GenerateEventRows(
@@ -262,27 +260,6 @@ namespace VedAstro.Library
         //▒█░░░ ▒█░▒█ ▄█▄ ░░▀▄▀░ ▒█░▒█ ░▒█░░ ▒█▄▄▄
 
 
-        /// <summary>
-        /// Use this find where to place row in chart, Y axis (vertical position)
-        /// scans from last
-        /// NOTE : 2 names for 1 methods, yeah! clearer caller code
-        /// </summary>
-        private static int GetLastOccupiedYAxis() => GetNextFreeYAxis();
-
-        private static int GetNextFreeYAxis()
-        {
-            //scan from last till you hit something
-            for (int i = verticalYAxisManifest.Length; i >= 0; i--)
-            {
-                //return next position where empty starts
-                //if true, means is occupied
-                if (verticalYAxisManifest[i]) { return i++; }
-            }
-
-            //if control reaches here, complete free, return room 0
-            return 0;
-
-        }
 
         private static string GetJsCodeSvg(string randomId)
         {
@@ -634,12 +611,13 @@ namespace VedAstro.Library
         /// </summary>
         private static string GetLifeEventLinesSvg(Person person, int verticalYAxis, Time startTime, List<Time> timeSlices)
         {
-            //add 1 to offset 0 index
-            //each 1 cell is 1 px
-            var maxSlices = timeSlices.Count + 50;
+            //each time slice is 1 px in width
+            //NOTE: add extra for life event boxes on the edges
+            //that expand more in virtual space than rendered
+            var maxSlices = timeSlices.Count + 1000;
 
             // place to keep track of occupied space represents pixels
-            bool[,] virtualSpace = new bool[maxSlices, 5000];
+            bool[,] virtualSpace = new bool[maxSlices, MaxLifeEventCanvasHeight];
 
             //use offset of input time, this makes sure life event lines
             //are placed on event chart correctly, since event chart is based on input offset
@@ -1674,7 +1652,7 @@ namespace VedAstro.Library
                 var rect = $"<rect " +
                            $"x=\"{xAxis}\" " +
                            $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
-                           $"width=\"{widthPerSlice}\" " +
+                           $"width=\"{WidthPerSlice}\" " +
                            $"height=\"{summaryRowHeight}\" " +
                            $"fill=\"{GetSummaryColor(totalNatureScore, minValue, maxValue)}\" />";
 

@@ -290,7 +290,7 @@ Know good and bad periods of your life years ahead.*@
             <p>
                 You cannot choose when thunderstorms come. <strong>But you can choose</strong> to sit at home dry or to
                 get wet outside. Don't take risks or make big changes in life during @RED periods (<strong>thunderstorm</strong>).
-                And when you see @GREEN make good use of it. Thus you will sail life untouched by the storms that rage on.
+                And when you see @GREEN make good use of it. Thus, you will sail life untouched by the storms that rage on.
             </p>
 
         </TextHTML>
@@ -322,7 +322,7 @@ Know good and bad periods of your life years ahead.*@
                 Death will not be a tragedy to everybody, <strong>just not possible</strong>.
                 It is only a transition date, to be afraid of it is like being <strong>afraid of your birthday</strong>.
                 Life will not be fun that way, we have all tried it.
-                And know very well what life without knowing tomorrows tragedy is like.
+                And know very well what life without knowing tomorrow's tragedy is like.
             </p>
             <p>
                 Even death during @GREEN period will be happy or peaceful and never tragic.
@@ -350,19 +350,19 @@ Know good and bad periods of your life years ahead.*@
         <TextHTML>
             <p>
                 This tool above all holds great potential for the progress of humanity.
-                Imagine a world with no accidents, a world with no tragedies, no setbacks.
-                Never has has there been a time in human history, where the need has been greater.
+                Imagine a world with <strong>no accidents</strong>, a world with <strong>no tragedies</strong>, <strong>no setbacks</strong>.
+                Never has there been a time in human history, where the need has been greater.
             </p>
             <p>
                 More and more is at stake at dime's turn. In our modern age a mere momentary lapse
                 in judgment can cost more to the whole of humanity then it ever did before.
                 Imagine a world where laughter abounds &amp; fear stands still.
-                "<strong>You may say I'm a dreamer, but I'm not the only one</strong>", John Lenon.
+                "<strong>You may say I'm a dreamer, but I'm not the only one</strong>", John Lennon.
             </p>
         </TextHTML>
     </ArticleBlock>
 
-    <ArticleBlock Title="Source of Code" IconName="noto-v1:backhand-index-pointing-up">
+@*     <ArticleBlock Title="Source of Code" IconName="noto-v1:backhand-index-pointing-up">
         <TextHTML>
             <p>
                 The people should know, the source behind many of the algorithmic patterns used to make this chart.
@@ -388,7 +388,7 @@ Know good and bad periods of your life years ahead.*@
         </TextHTML>
 
     </ArticleBlock>
-
+ *@
 
     @*     <QuoteTextBlock Author="Srinivasa Ramanujan" URL="@URL.RamanujanQuoteWiki">While asleep,
     I had an unusual experience.
@@ -512,21 +512,6 @@ Know good and bad periods of your life years ahead.*@
     //linked to selector box
     public string? SelectedPersonId { get; set; }
 
-    /// <summary>
-    /// Gets possible age list for selection 120 years
-    /// </summary>
-    private static List<string> GetAgeSelectionRange()
-    {
-        var compiledList = new List<string>();
-
-        for (int i = 1; i < 120; i++)
-        {
-            compiledList.Add(i.ToString());
-        }
-
-        //make visible
-        return compiledList;
-    }
 
     //default set to Raman, different from system-wide
     private string _selectedAyanamsaName = SimpleAyanamsa.Raman.ToString();
@@ -788,6 +773,21 @@ Know good and bad periods of your life years ahead.*@
         return true;
     }
 
+    /// <summary>
+    /// Gets possible age list for selection 120 years
+    /// </summary>
+    private static List<string> GetAgeSelectionRange()
+    {
+        var compiledList = new List<string>();
+
+        for (int i = 1; i < 120; i++)
+        {
+            compiledList.Add(i.ToString());
+        }
+
+        //make visible
+        return compiledList;
+    }
 
 }
 

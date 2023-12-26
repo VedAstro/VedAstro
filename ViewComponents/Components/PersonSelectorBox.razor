@@ -101,10 +101,10 @@ KEEP IT REAL
 
 @code {
 
-    /// <summary>
-    /// When person selection is changed
-    /// </summary>
-    public event Action OnChangePersonSelect;
+    //below prop needed for 2-way binding between page & component to work
+    [Parameter]
+    public EventCallback<string> SelectedPersonIdChanged { get; set; }
+
 
     private ElementReference _searchInput;
 
@@ -150,7 +150,7 @@ KEEP IT REAL
                 _selectedPersonId = value;
 
                 //update value in parent page (for parent to listen in)
-                OnChangePersonSelect?.Invoke();
+                SelectedPersonIdChanged.InvokeAsync(value);
             }
         }
     }

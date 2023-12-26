@@ -101,6 +101,11 @@ KEEP IT REAL
 
 @code {
 
+    /// <summary>
+    /// When person selection is changed
+    /// </summary>
+    public event Action OnChangePersonSelect;
+
     private ElementReference _searchInput;
 
     //DEFAULTS
@@ -140,19 +145,15 @@ KEEP IT REAL
                 if (_selectedPersonId == value) return;
 
                 //log this, don't await to reduce lag
-                WebLogger.Data($"Selected Person:{value}");
+                //WebLogger.Data($"Selected Person:{value}");
 
                 _selectedPersonId = value;
+
                 //update value in parent page (for parent to listen in)
-                SelectedPersonIdChanged.InvokeAsync(value);
+                OnChangePersonSelect?.Invoke();
             }
         }
     }
-
-
-    //below prop needed for 2-way binding between page & component to work
-    [Parameter]
-    public EventCallback<string> SelectedPersonIdChanged { get; set; }
 
 
     /// <summary>

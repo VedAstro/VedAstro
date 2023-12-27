@@ -167,11 +167,11 @@
         }
     }
 
-    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
+    private string _selectedAyanamsa = SimpleAyanamsa.Raman.ToString();
 
     /// <summary>
     /// if not specified will not be included in final URL
-    /// default set to Lahiri Chitrapaksha, as used system wide
+    /// default set to Lahiri Chitrapaksha, as used system-wide
     /// </summary>
     public string SelectedAyanamsa
     {
@@ -362,7 +362,7 @@
             TimeUrl = timeUrl,
             HoraryNumber = 0,
             RotateDegrees = 0,
-            Ayanamsa = _selectedAyanamsa, //default is Lahiri
+            Ayanamsa = SelectedAyanamsa, //default is Raman
         };
 
         //call VedAstro.js to generate table
@@ -407,7 +407,7 @@
             TimeUrl = timeUrl,
             HoraryNumber = 0,
             RotateDegrees = 0,
-            Ayanamsa = _selectedAyanamsa, //default is Lahiri
+            Ayanamsa = SelectedAyanamsa, //default is Raman
         };
 
         //call VedAstro.js to generate table
@@ -434,7 +434,7 @@
         var inputArguments = new
         {
             TimeUrl = timeUrl,
-            Ayanamsa = _selectedAyanamsa, //default is Lahiri
+            Ayanamsa = SelectedAyanamsa, //default is Raman
         };
 
         //call VedAstro.js to generate table

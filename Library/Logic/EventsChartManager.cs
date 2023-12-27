@@ -579,12 +579,9 @@ namespace VedAstro.Library
             var lifeEventList = person.LifeEventList;
             lifeEventList.Sort((x, y) => x.CompareTo(y));
 
-            //var positionY = lineHeight; //keep copy for resetting after overcrowded jam
-
             var listRowData = new List<string>();
             foreach (var lifeEvent in lifeEventList)
             {
-
                 //get timezone at place event happened
                 var lifeEvtTime = lifeEvent.StartTime.GetStdDateTimeOffset();//time at the place of event with correct standard timezone
                 var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to output offset, to match chart
@@ -602,20 +599,11 @@ namespace VedAstro.Library
                 //add line height to avoid chart above to row number (y position)
                 var finalYPosition = relativeRowNumber + lineHeight;
 
-                //calculate final event icon height avoiding other icons 
-                //positionY += rowNumber;
-
                 //put together icon + line + event data
                 var generateLifeEventLine = GenerateLifeEventLine(lifeEvent, finalYPosition, lifeEvtTime, positionX, out var lifeEventHeight);
 
-                int numTrueBools = virtualSpace.Cast<bool>().Count(b => b);
-                Console.WriteLine($"Number of true booleans: {numTrueBools}");
-
                 //mark as occupied for future ref
                 MarkRowNumber(positionX, relativeRowNumber, DescriptionBackgroundWidth, lifeEventHeight, 15, 15);
-
-                int numTrueBoolsx = virtualSpace.Cast<bool>().Count(b => b);
-                Console.WriteLine($"Number of true booleans: {numTrueBoolsx}");
 
                 //save position Y if it is the highest so far, save it to be used to draw final SVG height
                 MaxYAxis = finalYPosition > MaxYAxis ? finalYPosition : MaxYAxis;
@@ -626,8 +614,6 @@ namespace VedAstro.Library
                 //save the SVG under its row number with others to be placed z-index wise later
                 listRowData[relativeRowNumber] += generateLifeEventLine;
 
-                //reset line height for next 
-                //if (rowNumber != 0) { positionY = lineHeight; }
             }
 
             //place each row in a group and add to final list
@@ -655,7 +641,6 @@ namespace VedAstro.Library
 
             void MarkRowNumber(int startCol, int startRow, int widthPx, int heightPx, int verticalPadding, int horizontalPadding)
             {
-
                 //mark all occupied space
                 var lastColumn = startCol + widthPx + horizontalPadding;
                 var lastRow = startRow + heightPx + verticalPadding;
@@ -724,11 +709,11 @@ namespace VedAstro.Library
                             <!--TIME ROW-->
 		                    <g id=""TimeRowLegendTemplate"" transform=""matrix(1, 0, 0, 1, 10, 26)"" style=""display:none;"">
                                 <!--BACKGROUND-->
-                                <rect opacity=""0.80"" fill=""blue"" x=""-1"" y=""0"" width=""160"" height=""15"" rx=""2"" ry=""2""></rect>
+                                <rect opacity=""0.80"" fill=""blue"" x=""-1"" y=""0"" width=""160"" height=""12"" rx=""2"" ry=""2""></rect>
 			                    <!--TIME-->
-                                <text fill=""#FFFFFF"" font-size=""11"" font-weight=""100"" x=""10"" y=""11"">Template</text>
+                                <text fill=""#FFFFFF"" font-size=""11"" font-weight=""100"" x=""14"" y=""9"">Template</text>
                                 <!--CLOCK ICON-->
-                                <g fill=""#fff"" transform=""matrix(0.5, 0, 0, 0.5, 2, 3)"" width=""12"" height=""12"">
+                                <g fill=""#fff"" transform=""matrix(0.5, 0, 0, 0.5, 2, 1)"" width=""12"" height=""12"">
 				                    <path d=""M10 0a10 10 0 1 0 10 10A10 10 0 0 0 10 0zm2.5 14.5L9 11V4h2v6l3 3z""></path>
 			                    </g>
                             </g>

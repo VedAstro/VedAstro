@@ -84,7 +84,6 @@ namespace VedAstro.Library
 
 
             //ACT II : fill the components in order
-
             await GenerateComponents(inputPerson, timeRange.start, timeRange.end, daysPerPixel, inputedEventTags, summaryOptions);
 
 
@@ -320,59 +319,6 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Given planet list, will return factor for strongest only
-        /// </summary>
-
-        private static double GetPlanetPowerFactor(List<PlanetName> inputPlanetList, Time time)
-        {
-            //if no input planets return 0 power,
-            //this makes events with no planets not appear in smart sum row
-            //muhurtha events also are stopped here
-            if (!inputPlanetList.Any()) { return 0; }
-
-            //get all power factors into a list
-            var listx = new List<double>();
-            foreach (var planet in inputPlanetList)
-            {
-                var x = GetPlanetPowerFactor(planet, time);
-                listx.Add(x);
-            }
-
-            //todo can experiment with average as well,
-            //strongest was choose because, it is assumed that strong bhukti can override dasa
-            //take the strongest
-            var strongest = listx.Max();
-
-            return strongest;
-
-        }
-
-        /// <summary>
-        /// Given a list planet names only power factor of strongest planet is returned
-        /// convert the planets strength into a value over hundred with max & min set by strongest & weakest planet
-        /// </summary>
-        private static double GetPlanetPowerFactor(PlanetName valuePlanet, Time time)
-        {
-            //get all planet strength for given time (horoscope)
-            var list = Calculate.AllPlanetStrength(time);
-            //get the power of the planet inputed
-            var planetPwr = list.FirstOrDefault(x => x.Item2 == valuePlanet).Item1;
-
-            //get min & max
-            var min = list.Min(x => x.Item1); //weakest planet
-            var max = list.Max(x => x.Item1); //strongest planet
-
-            //convert the planets strength into a value over hundred with max & min set by strongest & weakest planet
-            //returns as percentage over 100%
-            var factor = planetPwr.Remap(min, max, 0, 100);
-
-            //planet power below 60% filtered out
-            factor = factor < 60 ? 0 : factor;
-
-            return factor;
-        }
-
-        /// <summary>
         /// Get color based on nature
         /// </summary>
         private static string GetColor(EventNature? eventNature) => GetColor(eventNature.ToString());
@@ -401,7 +347,6 @@ namespace VedAstro.Library
 
             return color;
         }
-
 
         /// <summary>
         /// Get color based on nature
@@ -455,7 +400,6 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Generates individual life event line svg
         /// Incrementing line height also increments icon position below
@@ -467,7 +411,8 @@ namespace VedAstro.Library
             var formattedEventName = ShortenName(lifeEvent.Name);
 
             int iconYAxis = lineHeight + 7; //start icon at end of line + 7 padding
-            var iconXAxis = $"-7.5"; //use negative to move center under line
+            int verticalLineHeight = iconYAxis + 2; //extra px added cause line moved up -2 
+            var iconXAxis = $"-7.5"; //use negative to move center under the line
             var nameTextHeight = 15;
 
             //only show name label for Major and Normal events
@@ -476,13 +421,15 @@ namespace VedAstro.Library
             var isShowName = isNormal || isMajor; //show name for normal and major only
             var evtNameStyle = isShowName ? "" : "display: none;";
 
-            //display description only for major events
-            var descriptionDisplayStyle = isMajor ? "" : "display:none;";
+            //display description only for major events and when text not Empty
+            var notEmpty = string.IsNullOrEmpty(lifeEvent.Description);
+            var descriptionDisplayStyle = isMajor || notEmpty ? "" : "display:none;";
 
+            //convert event description text to image 
             string descriptionTextSvg = StringToSvgTextBox(lifeEvent.Description, out var boxHeightPx);
 
             //set width of event name box based on if desc box is shown below (only shows for Major type)
-            var withoutDescBox = (GetTextWidthPx(formattedEventName) + 10);
+            var withoutDescBox = (GetTextWidthPx(formattedEventName) + 14);
             var withDescBox = 82;  //82 = 100 - icon = text space left
             var nameBackgroundWidth = isMajor ? withDescBox : withoutDescBox;
 
@@ -493,7 +440,9 @@ namespace VedAstro.Library
             totalHeight = (isMajor ? descBackgroundHeight : 0) + nameTextHeight;
 
             var iconSvg = $@"
-                                <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{iconYAxis}""></rect>
+                                <!-- POINTER LINE -->
+                                <rect class=""vertical-line"" y=""-2"" fill=""#1E1EEA"" width=""2"" height=""{verticalLineHeight}""></rect>
+
                                 <!-- EVENT ICON LABEL -->
                                 <g transform=""translate({iconXAxis},{iconYAxis})"">
                                     <g class=""name-label"" style="" cursor: pointer; "" >
@@ -502,12 +451,14 @@ namespace VedAstro.Library
 						                    <rect class=""background"" x=""0"" y=""0"" style=""fill: blue; opacity: 0.8;"" width=""{nameBackgroundWidth}"" height=""{nameTextHeight}"" rx=""2"" ry=""2"" />
 						                    <text class=""event-name"" x=""3"" y=""11"" style=""fill:#FFFFFF; font-size:12px;"">{formattedEventName}</text>
 					                    </g>
+
                                         <!-- EVENT ICON-->
 				                        <g class=""nature-icon"" transform=""translate(8,8)"">
                                             <rect class=""background"" fill=""{GetColor(lifeEvent.Nature)}"" x=""-7.5"" y=""-8"" width=""15"" height=""15"" rx=""2"" ry=""2""/>
 					                        <path d=""M2-0.2H0.7C0.5-0.2,0.3,0,0.3,0.2v1.3c0,0.2,0.2,0.4,0.4,0.4H2c0.2,0,0.4-0.2,0.4-0.4V0.2C2.5,0,2.3-0.2,2-0.2z M2-4.5v0.4 h-3.6v-0.4c0-0.2-0.2-0.4-0.4-0.4c-0.2,0-0.4,0.2-0.4,0.4v0.4h-0.4c-0.5,0-0.9,0.4-0.9,0.9v6.1c0,0.5,0.4,0.9,0.9,0.9h6.3 c0.5,0,0.9-0.4,0.9-0.9v-6.1c0-0.5-0.4-0.9-0.9-0.9H3.1v-0.4c0-0.2-0.2-0.4-0.4-0.4S2-4.8,2-4.5z M2.9,2.9h-5.4 c-0.2,0-0.4-0.2-0.4-0.4v-4.4h6.3v4.4C3.4,2.7,3.2,2.9,2.9,2.9z""/>
 				                        </g>
                                     </g>
+
                                     <!-- DESCRIPTION -->
 		                            <g class=""description-label"" style=""{descriptionDisplayStyle}"" transform=""translate(0,{17})"">
                                         <rect class=""background"" style=""fill: blue; opacity: 0.8;"" width=""{DescriptionBackgroundWidth}"" height=""{descBackgroundHeight}"" rx=""2"" ry=""2""/>
@@ -519,7 +470,7 @@ namespace VedAstro.Library
                                 ";
 
             //put together icon + line + event data
-            var lifeEventLine = $@"<g eventName=""{lifeEvent.Name}"" class=""LifeEventLines"" stdTime=""{lifeEvtTime:dd/MM/yyyy}"" 
+            var lifeEventLine = $@"<g eventname=""{lifeEvent.Name}"" eventweight=""{lifeEvent.Weight}"" class=""LifeEventLines"" stdtime=""{lifeEvtTime:dd/MM/yyyy}"" 
                               transform=""translate({positionX}, 0)"">{iconSvg}</g>";
 
             return lifeEventLine;
@@ -616,7 +567,7 @@ namespace VedAstro.Library
             //that expand more in virtual space than rendered
             var maxSlices = timeSlices.Count + 1000;
 
-            // place to keep track of occupied space represents pixels
+            // place to keep track of occupied space represents pixels (x-axis, y-axis)
             bool[,] virtualSpace = new bool[maxSlices, MaxLifeEventCanvasHeight];
 
             //use offset of input time, this makes sure life event lines
@@ -628,7 +579,7 @@ namespace VedAstro.Library
             var lifeEventList = person.LifeEventList;
             lifeEventList.Sort((x, y) => x.CompareTo(y));
 
-            var positionY = lineHeight; //keep copy for resetting after overcrowded jam
+            //var positionY = lineHeight; //keep copy for resetting after overcrowded jam
 
             var listRowData = new List<string>();
             foreach (var lifeEvent in lifeEventList)
@@ -646,26 +597,37 @@ namespace VedAstro.Library
                 if (lifeEvent.Weight == "Minor") { continue; }
 
                 //gets row number (pixel), that is free to occupy
-                var rowNumber = GetRowNumber(positionX); //start at 0 index
+                var relativeRowNumber = GetRowNumber(positionX); //start at 0 index
+
+                //add line height to avoid chart above to row number (y position)
+                var finalYPosition = relativeRowNumber + lineHeight;
 
                 //calculate final event icon height avoiding other icons 
-                positionY += rowNumber;
+                //positionY += rowNumber;
 
                 //put together icon + line + event data
-                var generateLifeEventLine = GenerateLifeEventLine(lifeEvent, positionY, lifeEvtTime, positionX, out var lifeEventHeight);
+                var generateLifeEventLine = GenerateLifeEventLine(lifeEvent, finalYPosition, lifeEvtTime, positionX, out var lifeEventHeight);
+
+                int numTrueBools = virtualSpace.Cast<bool>().Count(b => b);
+                Console.WriteLine($"Number of true booleans: {numTrueBools}");
 
                 //mark as occupied for future ref
-                MarkRowNumber(positionX, rowNumber, DescriptionBackgroundWidth, lifeEventHeight);
+                MarkRowNumber(positionX, relativeRowNumber, DescriptionBackgroundWidth, lifeEventHeight, 15, 15);
+
+                int numTrueBoolsx = virtualSpace.Cast<bool>().Count(b => b);
+                Console.WriteLine($"Number of true booleans: {numTrueBoolsx}");
 
                 //save position Y if it is the highest so far, save it to be used to draw final SVG height
-                MaxYAxis = positionY > MaxYAxis ? positionY : MaxYAxis;
+                MaxYAxis = finalYPosition > MaxYAxis ? finalYPosition : MaxYAxis;
 
-                //save it under its row with others
-                while (rowNumber > (listRowData.Count - 1)) { listRowData.Add(""); } //add empty row if 1st
-                listRowData[rowNumber] += generateLifeEventLine;
+                //add empty row before if 1st
+                while (relativeRowNumber > (listRowData.Count - 1)) { listRowData.Add(""); }
+
+                //save the SVG under its row number with others to be placed z-index wise later
+                listRowData[relativeRowNumber] += generateLifeEventLine;
 
                 //reset line height for next 
-                if (rowNumber != 0) { positionY = lineHeight; }
+                //if (rowNumber != 0) { positionY = lineHeight; }
             }
 
             //place each row in a group and add to final list
@@ -691,20 +653,21 @@ namespace VedAstro.Library
 
             //-------------------------
 
-            void MarkRowNumber(int columnNumber, int rowNumber, int widthPx, int heightPx)
+            void MarkRowNumber(int startCol, int startRow, int widthPx, int heightPx, int verticalPadding, int horizontalPadding)
             {
+
                 //mark all occupied space
-                var lastColumn = columnNumber + widthPx;
-                var lastRow = rowNumber + heightPx;
+                var lastColumn = startCol + widthPx + horizontalPadding;
+                var lastRow = startRow + heightPx + verticalPadding;
 
                 //mark all columns
-                for (int i = columnNumber; i <= lastColumn; i++)
+                for (int colIndex = startCol; colIndex <= lastColumn; colIndex++)
                 {
                     //mark all rows
-                    for (int j = 0; j <= lastRow; j++)
+                    for (int rowIndex = startRow; rowIndex <= lastRow; rowIndex++)
                     {
                         //mark true for occupied
-                        virtualSpace[i, j] = true; 
+                        virtualSpace[colIndex, rowIndex] = true;
                     }
                 }
 
@@ -712,25 +675,23 @@ namespace VedAstro.Library
 
             //given a column number will find row in it that is free (row = pixel)
             //start at 0 index
-            int GetRowNumber(int startX)
+            int GetRowNumber(int columnIndex)
             {
-                //padding between event boxes (vertical axis)
-                var padding = 10;
 
-                //scan till find row that is empty at fixed column (x axis)
-                for (int i = 0; i < virtualSpace.Length; i++)
+                //scan till find row that is empty at fixed column (x-axis)
+                for (int rowIndex = 0; rowIndex < MaxLifeEventCanvasHeight; rowIndex++)
                 {
-                    var isOccupied = virtualSpace[startX, i];
-                    
-                    //not occupied return as available number
-                    if (!isOccupied) { return i + padding; }
+                    var isOccupied = virtualSpace[columnIndex, rowIndex];
+
+                    //not occupied with padding included return as available number
+                    if (!isOccupied) { return rowIndex; }
                 }
 
                 throw new Exception("End of Virtual Rows!");
             }
 
         }
-        
+
         /// <summary>
         /// add in the cursor line (moves with cursor via JS)
         /// note: template cursor line is duplicated to dynamically generate legend box
@@ -760,12 +721,27 @@ namespace VedAstro.Library
 			                    <rect width=""2"" height=""{lineHeight}"" style=""fill:#000000;"" x=""0"" y=""0""></rect>
 			                    <rect width=""20"" height=""2"" style=""fill:black;"" x=""-9"" y=""{lineHeight - 2}""></rect>
 		                    </g>
+                            <!--TIME ROW-->
+		                    <g id=""TimeRowLegendTemplate"" transform=""matrix(1, 0, 0, 1, 10, 26)"" style=""display:none;"">
+                                <!--BACKGROUND-->
+                                <rect opacity=""0.80"" fill=""blue"" x=""-1"" y=""0"" width=""160"" height=""15"" rx=""2"" ry=""2""></rect>
+			                    <!--TIME-->
+                                <text fill=""#FFFFFF"" font-size=""11"" font-weight=""100"" x=""10"" y=""11"">Template</text>
+                                <!--CLOCK ICON-->
+                                <g fill=""#fff"" transform=""matrix(0.5, 0, 0, 0.5, 2, 3)"" width=""12"" height=""12"">
+				                    <path d=""M10 0a10 10 0 1 0 10 10A10 10 0 0 0 10 0zm2.5 14.5L9 11V4h2v6l3 3z""></path>
+			                    </g>
+                            </g>
+
                             <!--cloned to CursorLineLegendClone -->
 		                    <g id=""CursorLineLegendTemplate"" transform=""matrix(1, 0, 0, 1, 10, 26)"" style=""display:none;"">
+                                <!--BACKGROUND-->
                                 <rect opacity=""0.80"" fill=""blue"" x=""-1"" y=""0"" width=""160"" height=""15"" rx=""2"" ry=""2""></rect>
-			                    <text fill=""#FFFFFF"" font-size=""11"" font-weight=""400"" x=""14"" y=""11"">Template</text>
-                                <!--icon set dynamic by JS-->
-                                <use xlink:href=""""></use>                                
+			                    <!--EVENT NAME-->
+                                <text class=""event-name"" fill=""#FFFFFF"" font-size=""11"" font-weight=""400"" x=""14"" y=""11"">Template</text>
+                                <!--ICON SET DYNAMIC BY JS-->
+                                <circle class=""icon-holder"" cx=""6.82"" cy=""7.573"" r=""4.907"" fill=""grey""></circle>
+                                <text class=""nature-score"" fill=""#FFFFFF"" font-size=""7"" font-weight=""100"" x=""5.3"" y=""9.9""></text>
                             </g>
                             <!--place where dynamic event names are placed by JS-->
                             <g id=""CursorLineLegendHolder"" transform=""matrix(1, 0, 0, 1, 0, 4)""></g>
@@ -1565,6 +1541,7 @@ namespace VedAstro.Library
                         var rect = $"<rect " +
                                    $"eventname=\"{foundEvent?.FormattedName}\" " +
                                    $"eventdescription=\"{foundEvent?.Description}\" " +
+                                   $"naturescore=\"{foundEvent?.NatureScore}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
                                    $"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\" " +
                                    $"x=\"{horizontalPosition}\" " +

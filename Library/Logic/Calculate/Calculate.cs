@@ -8524,6 +8524,32 @@ namespace VedAstro.Library
         #region PLANET AND HOUSE STRENGHT
 
         /// <summary>
+        /// convert the planets strength into a value over hundred with max & min set by strongest & weakest planet
+        /// </summary>
+        private static double PlanetPowerPercentage(PlanetName inputPlanet, Time time)
+        {
+            //get all planet strength for given time (horoscope)
+            var allPlanets = Calculate.AllPlanetStrength(time);
+
+            //get the power of the planet inputed
+            var planetPwr = allPlanets.FirstOrDefault(x => x.Item2 == inputPlanet).Item1;
+
+            //get min & max
+            var min = allPlanets.Min(x => x.Item1); //weakest planet
+            var max = allPlanets.Max(x => x.Item1); //strongest planet
+
+            //convert the planets strength into a value over hundred with max & min set by strongest & weakest planet
+            //returns as percentage over 100%
+            var factor = planetPwr.Remap(min, max, 0, 100);
+
+            //planet power below 60% filtered out
+            //factor = factor < 60 ? 0 : factor;
+
+            return factor;
+        }
+
+
+        /// <summary>
         /// Returns an array of all planets sorted by strenght,
         /// 0 index being strongest to 8 index being weakest
         ///
@@ -9971,7 +9997,6 @@ namespace VedAstro.Library
             throw new Exception("Disc diameter now found!");
         }
 
-
         /// <summary>
         /// Ayanabala : All planets get 30 shasbtiamsas
         /// at the equator. For the Sun, Jupiter, Mars
@@ -10984,7 +11009,6 @@ namespace VedAstro.Library
 
             return returnList;
         }
-
 
         /// <summary>
         /// 0 index is strongest

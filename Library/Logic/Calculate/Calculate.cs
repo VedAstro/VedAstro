@@ -7946,7 +7946,6 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// SunTransit8Bindu
         /// Checks if a given planet's with given number of bindu is transiting now (Gochara)
         /// </summary>
         public static bool IsPlanetGocharaBindu(Time birthTime, Time nowTime, PlanetName planet, int bindu)

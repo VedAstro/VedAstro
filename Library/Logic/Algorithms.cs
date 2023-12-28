@@ -49,6 +49,8 @@ namespace VedAstro.Library
         /// </summary>
         public static double GocharaAshtakvargaBindu(Event foundEvent, Person person)
         {
+            //TODO NOTE: SUSPECT INVALID OUTPUT DATA NEEDS VALIDATION
+
             //if not gochara event, end here with 0/Neutral score
             if (!foundEvent.Name.ToString().Contains("Gochara")) { return 0; }
 

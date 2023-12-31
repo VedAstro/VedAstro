@@ -294,6 +294,13 @@ namespace Website
         public static async Task Show(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, element);
 
         /// <summary>
+        /// Uses jQuery to show element via blazor reference
+        /// another version with direct to element ref
+        /// uses JS runtime attached to AppData
+        /// </summary>
+        public static async Task Show(this ElementReference element) => await AppData.JsRuntime.InvokeVoidAsync(JS.showWrapper, element);
+
+        /// <summary>
         /// toggles the display property of an element, show / hide
         /// uses jquery toggle method
         /// ID without #

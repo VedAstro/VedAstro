@@ -6,9 +6,9 @@ public class URL
 {
     //keep inside
     public const string ApiBeta = "https://beta.api.vedastro.org";
-    public const string ApiBetaDirect = "https://vedastroapibeta.azurewebsites.net";
+    public const string ApiBetaDirect = "https://vedastroapibeta.azurewebsites.net/api";
     public const string ApiStable = "https://api.vedastro.org";
-    public const string ApiStableDirect = "https://vedastroapi.azurewebsites.net";
+    public const string ApiStableDirect = "https://vedastroapi.azurewebsites.net/api";
     public const string WebBeta = "https://beta.vedastro.org";
     public const string WebStable = "https://vedastro.org";
     public const string WebDirect = "https://vedastrowebsitestorage.z5.web.core.windows.net";
@@ -78,7 +78,7 @@ public class URL
         GetEventsChart = ApiUrl + "/EventsChart";
         GetCallStatus = ApiUrl + "/GetCallStatus";
         //TODO special URL for chart because timeout Azure CDN timeout >30s
-        GetEventsChartDirect = ApiUrlDirect + "/api/geteventschart"; 
+        GetEventsChartDirect = ApiUrlDirect + "/geteventschart"; 
         GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
         GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
         SaveEventsChart = ApiUrl + "/SaveEventsChart";

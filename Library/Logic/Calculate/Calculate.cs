@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using SwissEphNet;
 using static VedAstro.Library.PlanetName;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 
 namespace VedAstro.Library
@@ -191,6 +192,9 @@ namespace VedAstro.Library
             //remove dots "Dr." --> "Dr"
             fullName = fullName.Replace(".", "");
 
+            //remove numbers & fancy characters
+            fullName = Regex.Replace(fullName, "[^a-zA-Z]", "");
+
             //make lower case for matching
             fullName = fullName.ToLower();
 
@@ -365,7 +369,6 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all the Avastas for a planet, Lajjita, Garvita, Kshudita, etc...
         /// </summary>
-        /// <param name="planetName"></param>
         /// <param name="time">time to base calculation on</param>
         public static List<Avasta> PlanetAvasta(PlanetName planetName, Time time)
         {

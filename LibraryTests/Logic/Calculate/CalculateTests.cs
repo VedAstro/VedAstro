@@ -13,6 +13,8 @@ namespace VedAstro.Library.Tests
     {
         public static Time StandardHoroscope = new("14:20 16/10/1918 +05:30", GeoLocation.Bangalore);
 
+        public static Time HavelockEllis = new("08:15 02/02/1859 +00:00", new GeoLocation("", 0.0957, 51.377));
+
         /// <summary>
         /// Brookline, Massachusetts 42.3318° N, 71.1212° W
         /// </summary>
@@ -510,8 +512,6 @@ namespace VedAstro.Library.Tests
         public void PlanetAshtakvargaBinduTest3()
         {
 
-            Time HavelockEllis = new("08:15 02/02/1859 +00:00", new GeoLocation("", 0.0957, 51.377));
-
             var house3Sign = Calculate.PlanetZodiacSign(PlanetName.Moon, HavelockEllis);
 
             var bindu = Calculate.PlanetAshtakvargaBindu(PlanetName.Moon, house3Sign.GetSignName(), HavelockEllis);
@@ -521,5 +521,71 @@ namespace VedAstro.Library.Tests
 
         }
 
+        //PASS
+        [TestMethod()]
+        public void BirthNumberTest()
+        {
+            var birthNumber = Calculate.BirthNumber(StandardHoroscope);
+
+            //14:20 16/10/1918 +05:30 == 7 birth number
+            Assert.AreEqual(7, birthNumber);
+            
+            birthNumber = Calculate.BirthNumber(JohnFKennedy);
+
+            //03:15 29/05/1917 +00:00 == 2 birth number
+            Assert.AreEqual(2, birthNumber);
+        }
+
+        
+        //PASS
+        [TestMethod()]
+        public void DestinyNumberTest()
+        {
+            var destinyNumber = Calculate.DestinyNumber(StandardHoroscope);
+
+            //14:20 16/10/1918 +05:30 == 27 == 9 birth number
+            Assert.AreEqual(9, destinyNumber);
+            
+            destinyNumber = Calculate.DestinyNumber(JohnFKennedy);
+
+            //03:15 29/05/1917 +00:00 == 34 == 7 birth number
+            Assert.AreEqual(7, destinyNumber);
+        }
+
+        //PASS
+        [TestMethod()]
+        public void NameNumberPredictionTest()
+        {
+            var prediction = Calculate.NameNumberPrediction("Charlie Chaplin");
+
+            Console.WriteLine(prediction);
+        }
+
+        //PASS
+        [TestMethod()]
+        public void NameNumberTest()
+        {
+            var nameNumber = Calculate.NameNumber("Dr. Louis Pasteur");
+            Assert.AreEqual(55, nameNumber);
+
+            nameNumber = Calculate.NameNumber("Charles Spencer Chaplin");
+            Assert.AreEqual(79, nameNumber);
+
+            nameNumber = Calculate.NameNumber("Charlie Chaplin");
+            Assert.AreEqual(46, nameNumber);
+
+            nameNumber = Calculate.NameNumber("Neil A. Armstrong");
+            Assert.AreEqual(46, nameNumber);
+
+            nameNumber = Calculate.NameNumber("Vladimir Putin");
+            Assert.AreEqual(46, nameNumber);
+
+            nameNumber = Calculate.NameNumber("Robert Frost");
+            Assert.AreEqual(46, nameNumber);
+
+            nameNumber = Calculate.NameNumber("Joseph Stalin");
+            Assert.AreEqual(46, nameNumber);
+            
+        }
     }
 }

@@ -1,26 +1,74 @@
 ﻿@using VedAstro.Library
-@attribute [Route(PageRoute.TableGenerator)]
+@attribute [Route(PageRoute.Numerology)]
 
 <PageTitle>Numerology | VedAstro</PageTitle>
 
-<PageTop ImageName="table-generator-banner.png"
+<PageTop ImageName="numerology-banner.svg"
          Title="Numerology"
-         DescriptionText="A person's life can be predicted through his name spellings. Based on Mantra Shastra, as per the frequency of vibration of sounds. ">
+         DescriptionText="A person's life can be predicted through his name spellings. From Mantra Shastra, uses vibration frequency of alphabets.">
 </PageTop>
 
-<div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
+<div class="d-flex flex-wrap gap-3" style="max-width:@GR.W667px;">
+    
+    <div>
+        <IconTitle IconName="fluent:text-number-format-20-filled" Title="Name Number" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
 
-    <UnderConstructionHeader/>
+        <div class="hstack gap-2 mt-3">
+            @* NAME *@
+            <div class="input-group">
+                <span class="input-group-text gap-2" style="width: 136px;"><Icon IconName="flat-color-icons:butting-in" Size="35" />Name</span>
+                <input @bind="nameInput" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 17px;">
+            </div>
 
+            <IconButton Height="47" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="OnClickCalculateButton" />
+        </div>
+
+        @* OUTPUT *@
+        <div @ref="outputHolder" class="mt-3" style="display: none;">
+            <h4>Number: <strong>@nameNumber</strong></h4>
+            <p class="p-2 rounded" style="background: #fff; font-family: 'Gowun Dodum'; font-size: 20px; ">
+                @predictionOutputText
+            </p>
+        </div>
+    </div>
+    
+    
+
+
+    @*     <ArticleBlock Title="Name Number" IconName="openmoji:european-name-badge">
+    <TextHTML>
+    <p class="text-justify">
+    Calculated using the “Chaldean System” sourced from "Mantra Sastra"
+    </p>
+    </TextHTML>
+    </ArticleBlock>
+    *@
 </div>
 
 
 @code {
 
-    private void OnClickDownload()
-    {
-        _jsRuntime.FunFeaturePopUp("TableGen");
+    private string nameInput;
+    private string predictionOutputText;
+    private int nameNumber;
+    ElementReference outputHolder;
 
+
+
+    private void OnClickCalculateButton()
+    {
+        //calculate name number
+        nameNumber = Calculate.NameNumber(nameInput);
+
+        //using the number find prediction text
+        predictionOutputText = Calculate.NameNumberPrediction(nameInput);
+
+        //make visible
+        outputHolder.Show();
+        // _jsRuntime.Show(outputHolder);
+
+        //refresh
+        StateHasChanged();
     }
 
 }

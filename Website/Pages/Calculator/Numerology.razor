@@ -1,0 +1,27 @@
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.TableGenerator)]
+
+<PageTitle>Numerology | VedAstro</PageTitle>
+
+<PageTop ImageName="table-generator-banner.png"
+         Title="Numerology"
+         DescriptionText="A person's life can be predicted through his name spellings. Based on Mantra Shastra, as per the frequency of vibration of sounds. ">
+</PageTop>
+
+<div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
+
+    <UnderConstructionHeader/>
+
+</div>
+
+
+@code {
+
+    private void OnClickDownload()
+    {
+        _jsRuntime.FunFeaturePopUp("TableGen");
+
+    }
+
+}
+

@@ -42,6 +42,7 @@
         public const string GoodTimeFinder = "GoodTimeFinder";
         public const string StarsAboveMe = "StarsAboveMe";
         public const string TableGenerator = "TableGenerator";
+        public const string Numerology = "Numerology";
         public const string SunRiseSetTime = "SunRiseSetTime";
         public const string BirthTimeFinder = "BirthTimeFinder";
         public const string LocalMeanTime = "LocalMeanTime";

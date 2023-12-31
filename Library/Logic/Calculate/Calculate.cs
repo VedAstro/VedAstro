@@ -54,6 +54,312 @@ namespace VedAstro.Library
 
         //----------------------------------------CORE CODE---------------------------------------------
 
+
+        #region NUMEROLOGY
+
+        /// <summary>
+        /// Numerology
+        /// Your birth number denotes your ruling power; the structure of
+        /// the body and the character depend on that number.
+        /// The birth number denotes a person’s status and desires.
+        /// let us take it as 17-10-1931. Number 17 becomes 1+7 = 8.
+        /// So 8 is your Birth number.
+        /// </summary>
+        public static int BirthNumber(Time birthTime)
+        {
+            //get STD birth date in month (1-31)
+            var birthDate = birthTime.StdDate();
+
+            //sum the single digits to get birth number till number is 9 or lower (single digit)
+            while (birthDate > 9)
+            {
+                birthDate = birthDate.ToString().Select(x => x - '0').Sum();
+            }
+
+            return birthDate;
+        }
+
+        /// <summary>
+        /// Numerology
+        /// The events that occur in your life, your relationship with others, your future and the
+        /// end of your life, are all denoted by your destiny number.
+        /// The destiny number denotes to what extent a person will come up in life as well
+        /// as it determines his fate.
+        /// </summary>
+        public static int DestinyNumber(Time birthTime)
+        {
+            //EXP :17-10-1931
+            //The sum total of your date of birth, month and year is your Destiny
+            //number. So, if all the numbers are added up, i.e. 1 + 7 + 1 + 0 + 1 +
+            //9 + 3 + 1 = 23 ; then 2 + 3 = 5 is the answer. 
+
+            //to count the number, 1st convert to string without any space or characters
+            var combinedNumberText = birthTime.StdDateMonthYearText.Replace("/", "");
+
+            //add together all the numbers
+            var destinyNumber = combinedNumberText.Select(x => x - '0').Sum();
+
+            //add together total till get number 9 or less
+            //sum the single digits to get birth number till number is 9 or lower (single digit)
+            while (destinyNumber > 9)
+            {
+                destinyNumber = destinyNumber.ToString().Select(x => x - '0').Sum();
+            }
+
+            return destinyNumber;
+
+        }
+
+        /// <summary>
+        /// The numerical values given to the alphabets
+        /// are based on the “Chaldean System”
+        /// Numbers (values) denote the wave length of the
+        /// sound and impact of letters.
+        /// The powers of the nine planets in twelve star signs at different
+        /// times are indicated in 108 numbers.
+        /// </summary>
+        public static int NameNumber(string fullName)
+        {
+            var alphabetScoreList = new Dictionary<char, int>
+            {
+                { 'a', 1 },
+                { 'b', 2 },
+                { 'c', 3 },
+                { 'd', 4 },
+                { 'e', 5 },
+                { 'f', 8 },
+                { 'g', 3 },
+                { 'h', 5 },
+                { 'i', 1 },
+                { 'j', 1 },
+                { 'k', 2 },
+                { 'l', 3 },
+                { 'm', 4 },
+                { 'n', 5 },
+                { 'o', 7 },
+                { 'p', 8 },
+                { 'q', 1 },
+                { 'r', 2 },
+                { 's', 3 },
+                { 't', 4 },
+                { 'u', 6 },
+                { 'v', 6 },
+                { 'w', 6 },
+                { 'x', 5 },
+                { 'y', 1 },
+                { 'z', 7 }
+            };
+
+            //when letter alone, different score, due to pronounce change
+            var initialScoreList = new Dictionary<char, int>
+            {
+                { 'a', 1 },
+                { 'b', 2 },
+                { 'c', 3 },
+                { 'd', 4 },
+                { 'e', 5 },
+                { 'f', 8 },
+                { 'g', 3 },
+                { 'h', 5 },
+                { 'i', 10 }, //I, J and Y becomes 10
+                { 'j', 10 },
+                { 'k', 20 }, //K becomes 20
+                { 'l', 30 }, //L and S becomes 30
+                { 'm', 40 }, //M becomes 40
+                { 'n', 50 }, //N becomes 50
+                { 'o', 70 }, //O becomes 70
+                { 'p', 80 }, //P becomes 80
+                { 'q', 100 }, //Q becomes 100
+                { 'r', 200 }, //R becomes 200 
+                { 's', 30 }, //L and S becomes 30
+                { 't', 400 }, //Tbecomes 400
+                { 'u', 6 },
+                { 'v', 6 },
+                { 'w', 6 },
+                { 'x', 5 },
+                { 'y', 10 }, //I, J and Y becomes 10
+                { 'z', 7 }
+            };
+
+            //NOTE:
+            // calculations must be
+            // made only on the basis of the spelling of the name along with the
+            // initials. Letters denoting respect or status like Mr., etc., and degrees
+            // and suffixes to names have no value. However, names starting with
+            // title of Dr. (Doctor) should be taken into account.
+
+            //remove dots "Dr." --> "Dr"
+            fullName = fullName.Replace(".", "");
+
+            //make lower case for matching
+            fullName = fullName.ToLower();
+
+            //split by space into name pieces, first name, last name, initial (order not important)
+            var splittedName = fullName.Split(" ");
+
+            //add together number from each name piece
+            var totalScore = 0;
+            foreach (var namePiece in splittedName)
+            {
+                //if piece is only 1 alphabet, than it is an initial (different scoring system)
+                var isInitial = namePiece.Length == 1;
+
+                //add special score for initial
+                if (isInitial) { totalScore += initialScoreList[namePiece[0]]; }
+
+                //add together points for each alphabet in name piece
+                else
+                {
+                    foreach (var alphabet in namePiece)
+                    {
+                        totalScore += alphabetScoreList[alphabet];
+                    }
+                }
+            }
+
+            //return final added score for full name
+            return totalScore;
+
+        }
+
+        public static string NameNumberPrediction(string fullName)
+        {
+            //get name number
+            var nameNumber = NameNumber(fullName);
+
+            //dictionary of all possible predictions 
+            var nameNumberPredictions = new Dictionary<int, string>
+            {
+                //1 for SUN
+                { 10, "This number when comes as a name indicates the\r\nsound or resonance of the primal force. This is depicted in the\r\nancient texts as a snake enmeshed within a wheel. Those named\r\nunder this number will be dignified and popular. Confidence and\r\npatience coexist in their lives but their fortunes will change\r\nfrequently. It is like a revolving wheel, with ups and downs frequently.\r\nThey must be honest in all their activities and they are bound to gain\r\npopularity. They will lead happy lives since there will be no paucity of\r\nfunds" },
+                { 19, "Ancient books on this subject attribute mastery\r\nover the Three Worlds to this Number and as such, these people will\r\nbe the focus of attention wherever they are. This number indicates\r\nthe Rising Sun. This also has been described as the “Prince of the\r\nCelestial World” in ancient Indian texts and as an ‘‘Ideal Lover’’ in\r\nEgyptian scriptures. The sun becomes brighter as the day lengthens\r\nand so also these people progress as their age advances. Position,\r\nstatus, happiness, success and wealth will be gradually on the rise.\r\nBeing well-disciplined, they will look young and will be very active\r\neven in their advanced age. They must be honest even in matters\r\nrelated to sensual pleasures.\r" },
+                { 28, "Those with this name number do progress and get\r\nall the comforts during the early part of life but they frequently face\r\nstruggles or difficulties in all their endeavours in life. They may have\r\nto start their lives again and again always afresh, many times over.\r\nAlthough they progress very fast in their lives, they finally lose\r\neverything due to the cruel stroke of fate. One of the examples of\r\nsuch people born under this number is General MacArthur, a fine\r\nsoldier who deserved more of honour and recognition, but was\r\ndeprived of his position and career by President Truman of USA!\r\nThose coming under this number may incur unexpected losses due\r\nto their friends and relatives. Money lent by them rarely comes back.\r\nAs such, this number can only be regarded as an unlucky one, since\r\nall the hardearned money may be lost unexpectedly." },
+                { 37, "This is a very lucky number. It will lift even an\r\nordinary person to the most prominent positions in life. It brings\r\nsuccess in love and the patronage of the elite. These people will\r\nhave good friends from both sexes. They will be greatly favoured by\r\nmen if they are women and vice versa. As a result, their lives will\r\nimprove greatly. People will come forward to invest their capital with\r\nsuch people. Accumulation of money and wealth will be easy\r\nthrough various means. They will have an active interest in the fine\r\narts and in all probability, lead comfortable and luxurious lives. They\r\nwill be renowned for their pleasing manners and countenance. Some\r\nof them will be philanderers because of their casual attitude towards\r\nopposite sex. This number, which gives unexpected success, is a\r\ndesirable one.\r\n(Note: If people who occupy very high positions have their names\r\nunder this number, it may bring them unnecessary problems. This\r\nnumber will bring good fortune to ordinary people. These people\r\nshould remain satisfied when they attain a certain position in life and\r\nshould not be too ambitious. This number, will bring fortune\r\nautomatically, but will lose its power when one becomes too greedy.)\r" },
+                { 46, "This has been described as the “Crowned Head” in\r\nthe ancient texts. It means that when prudence, intelligence and\r\nknowledge are used wisely, it will bring the crown of life. Whatever\r\nmay be the business, this number will help one to reach the pinnacle\r\nof success and is capable of raising even the most ordinary person\r\nto the position of a ruler. Wealth and status will go up with the\r\nadvancement of age. People belonging to this number should be\r\nhonest in all walks of life." },
+                { 55, "This number predicts that both creation and\r\ndestruction can be done by a single power. This will bring victory\r\nover enemies. Before entering the battlefield, Greek soldiers were\r\nordered to wear a talisman marked with number 55 around their\r\nnecks. This number is the epitome of will-power and intuition. People\r\nunder this number will astonish others by their knowledge and win\r\nthem over. They are acknowledged as scholars. Wisdom and\r\nintelligence will be as bright as lightning. If not used in a proper way,\r\nthis may destroy them. Knowledge in various subjects could be\r\nacquired by those born under this number.\r" },
+                { 64, "This number will create equal number of friends\r\nand foes. Opposition will be experienced in life. This gives\r\nextraordinary will power, intelligence and knowledge. This will\r\nbestow fame by enabling them to do things that are considered\r\nimpossible. This ensures high position in the Government. At times,\r\nthis will give such a high position that everyone will pay respect and\r\nhold these people in high esteem and awe. Their words would cast a\r\npowerful influence." },
+                { 73, "This name number strengthens mental faculties\r\nand bestows fame, wealth and power. People having this number will\r\naspire to lead comfortable lives and will accomplish their desires.\r\nSupport from the people of authority will be available and material\r\npossessions will be in plenty. If they are not honest, they will lose\r\ntheir fame. If they are the spiritual types, they will lead a peaceful\r\nand comfortable life with pure hearts and noble thoughts.\r" },
+                { 82, "This is one of the most powerful numbers and it\r\ncan elevate even an ordinary person to the status of a ruler. Those\r\nhaving this number in their names are duty-conscious. With\r\nunceasing efforts, they will dominate the scene in any field they are\r\nplaced in. They would own lands, gold mines and precious gems.\r\nThey are lovers of high-bred horses and will attain the pinnacle of\r\nfame by making a fortune either in horse races, car races or in\r\nsimilar sports or business. They create unnecessary problems in\r\ntheir love matters and will be over-adamant in nature. Their eyes\r\nhave magnetic powers. If the power of this number is properly\r\nunderstood and practiced, no physical or mental feat is impossible to\r\nperform.\r" },
+                { 91, "This indicates strong determination and profitable\r\njourneys. They also undertake many journeys for trade or otherwise\r\nand will do all things with great vigour. Maritime trade using boats\r\nand ships will bring them plenty of wealth. They can attain success in\r\nbreathing exercises like meditation or concentration. Comfortable\r\nliving awaits them" },
+                { 100, "Even though this number is capable of giving\r\nsuccess in all efforts, it will not offer many opportunities. There will\r\nbe plenty of money. This number implies a long and comfortable life,\r\nwithout any major achievements." },
+                //2 for MOON
+                { 11, "Those having 11 as their name number will come\r\nup in life by their sheer faith in God. They will proft by various means\r\nvery easily. They may be riddled with unforeseen problems and\r\ndangers, as if to test their faith. Sometimes, they tend to meddle with\r\nmatters that do not concern them. They are liable to be let down by\r\ntheir family and friends. If they have faith in God, they will definitely\r\nattain great heights in life. If they lack faith, they are bound to face a\r\nlot of dangers." },
+                { 20, "This spiritual number represents a drumbeat\r\nheralding triumph or victory. People having this Name number work\r\nfor liberation and social reforms. They are capable of providing relief\r\nto the masses from grief and struggles. The world will admire them.\r\nWhen they work with personal motives, they are extremely selfish\r\nand highly destructive. The 20 number people will excel in medical\r\npractice using toxic medicines and deal with poisonous drugs. These\r\npeople possess the ability to awaken the sleeping masses and lead\r\nthem to very great achievements. When they go out of their way to\r\nsatisfy their selfish needs, delay and utter failure will be imminent.\r\n(HITLER, born on the 20th, spurred Germany into war and faced a\r\nhumiliating defeat. He is a very good example of this Name number.\r\nHe was represented by the battle drum that goaded the people to\r\nfollow a selfish motive which led to destruction)" },
+                { 29, "Those under this Name number often find it\r\nnecessary to go to court to settle disputes. They will experience all\r\nsorts of problems in their families and will generally be let down by\r\nfamily and friends. Those who praised them yesterday may curse\r\nthem today. These people live a life of mental agony and sorrow with\r\ntheir life partner. They get into deep troubles with the opposite sex.\r\nAny remedial measures taken to come out of these troubles may\r\nresult in considerable delay and huge loss of money. The personal\r\nlife will be full of ups and downs. Family life consists of events similar\r\nto the feats in a circus! Unless the name number is corrected\r\nproperly, these people will encounter these problems orever." },
+                { 38, "The people under this name number will be\r\nhonest, peaceloving and gentle. When it is a name number of a\r\nperson or a business, it will earn the help of the influential. This\r\nName number can bring great success. People under this number\r\nwill make rapid development and earn fame and wealth even from\r\nvery humble beginnings. At times, they will face a lot of dangers and\r\nget cheated by bad people, resulting in various dificulties. Even their\r\ndeaths will be sudden, rather unexpected and unusual.\r" },
+                { 47, "Those who come up very fast in life can be seen\r\namongst the people having this name number. They will be very\r\nmuch concerned about their own progress and will work out plans to\r\nachieve the same and will not rest until they reach their goal. As for\r\nas money matters are concerned, they will be very lucky and can be\r\nconsidered as very fortunate people. Many people in this number\r\ntend to lose their eyesight. Even the best of treatment may be in\r\nvain and they suffer very much. For those who have the habit of\r\nhunting, it would be better for them to abstain from hunting and\r\neating flesh of any kind.\r" },
+                { 56, "This number is full of wonders. Though this\r\nnumber tends to bring fortune and fame, it is the one that is used by\r\nthose practising various forms of occultism and divination. This\r\nnumber can free a person from all ties and can break bondage of\r\nany kind. Locks would open. Even the animals inside the cage would\r\nfind their way out. As too much of an explanation would be\r\ndangerous, I do not wish to pursue this subject any further. (As\r\nexplained earlier, the number 29 represents powers of the body and\r\nmind, whereas Number 56 gives magical powers). These people will\r\nlose their wealth and fame all of a sudden." },
+                { 65, "This number denotes divine grace and progress in\r\nspiritual life. It will earn the help of wealthy and powerful patrons.\r\nMarital life will be blissful. Persons under this Name number may be\r\nsometimes injured in accidents and may have cuts or bruises on\r\ntheir bodies.\r" },
+                { 74, "These people have great affnity towards their\r\nreligion. They run short of money often. They will introduce social\r\nand religious reforms and spread their principles. However, this is\r\nnot a desirable number. This Name number is best suited only for\r\nhermits and priests and is not favourable to others. These people\r\nalways remain worried about something or the other.\r" },
+                { 83, "This Name Number bestows prestigious posts,\r\nwhich will earn the respect and adoration of many. They will achieve\r\na life of splendour and authority. These people will be successful." },
+                { 92, "This number signifies gold, silver, land, wealth and\r\npossession of yogic power. If people having this Name number can\r\ncarefully practise the art of yogic breathing, they may even acquire\r\nthe power of Astral projection (defying gravity) or Kechari Mu-dra\r\n(defying diseases and death)." },
+                { 101, "Those under this Name number will have greater\r\nhelp from governments or the people of authority (than from their\r\nown efforts). There will be lots of obstacles in their business. Slump\r\nin business will be common. This cannot be considered a lucky\r\nnumber." },
+                //3 for JUPITER
+                { 3, "This name number denotes hard work, intelligence,\r\nsuccess and a comfortable life. They will be highly educated and will\r\ngradually progress in life." },
+                { 12, "These people naturally possess the ability to attract\r\npeople by their power of speech. They sacrifice their lives for the\r\nwelfare and happiness of others by shouldering their burdens too.\r" },
+                { 21, "These people are self-centered and concerned\r\nabout their own happiness and matters profitable to them. With great\r\ndetermination, they rise steadily in life and reach the pinnacle of\r\nsuccess. Their tactful behaviour helps them to solve all their\r\nproblems. They struggle hard in their early days but achieve success\r\nand happiness as they grow up. They will attain and retain good\r\npositions permanently in their lives." },
+                { 30, "These people tend to live in a world of fantasy. They\r\nare wise thinkers. They like to do what they feel is right. At times, just\r\nfor their own satisfaction they get involved in certain difficult tasks,\r\nwithout expecting any returns. They have less interest in making\r\nmoney. They know their minds and conquer the same easily. They\r\ngain mystic powers through mind control and related mental\r\nexercises.\r" },
+                { 39, "These people are very sincere and hardworking.\r\nInvariably, the name and fame that are rightfully due to them will be\r\nenjoyed by others. They work unceasingly for the welfare of others.\r\nThey are not as healthy as the other Number 3 people. At some\r\nstage in their lives they are prone to some kind of skin diseases." },
+                { 48, "They will be more interested in religious matters, but\r\nface opposition in matters that involve the society at large. They will\r\ndo a lot of work for public welfare, and create problems for\r\nthemselves while attempting to do things beyond their capacity. Fate\r\nis against them most of the time.\r" },
+                { 57, "This number gives victory or success in the\r\nbeginning, but brings about gradual downfall and loss of interest in\r\nthe end. Life which progresses at a very swift pace will grind to a halt\r\nall of a sudden. People named under this number will achieve great\r\nheights from humble beginnings but will later revert to their original\r\npositions.\r" },
+                { 66, "This number denotes dynamism and oratorical\r\nskills, perfection in the fine arts, patronage from the government\r\nauthorities and also a comfortable life.\r" },
+                { 75, "All of a sudden they attain great fame. They will\r\nmake good friends very soon. Unexpectedly, they become very\r\npopular. Fame and comforts will come in search of them. They\r\nbecome good poets and writers." },
+                { 84, "Early days will be full of struggles and worries. They\r\nearn enemies unnecessarily. Travelling benefits them. They do not\r\nget rewards commensurate to their efforts. They improve themselves\r\nto some extent spiritually. Though generally lacking in enthusiasm at\r\nfirst, they can go to extremes, if need be! If the influence of their birth\r\ndate is favourable, they can be great achievers.\r" },
+                { 93, "These people are capable of doing marvelous\r\nthings. They improve their worldly knowledge and are lucky to have\r\ntheir desires fulfilled. They excel in the field of histrionics through\r\nwhich they attain more fame. They earn through many business\r\npursuits and lead very dignified lives.\r" },
+                { 102, "This number signifies success at first ,followed by\r\nstruggles and confusion. These people cannot be called lucky." },
+                //4 for RAHU
+                { 4, "As this name number will be only for very short\r\nnames, it signifies a person or a thing that is popular. It does not\r\nbring luck as one might deserve. They will have needless fears,\r\nsickness and opposition. They can be well informed and worldlywise, but still they would work only as subordinates to others" },
+                { 13, "People in the western counties regard this number\r\nas unlucky and ominous. They do not stay in rooms or houses\r\nhaving this number and some hotels even do not have rooms with\r\nthis number. Unexpected events of sorrowful nature occur frequently.\r\nMen of this number have bitter experiences and face a lot of\r\ndifficulties because of women. Though these people do manage to\r\ncome up in life materially, they would still lead lives full of struggles.\r\nThis is not a desirable name number. This number gives only severe\r\ngrief, if birth and destiny numbers are also unlucky.\r" },
+                { 22, "The characteristics of those born on the 22nd hold\r\nequally good for this Name number also. This number instigates\r\nbase feelings and emotions. They are drawn towards gambling,\r\ndrinking, speculation and other vices and will readily indulge in them.\r\nThey may move towards self-destruction at a great speed and are\r\ngenerally surrounded by wicked and fraudulent people. They\r\ninvariably earn a bad reputation. They dislike the counsel of others. If\r\nthe influence of their date of birth is favourable, they can be\r\nsuccessful. Otherwise, they have to struggle to prevent total failure.\r\nThose with selfish motives invariably urge these people to devious\r\nways in order to further their own interests. They are good\r\nadministrators and can meet any problem or difficulty with courage.\r\nDangerous circumstances are foreseen. They often face\r\nhumiliations." },
+                { 31, "These people do not care for profit or loss but want\r\nonly the freedom to do what they desire. Whatever may be the gain\r\ninvolved, they would not like to indulge in anything against their wish.\r\nThey evince interest in astrology, philosophy and related sciences.\r\nThese people do not care about what others do or say about them.\r\nThey only wish to succeed and are never keen on the monetary\r\nbenefits they gain from such successes. Having succeeded, they\r\nsometimes even forgo their due profits. By the 31st year they lose all\r\ntheir material possession and savings. They regain them only by the\r\nage of 37. Unexpected happenings will bring about major changes in\r\nlife. Even their death will be sudden and abrupt. However, when\r\ndeath draws nearer, they somehow become intuitive and sense it\r\nwell in advance. If their birth number is 1 of any month, this number\r\nhelps them to achieve great positions in their official career.\r" },
+                { 40, "Those under this number earn good friends, who\r\nwill be of immense help to them in gaining jobs and positions of\r\ndistinction. It provides accumulation of fine jewellery and wealth. It\r\nalso brings fame and prosperity. Yet it is their negative qualities that\r\nare noticed by others. They can perform any work without any fear.\r\nEventually, their lives will turn out to be fruitless and in vain. They will\r\nlose all their money. They will blame the society for not recognizing\r\ntheir services or help. Lot of problems will come up in their lives and\r\nthe end will be pathetic.\r" },
+                { 49, "This name number brings abundant riches. Their\r\nfame will spread far and wide and their achievements will be the\r\nenvy of others. They lead highly eventful lives and travel a lot.\r\nWonderful experiences, permanent prosperity, excellent properties\r\nand sudden fortunes will come to them. Accidents can also happen\r\nsuddenly. If the birth number is a fortunate one, they lead happy\r\nlives. If not, they can end up being hated by others in the society and\r\nlife will end in a tragic manner. This number kindles the power of\r\nimagination." },
+                { 58, "This number gives outstanding popularity and the\r\npower to captivate others. They are great achievers. Life’s progress\r\nwill be swift. They are pious and orthodox and are great reformers,\r\nthough attached to religion. If their birth number is 4 or 8 of any\r\nmonth, they will hold positions of great responsibility and fame. They\r\nmay be sometimes forced to carry out certain things against their\r\nwish. Outwardly, these people appear to be very lucky but they also\r\nhave a lot of unwanted fears within. If the names of those born under\r\nother birth numbers also come under this number, life will slowly take\r\na turn for the worse and they will lose their reputation. They may\r\nbecome selfish and may have to undergo a lot of difficulties during\r\ntheir lifetime." },
+                { 67, "These people are exemplary artists (they may be\r\nartistes who perform) and work with great determination and vigour.\r\nThey are patronized by power barons and they reveal noble ideas.\r\n(Men should control passions and lust for women.) Love,\r\naffection and grace make these people endearing. They can never\r\nachieve anything if they are selfish. This number, which helps to\r\nattract and conquer others, does not help non-artists." },
+                { 76, "Those having this name number lose all their\r\nworldly possessions at some point of time. They are very popular.\r\nThey will be successful in philanthropic deeds. Surprisingly, they\r\nmake money in new ways. Income or material gains come through\r\nunexpected means. Their last years are generally spent in solitude,\r\ndoing nothing but eating and sleeping.\r" },
+                { 85, "This name number signifies those who come up\r\nthe hard way. They not only overcome all afflictions, but help in\r\nsolving others’ problems too. They reveal new ideas about religion\r\nand nature. They shine well in the field of medicine. They generally\r\nattain a position of distinction and honour." },
+                { 94, "These people execute lots of good services for the\r\nsake of mankind in general. They bring reforms in society. Comfort\r\nand fame will come and go in their lives. Their fame and good work\r\nwill generally be remembered even after their demise. This is a\r\nfortunate name number." },
+                { 103, "This name number is also favourable. There will\r\nbe improvement in material success initially, followed by a change in\r\nbusiness. They will face a lot of competition. Later years will be\r\npleasant and comfortable." },
+                //5 for MERCURY
+                { 5, "This number gives the power to charm people,\r\nexude dynamism and to lead a luxurious life enjoying fame and\r\nprominence. They spend money lavishly. These people should\r\ncultivate perseverance and concentration of mind.\r" },
+                { 14, "This number is suitable for trade. Those having this\r\nName number are always surrounded by a lot of people and things.\r\nThey are successful in various trades and will meet a lot of friends.\r\nThey may have strange problems and may face disappointments by\r\ntrusting others. They may also face risk from thunder, lightning,\r\nwater and fire. They undertake frequent travels. These people are\r\nadvised to be careful while travelling in fast-moving vehicles. If the\r\nproduct in which they trade also comes under number 14, it will have\r\nexcellent public patronage. The matters concerning love and\r\nmarriage must be considered and reconsidered many times before a\r\ndecision is taken. If not, these people may marry in haste and repent\r\nat leisure. This number can be called a very lucky number." },
+                { 23, "This number is the luckiest of all Mercury (5)\r\nnumbers. These people find success in all their endeavours. All their\r\nplans will succeed. They can achieve things which others won’t even\r\nimagine. Their accomplishments will astonish those around them. In\r\nspite of being such lucky people, if they do not strive hard, they will\r\nend up leading ordinary lives. Since they succeed in all their efforts,\r\nthey will earn the patronage, respect, honour and favour of people in\r\nvery high positions. Hence, these people are advised to keep up\r\nhigh standards and work out plans to achieve their goals. If not, they\r\nmight end up leading lives of luxury and pomp devoid of any\r\npersonal accomplishment. The positive types among them are the\r\nmost-soughtafter type executives in governments or in private\r\nenterprises. The negative types devote time to sleep and daydreaming.\r" },
+                { 32, "This number can attract a variety of people. They\r\nhave a mass appeal and they come out with unique ideas and\r\ntechniques even without prior experience. This potent and forceful\r\nnumber can make anyone a prominent person. If they lead their life\r\nfollowing their intuition, life will be wonderful. If they listen to the\r\nadvice of others, failures may recur one after another. This number is\r\nsaid to be the epitome of wisdom and intuition. They have aboveaverage intelligence and a witty manner of speaking. They will\r\nbecome geniuses. Ups and downs will be common in their lives.\r\nThey will attain high positions in life and will be youthful in\r\nappearance even in old age.\r" },
+                { 41, "This number denotes the qualities of charming and\r\ncontrolling. They are renowned achievers and they have high ideals.\r\nThey are keen about their development and will be world-famous.\r\nWhen they become heady with success, they get into things or\r\nmatters which are beyond their capability. The failures that could\r\nresult from such situations will be cleverly hidden from the public\r\nscrutiny. They are found to lead successful lives." },
+                { 50, "They are very intelligent people and analyse\r\neverything thoroughly. They excel in education. Some people will\r\nshine as good teachers. Some others use their intelligence to make\r\nmoney. They are lucky after the age of 50. Their life span will\r\nimprove and they live longer.\r" },
+                { 59, "Similar to persons belonging to number 50, these\r\npeople are also research-minded. Their writings are full of humour\r\nand they would shine as “Humour Kings” among writers. They would\r\nbecome rich by writing and get excellent public support. Their aim\r\nwill be to earn money. They will enjoy permanent fortunes. They may\r\nsuffer from nervous diseases including paralysis. Hence, it is\r\nnecessary for them to have good habits and keep themselves\r\nhealthy.\r" },
+                { 68, "This number is lucky to a certain extent. However,\r\nlife that starts quite pleasantly may suddenly grind to a halt. They will\r\nget involved in schemes that they cannot execute and will be badly\r\nhurt. Their greed will spoil their career and life. The fortunes that\r\ncame through an unforeseen stroke of luck may soon disappear.\r\nHence, this number is not quite fortunate." },
+                { 77, "This number denotes sincere effort, selfconfidence and hard work. Support from others brings in profits,\r\nfame and honour. Life will be very enchanting. They reap full benefits\r\nof this number only if they repose faith in god. They get chances to\r\ntravel aboard.\r" },
+                { 86, "This number denotes those who come up in a\r\ngradual manner and the hard way. They get what they deserve. They\r\nearn the favour and help of rich people. With the help so received,\r\nthey will lead comfortable and happy lives. They will have good\r\nsavings and lead happy lives.\r" },
+                { 95, "This number signifies a disciplined life combined\r\nwith daring events and honour. They are successful in trade and\r\nachieve distinction. By trading in a variety of new things, they amass\r\nwealth. They are excellent orators and will become popular in their\r\nline of business.\r" },
+                { 104, "This number will bring success in life followed by\r\nunexpected changes. Though they can be good achievers, they can\r\nonly earn fame and not money. In other words, they become popular\r\nbut material success may be a far cry" },
+                //6 for VENUS
+                { 6, "This number signifies a peaceful life, a satisfied and\r\ncontented mind and a good standard of living. Being a single digit, it\r\ndoes not have much power.\r" },
+                { 15, "The determination to succeed in all the plans and\r\nearn money and the quest for achieving one’s ends are signifed by\r\nthis number. Lust, revenge and malice may push the people of this\r\nName number to a vile state of mind. They may become selfish\r\ngradually. A charming appearance and forceful speech will help them\r\nin achieving their interests. Though this name number is not one\r\nconducive to leading a virtuous life, it is one that is ideally suited for\r\npurely material success. An alluring personality, excellence in fine\r\narts and a witty nature yield positive results in any activity that can\r\ngenerate huge profits. Many people come forward to help them in\r\nneed. Life will be luxurious. If their birth number is also favourable,\r\nthese people will attain fame, wealth and distinction in all aspects of\r\nlife" },
+                { 24, "Those named under this number 24 will receive\r\nmany favours from the government. This number helps them to\r\nreach very high positions in their careers easily. They will marry\r\nthose who are much higher in status and wealth. If the name number\r\ncomes under 24, these people can be found progressing very fast in\r\nuniformed service like the Defense, Para-military forces and the\r\nPolice. Even if they join as the lowest rank in any field, this number\r\nwill help them to rise to very high position by its powerful vibrations." },
+                { 33, "This number signifies simultaneous growth in\r\ndivine grace and prosperity. Those with this name number with or\r\nwithout their knowledge attain spiritual enlightenment surprisingly.\r\nAlong with divine grace, they are blessed with abundant wealth and\r\nproperties like granaries, mills etc. They will have many luxurious\r\nthings at their disposal. They may have everlasting wealth.\r" },
+                { 42, "Those named under this number, even if they are\r\npoor at the beginning of their lives, will attain a very prominent rank\r\nor position in their careers. They may be greedy at times. They will\r\nhave thrifty bent of mind and are smart in saving money. They\r\nhesitate to part with money even for their own comforts in life.\r\nStrength of mind and grace will flourish.\r" },
+                { 51, "This is the most powerful of all numbers under six.\r\nIt signifies sudden progress. Those who were just commoners\r\nyesterday will become popular and prominent to-day. Unusual\r\ncircumstances will bring about an unexpected ascent in rank and\r\nstatus. Their body and mind will be bubbling with energy and\r\nbecome uncontrollable. They will be frequently lost in thought, or will\r\nbecome emotionally active and put in untiring efforts in their work.\r\nThese people who are active in body and mind cannot sleep\r\npeacefully. They become restless like a caged lion. To be precise,\r\nthese people will be ruled by an extra-ordinary energy or power of\r\nboth body and mind. As there is a possibility of these people making\r\nenemies who could threaten their lives, it is advisable for them not to\r\nhurt others’ sentiments or feelings. This number is considered to be\r\nfortunate, as it signifes the accumulation of abundant wealth." },
+                { 60, "This number signifies peace, prosperity,\r\nappreciation of fine arts, a balanced state of mind and wisdom. They\r\nare skilled conversationalists who can put forth very logical\r\narguments. Their family life will be happy and idealistic. This is quite\r\na fortunate number.\r" },
+                { 69, "The person named under this number will be like\r\nan uncrowned king in any business they are involved in. They\r\novertake others and retain their position safely by their own efforts.\r\nThey are majestic in appearance, very prosperous and will achieve\r\nawe-inspiring status. Spurred by emotions, they are known to spend\r\nmoney lavishly for their self-satisfaction. They possess majesty and\r\nwill lead extremely comfortable and luxurious lives. They are\r\nincomparable when it comes to charming others with their tact and\r\nspeech.\r" },
+                { 78, "They are the most righteous type among all the\r\nNumber 6 people. They have a great leaning towards their religion\r\nand sometimes follow orthodox beliefs. They can become good\r\npoets and can bring the listeners under their spell. They are very\r\ngenerous and are fond of social service. They earn or inherit large\r\nsums of money very easily. But, if they are not careful, they could\r\nlose all their possessions except the Divine grace. Some of them\r\nattain success in occult practices and will be respected by one and\r\nall in society" },
+                { 87, "This number can give mystic powers. Money will\r\nbe earned by devious and illegal means. In case of a “negative\r\nswing”, this number makes people steal at midnight and helps them\r\nto charm snakes and tame animals. If birth and destiny numbers are\r\nnot positive, this number could be related to criminals and bad\r\npeople. So, the less we discuss, the better." },
+                { 96, "This can give a combination of prosperity and\r\nhigher education. All desires will be fulfilled. They can excel in the\r\nfine arts easily. Women will be charmed easily by these people. This\r\nis a fortunate number." },
+                { 105, "This number can give fortunes, satisfactory\r\nenvironment, great fame and accumulation of wealth. It will beget\r\ngood progeny.\r" },
+                //7 for KETU
+                { 7, "This name number represents high principles and\r\nvirtuous qualities, which may flourish with divine grace. Unexpected\r\nchanges will take place. Efforts will not produce the desired results." },
+                { 16, "This number signifies speedy progress and a\r\nsudden downfall. Ancient texts depict this number by a picture\r\nshowing the shattering of a tall tower and a king’s head with his\r\ncrown falling from its top. This truth was proved when Japan (16) fell\r\nprey to the nuclear bombs. The Japanese Emperor was considered\r\nto be God-incarnate and his people would not even look at him from\r\nan elevated place. Unfortunately, the Americans bombed Japan\r\nstripping the Emperor of his status and the consequences are well\r\nknown even today. If your name number is 16, it is better to change it\r\nto some other lucky number. This number induces new imaginative\r\nthoughts which will be refected in the writings of the person.\r" },
+                { 25, "As this number gives good results in the end, it\r\ncan be considered a good number. These people will undergo many\r\ntrials in life. Every step in life will present problems and difficulties.\r\nThe victory gained over such problems will give them selfconfidence, spiritual growth and the support of those around them.\r\nThey are worldly-wise, known for clarity of thought and hence their\r\nactions will be well-planned. These people will establish ideals and\r\nstandards for themselves and will adhere to them at all costs. Just as\r\ngold when cleansed of all impurities becomes shiny and precious,\r\nthe lives of these people will end with respect and honour after many\r\ntrials. (Note the life of Mahatma Gandhi who used to sign as\r\nM.K.Gandhi).\r" },
+                { 34, "In a way, this number can also be called lucky.\r\nThis number will openly display the best qualities and capabilities of\r\nthese persons in an attractive manner. It improves their stature but\r\ncannot be considered as fortunate. If the birth number is also a\r\nfavourable one, they can earn enormous wealth quite easily. If not,\r\nearning money itself will become a problem. There will be some\r\nproblem in their family life. Most of the men will either be\r\naddicted to women or wine. Their minds easily succumb to\r\nsensuous pleasures. This is the most fearful aspect of this number.\r\n(Be cautious about it)! Hence, they are advised to change this Name\r\nnumber to a more fortunate one.\r" },
+                { 43, "This is a strange number. Their whole life will be\r\nrevolutionary. Whatever profession in which they are involved, this\r\nnumber produces new enemies. They have the tendency to resign\r\nfrom their jobs often. They will be constantly bringing out extreme\r\nideas. They have extraordinary powers of imagination, speaking and\r\nwriting as in the case of the other name numbers under 7. Their\r\ndesires will be fulfilled at the end. This number, which is regarded as\r\nsomewhat unlucky, indicates trials, great obstacles and revolutionary\r\nchanges. They are sure to succeed in their ideals. (It is unlucky in\r\nthe sense that they do not enjoy the luxuries or comforts of a\r\npeaceful life. Even their success will not yield them any personal\r\ngains). Their shrewdness increases with age, but they will encounter\r\nmore criticism than praise for their capabilities and intelligence." },
+                { 52, "This number also signifies some type of\r\nrevolutionary qualities. If the birth number is favourable it could bring\r\nworld renown. They readily offer a solution to any problem and can\r\ncharm many. If they are on the spiritual path, they can attain great\r\npowers and immense popularity. All their desires will be fulfilled.\r\nThey can bring about a new era in the lives of others. (This\r\npower can also be found in number 25 to a certain extent). Their end\r\nwill come abruptly, leaving their work unaccomplished. Although their\r\npersonal life will be fraught with problems, they are sure to be\r\nfamous and favoured by all.\r" },
+                { 61, "These people will quit a comfortable life and try\r\nnew avenues according to their wishes. Successes and failures\r\ncome in succession. If they can take care of their health, their later\r\nyears will be quite fruitful helping them win prestigious posts. Though\r\nthey may seem to be leading happy lives, in reality, they will be\r\nunhappy in their family lives. They spend much time in making new\r\nefforts and will achieve victory. They will earn great fame.\r" },
+                { 70, "People represented by this number are of extreme\r\nnature. Their comfortable life gets disturbed by circumstances. There\r\nare frequent disappointments, failures and problems. But the later\r\nyears will be fruitful, successful and filled with blessings. This\r\nnumber does not possess much power. If their destiny number is\r\nfavourable, these people will be happy during their final years. If not,\r\ntheir problems may drown them in misery" },
+                { 79, "People of this number tend to suffer very badly in\r\nthe beginning of their lives due to many difficulties. Later, these\r\npeople will rise quickly by their cleverness and sheer will power.\r\nThey will settle down very comfortably and will succeed in their\r\nendeavours. They will have popular support, a comfortable life and\r\nwill achieve enduring success. They become very fortunate with the\r\npassage of time and also become great personalities.\r" },
+                { 88, "This number gives spiritual progress. They are\r\ngenerous and compassionate. They are affectionate to all creatures\r\nand will become popular" },
+                { 97, "This number gives proficiency in the scriptures and\r\nfine arts. It also gives eminence in spiritual career. They will be\r\nsuccessful in all their efforts and will be prosperous due to their\r\nastounding achievements in chosen fields." },
+                { 106, "There will be drastic changes in life. They will\r\nexperience many problems during their middle age. Their later years\r\nwill be comfortable. They get into big troubles that cannot be solved\r\neasily. This number is not a lucky one. Greed for worldly things will\r\nsupersede the interest in seeking divine grace.\r" },
+                //8 for SATURN
+                { 8, "This Name number gives you great success in\r\nspiritual life. If they have no control over pleasures, success will\r\ndelayed. After a big struggle they may succeed. They will have to\r\nface unexpected dangers and difficult circumstances in life.\r" },
+                { 17, "This name number gives demonic qualities while\r\npursuing the goals. It brings many problems and trials. However,\r\nthey will persistently struggle without giving up. Failures will prompt\r\nthem to struggle more actively. In the end they will be successful,\r\nand they get permanent prosperity and great fame. Some of them\r\nrisk their lives to attain their goals and so achieve progress. The\r\nworld can never forget them. This number can give mystic powers\r\nalso." },
+                { 26, "This number denotes poverty in old age and\r\nfruitless efforts. Those who have this name number undergo great\r\nlosses due to friends and partners. Circumstances lead them to\r\nfailure and confusion. This number reduces one’s span of life and\r\nearns enemies who may even go to the extent of murdering them.\r\nThose with Name numbers 26 at frst begin their life with great\r\nprinciples and later change their minds and end up only in pursuit of\r\nmoney and status, (Based on their general qualities of number 8,\r\nthey will be a little more fortunate in their later years)." },
+                { 35, "This number outwardly seems to be fortunate but\r\nthe person will suffer losses because of friends and associates.\r\nThese people will become very rich and popular but later lose all\r\ntheir money. Unexpected accidents may happen. This number\r\nhelps in earning money through illegal means. Today’s friends will\r\nbecome tomorrow’s foes. They are very fickle- minded. Expenses\r\nwill mount. This number would create severe incurable pain in the\r\nstomach. (For those with heart problems, this Name number will be a\r\ncurative factor). Those with this name number must be very careful\r\nin their large business endeavours." },
+                { 44, "This number helps in earning money easily.\r\nIndustries involving many people, like cinema theatres, printing\r\npresses, coal and iron mining, painting, making of furniture and\r\nsports goods, and organizing contests will help them earn a good\r\nincome. Hiring out vehicles like buses, trucks and cars will also be\r\nrewarding. They can also run banks. One day everything may come\r\nto a halt. Only the owner will enjoy the profits in a proprietary\r\nconcern. There is danger from fire and collapse of building. This\r\nnumber indicates that they may have to spend some time in\r\nprison. Their minds will go astray towards bad ways. Their lives may\r\nbe comfortable outside prison. Generally, either they suffer from\r\nsome disease or spend some time in prison, especially when the\r\nbirth and destiny numbers are also not harmonious.\r" },
+                { 53, "They experience success and failure in the\r\nbeginning of life itself. As they grow older, their lives will become\r\nsteadier and they will become well-known. Though they are\r\nintelligent, they are bound to get into problems beyond their control.\r\nThese people, who can convert failure into success, will perform\r\ngood deeds and earn prestige and popularity. (This is an unstable\r\nnumber. Only if the birth number is favourable, will it bring desirable\r\neffects). They will be lucky in their old age.\r" },
+                { 62, "Generally it will give great fame, victories and a\r\ncomfortable life. At times, great dangers and failures alternatively\r\naffect them. It could bring about serious enmity. It also causes\r\nmisunderstanding among relatives. Family life will not be pleasant.\r\nIntellectual faculties will improve. These people can charm everyone\r\neasily. This name number helps in charming enemies too!" },
+                { 71, "This number which brings about obstacles initially\r\nwill later shower prosperity. They will be good counsellors to others\r\nbecause of their intelligence. This number may be considered\r\nfortunate." },
+                { 80, "This number has strange mystic powers, but may\r\nlead to grave dangers if the date of birth is not favourable. Research\r\nin theology will be successful. Nature will change its course and help\r\nthem. Though their lives are full of dangers and anxieties, they will\r\nbe comfortable. Miracles will happen. It is a fortunate number." },
+                { 89, "This number, which also signifies benefits, brings\r\nproblems initially. They have a helping tendency and they will\r\nacquire great riches like land, houses and jewellery. Women are\r\nattracted to them easily. Society will respect the women of this Name\r\nnumber. They have a combination of beauty and wealth. They lead\r\nfearless lives with the help of their great power of speech and action.\r\nInitially, fire accidents may occur in their lives." },
+                { 98, "Like the people under Number 71, these people\r\nare also intelligent. But their lives are filled with worries and desires.\r\nThough they are intelligent, they may not benefit from that quality.\r\nDifficulties and chronic diseases may affect them.\r" },
+                { 107, "This number will bring fame and success. If they\r\nare men, they will have problems due to women and if they are\r\nwomen, it will be from men. Even if they attain wealth, life will not be\r\ncomfortable. However, they will be famous and influential.\r" },
+                //9 for MARS
+                { 9, "If the name comes under this number, it signifies\r\nwisdom and capability. It also denotes travel, struggles against odd\r\nsituations and victory in the end. When they finally succeed, they will\r\nhave a long life of luxury." },
+                { 18, "This name number, which signifies the decline of\r\ndivinity, will bring in problems, procrastination in all matters,\r\ndeviousness, and dangerous enemies. Their selfishness may induce\r\nthem to indulge in antisocial activities. They follow evil ways\r\nconsciously and become highly selfish. Life devoid of peace and rest\r\nwill be the order of the day. This number signifies growth of personal\r\ndesires at the cost of virtue. Desires will come to an end. Divine\r\ngrace will get destroyed. (Hindu Epics record that Mahabharat war\r\nwas fought for 18 days and 18 divisions fought the war in which the\r\nPandavas had to kill their own elders and gurus in the battle.\r\nAlthough considered holy by the Hindus, it is the eighteen-chaptered\r\nBhagavat Gita that spurred Arjuna into the war). This number, which\r\ndenotes jealousy, malice and dangers due to fire and weapons, is\r\nnot considered desirable." },
+                { 27, "This number signifies a clear mind and\r\nintelligence, unceasing hard work, accumulation of wealth, all round\r\ninfluence and positions of prominence and high rank. Especially in\r\nuniformed services like police, army, etc., they will rise very high in\r\ntheir ranks. This is as fortunate as number 24, which has been\r\nexplained earlier in this book. They will be respected and treated as\r\nthe best in their profession or service. They like to do social service\r\nand will be involved also in matters that would benefit them. This is a\r\nvery fortunate number that brings spirituality and magical powers." },
+                { 36, "This number can raise even poor people to an\r\nenviable status and make them live in mansions. Only when these\r\npeople go away from their place of birth to distant regions, do they\r\nattain success. They will travel extensively and occupy high\r\npositions. This number, though it appears very fortunate, will cause\r\nproblems within the family. They may be surrounded by disloyal\r\npeople.\r" },
+                { 45, "This is a lucky Name number. Even those who\r\nstruggle at lower levels will be raised to a higher status and\r\npositions. They are good conversationalists and will be found in\r\ngatherings that involve entertaining people. These hard-working\r\npeople will earn outstanding places in their career. They will achieve\r\ntheir goals at any cost. People would wonder if their life was a big\r\nshow. Even though they may have nagging problems, they will retain\r\ntheir smile and will never allow anyone to know their problems. This\r\nnumber, which assures a comfortable life, fame and wealth, is a\r\ndesirable one. Diseases will also be cured." },
+                { 54, "This number will give success step by step.\r\nFailures can also happen. They may begin their lives with prestige,\r\nreputation and prosperity. Stubbornness and thoughtless decisions\r\nwill make them lose their name and fame. Greed is their worst\r\nenemy that could make them lose all their wealth if they are not\r\ncareful. In the fag end of their lives, they may achieve success. Their\r\nlife will be without freedom and they will be under the control of\r\nothers.\r" },
+                { 63, "This is also a lucky number. However, if this\r\ncomes as a Name number, it will lead one into wrong ways. The\r\nancient texts describe this number as one related to thieves; so the\r\nless said, the better!\r" },
+                { 72, "This is the best of all numbers under 9. Although\r\nthese people struggle in their early years, they later enjoy life with all\r\ncomforts. A mind devoid of doubt will be filled with joy. The wealth\r\nacquired by these people will remain intact in their family for many\r\nfuture generations. Money keeps on coming continuously, without\r\nfail. (Businessmen should take note of this advantageous number). It\r\nwill also bring repute. This number signifies permanent wealth." },
+                { 81, "This number signifies a fortunate life. This will\r\ngive development, good position and wealth. If these people are not\r\ncareful, their luck could change for the worse. They will have\r\nopportunities to become teachers." },
+                { 90, "As this number derives its full power from number\r\n9, its people will go to any extent to get their desires fulfilled. Victory\r\nwill be certain. They will become very wealthy and famous. For those\r\nwho are interested in spiritual pursuits this number is not desirable.\r" },
+                { 99, "This Name number will lure its native to devious\r\nways. Success will come along with enmity. This number signifies\r\nbeing attacked by enemies, and hence it is not a good number.\r\n(However they will be blessed with education, wealth and\r\nprosperity).\r" },
+                { 108, "This number can give high positions and\r\nsuccess. Everything will happen according to their desire. As this\r\nnumber induces its people to make good efforts resulting in success,\r\nit is a very lucky number" },
+            };
+
+            //based on name number get predictions
+            //check if exists first
+            var predictionExist = nameNumberPredictions.ContainsKey(nameNumber);
+
+            //only if number exist
+            if (predictionExist) { return nameNumberPredictions[nameNumber]; }
+
+            //let caller know fail
+            return $"NO Prediction for name number {nameNumber}";
+        }
+
+        #endregion
+
         #region AVASTA
 
         /// <summary>

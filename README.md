@@ -44,10 +44,10 @@ The sage **`Parashara taught everybody`** the ways of astrology without asking m
 
 
 # 🎯 Perfect Predictions
-[![LifePredictor](https://vedastro.org/images/life-predictor-alertbox-examples.jpg)](https://vedastro.org/LifePredictor)   
-[![LifePredictor](https://vedastro.org/images/HallmarkCharts-SteveJobs-1982-2015.png)](https://vedastro.org/LifePredictor/SteveJobs1955)   
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-steve.jpg)](https://vedastro.org/LifePredictor)   
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-hitler.jpg)](https://vedastro.org/LifePredictor)   
 [![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/Match)   
-[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/StarsAboveMe)   
+[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Horoscope)   
 
 
 # 📊 +200 Astro API Calls & FREE (yeah you read right!)

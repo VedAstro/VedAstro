@@ -6,7 +6,7 @@
 <div id="@Id" class="@ExtraClass">
     <IconTitle Title="Chart" IconName="twemoji:dotted-six-pointed-star" TitleHolder="h4" />
     <div class="vstack">
-        <img id="ChartImageElementKundali" style="width: 352px;" src="https://vedastroapi.azurewebsites.net/api/Calculate/SouthIndianChart/Location/Bengaluru/Time/11:00/25/07/1984/+00:00/">
+        <img id="ChartImageElementKundali" style="width: 352px;" src="@IndianChartUrl">
     </div>
 </div>
 
@@ -14,11 +14,8 @@
 @code {
 
     private ElementReference imageHolder;
-    private bool isReady { get; set; } = false;//start as not ready
 
-    private Time? time { get; set; }
-    private string SkyChartUrl { get; set; } = "#";
-    private string SkyChartUrlGif { get; set; } = "#";
+    private string IndianChartUrl { get; set; } = "#";
 
     [Parameter]
     public string Id { get; set; }
@@ -26,29 +23,15 @@
     [Parameter]
     public string ExtraClass { get; set; }
 
-    private string GetUrl(string ending)
+
+    //chart style can be "South" or "North"
+    public async Task Update(Time finalTime, string chartStyle)
     {
+        //compile URL for generating chart
+        var url = $"{AppData.URL.ApiUrlDirect}/Calculate/{chartStyle}IndianChart{finalTime.ToUrl()}";
 
-
-        //if null end here
-        //if (string.IsNullOrEmpty(stringWithSpace)) { return ""; }
-
-        var url = $"{AppData.URL.ApiUrl}{time?.ToUrl()}/{ending}";
-        return url;
-
-    }
-
-    public async Task Update(Time finalTime)
-    {
-        isReady = false;
-
-        time = finalTime; //save value to be access later
-        SkyChartUrl = GetUrl("SkyChart");
-        SkyChartUrlGif = GetUrl("SkyChartGIF");
-
-        await _jsRuntime.InvokeVoidAsync(JS.SkyChartInit, imageHolder, SkyChartUrl);
-
-        isReady = true;
+        //add the url to image tag
+        IndianChartUrl = url;
 
         //needed to make appear else no change will appear
         StateHasChanged();

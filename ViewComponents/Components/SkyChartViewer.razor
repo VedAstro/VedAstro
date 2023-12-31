@@ -10,7 +10,7 @@
         <IconTitle Title="Sky Chart" IconName="emojione:night-with-stars" TitleHolder="h4" />
     }
     <div class="vstack">
-        <img id="" style="" src="https://vedastroapi.azurewebsites.net/api/Calculate/SkyChart/Location/Singapore/Time/00:00/17/12/2023/+08:00">
+        <img id="" style="" src="@SkyChartUrl">
     </div>
 
 </div>
@@ -24,7 +24,6 @@
 
     private Time? time { get; set; }
     private string SkyChartUrl { get; set; } = "#";
-    private string SkyChartUrlGif { get; set; } = "#";
 
     [Parameter]
     public string Id { get; set; }
@@ -32,32 +31,20 @@
     [Parameter]
     public string ExtraClass { get; set; }
 
-    private string GetUrl(string ending)
-    {
-        
-
-        //if null end here
-        //if (string.IsNullOrEmpty(stringWithSpace)) { return ""; }
-
-        var url = $"{AppData.URL.ApiUrl}{time?.ToUrl()}/{ending}";
-        return url;
-
-    }
 
     public async Task Update(Time finalTime)
     {
-        isReady = false;
 
-        time = finalTime; //save value to be access later
-        SkyChartUrl = GetUrl("SkyChart");
-        SkyChartUrlGif = GetUrl("SkyChartGIF");
+        //compile URL for generating chart
+        //https://vedastroapi.azurewebsites.net/api/Calculate/SkyChart/Location/Singapore/Time/00:00/17/12/2023/+08:00
+        var url = $"{AppData.URL.ApiUrlDirect}/Calculate/SkyChart{finalTime.ToUrl()}";
 
-        await _jsRuntime.InvokeVoidAsync(JS.SkyChartInit, imageHolder, SkyChartUrl);
-
-        isReady = true;
+        //add the url to image tag
+        SkyChartUrl = url;
 
         //needed to make appear else no change will appear
         StateHasChanged();
+
     }
 
 

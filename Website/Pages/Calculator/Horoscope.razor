@@ -121,7 +121,7 @@
          
         <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
         
-        <IndianChart Id="IndianChart" ExtraClass="scrollspy"/>
+        <IndianChart Id="IndianChart" ExtraClass="scrollspy" @ref="indianChartViewer"/>
 
         <div id="PlanetDataTable2" class="scrollspy" ></div>
 
@@ -193,6 +193,7 @@
     private PlanetChart planetChart;
 
     private SkyChartViewer skyChartViewer;
+    private IndianChart indianChartViewer;
 
     /// <summary>
     /// Param used in URL to set Person ID via URL
@@ -293,6 +294,9 @@
 
         //update sky chart
         await skyChartViewer.Update(_selectedPerson.BirthTime);
+
+        //update Indian Chart
+        await indianChartViewer.Update(_selectedPerson.BirthTime, SelectedChartStyle);
 
         //update planet chart
         planetChart.UpdateTime(_selectedPerson.BirthTime);

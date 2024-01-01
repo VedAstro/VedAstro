@@ -8715,6 +8715,27 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Calculate aspect angle between 2 planets
+        /// </summary>
+        public static double PlanetAspectDegree(PlanetName receiver, PlanetName trasmitter, Time time)
+        {
+            //Finding Drishti Kendra or Aspect Angle
+            var planetNirayanaLongitude = Calculate.PlanetNirayanaLongitude(receiver, time).TotalDegrees;
+            var nirayanaLongitude = Calculate.PlanetNirayanaLongitude(trasmitter, time).TotalDegrees;
+            var dk = planetNirayanaLongitude - nirayanaLongitude;
+
+            if (dk < 0) { dk += 360; }
+
+            //get special aspect if any
+            var vdrishti = FindViseshaDrishti(dk, trasmitter);
+
+            var final = FindDrishtiValue(dk) + vdrishti;
+
+            return final;
+
+        }
+
+        /// <summary>
         /// Gets all planets the transmitting aspect to inputed planet
         /// </summary>
         public static List<PlanetName> PlanetsAspectingPlanet(PlanetName receivingAspect, Time time)

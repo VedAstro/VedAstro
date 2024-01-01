@@ -237,19 +237,25 @@
         //uses tags to detect correct version
         var latestPublishedCommitNo = await WebsiteTools.GetLatestCommitNumber();
 
+        #region RELEASE
+
         //if lower raise warning
         if (currentCommitNo < latestPublishedCommitNo)
         {
             await AppData.JsRuntime.ShowAlert(
                 icon: "warning",
-                title: "VedAstro Needs Update!",
+                title: "Please Update!",
                 descriptionText: "Press <kbd>CTRL + SHIFT + R</kbd> to get <strong>latest</strong> version. " +
-                                 $"Also try clearing your <strong>Cookies & Cache</strong>. " +
-                                 $"{currentCommitNo} --> {latestPublishedCommitNo}");
+                                 $"Also try clearing your <strong>Cookies & Cache</strong>. <br>" +
+                                 $"<span style=\"font-size: 14px;color: grey;\">Your version is {currentCommitNo}, latest is {latestPublishedCommitNo}</span>");
 
             //reloads page
             await AppData.JsRuntime.ReloadPage();
         }
+
+        #endregion
+
+
     }
 
     /// <summary>

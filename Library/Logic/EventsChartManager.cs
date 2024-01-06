@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -1478,7 +1478,7 @@ namespace VedAstro.Library
                 //start as empty event
                 var prevEventList = new Dictionary<int, EventName>();
 
-                //generate 1px (rect) per time slice (horizontal)
+                //convert each time slice to a stack of event rects
                 foreach (var slice in timeSlices)
                 {
                     //get events that occurred at this time slice
@@ -1506,9 +1506,10 @@ namespace VedAstro.Library
                         minNatureScore = foundEventList.Aggregate((l, r) => l.NatureScore < r.NatureScore ? l : r).NatureScore;
                     }
 
+                    //generate each event rect at a time
                     foreach (var foundEvent in foundEventList)
                     {
-                        //if current event is different than event has changed, so draw a black line
+                        //if current event is different from event has changed, so draw a black line
                         int finalYAxis = yAxis + verticalPosition;
                         var prevExist = prevEventList.TryGetValue(finalYAxis, out var prevEventName);
                         var isNewEvent = prevExist && (prevEventName != foundEvent.Name);
@@ -1562,7 +1563,6 @@ namespace VedAstro.Library
                     }
 
 
-
                     //set position for next element in time slice
                     horizontalPosition += widthPerSlice;
 
@@ -1611,12 +1611,13 @@ namespace VedAstro.Library
                 //exp: -4 bad + 5 good = 1 total nature score
                 double totalNatureScore = summarySlice.Value.NatureScore;
 
+                var summaryColor = GetSummaryColor(totalNatureScore, minValue, maxValue);
                 var rect = $"<rect " +
                            $"x=\"{xAxis}\" " +
-                           $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+                           $"y=\"{yAxis}\" " + //y-axis placed here instead of parent group, so that auto legend can use the y-axis
                            $"width=\"{WidthPerSlice}\" " +
                            $"height=\"{summaryRowHeight}\" " +
-                           $"fill=\"{GetSummaryColor(totalNatureScore, minValue, maxValue)}\" />";
+                           $"fill=\"{summaryColor}\" />";
 
                 //add rect to row
                 colorRow += rect;

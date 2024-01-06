@@ -19,9 +19,11 @@
 
 class ID {
     static CursorLineLegendTemplate = `#CursorLineLegendTemplate`;
+    static TimeRowLegendTemplate = `#TimeRowLegendTemplate`;
     static CursorLineLegendCloneCls = ".CursorLineLegendClone";
     static LifeEventNameLabelCls = ".name-label";
     static LifeEventVerticalLineCls = ".vertical-line";
+    static LifeEventDescriptionLabelCls = ".description-label";
     static CursorLineLegendDescriptionHolder = "#CursorLineLegendDescriptionHolder";
     static EventChartHolder = ".EventChartHolder"; //main chart SVG element, used class since ID is unique number
     static EventsChartSvgHolder = "#EventsChartSvgHolder"; //default expected parent in page to inject chart into
@@ -61,6 +63,7 @@ class EventsChart {
         this.AllEventRects = this.$SvgChartElm.find(ID.EventListHolder).children("rect");
         this.$CursorLineLegendDescriptionHolder = this.$SvgChartElm.find(ID.CursorLineLegendDescriptionHolder);
         this.$CursorLineLegendTemplate = this.$SvgChartElm.find(ID.CursorLineLegendTemplate);
+        this.$TimeRowLegendTemplate = this.$SvgChartElm.find(ID.TimeRowLegendTemplate);
         this.$CursorLineLegendDescription = this.$SvgChartElm.find(ID.CursorLineLegendDescription);
         this.$CursorLineLegendDescriptionBackground = this.$SvgChartElm.find(ID.CursorLineLegendDescriptionBackground);
         this.$CursorLineLegendDescriptionHolder = this.$SvgChartElm.find(ID.CursorLineLegendDescriptionHolder);
@@ -294,6 +297,36 @@ class EventsChart {
         //glow
         $verticalLine.css('filter', 'drop-shadow(0px 0px 1px rgb(255 0 0))');
 
+        //make hidden description box visible (if any text)
+        var $descBox = $parent.children(ID.LifeEventDescriptionLabelCls);
+        if ($descBox.text().trim() !== '') { $descBox.show(); }
+
+    }
+
+    //on mouse leave life event name label, unhighlight event line
+    static onMouseLeaveLifeEventHandler(mouse, instance) {
+
+        //get label that has mouse over it
+        var targetElement = mouse.currentTarget;
+
+        //find the main vertical line for life event
+        var $parent = $(targetElement).parent();
+        var $verticalLine = $parent.siblings(ID.LifeEventVerticalLineCls);
+
+        //set back normal line width
+        $verticalLine.attr('width', '2');
+
+        //set line color back to default
+        $verticalLine.attr('fill', '#1E1EEA');
+
+        //glow
+        $verticalLine.css('filter', '');
+
+        //hide description box if not major
+        var $descBox = $parent.children(ID.LifeEventDescriptionLabelCls);
+        var isNotMajor = $parent.parent()[0].getAttribute("eventweight") !== "Major";
+        if (isNotMajor) { $descBox.hide(); }
+
     }
 
     //converts VedAstro date format to Google Calendar format
@@ -316,28 +349,8 @@ class EventsChart {
         };
     }
 
-    //on mouse leave life event name label, unhighlight event line
-    static onMouseLeaveLifeEventHandler(mouse, instance) {
-
-        //get label that has mouse over it
-        var targetElement = mouse.currentTarget;
-
-        //find the main vertical line for life event
-        var $parent = $(targetElement).parent();
-        var $verticalLine = $parent.siblings(ID.LifeEventVerticalLineCls);
-
-        //set back normal line width
-        $verticalLine.attr('width', '2');
-
-        //set line color back to default
-        $verticalLine.attr('fill', '#1E1EEA');
-
-        //glow
-        $verticalLine.css('filter', '');
-    }
-
-    //Gets a mouses x axis relative inside the given element
-    //used to get mouse location on SVG chart, zoom auto corrected 
+    //Gets a mouses x-axis relative inside the given element
+    //used to get mouse location on SVG chart, zoom autocorrected 
     static getMousePositionInElement(mouseEventData, instance) {
 
         //get relative position of mouse in Dasa view
@@ -656,12 +669,12 @@ class EventsChart {
             toggleDescriptionBox();
 
             // Generate summary row at the bottom showing count of good & bad
-            generateSummaryRow(allEventRectsAtX, goodCount, badCount);
+            //generateSummaryRow(allEventRectsAtX, goodCount, badCount);
 
 
             //-----------------------------------------LOCAL FUNCS-------------------------------
 
-            //code to draw one event row
+            //code to draw one event row box
             function drawEventRow(svgEventRect, mouseRoundedY, allElementsAtX) {
 
                 //STAGE 1
@@ -672,14 +685,10 @@ class EventsChart {
                 if (!eventName) { return; }
 
                 var eventDescription = svgEventRect.getAttribute("eventdescription");
+                var natureScore = svgEventRect.getAttribute("naturescore");
                 var color = svgEventRect.getAttribute("fill");
                 var newRowYAxis = parseInt(svgEventRect.getAttribute("y"));//parse as num, for calculation
 
-                //count good and bad events for summary row
-                var eventNatureName = "";// used later for icon color
-                //NOTE: this could fail if change in generator
-                if (color === EventsChart.BadColor) { eventNatureName = "Bad", badCount++; }
-                if (color === EventsChart.GoodColor) { eventNatureName = "Good", goodCount++; }
 
                 //STAGE 2
                 //TIME & AGE LEGEND
@@ -697,15 +706,24 @@ class EventsChart {
                 //position the group holding the legend over the event row which the legend represents
                 newLegendRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 2})`);//minus 2 for perfect alignment
 
-                //set event name text & color element
-                var $textElm = newLegendRow.children("text");
-                var iconElm = newLegendRow.children("use");
-                $textElm[0].innerHTML = eventName;
-                iconElm.attr("xlink:href", `#CursorLine${eventNatureName}Icon`); //set icon color based on nature
+                //#set data into view
+                //nature score 
+                var $natureScoreElm = newLegendRow.children(".nature-score"); //GET
+                let numberOnly = Math.abs(parseInt(natureScore)); //remove "-" symbol
+                $natureScoreElm[0].innerHTML = numberOnly;                   //SET
+
+                //icon color
+                var iconElm = newLegendRow.children(".icon-holder");//GET
+                iconElm.attr("fill", color);                        //SET  
+
+                //event name next to nature score
+                var $eventNameElm = newLegendRow.children(".event-name");//GET
+                $eventNameElm[0].innerHTML = eventName;                  //SET
+
 
                 //STAGE 4
                 //GENERATE DESCRIPTION ROW LOGIC
-                //check if mouse in within row of this event (y axis)
+                //check if mouse in within row of this event (y-axis)
                 var elementTopY = newRowYAxis;
                 var elementBottomY = newRowYAxis + EventsChart.RowHeight;
                 var mouseWithinRow = mouseRoundedY >= elementTopY && mouseRoundedY <= elementBottomY;
@@ -719,7 +737,7 @@ class EventsChart {
                     //highlight event name row
                     var $backgroundElm = newLegendRow.children("rect");
 
-                    $textElm.attr('font-weight', '700');
+                    $eventNameElm.attr('font-weight', '700');
                     $backgroundElm.attr("fill", "#0096FF"); //bright blue
                     $backgroundElm.attr("opacity", 1);//solid
 
@@ -828,7 +846,7 @@ class EventsChart {
 
                 function drawTimeAgeLegendRow() {
                     //make a copy of the template
-                    var newTimeLegend = instance.$CursorLineLegendTemplate.clone();
+                    var newTimeLegend = instance.$TimeRowLegendTemplate.clone();
 
                     //modify the template with new data
                     newTimeLegend.removeAttr('id'); //remove the clone template id
@@ -851,7 +869,7 @@ class EventsChart {
                     newTimeLegend.children("text").text(`${hourMin} ${date}  AGE: ${age}`);
 
                     //replace circle with clock icon
-                    newTimeLegend.children("use").attr("xlink:href", ID.CursorLineClockIcon);
+                    //newTimeLegend.children("use").attr("xlink:href", ID.CursorLineClockIcon);
                 }
             }
 
@@ -916,8 +934,4 @@ class EventsChart {
         }
     }
 }
-
-
-
-
 

@@ -5933,6 +5933,45 @@ namespace VedAstro.Library
             return ishtaMore ? 1 : -1;
         }
 
+
+        /// <summary>
+        /// Used for judging dasa good or bad, Bala book pg 110
+        /// output range -5 to 5
+        /// </summary>
+        public static double PlanetIshtaKashtaScoreDegree(PlanetName planet, Time birthTime)
+        {
+            //get both scores of good and bad
+            var ishtaScore = PlanetIshtaScore(planet: planet, birthTime: birthTime);
+            var kashtaScore = PlanetKashtaScore(planet: planet, birthTime: birthTime);
+
+            //final nature of event
+            var ishtaMore = ishtaScore > kashtaScore;
+
+            //NOTE: ASTRO THEORY
+            //caculate the difference between Good and Bad scores in percentage
+            //so the more difference there is the greater the Good or Bad
+            //if the difference is very small, than it makes sense that they
+            //should cancel each other.
+            var baseVal = ishtaMore ? ishtaScore : kashtaScore;
+            var difference = Math.Abs(value: ishtaScore - kashtaScore);
+            var ratio = difference / baseVal;
+            var percentage = ratio * 100;
+
+            var finalVal = 0.0;
+            if (ishtaMore)
+            {
+                //remap the
+                finalVal = percentage.Remap(fromMin: 0, fromMax: 100, toMin: 0, toMax: 4);
+            }
+            else
+            {
+                //remap the
+                finalVal = percentage.Remap(fromMin: 0, fromMax: 100, toMin: -4, toMax: 0);
+            }
+
+            return Math.Round(finalVal, 3);
+        }
+
         /// <summary>
         /// Experimental Code, stand back!
         /// Kashta Phala (Bad Strength) of a Planet
@@ -8855,7 +8894,7 @@ namespace VedAstro.Library
         /// <summary>
         /// convert the planets strength into a value over hundred with max & min set by strongest & weakest planet
         /// </summary>
-        private static double PlanetPowerPercentage(PlanetName inputPlanet, Time time)
+        public static double PlanetPowerPercentage(PlanetName inputPlanet, Time time)
         {
             //get all planet strength for given time (horoscope)
             var allPlanets = Calculate.AllPlanetStrength(time);

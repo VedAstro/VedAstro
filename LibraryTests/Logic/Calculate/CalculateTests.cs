@@ -12,6 +12,8 @@ namespace VedAstro.Library.Tests
     public class CalculateTests
     {
         public static Time StandardHoroscope = new("14:20 16/10/1918 +05:30", GeoLocation.Bangalore);
+        public static Time NearestHoroscope = new("12:44 23/04/1994 +08:00", GeoLocation.Ipoh);
+        public static Time MarilynMonroe = new("09:30 01/06/1926 -08:00", GeoLocation.LosAngeles);
 
         public static Time HavelockEllis = new("08:15 02/02/1859 +00:00", new GeoLocation("", 0.0957, 51.377));
 
@@ -529,14 +531,14 @@ namespace VedAstro.Library.Tests
 
             //14:20 16/10/1918 +05:30 == 7 birth number
             Assert.AreEqual(7, birthNumber);
-            
+
             birthNumber = Calculate.BirthNumber(JohnFKennedy);
 
             //03:15 29/05/1917 +00:00 == 2 birth number
             Assert.AreEqual(2, birthNumber);
         }
 
-        
+
         //PASS
         [TestMethod()]
         public void DestinyNumberTest()
@@ -545,7 +547,7 @@ namespace VedAstro.Library.Tests
 
             //14:20 16/10/1918 +05:30 == 27 == 9 birth number
             Assert.AreEqual(9, destinyNumber);
-            
+
             destinyNumber = Calculate.DestinyNumber(JohnFKennedy);
 
             //03:15 29/05/1917 +00:00 == 34 == 7 birth number
@@ -585,7 +587,24 @@ namespace VedAstro.Library.Tests
 
             nameNumber = Calculate.NameNumber("Joseph Stalin");
             Assert.AreEqual(46, nameNumber);
+
+        }
+
+        [TestMethod()]
+        public void PlanetAspectDegreeTest()
+        {
+            var testResult = Calculate.PlanetAspectDegree(PlanetName.Mars, PlanetName.Sun, StandardHoroscope);
+
+        }
+
+        [TestMethod()]
+        public void PlanetIshtaKashtaScoreDegreeTest()
+        {
+            var testResult = Calculate.PlanetIshtaKashtaScoreDegree(PlanetName.Sun, NearestHoroscope);
             
+            var testResult2 = Calculate.PlanetIshtaKashtaScoreDegree(PlanetName.Jupiter, MarilynMonroe);
+            var testResult3 = Calculate.PlanetIshtaKashtaScoreDegree(PlanetName.Saturn, MarilynMonroe);
+            var testResult4 = Calculate.PlanetIshtaKashtaScoreDegree(PlanetName.Ketu, MarilynMonroe);
         }
     }
 }

@@ -14,6 +14,8 @@
 //░█─░█ ░█▄▄▄ 　 ░█─░█ ░█──▀█ ░█▄▄▄ ░█▄▀▄█ 　 ░█─░█ ░█▄▄▄ 　 ░█▄▄▄ ▄▀░▀▄ ▄█▄ ░█▄▄▄█ ─░█── ░█▄▄▄ ░█▄▄▀
 
 
+//MAN RISE & FALL NOT TO THEIR DICTUM, BUT GOD'S
+
 
 
 using Azure;
@@ -876,7 +878,7 @@ namespace API
 
         /// <summary>
         /// Given a cache generator function and a name for the data
-        /// it calculate and save data to cache Data Blob storage
+        /// it'll calculate and save data to cache Data Blob storage
         /// </summary>
         public static async Task<BlobClient> ExecuteAndSaveToCache(Func<Task<string>> cacheGenerator, string cacheName, string mimeType = "")
         {

@@ -104,6 +104,7 @@
         public const string VSLifeSharePublicSession = "/VSLifeSharePublicSession";
         public const string PrivateServer = "/PrivateServer";
         public const string JoinOurFamily = "/JoinOurFamily";
+        public const string BodyTypes = "/BodyTypes";
         public const string Contact = "/Contact";
         public const string MadeOnEarth = "/MadeOnEarth";
         public const string FeatureList = "/FeatureList";

@@ -1071,7 +1071,6 @@ namespace VedAstro.Library
             return value;
         }
 
-
         /// <summary>
         /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
         /// for KP system a fast-moving point which can differentiate between two early births as twins.
@@ -1246,7 +1245,7 @@ namespace VedAstro.Library
                 case ConstellationName.Sravana:
                     return new ConstellationAnimal("Female", AnimalName.Monkey);
 
-                //
+                //Lion
                 case ConstellationName.Poorvabhadra:
                     return new ConstellationAnimal("Male", AnimalName.Lion);
                 case ConstellationName.Dhanishta:
@@ -4244,58 +4243,6 @@ namespace VedAstro.Library
                 var neutralPoint = ((max - min) / 2) + min;
 
                 if (neutralPoint <= 0) { throw new Exception("Planet does not have neutral point!"); }
-
-                return neutralPoint;
-            }
-        }
-
-        /// <summary>
-        /// EXPERIMENTAL
-        /// To determine if Shadvarga bala is strong or weak
-        /// a neutral point is set, anything above is strong & below is weak
-        ///
-        /// Note:
-        /// Neutral point is derived from all possible Shadvarga bala values across
-        /// 25 years (2000-2025), with 1 hour granularity
-        ///
-        /// Formula used = ((max-min)/2)+min (add min to get exact neutral point from 0 range)
-        /// max = hightest possible value
-        /// min = lowest possible value
-        /// </summary>
-        public static double PlanetShadvargaBalaNeutralPoint(PlanetName planet)
-        {
-            //no calculation for rahu and ketu here
-            var isRahu = planet.Name == PlanetNameEnum.Rahu;
-            var isKetu = planet.Name == PlanetNameEnum.Ketu;
-            var isRahuKetu = isRahu || isKetu;
-            if (isRahuKetu) { return 0; }
-
-
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadvargaBalaNeutralPoint), planet, Ayanamsa), _getPlanetShadvargaBalaNeutralPoint);
-
-
-            double _getPlanetShadvargaBalaNeutralPoint()
-            {
-                int max = 0, min = 0;
-
-                if (planet == Saturn) { max = 150; min = 11; }
-                if (planet == Mars) { max = 188; min = 21; }
-                if (planet == Jupiter) { max = 172; min = 17; }
-                if (planet == Mercury) { max = 150; min = 17; }
-                if (planet == Venus) { max = 158; min = 15; }
-                if (planet == Sun) { max = 180; min = 17; }
-                if (planet == Moon) { max = 165; min = 26; }
-
-                //difference between max & min
-                var difference = (max - min);
-
-                //divide difference in half to get neutral point
-                //add min to get exact neutral point from 0 range
-                var neutralPoint = (difference / 2) + min;
-
-                if (neutralPoint <= 0) { throw new Exception("Planet does not have neutral point!"); }
-
 
                 return neutralPoint;
             }
@@ -8330,8 +8277,7 @@ namespace VedAstro.Library
         /// You can also set how many levels of dasa you want to calculate, default is 4
         /// 7 Levels : Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
         /// </summary>
-        /// <param name="birthTime"></param>
-        /// <param name="levels">range 1 to 7, lower is faster</param>
+        /// <param name="levels">range 1 to 7,coresponds to bhukti, antaram, etc..., lower is faster</param>
         /// <param name="scanYears">time span to calculate, defaults 100 years, average life</param>
         /// <param name="precisionHours"> defaults to 21 days, higher is faster
         /// set how accurately the start & end time of each event is calculated
@@ -8373,6 +8319,17 @@ namespace VedAstro.Library
 
         }
 
+        /// <summary>
+        /// Calculates dasa for a specific time frame
+        /// </summary>
+        /// <param name="startTime">start of time range to show dasa</param>
+        /// <param name="endTime">end of time range to show dasa</param>
+        /// <param name="levels">range 1 to 7,coresponds to bhukti, antaram, etc..., lower is faster</param>
+        /// <param name="precisionHours"> defaults to 21 days, higher is faster
+        /// set how accurately the start & end time of each event is calculated
+        /// exp: setting 1 hour, means given in a time range of 100 years, it will be checked 876600 times 
+        /// </param>
+        /// <returns></returns>
         public static async Task<JObject> DasaAtRange(Time birthTime, Time startTime, Time endTime, int levels = 3, int precisionHours = 100)
         {
             //TODO NOTE:
@@ -9810,147 +9767,6 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// Shadvarga bala: This is the strength of a
-        /// planet due to its residence in the 6 sub-divisions
-        /// according to its relation with the dispositor.
-        ///
-        /// They are (1) Rasi, {2) Hora, (3) Drekkana, (4) Navamsa, (5)
-        /// Dwadasamsa and (6) Trimsamsa.
-        /// </summary>
-        public static Shashtiamsa PlanetShadvargaBala(PlanetName planetName, Time time)
-        {
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadvargaBala), planetName, time, Ayanamsa), _getPlanetShadvargaBala);
-
-
-            //UNDERLYING FUNCTION
-            Shashtiamsa _getPlanetShadvargaBala()
-            {
-
-                //declare empty list of planet sign relationships
-                var planetSignRelationshipList = new List<PlanetToSignRelationship>();
-
-                //1.
-                //get planet rasi Moolatrikona.
-                var planetInMoolatrikona = Calculate.IsPlanetInMoolatrikona(planetName, time);
-
-                //if planet is in moolatrikona
-                if (planetInMoolatrikona)
-                {
-                    //add the relationship to the list
-                    planetSignRelationshipList.Add(PlanetToSignRelationship.Moolatrikona);
-                }
-                else
-                //else get planet's normal relationship with rasi
-                {
-                    //get planet rasi
-                    var planetRasi = Calculate.PlanetZodiacSign(planetName, time).GetSignName();
-                    var rasiSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetRasi, time);
-
-                    //add planet rasi relationship to list
-                    planetSignRelationshipList.Add(rasiSignRelationship);
-                }
-
-                //2.
-                //get planet hora
-                var planetHora = Calculate.PlanetHoraSign(planetName, time);
-                var horaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetHora, time);
-                //add planet hora relationship to list
-                planetSignRelationshipList.Add(horaSignRelationship);
-
-                //3.
-                //get planet drekkana
-                var planetDrekkana = Calculate.PlanetDrekkanaSign(planetName, time);
-                var drekkanaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetDrekkana, time);
-                //add planet drekkana relationship to list
-                planetSignRelationshipList.Add(drekkanaSignRelationship);
-
-
-                //4.
-                //get planet navamsa
-                var planetNavamsa = Calculate.PlanetNavamsaSign(planetName, time);
-                var navamsaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetNavamsa, time);
-                //add planet navamsa relationship to list
-                planetSignRelationshipList.Add(navamsaSignRelationship);
-
-
-                //5.
-                //get planet dwadasamsa
-                var planetDwadasamsa = Calculate.PlanetDwadasamsaSign(planetName, time);
-                var dwadasamsaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetDwadasamsa, time);
-                //add planet dwadasamsa relationship to list
-                planetSignRelationshipList.Add(dwadasamsaSignRelationship);
-
-
-                //6.
-                //get planet thrimsamsa
-                var planetThrimsamsa = Calculate.PlanetThrimsamsaSign(planetName, time);
-                var thrimsamsaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetThrimsamsa, time);
-                //add planet thrimsamsa relationship to list
-                planetSignRelationshipList.Add(thrimsamsaSignRelationship);
-
-
-                //calculate total Saptavargaja Bala
-
-                //a place to store total value
-                double totalShadvargaBalaInShashtiamsa = 0;
-
-                //loop through all the relationship
-                foreach (var planetToSignRelationship in planetSignRelationshipList)
-                {
-                    //add relationship point accordingly
-
-                    //A planet in its Moolatrikona is assigned a value of 45 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.Moolatrikona)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 45;
-                    }
-
-                    //in Swavarga 30 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.OwnVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 30;
-                    }
-
-                    //in Adhi Mitravarga 22.5 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.BestFriendVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 22.5;
-                    }
-
-                    //in Mitravarga 15 · Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.FriendVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 15;
-                    }
-
-                    //in Samavarga 7.5 Shashtiamsas ~
-                    if (planetToSignRelationship == PlanetToSignRelationship.NeutralVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 7.5;
-                    }
-
-                    //in Satruvarga 3.75 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.EnemyVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 3.75;
-                    }
-
-                    //in Adhi Satruvarga 1.875 Shashtiamsas.
-                    if (planetToSignRelationship == PlanetToSignRelationship.BitterEnemyVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 1.875;
-                    }
-
-                }
-
-
-                return new Shashtiamsa(totalShadvargaBalaInShashtiamsa);
-
-            }
-
-        }
 
         /// <summary>
         /// residence of the planet and as such a certain degree of strength or weakness attends on it

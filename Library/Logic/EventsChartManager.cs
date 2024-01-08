@@ -1493,7 +1493,6 @@ namespace VedAstro.Library
 
                         //calculate accurate nature score
                         natureScore = CalculateNatureScore(foundEvent, inputPerson, summaryOptions.SelectedAlgorithm);
-
                         foundEvent.NatureScore = natureScore;
                     }
 

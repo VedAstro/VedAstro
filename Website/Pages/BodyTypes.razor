@@ -1,0 +1,64 @@
+﻿@using VedAstro.Library
+@using System.Xml.Linq
+@attribute [Route(PageRoute.BodyTypes)]
+
+<PageTitle>Body Types | VedAstro</PageTitle>
+
+@* PAGE HEADER *@
+<PageTopSideImage ImageName="join-our-family.svg"
+                  Title="Body Types"
+                  DescriptionText="Catalog of 27 astro vedic body types with known examples to document and aid in learning to recognize on your own." />
+
+
+<div class="gap-3" style="max-width:@GR.W667px">
+
+
+    <table class="table mb-5" style="text-wrap: nowrap;">
+        <thead>
+            <tr>
+                <th scope="col">Couple</th>
+                <th scope="col">Prediction</th>
+                <th scope="col">Real Life</th>
+                <th scope="col">Report</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Horse</td>
+                <td>Elephant</td>
+                <td>Sheep</td>
+                <td>Serpent</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+</div>
+
+
+
+@code {
+
+    private ElementReference houseNameSelector;
+    private ElementReference planetNameSelector;
+
+    public string SelectedExperience;
+
+
+    private async Task OnClickJoinUs()
+    {
+        //get email from user via js sweet alert lib
+        var emailFromAlert = await AppData.JsRuntime.PopupTextInput("Email me at...");
+
+        //loading box show
+        await _jsRuntime.ShowLoading();
+
+        //add message to API Messages book
+        await WebsiteTools.SendMailToAPI(emailFromAlert, $"Join Family > Tasks > {SelectedExperience}");
+
+        //say thank you and will get back
+        await _jsRuntime.ShowAlert("success", "Thank you", "we'll get back to you soon");
+    }
+
+}

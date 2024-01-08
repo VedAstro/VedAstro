@@ -370,8 +370,10 @@ namespace VedAstro.Library
         /// </summary>
         private static string GetSummaryColor(double totalNature, double minValue, double maxValue)
         {
+
             string colorHex;
-            if (totalNature >= 0) //good
+            //GOOD
+            if (totalNature >= 0) 
             {
                 //note: higher number is lighter color lower is darker
                 var color255 = (int)totalNature.Remap(0, maxValue, 0, 255);
@@ -386,7 +388,8 @@ namespace VedAstro.Library
                 var summaryColor = $"#{colorHex}FF{colorHex}";
                 return summaryColor; //green
             }
-            else //bad
+            //BAD
+            else
             {
                 //note: colors here are rendered opposite compared to good
                 //because lower number here is worse, as such needs to be dark red.
@@ -1591,9 +1594,20 @@ namespace VedAstro.Library
 
         private static string GenerateSummaryRow(Dictionary<int, SumData> summaryRowData, int summaryRowHeight, int singleRowHeight, int padding, ref int yAxis)
         {
+
             //min & max used to calculate color later
-            var maxValue = summaryRowData?.Values?.Max(x => x.NatureScore) ?? 0;
-            var minValue = summaryRowData?.Values?.Min(x => x.NatureScore) ?? 0;
+            //var maxValue = summaryRowData?.Values?.Max(x => x.NatureScore) ?? 0;
+            //var minValue = summaryRowData?.Values?.Min(x => x.NatureScore) ?? 0;
+
+
+            //min & max used to calculate color later
+            var rawMaxValue = summaryRowData?.Values?.Max(x => x.NatureScore) ?? 0;
+            var rawMinValue = summaryRowData?.Values?.Min(x => x.NatureScore) ?? 0;
+
+            //lower ceiling height by percentage, to make lower colors pop
+            //NOTE: percentage set base on experimentation
+            var maxValue = (rawMaxValue - (rawMaxValue * 0.4));
+            var minValue = (rawMinValue - (rawMinValue * 0.2));
 
 #if DEBUG
             Console.WriteLine($"GenerateSummaryRow : MAX:{maxValue}, MIN:{minValue}");
@@ -1609,6 +1623,8 @@ namespace VedAstro.Library
                 //that occurred at this point in time, possible negative number
                 //exp: -4 bad + 5 good = 1 total nature score
                 double totalNatureScore = summarySlice.Value.NatureScore;
+
+
 
                 var summaryColor = GetSummaryColor(totalNatureScore, minValue, maxValue);
                 var rect = $"<rect " +

@@ -77,13 +77,22 @@ namespace VedAstro.Library
             //remove white space that might have gotten in
             dataSignature = dataSignature.Replace(" ", "");
 
-            //needed else cache can't be created 
+            //clean name of invalid characters
             var cleaned = new string(dataSignature
                 .Where(ch => !Path.GetInvalidFileNameChars().Contains(ch))
                 .ToArray());
 
             return cleaned;
         }
+
+        public static async Task<EventsChart> FromCacheName(string chartName)
+        {
+            //AngelinaJolie1975-EventsChart-04061975-16052050-29.122-RAMAN-PD1-PD2-PD3-PD4-PD5-PD6-PD7-General-StrongestPlanet-StrongestHouse-IshtaKashtaPhala
+            
+            //var parsed = new EventsChart("","",)
+            throw new NotImplementedException();
+        }
+
 
         /// <summary>
         /// Creates empty from json SPEC ONLY

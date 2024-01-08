@@ -170,7 +170,8 @@ namespace VedAstro.Console
 
             //generate the needed charts
             var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.PD6, EventTag.PD7 };
-            var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General, Algorithm.IshtaKashtaPhala };
+            ///General,IshtaKashtaPhalaDegree,PlanetStrengthDegree
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General, Algorithm.IshtaKashtaPhalaDegree, Algorithm.PlanetStrengthDegree };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
 
             //time range is preset to full life 100 years from birth

@@ -24,7 +24,43 @@ namespace API
         //█▀█ █▀▀ █   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
         /// <summary>
-        /// Gets GetEventDataList 
+        /// Gets all saved/cached chart names for a person,
+        /// NOTE:
+        /// user than selects the chart, with data,
+        /// when called via generate will auto get the cached chart
+        /// </summary>
+        [Function(nameof(GetSavedChartNameList))]
+        public static async Task<HttpResponseData> GetSavedChartNameList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(GetSavedChartNameList)}/{{personId}}")] HttpRequestData req, string personId)
+        {
+            try
+            {
+                //get all in cache
+                var allSavedCharts = AzureCache.ListBlobs(personId);
+
+                var eventDataList = new JArray();
+                foreach (var chart in allSavedCharts)
+                {
+                    EventsChart parsedChart = await EventsChart.FromCacheName(chart.Name);
+
+                    eventDataList.Add(parsedChart.ToJson());
+                }
+
+                return APITools.PassMessageJson(eventDataList, req);
+            }
+
+            //if any failure, show error in payload
+            catch (Exception e)
+            {
+                APILogger.Error(e, req);
+                return APITools.FailMessageJson(e.Message, req);
+            }
+        }
+
+        /// <summary>
+        /// Gets all entries in EventDataList.xml as parsed JSON
+        /// NOTE:
+        /// used by good time finder
         /// </summary>
         [Function(nameof(GetEventDataList))]
         public static async Task<HttpResponseData> GetEventDataList(

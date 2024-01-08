@@ -4,69 +4,30 @@
 <PageTitle>Stars Above Me</PageTitle>
 
 <PageTop ImageName="stars-above-me-banner.png"
-		 Title="Stars Above Me"
-		 DescriptionText="Info of stars and planets above you now. View pure astronomical and inteprated Vedic data for past and future anywhere in the world.">
+         Title="Stars Above Me"
+         DescriptionText="Info of stars and planets above you now. View pure astronomical and inteprated Vedic data for past and future anywhere in the world.">
 </PageTop>
 
 <UnderConstructionHeader></UnderConstructionHeader>
 
 <div style="width: @GR.W824px">
-    <div class="vstack gap-3 mt-4 mb-5" style="max-width:@GR.W412px;">
-        <TimeInputSimple @ref="_timeInput" LabelText="Date &amp; Time" /> @*todo default to now*@
-        <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
-        <IconButton ButtonText="Refresh" Color="success" ExtraClass="align-self-end" IconName="uim:process" OnClickCallback="RefreshData" />
+    <div class="vstack gap-3 mt-4 mb-5" style="max-width: @GR.W412px;">
+        <TimeLocationInput @ref="_timeInput" LabelText="Date &amp; Time"/>
+        <IconButton ButtonText="Refresh" Color="success" ExtraClass="align-self-end" IconName="uim:process" OnClickCallback="RefreshData"/>
     </div>
 
 
-    <SkyChartViewer @ref="skyChartViewer" />
+        <SkyChartViewer @ref="skyChartViewer" />
 
-    @if (isReady)
+@*     @if (isReady)
     {
-        <IconTitle Title="Vedic" IconName="ph:star-of-david-duotone" />
-        <table class="table-striped table-hover table-bordered mb-5" style="text-wrap: nowrap;">
-            <thead>
-            <tr>
-                <th scope="col" class="p-1">Data</th>
-                <th scope="col" class="p-1">Value</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var calcResult in astrologyCalcs)
-            {
-                <tr>
-                    <th scope="row" class="p-1">@Format.FormatName(calcResult.Name)</th>
-                    <td class="p-1">@calcResult.ToString()</td>
-                </tr>
-            }
-            </tbody>
-        </table>
-
-
-        <IconTitle Title="Astronomy" IconName="streamline:ecology-science-planet-solar-system-ring-planet-saturn-space-astronomy" />
-        <table class="table table-striped table-hover table-bordered">
-            <thead>
-            <tr>
-                <th scope="col">Data</th>
-                <th scope="col">Value</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var calcResult in astronomyCalcs)
-            {
-                <tr>
-                    <th scope="row">@calcResult.Name</th>
-                    <td>@calcResult.ToString()</td>
-                </tr>
-            }
-            </tbody>
-        </table>
     }
     else
     {
         @AppData.LoadingImage
     }
 
-    <hr />
+ *@    <hr />
 
 
     <QuoteTextBlock Author="Carl Sagan" URL="@URL.CarlSaganWiki">
@@ -78,50 +39,47 @@
 
 @code {
 
-	private bool isReady = false;
+    private bool isReady = false;
 
-	private List<APIFunctionResult> astrologyCalcs;
-	private List<APIFunctionResult> astronomyCalcs;
+    private List<APIFunctionResult> astrologyCalcs;
+    private List<APIFunctionResult> astronomyCalcs;
 
-	private SkyChartViewer? skyChartViewer;
-	private Time finalTime = Time.Empty;
-	private GeoLocation finalGeoLocation = GeoLocation.Empty;
-	private TimeInputSimple _timeInput;
-	private GeoLocationInput _geoLocationInput;
-
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		//page should auto show data for user at current location
-		//we wait after render to get ready time and location
-		//TODO temp disable
-		//if (firstRender) { await RefreshData(); }
-
-	}
+    private SkyChartViewer? skyChartViewer;
+    private Time finalTime = Time.Empty;
+    private TimeLocationInput _timeInput;
+    private GeoLocationInput _geoLocationInput;
 
 
-	public async Task RefreshData()
-	{
-		//trigger loading icon
-		isReady = false;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //page should auto show data for user at current location
+        //we wait after render to get ready time and location
+        if (firstRender) { await RefreshData(); }
 
-		//get data from input fields,
-		//on page load, will get today and user's location from IP address
-		finalGeoLocation = _geoLocationInput.GetGeoLocation();
-		finalTime = await _timeInput.GetTime(finalGeoLocation);
+    }
 
-		//update sky chart
-		await skyChartViewer?.Update(finalTime);
 
-		//get all methods that have only time as input
-		astronomyCalcs = AutoCalculator.FindAndExecuteFunctions( null, finalTime);
-		astrologyCalcs = AutoCalculator.FindAndExecuteFunctions(null, finalTime);
+    public async Task RefreshData()
+    {
+        //trigger loading icon
+        isReady = false;
 
-		isReady = true;
+        //get data from input fields,
+        //on page load, will get today and user's location from IP address
+        finalTime = await _timeInput.GetTime();
 
-		StateHasChanged();
+        //update sky chart
+        await skyChartViewer?.Update(finalTime);
 
-	}
+        // //get all methods that have only time as input
+        // astronomyCalcs = AutoCalculator.FindAndExecuteFunctions(null, finalTime);
+        // astrologyCalcs = AutoCalculator.FindAndExecuteFunctions(null, finalTime);
+
+        isReady = true;
+
+        StateHasChanged();
+
+    }
 
 
 }

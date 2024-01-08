@@ -32,10 +32,13 @@ namespace API
         {
             try
             {
-                var _eventDataList = await Tools.GetXmlFile("https://vedastro.org/data/EventDataList.xml");
+                //get raw xml file
+                var eventDataListXml = await Tools.GetXmlFile("https://vedastrowebsitestorage.z5.web.core.windows.net/data/EventDataList.xml");
 
-                var xx = await Tools.ConvertXmlListFileToInstanceList<EventData>(_eventDataList);
+                //convert to parsed type, so can convert to JSON
+                var xx = await Tools.ConvertXmlListFileToInstanceList<EventData>(eventDataListXml);
 
+                //package nicely into JSON
                 var eventDataList = new JArray();
                 foreach (var x in xx)
                 {
@@ -73,7 +76,7 @@ namespace API
                 //get basic spec on how to make chart
                 //check if the specs given is correct and readable
                 //this is partially filled chart with no generated svg content only specs
-                var chartSpecsOnly = await  EventsChart.FromUrl(settingsUrl);
+                var chartSpecsOnly = await EventsChart.FromUrl(settingsUrl);
 
                 //a hash to id the chart's specs (caching)
                 var chartId = chartSpecsOnly.GetEventsChartSignature();
@@ -299,7 +302,7 @@ namespace API
 
             //hard set max width to 1000px so that no forever calculation created
             maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
-            
+
             //todo needs to be pumped in from input
             var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General };
             var summaryOptions = new ChartOptions(algorithmFuncsList);

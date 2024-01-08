@@ -190,7 +190,7 @@ public class URL
     public const string NasaJplSource = "https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html";
     public const string SwissEphSource = "https://www.astro.com/swisseph/swephinfo_e.htm";
     public const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
-    public const string WhatsAppContact = "https://wa.me/60142938084?text=Hi";
+    public const string WhatsAppContact = "https://wa.me/601113395387?text=Hi";
     public const string TelegramContact = "https://t.me/vedastro_org";
     public const string EmailToClick = "mailto:contact@vedastro.org";
     public const string GitHubRepo = "https://github.com/VedAstro/VedAstro";

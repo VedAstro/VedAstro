@@ -180,6 +180,9 @@
         {
             _selectedAyanamsa = value;
 
+            //set ayanamsa into blazor runtime, so that calc done on client will reflect
+            Calculate.Ayanamsa = (int)Tools.EnumFromUrl($"/Ayanamsa/{_selectedAyanamsa}");
+
             //highlight regenerate button to let user know needs recalculation
             _jsRuntime.AnimateHighlightElement("HoroscopeCalculateButton");
 
@@ -220,6 +223,14 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRenderAsync(firstRender)).Try(_jsRuntime);
 
+
+    protected override void OnInitialized()
+    {
+        //set ayanamsa into blazor runtime, so that calc done on client will reflect
+        //if not set here, it will default to Lahiri
+        Calculate.Ayanamsa = (int)Tools.EnumFromUrl($"/Ayanamsa/{_selectedAyanamsa}");
+
+    }
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀

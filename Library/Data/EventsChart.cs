@@ -64,7 +64,7 @@ namespace VedAstro.Library
             var startTime = TimeRange.start.StdDateMonthYearText;
 
             //include all data into the name of the cache,
-            //so easy to ID en mass and genocide them when needed
+            //so easy to ID en masse and genocide them when needed
             //NOTE: person ID must be first, to be detected by "cache cleaner" when person is updated
             var dataSignature = $"{this.Person.Id}-" +
                                 $"{nameof(EventsChart)}-" +

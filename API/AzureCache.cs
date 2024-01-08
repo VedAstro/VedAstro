@@ -27,13 +27,29 @@ namespace API
 
         }
 
+        public static List<BlobItem> ListBlobs(string searchKeyword)
+        {
+            var blobNames = new List<BlobItem>();
+
+            var blobItems = blobContainerClient.GetBlobs(prefix: searchKeyword).ToList();
+
+            //foreach (var blobItem in blobItems)
+            //{
+            //    if (blobItem.Name.Contains(searchKeyword))
+            //    {
+            //        blobNames.Add(blobItem);
+            //    }
+            //}
+
+            return blobItems;
+        }
 
         public static async Task<bool> IsExist(string callerId)
         {
-//#if DEBUG
-//            Console.WriteLine("CACHE TURNED OFF IN DEBUG MODE!!");
-//            return false;
-//#endif
+            //#if DEBUG
+            //            Console.WriteLine("CACHE TURNED OFF IN DEBUG MODE!!");
+            //            return false;
+            //#endif
 
             BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
 
@@ -91,7 +107,7 @@ namespace API
         /// <summary>
         /// Given a any data type, will add to Cache container, with specified name, mimetype is optional
         /// </summary>
-        public static async Task<BlobClient?> Add<T>(string fileName, T value, string mimeType = "")
+        public static async Task<BlobClient?> Add<T>(string fileName, T value, string mimeType = "", Dictionary<string, string> metadata = null)
         {
 
 #if DEBUG
@@ -112,8 +128,10 @@ namespace API
                 var blobUploadOptions = new BlobUploadOptions();
                 blobUploadOptions.AccessTier = AccessTier.Cool; //save money!
 
-                //note no override needed because specifying BlobUploadOptions, is auto override
-                await blobClient.UploadAsync(ms, options: blobUploadOptions);
+                //note no overwrite needed because specifying BlobUploadOptions, is auto overwrite
+                //TODO metadata option for future
+                var inputMetaData = metadata ?? new Dictionary<string, string>();
+                await blobClient.UploadAsync(ms, metadata: inputMetaData, accessTier: AccessTier.Cool);
 
             }
             else if (typeof(T) == typeof(byte[]))
@@ -240,11 +258,11 @@ namespace API
         public static async Task DeleteCacheRelatedToPerson(Person newPerson)
         {
             //if empty id, end here
-            if (Person.Empty.Equals(newPerson)) { return;}
+            if (Person.Empty.Equals(newPerson)) { return; }
 
             //person is placed infront if that cache belongs to that person
             //as such get all cache such way and delete
-            var foundCaches =  blobContainerClient.GetBlobs(BlobTraits.All, BlobStates.None, newPerson.Id);
+            var foundCaches = blobContainerClient.GetBlobs(BlobTraits.All, BlobStates.None, newPerson.Id);
 
             //delete all cache
             foreach (var cache in foundCaches)
@@ -260,11 +278,11 @@ namespace API
         public static async Task DeleteCacheRelatedToPerson(string personId)
         {
             //if empty id, end here
-            if (personId == "Empty") { return;}
+            if (personId == "Empty") { return; }
 
             //person is placed in front if that cache belongs to that person
             //as such get all cache such way and delete
-            var foundCaches =  blobContainerClient.GetBlobs(BlobTraits.All, BlobStates.None, personId);
+            var foundCaches = blobContainerClient.GetBlobs(BlobTraits.All, BlobStates.None, personId);
 
             //delete all cache
             foreach (var cache in foundCaches)

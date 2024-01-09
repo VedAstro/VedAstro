@@ -601,10 +601,20 @@ namespace VedAstro.Library.Tests
         public void PlanetIshtaKashtaScoreDegreeTest()
         {
             var testResult = Calculate.PlanetIshtaKashtaScoreDegree(PlanetName.Sun, NearestHoroscope);
-            
+
             var testResult2 = Calculate.PlanetIshtaKashtaScoreDegree(PlanetName.Jupiter, MarilynMonroe);
             var testResult3 = Calculate.PlanetIshtaKashtaScoreDegree(PlanetName.Saturn, MarilynMonroe);
             var testResult4 = Calculate.PlanetIshtaKashtaScoreDegree(PlanetName.Ketu, MarilynMonroe);
         }
+
+        [TestMethod()]
+        public void GocharaKakshasTest()
+        {
+
+            var xxx = Calculate.GocharaKakshas(Time.NowSystem(GeoLocation.Ipoh),StandardHoroscope);
+
+            Assert.Fail();
+        }
+
     }
 }

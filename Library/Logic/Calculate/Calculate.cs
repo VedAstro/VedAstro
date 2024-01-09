@@ -7964,6 +7964,108 @@ namespace VedAstro.Library
             return bindu;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public static JObject GocharaKakshas(Time checkTime, Time birthTime)
+        {
+            //first is column of name planets
+            var column1 = PlanetName.All7Planets;
+
+            //2nd column is signs the planet is currently in
+            var column2 = new Dictionary<PlanetName, ZodiacSign>();
+            //add in each planet and the sign it is in at check time
+            foreach (var planetName in column1) { column2.Add(planetName, Calculate.PlanetZodiacSign(planetName, checkTime)); }
+
+
+            //3rd column is planet which is ruling the current planet
+            //based on current zodiac sign determine the ruling planet
+            var column3 = new Dictionary<PlanetName, string>();
+            foreach (var currentZodiacSign in column2) { column3.Add(currentZodiacSign.Key, GetKakshyaLord(currentZodiacSign.Value)); }
+
+            //NOTE : where current time is linked to birth time
+            //4th column, score of 1 or 0 from Prastaraka 
+            var column4 = new Dictionary<PlanetName, int>();
+            foreach (var mainPlanet in column1) //can be acendant
+            {
+                var planetPrastaraka = Ashtakavarga.PlanetPrastaraka(mainPlanet, birthTime);
+                //narrow down to planet which ruling current planet
+                var rullingPlanet = column3[mainPlanet]; //includes Ascendant
+                var allSigns = planetPrastaraka[rullingPlanet];
+
+                //get specific score at current transiting sign
+                var checkTimeSign = column2[mainPlanet];
+                var score = allSigns[checkTimeSign.GetSignName()];
+                column4.Add(mainPlanet, score);
+            }
+
+            //5th column add points from Prastaraka
+            var column5 = new Dictionary<PlanetName, int>();
+            foreach (var mainPlanet in column1) //can be acendant
+            {
+                var planetPrastaraka = Ashtakavarga.PlanetPrastaraka(mainPlanet, birthTime);
+                //get score of compiled Prastaraka for all signs
+                var bhinnashtakaRow = planetPrastaraka.BhinnashtakaRow();
+
+                //get specific score at current transiting sign
+                var checkTimeSign = column2[mainPlanet];
+                var score = bhinnashtakaRow[checkTimeSign.GetSignName()];
+                column5.Add(mainPlanet, score);
+            }
+
+            //6th column add points from Sarvashtaka 
+            var column6 = new Dictionary<PlanetName, int>();
+            foreach (var mainPlanet in column1) //can be acendant
+            {
+                //get Sarvashtaka for all signs
+                var allSigns = SarvashtakavargaChart(birthTime);
+
+                //get specific score at current transiting sign
+                var checkTimeSign = column2[mainPlanet];
+
+                //get column with added points
+                var score = allSigns.SarvashtakavargaRow[checkTimeSign.GetSignName()];
+
+                column6.Add(mainPlanet, score);
+            }
+
+            //put together final table for caller
+            var holder = new JObject();
+            foreach (var mainPlanet in column1)
+            {
+                //package the row
+                var valueHolder = new JObject
+                {
+                    //make the columns
+                    ["Sign"] = column2[mainPlanet].GetSignName().ToString(),//current sign
+                    ["KakshaScore"] = column4[mainPlanet],
+                    ["KakshaLord"] = column3[mainPlanet],
+                    ["Ashtaka"] = column5[mainPlanet],
+                    ["Sarvashtaka"] = column6[mainPlanet],
+                };
+
+                holder[mainPlanet.Name.ToString()] = valueHolder;
+            }
+
+            return holder;
+
+            //based on table data
+            string GetKakshyaLord(ZodiacSign inputZodiacSign)
+            {
+                var degreeInSign = inputZodiacSign.GetDegreesInSign().TotalDegrees;
+
+                if (degreeInSign >= 0 && degreeInSign <= 3.75) { return "Saturn"; }
+                else if (degreeInSign > 3.75 && degreeInSign <= 7.5) { return "Jupiter"; }
+                else if (degreeInSign > 7.5 && degreeInSign <= 11.25) { return "Mars"; }
+                else if (degreeInSign > 11.25 && degreeInSign <= 15.00) { return "Sun"; }
+                else if (degreeInSign > 15.00 && degreeInSign <= 18.75) { return "Venus"; }
+                else if (degreeInSign > 18.75 && degreeInSign <= 22.5) { return "Mercury"; }
+                else if (degreeInSign > 22.5 && degreeInSign <= 26.25) { return "Moon"; }
+                else if (degreeInSign > 26.25 && degreeInSign <= 30.0) { return "Ascendant"; }
+
+                throw new Exception("END OF LINE");
+            }
+        }
 
         #endregion
 

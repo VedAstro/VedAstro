@@ -373,7 +373,7 @@ namespace VedAstro.Library
 
             string colorHex;
             //GOOD
-            if (totalNature >= 0) 
+            if (totalNature >= 0)
             {
                 //note: higher number is lighter color lower is darker
                 var color255 = (int)totalNature.Remap(0, maxValue, 0, 255);
@@ -411,7 +411,7 @@ namespace VedAstro.Library
         {
             //shorten the event name if too long & add ellipsis at end
             //else text goes outside box
-            var formattedEventName = ShortenName(lifeEvent.Name);
+            var formattedEventName = ShortenName(lifeEvent.Name, 14);
 
             int iconYAxis = lineHeight + 7; //start icon at end of line + 7 padding
             int verticalLineHeight = iconYAxis + 2; //extra px added cause line moved up -2 
@@ -425,8 +425,8 @@ namespace VedAstro.Library
             var evtNameStyle = isShowName ? "" : "display: none;";
 
             //display description only for major events and when text not Empty
-            var notEmpty = string.IsNullOrEmpty(lifeEvent.Description);
-            var descriptionDisplayStyle = isMajor || notEmpty ? "" : "display:none;";
+            var notEmpty = !string.IsNullOrEmpty(lifeEvent.Description);
+            var descriptionDisplayStyle = isMajor && notEmpty ? "" : "display:none;";
 
             //convert event description text to image 
             string descriptionTextSvg = StringToSvgTextBox(lifeEvent.Description, out var boxHeightPx);
@@ -478,29 +478,33 @@ namespace VedAstro.Library
 
             return lifeEventLine;
 
-            //LOCAL FUNC
-            string ShortenName(string rawInput)
-            {
-                //if no changes needed return as is (default)
-                var returnVal = rawInput;
-                const int nameCharLimit = 14; //any number of char above this limit will be replaced with  ellipsis  "..."
-
-                //if input is above limit
-                //replace extra chars with ...
-                var isAbove = rawInput.Length > nameCharLimit;
-                if (isAbove)
-                {
-                    //cut the extra chars out
-                    returnVal = returnVal.Substring(0, nameCharLimit);
-
-                    //add ellipsis 
-                    returnVal += "...";
-                }
-
-                return returnVal;
-            }
 
         }
+
+        /// <summary>
+        /// Given a text will shorten it with ellipsis at the back
+        /// </summary>
+        private static string ShortenName(string rawInput, int nameCharLimit)
+        {
+            //if no changes needed return as is (default)
+            var returnVal = rawInput;
+            //const int nameCharLimit = 14; //any number of char above this limit will be replaced with  ellipsis  "..."
+
+            //if input is above limit
+            //replace extra chars with ...
+            var isAbove = rawInput.Length > nameCharLimit;
+            if (isAbove)
+            {
+                //cut the extra chars out
+                returnVal = returnVal.Substring(0, nameCharLimit);
+
+                //add ellipsis 
+                returnVal += "...";
+            }
+
+            return returnVal;
+        }
+
 
         private static double GetTextWidthPx(string textInput)
         {
@@ -528,13 +532,29 @@ namespace VedAstro.Library
         /// <returns></returns>
         private static string StringToSvgTextBox(string inputStr, out int boxHeightPx)
         {
+            //shorten text length & add ellipsis at end
+            inputStr = ShortenName(inputStr, 44);
 
-            const int characterLimit = 21;
+            const int characterLimit = 22;
             //chop string to pieces, to wrap text nicely (new line)
             var splitStringRaw = Tools.SplitByCharCount(inputStr, characterLimit);
 
             //convert raw string to be HTML safe (handles special chars like &,!,%)
-            var splitString = splitStringRaw.Select(rawStr => HttpUtility.HtmlEncode(rawStr)).ToList();
+            var splitStringRaw2 = splitStringRaw.Select(rawStr => HttpUtility.HtmlEncode(rawStr)).ToList();
+
+            //remove white space characters at the front
+            var splitString = splitStringRaw2.Select(x => x.Trim()).ToList();
+
+            //NOTE : ellipses is 3 chars but takes space of 1, hence below logic
+            //if last string is ellipses by itself, then push it up (else a new row just for ellipses, not nice)
+            if (splitString.Any() && splitString.Last() == "...")
+            {
+                //remove last
+                splitString.RemoveAt(splitString.Count - 1);
+
+                //add ellipses to back of last text (3 chars but takes space of 1)
+                splitString[^1] += "...";
+            }
 
             //make a new holder for each line
             var compiledSvgLines = "";
@@ -1596,18 +1616,13 @@ namespace VedAstro.Library
         {
 
             //min & max used to calculate color later
-            //var maxValue = summaryRowData?.Values?.Max(x => x.NatureScore) ?? 0;
-            //var minValue = summaryRowData?.Values?.Min(x => x.NatureScore) ?? 0;
-
-
-            //min & max used to calculate color later
             var rawMaxValue = summaryRowData?.Values?.Max(x => x.NatureScore) ?? 0;
             var rawMinValue = summaryRowData?.Values?.Min(x => x.NatureScore) ?? 0;
 
             //lower ceiling height by percentage, to make lower colors pop
             //NOTE: percentage set base on experimentation
-            var maxValue = (rawMaxValue - (rawMaxValue * 0.4));
-            var minValue = (rawMinValue - (rawMinValue * 0.2));
+            var maxValue = (rawMaxValue - (rawMaxValue * 0.4)); //40% drop from top
+            var minValue = (rawMinValue - (rawMinValue * 0.2)); //20% up from bottom
 
 #if DEBUG
             Console.WriteLine($"GenerateSummaryRow : MAX:{maxValue}, MIN:{minValue}");

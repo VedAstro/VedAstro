@@ -7965,7 +7965,26 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Kakshyas for daily use : The concept of Kakshyas can be
+        /// employed for daily use. The method of this application is simple.
+        /// Prepare the Prastaraka charts for the seven planets. Then find
+        /// out the longitudes of each of the seven planets on a given day.
+        /// In the Prastaraka of the Sun, see if the transiting Sun is passing
+        /// through a Kakshya with a benefic point. For the Moon's transit,
+        /// consider the Prastaraka of the Moon. See for all the planets.
+        /// When several planets are transiting the Kakshyas where the natal
+        /// planets have contributed benefic points, that day is auspicious.
+        /// When several planets transit the Kakshyas where there are no
+        /// benefic points, it is adverse time for the native
         /// 
+        /// The Concept of Kakshya
+        /// The Prastaraka charts for different planets can be represented
+        /// in a different manner to make use of the concept of Kakshyas.
+        /// Each rashi or sign is divided into eight equal parts or Kakshyas
+        /// The Prastaraka chart for each planet can thus be readjusted
+        /// to bring in the concept of the Kakshyas.
+        /// A planet is considered to be productive ofbenefic
+        /// results when it transits a Kakshya where there is a benefic point
         /// </summary>
         public static JObject GocharaKakshas(Time checkTime, Time birthTime)
         {

@@ -47,13 +47,14 @@ namespace API
                 //await APITools.AutoControlOpenAPIOverload(callLog);
 
                 // Send data to the caller
-                // Some calculators return SVG & binary data, so need to send to caller directly
+                // Some calculators return SVG, so need to send to caller directly without "Payload" wrapper
                 switch (calculatorName)
                 {
                     // Handle SVG string
                     case nameof(VedAstro.Library.Calculate.SkyChart):
                     case nameof(VedAstro.Library.Calculate.SouthIndianChart):
                     case nameof(VedAstro.Library.Calculate.NorthIndianChart):
+                        //send direct as raw SVG image
                         return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawPlanetData), incomingRequest, "image/svg+xml");
                     default:
                         return APITools.SendAnyToCaller(calculatorName, rawPlanetData, incomingRequest);

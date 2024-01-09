@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Numerics;
 
 namespace VedAstro.Library
 {
@@ -53,34 +55,64 @@ namespace VedAstro.Library
 
         }
 
+        /// <summary>
+        /// AI written code 😁
+        /// </summary>
         public byte[] ToJpeg()
         {
             //convert current instance to a table format
             var table = this.ToDataTable();
 
             // Create a new Bitmap object
-            Bitmap bitmap = new Bitmap(table.Columns.Count * 60, table.Rows.Count * 20);
+            Bitmap bitmap = new Bitmap(1, 1);
             Graphics g = Graphics.FromImage(bitmap);
 
-            // Draw the table
-            for (int i = 0; i < table.Rows.Count; i++)
+            // Calculate the maximum width for each column
+            int[] columnWidths = new int[table.Columns.Count];
+            for (int j = 0; j < table.Columns.Count; j++)
             {
-                for (int j = 0; j < table.Columns.Count; j++)
+                for (int i = 0; i < table.Rows.Count; i++)
                 {
-                    g.FillRectangle(Brushes.White, new Rectangle(j * 60, i * 20, 60, 20));
-                    g.DrawRectangle(Pens.Black, new Rectangle(j * 60, i * 20, 60, 20));
-                    g.DrawString(table.Rows[i][j].ToString(), new Font("Arial", 10), Brushes.Black, new PointF(j * 60, i * 20));
+                    var font = i == 0 ? new Font("Arial", 10, FontStyle.Bold) : new Font("Arial", 10);
+                    var textSize = g.MeasureString(table.Rows[i][j].ToString(), font);
+                    columnWidths[j] = Math.Max(columnWidths[j], (int)textSize.Width);
                 }
+            }
+
+            // Dispose of the initial Graphics object and create a new one with the correct dimensions
+            g.Dispose();
+            int totalWidth = columnWidths.Sum() + table.Columns.Count * 2; // Add padding
+            bitmap = new Bitmap(totalWidth, table.Rows.Count * 20);
+            g = Graphics.FromImage(bitmap);
+
+            // Draw the table
+            int currentX = 0;
+            for (int j = 0; j < table.Columns.Count; j++)
+            {
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    g.FillRectangle(Brushes.White, new Rectangle(currentX, i * 20, columnWidths[j] + 2, 20)); // Add padding
+                    g.DrawRectangle(Pens.Black, new Rectangle(currentX, i * 20, columnWidths[j] + 2, 20)); // Add padding
+
+                    // Use a bold font for the first row (header)
+                    var font = i == 0 ? new Font("Arial", 10, FontStyle.Bold) : new Font("Arial", 10);
+
+                    // Add padding
+                    var leftPadding = 3;
+                    var topPadding = 1;
+                    g.DrawString(table.Rows[i][j].ToString(), font, Brushes.Black, new PointF(currentX + leftPadding, i * 20 + topPadding));
+                }
+                currentX += columnWidths[j] + 2; // Move to next column position
             }
 
             // Convert the image to a byte array
             using (MemoryStream ms = new MemoryStream())
             {
-                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
                 return ms.ToArray();
             }
-
         }
+
 
         public DataTable ToDataTable()
         {
@@ -88,17 +120,25 @@ namespace VedAstro.Library
             DataTable table = new DataTable("Table1");
 
             // Define columns.
-            table.Columns.Add("Planet", typeof(int));
+            table.Columns.Add("Planet", typeof(string));
             table.Columns.Add("Sign", typeof(string));
             table.Columns.Add("KakshaScore", typeof(string));
             table.Columns.Add("KakshaLord", typeof(string));
             table.Columns.Add("Ashtaka", typeof(string));
             table.Columns.Add("Sarvashtaka", typeof(string));
 
-            // Populate the table with sample data.
+            //first row is column headers
+            table.Rows.Add("Planet",
+                "Sign",
+                "KakshaScore",
+                "KakshaLord",
+                "Ashtaka",
+                "Sarvashtaka");
+
+            //fill table with data in rows
             foreach (var mainPlanet in Column1)
             {
-                table.Rows.Add(mainPlanet.Name,
+                table.Rows.Add(mainPlanet.Name.ToString(),
                     Column2[mainPlanet].GetSignName().ToString(),
                     Column4[mainPlanet],
                     Column3[mainPlanet],

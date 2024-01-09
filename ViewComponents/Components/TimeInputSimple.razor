@@ -13,7 +13,7 @@
 
 <style>
     /*to fix time input style in JS date picker*/
-    #CalendarPickerHolder input {
+    #CalendarPickerHolder@(InstanceID) input {
         border: 0;
         background-color: #f7f7f7;
     }
@@ -26,7 +26,7 @@
         color: black;
     }
 
-    #TimeInputHolder {
+    #TimeInputHolder@(InstanceID) {
         text-align-last: center;
         cursor: pointer;
         font-size: 18px;
@@ -47,23 +47,23 @@
     <span class="input-group-text gap-2"><Icon IconName="noto-v1:timer-clock" Size="30" />@LabelText</span>
     <div class="form-control" >
         @*note : on click will toggle picker, so picker cannot be inside TimeInputHolder*@
-        <div id="TimeInputHolder" @onclick="OnClickDateTimeInput" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
+        <div id="TimeInputHolder@(InstanceID)" @onclick="OnClickDateTimeInput" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
             <div class="hstack">
-                <span class="border-0 inputPerfect" id="HourInput" style="width: 33px;" @onclick:stopPropagation="false">@Hour</span>:
-                <span class="border-0 inputPerfect" id="MinuteInput" style="width: 33px;" @onclick:stopPropagation="false">@Minute</span>
-                <span class="border-0 inputPerfect" id="MeridianInput" style="width: 37px;" @onclick:stopPropagation="false">@Meridian</span>
+                <span class="border-0 inputPerfect" id="HourInput@(InstanceID)" style="width: 33px;" @onclick:stopPropagation="false">@Hour</span>:
+                <span class="border-0 inputPerfect" id="MinuteInput@(InstanceID)" style="width: 33px;" @onclick:stopPropagation="false">@Minute</span>
+                <span class="border-0 inputPerfect" id="MeridianInput@(InstanceID)" style="width: 37px;" @onclick:stopPropagation="false">@Meridian</span>
             </div>
             <div class="hstack">
-                <span class="border-0 inputPerfect" id="DateInput" style="width: 33px;" @onclick:stopPropagation="false">@Date</span>/
-                <span class="border-0 inputPerfect" id="MonthInput" style="width: 33px;" @onclick:stopPropagation="false">@Month</span>/
-                <span class="border-0 inputPerfect" id="YearInput" style="width: 56px;" @onclick:stopPropagation="false">@Year</span>
+                <span class="border-0 inputPerfect" id="DateInput@(InstanceID)" style="width: 33px;" @onclick:stopPropagation="false">@Date</span>/
+                <span class="border-0 inputPerfect" id="MonthInput@(InstanceID)" style="width: 33px;" @onclick:stopPropagation="false">@Month</span>/
+                <span class="border-0 inputPerfect" id="YearInput@(InstanceID)" style="width: 56px;" @onclick:stopPropagation="false">@Year</span>
             </div>
         </div>
         @*this is where js date picker will be created*@
         <div @ref="CalendarPickerHolder"
              class="mt-2 vanilla-calendar visually-hidden border border-primary"
              style="position: absolute; z-index: 999; background: #f7f7f7;"
-             id="CalendarPickerHolder" />
+             id="CalendarPickerHolder@(InstanceID)" />
     </div>
 </div>
 
@@ -73,6 +73,12 @@
 
     [Parameter]
     public string? LabelText { get; set; } = "Time";
+
+    /// <summary>
+    /// NOTE: make sure not static, because random ID needs to be generated on each render
+    /// random id as allow multiple on same page, thank you API Builder for this job 😁🙏
+    /// </summary>
+    private string InstanceID = Tools.GenerateId();
 
     public string? Hour
     {
@@ -158,7 +164,7 @@
     {
         if (firstRender)
         {
-            await _jsRuntime.InvokeVoidAsync(JS.InitCalendarPicker);
+            await _jsRuntime.InvokeVoidAsync(JS.InitCalendarPicker, InstanceID);
         }
     }
 
@@ -184,12 +190,12 @@
         try
         {
             //get latest values using JS
-            var hour = await _jsRuntime.GetText("#HourInput");
-            var minute = await _jsRuntime.GetText("#MinuteInput");
-            var meridian = await _jsRuntime.GetText("#MeridianInput");
-            var date = await _jsRuntime.GetText("#DateInput");
-            var month = await _jsRuntime.GetText("#MonthInput");
-            var year = await _jsRuntime.GetText("#YearInput");
+            var hour = await _jsRuntime.GetText($"#HourInput{InstanceID}");
+            var minute = await _jsRuntime.GetText($"#MinuteInput{InstanceID}");
+            var meridian = await _jsRuntime.GetText($"#MeridianInput{InstanceID}");
+            var date = await _jsRuntime.GetText($"#DateInput{InstanceID}");
+            var month = await _jsRuntime.GetText($"#MonthInput{InstanceID}");
+            var year = await _jsRuntime.GetText($"#YearInput{InstanceID}");
 
 
             //convert 12H time from input to 24H
@@ -213,18 +219,18 @@
     {
 
         //get latest values using JS
-        var hour = await _jsRuntime.GetText("#HourInput");
-        var minute = await _jsRuntime.GetText("#MinuteInput");
-        var meridian = await _jsRuntime.GetText("#MeridianInput");
-        var date = await _jsRuntime.GetText("#DateInput");
-        var month = await _jsRuntime.GetText("#MonthInput");
-        var year = await _jsRuntime.GetText("#YearInput");
+        var hour = await _jsRuntime.GetText($"#HourInput{InstanceID}");
+        var minute = await _jsRuntime.GetText($"#MinuteInput{InstanceID}");
+        var meridian = await _jsRuntime.GetText($"#MeridianInput{InstanceID}");
+        var date = await _jsRuntime.GetText($"#DateInput{InstanceID}");
+        var month = await _jsRuntime.GetText($"#MonthInput{InstanceID}");
+        var year = await _jsRuntime.GetText($"#YearInput{InstanceID}");
 
 
         //initialize picker with needed values
         //note: we get values using JS, because set via JS and Blazor Bind doesn't get it
         //note: timeInput.js holds LoadCalendar
-        await _jsRuntime.InvokeVoidAsync(JS.LoadCalendar, hour, minute, meridian, date, month, year);
+        await _jsRuntime.InvokeVoidAsync(JS.LoadCalendar, InstanceID,hour, minute, meridian, date, month, year);
 
         //toggle picker
         await _jsRuntime.ToggleClass(CalendarPickerHolder, "visually-hidden");
@@ -266,5 +272,6 @@
         this.Year = startTime.GetStdDateTimeOffset().Year.ToString();
         this.TimeZone = startTime.StdTimezoneText;
     }
+
 
 }

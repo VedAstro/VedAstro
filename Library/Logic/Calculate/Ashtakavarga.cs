@@ -32,7 +32,7 @@ namespace VedAstro.Library
         /// </summary>
         public static Prastaraka PlanetPrastaraka(PlanetName inputPlanet, Time birthTime)
         {
-            //8 cardinal points includind ascendant
+            //8 cardinal points including ascendant
             var minorPlanetList = All7Planets.Select(e => e.ToString()).ToList();
             minorPlanetList.Add("Ascendant"); //add special case Ascendant for Ashtakvarga calculation
 

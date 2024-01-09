@@ -80,14 +80,14 @@ export function FunFeaturePopUp() {
 
     Swal.fire({
         html: "<a target=\"_blank\" style=\"text-decoration-line: none;\" href=\"https://vedastro.org/Donate/\" class=\"link-primary fw-bold\">Fund</a> this feature for faster development",
-        iconHtml : "<span class=\"iconify\" data-icon=\"openmoji:love-letter\" data-inline=\"false\"></span>",
-        title : "Coming soon...",
-        showConfirmButton : true,
+        iconHtml: "<span class=\"iconify\" data-icon=\"openmoji:love-letter\" data-inline=\"false\"></span>",
+        title: "Coming soon...",
+        showConfirmButton: true,
         confirmButtonText: donateText,
-        showCancelButton : true,
-        cancelButtonText : "I can wait"
+        showCancelButton: true,
+        cancelButtonText: "I can wait"
     }).then((result) => {
-        
+
         if (result.isConfirmed) {
             window.open('https://vedastro.org/Donate', '_blank').focus();
         };
@@ -101,37 +101,37 @@ export function FunFeaturePopUp() {
 //then call LoadCalendar
 //make sure empty calendar div exists
 
-export function InitCalendarPicker() {
+export function InitCalendarPicker(tableId) {
 
     //global space to store calendar related refs
-    window.Calendar = {};
+    window[tableId] = {};
 
     //date input element
-    window.Calendar.hourInputId = '#HourInput';
-    window.Calendar.minuteInputId = '#MinuteInput';
-    window.Calendar.meridianInputId = '#MeridianInput';
-    window.Calendar.dateInputId = '#DateInput';
-    window.Calendar.monthInputId = '#MonthInput';
-    window.Calendar.yearInputId = '#YearInput';
+    window[tableId].hourInputId = `#HourInput${tableId}`;
+    window[tableId].minuteInputId = `#MinuteInput${tableId}`;
+    window[tableId].meridianInputId = `#MeridianInput${tableId}`;
+    window[tableId].dateInputId = `#DateInput${tableId}`;
+    window[tableId].monthInputId = `#MonthInput${tableId}`;
+    window[tableId].yearInputId = `#YearInput${tableId}`;
 
-    window.Calendar.calendarPickerHolderId = '#CalendarPickerHolder';
+    window[tableId].calendarPickerHolderId = `#CalendarPickerHolder${tableId}`;
 
-    window.Calendar.hourInputElm = document.querySelector(window.Calendar.hourInputId);
-    window.Calendar.minuteInputElm = document.querySelector(window.Calendar.minuteInputId);
-    window.Calendar.meridianInputElm = document.querySelector(window.Calendar.meridianInputId);
-    window.Calendar.dateInputElm = document.querySelector(window.Calendar.dateInputId);
-    window.Calendar.monthInputElm = document.querySelector(window.Calendar.monthInputId);
-    window.Calendar.yearInputElm = document.querySelector(window.Calendar.yearInputId);
+    window[tableId].hourInputElm = document.querySelector(window[tableId].hourInputId);
+    window[tableId].minuteInputElm = document.querySelector(window[tableId].minuteInputId);
+    window[tableId].meridianInputElm = document.querySelector(window[tableId].meridianInputId);
+    window[tableId].dateInputElm = document.querySelector(window[tableId].dateInputId);
+    window[tableId].monthInputElm = document.querySelector(window[tableId].monthInputId);
+    window[tableId].yearInputElm = document.querySelector(window[tableId].yearInputId);
 
     //date picker holder element
-    window.Calendar.calendarDatepickerPopupEl = document.querySelector(window.Calendar.calendarPickerHolderId);
+    window[tableId].calendarDatepickerPopupEl = document.querySelector(window[tableId].calendarPickerHolderId);
 
 }
 
 //sets the input dates and initializes the calendar
-export function LoadCalendar(hour12, minute, meridian, date, month, year) {
+export function LoadCalendar(tableId, hour12, minute, meridian, date, month, year) {
     // CSS Selector
-    window.Calendar.calendar = new VanillaCalendar(window.Calendar.calendarPickerHolderId, {
+    window[tableId].calendar = new VanillaCalendar(window[tableId].calendarPickerHolderId, {
         // Options
         date: {
             //set the date to show when calendar opens
@@ -153,14 +153,14 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
         //this is where time is sent back to blazor, by setting straight to dom
         actions: {
             changeTime(e, time, hours, minutes, keeping) {
-                window.Calendar.hourInputElm.innerText = hours;
-                window.Calendar.minuteInputElm.innerText = minutes;
-                window.Calendar.meridianInputElm.innerText = keeping;
+                window[tableId].hourInputElm.innerText = hours;
+                window[tableId].minuteInputElm.innerText = minutes;
+                window[tableId].meridianInputElm.innerText = keeping;
             },
             clickDay(e, dates) {
                 //if date selected, hide date picker
                 if (dates[0]) {
-                    window.Calendar.calendarDatepickerPopupEl.classList.add('visually-hidden');
+                    window[tableId].calendarDatepickerPopupEl.classList.add('visually-hidden');
                 }
 
                 //check needed because random clicks get through
@@ -172,9 +172,9 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
                     var day = choppedTimeData[2];
 
                     //inject the values into the text input
-                    window.Calendar.dateInputElm.innerText = day;
-                    window.Calendar.monthInputElm.innerText = month;
-                    window.Calendar.yearInputElm.innerText = year;
+                    window[tableId].dateInputElm.innerText = day;
+                    window[tableId].monthInputElm.innerText = month;
+                    window[tableId].yearInputElm.innerText = year;
                 }
 
             },
@@ -183,15 +183,15 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
             clickMonth(e, month) {
                 month = month + 1; //correction for JS lib bug
                 var with0 = ('0' + month).slice(-2);//change 9 to 09
-                window.Calendar.monthInputElm.innerText = with0;
+                window[tableId].monthInputElm.innerText = with0;
             },
-            clickYear(e, year) { window.Calendar.yearInputElm.innerText = year; }
+            clickYear(e, year) { window[tableId].yearInputElm.innerText = year; }
         },
     });
 
     //when module is loaded, calendar is initialized but not visible
     //click event in blazor will make picker visible
-    window.Calendar.calendar.init();
+    window[tableId].calendar.init();
 
     //handle clicks outside of picker
     document.addEventListener('click', autoHidePicker, { capture: true });
@@ -205,12 +205,12 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
     function autoHidePicker(e) {
 
         //check if click was outside input
-        const pickerHolder = e.target.closest(window.Calendar.calendarPickerHolderId);
-        const timeInput = e.target.closest("#TimeInputHolder"); //reference in Blazor
+        const pickerHolder = e.target.closest(window[tableId].calendarPickerHolderId);
+        const timeInput = e.target.closest(`#TimeInputHolder${tableId}`); //reference in Blazor
 
         //if click is not on either inputs then hide picker
         if (!(timeInput || pickerHolder)) {
-            window.Calendar.calendarDatepickerPopupEl.classList.add('visually-hidden');
+            window[tableId].calendarDatepickerPopupEl.classList.add('visually-hidden');
         }
     }
 

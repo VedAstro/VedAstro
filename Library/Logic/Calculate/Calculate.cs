@@ -9,6 +9,10 @@ using SwissEphNet;
 using static VedAstro.Library.PlanetName;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using System.Data;
+using System.Drawing;
+using System.IO;
 
 
 namespace VedAstro.Library
@@ -7986,7 +7990,7 @@ namespace VedAstro.Library
         /// A planet is considered to be productive ofbenefic
         /// results when it transits a Kakshya where there is a benefic point
         /// </summary>
-        public static JObject GocharaKakshas(Time checkTime, Time birthTime)
+        public static GocharaKakshas GocharaKakshas(Time checkTime, Time birthTime)
         {
             //first is column of name planets
             var column1 = PlanetName.All7Planets;
@@ -8048,25 +8052,9 @@ namespace VedAstro.Library
                 column6.Add(mainPlanet, score);
             }
 
-            //put together final table for caller
-            var holder = new JObject();
-            foreach (var mainPlanet in column1)
-            {
-                //package the row
-                var valueHolder = new JObject
-                {
-                    //make the columns
-                    ["Sign"] = column2[mainPlanet].GetSignName().ToString(),//current sign
-                    ["KakshaScore"] = column4[mainPlanet],
-                    ["KakshaLord"] = column3[mainPlanet],
-                    ["Ashtaka"] = column5[mainPlanet],
-                    ["Sarvashtaka"] = column6[mainPlanet],
-                };
-
-                holder[mainPlanet.Name.ToString()] = valueHolder;
-            }
-
-            return holder;
+            //pack the data to be oupted various formats even JPEG! yeah!
+            var finalData = new GocharaKakshas(column1, column2, column3, column4, column5, column6);
+            return finalData;
 
             //based on table data
             string GetKakshyaLord(ZodiacSign inputZodiacSign)

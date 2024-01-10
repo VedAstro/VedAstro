@@ -8074,6 +8074,9 @@ namespace VedAstro.Library
             }
         }
 
+        /// <summary>
+        /// Gochara Kakshas in nice JPEG format ready to be used img HTML direct
+        /// </summary>
         public static byte[] GocharaKakshasJPEG(Time checkTime, Time birthTime)
         {
             var xx = GocharaKakshas(checkTime, birthTime);

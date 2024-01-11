@@ -2788,9 +2788,9 @@ namespace VedAstro.Library
 
             var yoga = Calculate.NithyaYoga(time);
 
-            if (yoga == NithyaYoga.Atiganda || yoga == NithyaYoga.Soola
-                || yoga == NithyaYoga.Ganda || yoga == NithyaYoga.Vyatapata
-                || yoga == NithyaYoga.Vaidhriti)
+            if (yoga.Name == NithyaYogaName.Atiganda || yoga.Name == NithyaYogaName.Soola
+                || yoga.Name == NithyaYogaName.Ganda || yoga.Name == NithyaYogaName.Vyatapata
+                || yoga.Name == NithyaYogaName.Vaidhriti)
             {
                 return CalculatorResult.NotOccuring();
             }
@@ -2826,9 +2826,9 @@ namespace VedAstro.Library
 
             var yoga = Calculate.NithyaYoga(time);
 
-            if (yoga == NithyaYoga.Atiganda || yoga == NithyaYoga.Soola
-                                            || yoga == NithyaYoga.Ganda || yoga == NithyaYoga.Vyatapata
-                                            || yoga == NithyaYoga.Vaidhriti)
+            if (yoga.Name == NithyaYogaName.Atiganda || yoga.Name == NithyaYogaName.Soola
+                                            || yoga.Name == NithyaYogaName.Ganda || yoga.Name == NithyaYogaName.Vyatapata
+                                            || yoga.Name == NithyaYogaName.Vaidhriti)
             {
                 return CalculatorResult.IsOccuring();
             }

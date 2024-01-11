@@ -290,6 +290,7 @@
         if (_apiSelectorBox.GetSelectedMethodName() != "")
         {
 
+            var openApiMetadata = _apiSelectorBox.SelectedMethod;
             //inject the data into the input panel
             _parameterInputPanel.Show(openApiMetadata);
 

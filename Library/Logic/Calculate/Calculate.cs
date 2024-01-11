@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using ExCSS;
 
 
 namespace VedAstro.Library
@@ -59,6 +60,39 @@ namespace VedAstro.Library
 
         //----------------------------------------CORE CODE---------------------------------------------
 
+        #region PANCHANGA
+
+
+        /// <summary>
+        /// It’s used to determine auspicious times and rituals.
+        /// It includes five attributes for any given time:
+        /// Tithi (lunar day),
+        /// Vara (weekday),
+        /// Nakshatra (constellation),
+        /// Yoga (luni-solar day) and Karana (half of a Tithi).
+        /// </summary>
+        public static PanchangaTable PanchangaTable(Time inputTime)
+        {
+            //Tithi (lunar day)
+            var tithi = Calculate.LunarDay(inputTime);
+
+            //Vara (weekday)
+            var weekDay = Calculate.DayOfWeek(inputTime);
+
+            //Nakshatra (constellation)
+            var constellation = Calculate.MoonConstellation(inputTime);
+
+            //Yoga (luni-solar day) 
+            var yoga = Calculate.NithyaYoga(inputTime);
+
+            //Karana (half of a Tithi)
+            var karana = Calculate.Karana(inputTime);
+
+            return new PanchangaTable(tithi, weekDay, constellation, yoga, karana);
+        }
+
+
+        #endregion
 
         #region NUMEROLOGY
 
@@ -715,7 +749,6 @@ namespace VedAstro.Library
         /// Gets all houses owned by a planet at a given time for KP astrology (Horary & Kundali)
         /// </summary>
         /// <param name="horaryNumber">if more than 0, will use Horary instead of Kundali calculation</param>
-        /// <returns></returns>
         public static List<HouseName> HousesOwnedByPlanetKP(PlanetName inputPlanet, Time time, int horaryNumber = 0)
         {
             //Given a planet, return Zodiac Signs owned by it Ex. Ju, returns Sag an Pis
@@ -1569,6 +1602,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Also know as Panchanga Yoga
         /// Nithya Yoga = (Longitude of Sun + Longitude of Moon) / 13°20' (or 800')
         /// </summary>
         public static NithyaYoga NithyaYoga(Time time)
@@ -1579,8 +1613,12 @@ namespace VedAstro.Library
             Angle sunLongitude = PlanetNirayanaLongitude(Sun, time);
             Angle moonLongitude = PlanetNirayanaLongitude(Moon, time);
 
+            var jointLongitudeInMinutes = (sunLongitude + moonLongitude).Expunge360().TotalMinutes;
+
             //get joint motion in longitude of the Sun and the Moon
-            var jointLongitudeInMinutes = sunLongitude.TotalMinutes + moonLongitude.TotalMinutes;
+            //var jointLongitudeInMinutes = sunLongitude.TotalMinutes + moonLongitude.TotalMinutes;
+
+
 
             //get unrounded nithya yoga number by
             //dividing joint longitude by 800'
@@ -1590,7 +1628,7 @@ namespace VedAstro.Library
             var nithyaYogaNumber = Math.Ceiling(rawNithyaYogaNumber);
 
             //convert nithya yoga number to type
-            var nithyaYoga = (NithyaYoga)nithyaYogaNumber;
+            var nithyaYoga = VedAstro.Library.NithyaYoga.FromNumber(nithyaYogaNumber);
 
             //return to caller
 

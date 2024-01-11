@@ -70,7 +70,7 @@ namespace VedAstro.Library
         public DataTable ToDataTable()
         {
             // Create a new DataTable.
-            DataTable table = new DataTable("Table1");
+            DataTable table = new DataTable("GocharaKakshas");
 
             // Define columns.
             table.Columns.Add("Planet", typeof(string));
@@ -79,14 +79,6 @@ namespace VedAstro.Library
             table.Columns.Add("KakshaLord", typeof(string));
             table.Columns.Add("Ashtaka", typeof(string));
             table.Columns.Add("Sarvashtaka", typeof(string));
-
-            //first row is column headers
-            table.Rows.Add("Planet",
-                "Sign",
-                "KakshaScore",
-                "KakshaLord",
-                "Ashtaka",
-                "Sarvashtaka");
 
             //fill table with data in rows
             foreach (var mainPlanet in Column1)

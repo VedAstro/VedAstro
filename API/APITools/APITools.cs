@@ -17,7 +17,7 @@
 //MAN RISE & FALL NOT TO THEIR DICTUM, BUT GOD'S
 
 
-
+using System.Data;
 using Azure;
 using Azure.Communication.Email;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -36,6 +36,7 @@ using Microsoft.Extensions.DependencyModel;
 using Person = VedAstro.Library.Person;
 
 using MimeDetective;
+using HtmlAgilityPack;
 
 namespace API
 {
@@ -1035,11 +1036,49 @@ namespace API
         /// <summary>
         /// Given a file or string convertible data, send it to caller accordingly
         /// </summary>
-        public static HttpResponseData SendAnyToCaller(string calculatorName, object rawPlanetData, HttpRequestData incomingRequest)
+        public static HttpResponseData SendAnyToCaller(string format, string calculatorName, dynamic rawPlanetData, HttpRequestData incomingRequest)
         {
+            //if format specified as JPEG, then process separately if body is not binary already
+            //meaning here process methods that can output JSON
+            if (format == "JPEG" && rawPlanetData is not byte[])
+            {
+                //if supports JPEG convert here and end it
+                if (rawPlanetData is IToJpeg iToJpeg)
+                {
+                    var rawFileData = iToJpeg.ToJpeg();
+
+                    //get correct mime type so browser or receiver knows how to present
+                    var mimeType = GetMimeType(rawFileData);
+
+                    return APITools.SendFileToCaller(rawFileData, incomingRequest, mimeType);
+                }
+                //JSON convert to table needs extra step
+                //NOTE: this generic JSON to JPEG converter,
+                //if rendering not good implement custom IToJpeg
+                else  /*(rawPlanetData is IToJson iToJson)*/
+                {
+                    //first convert to json
+                    //var rawJsonFormat = Tools.AnyToJSON(calculatorName, rawPlanetData);
+                    DataTable rawTable = Tools.AnyToDataTable(calculatorName, rawPlanetData);
+                   
+                    //then to generic Table format
+                    //DataTable rawTable = Tools.ConvertJPropertyToDataTable(rawTableFormat);
+
+                    //convert data table to JPEG image
+                    var image = Tools.DataTableToJpeg(rawTable);
+
+                    //get correct mime type so browser or receiver knows how to present
+                    var mimeType = GetMimeType(image);
+
+                    return APITools.SendFileToCaller(image, incomingRequest, mimeType);
+                }
+
+                Type type = rawPlanetData.GetType();
+                return APITools.FailMessageJson($"JPEG Formatter for {type.Name} under construction. Donate to speed up development.", incomingRequest);
+            }
 
             //then it is a file
-            if (rawPlanetData is byte[] rawFileData)
+            else if (rawPlanetData is byte[] rawFileData)
             {
                 //get correct mime type so browser or receiver knows how to present
                 var mimeType = GetMimeType(rawFileData);

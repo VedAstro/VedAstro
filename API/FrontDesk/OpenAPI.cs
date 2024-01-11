@@ -4,6 +4,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 using Azure;
+using ScottPlot.Palettes;
 
 
 namespace API
@@ -40,6 +41,9 @@ namespace API
                 //0 : LOG CALL : used later for throttle limit
                 //var callLog = await APILogger.Visit(incomingRequest);
 
+                //1 : extract out custom format else empty string (removed from url)
+                var format = ParseAndGetFormat(fullParamString);
+
                 //process call smartly
                 var rawPlanetData = await HandleOpenAPICalls(calculatorName, fullParamString);
 
@@ -57,7 +61,7 @@ namespace API
                         //send direct as raw SVG image
                         return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawPlanetData), incomingRequest, "image/svg+xml");
                     default:
-                        return APITools.SendAnyToCaller(calculatorName, rawPlanetData, incomingRequest);
+                        return APITools.SendAnyToCaller(format, calculatorName, rawPlanetData, incomingRequest);
                 }
             }
 
@@ -92,7 +96,8 @@ namespace API
                 var callList = GenerateCallList(fullParamString);
 
                 //make new calculation for all planets or houses 
-                rawPlanetData = await ProcessAllCalls(calculatorName, callList);
+                rawPlanetData = ProcessAllCalls(calculatorName, callList);
+
             }
             //SINGLE / NORMAL
             else
@@ -137,28 +142,55 @@ namespace API
         /// <summary>
         /// Make call one by one for URL provided and return combined results
         /// </summary>
-        private static async Task<JArray> ProcessAllCalls(string calculatorName, Dictionary<dynamic, string> callList)
+        private static Dictionary<string, dynamic> ProcessAllCalls(string calculatorName, Dictionary<dynamic, string> callList)
         {
-            var rawPlanetData = new JArray();
-            //TODO can be made PARALLEL for speed, but disordered data
+            var rawPlanetData = new Dictionary<string, dynamic>();
             foreach (var callUrl in callList)
             {
                 var variedDataName = callUrl.Key.ToString();
                 var variedURL = callUrl.Value;
-                var rawData = await SingleAPICallData(calculatorName, variedURL);
-                var jProperty = Tools.AnyToJSON(variedDataName, rawData);
-                JObject obj = new JObject();
-                obj.Add(jProperty);
-                rawPlanetData.Add(obj);
+
+                //do heavy compute to get raw data
+                var rawData = SingleAPICallData(calculatorName, variedURL).Result;
+
+                //get method info of the called method and get it's
+                var ccc = Tools.MethodNameToMethodInfo(calculatorName, new[] { typeof(Calculate) });
+                var returnType = ccc.ReturnType;
+
+                // Cast rawData to its underlying type here
+                var castedData = Convert.ChangeType(rawData, returnType); // Use Convert.ChangeType
+
+                rawPlanetData.Add(variedDataName, castedData);
             }
             return rawPlanetData;
         }
 
 
+        //private static async Task<JArray> ProcessAllCalls(string calculatorName, Dictionary<dynamic, string> callList)
+        //{
+        //    var rawPlanetData = new JArray();
+        //    //TODO can be made PARALLEL for speed, but disordered data
+        //    foreach (var callUrl in callList)
+        //    {
+        //        var variedDataName = callUrl.Key.ToString();
+        //        var variedURL = callUrl.Value;
+
+        //        //do heavy compute to get raw data
+        //        var rawData = await SingleAPICallData(calculatorName, variedURL);
+
+        //        var jProperty = Tools.AnyToJSON(variedDataName, rawData);
+        //        JObject obj = new JObject();
+        //        obj.Add(jProperty);
+        //        rawPlanetData.Add(obj);
+        //    }
+        //    return rawPlanetData;
+        //}
+
+
         /// <summary>
         /// Main method that handles all API calls, be it SINGLE or ALL
         /// </summary>
-        private static async Task<object?> SingleAPICallData(string calculatorName, string fullParamString)
+        private static async Task<dynamic> SingleAPICallData(string calculatorName, string fullParamString)
         {
             //1 : GET INPUT DATA
             var calculator =
@@ -167,7 +199,6 @@ namespace API
 
             //2 : CUSTOM AYANAMSA (removes ayanamsa once read)
             fullParamString = ParseAndSetAyanamsa(fullParamString);
-
 
             //3: GET INPUTED PARAMETERS
             var rawOut = await ParseUrlParameters(fullParamString, calculator);
@@ -193,6 +224,7 @@ namespace API
             }
 
             return rawPlanetData;
+
         }
 
         /// <summary>
@@ -252,6 +284,30 @@ namespace API
             }
         }
 
+        /// <summary>
+        /// To detect if api caller wants image instead
+        /// </summary>
+        public static string ParseAndGetFormat(string fullParamString)
+        {
+            //if url contains word "ayanamsa" than process it
+            var isCustomFormat = fullParamString.Contains("Format/");
+            if (isCustomFormat)
+            {
+                //scan URL and take out ayanamsa and set it
+                var splitParamString = fullParamString.Split('/');
+                var formatLocation = Array.IndexOf(splitParamString, "Format");
+                var formatValue = splitParamString[formatLocation + 1];
+
+                return formatValue;
+            }
+
+            //if no ayanamsa, then return as is
+            else
+            {
+                return "";
+            }
+        }
+
 
         /// <summary>
         /// Reads URL data to instances
@@ -280,7 +336,7 @@ namespace API
 
             //STAGE 2 : HANDLE OPTIONAL PARAMETERS (can be in any order)
             var optionalParsedInputParamList = new Dictionary<string, dynamic>();
-            
+
             //only continue if param string still has data
             if (!IsNoURLDataLeft(fullParamString))
             {
@@ -295,7 +351,7 @@ namespace API
                 foreach (var optionalParam in allOptionalParams)
                 {
                     var lookingForName = optionalParam.Name.ToLower();
-                    
+
                     //get index of param name that matches
                     var foundIndex = brokenParams.ToList().FindIndex(p => p.ToLower() == lookingForName);
 
@@ -307,7 +363,7 @@ namespace API
 
                     //get the correct parser (can be for double, int or string)
                     var parser = GetParser(optionalParam.ParameterType);
-                    
+
                     //parse the data
                     var parsedData = parser(valueToParse);
 

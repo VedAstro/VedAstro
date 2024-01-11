@@ -1058,12 +1058,8 @@ namespace API
                 else  /*(rawPlanetData is IToJson iToJson)*/
                 {
                     //first convert to json
-                    //var rawJsonFormat = Tools.AnyToJSON(calculatorName, rawPlanetData);
                     DataTable rawTable = Tools.AnyToDataTable(calculatorName, rawPlanetData);
-                   
-                    //then to generic Table format
-                    //DataTable rawTable = Tools.ConvertJPropertyToDataTable(rawTableFormat);
-
+                    
                     //convert data table to JPEG image
                     var image = Tools.DataTableToJpeg(rawTable);
 

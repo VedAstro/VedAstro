@@ -1798,13 +1798,13 @@ namespace VedAstro.Library
             // Get the enum name and value from the URL parts
             var enumName = parts[0];
             var enumValue = parts[1];
-            
+
             // Get the type of the enum from the namespace and enum name
             var enumType = Type.GetType(Namespace + enumName);
-            
+
             // If the enum type is null, it was not found in the namespace
             if (enumType == null) { throw new ArgumentException($"Enum type '{enumName}' not found in namespace '{Namespace}'.", nameof(url)); }
-            
+
             try
             {
                 // Try to parse the enum value
@@ -1827,7 +1827,7 @@ namespace VedAstro.Library
                 throw;
             }
         }
-        
+
         public static object EnumFromUrl(string url, Type enumType)
         {
             // Constants for namespace and special enum name
@@ -1843,13 +1843,13 @@ namespace VedAstro.Library
             // Get the enum name and value from the URL parts
             var paramName = parts[0];
             var enumValue = parts[1];
-            
+
             // Get the type of the enum from the namespace and enum name
             //var enumType = Type.GetType(Namespace + enumName);
-            
+
             // If the enum type is null, it was not found in the namespace
             if (enumType == null) { throw new ArgumentException($"Enum type '{paramName}' not found in namespace '{Namespace}'.", nameof(url)); }
-            
+
             try
             {
                 // Try to parse the enum value
@@ -2775,6 +2775,36 @@ namespace VedAstro.Library
                 case Dictionary<HouseName, PlanetName> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
                 case Dictionary<HouseName, ZodiacName> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
                 case Dictionary<HouseName, Constellation> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
+                case Dictionary<string, object> dictionary:
+                    {
+                        //cast to correct type
+                        //var array = new JArray();
+
+                        // Assuming you have a list of JProperty
+                        List<JProperty> properties = new();
+
+                        foreach (var item in dictionary)
+                        {
+                            var allItemKeyName = item.Key.ToString();
+                            var apiFunctionResults = (List<APIFunctionResult>)item.Value;
+                            var ccc = Tools.AnyToJSON(allItemKeyName, apiFunctionResults);
+
+                            properties.Add((JProperty)ccc);
+                        }
+
+
+                        // To place them into a JArray, you can use the following code:
+                        JArray jArray = new JArray();
+                        foreach (var property in properties)
+                        {
+                            // Create a JObject from the JProperty and add it to the JArray
+                            JObject jObject = new JObject(property);
+                            jArray.Add(jObject);
+                        }
+
+                        rootPayloadJson = new JProperty(dataName, jArray);
+                        break;
+                    }
                 case Dictionary<HouseName, IList> dictionary:
                     {
 
@@ -2816,6 +2846,7 @@ namespace VedAstro.Library
             return rootPayloadJson;
 
         }
+        
         public static DataTable AnyToDataTable(string dataName, dynamic anyTypeData)
         {
             //process list differently
@@ -2980,9 +3011,23 @@ namespace VedAstro.Library
         {
             //add columns names
             var colName1 = dictionary.First().Key.GetType().Name;
-            var colName2 = dictionary.First().Value.GetType().Name;
             table.Columns.Add(colName1);
-            table.Columns.Add(colName2);
+
+            var value = dictionary.First().Value;   
+            if (value is List<APIFunctionResult> ccc)
+            {
+                foreach (var apiFunctionResult in ccc)
+                {
+                    //add in column name
+                    table.Columns.Add(apiFunctionResult.Name);
+                }
+            }
+            else
+            {
+                var colName2 = value.GetType().Name;
+                table.Columns.Add(colName2);
+
+            }
 
             //add in rows
             foreach (var item in dictionary)
@@ -2991,12 +3036,25 @@ namespace VedAstro.Library
                 var column1Data = item.Key;
                 var column2Data = item.Value;
 
+                if (column2Data is List<APIFunctionResult> allCallResults)
+                {
+                    //extra logic for rows
+                    var arrayObjects = new List<object>();
+                    foreach (var apiFunctionResult in allCallResults)
+                    {
+                        //add in data
+                        var result = apiFunctionResult.Result;
+                        arrayObjects.Add(Tools.AnyToString(result));
+                    }
+                    table.Rows.Add(arrayObjects.ToArray());
+                }
                 //if list need to break down, with comma
-                if (column2Data is IList iList)
+                else if (column2Data is IList iList)
                 {
                     var listData = string.Join(",", iList.Cast<object>());
                     table.Rows.Add(column1Data, listData);
                 }
+                //handle ALL API calls
                 else
                 {
                     table.Rows.Add(column1Data.ToString(), column2Data.ToString());

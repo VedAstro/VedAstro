@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -2815,6 +2816,193 @@ namespace VedAstro.Library
             return rootPayloadJson;
 
         }
+        public static DataTable AnyToDataTable(string dataName, dynamic anyTypeData)
+        {
+            //process list differently
+            var table = new DataTable();
+
+            switch (anyTypeData)
+            {
+                //case JObject jObject:
+                //    rootPayloadJson = new JProperty(dataName, jObject);
+                //    break;
+
+                //case List<House> dictionary:
+                //    {
+                //        var array = new JArray();
+                //        foreach (var item in dictionary)
+                //        {
+                //            var obj = new JObject
+                //        {
+                //            { "House", item.GetHouseName().ToString() },
+                //            { "Begin", item.GetBeginLongitude().ToString() },
+                //            { "Mid", item.GetMiddleLongitude().ToString() },
+                //            { "End", item.GetEndLongitude().ToString() }
+                //        };
+                //            array.Add(obj);
+                //        }
+
+                //        rootPayloadJson = new JProperty(dataName, array);
+                //        break;
+                //    }
+                //case List<Tuple<Time, Time, ZodiacName, PlanetName>> dictionary:
+                //    {
+                //        var array = new JArray();
+                //        foreach (var item in dictionary)
+                //        {
+                //            var obj = new JObject
+                //        {
+                //            { "Start", item.Item1.ToJson() },
+                //            { "End", item.Item2.ToJson() },
+                //            { "ZodiacSign", item.Item3.ToString() },
+                //            { "Planet", item.Item4.ToString() }
+                //        };
+                //            array.Add(obj);
+                //        }
+
+                //        rootPayloadJson = new JProperty(dataName, array);
+                //        break;
+                //    }
+
+                ////handles results that have many props from 1 call, exp : SwissEphemeris
+                //case List<APIFunctionResult> apiList:
+                //    {
+                //        //converts into JSON list with property names
+                //        //NOTE: uses back this AnyToJSON to convert nested types
+                //        var parsed = APIFunctionResult.ToJsonList(apiList);
+                //        rootPayloadJson = new JProperty(dataName, parsed);
+                //        return rootPayloadJson;
+                //    }
+
+                //case List<HoroscopePrediction> apiList:
+                //    {
+                //        var parsed = HoroscopePrediction.ToJsonList(apiList);
+                //        return parsed;
+                //    }
+
+                //case List<PlanetName> planetList:
+                //    {
+                //        var parsed = PlanetName.ToJsonList(planetList);
+                //        rootPayloadJson = new JProperty(dataName, parsed);
+                //        return rootPayloadJson;
+                //    }
+
+                //case List<JObject> jObjectList:
+                //    {
+
+                //        var parsed = ListToJson(jObjectList);
+                //        rootPayloadJson = new JProperty(dataName, parsed);
+
+                //        return rootPayloadJson;
+                //    }
+
+                //case List<DasaEvent> dasaEventList:
+                //    {
+                //        var parsed = DasaEvent.ToJsonList(dasaEventList);
+                //        rootPayloadJson = new JProperty(dataName, parsed);
+
+                //        return rootPayloadJson;
+                //    }
+
+                case IList iList:
+                    {
+
+                        //add in rows
+                        foreach (var item in iList)
+                        {
+                            table.Rows.Add(item.ToString());
+                        }
+                        break;
+                    }
+
+                //handles results that have many props from 1 call, exp : SwissEphemeris
+                case Dictionary<PlanetName, ZodiacSign> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<PlanetName, Angle> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<PlanetName, PlanetName> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<PlanetName, ZodiacName> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<PlanetName, Constellation> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<PlanetName, HouseName> dictionary: DictionaryToDataTable(dictionary, table); break;
+
+                case Dictionary<string, object> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, Angle> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, ZodiacSign> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, PlanetName> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, ZodiacName> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, Constellation> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, IList> dictionary: DictionaryToDataTable(dictionary, table); break;
+                //case Dictionary<HouseName, IList> dictionary:
+                //    {
+
+                //        var array = new JArray();
+                //        foreach (var item in dictionary)
+                //        {
+                //            var obj = new JObject
+                //        {
+                //            { "House", item.Key.ToString() },
+                //            { dataName,  Tools.ListToString((List<IList>)item.Value) }
+                //        };
+                //            array.Add(obj);
+                //        }
+
+                //        rootPayloadJson = new JProperty(dataName, array);
+                //        break;
+
+                //    }
+
+                //case Dictionary<ZodiacName, int> dictionary:
+                //    {
+                //        //convert list to comma separated string
+                //        var parsedList = dictionary.Cast<object>().ToList();
+                //        var stringComma = Tools.ListToString(parsedList);
+
+                //        rootPayloadJson = new JProperty(dataName, stringComma);
+                //        break;
+                //    }
+                //custom JSON converter available
+                case IToJson iToJson:
+
+                    //rootPayloadJson = new JProperty(dataName, iToJson.ToJson());
+                    break;
+                //normal conversion via "ToString"
+                default:
+                    //throw new NotImplementedException();
+                    //rootPayloadJson = new JProperty(dataName, anyTypeData?.ToString());
+                    break;
+            }
+
+
+
+            return table;
+
+        }
+
+        private static void DictionaryToDataTable<T, Y>(Dictionary<T, Y> dictionary, DataTable table)
+        {
+            //add columns names
+            var colName1 = dictionary.First().Key.GetType().Name;
+            var colName2 = dictionary.First().Value.GetType().Name;
+            table.Columns.Add(colName1);
+            table.Columns.Add(colName2);
+
+            //add in rows
+            foreach (var item in dictionary)
+            {
+                //data to put in row
+                var column1Data = item.Key;
+                var column2Data = item.Value;
+
+                //if list need to break down, with comma
+                if (column2Data is IList iList)
+                {
+                    var listData = string.Join(",", iList.Cast<object>());
+                    table.Rows.Add(column1Data, listData);
+                }
+                else
+                {
+                    table.Rows.Add(column1Data.ToString(), column2Data.ToString());
+                }
+            }
+        }
 
         /// <summary>
         /// Place Dictionary data nicely into JSON form
@@ -3628,6 +3816,101 @@ namespace VedAstro.Library
                 throw new Exception($"Failed to get {typeof(T).AssemblyQualifiedName} from API payload");
             }
 
+        }
+
+        public static byte[] DataTableToJpeg(DataTable table)
+        {
+            // Create a new Bitmap object
+            Bitmap bitmap = new Bitmap(1, 1);
+            Graphics g = Graphics.FromImage(bitmap);
+
+            // Calculate the maximum width for each column
+            int[] columnWidths = new int[table.Columns.Count];
+            for (int j = 0; j < table.Columns.Count; j++)
+            {
+                // Use the column name for the header row
+                var headerFont = new Font("Arial", 10, FontStyle.Bold);
+                var headerSize = g.MeasureString(table.Columns[j].ColumnName, headerFont);
+                columnWidths[j] = (int)headerSize.Width;
+
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    var font = new Font("Arial", 10);
+                    var textSize = g.MeasureString(table.Rows[i][j].ToString(), font);
+                    columnWidths[j] = Math.Max(columnWidths[j], (int)textSize.Width);
+                }
+            }
+
+            // Dispose of the initial Graphics object and create a new one with the correct dimensions
+            g.Dispose();
+            int totalWidth = columnWidths.Sum() + table.Columns.Count * 2; // Add padding
+            bitmap = new Bitmap(totalWidth, (table.Rows.Count + 1) * 20); // Add a row for the header
+            g = Graphics.FromImage(bitmap);
+
+            // Draw the table
+            int currentX = 0;
+            for (int j = 0; j < table.Columns.Count; j++)
+            {
+                // Draw the header row
+                g.FillRectangle(Brushes.White, new Rectangle(currentX, 0, columnWidths[j] + 2, 20)); // Add padding
+                g.DrawRectangle(Pens.Black, new Rectangle(currentX, 0, columnWidths[j] + 2, 20)); // Add padding
+                var headerFont = new Font("Arial", 10, FontStyle.Bold);
+                g.DrawString(table.Columns[j].ColumnName, headerFont, Brushes.Black, new PointF(currentX + 3, 1)); // Add padding
+
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    g.FillRectangle(Brushes.White, new Rectangle(currentX, (i + 1) * 20, columnWidths[j] + 2, 20)); // Add padding
+                    g.DrawRectangle(Pens.Black, new Rectangle(currentX, (i + 1) * 20, columnWidths[j] + 2, 20)); // Add padding
+
+                    var font = new Font("Arial", 10);
+                    g.DrawString(table.Rows[i][j].ToString(), font, Brushes.Black, new PointF(currentX + 3, (i + 1) * 20 + 1)); // Add padding
+                }
+                currentX += columnWidths[j] + 2; // Move to next column position
+            }
+
+            // Convert the image to a byte array
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                return ms.ToArray();
+            }
+        }
+
+        public static DataTable ConvertJPropertyToDataTable(JProperty jProperty)
+        {
+            // Create a new DataTable.
+            DataTable dataTable = new DataTable();
+
+            // Define a flag for the first row.
+            bool firstRow = true;
+
+            // Parse the JProperty values.
+            foreach (JObject jObject in jProperty.Value)
+            {
+                DataRow row = dataTable.NewRow();
+
+                // Extract the property values.
+                var properties = jObject.Properties();
+                foreach (var property in properties)
+                {
+                    // If it's the first row, add the property names as column names.
+                    if (firstRow)
+                    {
+                        dataTable.Columns.Add(property.Name, typeof(string));
+                    }
+
+                    // Add the value to the row.
+                    row[property.Name] = (string)property.Value;
+                }
+
+                // Add the row to the DataTable.
+                dataTable.Rows.Add(row);
+
+                // After the first row, set the flag to false.
+                firstRow = false;
+            }
+
+            return dataTable;
         }
     }
 

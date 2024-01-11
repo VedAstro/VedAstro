@@ -63,54 +63,7 @@ namespace VedAstro.Library
             //convert current instance to a table format
             var table = this.ToDataTable();
 
-            // Create a new Bitmap object
-            Bitmap bitmap = new Bitmap(1, 1);
-            Graphics g = Graphics.FromImage(bitmap);
-
-            // Calculate the maximum width for each column
-            int[] columnWidths = new int[table.Columns.Count];
-            for (int j = 0; j < table.Columns.Count; j++)
-            {
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    var font = i == 0 ? new Font("Arial", 10, FontStyle.Bold) : new Font("Arial", 10);
-                    var textSize = g.MeasureString(table.Rows[i][j].ToString(), font);
-                    columnWidths[j] = Math.Max(columnWidths[j], (int)textSize.Width);
-                }
-            }
-
-            // Dispose of the initial Graphics object and create a new one with the correct dimensions
-            g.Dispose();
-            int totalWidth = columnWidths.Sum() + table.Columns.Count * 2; // Add padding
-            bitmap = new Bitmap(totalWidth, table.Rows.Count * 20);
-            g = Graphics.FromImage(bitmap);
-
-            // Draw the table
-            int currentX = 0;
-            for (int j = 0; j < table.Columns.Count; j++)
-            {
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    g.FillRectangle(Brushes.White, new Rectangle(currentX, i * 20, columnWidths[j] + 2, 20)); // Add padding
-                    g.DrawRectangle(Pens.Black, new Rectangle(currentX, i * 20, columnWidths[j] + 2, 20)); // Add padding
-
-                    // Use a bold font for the first row (header)
-                    var font = i == 0 ? new Font("Arial", 10, FontStyle.Bold) : new Font("Arial", 10);
-
-                    // Add padding
-                    var leftPadding = 3;
-                    var topPadding = 1;
-                    g.DrawString(table.Rows[i][j].ToString(), font, Brushes.Black, new PointF(currentX + leftPadding, i * 20 + topPadding));
-                }
-                currentX += columnWidths[j] + 2; // Move to next column position
-            }
-
-            // Convert the image to a byte array
-            using (MemoryStream ms = new MemoryStream())
-            {
-                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                return ms.ToArray();
-            }
+            return Tools.DataTableToJpeg(table);
         }
 
 

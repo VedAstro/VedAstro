@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VedAstro.Library;
 using System;
 using System.Collections.Generic;
@@ -616,5 +616,13 @@ namespace VedAstro.Library.Tests
             Assert.Fail();
         }
 
+        [TestMethod()]
+        public void DayOfWeekTest()
+        {
+
+            var testDay1 = Calculate.DayOfWeek(StandardHoroscope);
+
+
+        }
     }
 }

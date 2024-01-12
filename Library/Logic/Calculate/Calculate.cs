@@ -88,7 +88,33 @@ namespace VedAstro.Library
             //Karana (half of a Tithi)
             var karana = Calculate.Karana(inputTime);
 
-            return new PanchangaTable(tithi, weekDay, constellation, yoga, karana);
+            //Disha Shool
+            var dishaShool = Calculate.DishaShool(inputTime);
+
+            return new PanchangaTable(tithi, weekDay, constellation, yoga, karana, dishaShool);
+        }
+
+        /// <summary>
+        /// Here are the following Disha shool days and the directions that are considered as
+        /// inauspicious or Disha shool. Check the Disha Shool chart to find the inauspicious direction to travel 
+        /// </summary>
+        public static string DishaShool(Time inputTime)
+        {
+            //vedic day
+            var vedicWeekDay = Calculate.DayOfWeek(inputTime);
+
+            switch (vedicWeekDay)
+            {
+                case Library.DayOfWeek.Monday: return "East";
+                case Library.DayOfWeek.Tuesday: return "North";
+                case Library.DayOfWeek.Wednesday: return "North";
+                case Library.DayOfWeek.Thursday: return "South";
+                case Library.DayOfWeek.Friday: return "West";
+                case Library.DayOfWeek.Saturday: return "East";
+                case Library.DayOfWeek.Sunday: return "West";
+            }
+
+            throw new Exception("END OF LINE!");
         }
 
 
@@ -6820,7 +6846,11 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Get Day Of Week
+        /// Get Vedic Day Of Week
+        /// The Hindu day begins with sunrise and continues till
+        /// next sunrise.The first hora on any day will be the
+        /// first hour after sunrise and the last hora, the hour
+        /// before sunrise the next day.
         /// </summary>
         public static DayOfWeek DayOfWeek(Time time)
         {
@@ -6831,24 +6861,42 @@ namespace VedAstro.Library
             //UNDERLYING FUNCTION
             DayOfWeek _getDayOfWeek()
             {
-                //The Hindu day begins with sunrise and continues till
-                //next sunrise.The first hora on any day will be the
-                //first hour after sunrise and the last hora, the hour
-                //before sunrise the next day.
+                // The Hindu day begins with sunrise and continues till
+                // next sunrise. The first hora on any day will be the
+                // first hour after sunrise and the last hora, the hour
+                // before sunrise the next day.
 
-                //TODO Change to new day system
-                //TODO make test first
+                //TODO NEEDS VERIFICATION
 
                 var sunRise = Calculate.SunriseTime(time);
 
-                //get week day name in string
-                var dayOfWeekNameInString = time.GetLmtDateTimeOffset().DayOfWeek.ToString();
+                // If the current time is after today's sunrise and before tomorrow's sunrise,
+                // then it is still considered today.
+                var tomorrowSunrise = Calculate.SunriseTime(time.AddHours(24)).GetLmtDateTimeOffset();
+                var todaySunrise = sunRise.GetLmtDateTimeOffset();
+                var lmtTime = time.GetLmtDateTimeOffset();
 
-                //convert string to day of week type
-                Enum.TryParse(dayOfWeekNameInString, out DayOfWeek dayOfWeek);
+                if (lmtTime >= todaySunrise  && lmtTime < tomorrowSunrise )
+                {
+                    //get week day name in string
+                    var dayOfWeekNameInString = lmtTime.DayOfWeek.ToString();
 
-                //return to caller
-                return dayOfWeek;
+                    //convert string to day of week type
+                    Enum.TryParse(dayOfWeekNameInString, out DayOfWeek dayOfWeek);
+
+                    return dayOfWeek;
+                }
+                else
+                {
+                    //get week day name in string
+                    var dayOfWeekNameInString = lmtTime.AddDays(-1).DayOfWeek.ToString();
+
+                    //convert string to day of week type
+                    Enum.TryParse(dayOfWeekNameInString, out DayOfWeek dayOfWeek);
+
+                    // If the current time is before today's sunrise, then it is considered the previous day.
+                    return dayOfWeek;
+                }
             }
 
 

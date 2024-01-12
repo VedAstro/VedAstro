@@ -8,7 +8,7 @@ namespace VedAstro.Library
     /// <summary>
     /// Data package for holding Panchanga Table as data
     /// </summary>
-    public class PanchangaTable(LunarDay tithi, DayOfWeek weekDay, Constellation constellation, NithyaYoga yoga, Karana karana):IToJpeg, IToJson, IToDataTable
+    public class PanchangaTable(LunarDay tithi, DayOfWeek weekDay, Constellation constellation, NithyaYoga yoga, Karana karana, string dishaShool) :IToJpeg, IToJson, IToDataTable
     {
         public byte[] ToJpeg() { var table = this.ToDataTable(); return Tools.DataTableToJpeg(table); }
 
@@ -27,6 +27,7 @@ namespace VedAstro.Library
             table.Rows.Add("Nakshatra", constellation);
             table.Rows.Add("Yoga", yoga);
             table.Rows.Add("Karana", karana);
+            table.Rows.Add("DishaShool", dishaShool);
 
 
             return table;
@@ -40,6 +41,7 @@ namespace VedAstro.Library
             returnVal["Nakshatra"] = constellation.ToString();
             returnVal["Yoga"] = yoga.ToJson();
             returnVal["Karana"] = karana.ToString();
+            returnVal["DishaShool"] = dishaShool.ToString();
 
             return returnVal;
 

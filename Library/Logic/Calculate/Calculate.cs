@@ -11829,6 +11829,14 @@ namespace VedAstro.Library
             //return strongest planet name
             return strongest.Key;
         }
+
+        public static SignProperties SignProperties(ZodiacName inputSign)
+        {
+            //input can be "Aries", "Leo"
+            var signProperties = new SignProperties(inputSign);
+
+            return signProperties;
+        }
     }
 }
 

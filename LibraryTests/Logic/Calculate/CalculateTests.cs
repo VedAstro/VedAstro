@@ -621,8 +621,15 @@ namespace VedAstro.Library.Tests
         {
 
             var testDay1 = Calculate.DayOfWeek(StandardHoroscope);
+        }
 
+        [TestMethod()]
+        public void SignPropertiesTest()
+        {
+
+            var testDay1 = Calculate.SignProperties(ZodiacName.Aries);
 
         }
+
     }
 }

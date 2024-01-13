@@ -67,6 +67,7 @@
 
 
         //DONATE
+        public const string ThankYou = "Donate/ThankYou";
         public const string Donate = "Donate/";
         public const string DonateOld = "DonateOld/";
         public const string DonatePayment = "Donate/Payment"; //contains Paypal sample code

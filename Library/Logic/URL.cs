@@ -184,6 +184,8 @@ public class URL
     public const string KoFiPage = "https://ko-fi.com/vedastro";
     public const string KoFiPageMemberships = "https://ko-fi.com/vedastro/tiers";
     public const string KoFiSponsorMemberships = "https://ko-fi.com/summary/2f3ac2df-9d55-4c48-87cf-2d6af0b80ceb";
+    public const string StripeINRSupportPayementLink = "https://buy.stripe.com/aEU5lU7nV4Pl0DKcMM";
+    public const string StripeUSDSupportPayementLink = "https://buy.stripe.com/7sI15E8rZepVbio289";
     public const string KoFiPrivateServer = "https://ko-fi.com/summary/783edc41-20e6-4e78-adb2-d4380577b5d1";
     public const string KoFiDonateIframe = "https://ko-fi.com/vedastro/?hidefeed=true&widget=true&embed=true&preview=true";
     public const string PaypalMePage = "https://paypal.me/VedAstroOrg";

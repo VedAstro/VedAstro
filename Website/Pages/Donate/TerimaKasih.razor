@@ -1,32 +1,17 @@
 ﻿@using VedAstro.Library
-@attribute [Route(PageRoute.Donate)]
+@attribute [Route(PageRoute.ThankYou)]
 
-<PageTitle>Donate</PageTitle>
+<PageTitle>Thank You</PageTitle>
 
-@* <PageTop ImageName="donate-banner.png"
-         Title="Support us"
-         DescriptionText="Help pay bills, maintain servers and improve the project. Contribute for the benefit of all people. Opportunity for good karma.">
-</PageTop>
- *@
 
-<PageTopSideImage ImageWidth="@GR.W157" ImageName="donate-banner.png"
-                  Title="Crowdfunding"
-                  DescriptionText="Help pay bills, maintain servers and improve the project. Contribute for the benefit of all people. Opportunity for good karma." />
 
-@*KO-FI WIDGET*@
-<div class="vstack" style="">
-    <iframe class="align-self-center border shadow rounded-4" id='kofiframe' src='@URL.KoFiDonateIframe' style="width: @GR.W412px; height: 557px;" title='vedastro'></iframe>
+<div class="d-flex flex-column justify-content-center" style="max-width:@GR.W667px;">
+    <img style="max-width:@GR.W255px;" src="images/donate-thank-you.png" />
+    <H1>Thank You</H1>
+    <H4>Your kind contribution<br />means the world to us.</H4>
+    <p>We will reach out to you via email soon.</p>
 </div>
 
-
-<IconTitle ExtraClass="mt-3" Title="Options" TitleHolder="h4" />
-<div class="hstack gap-3">
-    @*STACK BOXES ON RIGHT*@
-    <InfoBox Width="255" Title="Gifts" Description="Donate warm gifts, instead of cold cash" IconName="fluent-emoji:wrapped-gift" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("WishList"))" />
-    <InfoBox Width="255" Title="Crypto" Description="Instant and anonymous donation" IconName="cryptocurrency-color:btc" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("ForCryptoGeeks"))" />
-    <InfoBox Width="255" Title="Patreon" Description="Monthly contribution via Patreon" IconName="logos:patreon" IsNewTabOpen="true" ClickUrl="@URL.PatreonPage" />
-    @* <InfoBox Width="255" Title="Bank Transfer" Description="Send money via BIC/SWIFT transfer" IconName="noto-v1:bank" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("BankDetails"))" /> *@
-</div>
 
 <hr />
 
@@ -170,23 +155,6 @@
     private bool IsFromIndia = false;
 
 
-    protected override void OnInitialized()
-    {
-        //check if from India, than show different payment option
-        IsFromIndia = AppData.ClientLocation.Name().ToLower().Contains("india");
-
-        WebsiteTools.SendMailToAPI("User in Donate Page from", AppData.ClientLocation.Name());
-
-        //if from india then redirect to special page (Stripe)
-        if (IsFromIndia)
-        {
-            AppData.Go(URL.StripeINRSupportPayementLink);
-        }
-        else
-        {
-            AppData.Go(URL.StripeUSDSupportPayementLink);
-        }
-    }
 
     private async Task OnClickBankTransfer()
     {

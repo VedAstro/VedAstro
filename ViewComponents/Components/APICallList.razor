@@ -116,6 +116,8 @@
 </div>
 @code {
 
+
+
     /// <summary>
     /// Unique colors to id different params
     /// </summary>
@@ -138,11 +140,6 @@
     private ElementReference _resultsBox;
     private ElementReference _loadingBox;
 
-    /// <summary>
-    /// This delay helps to wait for user to finish typing before starting to render list
-    /// reduces lag and makes for better UX
-    /// </summary>
-    private static System.Timers.Timer _onKeyUpWaitTimer = new(3500);
 
     //data used to track search timer
     private static bool searchIsRunning = false;
@@ -168,6 +165,11 @@
 
     private bool _showLoading = false;
 
+    /// <summary>
+    /// This delay helps to wait for user to finish typing before starting to render list
+    /// reduces lag and makes for better UX
+    /// </summary>
+    private static Timer _onKeyUpWaitTimer = new(200);
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀

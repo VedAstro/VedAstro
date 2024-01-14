@@ -24,7 +24,7 @@ public class MethodDocumentation
 /// <summary>
 /// static meta data for a given method in Open API
 /// </summary>
-public class OpenAPIMetadata : IToJson
+public class OpenAPIMetadata : EventArgs, IToJson
 {
     public static List<OpenAPIMetadata> CachedAllMethoInfoList { get; set; } = new();
 

@@ -19,7 +19,7 @@
     <IconTitle IconSize="AppData.DefaultIconSize" Title="Browse Calls" IconName="fluent:line-horizontal-4-search-16-filled" TitleHolder="h4">
         <ButtonRow>
             <span style="font-size: 25px;">
-                Count : <strong>@MethodListFiltered.Count</strong>
+                Count : <strong id="FoundMethodInfoCountElm">0</strong>
             </span>
         </ButtonRow>
     </IconTitle>
@@ -30,7 +30,7 @@
         <div class="vstack gap-1">
             @* SEARCH *@
             <div class="hstack gap-2">
-                <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                <input id="APICallListSearchInputElement" @ref="_searchInput" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
             </div>
 
             @* METHOD DATA LIST *@
@@ -46,11 +46,12 @@
                 </div>
 
                 @* RESULTS HOLDER *@
-                <div @ref="_resultsBox" style="">
+                @* id used to hide show children *@
+                <div id="AllMethodInfoHolder" @ref="_resultsBox" style="">
                     @* list of method data *@
-                    @foreach (var methodData in MethodListFiltered)
+                    @foreach (var methodData in MethodListALL)
                     {
-                        <div class="card shadow mt-2">
+                        <div class="@methodData.Name MethodInfoHolder card shadow mt-2">
                             <div class="card-header d-flex justify-content-between">
                                 @* NAME *@
                                 <h6 class="mb-0">
@@ -97,6 +98,7 @@
                                     @* CALL, COPY, GOTO CODE BUTTONS *@
                                     <div>
                                         <div class="vstack gap-2" style="scale: 0.85;">
+                                            <IconButton FullWidth="true" ButtonText="Select API" TooltipText="Choose this API to build" IconName="carbon:select-window" OnClickCallback="@(()=>OnClickSelectAPIHandler(methodData))" SmallSize="true" />
                                             <IconButton FullWidth="true" ButtonText="Copy Python" TooltipText="Copy python snippet" IconName="vscode-icons:file-type-python" OnClickCallback="@(()=>WebsiteTools.OnClickCopyPythonSnippet(methodData))" SmallSize="true" />
                                             <IconButton FullWidth="true" ButtonText="Goto Code" TooltipText="See original source code" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(()=>WebsiteTools.OnClickGotoGithubCode(methodData))" SmallSize="true" />
                                         </div>
@@ -165,12 +167,41 @@
 
     private bool _showLoading = false;
 
-    /// <summary>
-    /// This delay helps to wait for user to finish typing before starting to render list
-    /// reduces lag and makes for better UX
-    /// </summary>
-    private static Timer _onKeyUpWaitTimer = new(200);
 
+    /// <summary>
+    /// Event fired when select API button clicked
+    /// </summary>
+    public event EventHandler OnClickSelectAPI;
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            IEnumerable<string> enumerable = MethodListALL.Select(x => x.SearchText);
+
+            var ccc = new List<object>();
+            foreach (var methodInfoApiMetadata in MethodListALL)
+            {
+                var book = new
+                {
+                    name = methodInfoApiMetadata.Name,
+                    description = methodInfoApiMetadata.SearchText
+                };
+
+                ccc.Add(book);
+            }
+
+            //send all search text for creating an index by the special JS search library (FlexSearch)
+            _jsRuntime.InvokeVoidAsync(JS.InitializeFlexSearch, ccc);
+
+        }
+    }
+
+    private void OnClickSelectAPIHandler(OpenAPIMetadata? methodData, dynamic component = null)
+    {
+        OnClickSelectAPI?.Invoke(this, methodData);
+    }
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
@@ -182,14 +213,23 @@
 
         //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
         MethodListALL = OpenAPIMetadata.FromMethodInfoList();
-        MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
+        //MethodListALLSearchText = enumerable.ToArray();
+
 
         //make copy for search
-        MethodListFiltered = MethodListALL;
+        //MethodListFiltered = MethodListALL;
 
         //show data on display
         _isReady = true;
     }
+
+    /// <summary>
+    /// This delay helps to wait for user to finish typing before starting to render list
+    /// reduces lag and makes for better UX
+    /// </summary>
+    private static Timer _onKeyUpWaitTimer = new(1000);
+    private static bool _searchIsRunning = false;
+
 
     /// <summary>
     /// called when user key up (AI code)
@@ -198,7 +238,6 @@
     /// </summary>
     private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
     {
-        //if arrow keys than obviously don't count
         //if arrow keys, space, or control keys then obviously don't count
         if (keyEventArgs.Code == "ArrowUp" || keyEventArgs.Code == "ArrowDown" ||
             keyEventArgs.Code == "ArrowLeft" || keyEventArgs.Code == "ArrowRight" ||
@@ -211,43 +250,38 @@
             return;
         }
 
+
         if (!_timerInitialized)
         {
             _onKeyUpWaitTimer.Elapsed += OnKeyUpWaitTimerElapsed;
             _timerInitialized = true;
         }
-        if (!searchIsRunning)
+        if (!_searchIsRunning)
         {
-            searchIsRunning = true;
-            _jsRuntime.Show(_loadingBox);
-            _jsRuntime.Hide(_resultsBox);
-            _onKeyUpWaitTimer.Stop();
-            _onKeyUpWaitTimer.Start();
+            // _searchIsRunning = true;
+            // _isReady = false; // show loading icon
         }
+        _onKeyUpWaitTimer.Stop();
+        _onKeyUpWaitTimer.Start();
+
+
     }
 
     private async void OnKeyUpWaitTimerElapsed(object sender, ElapsedEventArgs e)
     {
         _onKeyUpWaitTimer.Stop();
+        
         var searchText = (await _jsRuntime.GetValue(_searchInput)).ToLower();
-        if (string.IsNullOrEmpty(searchText))
-        {
-            MethodListFiltered = MethodListALL;
-        }
-        else
-        {
-            //uses special search library to search through text
-            var results = Process.ExtractAll(searchText, MethodListALLSearchText, cutoff: 60).OrderByDescending(r => r.Score);
-            MethodListFiltered = results.Select(yy => MethodListALL[yy.Index]).ToList();
-        }
+        _jsRuntime.InvokeVoidAsync(JS.SearchAPIMethod, searchText);
 
-        await InvokeAsync(StateHasChanged);
-        _jsRuntime.Hide(_loadingBox);
-        _jsRuntime.Show(_resultsBox);
 
-        searchIsRunning = false;
+        
+        _isReady = true; //hide loading, show results
 
-        StateHasChanged();
+        //_searchIsRunning = false;
+
+        //needed to make change appear
+        //StateHasChanged();
     }
 
     private async Task OnClickCopyAPI(string methodDataName)

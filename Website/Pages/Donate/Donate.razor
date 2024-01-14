@@ -170,12 +170,12 @@
     private bool IsFromIndia = false;
 
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         //check if from India, than show different payment option
         IsFromIndia = AppData.ClientLocation.Name().ToLower().Contains("india");
 
-        WebsiteTools.SendMailToAPI("User in Donate Page from", AppData.ClientLocation.Name());
+        await WebsiteTools.SendMailToAPI("User in Donate Page from", AppData.ClientLocation.Name());
 
         //if from india then redirect to special page (Stripe)
         if (IsFromIndia)
@@ -186,6 +186,7 @@
         {
             AppData.Go(URL.StripeUSDSupportPayementLink);
         }
+
     }
 
     private async Task OnClickBankTransfer()

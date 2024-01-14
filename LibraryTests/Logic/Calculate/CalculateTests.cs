@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VedAstro.Library;
 using System;
 using System.Collections.Generic;
@@ -611,7 +611,23 @@ namespace VedAstro.Library.Tests
         public void GocharaKakshasTest()
         {
 
-            var xxx = Calculate.GocharaKakshas(Time.NowSystem(GeoLocation.Ipoh),StandardHoroscope);
+            var xxx = Calculate.GocharaKakshas(Time.NowSystem(GeoLocation.Ipoh), StandardHoroscope);
+
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void PlanetDrekkanaSignTest()
+        {
+            var ccc = Calculate.PlanetDrekkanaSign(PlanetName.Sun, StandardHoroscope);
+
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void PlanetZodiacSignTest()
+        {
+            var ccc = Calculate.PlanetZodiacSign(PlanetName.Sun, StandardHoroscope);
 
             Assert.Fail();
         }
@@ -626,10 +642,24 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void SignPropertiesTest()
         {
+            var test1 = Calculate.SignProperties(ZodiacName.Aries);
+            Assert.AreSame("Goat/Ram", test1.Properties.Symbol);
+            Assert.AreSame("Dharma", test1.Properties.Purushartha);
 
-            var testDay1 = Calculate.SignProperties(ZodiacName.Aries);
+            test1 = Calculate.SignProperties(ZodiacName.Gemini);
+            Assert.AreSame("Couple (Male and Female) Holding a Lute", test1.Properties.Symbol);
+            Assert.AreSame("Airy", test1.Properties.Element);
 
+            //TODO maybe more properties here
         }
 
+        [TestMethod()]
+        public void ParseJHDFilesTest()
+        {
+
+            var xx = Calculate.ParseJHDFiles();
+
+            Assert.Fail();
+        }
     }
 }

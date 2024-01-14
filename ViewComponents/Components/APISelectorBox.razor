@@ -121,7 +121,7 @@ KEEP IT REAL
     /// This delay helps to wait for user to finish typing before starting to render list
     /// reduces lag and makes for better UX
     /// </summary>
-    private static Timer _onKeyUpWaitTimer = new(200);
+    private static Timer _onKeyUpWaitTimer = new(255);
 
     //data used to track search timer
     private static bool _timerInitialized = false;
@@ -357,5 +357,15 @@ KEEP IT REAL
 
     }
 
+    public void Focus()
+    {
+        mainElementRef.FocusAsync();
+    }
+
+    //programatically set the API, as though selected by dropdown
+    public void SetSelectedMethod(OpenAPIMetadata selected)
+    {
+        OnClickMethodName(selected);
+    }
 
 }

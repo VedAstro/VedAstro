@@ -358,6 +358,11 @@ namespace Website
         /// Uses jQuery to show element via selector (#ID,.class)
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, elementSelector);
+        
+        /// <summary>
+        /// Given list of IDs will show them all
+        /// </summary>
+        public static async Task ShowList(this IJSRuntime jsRuntime, List<string> elementSelector) => await jsRuntime.InvokeVoidAsync(JS.showListWrapper, elementSelector);
 
         /// <summary>
         /// to be used like this @(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))
@@ -433,6 +438,9 @@ namespace Website
             return finalXml;
         }
 
+        /// <summary>
+        /// Scrolls to a div on page given an ID without #
+        /// </summary>
         public static async Task ScrollToDivById(this IJSRuntime jsRuntime, string predictionName)
         {
             //make scroll movement to place

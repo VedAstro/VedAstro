@@ -37,6 +37,10 @@
         public const string setAttrWrapper = "Interop.setAttrWrapper";
         public const string setCssWrapper = "Interop.setCssWrapper";
         public const string showWrapper = "Interop.showWrapper";
+        public const string showListWrapper = "Interop.showListWrapper";
+        public const string showHideChildren = "Interop.showHideChildren";
+        public const string SearchAPIMethod = "Interop.SearchAPIMethod";
+        public const string InitializeFlexSearch = "Interop.InitializeFlexSearch";
         public const string hideWrapper = "Interop.hideWrapper";
         public const string FunFeaturePopUp = "Interop.FunFeaturePopUp";
         public const string getRandomText = "Interop.getRandomText";

@@ -21,12 +21,12 @@
         <div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
 
             @*GENERATOR*@
-            <div class="vstack gap-3" style="max-width: @GR.W412px;">
-
-                <div class="vstack gap-4">
-
+            @* id so can autoscroll here *@
+            <div id="@DropDownID" class="vstack gap-3" style="max-width: @GR.W412px;">
+                
+                <div  class="vstack gap-4">
                     @* FUNCTION NAME SELECT *@
-                    <div>
+                    <div >
                         <IconTitle IconName="flat-color-icons:calculator" Title="Calculator" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
                         <APISelectorBox @ref="_apiSelectorBox" />
                     </div>
@@ -118,7 +118,7 @@
                     <TextHTML>
                         <p>
                             Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language
-                            <strong>JS, Python, C#, Java</strong> or even your browsers' URL.
+                            <strong>JS, Python, C#, Java</strong> or even your browsers' URL. <BoldLink URL="@URL.GitHubDemoFiles">Demo Files</BoldLink>
                         </p>
                         <p>
                             You can also run <kbd>pip install vedastro</kbd> in your local or cloud environment.
@@ -128,7 +128,7 @@
                 </ArticleBlock>
 
                 @* LIST OF ALL API CALLS *@
-                <APICallList />
+                <APICallList @ref="_apiCallList" />
 
                 <ArticleBlock Title="Price" IconName="flat-color-icons:money-transfer">
                     <ButtonRow>
@@ -204,6 +204,7 @@
 
 
     private APISelectorBox? _apiSelectorBox = null;
+    private APICallList? _apiCallList = null;
 
     private ArticleBlock _nextStepArticleBlock;
 
@@ -228,6 +229,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+
         //NOTE: small needed else, components rendering gets messed up (time to pop)
         await _jsRuntime.ShowLoading(50);
 
@@ -244,6 +246,10 @@
     {
         if (_apiSelectorBox != null && !_isEventAttached)
         {
+            //attach handler when select api button is clicked from "Browse Calls" window.
+            //this will allow to select that API in the main selector
+            _apiCallList.OnClickSelectAPI += OnClickSelectAPIHandler;
+
             //sub event: when an method is selected, auto show inputs panel
             _apiSelectorBox.OnChangeSelectMethod += OnChangeSelectMethod;
             _isEventAttached = true;
@@ -298,6 +304,22 @@
             _jsRuntime.SlideDown("ParamInputHolderElement");
 
         }
+    }
+
+    //note without #, for code use later
+    private string DropDownID = "APIDropDownHolder";
+
+    private void OnClickSelectAPIHandler(object sender, EventArgs e)
+    {
+        //get name of selected API
+        var selected = (OpenAPIMetadata)e;
+
+        //bring window focus to the drop-down
+        _jsRuntime.ScrollToDivById(DropDownID);
+
+        //programmatically select this API from the drop-down
+        _apiSelectorBox.SetSelectedMethod(selected);
+
     }
 
     /// <summary>

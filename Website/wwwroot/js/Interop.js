@@ -28,6 +28,139 @@ export var unhighlightByEventName = (keyword) => window.EventsChartLoaded.unhigh
 const RETRY_COUNT = 5;
 
 
+/* Sunday After Noon Jan 2024
+A warm cup of Canadian soy, so fine,
+With dairy milk from New Zealand's vine.
+
+A sweet scent of Illinois' bloom,
+Paired with a device, in the room.
+
+Music so pure, it brings a tear,
+A symphony for the soul to hear.
+
+Pepper and turmeric from India's land,
+With sweet bread, loaf in hand.
+
+With the world at my fingertips, I ponder and muse,
+What will I do for others? Which path will I choose?
+
+ */
+
+
+//below method needs to be called to initialize search with a list of text chunks
+//that can be used later with 2nd call to do a search
+// Initializes the FlexSearch index with a list of text chunks for future searches.
+export async function InitializeFlexSearch(textChunks) {
+
+    setupSearchInputListener();
+
+    const fuseOptions = {
+        isCaseSensitive: false,
+        includeScore: true,
+        shouldSort: true,
+        // includeMatches: false,
+        findAllMatches: true, //show all possible API's
+        minMatchCharLength: 2,
+        // location: 0,
+        // threshold: 0.6,
+        // distance: 100,
+        // useExtendedSearch: false,
+        // ignoreLocation: false,
+        // ignoreFieldNorm: false,
+        // fieldNormWeight: 1,
+        keys: [
+            "name",
+            "description"
+        ]
+    };
+    window.fuseSearchIndex = new Fuse(textChunks, fuseOptions);
+
+    // Store all method information elements' indexes in an array.
+    const methodInfoIndexes = Array.from(Array($('#allMethodInfoHolder').children().length).keys());
+
+    console.log('JS: FuseSearch initialized.');
+
+    // Sets up the search input listener and defines the search logic.
+    function setupSearchInputListener() {
+        let typingTimer; // Timer identifier for debounce mechanism.
+        const typingDelay = 500; // Delay in ms after which search is triggered.
+
+        // Start the debounce timer on keyup event, ignoring arrow keys.
+        $('#APICallListSearchInputElement').keyup(function (event) {
+            clearTimeout(typingTimer);
+            if (![37, 38, 39, 40].includes(event.which)) { // Arrow keys
+                typingTimer = setTimeout(performSearch, typingDelay);
+            }
+        });
+
+        // Clear the debounce timer on keydown event.
+        $('#APICallListSearchInputElement').keydown(function () {
+            clearTimeout(typingTimer);
+        });
+
+        console.log('JS: Search input listener set up.');
+
+        // Performs the search operation based on the user's input.
+        function performSearch() {
+            const searchText = $('#APICallListSearchInputElement').val().trim();
+
+            //do search for text
+            if (isValidSearchInput(searchText)) { SearchAPIMethod(searchText); }
+            //no search word, so show all
+            else if (searchText === '') { showHideChildren('AllMethodInfoHolder', methodInfoIndexes);
+            } else { console.log('Invalid search input.'); }
+        }
+
+        // Validates the search input against a set of criteria.
+        function isValidSearchInput(input) {
+            const invalidCharactersRegex = /[^a-zA-Z0-9 ]/; // Disallow special characters.
+            return !invalidCharactersRegex.test(input);
+        }
+    }
+}
+
+// Searches for API methods using the provided search term.
+export async function SearchAPIMethod(searchTerm) {
+    // Perform fuzzy matching and sort results by relevance.
+    var fuseSearchResults = window.fuseSearchIndex.search(searchTerm);
+
+    // Display only the matched method information elements, sorted by score.
+    showHideChildren('AllMethodInfoHolder', fuseSearchResults);
+
+    // Update the displayed count of found methods.
+    $('#FoundMethodInfoCountElm').text(fuseSearchResults.length.toString());
+}
+
+// Toggles visibility of children elements based on specified indexes and sorts them by score.
+export function showHideChildren(parentId, searchResults) {
+    const $parent = $('#' + parentId);
+    // Clone and detach all children elements to prevent unnecessary reflows during DOM manipulation.
+    const $children = $parent.children().clone(true, true).detach();
+
+    // Clear the parent container before appending sorted children.
+    $parent.empty();
+
+    // Create a map of the search results for quick lookup.
+    const searchResultsMap = new Map(searchResults.map(result => [result.item.name, result]));
+
+    // Append the matched children back to the parent in sorted order.
+    searchResults.forEach(result => {
+        $children.filter("." + result.item.name).appendTo($parent).show();
+    });
+
+    // Append and hide the unmatched children at the bottom of the parent.
+    $children.each(function () {
+        const className = $(this).attr('class').split(' ')[0]; // Assuming the first class is the name.
+        if (!searchResultsMap.has(className)) {
+            $(this).appendTo($parent).hide();
+        }
+    });
+}
+
+
+
+
+
 //SCROLL SPY NAV
 //when run will attach events to all with .scrollspy
 //this then will used to highlight the Index link
@@ -624,6 +757,18 @@ export function setCssWrapper(element, propName, propVal) {
 export function showWrapper(element) {
     console.log(`JS: showWrapper`);
     $(element).show();
+};
+
+//Jquery to show inputed element
+//by class and ID (CSS selector) given as an array
+export function showListWrapper(idArray) {
+
+    console.log(`JS: showListWrapper`);
+
+    $.each(idArray, function (index, id) {
+        $('#' + id).show();
+    });
+
 };
 
 //Jquery to hide inputed element

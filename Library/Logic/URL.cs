@@ -173,6 +173,7 @@ public class URL
     public const string GitHubDiscussions = "https://github.com/orgs/VedAstro/discussions";
     public const string YoutubeChannel = "https://www.youtube.com/@vedastro/videos";
     public const string YoutubePythonGuide = "https://youtu.be/chEeF-xEQ48?si=RNTvGlSD-WXgso7P";
+    public const string GitHubDemoFiles = "https://github.com/VedAstro/VedAstro/tree/master/Demo";
     public const string FacebookPage = "https://www.facebook.com/vedastro.org";
     public const string Instagram = "https://www.instagram.com/_vedastro/";
     public const string Twitter = "https://twitter.com/_VedAstro";

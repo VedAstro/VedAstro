@@ -30,7 +30,7 @@
         <div class="vstack gap-1">
             @* SEARCH *@
             <div class="hstack gap-2">
-                <input id="APICallList-SearchInputElement" @ref="_searchInput" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                <input id="APICallList-SearchInputElement" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
             </div>
 
             @* METHOD DATA LIST *@
@@ -50,6 +50,7 @@
                     @* list of method data *@
                     @foreach (var methodData in MethodListALL)
                     {
+                        @* NOTE: method name as class used to show/hide *@
                         <div class="@methodData.Name MethodInfoHolder card shadow mt-2">
                             <div class="card-header d-flex justify-content-between">
                                 @* NAME *@
@@ -117,8 +118,6 @@
 </div>
 @code {
 
-
-
     /// <summary>
     /// Unique colors to id different params
     /// </summary>
@@ -136,28 +135,17 @@
         { 9, "#33FF33" }  // Neon Lime
     };
 
-    private ElementReference _searchInput;
-    private ElementReference _resultsBox;
-    private ElementReference _loadingBox;
-
     private List<OpenAPIMetadata?> MethodListALL = new List<OpenAPIMetadata?>();
-
 
     /// <summary>
     /// Hide on default till all ready to show
     /// </summary>
     private bool _isReady = false;
 
-    private bool _showLoading = false;
-
-
     /// <summary>
     /// Event fired when select API button clicked
     /// </summary>
     public event EventHandler OnClickSelectAPI;
-
-    private static bool _searchIsRunning = false;
-    private static bool _timerInitialized = false;
 
 
     protected override void OnAfterRender(bool firstRender)

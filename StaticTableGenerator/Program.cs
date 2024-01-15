@@ -14,16 +14,10 @@
 
 using System.Text;
 using VedAstro.Library;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
-using System.Security.Cryptography;
 
 namespace StaticTableGenerator
 {
@@ -56,7 +50,9 @@ namespace StaticTableGenerator
 				var signature = openApiCalc.GetMethodSignature();
 
 				//get example output in json
-				var exampleOut = GetExampleOutputJson(openApiCalc);
+				//todo disabled because some methods not fully done causing errors
+				//var exampleOut = GetExampleOutputJson(openApiCalc);
+				var exampleOut = "";
 
 				//get the description
 				var description = calcDescriptionList2.Where(x => x.Signature == signature).Select(x => x.Description).FirstOrDefault();

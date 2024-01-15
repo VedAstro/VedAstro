@@ -54,6 +54,9 @@ export async function InitializeFlexSearch(textChunks) {
 
     setupSearchInputListener();
 
+    //save for resetting search later
+    window.APICallListTextChunks = textChunks;
+
     const fuseOptions = {
         isCaseSensitive: false,
         includeScore: true,
@@ -75,20 +78,20 @@ export async function InitializeFlexSearch(textChunks) {
     };
     window.fuseSearchIndex = new Fuse(textChunks, fuseOptions);
 
-    // Store all method information elements' indexes in an array.
-    const methodInfoIndexes = Array.from(Array($('#allMethodInfoHolder').children().length).keys());
-
     console.log('JS: FuseSearch initialized.');
 
     // Sets up the search input listener and defines the search logic.
     function setupSearchInputListener() {
         let typingTimer; // Timer identifier for debounce mechanism.
-        const typingDelay = 500; // Delay in ms after which search is triggered.
+        const typingDelay = 420; // Delay in ms after which search is triggered.
 
         // Start the debounce timer on keyup event, ignoring arrow keys.
         $('#APICallListSearchInputElement').keyup(function (event) {
+
             clearTimeout(typingTimer);
             if (![37, 38, 39, 40].includes(event.which)) { // Arrow keys
+                $('#APICallListLoadingIconHolder').show();
+
                 typingTimer = setTimeout(performSearch, typingDelay);
             }
         });
@@ -102,61 +105,70 @@ export async function InitializeFlexSearch(textChunks) {
 
         // Performs the search operation based on the user's input.
         function performSearch() {
+            //remove if only white spaces
             const searchText = $('#APICallListSearchInputElement').val().trim();
 
-            //do search for text
-            if (isValidSearchInput(searchText)) { SearchAPIMethod(searchText); }
             //no search word, so show all
-            else if (searchText === '') { showHideChildren('AllMethodInfoHolder', methodInfoIndexes);
-            } else { console.log('Invalid search input.'); }
+            if (searchText === '') { showHideChildren(window.APICallListTextChunks); }
+
+            //do search for text
+            else { SearchAPIMethod(searchText); }
+
+            //remove loading once search task over
+            $('#APICallListLoadingIconHolder').hide();
         }
 
-        // Validates the search input against a set of criteria.
-        function isValidSearchInput(input) {
-            const invalidCharactersRegex = /[^a-zA-Z0-9 ]/; // Disallow special characters.
-            return !invalidCharactersRegex.test(input);
-        }
     }
 }
 
 // Searches for API methods using the provided search term.
 export async function SearchAPIMethod(searchTerm) {
+
     // Perform fuzzy matching and sort results by relevance.
     var fuseSearchResults = window.fuseSearchIndex.search(searchTerm);
 
+    // Map the sorted results to get the items.
+    const searchResults = fuseSearchResults.map(result => result.item);
+
     // Display only the matched method information elements, sorted by score.
-    showHideChildren('AllMethodInfoHolder', fuseSearchResults);
+    showHideChildren(searchResults);
+
+}
+
+export function showHideChildren(searchResults) {
+
+    const parent = document.getElementById('AllMethodInfoHolder');
+    const children = Array.from(parent.children);
+    const fragment = document.createDocumentFragment();
+    const searchResultsMap = new Map(searchResults.map(result => [result.name, result]));
 
     // Update the displayed count of found methods.
-    $('#FoundMethodInfoCountElm').text(fuseSearchResults.length.toString());
-}
+    document.getElementById('FoundMethodInfoCountElm').textContent = searchResults.length.toString();
 
-// Toggles visibility of children elements based on specified indexes and sorts them by score.
-export function showHideChildren(parentId, searchResults) {
-    const $parent = $('#' + parentId);
-    // Clone and detach all children elements to prevent unnecessary reflows during DOM manipulation.
-    const $children = $parent.children().clone(true, true).detach();
+    // Clear the parent container before appending reordered children.
+    parent.innerHTML = '';
 
-    // Clear the parent container before appending sorted children.
-    $parent.empty();
-
-    // Create a map of the search results for quick lookup.
-    const searchResultsMap = new Map(searchResults.map(result => [result.item.name, result]));
-
-    // Append the matched children back to the parent in sorted order.
+    // Append matched children to the fragment in the order of searchResults.
     searchResults.forEach(result => {
-        $children.filter("." + result.item.name).appendTo($parent).show();
-    });
-
-    // Append and hide the unmatched children at the bottom of the parent.
-    $children.each(function () {
-        const className = $(this).attr('class').split(' ')[0]; // Assuming the first class is the name.
-        if (!searchResultsMap.has(className)) {
-            $(this).appendTo($parent).hide();
+        const matchedChild = children.find(child => child.classList.contains(result.name));
+        if (matchedChild) {
+            matchedChild.style.display = '';
+            fragment.appendChild(matchedChild);
         }
     });
-}
 
+    // Hide unmatched children and append them to the fragment.
+    children.forEach(child => {
+        const className = child.classList.item(0); // Assuming the first class is the name.
+        if (!searchResultsMap.has(className)) {
+            child.style.display = 'none';
+            fragment.appendChild(child);
+        }
+    });
+
+    // Append the fragment to the parent to minimize reflows and maintain the new order.
+    parent.appendChild(fragment);
+}
 
 
 

@@ -30,7 +30,7 @@
         <div class="vstack gap-1">
             @* SEARCH *@
             <div class="hstack gap-2">
-                <input id="APICallListSearchInputElement" @ref="_searchInput" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                <input id="APICallList-SearchInputElement" @ref="_searchInput" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
             </div>
 
             @* METHOD DATA LIST *@
@@ -38,17 +38,15 @@
 
                 @* LOADING ICON *@
                 @* loading icon when list is being made, no loading popup because reduces user UX *@
-                <div id="APICallListLoadingIconHolder" class="mb-5" style="display: none;">
+                <div id="APICallList-LoadingIconHolder" class="mb-5" style="display: none;">
                     <div class="d-flex flex-column align-items-center">
                         <strong>Loading...</strong>
                         <div class="spinner-border" role="status" aria-hidden="true"></div>
                     </div>
                 </div>
-                <div id="VisibleMethodInfoHolder" style="">
-                </div>
                 @* RESULTS HOLDER *@
                 @* id used to hide show children *@
-                <div id="AllMethodInfoHolder" @ref="_resultsBox" >
+                <div id="APICallList-AllMethodInfoHolder" >
                     @* list of method data *@
                     @foreach (var methodData in MethodListALL)
                     {
@@ -138,28 +136,12 @@
         { 9, "#33FF33" }  // Neon Lime
     };
 
-
     private ElementReference _searchInput;
     private ElementReference _resultsBox;
     private ElementReference _loadingBox;
 
-
-    //data used to track search timer
-    private static bool searchIsRunning = false;
-    private static bool _timerInitialized = false;
-
-
-    /// <summary>
-    /// list that is shown to user and is changed by search
-    /// </summary>
-    private List<OpenAPIMetadata?> MethodListFiltered { get; set; } = new List<OpenAPIMetadata?>();
-
     private List<OpenAPIMetadata?> MethodListALL = new List<OpenAPIMetadata?>();
 
-    /// <summary>
-    /// extracted search text for faster search
-    /// </summary>
-    private string[] MethodListALLSearchText;
 
     /// <summary>
     /// Hide on default till all ready to show
@@ -174,27 +156,31 @@
     /// </summary>
     public event EventHandler OnClickSelectAPI;
 
+    private static bool _searchIsRunning = false;
+    private static bool _timerInitialized = false;
+
 
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
-            IEnumerable<string> enumerable = MethodListALL.Select(x => x.SearchText);
-
-            var ccc = new List<object>();
-            foreach (var methodInfoApiMetadata in MethodListALL)
+            //convert data to format understood by library
+            //extract out name and all search text
+            //so that can be used to show and hide divs directly
+            var methodInfoObjects = new List<object>();
+            foreach (var metadata in MethodListALL)
             {
-                var book = new
+                var package = new
                 {
-                    name = methodInfoApiMetadata.Name,
-                    description = methodInfoApiMetadata.SearchText
+                    name = metadata.Name,
+                    description = metadata.SearchText
                 };
 
-                ccc.Add(book);
+                methodInfoObjects.Add(package);
             }
 
             //send all search text for creating an index by the special JS search library (FlexSearch)
-            _jsRuntime.InvokeVoidAsync(JS.InitializeFlexSearch, ccc);
+            _jsRuntime.InvokeVoidAsync(JS.InitializeSearchForAPICallList, methodInfoObjects);
 
         }
     }
@@ -214,76 +200,12 @@
 
         //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
         MethodListALL = OpenAPIMetadata.FromMethodInfoList();
-        //MethodListALLSearchText = enumerable.ToArray();
-
-
-        //make copy for search
-        //MethodListFiltered = MethodListALL;
 
         //show data on display
         _isReady = true;
     }
 
-    /// <summary>
-    /// This delay helps to wait for user to finish typing before starting to render list
-    /// reduces lag and makes for better UX
-    /// </summary>
-    private static Timer _onKeyUpWaitTimer = new(1000);
-    private static bool _searchIsRunning = false;
 
-
-    /// <summary>
-    /// called when user key up (AI code)
-    /// uses a timer to delay the search operation until the user has stopped typing,
-    /// improving the user experience by not triggering a search on every keystroke
-    /// </summary>
-    private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
-    {
-        //if arrow keys, space, or control keys then obviously don't count
-        if (keyEventArgs.Code == "ArrowUp" || keyEventArgs.Code == "ArrowDown" ||
-            keyEventArgs.Code == "ArrowLeft" || keyEventArgs.Code == "ArrowRight" ||
-            keyEventArgs.Code == "Space" || keyEventArgs.Code == "ControlLeft" ||
-            keyEventArgs.Code == "ControlRight" || keyEventArgs.Code == "AltLeft" ||
-            keyEventArgs.Code == "AltRight" || keyEventArgs.Code == "ShiftLeft" ||
-            keyEventArgs.Code == "ShiftRight" || keyEventArgs.Code == "Enter" ||
-            keyEventArgs.Code == "Tab" || keyEventArgs.Code == "Escape")
-        {
-            return;
-        }
-
-
-        if (!_timerInitialized)
-        {
-            _onKeyUpWaitTimer.Elapsed += OnKeyUpWaitTimerElapsed;
-            _timerInitialized = true;
-        }
-        if (!_searchIsRunning)
-        {
-            // _searchIsRunning = true;
-            // _isReady = false; // show loading icon
-        }
-        _onKeyUpWaitTimer.Stop();
-        _onKeyUpWaitTimer.Start();
-
-
-    }
-
-    private async void OnKeyUpWaitTimerElapsed(object sender, ElapsedEventArgs e)
-    {
-        _onKeyUpWaitTimer.Stop();
-        
-        var searchText = (await _jsRuntime.GetValue(_searchInput)).ToLower();
-        _jsRuntime.InvokeVoidAsync(JS.SearchAPIMethod, searchText);
-
-
-        
-        _isReady = true; //hide loading, show results
-
-        //_searchIsRunning = false;
-
-        //needed to make change appear
-        //StateHasChanged();
-    }
 
     private async Task OnClickCopyAPI(string methodDataName)
     {

@@ -39,6 +39,7 @@
         public const string showWrapper = "Interop.showWrapper";
         public const string showListWrapper = "Interop.showListWrapper";
         public const string InitializeSearchForAPICallList = "Interop.InitializeSearchForAPICallList";
+        public const string InitializeSearchForAPISelector = "Interop.InitializeSearchForAPISelector";
         public const string hideWrapper = "Interop.hideWrapper";
         public const string FunFeaturePopUp = "Interop.FunFeaturePopUp";
         public const string getRandomText = "Interop.getRandomText";

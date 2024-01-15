@@ -38,16 +38,17 @@
 
                 @* LOADING ICON *@
                 @* loading icon when list is being made, no loading popup because reduces user UX *@
-                <div @ref="_loadingBox" style="display: none;">
-                    <div class="d-flex flex-column align-items-center mt-5">
+                <div id="APICallListLoadingIconHolder" class="mb-5" style="display: none;">
+                    <div class="d-flex flex-column align-items-center">
                         <strong>Loading...</strong>
                         <div class="spinner-border" role="status" aria-hidden="true"></div>
                     </div>
                 </div>
-
+                <div id="VisibleMethodInfoHolder" style="">
+                </div>
                 @* RESULTS HOLDER *@
                 @* id used to hide show children *@
-                <div id="AllMethodInfoHolder" @ref="_resultsBox" style="">
+                <div id="AllMethodInfoHolder" @ref="_resultsBox" >
                     @* list of method data *@
                     @foreach (var methodData in MethodListALL)
                     {

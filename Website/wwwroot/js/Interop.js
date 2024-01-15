@@ -50,8 +50,9 @@ What will I do for others? Which path will I choose?
 //below method needs to be called to initialize search with a list of text chunks
 //that can be used later with 2nd call to do a search
 // Initializes the FlexSearch index with a list of text chunks for future searches.
-export async function InitializeFlexSearch(textChunks) {
+export async function InitializeSearchForAPICallList(textChunks) {
 
+    //attach listener for input
     setupSearchInputListener();
 
     //save for resetting search later
@@ -76,28 +77,31 @@ export async function InitializeFlexSearch(textChunks) {
             "description"
         ]
     };
-    window.fuseSearchIndex = new Fuse(textChunks, fuseOptions);
+    window.APICallListSearchIndex = new Fuse(textChunks, fuseOptions);
 
-    console.log('JS: FuseSearch initialized.');
+    console.log('JS: APICallList Search Initialized.');
 
     // Sets up the search input listener and defines the search logic.
     function setupSearchInputListener() {
         let typingTimer; // Timer identifier for debounce mechanism.
         const typingDelay = 420; // Delay in ms after which search is triggered.
 
+        var searchInput = $('#APICallList-SearchInputElement');
+
         // Start the debounce timer on keyup event, ignoring arrow keys.
-        $('#APICallListSearchInputElement').keyup(function (event) {
+        //done so that when user is mid-typing search does not slow down browser
+        searchInput.keyup(function (event) {
 
             clearTimeout(typingTimer);
             if (![37, 38, 39, 40].includes(event.which)) { // Arrow keys
-                $('#APICallListLoadingIconHolder').show();
+                $('#APICallList-LoadingIconHolder').show();//show loading icon
 
                 typingTimer = setTimeout(performSearch, typingDelay);
             }
         });
 
         // Clear the debounce timer on keydown event.
-        $('#APICallListSearchInputElement').keydown(function () {
+        searchInput.keydown(function () {
             clearTimeout(typingTimer);
         });
 
@@ -106,70 +110,65 @@ export async function InitializeFlexSearch(textChunks) {
         // Performs the search operation based on the user's input.
         function performSearch() {
             //remove if only white spaces
-            const searchText = $('#APICallListSearchInputElement').val().trim();
+            const searchText = $('#APICallList-SearchInputElement').val().trim();
 
             //no search word, so show all
             if (searchText === '') { showHideChildren(window.APICallListTextChunks); }
 
             //do search for text
-            else { SearchAPIMethod(searchText); }
+            else { searchApiMethod(searchText); }
 
             //remove loading once search task over
-            $('#APICallListLoadingIconHolder').hide();
+            $('#APICallList-LoadingIconHolder').hide();
         }
 
+        // Searches for API methods using the provided search term.
+        function searchApiMethod(searchTerm) {
+
+            // Perform fuzzy matching and sort results by relevance.
+            var fuseSearchResults = window.APICallListSearchIndex.search(searchTerm);
+
+            // Map the sorted results to get the items.
+            const searchResults = fuseSearchResults.map(result => result.item);
+
+            // Display only the matched method information elements, sorted by score.
+            showHideChildren(searchResults);
+        }
+
+        function showHideChildren(searchResults) {
+            const parent = document.getElementById('APICallList-AllMethodInfoHolder');
+            const children = Array.from(parent.children);
+            const fragment = document.createDocumentFragment();
+            const searchResultsMap = new Map(searchResults.map(result => [result.name, result]));
+
+            // Update the displayed count of found methods.
+            document.getElementById('FoundMethodInfoCountElm').textContent = searchResults.length.toString();
+
+            // Clear the parent container before appending reordered children.
+            parent.innerHTML = '';
+
+            // Append matched children to the fragment in the order of searchResults.
+            searchResults.forEach(result => {
+                const matchedChild = children.find(child => child.classList.contains(result.name));
+                if (matchedChild) {
+                    matchedChild.style.display = '';
+                    fragment.appendChild(matchedChild);
+                }
+            });
+            // Hide unmatched children and append them to the fragment.
+            children.forEach(child => {
+                const className = child.classList.item(0); // Assuming the first class is the name.
+                if (!searchResultsMap.has(className)) {
+                    child.style.display = 'none';
+                    fragment.appendChild(child);
+                }
+            });
+
+            // Append the fragment to the parent to minimize reflows and maintain the new order.
+            parent.appendChild(fragment);
+        }
     }
 }
-
-// Searches for API methods using the provided search term.
-export async function SearchAPIMethod(searchTerm) {
-
-    // Perform fuzzy matching and sort results by relevance.
-    var fuseSearchResults = window.fuseSearchIndex.search(searchTerm);
-
-    // Map the sorted results to get the items.
-    const searchResults = fuseSearchResults.map(result => result.item);
-
-    // Display only the matched method information elements, sorted by score.
-    showHideChildren(searchResults);
-
-}
-
-export function showHideChildren(searchResults) {
-
-    const parent = document.getElementById('AllMethodInfoHolder');
-    const children = Array.from(parent.children);
-    const fragment = document.createDocumentFragment();
-    const searchResultsMap = new Map(searchResults.map(result => [result.name, result]));
-
-    // Update the displayed count of found methods.
-    document.getElementById('FoundMethodInfoCountElm').textContent = searchResults.length.toString();
-
-    // Clear the parent container before appending reordered children.
-    parent.innerHTML = '';
-
-    // Append matched children to the fragment in the order of searchResults.
-    searchResults.forEach(result => {
-        const matchedChild = children.find(child => child.classList.contains(result.name));
-        if (matchedChild) {
-            matchedChild.style.display = '';
-            fragment.appendChild(matchedChild);
-        }
-    });
-
-    // Hide unmatched children and append them to the fragment.
-    children.forEach(child => {
-        const className = child.classList.item(0); // Assuming the first class is the name.
-        if (!searchResultsMap.has(className)) {
-            child.style.display = 'none';
-            fragment.appendChild(child);
-        }
-    });
-
-    // Append the fragment to the parent to minimize reflows and maintain the new order.
-    parent.appendChild(fragment);
-}
-
 
 
 

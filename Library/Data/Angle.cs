@@ -96,6 +96,7 @@ namespace VedAstro.Library
         /// <summary>
         /// If total degrees is more than 360°,
         /// minus 360° from total degrees.
+        /// returns new modified instance
         /// </summary>
         public Angle Expunge360()
         {

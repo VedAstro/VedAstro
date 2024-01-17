@@ -442,7 +442,7 @@ namespace VedAstro.Library
             var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} +00:00";
 
             //get standard UTC Timezone offset at location at time (API) 
-            var timeInputPassed = Time.TryParseStd(timeStr, out var parsedInputTime);
+            var isPass = Time.TryParseStd(timeStr, out var parsedInputTime);
 
             //get timezone as text
             var timezoneSTDOffsetResult = await Tools.GetTimezoneOffsetApi(geoLocation, parsedInputTime);

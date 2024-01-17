@@ -2786,7 +2786,7 @@ namespace VedAstro.Library
                         foreach (var item in dictionary)
                         {
                             var allItemKeyName = item.Key.ToString();
-                            var apiFunctionResults = (List<APIFunctionResult>)item.Value;
+                            var apiFunctionResults = item.Value;
                             var ccc = Tools.AnyToJSON(allItemKeyName, apiFunctionResults);
 
                             properties.Add((JProperty)ccc);

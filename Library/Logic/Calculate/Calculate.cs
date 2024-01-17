@@ -1443,12 +1443,12 @@ India
         /// <summary>
         /// Given a person will give yoni kuta animal with sex
         /// </summary>
-        public static string YoniKutaAnimal(Person person)
+        public static string YoniKutaAnimalFromPerson(Person person)
         {
             var finalPrediction = "";
 
             var birthConst = Calculate.MoonConstellation(person.BirthTime);
-            var animal = Calculate.YoniKutaAnimal(birthConst.GetConstellationName());
+            var animal = Calculate.YoniKutaAnimalFromConstellation(birthConst.GetConstellationName());
 
             finalPrediction += animal.ToString();
 
@@ -1459,7 +1459,7 @@ India
         /// Given a constellation will give animal with sex, used for yoni kuta calculations
         /// and body appearance prediction
         /// </summary>
-        public static ConstellationAnimal YoniKutaAnimal(ConstellationName sign)
+        public static ConstellationAnimal YoniKutaAnimalFromConstellation(ConstellationName sign)
         {
             switch (sign)
             {

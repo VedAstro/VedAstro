@@ -65,7 +65,7 @@ namespace API
 
                     //get the animal prediction for possible birth time
                     var newBirthConstellation = Calculate.MoonConstellation(personAdjusted.BirthTime).GetConstellationName();
-                    var animal = Calculate.YoniKutaAnimal(newBirthConstellation);
+                    var animal = Calculate.YoniKutaAnimalFromConstellation(newBirthConstellation);
 
                     //nicely packed
                     var named = new JProperty(timeSlice.ToString(), animal.ToString());

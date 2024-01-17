@@ -702,10 +702,10 @@ namespace VedAstro.Library.Tests
             // An adhika maasa (extra month) comes once in every 3 years and that
             // synchronizes the lunar years with solar years. 
 
-            //this test makes sure month before is accidentally said as Adhika
+            //this test makes sure month before is not accidentally said as Adhika
             var may14 = new Time($"17:35 14/05/1999 +05:30", GeoLocation.Bangalore);
             var lunaMonthMay14 = Calculate.LunarMonth(may14);
-            //Assert.AreEqual(LunarMonth.Vaisaakha, lunaMonthMay14);
+            Assert.AreEqual(LunarMonth.Vaisaakha, lunaMonthMay14);
 
             //note: little forward to match up with book 15->16
             var may16 = new Time($"17:35 16/05/1999 +05:30", GeoLocation.Bangalore);

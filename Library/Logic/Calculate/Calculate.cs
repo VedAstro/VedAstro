@@ -129,7 +129,7 @@ namespace VedAstro.Library
         /// occupy on the full Moon day.
         /// Names are Chaitra, Vaisaakha, Jyeshtha, Aashaadha, Sraavana etc...
         /// </summary>
-        public static LunarMonth LunarMonth(Time inputTime)
+        public static LunarMonth LunarMonth(Time inputTime, bool ignoreLeapMonth = false)
         {
             //TODO JAN 2024
             //needs further validation, the month before
@@ -146,7 +146,7 @@ namespace VedAstro.Library
             var thisMonthSign = (int)Calculate.MoonSignName(lastNewMoonRaw);
             var nextMonthSign = (int)Calculate.MoonSignName(nextNewMoon);
 
-            //leap month dected if 2 months are same name
+            //detect leap month if 2 months are same name
             var isLeapMonth = (thisMonthSign == nextMonthSign);
 
             //increment 1 to convert from rasi to solar month number
@@ -154,6 +154,22 @@ namespace VedAstro.Library
 
             //if exceed 12 than loop back to 1
             if (monthNumber > 12) { monthNumber = monthNumber % 12; }
+
+            //verify if really leap month (rescursive)
+            //NOTE: this was added later as hack (remove if needed)
+            if (isLeapMonth && !ignoreLeapMonth)
+            {
+                var ccc = Calculate.NextNewMoon(nextNewMoon.AddHours(24));
+                var nextNewMoonxx = Calculate.LunarMonth(ccc, true); //NOTE:turn off recursive
+                var possibleLeapMonth = ((LunarMonth)monthNumber).ToString();
+
+                //checks if month name is in the next months name (Jyeshtha -> JyeshthaAdhika)
+                var vvv =  nextNewMoonxx.ToString().Contains(possibleLeapMonth);
+                if (!vvv)
+                {
+                    isLeapMonth = false;
+                }
+            }
 
             //based on month number (NOT sign number or constellation)
             //set the name of the lunar month also based on if leap month

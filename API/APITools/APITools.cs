@@ -1087,10 +1087,9 @@ namespace API
             {
                 return APITools.PassMessageJson(rawPlanetDataJson, incomingRequest);
             }
-
             //probably data that can be sent as JSON text
             else
-            {
+                    {
                 //4 : CONVERT TO JSON
                 var payloadJson = Tools.AnyToJSON(calculatorName, rawPlanetData); //use calculator name as key
 

@@ -269,15 +269,15 @@ Allen Mullen
     on planet earth made by this webapp to go unnoticed.
     -->
     <div id="blazor-error-ui" class="rounded-3 top-50 start-50 translate-middle-x p-4 border shadow" style="width: fit-content; height: fit-content; background: #ffccf4;">
-        <div class="vstack gap-2">
-            <div class="hstack gap-2">
-                <span class="iconify" data-icon="twemoji:lady-beetle" data-width="40"></span>
-                <h2>Oh no, a bug in the code!</h2>
+        <div class="vstack gap-4 align-items-center">
+            <div class="hstack gap-2 justify-content-center">
+                <span class="iconify" data-icon="maki:car-repair" data-width="40"></span>
+                <h2>App has crashed!</h2>
             </div>
-            <h6 class="mb-0">Fear not dear damsel, a developer has been summoned! The "bug" will be exterminated, so please come back later...</h6>
-            <h6 class="mb-0"><span class="fw-bolder">If you are a knight</span>, head into the <a href="https://github.com/VedAstro/VedAstro" class="link-danger">code</a> maze and squish the bug. Don't forget to make a <a href="#" class="link-success">pull request</a>, to share your victory with the world.</h6>
-            <button type="button" class="btn btn-success" onclick="(() => location.reload(true))()">Try Auto Recovery</button>
-            <button type="button" class="btn btn-info" onclick="(() => $('#blazor-error-ui').hide())()">Ignore &amp; Continue</button>
+            <div class="vstack gap-2">
+                <h4>Press <kbd>CTRL + SHIFT + R</kbd> to reboot the app.</h4>
+                <h4>If on mobile hit <kbd>REFRESH</kbd> multiple times.</h4>
+            </div>
         </div>
     </div>
 

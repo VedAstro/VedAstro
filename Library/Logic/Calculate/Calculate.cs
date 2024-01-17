@@ -76,6 +76,9 @@ namespace VedAstro.Library
             //Tithi (lunar day)
             var tithi = Calculate.LunarDay(inputTime);
 
+            //lunar month
+            var lunarMonth = Calculate.LunarMonth(inputTime);
+
             //Vara (weekday)
             var weekDay = Calculate.DayOfWeek(inputTime);
 
@@ -91,7 +94,7 @@ namespace VedAstro.Library
             //Disha Shool
             var dishaShool = Calculate.DishaShool(inputTime);
 
-            return new PanchangaTable(tithi, weekDay, constellation, yoga, karana, dishaShool);
+            return new PanchangaTable(tithi, lunarMonth, weekDay, constellation, yoga, karana, dishaShool);
         }
 
         /// <summary>
@@ -117,6 +120,134 @@ namespace VedAstro.Library
             throw new Exception("END OF LINE!");
         }
 
+        /// <summary>
+        /// Also know as Chandramana or Hindu Month.
+        /// Each Hindu month begins with the New Moon.
+        /// These lunar months go by special names. The name of a lunar month is
+        /// decided by the rasi in which Sun-Moon conjunction takes place.
+        /// These names come from the constellation that Moon is most likely to
+        /// occupy on the full Moon day.
+        /// Names are Chaitra, Vaisaakha, Jyeshtha, Aashaadha, Sraavana etc...
+        /// </summary>
+        public static LunarMonth LunarMonth(Time inputTime)
+        {
+            //TODO JAN 2024
+            //needs further validation, the month before
+            //Adhika is also shown as Adhika
+            //most test cases pass, but some closser to change dates fail
+
+            //based on vedic start of day (sunrise time)
+            //scan and get dates when new moon last occured
+            var sunriseTime = Calculate.SunriseTime(inputTime);
+            var lastNewMoonRaw = Calculate.PreviousNewMoon(sunriseTime); //for this moon month
+            var nextNewMoon = Calculate.NextNewMoon(sunriseTime); //for next moon month
+
+            //get sign as number
+            var thisMonthSign = (int)Calculate.MoonSignName(lastNewMoonRaw);
+            var nextMonthSign = (int)Calculate.MoonSignName(nextNewMoon);
+
+            //leap month dected if 2 months are same name
+            var isLeapMonth = (thisMonthSign == nextMonthSign);
+
+            //increment 1 to convert from rasi to solar month number
+            var monthNumber = thisMonthSign + 1;
+
+            //if exceed 12 than loop back to 1
+            if (monthNumber > 12) { monthNumber = monthNumber % 12; }
+
+            //based on month number (NOT sign number or constellation)
+            //set the name of the lunar month also based on if leap month
+            var monthName = Library.LunarMonth.Empty;
+            switch (monthNumber)
+            {
+                case 1: monthName = isLeapMonth ? Library.LunarMonth.ChaitraAdhika : Library.LunarMonth.Chaitra; break;
+                case 2: monthName = isLeapMonth ? Library.LunarMonth.VaisaakhaAdhika : Library.LunarMonth.Vaisaakha; break;
+                case 3: monthName = isLeapMonth ? Library.LunarMonth.JyeshthaAdhika : Library.LunarMonth.Jyeshtha; break;
+                case 4: monthName = isLeapMonth ? Library.LunarMonth.AashaadhaAdhika : Library.LunarMonth.Aashaadha; break;
+                case 5: monthName = isLeapMonth ? Library.LunarMonth.SraavanaAdhika : Library.LunarMonth.Sraavana; break;
+                case 6: monthName = isLeapMonth ? Library.LunarMonth.BhaadrapadaAdhika : Library.LunarMonth.Bhaadrapada; break;
+                case 7: monthName = isLeapMonth ? Library.LunarMonth.AaswayujaAdhika : Library.LunarMonth.Aaswayuja; break;
+                case 8: monthName = isLeapMonth ? Library.LunarMonth.KaarteekaAdhika : Library.LunarMonth.Kaarteeka; break;
+                case 9: monthName = isLeapMonth ? Library.LunarMonth.MaargasiraAdhika : Library.LunarMonth.Maargasira; break;
+                case 10: monthName = isLeapMonth ? Library.LunarMonth.PushyaAdhika : Library.LunarMonth.Pushya; break;
+                case 11: monthName = isLeapMonth ? Library.LunarMonth.MaaghaAdhika : Library.LunarMonth.Maagha; break;
+                case 12: monthName = isLeapMonth ? Library.LunarMonth.PhaalgunaAdhika : Library.LunarMonth.Phaalguna; break;
+            }
+
+            return monthName;
+        }
+
+        /// <summary>
+        /// Gets next future New Moon date, when tithi will be 1.
+        /// Uses conjunctions angle to calculate with accuracy of ~30min
+        /// Includes start time in scan
+        /// </summary>
+        public static Time NextNewMoon(Time inputTime)
+        {
+            //scan till find
+            //start with input time
+            var newMoonTime = inputTime;
+            while (true)
+            {
+                //if conjunction, than new moon dectected
+                var conjunctAngle = SunMoonConjunctionAngle(newMoonTime);
+
+                //When Sun and Moon are at the same longitude, a new lunar month of 30 tithis starts
+                //which conjunction 0 degrees
+                if (conjunctAngle.TotalDegrees < 1)
+                {
+                    return newMoonTime;
+                }
+
+                //go foward in time since did not find 0 degree conjunction
+                newMoonTime = newMoonTime.AddHours(0.5);
+            }
+
+            return newMoonTime;
+        }
+
+        /// <summary>
+        /// Gets last occured New Moon date, when tithi will be 1.
+        /// Uses conjunctions angle to calculate with accuracy of ~30min
+        /// Includes start time in scan
+        /// </summary>
+        public static Time PreviousNewMoon(Time inputTime)
+        {
+            //scan till find
+            //start with input time
+            var newMoonTime = inputTime;
+            while (true)
+            {
+                //if conjunction, than new moon dectected
+                var conjunctAngle = SunMoonConjunctionAngle(newMoonTime);
+
+                //When Sun and Moon are at the same longitude, a new lunar month of 30 tithis starts
+                //which conjunction 0 degrees
+                if (conjunctAngle.TotalDegrees < 1)
+                {
+                    return newMoonTime;
+                }
+
+                //go backward in time since did not find 0 degree conjunction
+                newMoonTime = newMoonTime.SubtractHours(0.5);
+            }
+        }
+
+        /// <summary>
+        /// Gets the distance in degrees between Sun & Moon at a given time
+        /// Used to calculate lunar months.
+        /// </summary>
+        public static Angle SunMoonConjunctionAngle(Time ccc)
+        {
+            //longitudes of the sun & moon
+            Angle sunLong = PlanetNirayanaLongitude(Sun, ccc);
+            Angle moonLong = PlanetNirayanaLongitude(Moon, ccc);
+
+            //get non negative difference, expunge 360 if needed
+            var cleanedDifference = moonLong.GetDifference(sunLong).Expunge360();
+
+            return cleanedDifference;
+        }
 
         #endregion
 
@@ -775,6 +906,19 @@ namespace VedAstro.Library
         #endregion
 
         #region GENERAL
+
+        /// <summary>
+        /// Given a time and location will return the coordinates at that location
+        /// Longitude and latitude at a location from Google Maps API
+        /// </summary>
+        public static async Task<GeoLocation> LocationGeoCoordinates(string locationName)
+        {
+            //get coordinates for location (API)
+            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
+            var geoLocation = geoLocationResult.Payload;
+
+            return geoLocation;
+        }
 
         /// <summary>
         /// Easyly import Jaganath Hora files into VedAstro.
@@ -5133,185 +5277,7 @@ India
         }
 
         /// <summary>
-        /// Gets name of vedic month
-        /// </summary>
-        public static LunarMonth LunarMonth(Time time)
-        {
-            return Library.LunarMonth.Empty;
-
-            //TODO NEEDS WORK
-            throw new NotImplementedException();
-
-
-            //get this months full moon date
-            var fullMoonTime = getFullMoonTime();
-
-            //sunrise
-            var x = SunriseTime(time);
-            var y = MoonConstellation(x).GetConstellationName();
-
-        Calculate:
-            //get the constellation behind the moon
-            var constellation = MoonConstellation(fullMoonTime).GetConstellationName();
-
-            //go back one constellation
-            //constellation = constellation - 1;
-
-            switch (constellation)
-            {
-                case ConstellationName.Aswini:
-                    return Library.LunarMonth.Aswijam;
-                    break;
-                case ConstellationName.Bharani:
-                    break;
-                case ConstellationName.Krithika:
-                    return Library.LunarMonth.Karthikam;
-                    break;
-                case ConstellationName.Rohini:
-                    break;
-                case ConstellationName.Mrigasira:
-                case ConstellationName.Aridra:
-                    return Library.LunarMonth.Margasiram;
-                    break;
-                case ConstellationName.Punarvasu:
-                    break;
-                case ConstellationName.Pushyami:
-                    return Library.LunarMonth.Pooshiam;
-                    break;
-                case ConstellationName.Aslesha:
-                    break;
-                case ConstellationName.Makha:
-                    return Library.LunarMonth.Magham;
-                    break;
-                case ConstellationName.Pubba:
-                    return Library.LunarMonth.Phalgunam;
-                    break;
-                case ConstellationName.Uttara:
-                    break;
-                case ConstellationName.Hasta:
-                    break;
-                case ConstellationName.Chitta:
-                    return Library.LunarMonth.Chitram;
-                    break;
-                case ConstellationName.Swathi:
-                    break;
-                case ConstellationName.Vishhaka:
-                    return Library.LunarMonth.Visakham;
-                    break;
-                case ConstellationName.Anuradha:
-                    break;
-                case ConstellationName.Jyesta:
-                    return Library.LunarMonth.Jaistam;
-                    break;
-                case ConstellationName.Moola:
-                    break;
-                case ConstellationName.Poorvashada:
-                    return Library.LunarMonth.Ashadam;
-                    break;
-                case ConstellationName.Uttarashada:
-                    break;
-                case ConstellationName.Sravana:
-                    return Library.LunarMonth.Sravanam;
-                    break;
-                case ConstellationName.Dhanishta:
-                    break;
-                case ConstellationName.Satabhisha:
-                    break;
-                case ConstellationName.Poorvabhadra:
-                    return Library.LunarMonth.Bhadrapadam;
-                case ConstellationName.Uttarabhadra:
-                    break;
-                case ConstellationName.Revathi:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            throw new ArgumentOutOfRangeException();
-            //switch (constellation)
-            //{
-            //    case ConstellationName.Aswini:
-            //        return LunarMonth.Aswijam;
-            //        break;
-            //    case ConstellationName.Krithika:
-            //        return LunarMonth.Karthikam;
-            //        break;
-            //    case ConstellationName.Mrigasira:
-            //        return LunarMonth.Margasiram;
-            //        break;
-            //    case ConstellationName.Pushyami:
-            //        return LunarMonth.Pooshiam;
-            //        break;
-            //    case ConstellationName.Makha:
-            //        return LunarMonth.Magham;
-            //        break;
-            //    case ConstellationName.Pubba:
-            //        return LunarMonth.Phalgunam;
-            //        break;
-            //    case ConstellationName.Chitta:
-            //        return LunarMonth.Chitram;
-            //        break;
-            //    case ConstellationName.Vishhaka:
-            //        return LunarMonth.Visakham;
-            //        break;
-            //    case ConstellationName.Jyesta:
-            //        return LunarMonth.Jaistam;
-            //        break;
-            //    case ConstellationName.Poorvashada:
-            //        return LunarMonth.Ashadam;
-            //        break;
-            //    case ConstellationName.Sravana:
-            //        return LunarMonth.Sravanam;
-            //        break;
-            //    case ConstellationName.Poorvabhadra:
-            //        return LunarMonth.Bhadrapadam;
-            //        break;
-            //    default:
-            //        fullMoonTime = fullMoonTime.AddHours(1);
-            //        goto Calculate;
-            //}
-
-
-
-
-
-            //FUNCTIONS
-
-            Time getFullMoonTime()
-            {
-                //get the lunar date number
-                int lunarDayNumber = LunarDay(time).GetLunarDateNumber();
-
-                //start with input time
-                var fullMoonTime = time;
-
-                //full moon not yet pass
-                if (lunarDayNumber < 15)
-                {
-                    //go forward in time till find full moon
-                    while (!IsFullMoon(fullMoonTime))
-                    {
-                        fullMoonTime = fullMoonTime.AddHours(1);
-                    }
-
-                    return fullMoonTime;
-                }
-                else
-                {
-                    //go backward in time till find full moon
-                    while (!IsFullMoon(fullMoonTime))
-                    {
-                        fullMoonTime = fullMoonTime.SubtractHours(1);
-                    }
-
-                    return fullMoonTime;
-
-                }
-
-            }
-        }
-
-        /// <summary>
-        /// Checks if the moon is FULL, moon day 15
+        /// Checks if the moon is FULL, moon day 15 at given time
         /// </summary>
         public static bool IsFullMoon(Time time)
         {
@@ -5320,6 +5286,18 @@ India
 
             //if day 15, it is full moon
             return lunarDayNumber == 15;
+        }
+
+        /// <summary>
+        /// Checks if the moon is New, moon day 1 at given time
+        /// </summary>
+        public static bool IsNewMoon(Time time)
+        {
+            //get the lunar date number
+            int lunarDayNumber = LunarDay(time).GetLunarDayNumber();
+
+            //if day 1, it is new moon
+            return lunarDayNumber == 1 || lunarDayNumber == 0;
         }
 
         /// <summary>
@@ -6464,11 +6442,10 @@ India
                 int iflag = SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
                 double[] results = new double[6];
                 string err_msg = "";
-                double jul_day_ET;
                 SwissEph ephemeris = new SwissEph();
 
                 // Convert DOB to ET
-                jul_day_ET = TimeToEphemerisTime(time);
+                double jul_day_ET = TimeToEphemerisTime(time);
 
                 //convert planet name, compatible with Swiss Eph
                 int swissPlanet = Tools.VedAstroToSwissEph(planetName);
@@ -6567,11 +6544,10 @@ India
                 int iflag = SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
                 double[] results = new double[10];
                 string err_msg = "";
-                double jul_day_ET;
                 SwissEph ephemeris = new SwissEph();
 
                 // Convert DOB to ET
-                jul_day_ET = Calculate.ConvertLmtToJulian(time);
+                var jul_day_ET = Calculate.ConvertLmtToJulian(time);
 
                 //Get planet long
                 var eclipseType = 0; /* eclipse type wanted: SE_ECL_TOTAL etc. or 0, if any eclipse type */
@@ -6987,7 +6963,7 @@ India
                 var todaySunrise = sunRise.GetLmtDateTimeOffset();
                 var lmtTime = time.GetLmtDateTimeOffset();
 
-                if (lmtTime >= todaySunrise  && lmtTime < tomorrowSunrise )
+                if (lmtTime >= todaySunrise && lmtTime < tomorrowSunrise)
                 {
                     //get week day name in string
                     var dayOfWeekNameInString = lmtTime.DayOfWeek.ToString();

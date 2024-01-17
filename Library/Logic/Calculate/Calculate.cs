@@ -65,11 +65,13 @@ namespace VedAstro.Library
 
         /// <summary>
         /// It’s used to determine auspicious times and rituals.
-        /// It includes five attributes for any given time:
+        /// It includes multiple attributes such as,
         /// Tithi (lunar day),
+        /// Lunar Month
         /// Vara (weekday),
         /// Nakshatra (constellation),
         /// Yoga (luni-solar day) and Karana (half of a Tithi).
+        /// Disha Shool
         /// </summary>
         public static PanchangaTable PanchangaTable(Time inputTime)
         {

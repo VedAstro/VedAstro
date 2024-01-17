@@ -5,6 +5,7 @@
     /// </summary>
     public enum ConstellationName
     {
+        Empty = 0,
         Aswini = 1,
         Bharani = 2,
         Krithika = 3,
@@ -16,7 +17,7 @@
         Aslesha = 9,
         Makha = 10,
         Pubba = 11,
-        Uttara = 12,
+        Uttara = 12, ///Uttara Phalguni
         Hasta = 13,
         Chitta = 14,
         Swathi = 15,

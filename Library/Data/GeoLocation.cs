@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -10,7 +11,7 @@ namespace VedAstro.Library
     //IMMUTABLE CLASS
     [Serializable()]
     //TODO CANDIDATE FOR RECORD STRUCT
-    public readonly struct GeoLocation : IToXml
+    public class GeoLocation : IToXml, IToJpeg, IToJson, IToDataTable
     {
         /// <summary>
         /// Returns an Empty Time instance meant to be used as null/void filler
@@ -125,6 +126,26 @@ namespace VedAstro.Library
             return hash1 + hash2 + hash3;
         }
 
+        public byte[] ToJpeg() { var table = this.ToDataTable(); return Tools.DataTableToJpeg(table); }
+
+        public DataTable ToDataTable()
+        {
+            // Create a new DataTable.
+            DataTable table = new DataTable("GeoLocation");
+
+            // Define columns.
+            table.Columns.Add("Name", typeof(string));
+            table.Columns.Add("Value", typeof(string));
+
+            // fill rows
+            table.Rows.Add("Name", this.Name());
+            table.Rows.Add("Longitude", this.Longitude());
+            table.Rows.Add("Latitude", this.Latitude());
+
+            return table;
+        }
+
+
         public JToken ToJson()
         {
             var temp = new JObject();
@@ -134,6 +155,8 @@ namespace VedAstro.Library
 
             return temp;
         }
+
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
 
         public XElement ToXml()
         {

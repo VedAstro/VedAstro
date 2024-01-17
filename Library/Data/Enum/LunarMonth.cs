@@ -12,64 +12,126 @@
     {
         Empty = 0,
         /// <summary>
-        /// Chitta
+        /// Chitta, Chitram
         /// </summary>
-        Chitram = 1,
+        Chaitra,
 
         /// <summary>
         /// Visakha
         /// </summary>
-        Visakham = 2,
+        Vaisaakha,
 
         /// <summary>
         /// Jaista
         /// </summary>
-        Jaistam = 3,
+        Jyeshtha,
 
         /// <summary>
         /// Poorvashadha
         /// </summary>
-        Ashadam = 4,
+        Aashaadha,
 
         /// <summary>
         /// Sravana
         /// </summary>
-        Sravanam = 5,
+        Sraavana,
 
         /// <summary>
         /// Poorvabhadra
         /// </summary>
-        Bhadrapadam = 6,
+        Bhaadrapada,
 
         /// <summary>
         /// Aswini
         /// </summary>
-        Aswijam = 7,
+        Aaswayuja,
 
         /// <summary>
         /// Krithika
         /// </summary>
-        Karthikam = 8,
+        Kaarteeka,
 
         /// <summary>
         /// Mrigasira
         /// </summary>
-        Margasiram = 9,
+        Maargasira,
 
         /// <summary>
         /// Pooshiami
         /// </summary>
-        Pooshiam = 10,
+        Pushya,
 
         /// <summary>
         /// Makha
         /// </summary>
-        Magham = 11,
+        Maagha,
 
         /// <summary>
         /// Phoobba
         /// </summary>
-        Phalgunam = 12
+        Phaalguna,
+
+        /// <summary>
+        /// Chitta, Chitram
+        /// </summary>
+        ChaitraAdhika,
+
+        /// <summary>
+        /// Visakha
+        /// </summary>
+        VaisaakhaAdhika,
+
+        /// <summary>
+        /// Jaista
+        /// </summary>
+        JyeshthaAdhika,
+
+        /// <summary>
+        /// Poorvashadha
+        /// </summary>
+        AashaadhaAdhika,
+
+        /// <summary>
+        /// Sravana
+        /// </summary>
+        SraavanaAdhika,
+
+        /// <summary>
+        /// Poorvabhadra
+        /// </summary>
+        BhaadrapadaAdhika,
+
+        /// <summary>
+        /// Aswini
+        /// </summary>
+        AaswayujaAdhika,
+
+        /// <summary>
+        /// Krithika
+        /// </summary>
+        KaarteekaAdhika,
+
+        /// <summary>
+        /// Mrigasira
+        /// </summary>
+        MaargasiraAdhika,
+
+        /// <summary>
+        /// Pooshiami
+        /// </summary>
+        PushyaAdhika,
+
+        /// <summary>
+        /// Makha
+        /// </summary>
+        MaaghaAdhika,
+
+        /// <summary>
+        /// Phoobba
+        /// </summary>
+        PhaalgunaAdhika,
+
 
     }
+
 }

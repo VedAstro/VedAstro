@@ -635,8 +635,16 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void DayOfWeekTest()
         {
-
             var testDay1 = Calculate.DayOfWeek(StandardHoroscope);
+
+            //should be wednesday
+            Assert.AreSame(DayOfWeek.Wednesday.ToString(), ((DayOfWeek)testDay1).ToString());
+
+
+            var testDay2 = Calculate.DayOfWeek(MarilynMonroe);
+
+            //should be wednesday
+            Assert.AreSame(DayOfWeek.Tuesday.ToString(), ((DayOfWeek)testDay2).ToString());
         }
 
         [TestMethod()]
@@ -660,6 +668,53 @@ namespace VedAstro.Library.Tests
             var xx = Calculate.ParseJHDFiles();
 
             Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void NextNewMoonTest()
+        {
+            var xx = Calculate.NextNewMoon(StandardHoroscope);
+            var x2x = Calculate.PreviousNewMoon(StandardHoroscope);
+
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void LunarMonthTest()
+        {
+            ////TEST 1
+            //var lunaMonth1 = Calculate.LunarMonth(StandardHoroscope);
+            //Assert.AreEqual(LunarMonth.Aaswayuja, lunaMonth1);
+
+            ////TEST 2
+            //var monroeTest = Calculate.LunarMonth(MarilynMonroe);
+            //Assert.AreEqual(LunarMonth.Vaisaakha, monroeTest);
+
+            //TEST 3
+            // Once in every 3 years, this difference accumulates to one month and
+            // an extra lunar month comes. This results in Sun-Moon conjunction coming
+            // twice in the same rasi. For example, Sun-Moon conjunction took place at
+            // 0°23' in Taurus on May 15, 1999 at 5:35:32 pm (IST) and again at 28°29' in
+            // Taurus on June 14, 1999 at 12:33:27 am (IST). Sun-Moon conjunction in
+            // Taurus starts Jyeshtha maasa (maasa = month) as per Table 4. So 1999 had
+            // 2 Jyeshtha maasas. One is called "Nija" Jeshtha maasa and the other is
+            // called "Adhika" Jyeshtha maasa. Nija means real and adhika means extra.
+            // An adhika maasa (extra month) comes once in every 3 years and that
+            // synchronizes the lunar years with solar years. 
+
+            //this test makes sure month before is accidentally said as Adhika
+            var may14 = new Time($"17:35 14/05/1999 +05:30", GeoLocation.Bangalore);
+            var lunaMonthMay14 = Calculate.LunarMonth(may14);
+            //Assert.AreEqual(LunarMonth.Vaisaakha, lunaMonthMay14);
+
+            //note: little forward to match up with book 15->16
+            var may16 = new Time($"17:35 16/05/1999 +05:30", GeoLocation.Bangalore);
+            var lunaMonthMay16 = Calculate.LunarMonth(may16);
+            Assert.AreEqual(LunarMonth.JyeshthaAdhika, lunaMonthMay16);
+
+            var june14 = new Time($"00:33 14/06/1999 +05:30", GeoLocation.Bangalore);
+            var lunaMonthJune14 = Calculate.LunarMonth(june14);
+            Assert.AreEqual(LunarMonth.Jyeshtha, lunaMonthJune14);
         }
     }
 }

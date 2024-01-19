@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VedAstro.Library.Tests
 {
@@ -715,6 +716,102 @@ namespace VedAstro.Library.Tests
             var june14 = new Time($"00:33 14/06/1999 +05:30", GeoLocation.Bangalore);
             var lunaMonthJune14 = Calculate.LunarMonth(june14);
             Assert.AreEqual(LunarMonth.Jyeshtha, lunaMonthJune14);
+        }
+
+        [TestMethod()]
+        public void PlanetNirayanaLongitudeTest()
+        {
+            //set error rate
+            var errorRate = 2;
+
+            // Test for Sun
+            var sunTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Sun, StandardHoroscope);
+            var sunTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Virgo, new Angle(29, 28, 40)));
+            Assert.IsTrue(Math.Abs((sunTest1 - sunTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Moon
+            var moonTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Moon, StandardHoroscope);
+            var moonTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Aquarius, new Angle(9, 46, 57))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((moonTest1 - moonTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Mars
+            var marsTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Mars, StandardHoroscope);
+            var marsTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Scorpio, new Angle(18, 01, 40))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((marsTest1 - marsTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Mercury
+            var mercuryTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Mercury, StandardHoroscope);
+            var mercuryTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Libra, new Angle(00, 04, 56))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((mercuryTest1 - mercuryTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Jupiter
+            var jupiterTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Jupiter, StandardHoroscope);
+            var jupiterTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Gemini, new Angle(22, 34, 27))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((jupiterTest1 - jupiterTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Venus
+            var venusTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Venus, StandardHoroscope);
+            var venusTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Virgo,
+                new Angle(19, 43, 23))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((venusTest1 - venusTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Saturn
+            var saturnTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Saturn, StandardHoroscope);
+            var saturnTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Leo,
+                new Angle(2, 56, 44))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((saturnTest1 - saturnTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Dhuma
+            var dhumaTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Dhuma, StandardHoroscope);
+            var dhumaTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Aquarius,
+                new Angle(12, 48, 40))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((dhumaTest1 - dhumaTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Vyatipaata
+            var vyatipaataTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Vyatipaata, StandardHoroscope);
+            var vyatipaataTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Taurus,
+                new Angle(17, 11, 19))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((vyatipaataTest1 - vyatipaataTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Parivesha
+            var pariveshaTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Parivesha, StandardHoroscope);
+            var pariveshaTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Scorpio,
+                new Angle(17, 11, 19))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((pariveshaTest1 - pariveshaTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Indrachaapa
+            var indrachaapaTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Indrachaapa, StandardHoroscope);
+            var indrachaapaTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Leo,
+                new Angle(12, 48, 40))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((indrachaapaTest1 - indrachaapaTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Upaketu
+            var upaketuTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Upaketu, StandardHoroscope);
+            var upaketuTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Leo,
+                new Angle(29, 28, 40))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((upaketuTest1 - upaketuTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Kaala
+            var kaalaTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Kaala, StandardHoroscope);
+            var kaalaTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Capricorn,
+                new Angle(24, 37, 58))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((kaalaTest1 - kaalaTruth1).TotalDegrees) <= errorRate);
+        }
+
+        [TestMethod()]
+        public void IsNightBirthTest()
+        {
+            //TODO  
+        }
+
+        [TestMethod()]
+        public void SunriseTimeTest()
+        {
+
+            var xxx = Calculate.SunriseTime(StandardHoroscope);
+            var xxdx = Calculate.SunriseTime(StandardHoroscope).GetLmtDateTimeOffsetText();
+
+            Assert.Fail();
         }
     }
 }

@@ -86,20 +86,30 @@ namespace API
         /// </summary>
         private static async Task<dynamic> HandleOpenAPICalls(string calculatorName, string fullParamString)
         {
-            var allCalls = new[] { "PlanetName/All/", "HouseName/All/" };
-            var isAllCall = allCalls.Any(call => fullParamString.Contains(call));
+            // List of keywords
+            //NOTE: the type name in front "/All" is needed to detect properly
+            //      also needed is the backslash at the end, without which it could detect methods instead
+            var allCallKeywords = new[] { "PlanetName/All/", "PlanetName/All9WithUpagrahas/", "HouseName/All/" };
+
+            // Check if any keyword is present in the fullParamString
+            var isAllCall = allCallKeywords.Any(call => fullParamString.Contains(call));
+
+            // Find the keyword that was used
+            var usedKeyword = allCallKeywords.FirstOrDefault(call => fullParamString.Contains(call));
+
             dynamic rawPlanetData;
-            //ALL
+
+            // If it's an 'All' call
             if (isAllCall)
             {
-                //generate new list of URL with the Planet name or house name changed from All to Sun, House1
-                var callList = GenerateCallList(fullParamString);
+                // Generate new list of URL with the Planet name or house name changed from All to Sun, House1
+                var broken = usedKeyword.Split('/'); //here we remove the front part because not needed
+                var callList = GenerateCallList(fullParamString, broken[1]);
 
-                //make new calculation for all planets or houses 
+                // Make new calculation for all planets or houses 
                 rawPlanetData = ProcessAllCalls(calculatorName, callList);
-
             }
-            //SINGLE / NORMAL
+            // If it's a single/normal call
             else
             {
                 rawPlanetData = await SingleAPICallData(calculatorName, fullParamString);
@@ -111,25 +121,39 @@ namespace API
         /// <summary>
         /// generate new list of URL with the Planet name or house name changed from All to Sun, House1
         /// </summary>
-        private static Dictionary<dynamic, string> GenerateCallList(string fullParamString)
+        private static Dictionary<dynamic, string> GenerateCallList(string fullParamString, string allUrlKeyWord)
         {
             var splitParamString = fullParamString.Split('/');
-            var allTypeNameLocation = Array.IndexOf(splitParamString, "All") - 1;
+            var allTypeNameLocation = Array.IndexOf(splitParamString, allUrlKeyWord) - 1;
             var typeName = splitParamString[allTypeNameLocation];
             var callList = new Dictionary<dynamic, string>();
+
+            //based on planet or house process accordingly
+            //todo future add Zodiac sign, constellation,....
             switch (typeName)
             {
                 case nameof(PlanetName):
-                    foreach (var planet in PlanetName.All9Planets)
+                    if (fullParamString.Contains("/All9WithUpagrahas/"))
                     {
-                        var newUrl = fullParamString.Replace("/All/", $"/{planet}/");
-                        callList.Add(planet, newUrl);
+                        foreach (var planet in PlanetName.All9WithUpagrahas)
+                        {
+                            var newUrl = fullParamString.Replace(allUrlKeyWord, $"{planet}");
+                            callList.Add(planet, newUrl);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var planet in PlanetName.All9Planets)
+                        {
+                            var newUrl = fullParamString.Replace(allUrlKeyWord, $"{planet}");
+                            callList.Add(planet, newUrl);
+                        }
                     }
                     break;
                 case nameof(HouseName):
                     foreach (var house in House.AllHouses)
                     {
-                        var newUrl = fullParamString.Replace("/All/", $"/{house}/");
+                        var newUrl = fullParamString.Replace(allUrlKeyWord, $"{house}");
                         callList.Add(house, newUrl);
                     }
                     break;

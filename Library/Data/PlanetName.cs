@@ -41,7 +41,13 @@ namespace VedAstro.Library
             ///  true osculating apogee, which is the point where the Moon is farthest from the Earth in its elliptical orbit.
             /// </summary>
             Ketu,
-            Earth
+            Earth,
+            Dhuma,
+            Vyatipaata,
+            Parivesha,
+            Indrachaapa,
+            Upaketu,
+            Kaala
         }
 
         //CONST FIELDS
@@ -53,6 +59,12 @@ namespace VedAstro.Library
         public static readonly PlanetName Venus = new PlanetName(PlanetNameEnum.Venus);
         public static readonly PlanetName Saturn = new PlanetName(PlanetNameEnum.Saturn);
         public static readonly PlanetName Earth = new PlanetName(PlanetNameEnum.Earth);
+        public static readonly PlanetName Dhuma = new PlanetName(PlanetNameEnum.Dhuma);
+        public static readonly PlanetName Vyatipaata = new PlanetName(PlanetNameEnum.Vyatipaata);
+        public static readonly PlanetName Parivesha = new PlanetName(PlanetNameEnum.Parivesha);
+        public static readonly PlanetName Indrachaapa = new PlanetName(PlanetNameEnum.Indrachaapa);
+        public static readonly PlanetName Upaketu = new PlanetName(PlanetNameEnum.Upaketu);
+        public static readonly PlanetName Kaala = new PlanetName(PlanetNameEnum.Kaala);
 
         /// <summary>
         /// the true node, which is the point where the Moon's orbit crosses the ecliptic plane
@@ -84,6 +96,18 @@ namespace VedAstro.Library
             Mars, Mercury,
             Jupiter, Venus,
             Saturn, Rahu, Ketu
+        };
+
+        /// <summary>
+        /// Gets a list of planet WITH rahu & ketu, used for looping through planets
+        /// </summary>
+        public static readonly List<PlanetName> All9WithUpagrahas = new List<PlanetName>()
+        {
+            Sun, Moon,
+            Mars, Mercury,
+            Jupiter, Venus,
+            Saturn, Rahu, Ketu,
+            Dhuma, Vyatipaata, Parivesha,Indrachaapa,Upaketu,Kaala
         };
 
 
@@ -132,6 +156,18 @@ namespace VedAstro.Library
                     return Ketu;
                 case "rahu":
                     return Rahu;
+                case "dhuma":
+                    return Dhuma;
+                case "vyatipaata":
+                    return Vyatipaata;
+                case "parivesha":
+                    return Parivesha;
+                case "indrachaapa":
+                    return Indrachaapa;
+                case "upaketu":
+                    return Upaketu;
+                case "kaala":
+                    return Kaala;
             }
 
             //could not parse, return empty

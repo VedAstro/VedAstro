@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Nancy</FirstName>
+  <LastName>Dussault</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2430139.378472</BirthDate>
+  <Longitude>87.216667</Longitude>
+  <Latitude>30.416667</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Pensacola</City>
+  <State>FL Florida</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Actress. Sung with the NYC opera, starred in three broadway musicals. Won critical praise for her acting, funny lady in a comedy. Petite redhead, seasoned performer, popular guest on talk shows. Gets up before sunrise for TV show, kooky ingenue, warm and spontaneous. She's real, offhand sometimes blundering behavior. NYT 1/77. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

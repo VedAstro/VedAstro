@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Ralph</FirstName>
+  <LastName>Beard</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2425215.597222</BirthDate>
+  <Longitude>86.466667</Longitude>
+  <Latitude>37.783333</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Hardinsberg</City>
+  <State>KY Kentucky</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Basketball player. Success in college and professional career. Accused of accepting bribes from gamblers, pleaded guilty. Wife divorced him, he became bitter, played minor league baseball. Wiry, fast, clever, full of nervous energy. Runs opponents to exhaustion. SS. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

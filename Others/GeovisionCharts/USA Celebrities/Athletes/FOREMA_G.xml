@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>George</FirstName>
+  <LastName>Foreman</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2432927.385417</BirthDate>
+  <Longitude>94.383333</Longitude>
+  <Latitude>32.550000</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Marshall</City>
+  <State>TX Texas</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Boxer, Olympic Gold Medal, Heavyweight Champion. Low key, genuine, devoted to love, duty, religion and apple pie. Influenced by and attached to his mother. Naive, gullible, loyal to friends, solemn voice. Dressed like a department store floorwalker. Raises dogs, simple, non-partisan in politics. CB 74. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

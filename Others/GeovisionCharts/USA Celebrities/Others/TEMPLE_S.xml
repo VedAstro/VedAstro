@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Shirley</FirstName>
+  <LastName>Temple-Black</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2425360.375000</BirthDate>
+  <Longitude>118.483333</Longitude>
+  <Latitude>34.016667</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Santa Monica</City>
+  <State>CA California</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>no notes. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Henry</FirstName>
+  <LastName>Jackson</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2419554.208333</BirthDate>
+  <Longitude>122.200000</Longitude>
+  <Latitude>47.983333</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Everett</City>
+  <State>IA Iowa</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Lawyer, politician, Senator (Washington). Influential authority, `last of the red hot cold warriors'. Hard work, business acumen, urged vigorous prosecution of the war. Piston like fist pounding, radiates strength and vitality. Dresses conservatively, serious demeanor. Said to lack charisma, `too busy' to marry. CB 79. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

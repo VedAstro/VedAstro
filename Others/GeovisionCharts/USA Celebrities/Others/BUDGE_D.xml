@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Donald</FirstName>
+  <LastName>Budge</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2420661.666667</BirthDate>
+  <Longitude>122.266667</Longitude>
+  <Latitude>37.816667</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Oakland</City>
+  <State>CA California</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Tennis player. Popular figure, likeable, energetic, shyness, lack of affectation. Ingratiating smile, sportsmanship, great strength, no weaknesses. Admiration of contemporaries and rivals, devastating, all powerful. Gaunt, angular, worked hard, little grace, spectacular. Most celebrated stroke in tennis. CB 41  LL 78  SS. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

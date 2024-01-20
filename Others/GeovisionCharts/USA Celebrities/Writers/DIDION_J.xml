@@ -1,0 +1,54 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Joan</FirstName>
+  <LastName>Didion</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2427777.246528</BirthDate>
+  <Longitude>121.493333</Longitude>
+  <Latitude>38.581667</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Sacramento</City>
+  <State>CA California</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events><Event Id="1" ><Name>Prashna</Name>
+   <Description></Description>
+   <Date>2450029.939537</Date>
+   <Longitude>91.950000</Longitude>
+   <Latitude>41.016667</Latitude>
+   <TimeZone>6.000000</TimeZone>
+   <DST>0.000000</DST>
+   <City>Fairfield</City>
+   <State>CA California</State>
+   <Country>USA</Country>
+   <EventLookUpMode>D</EventLookUpMode>
+   <EventClassification></EventClassification>
+   <EventNotes></EventNotes>
+   <EventRodden>0</EventRodden>
+   <IsUsed>1</IsUsed>
+  </Event>
+ </Events>
+ <DetailedNotes>Writer. Frail, volatile thinness, chain smoker, southern softness in her voice. Masquarded like a young girl, sadness in the face. Bright laughter puncuates unfinished sentences. Voice so soft and tentative that one has to strain to hear her. NYT 6/79. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

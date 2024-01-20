@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Shirley</FirstName>
+  <LastName>Hufstedler</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2424386.770833</BirthDate>
+  <Longitude>104.983333</Longitude>
+  <Latitude>39.733333</Latitude>
+  <TimeZone>7.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Denver </City>
+  <State>CO Colorado</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>US Secretary of Education. Independent minded Democrat, liberal activist, duty struck. Adored by her clerks, a queenly manner, classic taste in clothes. Puts things eloquently, quickly penetrates problems. Words are her chosen weapon, sweet talking, suffragist. Disarming vulnerability, ingenuousness. CB 80. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

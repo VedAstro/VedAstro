@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Hubert De</FirstName>
+  <LastName>Givenchy</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2424931.979167</BirthDate>
+  <Longitude>-2.083333</Longitude>
+  <Latitude>49.433333</Latitude>
+  <TimeZone>-0.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Beauvais</City>
+  <State> </State>
+  <Country>France</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>no notes. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

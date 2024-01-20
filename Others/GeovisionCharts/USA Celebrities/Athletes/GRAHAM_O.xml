@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Otto</FirstName>
+  <LastName>Graham</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2423029.576389</BirthDate>
+  <Longitude>87.833333</Longitude>
+  <Latitude>42.366667</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Waulegan</City>
+  <State>IL Illinois</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Football player. Loose, cocky, happy go lucky,gifted, solid, strong, confident. Proud, outspoken, sometimes indiscreet, easy going, leads with his heart. Gambling daring plays, quickness, split second reactions. Retired because of mental pressure, did not want pressure of coaching. Best quarterback, made Football Hall of Fame, had become stereotyped. LL 78   SS. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

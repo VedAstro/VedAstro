@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>H.R.</FirstName>
+  <LastName>Haldeman</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2424815.645833</BirthDate>
+  <Longitude>118.250000</Longitude>
+  <Latitude>34.066667</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Los Angeles</City>
+  <State>CA California</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Lawyer, government official, watergate conspriator. Eager, intense, arrogant, authoritative, singleness of purpose. Powerful in Nixon administration, feared, brusk taskmaster. Efficiency his watchword, conservative in style and politics. Charged with conspiracy, obstruction of justice, perjury. Former advertising executive, professional liar. XB 78  NYT 1/75. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

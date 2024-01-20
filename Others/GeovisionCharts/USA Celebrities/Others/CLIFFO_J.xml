@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>John</FirstName>
+  <LastName>Clifford</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2432349.410417</BirthDate>
+  <Longitude>118.350000</Longitude>
+  <Latitude>34.100000</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Hollywood</City>
+  <State>CA California</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Dancer, choreographer. Flamboyant style, brash, sprightly effervesence, originality. Off beat humor, a definite quirk, sharp incisive handling. Creative energy, most electric and engaging performer. Youthful arrogance, handsome, restless, unable to sit and answer questions. Lack of pretense, informal life style, unconventionally dressed. Self aware. CB 72. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

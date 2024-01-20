@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Madeline</FirstName>
+  <LastName>Kahn</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2430632.254861</BirthDate>
+  <Longitude>71.033333</Longitude>
+  <Latitude>42.383333</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>1.000000</DST>
+  <City>Chelsea</City>
+  <State>AL Alabama</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Actress. Funniest woman in films, versatile, incisive personality. The clown with the face of an angel, a dazzle in her smile and a dimple in.   her voice, extremely funny. Withdrawn and insecure as a child, spent much time alone. Pretty, refined, unassuming, quiet life, relishes privacy. Eschews the show business social whirl. Benefitted from years of psychotherapy. CB 77. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

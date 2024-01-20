@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>John</FirstName>
+  <LastName>Irving</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2430420.507639</BirthDate>
+  <Longitude>70.950000</Longitude>
+  <Latitude>42.983333</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>1.000000</DST>
+  <City>Exeter</City>
+  <State>NH New Hampshire</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Writer. Happy peaceful childhood, sensitivity, rare humor, emotional touchstones. CB 79. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

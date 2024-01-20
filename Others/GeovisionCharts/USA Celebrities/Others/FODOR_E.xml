@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Eugene</FirstName>
+  <LastName>Fodor</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2433345.763889</BirthDate>
+  <Longitude>106.766667</Longitude>
+  <Latitude>38.383333</Latitude>
+  <TimeZone>7.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Turkey Creek</City>
+  <State>CO Colorado</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Violinist. Personable, affable, athletic, disdains critics. Showy program selections, emphatic. Frequent smile, sex appeal, adoring female spectators. CB 76. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

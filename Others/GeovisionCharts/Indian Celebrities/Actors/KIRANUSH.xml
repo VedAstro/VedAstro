@@ -1,0 +1,70 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Usha</FirstName>
+  <LastName>Kiran</LastName>
+  <Anka>0</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2425723.795139</BirthDate>
+  <Longitude>-72.833333</Longitude>
+  <Latitude>18.966667</Latitude>
+  <TimeZone>-5.500000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Bombay</City>
+  <State>INDIA (general)</State>
+  <Country>India</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events><Event Id="1" ><Name>Today</Name>
+   <Description></Description>
+   <Date>2452017.935301</Date>
+   <Longitude>91.962500</Longitude>
+   <Latitude>41.008611</Latitude>
+   <TimeZone>6.000000</TimeZone>
+   <DST>0.000000</DST>
+   <City>Fairfield</City>
+   <State>IA Iowa</State>
+   <Country>USA</Country>
+   <EventLookUpMode>D</EventLookUpMode>
+   <EventClassification></EventClassification>
+   <EventNotes></EventNotes>
+   <EventRodden>0</EventRodden>
+   <IsUsed>1</IsUsed>
+  </Event>
+  <Event Id="2" ><Name>Muhurta</Name>
+   <Description></Description>
+   <Date>2452016.023889</Date>
+   <Longitude>-75.816667</Longitude>
+   <Latitude>26.916667</Latitude>
+   <TimeZone>-5.500000</TimeZone>
+   <DST>0.000000</DST>
+   <City></City>
+   <State></State>
+   <Country>India</Country>
+   <EventLookUpMode>D</EventLookUpMode>
+   <EventClassification></EventClassification>
+   <EventNotes></EventNotes>
+   <EventRodden>0</EventRodden>
+   <IsUsed>1</IsUsed>
+  </Event>
+ </Events>
+ <DetailedNotes></DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

@@ -6576,6 +6576,11 @@ India
                         case PlanetNameEnum.Indrachaapa: return Calculate.IndrachaapaLongitude(time);
                         case PlanetNameEnum.Upaketu: return Calculate.UpaketuLongitude(time);
                         case PlanetNameEnum.Kaala: return Calculate.KaalaLongitude(time);
+                        case PlanetNameEnum.Mrityu: return Calculate.MrityuLongitude(time);
+                        case PlanetNameEnum.Arthaprahaara: return Calculate.ArthaprahaaraLongitude(time);
+                        case PlanetNameEnum.Yamaghantaka: return Calculate.YamaghantakaLongitude(time);
+                        case PlanetNameEnum.Gulika: return Calculate.GulikaLongitude(time);
+                        case PlanetNameEnum.Maandi: return Calculate.MaandiLongitude(time);
                     }
                 }
 
@@ -6693,50 +6698,116 @@ India
         /// we find the time at the middle of Sun's part
         /// and find lagna rising then. That gives Kaala's longitude.
         /// </summary>
-        public static Angle KaalaLongitude(Time time)
+        public static Angle KaalaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Sun, "middle");
+
+        /// <summary>
+        /// Mrityu rises at the middle of Mars's part.
+        /// </summary>
+        public static Angle MrityuLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Mars, "middle");
+
+        /// <summary>
+        /// Artha Praharaka rises at the middle of Mercury's part. 
+        /// </summary>
+        public static Angle ArthaprahaaraLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Mercury, "middle");
+
+        /// <summary>
+        /// Yama ghantaka rises at the middle of Jupiter's part
+        /// </summary>
+        public static Angle YamaghantakaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Jupiter, "middle");
+
+        /// <summary>
+        /// Gulika rises at the middle of Saturn's part. 
+        /// </summary>
+        public static Angle GulikaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Saturn, "begin");
+
+        /// <summary>
+        /// Maandi rises at the beginning of Saturn's part.
+        /// </summary>
+        public static Angle MaandiLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Saturn, "middle");
+
+        /// <summary>
+        /// Calculates longitudes for the non sun based Upagrahas (sub-planets)
+        /// </summary>
+        public static Angle UpagrahaLongitude(Time time, PlanetNameEnum relatedPlanet, string upagrahaPart)
         {
             // Once we divide the day/night of birth into 8 equal parts and identify the
             // ruling planets of the 8 parts, we can find the longitudes of Kaala etc upagrahas
-            var partNumber = UpagrahaPartNumber(time, PlanetNameEnum.Sun); //since Kaala->Sun
+            var partNumber = UpagrahaPartNumber(time, relatedPlanet); //since Kaala->Sun
 
             //ascertain if day birth or night birth
             var isDayBirth = Calculate.IsDayBirth(time);
 
-            House subPlanetLong;
+            var adjustedPartNumber = partNumber - 1; //decrement part number to calculate start time of part interested in
+
+            //calculated duration of day based on sunrise and sunset
+            var dayDuration = Calculate.DayDurationHours(time);
+            //since there are 8 parts, hours per part is roughly ~1.5
+            var hoursPerPart = dayDuration / 8.0;
+
+            //place to store all longitudes for house 1 (lagna)
+            House lagnaLongitudes;
+
+            //# Based on night or day birth calculate the
+            //longitude based on lagna position at given part number
+
+            //day birth
             if (isDayBirth)
             {
-                //Each part is 12/8 = 1.5 hours
                 //get time the part starts after sunrise before sunset
-                var hoursAfterSunrise = partNumber * 1.5;
+                var hoursAfterSunrise = adjustedPartNumber * hoursPerPart;
+
                 //calculate start time based on sunrise
                 var sunrise = Calculate.SunriseTime(time);
                 var partStartTime = sunrise.AddHours(hoursAfterSunrise);
 
-                //calculate middle point in time of part (1.5/2 = 0.75 hours)
-                var partMiddleTime = partStartTime.AddHours(0.75);
+                //calculate middle point in time of part (~1.5/2 = ~0.75 hours)
+                var hoursPerHalfPart = hoursPerPart / 2;
+                var partMiddleTime = partStartTime.AddHours(hoursPerHalfPart);
 
                 //get lagna longitude at this middle time, which is the sub planet's long
-                subPlanetLong = Calculate.AllHouseMiddleLongitudes(time).Where(x => x.GetHouseName() == HouseName.House1).First();
+                //NOTE ASSUMPITION: only possible values "middle" or "begin"
+                var selectedPart = upagrahaPart == "middle" ? partMiddleTime :
+                    upagrahaPart == "begin" ? partStartTime : throw new Exception("END OF LINE!");
+                var allHouseMiddleLongitudes = Calculate.AllHouseMiddleLongitudes(selectedPart);
+                lagnaLongitudes = allHouseMiddleLongitudes.Where(x => x.GetHouseName() == HouseName.House1).First();
             }
+            //nigth birth
             else
             {
-                //Each part is 12/8 = 1.5 hours
-                //get time the part starts after sunset before sunrise
-                var hoursAfterSunset = partNumber * 1.5;
+                //get time the part starts after sunset before sunrise next day
+                var hoursAfterSunset = adjustedPartNumber * hoursPerPart;
 
-                //calculate start time based on sunset
+                //calculate start time based on sunrise
                 var sunset = Calculate.SunsetTime(time);
                 var partStartTime = sunset.AddHours(hoursAfterSunset);
 
-                //calculate middle point in time of part (1.5/2 = 0.75 hours)
-                var partMiddleTime = partStartTime.AddHours(0.75);
+                //calculate middle point in time of part (~1.5/2 = ~0.75 hours)
+                var hoursPerHalfPart = hoursPerPart / 2;
+                var partMiddleTime = partStartTime.AddHours(hoursPerHalfPart);
 
                 //get lagna longitude at this middle time, which is the sub planet's long
-                subPlanetLong = Calculate.AllHouseMiddleLongitudes(time).Where(x => x.GetHouseName() == HouseName.House1).First();
+                //NOTE ASSUMPITION: only possible values "middle" or "begin"
+                var selectedPart = upagrahaPart == "middle" ? partMiddleTime :
+                    upagrahaPart == "begin" ? partStartTime : throw new Exception("END OF LINE!");
+                var allHouseMiddleLongitudes = Calculate.AllHouseMiddleLongitudes(selectedPart);
+                lagnaLongitudes = allHouseMiddleLongitudes.Where(x => x.GetHouseName() == HouseName.House1).First();
             }
 
+            return lagnaLongitudes.GetMiddleLongitude();
 
-            return subPlanetLong.GetMiddleLongitude();
+        }
+
+
+        /// <summary>
+        /// Gets total hours in a vedic day, that is duration from sunset to sunrise
+        /// </summary>
+        public static double DayDurationHours(Time time)
+        {
+            var sunset = Calculate.SunsetTime(time);
+            var sunrise = Calculate.SunriseTime(time);
+
+            var totalHours = sunset.Subtract(sunrise).TotalHours;
+            return totalHours;
         }
 
         /// <summary>
@@ -6855,8 +6926,6 @@ India
 
         }
 
-
-
         /// <summary>
         /// Given a planet name will tell if it is an Upagraha planet
         /// </summary>
@@ -6871,6 +6940,11 @@ India
                 case PlanetNameEnum.Indrachaapa:
                 case PlanetNameEnum.Upaketu:
                 case PlanetNameEnum.Kaala:
+                case PlanetNameEnum.Mrityu:
+                case PlanetNameEnum.Arthaprahaara:
+                case PlanetNameEnum.Yamaghantaka:
+                case PlanetNameEnum.Gulika:
+                case PlanetNameEnum.Maandi:
                     return true;
             }
 

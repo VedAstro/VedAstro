@@ -1,11 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VedAstro.Library;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VedAstro.Library.Tests
 {
@@ -796,6 +789,36 @@ namespace VedAstro.Library.Tests
             var kaalaTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Capricorn,
                 new Angle(24, 37, 58))); // Replace with correct values
             Assert.IsTrue(Math.Abs((kaalaTest1 - kaalaTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Mrityu
+            var mrityuTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Mrityu, StandardHoroscope);
+            var mrityuTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Pisces,
+                new Angle(16, 29, 9))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((mrityuTest1 - mrityuTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Arthaprahaara
+            var arthaprahaaraTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Arthaprahaara, StandardHoroscope);
+            var arthaprahaaraTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Libra,
+                new Angle(9, 48, 21))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((arthaprahaaraTest1 - arthaprahaaraTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Yamaghantaka
+            var yamaghantakaTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Yamaghantaka, StandardHoroscope);
+            var yamaghantakaTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Scorpio,
+                new Angle(0, 30, 29))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((yamaghantakaTest1 - yamaghantakaTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Gulika
+            var gulikaTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Gulika, StandardHoroscope);
+            var gulikaTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Sagittarius,
+                new Angle(0, 33, 6))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((gulikaTest1 - gulikaTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Maandi
+            var maandiTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Maandi, StandardHoroscope);
+            var maandiTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Sagittarius,
+                new Angle(10, 38, 34))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((maandiTest1 - maandiTruth1).TotalDegrees) <= errorRate);
         }
 
         [TestMethod()]

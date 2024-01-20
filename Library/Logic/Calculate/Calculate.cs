@@ -935,6 +935,18 @@ namespace VedAstro.Library
         #region GENERAL
 
         /// <summary>
+        /// Gets total hours in a vedic day, that is duration from sunset to sunrise
+        /// </summary>
+        public static double DayDurationHours(Time time)
+        {
+            var sunset = Calculate.SunsetTime(time);
+            var sunrise = Calculate.SunriseTime(time);
+
+            var totalHours = sunset.Subtract(sunrise).TotalHours;
+            return totalHours;
+        }
+
+        /// <summary>
         /// A day starts at the time of sunrise and ends at the time of sunset. A
         /// night starts at the time of sunset and ends at the time of next day's sunrise.
         /// </summary>
@@ -3394,6 +3406,36 @@ India
                 planetSignList.Add(sign3FromSaturn);
                 planetSignList.Add(sign10FromSaturn);
 
+            }
+
+            // Mandi or Gulika is said to aspect 2nd, 7th
+            // and 12th Houses from the sign of occupation. 
+            if (planetName == Maandi)
+            {
+                //get signs planet is aspecting
+                var sign2ndFromMaandi = SignCountedFromInputSign(planetSignName, 2);
+                var sign7thFromMaandi = SignCountedFromInputSign(planetSignName, 7);
+                var sign12thFromMaandi = SignCountedFromInputSign(planetSignName, 12);
+
+                //add signs to return list
+                planetSignList.Add(sign2ndFromMaandi);
+                planetSignList.Add(sign7thFromMaandi);
+                planetSignList.Add(sign12thFromMaandi);
+            }
+
+            // Mandi or Gulika is said to aspect 2nd, 7th
+            // and 12th Houses from the sign of occupation. 
+            if (planetName == Gulika)
+            {
+                //get signs planet is aspecting
+                var sign2ndFromGulika = SignCountedFromInputSign(planetSignName, 2);
+                var sign7thFromGulika = SignCountedFromInputSign(planetSignName, 7);
+                var sign12thFromGulika = SignCountedFromInputSign(planetSignName, 12);
+
+                //add signs to return list
+                planetSignList.Add(sign2ndFromGulika);
+                planetSignList.Add(sign7thFromGulika);
+                planetSignList.Add(sign12thFromGulika);
             }
 
             // Jupiter the 5th and the 9th houses
@@ -6375,6 +6417,329 @@ India
 
         #endregion
 
+        #region UPAGRAHA
+
+        /// <summary>
+        /// Dhuma Sun' s longitude + 133°20’
+        /// </summary>
+        public static Angle DhumaLongitude(Time time)
+        {
+            //get sun long
+            var sunLong = Calculate.PlanetNirayanaLongitude(Sun, time);
+
+            //add 133°20’
+            var _133 = new Angle(133, 20, 0);
+            var total = _133 + sunLong;
+
+            return total.Expunge360();
+        }
+
+        /// <summary>
+        /// 360°-Dhuma's longitude
+        /// </summary>
+        public static Angle VyatipaataLongitude(Time time)
+        {
+            //get needed longitude
+            var dhumaLong = Calculate.DhumaLongitude(time);
+
+            //calculate final
+            var total = Angle.Degrees360 - dhumaLong;
+
+            return total.Expunge360();
+        }
+
+        /// <summary>
+        /// Vyatipaata's longitude + 180°
+        /// </summary>
+        public static Angle PariveshaLongitude(Time time)
+        {
+            //get needed longitude
+            var longitude = Calculate.VyatipaataLongitude(time);
+
+            //calculate final
+            var total = longitude + Angle.Degrees180;
+
+            return total.Expunge360();
+        }
+
+        /// <summary>
+        /// 360° - Parivesha's longitude
+        /// </summary>
+        public static Angle IndrachaapaLongitude(Time time)
+        {
+            //get needed longitude
+            var longitude = Calculate.PariveshaLongitude(time);
+
+            //calculate final
+            var total = Angle.Degrees360 - longitude;
+
+            return total.Expunge360();
+        }
+
+        /// <summary>
+        /// Indrachaapa's longitude + 16°40'
+        /// </summary>
+        public static Angle UpaketuLongitude(Time time)
+        {
+            //get needed longitude
+            var longitude = Calculate.IndrachaapaLongitude(time);
+
+            //calculate final
+            var _1640 = new Angle(16, 40, 0);
+            var total = longitude + _1640;
+
+            return total.Expunge360();
+        }
+
+        /// <summary>
+        /// Kaala rises at the middle of Sun's part. In other words,
+        /// we find the time at the middle of Sun's part
+        /// and find lagna rising then. That gives Kaala's longitude.
+        /// </summary>
+        public static Angle KaalaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Sun, "middle");
+
+        /// <summary>
+        /// Mrityu rises at the middle of Mars's part.
+        /// </summary>
+        public static Angle MrityuLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Mars, "middle");
+
+        /// <summary>
+        /// Artha Praharaka rises at the middle of Mercury's part. 
+        /// </summary>
+        public static Angle ArthaprahaaraLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Mercury, "middle");
+
+        /// <summary>
+        /// Yama ghantaka rises at the middle of Jupiter's part
+        /// </summary>
+        public static Angle YamaghantakaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Jupiter, "middle");
+
+        /// <summary>
+        /// Gulika rises at the middle of Saturn's part. 
+        /// </summary>
+        public static Angle GulikaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Saturn, "begin");
+
+        /// <summary>
+        /// Maandi rises at the beginning of Saturn's part.
+        /// </summary>
+        public static Angle MaandiLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Saturn, "middle");
+
+        /// <summary>
+        /// Calculates longitudes for the non sun based Upagrahas (sub-planets)
+        /// </summary>
+        public static Angle UpagrahaLongitude(Time time, PlanetNameEnum relatedPlanet, string upagrahaPart)
+        {
+            // Once we divide the day/night of birth into 8 equal parts and identify the
+            // ruling planets of the 8 parts, we can find the longitudes of Kaala etc upagrahas
+            var partNumber = UpagrahaPartNumber(time, relatedPlanet); //since Kaala->Sun
+
+            //ascertain if day birth or night birth
+            var isDayBirth = Calculate.IsDayBirth(time);
+
+            var adjustedPartNumber = partNumber - 1; //decrement part number to calculate start time of part interested in
+
+            //calculated duration of day based on sunrise and sunset
+            var dayDuration = Calculate.DayDurationHours(time);
+            //since there are 8 parts, hours per part is roughly ~1.5
+            var hoursPerPart = dayDuration / 8.0;
+
+            //place to store all longitudes for house 1 (lagna)
+            House lagnaLongitudes;
+
+            //# Based on night or day birth calculate the
+            //longitude based on lagna position at given part number
+
+            //day birth
+            if (isDayBirth)
+            {
+                //get time the part starts after sunrise before sunset
+                var hoursAfterSunrise = adjustedPartNumber * hoursPerPart;
+
+                //calculate start time based on sunrise
+                var sunrise = Calculate.SunriseTime(time);
+                var partStartTime = sunrise.AddHours(hoursAfterSunrise);
+
+                //calculate middle point in time of part (~1.5/2 = ~0.75 hours)
+                var hoursPerHalfPart = hoursPerPart / 2;
+                var partMiddleTime = partStartTime.AddHours(hoursPerHalfPart);
+
+                //get lagna longitude at this middle time, which is the sub planet's long
+                //NOTE ASSUMPITION: only possible values "middle" or "begin"
+                var selectedPart = upagrahaPart == "middle" ? partMiddleTime :
+                    upagrahaPart == "begin" ? partStartTime : throw new Exception("END OF LINE!");
+                var allHouseMiddleLongitudes = Calculate.AllHouseMiddleLongitudes(selectedPart);
+                lagnaLongitudes = allHouseMiddleLongitudes.Where(x => x.GetHouseName() == HouseName.House1).First();
+            }
+            //nigth birth
+            else
+            {
+                //get time the part starts after sunset before sunrise next day
+                var hoursAfterSunset = adjustedPartNumber * hoursPerPart;
+
+                //calculate start time based on sunrise
+                var sunset = Calculate.SunsetTime(time);
+                var partStartTime = sunset.AddHours(hoursAfterSunset);
+
+                //calculate middle point in time of part (~1.5/2 = ~0.75 hours)
+                var hoursPerHalfPart = hoursPerPart / 2;
+                var partMiddleTime = partStartTime.AddHours(hoursPerHalfPart);
+
+                //get lagna longitude at this middle time, which is the sub planet's long
+                //NOTE ASSUMPITION: only possible values "middle" or "begin"
+                var selectedPart = upagrahaPart == "middle" ? partMiddleTime :
+                    upagrahaPart == "begin" ? partStartTime : throw new Exception("END OF LINE!");
+                var allHouseMiddleLongitudes = Calculate.AllHouseMiddleLongitudes(selectedPart);
+                lagnaLongitudes = allHouseMiddleLongitudes.Where(x => x.GetHouseName() == HouseName.House1).First();
+            }
+
+            return lagnaLongitudes.GetMiddleLongitude();
+
+        }
+
+        /// <summary>
+        /// Depending on whether one is born during the day or the night, we divide the
+        /// length of the day/night into 8 equal parts. Each part is assigned a planet.
+        /// Given a planet and time the part number will be returned.
+        /// Each part is 12/8 = 1.5 hours.
+        /// </summary>
+        public static int UpagrahaPartNumber(Time inputTime, PlanetNameEnum inputPlanet)
+        {
+            //based on night or day birth get the number accoridngly
+            var isDayBirth = Calculate.IsDayBirth(inputTime);
+
+            if (isDayBirth)
+            {
+                return UpagrahaPartNumberDayBirth(inputTime, inputPlanet);
+            }
+            else
+            {
+                return UpagrahaPartNumberNightBirth(inputTime, inputPlanet);
+            }
+
+
+            //------------------LOCAL FUNCS-------------------------
+
+            int UpagrahaPartNumberNightBirth(Time inputTime, PlanetNameEnum inputPlanet)
+            {
+                //get weekday
+                var weekday = Calculate.DayOfWeek(inputTime);
+
+                //based on weekday and planet name return part number
+                //NOTE: table data from 
+                Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>> nightRulers = new Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>>
+            {
+                { Library.DayOfWeek.Sunday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Jupiter, 1 }, { PlanetNameEnum.Venus, 2 }, { PlanetNameEnum.Saturn, 3 }, { PlanetNameEnum.Empty, 4 }, { PlanetNameEnum.Sun, 5 }, { PlanetNameEnum.Moon, 6 }, { PlanetNameEnum.Mars ,7 }, { PlanetNameEnum.Mercury ,8 } }
+                },
+                { Library.DayOfWeek.Monday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Venus, 1 }, { PlanetNameEnum.Saturn, 2 }, { PlanetNameEnum.Empty, 3 }, { PlanetNameEnum.Sun, 4 }, { PlanetNameEnum.Moon, 5 }, { PlanetNameEnum.Mars, 6 }, { PlanetNameEnum.Mercury, 7 }, { PlanetNameEnum.Jupiter ,8 } }
+                },
+                { Library.DayOfWeek.Tuesday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Saturn, 1 }, { PlanetNameEnum.Empty, 2 }, { PlanetNameEnum.Sun, 3 }, { PlanetNameEnum.Moon, 4 }, { PlanetNameEnum.Mars, 5 }, { PlanetNameEnum.Mercury, 6 }, { PlanetNameEnum.Jupiter, 7 }, { PlanetNameEnum.Venus ,8 } }
+                },
+                { Library.DayOfWeek.Wednesday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Sun, 1 }, { PlanetNameEnum.Moon, 2 }, { PlanetNameEnum.Mars, 3 }, { PlanetNameEnum.Mercury, 4 }, { PlanetNameEnum.Jupiter, 5 }, { PlanetNameEnum.Venus, 6 }, { PlanetNameEnum.Saturn, 7 }, { PlanetNameEnum.Empty ,8} }
+                },
+                { Library.DayOfWeek.Thursday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Moon, 1 }, { PlanetNameEnum.Mars, 2 }, { PlanetNameEnum.Mercury, 3 }, { PlanetNameEnum.Jupiter, 4 }, { PlanetNameEnum.Venus, 5 }, { PlanetNameEnum.Saturn, 6 }, { PlanetNameEnum.Empty, 7 }, { PlanetNameEnum.Sun ,8 } }
+                },
+                { Library.DayOfWeek.Friday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Mars, 1 }, { PlanetNameEnum.Mercury, 2 }, { PlanetNameEnum.Jupiter, 3 }, { PlanetNameEnum.Venus, 4 }, { PlanetNameEnum.Saturn, 5 }, { PlanetNameEnum.Empty, 6 }, { PlanetNameEnum.Sun, 7 }, { PlanetNameEnum.Moon ,8 } }
+                },
+                { Library.DayOfWeek.Saturday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Mercury, 1 }, { PlanetNameEnum.Jupiter, 2 }, { PlanetNameEnum.Venus, 3 }, { PlanetNameEnum.Saturn, 4 }, { PlanetNameEnum.Empty, 5 }, { PlanetNameEnum.Sun, 6 }, { PlanetNameEnum.Moon, 7 }, { PlanetNameEnum.Mars ,8 } }
+                },
+
+            };
+
+                if (nightRulers.TryGetValue(weekday, out var planetParts))
+                {
+                    if (planetParts.TryGetValue(inputPlanet, out var partNumber))
+                    {
+                        return partNumber;
+                    }
+                    throw new Exception("Invalid planet name");
+                }
+
+                throw new Exception("Invalid day of week");
+            }
+
+
+            int UpagrahaPartNumberDayBirth(Time inputTime, PlanetNameEnum inputPlanet)
+            {
+                //get weekday
+                var weekday = Calculate.DayOfWeek(inputTime);
+
+                //based on weekday and planet name return part number
+                //NOTE: table data from 
+                Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>> dayRulers = new Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>>
+            {
+                { Library.DayOfWeek.Sunday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Sun, 1 }, { PlanetNameEnum.Moon, 2 }, { PlanetNameEnum.Mars ,3 }, { PlanetNameEnum.Mercury ,4 }, { PlanetNameEnum.Jupiter ,5 }, { PlanetNameEnum.Venus ,6 }, { PlanetNameEnum.Saturn ,7 }, { PlanetNameEnum.Empty ,8 } }
+                },
+                { Library.DayOfWeek.Monday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Moon, 1 }, { PlanetNameEnum.Mars ,2 }, { PlanetNameEnum.Mercury ,3 }, { PlanetNameEnum.Jupiter ,4},  {PlanetNameEnum.Venus ,5},  {PlanetNameEnum.Saturn ,6},  {PlanetNameEnum.Empty ,7}, { PlanetNameEnum.Sun ,8 } }
+                },
+                { Library.DayOfWeek.Tuesday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Mars, 1 }, { PlanetNameEnum.Mercury ,2 }, { PlanetNameEnum.Jupiter ,3 }, { PlanetNameEnum.Venus ,4},  {PlanetNameEnum.Saturn ,5},  {PlanetNameEnum.Empty ,6},  {PlanetNameEnum.Sun ,7}, { PlanetNameEnum.Moon ,8 } }
+                },
+                { Library.DayOfWeek.Wednesday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Mercury, 1 }, { PlanetNameEnum.Jupiter ,2 }, { PlanetNameEnum.Venus ,3 }, { PlanetNameEnum.Saturn ,4},  {PlanetNameEnum.Empty ,5},  {PlanetNameEnum.Sun ,6},  {PlanetNameEnum.Moon ,7}, { PlanetNameEnum.Mars ,8 } }
+                },
+                { Library.DayOfWeek.Thursday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Jupiter, 1 }, { PlanetNameEnum.Venus ,2 }, { PlanetNameEnum.Saturn ,3 }, { PlanetNameEnum.Empty ,4},  {PlanetNameEnum.Sun ,5},  {PlanetNameEnum.Moon ,6},  {PlanetNameEnum.Mars ,7}, { PlanetNameEnum.Mercury ,8 } }
+                },
+                { Library.DayOfWeek.Friday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Venus, 1 }, { PlanetNameEnum.Saturn ,2 }, { PlanetNameEnum.Empty ,3 }, { PlanetNameEnum.Sun ,4},  {PlanetNameEnum.Moon ,5},  {PlanetNameEnum.Mars ,6},  {PlanetNameEnum.Mercury ,7}, { PlanetNameEnum.Jupiter ,8 } }
+                },
+                { Library.DayOfWeek.Saturday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Saturn, 1 }, { PlanetNameEnum.Empty ,2 }, { PlanetNameEnum.Sun ,3 }, { PlanetNameEnum.Moon ,4},  {PlanetNameEnum.Mars ,5},  {PlanetNameEnum.Mercury ,6},  {PlanetNameEnum.Jupiter ,7}, { PlanetNameEnum.Venus ,8 } }
+                },
+            };
+
+
+                if (dayRulers.TryGetValue(weekday, out var planetParts))
+                {
+                    if (planetParts.TryGetValue(inputPlanet, out var partNumber))
+                    {
+                        return partNumber;
+                    }
+                    throw new Exception("Invalid planet name");
+                }
+
+                throw new Exception("Invalid day of week");
+            }
+
+        }
+
+        /// <summary>
+        /// Given a planet name will tell if it is an Upagraha planet
+        /// </summary>
+        public static bool IsUpagraha(PlanetName planet)
+        {
+            var planetName = planet.Name;
+            switch (planetName)
+            {
+                case PlanetNameEnum.Dhuma:
+                case PlanetNameEnum.Vyatipaata:
+                case PlanetNameEnum.Parivesha:
+                case PlanetNameEnum.Indrachaapa:
+                case PlanetNameEnum.Upaketu:
+                case PlanetNameEnum.Kaala:
+                case PlanetNameEnum.Mrityu:
+                case PlanetNameEnum.Arthaprahaara:
+                case PlanetNameEnum.Yamaghantaka:
+                case PlanetNameEnum.Gulika:
+                case PlanetNameEnum.Maandi:
+                    return true;
+            }
+
+            //if control reaches here than must be normal planet
+            return false;
+        }
+
+
+        #endregion
+
         #region CACHED FUNCTIONS
         //NOTE : These are functions that don't call other functions from this class
         //       Only functions that don't call other cached functions are allowed to be cached
@@ -6619,337 +6984,6 @@ India
             }
 
 
-        }
-
-        /// <summary>
-        /// Dhuma Sun' s longitude + 133°20’
-        /// </summary>
-        public static Angle DhumaLongitude(Time time)
-        {
-            //get sun long
-            var sunLong = Calculate.PlanetNirayanaLongitude(Sun, time);
-
-            //add 133°20’
-            var _133 = new Angle(133, 20, 0);
-            var total = _133 + sunLong;
-
-            return total.Expunge360();
-        }
-
-        /// <summary>
-        /// 360°-Dhuma's longitude
-        /// </summary>
-        public static Angle VyatipaataLongitude(Time time)
-        {
-            //get needed longitude
-            var dhumaLong = Calculate.DhumaLongitude(time);
-
-            //calculate final
-            var total = Angle.Degrees360 - dhumaLong;
-
-            return total.Expunge360();
-        }
-
-        /// <summary>
-        /// Vyatipaata's longitude + 180°
-        /// </summary>
-        public static Angle PariveshaLongitude(Time time)
-        {
-            //get needed longitude
-            var longitude = Calculate.VyatipaataLongitude(time);
-
-            //calculate final
-            var total = longitude + Angle.Degrees180;
-
-            return total.Expunge360();
-        }
-
-        /// <summary>
-        /// 360° - Parivesha's longitude
-        /// </summary>
-        public static Angle IndrachaapaLongitude(Time time)
-        {
-            //get needed longitude
-            var longitude = Calculate.PariveshaLongitude(time);
-
-            //calculate final
-            var total = Angle.Degrees360 - longitude;
-
-            return total.Expunge360();
-        }
-
-        /// <summary>
-        /// Indrachaapa's longitude + 16°40'
-        /// </summary>
-        public static Angle UpaketuLongitude(Time time)
-        {
-            //get needed longitude
-            var longitude = Calculate.IndrachaapaLongitude(time);
-
-            //calculate final
-            var _1640 = new Angle(16, 40, 0);
-            var total = longitude + _1640;
-
-            return total.Expunge360();
-        }
-
-        /// <summary>
-        /// Kaala rises at the middle of Sun's part. In other words,
-        /// we find the time at the middle of Sun's part
-        /// and find lagna rising then. That gives Kaala's longitude.
-        /// </summary>
-        public static Angle KaalaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Sun, "middle");
-
-        /// <summary>
-        /// Mrityu rises at the middle of Mars's part.
-        /// </summary>
-        public static Angle MrityuLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Mars, "middle");
-
-        /// <summary>
-        /// Artha Praharaka rises at the middle of Mercury's part. 
-        /// </summary>
-        public static Angle ArthaprahaaraLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Mercury, "middle");
-
-        /// <summary>
-        /// Yama ghantaka rises at the middle of Jupiter's part
-        /// </summary>
-        public static Angle YamaghantakaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Jupiter, "middle");
-
-        /// <summary>
-        /// Gulika rises at the middle of Saturn's part. 
-        /// </summary>
-        public static Angle GulikaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Saturn, "begin");
-
-        /// <summary>
-        /// Maandi rises at the beginning of Saturn's part.
-        /// </summary>
-        public static Angle MaandiLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Saturn, "middle");
-
-        /// <summary>
-        /// Calculates longitudes for the non sun based Upagrahas (sub-planets)
-        /// </summary>
-        public static Angle UpagrahaLongitude(Time time, PlanetNameEnum relatedPlanet, string upagrahaPart)
-        {
-            // Once we divide the day/night of birth into 8 equal parts and identify the
-            // ruling planets of the 8 parts, we can find the longitudes of Kaala etc upagrahas
-            var partNumber = UpagrahaPartNumber(time, relatedPlanet); //since Kaala->Sun
-
-            //ascertain if day birth or night birth
-            var isDayBirth = Calculate.IsDayBirth(time);
-
-            var adjustedPartNumber = partNumber - 1; //decrement part number to calculate start time of part interested in
-
-            //calculated duration of day based on sunrise and sunset
-            var dayDuration = Calculate.DayDurationHours(time);
-            //since there are 8 parts, hours per part is roughly ~1.5
-            var hoursPerPart = dayDuration / 8.0;
-
-            //place to store all longitudes for house 1 (lagna)
-            House lagnaLongitudes;
-
-            //# Based on night or day birth calculate the
-            //longitude based on lagna position at given part number
-
-            //day birth
-            if (isDayBirth)
-            {
-                //get time the part starts after sunrise before sunset
-                var hoursAfterSunrise = adjustedPartNumber * hoursPerPart;
-
-                //calculate start time based on sunrise
-                var sunrise = Calculate.SunriseTime(time);
-                var partStartTime = sunrise.AddHours(hoursAfterSunrise);
-
-                //calculate middle point in time of part (~1.5/2 = ~0.75 hours)
-                var hoursPerHalfPart = hoursPerPart / 2;
-                var partMiddleTime = partStartTime.AddHours(hoursPerHalfPart);
-
-                //get lagna longitude at this middle time, which is the sub planet's long
-                //NOTE ASSUMPITION: only possible values "middle" or "begin"
-                var selectedPart = upagrahaPart == "middle" ? partMiddleTime :
-                    upagrahaPart == "begin" ? partStartTime : throw new Exception("END OF LINE!");
-                var allHouseMiddleLongitudes = Calculate.AllHouseMiddleLongitudes(selectedPart);
-                lagnaLongitudes = allHouseMiddleLongitudes.Where(x => x.GetHouseName() == HouseName.House1).First();
-            }
-            //nigth birth
-            else
-            {
-                //get time the part starts after sunset before sunrise next day
-                var hoursAfterSunset = adjustedPartNumber * hoursPerPart;
-
-                //calculate start time based on sunrise
-                var sunset = Calculate.SunsetTime(time);
-                var partStartTime = sunset.AddHours(hoursAfterSunset);
-
-                //calculate middle point in time of part (~1.5/2 = ~0.75 hours)
-                var hoursPerHalfPart = hoursPerPart / 2;
-                var partMiddleTime = partStartTime.AddHours(hoursPerHalfPart);
-
-                //get lagna longitude at this middle time, which is the sub planet's long
-                //NOTE ASSUMPITION: only possible values "middle" or "begin"
-                var selectedPart = upagrahaPart == "middle" ? partMiddleTime :
-                    upagrahaPart == "begin" ? partStartTime : throw new Exception("END OF LINE!");
-                var allHouseMiddleLongitudes = Calculate.AllHouseMiddleLongitudes(selectedPart);
-                lagnaLongitudes = allHouseMiddleLongitudes.Where(x => x.GetHouseName() == HouseName.House1).First();
-            }
-
-            return lagnaLongitudes.GetMiddleLongitude();
-
-        }
-
-
-        /// <summary>
-        /// Gets total hours in a vedic day, that is duration from sunset to sunrise
-        /// </summary>
-        public static double DayDurationHours(Time time)
-        {
-            var sunset = Calculate.SunsetTime(time);
-            var sunrise = Calculate.SunriseTime(time);
-
-            var totalHours = sunset.Subtract(sunrise).TotalHours;
-            return totalHours;
-        }
-
-        /// <summary>
-        /// Depending on whether one is born during the day or the night, we divide the
-        /// length of the day/night into 8 equal parts. Each part is assigned a planet.
-        /// Given a planet and time the part number will be returned.
-        /// Each part is 12/8 = 1.5 hours.
-        /// </summary>
-        public static int UpagrahaPartNumber(Time inputTime, PlanetNameEnum inputPlanet)
-        {
-            //based on night or day birth get the number accoridngly
-            var isDayBirth = Calculate.IsDayBirth(inputTime);
-
-            if (isDayBirth)
-            {
-                return UpagrahaPartNumberDayBirth(inputTime, inputPlanet);
-            }
-            else
-            {
-                return UpagrahaPartNumberNightBirth(inputTime, inputPlanet);
-            }
-
-
-            //------------------LOCAL FUNCS-------------------------
-
-            int UpagrahaPartNumberNightBirth(Time inputTime, PlanetNameEnum inputPlanet)
-            {
-                //get weekday
-                var weekday = Calculate.DayOfWeek(inputTime);
-
-                //based on weekday and planet name return part number
-                //NOTE: table data from 
-                Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>> nightRulers = new Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>>
-            {
-                { Library.DayOfWeek.Sunday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Jupiter, 1 }, { PlanetNameEnum.Venus, 2 }, { PlanetNameEnum.Saturn, 3 }, { PlanetNameEnum.Empty, 4 }, { PlanetNameEnum.Sun, 5 }, { PlanetNameEnum.Moon, 6 }, { PlanetNameEnum.Mars ,7 }, { PlanetNameEnum.Mercury ,8 } }
-                },
-                { Library.DayOfWeek.Monday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Venus, 1 }, { PlanetNameEnum.Saturn, 2 }, { PlanetNameEnum.Empty, 3 }, { PlanetNameEnum.Sun, 4 }, { PlanetNameEnum.Moon, 5 }, { PlanetNameEnum.Mars, 6 }, { PlanetNameEnum.Mercury, 7 }, { PlanetNameEnum.Jupiter ,8 } }
-                },
-                { Library.DayOfWeek.Tuesday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Saturn, 1 }, { PlanetNameEnum.Empty, 2 }, { PlanetNameEnum.Sun, 3 }, { PlanetNameEnum.Moon, 4 }, { PlanetNameEnum.Mars, 5 }, { PlanetNameEnum.Mercury, 6 }, { PlanetNameEnum.Jupiter, 7 }, { PlanetNameEnum.Venus ,8 } }
-                },
-                { Library.DayOfWeek.Wednesday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Sun, 1 }, { PlanetNameEnum.Moon, 2 }, { PlanetNameEnum.Mars, 3 }, { PlanetNameEnum.Mercury, 4 }, { PlanetNameEnum.Jupiter, 5 }, { PlanetNameEnum.Venus, 6 }, { PlanetNameEnum.Saturn, 7 }, { PlanetNameEnum.Empty ,8} }
-                },
-                { Library.DayOfWeek.Thursday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Moon, 1 }, { PlanetNameEnum.Mars, 2 }, { PlanetNameEnum.Mercury, 3 }, { PlanetNameEnum.Jupiter, 4 }, { PlanetNameEnum.Venus, 5 }, { PlanetNameEnum.Saturn, 6 }, { PlanetNameEnum.Empty, 7 }, { PlanetNameEnum.Sun ,8 } }
-                },
-                { Library.DayOfWeek.Friday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Mars, 1 }, { PlanetNameEnum.Mercury, 2 }, { PlanetNameEnum.Jupiter, 3 }, { PlanetNameEnum.Venus, 4 }, { PlanetNameEnum.Saturn, 5 }, { PlanetNameEnum.Empty, 6 }, { PlanetNameEnum.Sun, 7 }, { PlanetNameEnum.Moon ,8 } }
-                },
-                { Library.DayOfWeek.Saturday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Mercury, 1 }, { PlanetNameEnum.Jupiter, 2 }, { PlanetNameEnum.Venus, 3 }, { PlanetNameEnum.Saturn, 4 }, { PlanetNameEnum.Empty, 5 }, { PlanetNameEnum.Sun, 6 }, { PlanetNameEnum.Moon, 7 }, { PlanetNameEnum.Mars ,8 } }
-                },
-
-            };
-
-                if (nightRulers.TryGetValue(weekday, out var planetParts))
-                {
-                    if (planetParts.TryGetValue(inputPlanet, out var partNumber))
-                    {
-                        return partNumber;
-                    }
-                    throw new Exception("Invalid planet name");
-                }
-
-                throw new Exception("Invalid day of week");
-            }
-
-
-            int UpagrahaPartNumberDayBirth(Time inputTime, PlanetNameEnum inputPlanet)
-            {
-                //get weekday
-                var weekday = Calculate.DayOfWeek(inputTime);
-
-                //based on weekday and planet name return part number
-                //NOTE: table data from 
-                Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>> dayRulers = new Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>>
-            {
-                { Library.DayOfWeek.Sunday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Sun, 1 }, { PlanetNameEnum.Moon, 2 }, { PlanetNameEnum.Mars ,3 }, { PlanetNameEnum.Mercury ,4 }, { PlanetNameEnum.Jupiter ,5 }, { PlanetNameEnum.Venus ,6 }, { PlanetNameEnum.Saturn ,7 }, { PlanetNameEnum.Empty ,8 } }
-                },
-                { Library.DayOfWeek.Monday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Moon, 1 }, { PlanetNameEnum.Mars ,2 }, { PlanetNameEnum.Mercury ,3 }, { PlanetNameEnum.Jupiter ,4},  {PlanetNameEnum.Venus ,5},  {PlanetNameEnum.Saturn ,6},  {PlanetNameEnum.Empty ,7}, { PlanetNameEnum.Sun ,8 } }
-                },
-                { Library.DayOfWeek.Tuesday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Mars, 1 }, { PlanetNameEnum.Mercury ,2 }, { PlanetNameEnum.Jupiter ,3 }, { PlanetNameEnum.Venus ,4},  {PlanetNameEnum.Saturn ,5},  {PlanetNameEnum.Empty ,6},  {PlanetNameEnum.Sun ,7}, { PlanetNameEnum.Moon ,8 } }
-                },
-                { Library.DayOfWeek.Wednesday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Mercury, 1 }, { PlanetNameEnum.Jupiter ,2 }, { PlanetNameEnum.Venus ,3 }, { PlanetNameEnum.Saturn ,4},  {PlanetNameEnum.Empty ,5},  {PlanetNameEnum.Sun ,6},  {PlanetNameEnum.Moon ,7}, { PlanetNameEnum.Mars ,8 } }
-                },
-                { Library.DayOfWeek.Thursday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Jupiter, 1 }, { PlanetNameEnum.Venus ,2 }, { PlanetNameEnum.Saturn ,3 }, { PlanetNameEnum.Empty ,4},  {PlanetNameEnum.Sun ,5},  {PlanetNameEnum.Moon ,6},  {PlanetNameEnum.Mars ,7}, { PlanetNameEnum.Mercury ,8 } }
-                },
-                { Library.DayOfWeek.Friday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Venus, 1 }, { PlanetNameEnum.Saturn ,2 }, { PlanetNameEnum.Empty ,3 }, { PlanetNameEnum.Sun ,4},  {PlanetNameEnum.Moon ,5},  {PlanetNameEnum.Mars ,6},  {PlanetNameEnum.Mercury ,7}, { PlanetNameEnum.Jupiter ,8 } }
-                },
-                { Library.DayOfWeek.Saturday, new Dictionary<PlanetNameEnum, int>
-                    { { PlanetNameEnum.Saturn, 1 }, { PlanetNameEnum.Empty ,2 }, { PlanetNameEnum.Sun ,3 }, { PlanetNameEnum.Moon ,4},  {PlanetNameEnum.Mars ,5},  {PlanetNameEnum.Mercury ,6},  {PlanetNameEnum.Jupiter ,7}, { PlanetNameEnum.Venus ,8 } }
-                },
-            };
-
-
-                if (dayRulers.TryGetValue(weekday, out var planetParts))
-                {
-                    if (planetParts.TryGetValue(inputPlanet, out var partNumber))
-                    {
-                        return partNumber;
-                    }
-                    throw new Exception("Invalid planet name");
-                }
-
-                throw new Exception("Invalid day of week");
-            }
-
-        }
-
-        /// <summary>
-        /// Given a planet name will tell if it is an Upagraha planet
-        /// </summary>
-        public static bool IsUpagraha(PlanetName planet)
-        {
-            var planetName = planet.Name;
-            switch (planetName)
-            {
-                case PlanetNameEnum.Dhuma:
-                case PlanetNameEnum.Vyatipaata:
-                case PlanetNameEnum.Parivesha:
-                case PlanetNameEnum.Indrachaapa:
-                case PlanetNameEnum.Upaketu:
-                case PlanetNameEnum.Kaala:
-                case PlanetNameEnum.Mrityu:
-                case PlanetNameEnum.Arthaprahaara:
-                case PlanetNameEnum.Yamaghantaka:
-                case PlanetNameEnum.Gulika:
-                case PlanetNameEnum.Maandi:
-                    return true;
-            }
-
-            //if control reaches here than must be normal planet
-            return false;
         }
 
         /// <summary>

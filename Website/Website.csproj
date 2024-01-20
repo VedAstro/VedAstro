@@ -4,6 +4,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>Website</RootNamespace>
+		<PublishTrimmed>true</PublishTrimmed>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Flavor)'=='AOT_ON'">
 			<!--AOT disabled because not working in android chrome-->

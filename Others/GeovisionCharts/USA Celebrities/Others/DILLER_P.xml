@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Phyllis</FirstName>
+  <LastName>Diller</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2421426.541667</BirthDate>
+  <Longitude>84.100000</Longitude>
+  <Latitude>40.733333</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Lima</City>
+  <State>OH Ohio</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Actress, comedian. Funniest woman in the world, highest paid. Natural clown, spontaneous, satirical, cackling laugh. Self ridiculing, zany comedian, exotic hairdos and costumes. Clowns at home too, maintains grueling schedule. CB 67. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

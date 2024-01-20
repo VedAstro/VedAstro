@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Walter</FirstName>
+  <LastName>Huddleston</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2424620.812500</BirthDate>
+  <Longitude>85.366667</Longitude>
+  <Latitude>36.800000</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Burkesville</City>
+  <State>KY Kentucky</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Politician, Senator. Started as radio disk jockey, then sprotscaster and station manager. Easy going demaenor, careful attention to detail, intense. Principal architect of Intelligence Bill. Soft voiced with temperate habits, self disclipined. Ideology colored by liberalism but weighed by conservatism of his roots. NYT 2/78. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

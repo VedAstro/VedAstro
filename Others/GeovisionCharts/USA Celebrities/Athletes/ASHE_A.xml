@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Arthur</FirstName>
+  <LastName>Ashe</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2430916.038194</BirthDate>
+  <Longitude>77.450000</Longitude>
+  <Latitude>37.550000</Latitude>
+  <TimeZone>0.000000</TimeZone>
+  <DST>1.000000</DST>
+  <City>Richmond</City>
+  <State>NV Nevada</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Tennis player. Sense of pride and honor, shy, introverted, easy going. Mature, balanced, cool competitor, reserved, low key. CB 66  LL 78   NYT 9/77. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>John T.</FirstName>
+  <LastName>Dunlop</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2420318.843750</BirthDate>
+  <Longitude>120.800000</Longitude>
+  <Latitude>38.733333</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Placerville</City>
+  <State>CA California</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Economist, industrial relations expert, US Secretary of Labor. Secretary of Labor in 1979. Tough, independent minded, unmatched influence in the labor camp. Took up the cause of collective bargaining solution to business and.   labor disputes. Refused a position in the White House. Headed a committee, uncanny sense of identifying and negotiating the possible. NYT 9/79. . . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

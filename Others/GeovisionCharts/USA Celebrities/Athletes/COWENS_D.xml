@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Dave</FirstName>
+  <LastName>Cowens</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2432849.686111</BirthDate>
+  <Longitude>84.500000</Longitude>
+  <Latitude>39.083333</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Newport</City>
+  <State>KY Kentucky</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Basketball player. Hard working, aggressive style, endless practice, untiring effort. Amazingly quick, determined, competitive. Quiet, conservative off the court. No nonsense guy, not given to small talk. Lunges on elbows and knees to swat balls . Translates drive and motivation into winning ways for team. NYT 11/78. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

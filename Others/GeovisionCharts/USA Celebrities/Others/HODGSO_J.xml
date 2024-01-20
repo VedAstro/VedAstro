@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>James</FirstName>
+  <LastName>Hodgson</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2420834.597222</BirthDate>
+  <Longitude>96.050000</Longitude>
+  <Latitude>44.933333</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Dawson</City>
+  <State>MN Minnesota</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Government official, diplomat. Decent, negotiator, low profile, toughness, fairness, straight talking. Deeply committed with disadvantaged minorities, good organization man. Policy of moderation and restraint, warm affable, gregarious. Easy to talk to, ability to grasp many aspects of a problem. CB 70. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

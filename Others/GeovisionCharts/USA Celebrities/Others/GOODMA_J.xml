@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Julian</FirstName>
+  <LastName>Goodman</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2423175.666667</BirthDate>
+  <Longitude>85.916667</Longitude>
+  <Latitude>37.000000</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Glasgow</City>
+  <State>KY Kentucky</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Broadcasting Executive. Pioneering contributions to radio and television. Set high goals for the medium that employed him. Quick succession of promotions. Emotionally restrained, not a great noise maker, charming. Witty, precise, decisive, bright guy. CB 67. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

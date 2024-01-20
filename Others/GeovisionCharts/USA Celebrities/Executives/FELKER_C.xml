@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Clay</FirstName>
+  <LastName>Felker</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2424425.894444</BirthDate>
+  <Longitude>90.200000</Longitude>
+  <Latitude>38.616667</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>St Louis</City>
+  <State>MO Missouri</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Editor, publisher. Imaginative, restlessly energetic, impatient to have control. Flair, brilliance, fascinated with power, sharp, darting eyes. Booming voice, brusque, plaintive, compelling need. Good humored, works till 8 PM. CB 75. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

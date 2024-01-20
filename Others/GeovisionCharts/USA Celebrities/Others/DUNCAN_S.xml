@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Sandy</FirstName>
+  <LastName>Duncan</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2431871.856944</BirthDate>
+  <Longitude>94.800000</Longitude>
+  <Latitude>32.150000</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Henderson</City>
+  <State>TX Texas</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Actress. Zooms onto the stage, TV star at 25. After marriage refused to travel, changed. Closet person most of her life, wanted to be perfect. Innocuous, inconspicious, not controversial. Divorced, sticks out her tongue, gives Bronx cheer. NYT 8/79. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

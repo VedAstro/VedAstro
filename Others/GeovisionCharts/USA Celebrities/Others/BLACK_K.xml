@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Karen</FirstName>
+  <LastName>Black</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2429445.708333</BirthDate>
+  <Longitude>87.850000</Longitude>
+  <Latitude>42.033333</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>1.000000</DST>
+  <City>Park Ridge</City>
+  <State>IL Illinois</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Actress. Unglamorous. pretty face, unimpressed with own celebrity. Adopted many orphaned cats. CB 76. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

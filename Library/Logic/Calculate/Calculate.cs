@@ -7781,7 +7781,6 @@ India
             }
         }
 
-
         /// <summary>
         /// Given a planet name will return list of signs that the planet rules
         /// </summary>
@@ -7815,6 +7814,36 @@ India
                 case PlanetNameEnum.Saturn:
                     zodiacNames.Add(ZodiacName.Capricorn);
                     zodiacNames.Add(ZodiacName.Aquarius);
+                    break;
+                case PlanetNameEnum.Dhuma:
+                    zodiacNames.Add(ZodiacName.Capricorn);
+                    break;
+                case PlanetNameEnum.Vyatipaata:
+                    zodiacNames.Add(ZodiacName.Gemini);
+                    break;
+                case PlanetNameEnum.Parivesha:
+                    zodiacNames.Add(ZodiacName.Sagittarius);
+                    break;
+                case PlanetNameEnum.Indrachaapa:
+                    zodiacNames.Add(ZodiacName.Cancer);
+                    break;
+                case PlanetNameEnum.Upaketu:
+                    zodiacNames.Add(ZodiacName.Cancer);
+                    break;
+                case PlanetNameEnum.Gulika:
+                    zodiacNames.Add(ZodiacName.Aquarius);
+                    break;
+                case PlanetNameEnum.Yamaghantaka:
+                    zodiacNames.Add(ZodiacName.Sagittarius);
+                    break;
+                case PlanetNameEnum.Arthaprahaara:
+                    zodiacNames.Add(ZodiacName.Gemini);
+                    break;
+                case PlanetNameEnum.Kaala:
+                    zodiacNames.Add(ZodiacName.Capricorn);
+                    break;
+                case PlanetNameEnum.Mrityu:
+                    zodiacNames.Add(ZodiacName.Scorpio);
                     break;
                 default:
                     zodiacNames.Add(ZodiacName.Empty);
@@ -7897,10 +7926,6 @@ India
 
         /// <summary>
         /// Gets the exact longitude where planet is Exalted/Exaltation
-        ///
-        /// NOTE:
-        /// Rahu & ketu have exaltation points ref : Astroloy for Beginners pg. 12
-        /// 
         /// Exaltation
         /// Each planet is held to be exalted when it is
         /// in a particular sign. The power to do good when in
@@ -7908,6 +7933,11 @@ India
         /// Throughout the sign ascribed, the planet is exalted
         /// but in a particular degree its exaltation is at the maximum level.
         /// 
+        /// NOTE:
+        /// - For Upagrahas no exact degree for exaltation the whole
+        /// sign is counted as such exalatiotn set at degree 1
+        /// 
+        /// - Rahu & ketu have exaltation points ref : Astroloy for Beginners pg. 12
         /// </summary>
         public static ZodiacSign PlanetExaltationPoint(PlanetName planetName)
         {
@@ -7966,10 +7996,33 @@ India
                 {
                     return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(20));
                 }
+
                 // Ketu 20th of Scorpio.
                 else if (planetName == Library.PlanetName.Ketu)
                 {
                     return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(20));
+                }
+
+                //NOTE: Upagrahas exalatation whole sign, artificial set degree 1
+                else if (planetName == Library.PlanetName.Dhuma)
+                {
+                    return new ZodiacSign(ZodiacName.Leo, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Vyatipaata)
+                {
+                    return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Parivesha)
+                {
+                    return new ZodiacSign(ZodiacName.Gemini, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Indrachaapa)
+                {
+                    return new ZodiacSign(ZodiacName.Sagittarius, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Upaketu)
+                {
+                    return new ZodiacSign(ZodiacName.Aquarius, Angle.FromDegrees(1));
                 }
 
                 throw new Exception("Planet exaltation point not found, error!");
@@ -7979,19 +8032,21 @@ India
         }
 
         /// <summary>
-        /// Gets the exact longitude where planet is Debilitated/Debility
+        /// Gets the exact sign longitude where planet is Debilitated/Debility
         /// TODO method needs testing!
         /// Note:
-        /// -   Rahu & ketu have debilitation points ref : Astroloy for Beginners pg. 12
-        /// -   "planet to sign relationship" is the whole sign, this is just a point
-        /// -   The 7th house or the 180th degree from the place of exaltation is the
-        ///     place of debilitation or fall. The Sun is debilitated-
-        ///     in the 10th degree of Libra, the Moon 3rd
-        ///     of Scorpio and so on.
-        /// -   The debilitation or depression points are found
-        ///     by adding 180° to the maximum points given above.
-        ///     While in a state of fall, planets give results contrary
-        ///     to those when in exaltation. ref : Astroloy for Beginners pg. 11
+        /// - Rahu & ketu have debilitation points ref : Astroloy for Beginners pg. 12
+        /// - "planet to sign relationship" is the whole sign, this is just a point
+        /// - The 7th house or the 180th degree from the place of exaltation is the
+        ///   place of debilitation or fall. The Sun is debilitated-
+        ///   in the 10th degree of Libra, the Moon 3rd
+        ///   of Scorpio and so on.
+        /// - For Upagrahas no exact degree for exaltation the whole
+        ///   sign is counted as such exalatiotn set at degree 1
+        /// - The debilitation or depression points are found
+        ///   by adding 180° to the maximum points given above.
+        ///   While in a state of fall, planets give results contrary
+        ///   to those when in exaltation. ref : Astroloy for Beginners pg. 11
         /// </summary>
         public static ZodiacSign PlanetDebilitationPoint(PlanetName planetName)
         {
@@ -8008,36 +8063,6 @@ India
                 // place of debilitation or fall. The Sun is debilitated-
                 // in the 10th degree of Libra, the Moon 3rd
                 // of Scorpio and so on.
-
-                //if (planetName == PlanetName.Sun)
-                //{
-                //    return Angle.FromDegrees(190);
-                //}
-                //else if (planetName == PlanetName.Moon)
-                //{
-                //    return Angle.FromDegrees(213);
-                //}
-                //else if (planetName == PlanetName.Mars)
-                //{
-                //    return Angle.FromDegrees(118);
-                //}
-                //else if (planetName == PlanetName.Mercury)
-                //{
-                //    return Angle.FromDegrees(345);
-                //}
-                //else if (planetName == PlanetName.Jupiter)
-                //{
-                //    return Angle.FromDegrees(275);
-                //}
-                //else if (planetName == PlanetName.Venus)
-                //{
-                //    return Angle.FromDegrees(177);
-                //}
-                //else if (planetName == PlanetName.Saturn)
-                //{
-                //    return Angle.FromDegrees(20);
-                //}
-
 
                 //Sun in the 10th degree of Libra;
                 if (planetName == Library.PlanetName.Sun)
@@ -8087,10 +8112,33 @@ India
                 {
                     return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(20));
                 }
+
                 // Ketu 20th of Taurus.
                 else if (planetName == Library.PlanetName.Ketu)
                 {
                     return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(20));
+                }
+
+                //NOTE: Upagrahas Debilitation whole sign, artificial set degree 1
+                else if (planetName == Library.PlanetName.Dhuma)
+                {
+                    return new ZodiacSign(ZodiacName.Aquarius, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Vyatipaata)
+                {
+                    return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Parivesha)
+                {
+                    return new ZodiacSign(ZodiacName.Sagittarius, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Indrachaapa)
+                {
+                    return new ZodiacSign(ZodiacName.Gemini, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Upaketu)
+                {
+                    return new ZodiacSign(ZodiacName.Leo, Angle.FromDegrees(1));
                 }
 
 

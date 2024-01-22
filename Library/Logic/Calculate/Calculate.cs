@@ -105,7 +105,10 @@ namespace VedAstro.Library
             //Sunset
             var sunset = Calculate.SunsetTime(inputTime);
 
-            return new PanchangaTable(ayanamsaDegree, tithi, lunarMonth, weekDay, constellation, yoga, karana, horaLord, dishaShool, sunrise, sunset);
+            //Ishta Kaala
+            var ishtaKaala = Calculate.IshtaKaala(inputTime);
+
+            return new PanchangaTable(ayanamsaDegree, tithi, lunarMonth, weekDay, constellation, yoga, karana, horaLord, dishaShool, sunrise, sunset, ishtaKaala);
         }
 
         /// <summary>

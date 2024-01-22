@@ -20,9 +20,10 @@ namespace VedAstro.Library
         public string DishaShool { get; set; }
         public Time Sunrise { get; set; }
         public Time Sunset { get; set; }
+        public Angle IshtaKaala { get; set; }
 
 
-        public PanchangaTable(string ayanamsa, LunarDay tithi, LunarMonth lunarMonth, DayOfWeek vara, Constellation nakshatra, NithyaYoga yoga, Karana karana, PlanetName horaLord, string dishaShool, Time sunrise, Time sunset)
+        public PanchangaTable(string ayanamsa, LunarDay tithi, LunarMonth lunarMonth, DayOfWeek vara, Constellation nakshatra, NithyaYoga yoga, Karana karana, PlanetName horaLord, string dishaShool, Time sunrise, Time sunset, Angle ishtaKaala)
         {
             Ayanamsa = ayanamsa;
             Tithi = tithi;
@@ -35,6 +36,7 @@ namespace VedAstro.Library
             DishaShool = dishaShool;
             Sunrise = sunrise;
             Sunset = sunset;
+            IshtaKaala = ishtaKaala;
         }
 
         public byte[] ToJpeg() { var table = this.ToDataTable(); return Tools.DataTableToJpeg(table); }
@@ -51,7 +53,16 @@ namespace VedAstro.Library
             // fill rows
             foreach (var prop in GetType().GetProperties())
             {
-                table.Rows.Add(prop.Name, prop.GetValue(this));
+                var value = prop.GetValue(this);
+
+                if (value is Angle angleVal)
+                {
+                    table.Rows.Add(prop.Name, angleVal.DegreesMinutesSecondsText);
+                }
+                else
+                {
+                    table.Rows.Add(prop.Name, value.ToString());
+                }
             }
 
             return table;

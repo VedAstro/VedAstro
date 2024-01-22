@@ -4339,6 +4339,54 @@ India
         }
 
         /// <summary>
+        /// Also know as "Suryodayadi Jananakala Ghatikah".
+        /// It is customary among the Hindus to mention
+        /// the time of birth as "Suryodayadi Jananakala
+        /// Ghatikaha ", i.e., the number of ghatis passed
+        /// from sunrise up to the moment of birth. 
+        /// </summary>
+        public static Angle IshtaKaala(Time birthTime)
+        {
+            //check if sunrise before or after
+            var isBefore = Calculate.IsBeforeSunrise(birthTime);
+
+            //if birthTime is before sunrise then use previous day sunrise
+            TimeSpan timeDifference;
+            if (isBefore)
+            {
+                var preSunrise = Calculate.SunriseTime(birthTime.SubtractHours(23));
+                timeDifference = birthTime.Subtract(preSunrise); //sunrise day before
+            }
+            else
+            {
+                var sunrise = Calculate.SunriseTime(birthTime);
+                timeDifference = birthTime.Subtract(sunrise); ;
+            }
+
+            //(Birth Time - Sunrise) x 2.5 = Suryodayadi Jananakala Ghatikaha. 
+            var differenceHours = timeDifference.TotalHours;
+            var ghatis = differenceHours * 2.5;
+
+            //return round(ghatis to 2 decimal places)
+            return Angle.FromDegrees(ghatis);
+        }
+
+        /// <summary>
+        /// Given a time, will check if it occured before or after sunrise for that given day.
+        /// Returns true if given time is before sunrise
+        /// </summary>
+        public static bool IsBeforeSunrise(Time birthTime)
+        {
+            //get sunrise for that day
+            var sunrise = Calculate.SunriseTime(birthTime);
+
+            //if time is before than it must be smalller
+            var isBefore = birthTime < sunrise;
+
+            return isBefore;
+        }
+
+        /// <summary>
         /// A hora is equal to 1/24th part of
         /// a day. The Hindu day begins with sunrise and continues till
         /// next sunrise. The first hora on any day will be the

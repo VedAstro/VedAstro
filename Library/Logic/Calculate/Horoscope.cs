@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 //makes accessing Planet and House shorter and sweeter
 using static VedAstro.Library.PlanetName;
 using static VedAstro.Library.HouseName;
@@ -27,6 +27,456 @@ namespace VedAstro.Library
     /// </summary>
     public class CalculateHoroscope
     {
+        //from book Jataka Mani Manjusha
+        #region UPAGRAHA IN HOUSES
+
+        //Dhuma
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse1)]
+        public static CalculatorResult DhumaInHouse1(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House1, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse2)]
+        public static CalculatorResult DhumaInHouse2(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House2, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse3)]
+        public static CalculatorResult DhumaInHouse3(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House3, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse4)]
+        public static CalculatorResult DhumaInHouse4(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House4, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse5)]
+        public static CalculatorResult DhumaInHouse5(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House5, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse6)]
+        public static CalculatorResult DhumaInHouse6(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House6, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse7)]
+        public static CalculatorResult DhumaInHouse7(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House7, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse8)]
+        public static CalculatorResult DhumaInHouse8(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House8, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse9)]
+        public static CalculatorResult DhumaInHouse9(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House9, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse10)]
+        public static CalculatorResult DhumaInHouse10(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House10, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse11)]
+        public static CalculatorResult DhumaInHouse11(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House11, birthTime), new[] { Dhuma }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.DhumaInHouse12)]
+        public static CalculatorResult DhumaInHouse12(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Dhuma, House12, birthTime), new[] { Dhuma }, birthTime);
+
+        //Vyatipaata
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse1)]
+        public static CalculatorResult VyatipaataInHouse1(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House1, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse2)]
+        public static CalculatorResult VyatipaataInHouse2(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House2, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse3)]
+        public static CalculatorResult VyatipaataInHouse3(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House3, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse4)]
+        public static CalculatorResult VyatipaataInHouse4(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House4, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse5)]
+        public static CalculatorResult VyatipaataInHouse5(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House5, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse6)]
+        public static CalculatorResult VyatipaataInHouse6(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House6, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse7)]
+        public static CalculatorResult VyatipaataInHouse7(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House7, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse8)]
+        public static CalculatorResult VyatipaataInHouse8(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House8, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse9)]
+        public static CalculatorResult VyatipaataInHouse9(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House9, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse10)]
+        public static CalculatorResult VyatipaataInHouse10(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House10, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse11)]
+        public static CalculatorResult VyatipaataInHouse11(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House11, birthTime), new[] { Vyatipaata }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.VyatipaataInHouse12)]
+        public static CalculatorResult VyatipaataInHouse12(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Vyatipaata, House12, birthTime), new[] { Vyatipaata }, birthTime);
+
+        //Parivesha
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse1)]
+        public static CalculatorResult PariveshaInHouse1(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House1, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse2)]
+        public static CalculatorResult PariveshaInHouse2(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House2, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse3)]
+        public static CalculatorResult PariveshaInHouse3(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House3, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse4)]
+        public static CalculatorResult PariveshaInHouse4(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House4, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse5)]
+        public static CalculatorResult PariveshaInHouse5(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House5, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse6)]
+        public static CalculatorResult PariveshaInHouse6(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House6, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse7)]
+        public static CalculatorResult PariveshaInHouse7(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House7, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse8)]
+        public static CalculatorResult PariveshaInHouse8(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House8, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse9)]
+        public static CalculatorResult PariveshaInHouse9(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House9, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse10)]
+        public static CalculatorResult PariveshaInHouse10(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House10, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse11)]
+        public static CalculatorResult PariveshaInHouse11(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House11, birthTime), new[] { Parivesha }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.PariveshaInHouse12)]
+        public static CalculatorResult PariveshaInHouse12(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Parivesha, House12, birthTime), new[] { Parivesha }, birthTime);
+
+
+        //Indrachaapa
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse1)]
+        public static CalculatorResult IndrachaapaInHouse1(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House1, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse2)]
+        public static CalculatorResult IndrachaapaInHouse2(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House2, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse3)]
+        public static CalculatorResult IndrachaapaInHouse3(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House3, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse4)]
+        public static CalculatorResult IndrachaapaInHouse4(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House4, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse5)]
+        public static CalculatorResult IndrachaapaInHouse5(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House5, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse6)]
+        public static CalculatorResult IndrachaapaInHouse6(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House6, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse7)]
+        public static CalculatorResult IndrachaapaInHouse7(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House7, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse8)]
+        public static CalculatorResult IndrachaapaInHouse8(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House8, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse9)]
+        public static CalculatorResult IndrachaapaInHouse9(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House9, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse10)]
+        public static CalculatorResult IndrachaapaInHouse10(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House10, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse11)]
+        public static CalculatorResult IndrachaapaInHouse11(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House11, birthTime), new[] { Indrachaapa }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.IndrachaapaInHouse12)]
+        public static CalculatorResult IndrachaapaInHouse12(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Indrachaapa, House12, birthTime), new[] { Indrachaapa }, birthTime);
+
+        //Upaketu
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse1)]
+        public static CalculatorResult UpaketuInHouse1(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House1, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse2)]
+        public static CalculatorResult UpaketuInHouse2(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House2, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse3)]
+        public static CalculatorResult UpaketuInHouse3(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House3, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse4)]
+        public static CalculatorResult UpaketuInHouse4(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House4, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse5)]
+        public static CalculatorResult UpaketuInHouse5(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House5, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse6)]
+        public static CalculatorResult UpaketuInHouse6(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House6, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse7)]
+        public static CalculatorResult UpaketuInHouse7(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House7, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse8)]
+        public static CalculatorResult UpaketuInHouse8(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House8, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse9)]
+        public static CalculatorResult UpaketuInHouse9(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House9, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse10)]
+        public static CalculatorResult UpaketuInHouse10(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House10, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse11)]
+        public static CalculatorResult UpaketuInHouse11(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House11, birthTime), new[] { Upaketu }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.UpaketuInHouse12)]
+        public static CalculatorResult UpaketuInHouse12(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Upaketu, House12, birthTime), new[] { Upaketu }, birthTime);
+
+        //Kaala
+        //Mrityu
+        //Arthaprahaara
+        //NOTE : no prediction reference for above sub-planets found hence left empty for now, technically should exist
+
+        //Yamaghantaka
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse1)]
+        public static CalculatorResult YamaghantakaInHouse1(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House1, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse2)]
+        public static CalculatorResult YamaghantakaInHouse2(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House2, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse3)]
+        public static CalculatorResult YamaghantakaInHouse3(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House3, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse4)]
+        public static CalculatorResult YamaghantakaInHouse4(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House4, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse5)]
+        public static CalculatorResult YamaghantakaInHouse5(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House5, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse6)]
+        public static CalculatorResult YamaghantakaInHouse6(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House6, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse7)]
+        public static CalculatorResult YamaghantakaInHouse7(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House7, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse8)]
+        public static CalculatorResult YamaghantakaInHouse8(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House8, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse9)]
+        public static CalculatorResult YamaghantakaInHouse9(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House9, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse10)]
+        public static CalculatorResult YamaghantakaInHouse10(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House10, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse11)]
+        public static CalculatorResult YamaghantakaInHouse11(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House11, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.YamaghantakaInHouse12)]
+        public static CalculatorResult YamaghantakaInHouse12(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Yamaghantaka, House12, birthTime), new[] { Yamaghantaka }, birthTime);
+
+        //Gulika
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse1)]
+        public static CalculatorResult GulikaInHouse1(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House1, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse2)]
+        public static CalculatorResult GulikaInHouse2(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House2, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse3)]
+        public static CalculatorResult GulikaInHouse3(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House3, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse4)]
+        public static CalculatorResult GulikaInHouse4(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House4, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse5)]
+        public static CalculatorResult GulikaInHouse5(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House5, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse6)]
+        public static CalculatorResult GulikaInHouse6(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House6, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse7)]
+        public static CalculatorResult GulikaInHouse7(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House7, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse8)]
+        public static CalculatorResult GulikaInHouse8(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House8, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse9)]
+        public static CalculatorResult GulikaInHouse9(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House9, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse10)]
+        public static CalculatorResult GulikaInHouse10(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House10, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse11)]
+        public static CalculatorResult GulikaInHouse11(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House11, birthTime), new[] { Gulika }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.GulikaInHouse12)]
+        public static CalculatorResult GulikaInHouse12(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Gulika, House12, birthTime), new[] { Gulika }, birthTime);
+
+        //Maandi
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse1)]
+        public static CalculatorResult MaandiInHouse1(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House1, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse2)]
+        public static CalculatorResult MaandiInHouse2(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House2, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse3)]
+        public static CalculatorResult MaandiInHouse3(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House3, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse4)]
+        public static CalculatorResult MaandiInHouse4(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House4, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse5)]
+        public static CalculatorResult MaandiInHouse5(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House5, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse6)]
+        public static CalculatorResult MaandiInHouse6(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House6, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse7)]
+        public static CalculatorResult MaandiInHouse7(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House7, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse8)]
+        public static CalculatorResult MaandiInHouse8(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House8, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse9)]
+        public static CalculatorResult MaandiInHouse9(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House9, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse10)]
+        public static CalculatorResult MaandiInHouse10(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House10, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse11)]
+        public static CalculatorResult MaandiInHouse11(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House11, birthTime), new[] { Maandi }, birthTime);
+
+        [HoroscopeCalculator(HoroscopeName.MaandiInHouse12)]
+        public static CalculatorResult MaandiInHouse12(Time birthTime) => CalculatorResult.New(Calculate.IsPlanetInHouse(Maandi, House12, birthTime), new[] { Maandi }, birthTime);
+
+        //# QUALITIES OF GULIKA OR MANDI ASSOCIATED WITH PLANETS
+
+        [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithSun)]
+        public static CalculatorResult MaandiGulikaWithSun(Time birthTime)
+        {
+            //check if any of the planets are conjunct 
+            var mandiIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Maandi, Sun, birthTime);
+            var gulikaIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Gulika, Sun, birthTime);
+
+            //only if either 1 is true
+            var isOccuring = mandiIsConjunct || gulikaIsConjunct;
+
+            return CalculatorResult.New(isOccuring, [Sun], birthTime);
+        }
+
+        [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithMoon)]
+        public static CalculatorResult MaandiGulikaWithMoon(Time birthTime)
+        {
+            //check if any of the planets are conjunct 
+            var mandiIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Maandi, Moon, birthTime);
+            var gulikaIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Gulika, Moon, birthTime);
+
+            //only if either 1 is true
+            var isOccuring = mandiIsConjunct || gulikaIsConjunct;
+
+            return CalculatorResult.New(isOccuring, [Moon], birthTime);
+        }
+
+        [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithMars)]
+        public static CalculatorResult MaandiGulikaWithMars(Time birthTime)
+        {
+            //check if any of the planets are conjunct 
+            var mandiIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Maandi, Mars, birthTime);
+            var gulikaIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Gulika, Mars, birthTime);
+
+            //only if either 1 is true
+            var isOccuring = mandiIsConjunct || gulikaIsConjunct;
+
+            return CalculatorResult.New(isOccuring, [Mars], birthTime);
+        }
+
+        [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithJupiter)]
+        public static CalculatorResult MaandiGulikaWithJupiter(Time birthTime)
+        {
+            //check if any of the planets are conjunct 
+            var mandiIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Maandi, Jupiter, birthTime);
+            var gulikaIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Gulika, Jupiter, birthTime);
+
+            //only if either 1 is true
+            var isOccuring = mandiIsConjunct || gulikaIsConjunct;
+
+            return CalculatorResult.New(isOccuring, [Jupiter], birthTime);
+        }
+
+        [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithVenus)]
+        public static CalculatorResult MaandiGulikaWithVenus(Time birthTime)
+        {
+            //check if any of the planets are conjunct 
+            var mandiIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Maandi, Venus, birthTime);
+            var gulikaIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Gulika, Venus, birthTime);
+
+            //only if either 1 is true
+            var isOccuring = mandiIsConjunct || gulikaIsConjunct;
+
+            return CalculatorResult.New(isOccuring, [Venus], birthTime);
+        }
+
+        [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithSaturn)]
+        public static CalculatorResult MaandiGulikaWithSaturn(Time birthTime)
+        {
+            //check if any of the planets are conjunct 
+            var mandiIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Maandi, Saturn, birthTime);
+            var gulikaIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Gulika, Saturn, birthTime);
+
+            //only if either 1 is true
+            var isOccuring = mandiIsConjunct || gulikaIsConjunct;
+
+            return CalculatorResult.New(isOccuring, [Saturn], birthTime);
+        }
+
+        [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithRahu)]
+        public static CalculatorResult MaandiGulikaWithRahu(Time birthTime)
+        {
+            //check if any of the planets are conjunct 
+            var mandiIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Maandi, Rahu, birthTime);
+            var gulikaIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Gulika, Rahu, birthTime);
+
+            //only if either 1 is true
+            var isOccuring = mandiIsConjunct || gulikaIsConjunct;
+
+            return CalculatorResult.New(isOccuring, [Rahu], birthTime);
+        }
+
+        [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithKetu)]
+        public static CalculatorResult MaandiGulikaWithKetu(Time birthTime)
+        {
+            //check if any of the planets are conjunct 
+            var mandiIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Maandi, Ketu, birthTime);
+            var gulikaIsConjunct = Calculate.IsPlanetConjunctWithPlanet(Gulika, Ketu, birthTime);
+
+            //only if either 1 is true
+            var isOccuring = mandiIsConjunct || gulikaIsConjunct;
+
+            return CalculatorResult.New(isOccuring, [Ketu], birthTime);
+        }
+
+        [HoroscopeCalculator(HoroscopeName.MaandiGulikaInStrongSign)]
+        public static CalculatorResult MaandiGulikaInStrongSign(Time birthTime)
+        {
+            //If the lord of the house occupied by Gulika be possessed of strength and be posited
+            //in a kendra, trikona, his own, exaltation or friendly house, the other Gulika results will
+            //be modified to the extent that such person will own conveyances, beautiful as Cupid,
+            //will be highly respected and widely renowned, and will be a man of power and authority.
+
+            var gulikaSign = Calculate.PlanetZodiacSign(Gulika, birthTime);
+
+            //rasi lord exalted
+            var signLord = Calculate.LordOfZodiacSign(gulikaSign.GetSignName());
+            var isLordExalted = Calculate.IsPlanetExalted(signLord, birthTime);
+
+            //rasi lord in own house
+            var isOwnHouse = Calculate.IsPlanetInOwnHouse(signLord, birthTime);
+
+            //rasi lord in moolatrikona
+            var isMoolatrikona = Calculate.IsPlanetInMoolatrikona(signLord, birthTime);
+
+            //in kendra 
+            var isInKendra = Calculate.IsPlanetInKendra([signLord], birthTime);
+
+            //in trikona 
+            var isInTrikona = Calculate.IsPlanetInTrikona(signLord, birthTime);
+
+            //in friendly house
+            var isInFriendsHouse = Calculate.IsPlanetInFriendHouse(signLord, birthTime);
+
+            //either 1 condition is met
+            var isOccuring = isLordExalted || isOwnHouse || isMoolatrikona || isInKendra || isInTrikona || isInFriendsHouse;
+
+
+            return CalculatorResult.New(isOccuring, [Gulika, signLord], birthTime);
+
+        }
+
+        #endregion
+
         //yoga's from BV Raman's Ashtakavarga System Book
         #region ASHTAKAVARGA YOGAS
 

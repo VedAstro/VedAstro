@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Data;
 
 namespace VedAstro.Library
@@ -38,11 +37,7 @@ namespace VedAstro.Library
             Sunset = sunset;
         }
 
-        public byte[] ToJpeg()
-        {
-            var table = this.ToDataTable();
-            return Tools.DataTableToJpeg(table);
-        }
+        public byte[] ToJpeg() { var table = this.ToDataTable(); return Tools.DataTableToJpeg(table); }
 
         public DataTable ToDataTable()
         {

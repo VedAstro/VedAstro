@@ -836,5 +836,17 @@ namespace VedAstro.Library.Tests
 
             Assert.Fail();
         }
+
+        [TestMethod()]
+        public void IshtaKaalaTest()
+        {
+            double errorRate = 2;
+
+            var test1 = Calculate.IshtaKaala(StandardHoroscope);
+
+            var truth1 = new Angle(20, 15, 0); // Replace with correct values
+
+            Assert.IsTrue(Math.Abs((test1 - truth1).TotalDegrees) <= errorRate);
+        }
     }
 }

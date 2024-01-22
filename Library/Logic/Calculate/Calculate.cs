@@ -1188,13 +1188,17 @@ India
             return returnList;
         }
 
+
         /// <summary>
-        /// Given a birth time will calculate all predictions that match for given birth time and return the data
+        /// Given a birth time will calculate all predictions that match for given birth time.
+        /// Default includes all predictions, ie: Yoga, Planets in Sign, AshtakavargaYoga
+        /// Can be filtered.
         /// </summary>
-        public static async Task<List<HoroscopePrediction>> HoroscopePredictions(Time birthTime)
+        /// <param name="filterTag">Set to only show certain types of predictions</param>
+        public static async Task<List<HoroscopePrediction>> HoroscopePredictions(Time birthTime, EventTag filterTag = EventTag.Empty)
         {
             //calculate predictions for current person
-            var predictionList = await Tools.GetHoroscopePrediction(birthTime, URL.HoroscopeDataListFile);
+            var predictionList = await Tools.GetHoroscopePrediction(birthTime, URL.HoroscopeDataListFile, filterTag);
 
             return predictionList;
         }

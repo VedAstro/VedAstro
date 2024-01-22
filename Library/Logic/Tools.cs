@@ -1,3 +1,14 @@
+using Azure;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using HtmlAgilityPack;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using OfficeOpenXml;
+using Svg;
+using SwissEphNet;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +21,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
-using OfficeOpenXml;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -19,17 +29,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SwissEphNet;
 using Formatting = Newtonsoft.Json.Formatting;
-using Azure.Storage.Blobs.Models;
-using Azure.Storage.Blobs;
-using Svg;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis;
-using HtmlAgilityPack;
-using Azure;
 
 
 
@@ -643,18 +643,24 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all horoscope predictions for a person
         /// </summary>
-        public static async Task<List<HoroscopePrediction>> GetHoroscopePrediction(Time birthTime, string fileUrl)
+        public static async Task<List<HoroscopePrediction>> GetHoroscopePrediction(Time birthTime, string fileUrl, EventTag filterTag = EventTag.Empty)
         {
             //get list of horoscope data (file from wwwroot)
             var horoscopeDataList = await GetHoroscopeDataList(fileUrl);
+
+            //filter what to show if any specified
+            if (filterTag != EventTag.Empty)
+            {
+                horoscopeDataList = horoscopeDataList.Where(horoData => horoData.EventTags.Contains(filterTag)).ToList();
+            }
 
             //start calculating predictions (mix with time by person's birth date)
             var predictionList = CalculatePredictions(birthTime, horoscopeDataList);
 
             //place important predictions at the top
-            var sorted = SortPredictionData(predictionList);
+            //var sorted = SortPredictionData(predictionList);
 
-            return sorted;
+            return predictionList;
 
             /// <summary>
             /// Get list of predictions occurring in a time period for all the
@@ -693,12 +699,31 @@ namespace VedAstro.Library
                 return horoscopeList;
             }
 
+            //TODO MARKED FOR OBLIVION
+            //pushes "rising sign " to top
             List<HoroscopePrediction> SortPredictionData(List<HoroscopePrediction> horoscopePredictions)
             {
-                //put rising sign at top
-                horoscopePredictions.MoveToBeginning((horPre) => horPre.FormattedName.ToLower().Contains("rising"));
-
                 //todo followed by planet in sign prediction ordered by planet strength 
+
+                // Check if the list is null or empty
+                if (horoscopePredictions == null || !horoscopePredictions.Any())
+                {
+                    throw new ArgumentException("The list of horoscope predictions cannot be null or empty.");
+                }
+
+                // Find the index of the rising sign
+                int risingSignIndex = horoscopePredictions.FindIndex(horPre => horPre.FormattedName.ToLower().Contains("rising"));
+
+                // Check if the rising sign was found
+                if (risingSignIndex == -1)
+                {
+                    throw new Exception("The rising sign was not found in the list of horoscope predictions.");
+                }
+
+                // Move the rising sign to the beginning of the list
+                HoroscopePrediction risingSign = horoscopePredictions[risingSignIndex];
+                horoscopePredictions.RemoveAt(risingSignIndex);
+                horoscopePredictions.Insert(0, risingSign);
 
                 return horoscopePredictions;
             }
@@ -1151,15 +1176,18 @@ namespace VedAstro.Library
 
                 //combine to together based on type
                 var item = list[i];
-                if (item is IToJson iToJson)
-                {
-                    //todo can wrap into jobject if needed
-                    combinedNames += iToJson.ToJson() + ending;
-                }
-                else
-                {
-                    combinedNames += item.ToString() + ending;
-                }
+
+                combinedNames += item.ToString() + ending;
+
+                //if (item is IToJson iToJson)
+                //{
+                //    //todo can wrap into jobject if needed
+                //    combinedNames += iToJson.ToJson() + ending;
+                //}
+                //else
+                //{
+                //    combinedNames += item.ToString() + ending;
+                //}
 
             }
 
@@ -2846,7 +2874,7 @@ namespace VedAstro.Library
             return rootPayloadJson;
 
         }
-        
+
         public static DataTable AnyToDataTable(string dataName, dynamic anyTypeData)
         {
             //process list differently
@@ -2905,11 +2933,18 @@ namespace VedAstro.Library
                 //        return rootPayloadJson;
                 //    }
 
-                //case List<HoroscopePrediction> apiList:
-                //    {
-                //        var parsed = HoroscopePrediction.ToJsonList(apiList);
-                //        return parsed;
-                //    }
+                case List<HoroscopePrediction> apiList:
+                    {
+                        table.Columns.Add("Column1", typeof(string));
+                        table.Columns.Add("Column2", typeof(string));
+                        table.Columns.Add("Column3", typeof(string));
+                        //add in rows
+                        foreach (var item in apiList)
+                        {
+                            table.Rows.Add(item.ToDataRow());
+                        }
+                        break;
+                    }
 
                 //case List<PlanetName> planetList:
                 //    {
@@ -2937,7 +2972,6 @@ namespace VedAstro.Library
 
                 case IList iList:
                     {
-
                         //add in rows
                         foreach (var item in iList)
                         {
@@ -3007,13 +3041,18 @@ namespace VedAstro.Library
 
         }
 
-        private static void DictionaryToDataTable<T, Y>(Dictionary<T, Y> dictionary, DataTable table)
+
+        /// <summary>
+        /// Given a dictionary of example Dictionary<PlanetName, ZodiacSign>
+        /// will convert to equal DataTable representation
+        /// </summary>
+        public static void DictionaryToDataTable<T, Y>(Dictionary<T, Y> dictionary, DataTable table)
         {
             //add columns names
             var colName1 = dictionary.First().Key.GetType().Name;
             table.Columns.Add(colName1);
 
-            var value = dictionary.First().Value;   
+            var value = dictionary.First().Value;
             if (value is List<APIFunctionResult> ccc)
             {
                 foreach (var apiFunctionResult in ccc)

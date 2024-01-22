@@ -1,7 +1,7 @@
-using System.Linq;
+﻿using System.Linq;
+using static VedAstro.Library.HouseName;
 //makes accessing Planet and House shorter and sweeter
 using static VedAstro.Library.PlanetName;
-using static VedAstro.Library.HouseName;
 
 //█▀▀█ █▀▀▄ █░░ █░░█ 　 █▀▀ █▀▀█ █▀▀▄ █▀▀ 　 █░░░█ █░░█ █▀▀ █▀▀▄ 　 █░░█ █▀▀█ █░░█ 　 █▀▀ █▀▀█ █▀▀▄ █▀▀▄ █▀▀█ ▀▀█▀▀ 
 //█░░█ █░░█ █░░ █▄▄█ 　 █░░ █░░█ █░░█ █▀▀ 　 █▄█▄█ █▀▀█ █▀▀ █░░█ 　 █▄▄█ █░░█ █░░█ 　 █░░ █▄▄█ █░░█ █░░█ █░░█ ░░█░░ 
@@ -499,9 +499,8 @@ namespace VedAstro.Library
             //associated with 1,2,3 bindus
             var isOccuring = bindus == 1 || bindus == 2 || bindus == 3;
 
-            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
+            return CalculatorResult.New(isOccuring, [Moon], birthTime);
         }
-
 
         /// <summary>
         /// If the particular Bhava occupied by the 
@@ -513,7 +512,7 @@ namespace VedAstro.Library
         [HoroscopeCalculator(HoroscopeName.MoonAshtakavargaYoga2)]
         public static CalculatorResult MoonAshtakavargaYoga2(Time birthTime)
         {
-           return CalculatorResult.NotOccuring();
+            return CalculatorResult.NotOccuring();
         }
 
         /// <summary>
@@ -543,7 +542,7 @@ namespace VedAstro.Library
             //both condition meet
             var isOccuring = isMoonIn6th11th && moreThan6;
 
-            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
+            return CalculatorResult.New(isOccuring, [Moon], birthTime);
         }
 
         /// <summary>
@@ -569,10 +568,8 @@ namespace VedAstro.Library
             //both condition meet
             var isOccuring = isMoonIn6th11th && moreThan6;
 
-            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
+            return CalculatorResult.New(isOccuring, [Moon], birthTime);
         }
-
-
 
 
         #endregion
@@ -621,7 +618,7 @@ namespace VedAstro.Library
             //both conditions have to be met
             var isOccuring = sunNotIn2 && planetsIn2.Any();
 
-            return CalculatorResult.New(isOccuring, new[] { House2 }, new[] { Moon }, birthTime);
+            return CalculatorResult.New(isOccuring, new[] { House2 }, [Moon], birthTime);
         }
 
         /// <summary>
@@ -653,7 +650,7 @@ namespace VedAstro.Library
             //both conditions have to be met
             var isOccuring = planetsIn12.Any();
 
-            return CalculatorResult.New(isOccuring, new[] { House12 }, new[] { Moon }, birthTime);
+            return CalculatorResult.New(isOccuring, new[] { House12 }, [Moon], birthTime);
         }
 
         /// <summary>
@@ -677,7 +674,7 @@ namespace VedAstro.Library
             //on either side of  the Moon
             var planetOnBothSides = planetsInBottom || planetsInTop;
 
-            return CalculatorResult.New(planetOnBothSides, new[] { Moon }, birthTime);
+            return CalculatorResult.New(planetOnBothSides, [Moon], birthTime);
         }
 
         /// <summary>
@@ -703,7 +700,7 @@ namespace VedAstro.Library
             //no planets on both sides of the Moon
             var planetOnBothSides = noPlanetsInBottom && noPlanetsInTop;
 
-            return CalculatorResult.New(planetOnBothSides, new[] { Moon }, birthTime);
+            return CalculatorResult.New(planetOnBothSides, [Moon], birthTime);
         }
 
         /// <summary>
@@ -744,7 +741,7 @@ namespace VedAstro.Library
 
             var isOccuring = Calculate.IsPlanetsInSignsFromPlanet(signsFromList, beneficList, Moon, birthTime);
 
-            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
+            return CalculatorResult.New(isOccuring, [Moon], birthTime);
         }
 
         /// <summary>
@@ -784,13 +781,13 @@ namespace VedAstro.Library
             //list upachayas houses (3,6,10 and 11)
             var upachayasList = new[] { 3, 6, 10, 11 };
 
-            //is there benefics in upachayas from the ascendant/lagna
+            //check if there is benefics in upachayas from the ascendant/lagna
             var beneficsFoundInUpachFromLagna = Calculate.IsBeneficsInSignsFromLagna(upachayasList, birthTime);
 
-            //is there benefics in upachayas from the Moon
+            //check if there is benefics in upachayas from the Moon
             var beneficsFoundInUpachFromMoon = Calculate.IsBeneficsInSignsFromPlanet(upachayasList, Moon, birthTime);
 
-            //check if benefics are in upachayas in either one case
+            //for yoga to occur benefics has to be in either one above
             var isOccuring = beneficsFoundInUpachFromLagna || beneficsFoundInUpachFromMoon;
 
             //tell caller if Vasumathi Yoga is present in horoscope
@@ -852,7 +849,7 @@ namespace VedAstro.Library
             int[] signsFromList = new[] { 6, 8, 12 };
 
             //check for jupiter only
-            PlanetName[] planetList = new[] { Moon };
+            PlanetName[] planetList = [Moon];
 
             var isOccuring = Calculate.IsPlanetsInSignsFromPlanet(signsFromList, planetList, Jupiter, birthTime);
 
@@ -1840,7 +1837,7 @@ namespace VedAstro.Library
             var lord = Calculate.LordOfHouse(HouseName.House2, time);
             var lordPlace = Calculate.HousePlanetOccupies(lord, time);
             if (lordPlace != HouseName.House2) { return CalculatorResult.NotOccuring(); }
-            
+
             //evil planet in house 2, prediction occuring
             var evilInHouse2 = Calculate.IsMaleficPlanetInHouse(HouseName.House2, time);
 

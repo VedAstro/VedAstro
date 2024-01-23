@@ -1,6 +1,6 @@
-﻿## Easy to use JS library help your app or website to talk with VedAstro API
+## Easy to use JS library help your app or website to talk with VedAstro API
 
-## 🛜 JS CDN -> https://vedastro.org/js/VedAstro.js
+## 🛜 JS CDN --> https://vedastro.org/js/VedAstro.js
 
 ## 🏎️ Quick Start
 
@@ -9,6 +9,8 @@ HTML
 <html>
     <head>
         <title>Astro Table Demo</title>
+        <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+        <script src="https://vedastro.org/js/VedAstro.js"></script>
     </head>
     <body>
         <div id="PlanetDataTable"></div>
@@ -18,7 +20,7 @@ HTML
 
 JS
 ```javascript
-//define the columns
+//define the columns names and the underling API call
 var planetColumns = [
     { Api: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
     { Api: "PlanetConstellation", Enabled: true, Name: "Star" },
@@ -46,3 +48,9 @@ var planetDataTable = new AstroTable(settings);
 ```
 
 ## 🚀 What's Possible?
+![image](https://github.com/VedAstro/VedAstro/assets/43817262/419954b6-43ec-4a5b-b106-0c8f303b5a9d)
+![image](https://github.com/VedAstro/VedAstro/assets/43817262/cb0da81b-6ee8-44e1-a635-9e83a3912947)
+![image](https://github.com/VedAstro/VedAstro/assets/43817262/6c33a27a-83cb-4bf8-a346-35090daea106)
+
+
+

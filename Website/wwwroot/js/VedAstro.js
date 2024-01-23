@@ -621,15 +621,19 @@ class AstroTable {
         return items.filter((item) => item.MethodInfo.Name === apiCalcName);
     }
 
+    //takes in many arrays and combines them into a single table like array
     static CombineRawAPICallResults(inputArray) {
         return inputArray.reduce((acc, curr) => {
-            curr?.forEach((obj) => {
-                const key = Object.keys(obj)[0];
-                if (!acc[key]) {
-                    acc[key] = [];
-                }
-                acc[key].push(obj[key]);
-            });
+            if (curr !== undefined) {
+                let curr1 = curr[Object.keys(curr)[0]];
+                curr1?.forEach((obj) => {
+                    const key = Object.keys(obj)[0];
+                    if (!acc[key]) {
+                        acc[key] = [];
+                    }
+                    acc[key].push(obj[key]);
+                });
+            }
             return acc;
         }, {});
     }
@@ -1051,6 +1055,5 @@ class AshtakvargaTable {
         var currentTable = document.getElementById(tableId);
         currentTable.innerHTML = html;
     }
-
 
 }

@@ -1,4 +1,4 @@
-﻿Easy to use JS library help your app or website to talk VedAstro API
+﻿## Easy to use JS library help your app or website to talk with VedAstro API
 
 ## 🛜 JS CDN -> https://vedastro.org/js/VedAstro.js
 

@@ -1398,9 +1398,8 @@ India
                 case ConstellationName.Jyesta:
                 case ConstellationName.Revathi:
                     return VedAstro.Library.PlanetName.Mercury;
-
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(constellation), constellation, null);
+                    return VedAstro.Library.PlanetName.Empty;
             }
 
             throw new Exception("End of Line");

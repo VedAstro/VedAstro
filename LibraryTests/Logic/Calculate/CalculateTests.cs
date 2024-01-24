@@ -658,10 +658,54 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void ParseJHDFilesTest()
         {
+            var standardHoroJHD = @"
+                                10
+                                16
+                                1918
+                                14.199999999999999
+                                -5.300000
+                                -77.350000
+                                12.590000
+                                0.000000
+                                -5.500000
+                                -5.500000
+                                0
+                                105
+                                Bangalore
+                                India
+                                1
+                                1013.250000
+                                20.000000
+                                2
+                                ";
+            var test1 = Calculate.ParseJHDFiles(standardHoroJHD);
 
-            var xx = Calculate.ParseJHDFiles();
+            Assert.AreEqual(StandardHoroscope.GetStdDateTimeOffset(), test1.GetStdDateTimeOffset());
 
-            Assert.Fail();
+            var monroeJHD = @"
+                                6
+                                1
+                                1926
+                                9.300000000000001
+                                8.000000
+                                118.145667
+                                34.031333
+                                330.000000
+                                8.000000
+                                7.000000
+                                0
+                                254
+                                Los^Angeles
+                                California,^USA
+                                1
+                                1013.250000
+                                20.000000
+                                2
+                                ";
+
+            var test2 = Calculate.ParseJHDFiles(monroeJHD);
+
+            Assert.AreEqual(MarilynMonroe.GetStdDateTimeOffset(), test2.GetStdDateTimeOffset());
         }
 
         [TestMethod()]
@@ -847,6 +891,12 @@ namespace VedAstro.Library.Tests
             var truth1 = new Angle(20, 15, 0); // Replace with correct values
 
             Assert.IsTrue(Math.Abs((test1 - truth1).TotalDegrees) <= errorRate);
+        }
+
+        [TestMethod()]
+        public void LunarDayTest()
+        {
+            Assert.Fail();
         }
     }
 }

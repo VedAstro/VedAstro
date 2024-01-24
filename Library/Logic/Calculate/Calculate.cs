@@ -1004,31 +1004,11 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Easyly import Jaganath Hora files into VedAstro.
+        /// Easyly import Jaganath Hora (.jhd) files into VedAstro.
         /// Yeah! Competition drives growth!
         /// </summary>
-        public static string ParseJHDFiles()
+        public static Person ParseJHDFiles(string personName, string rawTextData)
         {
-            var rawTextData = @"
-10
-16
-1918
-14.199999999999999
--5.300000
--77.350000
-12.590000
-0.000000
--5.500000
--5.500000
-0
-105
-Bangalore
-India
-1
-1013.250000
-20.000000
-2
-";
             // Split the raw text data into an array of strings
             var lines = rawTextData.Trim().Split('\n');
 
@@ -1038,29 +1018,81 @@ India
             var hours = (int)hoursTotalDecimal;
             // Get the fractional part and convert it to minutes
             double fractionalPart = hoursTotalDecimal - hours;
-            var minutes = (int)(fractionalPart * 60);
+            var minutes = (int)Math.Round(fractionalPart * 100);
 
-            var day = int.Parse(lines[0]);
-            var month = int.Parse(lines[1]);
+            //extract out the date parts
+            var month = int.Parse(lines[0]);
+            var day = int.Parse(lines[1]);
             var year = int.Parse(lines[2]);
-            var timeZoneOffset = double.Parse(lines[4]);
-            var timeZoneSpan = TimeSpan.FromHours(timeZoneOffset);
+            var timeZoneSpan = ConvertRawTimezoneToTimeSpan(lines[4]);
 
             // Format the date and time text
-            var dateTimeText = $"{hours:D2}:{minutes:D2} {day:D2}/{month:D2}/{year} {timeZoneSpan:+hh\\:mm}";
+            DateTimeOffset parsedStdTime = new DateTimeOffset(year, month, day, hours, minutes, 0, 0, timeZoneSpan);
+            var dateTimeText = parsedStdTime.ToString(Time.DateTimeFormat);
 
             // Extract the location and coordinates
-            var location = $"{lines[12]},{lines[13]}";
-            var longitude = Math.Abs(double.Parse(lines[5]));
+            var locationRaw = $"{lines[12].Trim()}, {lines[13].Trim()}";//remove trailing white spaces
+            var locationName = Regex.Replace(locationRaw, "[^a-zA-Z0-9 ,]", "");
+            var rawLongitude = lines[5];
+            var longitude = ConvertRawLongitude(rawLongitude);
             var latitude = double.Parse(lines[6]);
+            var parsedLocation = new GeoLocation(locationName, longitude, latitude);
 
-            // Output the extracted data
-            Console.WriteLine($"var dateTimeText = \"{dateTimeText}\"");
-            Console.WriteLine($"var location = \"{location}\";");
-            Console.WriteLine($"var long = {longitude};");
-            Console.WriteLine($"var lat = {latitude};");
+            var birthTime = new Time(parsedStdTime, parsedLocation);
 
-            return "";
+            //extract gender
+            var genderRaw = int.Parse(lines[17].Trim());
+            var parsedGender = genderRaw == 1 ? Gender.Male : Gender.Female; //female is 2
+
+            //combine all into 1 person
+            var person = new Person(personName, birthTime, parsedGender);
+
+            return person;
+
+            // Converts input to a TimeSpan representing UTC offset.
+            // If input is “-5.300000/r” it converts to "+05:30"
+            // but if “5.300000/r” it converts to "-05:30"
+            static TimeSpan ConvertRawTimezoneToTimeSpan(string input)
+            {
+                // Remove the "/r" from the end of the string
+                string cleanedInput = input.Replace("/r", "");
+
+                // Split the string into hours and minutes
+                string[] timeParts = cleanedInput.Split('.');
+
+                // Convert the string parts to integers
+                int hours = int.Parse(timeParts[0]);
+                int minutes = int.Parse(timeParts[1].Substring(0, 2)); // Get the first two digits of the decimal part
+
+                // Reverse the sign of the hours
+                hours = -hours;
+
+                // Convert the hours and minutes to a TimeSpan
+                TimeSpan timeSpan = new TimeSpan(hours, minutes, 0);
+
+                return timeSpan;
+            }
+
+            //Converts a raw longitude string to a double and changes its sign.
+            //EXP: "-77.350000\r" to 77.35, "108.350000\r" to -108.35
+            static double ConvertRawLongitude(string rawLongitude)
+            {
+                // Trim the string to remove leading and trailing white spaces
+                string trimmedLongitude = rawLongitude.Trim();
+
+                // Try to parse the string to a double
+                if (double.TryParse(trimmedLongitude, out double longitude))
+                {
+                    // If the longitude is negative, make it positive. If it's positive, make it negative.
+                    longitude = longitude < 0 ? Math.Abs(longitude) : -Math.Abs(longitude);
+                    return longitude;
+                }
+                else
+                {
+                    throw new FormatException("Invalid format for longitude.");
+                }
+            }
+
         }
 
         /// <summary>

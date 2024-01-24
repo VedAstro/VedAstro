@@ -10,7 +10,7 @@
 
         @if (paramType == typeof(Time))
         {
-            <span class="hstack gap2-2" style="font-weight: 600; color: red;">
+            <span class="hstack gap2-2" style="font-weight: 600;color: red;margin-left: 13px;">
                 @ParamName
                 @if (!string.IsNullOrEmpty(ParamDescription)) { <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" /> }
             </span>

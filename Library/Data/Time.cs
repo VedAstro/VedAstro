@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -346,7 +346,7 @@ namespace VedAstro.Library
         }
 
         public string GetLmtDateTimeOffsetText() => this.GetLmtDateTimeOffset().ToString(Time.DateTimeFormat);
-       
+
 
         /// <summary>
         /// Check if an inputed STD time string is valid,
@@ -587,7 +587,10 @@ namespace VedAstro.Library
             }
 
             //not correct type, return not equal
-            else { return false; }
+            else
+            {
+                return false;
+            }
 
         }
 

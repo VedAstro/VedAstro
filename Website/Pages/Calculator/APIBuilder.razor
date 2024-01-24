@@ -31,15 +31,12 @@
                         <APISelectorBox @ref="_apiSelectorBox" />
                     </div>
 
-
                     @* INPUT PARAM NAME SELECT *@
                     <div id="ParamInputHolderElement" style="display: none">
                         <IconTitle IconName="flat-color-icons:multiple-inputs" Title="Input Parameters" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
                         <ParameterInputPanel @ref="_parameterInputPanel" />
                     </div>
-
                 </div>
-
 
                 @* -------- BOTTOM BUTTONS --------*@
                 <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />

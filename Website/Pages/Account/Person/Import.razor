@@ -1,78 +1,178 @@
 ﻿@using Newtonsoft.Json.Linq;
 @using VedAstro.Library
-@*A simple page specialized for adding new Person profiles fast & easy*@
-@attribute [Route(PageRoute.AddPerson)]
+@attribute [Route(PageRoute.Import)]
 
-<PageTitle>Add Person | VedAstro</PageTitle>
+<PageTitle>Easy Import | VedAstro</PageTitle>
 
-<PageTop Title="Add New Person" IconName="icomoon-free:profile" />
+<PageTopSideImage ImageName="life-predictor-banner.png"
+                  Title="Import Person"
+                  DescriptionText="Easily import birth details from apps Like Jagannatha Hora, Light of KP (LOKPA) or Parashara's Light 9" />
 
-@*show loading first, note done by style because need element alive*@
-<div class="@(!_nothingToShow?"d-none":"")">
-    @AppData.LoadingImage
-</div>
+<div>
+    @* INPUT *@
+    <div class="d-md-flex justify-content-between">
+        @*SELECTOR*@
+        <div class="me-5">
+            <div class="vstack gap-4">
+                @* APP SELECT *@
 
-<div class="d-md-flex justify-content-between">
-    @*SELECTOR*@
-    <div class="me-5">
-        <div class="vstack gap-3 @(_nothingToShow ? "d-none" : "")" style="max-width: @GR.W412px">
+                <div >
+                    <IconTitle IconName="logos:apple-app-store" Title="Select App" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)"/>
+                    <div class="input-group"><label class="input-group-text" style="font-weight: 600; color: red;" for="ed64a086-62cd-4141-b778-421d2e1399e1">Import from</label><!--!-->
+                        <select @bind="SelectedAppName" class="form-select" id="ed64a086-62cd-4141-b778-421d2e1399e1">
+                            <option value="" selected>Make a choice...</option>
+                            <option value="JagannathaHora">Jagannatha Hora</option>
+                            <option value="LOKPA">Light of KP (LOKPA)</option>
+                            <option value="ParasharasLight">Parashara's Light</option>
+                            <option value="Maitreya">Maitreya</option>
+                        </select>
+                    </div>
+                </div>
 
-            @* NAME *@
-            <div class="input-group">
-                <span class="input-group-text gap-2" style="width: 136px;"><Icon IconName="flat-color-icons:butting-in" Size="35" />Name</span>
-                <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 17px;">
+                @* FILE UPLOAD *@
+
+                <div @ref="fileUploadInputHtml" style="display: none;">
+                    <div class="vstack gap-3 input-group mb-3">
+                        <div class="form-control" style="width: 100%; border-radius: 6px;">
+                            <InputFile Multiple id="inputGroupFile02" OnChange="@OnInputFileChange"/>
+                        </div>
+                    </div>
+
+                    @{
+
+                    }
+                    <div @ref="uploadFileInfoHolder" class="hstack gap-3" style="display: none;">
+                        <div class="hstack gap-2">
+                            <Icon IconName="icon-park:file-success" Size="30"/>
+                            Read Complete!
+                        </div>
+                        <span class="mt-1">Size : <strong>@Tools.BytesToHumanText(UploadedFile?.Size ?? 0)</strong></span>
+                    </div>
+
+                </div>
+
+                @* -------- BOTTOM BUTTONS --------*@
+                <IconButton ButtonText="Import" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="mdi:import" OnClickCallback="@OnClickImport"/>
+
             </div>
 
-            @* TIME *@
-            <TimeLocationInput @ref="_timeInput" LabelText="Birth Time" />
+        </div>
 
-            @* GENDER *@
-            <div class="input-group">
-                <label class="input-group-text gap-2" for="genderSelectInput" style="width: 165px;"><Icon IconName="mdi:human-male-female" Size="34" />Gender</label>
-                <select @bind="_genderInput" class="form-select" id="genderSelectInput" style="font-weight: 600; font-size: 17px;">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-            </div>
-
-            <div class="mt-2 d-flex justify-content-between">
-                <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-                <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton" />
+        @*SIDEBAR*@
+        <div class="mt-md-0 mt-4 me-md-5">
+            <!--when small give at top-->
+            <div class="vstack gap-0 gap-md-2">
+                <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy"/>
+                <InfoBox MaxWidth="365" FullWidth="@true" Title="Cloud Sync" Description="Free cloud storage for storing horoscopes accross devices" IconName="ic:baseline-cloud-done"/>
             </div>
         </div>
     </div>
-
-    @*SIDEBAR*@
-    <div class="mt-md-0 mt-4 me-md-5">
-        <!--when small give at top-->
-        <div class="vstack gap-0 gap-md-2">
-            <InfoBox MaxWidth="365" Title="Easy Import" Description="Birth data from Jagannatha Hora, Parashara's Light" IconName="meteocons:cloud-up-fill" ClickUrl="@PageRoute.Import"  />
-            <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
-            <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="fa-solid:history" IsNewTabOpen="true" ClickUrl="@PageRoute.BirthTimeFinder" />
+    
+    @* PREVIEW TABLE *@
+    <div class="mt-4">
+        @* MESSAGE *@
+        <div >
+            <div class="d-flex justify-content-center">
+                @* important needed to override flex *@
+                <span class="" style="color: @AppData.Grey; font-size: 14px;">Check imported preview data below before click <strong>Import</strong></span>
+            </div>
         </div>
-    </div>
-</div>
 
+        @* TABLE *@
+        <table @ref="ListPreviewTable" class="table table-bordered table-hover" style="display: none;">
+            <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Birth Date & Time</th>
+                <th>Location</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (int index = 0; index < _importedPersonList.Count; index++)
+            {
+                <tr>
+                    <td>@_importedPersonList[index].Name</td>
+                    <td>@_importedPersonList[index].BirthTimeString</td>
+                    <td>@_importedPersonList[index].GetBirthLocation().ToString().Truncate(30)</td> @*we don't need whole location*@
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+</div>
 
 @code {
+    ElementReference ListPreviewTable;
+    ElementReference uploadFileInfoHolder;
+    ElementReference fileUploadInputHtml;
 
     TimeLocationInput _timeInput;
     private string? _nameInput;
     private string? _genderInput = "Male"; //since Male is first in combobox
     private Person _person;
     private bool _nothingToShow = false; //start by showing when start
+    private string _selectedAppName;
+
+    public string SelectedAppName
+    {
+        get => _selectedAppName;
+        set
+        {
+            if (value == "JagannathaHora")
+            {
+                //once set show upload button
+                 _jsRuntime.Show(fileUploadInputHtml);
+                _selectedAppName = value;
+            }
+            else
+            {
+                _jsRuntime.FunFeaturePopUp("Import");
+            }
+        }
+    }
+
+    public IBrowserFile? UploadedFile { get; set; }
+
+    private IReadOnlyList<IBrowserFile> _uploadedFileList;
+    private  List<Person> _importedPersonList = new List<Person>();
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
-    /// <summary>
-    /// Function that is called on save click of button
-    /// NOTE : surprisingly this is nessary for async await to work properly
-    /// </summary>
-    private async Task OnClickSubmitButton() => await InvokeAsync(async () => await _OnClickSubmitButton()).Try(_jsRuntime);
 
+
+    /// <summary>
+    /// Once received file send for processing (API) to extract time list for later use
+    /// </summary>
+    private async Task OnInputFileChange(InputFileChangeEventArgs inputFileData)
+    {
+        //show icon that file is being processed hold tight
+        await _jsRuntime.ShowLoading();
+
+        //save files for parsing
+        _uploadedFileList = inputFileData.GetMultipleFiles();
+
+        //parse them files based on selected format
+        //and sets them saves them as parsed
+        switch (SelectedAppName)
+        {
+            case "JagannathaHora": ParseJhdInputFile(); break;
+            default:
+                await _jsRuntime.FunFeaturePopUp("File Parser");
+                //todo show msg
+            break;
+        }
+
+        //after parsing show preview
+        _jsRuntime.Show(ListPreviewTable);
+
+        //show done message to user
+        var msg = $"{_uploadedFileList.Count} Files Parsed";
+        await _jsRuntime.ShowAlert("success", msg, "Check the preview data and click import.");
+    }
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
@@ -295,6 +395,53 @@
         return new Person(newPersonOwnerId, "", nameInput, birthTime, gender);
 
         //----------LOCAL FUNCTION ---------------------
+    }
+
+    /// <summary>
+    /// Takes uploaded raw binary files and parses them
+    /// </summary>
+    private async void ParseJhdInputFile()
+    {
+        try
+        {
+            //parse each file one by one
+            foreach (var singleFile in _uploadedFileList)
+            {
+                //JHD files have person name saved as file name
+                var personNameRaw = singleFile.Name;
+                string personNameRaw2 = Path.GetFileNameWithoutExtension(personNameRaw); //remove file extension
+                string personName = Format.FormatName(personNameRaw2); //remove file extension
+
+                var openReadStream = singleFile.OpenReadStream();
+                using var reader = new StreamReader(openReadStream);
+                var rawJhdFile = await reader.ReadToEndAsync();
+
+                //convert JHD file to Time instance
+                var parsedPerson = Calculate.ParseJHDFiles(personName, rawJhdFile);
+
+                //create person instance 
+                _importedPersonList.Add(parsedPerson);
+            }
+        }
+        //if fail let user know
+        catch (Exception e)
+        {
+            //todo error msg
+            Console.WriteLine(e);
+            throw;
+        }
+
+    } 
+
+    private async Task OnClickImport()
+    {
+        //add each person to API
+        foreach (var _person in _importedPersonList)
+        { 
+            await AppData.API.Person.AddPerson(_person);
+        }
+
+        await _jsRuntime.ShowAlert("success", $"Import complete", "New person profiles now ready for calculations.");
     }
 
 }

@@ -33,7 +33,7 @@
         public const string JournalEditorParam = "Journal/Editor/{PersonIdUrl}/{LifeEventIdUrl}"; //for page declaration
         public const string JournalEditor = "Journal/Editor"; //for page URL generation
 
-        
+
         //CALCULATORS
         public const string CalculatorList = "Calculator/";
         public const string LifePredictor = "LifePredictor";
@@ -80,6 +80,7 @@
         public const string SavedCharts = "Account/SavedCharts";
         public const string PersonList = "Account/Person/List";
         public const string AddPerson = "Account/Person/Add";
+        public const string Import = "Account/Person/Import";
         public const string PersonEditor = "Account/Person/Editor"; //used to make nav link
         public const string PersonEditorParam = "Account/Person/Editor/{PersonIdUrl}"; //actual page access
 

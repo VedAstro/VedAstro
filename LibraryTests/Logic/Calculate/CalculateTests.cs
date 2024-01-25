@@ -678,9 +678,9 @@ namespace VedAstro.Library.Tests
                                 20.000000
                                 2
                                 ";
-            var test1 = Calculate.ParseJHDFiles(standardHoroJHD);
+            var test1 = Calculate.ParseJHDFiles("", standardHoroJHD);
 
-            Assert.AreEqual(StandardHoroscope.GetStdDateTimeOffset(), test1.GetStdDateTimeOffset());
+            Assert.AreEqual(StandardHoroscope.GetStdDateTimeOffset(), test1.BirthTime.GetStdDateTimeOffset());
 
             var monroeJHD = @"
                                 6
@@ -703,9 +703,9 @@ namespace VedAstro.Library.Tests
                                 2
                                 ";
 
-            var test2 = Calculate.ParseJHDFiles(monroeJHD);
+            var test2 = Calculate.ParseJHDFiles("", monroeJHD);
 
-            Assert.AreEqual(MarilynMonroe.GetStdDateTimeOffset(), test2.GetStdDateTimeOffset());
+            Assert.AreEqual(MarilynMonroe.GetStdDateTimeOffset(), test2.BirthTime.GetStdDateTimeOffset());
         }
 
         [TestMethod()]
@@ -896,6 +896,8 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void LunarDayTest()
         {
+            //TODO test for Lunar Day
+
             Assert.Fail();
         }
     }

@@ -78,14 +78,14 @@ public class URL
         GetEventsChart = ApiUrl + "/EventsChart";
         GetCallStatus = ApiUrl + "/GetCallStatus";
         //TODO special URL for chart because timeout Azure CDN timeout >30s
-        GetEventsChartDirect = ApiUrlDirect + "/geteventschart"; 
+        GetEventsChartDirect = ApiUrlDirect + "/geteventschart";
         GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
         GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
         SaveEventsChart = ApiUrl + "/SaveEventsChart";
         GetEventDataList = ApiUrl + "/GetEventDataList";
         GetEventsApi = ApiUrl + "/getevents";
         SignInGoogle = ApiUrl + "/SignInGoogle";
-        SignInFacebook = ApiUrl + "/SignInFacebook"; 
+        SignInFacebook = ApiUrl + "/SignInFacebook";
         //NOTE: special use of "direct" url for max speed (no CDN)
         HoroscopeDataListXml = $"{WebUrlDirect}/data/HoroscopeDataList.xml";//used in horoscope prediction
         EventsChartViewerHtml = $"{WebUrlDirect}/data/EventsChartViewer.html";
@@ -167,13 +167,13 @@ public class URL
     public const string GoogleSignInJs = "https://accounts.google.com/gsi/client";
     public const string ExcelSampleMLFile = "https://github.com/VedAstro/VedAstro/raw/master/DataProcessor/TableGeneratorSampleInput.xlsx";
     public const string GeoJsApiUrl = "https://get.geojs.io/v1/ip/geo.json";
-    public const string TelescopeBuyPage = "https://www.ebay.com/itm/285323405966";
+    public const string TelescopeBuyPage = "https://www.ebay.com/itm/285643731472";
     public const string LaptopBuyPage = "https://www.ebay.com/itm/304878531330";
     public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
     public const string GitHubDiscussions = "https://github.com/orgs/VedAstro/discussions";
     public const string YoutubeChannel = "https://www.youtube.com/@vedastro/videos";
     public const string YoutubePythonGuide = "https://youtu.be/chEeF-xEQ48?si=RNTvGlSD-WXgso7P";
-    public const string GitHubDemoFiles = "https://github.com/VedAstro/VedAstro/tree/master/Demo";
+    public const string GitHubDemoFiles = "https://github.com/VedAstro/VedAstro/tree/master/Demo/JavaScript";
     public const string FacebookPage = "https://www.facebook.com/vedastro.org";
     public const string Instagram = "https://www.instagram.com/_vedastro/";
     public const string Twitter = "https://twitter.com/_VedAstro";

@@ -5,6 +5,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>Website</RootNamespace>
 		<PublishTrimmed>true</PublishTrimmed>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<ErrorReport>none</ErrorReport>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Flavor)'=='AOT_ON'">
 			<!--AOT disabled because not working in android chrome-->
@@ -13,6 +15,14 @@
 	<PropertyGroup Condition="'$(Flavor)'=='AOT_OFF'">
 			<!--AOT disabled because not working in android chrome-->
 			<RunAOTCompilation>false</RunAOTCompilation>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+	  <DebugType>full</DebugType>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+	  <DebugType>full</DebugType>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Include="..\ViewComponents\Code\API\EventsChartTools.cs" Link="Code\API\EventsChartTools.cs" />

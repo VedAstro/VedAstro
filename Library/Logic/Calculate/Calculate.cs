@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static VedAstro.Library.PlanetName;
+using Exception = System.Exception;
 
 
 namespace VedAstro.Library
@@ -57,8 +58,138 @@ namespace VedAstro.Library
 
         //----------------------------------------CORE CODE---------------------------------------------
 
-        #region PANCHANGA
+        #region PANCHA PAKSHI
 
+        /// <summary>
+        /// Gets "birth bird" for a birth time.
+        /// Sidhas have personified the elements as birds identifying each element under
+        /// which an individual is born, when these elements are all functioning differentially
+        /// during each time gap. These 5 elemental vibrations are personified as PAKSHIS or BIRDS and the
+        /// gradations of their faculities are named as 5 activities.
+        /// </summary>
+        public static BirdName PanchaPakshi(Time birthTime)
+        {
+            //get rulling constellation
+            var rullingConst = Calculate.MoonConstellation(birthTime);
+            var rullingConstNumber = (int)rullingConst.GetConstellationName();
+
+            //based on waxing or waning assign bird accordingly
+            var isWaxing = Calculate.IsWaxingMoon(birthTime);
+            if (isWaxing)
+            {
+                switch (rullingConstNumber)
+                {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        return BirdName.Vulture;
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                        return BirdName.Owl;
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                    case 16:
+                        return BirdName.Crow;
+                    case 17:
+                    case 18:
+                    case 19:
+                    case 20:
+                    case 21:
+                        return BirdName.Cock;
+                    case 22:
+                    case 23:
+                    case 24:
+                    case 25:
+                    case 26:
+                    case 27:
+                        return BirdName.Peacock;
+                }
+            }
+            //else must be wanning
+            else
+            {
+                switch (rullingConstNumber)
+                {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        return BirdName.Peacock;
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                        return BirdName.Cock;
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                    case 16:
+                        return BirdName.Crow;
+                    case 17:
+                    case 18:
+                    case 19:
+                    case 20:
+                    case 21:
+                        return BirdName.Owl;
+                    case 22:
+                    case 23:
+                    case 24:
+                    case 25:
+                    case 26:
+                    case 27:
+                        return BirdName.Vulture;
+                }
+            }
+
+            throw new Exception("END OF LINE!");
+        }
+
+        public enum BirdName
+        {
+            Vulture,
+            Owl,
+            Crow,
+            Cock,
+            Peacock
+        }
+
+        /// <summary>
+        /// Given a time will return true if it is on
+        /// "Waxing moon" or "Shukla Paksha" or "Bright half"
+        /// </summary>
+        public static bool IsWaxingMoon(Time birthTime)
+        {
+            var lunarDay = LunarDay(birthTime);
+
+            return lunarDay.GetMoonPhase() == MoonPhase.BrightHalf;
+        }
+
+        /// <summary>
+        /// Given a time will return true if it is on
+        /// "Waning moon" or "Krishna Paksha" or "Dark half"
+        /// </summary>
+        public static bool IsWaningMoon(Time birthTime)
+        {
+            var lunarDay = LunarDay(birthTime);
+
+            return lunarDay.GetMoonPhase() == MoonPhase.DarkHalf;
+        }
+
+        #endregion
+
+        #region PANCHANGA
 
         /// <summary>
         /// It’s used to determine auspicious times and rituals.

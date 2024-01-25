@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Jim</FirstName>
+  <LastName>Bouton</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2429331.368056</BirthDate>
+  <Longitude>74.166667</Longitude>
+  <Latitude>40.733333</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Newark</City>
+  <State>NJ New Jersey</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Baesball player, television sportscaster. Nonconformist, candid, irreverent sense of humor, free and easy . Irrepressible comic sense of life, indiscreet, enthusiastic. CB 71. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

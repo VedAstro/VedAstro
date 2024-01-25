@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -15,6 +15,7 @@ namespace VedAstro.Library
     /// </summary>
     public enum EventTag
     {
+        Empty = 0,
         //todo made visible to public via api
         Agriculture,
         General,
@@ -55,7 +56,7 @@ namespace VedAstro.Library
         PD8,
 
         DasaSpecialRules,
-
+        Upagraha,
     }
 
     public static class EventTagExtensions
@@ -116,7 +117,7 @@ namespace VedAstro.Library
 
             return eventTagListXml;
         }
-        
+
         /// <summary>
         /// Note: Root element must be named EventTagList
         /// </summary>

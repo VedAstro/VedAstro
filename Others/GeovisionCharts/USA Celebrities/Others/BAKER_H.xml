@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Howard</FirstName>
+  <LastName>Baker</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2424470.125000</BirthDate>
+  <Longitude>84.483333</Longitude>
+  <Latitude>36.416667</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Huntsville </City>
+  <State>TN Tennessee</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Attorney, politician. Hard working, productive, shrewd, quick, good natured. Sincerity, integrity, impartiality, good political debator. Won first place in public speaking contest. Cunning cross examiner, skill, charm, boyish, handsome. Telegenic appearance, impeccably groomed, articulate. CB 74. . . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

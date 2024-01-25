@@ -38,7 +38,7 @@ namespace VedAstro.Library
         public bool Contains(HouseName houseName) => RelatedHouses.Contains(houseName);
 
         /// <summary>
-        /// Converts all values to string seperated by comma
+        /// Converts all values to string separated by comma
         /// Note: used when searching
         /// </summary>
         public override string ToString()
@@ -124,7 +124,7 @@ namespace VedAstro.Library
                 var relatedPlanets = PlanetName.FromJsonList(horoscopeInput["Planets"]);
                 var relatedHouses = HouseNameExtensions.FromJsonList(horoscopeInput["Houses"]);
                 var relatedZodiacs = ZodiacNameExtensions.FromJsonList(horoscopeInput["Zodiacs"]);
-                
+
                 var parsedHoroscope = new RelatedBody()
                 {
                     RelatedPlanets = relatedPlanets,

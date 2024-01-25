@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Ken</FirstName>
+  <LastName>Harrelson</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2430242.354167</BirthDate>
+  <Longitude>82.033333</Longitude>
+  <Latitude>34.750000</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Woodruff</City>
+  <State>SC South Carolina</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Baseball player. Colorful, eccentric egotist, swinging life style, offbeat. Non conformist, mod wardrobe, criticized his coach, rebel. Antics, self consciousness, fastidiousness, elegant, bright. Played a kooky clown, refuses to retract a statement. Luxurious apartment, short-tempered, easily involved in fist fights. CB 70. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>George</FirstName>
+  <LastName>Hartzog</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2422401.083333</BirthDate>
+  <Longitude>80.666667</Longitude>
+  <Latitude>32.916667</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Walterboro</City>
+  <State>SC South Carolina</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Lawyer and administrator. Director of National Park Service, then Exec Director of Downtown St Louis. Accomplished public speaker, adroit political strategist. Highly respected, wheeler dealer, works 14 hours a day, optimistic. CB 70. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

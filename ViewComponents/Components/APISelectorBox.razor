@@ -21,7 +21,6 @@ KEEP IT REAL
 @using System.Xml.Linq
 @using System.Collections
 @using System.Timers
-@using FuzzySharp
 
 <div @ref="mainElementRef" class="hstack gap-2 @ExtraClass">
     @*Component shows combo box with people list*@
@@ -36,26 +35,27 @@ KEEP IT REAL
 
             @* SEARCH *@
             <div class="hstack gap-2">
-                <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                <input id="APISelector-SearchInputElement" @ref="_searchInput" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
                 <Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() => AppData.Go(PageRoute.APICallList))" />
             </div>
-
+            
             @* LIST OF METHODS *@
-            @if (_isReady)
-            {
-                @foreach (var apiMethod in MethodListFiltered)
+            <div id="APISelector-AllMethodInfoHolder" >
+                @foreach (var apiMethod in MethodListALL)
                 {
-                    <li class="dropdown-item d-flex gap-2 w-100" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">
+                    @* NOTE: method name as class used to show/hide *@
+                    <li class="@apiMethod.Name dropdown-item d-flex gap-2 w-100" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">
                         <span style=" font-size: 16px; font-weight: 500; ">@(Format.FormatName(apiMethod.Name))</span>
                         <IconTooltip Opacity="0.3" Interactive="false" ShowOnHover="true" Size="16" TooltipText="@apiMethod.Description" SmallIcon="true" />
                     </li>
                 }
-            }
+            </div>
+
             @* LOADING ICON *@
             @* loading icon when list is being made, no loading popup because reduces user UX *@
             else
             {
-                <div class="d-flex flex-column align-items-center mt-5">
+                <div id="APISelector-LoadingIconHolder"  class="d-flex flex-column align-items-center mt-5">
                     <strong>Loading...</strong>
                     <div class="spinner-border" role="status" aria-hidden="true"></div>
                 </div>
@@ -121,7 +121,7 @@ KEEP IT REAL
     /// This delay helps to wait for user to finish typing before starting to render list
     /// reduces lag and makes for better UX
     /// </summary>
-    private static Timer _onKeyUpWaitTimer = new(3500);
+    private static Timer _onKeyUpWaitTimer = new(255);
 
     //data used to track search timer
     private static bool _timerInitialized = false;
@@ -149,7 +149,7 @@ KEEP IT REAL
     /// <summary>
     /// list that is shown to user and is changed by search
     /// </summary>
-    private List<OpenAPIMetadata?> MethodListFiltered { get; set; } = new();
+    //private List<OpenAPIMetadata?> MethodListFiltered { get; set; } = new();
 
     public OpenAPIMetadata? SelectedMethod { get; set; } = null;
 
@@ -158,13 +158,37 @@ KEEP IT REAL
     /// <summary>
     /// extracted search text for faster search
     /// </summary>
-    private string[] MethodListALLSearchText;
+    //private string[] MethodListALLSearchText;
 
     /// <summary>
     /// Event fired when selection of method is changed
     /// </summary>
     public event EventHandler OnChangeSelectMethod;
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //convert data to format understood by library
+            //extract out name and all search text
+            //so that can be used to show and hide divs directly
+            var methodInfoObjects = new List<object>();
+            foreach (var metadata in MethodListALL)
+            {
+                var package = new
+                {
+                    name = metadata.Name,
+                    description = metadata.SearchText
+                };
+
+                methodInfoObjects.Add(package);
+            }
+
+            //send all search text for creating an index by the special JS search library (FlexSearch)
+            _jsRuntime.InvokeVoidAsync(JS.InitializeSearchForAPISelector, methodInfoObjects);
+
+        }
+    }
 
 
     protected override async Task OnInitializedAsync()
@@ -177,12 +201,6 @@ KEEP IT REAL
         //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
         //if custom list specified use that else default to all from Open API
         MethodListALL = CustomAllMethodList.Any() ? CustomAllMethodList : OpenAPIMetadata.FromMethodInfoList();
-
-        //to speed up search array of description
-        MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
-
-        //make copy for search
-        MethodListFiltered = MethodListALL;
 
         //show data on display
         _isReady = true;
@@ -243,40 +261,7 @@ KEEP IT REAL
         StateHasChanged();
     }
 
-    /// <summary>
-    /// called when user key up (AI code)
-    /// uses a timer to delay the search operation until the user has stopped typing,
-    /// improving the user experience by not triggering a search on every keystroke
-    /// </summary>
-    private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
-    {
-        //if arrow keys than obviously don't count
-        //if arrow keys, space, or control keys then obviously don't count
-        if (keyEventArgs.Code == "ArrowUp" || keyEventArgs.Code == "ArrowDown" ||
-            keyEventArgs.Code == "ArrowLeft" || keyEventArgs.Code == "ArrowRight" ||
-            keyEventArgs.Code == "Space" || keyEventArgs.Code == "ControlLeft" ||
-            keyEventArgs.Code == "ControlRight" || keyEventArgs.Code == "AltLeft" ||
-            keyEventArgs.Code == "AltRight" || keyEventArgs.Code == "ShiftLeft" ||
-            keyEventArgs.Code == "ShiftRight" || keyEventArgs.Code == "Enter" ||
-            keyEventArgs.Code == "Tab" || keyEventArgs.Code == "Escape")
-        {
-            return;
-        }
-
-        if (!_timerInitialized)
-        {
-            _onKeyUpWaitTimer.Elapsed += OnKeyUpWaitTimerElapsed;
-            _timerInitialized = true;
-        }
-        if (!_searchIsRunning)
-        {
-            _searchIsRunning = true;
-            _isReady = false; // show loading icon
-            _onKeyUpWaitTimer.Stop();
-            _onKeyUpWaitTimer.Start();
-        }
-    }
-
+    
     /// <summary>
     /// Checks if validation of all input fields
     /// </summary>
@@ -296,30 +281,7 @@ KEEP IT REAL
     }
 
 
-    private async void OnKeyUpWaitTimerElapsed(object sender, ElapsedEventArgs e)
-    {
-        _onKeyUpWaitTimer.Stop();
-        var searchText = (await _jsRuntime.GetValue(_searchInput)).ToLower();
-        if (string.IsNullOrEmpty(searchText))
-        {
-            MethodListFiltered = MethodListALL;
-        }
-        else
-        {
-            //uses special search library to search through text
-            var results = Process.ExtractAll(searchText, MethodListALLSearchText, cutoff: 60).OrderByDescending(r => r.Score);
-            MethodListFiltered = results.Select(yy => MethodListALL[yy.Index]).ToList();
-        }
-
-        await InvokeAsync(StateHasChanged);
-
-        _isReady = true; //hide loading, show results
-
-        _searchIsRunning = false;
-
-        //needed to make change appear
-        StateHasChanged();
-    }
+   
 
     /// <summary>
     /// When main button is clicked to trigger auto focus to search bar
@@ -357,5 +319,15 @@ KEEP IT REAL
 
     }
 
+    public void Focus()
+    {
+        mainElementRef.FocusAsync();
+    }
+
+    //programatically set the API, as though selected by dropdown
+    public void SetSelectedMethod(OpenAPIMetadata selected)
+    {
+        OnClickMethodName(selected);
+    }
 
 }

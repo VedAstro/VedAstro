@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>David G.</FirstName>
+  <LastName>Freeman</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2422574.309028</BirthDate>
+  <Longitude>118.150000</Longitude>
+  <Latitude>34.150000</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Pasadena</City>
+  <State>CA California</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Badminton player. Excellent student, well rounded person. LL 78. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

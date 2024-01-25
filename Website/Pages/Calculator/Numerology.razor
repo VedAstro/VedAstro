@@ -1,0 +1,172 @@
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.Numerology)]
+
+<PageTitle>Numerology | VedAstro</PageTitle>
+
+<PageTop ImageName="numerology-banner.svg"
+         Title="Numerology"
+         DescriptionText="A person's life can be predicted through his name spellings. From Mantra Shastra, uses vibration frequency of alphabets.">
+</PageTop>
+
+<div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
+    
+    @* NAME NUMBER *@
+    <div>
+        <IconTitle IconName="fluent:text-number-format-20-filled" Title="Name Number" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
+
+        <div class="hstack gap-2 mt-3">
+            @* NAME *@
+            <div class="input-group">
+                <span class="input-group-text gap-2" style="width: 136px;">
+                    <Icon IconName="flat-color-icons:butting-in" Size="35" />Name
+                    <HelpIconTooltip ShowOnHover="true" HelpText="@NameInputDesc" SmallIcon="true" />
+                </span>
+                <input @bind="nameInput" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 17px;">
+            </div>
+            
+            @* CALC BUTTON *@
+            <IconButton Height="47" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="OnClickCalculateButton" />
+        </div>
+
+        @* OUTPUT *@
+        <div @ref="outputHolder" class="mt-3" style="display: none;">
+            <h4>Number: <strong>@nameNumber</strong></h4>
+            <p class="p-2 rounded" style="background: #fff; font-family: 'Gowun Dodum'; font-size: 20px; ">
+                @predictionOutputText
+            </p>
+        </div>
+    </div>
+    
+    @* ACCURATE SAMPLE *@
+    <div class="mt-3" style="max-width:@GR.W667px;">
+        <IconTitle Title="Accurate" TitleHolder="h5" IconName="noto-v1:direct-hit" />
+        <table class="table mb-5" style="width:@GR.W667px;">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Number</th>
+                    <th scope="col">Prediction</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var prediction in AccuratePredictionExampleList)
+                {
+                    <tr>
+                        <td>@prediction.Name</td>
+                        <td>@prediction.Number</td>
+                        <td>@prediction.Prediction</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+@*HELP SECTION*@
+<PageHelpSection>
+    <Content>
+        <h4 class="fw-bold">What is Numerology?</h4>
+        <p class="">
+            To put things in a nutshell, every man
+            or woman is represented by a Number (since he is born on a
+            particular date, month and year) and also defined by letters
+            pertaining to their names.
+        </p>
+        <p class="mb-4">
+            According to these sastras the
+            <strong>man is a Yantra</strong> and his <strong>name is a Mantra</strong>.
+            Favourable results can be
+            obtained only if <strong>both agree</strong> with each other and any disagreement
+            will be harmful to them. This is the basic foundation of this science.
+        </p>
+
+        <h4 class="fw-bold">Source of Numerology?</h4>
+        <p class="">
+            <strong>Mantra Sastra</strong> helps us to understand the latent powers of
+            nature, and we learn to command them through sound vibrations.
+            Finding out the forms of those invisible powers and then using them
+            is the <strong>aim of Tantra Sastra</strong>.
+        </p>
+        <p class="mb-4">
+            Only these two mutually related sastras
+            can help us to understand nature and live in accordance with it.
+            These two sastras have <strong>been kept secret</strong> to this day lest it
+            should fall in the hands of the unscrupulous. These are still
+            sustained only under a Guru-Disciple set-up.
+        </p>
+
+    </Content>
+</PageHelpSection>
+
+@code {
+
+
+    private string nameInput;
+    private string predictionOutputText;
+    private int nameNumber;
+    ElementReference outputHolder;
+
+    private string NameInputDesc = "Can be name of Person, Business or a Project. Enter most widely used name spelling.";
+
+    private List<dynamic> AccuratePredictionExampleList = new List<dynamic>();
+
+
+    protected override void OnInitialized()
+    {
+        //declare list of sample names
+        var nameList = new List<string>() { "THOMAS ALVA EDISON", "ADOLF HITLER", "MICHAEL JACKSON" };
+
+        //fill sample data to show in Table
+        foreach (var sampleName in nameList)
+        {
+            var number = Calculate.NameNumber(sampleName);
+            var predictionText = Calculate.NameNumberPrediction(sampleName).Truncate(194);
+            AccuratePredictionExampleList.Add(new { Name = sampleName, Number = number, Prediction = predictionText });
+        }
+
+    }
+
+    private async Task OnClickCalculateButton()
+    {
+
+        //only continue if passed input field validation
+        if (!await ValidationPassed()) { return; }
+
+        //calculate name number
+        nameNumber = Calculate.NameNumber(nameInput);
+
+        //using the number find prediction text
+        predictionOutputText = Calculate.NameNumberPrediction(nameInput);
+
+        //make visible
+        outputHolder.Show();
+        // _jsRuntime.Show(outputHolder);
+
+        //refresh
+        StateHasChanged();
+    }
+
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private async Task<bool> ValidationPassed()
+    {
+
+        //TEST 1
+        //if person name not inputed
+        if (string.IsNullOrEmpty(nameInput))
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", "Please enter a name!", true);
+            return false;
+        }
+
+        return true;
+    }
+
+
+}
+

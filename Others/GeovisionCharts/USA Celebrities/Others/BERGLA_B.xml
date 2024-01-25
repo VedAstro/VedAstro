@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Bob</FirstName>
+  <LastName>Bergland</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2425450.159722</BirthDate>
+  <Longitude>95.766667</Longitude>
+  <Latitude>48.850000</Latitude>
+  <TimeZone>6.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Roseau</City>
+  <State>MN Minnesota</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Farmer, politician, agriculture secretary. Adept at negotiating compromise solutions. Stands his ground, fair and honest, turns in good performance. Attention to detail, leader, organizer in National Farmers Union. Ruddy, weathered countenance. CB 77   NYT 12/76. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

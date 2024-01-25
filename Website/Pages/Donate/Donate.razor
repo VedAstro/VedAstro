@@ -11,15 +11,12 @@
 
 <PageTopSideImage ImageWidth="@GR.W157" ImageName="donate-banner.png"
                   Title="Crowdfunding"
-                  DescriptionText="Help pay bills, maintain servers and improve the project. Contribute for the benefit of all people. Opportunity for good karma." />
-
+                  DescriptionText="Help to improve &amp; speed up development of the project. Contribute for the future vedic astrology." />
 
 @*KO-FI WIDGET*@
 <div class="vstack" style="">
     <iframe class="align-self-center border shadow rounded-4" id='kofiframe' src='@URL.KoFiDonateIframe' style="width: @GR.W412px; height: 557px;" title='vedastro'></iframe>
 </div>
-
-
 
 
 <IconTitle ExtraClass="mt-3" Title="Options" TitleHolder="h4" />
@@ -170,6 +167,28 @@
 @code {
 
     private const string OfficeAddress = "7, Hala Pengkalan Timur 8A,<br/>Taman Pengkalan Puteri, 31650,<br/>Ipoh, Perak, MALAYSIA";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //check if from India, then show different payment option
+        var IsFromIndia = AppData.ClientLocation.Name().ToLower().Contains("india");
+
+        //if from india then redirect to special page (Stripe)
+        if (IsFromIndia)
+        {
+            AppData.Go(URL.StripeINRSupportPayementLink);
+        }
+        //todo for each possible country
+        // else
+        // {
+        //     AppData.Go(URL.StripeUSDSupportPayementLink);
+        // }
+
+
+        //little log
+        await WebsiteTools.SendMailToAPI("User in Donate Page from", AppData.ClientLocation.Name());
+    }
 
     private async Task OnClickBankTransfer()
     {

@@ -13,7 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		HoroscopeAnalysisTips.txt = HoroscopeAnalysisTips.txt
 		LICENSE.md = LICENSE.md
 		README.md = README.md
-		NotCode\PublicLedger\README.md = NotCode\PublicLedger\README.md
 		VedAstroAPIDemo.html = VedAstroAPIDemo.html
 		version.json = version.json
 	EndProjectSection
@@ -61,6 +60,27 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desktop", "Desktop\Desktop.csproj", "{F939CFB7-BA50-4563-B7D0-C69A3DCABEA9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewComponents", "ViewComponents\ViewComponents.csproj", "{D5663FD0-6516-4C12-BD40-0079C15163F3}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Demo", "Demo\", "{2F09E7A5-58C0-4EFD-BD22-71678744D513}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_64057"
+		Debug.AspNetCompiler.PhysicalPath = "Demo\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64057\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_64057"
+		Release.AspNetCompiler.PhysicalPath = "Demo\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64057\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "64057"
+		SlnRelativePath = "Demo\"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -183,6 +203,18 @@ Global
 		{D5663FD0-6516-4C12-BD40-0079C15163F3}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
 		{D5663FD0-6516-4C12-BD40-0079C15163F3}.ReleaseTest|x64.ActiveCfg = Release|Any CPU
 		{D5663FD0-6516-4C12-BD40-0079C15163F3}.ReleaseTest|x64.Build.0 = Release|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.Debug|x64.Build.0 = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.Release|x64.ActiveCfg = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.Release|x64.Build.0 = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.ReleaseTest|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.ReleaseTest|Any CPU.Build.0 = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.ReleaseTest|x64.ActiveCfg = Debug|Any CPU
+		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.ReleaseTest|x64.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

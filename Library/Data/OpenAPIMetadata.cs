@@ -24,7 +24,7 @@ public class MethodDocumentation
 /// <summary>
 /// static meta data for a given method in Open API
 /// </summary>
-public class OpenAPIMetadata : IToJson
+public class OpenAPIMetadata : EventArgs, IToJson
 {
     public static List<OpenAPIMetadata> CachedAllMethoInfoList { get; set; } = new();
 
@@ -357,4 +357,23 @@ public class OpenAPIMetadata : IToJson
         }
         return "";
     }
+
+    public List<ParameterMetadata> GetParamList()
+    {
+        //set new params
+        var methodInf = this?.MethodInfo;
+
+        //extract data of param types and their names in C# code (which will be displayed)
+        var paramTypeList = new List<ParameterMetadata>();
+        foreach (var param in methodInf.GetParameters())
+        {
+            var paramDescription = this?.GetParamDesc(param.Name) ?? "";
+            paramTypeList.Add(new(param, paramDescription));
+        }
+
+
+        return paramTypeList;
+
+    }
+
 }

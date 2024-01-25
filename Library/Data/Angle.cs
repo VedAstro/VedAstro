@@ -96,6 +96,7 @@ namespace VedAstro.Library
         /// <summary>
         /// If total degrees is more than 360°,
         /// minus 360° from total degrees.
+        /// returns new modified instance
         /// </summary>
         public Angle Expunge360()
         {
@@ -246,12 +247,18 @@ namespace VedAstro.Library
         {
             var returnVal = new JObject();
             //classical notation (DMS)
-            returnVal["DegreeMinuteSecond"] = $"{this.Degrees}° {Math.Abs(this.Minutes)}' {Math.Abs(this.Seconds)}";//Only degrees is in negative
+            returnVal["DegreeMinuteSecond"] = this.DegreesMinutesSecondsText;
             returnVal["TotalDegrees"] = this.TotalDegrees.ToString();//Only degrees is in negative
 
             return returnVal;
             
         }
+
+        /// <summary>
+        /// Return angle as Degree Minute Seconds --> 23° 14' 12" as text
+        /// Only degrees is in negative
+        /// </summary>
+        public string DegreesMinutesSecondsText => $"{this.Degrees}° {Math.Abs(this.Minutes)}' {Math.Abs(this.Seconds)}";
 
         /// <summary>
         /// Gets a unique value representing the data (NOT instance)

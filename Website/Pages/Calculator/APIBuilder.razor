@@ -7,7 +7,7 @@
 <PageTop ImageName="api-builder-banner.png"
          Title="Open API"
          DescriptionText="Advanced astronomical data via a simple HTTP request for free.
- Enabling you to build your app or service faster and cheaper. Including Python library.">
+ Enabling you to build your app or service faster and cheaper. Including Python & .NET library.">
 </PageTop>
 
 @*
@@ -21,25 +21,22 @@
         <div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
 
             @*GENERATOR*@
-            <div class="vstack gap-3" style="max-width: @GR.W412px;">
-
-                <div class="vstack gap-4">
-
+            @* id so can autoscroll here *@
+            <div id="@DropDownID" class="vstack gap-3" style="max-width: @GR.W412px;">
+                
+                <div  class="vstack gap-4">
                     @* FUNCTION NAME SELECT *@
-                    <div>
+                    <div >
                         <IconTitle IconName="flat-color-icons:calculator" Title="Calculator" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
                         <APISelectorBox @ref="_apiSelectorBox" />
                     </div>
-
 
                     @* INPUT PARAM NAME SELECT *@
                     <div id="ParamInputHolderElement" style="display: none">
                         <IconTitle IconName="flat-color-icons:multiple-inputs" Title="Input Parameters" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
                         <ParameterInputPanel @ref="_parameterInputPanel" />
                     </div>
-
                 </div>
-
 
                 @* -------- BOTTOM BUTTONS --------*@
                 <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />
@@ -69,7 +66,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("JavaScript"))">
+                                    <a class="dropdown-item hstack gap-1" @onclick="@(() => AppData.Go(URL.GitHubDemoFiles,newTab:true))">
                                         <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="skill-icons:javascript" />
                                         <span>JavaScript</span>
                                     </a>
@@ -118,17 +115,13 @@
                     <TextHTML>
                         <p>
                             Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language
-                            <strong>JS, Python, C#, Java</strong> or even your browsers' URL.
-                        </p>
-                        <p>
-                            You can also run <kbd>pip install vedastro</kbd> in your local or cloud environment.
-                            <BoldLink URL="@URL.YoutubePythonGuide">Watch Python Guide</BoldLink>
+                            <strong>JS, Python, C#, Java</strong> or even your browsers' URL. <BoldLink URL="@URL.GitHubDemoFiles">Demo Files</BoldLink>
                         </p>
                     </TextHTML>
                 </ArticleBlock>
 
                 @* LIST OF ALL API CALLS *@
-                <APICallList />
+                <APICallList @ref="_apiCallList" />
 
                 <ArticleBlock Title="Price" IconName="flat-color-icons:money-transfer">
                     <ButtonRow>
@@ -204,6 +197,7 @@
 
 
     private APISelectorBox? _apiSelectorBox = null;
+    private APICallList? _apiCallList = null;
 
     private ArticleBlock _nextStepArticleBlock;
 
@@ -228,6 +222,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+
         //NOTE: small needed else, components rendering gets messed up (time to pop)
         await _jsRuntime.ShowLoading(50);
 
@@ -244,6 +239,10 @@
     {
         if (_apiSelectorBox != null && !_isEventAttached)
         {
+            //attach handler when select api button is clicked from "Browse Calls" window.
+            //this will allow to select that API in the main selector
+            _apiCallList.OnClickSelectAPI += OnClickSelectAPIHandler;
+
             //sub event: when an method is selected, auto show inputs panel
             _apiSelectorBox.OnChangeSelectMethod += OnChangeSelectMethod;
             _isEventAttached = true;
@@ -289,25 +288,31 @@
         //only continue if user has selected a method
         if (_apiSelectorBox.GetSelectedMethodName() != "")
         {
-            //set new params
+
             var openApiMetadata = _apiSelectorBox.SelectedMethod;
-            var methodInf = openApiMetadata?.MethodInfo;
-
-            //extract data of param types and their names in C# code (which will be displayed)
-            var paramTypeList = new List<ParameterMetadata>();
-            foreach (var param in methodInf.GetParameters())
-            {
-                var paramDescription = openApiMetadata?.GetParamDesc(param.Name) ?? "";
-                paramTypeList.Add(new(param, paramDescription));
-            }
-
             //inject the data into the input panel
-            _parameterInputPanel.Show(paramTypeList);
+            _parameterInputPanel.Show(openApiMetadata);
 
             //make param input panel visible
             _jsRuntime.SlideDown("ParamInputHolderElement");
 
         }
+    }
+
+    //note without #, for code use later
+    private string DropDownID = "APIDropDownHolder";
+
+    private void OnClickSelectAPIHandler(object sender, EventArgs e)
+    {
+        //get name of selected API
+        var selected = (OpenAPIMetadata)e;
+
+        //bring window focus to the drop-down
+        _jsRuntime.ScrollToDivById(DropDownID);
+
+        //programmatically select this API from the drop-down
+        _apiSelectorBox.SetSelectedMethod(selected);
+
     }
 
     /// <summary>
@@ -323,7 +328,8 @@
 
         //STAGE 2 :
         //combine the call
-        var domain = AppData.URL.ApiUrl; //get stable or beta as needed
+        //NOTE: use to direct URL to save money 💰😁
+        var domain = AppData.URL.ApiUrlDirect; //get stable or beta as needed
 
         //format of the API call
         //.../Calculator/DistanceBetweenPlanets/PlanetName/Sun/PlanetName/Moon/Location/Singapore/Time/23:59/31/12/2000/+08:00

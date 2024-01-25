@@ -1,11 +1,9 @@
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Xml.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using VedAstro.Library;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Xml.Linq;
 
 
 namespace Website
@@ -112,6 +110,38 @@ namespace Website
         }
 
         /// <summary>
+        /// Uses icon from Iconify plugin
+        /// </summary>
+        public static async Task ShowAlertCustomIcon(this IJSRuntime jsRuntime, string iconName, string title, bool showConfirmButton, int timer = 0, bool useHtml = false)
+        {
+            object alertData;
+
+            if (useHtml)
+            {
+                alertData = new
+                {
+                    iconHtml = $"<span class=\"iconify\" data-icon=\"{iconName}\" data-inline=\"false\"></span>",
+                    html = title,
+                    showConfirmButton = showConfirmButton,
+                    timer = timer
+                };
+            }
+            else
+            {
+                alertData = new
+                {
+                    iconHtml = $"<span class=\"iconify\" data-icon=\"{iconName}\" data-inline=\"false\"></span>",
+                    title = title,
+                    showConfirmButton = showConfirmButton,
+                    timer = timer
+                };
+            }
+
+
+            await jsRuntime.ShowAlert(alertData);
+        }
+
+        /// <summary>
         /// Shows alert using sweet alert js
         /// will show okay button, no timeout
         /// </summary>
@@ -122,6 +152,28 @@ namespace Website
 
             //call SweetAlert lib directly via constructor
             await jsRuntime.InvokeVoidAsync(JS.Swal_fire, title, descriptionText, icon);
+        }
+
+        /// <summary>
+        /// Shows alert using sweet alert js
+        /// will show okay button, no timeout
+        /// Uses icon from Iconify plugin
+        /// </summary>
+        public static async Task ShowAlertCustomIcon(this IJSRuntime jsRuntime, string iconName, string title, string descriptionText)
+        {
+            //log this, don't await to reduce lag
+            //WebLogger.Data($"Alert : {title} : {descriptionText}");
+
+            var alertData = new
+            {
+                iconHtml = $"<span class=\"iconify\" data-icon=\"{iconName}\" data-inline=\"false\"></span>",
+                title = title,
+                text = descriptionText,
+                showConfirmButton = true,
+            };
+
+            //call SweetAlert lib directly via constructor
+            await jsRuntime.ShowAlert(alertData);
         }
 
 
@@ -255,9 +307,9 @@ namespace Website
         {
             var value = await jsRuntime.InvokeAsync<string>(JS.getProperty, propName);
 
-//#if DEBUG
-//            Console.WriteLine($"GET Prop : {propName} = {value}");
-//#endif
+            //#if DEBUG
+            //            Console.WriteLine($"GET Prop : {propName} = {value}");
+            //#endif
 
             return value;
         }
@@ -267,9 +319,9 @@ namespace Website
         /// </summary>
         public static async Task SetProperty(this IJSRuntime jsRuntime, string propName, string value)
         {
-//#if DEBUG
-//            Console.WriteLine($"SET Prop : {propName} = {value}");
-//#endif
+            //#if DEBUG
+            //            Console.WriteLine($"SET Prop : {propName} = {value}");
+            //#endif
             await jsRuntime.InvokeVoidAsync(JS.setProperty, propName, value);
         }
 
@@ -292,6 +344,13 @@ namespace Website
         /// Uses jQuery to show element via blazor reference
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, element);
+
+        /// <summary>
+        /// Uses jQuery to show element via blazor reference
+        /// another version with direct to element ref
+        /// uses JS runtime attached to AppData
+        /// </summary>
+        public static async Task Show(this ElementReference element) => await AppData.JsRuntime.InvokeVoidAsync(JS.showWrapper, element);
 
         /// <summary>
         /// toggles the display property of an element, show / hide
@@ -351,6 +410,11 @@ namespace Website
         /// Uses jQuery to show element via selector (#ID,.class)
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, elementSelector);
+
+        /// <summary>
+        /// Given list of IDs will show them all
+        /// </summary>
+        public static async Task ShowList(this IJSRuntime jsRuntime, List<string> elementSelector) => await jsRuntime.InvokeVoidAsync(JS.showListWrapper, elementSelector);
 
         /// <summary>
         /// to be used like this @(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))
@@ -426,6 +490,9 @@ namespace Website
             return finalXml;
         }
 
+        /// <summary>
+        /// Scrolls to a div on page given an ID without #
+        /// </summary>
         public static async Task ScrollToDivById(this IJSRuntime jsRuntime, string predictionName)
         {
             //make scroll movement to place

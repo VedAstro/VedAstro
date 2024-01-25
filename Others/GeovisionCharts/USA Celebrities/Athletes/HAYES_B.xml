@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Bob</FirstName>
+  <LastName>Hayes</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2430714.145139</BirthDate>
+  <Longitude>81.650000</Longitude>
+  <Latitude>30.333333</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>1.000000</DST>
+  <City>Jacksonville</City>
+  <State>FL Florida</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Football player, olympic gold medal in track and field. Known as worlds fastest human, unorthodox style, ungraceful. Epitome of raw unbridled power and speed like a runaway tank. Unnerved by too much attention, his parents considered him a lazy child. Friendly, gregarious and casual, knows how to draw people to him. CB 66   LL 78   SS. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

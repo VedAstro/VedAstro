@@ -1,13 +1,17 @@
 
 
+using ExCSS;
+using Newtonsoft.Json.Linq;
+using SwissEphNet;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SwissEphNet;
 using static VedAstro.Library.PlanetName;
-using Newtonsoft.Json.Linq;
+using Exception = System.Exception;
 
 
 namespace VedAstro.Library
@@ -54,12 +58,678 @@ namespace VedAstro.Library
 
         //----------------------------------------CORE CODE---------------------------------------------
 
+        #region PANCHA PAKSHI
+
+        /// <summary>
+        /// Gets "birth bird" for a birth time.
+        /// Sidhas have personified the elements as birds identifying each element under
+        /// which an individual is born, when these elements are all functioning differentially
+        /// during each time gap. These 5 elemental vibrations are personified as PAKSHIS or BIRDS and the
+        /// gradations of their faculities are named as 5 activities.
+        /// </summary>
+        public static BirdName PanchaPakshi(Time birthTime)
+        {
+            //get rulling constellation
+            var rullingConst = Calculate.MoonConstellation(birthTime);
+            var rullingConstNumber = (int)rullingConst.GetConstellationName();
+
+            //based on waxing or waning assign bird accordingly
+            var isWaxing = Calculate.IsWaxingMoon(birthTime);
+            if (isWaxing)
+            {
+                switch (rullingConstNumber)
+                {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        return BirdName.Vulture;
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                        return BirdName.Owl;
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                    case 16:
+                        return BirdName.Crow;
+                    case 17:
+                    case 18:
+                    case 19:
+                    case 20:
+                    case 21:
+                        return BirdName.Cock;
+                    case 22:
+                    case 23:
+                    case 24:
+                    case 25:
+                    case 26:
+                    case 27:
+                        return BirdName.Peacock;
+                }
+            }
+            //else must be wanning
+            else
+            {
+                switch (rullingConstNumber)
+                {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        return BirdName.Peacock;
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                        return BirdName.Cock;
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                    case 16:
+                        return BirdName.Crow;
+                    case 17:
+                    case 18:
+                    case 19:
+                    case 20:
+                    case 21:
+                        return BirdName.Owl;
+                    case 22:
+                    case 23:
+                    case 24:
+                    case 25:
+                    case 26:
+                    case 27:
+                        return BirdName.Vulture;
+                }
+            }
+
+            throw new Exception("END OF LINE!");
+        }
+
+        public enum BirdName
+        {
+            Vulture,
+            Owl,
+            Crow,
+            Cock,
+            Peacock
+        }
+
+        /// <summary>
+        /// Given a time will return true if it is on
+        /// "Waxing moon" or "Shukla Paksha" or "Bright half"
+        /// </summary>
+        public static bool IsWaxingMoon(Time birthTime)
+        {
+            var lunarDay = LunarDay(birthTime);
+
+            return lunarDay.GetMoonPhase() == MoonPhase.BrightHalf;
+        }
+
+        /// <summary>
+        /// Given a time will return true if it is on
+        /// "Waning moon" or "Krishna Paksha" or "Dark half"
+        /// </summary>
+        public static bool IsWaningMoon(Time birthTime)
+        {
+            var lunarDay = LunarDay(birthTime);
+
+            return lunarDay.GetMoonPhase() == MoonPhase.DarkHalf;
+        }
+
+        #endregion
+
+        #region PANCHANGA
+
+        /// <summary>
+        /// It’s used to determine auspicious times and rituals.
+        /// It includes multiple attributes such as,
+        /// Tithi (lunar day),
+        /// Lunar Month
+        /// Vara (weekday),
+        /// Nakshatra (constellation),
+        /// Yoga (luni-solar day) and Karana (half of a Tithi).
+        /// Disha Shool
+        /// </summary>
+        public static PanchangaTable PanchangaTable(Time inputTime)
+        {
+            //Ayanamsa
+            var ayanamsaDegree = Calculate.AyanamsaDegree(inputTime).DegreesMinutesSecondsText;
+
+            //Tithi (lunar day)
+            var tithi = Calculate.LunarDay(inputTime);
+
+            //lunar month
+            var lunarMonth = Calculate.LunarMonth(inputTime);
+
+            //Vara (weekday)
+            var weekDay = Calculate.DayOfWeek(inputTime);
+
+            //Nakshatra (constellation)
+            var constellation = Calculate.MoonConstellation(inputTime);
+
+            //Yoga (luni-solar day) 
+            var yoga = Calculate.NithyaYoga(inputTime);
+
+            //Karana (half of a Tithi)
+            var karana = Calculate.Karana(inputTime);
+
+            //Hora Lord
+            var horaLord = Calculate.LordOfHoraFromTime(inputTime);
+
+            //Disha Shool
+            var dishaShool = Calculate.DishaShool(inputTime);
+
+            //Sunrise
+            var sunrise = Calculate.SunriseTime(inputTime);
+
+            //Sunset
+            var sunset = Calculate.SunsetTime(inputTime);
+
+            //Ishta Kaala
+            var ishtaKaala = Calculate.IshtaKaala(inputTime);
+
+            return new PanchangaTable(ayanamsaDegree, tithi, lunarMonth, weekDay, constellation, yoga, karana, horaLord, dishaShool, sunrise, sunset, ishtaKaala);
+        }
+
+        /// <summary>
+        /// Here are the following Disha shool days and the directions that are considered as
+        /// inauspicious or Disha shool. Check the Disha Shool chart to find the inauspicious direction to travel 
+        /// </summary>
+        public static string DishaShool(Time inputTime)
+        {
+            //vedic day
+            var vedicWeekDay = Calculate.DayOfWeek(inputTime);
+
+            switch (vedicWeekDay)
+            {
+                case Library.DayOfWeek.Monday: return "East";
+                case Library.DayOfWeek.Tuesday: return "North";
+                case Library.DayOfWeek.Wednesday: return "North";
+                case Library.DayOfWeek.Thursday: return "South";
+                case Library.DayOfWeek.Friday: return "West";
+                case Library.DayOfWeek.Saturday: return "East";
+                case Library.DayOfWeek.Sunday: return "West";
+            }
+
+            throw new Exception("END OF LINE!");
+        }
+
+        /// <summary>
+        /// Also know as Chandramana or Hindu Month.
+        /// Each Hindu month begins with the New Moon.
+        /// These lunar months go by special names. The name of a lunar month is
+        /// decided by the rasi in which Sun-Moon conjunction takes place.
+        /// These names come from the constellation that Moon is most likely to
+        /// occupy on the full Moon day.
+        /// Names are Chaitra, Vaisaakha, Jyeshtha, Aashaadha, Sraavana etc...
+        /// </summary>
+        public static LunarMonth LunarMonth(Time inputTime, bool ignoreLeapMonth = false)
+        {
+            //TODO JAN 2024
+            //needs further validation, the month before
+            //Adhika is also shown as Adhika
+            //most test cases pass, but some closser to change dates fail
+
+            //based on vedic start of day (sunrise time)
+            //scan and get dates when new moon last occured
+            var sunriseTime = Calculate.SunriseTime(inputTime);
+            var lastNewMoonRaw = Calculate.PreviousNewMoon(sunriseTime); //for this moon month
+            var nextNewMoon = Calculate.NextNewMoon(sunriseTime); //for next moon month
+
+            //get sign as number
+            var thisMonthSign = (int)Calculate.MoonSignName(lastNewMoonRaw);
+            var nextMonthSign = (int)Calculate.MoonSignName(nextNewMoon);
+
+            //detect leap month if 2 months are same name
+            var isLeapMonth = (thisMonthSign == nextMonthSign);
+
+            //increment 1 to convert from rasi to solar month number
+            var monthNumber = thisMonthSign + 1;
+
+            //if exceed 12 than loop back to 1
+            if (monthNumber > 12) { monthNumber = monthNumber % 12; }
+
+            //verify if really leap month (rescursive)
+            //NOTE: this was added later as hack (remove if needed)
+            if (isLeapMonth && !ignoreLeapMonth)
+            {
+                var ccc = Calculate.NextNewMoon(nextNewMoon.AddHours(24));
+                var nextNewMoonxx = Calculate.LunarMonth(ccc, true); //NOTE:turn off recursive
+                var possibleLeapMonth = ((LunarMonth)monthNumber).ToString();
+
+                //checks if month name is in the next months name (Jyeshtha -> JyeshthaAdhika)
+                var vvv = nextNewMoonxx.ToString().Contains(possibleLeapMonth);
+                if (!vvv)
+                {
+                    isLeapMonth = false;
+                }
+            }
+
+            //based on month number (NOT sign number or constellation)
+            //set the name of the lunar month also based on if leap month
+            var monthName = Library.LunarMonth.Empty;
+            switch (monthNumber)
+            {
+                case 1: monthName = isLeapMonth ? Library.LunarMonth.ChaitraAdhika : Library.LunarMonth.Chaitra; break;
+                case 2: monthName = isLeapMonth ? Library.LunarMonth.VaisaakhaAdhika : Library.LunarMonth.Vaisaakha; break;
+                case 3: monthName = isLeapMonth ? Library.LunarMonth.JyeshthaAdhika : Library.LunarMonth.Jyeshtha; break;
+                case 4: monthName = isLeapMonth ? Library.LunarMonth.AashaadhaAdhika : Library.LunarMonth.Aashaadha; break;
+                case 5: monthName = isLeapMonth ? Library.LunarMonth.SraavanaAdhika : Library.LunarMonth.Sraavana; break;
+                case 6: monthName = isLeapMonth ? Library.LunarMonth.BhaadrapadaAdhika : Library.LunarMonth.Bhaadrapada; break;
+                case 7: monthName = isLeapMonth ? Library.LunarMonth.AaswayujaAdhika : Library.LunarMonth.Aaswayuja; break;
+                case 8: monthName = isLeapMonth ? Library.LunarMonth.KaarteekaAdhika : Library.LunarMonth.Kaarteeka; break;
+                case 9: monthName = isLeapMonth ? Library.LunarMonth.MaargasiraAdhika : Library.LunarMonth.Maargasira; break;
+                case 10: monthName = isLeapMonth ? Library.LunarMonth.PushyaAdhika : Library.LunarMonth.Pushya; break;
+                case 11: monthName = isLeapMonth ? Library.LunarMonth.MaaghaAdhika : Library.LunarMonth.Maagha; break;
+                case 12: monthName = isLeapMonth ? Library.LunarMonth.PhaalgunaAdhika : Library.LunarMonth.Phaalguna; break;
+            }
+
+            return monthName;
+        }
+
+        /// <summary>
+        /// Gets next future New Moon date, when tithi will be 1.
+        /// Uses conjunctions angle to calculate with accuracy of ~30min
+        /// Includes start time in scan
+        /// </summary>
+        public static Time NextNewMoon(Time inputTime)
+        {
+            //scan till find
+            //start with input time
+            var newMoonTime = inputTime;
+            while (true)
+            {
+                //if conjunction, than new moon dectected
+                var conjunctAngle = SunMoonConjunctionAngle(newMoonTime);
+
+                //When Sun and Moon are at the same longitude, a new lunar month of 30 tithis starts
+                //which conjunction 0 degrees
+                if (conjunctAngle.TotalDegrees < 1)
+                {
+                    return newMoonTime;
+                }
+
+                //go foward in time since did not find 0 degree conjunction
+                newMoonTime = newMoonTime.AddHours(0.5);
+            }
+
+            return newMoonTime;
+        }
+
+        /// <summary>
+        /// Gets last occured New Moon date, when tithi will be 1.
+        /// Uses conjunctions angle to calculate with accuracy of ~30min
+        /// Includes start time in scan
+        /// </summary>
+        public static Time PreviousNewMoon(Time inputTime)
+        {
+            //scan till find
+            //start with input time
+            var newMoonTime = inputTime;
+            while (true)
+            {
+                //if conjunction, than new moon dectected
+                var conjunctAngle = SunMoonConjunctionAngle(newMoonTime);
+
+                //When Sun and Moon are at the same longitude, a new lunar month of 30 tithis starts
+                //which conjunction 0 degrees
+                if (conjunctAngle.TotalDegrees < 1)
+                {
+                    return newMoonTime;
+                }
+
+                //go backward in time since did not find 0 degree conjunction
+                newMoonTime = newMoonTime.SubtractHours(0.5);
+            }
+        }
+
+        /// <summary>
+        /// Gets the distance in degrees between Sun & Moon at a given time
+        /// Used to calculate lunar months.
+        /// </summary>
+        public static Angle SunMoonConjunctionAngle(Time ccc)
+        {
+            //longitudes of the sun & moon
+            Angle sunLong = PlanetNirayanaLongitude(Sun, ccc);
+            Angle moonLong = PlanetNirayanaLongitude(Moon, ccc);
+
+            //get non negative difference, expunge 360 if needed
+            var cleanedDifference = moonLong.GetDifference(sunLong).Expunge360();
+
+            return cleanedDifference;
+        }
+
+        #endregion
+
+        #region NUMEROLOGY
+
+        /// <summary>
+        /// Numerology
+        /// Your birth number denotes your ruling power; the structure of
+        /// the body and the character depend on that number.
+        /// The birth number denotes a person’s status and desires.
+        /// let us take it as 17-10-1931. Number 17 becomes 1+7 = 8.
+        /// So 8 is your Birth number.
+        /// </summary>
+        public static int BirthNumber(Time birthTime)
+        {
+            //get STD birth date in month (1-31)
+            var birthDate = birthTime.StdDate();
+
+            //sum the single digits to get birth number till number is 9 or lower (single digit)
+            while (birthDate > 9)
+            {
+                birthDate = birthDate.ToString().Select(x => x - '0').Sum();
+            }
+
+            return birthDate;
+        }
+
+        /// <summary>
+        /// Numerology
+        /// The events that occur in your life, your relationship with others, your future and the
+        /// end of your life, are all denoted by your destiny number.
+        /// The destiny number denotes to what extent a person will come up in life as well
+        /// as it determines his fate.
+        /// </summary>
+        public static int DestinyNumber(Time birthTime)
+        {
+            //EXP :17-10-1931
+            //The sum total of your date of birth, month and year is your Destiny
+            //number. So, if all the numbers are added up, i.e. 1 + 7 + 1 + 0 + 1 +
+            //9 + 3 + 1 = 23 ; then 2 + 3 = 5 is the answer. 
+
+            //to count the number, 1st convert to string without any space or characters
+            var combinedNumberText = birthTime.StdDateMonthYearText.Replace("/", "");
+
+            //add together all the numbers
+            var destinyNumber = combinedNumberText.Select(x => x - '0').Sum();
+
+            //add together total till get number 9 or less
+            //sum the single digits to get birth number till number is 9 or lower (single digit)
+            while (destinyNumber > 9)
+            {
+                destinyNumber = destinyNumber.ToString().Select(x => x - '0').Sum();
+            }
+
+            return destinyNumber;
+
+        }
+
+        /// <summary>
+        /// The numerical values given to the alphabets
+        /// are based on the “Chaldean System”
+        /// Numbers (values) denote the wave length of the
+        /// sound and impact of letters.
+        /// The powers of the nine planets in twelve star signs at different
+        /// times are indicated in 108 numbers.
+        /// </summary>
+        public static int NameNumber(string fullName)
+        {
+            var alphabetScoreList = new Dictionary<char, int>
+            {
+                { 'a', 1 },
+                { 'b', 2 },
+                { 'c', 3 },
+                { 'd', 4 },
+                { 'e', 5 },
+                { 'f', 8 },
+                { 'g', 3 },
+                { 'h', 5 },
+                { 'i', 1 },
+                { 'j', 1 },
+                { 'k', 2 },
+                { 'l', 3 },
+                { 'm', 4 },
+                { 'n', 5 },
+                { 'o', 7 },
+                { 'p', 8 },
+                { 'q', 1 },
+                { 'r', 2 },
+                { 's', 3 },
+                { 't', 4 },
+                { 'u', 6 },
+                { 'v', 6 },
+                { 'w', 6 },
+                { 'x', 5 },
+                { 'y', 1 },
+                { 'z', 7 }
+            };
+
+            //when letter alone, different score, due to pronounce change
+            var initialScoreList = new Dictionary<char, int>
+            {
+                { 'a', 1 },
+                { 'b', 2 },
+                { 'c', 3 },
+                { 'd', 4 },
+                { 'e', 5 },
+                { 'f', 8 },
+                { 'g', 3 },
+                { 'h', 5 },
+                { 'i', 10 }, //I, J and Y becomes 10
+                { 'j', 10 },
+                { 'k', 20 }, //K becomes 20
+                { 'l', 30 }, //L and S becomes 30
+                { 'm', 40 }, //M becomes 40
+                { 'n', 50 }, //N becomes 50
+                { 'o', 70 }, //O becomes 70
+                { 'p', 80 }, //P becomes 80
+                { 'q', 100 }, //Q becomes 100
+                { 'r', 200 }, //R becomes 200 
+                { 's', 30 }, //L and S becomes 30
+                { 't', 400 }, //Tbecomes 400
+                { 'u', 6 },
+                { 'v', 6 },
+                { 'w', 6 },
+                { 'x', 5 },
+                { 'y', 10 }, //I, J and Y becomes 10
+                { 'z', 7 }
+            };
+
+            //NOTE:
+            // calculations must be
+            // made only on the basis of the spelling of the name along with the
+            // initials. Letters denoting respect or status like Mr., etc., and degrees
+            // and suffixes to names have no value. However, names starting with
+            // title of Dr. (Doctor) should be taken into account.
+
+            //remove dots "Dr." --> "Dr"
+            fullName = fullName.Replace(".", "");
+
+            //remove numbers & fancy characters
+            fullName = Regex.Replace(fullName, "[^a-zA-Z]", "");
+
+            //make lower case for matching
+            fullName = fullName.ToLower();
+
+            //split by space into name pieces, first name, last name, initial (order not important)
+            var splittedName = fullName.Split(" ");
+
+            //add together number from each name piece
+            var totalScore = 0;
+            foreach (var namePiece in splittedName)
+            {
+                //if piece is only 1 alphabet, than it is an initial (different scoring system)
+                var isInitial = namePiece.Length == 1;
+
+                //add special score for initial
+                if (isInitial) { totalScore += initialScoreList[namePiece[0]]; }
+
+                //add together points for each alphabet in name piece
+                else
+                {
+                    foreach (var alphabet in namePiece)
+                    {
+                        totalScore += alphabetScoreList[alphabet];
+                    }
+                }
+            }
+
+            //return final added score for full name
+            return totalScore;
+
+        }
+
+        /// <summary>
+        /// Shows numerology prediction for given name. At first the name number is calculated
+        /// based on “Chaldean System”, then prediction is matched with
+        /// translation from Mantra Sutras.
+        /// </summary>
+        public static string NameNumberPrediction(string fullName)
+        {
+            //get name number
+            var nameNumber = NameNumber(fullName);
+
+            //dictionary of all possible predictions 
+            var nameNumberPredictions = new Dictionary<int, string>
+            {
+                //1 for SUN
+                { 10, "This number when comes as a name indicates the sound or resonance of the primal force. This is depicted in the ancient texts as a snake enmeshed within a wheel. Those named under this number will be dignified and popular. Confidence and patience coexist in their lives but their fortunes will change frequently. It is like a revolving wheel, with ups and downs frequently. They must be honest in all their activities and they are bound to gain popularity. They will lead happy lives since there will be no paucity of funds" },
+                { 19, "Ancient books on this subject attribute mastery over the Three Worlds to this Number and as such, these people will be the focus of attention wherever they are. This number indicates the Rising Sun. This also has been described as the “Prince of the Celestial World” in ancient Indian texts and as an ‘‘Ideal Lover’’ in Egyptian scriptures. The sun becomes brighter as the day lengthens and so also these people progress as their age advances. Position, status, happiness, success and wealth will be gradually on the rise. Being well-disciplined, they will look young and will be very active even in their advanced age. They must be honest even in matters related to sensual pleasures.\r" },
+                { 28, "Those with this name number do progress and get all the comforts during the early part of life but they frequently face struggles or difficulties in all their endeavours in life. They may have to start their lives again and again always afresh, many times over. Although they progress very fast in their lives, they finally lose everything due to the cruel stroke of fate. One of the examples of such people born under this number is General MacArthur, a fine soldier who deserved more of honour and recognition, but was deprived of his position and career by President Truman of USA! Those coming under this number may incur unexpected losses due to their friends and relatives. Money lent by them rarely comes back. As such, this number can only be regarded as an unlucky one, since all the hardearned money may be lost unexpectedly." },
+                { 37, "This is a very lucky number. It will lift even an ordinary person to the most prominent positions in life. It brings success in love and the patronage of the elite. These people will have good friends from both sexes. They will be greatly favoured by men if they are women and vice versa. As a result, their lives will improve greatly. People will come forward to invest their capital with such people. Accumulation of money and wealth will be easy through various means. They will have an active interest in the fine arts and in all probability, lead comfortable and luxurious lives. They will be renowned for their pleasing manners and countenance. Some of them will be philanderers because of their casual attitude towards opposite sex. This number, which gives unexpected success, is a desirable one. (Note: If people who occupy very high positions have their names under this number, it may bring them unnecessary problems. This number will bring good fortune to ordinary people. These people should remain satisfied when they attain a certain position in life and should not be too ambitious. This number, will bring fortune automatically, but will lose its power when one becomes too greedy.)\r" },
+                { 46, "This has been described as the “Crowned Head” in the ancient texts. It means that when prudence, intelligence and knowledge are used wisely, it will bring the crown of life. Whatever may be the business, this number will help one to reach the pinnacle of success and is capable of raising even the most ordinary person to the position of a ruler. Wealth and status will go up with the advancement of age. People belonging to this number should be honest in all walks of life." },
+                { 55, "This number predicts that both creation and destruction can be done by a single power. This will bring victory over enemies. Before entering the battlefield, Greek soldiers were ordered to wear a talisman marked with number 55 around their necks. This number is the epitome of will-power and intuition. People under this number will astonish others by their knowledge and win them over. They are acknowledged as scholars. Wisdom and intelligence will be as bright as lightning. If not used in a proper way, this may destroy them. Knowledge in various subjects could be acquired by those born under this number.\r" },
+                { 64, "This number will create equal number of friends and foes. Opposition will be experienced in life. This gives extraordinary will power, intelligence and knowledge. This will bestow fame by enabling them to do things that are considered impossible. This ensures high position in the Government. At times, this will give such a high position that everyone will pay respect and hold these people in high esteem and awe. Their words would cast a powerful influence." },
+                { 73, "This name number strengthens mental faculties and bestows fame, wealth and power. People having this number will aspire to lead comfortable lives and will accomplish their desires. Support from the people of authority will be available and material possessions will be in plenty. If they are not honest, they will lose their fame. If they are the spiritual types, they will lead a peaceful and comfortable life with pure hearts and noble thoughts.\r" },
+                { 82, "This is one of the most powerful numbers and it can elevate even an ordinary person to the status of a ruler. Those having this number in their names are duty-conscious. With unceasing efforts, they will dominate the scene in any field they are placed in. They would own lands, gold mines and precious gems. They are lovers of high-bred horses and will attain the pinnacle of fame by making a fortune either in horse races, car races or in similar sports or business. They create unnecessary problems in their love matters and will be over-adamant in nature. Their eyes have magnetic powers. If the power of this number is properly understood and practiced, no physical or mental feat is impossible to perform.\r" },
+                { 91, "This indicates strong determination and profitable journeys. They also undertake many journeys for trade or otherwise and will do all things with great vigour. Maritime trade using boats and ships will bring them plenty of wealth. They can attain success in breathing exercises like meditation or concentration. Comfortable living awaits them" },
+                { 100, "Even though this number is capable of giving success in all efforts, it will not offer many opportunities. There will be plenty of money. This number implies a long and comfortable life, without any major achievements." },
+                //2 for MOON
+                { 11, "Those having 11 as their name number will come up in life by their sheer faith in God. They will proft by various means very easily. They may be riddled with unforeseen problems and dangers, as if to test their faith. Sometimes, they tend to meddle with matters that do not concern them. They are liable to be let down by their family and friends. If they have faith in God, they will definitely attain great heights in life. If they lack faith, they are bound to face a lot of dangers." },
+                { 20, "This spiritual number represents a drumbeat heralding triumph or victory. People having this Name number work for liberation and social reforms. They are capable of providing relief to the masses from grief and struggles. The world will admire them. When they work with personal motives, they are extremely selfish and highly destructive. The 20 number people will excel in medical practice using toxic medicines and deal with poisonous drugs. These people possess the ability to awaken the sleeping masses and lead them to very great achievements. When they go out of their way to satisfy their selfish needs, delay and utter failure will be imminent. (HITLER, born on the 20th, spurred Germany into war and faced a humiliating defeat. He is a very good example of this Name number. He was represented by the battle drum that goaded the people to follow a selfish motive which led to destruction)" },
+                { 29, "Those under this Name number often find it necessary to go to court to settle disputes. They will experience all sorts of problems in their families and will generally be let down by family and friends. Those who praised them yesterday may curse them today. These people live a life of mental agony and sorrow with their life partner. They get into deep troubles with the opposite sex. Any remedial measures taken to come out of these troubles may result in considerable delay and huge loss of money. The personal life will be full of ups and downs. Family life consists of events similar to the feats in a circus! Unless the name number is corrected properly, these people will encounter these problems orever." },
+                { 38, "The people under this name number will be honest, peaceloving and gentle. When it is a name number of a person or a business, it will earn the help of the influential. This Name number can bring great success. People under this number will make rapid development and earn fame and wealth even from very humble beginnings. At times, they will face a lot of dangers and get cheated by bad people, resulting in various dificulties. Even their deaths will be sudden, rather unexpected and unusual.\r" },
+                { 47, "Those who come up very fast in life can be seen amongst the people having this name number. They will be very much concerned about their own progress and will work out plans to achieve the same and will not rest until they reach their goal. As for as money matters are concerned, they will be very lucky and can be considered as very fortunate people. Many people in this number tend to lose their eyesight. Even the best of treatment may be in vain and they suffer very much. For those who have the habit of hunting, it would be better for them to abstain from hunting and eating flesh of any kind.\r" },
+                { 56, "This number is full of wonders. Though this number tends to bring fortune and fame, it is the one that is used by those practising various forms of occultism and divination. This number can free a person from all ties and can break bondage of any kind. Locks would open. Even the animals inside the cage would find their way out. As too much of an explanation would be dangerous, I do not wish to pursue this subject any further. (As explained earlier, the number 29 represents powers of the body and mind, whereas Number 56 gives magical powers). These people will lose their wealth and fame all of a sudden." },
+                { 65, "This number denotes divine grace and progress in spiritual life. It will earn the help of wealthy and powerful patrons. Marital life will be blissful. Persons under this Name number may be sometimes injured in accidents and may have cuts or bruises on their bodies.\r" },
+                { 74, "These people have great affnity towards their religion. They run short of money often. They will introduce social and religious reforms and spread their principles. However, this is not a desirable number. This Name number is best suited only for hermits and priests and is not favourable to others. These people always remain worried about something or the other.\r" },
+                { 83, "This Name Number bestows prestigious posts, which will earn the respect and adoration of many. They will achieve a life of splendour and authority. These people will be successful." },
+                { 92, "This number signifies gold, silver, land, wealth and possession of yogic power. If people having this Name number can carefully practise the art of yogic breathing, they may even acquire the power of Astral projection (defying gravity) or Kechari Mu-dra (defying diseases and death)." },
+                { 101, "Those under this Name number will have greater help from governments or the people of authority (than from their own efforts). There will be lots of obstacles in their business. Slump in business will be common. This cannot be considered a lucky number." },
+                //3 for JUPITER
+                { 3, "This name number denotes hard work, intelligence, success and a comfortable life. They will be highly educated and will gradually progress in life." },
+                { 12, "These people naturally possess the ability to attract people by their power of speech. They sacrifice their lives for the welfare and happiness of others by shouldering their burdens too.\r" },
+                { 21, "These people are self-centered and concerned about their own happiness and matters profitable to them. With great determination, they rise steadily in life and reach the pinnacle of success. Their tactful behaviour helps them to solve all their problems. They struggle hard in their early days but achieve success and happiness as they grow up. They will attain and retain good positions permanently in their lives." },
+                { 30, "These people tend to live in a world of fantasy. They are wise thinkers. They like to do what they feel is right. At times, just for their own satisfaction they get involved in certain difficult tasks, without expecting any returns. They have less interest in making money. They know their minds and conquer the same easily. They gain mystic powers through mind control and related mental exercises.\r" },
+                { 39, "These people are very sincere and hardworking. Invariably, the name and fame that are rightfully due to them will be enjoyed by others. They work unceasingly for the welfare of others. They are not as healthy as the other Number 3 people. At some stage in their lives they are prone to some kind of skin diseases." },
+                { 48, "They will be more interested in religious matters, but face opposition in matters that involve the society at large. They will do a lot of work for public welfare, and create problems for themselves while attempting to do things beyond their capacity. Fate is against them most of the time.\r" },
+                { 57, "This number gives victory or success in the beginning, but brings about gradual downfall and loss of interest in the end. Life which progresses at a very swift pace will grind to a halt all of a sudden. People named under this number will achieve great heights from humble beginnings but will later revert to their original positions.\r" },
+                { 66, "This number denotes dynamism and oratorical skills, perfection in the fine arts, patronage from the government authorities and also a comfortable life.\r" },
+                { 75, "All of a sudden they attain great fame. They will make good friends very soon. Unexpectedly, they become very popular. Fame and comforts will come in search of them. They become good poets and writers." },
+                { 84, "Early days will be full of struggles and worries. They earn enemies unnecessarily. Travelling benefits them. They do not get rewards commensurate to their efforts. They improve themselves to some extent spiritually. Though generally lacking in enthusiasm at first, they can go to extremes, if need be! If the influence of their birth date is favourable, they can be great achievers.\r" },
+                { 93, "These people are capable of doing marvelous things. They improve their worldly knowledge and are lucky to have their desires fulfilled. They excel in the field of histrionics through which they attain more fame. They earn through many business pursuits and lead very dignified lives.\r" },
+                { 102, "This number signifies success at first ,followed by struggles and confusion. These people cannot be called lucky." },
+                //4 for RAHU
+                { 4, "As this name number will be only for very short names, it signifies a person or a thing that is popular. It does not bring luck as one might deserve. They will have needless fears, sickness and opposition. They can be well informed and worldlywise, but still they would work only as subordinates to others" },
+                { 13, "People in the western counties regard this number as unlucky and ominous. They do not stay in rooms or houses having this number and some hotels even do not have rooms with this number. Unexpected events of sorrowful nature occur frequently. Men of this number have bitter experiences and face a lot of difficulties because of women. Though these people do manage to come up in life materially, they would still lead lives full of struggles. This is not a desirable name number. This number gives only severe grief, if birth and destiny numbers are also unlucky.\r" },
+                { 22, "The characteristics of those born on the 22nd hold equally good for this Name number also. This number instigates base feelings and emotions. They are drawn towards gambling, drinking, speculation and other vices and will readily indulge in them. They may move towards self-destruction at a great speed and are generally surrounded by wicked and fraudulent people. They invariably earn a bad reputation. They dislike the counsel of others. If the influence of their date of birth is favourable, they can be successful. Otherwise, they have to struggle to prevent total failure. Those with selfish motives invariably urge these people to devious ways in order to further their own interests. They are good administrators and can meet any problem or difficulty with courage. Dangerous circumstances are foreseen. They often face humiliations." },
+                { 31, "These people do not care for profit or loss but want only the freedom to do what they desire. Whatever may be the gain involved, they would not like to indulge in anything against their wish. They evince interest in astrology, philosophy and related sciences. These people do not care about what others do or say about them. They only wish to succeed and are never keen on the monetary benefits they gain from such successes. Having succeeded, they sometimes even forgo their due profits. By the 31st year they lose all their material possession and savings. They regain them only by the age of 37. Unexpected happenings will bring about major changes in life. Even their death will be sudden and abrupt. However, when death draws nearer, they somehow become intuitive and sense it well in advance. If their birth number is 1 of any month, this number helps them to achieve great positions in their official career.\r" },
+                { 40, "Those under this number earn good friends, who will be of immense help to them in gaining jobs and positions of distinction. It provides accumulation of fine jewellery and wealth. It also brings fame and prosperity. Yet it is their negative qualities that are noticed by others. They can perform any work without any fear. Eventually, their lives will turn out to be fruitless and in vain. They will lose all their money. They will blame the society for not recognizing their services or help. Lot of problems will come up in their lives and the end will be pathetic.\r" },
+                { 49, "This name number brings abundant riches. Their fame will spread far and wide and their achievements will be the envy of others. They lead highly eventful lives and travel a lot. Wonderful experiences, permanent prosperity, excellent properties and sudden fortunes will come to them. Accidents can also happen suddenly. If the birth number is a fortunate one, they lead happy lives. If not, they can end up being hated by others in the society and life will end in a tragic manner. This number kindles the power of imagination." },
+                { 58, "This number gives outstanding popularity and the power to captivate others. They are great achievers. Life’s progress will be swift. They are pious and orthodox and are great reformers, though attached to religion. If their birth number is 4 or 8 of any month, they will hold positions of great responsibility and fame. They may be sometimes forced to carry out certain things against their wish. Outwardly, these people appear to be very lucky but they also have a lot of unwanted fears within. If the names of those born under other birth numbers also come under this number, life will slowly take a turn for the worse and they will lose their reputation. They may become selfish and may have to undergo a lot of difficulties during their lifetime." },
+                { 67, "These people are exemplary artists (they may be artistes who perform) and work with great determination and vigour. They are patronized by power barons and they reveal noble ideas. (Men should control passions and lust for women.) Love, affection and grace make these people endearing. They can never achieve anything if they are selfish. This number, which helps to attract and conquer others, does not help non-artists." },
+                { 76, "Those having this name number lose all their worldly possessions at some point of time. They are very popular. They will be successful in philanthropic deeds. Surprisingly, they make money in new ways. Income or material gains come through unexpected means. Their last years are generally spent in solitude, doing nothing but eating and sleeping.\r" },
+                { 85, "This name number signifies those who come up the hard way. They not only overcome all afflictions, but help in solving others’ problems too. They reveal new ideas about religion and nature. They shine well in the field of medicine. They generally attain a position of distinction and honour." },
+                { 94, "These people execute lots of good services for the sake of mankind in general. They bring reforms in society. Comfort and fame will come and go in their lives. Their fame and good work will generally be remembered even after their demise. This is a fortunate name number." },
+                { 103, "This name number is also favourable. There will be improvement in material success initially, followed by a change in business. They will face a lot of competition. Later years will be pleasant and comfortable." },
+                //5 for MERCURY
+                { 5, "This number gives the power to charm people, exude dynamism and to lead a luxurious life enjoying fame and prominence. They spend money lavishly. These people should cultivate perseverance and concentration of mind.\r" },
+                { 14, "This number is suitable for trade. Those having this Name number are always surrounded by a lot of people and things. They are successful in various trades and will meet a lot of friends. They may have strange problems and may face disappointments by trusting others. They may also face risk from thunder, lightning, water and fire. They undertake frequent travels. These people are advised to be careful while travelling in fast-moving vehicles. If the product in which they trade also comes under number 14, it will have excellent public patronage. The matters concerning love and marriage must be considered and reconsidered many times before a decision is taken. If not, these people may marry in haste and repent at leisure. This number can be called a very lucky number." },
+                { 23, "This number is the luckiest of all Mercury (5) numbers. These people find success in all their endeavours. All their plans will succeed. They can achieve things which others won’t even imagine. Their accomplishments will astonish those around them. In spite of being such lucky people, if they do not strive hard, they will end up leading ordinary lives. Since they succeed in all their efforts, they will earn the patronage, respect, honour and favour of people in very high positions. Hence, these people are advised to keep up high standards and work out plans to achieve their goals. If not, they might end up leading lives of luxury and pomp devoid of any personal accomplishment. The positive types among them are the most-soughtafter type executives in governments or in private enterprises. The negative types devote time to sleep and daydreaming.\r" },
+                { 32, "This number can attract a variety of people. They have a mass appeal and they come out with unique ideas and techniques even without prior experience. This potent and forceful number can make anyone a prominent person. If they lead their life following their intuition, life will be wonderful. If they listen to the advice of others, failures may recur one after another. This number is said to be the epitome of wisdom and intuition. They have aboveaverage intelligence and a witty manner of speaking. They will become geniuses. Ups and downs will be common in their lives. They will attain high positions in life and will be youthful in appearance even in old age.\r" },
+                { 41, "This number denotes the qualities of charming and controlling. They are renowned achievers and they have high ideals. They are keen about their development and will be world-famous. When they become heady with success, they get into things or matters which are beyond their capability. The failures that could result from such situations will be cleverly hidden from the public scrutiny. They are found to lead successful lives." },
+                { 50, "They are very intelligent people and analyse everything thoroughly. They excel in education. Some people will shine as good teachers. Some others use their intelligence to make money. They are lucky after the age of 50. Their life span will improve and they live longer.\r" },
+                { 59, "Similar to persons belonging to number 50, these people are also research-minded. Their writings are full of humour and they would shine as “Humour Kings” among writers. They would become rich by writing and get excellent public support. Their aim will be to earn money. They will enjoy permanent fortunes. They may suffer from nervous diseases including paralysis. Hence, it is necessary for them to have good habits and keep themselves healthy.\r" },
+                { 68, "This number is lucky to a certain extent. However, life that starts quite pleasantly may suddenly grind to a halt. They will get involved in schemes that they cannot execute and will be badly hurt. Their greed will spoil their career and life. The fortunes that came through an unforeseen stroke of luck may soon disappear. Hence, this number is not quite fortunate." },
+                { 77, "This number denotes sincere effort, selfconfidence and hard work. Support from others brings in profits, fame and honour. Life will be very enchanting. They reap full benefits of this number only if they repose faith in god. They get chances to travel aboard.\r" },
+                { 86, "This number denotes those who come up in a gradual manner and the hard way. They get what they deserve. They earn the favour and help of rich people. With the help so received, they will lead comfortable and happy lives. They will have good savings and lead happy lives.\r" },
+                { 95, "This number signifies a disciplined life combined with daring events and honour. They are successful in trade and achieve distinction. By trading in a variety of new things, they amass wealth. They are excellent orators and will become popular in their line of business.\r" },
+                { 104, "This number will bring success in life followed by unexpected changes. Though they can be good achievers, they can only earn fame and not money. In other words, they become popular but material success may be a far cry" },
+                //6 for VENUS
+                { 6, "This number signifies a peaceful life, a satisfied and contented mind and a good standard of living. Being a single digit, it does not have much power.\r" },
+                { 15, "The determination to succeed in all the plans and earn money and the quest for achieving one’s ends are signifed by this number. Lust, revenge and malice may push the people of this Name number to a vile state of mind. They may become selfish gradually. A charming appearance and forceful speech will help them in achieving their interests. Though this name number is not one conducive to leading a virtuous life, it is one that is ideally suited for purely material success. An alluring personality, excellence in fine arts and a witty nature yield positive results in any activity that can generate huge profits. Many people come forward to help them in need. Life will be luxurious. If their birth number is also favourable, these people will attain fame, wealth and distinction in all aspects of life" },
+                { 24, "Those named under this number 24 will receive many favours from the government. This number helps them to reach very high positions in their careers easily. They will marry those who are much higher in status and wealth. If the name number comes under 24, these people can be found progressing very fast in uniformed service like the Defense, Para-military forces and the Police. Even if they join as the lowest rank in any field, this number will help them to rise to very high position by its powerful vibrations." },
+                { 33, "This number signifies simultaneous growth in divine grace and prosperity. Those with this name number with or without their knowledge attain spiritual enlightenment surprisingly. Along with divine grace, they are blessed with abundant wealth and properties like granaries, mills etc. They will have many luxurious things at their disposal. They may have everlasting wealth.\r" },
+                { 42, "Those named under this number, even if they are poor at the beginning of their lives, will attain a very prominent rank or position in their careers. They may be greedy at times. They will have thrifty bent of mind and are smart in saving money. They hesitate to part with money even for their own comforts in life. Strength of mind and grace will flourish.\r" },
+                { 51, "This is the most powerful of all numbers under six. It signifies sudden progress. Those who were just commoners yesterday will become popular and prominent to-day. Unusual circumstances will bring about an unexpected ascent in rank and status. Their body and mind will be bubbling with energy and become uncontrollable. They will be frequently lost in thought, or will become emotionally active and put in untiring efforts in their work. These people who are active in body and mind cannot sleep peacefully. They become restless like a caged lion. To be precise, these people will be ruled by an extra-ordinary energy or power of both body and mind. As there is a possibility of these people making enemies who could threaten their lives, it is advisable for them not to hurt others’ sentiments or feelings. This number is considered to be fortunate, as it signifes the accumulation of abundant wealth." },
+                { 60, "This number signifies peace, prosperity, appreciation of fine arts, a balanced state of mind and wisdom. They are skilled conversationalists who can put forth very logical arguments. Their family life will be happy and idealistic. This is quite a fortunate number.\r" },
+                { 69, "The person named under this number will be like an uncrowned king in any business they are involved in. They overtake others and retain their position safely by their own efforts. They are majestic in appearance, very prosperous and will achieve awe-inspiring status. Spurred by emotions, they are known to spend money lavishly for their self-satisfaction. They possess majesty and will lead extremely comfortable and luxurious lives. They are incomparable when it comes to charming others with their tact and speech.\r" },
+                { 78, "They are the most righteous type among all the Number 6 people. They have a great leaning towards their religion and sometimes follow orthodox beliefs. They can become good poets and can bring the listeners under their spell. They are very generous and are fond of social service. They earn or inherit large sums of money very easily. But, if they are not careful, they could lose all their possessions except the Divine grace. Some of them attain success in occult practices and will be respected by one and all in society" },
+                { 87, "This number can give mystic powers. Money will be earned by devious and illegal means. In case of a “negative swing”, this number makes people steal at midnight and helps them to charm snakes and tame animals. If birth and destiny numbers are not positive, this number could be related to criminals and bad people. So, the less we discuss, the better." },
+                { 96, "This can give a combination of prosperity and higher education. All desires will be fulfilled. They can excel in the fine arts easily. Women will be charmed easily by these people. This is a fortunate number." },
+                { 105, "This number can give fortunes, satisfactory environment, great fame and accumulation of wealth. It will beget good progeny.\r" },
+                //7 for KETU
+                { 7, "This name number represents high principles and virtuous qualities, which may flourish with divine grace. Unexpected changes will take place. Efforts will not produce the desired results." },
+                { 16, "This number signifies speedy progress and a sudden downfall. Ancient texts depict this number by a picture showing the shattering of a tall tower and a king’s head with his crown falling from its top. This truth was proved when Japan (16) fell prey to the nuclear bombs. The Japanese Emperor was considered to be God-incarnate and his people would not even look at him from an elevated place. Unfortunately, the Americans bombed Japan stripping the Emperor of his status and the consequences are well known even today. If your name number is 16, it is better to change it to some other lucky number. This number induces new imaginative thoughts which will be refected in the writings of the person.\r" },
+                { 25, "As this number gives good results in the end, it can be considered a good number. These people will undergo many trials in life. Every step in life will present problems and difficulties. The victory gained over such problems will give them selfconfidence, spiritual growth and the support of those around them. They are worldly-wise, known for clarity of thought and hence their actions will be well-planned. These people will establish ideals and standards for themselves and will adhere to them at all costs. Just as gold when cleansed of all impurities becomes shiny and precious, the lives of these people will end with respect and honour after many trials. (Note the life of Mahatma Gandhi who used to sign as M.K.Gandhi).\r" },
+                { 34, "In a way, this number can also be called lucky. This number will openly display the best qualities and capabilities of these persons in an attractive manner. It improves their stature but cannot be considered as fortunate. If the birth number is also a favourable one, they can earn enormous wealth quite easily. If not, earning money itself will become a problem. There will be some problem in their family life. Most of the men will either be addicted to women or wine. Their minds easily succumb to sensuous pleasures. This is the most fearful aspect of this number. (Be cautious about it)! Hence, they are advised to change this Name number to a more fortunate one.\r" },
+                { 43, "This is a strange number. Their whole life will be revolutionary. Whatever profession in which they are involved, this number produces new enemies. They have the tendency to resign from their jobs often. They will be constantly bringing out extreme ideas. They have extraordinary powers of imagination, speaking and writing as in the case of the other name numbers under 7. Their desires will be fulfilled at the end. This number, which is regarded as somewhat unlucky, indicates trials, great obstacles and revolutionary changes. They are sure to succeed in their ideals. (It is unlucky in the sense that they do not enjoy the luxuries or comforts of a peaceful life. Even their success will not yield them any personal gains). Their shrewdness increases with age, but they will encounter more criticism than praise for their capabilities and intelligence." },
+                { 52, "This number also signifies some type of revolutionary qualities. If the birth number is favourable it could bring world renown. They readily offer a solution to any problem and can charm many. If they are on the spiritual path, they can attain great powers and immense popularity. All their desires will be fulfilled. They can bring about a new era in the lives of others. (This power can also be found in number 25 to a certain extent). Their end will come abruptly, leaving their work unaccomplished. Although their personal life will be fraught with problems, they are sure to be famous and favoured by all.\r" },
+                { 61, "These people will quit a comfortable life and try new avenues according to their wishes. Successes and failures come in succession. If they can take care of their health, their later years will be quite fruitful helping them win prestigious posts. Though they may seem to be leading happy lives, in reality, they will be unhappy in their family lives. They spend much time in making new efforts and will achieve victory. They will earn great fame.\r" },
+                { 70, "People represented by this number are of extreme nature. Their comfortable life gets disturbed by circumstances. There are frequent disappointments, failures and problems. But the later years will be fruitful, successful and filled with blessings. This number does not possess much power. If their destiny number is favourable, these people will be happy during their final years. If not, their problems may drown them in misery" },
+                { 79, "People of this number tend to suffer very badly in the beginning of their lives due to many difficulties. Later, these people will rise quickly by their cleverness and sheer will power. They will settle down very comfortably and will succeed in their endeavours. They will have popular support, a comfortable life and will achieve enduring success. They become very fortunate with the passage of time and also become great personalities.\r" },
+                { 88, "This number gives spiritual progress. They are generous and compassionate. They are affectionate to all creatures and will become popular" },
+                { 97, "This number gives proficiency in the scriptures and fine arts. It also gives eminence in spiritual career. They will be successful in all their efforts and will be prosperous due to their astounding achievements in chosen fields." },
+                { 106, "There will be drastic changes in life. They will experience many problems during their middle age. Their later years will be comfortable. They get into big troubles that cannot be solved easily. This number is not a lucky one. Greed for worldly things will supersede the interest in seeking divine grace.\r" },
+                //8 for SATURN
+                { 8, "This Name number gives you great success in spiritual life. If they have no control over pleasures, success will delayed. After a big struggle they may succeed. They will have to face unexpected dangers and difficult circumstances in life.\r" },
+                { 17, "This name number gives demonic qualities while pursuing the goals. It brings many problems and trials. However, they will persistently struggle without giving up. Failures will prompt them to struggle more actively. In the end they will be successful, and they get permanent prosperity and great fame. Some of them risk their lives to attain their goals and so achieve progress. The world can never forget them. This number can give mystic powers also." },
+                { 26, "This number denotes poverty in old age and fruitless efforts. Those who have this name number undergo great losses due to friends and partners. Circumstances lead them to failure and confusion. This number reduces one’s span of life and earns enemies who may even go to the extent of murdering them. Those with Name numbers 26 at frst begin their life with great principles and later change their minds and end up only in pursuit of money and status, (Based on their general qualities of number 8, they will be a little more fortunate in their later years)." },
+                { 35, "This number outwardly seems to be fortunate but the person will suffer losses because of friends and associates. These people will become very rich and popular but later lose all their money. Unexpected accidents may happen. This number helps in earning money through illegal means. Today’s friends will become tomorrow’s foes. They are very fickle- minded. Expenses will mount. This number would create severe incurable pain in the stomach. (For those with heart problems, this Name number will be a curative factor). Those with this name number must be very careful in their large business endeavours." },
+                { 44, "This number helps in earning money easily. Industries involving many people, like cinema theatres, printing presses, coal and iron mining, painting, making of furniture and sports goods, and organizing contests will help them earn a good income. Hiring out vehicles like buses, trucks and cars will also be rewarding. They can also run banks. One day everything may come to a halt. Only the owner will enjoy the profits in a proprietary concern. There is danger from fire and collapse of building. This number indicates that they may have to spend some time in prison. Their minds will go astray towards bad ways. Their lives may be comfortable outside prison. Generally, either they suffer from some disease or spend some time in prison, especially when the birth and destiny numbers are also not harmonious.\r" },
+                { 53, "They experience success and failure in the beginning of life itself. As they grow older, their lives will become steadier and they will become well-known. Though they are intelligent, they are bound to get into problems beyond their control. These people, who can convert failure into success, will perform good deeds and earn prestige and popularity. (This is an unstable number. Only if the birth number is favourable, will it bring desirable effects). They will be lucky in their old age.\r" },
+                { 62, "Generally it will give great fame, victories and a comfortable life. At times, great dangers and failures alternatively affect them. It could bring about serious enmity. It also causes misunderstanding among relatives. Family life will not be pleasant. Intellectual faculties will improve. These people can charm everyone easily. This name number helps in charming enemies too!" },
+                { 71, "This number which brings about obstacles initially will later shower prosperity. They will be good counsellors to others because of their intelligence. This number may be considered fortunate." },
+                { 80, "This number has strange mystic powers, but may lead to grave dangers if the date of birth is not favourable. Research in theology will be successful. Nature will change its course and help them. Though their lives are full of dangers and anxieties, they will be comfortable. Miracles will happen. It is a fortunate number." },
+                { 89, "This number, which also signifies benefits, brings problems initially. They have a helping tendency and they will acquire great riches like land, houses and jewellery. Women are attracted to them easily. Society will respect the women of this Name number. They have a combination of beauty and wealth. They lead fearless lives with the help of their great power of speech and action. Initially, fire accidents may occur in their lives." },
+                { 98, "Like the people under Number 71, these people are also intelligent. But their lives are filled with worries and desires. Though they are intelligent, they may not benefit from that quality. Difficulties and chronic diseases may affect them.\r" },
+                { 107, "This number will bring fame and success. If they are men, they will have problems due to women and if they are women, it will be from men. Even if they attain wealth, life will not be comfortable. However, they will be famous and influential.\r" },
+                //9 for MARS
+                { 9, "If the name comes under this number, it signifies wisdom and capability. It also denotes travel, struggles against odd situations and victory in the end. When they finally succeed, they will have a long life of luxury." },
+                { 18, "This name number, which signifies the decline of divinity, will bring in problems, procrastination in all matters, deviousness, and dangerous enemies. Their selfishness may induce them to indulge in antisocial activities. They follow evil ways consciously and become highly selfish. Life devoid of peace and rest will be the order of the day. This number signifies growth of personal desires at the cost of virtue. Desires will come to an end. Divine grace will get destroyed. (Hindu Epics record that Mahabharat war was fought for 18 days and 18 divisions fought the war in which the Pandavas had to kill their own elders and gurus in the battle. Although considered holy by the Hindus, it is the eighteen-chaptered Bhagavat Gita that spurred Arjuna into the war). This number, which denotes jealousy, malice and dangers due to fire and weapons, is not considered desirable." },
+                { 27, "This number signifies a clear mind and intelligence, unceasing hard work, accumulation of wealth, all round influence and positions of prominence and high rank. Especially in uniformed services like police, army, etc., they will rise very high in their ranks. This is as fortunate as number 24, which has been explained earlier in this book. They will be respected and treated as the best in their profession or service. They like to do social service and will be involved also in matters that would benefit them. This is a very fortunate number that brings spirituality and magical powers." },
+                { 36, "This number can raise even poor people to an enviable status and make them live in mansions. Only when these people go away from their place of birth to distant regions, do they attain success. They will travel extensively and occupy high positions. This number, though it appears very fortunate, will cause problems within the family. They may be surrounded by disloyal people.\r" },
+                { 45, "This is a lucky Name number. Even those who struggle at lower levels will be raised to a higher status and positions. They are good conversationalists and will be found in gatherings that involve entertaining people. These hard-working people will earn outstanding places in their career. They will achieve their goals at any cost. People would wonder if their life was a big show. Even though they may have nagging problems, they will retain their smile and will never allow anyone to know their problems. This number, which assures a comfortable life, fame and wealth, is a desirable one. Diseases will also be cured." },
+                { 54, "This number will give success step by step. Failures can also happen. They may begin their lives with prestige, reputation and prosperity. Stubbornness and thoughtless decisions will make them lose their name and fame. Greed is their worst enemy that could make them lose all their wealth if they are not careful. In the fag end of their lives, they may achieve success. Their life will be without freedom and they will be under the control of others.\r" },
+                { 63, "This is also a lucky number. However, if this comes as a Name number, it will lead one into wrong ways. The ancient texts describe this number as one related to thieves; so the less said, the better!\r" },
+                { 72, "This is the best of all numbers under 9. Although these people struggle in their early years, they later enjoy life with all comforts. A mind devoid of doubt will be filled with joy. The wealth acquired by these people will remain intact in their family for many future generations. Money keeps on coming continuously, without fail. (Businessmen should take note of this advantageous number). It will also bring repute. This number signifies permanent wealth." },
+                { 81, "This number signifies a fortunate life. This will give development, good position and wealth. If these people are not careful, their luck could change for the worse. They will have opportunities to become teachers." },
+                { 90, "As this number derives its full power from number 9, its people will go to any extent to get their desires fulfilled. Victory will be certain. They will become very wealthy and famous. For those who are interested in spiritual pursuits this number is not desirable.\r" },
+                { 99, "This Name number will lure its native to devious ways. Success will come along with enmity. This number signifies being attacked by enemies, and hence it is not a good number. (However they will be blessed with education, wealth and prosperity).\r" },
+                { 108, "This number can give high positions and success. Everything will happen according to their desire. As this number induces its people to make good efforts resulting in success, it is a very lucky number" },
+            };
+
+            //based on name number get predictions
+            //check if exists first
+            var predictionExist = nameNumberPredictions.ContainsKey(nameNumber);
+
+            //only if number exist
+            if (predictionExist) { return nameNumberPredictions[nameNumber]; }
+
+            //let caller know fail
+            return $"NO Prediction for name number {nameNumber}";
+        }
+
+        #endregion
+
         #region AVASTA
 
         /// <summary>
         /// Gets all the Avastas for a planet, Lajjita, Garvita, Kshudita, etc...
         /// </summary>
-        /// <param name="planetName"></param>
         /// <param name="time">time to base calculation on</param>
         public static List<Avasta> PlanetAvasta(PlanetName planetName, Time time)
         {
@@ -399,10 +1069,167 @@ namespace VedAstro.Library
         #region GENERAL
 
         /// <summary>
+        /// Gets total hours in a vedic day, that is duration from sunset to sunrise
+        /// </summary>
+        public static double DayDurationHours(Time time)
+        {
+            var sunset = Calculate.SunsetTime(time);
+            var sunrise = Calculate.SunriseTime(time);
+
+            var totalHours = sunset.Subtract(sunrise).TotalHours;
+            return totalHours;
+        }
+
+        /// <summary>
+        /// A day starts at the time of sunrise and ends at the time of sunset. A
+        /// night starts at the time of sunset and ends at the time of next day's sunrise.
+        /// </summary>
+        public static bool IsNightBirth(Time birthTime)
+        {
+            //get sunset time for that day
+            var sunset = Calculate.SunsetTime(birthTime);
+
+            //get next day sunrise time
+            var nextDay = birthTime.AddHours(23);
+            var sunriseNextDay = Calculate.SunriseTime(nextDay);
+
+            //check if given birth time is within this time frame
+            var xx = birthTime >= sunset;
+            var cc = birthTime <= sunriseNextDay;
+
+            //if so then night birth!
+            return xx && cc;
+        }
+
+        /// <summary>
+        /// A day starts at the time of sunrise and ends at the time of sunset. A
+        /// night starts at the time of sunset and ends at the time of next day's sunrise.
+        /// </summary>
+        public static bool IsDayBirth(Time birthTime)
+        {
+            //get sunrise time for that day
+            var sunrise = Calculate.SunriseTime(birthTime);
+
+            //get day sunset time
+            var sunset = Calculate.SunsetTime(birthTime);
+
+            //check if given birth time is within this time frame
+            var xx = birthTime >= sunrise;
+            var cc = birthTime <= sunset;
+
+            //if so then day birth!
+            return xx && cc;
+        }
+
+        /// <summary>
+        /// Given a time and location will return the coordinates at that location
+        /// Longitude and latitude at a location from Google Maps API
+        /// </summary>
+        public static async Task<GeoLocation> LocationGeoCoordinates(string locationName)
+        {
+            //get coordinates for location (API)
+            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
+            var geoLocation = geoLocationResult.Payload;
+
+            return geoLocation;
+        }
+
+        /// <summary>
+        /// Easyly import Jaganath Hora (.jhd) files into VedAstro.
+        /// Yeah! Competition drives growth!
+        /// </summary>
+        public static Person ParseJHDFiles(string personName, string rawTextData)
+        {
+            // Split the raw text data into an array of strings
+            var lines = rawTextData.Trim().Split('\n');
+
+            // Extract the date and time parts
+            var hoursTotalDecimal = double.Parse(lines[3]);
+            // Extract the whole number part for hours
+            var hours = (int)hoursTotalDecimal;
+            // Get the fractional part and convert it to minutes
+            double fractionalPart = hoursTotalDecimal - hours;
+            var minutes = (int)Math.Round(fractionalPart * 100);
+
+            //extract out the date parts
+            var month = int.Parse(lines[0]);
+            var day = int.Parse(lines[1]);
+            var year = int.Parse(lines[2]);
+            var timeZoneSpan = ConvertRawTimezoneToTimeSpan(lines[4]);
+
+            // Format the date and time text
+            DateTimeOffset parsedStdTime = new DateTimeOffset(year, month, day, hours, minutes, 0, 0, timeZoneSpan);
+            var dateTimeText = parsedStdTime.ToString(Time.DateTimeFormat);
+
+            // Extract the location and coordinates
+            var locationRaw = $"{lines[12].Trim()}, {lines[13].Trim()}";//remove trailing white spaces
+            var locationName = Regex.Replace(locationRaw, "[^a-zA-Z0-9 ,]", "");
+            var rawLongitude = lines[5];
+            var longitude = ConvertRawLongitude(rawLongitude);
+            var latitude = double.Parse(lines[6]);
+            var parsedLocation = new GeoLocation(locationName, longitude, latitude);
+
+            var birthTime = new Time(parsedStdTime, parsedLocation);
+
+            //extract gender
+            var genderRaw = int.Parse(lines[17].Trim());
+            var parsedGender = genderRaw == 1 ? Gender.Male : Gender.Female; //female is 2
+
+            //combine all into 1 person
+            var person = new Person(personName, birthTime, parsedGender);
+
+            return person;
+
+            // Converts input to a TimeSpan representing UTC offset.
+            // If input is “-5.300000/r” it converts to "+05:30"
+            // but if “5.300000/r” it converts to "-05:30"
+            static TimeSpan ConvertRawTimezoneToTimeSpan(string input)
+            {
+                // Remove the "/r" from the end of the string
+                string cleanedInput = input.Replace("/r", "");
+
+                // Split the string into hours and minutes
+                string[] timeParts = cleanedInput.Split('.');
+
+                // Convert the string parts to integers
+                int hours = int.Parse(timeParts[0]);
+                int minutes = int.Parse(timeParts[1].Substring(0, 2)); // Get the first two digits of the decimal part
+
+                // Reverse the sign of the hours
+                hours = -hours;
+
+                // Convert the hours and minutes to a TimeSpan
+                TimeSpan timeSpan = new TimeSpan(hours, minutes, 0);
+
+                return timeSpan;
+            }
+
+            //Converts a raw longitude string to a double and changes its sign.
+            //EXP: "-77.350000\r" to 77.35, "108.350000\r" to -108.35
+            static double ConvertRawLongitude(string rawLongitude)
+            {
+                // Trim the string to remove leading and trailing white spaces
+                string trimmedLongitude = rawLongitude.Trim();
+
+                // Try to parse the string to a double
+                if (double.TryParse(trimmedLongitude, out double longitude))
+                {
+                    // If the longitude is negative, make it positive. If it's positive, make it negative.
+                    longitude = longitude < 0 ? Math.Abs(longitude) : -Math.Abs(longitude);
+                    return longitude;
+                }
+                else
+                {
+                    throw new FormatException("Invalid format for longitude.");
+                }
+            }
+
+        }
+
+        /// <summary>
         /// Gets all houses owned by a planet at a given time for KP astrology (Horary & Kundali)
         /// </summary>
         /// <param name="horaryNumber">if more than 0, will use Horary instead of Kundali calculation</param>
-        /// <returns></returns>
         public static List<HouseName> HousesOwnedByPlanetKP(PlanetName inputPlanet, Time time, int horaryNumber = 0)
         {
             //Given a planet, return Zodiac Signs owned by it Ex. Ju, returns Sag an Pis
@@ -527,13 +1354,17 @@ namespace VedAstro.Library
             return returnList;
         }
 
+
         /// <summary>
-        /// Given a birth time will calculate all predictions that match for given birth time and return the data
+        /// Given a birth time will calculate all predictions that match for given birth time.
+        /// Default includes all predictions, ie: Yoga, Planets in Sign, AshtakavargaYoga
+        /// Can be filtered.
         /// </summary>
-        public static async Task<List<HoroscopePrediction>> HoroscopePredictions(Time birthTime)
+        /// <param name="filterTag">Set to only show certain types of predictions</param>
+        public static async Task<List<HoroscopePrediction>> HoroscopePredictions(Time birthTime, EventTag filterTag = EventTag.Empty)
         {
             //calculate predictions for current person
-            var predictionList = await Tools.GetHoroscopePrediction(birthTime, URL.HoroscopeDataListFile);
+            var predictionList = await Tools.GetHoroscopePrediction(birthTime, URL.HoroscopeDataListFile, filterTag);
 
             return predictionList;
         }
@@ -730,9 +1561,8 @@ namespace VedAstro.Library
                 case ConstellationName.Jyesta:
                 case ConstellationName.Revathi:
                     return VedAstro.Library.PlanetName.Mercury;
-
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(constellation), constellation, null);
+                    return VedAstro.Library.PlanetName.Empty;
             }
 
             throw new Exception("End of Line");
@@ -761,7 +1591,6 @@ namespace VedAstro.Library
 
             return value;
         }
-
 
         /// <summary>
         /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
@@ -845,12 +1674,12 @@ namespace VedAstro.Library
         /// <summary>
         /// Given a person will give yoni kuta animal with sex
         /// </summary>
-        public static string YoniKutaAnimal(Person person)
+        public static string YoniKutaAnimalFromPerson(Person person)
         {
             var finalPrediction = "";
 
             var birthConst = Calculate.MoonConstellation(person.BirthTime);
-            var animal = Calculate.YoniKutaAnimal(birthConst.GetConstellationName());
+            var animal = Calculate.YoniKutaAnimalFromConstellation(birthConst.GetConstellationName());
 
             finalPrediction += animal.ToString();
 
@@ -861,7 +1690,7 @@ namespace VedAstro.Library
         /// Given a constellation will give animal with sex, used for yoni kuta calculations
         /// and body appearance prediction
         /// </summary>
-        public static ConstellationAnimal YoniKutaAnimal(ConstellationName sign)
+        public static ConstellationAnimal YoniKutaAnimalFromConstellation(ConstellationName sign)
         {
             switch (sign)
             {
@@ -937,7 +1766,7 @@ namespace VedAstro.Library
                 case ConstellationName.Sravana:
                     return new ConstellationAnimal("Female", AnimalName.Monkey);
 
-                //
+                //Lion
                 case ConstellationName.Poorvabhadra:
                     return new ConstellationAnimal("Male", AnimalName.Lion);
                 case ConstellationName.Dhanishta:
@@ -961,12 +1790,35 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<string> SkyChart(Time time) => await SkyChartManager.GenerateChart(time, 750, 230);
 
+        public enum ChartType
+        {
+            Rasi,
+            Hora,
+            Drekkana,
+            Chaturthamsa,
+            Panchamsa,
+            Shashthamsa,
+            Saptamsa,
+            Ashtamsa,
+            Navamsa,
+            Dasamsa,
+            Rudramsa,
+            Dwadasamsa,
+            Shodasamsa,
+            Vimsamsa,
+            Chaturvimsamsa,
+            Nakshatramsa,
+            Trimsamsa,
+            Khavedamsa,
+            Akshavedamsa,
+            Shashthyamsa,
+        }
         /// <summary>
         /// Get sky chart at a given time. SVG image file. URL can be used like a image source link
         /// </summary>
-        public static string SouthIndianChart(Time time)
+        public static string SouthIndianChart(Time time, ChartType chartType = ChartType.Rasi)
         {
-            var svgString = SouthChartManager.GenerateChart(time, 1000, 1000);
+            var svgString = (new SouthChartManager(time, 1000, 1000, chartType)).SVGChart;
 
             return svgString;
         }
@@ -1257,6 +2109,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Also know as Panchanga Yoga
         /// Nithya Yoga = (Longitude of Sun + Longitude of Moon) / 13°20' (or 800')
         /// </summary>
         public static NithyaYoga NithyaYoga(Time time)
@@ -1267,8 +2120,12 @@ namespace VedAstro.Library
             Angle sunLongitude = PlanetNirayanaLongitude(Sun, time);
             Angle moonLongitude = PlanetNirayanaLongitude(Moon, time);
 
+            var jointLongitudeInMinutes = (sunLongitude + moonLongitude).Expunge360().TotalMinutes;
+
             //get joint motion in longitude of the Sun and the Moon
-            var jointLongitudeInMinutes = sunLongitude.TotalMinutes + moonLongitude.TotalMinutes;
+            //var jointLongitudeInMinutes = sunLongitude.TotalMinutes + moonLongitude.TotalMinutes;
+
+
 
             //get unrounded nithya yoga number by
             //dividing joint longitude by 800'
@@ -1278,7 +2135,7 @@ namespace VedAstro.Library
             var nithyaYogaNumber = Math.Ceiling(rawNithyaYogaNumber);
 
             //convert nithya yoga number to type
-            var nithyaYoga = (NithyaYoga)nithyaYogaNumber;
+            var nithyaYoga = VedAstro.Library.NithyaYoga.FromNumber(nithyaYogaNumber);
 
             //return to caller
 
@@ -1286,7 +2143,13 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Used for auspicious activities, part Panchang like Tithi, Nakshatra, Yoga, etc.
+        /// Used for muhurtha of auspicious activities, part of Panchang like Tithi, Nakshatra, Yoga, etc.
+        /// Each tithi is divided into 2 karanas. There are 11 karanas: (1) Bava, (2)
+        /// Balava, (3) Kaulava, (4) Taitula, (5) Garija, (6) Vanija, (7) Vishti, (8) Sakuna,
+        /// (9) Chatushpada, (10) Naga, and, (11) Kimstughna. The first 7 karanas
+        /// repeat 8 times starting from the 2nd half of the first lunar day of a month.
+        /// The last 4 karanas come just once in a month, starting from the 2nd half of
+        /// the 29th lunar day and ending at the 1st half of the first lunar day.
         /// </summary>
         public static Karana Karana(Time time)
         {
@@ -2003,19 +2866,41 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets list of all planets and the zodiac signs they are in
         /// </summary>
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetSigns(Time time)
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetSigns(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetZodiacSign(planet, time).GetSignName(), Angle.Zero));
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetHoraSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetHoraSigns(planet, time), Angle.Zero));
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetDrekkanaSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetDrekkanaSign(planet, time), Angle.Zero));
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetChaturthamsaSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetChaturthamsaSign(planet, time), Angle.Zero));
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetPanchamsaSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetPanchamsaSign(planet, time), Angle.Zero));
+
+
+        /// <summary>
+        /// Given a zodiac sign will convert to drekkana
+        /// </summary>
+        public static ZodiacName DrekkanaSignName(ZodiacSign zodiacSign)
         {
-            var returnList = new Dictionary<PlanetName, ZodiacSign>();
+            // Get the degree within the sign
+            var degree = zodiacSign.GetDegreesInSign().TotalDegrees;
 
-            //check each planet if in sign
-            foreach (var planet in All9Planets)
+            // Calculate the Drekkana index inside the 30 degrees
+            int drekkanaIndex = (int)Math.Ceiling((degree / 10));
+
+            switch (drekkanaIndex)
             {
-                var planetSign = PlanetZodiacSign(planet, time);
-
-                returnList[planet] = planetSign;
+                //Narada drekkna or 1st Drekkna of any Sign is same as sign
+                case 1: return zodiacSign.GetSignName(); break;
+                // Augsta drekkna or 2nd drekkna of sign is 5th from Sign.
+                case 2: return SignCountedFromInputSign(zodiacSign.GetSignName(), 5); break;
+                //Durvasa drekkna or 3rd drekkna of any sign is 9th from Sign.
+                case 3: return SignCountedFromInputSign(zodiacSign.GetSignName(), 9); break;
             }
 
-            return returnList;
+            throw new Exception("END OF LINE!");
+        }
+        public static ZodiacName HoraSignName(ZodiacSign zodiacSign)
+        {
+            return ZodiacName.Aries;
+
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -2619,10 +3504,10 @@ namespace VedAstro.Library
         public static ZodiacSign PlanetZodiacSign(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetZodiacSign), planetName, time, Ayanamsa), _getPlanetRasiSign);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetZodiacSign), planetName, time, Ayanamsa), _planetZodiacSign);
 
             //UNDERLYING FUNCTION
-            ZodiacSign _getPlanetRasiSign()
+            ZodiacSign _planetZodiacSign()
             {
                 //get longitude of planet
                 var longitudeOfPlanet = PlanetNirayanaLongitude(planetName, time);
@@ -2636,6 +3521,7 @@ namespace VedAstro.Library
             }
 
         }
+
 
         /// <summary>
         /// Checks if a given planet is in a given sign at a given time
@@ -2689,6 +3575,36 @@ namespace VedAstro.Library
                 planetSignList.Add(sign3FromSaturn);
                 planetSignList.Add(sign10FromSaturn);
 
+            }
+
+            // Mandi or Gulika is said to aspect 2nd, 7th
+            // and 12th Houses from the sign of occupation. 
+            if (planetName == Maandi)
+            {
+                //get signs planet is aspecting
+                var sign2ndFromMaandi = SignCountedFromInputSign(planetSignName, 2);
+                var sign7thFromMaandi = SignCountedFromInputSign(planetSignName, 7);
+                var sign12thFromMaandi = SignCountedFromInputSign(planetSignName, 12);
+
+                //add signs to return list
+                planetSignList.Add(sign2ndFromMaandi);
+                planetSignList.Add(sign7thFromMaandi);
+                planetSignList.Add(sign12thFromMaandi);
+            }
+
+            // Mandi or Gulika is said to aspect 2nd, 7th
+            // and 12th Houses from the sign of occupation. 
+            if (planetName == Gulika)
+            {
+                //get signs planet is aspecting
+                var sign2ndFromGulika = SignCountedFromInputSign(planetSignName, 2);
+                var sign7thFromGulika = SignCountedFromInputSign(planetSignName, 7);
+                var sign12thFromGulika = SignCountedFromInputSign(planetSignName, 12);
+
+                //add signs to return list
+                planetSignList.Add(sign2ndFromGulika);
+                planetSignList.Add(sign7thFromGulika);
+                planetSignList.Add(sign12thFromGulika);
             }
 
             // Jupiter the 5th and the 9th houses
@@ -2934,41 +3850,41 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the Drekkana sign the planet is in
         /// </summary>
-        public static ZodiacName PlanetDrekkanaSign(PlanetName planetName, Time time)
+        public static ZodiacName PlanetDrekkanaSign(PlanetName planetName, Time time) => Calculate.DrekkanaSignName(Calculate.PlanetZodiacSign(planetName, time));
+
+        public static ZodiacName PlanetChaturthamsaSign(PlanetName planetName, Time time) => Calculate.ChaturthamsaSignName(Calculate.PlanetZodiacSign(planetName, time));
+
+        public static ZodiacName PlanetPanchamsaSign(PlanetName planetName, Time time) => Calculate.PanchamsaSignName(Calculate.PlanetZodiacSign(planetName, time));
+
+        public static ZodiacName ChaturthamsaSignName(ZodiacSign zodiacSign)
         {
-            //get sign planet is in
-            var planetSign = PlanetZodiacSign(planetName, time);
+            // Get the degree within the sign
+            var degree = zodiacSign.GetDegreesInSign().TotalDegrees;
 
-            //get planet sign name
-            var planetSignName = planetSign.GetSignName();
+            // Calculate the Chaturthamsa index inside the 30 degrees
+            int chaturthamsaIndex = (int)Math.Ceiling((degree / 7.5));
 
-            //get degrees in sign 
-            var degreesInSign = planetSign.GetDegreesInSign().TotalDegrees;
-
-            //1.0 get the number of the drekkana the planet is in
-
-            //if planet is in 1st drekkana
-            if (degreesInSign >= 0 && degreesInSign <= 10)
+            switch (chaturthamsaIndex)
             {
-                //return planet's current sign
-                return planetSignName;
+                // 1st Chaturthamsa of any Sign is same as sign
+                case 1: return zodiacSign.GetSignName(); break;
+                // 2nd Chaturthamsa of sign is 4th from Sign.
+                case 2: return SignCountedFromInputSign(zodiacSign.GetSignName(), 4); break;
+                // 3rd Chaturthamsa of any sign is 7th from Sign.
+                case 3: return SignCountedFromInputSign(zodiacSign.GetSignName(), 7); break;
+                // 4th Chaturthamsa of any sign is 10th from Sign.
+                case 4: return SignCountedFromInputSign(zodiacSign.GetSignName(), 10); break;
             }
 
-            //if planet is in 2nd drekkana
-            if (degreesInSign > 10 && degreesInSign <= 20)
-            {
-                //return 5th sign from planets current sign
-                return SignCountedFromInputSign(planetSignName, 5);
-            }
+            throw new Exception("Invalid Chaturthamsa index!");
+        }
 
-            //if planet is in 3rd drekkana
-            if (degreesInSign > 20 && degreesInSign <= 30)
-            {
-                //return 9th sign from planets current sign
-                return SignCountedFromInputSign(planetSignName, 9);
-            }
+        public static ZodiacName PanchamsaSignName(ZodiacSign zodiacSign)
+        {
+            //TODO
+            return ZodiacName.Libra;
 
-            throw new Exception("Planet drekkana not found, error!");
+            throw new Exception("END OF LINE!");
         }
 
         /// <summary>
@@ -3588,6 +4504,54 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Also know as "Suryodayadi Jananakala Ghatikah".
+        /// It is customary among the Hindus to mention
+        /// the time of birth as "Suryodayadi Jananakala
+        /// Ghatikaha ", i.e., the number of ghatis passed
+        /// from sunrise up to the moment of birth. 
+        /// </summary>
+        public static Angle IshtaKaala(Time birthTime)
+        {
+            //check if sunrise before or after
+            var isBefore = Calculate.IsBeforeSunrise(birthTime);
+
+            //if birthTime is before sunrise then use previous day sunrise
+            TimeSpan timeDifference;
+            if (isBefore)
+            {
+                var preSunrise = Calculate.SunriseTime(birthTime.SubtractHours(23));
+                timeDifference = birthTime.Subtract(preSunrise); //sunrise day before
+            }
+            else
+            {
+                var sunrise = Calculate.SunriseTime(birthTime);
+                timeDifference = birthTime.Subtract(sunrise); ;
+            }
+
+            //(Birth Time - Sunrise) x 2.5 = Suryodayadi Jananakala Ghatikaha. 
+            var differenceHours = timeDifference.TotalHours;
+            var ghatis = differenceHours * 2.5;
+
+            //return round(ghatis to 2 decimal places)
+            return Angle.FromDegrees(ghatis);
+        }
+
+        /// <summary>
+        /// Given a time, will check if it occured before or after sunrise for that given day.
+        /// Returns true if given time is before sunrise
+        /// </summary>
+        public static bool IsBeforeSunrise(Time birthTime)
+        {
+            //get sunrise for that day
+            var sunrise = Calculate.SunriseTime(birthTime);
+
+            //if time is before than it must be smalller
+            var isBefore = birthTime < sunrise;
+
+            return isBefore;
+        }
+
+        /// <summary>
         /// A hora is equal to 1/24th part of
         /// a day. The Hindu day begins with sunrise and continues till
         /// next sunrise. The first hora on any day will be the
@@ -3636,7 +4600,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets hora zodiac sign of a planet
         /// </summary>
-        public static ZodiacName PlanetHoraSign(PlanetName planetName, Time time)
+        public static ZodiacName PlanetHoraSigns(PlanetName planetName, Time time)
         {
             //get planet sign
             var planetSign = PlanetZodiacSign(planetName, time);
@@ -3935,58 +4899,6 @@ namespace VedAstro.Library
                 var neutralPoint = ((max - min) / 2) + min;
 
                 if (neutralPoint <= 0) { throw new Exception("Planet does not have neutral point!"); }
-
-                return neutralPoint;
-            }
-        }
-
-        /// <summary>
-        /// EXPERIMENTAL
-        /// To determine if Shadvarga bala is strong or weak
-        /// a neutral point is set, anything above is strong & below is weak
-        ///
-        /// Note:
-        /// Neutral point is derived from all possible Shadvarga bala values across
-        /// 25 years (2000-2025), with 1 hour granularity
-        ///
-        /// Formula used = ((max-min)/2)+min (add min to get exact neutral point from 0 range)
-        /// max = hightest possible value
-        /// min = lowest possible value
-        /// </summary>
-        public static double PlanetShadvargaBalaNeutralPoint(PlanetName planet)
-        {
-            //no calculation for rahu and ketu here
-            var isRahu = planet.Name == PlanetNameEnum.Rahu;
-            var isKetu = planet.Name == PlanetNameEnum.Ketu;
-            var isRahuKetu = isRahu || isKetu;
-            if (isRahuKetu) { return 0; }
-
-
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadvargaBalaNeutralPoint), planet, Ayanamsa), _getPlanetShadvargaBalaNeutralPoint);
-
-
-            double _getPlanetShadvargaBalaNeutralPoint()
-            {
-                int max = 0, min = 0;
-
-                if (planet == Saturn) { max = 150; min = 11; }
-                if (planet == Mars) { max = 188; min = 21; }
-                if (planet == Jupiter) { max = 172; min = 17; }
-                if (planet == Mercury) { max = 150; min = 17; }
-                if (planet == Venus) { max = 158; min = 15; }
-                if (planet == Sun) { max = 180; min = 17; }
-                if (planet == Moon) { max = 165; min = 26; }
-
-                //difference between max & min
-                var difference = (max - min);
-
-                //divide difference in half to get neutral point
-                //add min to get exact neutral point from 0 range
-                var neutralPoint = (difference / 2) + min;
-
-                if (neutralPoint <= 0) { throw new Exception("Planet does not have neutral point!"); }
-
 
                 return neutralPoint;
             }
@@ -4698,185 +5610,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets name of vedic month
-        /// </summary>
-        public static LunarMonth LunarMonth(Time time)
-        {
-            return Library.LunarMonth.Empty;
-
-            //TODO NEEDS WORK
-            throw new NotImplementedException();
-
-
-            //get this months full moon date
-            var fullMoonTime = getFullMoonTime();
-
-            //sunrise
-            var x = SunriseTime(time);
-            var y = MoonConstellation(x).GetConstellationName();
-
-        Calculate:
-            //get the constellation behind the moon
-            var constellation = MoonConstellation(fullMoonTime).GetConstellationName();
-
-            //go back one constellation
-            //constellation = constellation - 1;
-
-            switch (constellation)
-            {
-                case ConstellationName.Aswini:
-                    return Library.LunarMonth.Aswijam;
-                    break;
-                case ConstellationName.Bharani:
-                    break;
-                case ConstellationName.Krithika:
-                    return Library.LunarMonth.Karthikam;
-                    break;
-                case ConstellationName.Rohini:
-                    break;
-                case ConstellationName.Mrigasira:
-                case ConstellationName.Aridra:
-                    return Library.LunarMonth.Margasiram;
-                    break;
-                case ConstellationName.Punarvasu:
-                    break;
-                case ConstellationName.Pushyami:
-                    return Library.LunarMonth.Pooshiam;
-                    break;
-                case ConstellationName.Aslesha:
-                    break;
-                case ConstellationName.Makha:
-                    return Library.LunarMonth.Magham;
-                    break;
-                case ConstellationName.Pubba:
-                    return Library.LunarMonth.Phalgunam;
-                    break;
-                case ConstellationName.Uttara:
-                    break;
-                case ConstellationName.Hasta:
-                    break;
-                case ConstellationName.Chitta:
-                    return Library.LunarMonth.Chitram;
-                    break;
-                case ConstellationName.Swathi:
-                    break;
-                case ConstellationName.Vishhaka:
-                    return Library.LunarMonth.Visakham;
-                    break;
-                case ConstellationName.Anuradha:
-                    break;
-                case ConstellationName.Jyesta:
-                    return Library.LunarMonth.Jaistam;
-                    break;
-                case ConstellationName.Moola:
-                    break;
-                case ConstellationName.Poorvashada:
-                    return Library.LunarMonth.Ashadam;
-                    break;
-                case ConstellationName.Uttarashada:
-                    break;
-                case ConstellationName.Sravana:
-                    return Library.LunarMonth.Sravanam;
-                    break;
-                case ConstellationName.Dhanishta:
-                    break;
-                case ConstellationName.Satabhisha:
-                    break;
-                case ConstellationName.Poorvabhadra:
-                    return Library.LunarMonth.Bhadrapadam;
-                case ConstellationName.Uttarabhadra:
-                    break;
-                case ConstellationName.Revathi:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            throw new ArgumentOutOfRangeException();
-            //switch (constellation)
-            //{
-            //    case ConstellationName.Aswini:
-            //        return LunarMonth.Aswijam;
-            //        break;
-            //    case ConstellationName.Krithika:
-            //        return LunarMonth.Karthikam;
-            //        break;
-            //    case ConstellationName.Mrigasira:
-            //        return LunarMonth.Margasiram;
-            //        break;
-            //    case ConstellationName.Pushyami:
-            //        return LunarMonth.Pooshiam;
-            //        break;
-            //    case ConstellationName.Makha:
-            //        return LunarMonth.Magham;
-            //        break;
-            //    case ConstellationName.Pubba:
-            //        return LunarMonth.Phalgunam;
-            //        break;
-            //    case ConstellationName.Chitta:
-            //        return LunarMonth.Chitram;
-            //        break;
-            //    case ConstellationName.Vishhaka:
-            //        return LunarMonth.Visakham;
-            //        break;
-            //    case ConstellationName.Jyesta:
-            //        return LunarMonth.Jaistam;
-            //        break;
-            //    case ConstellationName.Poorvashada:
-            //        return LunarMonth.Ashadam;
-            //        break;
-            //    case ConstellationName.Sravana:
-            //        return LunarMonth.Sravanam;
-            //        break;
-            //    case ConstellationName.Poorvabhadra:
-            //        return LunarMonth.Bhadrapadam;
-            //        break;
-            //    default:
-            //        fullMoonTime = fullMoonTime.AddHours(1);
-            //        goto Calculate;
-            //}
-
-
-
-
-
-            //FUNCTIONS
-
-            Time getFullMoonTime()
-            {
-                //get the lunar date number
-                int lunarDayNumber = LunarDay(time).GetLunarDateNumber();
-
-                //start with input time
-                var fullMoonTime = time;
-
-                //full moon not yet pass
-                if (lunarDayNumber < 15)
-                {
-                    //go forward in time till find full moon
-                    while (!IsFullMoon(fullMoonTime))
-                    {
-                        fullMoonTime = fullMoonTime.AddHours(1);
-                    }
-
-                    return fullMoonTime;
-                }
-                else
-                {
-                    //go backward in time till find full moon
-                    while (!IsFullMoon(fullMoonTime))
-                    {
-                        fullMoonTime = fullMoonTime.SubtractHours(1);
-                    }
-
-                    return fullMoonTime;
-
-                }
-
-            }
-        }
-
-        /// <summary>
-        /// Checks if the moon is FULL, moon day 15
+        /// Checks if the moon is FULL, moon day 15 at given time
         /// </summary>
         public static bool IsFullMoon(Time time)
         {
@@ -4885,6 +5619,18 @@ namespace VedAstro.Library
 
             //if day 15, it is full moon
             return lunarDayNumber == 15;
+        }
+
+        /// <summary>
+        /// Checks if the moon is New, moon day 1 at given time
+        /// </summary>
+        public static bool IsNewMoon(Time time)
+        {
+            //get the lunar date number
+            int lunarDayNumber = LunarDay(time).GetLunarDayNumber();
+
+            //if day 1, it is new moon
+            return lunarDayNumber == 1 || lunarDayNumber == 0;
         }
 
         /// <summary>
@@ -5624,6 +6370,45 @@ namespace VedAstro.Library
             return ishtaMore ? 1 : -1;
         }
 
+
+        /// <summary>
+        /// Used for judging dasa good or bad, Bala book pg 110
+        /// output range -5 to 5
+        /// </summary>
+        public static double PlanetIshtaKashtaScoreDegree(PlanetName planet, Time birthTime)
+        {
+            //get both scores of good and bad
+            var ishtaScore = PlanetIshtaScore(planet: planet, birthTime: birthTime);
+            var kashtaScore = PlanetKashtaScore(planet: planet, birthTime: birthTime);
+
+            //final nature of event
+            var ishtaMore = ishtaScore > kashtaScore;
+
+            //NOTE: ASTRO THEORY
+            //caculate the difference between Good and Bad scores in percentage
+            //so the more difference there is the greater the Good or Bad
+            //if the difference is very small, than it makes sense that they
+            //should cancel each other.
+            var baseVal = ishtaMore ? ishtaScore : kashtaScore;
+            var difference = Math.Abs(value: ishtaScore - kashtaScore);
+            var ratio = difference / baseVal;
+            var percentage = ratio * 100;
+
+            var finalVal = 0.0;
+            if (ishtaMore)
+            {
+                //remap the
+                finalVal = percentage.Remap(fromMin: 0, fromMax: 100, toMin: 0, toMax: 4);
+            }
+            else
+            {
+                //remap the
+                finalVal = percentage.Remap(fromMin: 0, fromMax: 100, toMin: -4, toMax: 0);
+            }
+
+            return Math.Round(finalVal, 3);
+        }
+
         /// <summary>
         /// Experimental Code, stand back!
         /// Kashta Phala (Bad Strength) of a Planet
@@ -5849,6 +6634,329 @@ namespace VedAstro.Library
 
         #endregion
 
+        #region UPAGRAHA
+
+        /// <summary>
+        /// Dhuma Sun' s longitude + 133°20’
+        /// </summary>
+        public static Angle DhumaLongitude(Time time)
+        {
+            //get sun long
+            var sunLong = Calculate.PlanetNirayanaLongitude(Sun, time);
+
+            //add 133°20’
+            var _133 = new Angle(133, 20, 0);
+            var total = _133 + sunLong;
+
+            return total.Expunge360();
+        }
+
+        /// <summary>
+        /// 360°-Dhuma's longitude
+        /// </summary>
+        public static Angle VyatipaataLongitude(Time time)
+        {
+            //get needed longitude
+            var dhumaLong = Calculate.DhumaLongitude(time);
+
+            //calculate final
+            var total = Angle.Degrees360 - dhumaLong;
+
+            return total.Expunge360();
+        }
+
+        /// <summary>
+        /// Vyatipaata's longitude + 180°
+        /// </summary>
+        public static Angle PariveshaLongitude(Time time)
+        {
+            //get needed longitude
+            var longitude = Calculate.VyatipaataLongitude(time);
+
+            //calculate final
+            var total = longitude + Angle.Degrees180;
+
+            return total.Expunge360();
+        }
+
+        /// <summary>
+        /// 360° - Parivesha's longitude
+        /// </summary>
+        public static Angle IndrachaapaLongitude(Time time)
+        {
+            //get needed longitude
+            var longitude = Calculate.PariveshaLongitude(time);
+
+            //calculate final
+            var total = Angle.Degrees360 - longitude;
+
+            return total.Expunge360();
+        }
+
+        /// <summary>
+        /// Indrachaapa's longitude + 16°40'
+        /// </summary>
+        public static Angle UpaketuLongitude(Time time)
+        {
+            //get needed longitude
+            var longitude = Calculate.IndrachaapaLongitude(time);
+
+            //calculate final
+            var _1640 = new Angle(16, 40, 0);
+            var total = longitude + _1640;
+
+            return total.Expunge360();
+        }
+
+        /// <summary>
+        /// Kaala rises at the middle of Sun's part. In other words,
+        /// we find the time at the middle of Sun's part
+        /// and find lagna rising then. That gives Kaala's longitude.
+        /// </summary>
+        public static Angle KaalaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Sun, "middle");
+
+        /// <summary>
+        /// Mrityu rises at the middle of Mars's part.
+        /// </summary>
+        public static Angle MrityuLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Mars, "middle");
+
+        /// <summary>
+        /// Artha Praharaka rises at the middle of Mercury's part. 
+        /// </summary>
+        public static Angle ArthaprahaaraLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Mercury, "middle");
+
+        /// <summary>
+        /// Yama ghantaka rises at the middle of Jupiter's part
+        /// </summary>
+        public static Angle YamaghantakaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Jupiter, "middle");
+
+        /// <summary>
+        /// Gulika rises at the middle of Saturn's part. 
+        /// </summary>
+        public static Angle GulikaLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Saturn, "begin");
+
+        /// <summary>
+        /// Maandi rises at the beginning of Saturn's part.
+        /// </summary>
+        public static Angle MaandiLongitude(Time time) => UpagrahaLongitude(time, PlanetNameEnum.Saturn, "middle");
+
+        /// <summary>
+        /// Calculates longitudes for the non sun based Upagrahas (sub-planets)
+        /// </summary>
+        public static Angle UpagrahaLongitude(Time time, PlanetNameEnum relatedPlanet, string upagrahaPart)
+        {
+            // Once we divide the day/night of birth into 8 equal parts and identify the
+            // ruling planets of the 8 parts, we can find the longitudes of Kaala etc upagrahas
+            var partNumber = UpagrahaPartNumber(time, relatedPlanet); //since Kaala->Sun
+
+            //ascertain if day birth or night birth
+            var isDayBirth = Calculate.IsDayBirth(time);
+
+            var adjustedPartNumber = partNumber - 1; //decrement part number to calculate start time of part interested in
+
+            //calculated duration of day based on sunrise and sunset
+            var dayDuration = Calculate.DayDurationHours(time);
+            //since there are 8 parts, hours per part is roughly ~1.5
+            var hoursPerPart = dayDuration / 8.0;
+
+            //place to store all longitudes for house 1 (lagna)
+            House lagnaLongitudes;
+
+            //# Based on night or day birth calculate the
+            //longitude based on lagna position at given part number
+
+            //day birth
+            if (isDayBirth)
+            {
+                //get time the part starts after sunrise before sunset
+                var hoursAfterSunrise = adjustedPartNumber * hoursPerPart;
+
+                //calculate start time based on sunrise
+                var sunrise = Calculate.SunriseTime(time);
+                var partStartTime = sunrise.AddHours(hoursAfterSunrise);
+
+                //calculate middle point in time of part (~1.5/2 = ~0.75 hours)
+                var hoursPerHalfPart = hoursPerPart / 2;
+                var partMiddleTime = partStartTime.AddHours(hoursPerHalfPart);
+
+                //get lagna longitude at this middle time, which is the sub planet's long
+                //NOTE ASSUMPITION: only possible values "middle" or "begin"
+                var selectedPart = upagrahaPart == "middle" ? partMiddleTime :
+                    upagrahaPart == "begin" ? partStartTime : throw new Exception("END OF LINE!");
+                var allHouseMiddleLongitudes = Calculate.AllHouseMiddleLongitudes(selectedPart);
+                lagnaLongitudes = allHouseMiddleLongitudes.Where(x => x.GetHouseName() == HouseName.House1).First();
+            }
+            //nigth birth
+            else
+            {
+                //get time the part starts after sunset before sunrise next day
+                var hoursAfterSunset = adjustedPartNumber * hoursPerPart;
+
+                //calculate start time based on sunrise
+                var sunset = Calculate.SunsetTime(time);
+                var partStartTime = sunset.AddHours(hoursAfterSunset);
+
+                //calculate middle point in time of part (~1.5/2 = ~0.75 hours)
+                var hoursPerHalfPart = hoursPerPart / 2;
+                var partMiddleTime = partStartTime.AddHours(hoursPerHalfPart);
+
+                //get lagna longitude at this middle time, which is the sub planet's long
+                //NOTE ASSUMPITION: only possible values "middle" or "begin"
+                var selectedPart = upagrahaPart == "middle" ? partMiddleTime :
+                    upagrahaPart == "begin" ? partStartTime : throw new Exception("END OF LINE!");
+                var allHouseMiddleLongitudes = Calculate.AllHouseMiddleLongitudes(selectedPart);
+                lagnaLongitudes = allHouseMiddleLongitudes.Where(x => x.GetHouseName() == HouseName.House1).First();
+            }
+
+            return lagnaLongitudes.GetMiddleLongitude();
+
+        }
+
+        /// <summary>
+        /// Depending on whether one is born during the day or the night, we divide the
+        /// length of the day/night into 8 equal parts. Each part is assigned a planet.
+        /// Given a planet and time the part number will be returned.
+        /// Each part is 12/8 = 1.5 hours.
+        /// </summary>
+        public static int UpagrahaPartNumber(Time inputTime, PlanetNameEnum inputPlanet)
+        {
+            //based on night or day birth get the number accoridngly
+            var isDayBirth = Calculate.IsDayBirth(inputTime);
+
+            if (isDayBirth)
+            {
+                return UpagrahaPartNumberDayBirth(inputTime, inputPlanet);
+            }
+            else
+            {
+                return UpagrahaPartNumberNightBirth(inputTime, inputPlanet);
+            }
+
+
+            //------------------LOCAL FUNCS-------------------------
+
+            int UpagrahaPartNumberNightBirth(Time inputTime, PlanetNameEnum inputPlanet)
+            {
+                //get weekday
+                var weekday = Calculate.DayOfWeek(inputTime);
+
+                //based on weekday and planet name return part number
+                //NOTE: table data from 
+                Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>> nightRulers = new Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>>
+            {
+                { Library.DayOfWeek.Sunday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Jupiter, 1 }, { PlanetNameEnum.Venus, 2 }, { PlanetNameEnum.Saturn, 3 }, { PlanetNameEnum.Empty, 4 }, { PlanetNameEnum.Sun, 5 }, { PlanetNameEnum.Moon, 6 }, { PlanetNameEnum.Mars ,7 }, { PlanetNameEnum.Mercury ,8 } }
+                },
+                { Library.DayOfWeek.Monday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Venus, 1 }, { PlanetNameEnum.Saturn, 2 }, { PlanetNameEnum.Empty, 3 }, { PlanetNameEnum.Sun, 4 }, { PlanetNameEnum.Moon, 5 }, { PlanetNameEnum.Mars, 6 }, { PlanetNameEnum.Mercury, 7 }, { PlanetNameEnum.Jupiter ,8 } }
+                },
+                { Library.DayOfWeek.Tuesday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Saturn, 1 }, { PlanetNameEnum.Empty, 2 }, { PlanetNameEnum.Sun, 3 }, { PlanetNameEnum.Moon, 4 }, { PlanetNameEnum.Mars, 5 }, { PlanetNameEnum.Mercury, 6 }, { PlanetNameEnum.Jupiter, 7 }, { PlanetNameEnum.Venus ,8 } }
+                },
+                { Library.DayOfWeek.Wednesday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Sun, 1 }, { PlanetNameEnum.Moon, 2 }, { PlanetNameEnum.Mars, 3 }, { PlanetNameEnum.Mercury, 4 }, { PlanetNameEnum.Jupiter, 5 }, { PlanetNameEnum.Venus, 6 }, { PlanetNameEnum.Saturn, 7 }, { PlanetNameEnum.Empty ,8} }
+                },
+                { Library.DayOfWeek.Thursday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Moon, 1 }, { PlanetNameEnum.Mars, 2 }, { PlanetNameEnum.Mercury, 3 }, { PlanetNameEnum.Jupiter, 4 }, { PlanetNameEnum.Venus, 5 }, { PlanetNameEnum.Saturn, 6 }, { PlanetNameEnum.Empty, 7 }, { PlanetNameEnum.Sun ,8 } }
+                },
+                { Library.DayOfWeek.Friday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Mars, 1 }, { PlanetNameEnum.Mercury, 2 }, { PlanetNameEnum.Jupiter, 3 }, { PlanetNameEnum.Venus, 4 }, { PlanetNameEnum.Saturn, 5 }, { PlanetNameEnum.Empty, 6 }, { PlanetNameEnum.Sun, 7 }, { PlanetNameEnum.Moon ,8 } }
+                },
+                { Library.DayOfWeek.Saturday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Mercury, 1 }, { PlanetNameEnum.Jupiter, 2 }, { PlanetNameEnum.Venus, 3 }, { PlanetNameEnum.Saturn, 4 }, { PlanetNameEnum.Empty, 5 }, { PlanetNameEnum.Sun, 6 }, { PlanetNameEnum.Moon, 7 }, { PlanetNameEnum.Mars ,8 } }
+                },
+
+            };
+
+                if (nightRulers.TryGetValue(weekday, out var planetParts))
+                {
+                    if (planetParts.TryGetValue(inputPlanet, out var partNumber))
+                    {
+                        return partNumber;
+                    }
+                    throw new Exception("Invalid planet name");
+                }
+
+                throw new Exception("Invalid day of week");
+            }
+
+
+            int UpagrahaPartNumberDayBirth(Time inputTime, PlanetNameEnum inputPlanet)
+            {
+                //get weekday
+                var weekday = Calculate.DayOfWeek(inputTime);
+
+                //based on weekday and planet name return part number
+                //NOTE: table data from 
+                Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>> dayRulers = new Dictionary<DayOfWeek, Dictionary<PlanetNameEnum, int>>
+            {
+                { Library.DayOfWeek.Sunday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Sun, 1 }, { PlanetNameEnum.Moon, 2 }, { PlanetNameEnum.Mars ,3 }, { PlanetNameEnum.Mercury ,4 }, { PlanetNameEnum.Jupiter ,5 }, { PlanetNameEnum.Venus ,6 }, { PlanetNameEnum.Saturn ,7 }, { PlanetNameEnum.Empty ,8 } }
+                },
+                { Library.DayOfWeek.Monday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Moon, 1 }, { PlanetNameEnum.Mars ,2 }, { PlanetNameEnum.Mercury ,3 }, { PlanetNameEnum.Jupiter ,4},  {PlanetNameEnum.Venus ,5},  {PlanetNameEnum.Saturn ,6},  {PlanetNameEnum.Empty ,7}, { PlanetNameEnum.Sun ,8 } }
+                },
+                { Library.DayOfWeek.Tuesday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Mars, 1 }, { PlanetNameEnum.Mercury ,2 }, { PlanetNameEnum.Jupiter ,3 }, { PlanetNameEnum.Venus ,4},  {PlanetNameEnum.Saturn ,5},  {PlanetNameEnum.Empty ,6},  {PlanetNameEnum.Sun ,7}, { PlanetNameEnum.Moon ,8 } }
+                },
+                { Library.DayOfWeek.Wednesday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Mercury, 1 }, { PlanetNameEnum.Jupiter ,2 }, { PlanetNameEnum.Venus ,3 }, { PlanetNameEnum.Saturn ,4},  {PlanetNameEnum.Empty ,5},  {PlanetNameEnum.Sun ,6},  {PlanetNameEnum.Moon ,7}, { PlanetNameEnum.Mars ,8 } }
+                },
+                { Library.DayOfWeek.Thursday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Jupiter, 1 }, { PlanetNameEnum.Venus ,2 }, { PlanetNameEnum.Saturn ,3 }, { PlanetNameEnum.Empty ,4},  {PlanetNameEnum.Sun ,5},  {PlanetNameEnum.Moon ,6},  {PlanetNameEnum.Mars ,7}, { PlanetNameEnum.Mercury ,8 } }
+                },
+                { Library.DayOfWeek.Friday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Venus, 1 }, { PlanetNameEnum.Saturn ,2 }, { PlanetNameEnum.Empty ,3 }, { PlanetNameEnum.Sun ,4},  {PlanetNameEnum.Moon ,5},  {PlanetNameEnum.Mars ,6},  {PlanetNameEnum.Mercury ,7}, { PlanetNameEnum.Jupiter ,8 } }
+                },
+                { Library.DayOfWeek.Saturday, new Dictionary<PlanetNameEnum, int>
+                    { { PlanetNameEnum.Saturn, 1 }, { PlanetNameEnum.Empty ,2 }, { PlanetNameEnum.Sun ,3 }, { PlanetNameEnum.Moon ,4},  {PlanetNameEnum.Mars ,5},  {PlanetNameEnum.Mercury ,6},  {PlanetNameEnum.Jupiter ,7}, { PlanetNameEnum.Venus ,8 } }
+                },
+            };
+
+
+                if (dayRulers.TryGetValue(weekday, out var planetParts))
+                {
+                    if (planetParts.TryGetValue(inputPlanet, out var partNumber))
+                    {
+                        return partNumber;
+                    }
+                    throw new Exception("Invalid planet name");
+                }
+
+                throw new Exception("Invalid day of week");
+            }
+
+        }
+
+        /// <summary>
+        /// Given a planet name will tell if it is an Upagraha planet
+        /// </summary>
+        public static bool IsUpagraha(PlanetName planet)
+        {
+            var planetName = planet.Name;
+            switch (planetName)
+            {
+                case PlanetNameEnum.Dhuma:
+                case PlanetNameEnum.Vyatipaata:
+                case PlanetNameEnum.Parivesha:
+                case PlanetNameEnum.Indrachaapa:
+                case PlanetNameEnum.Upaketu:
+                case PlanetNameEnum.Kaala:
+                case PlanetNameEnum.Mrityu:
+                case PlanetNameEnum.Arthaprahaara:
+                case PlanetNameEnum.Yamaghantaka:
+                case PlanetNameEnum.Gulika:
+                case PlanetNameEnum.Maandi:
+                    return true;
+            }
+
+            //if control reaches here than must be normal planet
+            return false;
+        }
+
+
+        #endregion
+
         #region CACHED FUNCTIONS
         //NOTE : These are functions that don't call other functions from this class
         //       Only functions that don't call other cached functions are allowed to be cached
@@ -5990,11 +7098,10 @@ namespace VedAstro.Library
                 int iflag = SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
                 double[] results = new double[6];
                 string err_msg = "";
-                double jul_day_ET;
                 SwissEph ephemeris = new SwissEph();
 
                 // Convert DOB to ET
-                jul_day_ET = TimeToEphemerisTime(time);
+                double jul_day_ET = TimeToEphemerisTime(time);
 
                 //convert planet name, compatible with Swiss Eph
                 int swissPlanet = Tools.VedAstroToSwissEph(planetName);
@@ -6039,6 +7146,26 @@ namespace VedAstro.Library
 
             Angle _getPlanetNirayanaLongitude()
             {
+                //if Upagrahas hadle seperately
+                if (Calculate.IsUpagraha(planetName))
+                {
+                    //calculate upagraha
+                    switch (planetName.Name)
+                    {
+                        case PlanetNameEnum.Dhuma: return Calculate.DhumaLongitude(time);
+                        case PlanetNameEnum.Vyatipaata: return Calculate.VyatipaataLongitude(time);
+                        case PlanetNameEnum.Parivesha: return Calculate.PariveshaLongitude(time);
+                        case PlanetNameEnum.Indrachaapa: return Calculate.IndrachaapaLongitude(time);
+                        case PlanetNameEnum.Upaketu: return Calculate.UpaketuLongitude(time);
+                        case PlanetNameEnum.Kaala: return Calculate.KaalaLongitude(time);
+                        case PlanetNameEnum.Mrityu: return Calculate.MrityuLongitude(time);
+                        case PlanetNameEnum.Arthaprahaara: return Calculate.ArthaprahaaraLongitude(time);
+                        case PlanetNameEnum.Yamaghantaka: return Calculate.YamaghantakaLongitude(time);
+                        case PlanetNameEnum.Gulika: return Calculate.GulikaLongitude(time);
+                        case PlanetNameEnum.Maandi: return Calculate.MaandiLongitude(time);
+                    }
+                }
+
 
                 //This would request sidereal positions calculated using the Swiss Ephemeris.
                 int iflag = SwissEph.SEFLG_SIDEREAL | SwissEph.SEFLG_SWIEPH; // SEFLG_SIDEREAL | ; //+ SwissEph.SEFLG_SPEED;
@@ -6093,11 +7220,10 @@ namespace VedAstro.Library
                 int iflag = SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
                 double[] results = new double[10];
                 string err_msg = "";
-                double jul_day_ET;
                 SwissEph ephemeris = new SwissEph();
 
                 // Convert DOB to ET
-                jul_day_ET = Calculate.ConvertLmtToJulian(time);
+                var jul_day_ET = Calculate.ConvertLmtToJulian(time);
 
                 //Get planet long
                 var eclipseType = 0; /* eclipse type wanted: SE_ECL_TOTAL etc. or 0, if any eclipse type */
@@ -6405,7 +7531,6 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Converts Planet Longitude to Zodiac Sign equivalent
         /// </summary>
@@ -6483,7 +7608,11 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Get Day Of Week
+        /// Get Vedic Day Of Week
+        /// The Hindu day begins with sunrise and continues till
+        /// next sunrise.The first hora on any day will be the
+        /// first hour after sunrise and the last hora, the hour
+        /// before sunrise the next day.
         /// </summary>
         public static DayOfWeek DayOfWeek(Time time)
         {
@@ -6494,24 +7623,42 @@ namespace VedAstro.Library
             //UNDERLYING FUNCTION
             DayOfWeek _getDayOfWeek()
             {
-                //The Hindu day begins with sunrise and continues till
-                //next sunrise.The first hora on any day will be the
-                //first hour after sunrise and the last hora, the hour
-                //before sunrise the next day.
+                // The Hindu day begins with sunrise and continues till
+                // next sunrise. The first hora on any day will be the
+                // first hour after sunrise and the last hora, the hour
+                // before sunrise the next day.
 
-                //TODO Change to new day system
-                //TODO make test first
+                //TODO NEEDS VERIFICATION
 
                 var sunRise = Calculate.SunriseTime(time);
 
-                //get week day name in string
-                var dayOfWeekNameInString = time.GetLmtDateTimeOffset().DayOfWeek.ToString();
+                // If the current time is after today's sunrise and before tomorrow's sunrise,
+                // then it is still considered today.
+                var tomorrowSunrise = Calculate.SunriseTime(time.AddHours(24)).GetLmtDateTimeOffset();
+                var todaySunrise = sunRise.GetLmtDateTimeOffset();
+                var lmtTime = time.GetLmtDateTimeOffset();
 
-                //convert string to day of week type
-                Enum.TryParse(dayOfWeekNameInString, out DayOfWeek dayOfWeek);
+                if (lmtTime >= todaySunrise && lmtTime < tomorrowSunrise)
+                {
+                    //get week day name in string
+                    var dayOfWeekNameInString = lmtTime.DayOfWeek.ToString();
 
-                //return to caller
-                return dayOfWeek;
+                    //convert string to day of week type
+                    Enum.TryParse(dayOfWeekNameInString, out DayOfWeek dayOfWeek);
+
+                    return dayOfWeek;
+                }
+                else
+                {
+                    //get week day name in string
+                    var dayOfWeekNameInString = lmtTime.AddDays(-1).DayOfWeek.ToString();
+
+                    //convert string to day of week type
+                    Enum.TryParse(dayOfWeekNameInString, out DayOfWeek dayOfWeek);
+
+                    // If the current time is before today's sunrise, then it is considered the previous day.
+                    return dayOfWeek;
+                }
             }
 
 
@@ -6520,7 +7667,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets hora lord based on hora number & week day
         /// </summary>
-        public static PlanetName LordOfHora(int hora, DayOfWeek day)
+        public static PlanetName LordOfHoraFromWeekday(int hora, DayOfWeek day)
         {
             switch (day)
             {
@@ -6733,6 +7880,30 @@ namespace VedAstro.Library
 
         }
 
+
+        /// <summary>
+        /// Each day starts at sunrise and ends at next day's sunrise. This period is
+        /// divided into 24 equal parts and they are called horas. A hora is almost equal
+        /// to an hour. These horas are ruled by different planets. The lords of hora
+        /// come in the order of decreasing speed with respect to earth: Saturn, Jupiter,
+        /// Mars, Sun, Venus, Mercury and Moon. After Moon, we go back to Saturn
+        /// and repeat the 7 planets.
+        /// </summary>
+        public static PlanetName LordOfHoraFromTime(Time time)
+        {
+            //first ascertain the weekday of birth
+            var birthWeekday = Calculate.DayOfWeek(time);
+
+            //ascertain the number of hours elapsed from sunrise to birth
+            //This shows the number of horas passed.
+            var hora = Calculate.HoraAtBirth(time);
+
+            //get lord of hora (hour)
+            var lord = Calculate.LordOfHoraFromWeekday(hora, birthWeekday);
+
+            return lord;
+        }
+
         /// <summary>
         /// Gets the junction point (sandhi) between 2 consecutive
         /// houses, where one house begins and the other ends.
@@ -6827,7 +7998,6 @@ namespace VedAstro.Library
             }
         }
 
-
         /// <summary>
         /// Given a planet name will return list of signs that the planet rules
         /// </summary>
@@ -6861,6 +8031,36 @@ namespace VedAstro.Library
                 case PlanetNameEnum.Saturn:
                     zodiacNames.Add(ZodiacName.Capricorn);
                     zodiacNames.Add(ZodiacName.Aquarius);
+                    break;
+                case PlanetNameEnum.Dhuma:
+                    zodiacNames.Add(ZodiacName.Capricorn);
+                    break;
+                case PlanetNameEnum.Vyatipaata:
+                    zodiacNames.Add(ZodiacName.Gemini);
+                    break;
+                case PlanetNameEnum.Parivesha:
+                    zodiacNames.Add(ZodiacName.Sagittarius);
+                    break;
+                case PlanetNameEnum.Indrachaapa:
+                    zodiacNames.Add(ZodiacName.Cancer);
+                    break;
+                case PlanetNameEnum.Upaketu:
+                    zodiacNames.Add(ZodiacName.Cancer);
+                    break;
+                case PlanetNameEnum.Gulika:
+                    zodiacNames.Add(ZodiacName.Aquarius);
+                    break;
+                case PlanetNameEnum.Yamaghantaka:
+                    zodiacNames.Add(ZodiacName.Sagittarius);
+                    break;
+                case PlanetNameEnum.Arthaprahaara:
+                    zodiacNames.Add(ZodiacName.Gemini);
+                    break;
+                case PlanetNameEnum.Kaala:
+                    zodiacNames.Add(ZodiacName.Capricorn);
+                    break;
+                case PlanetNameEnum.Mrityu:
+                    zodiacNames.Add(ZodiacName.Scorpio);
                     break;
                 default:
                     zodiacNames.Add(ZodiacName.Empty);
@@ -6943,10 +8143,6 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Gets the exact longitude where planet is Exalted/Exaltation
-        ///
-        /// NOTE:
-        /// Rahu & ketu have exaltation points ref : Astroloy for Beginners pg. 12
-        /// 
         /// Exaltation
         /// Each planet is held to be exalted when it is
         /// in a particular sign. The power to do good when in
@@ -6954,6 +8150,11 @@ namespace VedAstro.Library
         /// Throughout the sign ascribed, the planet is exalted
         /// but in a particular degree its exaltation is at the maximum level.
         /// 
+        /// NOTE:
+        /// - For Upagrahas no exact degree for exaltation the whole
+        /// sign is counted as such exalatiotn set at degree 1
+        /// 
+        /// - Rahu & ketu have exaltation points ref : Astroloy for Beginners pg. 12
         /// </summary>
         public static ZodiacSign PlanetExaltationPoint(PlanetName planetName)
         {
@@ -7012,10 +8213,33 @@ namespace VedAstro.Library
                 {
                     return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(20));
                 }
+
                 // Ketu 20th of Scorpio.
                 else if (planetName == Library.PlanetName.Ketu)
                 {
                     return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(20));
+                }
+
+                //NOTE: Upagrahas exalatation whole sign, artificial set degree 1
+                else if (planetName == Library.PlanetName.Dhuma)
+                {
+                    return new ZodiacSign(ZodiacName.Leo, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Vyatipaata)
+                {
+                    return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Parivesha)
+                {
+                    return new ZodiacSign(ZodiacName.Gemini, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Indrachaapa)
+                {
+                    return new ZodiacSign(ZodiacName.Sagittarius, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Upaketu)
+                {
+                    return new ZodiacSign(ZodiacName.Aquarius, Angle.FromDegrees(1));
                 }
 
                 throw new Exception("Planet exaltation point not found, error!");
@@ -7025,19 +8249,21 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets the exact longitude where planet is Debilitated/Debility
+        /// Gets the exact sign longitude where planet is Debilitated/Debility
         /// TODO method needs testing!
         /// Note:
-        /// -   Rahu & ketu have debilitation points ref : Astroloy for Beginners pg. 12
-        /// -   "planet to sign relationship" is the whole sign, this is just a point
-        /// -   The 7th house or the 180th degree from the place of exaltation is the
-        ///     place of debilitation or fall. The Sun is debilitated-
-        ///     in the 10th degree of Libra, the Moon 3rd
-        ///     of Scorpio and so on.
-        /// -   The debilitation or depression points are found
-        ///     by adding 180° to the maximum points given above.
-        ///     While in a state of fall, planets give results contrary
-        ///     to those when in exaltation. ref : Astroloy for Beginners pg. 11
+        /// - Rahu & ketu have debilitation points ref : Astroloy for Beginners pg. 12
+        /// - "planet to sign relationship" is the whole sign, this is just a point
+        /// - The 7th house or the 180th degree from the place of exaltation is the
+        ///   place of debilitation or fall. The Sun is debilitated-
+        ///   in the 10th degree of Libra, the Moon 3rd
+        ///   of Scorpio and so on.
+        /// - For Upagrahas no exact degree for exaltation the whole
+        ///   sign is counted as such exalatiotn set at degree 1
+        /// - The debilitation or depression points are found
+        ///   by adding 180° to the maximum points given above.
+        ///   While in a state of fall, planets give results contrary
+        ///   to those when in exaltation. ref : Astroloy for Beginners pg. 11
         /// </summary>
         public static ZodiacSign PlanetDebilitationPoint(PlanetName planetName)
         {
@@ -7054,36 +8280,6 @@ namespace VedAstro.Library
                 // place of debilitation or fall. The Sun is debilitated-
                 // in the 10th degree of Libra, the Moon 3rd
                 // of Scorpio and so on.
-
-                //if (planetName == PlanetName.Sun)
-                //{
-                //    return Angle.FromDegrees(190);
-                //}
-                //else if (planetName == PlanetName.Moon)
-                //{
-                //    return Angle.FromDegrees(213);
-                //}
-                //else if (planetName == PlanetName.Mars)
-                //{
-                //    return Angle.FromDegrees(118);
-                //}
-                //else if (planetName == PlanetName.Mercury)
-                //{
-                //    return Angle.FromDegrees(345);
-                //}
-                //else if (planetName == PlanetName.Jupiter)
-                //{
-                //    return Angle.FromDegrees(275);
-                //}
-                //else if (planetName == PlanetName.Venus)
-                //{
-                //    return Angle.FromDegrees(177);
-                //}
-                //else if (planetName == PlanetName.Saturn)
-                //{
-                //    return Angle.FromDegrees(20);
-                //}
-
 
                 //Sun in the 10th degree of Libra;
                 if (planetName == Library.PlanetName.Sun)
@@ -7133,10 +8329,33 @@ namespace VedAstro.Library
                 {
                     return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(20));
                 }
+
                 // Ketu 20th of Taurus.
                 else if (planetName == Library.PlanetName.Ketu)
                 {
                     return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(20));
+                }
+
+                //NOTE: Upagrahas Debilitation whole sign, artificial set degree 1
+                else if (planetName == Library.PlanetName.Dhuma)
+                {
+                    return new ZodiacSign(ZodiacName.Aquarius, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Vyatipaata)
+                {
+                    return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Parivesha)
+                {
+                    return new ZodiacSign(ZodiacName.Sagittarius, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Indrachaapa)
+                {
+                    return new ZodiacSign(ZodiacName.Gemini, Angle.FromDegrees(1));
+                }
+                else if (planetName == Library.PlanetName.Upaketu)
+                {
+                    return new ZodiacSign(ZodiacName.Leo, Angle.FromDegrees(1));
                 }
 
 
@@ -7669,6 +8888,112 @@ namespace VedAstro.Library
             return bindu;
         }
 
+        /// <summary>
+        /// Kakshyas for daily use : The concept of Kakshyas can be
+        /// employed for daily use. The method of this application is simple.
+        /// Prepare the Prastaraka charts for the seven planets. Then find
+        /// out the longitudes of each of the seven planets on a given day.
+        /// In the Prastaraka of the Sun, see if the transiting Sun is passing
+        /// through a Kakshya with a benefic point. For the Moon's transit,
+        /// consider the Prastaraka of the Moon. See for all the planets.
+        /// When several planets are transiting the Kakshyas where the natal
+        /// planets have contributed benefic points, that day is auspicious.
+        /// When several planets transit the Kakshyas where there are no
+        /// benefic points, it is adverse time for the native
+        /// 
+        /// The Concept of Kakshya
+        /// The Prastaraka charts for different planets can be represented
+        /// in a different manner to make use of the concept of Kakshyas.
+        /// Each rashi or sign is divided into eight equal parts or Kakshyas
+        /// The Prastaraka chart for each planet can thus be readjusted
+        /// to bring in the concept of the Kakshyas.
+        /// A planet is considered to be productive ofbenefic
+        /// results when it transits a Kakshya where there is a benefic point
+        /// </summary>
+        public static GocharaKakshas GocharaKakshas(Time checkTime, Time birthTime)
+        {
+            //first is column of name planets
+            var column1 = PlanetName.All7Planets;
+
+            //2nd column is signs the planet is currently in
+            var column2 = new Dictionary<PlanetName, ZodiacSign>();
+            //add in each planet and the sign it is in at check time
+            foreach (var planetName in column1) { column2.Add(planetName, Calculate.PlanetZodiacSign(planetName, checkTime)); }
+
+
+            //3rd column is planet which is ruling the current planet
+            //based on current zodiac sign determine the ruling planet
+            var column3 = new Dictionary<PlanetName, string>();
+            foreach (var currentZodiacSign in column2) { column3.Add(currentZodiacSign.Key, GetKakshyaLord(currentZodiacSign.Value)); }
+
+            //NOTE : where current time is linked to birth time
+            //4th column, score of 1 or 0 from Prastaraka 
+            var column4 = new Dictionary<PlanetName, int>();
+            foreach (var mainPlanet in column1) //can be acendant
+            {
+                var planetPrastaraka = Ashtakavarga.PlanetPrastaraka(mainPlanet, birthTime);
+                //narrow down to planet which ruling current planet
+                var rullingPlanet = column3[mainPlanet]; //includes Ascendant
+                var allSigns = planetPrastaraka[rullingPlanet];
+
+                //get specific score at current transiting sign
+                var checkTimeSign = column2[mainPlanet];
+                var score = allSigns[checkTimeSign.GetSignName()];
+                column4.Add(mainPlanet, score);
+            }
+
+            //5th column add points from Prastaraka
+            var column5 = new Dictionary<PlanetName, int>();
+            foreach (var mainPlanet in column1) //can be acendant
+            {
+                var planetPrastaraka = Ashtakavarga.PlanetPrastaraka(mainPlanet, birthTime);
+                //get score of compiled Prastaraka for all signs
+                var bhinnashtakaRow = planetPrastaraka.BhinnashtakaRow();
+
+                //get specific score at current transiting sign
+                var checkTimeSign = column2[mainPlanet];
+                var score = bhinnashtakaRow[checkTimeSign.GetSignName()];
+                column5.Add(mainPlanet, score);
+            }
+
+            //6th column add points from Sarvashtaka 
+            var column6 = new Dictionary<PlanetName, int>();
+            foreach (var mainPlanet in column1) //can be acendant
+            {
+                //get Sarvashtaka for all signs
+                var allSigns = SarvashtakavargaChart(birthTime);
+
+                //get specific score at current transiting sign
+                var checkTimeSign = column2[mainPlanet];
+
+                //get column with added points
+                var score = allSigns.SarvashtakavargaRow[checkTimeSign.GetSignName()];
+
+                column6.Add(mainPlanet, score);
+            }
+
+            //pack the data to be oupted various formats even JPEG! yeah!
+            var finalData = new GocharaKakshas(column1, column2, column3, column4, column5, column6);
+            return finalData;
+
+            //based on table data
+            string GetKakshyaLord(ZodiacSign inputZodiacSign)
+            {
+                var degreeInSign = inputZodiacSign.GetDegreesInSign().TotalDegrees;
+
+                if (degreeInSign >= 0 && degreeInSign <= 3.75) { return "Saturn"; }
+                else if (degreeInSign > 3.75 && degreeInSign <= 7.5) { return "Jupiter"; }
+                else if (degreeInSign > 7.5 && degreeInSign <= 11.25) { return "Mars"; }
+                else if (degreeInSign > 11.25 && degreeInSign <= 15.00) { return "Sun"; }
+                else if (degreeInSign > 15.00 && degreeInSign <= 18.75) { return "Venus"; }
+                else if (degreeInSign > 18.75 && degreeInSign <= 22.5) { return "Mercury"; }
+                else if (degreeInSign > 22.5 && degreeInSign <= 26.25) { return "Moon"; }
+                else if (degreeInSign > 26.25 && degreeInSign <= 30.0) { return "Ascendant"; }
+
+                throw new Exception("END OF LINE");
+            }
+        }
+
 
         #endregion
 
@@ -7946,7 +9271,6 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// SunTransit8Bindu
         /// Checks if a given planet's with given number of bindu is transiting now (Gochara)
         /// </summary>
         public static bool IsPlanetGocharaBindu(Time birthTime, Time nowTime, PlanetName planet, int bindu)
@@ -7983,8 +9307,7 @@ namespace VedAstro.Library
         /// You can also set how many levels of dasa you want to calculate, default is 4
         /// 7 Levels : Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
         /// </summary>
-        /// <param name="birthTime"></param>
-        /// <param name="levels">range 1 to 7, lower is faster</param>
+        /// <param name="levels">range 1 to 7,coresponds to bhukti, antaram, etc..., lower is faster</param>
         /// <param name="scanYears">time span to calculate, defaults 100 years, average life</param>
         /// <param name="precisionHours"> defaults to 21 days, higher is faster
         /// set how accurately the start & end time of each event is calculated
@@ -8026,6 +9349,17 @@ namespace VedAstro.Library
 
         }
 
+        /// <summary>
+        /// Calculates dasa for a specific time frame
+        /// </summary>
+        /// <param name="startTime">start of time range to show dasa</param>
+        /// <param name="endTime">end of time range to show dasa</param>
+        /// <param name="levels">range 1 to 7,coresponds to bhukti, antaram, etc..., lower is faster</param>
+        /// <param name="precisionHours"> defaults to 21 days, higher is faster
+        /// set how accurately the start & end time of each event is calculated
+        /// exp: setting 1 hour, means given in a time range of 100 years, it will be checked 876600 times 
+        /// </param>
+        /// <returns></returns>
         public static async Task<JObject> DasaAtRange(Time birthTime, Time startTime, Time endTime, int levels = 3, int precisionHours = 100)
         {
             //TODO NOTE:
@@ -8407,6 +9741,27 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Calculate aspect angle between 2 planets
+        /// </summary>
+        public static double PlanetAspectDegree(PlanetName receiver, PlanetName trasmitter, Time time)
+        {
+            //Finding Drishti Kendra or Aspect Angle
+            var planetNirayanaLongitude = Calculate.PlanetNirayanaLongitude(receiver, time).TotalDegrees;
+            var nirayanaLongitude = Calculate.PlanetNirayanaLongitude(trasmitter, time).TotalDegrees;
+            var dk = planetNirayanaLongitude - nirayanaLongitude;
+
+            if (dk < 0) { dk += 360; }
+
+            //get special aspect if any
+            var vdrishti = FindViseshaDrishti(dk, trasmitter);
+
+            var final = FindDrishtiValue(dk) + vdrishti;
+
+            return final;
+
+        }
+
+        /// <summary>
         /// Gets all planets the transmitting aspect to inputed planet
         /// </summary>
         public static List<PlanetName> PlanetsAspectingPlanet(PlanetName receivingAspect, Time time)
@@ -8522,6 +9877,32 @@ namespace VedAstro.Library
         #endregion
 
         #region PLANET AND HOUSE STRENGHT
+
+        /// <summary>
+        /// convert the planets strength into a value over hundred with max & min set by strongest & weakest planet
+        /// </summary>
+        public static double PlanetPowerPercentage(PlanetName inputPlanet, Time time)
+        {
+            //get all planet strength for given time (horoscope)
+            var allPlanets = Calculate.AllPlanetStrength(time);
+
+            //get the power of the planet inputed
+            var planetPwr = allPlanets.FirstOrDefault(x => x.Item2 == inputPlanet).Item1;
+
+            //get min & max
+            var min = allPlanets.Min(x => x.Item1); //weakest planet
+            var max = allPlanets.Max(x => x.Item1); //strongest planet
+
+            //convert the planets strength into a value over hundred with max & min set by strongest & weakest planet
+            //returns as percentage over 100%
+            var factor = planetPwr.Remap(min, max, 0, 100);
+
+            //planet power below 60% filtered out
+            //factor = factor < 60 ? 0 : factor;
+
+            return factor;
+        }
+
 
         /// <summary>
         /// Returns an array of all planets sorted by strenght,
@@ -9318,7 +10699,7 @@ namespace VedAstro.Library
                 }
 
                 //get planet hora
-                var planetHora = Calculate.PlanetHoraSign(planetName, time);
+                var planetHora = Calculate.PlanetHoraSigns(planetName, time);
                 var horaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetHora, time);
                 //add planet hora relationship to list
                 planetSignRelationshipList.Add(horaSignRelationship);
@@ -9417,147 +10798,6 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// Shadvarga bala: This is the strength of a
-        /// planet due to its residence in the 6 sub-divisions
-        /// according to its relation with the dispositor.
-        ///
-        /// They are (1) Rasi, {2) Hora, (3) Drekkana, (4) Navamsa, (5)
-        /// Dwadasamsa and (6) Trimsamsa.
-        /// </summary>
-        public static Shashtiamsa PlanetShadvargaBala(PlanetName planetName, Time time)
-        {
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadvargaBala), planetName, time, Ayanamsa), _getPlanetShadvargaBala);
-
-
-            //UNDERLYING FUNCTION
-            Shashtiamsa _getPlanetShadvargaBala()
-            {
-
-                //declare empty list of planet sign relationships
-                var planetSignRelationshipList = new List<PlanetToSignRelationship>();
-
-                //1.
-                //get planet rasi Moolatrikona.
-                var planetInMoolatrikona = Calculate.IsPlanetInMoolatrikona(planetName, time);
-
-                //if planet is in moolatrikona
-                if (planetInMoolatrikona)
-                {
-                    //add the relationship to the list
-                    planetSignRelationshipList.Add(PlanetToSignRelationship.Moolatrikona);
-                }
-                else
-                //else get planet's normal relationship with rasi
-                {
-                    //get planet rasi
-                    var planetRasi = Calculate.PlanetZodiacSign(planetName, time).GetSignName();
-                    var rasiSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetRasi, time);
-
-                    //add planet rasi relationship to list
-                    planetSignRelationshipList.Add(rasiSignRelationship);
-                }
-
-                //2.
-                //get planet hora
-                var planetHora = Calculate.PlanetHoraSign(planetName, time);
-                var horaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetHora, time);
-                //add planet hora relationship to list
-                planetSignRelationshipList.Add(horaSignRelationship);
-
-                //3.
-                //get planet drekkana
-                var planetDrekkana = Calculate.PlanetDrekkanaSign(planetName, time);
-                var drekkanaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetDrekkana, time);
-                //add planet drekkana relationship to list
-                planetSignRelationshipList.Add(drekkanaSignRelationship);
-
-
-                //4.
-                //get planet navamsa
-                var planetNavamsa = Calculate.PlanetNavamsaSign(planetName, time);
-                var navamsaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetNavamsa, time);
-                //add planet navamsa relationship to list
-                planetSignRelationshipList.Add(navamsaSignRelationship);
-
-
-                //5.
-                //get planet dwadasamsa
-                var planetDwadasamsa = Calculate.PlanetDwadasamsaSign(planetName, time);
-                var dwadasamsaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetDwadasamsa, time);
-                //add planet dwadasamsa relationship to list
-                planetSignRelationshipList.Add(dwadasamsaSignRelationship);
-
-
-                //6.
-                //get planet thrimsamsa
-                var planetThrimsamsa = Calculate.PlanetThrimsamsaSign(planetName, time);
-                var thrimsamsaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetThrimsamsa, time);
-                //add planet thrimsamsa relationship to list
-                planetSignRelationshipList.Add(thrimsamsaSignRelationship);
-
-
-                //calculate total Saptavargaja Bala
-
-                //a place to store total value
-                double totalShadvargaBalaInShashtiamsa = 0;
-
-                //loop through all the relationship
-                foreach (var planetToSignRelationship in planetSignRelationshipList)
-                {
-                    //add relationship point accordingly
-
-                    //A planet in its Moolatrikona is assigned a value of 45 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.Moolatrikona)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 45;
-                    }
-
-                    //in Swavarga 30 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.OwnVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 30;
-                    }
-
-                    //in Adhi Mitravarga 22.5 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.BestFriendVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 22.5;
-                    }
-
-                    //in Mitravarga 15 · Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.FriendVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 15;
-                    }
-
-                    //in Samavarga 7.5 Shashtiamsas ~
-                    if (planetToSignRelationship == PlanetToSignRelationship.NeutralVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 7.5;
-                    }
-
-                    //in Satruvarga 3.75 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.EnemyVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 3.75;
-                    }
-
-                    //in Adhi Satruvarga 1.875 Shashtiamsas.
-                    if (planetToSignRelationship == PlanetToSignRelationship.BitterEnemyVarga)
-                    {
-                        totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 1.875;
-                    }
-
-                }
-
-
-                return new Shashtiamsa(totalShadvargaBalaInShashtiamsa);
-
-            }
-
-        }
 
         /// <summary>
         /// residence of the planet and as such a certain degree of strength or weakness attends on it
@@ -9972,7 +11212,6 @@ namespace VedAstro.Library
             throw new Exception("Disc diameter now found!");
         }
 
-
         /// <summary>
         /// Ayanabala : All planets get 30 shasbtiamsas
         /// at the equator. For the Sun, Jupiter, Mars
@@ -10137,7 +11376,7 @@ namespace VedAstro.Library
                 var hora = Calculate.HoraAtBirth(time);
 
                 //get lord of hora (hour)
-                var lord = Calculate.LordOfHora(hora, birthWeekday);
+                var lord = Calculate.LordOfHoraFromWeekday(hora, birthWeekday);
 
                 //planet inputed is lord of hora, then 60 shashtiamsas
                 if (lord == planetName)
@@ -10390,30 +11629,6 @@ namespace VedAstro.Library
 
             //return value in shashtiamsa type
             return new Shashtiamsa(ochchabalaInShashtiamsa);
-        }
-
-        /// <summary>
-        /// Determines if the input time is day during day, used for birth times
-        /// if day returns true
-        /// </summary>
-        public static bool IsDayBirth(Time time)
-        {
-            //get sunrise & sunset times
-            var sunrise = Calculate.SunriseTime(time).GetLmtDateTimeOffset();
-            var sunset = Calculate.SunsetTime(time).GetLmtDateTimeOffset();
-            var checkingTime = time.GetLmtDateTimeOffset();
-
-            //if time is after sunrise & before sunset, than it is during the day
-            if (checkingTime >= sunrise && checkingTime <= sunset)
-            {
-                return true;
-            }
-            //else during night
-            else
-            {
-                return false;
-            }
-
         }
 
         /// <summary>
@@ -10986,7 +12201,6 @@ namespace VedAstro.Library
             return returnList;
         }
 
-
         /// <summary>
         /// 0 index is strongest
         /// </summary>
@@ -11426,6 +12640,12 @@ namespace VedAstro.Library
             //return strongest planet name
             return strongest.Key;
         }
+
+        /// <summary>
+        /// Gets the characteristic of signs
+        /// </summary>
+        public static SignProperties SignProperties(ZodiacName inputSign) => new SignProperties(inputSign);
+
     }
 }
 

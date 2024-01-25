@@ -1,5 +1,4 @@
 ﻿using System.Xml.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -19,22 +18,5 @@ namespace VedAstro.Library
         /// Converts XML to its instance type
         /// </summary>
         dynamic FromXml<T>(XElement personXml) where T : IToXml;
-    }
-
-    /// <summary>
-    /// convertible to JSON
-    /// </summary>
-    public interface IToJson
-    {
-
-        /// <summary>
-        /// Converts Type to XML version of it
-        /// </summary>
-        /// <returns></returns>
-        JObject ToJson();
-
-        /// <summary>
-        /// Converts XML to its instance type
-        /// </summary>
     }
 }

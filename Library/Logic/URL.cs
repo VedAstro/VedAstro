@@ -6,9 +6,9 @@ public class URL
 {
     //keep inside
     public const string ApiBeta = "https://beta.api.vedastro.org";
-    public const string ApiBetaDirect = "https://vedastroapibeta.azurewebsites.net";
+    public const string ApiBetaDirect = "https://vedastroapibeta.azurewebsites.net/api";
     public const string ApiStable = "https://api.vedastro.org";
-    public const string ApiStableDirect = "https://vedastroapi.azurewebsites.net";
+    public const string ApiStableDirect = "https://vedastroapi.azurewebsites.net/api";
     public const string WebBeta = "https://beta.vedastro.org";
     public const string WebStable = "https://vedastro.org";
     public const string WebDirect = "https://vedastrowebsitestorage.z5.web.core.windows.net";
@@ -78,14 +78,14 @@ public class URL
         GetEventsChart = ApiUrl + "/EventsChart";
         GetCallStatus = ApiUrl + "/GetCallStatus";
         //TODO special URL for chart because timeout Azure CDN timeout >30s
-        GetEventsChartDirect = ApiUrlDirect + "/api/geteventschart"; 
+        GetEventsChartDirect = ApiUrlDirect + "/geteventschart";
         GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
         GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
         SaveEventsChart = ApiUrl + "/SaveEventsChart";
         GetEventDataList = ApiUrl + "/GetEventDataList";
         GetEventsApi = ApiUrl + "/getevents";
         SignInGoogle = ApiUrl + "/SignInGoogle";
-        SignInFacebook = ApiUrl + "/SignInFacebook"; 
+        SignInFacebook = ApiUrl + "/SignInFacebook";
         //NOTE: special use of "direct" url for max speed (no CDN)
         HoroscopeDataListXml = $"{WebUrlDirect}/data/HoroscopeDataList.xml";//used in horoscope prediction
         EventsChartViewerHtml = $"{WebUrlDirect}/data/EventsChartViewer.html";
@@ -167,12 +167,13 @@ public class URL
     public const string GoogleSignInJs = "https://accounts.google.com/gsi/client";
     public const string ExcelSampleMLFile = "https://github.com/VedAstro/VedAstro/raw/master/DataProcessor/TableGeneratorSampleInput.xlsx";
     public const string GeoJsApiUrl = "https://get.geojs.io/v1/ip/geo.json";
-    public const string TelescopeBuyPage = "https://www.ebay.com/itm/285323405966";
+    public const string TelescopeBuyPage = "https://www.ebay.com/itm/285643731472";
     public const string LaptopBuyPage = "https://www.ebay.com/itm/304878531330";
     public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
     public const string GitHubDiscussions = "https://github.com/orgs/VedAstro/discussions";
     public const string YoutubeChannel = "https://www.youtube.com/@vedastro/videos";
     public const string YoutubePythonGuide = "https://youtu.be/chEeF-xEQ48?si=RNTvGlSD-WXgso7P";
+    public const string GitHubDemoFiles = "https://github.com/VedAstro/VedAstro/tree/master/Demo/JavaScript";
     public const string FacebookPage = "https://www.facebook.com/vedastro.org";
     public const string Instagram = "https://www.instagram.com/_vedastro/";
     public const string Twitter = "https://twitter.com/_VedAstro";
@@ -184,13 +185,15 @@ public class URL
     public const string KoFiPage = "https://ko-fi.com/vedastro";
     public const string KoFiPageMemberships = "https://ko-fi.com/vedastro/tiers";
     public const string KoFiSponsorMemberships = "https://ko-fi.com/summary/2f3ac2df-9d55-4c48-87cf-2d6af0b80ceb";
+    public const string StripeINRSupportPayementLink = "https://buy.stripe.com/aEU5lU7nV4Pl0DKcMM";
+    public const string StripeUSDSupportPayementLink = "https://buy.stripe.com/7sI15E8rZepVbio289";
     public const string KoFiPrivateServer = "https://ko-fi.com/summary/783edc41-20e6-4e78-adb2-d4380577b5d1";
     public const string KoFiDonateIframe = "https://ko-fi.com/vedastro/?hidefeed=true&widget=true&embed=true&preview=true";
     public const string PaypalMePage = "https://paypal.me/VedAstroOrg";
     public const string NasaJplSource = "https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html";
     public const string SwissEphSource = "https://www.astro.com/swisseph/swephinfo_e.htm";
     public const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
-    public const string WhatsAppContact = "https://wa.me/60142938084?text=Hi";
+    public const string WhatsAppContact = "https://wa.me/601113395387?text=Hi";
     public const string TelegramContact = "https://t.me/vedastro_org";
     public const string EmailToClick = "mailto:contact@vedastro.org";
     public const string GitHubRepo = "https://github.com/VedAstro/VedAstro";

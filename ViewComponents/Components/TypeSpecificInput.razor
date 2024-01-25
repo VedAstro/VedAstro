@@ -10,9 +10,9 @@
 
         @if (paramType == typeof(Time))
         {
-            <span class="hstack gap2-2" style="font-weight: 600; color: red;">
+            <span class="hstack gap2-2" style="font-weight: 600;color: red;margin-left: 13px;">
                 @ParamName
-                <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" />
+                @if (!string.IsNullOrEmpty(ParamDescription)) { <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" /> }
             </span>
             <TimeLocationInput @ref="_inputTimeLocation" />
         }
@@ -21,12 +21,13 @@
             <div class="input-group">
                 <label class="input-group-text" style="font-weight: 600; color: red;" for="@InstanceId">
                     @ParamName
-                    <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" />
+                    @if (!string.IsNullOrEmpty(ParamDescription)) { <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" /> }
                 </label>
                 <select @bind="_inputPlanetName" class="form-select" id="@InstanceId">
                     <option selected>Choose...</option>
                     @{
                         <option value="All" style="color: blue;font-weight: 600;">All</option>
+                        <option value="All9WithUpagrahas" style="color: blue;font-weight: 600;">All 9 With Upagrahas</option>
                         <option value="Sun">Sun</option>
                         <option value="Moon">Moon</option>
                         <option value="Mars">Mars</option>
@@ -45,7 +46,7 @@
             <div class="input-group">
                 <label class="input-group-text" style="font-weight: 600; color: red;" for="@InstanceId">
                     @ParamName
-                    <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" />
+                    @if (!string.IsNullOrEmpty(ParamDescription)) { <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" /> }
                 </label>
                 <select @bind="_inputHouseName" class="form-select" id="@InstanceId">
                     <option selected>Choose...</option>
@@ -72,7 +73,7 @@
             <div class="input-group">
                 <span class="input-group-text" style="font-weight: 600; color: red;" id="@InstanceId">
                     @ParamName
-                    <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" />
+                    @if (!string.IsNullOrEmpty(ParamDescription)) { <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" /> }
                 </span>
                 <input @bind="_inputTotalDegrees" type="text" class="form-control" placeholder="23.456">
             </div>
@@ -82,7 +83,7 @@
             <div class="input-group">
                 <span class="input-group-text" style="font-weight: 600; color: red;" id="@InstanceId">
                     @ParamName
-                    <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" />
+                    @if (!string.IsNullOrEmpty(ParamDescription)) { <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" /> }
                 </span>
                 <input @bind="_inputText" type="text" class="form-control" placeholder="...">
             </div>
@@ -92,7 +93,7 @@
             <div class="input-group">
                 <span class="input-group-text" style="font-weight: 600; color: red;" id="@InstanceId">
                     @ParamName
-                    <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" />
+                    @if (!string.IsNullOrEmpty(ParamDescription)) { <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" /> }
                 </span>
                 <input @bind="_inputNumber" type="number" class="form-control" placeholder="...">
             </div>
@@ -100,7 +101,10 @@
         else if (paramType.IsEnum)
         {
             <div class="input-group">
-                <label class="input-group-text" style="font-weight: 600; color: red;" for="@InstanceId">@(Format.FormatName(paramType.Name))</label>
+                <label class="input-group-text" style="font-weight: 600; color: red;" for="@InstanceId">
+                    @(Format.FormatName(paramType.Name))
+                    @if (!string.IsNullOrEmpty(ParamDescription)) { <HelpIconTooltip ShowOnHover="true" HelpText="@ParamDescription" SmallIcon="true" /> }
+                </label>
                 <select @bind="_inputEnumName" class="form-select" id="@InstanceId">
                     <option selected>Choose...</option>
                     @{

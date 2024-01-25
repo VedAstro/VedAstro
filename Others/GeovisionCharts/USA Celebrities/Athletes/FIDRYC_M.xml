@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Mark</FirstName>
+  <LastName>Fidrych</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2434969.009028</BirthDate>
+  <Longitude>71.800000</Longitude>
+  <Latitude>42.266667</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>1.000000</DST>
+  <City>Worcester</City>
+  <State>AL Alabama</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Baseball player. Refershing boyish enthusiasm, good natured eccentricities, twitchy. Hyperactive, honest, gullible, local hero, popular. Indifferent to money, no hurry to ask for more. Idiosyncratic mannerisms and antics, spontaneity, unpredictable. Far from being wacky, down to earth, considerate. Avoids steady dating, foud solitude harder to bear, religious. CB 78. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

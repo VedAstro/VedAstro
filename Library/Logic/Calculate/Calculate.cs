@@ -9239,6 +9239,7 @@ namespace VedAstro.Library
             //get chestaBala
             var chestaBala = Calculate.PlanetChestaBala(planetName, time).ToDouble();
 
+            
             //based on chesta bala assign name to it
             //Chesta kendra = 180 degrees = Retrograde
             switch (chestaBala)

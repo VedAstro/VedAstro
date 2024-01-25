@@ -46,9 +46,9 @@
     <div class="mt-md-0 mt-4 me-md-5">
         <!--when small give at top-->
         <div class="vstack gap-0 gap-md-2">
-            <InfoBox MaxWidth="365" Title="Easy Import" Description="Birth data from Jagannatha Hora, Parashara's Light" IconName="meteocons:cloud-up-fill" ClickUrl="@PageRoute.Import"  />
+            <InfoBox MaxWidth="365" Title="Easy Import" Description="Birth data from Jagannatha Hora, Light of KP (LOKPA) or Parashara's Light 9" IconName="fluent-emoji-flat:outbox-tray" ClickUrl="@PageRoute.Import"  />
             <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
-            <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="fa-solid:history" IsNewTabOpen="true" ClickUrl="@PageRoute.BirthTimeFinder" />
+            <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="noto:alarm-clock" IsNewTabOpen="true" ClickUrl="@PageRoute.BirthTimeFinder" />
         </div>
     </div>
 </div>
@@ -73,14 +73,12 @@
     /// </summary>
     private async Task OnClickSubmitButton() => await InvokeAsync(async () => await _OnClickSubmitButton()).Try(_jsRuntime);
 
-
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
     //sends the newly created person to API server
     private async Task _OnClickSubmitButton()
     {
-
         //if not logged in tell user what the f he is doing
         if (AppData.IsGuestUser)
         {

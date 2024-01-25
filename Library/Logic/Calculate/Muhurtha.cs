@@ -2788,9 +2788,9 @@ namespace VedAstro.Library
 
             var yoga = Calculate.NithyaYoga(time);
 
-            if (yoga == NithyaYoga.Atiganda || yoga == NithyaYoga.Soola
-                || yoga == NithyaYoga.Ganda || yoga == NithyaYoga.Vyatapata
-                || yoga == NithyaYoga.Vaidhriti)
+            if (yoga.Name == NithyaYogaName.Atiganda || yoga.Name == NithyaYogaName.Soola
+                || yoga.Name == NithyaYogaName.Ganda || yoga.Name == NithyaYogaName.Vyatapata
+                || yoga.Name == NithyaYogaName.Vaidhriti)
             {
                 return CalculatorResult.NotOccuring();
             }
@@ -2826,9 +2826,9 @@ namespace VedAstro.Library
 
             var yoga = Calculate.NithyaYoga(time);
 
-            if (yoga == NithyaYoga.Atiganda || yoga == NithyaYoga.Soola
-                                            || yoga == NithyaYoga.Ganda || yoga == NithyaYoga.Vyatapata
-                                            || yoga == NithyaYoga.Vaidhriti)
+            if (yoga.Name == NithyaYogaName.Atiganda || yoga.Name == NithyaYogaName.Soola
+                                            || yoga.Name == NithyaYogaName.Ganda || yoga.Name == NithyaYogaName.Vyatapata
+                                            || yoga.Name == NithyaYogaName.Vaidhriti)
             {
                 return CalculatorResult.IsOccuring();
             }
@@ -4584,8 +4584,8 @@ namespace VedAstro.Library
             //get lunar current lunar month
             var lunarMonth = Calculate.LunarMonth(time);
 
-            if (lunarMonth is LunarMonth.Jaistam or LunarMonth.Ashadam or LunarMonth.Bhadrapadam
-                or LunarMonth.Aswijam or LunarMonth.Margasiram or LunarMonth.Pooshiam or LunarMonth.Phalgunam)
+            if (lunarMonth is LunarMonth.Jyeshtha or LunarMonth.Aashaadha or LunarMonth.Bhaadrapada
+                or LunarMonth.Aaswayuja or LunarMonth.Maargasira or LunarMonth.Pushya or LunarMonth.Phaalguna)
             {
                 return CalculatorResult.IsOccuring();
             }

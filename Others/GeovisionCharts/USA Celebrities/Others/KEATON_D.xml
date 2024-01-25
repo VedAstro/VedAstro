@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Dianne</FirstName>
+  <LastName>Keaton</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2431825.617361</BirthDate>
+  <Longitude>118.250000</Longitude>
+  <Latitude>34.066667</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Los Angeles</City>
+  <State>CA California</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Actress. Accomplished actress, Hollywood outsider, early age clown. Saw an analyst 3-5 times a week. Casual dress, no makeup, nervous, kooky comedy character. Constant, uneasy smile, speaks slowly, shyly and softly. Biggest female star for a time. CB 78   NYT 4/77. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

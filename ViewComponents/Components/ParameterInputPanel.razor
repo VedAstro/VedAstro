@@ -49,38 +49,83 @@
                     <optgroup label="Easy">
                         @foreach (var ayanamsa in @AppData.SimpleAyanamsaAll)
                         {
-                                <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
+                            <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
                         }
                     </optgroup>
                     <optgroup label="Advanced">
                         @foreach (var ayanamsa in @AppData.AdvancedAyanamsaAll)
                         {
-                                <option value="@ayanamsa">@ayanamsa</option>
+                            <option value="@ayanamsa">@ayanamsa</option>
                         }
                     </optgroup>
                 </select>
             </div>
-
-            <div class="input-group" style="display: none">
-                <span class="input-group-text">Year of Zero Coincidence</span>
-                <input type="text" class="form-control" placeholder="397">
+            
+            @* FORMAT *@
+            <div class="input-group mb-2">
+                <label style="width: @GR.W134px;" class="input-group-text">
+                    <Icon ExtraClass="me-2" IconName="lucide:file-output"/>
+                    Format
+                    <HelpIconTooltip ShowOnHover="true" HelpText="Output format, select JPEG for ready made table as image or JSON for parsable data" SmallIcon="true" />
+                </label>
+                <select @bind="SelectedFormat" class="form-select">
+                    <option value="JSON">JSON</option>
+                    <option value="JPEG">JPEG Table</option>
+                </select>
             </div>
+
         </div>
     </div>
 </div>
 
 @code {
 
-    
-
-
-
     /// <summary>
     /// if not specified will not be included in final URL
-    /// default set to Raman, as used system wide
+    /// default set to Raman, as used system-wide
     /// </summary>
     private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
 
+    /// <summary>
+    /// can be JSON or JPEG
+    /// </summary>
+    private string _selectedFormat = "JSON";
+
+    /// <summary>
+    /// can be JSON or JPEG
+    /// </summary>
+    public string SelectedFormat
+    {
+        get => _selectedFormat;
+        set
+        {
+            _selectedFormat = value;
+            
+            // //only allow set for calls that support
+            // //check if output type of selected method as code for needed format
+            // Type returnType = SelectedMethod.MethodInfo.ReturnType;
+
+            // bool isImplemented = false;
+            // switch (value)
+            // {
+            //     case "JSON": isImplemented = typeof(IToJson).IsAssignableFrom(returnType);
+            //         break;
+            //     case "JPEG": isImplemented = typeof(IToJpeg).IsAssignableFrom(returnType);
+            //         break;
+            // }
+
+            // //if implemented set it, else show not ready or supported message
+            // if (isImplemented)
+            // {
+            //     _selectedFormat = value;
+            // }
+            // else
+            // {
+                
+            // }
+
+        }
+    }
 
 
     TypeSpecificInput _param1;
@@ -101,6 +146,8 @@
     //list of all the inputs on screen
     List<TypeSpecificInput> paramListOptional;
     List<TypeSpecificInput> paramList;
+
+    public OpenAPIMetadata SelectedMethod { get; set; }
 
 
     //TODO MARKED FOR DELETION
@@ -136,8 +183,13 @@
 
     //given data on params shows them on screen
     //input format List(param name, description, type)
-    public void Show(List<ParameterMetadata> paramInfoList)
+    public void Show(OpenAPIMetadata openApiMetadata)
     {
+        //save for later use
+        SelectedMethod = openApiMetadata;
+
+        //extract parameters 
+        List<ParameterMetadata> paramInfoList = openApiMetadata.GetParamList();
         //split into 2 lists, required and optional
         _requiredParams = paramInfoList.Where(x => x.IsOptional == false).ToList();
         _optionalParams = paramInfoList.Where(x => x.IsOptional == true).ToList();
@@ -147,7 +199,6 @@
 
         for (int index = 0; index < _requiredParams.Count; index++){paramList[index].SetValue(_requiredParams[index]);}
 
-
         //clear inputs from previous method (if any)
         foreach (var paramInput in paramListOptional) { paramInput?.Hide(); }
 
@@ -155,6 +206,7 @@
 
         StateHasChanged(); //needed to propagate updates
     }
+
 
     public async Task<string> ToApiUrl()
     {
@@ -179,9 +231,13 @@
             }
         }
 
-        //add ayanamsa if selected
+        //add ayanamsa if changed
         var ayanamsaUrl = _selectedAyanamsa == SimpleAyanamsa.LahiriChitrapaksha.ToString() ? "" : $"/Ayanamsa/{_selectedAyanamsa}";
         compiledUrl += ayanamsaUrl;
+
+        //add format if changed
+        var formatUrl = SelectedFormat == "JSON" ? "" : $"/Format/{SelectedFormat}";
+        compiledUrl += formatUrl;
 
         return compiledUrl;
 

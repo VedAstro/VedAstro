@@ -152,6 +152,23 @@
                         </label>
                     </div>
                     <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.Astronomical])" id="@EventTag.Astronomical" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100" for="@EventTag.Astronomical">
+                            <Icon IconName="ion:telescope-outline" />
+                            @(Format.FormatName(EventTag.Astronomical.ToString()))
+                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                                <TooltipHtml>
+                                    <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Astronomical))
+                                        {
+                                            <span>@x.FormattedName</span>
+                                        }
+                                    </div>
+                                </TooltipHtml>
+                            </IconTooltip>
+                        </label>
+                    </div>
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
                         <input @bind="@(SelectedTagsDictionary[EventTag.Marriage])" id="@EventTag.Marriage" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
                         <label class="form-check-label d-flex gap-2 w-100" for="@EventTag.Marriage">
                             <Icon IconName="fluent-emoji-high-contrast:heart-with-arrow" />
@@ -500,7 +517,7 @@
         var timeRange = GetTimeRange();
 
         //for muhurtha standard event nature is more logical
-        var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General };
+        var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General };
         var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart (will auto scroll to chart when done)

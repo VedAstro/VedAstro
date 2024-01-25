@@ -11,5 +11,16 @@
         /// Gets the number of days between start and end time
         /// </summary>
         public double daysBetween => this.end.Subtract(this.start).TotalDays;
+
+
+        /// <summary>
+        /// Text of start and end time. Exp: 10/10/2020 - 11/10/2020
+        /// </summary>
+        public override string ToString()
+        {
+            var finalString = $"{start.StdDateMonthYearText} - {end.StdDateMonthYearText}";
+
+            return finalString;
+        }
     }
 }

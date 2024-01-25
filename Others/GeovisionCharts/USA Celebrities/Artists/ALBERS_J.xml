@@ -1,0 +1,70 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Joseph</FirstName>
+  <LastName>Albers</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2410715.855556</BirthDate>
+  <Longitude>-6.916667</Longitude>
+  <Latitude>51.516667</Latitude>
+  <TimeZone>0.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Bottrop</City>
+  <State>GERMANY (General)</State>
+  <Country>Germany</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events><Event Id="1" ><Name>Today</Name>
+   <Description></Description>
+   <Date>2453781.054132</Date>
+   <Longitude>91.950000</Longitude>
+   <Latitude>41.000000</Latitude>
+   <TimeZone>6.000000</TimeZone>
+   <DST>0.000000</DST>
+   <City>Fairfield</City>
+   <State>IA Iowa</State>
+   <Country>USA</Country>
+   <EventLookUpMode>A</EventLookUpMode>
+   <EventClassification></EventClassification>
+   <EventNotes></EventNotes>
+   <EventRodden>0</EventRodden>
+   <IsUsed>0</IsUsed>
+  </Event>
+  <Event Id="2" ><Name>Muhurta</Name>
+   <Description></Description>
+   <Date>2453781.054132</Date>
+   <Longitude>91.962500</Longitude>
+   <Latitude>41.008611</Latitude>
+   <TimeZone>6.000000</TimeZone>
+   <DST>0.000000</DST>
+   <City>Fairfield</City>
+   <State>IA Iowa</State>
+   <Country>USA</Country>
+   <EventLookUpMode>D</EventLookUpMode>
+   <EventClassification></EventClassification>
+   <EventNotes></EventNotes>
+   <EventRodden>0</EventRodden>
+   <IsUsed>0</IsUsed>
+  </Event>
+ </Events>
+ <DetailedNotes>no notes. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

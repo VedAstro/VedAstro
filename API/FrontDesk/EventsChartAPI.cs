@@ -24,7 +24,43 @@ namespace API
         //█▀█ █▀▀ █   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
         /// <summary>
-        /// Gets GetEventDataList 
+        /// Gets all saved/cached chart names for a person,
+        /// NOTE:
+        /// user than selects the chart, with data,
+        /// when called via generate will auto get the cached chart
+        /// </summary>
+        [Function(nameof(GetSavedChartNameList))]
+        public static async Task<HttpResponseData> GetSavedChartNameList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(GetSavedChartNameList)}/{{personId}}")] HttpRequestData req, string personId)
+        {
+            try
+            {
+                //get all in cache
+                var allSavedCharts = AzureCache.ListBlobs(personId);
+
+                var eventDataList = new JArray();
+                foreach (var chart in allSavedCharts)
+                {
+                    EventsChart parsedChart = await EventsChart.FromCacheName(chart.Name);
+
+                    eventDataList.Add(parsedChart.ToJson());
+                }
+
+                return APITools.PassMessageJson(eventDataList, req);
+            }
+
+            //if any failure, show error in payload
+            catch (Exception e)
+            {
+                APILogger.Error(e, req);
+                return APITools.FailMessageJson(e.Message, req);
+            }
+        }
+
+        /// <summary>
+        /// Gets all entries in EventDataList.xml as parsed JSON
+        /// NOTE:
+        /// used by good time finder
         /// </summary>
         [Function(nameof(GetEventDataList))]
         public static async Task<HttpResponseData> GetEventDataList(
@@ -32,10 +68,13 @@ namespace API
         {
             try
             {
-                var _eventDataList = await Tools.GetXmlFile("https://vedastro.org/data/EventDataList.xml");
+                //get raw xml file
+                var eventDataListXml = await Tools.GetXmlFile("https://vedastrowebsitestorage.z5.web.core.windows.net/data/EventDataList.xml");
 
-                var xx = await Tools.ConvertXmlListFileToInstanceList<EventData>(_eventDataList);
+                //convert to parsed type, so can convert to JSON
+                var xx = await Tools.ConvertXmlListFileToInstanceList<EventData>(eventDataListXml);
 
+                //package nicely into JSON
                 var eventDataList = new JArray();
                 foreach (var x in xx)
                 {
@@ -73,7 +112,7 @@ namespace API
                 //get basic spec on how to make chart
                 //check if the specs given is correct and readable
                 //this is partially filled chart with no generated svg content only specs
-                var chartSpecsOnly = await  EventsChart.FromUrl(settingsUrl);
+                var chartSpecsOnly = await EventsChart.FromUrl(settingsUrl);
 
                 //a hash to id the chart's specs (caching)
                 var chartId = chartSpecsOnly.GetEventsChartSignature();
@@ -299,7 +338,7 @@ namespace API
 
             //hard set max width to 1000px so that no forever calculation created
             maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
-            
+
             //todo needs to be pumped in from input
             var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General };
             var summaryOptions = new ChartOptions(algorithmFuncsList);

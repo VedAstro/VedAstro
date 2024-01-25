@@ -1,0 +1,70 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Carl</FirstName>
+  <LastName>Zuckmayer</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2413921.312500</BirthDate>
+  <Longitude>-8.350000</Longitude>
+  <Latitude>49.916667</Latitude>
+  <TimeZone>-1.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Nackenheim</City>
+  <State>GERMANY (General)</State>
+  <Country>Germany</Country>
+  <BDLoopUpMode>A</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events><Event Id="1" ><Name>Today</Name>
+   <Description></Description>
+   <Date>2453781.098229</Date>
+   <Longitude>-3.166667</Longitude>
+   <Latitude>50.700000</Latitude>
+   <TimeZone>-1.000000</TimeZone>
+   <DST>0.000000</DST>
+   <City>Roubaix</City>
+   <State>FRANCE (General)France</State>
+   <Country>France</Country>
+   <EventLookUpMode>A</EventLookUpMode>
+   <EventClassification></EventClassification>
+   <EventNotes></EventNotes>
+   <EventRodden>0</EventRodden>
+   <IsUsed>0</IsUsed>
+  </Event>
+  <Event Id="2" ><Name>Muhurta</Name>
+   <Description></Description>
+   <Date>2453781.098229</Date>
+   <Longitude>-3.166667</Longitude>
+   <Latitude>50.700000</Latitude>
+   <TimeZone>-0.210000</TimeZone>
+   <DST>0.000000</DST>
+   <City>Roubaix</City>
+   <State>B4 FR Nord-Pas-dFrance                  =FR,FR,0</State>
+   <Country>France                  =FR,FR,0</Country>
+   <EventLookUpMode>D</EventLookUpMode>
+   <EventClassification></EventClassification>
+   <EventNotes></EventNotes>
+   <EventRodden>0</EventRodden>
+   <IsUsed>0</IsUsed>
+  </Event>
+ </Events>
+ <DetailedNotes>no notes. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

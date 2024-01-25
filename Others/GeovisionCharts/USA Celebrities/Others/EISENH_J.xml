@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>John</FirstName>
+  <LastName>Eisenhower</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2423269.763889</BirthDate>
+  <Longitude>104.983333</Longitude>
+  <Latitude>39.733333</Latitude>
+  <TimeZone>7.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Denver</City>
+  <State>CO Colorado</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Author and diplomat. Son of President, ambassador, wrote on history. Modest, unassuming, unpretentious, easy to talk to. Shields his childern from publicity. CB 69. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

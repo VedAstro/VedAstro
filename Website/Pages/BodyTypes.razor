@@ -1,0 +1,611 @@
+﻿@using VedAstro.Library
+@using System.Xml.Linq
+@attribute [Route(PageRoute.BodyTypes)]
+
+<PageTitle>Body Types | VedAstro</PageTitle>
+
+
+<style>
+
+
+    .img-fixed-width {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto;
+    }
+
+</style>
+
+@* PAGE HEADER *@
+<PageTopSideImage ImageName="join-our-family.svg"
+                  Title="Body Types (Yoni)"
+                  DescriptionText="Catalog of 27 astro vedic body types with known examples to document and aid in learning to recognize on your own." />
+
+
+<div class="gap-3" style="max-width:@GR.W667px">
+
+
+    <table class="table mb-5" style="text-wrap: nowrap;">
+        <thead>
+            <tr>
+                <th scope="col">Animal</th>
+                <th scope="col">Male Example</th>
+                <th scope="col">Female Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <p>Horse Male</p>
+                    <p>Aswini</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/PeterStormare.jpg" />
+                        <img class="img-fixed-width" src="images/person/JonVoight.webp" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                                    </td>
+            </tr
+      >      <tr>
+                <td>
+                    <p>Horse Female</p>
+                    <p>Satabhisha</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/DenzelWashington.jpg" />
+                        <img class="img-fixed-width" src="images/person/EthanHawke.webp" />
+                        <img class="img-fixed-width" src="images/person/FrançoisTruffaut.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JessicaLange.webp">
+                        <img class="img-fixed-width" src="images/person/DianeKeaton.webp">
+                        <img class="img-fixed-width" src="images/person/HelenMirren.jpg">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Elephant Male</p>
+                    <p>Bharani</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JamieLeeCurtis.jpg">
+                        <img class="img-fixed-width" src="images/person/WhitneyHouston.jpg">
+                        <img class="img-fixed-width" src="images/person/IngridBergman.jpg">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Elephant Female</p>
+                    <p>Revathi</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Sheep Male</p>
+                    <p>Pushyami</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Sheep Female</p>
+                    <p>Krithika</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Serpent Male</p>
+                    <p>Rohini</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Serpent Female</p>
+                    <p>Mrigasira</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Dog Male</p>
+                    <p>Moola</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Dog Female</p>
+                    <p>Aridra</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Cat Male</p>
+                    <p>Aslesha</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Cat Female</p>
+                    <p>Punarvasu</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Rat Male</p>
+                    <p>Makha</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Rat Female</p>
+                    <p>Pubba</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Cow Male</p>
+                    <p>Uttara</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Cow Female</p>
+                    <p>Uttarabhadra</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Buffalo Male</p>
+                    <p>Swathi</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Buffalo Female</p>
+                    <p>Hasta</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Tiger Male</p>
+                    <p>Vishhaka</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Tiger Female</p>
+                    <p>Chitta</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Hare Male</p>
+                    <p>Jyesta</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Hare Female</p>
+                    <p>Anuradha</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Monkey Male</p>
+                    <p>Poorvashada</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Monkey Female</p>
+                    <p>Sravana</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Lion Male</p>
+                    <p>Poorvabhadra</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Lion Female</p>
+                    <p>Dhanishta</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mongoose Male</p>
+                    <p>Uttarashada</p>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                        <img class="img-fixed-width" src="images/person/JeremyIrons.jpg" />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fixed-width" src="images/person/SallyField.jpg">
+                        <img class="img-fixed-width" src="images/person/HelenHunt.jpg">
+                        <img class="img-fixed-width" src="images/person/AngelinaJolie.webp">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+</div>
+
+
+
+@code {
+
+    private ElementReference houseNameSelector;
+    private ElementReference planetNameSelector;
+
+    public string SelectedExperience;
+
+
+    private async Task OnClickJoinUs()
+    {
+        //get email from user via js sweet alert lib
+        var emailFromAlert = await AppData.JsRuntime.PopupTextInput("Email me at...");
+
+        //loading box show
+        await _jsRuntime.ShowLoading();
+
+        //add message to API Messages book
+        await WebsiteTools.SendMailToAPI(emailFromAlert, $"Join Family > Tasks > {SelectedExperience}");
+
+        //say thank you and will get back
+        await _jsRuntime.ShowAlert("success", "Thank you", "we'll get back to you soon");
+    }
+
+}

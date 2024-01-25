@@ -131,13 +131,13 @@ namespace VedAstro.Console
                         var maxWidth = int.Parse(GetInputFromUser("Enter Max Width in Px"));
                         var precisionInHours = double.Parse(GetInputFromUser("Enter Scan Precision in Hours"));
                         System.Console.WriteLine("Start & End of Chart");
-                        var startYear = GetInputFromUser("START Year (0001-9999) ?");
-                        var endYear = GetInputFromUser("END Year (0001-9999) ?");
+                        var startDate = GetInputFromUser("START Year (31/12/2000) ?");
+                        var endDate = GetInputFromUser("END Year (31/12/2000) ?");
                         System.Console.WriteLine("Start & End of Possible Birth Hour");
                         var startHour = GetInputFromUser("START TIME (00:00-23:59) ?");
                         var endHour = GetInputFromUser("END TIME (00:00-23:59) ?");
 
-                        await FindBirthTimeEventsChartPerson(personId, maxWidth, precisionInHours, startYear, endYear, startHour, endHour);
+                        await FindBirthTimeEventsChartPerson(personId, maxWidth, precisionInHours, startDate, endDate, startHour, endHour);
 
                         break;
                     }
@@ -170,12 +170,13 @@ namespace VedAstro.Console
 
             //generate the needed charts
             var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.PD6, EventTag.PD7 };
-            var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General, Algorithm.IshtaKashtaPhala };
+            ///General,IshtaKashtaPhalaDegree,PlanetStrengthDegree
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General, Algorithm.IshtaKashtaPhalaDegree, Algorithm.PlanetStrengthDegree };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
 
             //time range is preset to full life 100 years from birth
-            var start = new Time($"00:00 01/01/{startYear} {foundPerson.BirthTimeZone}", foundPerson.GetBirthLocation());
-            var end = new Time($"00:00 31/12/{endYear} {foundPerson.BirthTimeZone}", foundPerson.GetBirthLocation());
+            var start = new Time($"00:00 {startYear} {foundPerson.BirthTimeZone}", foundPerson.GetBirthLocation());
+            var end = new Time($"00:00 {endYear} {foundPerson.BirthTimeZone}", foundPerson.GetBirthLocation());
             var timeRange = new TimeRange(start, end);
 
             //calculate based on max screen width,

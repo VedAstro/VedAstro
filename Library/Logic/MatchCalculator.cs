@@ -612,8 +612,8 @@ namespace VedAstro.Library
 
 
             //get group names
-            var maleGroupName = Calculate.YoniKutaAnimal(maleConstellation);
-            var femaleGroupName = Calculate.YoniKutaAnimal(femaleConstellation);
+            var maleGroupName = Calculate.YoniKutaAnimalFromConstellation(maleConstellation);
+            var femaleGroupName = Calculate.YoniKutaAnimalFromConstellation(femaleConstellation);
 
             AnimalName maleAnimal = maleGroupName.Animal;
             AnimalName femaleAnimal = femaleGroupName.Animal;

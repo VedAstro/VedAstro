@@ -1,0 +1,70 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Swami</FirstName>
+  <LastName>Vivekananda</LastName>
+  <Anka>0</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2401517.772917</BirthDate>
+  <Longitude>-88.366667</Longitude>
+  <Latitude>22.533333</Latitude>
+  <TimeZone>-5.880000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Calcutta</City>
+  <State>INDIA (general)</State>
+  <Country>India</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events><Event Id="1" ><Name>Today</Name>
+   <Description></Description>
+   <Date>2452015.938646</Date>
+   <Longitude>91.962500</Longitude>
+   <Latitude>41.008611</Latitude>
+   <TimeZone>6.000000</TimeZone>
+   <DST>0.000000</DST>
+   <City>Fairfield</City>
+   <State>IA Iowa</State>
+   <Country>USA</Country>
+   <EventLookUpMode>D</EventLookUpMode>
+   <EventClassification></EventClassification>
+   <EventNotes></EventNotes>
+   <EventRodden>0</EventRodden>
+   <IsUsed>1</IsUsed>
+  </Event>
+  <Event Id="2" ><Name>Muhurta</Name>
+   <Description></Description>
+   <Date>2452015.935150</Date>
+   <Longitude>91.962500</Longitude>
+   <Latitude>41.008611</Latitude>
+   <TimeZone>6.000000</TimeZone>
+   <DST>0.000000</DST>
+   <City></City>
+   <State>IA Iowa</State>
+   <Country>USA</Country>
+   <EventLookUpMode>D</EventLookUpMode>
+   <EventClassification></EventClassification>
+   <EventNotes></EventNotes>
+   <EventRodden>0</EventRodden>
+   <IsUsed>1</IsUsed>
+  </Event>
+ </Events>
+ <DetailedNotes></DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

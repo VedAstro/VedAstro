@@ -621,15 +621,19 @@ class AstroTable {
         return items.filter((item) => item.MethodInfo.Name === apiCalcName);
     }
 
+    //takes in many arrays and combines them into a single table like array
     static CombineRawAPICallResults(inputArray) {
         return inputArray.reduce((acc, curr) => {
-            curr?.forEach((obj) => {
-                const key = Object.keys(obj)[0];
-                if (!acc[key]) {
-                    acc[key] = [];
-                }
-                acc[key].push(obj[key]);
-            });
+            if (curr !== undefined) {
+                let curr1 = curr[Object.keys(curr)[0]];
+                curr1?.forEach((obj) => {
+                    const key = Object.keys(obj)[0];
+                    if (!acc[key]) {
+                        acc[key] = [];
+                    }
+                    acc[key].push(obj[key]);
+                });
+            }
             return acc;
         }, {});
     }
@@ -980,11 +984,11 @@ class AshtakvargaTable {
         //create empty table inside main holder
         //table will be filled later
         $(`#${this.ElementID}`).append(
-            `<table id="${this.SarvashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=""></table>`
+            `<table id="${this.SarvashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
         );
 
         $(`#${this.ElementID}`).append(
-            `<table id="${this.BhinnashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=""></table>`
+            `<table id="${this.BhinnashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
         );
 
         //generate table from inputed data
@@ -1051,6 +1055,5 @@ class AshtakvargaTable {
         var currentTable = document.getElementById(tableId);
         currentTable.innerHTML = html;
     }
-
 
 }

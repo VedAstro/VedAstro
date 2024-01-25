@@ -67,7 +67,6 @@
 
     private string _searchInput = "";
     private Person _selectedPerson;
-    private List<LifeEvent>? _filteredLifeEvents;
     private PersonSelectorBox? _peopleSelectorBox;
 
     private bool _isReady = false;
@@ -78,16 +77,9 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
 
-    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRenderAsync(firstRender)).Try(_jsRuntime);
-
-
-
-    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
-    private async Task _OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        //if parameter has been set then auto load person data as
+        //if parameter has been set then autoload person data as
         //though person was selected and calculate was clicked
         if (PersonIdUrl != null && firstRender)
         {
@@ -106,6 +98,12 @@
             _jsRuntime.HideLoading();
         }
     }
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
 
     private async Task ShowButtonClicked()
     {
@@ -129,9 +127,6 @@
         //life events
         await lifeEventViewer.SetData(_selectedPerson);
 
-        //make a copy for search
-        _filteredLifeEvents = _selectedPerson.LifeEventList.ToList();
-
         //put person name into tab title for easy multi-tabbing
         _pageTitle = $"Journal | {_selectedPerson.Name}";
 
@@ -150,8 +145,14 @@
         //only continue if passed input field validation
         if (!await IsValidationPassed()) { return; }
 
-        AppData.Go(url: $"{PageRoute.JournalEditor}/{PersonIdUrl}/{Tools.GenerateId()}", rememberMe: true);
+        //sometimes, person is selected from memory, but not in URL
+        //in such case, pretend button show button is clicked
+        //updates all the needed values including person ID in URL
+        if (string.IsNullOrEmpty(PersonIdUrl)) { await ShowButtonClicked(); }
 
+        //create new ID will auto be detected on editor page as new
+        var newId = Tools.GenerateId();
+        AppData.Go(url: $"{PageRoute.JournalEditor}/{PersonIdUrl}/{newId}", rememberMe: true);
     }
 
 

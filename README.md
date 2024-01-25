@@ -28,6 +28,7 @@
 
 - [Website](https://vedastro.org/Docs/QuickGuide) --> easy & fast astrology data for **normal users**
 - [Open API](https://vedastro.org/APIBuilder) --> free astrology data for your app or website with a simple `HTTP GET`
+- [JavaScript SDK](https://github.com/VedAstro/VedAstro/tree/master/Demo/JavaScript) --> easy to use JS library to simply API access and use
 - [Swiss Ephemeris API](https://vedastro.org/APIBuilder) --> free advanced astronomy data from NASA's JPL Ephemeris
 - [Learn Astro Computation](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> learn exact math & logic used in astrology via **`Free Open Source`** code
 - [ML Table Generator](https://vedastro.org/TableGenerator) --> easily generate large astronomical tables for use in ML/AI Model training and Data Science
@@ -44,15 +45,18 @@ The sage **`Parashara taught everybody`** the ways of astrology without asking m
 
 
 # 🎯 Perfect Predictions
-[![LifePredictor](https://vedastro.org/images/life-predictor-alertbox-examples.jpg)](https://vedastro.org/LifePredictor)   
-[![LifePredictor](https://vedastro.org/images/HallmarkCharts-SteveJobs-1982-2015.png)](https://vedastro.org/LifePredictor/SteveJobs1955)   
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-steve.jpg)](https://vedastro.org/LifePredictor)   
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-monroe.jpg)](https://vedastro.org/LifePredictor)   
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-hitler.jpg)](https://vedastro.org/LifePredictor)   
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-elon.jpg)](https://vedastro.org/LifePredictor)   
 [![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/Match)   
-[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/StarsAboveMe)   
+[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Horoscope)   
 
 
-# 📊 +200 Astro API Calls & FREE (yeah you read right!)
+# 📊 +200 Astro API Calls
 Below is sample API call result for data related to "**Sun**" on "**30/06/2023**" at "**Singapore**"
 --> [Watch Video Guide](https://www.youtube.com/watch?v=y110RAgIorY)
+--> [JS Demo Files](https://github.com/VedAstro/VedAstro/tree/master/Demo/JavaScript)
 ```json
  "Payload": {
     "SwissEphemeris": "{ Longitude = 97.672406549912, Latitude = 2.2248025536827577E-05, DistanceAU = 1.0165940297895264, SpeedLongitude = 0, SpeedLatitude = 0, SpeedDistance = 0 }",

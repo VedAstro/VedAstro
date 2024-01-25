@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>John W.</FirstName>
+  <LastName>Gardner</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2419684.375000</BirthDate>
+  <Longitude>188.250000</Longitude>
+  <Latitude>34.066667</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Los Angeles</City>
+  <State>CA California</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Organization official, writer. Founder and head of Common Cause, clear, distilled aphoristic style. Too sermonizing, gnomic style, sincere, moral tone and values. Patrician bearing, calm manner, quiet strength. Revises again and again when he writes, a patient prose craftsman. Carefully budgets time, provides periods of thinking. Compassionate, meticulous, schedule, extraordinary memory. CB 76. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

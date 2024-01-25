@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -146,6 +146,14 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// return data row for use in DataTable conversion
+        /// </summary>
+        public object[] ToDataRow()
+        {
+            return new[] { FormattedName, Description, RelatedBody.ToString() };
+        }
+
+        /// <summary>
         /// Searches all text in prediction for input
         /// </summary>
         public bool Contains(string searchText)
@@ -235,6 +243,8 @@ namespace VedAstro.Library
 
 
         #endregion
+
+
 
     }
 }

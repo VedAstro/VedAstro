@@ -121,7 +121,7 @@
          
         <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
         
-        <IndianChart Id="IndianChart" ExtraClass="scrollspy"/>
+        <IndianChart Id="IndianChart" ExtraClass="scrollspy" @ref="indianChartViewer"/>
 
         <div id="PlanetDataTable2" class="scrollspy" ></div>
 
@@ -167,11 +167,11 @@
         }
     }
 
-    private string _selectedAyanamsa = SimpleAyanamsa.LahiriChitrapaksha.ToString();
+    private string _selectedAyanamsa = SimpleAyanamsa.Raman.ToString();
 
     /// <summary>
     /// if not specified will not be included in final URL
-    /// default set to Lahiri Chitrapaksha, as used system wide
+    /// default set to Lahiri Chitrapaksha, as used system-wide
     /// </summary>
     public string SelectedAyanamsa
     {
@@ -179,6 +179,9 @@
         set
         {
             _selectedAyanamsa = value;
+
+            //set ayanamsa into blazor runtime, so that calc done on client will reflect
+            Calculate.Ayanamsa = (int)Tools.EnumFromUrl($"/Ayanamsa/{_selectedAyanamsa}");
 
             //highlight regenerate button to let user know needs recalculation
             _jsRuntime.AnimateHighlightElement("HoroscopeCalculateButton");
@@ -193,6 +196,7 @@
     private PlanetChart planetChart;
 
     private SkyChartViewer skyChartViewer;
+    private IndianChart indianChartViewer;
 
     /// <summary>
     /// Param used in URL to set Person ID via URL
@@ -207,8 +211,6 @@
 
     private Person _selectedPerson;
 
-    private HoroscopeInfoView _horoscopeInfoView;
-
     private PageHelpSection _helpSection;
 
 
@@ -221,6 +223,14 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRenderAsync(firstRender)).Try(_jsRuntime);
 
+
+    protected override void OnInitialized()
+    {
+        //set ayanamsa into blazor runtime, so that calc done on client will reflect
+        //if not set here, it will default to Lahiri
+        Calculate.Ayanamsa = (int)Tools.EnumFromUrl($"/Ayanamsa/{_selectedAyanamsa}");
+
+    }
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -296,6 +306,9 @@
         //update sky chart
         await skyChartViewer.Update(_selectedPerson.BirthTime);
 
+        //update Indian Chart
+        await indianChartViewer.Update(_selectedPerson.BirthTime, SelectedChartStyle);
+
         //update planet chart
         planetChart.UpdateTime(_selectedPerson.BirthTime);
 
@@ -364,7 +377,7 @@
             TimeUrl = timeUrl,
             HoraryNumber = 0,
             RotateDegrees = 0,
-            Ayanamsa = _selectedAyanamsa, //default is Lahiri
+            Ayanamsa = SelectedAyanamsa, //default is Raman
         };
 
         //call VedAstro.js to generate table
@@ -409,7 +422,7 @@
             TimeUrl = timeUrl,
             HoraryNumber = 0,
             RotateDegrees = 0,
-            Ayanamsa = _selectedAyanamsa, //default is Lahiri
+            Ayanamsa = SelectedAyanamsa, //default is Raman
         };
 
         //call VedAstro.js to generate table
@@ -436,7 +449,7 @@
         var inputArguments = new
         {
             TimeUrl = timeUrl,
-            Ayanamsa = _selectedAyanamsa, //default is Lahiri
+            Ayanamsa = SelectedAyanamsa, //default is Raman
         };
 
         //call VedAstro.js to generate table

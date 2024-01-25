@@ -548,13 +548,14 @@ namespace Website
             AppData.Go(searchLink, newTab: true);
         }
 
+
         public static async Task OnClickCopyPythonSnippet(OpenAPIMetadata? methodData, dynamic component = null)
         {
             //if null, tell user to get act together
             if (methodData == null)
             {
                 var msg = "You need to choose a calculator to auto generate Python code.";
-                AppData.JsRuntime.ShowAlert("warning", $"Select a calculator first, {AlertText.RandomNoun()}!", msg);
+                await AppData.JsRuntime.ShowAlert("warning", $"Select a calculator first, {AlertText.RandomNoun()}!", msg);
 
                 //end here
                 return;

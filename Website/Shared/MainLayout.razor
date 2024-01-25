@@ -4,7 +4,6 @@
 @using Website.Pages
 @using System.Text.Json
 
-<NotificationSound @ref="_soundPlayer" />
 
 @*
     NOTE : Components here are loaded same time as page,
@@ -27,7 +26,7 @@
         <div @ref="AppData.DesktopSidebar" class="col-auto align-items-start d-none d-md-block">
             <!--only visible in Desktop-->
             <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 999;">
-                <!-- special style to make appear in night mode dispite bg-white -->
+                <!-- special style to make appear in night mode despite bg-white -->
                 @* SEARCH *@
                 <SearchBox />
                 <SideBarButtons />
@@ -104,8 +103,8 @@
                     <div class="me-5">
                         @* SOCIAL ICONS *@
                         <ul class="list-unstyled d-flex">
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon TooltipText="Buy us Coffee" IconName="medical-icon:coffee-shop" Size="22" /></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon TooltipText="Buy us Beer" IconName="streamline-emojis:beer-mug" Size="22"/></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon TooltipText="Buy us Coffee" IconName="line-md:coffee-half-empty-twotone-loop" Size="24" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon TooltipText="Buy us Cupcake" IconName="fluent-emoji:cupcake" Size="24"/></a></li>
                             <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.Twitter"><Icon TooltipText="Updates via Twitter" IconName="skill-icons:twitter" Size="22"/></a></li>
                             <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.PatreonPage"><Icon TooltipText="Become a Patron" IconName="logos:patreon" Size="22"/></a></li>
                             <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.GitHubRepo"><Icon TooltipText="View Awesome Source Code" IconName="skill-icons:github-dark" Size="22"/></a></li>
@@ -238,19 +237,25 @@
         //uses tags to detect correct version
         var latestPublishedCommitNo = await WebsiteTools.GetLatestCommitNumber();
 
+        #region RELEASE
+
         //if lower raise warning
         if (currentCommitNo < latestPublishedCommitNo)
         {
             await AppData.JsRuntime.ShowAlert(
                 icon: "warning",
-                title: "VedAstro Needs Update!",
+                title: "Please Update!",
                 descriptionText: "Press <kbd>CTRL + SHIFT + R</kbd> to get <strong>latest</strong> version. " +
-                                 $"Also try clearing your <strong>Cookies & Cache</strong>. " +
-                                 $"{currentCommitNo} --> {latestPublishedCommitNo}");
+                                 $"Also try clearing your <strong>Cookies & Cache</strong>. <br>" +
+                                 $"<span style=\"font-size: 14px;color: grey;\">Your version is {currentCommitNo}, latest is {latestPublishedCommitNo}</span>");
 
             //reloads page
             await AppData.JsRuntime.ReloadPage();
         }
+
+        #endregion
+
+
     }
 
     /// <summary>

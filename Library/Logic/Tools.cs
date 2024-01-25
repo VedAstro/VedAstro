@@ -1,6 +1,18 @@
+using Azure;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using HtmlAgilityPack;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using OfficeOpenXml;
+using Svg;
+using SwissEphNet;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -9,7 +21,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
-using OfficeOpenXml;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -18,17 +29,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SwissEphNet;
 using Formatting = Newtonsoft.Json.Formatting;
-using Azure.Storage.Blobs.Models;
-using Azure.Storage.Blobs;
-using Svg;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis;
-using HtmlAgilityPack;
-using Azure;
 
 
 
@@ -441,7 +442,7 @@ namespace VedAstro.Library
             var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} +00:00";
 
             //get standard UTC Timezone offset at location at time (API) 
-            var timeInputPassed = Time.TryParseStd(timeStr, out var parsedInputTime);
+            var isPass = Time.TryParseStd(timeStr, out var parsedInputTime);
 
             //get timezone as text
             var timezoneSTDOffsetResult = await Tools.GetTimezoneOffsetApi(geoLocation, parsedInputTime);
@@ -642,18 +643,24 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all horoscope predictions for a person
         /// </summary>
-        public static async Task<List<HoroscopePrediction>> GetHoroscopePrediction(Time birthTime, string fileUrl)
+        public static async Task<List<HoroscopePrediction>> GetHoroscopePrediction(Time birthTime, string fileUrl, EventTag filterTag = EventTag.Empty)
         {
             //get list of horoscope data (file from wwwroot)
             var horoscopeDataList = await GetHoroscopeDataList(fileUrl);
+
+            //filter what to show if any specified
+            if (filterTag != EventTag.Empty)
+            {
+                horoscopeDataList = horoscopeDataList.Where(horoData => horoData.EventTags.Contains(filterTag)).ToList();
+            }
 
             //start calculating predictions (mix with time by person's birth date)
             var predictionList = CalculatePredictions(birthTime, horoscopeDataList);
 
             //place important predictions at the top
-            var sorted = SortPredictionData(predictionList);
+            //var sorted = SortPredictionData(predictionList);
 
-            return sorted;
+            return predictionList;
 
             /// <summary>
             /// Get list of predictions occurring in a time period for all the
@@ -692,12 +699,31 @@ namespace VedAstro.Library
                 return horoscopeList;
             }
 
+            //TODO MARKED FOR OBLIVION
+            //pushes "rising sign " to top
             List<HoroscopePrediction> SortPredictionData(List<HoroscopePrediction> horoscopePredictions)
             {
-                //put rising sign at top
-                horoscopePredictions.MoveToBeginning((horPre) => horPre.FormattedName.ToLower().Contains("rising"));
-
                 //todo followed by planet in sign prediction ordered by planet strength 
+
+                // Check if the list is null or empty
+                if (horoscopePredictions == null || !horoscopePredictions.Any())
+                {
+                    throw new ArgumentException("The list of horoscope predictions cannot be null or empty.");
+                }
+
+                // Find the index of the rising sign
+                int risingSignIndex = horoscopePredictions.FindIndex(horPre => horPre.FormattedName.ToLower().Contains("rising"));
+
+                // Check if the rising sign was found
+                if (risingSignIndex == -1)
+                {
+                    throw new Exception("The rising sign was not found in the list of horoscope predictions.");
+                }
+
+                // Move the rising sign to the beginning of the list
+                HoroscopePrediction risingSign = horoscopePredictions[risingSignIndex];
+                horoscopePredictions.RemoveAt(risingSignIndex);
+                horoscopePredictions.Insert(0, risingSign);
 
                 return horoscopePredictions;
             }
@@ -1150,15 +1176,18 @@ namespace VedAstro.Library
 
                 //combine to together based on type
                 var item = list[i];
-                if (item is IToJson iToJson)
-                {
-                    //todo can wrap into jobject if needed
-                    combinedNames += iToJson.ToJson() + ending;
-                }
-                else
-                {
-                    combinedNames += item.ToString() + ending;
-                }
+
+                combinedNames += item.ToString() + ending;
+
+                //if (item is IToJson iToJson)
+                //{
+                //    //todo can wrap into jobject if needed
+                //    combinedNames += iToJson.ToJson() + ending;
+                //}
+                //else
+                //{
+                //    combinedNames += item.ToString() + ending;
+                //}
 
             }
 
@@ -1797,13 +1826,13 @@ namespace VedAstro.Library
             // Get the enum name and value from the URL parts
             var enumName = parts[0];
             var enumValue = parts[1];
-            
+
             // Get the type of the enum from the namespace and enum name
             var enumType = Type.GetType(Namespace + enumName);
-            
+
             // If the enum type is null, it was not found in the namespace
             if (enumType == null) { throw new ArgumentException($"Enum type '{enumName}' not found in namespace '{Namespace}'.", nameof(url)); }
-            
+
             try
             {
                 // Try to parse the enum value
@@ -1826,7 +1855,7 @@ namespace VedAstro.Library
                 throw;
             }
         }
-        
+
         public static object EnumFromUrl(string url, Type enumType)
         {
             // Constants for namespace and special enum name
@@ -1842,13 +1871,13 @@ namespace VedAstro.Library
             // Get the enum name and value from the URL parts
             var paramName = parts[0];
             var enumValue = parts[1];
-            
+
             // Get the type of the enum from the namespace and enum name
             //var enumType = Type.GetType(Namespace + enumName);
-            
+
             // If the enum type is null, it was not found in the namespace
             if (enumType == null) { throw new ArgumentException($"Enum type '{paramName}' not found in namespace '{Namespace}'.", nameof(url)); }
-            
+
             try
             {
                 // Try to parse the enum value
@@ -2774,6 +2803,36 @@ namespace VedAstro.Library
                 case Dictionary<HouseName, PlanetName> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
                 case Dictionary<HouseName, ZodiacName> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
                 case Dictionary<HouseName, Constellation> dictionary: rootPayloadJson = RootPayloadJson("House", dataName, dictionary); break;
+                case Dictionary<string, object> dictionary:
+                    {
+                        //cast to correct type
+                        //var array = new JArray();
+
+                        // Assuming you have a list of JProperty
+                        List<JProperty> properties = new();
+
+                        foreach (var item in dictionary)
+                        {
+                            var allItemKeyName = item.Key.ToString();
+                            var apiFunctionResults = item.Value;
+                            var ccc = Tools.AnyToJSON(allItemKeyName, apiFunctionResults);
+
+                            properties.Add((JProperty)ccc);
+                        }
+
+
+                        // To place them into a JArray, you can use the following code:
+                        JArray jArray = new JArray();
+                        foreach (var property in properties)
+                        {
+                            // Create a JObject from the JProperty and add it to the JArray
+                            JObject jObject = new JObject(property);
+                            jArray.Add(jObject);
+                        }
+
+                        rootPayloadJson = new JProperty(dataName, jArray);
+                        break;
+                    }
                 case Dictionary<HouseName, IList> dictionary:
                     {
 
@@ -2814,6 +2873,232 @@ namespace VedAstro.Library
 
             return rootPayloadJson;
 
+        }
+
+        public static DataTable AnyToDataTable(string dataName, dynamic anyTypeData)
+        {
+            //process list differently
+            var table = new DataTable();
+
+            switch (anyTypeData)
+            {
+                //case JObject jObject:
+                //    rootPayloadJson = new JProperty(dataName, jObject);
+                //    break;
+
+                //case List<House> dictionary:
+                //    {
+                //        var array = new JArray();
+                //        foreach (var item in dictionary)
+                //        {
+                //            var obj = new JObject
+                //        {
+                //            { "House", item.GetHouseName().ToString() },
+                //            { "Begin", item.GetBeginLongitude().ToString() },
+                //            { "Mid", item.GetMiddleLongitude().ToString() },
+                //            { "End", item.GetEndLongitude().ToString() }
+                //        };
+                //            array.Add(obj);
+                //        }
+
+                //        rootPayloadJson = new JProperty(dataName, array);
+                //        break;
+                //    }
+                //case List<Tuple<Time, Time, ZodiacName, PlanetName>> dictionary:
+                //    {
+                //        var array = new JArray();
+                //        foreach (var item in dictionary)
+                //        {
+                //            var obj = new JObject
+                //        {
+                //            { "Start", item.Item1.ToJson() },
+                //            { "End", item.Item2.ToJson() },
+                //            { "ZodiacSign", item.Item3.ToString() },
+                //            { "Planet", item.Item4.ToString() }
+                //        };
+                //            array.Add(obj);
+                //        }
+
+                //        rootPayloadJson = new JProperty(dataName, array);
+                //        break;
+                //    }
+
+                ////handles results that have many props from 1 call, exp : SwissEphemeris
+                //case List<APIFunctionResult> apiList:
+                //    {
+                //        //converts into JSON list with property names
+                //        //NOTE: uses back this AnyToJSON to convert nested types
+                //        var parsed = APIFunctionResult.ToJsonList(apiList);
+                //        rootPayloadJson = new JProperty(dataName, parsed);
+                //        return rootPayloadJson;
+                //    }
+
+                case List<HoroscopePrediction> apiList:
+                    {
+                        table.Columns.Add("Column1", typeof(string));
+                        table.Columns.Add("Column2", typeof(string));
+                        table.Columns.Add("Column3", typeof(string));
+                        //add in rows
+                        foreach (var item in apiList)
+                        {
+                            table.Rows.Add(item.ToDataRow());
+                        }
+                        break;
+                    }
+
+                //case List<PlanetName> planetList:
+                //    {
+                //        var parsed = PlanetName.ToJsonList(planetList);
+                //        rootPayloadJson = new JProperty(dataName, parsed);
+                //        return rootPayloadJson;
+                //    }
+
+                //case List<JObject> jObjectList:
+                //    {
+
+                //        var parsed = ListToJson(jObjectList);
+                //        rootPayloadJson = new JProperty(dataName, parsed);
+
+                //        return rootPayloadJson;
+                //    }
+
+                //case List<DasaEvent> dasaEventList:
+                //    {
+                //        var parsed = DasaEvent.ToJsonList(dasaEventList);
+                //        rootPayloadJson = new JProperty(dataName, parsed);
+
+                //        return rootPayloadJson;
+                //    }
+
+                case IList iList:
+                    {
+                        //add in rows
+                        foreach (var item in iList)
+                        {
+                            table.Rows.Add(item.ToString());
+                        }
+                        break;
+                    }
+
+                //handles results that have many props from 1 call, exp : SwissEphemeris
+                case Dictionary<PlanetName, ZodiacSign> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<PlanetName, Angle> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<PlanetName, PlanetName> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<PlanetName, ZodiacName> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<PlanetName, Constellation> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<PlanetName, HouseName> dictionary: DictionaryToDataTable(dictionary, table); break;
+
+                case Dictionary<string, object> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, Angle> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, ZodiacSign> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, PlanetName> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, ZodiacName> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, Constellation> dictionary: DictionaryToDataTable(dictionary, table); break;
+                case Dictionary<HouseName, IList> dictionary: DictionaryToDataTable(dictionary, table); break;
+                //case Dictionary<HouseName, IList> dictionary:
+                //    {
+
+                //        var array = new JArray();
+                //        foreach (var item in dictionary)
+                //        {
+                //            var obj = new JObject
+                //        {
+                //            { "House", item.Key.ToString() },
+                //            { dataName,  Tools.ListToString((List<IList>)item.Value) }
+                //        };
+                //            array.Add(obj);
+                //        }
+
+                //        rootPayloadJson = new JProperty(dataName, array);
+                //        break;
+
+                //    }
+
+                //case Dictionary<ZodiacName, int> dictionary:
+                //    {
+                //        //convert list to comma separated string
+                //        var parsedList = dictionary.Cast<object>().ToList();
+                //        var stringComma = Tools.ListToString(parsedList);
+
+                //        rootPayloadJson = new JProperty(dataName, stringComma);
+                //        break;
+                //    }
+                //custom JSON converter available
+                case IToJson iToJson:
+
+                    //rootPayloadJson = new JProperty(dataName, iToJson.ToJson());
+                    break;
+                //normal conversion via "ToString"
+                default:
+                    //throw new NotImplementedException();
+                    //rootPayloadJson = new JProperty(dataName, anyTypeData?.ToString());
+                    break;
+            }
+
+
+
+            return table;
+
+        }
+
+
+        /// <summary>
+        /// Given a dictionary of example Dictionary<PlanetName, ZodiacSign>
+        /// will convert to equal DataTable representation
+        /// </summary>
+        public static void DictionaryToDataTable<T, Y>(Dictionary<T, Y> dictionary, DataTable table)
+        {
+            //add columns names
+            var colName1 = dictionary.First().Key.GetType().Name;
+            table.Columns.Add(colName1);
+
+            var value = dictionary.First().Value;
+            if (value is List<APIFunctionResult> ccc)
+            {
+                foreach (var apiFunctionResult in ccc)
+                {
+                    //add in column name
+                    table.Columns.Add(apiFunctionResult.Name);
+                }
+            }
+            else
+            {
+                var colName2 = value.GetType().Name;
+                table.Columns.Add(colName2);
+
+            }
+
+            //add in rows
+            foreach (var item in dictionary)
+            {
+                //data to put in row
+                var column1Data = item.Key;
+                var column2Data = item.Value;
+
+                if (column2Data is List<APIFunctionResult> allCallResults)
+                {
+                    //extra logic for rows
+                    var arrayObjects = new List<object>();
+                    foreach (var apiFunctionResult in allCallResults)
+                    {
+                        //add in data
+                        var result = apiFunctionResult.Result;
+                        arrayObjects.Add(Tools.AnyToString(result));
+                    }
+                    table.Rows.Add(arrayObjects.ToArray());
+                }
+                //if list need to break down, with comma
+                else if (column2Data is IList iList)
+                {
+                    var listData = string.Join(",", iList.Cast<object>());
+                    table.Rows.Add(column1Data, listData);
+                }
+                //handle ALL API calls
+                else
+                {
+                    table.Rows.Add(column1Data.ToString(), column2Data.ToString());
+                }
+            }
         }
 
         /// <summary>
@@ -3247,7 +3532,7 @@ namespace VedAstro.Library
         public static async Task<Person> GetPersonByIdViaAPI(string personId, string ownerId)
         {
 
-            var url = $"{URL.ApiStableDirect}/api/GetPerson/OwnerId/{ownerId}/PersonId/{personId}";
+            var url = $"{URL.ApiStableDirect}/GetPerson/OwnerId/{ownerId}/PersonId/{personId}";
             var result = await Tools.ReadServerRaw<JObject>(url);
 
             //get parsed payload from raw result
@@ -3628,6 +3913,101 @@ namespace VedAstro.Library
                 throw new Exception($"Failed to get {typeof(T).AssemblyQualifiedName} from API payload");
             }
 
+        }
+
+        public static byte[] DataTableToJpeg(DataTable table)
+        {
+            // Create a new Bitmap object
+            Bitmap bitmap = new Bitmap(1, 1);
+            Graphics g = Graphics.FromImage(bitmap);
+
+            // Calculate the maximum width for each column
+            int[] columnWidths = new int[table.Columns.Count];
+            for (int j = 0; j < table.Columns.Count; j++)
+            {
+                // Use the column name for the header row
+                var headerFont = new Font("Arial", 10, FontStyle.Bold);
+                var headerSize = g.MeasureString(table.Columns[j].ColumnName, headerFont);
+                columnWidths[j] = (int)headerSize.Width;
+
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    var font = new Font("Arial", 10);
+                    var textSize = g.MeasureString(table.Rows[i][j].ToString(), font);
+                    columnWidths[j] = Math.Max(columnWidths[j], (int)textSize.Width);
+                }
+            }
+
+            // Dispose of the initial Graphics object and create a new one with the correct dimensions
+            g.Dispose();
+            int totalWidth = columnWidths.Sum() + table.Columns.Count * 2; // Add padding
+            bitmap = new Bitmap(totalWidth, (table.Rows.Count + 1) * 20); // Add a row for the header
+            g = Graphics.FromImage(bitmap);
+
+            // Draw the table
+            int currentX = 0;
+            for (int j = 0; j < table.Columns.Count; j++)
+            {
+                // Draw the header row
+                g.FillRectangle(Brushes.White, new Rectangle(currentX, 0, columnWidths[j] + 2, 20)); // Add padding
+                g.DrawRectangle(Pens.Black, new Rectangle(currentX, 0, columnWidths[j] + 2, 20)); // Add padding
+                var headerFont = new Font("Arial", 10, FontStyle.Bold);
+                g.DrawString(table.Columns[j].ColumnName, headerFont, Brushes.Black, new PointF(currentX + 3, 1)); // Add padding
+
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    g.FillRectangle(Brushes.White, new Rectangle(currentX, (i + 1) * 20, columnWidths[j] + 2, 20)); // Add padding
+                    g.DrawRectangle(Pens.Black, new Rectangle(currentX, (i + 1) * 20, columnWidths[j] + 2, 20)); // Add padding
+
+                    var font = new Font("Arial", 10);
+                    g.DrawString(table.Rows[i][j].ToString(), font, Brushes.Black, new PointF(currentX + 3, (i + 1) * 20 + 1)); // Add padding
+                }
+                currentX += columnWidths[j] + 2; // Move to next column position
+            }
+
+            // Convert the image to a byte array
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                return ms.ToArray();
+            }
+        }
+
+        public static DataTable ConvertJPropertyToDataTable(JProperty jProperty)
+        {
+            // Create a new DataTable.
+            DataTable dataTable = new DataTable();
+
+            // Define a flag for the first row.
+            bool firstRow = true;
+
+            // Parse the JProperty values.
+            foreach (JObject jObject in jProperty.Value)
+            {
+                DataRow row = dataTable.NewRow();
+
+                // Extract the property values.
+                var properties = jObject.Properties();
+                foreach (var property in properties)
+                {
+                    // If it's the first row, add the property names as column names.
+                    if (firstRow)
+                    {
+                        dataTable.Columns.Add(property.Name, typeof(string));
+                    }
+
+                    // Add the value to the row.
+                    row[property.Name] = (string)property.Value;
+                }
+
+                // Add the row to the DataTable.
+                dataTable.Rows.Add(row);
+
+                // After the first row, set the flag to false.
+                firstRow = false;
+            }
+
+            return dataTable;
         }
     }
 

@@ -432,8 +432,6 @@ namespace Website
         public static ElementReference DesktopSidebar { get; set; }
 
 
-
-
         /// <summary>
         /// gets cached person list stored in browser memory
         /// </summary>

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Data;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
     [Serializable()]
-    public struct LunarDay
+    public struct LunarDay : IToJson
     {
         //FIELDS
         private readonly int _lunarDateNumber; //number from 1 to 30
@@ -110,6 +112,58 @@ namespace VedAstro.Library
             throw new Exception("Moon phase not found, error!");
         }
 
+        public string GetPaksha()
+        {
+            //get phase and convert accordingly
+            var moonPhase = GetMoonPhase();
+            switch (moonPhase)
+            {
+                case MoonPhase.BrightHalf:
+                    return "Sukla";
+                case MoonPhase.DarkHalf:
+                    return "Krishna";
+            }
+
+            throw new Exception("END OF LINE!");
+        }
+
+        public string GetTithiName()
+        {
+            switch (_lunarDateNumber)
+            {
+                case 1: return "Padyami";
+                case 2: return "Vidiya";
+                case 3: return "Tadiya";
+                case 4: return "Chavithi";
+                case 5: return "Panchimi";
+                case 6: return "Sashti";
+                case 7: return "Saptami";
+                case 8: return "Ashtami";
+                case 9: return "Navami";
+                case 10: return "Dasimi";
+                case 11: return "Ekadasi";
+                case 12: return "Dwadasi";
+                case 13: return "Triodasi";
+                case 14: return "Chaturdasi";
+                case 15: return "Poornima";
+                case 16: return "Padyami";
+                case 17: return "Vidiya";
+                case 18: return "Tadiya";
+                case 19: return "Chavithi";
+                case 20: return "Panchimi";
+                case 21: return "Sashti";
+                case 22: return "Saptami";
+                case 23: return "Ashtami";
+                case 24: return "Navami";
+                case 25: return "Dasimi";
+                case 26: return "Ekadasi";
+                case 27: return "Dwadasi";
+                case 28: return "Triodasi";
+                case 29: return "Chaturdasi";
+                case 30: return "Amavasya";
+                default: throw new Exception("END OF THE LINE!");
+            }
+        }
 
 
         //PRIVATE METHODS
@@ -146,6 +200,23 @@ namespace VedAstro.Library
             //return string to caller
             return returnString;
         }
+
+
+        public JObject ToJson()
+        {
+
+            var returnVal = new JObject();
+            returnVal["Name"] = this.GetTithiName();
+            returnVal["Paksha"] = this.GetPaksha();
+            returnVal["Date"] = $"{_lunarDateNumber}/30";
+            returnVal["Day"] = $"{_lunarDayNumber}/15";
+            returnVal["Phase"] = this.GetMoonPhase().ToString();
+
+            return returnVal;
+
+        }
+
+
 
         public override bool Equals(object value)
         {

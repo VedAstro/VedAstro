@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Dick</FirstName>
+  <LastName>Button</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2425811.148611</BirthDate>
+  <Longitude>73.983333</Longitude>
+  <Latitude>40.900000</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>1.000000</DST>
+  <City>Englewood</City>
+  <State>NJ New Jersey</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>Olympic skating champion. Practices many hours each day, handsome, elegant, athletic, acrobatic. Dominant figure in skating for over 25 yrs. Enthusiastic as a television announcer. CB 49  LL 78  SS. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

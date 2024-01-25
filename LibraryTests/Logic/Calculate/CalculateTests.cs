@@ -755,6 +755,7 @@ namespace VedAstro.Library.Tests
             Assert.AreEqual(LunarMonth.Jyeshtha, lunaMonthJune14);
         }
 
+        //PASS
         [TestMethod()]
         public void PlanetNirayanaLongitudeTest()
         {
@@ -899,6 +900,17 @@ namespace VedAstro.Library.Tests
             //TODO test for Lunar Day
 
             Assert.Fail();
+        }
+
+        //PASS
+        [TestMethod()]
+        public void PanchaPakshiTest()
+        {
+
+            var test1 = Calculate.PanchaPakshi(StandardHoroscope);
+
+            Assert.AreEqual(Calculate.BirdName.Peacock, test1);
+
         }
     }
 }

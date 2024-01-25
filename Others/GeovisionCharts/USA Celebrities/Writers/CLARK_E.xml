@@ -1,0 +1,54 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Eleanor</FirstName>
+  <LastName>Clark</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2419954.847222</BirthDate>
+  <Longitude>118.250000</Longitude>
+  <Latitude>33.066667</Latitude>
+  <TimeZone>8.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Los angeles</City>
+  <State>CA California</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events><Event Id="1" ><Name>Prashna</Name>
+   <Description></Description>
+   <Date>2450029.937037</Date>
+   <Longitude>91.950000</Longitude>
+   <Latitude>41.016667</Latitude>
+   <TimeZone>6.000000</TimeZone>
+   <DST>0.000000</DST>
+   <City>Fairfield</City>
+   <State>CA California</State>
+   <Country>USA</Country>
+   <EventLookUpMode>D</EventLookUpMode>
+   <EventClassification></EventClassification>
+   <EventNotes></EventNotes>
+   <EventRodden>0</EventRodden>
+   <IsUsed>1</IsUsed>
+  </Event>
+ </Events>
+ <DetailedNotes>Writer. Member of a rebel group, sharp, ironist, stern,. Individualistic moralist, knows several languages, bold use of language. Delightful style, wit, charm, a character, strong opinions. Became blind, not self pitying, unyielding, alive. Loves sports, cooking, entertaining, friends, gardening. Graceful, athletically inclined. CB 78. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

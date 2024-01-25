@@ -1,9 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>Website</RootNamespace>
+		<PublishTrimmed>true</PublishTrimmed>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<ErrorReport>none</ErrorReport>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Flavor)'=='AOT_ON'">
 			<!--AOT disabled because not working in android chrome-->
@@ -12,6 +15,14 @@
 	<PropertyGroup Condition="'$(Flavor)'=='AOT_OFF'">
 			<!--AOT disabled because not working in android chrome-->
 			<RunAOTCompilation>false</RunAOTCompilation>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+	  <DebugType>full</DebugType>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+	  <DebugType>full</DebugType>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Include="..\ViewComponents\Code\API\EventsChartTools.cs" Link="Code\API\EventsChartTools.cs" />
@@ -29,8 +40,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all" />
 		<!--<PackageReference Include="VedAstro.Library" Version="1.2.0" />-->
 	</ItemGroup>
 
@@ -57,7 +68,6 @@
 	  <Content Include="..\ViewComponents\Components\FoundMatchList.razor" Link="ViewComponents\FoundMatchList.razor" />
 	  <Content Include="..\ViewComponents\Components\GeoLocationInput.razor" Link="ViewComponents\GeoLocationInput.razor" />
 	  <Content Include="..\ViewComponents\Components\HelpIconTooltip.razor" Link="ViewComponents\HelpIconTooltip.razor" />
-	  <Content Include="..\ViewComponents\Components\HoroscopeInfoView.razor" Link="ViewComponents\HoroscopeInfoView.razor" />
 	  <Content Include="..\ViewComponents\Components\HoroscopeReferenceList.razor" Link="ViewComponents\HoroscopeReferenceList.razor" />
 	  <Content Include="..\ViewComponents\Components\HouseAPIBuilderPanel.razor" Link="ViewComponents\HouseAPIBuilderPanel.razor" />
 	  <Content Include="..\ViewComponents\Components\Icon.razor" Link="ViewComponents\Icon.razor" />

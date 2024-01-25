@@ -33,10 +33,10 @@ namespace VedAstro.Library
             switch (foundEvent?.Nature)
             {
                 case EventNature.Good:
-                    generalScore = 1;
+                    generalScore = 3;
                     break;
                 case EventNature.Bad:
-                    generalScore = -1;
+                    generalScore = -3;
                     break;
             }
 
@@ -49,6 +49,8 @@ namespace VedAstro.Library
         /// </summary>
         public static double GocharaAshtakvargaBindu(Event foundEvent, Person person)
         {
+            //TODO NOTE: SUSPECT INVALID OUTPUT DATA NEEDS VALIDATION
+
             //if not gochara event, end here with 0/Neutral score
             if (!foundEvent.Name.ToString().Contains("Gochara")) { return 0; }
 
@@ -62,6 +64,8 @@ namespace VedAstro.Library
             //NOTE: Below we mix radical horoscope with now time = future prediction/muhurtha
             //get ashtakvarga bindu points to predict good/bad nature of ongoing gochara (percentage possible)
             //note here "Start Time" should be fine, since all throughout the event the house sign will be same as start
+            //TODO NOT SURE WHICH sign to use
+            //var houseSign = Calculate.PlanetZodiacSign(gocharaPlanet, foundEvent.StartTime);
             var houseSign = Calculate.HouseSignName(gocharaHouse, foundEvent.StartTime); //time here is current time, not birth
                                                                                          //here is birth time because ashtakvarga is based on birth
             var binduPoints = Calculate.PlanetAshtakvargaBindu(gocharaPlanet, houseSign, person.BirthTime);//here is birth
@@ -87,14 +91,17 @@ namespace VedAstro.Library
         public static double StrongestPlanet(Event foundEvent, Person person)
         {
             //get top planet
-            var topPlanet = Calculate.AllPlanetOrderedByStrength(person.BirthTime)[0];
+            var allPlanetOrderedByStrength = Calculate.AllPlanetOrderedByStrength(person.BirthTime);
+            var topPlanet = allPlanetOrderedByStrength[0];
+            var top2ndPlanet = allPlanetOrderedByStrength[1];
 
             //get all planets in event, scan and give score
             var planetNatureScore = 0.0;
             foreach (var relatedPlanet in foundEvent.GetRelatedPlanet())
             {
                 //is planet top planet
-                var isTopPlanet = relatedPlanet == topPlanet;
+                var isTopPlanet = relatedPlanet == topPlanet ||
+                                  relatedPlanet == top2ndPlanet;
 
                 //if top planet than give score
                 if (isTopPlanet)
@@ -109,14 +116,17 @@ namespace VedAstro.Library
         public static double WeakestPlanet(Event foundEvent, Person person)
         {
             //get bottom planet
-            var bottomPlanet = Calculate.AllPlanetOrderedByStrength(person.BirthTime)[8];
+            var allPlanetOrderedByStrength = Calculate.AllPlanetOrderedByStrength(person.BirthTime);
+            var bottomPlanet = allPlanetOrderedByStrength[8];
+            var bottom2ndPlanet = allPlanetOrderedByStrength[7];
 
             //get all planets in event, scan and give score
             var planetNatureScore = 0.0;
             foreach (var relatedPlanet in foundEvent.GetRelatedPlanet())
             {
                 //is planet bottom planet
-                var isBottomPlanet = relatedPlanet == bottomPlanet;
+                var isBottomPlanet = relatedPlanet == bottomPlanet ||
+                                     relatedPlanet == bottom2ndPlanet;
 
                 //if bottom planet than give score
                 if (isBottomPlanet)
@@ -157,7 +167,8 @@ namespace VedAstro.Library
 
             //get all houses in event, scan and give score
             var houseNatureScore = 0.0;
-            foreach (var relatedHouse in foundEvent.GetRelatedHouse())
+            var relatedHouses = foundEvent.GetRelatedHouse();
+            foreach (var relatedHouse in relatedHouses)
             {
                 //is house bottom house
                 var isBottomHouse = relatedHouse == bottomHouse;
@@ -217,6 +228,50 @@ namespace VedAstro.Library
             return score;
         }
 
+        public static double IshtaKashtaPhalaDegree(Event foundEvent, Person person)
+        {
+            //must be a dasa event, has PD in event name
+            var isDasaEvent = foundEvent.Name.ToString().Contains("PD");
+            if (!isDasaEvent) { return 0; }
+
+            //get the strongest planet of person's birth found in Event
+            //NOTE: refer pg.110 Graha & Bhava bala, how planets trump each other
+            var relatedPlanets = foundEvent.GetRelatedPlanet();
+            var strongestPlanet = Calculate.PickOutStrongestPlanet(relatedPlanets, person.BirthTime);
+
+            //get good or bad based on Ishta and Kashta, if former is more than good
+            var score = Calculate.PlanetIshtaKashtaScoreDegree(strongestPlanet, person.BirthTime);
+
+            return score;
+        }
+
+        public static double PlanetStrengthDegree(Event foundEvent, Person person)
+        {
+            //get all planets in event, scan and give score
+            var planetNatureScore = 0.0;
+            foreach (var relatedPlanet in foundEvent.GetRelatedPlanet())
+            {
+                var rawScore = Calculate.PlanetPowerPercentage(relatedPlanet, person.BirthTime);
+
+                //if below 50% than starts to turn RED
+                var finalScore = 0.0;
+                if (rawScore > 50)
+                {
+                    //remap the
+                    finalScore = rawScore.Remap(fromMin: 0, fromMax: 100, toMin: 0, toMax: 1);
+                }
+                else
+                {
+                    //remap the
+                    finalScore = rawScore.Remap(fromMin: 0, fromMax: 100, toMin: -1, toMax: 0);
+                }
+
+                planetNatureScore += finalScore;
+
+            }
+
+            return planetNatureScore;
+        }
 
     }
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>Frida</FirstName>
+  <LastName>Kahlo</LastName>
+  <Anka>1</Anka>
+  <Gender>1</Gender>
+  <BirthDate>2417763.129861</BirthDate>
+  <Longitude>99.166667</Longitude>
+  <Latitude>19.333333</Latitude>
+  <TimeZone>0.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Coyoacan, Mexico City</City>
+  <State> </State>
+  <Country>Mexico</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>no notes. </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

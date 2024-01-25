@@ -345,7 +345,7 @@
         {
             //poll till get
             int maxWidth = 940;
-            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General };
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
             string chartSvg = await AppData.API.EventsChart.GetEventsChart(SelectedPerson, SelectedTimeRange, SelectedEventTags, maxWidth, summaryOptions,SelectedAyanamsaName);
 

@@ -1,0 +1,38 @@
+<!DOCTYPE BirthData>
+<BirthData>
+ <BirthInfo><FirstName>William</FirstName>
+  <LastName>Bowen</LastName>
+  <Anka>1</Anka>
+  <Gender>0</Gender>
+  <BirthDate>2427352.129861</BirthDate>
+  <Longitude>84.516667</Longitude>
+  <Latitude>39.100000</Latitude>
+  <TimeZone>5.000000</TimeZone>
+  <DST>0.000000</DST>
+  <City>Cincinnati</City>
+  <State>OH Ohio</State>
+  <Country>USA</Country>
+  <BDLoopUpMode>D</BDLoopUpMode>
+  <RoddenRating>0</RoddenRating>
+ </BirthInfo>
+ <Events></Events>
+ <DetailedNotes>University President, economist. Skillful analyst, deals effectively with universities complex finances. Respected, fair minded, accessible, compassionate, sensitive. Open to Argument, constantly concerned with individuals. Trim, youthful looking, conservative sportsclothes. Bicycles to office in good weather, sports enthusiast. Wrote books on economics. CB 73. . </DetailedNotes>
+ <BirthdataPicklist></BirthdataPicklist>
+ <AnimatedPicklist></AnimatedPicklist>
+ <MuhurtaPicklist></MuhurtaPicklist>
+ <FamilyInfo><GrandFather></GrandFather>
+  <Father></Father>
+  <Mother></Mother>
+  <Caste></Caste>
+  <Gotra></Gotra>
+  <Address1></Address1>
+  <Address2></Address2>
+  <Address3></Address3>
+  <Email></Email>
+  <Phone></Phone>
+  <Tags></Tags>
+  <Unused1></Unused1>
+  <Unused2></Unused2>
+  <Unused3></Unused3>
+ </FamilyInfo>
+</BirthData>

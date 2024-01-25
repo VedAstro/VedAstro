@@ -33,7 +33,7 @@
         public const string JournalEditorParam = "Journal/Editor/{PersonIdUrl}/{LifeEventIdUrl}"; //for page declaration
         public const string JournalEditor = "Journal/Editor"; //for page URL generation
 
-        
+
         //CALCULATORS
         public const string CalculatorList = "Calculator/";
         public const string LifePredictor = "LifePredictor";
@@ -42,6 +42,7 @@
         public const string GoodTimeFinder = "GoodTimeFinder";
         public const string StarsAboveMe = "StarsAboveMe";
         public const string TableGenerator = "TableGenerator";
+        public const string Numerology = "Numerology";
         public const string SunRiseSetTime = "SunRiseSetTime";
         public const string BirthTimeFinder = "BirthTimeFinder";
         public const string LocalMeanTime = "LocalMeanTime";
@@ -66,6 +67,7 @@
 
 
         //DONATE
+        public const string ThankYou = "Donate/ThankYou";
         public const string Donate = "Donate/";
         public const string DonateOld = "DonateOld/";
         public const string DonatePayment = "Donate/Payment"; //contains Paypal sample code
@@ -78,6 +80,7 @@
         public const string SavedCharts = "Account/SavedCharts";
         public const string PersonList = "Account/Person/List";
         public const string AddPerson = "Account/Person/Add";
+        public const string Import = "Account/Person/Import";
         public const string PersonEditor = "Account/Person/Editor"; //used to make nav link
         public const string PersonEditorParam = "Account/Person/Editor/{PersonIdUrl}"; //actual page access
 
@@ -103,6 +106,7 @@
         public const string VSLifeSharePublicSession = "/VSLifeSharePublicSession";
         public const string PrivateServer = "/PrivateServer";
         public const string JoinOurFamily = "/JoinOurFamily";
+        public const string BodyTypes = "/BodyTypes";
         public const string Contact = "/Contact";
         public const string MadeOnEarth = "/MadeOnEarth";
         public const string FeatureList = "/FeatureList";

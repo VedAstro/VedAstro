@@ -138,7 +138,6 @@
 		<Content Include="..\ViewComponents\Components\FoundMatchList.razor" Link="ViewComponents\FoundMatchList.razor" />
 		<Content Include="..\ViewComponents\Components\GeoLocationInput.razor" Link="ViewComponents\GeoLocationInput.razor" />
 		<Content Include="..\ViewComponents\Components\HelpIconTooltip.razor" Link="ViewComponents\HelpIconTooltip.razor" />
-		<Content Include="..\ViewComponents\Components\HoroscopeInfoView.razor" Link="ViewComponents\HoroscopeInfoView.razor" />
 		<Content Include="..\ViewComponents\Components\HoroscopeReferenceList.razor" Link="ViewComponents\HoroscopeReferenceList.razor" />
 		<Content Include="..\ViewComponents\Components\HouseAPIBuilderPanel.razor" Link="ViewComponents\HouseAPIBuilderPanel.razor" />
 		<Content Include="..\ViewComponents\Components\Icon.razor" Link="ViewComponents\Icon.razor" />

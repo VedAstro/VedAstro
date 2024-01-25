@@ -41,7 +41,18 @@ namespace VedAstro.Library
             ///  true osculating apogee, which is the point where the Moon is farthest from the Earth in its elliptical orbit.
             /// </summary>
             Ketu,
-            Earth
+            Earth,
+            Dhuma,
+            Vyatipaata,
+            Parivesha,
+            Indrachaapa,
+            Upaketu,
+            Kaala,
+            Mrityu,
+            Arthaprahaara,
+            Yamaghantaka,
+            Gulika,
+            Maandi
         }
 
         //CONST FIELDS
@@ -53,6 +64,17 @@ namespace VedAstro.Library
         public static readonly PlanetName Venus = new PlanetName(PlanetNameEnum.Venus);
         public static readonly PlanetName Saturn = new PlanetName(PlanetNameEnum.Saturn);
         public static readonly PlanetName Earth = new PlanetName(PlanetNameEnum.Earth);
+        public static readonly PlanetName Dhuma = new PlanetName(PlanetNameEnum.Dhuma);
+        public static readonly PlanetName Vyatipaata = new PlanetName(PlanetNameEnum.Vyatipaata);
+        public static readonly PlanetName Parivesha = new PlanetName(PlanetNameEnum.Parivesha);
+        public static readonly PlanetName Indrachaapa = new PlanetName(PlanetNameEnum.Indrachaapa);
+        public static readonly PlanetName Upaketu = new PlanetName(PlanetNameEnum.Upaketu);
+        public static readonly PlanetName Kaala = new PlanetName(PlanetNameEnum.Kaala);
+        public static readonly PlanetName Mrityu = new PlanetName(PlanetNameEnum.Mrityu);
+        public static readonly PlanetName Arthaprahaara = new PlanetName(PlanetNameEnum.Arthaprahaara);
+        public static readonly PlanetName Yamaghantaka = new PlanetName(PlanetNameEnum.Yamaghantaka);
+        public static readonly PlanetName Gulika = new PlanetName(PlanetNameEnum.Gulika);
+        public static readonly PlanetName Maandi = new PlanetName(PlanetNameEnum.Maandi);
 
         /// <summary>
         /// the true node, which is the point where the Moon's orbit crosses the ecliptic plane
@@ -84,6 +106,18 @@ namespace VedAstro.Library
             Mars, Mercury,
             Jupiter, Venus,
             Saturn, Rahu, Ketu
+        };
+
+        /// <summary>
+        /// Gets a list of planet WITH rahu & ketu, used for looping through planets
+        /// </summary>
+        public static readonly List<PlanetName> All9WithUpagrahas = new List<PlanetName>()
+        {
+            Sun, Moon,
+            Mars, Mercury,
+            Jupiter, Venus,
+            Saturn, Rahu, Ketu,
+            Dhuma, Vyatipaata, Parivesha,Indrachaapa,Upaketu,Kaala,Mrityu, Arthaprahaara, Yamaghantaka, Gulika,Maandi
         };
 
 
@@ -132,6 +166,28 @@ namespace VedAstro.Library
                     return Ketu;
                 case "rahu":
                     return Rahu;
+                case "dhuma":
+                    return Dhuma;
+                case "vyatipaata":
+                    return Vyatipaata;
+                case "parivesha":
+                    return Parivesha;
+                case "indrachaapa":
+                    return Indrachaapa;
+                case "upaketu":
+                    return Upaketu;
+                case "kaala":
+                    return Kaala;
+                case "mrityu":
+                    return Mrityu;
+                case "arthaprahaara":
+                    return Arthaprahaara;
+                case "yamaghantaka":
+                    return Yamaghantaka;
+                case "gulika":
+                    return Gulika;
+                case "maandi":
+                    return Maandi;
             }
 
             //could not parse, return empty
@@ -154,6 +210,17 @@ namespace VedAstro.Library
                 case "saturn": { parsed = PlanetName.Saturn; return true; }
                 case "rahu": { parsed = PlanetName.Rahu; return true; }
                 case "ketu": { parsed = PlanetName.Ketu; return true; }
+                case "dhuma": { parsed = PlanetName.Dhuma; return true; }
+                case "vyatipaata": { parsed = PlanetName.Vyatipaata; return true; }
+                case "parivesha": { parsed = PlanetName.Parivesha; return true; }
+                case "indrachaapa": { parsed = PlanetName.Indrachaapa; return true; }
+                case "upaketu": { parsed = PlanetName.Upaketu; return true; }
+                case "kaala": { parsed = PlanetName.Kaala; return true; }
+                case "mrityu": { parsed = PlanetName.Mrityu; return true; }
+                case "arthaprahaara": { parsed = PlanetName.Arthaprahaara; return true; }
+                case "yamaghantaka": { parsed = PlanetName.Yamaghantaka; return true; }
+                case "gulika": { parsed = PlanetName.Gulika; return true; }
+                case "maandi": { parsed = PlanetName.Maandi; return true; }
             }
 
             //could not parse

@@ -25,12 +25,74 @@ export var scrollIntoView = (id) => $(id)[0].scrollIntoView(); //scrolls element
 export var highlightByEventName = (keyword) => window.EventsChartLoaded.highlightByEventName(keyword);
 export var AddEventsToGoogleCalendar = () => window.EventsChartLoaded.AddEventsToGoogleCalendar();
 export var unhighlightByEventName = (keyword) => window.EventsChartLoaded.unhighlightByEventName(keyword);
-
 const RETRY_COUNT = 5;
 
 
+//SCROLL SPY NAV
+//when run will attach events to all with .scrollspy
+//this then will used to highlight the Index link
+export async function InitializeInPageNav() {
 
+    //attaches a handler when scroll
+    $(window).bind('scroll', async function () {
+        var currentTop = $(window).scrollTop();
 
+        //all content element with class "scrollspy"
+        var elems = $('.scrollspy');
+
+        for (let index = 0; index < elems.length; index++) {
+            var elemTop = $(elems[index]).offset().top;
+            var elemBottom = elemTop + $(elems[index]).height();
+            var offset = 200; // Adjust this value to your needs
+            if (currentTop >= elemTop - offset && currentTop <= elemBottom) {
+                var contentId = $(elems[index]).attr('id');
+                var navLink = $(`#${contentId}-Link`);
+
+                //remove previous selected active
+                navLink.siblings().removeClass('active');
+
+                //make current active
+                navLink.addClass('active');
+
+                //set the nav menu to nicely appear at mid center vertically
+                var windowHeight = $(window).height();
+                var divHeight = $("#inPageNavBar").height();
+                var divOffset = (windowHeight - divHeight) / 2;
+                $("#inPageNavBar").css("top", divOffset + "px");
+
+            }
+        }
+    });
+}
+
+//gets random text from given list
+export function getRandomText(possibleTextsArray) {
+    var index = Math.floor(Math.random() * possibleTextsArray.length);
+    return possibleTextsArray[index];
+}
+
+//simple pop up for coming soon, with encouraged donation :D
+export function FunFeaturePopUp() {
+
+    //get interesting donate prompt text
+    var texts = ["Build it faster!", "Speed Up Development", "Support Development"];
+    var donateText = getRandomText(texts);
+
+    Swal.fire({
+        html: "<a target=\"_blank\" style=\"text-decoration-line: none;\" href=\"https://vedastro.org/Donate/\" class=\"link-primary fw-bold\">Fund</a> this feature for faster development",
+        iconHtml: "<span class=\"iconify\" data-icon=\"openmoji:love-letter\" data-inline=\"false\"></span>",
+        title: "Coming soon...",
+        showConfirmButton: true,
+        confirmButtonText: donateText,
+        showCancelButton: true,
+        cancelButtonText: "I can wait"
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            window.open('https://vedastro.org/Donate', '_blank').focus();
+        };
+    });
+}
 
 //--------------------------CALENDAR INPUT SELECTOR CODE
 //DESCRIPTION
@@ -39,37 +101,37 @@ const RETRY_COUNT = 5;
 //then call LoadCalendar
 //make sure empty calendar div exists
 
-export function InitCalendarPicker() {
+export function InitCalendarPicker(tableId) {
 
     //global space to store calendar related refs
-    window.Calendar = {};
+    window[tableId] = {};
 
     //date input element
-    window.Calendar.hourInputId = '#HourInput';
-    window.Calendar.minuteInputId = '#MinuteInput';
-    window.Calendar.meridianInputId = '#MeridianInput';
-    window.Calendar.dateInputId = '#DateInput';
-    window.Calendar.monthInputId = '#MonthInput';
-    window.Calendar.yearInputId = '#YearInput';
+    window[tableId].hourInputId = `#HourInput${tableId}`;
+    window[tableId].minuteInputId = `#MinuteInput${tableId}`;
+    window[tableId].meridianInputId = `#MeridianInput${tableId}`;
+    window[tableId].dateInputId = `#DateInput${tableId}`;
+    window[tableId].monthInputId = `#MonthInput${tableId}`;
+    window[tableId].yearInputId = `#YearInput${tableId}`;
 
-    window.Calendar.calendarPickerHolderId = '#CalendarPickerHolder';
+    window[tableId].calendarPickerHolderId = `#CalendarPickerHolder${tableId}`;
 
-    window.Calendar.hourInputElm = document.querySelector(window.Calendar.hourInputId);
-    window.Calendar.minuteInputElm = document.querySelector(window.Calendar.minuteInputId);
-    window.Calendar.meridianInputElm = document.querySelector(window.Calendar.meridianInputId);
-    window.Calendar.dateInputElm = document.querySelector(window.Calendar.dateInputId);
-    window.Calendar.monthInputElm = document.querySelector(window.Calendar.monthInputId);
-    window.Calendar.yearInputElm = document.querySelector(window.Calendar.yearInputId);
+    window[tableId].hourInputElm = document.querySelector(window[tableId].hourInputId);
+    window[tableId].minuteInputElm = document.querySelector(window[tableId].minuteInputId);
+    window[tableId].meridianInputElm = document.querySelector(window[tableId].meridianInputId);
+    window[tableId].dateInputElm = document.querySelector(window[tableId].dateInputId);
+    window[tableId].monthInputElm = document.querySelector(window[tableId].monthInputId);
+    window[tableId].yearInputElm = document.querySelector(window[tableId].yearInputId);
 
     //date picker holder element
-    window.Calendar.calendarDatepickerPopupEl = document.querySelector(window.Calendar.calendarPickerHolderId);
+    window[tableId].calendarDatepickerPopupEl = document.querySelector(window[tableId].calendarPickerHolderId);
 
 }
 
 //sets the input dates and initializes the calendar
-export function LoadCalendar(hour12, minute, meridian, date, month, year) {
+export function LoadCalendar(tableId, hour12, minute, meridian, date, month, year) {
     // CSS Selector
-    window.Calendar.calendar = new VanillaCalendar(window.Calendar.calendarPickerHolderId, {
+    window[tableId].calendar = new VanillaCalendar(window[tableId].calendarPickerHolderId, {
         // Options
         date: {
             //set the date to show when calendar opens
@@ -91,14 +153,14 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
         //this is where time is sent back to blazor, by setting straight to dom
         actions: {
             changeTime(e, time, hours, minutes, keeping) {
-                window.Calendar.hourInputElm.innerText = hours;
-                window.Calendar.minuteInputElm.innerText = minutes;
-                window.Calendar.meridianInputElm.innerText = keeping;
+                window[tableId].hourInputElm.innerText = hours;
+                window[tableId].minuteInputElm.innerText = minutes;
+                window[tableId].meridianInputElm.innerText = keeping;
             },
             clickDay(e, dates) {
                 //if date selected, hide date picker
                 if (dates[0]) {
-                    window.Calendar.calendarDatepickerPopupEl.classList.add('visually-hidden');
+                    window[tableId].calendarDatepickerPopupEl.classList.add('visually-hidden');
                 }
 
                 //check needed because random clicks get through
@@ -110,9 +172,9 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
                     var day = choppedTimeData[2];
 
                     //inject the values into the text input
-                    window.Calendar.dateInputElm.innerText = day;
-                    window.Calendar.monthInputElm.innerText = month;
-                    window.Calendar.yearInputElm.innerText = year;
+                    window[tableId].dateInputElm.innerText = day;
+                    window[tableId].monthInputElm.innerText = month;
+                    window[tableId].yearInputElm.innerText = year;
                 }
 
             },
@@ -121,15 +183,15 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
             clickMonth(e, month) {
                 month = month + 1; //correction for JS lib bug
                 var with0 = ('0' + month).slice(-2);//change 9 to 09
-                window.Calendar.monthInputElm.innerText = with0;
+                window[tableId].monthInputElm.innerText = with0;
             },
-            clickYear(e, year) { window.Calendar.yearInputElm.innerText = year; }
+            clickYear(e, year) { window[tableId].yearInputElm.innerText = year; }
         },
     });
 
     //when module is loaded, calendar is initialized but not visible
     //click event in blazor will make picker visible
-    window.Calendar.calendar.init();
+    window[tableId].calendar.init();
 
     //handle clicks outside of picker
     document.addEventListener('click', autoHidePicker, { capture: true });
@@ -143,12 +205,12 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
     function autoHidePicker(e) {
 
         //check if click was outside input
-        const pickerHolder = e.target.closest(window.Calendar.calendarPickerHolderId);
-        const timeInput = e.target.closest("#TimeInputHolder"); //reference in Blazor
+        const pickerHolder = e.target.closest(window[tableId].calendarPickerHolderId);
+        const timeInput = e.target.closest(`#TimeInputHolder${tableId}`); //reference in Blazor
 
         //if click is not on either inputs then hide picker
         if (!(timeInput || pickerHolder)) {
-            window.Calendar.calendarDatepickerPopupEl.classList.add('visually-hidden');
+            window[tableId].calendarDatepickerPopupEl.classList.add('visually-hidden');
         }
     }
 
@@ -535,13 +597,13 @@ export function addWidthToEveryChild(element, widthToAdd) {
 
 export function getPropWrapper(element, propName) {
     let propVal = $(element).prop(propName);
-    console.log(`JS: getPropWrapper : ${propName} : ${propVal}`);
+    //console.log(`JS: getPropWrapper : ${propName} : ${propVal}`);
     return propVal;
 }
 
 export function setPropWrapper(element, propName, propVal) {
     $(element).prop(propName, propVal);
-    console.log(`JS: setPropWrapper : ${propName} : ${propVal}`);
+    //console.log(`JS: setPropWrapper : ${propName} : ${propVal}`);
     return propVal;
 }
 
@@ -841,18 +903,89 @@ export function DrawHouseStrengthChart(_house1,
 //todo check for functionality
 
 //scrolls to div on page and flashes div using JS
+//can input both Element ref or CSS selector
 export function scrollToDiv(elmInput) {
     var $elm = $(elmInput);
 
     //scroll to element
     $elm[0].scrollIntoView();
-    //document.getElementById(elemId).scrollIntoView();
 
-    //use JS to attarct attention to div
-    //var idString = `#${elmId}`;
+    animateHighlightElement(elmInput);
+}
+
+//flashes div using JS
+//can input both Element ref or CSS selector
+export function animateHighlightElement(elmInput) {
+
+    var $elm = $(elmInput);
+
+    //use JS to attract attention to div
     $elm.fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
 
     $elm.fadeTo(100, 0.4, function () { $(this).fadeTo(500, 1.0); });
+
+}
+
+//similar to JQuery's .slideToggle("slow")
+// note that this function uses CSS transitions for the
+//sliding effect, which are smoother than jQuery’s animations but might not be supported in all browsers
+export function smoothSlideToggle(elementSelector, speed = 1000) {
+
+    // Select the element
+    let el = document.querySelector(elementSelector);
+
+    // Check if the element is currently not displayed
+    //SHOW
+    if (window.getComputedStyle(el).display === 'none') {
+        // Set the initial display to block
+        el.style.display = 'block';
+
+        // Capture the height of the element
+        let height = el.offsetHeight;
+
+        // Set the initial height to 0 and overflow to hidden
+        el.style.height = 0;
+        el.style.overflow = 'hidden';
+
+        // Set the transition property for smooth animation
+        el.style.transition = 'height 1s ease-in-out';
+
+        // After a short delay, set the height to the element's original height
+        setTimeout(() => {
+            return el.style.height = height + 'px';
+        }, 0);
+
+        //once animation complete, make "help text" not cut when exceed div width
+        //this is done by removing overflow property, which needs to be "hidden" during animation 
+        el.addEventListener('transitionend', function transitionEnd(event) {
+            // Remove the event listener
+            event.target.removeEventListener('transitionend', transitionEnd);
+
+            // Set the overflow to visible
+            el.style.removeProperty('overflow');
+        });
+    }
+
+    //HIDE
+    else {
+
+        //before animation starts, set overflow back to "hidden", for beautiful UX animation
+        el.style.overflow = 'hidden';
+
+        // If the element is currently displayed, set the transition property
+        el.style.transition = 'height 1s ease-in-out';
+
+        // Animate the height to 0
+        el.style.height = 0;
+
+        // After the transition is complete, set the display to none and remove the added styles
+        setTimeout(() => {
+            el.style.display = 'none';
+            el.style.removeProperty('height');
+            el.style.removeProperty('overflow');
+            el.style.removeProperty('transition');
+        }, speed);
+    }
 }
 
 export async function htmlToEmail(elmInput, fileName, fileFormat, receiverEmail) {

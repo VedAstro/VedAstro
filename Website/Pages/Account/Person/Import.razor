@@ -1,0 +1,231 @@
+﻿@using Newtonsoft.Json.Linq;
+@using VedAstro.Library
+@attribute [Route(PageRoute.Import)]
+
+<PageTitle>Easy Import | VedAstro</PageTitle>
+
+<PageTopSideImage ImageName="life-predictor-banner.png"
+                  Title="Import Person"
+                  DescriptionText="Easily import birth details from apps like Jagannatha Hora, Light of KP (LOKPA) or Parashara's Light 9" />
+
+<div>
+    @* INPUT *@
+    <div class="d-md-flex justify-content-between">
+        @*SELECTOR*@
+        <div class="me-5">
+            <div class="vstack gap-4">
+                @* APP SELECT *@
+                <div >
+                    <IconTitle IconName="logos:apple-app-store" Title="Select App" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)"/>
+                    <div class="input-group"><label class="input-group-text" style="font-weight: 600; color: red;" for="ed64a086-62cd-4141-b778-421d2e1399e1">Import from</label><!--!-->
+                        <select @bind="SelectedAppName" class="form-select" id="ed64a086-62cd-4141-b778-421d2e1399e1">
+                            <option value="" selected>Make a choice...</option>
+                            <option value="JagannathaHora">Jagannatha Hora</option>
+                            <option value="LOKPA">Light of KP (LOKPA)</option>
+                            <option value="ParasharasLight">Parashara's Light</option>
+                            <option value="Maitreya">Maitreya</option>
+                        </select>
+                    </div>
+                </div>
+
+                @* FILE UPLOAD *@
+
+                <div @ref="_fileUploadInputHtml" style="display: none;">
+                    <div class="vstack gap-3 input-group mb-3">
+                        <div class="form-control" style="width: 100%; border-radius: 6px;">
+                            <InputFile Multiple id="inputGroupFile02" OnChange="@OnInputFileChange"/>
+                        </div>
+                    </div>
+                </div>
+
+                @* -------- BOTTOM BUTTONS --------*@
+                <IconButton ButtonText="Import" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="mdi:import" OnClickCallback="@OnClickImport"/>
+
+            </div>
+
+        </div>
+
+        @*SIDEBAR*@
+        <div class="mt-md-0 mt-4 me-md-5">
+            <!--when small give at top-->
+            <div class="vstack gap-0 gap-md-2">
+                <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy"/>
+                <InfoBox MaxWidth="365" FullWidth="@true" Title="Cloud Sync" Description="Free cloud storage for storing horoscopes accross devices" IconName="ic:baseline-cloud-done"/>
+            </div>
+        </div>
+    </div>
+    
+    @* PREVIEW TABLE *@
+    <div @ref="_listPreviewTable" style="display: none;" class="mt-4">
+        @* MESSAGE *@
+        <IconTitle IconName="flat-color-icons:fine-print" Title="Preview" TitleHolder="h5" MaxWidthPx="@((int)GR.W546)"/>
+
+        @* TABLE *@
+        <table class="table table-bordered table-hover" >
+            <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Birth Date & Time</th>
+                <th>Location</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (int index = 0; index < _importedPersonList.Count; index++)
+            {
+                <tr>
+                    <td>@_importedPersonList[index].Name</td>
+                    <td>@_importedPersonList[index].BirthTimeString</td>
+                    <td>@_importedPersonList[index].GetBirthLocation().ToString().Truncate(30)</td> @*we don't need whole location*@
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+@code {
+    ElementReference _listPreviewTable;
+    ElementReference _fileUploadInputHtml;
+
+    private string _selectedAppName;
+
+    public string SelectedAppName
+    {
+        get => _selectedAppName;
+        set
+        {
+            if (value == "JagannathaHora")
+            {
+                //once set show upload button
+                _jsRuntime.Show(_fileUploadInputHtml);
+                _selectedAppName = value;
+            }
+            else
+            {
+                _jsRuntime.FunFeaturePopUp("Import");
+            }
+        }
+    }
+
+    public IBrowserFile? UploadedFile { get; set; }
+
+    private List<IBrowserFile>? _uploadedFileList = new List<IBrowserFile>();
+
+    private readonly List<Person> _importedPersonList = new List<Person>();
+
+
+    /// <summary>
+    /// Once received file send for processing (API) to extract time list for later use
+    /// </summary>
+    private async Task OnInputFileChange(InputFileChangeEventArgs inputFileData)
+    {
+        //if not logged in tell user what the f he is doing
+        if (AppData.IsGuestUser)
+        {
+            var loginLink = $"<a target=\"_blank\" style=\"text-decoration-line: none;\" href=\"{AppData.URL.Login}\" class=\"link-primary fw-bold\">logged in</a>";
+            await _jsRuntime.ShowAlert("info", "Remember!", $"You have not {loginLink}, continue as <strong>Guest</strong>?");
+        }
+
+        //show icon that file is being processed hold tight
+        await _jsRuntime.ShowLoading();
+
+        //save files for parsing
+        _uploadedFileList = inputFileData.GetMultipleFiles().ToList();
+
+        //parse them files based on selected format
+        //and saved them to main list
+        switch (SelectedAppName)
+        {
+            case "JagannathaHora": ParseJhdInputFile(); break;
+            default:
+                await _jsRuntime.FunFeaturePopUp("File Parser");
+                break;
+        }
+
+        //after parsing show preview
+        await _jsRuntime.Show(_listPreviewTable);
+
+        //show done message to user
+        var msg = $"{_uploadedFileList.Count} Files Parsed";
+        await _jsRuntime.ShowAlert("success", msg, "Check preview data then click import.");
+    }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private async Task<bool> IsValidationPassed()
+    {
+        //TEST 1 : at least 1 file must be uploaded
+        if (!_uploadedFileList.Any())
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlertCustomIcon("flat-color-icons:answers", $"Upload file first!", true);
+            return false;
+        }
+
+        //if control reaches here than, it's valid
+        return true;
+    }
+
+    /// <summary>
+    /// Takes uploaded raw binary files and parses them
+    /// </summary>
+    private async void ParseJhdInputFile()
+    {
+        try
+        {
+            //parse each file one by one
+            if (_uploadedFileList != null)
+            {
+                //clear old stuff from previous
+                _importedPersonList.Clear();
+
+                foreach (var singleFile in _uploadedFileList)
+                {
+                    //JHD files have person name saved as file name
+                    var personNameRaw = singleFile.Name;
+                    string personNameRaw2 = Path.GetFileNameWithoutExtension(personNameRaw); //remove file extension
+                    string personName = Format.FormatName(personNameRaw2); //remove file extension
+
+                    var openReadStream = singleFile.OpenReadStream();
+                    using var reader = new StreamReader(openReadStream);
+                    var rawJhdFile = await reader.ReadToEndAsync();
+
+                    //convert JHD file to Time instance
+                    var parsedPerson = Calculate.ParseJHDFiles(personName, rawJhdFile);
+
+                    //create person instance 
+                    _importedPersonList.Add(parsedPerson);
+                }
+            }
+        }
+        //if fail let user know
+        catch (Exception e)
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", "Failed to read file!","File could be corrupt or format not supported.");
+        }
+
+    } 
+
+    /// <summary>
+    /// sends parsed person to API
+    /// </summary>
+    private async Task OnClickImport()
+    {
+        await _jsRuntime.ShowLoading();
+
+        //only continue if passed input field validation
+        if (!(await IsValidationPassed())) { return; } //if nothing than back to normal
+
+        //add each person to API
+        foreach (var person in _importedPersonList)
+        { 
+            await AppData.API.Person.AddPerson(person, true);
+        }
+
+        await _jsRuntime.ShowAlertCustomIcon("flat-color-icons:approve", $"Import complete", "New person profiles now ready for calculations.");
+    }
+
+}

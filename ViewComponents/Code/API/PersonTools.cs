@@ -70,7 +70,7 @@ public class PersonTools
     /// <summary>
     /// Adds new person to API server main list
     /// </summary>
-    public async Task AddPerson(Person person)
+    public async Task AddPerson(Person person, bool disableAlert = false)
     {
         //create id that will own person, if logged in use "user id" else use "session id"
         var ownerId = _api.UserId == "101" ? _api.VisitorID : _api.UserId;
@@ -89,7 +89,7 @@ public class PersonTools
 #endif
 
         //if pass, clear local person cache & show appropriate done message to user
-        await HandleResultClearLocalCache(person.DisplayName, jsonResult, "add");
+        await HandleResultClearLocalCache(person.DisplayName, jsonResult, "add", disableAlert);
 
     }
 
@@ -118,7 +118,7 @@ public class PersonTools
 
     }
 
-    
+
     public async Task DeleteLifeEvent(LifeEvent lifeEventToDelete)
     {
         //tell API to get started
@@ -225,28 +225,36 @@ public class PersonTools
     /// checks status, if pass clears person list cache, for update, delete and add
     /// extra data needed to show pop up message
     /// </summary>
-    private async Task HandleResultClearLocalCache(string personName, JToken jsonResult, string task)
+    private async Task HandleResultClearLocalCache(string personName, JToken jsonResult, string task, bool disableAlert = false)
     {
 
         //if anything but pass, raise alarm
         var status = jsonResult["Status"]?.Value<string>() ?? "";
 
-        //FAIL
-        if (status != "Pass") 
+        //show or hide alert logic based on parent caller
+        if (!disableAlert)
         {
-            var failMessage = jsonResult["Payload"]?.Value<string>() ?? "Server didn't give reason, pls try later.";
-            await _api.ShowAlert("error", $"Server said no to your request! Why?", failMessage);
+            //FAIL
+            if (status != "Pass")
+            {
+                var failMessage = jsonResult["Payload"]?.Value<string>() ?? "Server didn't give reason, pls try later.";
+                await _api.ShowAlert("error", $"Server said no to your request! Why?", failMessage);
+            }
+            //PASS
+            else
+            {
+                //let user know person has been updates
+                await _api.ShowAlert("success", $"{personName} {task} complete!", false, timer: 1000);
+            }
         }
 
-        //PASS
-        else
+        //only clear cache if Pass
+        if (status == "Pass")
         {
             //1: clear stored person list
             await AppData.ClearCachedPersonList();
-
-            //let user know person has been updates
-            await _api.ShowAlert("success", $"{personName} {task} complete!", false, timer: 1000);
         }
+
     }
 
 }

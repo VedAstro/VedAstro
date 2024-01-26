@@ -344,7 +344,7 @@ namespace VedAstro.Library
             //only if either 1 is true
             var isOccuring = mandiIsConjunct || gulikaIsConjunct;
 
-            return CalculatorResult.New(isOccuring, [Sun], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Sun }, birthTime);
         }
 
         [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithMoon)]
@@ -357,7 +357,7 @@ namespace VedAstro.Library
             //only if either 1 is true
             var isOccuring = mandiIsConjunct || gulikaIsConjunct;
 
-            return CalculatorResult.New(isOccuring, [Moon], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
         }
 
         [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithMars)]
@@ -370,7 +370,7 @@ namespace VedAstro.Library
             //only if either 1 is true
             var isOccuring = mandiIsConjunct || gulikaIsConjunct;
 
-            return CalculatorResult.New(isOccuring, [Mars], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Mars }, birthTime);
         }
 
         [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithJupiter)]
@@ -383,7 +383,7 @@ namespace VedAstro.Library
             //only if either 1 is true
             var isOccuring = mandiIsConjunct || gulikaIsConjunct;
 
-            return CalculatorResult.New(isOccuring, [Jupiter], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Jupiter }, birthTime);
         }
 
         [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithVenus)]
@@ -396,7 +396,7 @@ namespace VedAstro.Library
             //only if either 1 is true
             var isOccuring = mandiIsConjunct || gulikaIsConjunct;
 
-            return CalculatorResult.New(isOccuring, [Venus], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Venus }, birthTime);
         }
 
         [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithSaturn)]
@@ -409,7 +409,7 @@ namespace VedAstro.Library
             //only if either 1 is true
             var isOccuring = mandiIsConjunct || gulikaIsConjunct;
 
-            return CalculatorResult.New(isOccuring, [Saturn], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Saturn }, birthTime);
         }
 
         [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithRahu)]
@@ -422,7 +422,7 @@ namespace VedAstro.Library
             //only if either 1 is true
             var isOccuring = mandiIsConjunct || gulikaIsConjunct;
 
-            return CalculatorResult.New(isOccuring, [Rahu], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Rahu }, birthTime);
         }
 
         [HoroscopeCalculator(HoroscopeName.MaandiGulikaWithKetu)]
@@ -435,7 +435,7 @@ namespace VedAstro.Library
             //only if either 1 is true
             var isOccuring = mandiIsConjunct || gulikaIsConjunct;
 
-            return CalculatorResult.New(isOccuring, [Ketu], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Ketu }, birthTime);
         }
 
         [HoroscopeCalculator(HoroscopeName.MaandiGulikaInStrongSign)]
@@ -471,8 +471,8 @@ namespace VedAstro.Library
             var isOccuring = isLordExalted || isOwnHouse || isMoolatrikona || isInKendra || isInTrikona || isInFriendsHouse;
 
 
-            return CalculatorResult.New(isOccuring, [Gulika, signLord], birthTime);
-
+            return CalculatorResult.New(isOccuring, new[] { Gulika, signLord }, birthTime);
+            
         }
 
         #endregion
@@ -499,7 +499,7 @@ namespace VedAstro.Library
             //associated with 1,2,3 bindus
             var isOccuring = bindus == 1 || bindus == 2 || bindus == 3;
 
-            return CalculatorResult.New(isOccuring, [Moon], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
         }
 
         /// <summary>
@@ -542,7 +542,7 @@ namespace VedAstro.Library
             //both condition meet
             var isOccuring = isMoonIn6th11th && moreThan6;
 
-            return CalculatorResult.New(isOccuring, [Moon], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
         }
 
         /// <summary>
@@ -568,7 +568,7 @@ namespace VedAstro.Library
             //both condition meet
             var isOccuring = isMoonIn6th11th && moreThan6;
 
-            return CalculatorResult.New(isOccuring, [Moon], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
         }
 
 
@@ -618,7 +618,7 @@ namespace VedAstro.Library
             //both conditions have to be met
             var isOccuring = sunNotIn2 && planetsIn2.Any();
 
-            return CalculatorResult.New(isOccuring, new[] { House2 }, [Moon], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { House2 }, new[] { Moon }, birthTime);
         }
 
         /// <summary>
@@ -650,7 +650,7 @@ namespace VedAstro.Library
             //both conditions have to be met
             var isOccuring = planetsIn12.Any();
 
-            return CalculatorResult.New(isOccuring, new[] { House12 }, [Moon], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { House12 }, new[] { Moon }, birthTime);
         }
 
         /// <summary>
@@ -674,7 +674,7 @@ namespace VedAstro.Library
             //on either side of  the Moon
             var planetOnBothSides = planetsInBottom || planetsInTop;
 
-            return CalculatorResult.New(planetOnBothSides, [Moon], birthTime);
+            return CalculatorResult.New(planetOnBothSides, new[] { Moon }, birthTime);
         }
 
         /// <summary>
@@ -700,7 +700,7 @@ namespace VedAstro.Library
             //no planets on both sides of the Moon
             var planetOnBothSides = noPlanetsInBottom && noPlanetsInTop;
 
-            return CalculatorResult.New(planetOnBothSides, [Moon], birthTime);
+            return CalculatorResult.New(planetOnBothSides, new[] { Moon }, birthTime);
         }
 
         /// <summary>
@@ -741,7 +741,7 @@ namespace VedAstro.Library
 
             var isOccuring = Calculate.IsPlanetsInSignsFromPlanet(signsFromList, beneficList, Moon, birthTime);
 
-            return CalculatorResult.New(isOccuring, [Moon], birthTime);
+            return CalculatorResult.New(isOccuring, new[] { Moon }, birthTime);
         }
 
         /// <summary>

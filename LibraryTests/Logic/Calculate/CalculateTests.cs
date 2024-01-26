@@ -907,7 +907,7 @@ namespace VedAstro.Library.Tests
         public void PanchaPakshiTest()
         {
 
-            var test1 = Calculate.PanchaPakshi(StandardHoroscope);
+            var test1 = Calculate.PanchaPakshiBirthBird(StandardHoroscope);
 
             Assert.AreEqual(Calculate.BirdName.Peacock, test1);
 

@@ -61,13 +61,96 @@ namespace VedAstro.Library
         #region PANCHA PAKSHI
 
         /// <summary>
+        /// In each of the main activities, the other four activities also occur as
+        /// abstract sub-activity for short duration of time gaps covering the complete
+        /// duration of the main activity, the period being 2 hrs. 24 min
+        /// </summary>
+        public static BirdActivity AbstractActivity(Time birthTime)
+        {
+            return BirdActivity.Eating;
+        }
+
+        public static BirdActivity MainActivity(Time birthTime)
+        {
+            return BirdActivity.Eating;
+
+        }
+
+        public static BirthTimeInVedicDay IsBirthTimeInVedicDay(Time birthTime)
+        {
+            return BirthTimeInVedicDay.NextDay;
+        }
+
+        /// <summary>
+        /// yama works out to 2 hrs. 24 mts. of our modern time.
+        /// It is to be noted that the beginning of the day is
+        /// reckoned from Sun rise to Sun set in Hindu system. Similarly
+        /// night is reckoned from Sun set to Sun rise on the following
+        /// day, thus consisting of 24 hours for one day.
+        /// </summary>
+        /// <returns></returns>
+        public static int BirthYama(Time birthTime)
+        {
+            //based on wheather birth falls same on vedic day and calendar day
+            var timeInDay = Calculate.IsBirthTimeInVedicDay(birthTime);
+
+            var calendarDate = birthTime;
+            switch (timeInDay)
+            {
+                //if on same day, no need to change data
+                case BirthTimeInVedicDay.Yes: break;
+                //birth after sunset so next day
+                case BirthTimeInVedicDay.NextDay:
+                    calendarDate = calendarDate.AddHours(23); break;
+                //birth before sunrise
+                case BirthTimeInVedicDay.PreviousDay:
+                    calendarDate = calendarDate.SubtractHours(23); break;
+                    break;
+
+            }
+
+            //get duration of day on correct "vedic date"
+            var dayDuration = Calculate.DayDurationHours(birthTime);
+
+            //split into 5 pieces of 1 YAMA (2 hours 24 min)
+            var sunset = Calculate.SunsetTime(birthTime);
+            var sunrise = Calculate.SunriseTime(birthTime);
+
+            return 1;
+
+
+        }
+
+        public enum BirthTimeInVedicDay
+        {
+            PreviousDay, Yes, NextDay
+        }
+
+        /// <summary>
+        /// Calculates the strength of a bird's "Abstract" activity based on its birth time.
+        /// </summary>
+        /// <param name="birthTime">The bird's birth time :D.</param>
+        /// <returns>The strength of the bird's activity.</returns>
+        public static double AbstractActivityStrength(Time birthTime)
+        {
+            // Determine the bird's type and its current main and abstract activities.
+            var birthBird = PanchaPakshiBirthBird(birthTime);
+            var mainActivity = MainActivity(birthTime);
+            var abstractActivity = AbstractActivity(birthTime);
+
+            // Retrieve the strength of the bird's abstract activity from the pre-initialized dictionary.
+            return PanchaPakshi.AbstractActivityStrengthTable[birthBird][mainActivity][abstractActivity];
+        }
+
+        /// <summary>
         /// Gets "birth bird" for a birth time.
         /// Sidhas have personified the elements as birds identifying each element under
         /// which an individual is born, when these elements are all functioning differentially
         /// during each time gap. These 5 elemental vibrations are personified as PAKSHIS or BIRDS and the
         /// gradations of their faculities are named as 5 activities.
+        /// This bird is called his birth Stellar Lunar bird.
         /// </summary>
-        public static BirdName PanchaPakshi(Time birthTime)
+        public static BirdName PanchaPakshiBirthBird(Time birthTime)
         {
             //get rulling constellation
             var rullingConst = Calculate.MoonConstellation(birthTime);
@@ -154,15 +237,6 @@ namespace VedAstro.Library
             }
 
             throw new Exception("END OF LINE!");
-        }
-
-        public enum BirdName
-        {
-            Vulture,
-            Owl,
-            Crow,
-            Cock,
-            Peacock
         }
 
         /// <summary>
@@ -1070,6 +1144,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Gets total hours in a vedic day, that is duration from sunset to sunrise
+        /// NOTE: does not account if birth time is outside sunrise & sunset range
         /// </summary>
         public static double DayDurationHours(Time time)
         {

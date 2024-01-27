@@ -13,11 +13,37 @@ namespace VedAstro.Library
 
     public enum BirdActivity
     {
+        /// <summary>
+        /// Thus, the Dying and Sleeping states
+        /// are very weak and unsuitable for any action
+        /// </summary>
         Dying,
+
+        /// <summary>
+        /// 
+        /// </summary>
         Sleeping,
+
         Walking,
+
+        /// <summary>
+        /// Thus, the Eating and Ruling activity periods will be
+        /// suitable for all the actions of day to day life to consummate
+        /// into success.
+        /// </summary>
         Eating,
+
+        /// <summary>
+        /// Thus, the Eating and Ruling activity periods will be
+        /// suitable for all the actions of day to day life to consummate
+        /// into success.
+        /// </summary>
         Ruling
+    }
+
+    public enum BirthTimeInVedicDay
+    {
+        PreviousDay, Yes, NextDay
     }
 
 

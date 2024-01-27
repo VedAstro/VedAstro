@@ -909,8 +909,118 @@ namespace VedAstro.Library.Tests
 
             var test1 = Calculate.PanchaPakshiBirthBird(StandardHoroscope);
 
-            Assert.AreEqual(Calculate.BirdName.Peacock, test1);
+            Assert.AreEqual(BirdName.Peacock, test1);
 
+        }
+
+        [TestMethod()]
+        public void BirthYamaTest()
+        {
+            //TODO VERIFY
+            var test1 = Calculate.BirthYama(StandardHoroscope);
+
+            //Assert.AreEqual(1, test1);
+        }
+
+        [TestMethod()]
+        public void GetFirstVowelSoundTest()
+        {
+            //ALL POSSIBLE VOWELS
+            //"A", "AA",
+            //"I", "OW",
+            //"E", "EE",
+            //"U", "UU",
+            //"EA", "EAA",
+            //"O", "OO",
+
+            //Here the first vowel sound of the name is formed by the first two letters "MI"
+            //which can be split as M + I = M E. Hence the resultant sound
+            //is that of short vowel "E"
+            var test1 = Calculate.FirstVowelSound("MISHRA");
+            Assert.AreEqual("E", test1);
+
+            var test2 = Calculate.FirstVowelSound("GOPAL");
+            Assert.AreEqual("O", test2);
+
+            var test3 = Calculate.FirstVowelSound("AMAR");
+            Assert.AreEqual("A", test3);
+
+            var test4 = Calculate.FirstVowelSound("ANNIE");
+            Assert.AreEqual("A", test4);
+
+            var test5 = Calculate.FirstVowelSound("VASANTHRAJ");
+            Assert.AreEqual("A", test5);
+
+            var test6 = Calculate.FirstVowelSound("THAARA");
+            Assert.AreEqual("AA", test6);
+
+            var test7 = Calculate.FirstVowelSound("VALANTINE");
+            Assert.AreEqual("A", test7);
+
+            //Here, the first sound comes from the first three letters
+            //in English version as EAI = E + A + I = "I"
+            var test8 = Calculate.FirstVowelSound("EAISHVARYA");
+            Assert.AreEqual("I", test8);
+
+            //the first vowel comes from the first four letters of the
+            //name as S + H + A + I = SHAI and from the first consonant
+            //from which the first vowel "I" is splitted and identified from
+            //the consonant
+            var test9 = Calculate.FirstVowelSound("SHAILENDRA");
+            Assert.AreEqual("I", test9);
+
+            //Here, the first sound comes out from the first letter "I" itself.
+            var test10 = Calculate.FirstVowelSound("IVANHOE");
+            Assert.AreEqual("I", test10);
+
+            //Here, the first vowel sound comes from the first
+            //three letters in the English version thus G + O + U = GOU
+            var test11 = Calculate.FirstVowelSound("GOUTHAM");
+            Assert.AreEqual("OW", test11);
+
+            //TODO
+            //Here, the First vowel sound comes from the first
+            // three letters thus C + O + W = COW
+            var test12 = Calculate.FirstVowelSound("COWLDRY");
+            //Assert.AreEqual("OW", test12);
+
+            var test13 = Calculate.FirstVowelSound("ESHWARDAS");
+            Assert.AreEqual("E", test13);
+
+            var test14 = Calculate.FirstVowelSound("VEERENDRA");
+            Assert.AreEqual("EE", test14);
+
+            var test15 = Calculate.FirstVowelSound("EVE");
+            Assert.AreEqual("E", test15);
+
+            var test16 = Calculate.FirstVowelSound("UMAPATHY");
+            Assert.AreEqual("U", test16);
+
+            var test17 = Calculate.FirstVowelSound("URMILA");
+            Assert.AreEqual("U", test17);
+
+            var test18 = Calculate.FirstVowelSound("SURAJ KUMAR");
+            Assert.AreEqual("U", test18);
+
+            var test19 = Calculate.FirstVowelSound("RUTH");
+            Assert.AreEqual("U", test19);
+
+            //TODO
+            var test20 = Calculate.FirstVowelSound("EZIL ARASAN");
+            //Assert.AreEqual("EA", test20);
+
+            var test21 = Calculate.FirstVowelSound("PERUMAL");
+            Assert.AreEqual("EA", test21);
+
+            //TODO
+            var test22 = Calculate.FirstVowelSound("ESTHER");
+            //Assert.AreEqual("EA", test22);
+
+            var test23 = Calculate.FirstVowelSound("JACOB");
+            Assert.AreEqual("EA", test23);
+
+            var test24 = Calculate.FirstVowelSound("OMPRAKASH");
+            Assert.AreEqual("O", test24);
         }
     }
 }

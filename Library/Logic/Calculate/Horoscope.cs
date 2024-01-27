@@ -459,7 +459,7 @@ namespace VedAstro.Library
             var isMoolatrikona = Calculate.IsPlanetInMoolatrikona(signLord, birthTime);
 
             //in kendra 
-            var isInKendra = Calculate.IsPlanetInKendra([signLord], birthTime);
+            var isInKendra = Calculate.IsPlanetInKendra(new[] { signLord }, birthTime);
 
             //in trikona 
             var isInTrikona = Calculate.IsPlanetInTrikona(signLord, birthTime);
@@ -849,7 +849,7 @@ namespace VedAstro.Library
             int[] signsFromList = new[] { 6, 8, 12 };
 
             //check for jupiter only
-            PlanetName[] planetList = [Moon];
+            PlanetName[] planetList = new[] { Moon };
 
             var isOccuring = Calculate.IsPlanetsInSignsFromPlanet(signsFromList, planetList, Jupiter, birthTime);
 

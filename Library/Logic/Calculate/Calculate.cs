@@ -1,6 +1,4 @@
 
-
-using ExCSS;
 using Newtonsoft.Json.Linq;
 using SwissEphNet;
 using System;
@@ -12,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static VedAstro.Library.PlanetName;
 using Exception = System.Exception;
-
+using System.Text;
 
 namespace VedAstro.Library
 {
@@ -70,15 +68,47 @@ namespace VedAstro.Library
             return BirdActivity.Eating;
         }
 
+        /// <summary>
+        /// Each bird performs these five activities during each day
+        /// and in night over the week days and during waxing and
+        /// waning Moon cycles during the 5 YAMAS in day and 5
+        /// YAMAS in night in a stipulated order
+        /// </summary>
+        /// <param name="birthTime"></param>
         public static BirdActivity MainActivity(Time birthTime)
         {
             return BirdActivity.Eating;
 
         }
 
+
+        /// <summary>
+        /// Checks if a given birth time is within that days' sunrise and sunset aka "vedic day"
+        /// </summary>
         public static BirthTimeInVedicDay IsBirthTimeInVedicDay(Time birthTime)
         {
-            return BirthTimeInVedicDay.NextDay;
+            var sunset = Calculate.SunsetTime(birthTime);
+            var sunrise = Calculate.SunriseTime(birthTime);
+
+            //time should be after sunrise (sunrise time will be smaller)
+            var isAfterSunrise = sunrise < birthTime;
+
+            //time should be before sunset (sunset time will be bigger)
+            var isBeforeSunset = sunset > birthTime;
+
+            //is within Vedic day (end here)
+            if (isAfterSunrise && isBeforeSunset) { return BirthTimeInVedicDay.Yes; }
+
+            //#PREVIOUS DAY
+            //time should be before sunrise (sunrise time will be bigger)
+            if (sunrise > birthTime) { return BirthTimeInVedicDay.PreviousDay; }
+
+            //#NEXT DAY
+            //time should be before sunset (sunset time will be smaller)
+            if (sunset < birthTime) { return BirthTimeInVedicDay.NextDay; }
+
+
+            throw new Exception("END OF LINE!");
         }
 
         /// <summary>
@@ -106,30 +136,32 @@ namespace VedAstro.Library
                 case BirthTimeInVedicDay.PreviousDay:
                     calendarDate = calendarDate.SubtractHours(23); break;
                     break;
-
             }
 
-            //get duration of day on correct "vedic date"
-            var dayDuration = Calculate.DayDurationHours(birthTime);
+            //start counting from sunrise on calendar date
+            var yamaStartTime = Calculate.SunriseTime(calendarDate);
 
-            //split into 5 pieces of 1 YAMA (2 hours 24 min)
-            var sunset = Calculate.SunsetTime(birthTime);
-            var sunrise = Calculate.SunriseTime(birthTime);
+            //get start of vedic day and start checking 1 yama range at a time
+            for (int yamaCount = 1; yamaCount <= 5; yamaCount++)
+            {
+                //calculate yama end time based on yama count (2h 24min = 2.4h)
+                var yamaEndTime = yamaStartTime.AddHours(2.4 * yamaCount);
 
-            return 1;
+                //if birth time is in this yama, found! end here.
+                //(start time must be smaller and time must be bigger)
+                if (yamaStartTime < birthTime && yamaEndTime > birthTime) { return yamaCount; }
 
+                //keep looking, end of this yama begins next
+                yamaStartTime = yamaEndTime;
+            }
 
-        }
-
-        public enum BirthTimeInVedicDay
-        {
-            PreviousDay, Yes, NextDay
+            throw new Exception("Yama not found!");
         }
 
         /// <summary>
         /// Calculates the strength of a bird's "Abstract" activity based on its birth time.
         /// </summary>
-        /// <param name="birthTime">The bird's birth time :D.</param>
+        /// <param name="birthTime">The bird's birth time :D</param>
         /// <returns>The strength of the bird's activity.</returns>
         public static double AbstractActivityStrength(Time birthTime)
         {
@@ -240,6 +272,38 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Ancients have evolved a method of identifying the birth bird of
+        /// other individuals by recognising the first
+        /// vowel sound that shoots out while uttering the name of such
+        /// individual. Here, we have to be
+        /// very careful in identifying the first vowel sound (and not the
+        /// first vowel letter) ofthe other man's name. In this system, the
+        /// vowels referred to are ofthe Dravidian Origin TAMIL and do
+        /// not indicate the English vowel sounds. This should always be
+        /// borne in mind.
+        /// It should
+        /// be remembered that the eleven vowels of Dravidian Tamil
+        /// language are distributed among the 5 birds. These vowels and
+        /// consonants which contain them are to be identified from the
+        /// first sound of the name. Virtually, these eleven vowel sounds
+        /// are to be equated and sounded by the five English vowels A, E,
+        /// I, O and U. In this language "U" is uttered as "V + U = VU",
+        /// to project the Dravidian sound. Except the sound "I", all
+        /// other sounds have short and long vowels.
+        ///
+        /// From what has been explained so far, it can be understood
+        /// that for the same name, the birds are different during bright
+        /// half and dark halfperiods of Moon where we do not know the
+        /// birth data of the other person and for such persons only we
+        /// should use this system
+        /// </summary>
+        /// <param name="name">a popular name and known by that name only</param>
+        public static BirdName PanchaPakshiBirthBirdFromName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Given a time will return true if it is on
         /// "Waxing moon" or "Shukla Paksha" or "Bright half"
         /// </summary>
@@ -260,6 +324,141 @@ namespace VedAstro.Library
 
             return lunarDay.GetMoonPhase() == MoonPhase.DarkHalf;
         }
+
+
+        /// <summary>
+        /// Given a name will extract out the 1st vowel sound.
+        /// Used to get Pancha Pakshi bird when birth date not known
+        /// </summary>
+        public static string FirstVowelSound(string word)
+        {
+            HashSet<char> Vowels = new HashSet<char>("aeiouAEIOU");
+            Dictionary<string, string> ConsecutiveVowelMap = new Dictionary<string, string>()
+            {
+                { "AI", "I" },
+                { "AE", "A" },
+                { "AO", "A" },
+                { "AU", "A" },
+                { "EZ", "EA" },
+                { "JA", "EA" },
+                { "PE", "EA" },
+                { "ES", "EA" },
+                { "EI", "E" },
+                { "MI", "E" },
+                { "EA", "E" },
+                { "EO", "E" },
+                { "EU", "E" },
+                { "IA", "I" },
+                { "IE", "I" },
+                { "IO", "I" },
+                { "IU", "I" },
+                { "OA", "O" },
+                { "OE", "O" },
+                { "OI", "O" },
+                { "OU", "OW" },
+                { "OP", "O" },
+                { "UA", "U" },
+                { "UE", "U" },
+                { "UI", "U" },
+                { "UO", "U" }
+            };
+
+
+            // Remove non-letter characters from the input word
+            var cleanedWord = new string(word.Where(Char.IsLetter).ToArray());
+
+            // Split the cleaned word into syllables
+            var syllables = Syllables(cleanedWord);
+
+            for (int i = 0; i < syllables.Count; i++)
+            {
+                var syllableToCheck = syllables[i];
+
+                // If the syllable starts with a vowel or contains consecutive vowels at its end and beginning, handle it accordingly
+                if (IsVowel(syllableToCheck) || (i < syllables.Count - 1 && IsVowel(syllableToCheck[^1].ToString()) && IsVowel(syllables[i + 1][0].ToString())))
+                {
+                    // Use the lookup table if there are two consecutive vowels at the end and beginning of adjacent syllables
+                    if (i < syllables.Count - 1 && IsVowel(syllableToCheck[^1].ToString()) && IsVowel(syllables[i + 1][0].ToString()))
+                    {
+                        var firstVowelSound = syllableToCheck[^1].ToString() + syllables[i + 1][0];
+
+                        if (ConsecutiveVowelMap.TryGetValue(firstVowelSound.ToUpper(), out string mappedValue2))
+                        {
+                            return mappedValue2;
+                        }
+
+                        return firstVowelSound;
+                    }
+
+                    // Use the lookup table for syllables that only contain vowels
+                    if (IsVowel(syllableToCheck) && ConsecutiveVowelMap.TryGetValue(syllableToCheck.ToUpper(), out string mappedValue))
+                    {
+                        return mappedValue;
+                    }
+
+                    // Return the last vowel sound if it's not followed by another vowel in the next syllable
+                    if (i < syllables.Count - 1 && IsVowel(syllableToCheck[^1].ToString()) && !IsVowel(syllables[i + 1][0].ToString()))
+                    {
+                        return syllableToCheck[^1].ToString();
+                    }
+
+                    // Otherwise, just return the syllable itself
+                    return syllableToCheck;
+                }
+            }
+
+            return "";
+
+
+            List<string> Syllables(string word)
+            {
+                var vowels = new HashSet<char> { 'a', 'e', 'i', 'o', 'u' };
+                var syllables = new List<string>();
+                var currentSyllable = new StringBuilder();
+
+                for (int i = 0; i < word.Length; i++)
+                {
+                    currentSyllable.Append(word[i]);
+                    if (vowels.Contains(char.ToLower(word[i])))
+                    {
+                        syllables.Add(currentSyllable.ToString());
+                        currentSyllable.Clear();
+
+                        if (i < word.Length - 1 && !vowels.Contains(char.ToLower(word[i + 1])))
+                        {
+                            currentSyllable.Append(word[i + 1]);
+                            i++;
+                        }
+                    }
+                }
+
+                if (currentSyllable.Length > 0)
+                {
+                    syllables.Add(currentSyllable.ToString());
+                }
+
+                // Combine single character vowel syllables
+                for (int i = 0; i < syllables.Count - 1; i++)
+                {
+                    if (syllables[i].Length == 1 && syllables[i + 1].Length == 1 && vowels.Contains(char.ToLower(syllables[i][0])) && vowels.Contains(char.ToLower(syllables[i + 1][0])))
+                    {
+                        syllables[i] += syllables[i + 1];
+                        syllables.RemoveAt(i + 1);
+                        i--;
+                    }
+                }
+
+                return syllables;
+            }
+
+            bool IsVowel(string syllable)
+            {
+                return syllable.Any(c => "aeiou".Contains(char.ToLower(c)));
+            }
+
+        }
+
+
 
         #endregion
 
@@ -7029,7 +7228,6 @@ namespace VedAstro.Library
             return false;
         }
 
-
         #endregion
 
         #region CACHED FUNCTIONS
@@ -10258,7 +10456,7 @@ namespace VedAstro.Library
             if (isRahuKetu) { return Shashtiamsa.Zero; }
 
             double dk;
-            var drishti = new Dictionary<String, double>();
+            var drishti = new Dictionary<string, double>();
             double vdrishti;
             var sp = new Dictionary<PlanetName, int>();
 
@@ -12064,11 +12262,11 @@ namespace VedAstro.Library
                     return _sp;
                 }
 
-                Dictionary<String, double> GetDrishtiKendra(Time time1)
+                Dictionary<string, double> GetDrishtiKendra(Time time1)
                 {
 
                     //planet & house no. is used key
-                    var _drishti = new Dictionary<String, double>();
+                    var _drishti = new Dictionary<string, double>();
 
                     double drishtiKendra;
 

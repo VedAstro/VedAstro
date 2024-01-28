@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using VedAstro.Library;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace VedAstro.Library.Tests
 {
@@ -1022,5 +1023,26 @@ namespace VedAstro.Library.Tests
             var test24 = Calculate.FirstVowelSound("OMPRAKASH");
             Assert.AreEqual("O", test24);
         }
+
+        [TestMethod()]
+        public void AbstractActivityTest()
+        {
+            var test24 = Calculate.AbstractActivity(StandardHoroscope);
+            Assert.AreEqual("O", test24);
+        }
+
+        [TestMethod()]
+        public void AbstractActivityStrengthTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void MainActivityTest()
+        {
+            var test24 = Calculate.MainActivity(StandardHoroscope, Time.NowSystem(GeoLocation.Bangalore));
+            Assert.AreEqual("O", test24);
+        }
+
     }
 }

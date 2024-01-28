@@ -119,7 +119,7 @@
         TarabalaMitraWeak,
         TarabalaParamaMitraWeak,
         Papashadvargas,
-        
+
         CombinedEvent,
         GoodMoonSignForSelling,
         GoodWeekdayForSelling,
@@ -1089,6 +1089,15 @@
         StrongBeneficsTravelYoga,
         IdealPlanetsTravelYoga,
 
+        #endregion
+
+        #region PANCHA PAKSHI
+
+        BirdRuling,
+        BirdEating,
+        BirdWalking,
+        BirdSleeping,
+        BirdDying
 
         #endregion
     }

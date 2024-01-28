@@ -62,10 +62,80 @@ namespace VedAstro.Library
         /// In each of the main activities, the other four activities also occur as
         /// abstract sub-activity for short duration of time gaps covering the complete
         /// duration of the main activity, the period being 2 hrs. 24 min
+        /// for Pancha Pakshi
         /// </summary>
-        public static BirdActivity AbstractActivity(Time birthTime)
+        public static BirdActivity AbstractActivity(Time checkTime)
         {
-            return BirdActivity.Eating;
+            //start counting from start of current Yama
+            var yamaStartTime = BirthYama(checkTime).YamaStartTime;
+
+            //based on day or night birth start checking
+            if (IsDayBirth(checkTime))
+            {
+                //total minutes is 2h 24min
+                var daySubTimings = new Dictionary<BirdActivity, double>()
+                {
+                    {BirdActivity.Eating, 30},
+                    {BirdActivity.Walking, 36},
+                    {BirdActivity.Ruling, 48},
+                    {BirdActivity.Sleeping, 18},
+                    {BirdActivity.Dying, 12}
+                };
+
+                //find which sub activity given time falls under
+                foreach (var timing in daySubTimings)
+                {
+                    //calculate end time for this yama
+                    var subYamaSpanMin = timing.Value;
+                    var yamaEndTime = yamaStartTime.AddHours(Tools.MinutesToHours(subYamaSpanMin));
+
+                    //if birth time is in this sub-yama, found! end here.
+                    //(start time must be smaller and time must be bigger)
+                    if (yamaStartTime < checkTime && yamaEndTime > checkTime)
+                    {
+                        return timing.Key; //bird name
+                    }
+
+                    //since not found
+                    //keep looking, end of this yama begins next
+                    yamaStartTime = yamaEndTime;
+                }
+            }
+            //night birth
+            else
+            {
+                //total minutes is 2h 24min
+                var nightSubTimings = new Dictionary<BirdActivity, double>()
+                {
+                    {BirdActivity.Eating, 30},
+                    {BirdActivity.Ruling, 24},
+                    {BirdActivity.Dying, 36},
+                    {BirdActivity.Walking, 30},
+                    {BirdActivity.Sleeping, 24}
+                };
+
+                //find which sub activity given time falls under this sub yama
+                foreach (var timing in nightSubTimings)
+                {
+                    //calculate end time for this yama
+                    var subYamaSpanMin = timing.Value;
+                    var yamaEndTime = yamaStartTime.AddHours(Tools.MinutesToHours(subYamaSpanMin));
+
+                    //if birth time is in this sub-yama, found! end here.
+                    //(start time must be smaller and time must be bigger)
+                    if (yamaStartTime < checkTime && yamaEndTime > checkTime)
+                    {
+                        return timing.Key; //bird name
+                    }
+
+                    //since not found
+                    //keep looking, end of this yama begins next
+                    yamaStartTime = yamaEndTime;
+                }
+            }
+
+
+            throw new Exception("END OF LINE!");
         }
 
         /// <summary>
@@ -73,11 +143,20 @@ namespace VedAstro.Library
         /// and in night over the week days and during waxing and
         /// waning Moon cycles during the 5 YAMAS in day and 5
         /// YAMAS in night in a stipulated order
+        /// for Pancha Pakshi
         /// </summary>
-        /// <param name="birthTime"></param>
-        public static BirdActivity MainActivity(Time birthTime)
+        public static BirdActivity MainActivity(Time birthTime, Time checkTime)
         {
-            return BirdActivity.Eating;
+
+            // Determine the bird's type and its current main and abstract activities.
+            var birthBird = PanchaPakshiBirthBird(birthTime);
+            var timeOfDay = IsDayBirth(checkTime) ? PanchaPakshi.TimeOfDay.Day : PanchaPakshi.TimeOfDay.Night;
+            var dayOfWeek = DayOfWeek(checkTime);
+            var yamaNumber = BirthYama(checkTime).YamaCount;
+
+            // Retrieve the strength of the bird's abstract activity from the pre-initialized dictionary.
+            var mainActivity = PanchaPakshi.TableData[timeOfDay][dayOfWeek][yamaNumber][birthBird];
+            return mainActivity;
 
         }
 
@@ -117,9 +196,11 @@ namespace VedAstro.Library
         /// reckoned from Sun rise to Sun set in Hindu system. Similarly
         /// night is reckoned from Sun set to Sun rise on the following
         /// day, thus consisting of 24 hours for one day.
+        /// The timings of the five Yamas are the same during day
+        /// and night
+        /// for Pancha Pakshi
         /// </summary>
-        /// <returns></returns>
-        public static int BirthYama(Time birthTime)
+        public static BirthYama BirthYama(Time birthTime)
         {
             //based on wheather birth falls same on vedic day and calendar day
             var timeInDay = Calculate.IsBirthTimeInVedicDay(birthTime);
@@ -149,7 +230,10 @@ namespace VedAstro.Library
 
                 //if birth time is in this yama, found! end here.
                 //(start time must be smaller and time must be bigger)
-                if (yamaStartTime < birthTime && yamaEndTime > birthTime) { return yamaCount; }
+                if (yamaStartTime < birthTime && yamaEndTime > birthTime)
+                {
+                    return new BirthYama(yamaCount, yamaStartTime, yamaEndTime);
+                }
 
                 //keep looking, end of this yama begins next
                 yamaStartTime = yamaEndTime;
@@ -158,17 +242,19 @@ namespace VedAstro.Library
             throw new Exception("Yama not found!");
         }
 
+
         /// <summary>
-        /// Calculates the strength of a bird's "Abstract" activity based on its birth time.
+        /// Calculates the strength of a bird's "Abstract" activity (sub activity) based on its birth time.
+        /// for pancha pakshi bird
         /// </summary>
         /// <param name="birthTime">The bird's birth time :D</param>
         /// <returns>The strength of the bird's activity.</returns>
-        public static double AbstractActivityStrength(Time birthTime)
+        public static double AbstractActivityStrength(Time birthTime, Time checkTime)
         {
             // Determine the bird's type and its current main and abstract activities.
             var birthBird = PanchaPakshiBirthBird(birthTime);
-            var mainActivity = MainActivity(birthTime);
-            var abstractActivity = AbstractActivity(birthTime);
+            var mainActivity = MainActivity(birthTime, checkTime);
+            var abstractActivity = AbstractActivity(checkTime);
 
             // Retrieve the strength of the bird's abstract activity from the pre-initialized dictionary.
             return PanchaPakshi.AbstractActivityStrengthTable[birthBird][mainActivity][abstractActivity];
@@ -324,7 +410,6 @@ namespace VedAstro.Library
 
             return lunarDay.GetMoonPhase() == MoonPhase.DarkHalf;
         }
-
 
         /// <summary>
         /// Given a name will extract out the 1st vowel sound.

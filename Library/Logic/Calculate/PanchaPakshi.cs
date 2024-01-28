@@ -46,6 +46,8 @@ namespace VedAstro.Library
         PreviousDay, Yes, NextDay
     }
 
+    public record BirthYama(int YamaCount, Time YamaStartTime, Time YamaEndTime);
+
 
     /// <summary>
     /// Deeper data and logic for Pancha Pakshi used by Calculate API
@@ -339,5 +341,803 @@ namespace VedAstro.Library
                 }
             };
 
+        public enum TimeOfDay
+        {
+            Night, Day
+        }
+
+        //levels Day/Night Time > Day of week > Yama number > Bird > Activity
+        public static Dictionary<TimeOfDay, Dictionary<DayOfWeek, Dictionary<int, Dictionary<BirdName, BirdActivity>>>>
+            TableData = new()
+            {
+                {
+                    TimeOfDay.Day, new Dictionary<DayOfWeek, Dictionary<int,  Dictionary<BirdName, BirdActivity>>>
+                    {
+                        {
+                            DayOfWeek.Sunday, new Dictionary<int,  Dictionary<BirdName, BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Vulture, BirdActivity.Eating},
+                                        {BirdName.Owl,BirdActivity.Walking},
+                                        {BirdName.Crow,BirdActivity.Ruling},
+                                        {BirdName.Cock,BirdActivity.Sleeping},
+                                        {BirdName.Peacock,BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    2,new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Peacock,BirdActivity.Eating},
+                                        {BirdName.Vulture,BirdActivity.Walking},
+                                        {BirdName.Owl,BirdActivity.Ruling},
+                                        {BirdName.Crow,BirdActivity.Sleeping},
+                                        {BirdName.Cock,BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    3,new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Cock , BirdActivity.Eating},
+                                        {BirdName.Peacock , BirdActivity.Walking},
+                                        {BirdName.Vulture , BirdActivity.Ruling},
+                                        {BirdName.Owl , BirdActivity.Sleeping},
+                                        {BirdName.Crow , BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    4,new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Crow , BirdActivity.Eating},
+                                        {BirdName.Cock , BirdActivity.Walking},
+                                        {BirdName.Peacock , BirdActivity.Ruling},
+                                        {BirdName.Vulture , BirdActivity.Sleeping},
+                                        {BirdName.Owl , BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    5,new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Owl , BirdActivity.Eating},
+                                        {BirdName.Crow , BirdActivity.Walking},
+                                        {BirdName.Cock , BirdActivity.Ruling},
+                                        {BirdName.Peacock , BirdActivity.Sleeping},
+                                        {BirdName.Vulture , BirdActivity.Dying}
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            DayOfWeek.Tuesday, new Dictionary<int,  Dictionary<BirdName, BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Vulture, BirdActivity.Eating},
+                                        {BirdName.Owl,BirdActivity.Walking},
+                                        {BirdName.Crow,BirdActivity.Ruling},
+                                        {BirdName.Cock,BirdActivity.Sleeping},
+                                        {BirdName.Peacock,BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    2,new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Peacock,BirdActivity.Eating},
+                                        {BirdName.Vulture,BirdActivity.Walking},
+                                        {BirdName.Owl,BirdActivity.Ruling},
+                                        {BirdName.Crow,BirdActivity.Sleeping},
+                                        {BirdName.Cock,BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    3,new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Cock , BirdActivity.Eating},
+                                        {BirdName.Peacock , BirdActivity.Walking},
+                                        {BirdName.Vulture , BirdActivity.Ruling},
+                                        {BirdName.Owl , BirdActivity.Sleeping},
+                                        {BirdName.Crow , BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    4,new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Crow , BirdActivity.Eating},
+                                        {BirdName.Cock , BirdActivity.Walking},
+                                        {BirdName.Peacock , BirdActivity.Ruling},
+                                        {BirdName.Vulture , BirdActivity.Sleeping},
+                                        {BirdName.Owl , BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    5,new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Owl , BirdActivity.Eating},
+                                        {BirdName.Crow , BirdActivity.Walking},
+                                        {BirdName.Cock , BirdActivity.Ruling},
+                                        {BirdName.Peacock , BirdActivity.Sleeping},
+                                        {BirdName.Vulture , BirdActivity.Dying}
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            DayOfWeek.Monday, new Dictionary<int, Dictionary<BirdName, BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Owl, BirdActivity.Eating},
+                                        {BirdName.Crow, BirdActivity.Walking},
+                                        {BirdName.Cock, BirdActivity.Ruling},
+                                        {BirdName.Peacock, BirdActivity.Sleeping},
+                                        {BirdName.Vulture, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    2, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Vulture, BirdActivity.Eating},
+                                        {BirdName.Owl, BirdActivity.Walking},
+                                        {BirdName.Crow, BirdActivity.Ruling},
+                                        {BirdName.Cock, BirdActivity.Sleeping},
+                                        {BirdName.Peacock, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    3, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Peacock, BirdActivity.Eating},
+                                        {BirdName.Vulture, BirdActivity.Walking},
+                                        {BirdName.Owl, BirdActivity.Ruling},
+                                        {BirdName.Crow, BirdActivity.Sleeping},
+                                        {BirdName.Cock, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    4, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Cock, BirdActivity.Eating},
+                                        {BirdName.Peacock, BirdActivity.Walking},
+                                        {BirdName.Vulture, BirdActivity.Ruling},
+                                        {BirdName.Owl, BirdActivity.Sleeping},
+                                        {BirdName.Crow, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    5, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Crow, BirdActivity.Eating},
+                                        {BirdName.Cock, BirdActivity.Walking},
+                                        {BirdName.Peacock, BirdActivity.Ruling},
+                                        {BirdName.Vulture, BirdActivity.Sleeping},
+                                        {BirdName.Owl, BirdActivity.Dying}
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            DayOfWeek.Wednesday, new Dictionary<int, Dictionary<BirdName, BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Owl, BirdActivity.Eating},
+                                        {BirdName.Crow, BirdActivity.Walking},
+                                        {BirdName.Cock, BirdActivity.Ruling},
+                                        {BirdName.Peacock, BirdActivity.Sleeping},
+                                        {BirdName.Vulture, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    2, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Vulture, BirdActivity.Eating},
+                                        {BirdName.Owl, BirdActivity.Walking},
+                                        {BirdName.Crow, BirdActivity.Ruling},
+                                        {BirdName.Cock, BirdActivity.Sleeping},
+                                        {BirdName.Peacock, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    3, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Peacock, BirdActivity.Eating},
+                                        {BirdName.Vulture, BirdActivity.Walking},
+                                        {BirdName.Owl, BirdActivity.Ruling},
+                                        {BirdName.Crow, BirdActivity.Sleeping},
+                                        {BirdName.Cock, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    4, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Cock, BirdActivity.Eating},
+                                        {BirdName.Peacock, BirdActivity.Walking},
+                                        {BirdName.Vulture, BirdActivity.Ruling},
+                                        {BirdName.Owl, BirdActivity.Sleeping},
+                                        {BirdName.Crow, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    5, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Crow, BirdActivity.Eating},
+                                        {BirdName.Cock, BirdActivity.Walking},
+                                        {BirdName.Peacock, BirdActivity.Ruling},
+                                        {BirdName.Vulture, BirdActivity.Sleeping},
+                                        {BirdName.Owl, BirdActivity.Dying}
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            DayOfWeek.Thursday, new Dictionary<int, Dictionary<BirdName, BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        { BirdName.Crow, BirdActivity.Eating },
+                                        { BirdName.Cock, BirdActivity.Walking },
+                                        { BirdName.Peacock, BirdActivity.Ruling },
+                                        { BirdName.Vulture, BirdActivity.Sleeping },
+                                        { BirdName.Owl, BirdActivity.Dying }
+                                    }
+                                },
+                                {
+                                    2, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        { BirdName.Owl, BirdActivity.Eating },
+                                        { BirdName.Crow, BirdActivity.Walking },
+                                        { BirdName.Cock, BirdActivity.Ruling },
+                                        { BirdName.Peacock, BirdActivity.Sleeping },
+                                        { BirdName.Vulture, BirdActivity.Dying }
+                                    }
+                                },
+                                {
+                                    3, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        { BirdName.Vulture, BirdActivity.Eating },
+                                        { BirdName.Owl, BirdActivity.Walking },
+                                        { BirdName.Crow, BirdActivity.Ruling },
+                                        { BirdName.Cock, BirdActivity.Sleeping },
+                                        { BirdName.Peacock, BirdActivity.Dying }
+                                    }
+                                },
+                                {
+                                    4, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        { BirdName.Peacock, BirdActivity.Eating },
+                                        { BirdName.Vulture, BirdActivity.Walking },
+                                        { BirdName.Owl, BirdActivity.Ruling },
+                                        { BirdName.Crow, BirdActivity.Sleeping },
+                                        { BirdName.Cock, BirdActivity.Dying }
+                                    }
+                                },
+                                {
+                                    5, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        { BirdName.Cock, BirdActivity.Eating },
+                                        { BirdName.Peacock, BirdActivity.Walking },
+                                        { BirdName.Vulture, BirdActivity.Ruling },
+                                        { BirdName.Owl, BirdActivity.Sleeping },
+                                        { BirdName.Crow, BirdActivity.Dying }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            DayOfWeek.Friday, new Dictionary<int, Dictionary<BirdName, BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        { BirdName.Cock, BirdActivity.Eating },
+                                        { BirdName.Peacock, BirdActivity.Walking },
+                                        { BirdName.Vulture, BirdActivity.Ruling },
+                                        { BirdName.Owl, BirdActivity.Sleeping },
+                                        { BirdName.Crow, BirdActivity.Dying }
+                                    }
+                                },
+                                {
+                                    2, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        { BirdName.Crow, BirdActivity.Eating },
+                                        { BirdName.Cock, BirdActivity.Walking },
+                                        { BirdName.Peacock, BirdActivity.Ruling },
+                                        { BirdName.Vulture, BirdActivity.Sleeping },
+                                        { BirdName.Owl, BirdActivity.Dying }
+                                    }
+                                },
+                                {
+                                    3, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        { BirdName.Owl, BirdActivity.Eating },
+                                        { BirdName.Crow, BirdActivity.Walking },
+                                        { BirdName.Cock, BirdActivity.Ruling },
+                                        { BirdName.Peacock, BirdActivity.Sleeping },
+                                        { BirdName.Vulture, BirdActivity.Dying }
+                                    }
+                                },
+                                {
+                                    4, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        { BirdName.Vulture, BirdActivity.Eating },
+                                        { BirdName.Owl, BirdActivity.Walking },
+                                        { BirdName.Crow, BirdActivity.Ruling },
+                                        { BirdName.Cock, BirdActivity.Sleeping },
+                                        { BirdName.Peacock, BirdActivity.Dying }
+                                    }
+                                },
+                                {
+                                    5, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        { BirdName.Peacock, BirdActivity.Eating },
+                                        { BirdName.Vulture, BirdActivity.Walking },
+                                        { BirdName.Owl, BirdActivity.Ruling },
+                                        { BirdName.Crow, BirdActivity.Sleeping },
+                                        { BirdName.Cock, BirdActivity.Dying }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            DayOfWeek.Saturday, new Dictionary<int, Dictionary<BirdName, BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Peacock, BirdActivity.Eating},
+                                        {BirdName.Vulture, BirdActivity.Walking},
+                                        {BirdName.Owl, BirdActivity.Ruling},
+                                        {BirdName.Crow, BirdActivity.Sleeping},
+                                        {BirdName.Cock, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    2, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Cock, BirdActivity.Eating},
+                                        {BirdName.Peacock, BirdActivity.Walking},
+                                        {BirdName.Vulture, BirdActivity.Ruling},
+                                        {BirdName.Owl, BirdActivity.Sleeping},
+                                        {BirdName.Crow, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    3, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Crow, BirdActivity.Eating},
+                                        {BirdName.Cock, BirdActivity.Walking},
+                                        {BirdName.Peacock, BirdActivity.Ruling},
+                                        {BirdName.Vulture, BirdActivity.Sleeping},
+                                        {BirdName.Owl, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    4, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Owl, BirdActivity.Eating},
+                                        {BirdName.Crow, BirdActivity.Walking},
+                                        {BirdName.Cock, BirdActivity.Ruling},
+                                        {BirdName.Peacock, BirdActivity.Sleeping},
+                                        {BirdName.Vulture, BirdActivity.Dying}
+                                    }
+                                },
+                                {
+                                    5, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Vulture, BirdActivity.Eating},
+                                        {BirdName.Owl, BirdActivity.Walking},
+                                        {BirdName.Crow, BirdActivity.Ruling},
+                                        {BirdName.Cock, BirdActivity.Sleeping},
+                                        {BirdName.Peacock, BirdActivity.Dying}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    TimeOfDay.Night, new Dictionary<DayOfWeek, Dictionary<int,  Dictionary<BirdName, BirdActivity>>>
+                    {
+                        {
+                            DayOfWeek.Sunday, new Dictionary<int, Dictionary<BirdName,BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Crow,BirdActivity.Eating},
+                                        {BirdName.Owl,BirdActivity.Ruling},
+                                        {BirdName.Vulture,BirdActivity.Dying},
+                                        {BirdName.Peacock,BirdActivity.Walking},
+                                        {BirdName.Cock,BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    2,
+                                    new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Cock,BirdActivity.Eating},
+                                        {BirdName.Crow,BirdActivity.Ruling},
+                                        {BirdName.Owl,BirdActivity.Dying},
+                                        {BirdName.Vulture,BirdActivity.Walking},
+                                        {BirdName.Peacock,BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    3,
+                                    new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Peacock,BirdActivity.Eating},
+                                        {BirdName.Cock,BirdActivity.Ruling},
+                                        {BirdName.Crow,BirdActivity.Dying},
+                                        {BirdName.Owl,BirdActivity.Walking},
+                                        {BirdName.Vulture,BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    4,
+                                    new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Vulture,BirdActivity.Eating},
+                                        {BirdName.Peacock,BirdActivity.Ruling},
+                                        {BirdName.Cock,BirdActivity.Dying},
+                                        {BirdName.Crow,BirdActivity.Walking},
+                                        {BirdName.Owl,BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    5,
+                                    new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Owl,BirdActivity.Eating},
+                                        {BirdName.Vulture,BirdActivity.Ruling},
+                                        {BirdName.Peacock,BirdActivity.Dying},
+                                        {BirdName.Cock,BirdActivity.Walking},
+                                        {BirdName.Crow,BirdActivity.Sleeping}
+                                    }
+                                },
+                            }
+                        },
+                        {
+                            DayOfWeek.Tuesday, new Dictionary<int, Dictionary<BirdName,BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Crow,BirdActivity.Eating},
+                                        {BirdName.Owl,BirdActivity.Ruling},
+                                        {BirdName.Vulture,BirdActivity.Dying},
+                                        {BirdName.Peacock,BirdActivity.Walking},
+                                        {BirdName.Cock,BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    2,
+                                    new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Cock,BirdActivity.Eating},
+                                        {BirdName.Crow,BirdActivity.Ruling},
+                                        {BirdName.Owl,BirdActivity.Dying},
+                                        {BirdName.Vulture,BirdActivity.Walking},
+                                        {BirdName.Peacock,BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    3,
+                                    new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Peacock,BirdActivity.Eating},
+                                        {BirdName.Cock,BirdActivity.Ruling},
+                                        {BirdName.Crow,BirdActivity.Dying},
+                                        {BirdName.Owl,BirdActivity.Walking},
+                                        {BirdName.Vulture,BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    4,
+                                    new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Vulture,BirdActivity.Eating},
+                                        {BirdName.Peacock,BirdActivity.Ruling},
+                                        {BirdName.Cock,BirdActivity.Dying},
+                                        {BirdName.Crow,BirdActivity.Walking},
+                                        {BirdName.Owl,BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    5,
+                                    new Dictionary<BirdName,BirdActivity>
+                                    {
+                                        {BirdName.Owl,BirdActivity.Eating},
+                                        {BirdName.Vulture,BirdActivity.Ruling},
+                                        {BirdName.Peacock,BirdActivity.Dying},
+                                        {BirdName.Cock,BirdActivity.Walking},
+                                        {BirdName.Crow,BirdActivity.Sleeping}
+                                    }
+                                },
+                            }
+                        },
+                        {
+                            DayOfWeek.Monday, new Dictionary<int, Dictionary<BirdName, BirdActivity>>
+                           {
+                               {
+                                   1, new Dictionary<BirdName, BirdActivity>
+                                   {
+                                       {BirdName.Cock, BirdActivity.Eating},
+                                       {BirdName.Crow, BirdActivity.Ruling},
+                                       {BirdName.Owl, BirdActivity.Dying},
+                                       {BirdName.Vulture, BirdActivity.Walking},
+                                       {BirdName.Peacock, BirdActivity.Sleeping}
+                                   }
+                               },
+                               {
+                                   2, new Dictionary<BirdName, BirdActivity>
+                                   {
+                                       {BirdName.Peacock, BirdActivity.Eating},
+                                       {BirdName.Cock, BirdActivity.Ruling},
+                                       {BirdName.Crow, BirdActivity.Dying},
+                                       {BirdName.Owl, BirdActivity.Walking},
+                                       {BirdName.Vulture, BirdActivity.Sleeping}
+                                   }
+                               },
+                               {
+                                   3, new Dictionary<BirdName, BirdActivity>
+                                   {
+                                       {BirdName.Vulture, BirdActivity.Eating},
+                                       {BirdName.Peacock, BirdActivity.Ruling},
+                                       {BirdName.Cock, BirdActivity.Dying},
+                                       {BirdName.Crow, BirdActivity.Walking},
+                                       {BirdName.Owl, BirdActivity.Sleeping}
+                                   }
+                               },
+                               {
+                                   4, new Dictionary<BirdName, BirdActivity>
+                                   {
+                                       {BirdName.Owl, BirdActivity.Eating},
+                                       {BirdName.Vulture, BirdActivity.Ruling},
+                                       {BirdName.Peacock, BirdActivity.Dying},
+                                       {BirdName.Cock, BirdActivity.Walking},
+                                       {BirdName.Crow, BirdActivity.Sleeping}
+                                   }
+                               },
+                               {
+                                   5, new Dictionary<BirdName, BirdActivity>
+                                   {
+                                       {BirdName.Crow, BirdActivity.Eating},
+                                       {BirdName.Owl, BirdActivity.Ruling},
+                                       {BirdName.Vulture, BirdActivity.Dying},
+                                       {BirdName.Peacock, BirdActivity.Walking},
+                                       {BirdName.Cock, BirdActivity.Sleeping}
+                                   }
+                               }
+                           }
+                        },
+                        {
+                            DayOfWeek.Wednesday, new Dictionary<int, Dictionary<BirdName, BirdActivity>>
+                           {
+                               {
+                                   1, new Dictionary<BirdName, BirdActivity>
+                                   {
+                                       {BirdName.Cock, BirdActivity.Eating},
+                                       {BirdName.Crow, BirdActivity.Ruling},
+                                       {BirdName.Owl, BirdActivity.Dying},
+                                       {BirdName.Vulture, BirdActivity.Walking},
+                                       {BirdName.Peacock, BirdActivity.Sleeping}
+                                   }
+                               },
+                               {
+                                   2, new Dictionary<BirdName, BirdActivity>
+                                   {
+                                       {BirdName.Peacock, BirdActivity.Eating},
+                                       {BirdName.Cock, BirdActivity.Ruling},
+                                       {BirdName.Crow, BirdActivity.Dying},
+                                       {BirdName.Owl, BirdActivity.Walking},
+                                       {BirdName.Vulture, BirdActivity.Sleeping}
+                                   }
+                               },
+                               {
+                                   3, new Dictionary<BirdName, BirdActivity>
+                                   {
+                                       {BirdName.Vulture, BirdActivity.Eating},
+                                       {BirdName.Peacock, BirdActivity.Ruling},
+                                       {BirdName.Cock, BirdActivity.Dying},
+                                       {BirdName.Crow, BirdActivity.Walking},
+                                       {BirdName.Owl, BirdActivity.Sleeping}
+                                   }
+                               },
+                               {
+                                   4, new Dictionary<BirdName, BirdActivity>
+                                   {
+                                       {BirdName.Owl, BirdActivity.Eating},
+                                       {BirdName.Vulture, BirdActivity.Ruling},
+                                       {BirdName.Peacock, BirdActivity.Dying},
+                                       {BirdName.Cock, BirdActivity.Walking},
+                                       {BirdName.Crow, BirdActivity.Sleeping}
+                                   }
+                               },
+                               {
+                                   5, new Dictionary<BirdName, BirdActivity>
+                                   {
+                                       {BirdName.Crow, BirdActivity.Eating},
+                                       {BirdName.Owl, BirdActivity.Ruling},
+                                       {BirdName.Vulture, BirdActivity.Dying},
+                                       {BirdName.Peacock, BirdActivity.Walking},
+                                       {BirdName.Cock, BirdActivity.Sleeping}
+                                   }
+                               }
+                           }
+                        },
+                        {
+                            DayOfWeek.Thursday, new Dictionary<int, Dictionary<BirdName, BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Peacock, BirdActivity.Eating},
+                                        {BirdName.Cock, BirdActivity.Ruling},
+                                        {BirdName.Crow, BirdActivity.Dying},
+                                        {BirdName.Owl, BirdActivity.Walking},
+                                        {BirdName.Vulture, BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    2, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Vulture, BirdActivity.Eating},
+                                        {BirdName.Peacock, BirdActivity.Ruling},
+                                        {BirdName.Cock, BirdActivity.Dying},
+                                        {BirdName.Crow, BirdActivity.Walking},
+                                        {BirdName.Owl, BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    3, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Owl, BirdActivity.Eating},
+                                        {BirdName.Vulture, BirdActivity.Ruling},
+                                        {BirdName.Peacock, BirdActivity.Dying},
+                                        {BirdName.Cock, BirdActivity.Walking},
+                                        {BirdName.Crow, BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    4, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Crow, BirdActivity.Eating},
+                                        {BirdName.Owl, BirdActivity.Ruling},
+                                        {BirdName.Vulture, BirdActivity.Dying},
+                                        {BirdName.Peacock, BirdActivity.Walking},
+                                        {BirdName.Cock, BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    5, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Cock, BirdActivity.Eating},
+                                        {BirdName.Crow, BirdActivity.Ruling},
+                                        {BirdName.Owl, BirdActivity.Dying},
+                                        {BirdName.Vulture, BirdActivity.Walking},
+                                        {BirdName.Peacock, BirdActivity.Sleeping}
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            DayOfWeek.Friday, new Dictionary<int, Dictionary<BirdName, BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Vulture, BirdActivity.Eating},
+                                        {BirdName.Peacock, BirdActivity.Ruling},
+                                        {BirdName.Cock, BirdActivity.Dying},
+                                        {BirdName.Crow, BirdActivity.Walking},
+                                        {BirdName.Owl, BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    2, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Owl, BirdActivity.Eating},
+                                        {BirdName.Vulture, BirdActivity.Ruling},
+                                        {BirdName.Peacock, BirdActivity.Dying},
+                                        {BirdName.Cock, BirdActivity.Walking},
+                                        {BirdName.Crow, BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    3, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Crow, BirdActivity.Eating},
+                                        {BirdName.Owl, BirdActivity.Ruling},
+                                        {BirdName.Vulture, BirdActivity.Dying},
+                                        {BirdName.Peacock, BirdActivity.Walking},
+                                        {BirdName.Cock, BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    4, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Cock, BirdActivity.Eating},
+                                        {BirdName.Crow, BirdActivity.Ruling},
+                                        {BirdName.Owl, BirdActivity.Dying},
+                                        {BirdName.Vulture, BirdActivity.Walking},
+                                        {BirdName.Peacock, BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    5, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Peacock, BirdActivity.Eating},
+                                        {BirdName.Cock, BirdActivity.Ruling},
+                                        {BirdName.Crow, BirdActivity.Dying},
+                                        {BirdName.Owl, BirdActivity.Walking},
+                                        {BirdName.Vulture, BirdActivity.Sleeping}
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            DayOfWeek.Saturday, new Dictionary<int, Dictionary<BirdName, BirdActivity>>
+                            {
+                                {
+                                    1, new Dictionary<BirdName, BirdActivity>
+                                    {
+                                        {BirdName.Owl,BirdActivity.Eating},
+                                        {BirdName.Vulture,BirdActivity.Ruling},
+                                        {BirdName.Peacock,BirdActivity.Dying},
+                                        {BirdName.Cock,BirdActivity.Walking},
+                                        {BirdName.Crow,BirdActivity.Sleeping}
+                                    }
+                                },
+                                {
+                                    2, new Dictionary<BirdName, BirdActivity>
+                                        {
+                                            {BirdName.Crow,BirdActivity.Eating},
+                                            {BirdName.Owl,BirdActivity.Ruling},
+                                            {BirdName.Vulture,BirdActivity.Dying},
+                                            {BirdName.Peacock,BirdActivity.Walking},
+                                            {BirdName.Cock,BirdActivity.Sleeping}
+                                        }
+                                },
+                                {
+                                    3, new Dictionary<BirdName, BirdActivity>
+                                        {
+                                            {BirdName.Cock,BirdActivity.Eating},
+                                            {BirdName.Crow,BirdActivity.Ruling},
+                                            {BirdName.Owl,BirdActivity.Dying},
+                                            {BirdName.Vulture,BirdActivity.Walking},
+                                            {BirdName.Peacock,BirdActivity.Sleeping}
+                                        }
+                                },
+                                {
+                                    4, new Dictionary<BirdName, BirdActivity>
+                                        {
+                                            {BirdName.Peacock,BirdActivity.Eating},
+                                            {BirdName.Cock,BirdActivity.Ruling},
+                                            {BirdName.Crow,BirdActivity.Dying},
+                                            {BirdName.Owl,BirdActivity.Walking},
+                                            {BirdName.Vulture,BirdActivity.Sleeping}
+                                        }
+                                },
+                                {
+                                    5, new Dictionary<BirdName, BirdActivity>
+                                        {
+                                            {BirdName.Vulture,BirdActivity.Eating},
+                                            {BirdName.Peacock,BirdActivity.Ruling},
+                                            {BirdName.Cock,BirdActivity.Dying},
+                                            {BirdName.Crow,BirdActivity.Walking},
+                                            {BirdName.Owl,BirdActivity.Sleeping}
+                                        }
+                                },
+                            }
+                        }
+                    }
+                }
+            };
     }
 }

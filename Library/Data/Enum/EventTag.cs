@@ -57,6 +57,7 @@ namespace VedAstro.Library
 
         DasaSpecialRules,
         Upagraha,
+        PanchaPakshi,
     }
 
     public static class EventTagExtensions

@@ -25,6 +25,25 @@ namespace VedAstro.Library
         [EventCalculator(EventName.Empty)]
         public static CalculatorResult Empty(Time time, Person person) => CalculatorResult.NotOccuring();
 
+        #region PANCHA PAKSHI
+
+        [EventCalculator(EventName.BirdRuling)]
+        public static CalculatorResult BirdRuling(Time time, Person person) => new() { Occuring = Calculate.MainActivity(person.BirthTime, time) == BirdActivity.Ruling };
+
+        [EventCalculator(EventName.BirdEating)]
+        public static CalculatorResult BirdEating(Time time, Person person) => new() { Occuring = Calculate.MainActivity(person.BirthTime, time) == BirdActivity.Eating };
+
+        [EventCalculator(EventName.BirdWalking)]
+        public static CalculatorResult BirdWalking(Time time, Person person) => new() { Occuring = Calculate.MainActivity(person.BirthTime, time) == BirdActivity.Walking };
+
+        [EventCalculator(EventName.BirdSleeping)]
+        public static CalculatorResult BirdSleeping(Time time, Person person) => new() { Occuring = Calculate.MainActivity(person.BirthTime, time) == BirdActivity.Sleeping };
+
+        [EventCalculator(EventName.BirdDying)]
+        public static CalculatorResult BirdDying(Time time, Person person) => new() { Occuring = Calculate.MainActivity(person.BirthTime, time) == BirdActivity.Dying };
+
+        #endregion
+
         #region TRAVEL
 
         //Doctor Manhatan can walk on the surface of the sun,
@@ -113,7 +132,7 @@ namespace VedAstro.Library
             }
 
             //all quaters buts the first
-            var isCorrectQuater = rulingConstellation.GetQuarter() != 1; 
+            var isCorrectQuater = rulingConstellation.GetQuarter() != 1;
 
             //event occuring if is good constellation & correct quater
             var occuring = isGoodConstellation && isCorrectQuater;
@@ -262,7 +281,7 @@ namespace VedAstro.Library
                     return CalculatorResult.NotOccuring();
             }
         }
-       
+
         /// <summary>
         /// Aries, Taurus, Cancer, Leo, Libra and Sagittarius are favorable signs
         /// for starting on a journey.
@@ -440,7 +459,7 @@ namespace VedAstro.Library
             var isMoonInLagna = Calculate.IsPlanetInHouse(PlanetName.Moon, HouseName.House1, time);
 
             //venus or jupiter in Kendra
-            var planetNames = new PlanetName[]{PlanetName.Jupiter, PlanetName.Venus};
+            var planetNames = new PlanetName[] { PlanetName.Jupiter, PlanetName.Venus };
             var isVenusJupiterKendra = Calculate.IsPlanetInKendra(planetNames, time);
 
             //both conditions need to be met to fortify moon
@@ -450,7 +469,7 @@ namespace VedAstro.Library
 
         }
 
-        
+
         /// <summary>
         /// Jupiter strong in Lagna and the Moon in any place other than the 8th 
         /// would be a strong combination. 
@@ -483,7 +502,7 @@ namespace VedAstro.Library
         {
             //moon in the 7th
             var isMoonIn7th = Calculate.IsPlanetInHouse(PlanetName.Moon, HouseName.House7, time);
-            
+
             //venus & mercury in 4th
             var isVenusIn4th = Calculate.IsPlanetInHouse(PlanetName.Venus, HouseName.House4, time);
             var isMercuryIn4th = Calculate.IsPlanetInHouse(PlanetName.Mercury, HouseName.House4, time);
@@ -510,7 +529,7 @@ namespace VedAstro.Library
 
             //Jupiter in the 7th
             var isJupiterIn7th = Calculate.IsPlanetInHouse(PlanetName.Jupiter, HouseName.House7, time);
-            
+
             //either 1 conditions meets 
             var occuring = isMercuryIn4th || isJupiterIn2nd || isJupiterIn7th;
 

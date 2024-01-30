@@ -292,6 +292,29 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Returns STD time in string HH:mm dd/MM/yyyy zzz
+        /// </summary>
+        public string GetStdDateTimeSecondsOffsetText()
+        {
+            //format time with formatting info
+            //note: only explicit statement of format as below works
+            var stdDateTimeString = _stdTime.ToString("HH:mm:ss dd/MM/yyyy");
+            var stdTimeZoneString = _stdTime.ToString("zzz"); //timezone separate so can clean date time
+
+            //god knows why, in some time zones date comes with "." instead of "/" (despite above formatting)
+            stdDateTimeString = stdDateTimeString.Replace('.', '/');
+
+            //god knows why, in some time zones date comes with "-" instead of "/" (despite above formatting)
+            stdDateTimeString = stdDateTimeString.Replace('-', '/');
+
+            //recombine
+            var final = $"{stdDateTimeString} {stdTimeZoneString}";
+
+            //return formatted time
+            return final;
+        }
+
+        /// <summary>
         /// Returns STD time in string dd/MM/yyyy
         /// </summary>
         public readonly string StdDateMonthYearText => _stdTime.ToString("dd/MM/yyyy");

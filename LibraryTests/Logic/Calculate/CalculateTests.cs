@@ -204,6 +204,13 @@ namespace VedAstro.Library.Tests
             Assert.Fail();
         }
 
+        [TestMethod()]
+        public void AllConstellationTest()
+        {
+            var x = Constellation.AllConstellation;
+            Assert.AreEqual(27, x.Count);
+        }
+
 
         /// <summary>
         /// Test fully functional and should pass

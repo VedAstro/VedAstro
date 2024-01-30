@@ -378,3 +378,7 @@ API/local.settings.json
 .DS_Store
 
 Library/Logic/Calculate/CalculateKP.cs
+
+API/Properties/serviceDependencies.karagan - Zip Deploy.json
+
+API/Properties/ServiceDependencies/karagan - Zip Deploy/storage1.arm.json

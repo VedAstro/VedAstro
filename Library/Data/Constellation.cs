@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VedAstro.Library
 {
@@ -16,8 +17,19 @@ namespace VedAstro.Library
 
         public static Constellation Empty = new Constellation(1, 1, Angle.FromDegrees(0));
 
-        public static List<ConstellationName> AllConstellation => new List<ConstellationName>((ConstellationName[])Enum.GetValues(typeof(ConstellationName)));
-
+        /// <summary>
+        /// Gets all 27 constellation
+        /// NOTE:
+        /// - empty artificially removed
+        /// - also used by API for ALL call
+        /// </summary>
+        public static List<ConstellationName> AllConstellation
+        {
+            get
+            {
+                return new List<ConstellationName>(((ConstellationName[])Enum.GetValues(typeof(ConstellationName))).Where(e => e != ConstellationName.Empty));
+            }
+        }
 
         //DATA FIELDS
         private readonly ConstellationName _name;

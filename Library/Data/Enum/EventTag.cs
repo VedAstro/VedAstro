@@ -58,6 +58,7 @@ namespace VedAstro.Library
         DasaSpecialRules,
         Upagraha,
         PanchaPakshi,
+        YamaNumber, //special to verify underlying astro events for pancha pakshi
     }
 
     public static class EventTagExtensions

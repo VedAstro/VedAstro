@@ -20,11 +20,17 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Gets all algorithm methods in nice string for selection in Website
+        /// DYNAMIC!
         /// </summary>
         public static MethodInfo[] All => typeof(Algorithm)
             .GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
             .Where(m => !m.Name.StartsWith("get_") && !m.Name.StartsWith("set_"))
             .ToArray();
+
+        /// <summary>
+        /// Disables all auto coloring, for use with Highlight function. 💡✝️
+        /// </summary>
+        public static double Neutral(Event foundEvent, Person person) => 0;
 
         public static double General(Event foundEvent, Person person)
         {

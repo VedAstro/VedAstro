@@ -152,6 +152,13 @@
         SunBadPositionDasa,
         ExaltedSunDasa,
 
+        Yama1,
+        Yama2,
+        Yama3,
+        Yama4,
+        Yama5,
+
+
         #region AGRICULTURE
 
         BadForStartingAllAgriculture,
@@ -1097,7 +1104,7 @@
         BirdEating,
         BirdWalking,
         BirdSleeping,
-        BirdDying
+        BirdDying,
 
         #endregion
     }

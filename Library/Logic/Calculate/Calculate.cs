@@ -67,7 +67,7 @@ namespace VedAstro.Library
         public static BirdActivity AbstractActivity(Time checkTime)
         {
             //start counting from start of current Yama
-            var yamaStartTime = BirthYama(checkTime).YamaStartTime;
+            var yamaStartTime = BirthYama3(checkTime).YamaStartTime;
 
             //based on day or night birth start checking
             if (IsDayBirth(checkTime))
@@ -152,7 +152,7 @@ namespace VedAstro.Library
             var birthBird = PanchaPakshiBirthBird(birthTime);
             var timeOfDay = IsDayBirth(checkTime) ? PanchaPakshi.TimeOfDay.Day : PanchaPakshi.TimeOfDay.Night;
             var dayOfWeek = DayOfWeek(checkTime);
-            var yamaNumber = BirthYama(checkTime).YamaCount;
+            var yamaNumber = BirthYama3(checkTime).YamaCount;
 
             // Retrieve the strength of the bird's abstract activity from the pre-initialized dictionary.
             var mainActivity = PanchaPakshi.TableData[timeOfDay][dayOfWeek][yamaNumber][birthBird];
@@ -164,31 +164,149 @@ namespace VedAstro.Library
         /// <summary>
         /// Checks if a given birth time is within that days' sunrise and sunset aka "vedic day"
         /// </summary>
-        public static BirthTimeInVedicDay IsBirthTimeInVedicDay(Time birthTime)
+        //public static BirthTimeInVedicDay IsBirthTimeInVedicDay(Time birthTime)
+        //{
+        //    var sunset = Calculate.SunsetTime(birthTime);
+        //    var sunrise = Calculate.SunriseTime(birthTime);
+
+        //    //time should be after sunrise (sunrise time will be smaller)
+        //    var isAfterSunrise = sunrise < birthTime;
+
+        //    //time should be before sunset (sunset time will be bigger)
+        //    var isBeforeSunset = sunset > birthTime;
+
+        //    //is within Vedic day (end here)
+        //    if (isAfterSunrise && isBeforeSunset) { return BirthTimeInVedicDay.Yes; }
+
+        //    //#PREVIOUS DAY
+        //    //time should be before sunrise (sunrise time will be bigger)
+        //    if (sunrise > birthTime) { return BirthTimeInVedicDay.PreviousDay; }
+
+        //    //#NEXT DAY
+        //    //time should be before sunset (sunset time will be smaller)
+        //    if (sunset < birthTime) { return BirthTimeInVedicDay.NextDay; }
+
+
+        //    throw new Exception("END OF LINE!");
+        //}
+
+
+        public static BirthYama BirthYama3(Time inputTime)
         {
-            var sunset = Calculate.SunsetTime(birthTime);
-            var sunrise = Calculate.SunriseTime(birthTime);
+            //get the vedic day start time for given input time (aka sunrise)
+            var dayStartVedic = Calculate.VedicDayStartTime(inputTime);
 
-            //time should be after sunrise (sunrise time will be smaller)
-            var isAfterSunrise = sunrise < birthTime;
+            //get start of vedic day and start checking 1 yama range at a time
+            var isFound = false;
+            var yamaCount = 1;
+            var yamaStartTime = dayStartVedic;
+            while (!isFound)
+            {
+                //calculate yama end time based on yama count (2h 24min = 2.4h)
+                //var minFromStart = 2.4 * yamaCount;
+                var yamaEndTime = yamaStartTime.AddHours(2.4); // Changed this line
 
-            //time should be before sunset (sunset time will be bigger)
-            var isBeforeSunset = sunset > birthTime;
+                //if birth time is in this yama, found! end here.
+                //(start time must be smaller or equal and end time must be bigger or equal)
+                if (yamaStartTime <= inputTime && yamaEndTime >= inputTime)
+                {
+                    //if above 5, restart Yama count for night cycle
+                    if (yamaCount > 5) { yamaCount = yamaCount - 5; }
 
-            //is within Vedic day (end here)
-            if (isAfterSunrise && isBeforeSunset) { return BirthTimeInVedicDay.Yes; }
+                    return new BirthYama(yamaCount, yamaStartTime, yamaEndTime);
+                }
+
+                //keep looking, end of this yama begins next
+                yamaStartTime = yamaEndTime;
+
+                yamaCount++;
+            }
+
+            throw new Exception("END OF LINE!");
+
+        }
+
+        /// <summary>
+        /// Given a time, it will find out the start time of for that vedic day
+        /// If time is before sunrise, the previous day
+        /// </summary>
+        public static Time VedicDayStartTime(Time inputTime)
+        {
+            var sunrise = Calculate.SunriseTime(inputTime);
 
             //#PREVIOUS DAY
             //time should be before sunrise (sunrise time will be bigger)
-            if (sunrise > birthTime) { return BirthTimeInVedicDay.PreviousDay; }
+            if (sunrise > inputTime)
+            {
+                var previousDay = inputTime.SubtractHours(23); //todo proper method
+                var yamaStartTime = Calculate.SunriseTime(previousDay);
+                return yamaStartTime;
+            }
+            //else return sunrise as is
+            else
+            {
+                return sunrise;
+            }
 
-            //#NEXT DAY
-            //time should be before sunset (sunset time will be smaller)
-            if (sunset < birthTime) { return BirthTimeInVedicDay.NextDay; }
 
-
-            throw new Exception("END OF LINE!");
         }
+
+        //public static BirthYama BirthYama(Time birthTime)
+        //{
+        //    //based on whether birth falls same on vedic day and calendar day
+        //    //var timeInDay = Calculate.IsBirthTimeInVedicDay(birthTime);
+
+        //    var calendarDate = birthTime;
+        //    var sunset = Calculate.SunsetTime(birthTime);
+        //    var sunrise = Calculate.SunriseTime(birthTime);
+
+        //    //before sunrise --> Previous Day (sunrise time will be bigger)
+        //    var isPreviousDay = sunrise > birthTime;
+
+        //    //after next day's sunrise --> Next day (sunrise time will be bigger)
+        //    var nextSunrise = SunriseTime(birthTime.MoveToNextDay());
+        //    var isNextDay = nextSunrise > birthTime;
+
+
+        //    switch (timeInDay)
+        //    {
+        //        //if on same day, no need to change data
+        //        case BirthTimeInVedicDay.Yes: break;
+        //        //birth after sunset so next day
+        //        case BirthTimeInVedicDay.NextDay:
+        //            calendarDate = calendarDate.AddHours(23); break;
+        //        //birth before sunrise
+        //        case BirthTimeInVedicDay.PreviousDay:
+        //            calendarDate = calendarDate.SubtractHours(23); break;
+        //    }
+
+        //    //start counting from sunrise on calendar date
+        //    var yamaStartTime = Calculate.SunriseTime(calendarDate);
+
+
+        //    //start counting from sunrise on calendar date
+        //    var yamaStartTime = Calculate.SunriseTime(birthTime);
+
+        //    //get start of vedic day and start checking 1 yama range at a time
+        //    for (int yamaCount = 1; yamaCount <= 5; yamaCount++)
+        //    {
+        //        //calculate yama end time based on yama count (2h 24min = 2.4h)
+        //        var yamaEndTime = yamaStartTime.AddHours(2.4); // Changed this line
+
+        //        //if birth time is in this yama, found! end here.
+        //        //(start time must be smaller or equal and end time must be bigger or equal)
+        //        if (yamaStartTime <= birthTime && yamaEndTime >= birthTime)
+        //        {
+        //            return new BirthYama(yamaCount, yamaStartTime, yamaEndTime);
+        //        }
+
+        //        //keep looking, end of this yama begins next
+        //        yamaStartTime = yamaEndTime;
+        //    }
+
+
+        //}
+
 
         /// <summary>
         /// yama works out to 2 hrs. 24 mts. of our modern time.
@@ -200,47 +318,98 @@ namespace VedAstro.Library
         /// and night
         /// for Pancha Pakshi
         /// </summary>
-        public static BirthYama BirthYama(Time birthTime)
-        {
-            //based on wheather birth falls same on vedic day and calendar day
-            var timeInDay = Calculate.IsBirthTimeInVedicDay(birthTime);
+        //public static BirthYama BirthYama(Time birthTime)
+        //{
 
-            var calendarDate = birthTime;
-            switch (timeInDay)
-            {
-                //if on same day, no need to change data
-                case BirthTimeInVedicDay.Yes: break;
-                //birth after sunset so next day
-                case BirthTimeInVedicDay.NextDay:
-                    calendarDate = calendarDate.AddHours(23); break;
-                //birth before sunrise
-                case BirthTimeInVedicDay.PreviousDay:
-                    calendarDate = calendarDate.SubtractHours(23); break;
-                    break;
-            }
+        //    // Extract the time component from the DateTimeOffset
+        //    DateTimeOffset dto = birthTime.GetLmtDateTimeOffset();
+        //    TimeSpan inputTime = dto.TimeOfDay;
 
-            //start counting from sunrise on calendar date
-            var yamaStartTime = Calculate.SunriseTime(calendarDate);
+        //    // Parse the start and end times
+        //    var sunriseStd = SunriseTime(birthTime).GetLmtDateTimeOffset();
+        //    TimeSpan start = sunriseStd.TimeOfDay;
+        //    var sunsetStd = SunsetTime(birthTime).GetLmtDateTimeOffset();
+        //    TimeSpan end = sunsetStd.TimeOfDay;
 
-            //get start of vedic day and start checking 1 yama range at a time
-            for (int yamaCount = 1; yamaCount <= 5; yamaCount++)
-            {
-                //calculate yama end time based on yama count (2h 24min = 2.4h)
-                var yamaEndTime = yamaStartTime.AddHours(2.4 * yamaCount);
+        //    // Calculate the length of each piece
+        //    //TimeSpan pieceLength = (end - start) / 5;
+        //    TimeSpan pieceLength = TimeSpan.FromHours(2.4);
 
-                //if birth time is in this yama, found! end here.
-                //(start time must be smaller and time must be bigger)
-                if (yamaStartTime < birthTime && yamaEndTime > birthTime)
-                {
-                    return new BirthYama(yamaCount, yamaStartTime, yamaEndTime);
-                }
+        //    // Find out which piece the input time falls under
+        //    for (int i = 0; i < 5; i++)
+        //    {
+        //        TimeSpan yamaStartTime = start + pieceLength * i;
+        //        TimeSpan yamaEndTime = start + pieceLength * (i + 1);
 
-                //keep looking, end of this yama begins next
-                yamaStartTime = yamaEndTime;
-            }
+        //        if (inputTime >= yamaStartTime && inputTime <= yamaEndTime)
+        //        {
+        //            return new BirthYama(i + 1, yamaStartTime, yamaEndTime);
+        //        }
 
-            throw new Exception("Yama not found!");
-        }
+        //        Console.WriteLine($"{i + 1} -- {yamaStartTime} -- {yamaEndTime}");
+        //        if (i == 4)
+        //        {
+        //            Console.WriteLine("last");
+        //        }
+        //    }
+
+        //    //if before sunrise, than return end of last is 5
+        //    if (inputTime <= sunriseStd.TimeOfDay)
+        //    {
+        //        return new BirthYama(5, new TimeSpan(), new TimeSpan());
+        //    }
+
+        //    //after sunset
+        //    if (inputTime >= sunsetStd.TimeOfDay)
+        //    {
+        //        return new BirthYama(1, new TimeSpan(), new TimeSpan());
+        //    }
+
+        //    //if reach here than fail!
+        //    return new BirthYama(1, new TimeSpan(), new TimeSpan());
+
+        //}
+
+        //public static BirthYama BirthYama(Time birthTime)
+        //{
+        //    //based on whether birth falls same on vedic day and calendar day
+        //    var timeInDay = Calculate.IsBirthTimeInVedicDay(birthTime);
+
+        //    var calendarDate = birthTime;
+        //    switch (timeInDay)
+        //    {
+        //        //if on same day, no need to change data
+        //        case BirthTimeInVedicDay.Yes: break;
+        //        //birth after sunset so next day
+        //        case BirthTimeInVedicDay.NextDay:
+        //            calendarDate = calendarDate.AddHours(23); break;
+        //        //birth before sunrise
+        //        case BirthTimeInVedicDay.PreviousDay:
+        //            calendarDate = calendarDate.SubtractHours(23); break;
+        //    }
+
+        //    //start counting from sunrise on calendar date
+        //    var yamaStartTime = Calculate.SunriseTime(calendarDate);
+
+        //    //get start of vedic day and start checking 1 yama range at a time
+        //    for (int yamaCount = 1; yamaCount <= 5; yamaCount++)
+        //    {
+        //        //calculate yama end time based on yama count (2h 24min = 2.4h)
+        //        var yamaEndTime = yamaStartTime.AddHours(2.4); // Changed this line
+
+        //        //if birth time is in this yama, found! end here.
+        //        //(start time must be smaller or equal and end time must be bigger or equal)
+        //        if (yamaStartTime <= birthTime && yamaEndTime >= birthTime)
+        //        {
+        //            return new BirthYama(yamaCount, yamaStartTime, yamaEndTime);
+        //        }
+
+        //        //keep looking, end of this yama begins next
+        //        yamaStartTime = yamaEndTime;
+        //    }
+
+        //    throw new Exception("Yama not found!");
+        //}
 
 
         /// <summary>

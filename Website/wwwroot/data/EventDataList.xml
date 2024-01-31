@@ -951,8 +951,44 @@
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
+	
+	<!--ASTRONOMICAL-->
 	<Event>
-
+		<Name>Yama1</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+		</Description>
+		<Tag>Astronomical,YamaNumber</Tag>
+	</Event>
+	<Event>
+		<Name>Yama2</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+		</Description>
+		<Tag>Astronomical,YamaNumber</Tag>
+	</Event>
+	<Event>
+		<Name>Yama3</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+		</Description>
+		<Tag>Astronomical,YamaNumber</Tag>
+	</Event>
+	<Event>
+		<Name>Yama4</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+		</Description>
+		<Tag>Astronomical,YamaNumber</Tag>
+	</Event>
+	<Event>
+		<Name>Yama5</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+		</Description>
+		<Tag>Astronomical,YamaNumber</Tag>
+	</Event>
+	<Event>
 		<Name>SunIsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -960,7 +996,6 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-
 		<Name>MoonIsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>

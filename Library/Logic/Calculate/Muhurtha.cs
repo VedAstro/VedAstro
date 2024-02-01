@@ -4317,15 +4317,15 @@ namespace VedAstro.Library
         #region ASTRONOMICAL
 
         [EventCalculator(EventName.Yama1)]
-        public static CalculatorResult Yama1(Time time, Person person) => new() { Occuring = Calculate.BirthYama3(time).YamaCount == 1 };
+        public static CalculatorResult Yama1(Time time, Person person) => new() { Occuring = Calculate.BirthYama(time).YamaCount == 1 };
         [EventCalculator(EventName.Yama2)]
-        public static CalculatorResult Yama2(Time time, Person person) => new() { Occuring = Calculate.BirthYama3(time).YamaCount == 2 };
+        public static CalculatorResult Yama2(Time time, Person person) => new() { Occuring = Calculate.BirthYama(time).YamaCount == 2 };
         [EventCalculator(EventName.Yama3)]
-        public static CalculatorResult Yama3(Time time, Person person) => new() { Occuring = Calculate.BirthYama3(time).YamaCount == 3 };
+        public static CalculatorResult Yama3(Time time, Person person) => new() { Occuring = Calculate.BirthYama(time).YamaCount == 3 };
         [EventCalculator(EventName.Yama4)]
-        public static CalculatorResult Yama4(Time time, Person person) => new() { Occuring = Calculate.BirthYama3(time).YamaCount == 4 };
+        public static CalculatorResult Yama4(Time time, Person person) => new() { Occuring = Calculate.BirthYama(time).YamaCount == 4 };
         [EventCalculator(EventName.Yama5)]
-        public static CalculatorResult Yama5(Time time, Person person) => new() { Occuring = Calculate.BirthYama3(time).YamaCount == 5 };
+        public static CalculatorResult Yama5(Time time, Person person) => new() { Occuring = Calculate.BirthYama(time).YamaCount == 5 };
 
 
         [EventCalculator(EventName.SunIsStrong)]

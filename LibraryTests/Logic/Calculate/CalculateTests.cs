@@ -926,7 +926,7 @@ namespace VedAstro.Library.Tests
         {
             //TODO VERIFY
             //var test1 = Calculate.BirthYama(StandardHoroscope);
-            var test1 = Calculate.BirthYama3(StandardHoroscope);
+            var test1 = Calculate.BirthYama(StandardHoroscope);
 
             //Assert.AreEqual(1, test1);
         }

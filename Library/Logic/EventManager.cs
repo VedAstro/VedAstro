@@ -88,23 +88,34 @@ namespace VedAstro.Library
 
         //takes time list and checks if event is occuring for each time slice,
         //and returns it in dictionary list, done in parallel
-        public static EventSlice[] ConvertToEventSlice(List<Time> timeList, EventData eventData,
-            Person person)
+        public static EventSlice[] ConvertToEventSlice(List<Time> timeList, EventData eventData, Person person, bool useParallel = true)
         {
-            //event data list is recreated because the data
-            //inside is possibly changed when calculators are run (dynamic yeah!)
-            //var returnList = new ConcurrentBag<EventSlice>();
             EventSlice[] returnList = new EventSlice[timeList.Count];
 
-            Parallel.For(0, timeList.Count, i =>
+            if (useParallel)
             {
-                var timeTemp = timeList[i];
-                //get if event occurring at the inputed time (heavy computation)
-                var updatedEventData = ConvertToEventSlice(timeTemp, eventData, person);
+                Parallel.For(0, timeList.Count, i =>
+                {
+                    //event data list is recreated because the data
+                    //inside is possibly changed when calculators are run (dynamic yeah!)
+                    var timeTemp = timeList[i];
 
-                //note: fills null if not occuring
-                returnList[i] = updatedEventData;
-            });
+                    //get if event occurring at the inputed time (heavy computation)
+                    var updatedEventData = ConvertToEventSlice(timeTemp, eventData, person);
+
+                    //note: fills null if not occuring
+                    returnList[i] = updatedEventData;
+                });
+            }
+            else
+            {
+                for (int i = 0; i < timeList.Count; i++)
+                {
+                    var timeTemp = timeList[i];
+                    var updatedEventData = ConvertToEventSlice(timeTemp, eventData, person);
+                    returnList[i] = updatedEventData;
+                }
+            }
 
             return returnList;
         }
@@ -138,7 +149,7 @@ namespace VedAstro.Library
                 var isDescriptionOverride = !string.IsNullOrEmpty(predictionData.DescriptionOverride); //if true override, else false
                 var description = isDescriptionOverride ? predictionData.DescriptionOverride : eventData.Description;
 
-                if (nature == EventNature.Empty || string.IsNullOrEmpty(description))
+                if (nature == EventNature.Empty)
                 {
                     throw new Exception("Something wrong");
                 }

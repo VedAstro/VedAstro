@@ -231,13 +231,14 @@
     /// </summary>
     private async Task CheckRaiseOutdatedWarning()
     {
+        #region RELEASE
+
         //higher number is latest
         var currentCommitNo = int.Parse(ThisAssembly.CommitNumber);
 
         //uses tags to detect correct version
         var latestPublishedCommitNo = await WebsiteTools.GetLatestCommitNumber();
 
-        #region RELEASE
 
         //if lower raise warning
         if (currentCommitNo < latestPublishedCommitNo)
@@ -254,8 +255,6 @@
         }
 
         #endregion
-
-
     }
 
     /// <summary>

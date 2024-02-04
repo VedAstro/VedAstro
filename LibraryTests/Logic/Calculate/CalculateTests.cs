@@ -874,6 +874,53 @@ namespace VedAstro.Library.Tests
             Assert.IsTrue(Math.Abs((maandiTest1 - maandiTruth1).TotalDegrees) <= errorRate);
         }
 
+        //PASS
+        [TestMethod()]
+        public void PlanetTajikaLongitudeTest()
+        {
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
+
+            //set error rate
+            var errorRate = 1;
+
+            // Test for Sun
+            var sunTest1 = Calculate.PlanetTajikaLongitude(PlanetName.Sun, StandardHoroscope, 2024);
+            var sunTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Virgo, new Angle(29, 28, 40)));
+            Assert.IsTrue(Math.Abs((sunTest1 - sunTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Moon
+            var moonTest1 = Calculate.PlanetTajikaLongitude(PlanetName.Moon, StandardHoroscope, 2024);
+            var moonTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Pisces, new Angle(16, 12, 30))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((moonTest1 - moonTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Mars
+            var marsTest1 = Calculate.PlanetTajikaLongitude(PlanetName.Mars, StandardHoroscope, 2024);
+            var marsTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Gemini, new Angle(28, 18, 39))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((marsTest1 - marsTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Mercury
+            var mercuryTest1 = Calculate.PlanetTajikaLongitude(PlanetName.Mercury, StandardHoroscope, 2024);
+            var mercuryTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Libra, new Angle(10, 10, 28))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((mercuryTest1 - mercuryTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Jupiter
+            var jupiterTest1 = Calculate.PlanetTajikaLongitude(PlanetName.Jupiter, StandardHoroscope, 2024);
+            var jupiterTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Taurus, new Angle(27, 03, 44))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((jupiterTest1 - jupiterTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Venus
+            var venusTest1 = Calculate.PlanetTajikaLongitude(PlanetName.Venus, StandardHoroscope, 2024);
+            var venusTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Scorpio, new Angle(04, 17, 20))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((venusTest1 - venusTruth1).TotalDegrees) <= errorRate);
+
+            // Test for Saturn
+            var saturnTest1 = Calculate.PlanetTajikaLongitude(PlanetName.Saturn, StandardHoroscope, 2024);
+            var saturnTruth1 = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Aquarius, new Angle(19, 15, 58))); // Replace with correct values
+            Assert.IsTrue(Math.Abs((saturnTest1 - saturnTruth1).TotalDegrees) <= errorRate);
+
+        }
+
         [TestMethod()]
         public void IsNightBirthTest()
         {
@@ -1052,5 +1099,91 @@ namespace VedAstro.Library.Tests
             Assert.AreEqual("O", test24);
         }
 
+        [TestMethod()]
+        public async Task MurthiTest()
+        {
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
+
+            //now check time
+            var checkTime = await Time.Now(GeoLocation.Bangalore);
+
+            var test24 = Calculate.Murthi(PlanetName.Sun, checkTime, StandardHoroscope);
+
+            Assert.AreEqual("O", test24);
+        }
+
+        [TestMethod()]
+        public async Task TransitHouseFromMoonTest()
+        {
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
+
+            //now check time
+            Time checkTime = new("14:20 02/02/2024 +05:30", GeoLocation.Bangalore);
+
+            var test24 = Calculate.TransitHouseFromMoon(PlanetName.Sun, checkTime, StandardHoroscope);
+
+            Assert.AreEqual(HouseName.House12, test24);
+        }
+
+        [TestMethod()]
+        public async Task TransitHouseFromNavamsaMoonTest()
+        {
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
+
+            //now check time
+            Time checkTime = new("14:20 02/02/2024 +05:30", GeoLocation.Bangalore);
+
+            var test1 = Calculate.TransitHouseFromNavamsaMoon(PlanetName.Sun, checkTime, StandardHoroscope);
+            Assert.AreEqual(HouseName.House2, test1);
+
+            var test2 = Calculate.TransitHouseFromNavamsaMoon(PlanetName.Moon, checkTime, StandardHoroscope);
+            Assert.AreEqual(HouseName.House11, test2);
+
+            var test3 = Calculate.TransitHouseFromNavamsaMoon(PlanetName.Mars, checkTime, StandardHoroscope);
+            Assert.AreEqual(HouseName.House1, test3);
+        }
+
+        [TestMethod()]
+        public async Task TransitHouseFromLagnaTest()
+        {
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
+
+            //now check time
+            Time checkTime = new("14:20 02/02/2024 +05:30", GeoLocation.Bangalore);
+
+            var test1 = Calculate.TransitHouseFromLagna(PlanetName.Sun, checkTime, StandardHoroscope);
+
+            Assert.AreEqual(HouseName.House1, test1);
+            var test2 = Calculate.TransitHouseFromLagna(PlanetName.Moon, checkTime, StandardHoroscope);
+
+            Assert.AreEqual(HouseName.House10, test2);
+            var test3 = Calculate.TransitHouseFromLagna(PlanetName.Mars, checkTime, StandardHoroscope);
+
+            Assert.AreEqual(HouseName.House12, test3);
+        }
+
+        [TestMethod()]
+        public async Task TransitHouseFromNavamsaLagnaTest()
+        {
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
+
+            //now check time
+            Time checkTime = new("14:20 02/02/2024 +05:30", GeoLocation.Bangalore);
+
+            var test1 = Calculate.TransitHouseFromNavamsaLagna(PlanetName.Sun, checkTime, StandardHoroscope);
+
+            Assert.AreEqual(HouseName.House6, test1);
+            var test2 = Calculate.TransitHouseFromNavamsaLagna(PlanetName.Moon, checkTime, StandardHoroscope);
+
+            Assert.AreEqual(HouseName.House3, test2);
+            var test3 = Calculate.TransitHouseFromNavamsaLagna(PlanetName.Mars, checkTime, StandardHoroscope);
+
+            Assert.AreEqual(HouseName.House5, test3);
+        }
     }
 }

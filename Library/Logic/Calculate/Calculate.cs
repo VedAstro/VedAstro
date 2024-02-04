@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using static VedAstro.Library.PlanetName;
 using Exception = System.Exception;
 using System.Text;
+using ExCSS;
+using System.Numerics;
 
 namespace VedAstro.Library
 {
@@ -55,6 +57,119 @@ namespace VedAstro.Library
         #endregion
 
         //----------------------------------------CORE CODE---------------------------------------------
+
+        #region TAJIKA
+
+        /// <summary>
+        /// Gets a given planet's Tajika Longitude
+        /// </summary>
+        /// <param name="scanYear">4 digit year number</param>
+        public static Angle PlanetTajikaLongitude(PlanetName planetName, Time birthTime, int scanYear)
+        {
+            //based on birth sun sign find next date with exact sign for given year
+            var possibleTajika = Calculate.TajikaDateForYear(birthTime, scanYear);
+
+            //once found, use that date to get niryana longitude for asked for planet
+            var tajikaLongitude = Calculate.PlanetNirayanaLongitude(planetName, possibleTajika);
+
+            return tajikaLongitude;
+        }
+
+        /// <summary>
+        /// Gets a given planet's Tajika constellation
+        /// </summary>
+        /// <param name="scanYear">4 digit year number</param>
+        public static Constellation PlanetTajikaConstellation(PlanetName planetName, Time birthTime, int scanYear)
+        {
+            //get position of planet in longitude
+            var planetLongitude = PlanetTajikaLongitude(planetName, birthTime, scanYear);
+
+            //return the constellation behind the planet
+            return ConstellationAtLongitude(planetLongitude);
+
+        }
+
+        /// <summary>
+        /// Gets a given planet's Tajika zodiac sign
+        /// </summary>
+        /// <param name="scanYear">4 digit year number</param>
+        public static ZodiacSign PlanetTajikaZodiacSign(PlanetName planetName, Time birthTime, int scanYear)
+        {
+            //get position of planet in longitude
+            var planetLongitude = PlanetTajikaLongitude(planetName, birthTime, scanYear);
+
+            //return the constellation behind the planet
+            return ZodiacSignAtLongitude(planetLongitude);
+        }
+
+        /// <summary>
+        /// Given a birth time and scan year, will return exact time for tajika chart
+        /// The tājika system attempts to predict in detail the likely happenings in one year of
+        /// an individual's life. The system goes to such details as to predict events even on a
+        /// day-by-day basis or even half-a-day. On account of this,
+        /// this system is also called the varṣaphala system.
+        /// </summary>
+        /// <param name="scanYear">4 digit year number</param>
+        public static Time TajikaDateForYear(Time birthTime, int scanYear)
+        {
+
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey(nameof(TajikaDateForYear), birthTime, scanYear, Ayanamsa), _tajikaDateForYear);
+
+
+            //UNDERLYING FUNCTION
+
+            Time _tajikaDateForYear()
+            {
+                //get position of sun on birth
+                var sunBirthSign = SunSign(birthTime);
+
+                //scan to find next time sun will be in same sign as birth for given year
+                //(not overall longitude only same sign and degree in sign)
+                var tajikaDateFound = false;
+
+                //NOTE: to speed up computation time, only start scan 5 days before birth date
+                //      this assumes that all tajika dates will only occure +/-5 days from birthday
+                var birthDateYear = new Time($"00:00 {birthTime.StdDateText()}/{birthTime.StdMonthText()}/{scanYear} {birthTime.StdTimezoneText}", birthTime.GetGeoLocation());
+                var possibleTajika = birthDateYear.SubtractHours(Tools.DaysToHours(5));
+
+                while (!tajikaDateFound)
+                {
+                    //get sun sign at possible date
+                    var possibleSunSign = Calculate.SunSign(possibleTajika);
+
+                    //if found
+                    var nameMatch = sunBirthSign.GetSignName() == possibleSunSign.GetSignName();
+                    var degreesInSign = sunBirthSign.GetDegreesInSign().TotalDegrees;
+                    var inSign = possibleSunSign.GetDegreesInSign().TotalDegrees;
+                    var tolerance = 0.008; // Tolerance in degrees
+                    var degreesMatch = Math.Abs(degreesInSign - inSign) <= tolerance;
+
+                    //date found, can stop looking
+                    if (nameMatch && degreesMatch)
+                    {
+                        tajikaDateFound = true;
+                    }
+
+                    //not found, keep looking
+                    else
+                    {
+                        //NOTE : The sun moves across the zodiac at a rate of approximately 0.3 hours per minute.
+                        //as such to be optimal we scan every 0.3 hours, to achive "DMS" minute level accuracy match
+                        possibleTajika = possibleTajika.AddHours(0.3);
+                    }
+
+                }
+
+                //possible date confirmed as correct date
+                return possibleTajika;
+            }
+
+        }
+
+
+        #endregion
+
 
         #region PANCHA PAKSHI
 

@@ -114,6 +114,12 @@ namespace VedAstro.Library
         public DateTimeOffset StdTimeNowAtOffset => DateTimeOffset.Now.ToOffset(this.GetStdDateTimeOffset().Offset);
 
         /// <summary>
+        /// Gets now time (STD) at this time's location/offset
+        /// SYSTEM NOW TIME
+        /// </summary>
+        public Time TimeNowAtOffset => new Time(this.StdTimeNowAtOffset, this.GetGeoLocation());
+
+        /// <summary>
         /// Sample method used for Open API example metadata StandardHoroscope
         /// </summary>
         public static Time StandardHoroscope() => new("14:20 16/10/1918 +05:30", GeoLocation.Bangalore);
@@ -163,9 +169,20 @@ namespace VedAstro.Library
         public int StdMonth() => this.GetStdDateTimeOffset().Month;
 
         /// <summary>
+        /// Will return month number as text with leading 0
+        /// </summary>
+        public string StdMonthText() => this.GetStdDateTimeOffset().Month.ToString("D2");
+
+        /// <summary>
         /// Gets date in month 1-31
         /// </summary>
         public int StdDate() => this.GetStdDateTimeOffset().Day;
+
+        /// <summary>
+        /// Gets date in month 1-31
+        /// Will return month number as text with leading 0
+        /// </summary>
+        public string StdDateText() => this.GetStdDateTimeOffset().Day.ToString("D2");
 
         /// <summary>
         /// Gets hour in 0 - 23
@@ -212,6 +229,22 @@ namespace VedAstro.Library
             //return time to caller
             return newTime;
 
+        }
+
+        /// <summary>
+        /// Returns new instance.
+        /// Moves current date to exactly next day, without altering time (hh:ss)
+        /// </summary>
+        public Time MoveToNextDay()
+        {
+            //move to next day
+            var stdTime = _stdTime.AddDays(1).AddTicks(-_stdTime.TimeOfDay.Ticks);
+
+            //create new instance of incremented time
+            var newTime = new Time(stdTime, _geoLocation);
+
+            //return time to caller
+            return newTime;
         }
 
         /// <summary>

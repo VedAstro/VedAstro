@@ -60,6 +60,7 @@ namespace VedAstro.Library
 
         #region TAJIKA
 
+
         /// <summary>
         /// Gets a given planet's Tajika Longitude
         /// </summary>
@@ -170,6 +171,97 @@ namespace VedAstro.Library
 
         #endregion
 
+        #region TRANSITS
+
+        public static HouseName TransitHouseFromLagna(PlanetName transitPlanet, Time checkTime, Time birthTime)
+        {
+            //Note the Lagna Rashi.
+            var lagnaRasi = HouseZodiacSign(HouseName.House1, birthTime);
+
+            //Choose the planet transit result for which predictions to be made.
+
+            //Note the transit position of the Moon with reference to
+            //Natal Moon(Janma Rashi) when the chosen planet enters a new sign.
+            var transitRasi = PlanetZodiacSign(transitPlanet, checkTime);
+            var count = Calculate.CountFromSignToSign(lagnaRasi.GetSignName(), transitRasi.GetSignName());
+
+            return (HouseName)count;
+
+        }
+
+        public static HouseName TransitHouseFromNavamsaLagna(PlanetName transitPlanet, Time checkTime, Time birthTime)
+        {
+            //Note the Lagna Rashi.
+            var navamsaLagnaRasi = Calculate.HouseNavamsaSign(HouseName.House1, birthTime);
+
+            //Choose the planet transit result for which predictions to be made.
+
+            //Note the transit position of the Moon with reference to
+            //Natal Moon(Janma Rashi) when the chosen planet enters a new sign.
+            var transitRasi = PlanetZodiacSign(transitPlanet, checkTime);
+            var count = Calculate.CountFromSignToSign(navamsaLagnaRasi, transitRasi.GetSignName());
+
+            return (HouseName)count;
+
+        }
+
+        public static HouseName TransitHouseFromMoon(PlanetName transitPlanet, Time checkTime, Time birthTime)
+        {
+            //Note the Janma Rashi.
+            var janmaRasi = PlanetZodiacSign(Moon, birthTime);
+
+            //Choose the planet transit result for which predictions to be made.
+            //Note the transit position of the Moon with reference to
+            //Natal Moon(Janma Rashi) when the chosen planet enters a new sign.
+            var transitRasi = PlanetZodiacSign(transitPlanet, checkTime);
+            var count = Calculate.CountFromSignToSign(janmaRasi.GetSignName(), transitRasi.GetSignName());
+
+            return (HouseName)count;
+        }
+
+        public static HouseName TransitHouseFromNavamsaMoon(PlanetName transitPlanet, Time checkTime, Time birthTime)
+        {
+            //Note the Janma Rashi.
+            var janmaRasi = Calculate.PlanetNavamsaSign(Moon, birthTime);
+
+            //Choose the planet transit result for which predictions to be made.
+            //Note the transit position of the Moon with reference to
+            //Natal Moon(Janma Rashi) when the chosen planet enters a new sign.
+            var transitRasi = PlanetZodiacSign(transitPlanet, checkTime);
+            var count = Calculate.CountFromSignToSign(janmaRasi, transitRasi.GetSignName());
+
+            return (HouseName)count;
+        }
+
+        public static string Murthi(PlanetName transitPlanet, Time checkTime, Time birthTime)
+        {
+            return "";
+
+            //if moon retun no murthi
+            if (transitPlanet == Moon) { return ""; }
+
+            //Note the Janma Rashi.
+            var janmaRasi = PlanetZodiacSign(Moon, birthTime);
+
+            //Choose the planet transit result for which predictions to be made.
+
+            //Note the transit position of the Moon with reference to
+            //Natal Moon(Janma Rashi) when the chosen planet enters a new sign.
+            var transitRasi = PlanetZodiacSign(transitPlanet, checkTime);
+            var count = Calculate.CountFromSignToSign(janmaRasi.GetSignName(), transitRasi.GetSignName());
+
+            //Name the Moorti as follows:- •
+
+            //If the transit Moon is in 1st, 6th or 11th from Natal Moon – Swarna(Golden) Moorti.
+            //If it is in 2nd, 5th or 9th – Rajata(Silver) Moorti.
+            //If it is in 3rd, 7th or 10th – Tamra(Copper) Moorti.
+            //If it is in 4th, 8th or 12th – Loha(Iron) Moorti.
+
+            throw new Exception("");
+
+        }
+
+        #endregion
 
         #region PANCHA PAKSHI
 

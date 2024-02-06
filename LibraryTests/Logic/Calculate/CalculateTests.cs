@@ -1156,13 +1156,12 @@ namespace VedAstro.Library.Tests
             Time checkTime = new("14:20 02/02/2024 +05:30", GeoLocation.Bangalore);
 
             var test1 = Calculate.TransitHouseFromLagna(PlanetName.Sun, checkTime, StandardHoroscope);
-
             Assert.AreEqual(HouseName.House1, test1);
+
             var test2 = Calculate.TransitHouseFromLagna(PlanetName.Moon, checkTime, StandardHoroscope);
-
             Assert.AreEqual(HouseName.House10, test2);
-            var test3 = Calculate.TransitHouseFromLagna(PlanetName.Mars, checkTime, StandardHoroscope);
 
+            var test3 = Calculate.TransitHouseFromLagna(PlanetName.Mars, checkTime, StandardHoroscope);
             Assert.AreEqual(HouseName.House12, test3);
         }
 
@@ -1184,6 +1183,77 @@ namespace VedAstro.Library.Tests
             var test3 = Calculate.TransitHouseFromNavamsaLagna(PlanetName.Mars, checkTime, StandardHoroscope);
 
             Assert.AreEqual(HouseName.House5, test3);
+        }
+
+        [TestMethod()]
+        public void PlanetHoraSignsTest()
+        {
+
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
+
+            var test1 = Calculate.PlanetHoraSigns(PlanetName.Sun, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test1);
+
+            var test2 = Calculate.PlanetHoraSigns(PlanetName.Moon, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test2);
+
+            var test3 = Calculate.PlanetHoraSigns(PlanetName.Mars, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test3);
+
+            var test4 = Calculate.PlanetHoraSigns(PlanetName.Mercury, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test4);
+
+            var test5 = Calculate.PlanetHoraSigns(PlanetName.Jupiter, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Cancer, test5);
+
+            var test6 = Calculate.PlanetHoraSigns(PlanetName.Venus, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test6);
+
+            var test7 = Calculate.PlanetHoraSigns(PlanetName.Saturn, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test7);
+
+            var test8 = Calculate.PlanetHoraSigns(PlanetName.Rahu, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test8);
+
+            var test9 = Calculate.PlanetHoraSigns(PlanetName.Ketu, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test9);
+
+        }
+
+        [TestMethod()]
+        public void PlanetZodiacSignsTest()
+        {
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
+
+            var test1 = Calculate.PlanetZodiacSign(PlanetName.Sun, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Virgo, test1.GetSignName());
+
+            var test2 = Calculate.PlanetZodiacSign(PlanetName.Moon, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Aquarius, test2.GetSignName());
+
+            var test3 = Calculate.PlanetZodiacSign(PlanetName.Mars, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Scorpio, test3.GetSignName());
+
+            var test4 = Calculate.PlanetZodiacSign(PlanetName.Mercury, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Libra, test4.GetSignName());
+
+            var test5 = Calculate.PlanetZodiacSign(PlanetName.Jupiter, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Gemini, test5.GetSignName());
+
+            var test6 = Calculate.PlanetZodiacSign(PlanetName.Venus, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Virgo, test6.GetSignName());
+
+            var test7 = Calculate.PlanetZodiacSign(PlanetName.Saturn, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test7.GetSignName());
+
+            var test8 = Calculate.PlanetZodiacSign(PlanetName.Rahu, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Scorpio, test8.GetSignName());
+
+            var test9 = Calculate.PlanetZodiacSign(PlanetName.Ketu, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Taurus, test9.GetSignName());
+
         }
     }
 }

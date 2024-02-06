@@ -60,7 +60,6 @@ namespace VedAstro.Library
 
         #region TAJIKA
 
-
         /// <summary>
         /// Gets a given planet's Tajika Longitude
         /// </summary>
@@ -2354,29 +2353,7 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<string> SkyChart(Time time) => await SkyChartManager.GenerateChart(time, 750, 230);
 
-        public enum ChartType
-        {
-            Rasi,
-            Hora,
-            Drekkana,
-            Chaturthamsa,
-            Panchamsa,
-            Shashthamsa,
-            Saptamsa,
-            Ashtamsa,
-            Navamsa,
-            Dasamsa,
-            Rudramsa,
-            Dwadasamsa,
-            Shodasamsa,
-            Vimsamsa,
-            Chaturvimsamsa,
-            Nakshatramsa,
-            Trimsamsa,
-            Khavedamsa,
-            Akshavedamsa,
-            Shashthyamsa,
-        }
+
         /// <summary>
         /// Get sky chart at a given time. SVG image file. URL can be used like a image source link
         /// </summary>
@@ -5175,66 +5152,19 @@ namespace VedAstro.Library
             //get planet degrees in sign
             var degreesInSign = planetSign.GetDegreesInSign().TotalDegrees;
 
-            //declare flags
-            var planetInFirstHora = false;
-            var planetInSecondHora = false;
-
-            //1.0 get which hora planet is in
-            //if sign in first hora (0 to 15 degrees)
-            if (degreesInSign >= 0 && degreesInSign <= 15)
+            //find where table indexes meet
+            foreach (var horaRow in Vargas.HoraTable[planetSignName])
             {
-                planetInFirstHora = true;
+                //NOTE : scan is assumed to begin at small number and work way up
+                var isInRange = horaRow.Key.IsWithinRange(degreesInSign);
+                if (isInRange)
+                {
+                    return horaRow.Value;
+                }
             }
 
-            //if sign in second hora (15 to 30 degrees)
-            if (degreesInSign > 15 && degreesInSign <= 30)
-            {
-                planetInSecondHora = true;
-            }
+            throw new Exception("END OF LINE!");
 
-            //2.0 check which type of sign the planet is in
-
-            //if planet is in odd sign
-            if (IsOddSign(planetSignName))
-            {
-                //if planet in first hora
-                if (planetInFirstHora == true && planetInSecondHora == false)
-                {
-                    //governed by the Sun (Leo)
-                    return ZodiacName.Leo;
-                }
-
-                //if planet in second hora
-                if (planetInFirstHora == false && planetInSecondHora == true)
-                {
-                    //governed by the Moon (Cancer)
-                    return ZodiacName.Cancer;
-                }
-
-            }
-
-
-            //if planet is in even sign
-            if (IsEvenSign(planetSignName))
-            {
-                //if planet in first hora
-                if (planetInFirstHora == true && planetInSecondHora == false)
-                {
-                    //governed by the Moon (Cancer)
-                    return ZodiacName.Cancer;
-
-                }
-
-                //if planet in second hora
-                if (planetInFirstHora == false && planetInSecondHora == true)
-                {
-                    //governed by the Sun (Leo)
-                    return ZodiacName.Leo;
-                }
-
-            }
-
-            throw new Exception("Planet hora not found, error!");
         }
 
         /// <summary>

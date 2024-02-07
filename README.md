@@ -490,3 +490,10 @@ but with Client + Server config, hashes become different, needs changing to MD5
 -   Needs to be added with care and where absolutely needed,
     else could get very confusing.
 
+# Things to remember
+To all those who say we need money todo good. Jesus said not.
+
+"It is easier for a camel to go through the eye of a needle,
+than for a rich man to enter the kingdom of God"
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Hoffman-ChristAndTheRichYoungRuler.jpg/1024px-Hoffman-ChristAndTheRichYoungRuler.jpg" width="600"/>

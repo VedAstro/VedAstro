@@ -4040,31 +4040,6 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Get zodiac sign planet is in.
-        /// </summary>
-        public static ZodiacSign PlanetZodiacSign(PlanetName planetName, Time time)
-        {
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetZodiacSign), planetName, time, Ayanamsa), _planetZodiacSign);
-
-            //UNDERLYING FUNCTION
-            ZodiacSign _planetZodiacSign()
-            {
-                //get longitude of planet
-                var longitudeOfPlanet = PlanetNirayanaLongitude(planetName, time);
-
-                //get sign planet is in
-                var signPlanetIsIn = ZodiacSignAtLongitude(longitudeOfPlanet);
-
-                //return
-                return signPlanetIsIn;
-
-            }
-
-        }
-
-
-        /// <summary>
         /// Checks if a given planet is in a given sign at a given time
         /// </summary>
         public static bool IsPlanetInSign(PlanetName planetName, ZodiacName signInput, Time time)
@@ -5139,35 +5114,6 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets hora zodiac sign of a planet
-        /// </summary>
-        public static ZodiacName PlanetHoraSigns(PlanetName planetName, Time time)
-        {
-            //get planet sign
-            var planetSign = PlanetZodiacSign(planetName, time);
-
-            //get planet sign name
-            var planetSignName = planetSign.GetSignName();
-
-            //get planet degrees in sign
-            var degreesInSign = planetSign.GetDegreesInSign().TotalDegrees;
-
-            //find where table indexes meet
-            foreach (var horaRow in Vargas.HoraTable[planetSignName])
-            {
-                //NOTE : scan is assumed to begin at small number and work way up
-                var isInRange = horaRow.Key.IsWithinRange(degreesInSign);
-                if (isInRange)
-                {
-                    return horaRow.Value;
-                }
-            }
-
-            throw new Exception("END OF LINE!");
-
-        }
-
-        /// <summary>
         /// get sunrise time for that day at that place
         /// </summary>
         public static Time SunriseTime(Time time)
@@ -5429,7 +5375,6 @@ namespace VedAstro.Library
 
             return isPlanetInKendra;
         }
-
 
         /// <summary>
         /// Checks if a planet is in a Upachayas (3rd, 6th, 10th, and 11th)

@@ -22,17 +22,6 @@ using System.Threading.Tasks;
 
 namespace VedAstro.Library
 {
-    public struct DegreeRange(double startDegree, double endDegree)
-    {
-        public double StartDegree { get; set; } = startDegree;
-        public double EndDegree { get; set; } = endDegree;
-
-        /// <summary>
-        /// returns true if given number is within start and end range
-        /// </summary>
-        public bool IsWithinRange(double degree) => degree >= StartDegree && degree <= EndDegree;
-    }
-
     /// <summary>
     /// Vargas or Subtle Divisions
     /// It is easy to appreciate that any given sign remains on the horizon for an
@@ -53,8 +42,38 @@ namespace VedAstro.Library
     /// placement of the lagna and the planets forms that specific varga or divisional
     /// chart.
     /// </summary>
-    public class Vargas
+    public static class Vargas
     {
+        /// <summary>
+        /// This is an abstacted calculator made to work with table data from
+        /// Elements of Vedic Astrology - K. S. Charak (chapter on vargas)
+        /// </summary>
+        /// <param name="precomputedTable">special tables pre made in code for each varga type</param>
+        public static ZodiacSign VargasCoreCalculator(ZodiacSign zodiacSign, Dictionary<DegreeRange, ZodiacName> precomputedTable, int divisionNumber)
+        {
+            // Get the degree within the sign
+            var degreesInSign = zodiacSign.GetDegreesInSign().TotalDegrees;
+
+            //find where table indexes meet
+            foreach (var rowData in precomputedTable)
+            {
+                //NOTE : scan is assumed to begin at small number and work way up
+                var isInRange = rowData.Key.IsWithinRange(degreesInSign);
+
+                //return pre-computed sign
+                var zodiacName = rowData.Value;
+                if (isInRange)
+                {
+                    //NOTE : degrees in sign have to be converted (special logic) for specific division type
+                    var divisionalDegreesInSign = Calculate.DivisionalLongitude(degreesInSign, divisionNumber);
+                    return new ZodiacSign(zodiacName, divisionalDegreesInSign);
+                }
+            }
+
+            throw new Exception("END OF LINE!");
+        }
+
+        //MASSIVE STATIC TABLES
 
         public static Dictionary<ZodiacName, Dictionary<DegreeRange, ZodiacName>> HoraTable = new()
         {
@@ -72,5 +91,101 @@ namespace VedAstro.Library
             { ZodiacName.Pisces, new() { { new DegreeRange(0, 15), ZodiacName.Cancer }, { new DegreeRange(15, 30), ZodiacName.Leo } } },
         };
 
+        public static Dictionary<ZodiacName, Dictionary<DegreeRange, ZodiacName>> DrekkanaTable = new()
+        {
+            { ZodiacName.Aries, new() { { new DegreeRange(0, 10), ZodiacName.Aries }, { new DegreeRange(10, 20), ZodiacName.Leo }, { new DegreeRange(20, 30), ZodiacName.Sagittarius } } },
+            { ZodiacName.Taurus, new() { { new DegreeRange(0, 10), ZodiacName.Taurus }, { new DegreeRange(10, 20), ZodiacName.Virgo }, { new DegreeRange(20, 30), ZodiacName.Capricorn } } },
+            { ZodiacName.Gemini, new() { { new DegreeRange(0, 10), ZodiacName.Gemini }, { new DegreeRange(10, 20), ZodiacName.Libra }, { new DegreeRange(20, 30), ZodiacName.Aquarius } } },
+            { ZodiacName.Cancer, new() { { new DegreeRange(0, 10), ZodiacName.Cancer }, { new DegreeRange(10, 20), ZodiacName.Scorpio }, { new DegreeRange(20, 30), ZodiacName.Pisces } } },
+            { ZodiacName.Leo, new() { { new DegreeRange(0, 10), ZodiacName.Leo }, { new DegreeRange(10, 20), ZodiacName.Sagittarius }, { new DegreeRange(20, 30), ZodiacName.Aries } } },
+            { ZodiacName.Virgo, new() { { new DegreeRange(0, 10), ZodiacName.Virgo }, { new DegreeRange(10, 20), ZodiacName.Capricorn }, { new DegreeRange(20, 30), ZodiacName.Taurus } } },
+            { ZodiacName.Libra, new() { { new DegreeRange(0, 10), ZodiacName.Libra }, { new DegreeRange(10, 20), ZodiacName.Aquarius }, { new DegreeRange(20, 30), ZodiacName.Gemini } } },
+            { ZodiacName.Scorpio, new() { { new DegreeRange(0, 10), ZodiacName.Scorpio }, { new DegreeRange(10, 20), ZodiacName.Pisces }, { new DegreeRange(20, 30), ZodiacName.Cancer } } },
+            { ZodiacName.Sagittarius, new() { { new DegreeRange(0, 10), ZodiacName.Sagittarius }, { new DegreeRange(10, 20), ZodiacName.Aries }, { new DegreeRange(20, 30), ZodiacName.Leo } } },
+            { ZodiacName.Capricorn, new() { { new DegreeRange(0, 10), ZodiacName.Capricorn }, { new DegreeRange(10, 20), ZodiacName.Taurus }, { new DegreeRange(20, 30), ZodiacName.Virgo } } },
+            { ZodiacName.Aquarius, new() { { new DegreeRange(0, 10), ZodiacName.Aquarius }, { new DegreeRange(10, 20), ZodiacName.Gemini }, { new DegreeRange(20, 30), ZodiacName.Libra } } },
+            { ZodiacName.Pisces, new() { { new DegreeRange(0, 10), ZodiacName.Pisces }, { new DegreeRange(10, 20), ZodiacName.Cancer }, { new DegreeRange(20, 30), ZodiacName.Scorpio } } },
+        };
+
+        public static Dictionary<ZodiacName, Dictionary<DegreeRange, ZodiacName>> ChaturthamshaTable = new()
+        {
+            { ZodiacName.Aries, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Aries },
+                { new DegreeRange(7.5, 15), ZodiacName.Cancer },
+                { new DegreeRange(15, 22.5), ZodiacName.Libra },
+                { new DegreeRange(22.5, 30), ZodiacName.Capricorn } } },
+
+            { ZodiacName.Taurus, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Taurus },
+                { new DegreeRange(7.5, 15), ZodiacName.Leo },
+                { new DegreeRange(15, 22.5), ZodiacName.Scorpio },
+                { new DegreeRange(22.5, 30), ZodiacName.Aquarius } } },
+
+            { ZodiacName.Gemini, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Gemini },
+                { new DegreeRange(7.5, 15), ZodiacName.Virgo },
+                { new DegreeRange(15, 22.5), ZodiacName.Sagittarius },
+                { new DegreeRange(22.5, 30), ZodiacName.Pisces } } },
+
+            { ZodiacName.Cancer, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Cancer },
+                { new DegreeRange(7.5, 15), ZodiacName.Libra },
+                { new DegreeRange(15, 22.5), ZodiacName.Capricorn },
+                { new DegreeRange(22.5, 30), ZodiacName.Aries } } },
+
+            { ZodiacName.Leo, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Leo },
+                { new DegreeRange(7.5, 15), ZodiacName.Scorpio },
+                { new DegreeRange(15, 22.5), ZodiacName.Aquarius },
+                { new DegreeRange(22.5, 30), ZodiacName.Taurus } } },
+
+            { ZodiacName.Virgo, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Virgo },
+                { new DegreeRange(7.5, 15), ZodiacName.Sagittarius },
+                { new DegreeRange(15, 22.5), ZodiacName.Pisces },
+                { new DegreeRange(22.5, 30), ZodiacName.Gemini } } },
+
+            { ZodiacName.Libra, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Libra },
+                { new DegreeRange(7.5, 15), ZodiacName.Capricorn },
+                { new DegreeRange(15, 22.5), ZodiacName.Aries },
+                { new DegreeRange(22.5, 30), ZodiacName.Cancer } }
+            },
+
+            { ZodiacName.Scorpio, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Scorpio },
+                { new DegreeRange(7.5, 15), ZodiacName.Aquarius },
+                { new DegreeRange(15, 22.5), ZodiacName.Taurus },
+                { new DegreeRange(22.5, 30), ZodiacName.Leo } }
+            },
+
+            { ZodiacName.Sagittarius, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Sagittarius },
+                { new DegreeRange(7.5, 15), ZodiacName.Pisces },
+                { new DegreeRange(15, 22.5), ZodiacName.Gemini },
+                { new DegreeRange(22.5, 30), ZodiacName.Virgo } }
+            },
+
+            { ZodiacName.Capricorn, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Capricorn },
+                { new DegreeRange(7.5, 15), ZodiacName.Aries },
+                { new DegreeRange(15, 22.5), ZodiacName.Cancer },
+                { new DegreeRange(22.5, 30), ZodiacName.Libra } }
+            },
+
+            { ZodiacName.Aquarius, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Aquarius },
+                { new DegreeRange(7.5, 15), ZodiacName.Taurus },
+                { new DegreeRange(15, 22.5), ZodiacName.Leo },
+                { new DegreeRange(22.5, 30), ZodiacName.Scorpio } }
+            },
+
+            { ZodiacName.Pisces, new() {
+                { new DegreeRange(0, 7.5), ZodiacName.Pisces },
+                { new DegreeRange(7.5, 15), ZodiacName.Gemini },
+                { new DegreeRange(15, 22.5), ZodiacName.Virgo },
+                { new DegreeRange(22.5, 30), ZodiacName.Sagittarius } }
+            }
+        };
     }
 }

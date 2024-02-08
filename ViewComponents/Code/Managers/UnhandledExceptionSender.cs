@@ -106,7 +106,7 @@ namespace Website
                 //note: below refresh method works well to recover, though it should not happen
 
                 var timeToReadMsg = 4000; //give time for user to see the message
-                
+
                 //get debug mode, most likely cause for errors
                 //if debug mode enabled tell user it could be the cause of errors
                 if (await WebsiteTools.GetDebugModeBool())
@@ -120,12 +120,29 @@ namespace Website
                 //normal error message with redirect to home page
                 else
                 {
-                    await AppData.JsRuntime.ShowAlert(
-                        icon: "warning",
-                        title: "App has crashed!",
-                        descriptionText: "Go <strong>Home</strong> page and press <kbd>CTRL + SHIFT + R</kbd> to <strong>restart</strong> app");
-                    //send user to home page to restart
-                    await AppData.JsRuntime.LoadPage(AppData.URL.WebUrl);
+                    //prepare question to ask user
+                    var alertData = new
+                    {
+                        icon = "warning",
+                        title = "App has crashed!",
+                        html = "Go <strong>Home</strong> page and press <kbd>CTRL + SHIFT + R</kbd> to <strong>restart</strong> app",
+                        showCancelButton = true,
+                        confirmButtonColor = "#3085d6",
+                        cancelButtonColor = "#d33",
+                        cancelButtonText = "Ignore",
+                        confirmButtonText = "Restart"
+                    };
+
+                    var sweetAlertResult = await AppData.JsRuntime.ShowAlertResult(alertData);
+
+                    //if user clicked continue, then 00:00 is correct, so pass validation
+                    var continueClicked = sweetAlertResult.GetProperty("isConfirmed").GetBoolean();
+                    if (!continueClicked)
+                    {
+                        //send user to home page to restart
+                        await AppData.JsRuntime.LoadPage(AppData.URL.WebUrl);
+                    }
+
                 }
 
             }

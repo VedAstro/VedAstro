@@ -619,22 +619,6 @@ namespace VedAstro.Library.Tests
         }
 
         [TestMethod()]
-        public void PlanetDrekkanaSignTest()
-        {
-            var ccc = Calculate.PlanetDrekkanaSign(PlanetName.Sun, StandardHoroscope);
-
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void PlanetZodiacSignTest()
-        {
-            var ccc = Calculate.PlanetZodiacSign(PlanetName.Sun, StandardHoroscope);
-
-            Assert.Fail();
-        }
-
-        [TestMethod()]
         public void DayOfWeekTest()
         {
             var testDay1 = Calculate.DayOfWeek(StandardHoroscope);
@@ -1186,38 +1170,40 @@ namespace VedAstro.Library.Tests
         }
 
         [TestMethod()]
-        public void PlanetHoraSignsTest()
+        public void PlanetDivisionalLongitudeTest()
         {
-
             //use LAHIRI
             Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
 
-            var test1 = Calculate.PlanetHoraSigns(PlanetName.Sun, StandardHoroscope);
-            Assert.AreEqual(ZodiacName.Leo, test1);
+            //For example, if planet Jupiter is at 12 degrees 04 minutes in any sign and
+            //we want to calculate the longitude of planet Jupiter in D-7.
+            //Here, Simple multiply 12 degrees 4 minutes by 7 and you will get 84 degrees 28 minutes.
+            // 
+            // Now from 84 degrees 28 minutes remove two completed signs(subtract 60) which will give us
+            // 24 degree and 28 minutes and this will be the longitude of planet Jupiter in D-7.
 
-            var test2 = Calculate.PlanetHoraSigns(PlanetName.Moon, StandardHoroscope);
-            Assert.AreEqual(ZodiacName.Leo, test2);
+            var test1 = Calculate.PlanetDivisionalLongitude(PlanetName.Jupiter, StandardHoroscope, 7);
+            var correct1 = new Angle(24, 28, 0);
+            Assert.AreEqual(correct1.TotalDegrees, test1.TotalDegrees);
 
-            var test3 = Calculate.PlanetHoraSigns(PlanetName.Mars, StandardHoroscope);
-            Assert.AreEqual(ZodiacName.Leo, test3);
+        }
 
-            var test4 = Calculate.PlanetHoraSigns(PlanetName.Mercury, StandardHoroscope);
-            Assert.AreEqual(ZodiacName.Leo, test4);
+        [TestMethod()]
+        public void DivisionalLongitudeTest()
+        {
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
 
-            var test5 = Calculate.PlanetHoraSigns(PlanetName.Jupiter, StandardHoroscope);
-            Assert.AreEqual(ZodiacName.Cancer, test5);
+            //For example, if planet Jupiter is at 12 degrees 04 minutes in any sign and
+            //we want to calculate the longitude of planet Jupiter in D-7.
+            //Here, Simple multiply 12 degrees 4 minutes by 7 and you will get 84 degrees 28 minutes.
+            // 
+            // Now from 84 degrees 28 minutes remove two completed signs(subtract 60) which will give us
+            // 24 degree and 28 minutes and this will be the longitude of planet Jupiter in D-7.
 
-            var test6 = Calculate.PlanetHoraSigns(PlanetName.Venus, StandardHoroscope);
-            Assert.AreEqual(ZodiacName.Leo, test6);
-
-            var test7 = Calculate.PlanetHoraSigns(PlanetName.Saturn, StandardHoroscope);
-            Assert.AreEqual(ZodiacName.Leo, test7);
-
-            var test8 = Calculate.PlanetHoraSigns(PlanetName.Rahu, StandardHoroscope);
-            Assert.AreEqual(ZodiacName.Leo, test8);
-
-            var test9 = Calculate.PlanetHoraSigns(PlanetName.Ketu, StandardHoroscope);
-            Assert.AreEqual(ZodiacName.Leo, test9);
+            var test1 = Calculate.DivisionalLongitude(new Angle(12, 4, 0).TotalDegrees, 7);
+            var correct1 = new Angle(24, 28, 0);
+            Assert.AreEqual(correct1.TotalDegrees, test1.TotalDegrees);
 
         }
 
@@ -1255,5 +1241,79 @@ namespace VedAstro.Library.Tests
             Assert.AreEqual(ZodiacName.Taurus, test9.GetSignName());
 
         }
+
+        [TestMethod()]
+        public void PlanetHoraSignsTest()
+        {
+
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
+
+            var test1 = Calculate.PlanetHoraSigns(PlanetName.Sun, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test1);
+
+            var test2 = Calculate.PlanetHoraSigns(PlanetName.Moon, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test2);
+
+            var test3 = Calculate.PlanetHoraSigns(PlanetName.Mars, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test3);
+
+            var test4 = Calculate.PlanetHoraSigns(PlanetName.Mercury, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test4);
+
+            var test5 = Calculate.PlanetHoraSigns(PlanetName.Jupiter, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Cancer, test5);
+
+            var test6 = Calculate.PlanetHoraSigns(PlanetName.Venus, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test6);
+
+            var test7 = Calculate.PlanetHoraSigns(PlanetName.Saturn, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test7);
+
+            var test8 = Calculate.PlanetHoraSigns(PlanetName.Rahu, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test8);
+
+            var test9 = Calculate.PlanetHoraSigns(PlanetName.Ketu, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test9);
+
+        }
+
+        [TestMethod()]
+        public void PlanetDrekkanaSignTest()
+        {
+
+            //use LAHIRI
+            Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
+
+            var test1 = Calculate.PlanetDrekkanaSign(PlanetName.Sun, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Taurus, test1);
+
+            var test2 = Calculate.PlanetDrekkanaSign(PlanetName.Moon, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Aquarius, test2);
+
+            var test3 = Calculate.PlanetDrekkanaSign(PlanetName.Mars, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Pisces, test3);
+
+            var test4 = Calculate.PlanetDrekkanaSign(PlanetName.Mercury, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Libra, test4);
+
+            var test5 = Calculate.PlanetDrekkanaSign(PlanetName.Jupiter, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Aquarius, test5);
+
+            var test6 = Calculate.PlanetDrekkanaSign(PlanetName.Venus, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Capricorn, test6);
+
+            var test7 = Calculate.PlanetDrekkanaSign(PlanetName.Saturn, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Leo, test7);
+
+            var test8 = Calculate.PlanetDrekkanaSign(PlanetName.Rahu, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Cancer, test8);
+
+            var test9 = Calculate.PlanetDrekkanaSign(PlanetName.Ketu, StandardHoroscope);
+            Assert.AreEqual(ZodiacName.Capricorn, test9);
+
+        }
+
+
     }
 }

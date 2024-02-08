@@ -1556,9 +1556,13 @@ namespace VedAstro.Library
 
         }
 
-
+        /// <summary>
+        /// Handles all JSON replies from VedAstro format, or raw JSON format
+        /// </summary>
         public static async Task<WebResult<JToken>> ReadFromServerJsonReply(string apiUrl)
         {
+            var exceptionList = new List<Exception>();
+
             //send request to API server
             var result = await RequestServer(apiUrl, 3);
 
@@ -1584,9 +1588,10 @@ namespace VedAstro.Library
             {
                 try
                 {
+                    //OPTION 1 : VedAstro API format
                     //make JSON data readable
                     var parsedJson = JObject.Parse(inputRawString);
-                    var returnVal = WebResult<JObject>.FromJson(parsedJson);
+                    var returnVal = WebResult<JObject>.FromVedAstroJson(parsedJson);
 
                     //if did not pass, raise exception so can check other methods
                     if (!returnVal.IsPass) { throw new InvalidOperationException(); }
@@ -1595,12 +1600,23 @@ namespace VedAstro.Library
                 catch (Exception e1)
                 {
 
+                    try
+                    {
+                        //OPTION 2 : json 3rd party reply
+                        var parsedJson = JObject.Parse(inputRawString);
+                        return new WebResult<JToken>(true, parsedJson);
+                    }
+                    catch (Exception e3) { exceptionList.Add(e3); } //if fail just void print
+
+                    exceptionList.Add(e1);
+
                     //send all exception data to server
-                    LibLogger.Error(e1, inputRawString);
+                    foreach (var exception in exceptionList) { LibLogger.Error(exception, inputRawString); }
 
                     //if control reaches here all has failed
                     return new WebResult<JToken>(false, new JObject("Failed"));
                 }
+
             }
 
             //note uses GET request

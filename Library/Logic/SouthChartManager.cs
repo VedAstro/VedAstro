@@ -157,30 +157,29 @@ namespace VedAstro.Library
             foreach (var houseName in House.AllHouses)
             {
                 //get 
-                ZodiacName houseSign = ZodiacName.Empty;
+                ZodiacName houseSignName = ZodiacName.Empty;
                 ZodiacSign houseZodiacSign;
                 switch (this.ChartType)
                 {
                     case ChartType.Rasi:
                         houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSign = houseZodiacSign.GetSignName();
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.Hora:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        //TODO
-                        houseSign = Calculate.HoraSignName(houseZodiacSign);
+                        houseZodiacSign = HouseHoraSign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.Drekkana:
                         houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSign = Calculate.DrekkanaSignName(houseZodiacSign);
+                        houseSignName = Calculate.DrekkanaSignName(houseZodiacSign).GetSignName();
                         break;
                     case ChartType.Chaturthamsa:
                         houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSign = Calculate.ChaturthamsaSignName(houseZodiacSign);
+                        houseSignName = Calculate.ChaturthamshaSignName(houseZodiacSign).GetSignName();
                         break;
                     case ChartType.Panchamsa:
                         houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSign = Calculate.PanchamsaSignName(houseZodiacSign);
+                        houseSignName = Calculate.PanchamsaSignName(houseZodiacSign).GetSignName();
                         break;
                     case ChartType.Shashthamsa:
                     case ChartType.Saptamsa:
@@ -202,7 +201,7 @@ namespace VedAstro.Library
                 }
 
 
-                var coordinates = GetHousePositionForSignBox(houseSign);
+                var coordinates = GetHousePositionForSignBox(houseSignName);
                 var xx = $"<text  transform=\"translate({coordinates.xAxis} {coordinates.yAxis})\"" +
                          $" style=\"fill:#3300FF; font-family:Arial-BoldMT, Arial; font-size:28px; font-weight:700;\">" +
                          $"{(int)houseName}</text>";

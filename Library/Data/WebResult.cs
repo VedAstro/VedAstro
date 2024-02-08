@@ -67,10 +67,10 @@ namespace VedAstro.Library
             {
                 //get payload out and check it
                 var rawXml = inputXml.Element("Payload")?.Value;
-                
+
                 //payload is allowed to be empty
                 if (string.IsNullOrEmpty(rawXml)) { finalXml = new XElement("Root"); }
-                
+
                 //only attempt to parse when confirmed something inside
                 else
                 {
@@ -88,7 +88,13 @@ namespace VedAstro.Library
             return result;
         }
 
-        public static WebResult<JToken> FromJson(JObject inputXml)
+        /// <summary>
+        /// Given json reply from VedAstro API, it can parse
+        /// because expected format "Status" and "Payload"
+        /// </summary>
+        /// <param name="inputXml"></param>
+        /// <returns></returns>
+        public static WebResult<JToken> FromVedAstroJson(JObject inputXml)
         {
             var result = new WebResult<JToken>();
 

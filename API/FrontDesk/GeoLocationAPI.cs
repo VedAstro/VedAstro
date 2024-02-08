@@ -42,6 +42,11 @@ namespace API
 
         }
 
+        public enum APIProvider
+        {
+            VedAstro, Azure, Google
+        }
+
         /// <summary>
         /// https://vedastroapibeta.azurewebsites.net/api/AddressToGeoLocation/Gaithersburg, MD, USA
         /// </summary>
@@ -56,15 +61,39 @@ namespace API
             var call = APILogger.Visit(incomingRequest);
 
             //1 : CALCULATE
-            var parsedGeoLocation = AddressToGeoLocation_VedAstro(address);
-            //use google only if no cache in VedAstro
-            if (parsedGeoLocation.Name() == GeoLocation.Empty.Name())
+            // Define a list of functions in the order of priority
+            var geoLocationProviders = new Dictionary<APIProvider, Func<string, Task<GeoLocation>>>
             {
-                parsedGeoLocation = await AddressToGeoLocation_Google(address);
-                //add new data to cache, for future speed up
-                AddToCache(parsedGeoLocation, rowKeyData: CreateSearchableName(address));
-            }
+                {APIProvider.VedAstro, AddressToGeoLocation_VedAstro},
+                {APIProvider.Azure, AddressToGeoLocation_Azure},
+                {APIProvider.Google, AddressToGeoLocation_Google},
+            };
 
+            //start with empty as default if fail
+            var parsedGeoLocation = GeoLocation.Empty;
+
+            // Iterate over the list of functions
+            foreach (var row in geoLocationProviders)
+            {
+                var provider = row.Value;
+                parsedGeoLocation = await provider(address);
+
+                // when new location not is cache, we add it
+                // only add to cache if not empty and not VedAstro
+                var isNotEmpty = parsedGeoLocation.Name() != GeoLocation.Empty.Name();
+                var isNotVedAstro = row.Key != APIProvider.VedAstro;
+                if (isNotEmpty && isNotVedAstro)
+                {
+                    //add new data to cache, for future speed up
+                    //TODO 8/2/2024 we are over adding, must be way to not add new record if current record can be modified
+                    //TODO aka consolidate the cache rows
+                    //TODO SmartEditAddToCache()
+                    AddToCache(parsedGeoLocation, rowKeyData: CreateSearchableName(address));
+                }
+
+                //once found, stop searching for location with APIs
+                if (isNotEmpty) { break; }
+            }
 
             //2 : SEND TO CALLER
             return APITools.PassMessageJson(parsedGeoLocation.ToJson(), incomingRequest);
@@ -220,8 +249,9 @@ namespace API
 
         /// <summary>
         /// Will return empty Geo Location if no cache
+        /// NOTE: keep async for easy selection with other methods
         /// </summary>
-        private static GeoLocation AddressToGeoLocation_VedAstro(string inputLocalName)
+        private static async Task<GeoLocation> AddressToGeoLocation_VedAstro(string inputLocalName)
         {
             //do direct search for address in name field
             //NOTE: we want to include misspelled and under-case to save
@@ -244,7 +274,7 @@ namespace API
         /// <summary>
         /// Will return empty Geo Location if no cache
         /// </summary>
-        private static GeoLocation CoordinatesToGeoLocation_Vedastro(string longitude, string latitude)
+        public static GeoLocation CoordinatesToGeoLocation_Vedastro(string longitude, string latitude)
         {
             //do direct search for address in name field 
             var longitudeParsed = double.Parse(longitude);
@@ -262,7 +292,7 @@ namespace API
 
         }
 
-        private static async Task<string> GeoLocationToTimezone_Google(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
+        public static async Task<string> GeoLocationToTimezone_Google(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
             var returnResult = new WebResult<string>();
 
@@ -312,7 +342,7 @@ namespace API
         /// <summary>
         /// Gets coordinates from Google API
         /// </summary>
-        private static async Task<GeoLocation> CoordinatesToGeoLocation_Google(string longitude, string latitude)
+        public static async Task<GeoLocation> CoordinatesToGeoLocation_Google(string longitude, string latitude)
         {
             var apiKey = Secrets.GoogleAPIKey;
             var urlReverse = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={apiKey}";
@@ -331,7 +361,52 @@ namespace API
             return fromIpAddress;
         }
 
-        private static async Task<GeoLocation> AddressToGeoLocation_Google(string address)
+        public static async Task<GeoLocation> AddressToGeoLocation_Azure(string address)
+        {
+            //if null or empty turn back as nothing
+            if (string.IsNullOrEmpty(address)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            //create the request url for Azure Maps API
+            var apiKey = Secrets.AzureMapsAPIKey;
+            var url = $"https://atlas.microsoft.com/search/address/json?api-version=1.0&subscription-key={apiKey}&query={Uri.EscapeDataString(address)}";
+
+            //get location data from Azure Maps API
+            var webResult = await Tools.ReadFromServerJsonReply(url);
+
+            //if fail to make call, end here
+            if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            //if success, get the reply data out
+            var geocodeResponseJson = webResult.Payload;
+            var resultJson = geocodeResponseJson["results"][0];
+
+#if DEBUG
+            //DEBUG
+            Console.WriteLine(geocodeResponseJson.ToString());
+#endif
+
+            //check the data, if location was NOT found by Azure Maps API, end here
+            if (resultJson == null || resultJson["type"].Value<string>() != "Geography") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            //if success, extract out the longitude & latitude
+            var locationElement = resultJson["position"];
+            var lat = double.Parse(locationElement["lat"].Value<string>() ?? "0");
+            var lng = double.Parse(locationElement["lon"].Value<string>() ?? "0");
+
+            //round coordinates to 3 decimal places
+            lat = Math.Round(lat, 3);
+            lng = Math.Round(lng, 3);
+
+            //get full name with country & state
+            var freeformAddress = resultJson["address"]["freeformAddress"].Value<string>();
+            var country = resultJson["address"]["country"].Value<string>();
+            var fullName = $"{freeformAddress}, {country}";
+
+            //return to caller pass
+            return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lng, lat));
+        }
+
+        public static async Task<GeoLocation> AddressToGeoLocation_Google(string address)
         {
             //if null or empty turn back as nothing
             if (string.IsNullOrEmpty(address)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
@@ -357,7 +432,8 @@ namespace API
 #endif
 
             //check the data, if location was NOT found by google API, end here
-            if (statusXml == null || statusXml.Value == "ZERO_RESULTS") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+            var statusMsg = statusXml.Value;
+            if (statusXml == null || statusMsg == "ZERO_RESULTS" || statusMsg == "REQUEST_DENIED") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
 
             //if success, extract out the longitude & latitude
             var locationElement = resultXml?.Element("geometry")?.Element("location");

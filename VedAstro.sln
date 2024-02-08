@@ -82,6 +82,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Demo", "Demo\", "{2F09E7A5-
 		SlnRelativePath = "Demo\"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APITests", "APITests\APITests.csproj", "{210F0481-797F-42C0-9F71-012F133BDA0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -215,6 +217,18 @@ Global
 		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.ReleaseTest|Any CPU.Build.0 = Debug|Any CPU
 		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.ReleaseTest|x64.ActiveCfg = Debug|Any CPU
 		{2F09E7A5-58C0-4EFD-BD22-71678744D513}.ReleaseTest|x64.Build.0 = Debug|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.Debug|x64.Build.0 = Debug|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.Release|x64.ActiveCfg = Release|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.Release|x64.Build.0 = Release|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.ReleaseTest|x64.ActiveCfg = Release|Any CPU
+		{210F0481-797F-42C0-9F71-012F133BDA0E}.ReleaseTest|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

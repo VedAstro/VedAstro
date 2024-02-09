@@ -27,6 +27,8 @@ namespace VedAstro.Library
     /// </summary>
     public class CalculateHoroscope
     {
+
+
         //from book Jataka Mani Manjusha
         #region UPAGRAHA IN HOUSES
 
@@ -472,7 +474,7 @@ namespace VedAstro.Library
 
 
             return CalculatorResult.New(isOccuring, new[] { Gulika, signLord }, birthTime);
-            
+
         }
 
         #endregion
@@ -612,6 +614,7 @@ namespace VedAstro.Library
             //If there are planets
             //get sign 2nd house from moon
             var moon2ndHseSign = Calculate.SignCountedFromPlanetSign(2, Moon, birthTime);
+
             //get planets in that 2nd hse sign
             var planetsIn2 = Calculate.PlanetsInSign(moon2ndHseSign, birthTime);
 
@@ -633,12 +636,11 @@ namespace VedAstro.Library
         [HoroscopeCalculator(HoroscopeName.AnaphaYoga)]
         public static CalculatorResult AnaphaYoga(Time birthTime)
         {
-
             //If there are planets in the 12th from moon
             var moon12ndHseSign = Calculate.SignCountedFromPlanetSign(12, Moon, birthTime);
+
             //get planets in that 12th hse sign from moon
             var planetsIn12 = Calculate.PlanetsInSign(moon12ndHseSign, birthTime);
-
 
             //Remarks.- In Anapha also the Sun is not taken
             //into account. The remarks made for Sunapha apply
@@ -702,6 +704,7 @@ namespace VedAstro.Library
 
             return CalculatorResult.New(planetOnBothSides, new[] { Moon }, birthTime);
         }
+
 
         /// <summary>
         /// Definition: If Mars conjoins the Moon this

@@ -88,7 +88,7 @@ namespace VedAstro.Library
         public static async Task<EventsChart> FromCacheName(string chartName)
         {
             //AngelinaJolie1975-EventsChart-04061975-16052050-29.122-RAMAN-PD1-PD2-PD3-PD4-PD5-PD6-PD7-General-StrongestPlanet-StrongestHouse-IshtaKashtaPhala
-            
+
             //var parsed = new EventsChart("","",)
             throw new NotImplementedException();
         }

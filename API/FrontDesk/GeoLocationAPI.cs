@@ -8,6 +8,8 @@ using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using Time = VedAstro.Library.Time;
+using Newtonsoft.Json;
+using System.Net;
 
 namespace API
 {
@@ -156,22 +158,48 @@ namespace API
             WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
             var geoLocation = geoLocationResult.Payload;
 
-
-            //2 : Use cache if available else Google it
-            var timezoneStr = GeoLocationToTimezone_Vedastro(geoLocation, parsedSTDInputTime);
-            //use google only if no cache in VedAstro
-            if (string.IsNullOrEmpty(timezoneStr))
+            //2 : CALCULATE
+            // Define a list of functions in the order of priority
+            var geoLocationProviders = new Dictionary<APIProvider, Func<GeoLocation, DateTimeOffset, Task<string>>>
             {
-                timezoneStr = await GeoLocationToTimezone_Google(geoLocation, parsedSTDInputTime);
+                {APIProvider.VedAstro, GeoLocationToTimezone_Vedastro},
+                {APIProvider.Azure, GeoLocationToTimezone_Azure},
+                {APIProvider.Google, GeoLocationToTimezone_Google},
+            };
 
-                //NOTE :reduce accuracy to days so time is removed (this only writes, another checks)
-                //      done to reduce cache clogging, so might miss offset by hours but not days
-                //      !!DO NOT lower accuracy below time as needed for Western day light saving changes!! 
-                DateTimeOffset roundedTime = new DateTimeOffset(parsedSTDInputTime.Year, parsedSTDInputTime.Month, parsedSTDInputTime.Day, 0, 0, 0, parsedSTDInputTime.Offset);
-                var timeTicks = roundedTime.Ticks.ToString();
-                AddToCache(geoLocation, rowKeyData: timeTicks, timezone: timezoneStr);
+            //start with empty as default if fail
+            var timezoneStr = "";
+
+            // Iterate over the list of functions
+            foreach (var row in geoLocationProviders)
+            {
+                var provider = row.Value;
+                timezoneStr = await provider(geoLocation, parsedSTDInputTime);
+
+                // when new location not is cache, we add it
+                // only add to cache if not empty and not VedAstro
+                var isNotEmpty = !(string.IsNullOrEmpty(timezoneStr));
+                var isNotVedAstro = row.Key != APIProvider.VedAstro;
+                if (isNotEmpty && isNotVedAstro)
+                {
+                    //NOTE :reduce accuracy to days so time is removed (this only writes, another checks)
+                    //      done to reduce cache clogging, so might miss offset by hours but not days
+                    //      !!DO NOT lower accuracy below time as needed for Western day light saving changes!! 
+                    DateTimeOffset roundedTime = new DateTimeOffset(parsedSTDInputTime.Year, parsedSTDInputTime.Month, parsedSTDInputTime.Day, 0, 0, 0, parsedSTDInputTime.Offset);
+                    var timeTicks = roundedTime.Ticks.ToString();
+                    AddToCache(geoLocation, rowKeyData: timeTicks, timezone: timezoneStr);
+
+                }
+
+                //once found, stop searching for location with APIs
+                if (isNotEmpty) { break; }
             }
 
+            //if all has failed make sure to return fail message with empty timezone to detect failure
+            if (string.IsNullOrEmpty(timezoneStr))
+            {
+                return APITools.FailMessageJson(timezoneStr, incomingRequest);
+            }
 
             //3 : SEND TO CALLER
             return APITools.PassMessageJson(timezoneStr, incomingRequest);
@@ -220,7 +248,10 @@ namespace API
             return cleanInputAddress;
         }
 
-        private static string GeoLocationToTimezone_Vedastro(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
+
+        //--------------- VEDASTRO -----------------
+
+        private static async Task<string> GeoLocationToTimezone_Vedastro(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
 
             //time that is linked to timezone
@@ -292,6 +323,9 @@ namespace API
 
         }
 
+
+        //--------------- GOOGLE ------------------
+
         public static async Task<string> GeoLocationToTimezone_Google(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
             var returnResult = new WebResult<string>();
@@ -318,23 +352,30 @@ namespace API
 
                 //try parse Google API's payload
                 var isParsed = Tools.TryParseGoogleTimeZoneResponse(timeZoneResponseXml, out offsetMinutes);
-                if (!isParsed) { goto Fail; } //not parsed end here
+                if (!isParsed)
+                {
+                    //mark as fail & use possibly inaccurate backup timezone (client browser's timezone)
+                    returnResult.IsPass = false;
+                    returnResult.Payload = "";
+                }
+                else
+                {
+                    //convert to string exp: +08:00
+                    var parsedOffsetString = Tools.TimeSpanToUTCTimezoneString(offsetMinutes);
 
-                //convert to string exp: +08:00
-                var parsedOffsetString = Tools.TimeSpanToUTCTimezoneString(offsetMinutes);
+                    //place data inside capsule
+                    returnResult.Payload = parsedOffsetString;
+                    returnResult.IsPass = true;
 
-                //place data inside capsule
-                returnResult.Payload = parsedOffsetString;
-                returnResult.IsPass = true;
-
-                return returnResult.Payload;
+                }
+            }
+            else
+            {
+                //mark as fail & use possibly inaccurate backup timezone (client browser's timezone)
+                returnResult.IsPass = false;
+                returnResult.Payload = "";
             }
 
-        Fail:
-            //mark as fail & use possibly inaccurate backup timezone (client browser's timezone)
-            returnResult.IsPass = false;
-            offsetMinutes = Tools.GetSystemTimezone();
-            returnResult.Payload = Tools.TimeSpanToUTCTimezoneString(offsetMinutes);
             return returnResult.Payload;
 
         }
@@ -359,51 +400,6 @@ namespace API
             var fromIpAddress = new GeoLocation(newLocationName, double.Parse(longitude), double.Parse(latitude));
 
             return fromIpAddress;
-        }
-
-        public static async Task<GeoLocation> AddressToGeoLocation_Azure(string address)
-        {
-            //if null or empty turn back as nothing
-            if (string.IsNullOrEmpty(address)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
-
-            //create the request url for Azure Maps API
-            var apiKey = Secrets.AzureMapsAPIKey;
-            var url = $"https://atlas.microsoft.com/search/address/json?api-version=1.0&subscription-key={apiKey}&query={Uri.EscapeDataString(address)}";
-
-            //get location data from Azure Maps API
-            var webResult = await Tools.ReadFromServerJsonReply(url);
-
-            //if fail to make call, end here
-            if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
-
-            //if success, get the reply data out
-            var geocodeResponseJson = webResult.Payload;
-            var resultJson = geocodeResponseJson["results"][0];
-
-#if DEBUG
-            //DEBUG
-            Console.WriteLine(geocodeResponseJson.ToString());
-#endif
-
-            //check the data, if location was NOT found by Azure Maps API, end here
-            if (resultJson == null || resultJson["type"].Value<string>() != "Geography") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
-
-            //if success, extract out the longitude & latitude
-            var locationElement = resultJson["position"];
-            var lat = double.Parse(locationElement["lat"].Value<string>() ?? "0");
-            var lng = double.Parse(locationElement["lon"].Value<string>() ?? "0");
-
-            //round coordinates to 3 decimal places
-            lat = Math.Round(lat, 3);
-            lng = Math.Round(lng, 3);
-
-            //get full name with country & state
-            var freeformAddress = resultJson["address"]["freeformAddress"].Value<string>();
-            var country = resultJson["address"]["country"].Value<string>();
-            var fullName = $"{freeformAddress}, {country}";
-
-            //return to caller pass
-            return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lng, lat));
         }
 
         public static async Task<GeoLocation> AddressToGeoLocation_Google(string address)
@@ -449,6 +445,124 @@ namespace API
 
             //return to caller pass
             return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lng, lat));
+        }
+
+
+        //--------------- AZURE -----------------
+        public static async Task<GeoLocation> AddressToGeoLocation_Azure(string address)
+        {
+            //if null or empty turn back as nothing
+            if (string.IsNullOrEmpty(address)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            //create the request url for Azure Maps API
+            var apiKey = Secrets.AzureMapsAPIKey;
+            var url = $"https://atlas.microsoft.com/search/address/json?api-version=1.0&subscription-key={apiKey}&query={Uri.EscapeDataString(address)}";
+
+            //get location data from Azure Maps API
+            var webResult = await Tools.ReadFromServerJsonReply(url);
+
+            //if fail to make call, end here
+            if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            //if success, get the reply data out
+            var geocodeResponseJson = webResult.Payload;
+            var resultJson = geocodeResponseJson["results"][0];
+
+#if DEBUG
+            //DEBUG
+            Console.WriteLine(geocodeResponseJson.ToString());
+#endif
+
+            //check the data, if location was NOT found by Azure Maps API, end here
+            if (resultJson == null || resultJson["type"].Value<string>() != "Geography") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            //if success, extract out the longitude & latitude
+            var locationElement = resultJson["position"];
+            var lat = double.Parse(locationElement["lat"].Value<string>() ?? "0");
+            var lng = double.Parse(locationElement["lon"].Value<string>() ?? "0");
+
+            //round coordinates to 3 decimal places
+            lat = Math.Round(lat, 3);
+            lng = Math.Round(lng, 3);
+
+            //get full name with country & state
+            var freeformAddress = resultJson["address"]["freeformAddress"].Value<string>();
+            var country = resultJson["address"]["country"].Value<string>();
+            var fullName = $"{freeformAddress}, {country}";
+
+            //return to caller pass
+            return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lng, lat));
+        }
+
+        public static async Task<string> GeoLocationToTimezone_Azure(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
+        {
+            var returnResult = new WebResult<string>();
+
+            // Convert the DateTimeOffset to ISO 8601 format ("yyyy-MM-ddTHH:mm:ssZ")
+            var locationTimeIso8601 = timeAtLocation.ToString("O", System.Globalization.CultureInfo.InvariantCulture);
+
+            // Create the request URL for Azure Maps API
+            var apiKey = Secrets.AzureMapsAPIKey;
+            var url = $@"https://atlas.microsoft.com/timezone/byCoordinates/json?api-version=1.0&subscription-key={apiKey}&query={geoLocation.Latitude()},{geoLocation.Longitude()}&timestamp={Uri.EscapeDataString(locationTimeIso8601)}";
+
+            // Get raw location data from Azure Maps API
+            var apiResult = await Tools.ReadFromServerJsonReply(url);
+
+            // If result from API is a failure, use the system time zone as fallback
+            TimeSpan offsetMinutes;
+            if (apiResult.IsPass) // All well
+            {
+                // Parse Azure API's payload
+                bool isParsed = TryParseAzureTimeZoneResponse(apiResult.Payload, out offsetMinutes);
+                if (isParsed)
+                {
+                    // Convert to string (+08:00)
+                    returnResult.Payload = Tools.TimeSpanToUTCTimezoneString(offsetMinutes);
+                    returnResult.IsPass = true;
+                }
+                else
+                {
+                    // Mark as fail & return empty for fail detection
+                    returnResult.IsPass = false;
+                    returnResult.Payload = "";
+                }
+            }
+            else
+            {
+                //mark as fail & use possibly inaccurate backup timezone (client browser's timezone)
+                returnResult.IsPass = false;
+                returnResult.Payload = "";
+            }
+
+            return returnResult;
+        }
+
+        private static bool TryParseAzureTimeZoneResponse(JToken timeZoneResponseJson, out TimeSpan offsetMinutes)
+        {
+            try
+            {
+                var timeZonesArray = timeZoneResponseJson["TimeZones"] as JArray;
+                if (timeZonesArray == null || !timeZonesArray.HasValues)
+                    throw new ArgumentException($"Invalid or missing 'TimeZones' property in Azure timezone response.");
+
+                var firstTimeZoneObject = timeZonesArray[0] as JObject;
+                if (firstTimeZoneObject == null)
+                    throw new ArgumentException($"Invalid or missing timezone object in Azure timezone response.");
+
+                var referenceTimeObject = firstTimeZoneObject["ReferenceTime"] as JObject;
+                if (referenceTimeObject == null)
+                    throw new ArgumentException($"Invalid or missing 'ReferenceTime' object in Azure timezone response.");
+
+                var standardOffsetString = referenceTimeObject["StandardOffset"].Value<string>();
+                offsetMinutes = TimeSpan.Parse(standardOffsetString);
+
+                return true;
+            }
+            catch
+            {
+                offsetMinutes = default;
+                return false;
+            }
         }
     }
 }

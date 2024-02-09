@@ -1306,6 +1306,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Given a place's name, using VedAstro API will get location
+        /// via HTTP request
         /// </summary>
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {

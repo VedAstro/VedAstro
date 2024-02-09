@@ -24,10 +24,10 @@ namespace VedAstro.Library
         private const double DegreesPerSecond = 1.0 / SecondsPerDegree;
 
         public static readonly Angle Zero = new Angle(0, 0, 0);
-        public static readonly Angle Degrees45 = new Angle(45);
-        public static readonly Angle Degrees90 = new Angle(90);
-        public static readonly Angle Degrees180 = new Angle(180);
-        public static readonly Angle Degrees360 = new Angle(360);
+        public static readonly Angle Degrees45 = new Angle(45, 0, 0);
+        public static readonly Angle Degrees90 = new Angle(90, 0, 0);
+        public static readonly Angle Degrees180 = new Angle(180, 0, 0);
+        public static readonly Angle Degrees360 = new Angle(360, 0, 0);
 
 
         //DATA FIELD
@@ -41,6 +41,17 @@ namespace VedAstro.Library
             _seconds = DegreesToSeconds(degrees);
             _seconds += MinutesToSeconds(minutes);
             _seconds += seconds;
+        }
+
+        /// <summary>
+        /// NOTE: decimal seconds is chopped off
+        /// used for easy test case code creation
+        /// </summary>
+        public Angle(double degrees = 0, double minutes = 0, double seconds = 0)
+        {
+            _seconds = DegreesToSeconds(degrees);
+            _seconds += MinutesToSeconds(minutes);
+            _seconds += (long)seconds;
         }
 
 
@@ -85,13 +96,10 @@ namespace VedAstro.Library
             return new Angle(value, 0, 0);
         }
 
-		/// <summary>
-		/// Convert from degrees and minutes like Long. 77' 34"E.
-		/// </summary>
-		public static double ConvertDegreeMinuteToTotalDegrees(double degree, double minute)
-		{
-			return new Angle(degree, minute).TotalDegrees;
-		}
+        /// <summary>
+        /// Convert from degrees and minutes like Long. 77' 34"E.
+        /// </summary>
+        public static double ConvertDegreeMinuteToTotalDegrees(double degree, double minute) => new Angle(degree, minute, 0).TotalDegrees;
 
         /// <summary>
         /// If total degrees is more than 360°,
@@ -251,7 +259,7 @@ namespace VedAstro.Library
             returnVal["TotalDegrees"] = this.TotalDegrees.ToString();//Only degrees is in negative
 
             return returnVal;
-            
+
         }
 
         /// <summary>

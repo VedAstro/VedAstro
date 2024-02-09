@@ -304,6 +304,162 @@ namespace VedAstro.Library
 
         #endregion
 
+        #region VARGAS OR SUBTLE DIVISIONS
+
+        /// <summary>
+        /// Calculates the divisional longitude of a planet in a D-chart (divisional chart) in Vedic Astrology.
+        /// written by AI & Human 
+        /// </summary>
+        /// <param name="planetName">The name of the planet.</param>
+        /// <param name="inputTime">The time for which the calculation is to be made.</param>
+        /// <param name="divisionalNo">The number of the D-chart (e.g., 2, 3, 4, 7, 9, etc.).</param>
+        /// <returns>The divisional longitude of the planet in the specified D-chart.</returns>
+        public static Angle PlanetDivisionalLongitude(PlanetName planetName, Time inputTime, int divisionalNo)
+        {
+            // Step 1: Get the Nirayana (sidereal) longitude of the planet at the given time.
+            var planet_degrees = Calculate.PlanetNirayanaLongitude(planetName, inputTime).TotalDegrees;
+
+            // Multiply the planet's longitude by the D-chart number to get the raw divisional longitude.
+            var total_degrees = planet_degrees * divisionalNo;
+
+            // Step 2: Normalize the raw divisional longitude to the range [0, 60) degrees.
+            // This is done by subtracting 60 (the number of degrees in a zodiac sign) until the result is less than 60.
+            while (total_degrees >= 60)
+            {
+                total_degrees -= 60;
+            }
+
+            // The remaining value is the longitude of the planet in the D-chart.
+            var finalLong = Angle.FromDegrees(total_degrees);
+            return finalLong;
+        }
+
+        public static Angle DivisionalLongitude(double totalDegrees, int divisionalNo)
+        {
+            // Step 1: Get the Nirayana (sidereal) longitude of the planet at the given time.
+            //var planet_degrees = Calculate.PlanetNirayanaLongitude(planetName, inputTime).TotalDegrees;
+
+            // Multiply the planet's longitude by the D-chart number to get the raw divisional longitude.
+            var total_degrees = totalDegrees * divisionalNo;
+
+            // Step 2: Normalize the raw divisional longitude to the range [0, 60) degrees.
+            // This is done by subtracting 60 (the number of degrees in a zodiac sign) until the result is less than 60.
+            while (total_degrees >= 60)
+            {
+                total_degrees -= 60;
+            }
+
+            // The remaining value is the longitude of the planet in the D-chart.
+            var finalLong = Angle.FromDegrees(total_degrees);
+            return finalLong;
+        }
+
+
+        //------------ D1 ------------
+        /// <summary>
+        /// Get zodiac sign planet is in.
+        /// D1
+        /// </summary>
+        public static ZodiacSign PlanetZodiacSign(PlanetName planetName, Time time)
+        {
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetZodiacSign), planetName, time, Ayanamsa), _planetZodiacSign);
+
+            //UNDERLYING FUNCTION
+            ZodiacSign _planetZodiacSign()
+            {
+                //get longitude of planet
+                var longitudeOfPlanet = PlanetNirayanaLongitude(planetName, time);
+
+                //get sign planet is in
+                var signPlanetIsIn = ZodiacSignAtLongitude(longitudeOfPlanet);
+
+                //return
+                return signPlanetIsIn;
+
+            }
+
+        }
+
+
+        //------------ D2 ------------
+
+        /// <summary>
+        /// Gets hora zodiac sign of a planet
+        /// D2
+        /// </summary>
+        public static ZodiacSign PlanetHoraSigns(PlanetName planetName, Time time) => Calculate.DrekkanaSignName(Calculate.PlanetZodiacSign(planetName, time));
+
+        /// <summary>
+        /// D2 chart
+        /// </summary>
+        public static ZodiacSign HoraSignName(ZodiacSign zodiacSign) => Vargas.VargasCoreCalculator(zodiacSign, Vargas.HoraTable[zodiacSign.GetSignName()], 2);
+
+        /// <summary>
+        /// given a longitude will return hora sign at that
+        /// </summary>
+        public static ZodiacSign HoraSignAtLongitude(Angle longitude) => HoraSignName(ZodiacSignAtLongitude(longitude));
+
+        /// <summary>
+        /// Gets the zodiac sign at middle longitude of the house with degrees data
+        /// </summary>
+        public static ZodiacSign HouseHoraSign(HouseName houseNumber, Time time)
+        {
+            //get all houses
+            var allHouses = AllHouseMiddleLongitudes(time);
+
+            //get the house specified 
+            var specifiedHouse = allHouses.Find(house => house.GetHouseName() == houseNumber);
+
+            //get sign of the specified house
+            var middleLongitude = specifiedHouse.GetMiddleLongitude();
+            var houseSign = HoraSignAtLongitude(middleLongitude);
+
+            //return the name of house sign
+            return houseSign;
+        }
+
+
+        //------------ D3 ------------
+        /// <summary>
+        /// Gets the Drekkana sign the planet is in
+        /// D3
+        /// </summary>
+        public static ZodiacSign PlanetDrekkanaSign(PlanetName planetName, Time time) => Calculate.DrekkanaSignName(Calculate.PlanetZodiacSign(planetName, time));
+
+        /// <summary>
+        /// Given a zodiac sign will convert to drekkana
+        /// D3
+        /// </summary>
+        public static ZodiacSign DrekkanaSignName(ZodiacSign zodiacSign) => Vargas.VargasCoreCalculator(zodiacSign, Vargas.DrekkanaTable[zodiacSign.GetSignName()], 3);
+
+
+        //------------ D4 ------------
+
+        /// <summary>
+        /// D4 chart
+        /// </summary>
+        public static ZodiacSign PlanetChaturthamshaSign(PlanetName planetName, Time time) => Calculate.ChaturthamshaSignName(Calculate.PlanetZodiacSign(planetName, time));
+
+        /// <summary>
+        /// D4 chart
+        /// </summary>
+        public static ZodiacSign ChaturthamshaSignName(ZodiacSign zodiacSign) => Vargas.VargasCoreCalculator(zodiacSign, Vargas.ChaturthamshaTable[zodiacSign.GetSignName()], 4);
+
+
+
+
+        /// <summary>
+        /// Gets list of all planets and the zodiac signs they are in
+        /// </summary>
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetSigns(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetZodiacSign(planet, time).GetSignName(), Angle.Zero));
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetHoraSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => PlanetHoraSigns(planet, time));
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetDrekkanaSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => PlanetDrekkanaSign(planet, time));
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetChaturthamsaSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => PlanetChaturthamshaSign(planet, time));
+        public static Dictionary<PlanetName, ZodiacSign> AllPlanetPanchamsaSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => PlanetPanchamsaSign(planet, time));
+
+
+        #endregion
 
 
         #region TAJIKA
@@ -3652,45 +3808,6 @@ namespace VedAstro.Library
             return returnList;
         }
 
-        /// <summary>
-        /// Gets list of all planets and the zodiac signs they are in
-        /// </summary>
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetSigns(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetZodiacSign(planet, time).GetSignName(), Angle.Zero));
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetHoraSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetHoraSigns(planet, time), Angle.Zero));
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetDrekkanaSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetDrekkanaSign(planet, time), Angle.Zero));
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetChaturthamsaSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetChaturthamsaSign(planet, time), Angle.Zero));
-        public static Dictionary<PlanetName, ZodiacSign> AllPlanetPanchamsaSign(Time time) => All9Planets.ToDictionary(planet => planet, planet => new ZodiacSign(PlanetPanchamsaSign(planet, time), Angle.Zero));
-
-
-        /// <summary>
-        /// Given a zodiac sign will convert to drekkana
-        /// </summary>
-        public static ZodiacName DrekkanaSignName(ZodiacSign zodiacSign)
-        {
-            // Get the degree within the sign
-            var degree = zodiacSign.GetDegreesInSign().TotalDegrees;
-
-            // Calculate the Drekkana index inside the 30 degrees
-            int drekkanaIndex = (int)Math.Ceiling((degree / 10));
-
-            switch (drekkanaIndex)
-            {
-                //Narada drekkna or 1st Drekkna of any Sign is same as sign
-                case 1: return zodiacSign.GetSignName(); break;
-                // Augsta drekkna or 2nd drekkna of sign is 5th from Sign.
-                case 2: return SignCountedFromInputSign(zodiacSign.GetSignName(), 5); break;
-                //Durvasa drekkna or 3rd drekkna of any sign is 9th from Sign.
-                case 3: return SignCountedFromInputSign(zodiacSign.GetSignName(), 9); break;
-            }
-
-            throw new Exception("END OF LINE!");
-        }
-        public static ZodiacName HoraSignName(ZodiacSign zodiacSign)
-        {
-            return ZodiacName.Aries;
-
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Gets the Nirayana longitude of all 9 planets
@@ -3832,7 +3949,6 @@ namespace VedAstro.Library
             return houseForPlanet;
         }
 
-
         /// <summary>
         /// List of all planets and the houses they are located in at a given time based on zodiac sign.
         /// </summary>
@@ -3937,7 +4053,6 @@ namespace VedAstro.Library
             return value;
         }
 
-
         /// <summary>
         /// The lord of a bhava is
         /// the Graha (planet) in whose Rasi (sign) the Bhavamadhya falls
@@ -4011,8 +4126,6 @@ namespace VedAstro.Library
 
         }
 
-
-
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
@@ -4053,7 +4166,6 @@ namespace VedAstro.Library
 
             return allHouses;
         }
-
 
         /// <summary>
         /// Gets the constellation specific for KP system (horary or kundali)
@@ -4611,42 +4723,38 @@ namespace VedAstro.Library
             throw new Exception("Saptamsa not found, error!");
         }
 
-        /// <summary>
-        /// Gets the Drekkana sign the planet is in
-        /// </summary>
-        public static ZodiacName PlanetDrekkanaSign(PlanetName planetName, Time time) => Calculate.DrekkanaSignName(Calculate.PlanetZodiacSign(planetName, time));
 
-        public static ZodiacName PlanetChaturthamsaSign(PlanetName planetName, Time time) => Calculate.ChaturthamsaSignName(Calculate.PlanetZodiacSign(planetName, time));
+        public static ZodiacSign PlanetChaturthamsaSign(PlanetName planetName, Time time) => Calculate.ChaturthamsaSignName(Calculate.PlanetZodiacSign(planetName, time));
 
-        public static ZodiacName PlanetPanchamsaSign(PlanetName planetName, Time time) => Calculate.PanchamsaSignName(Calculate.PlanetZodiacSign(planetName, time));
+        public static ZodiacSign PlanetPanchamsaSign(PlanetName planetName, Time time) => Calculate.PanchamsaSignName(Calculate.PlanetZodiacSign(planetName, time));
 
-        public static ZodiacName ChaturthamsaSignName(ZodiacSign zodiacSign)
+        public static ZodiacSign ChaturthamsaSignName(ZodiacSign zodiacSign)
         {
-            // Get the degree within the sign
-            var degree = zodiacSign.GetDegreesInSign().TotalDegrees;
+            //// Get the degree within the sign
+            //var degree = zodiacSign.GetDegreesInSign().TotalDegrees;
 
-            // Calculate the Chaturthamsa index inside the 30 degrees
-            int chaturthamsaIndex = (int)Math.Ceiling((degree / 7.5));
+            //// Calculate the Chaturthamsa index inside the 30 degrees
+            //int chaturthamsaIndex = (int)Math.Ceiling((degree / 7.5));
 
-            switch (chaturthamsaIndex)
-            {
-                // 1st Chaturthamsa of any Sign is same as sign
-                case 1: return zodiacSign.GetSignName(); break;
-                // 2nd Chaturthamsa of sign is 4th from Sign.
-                case 2: return SignCountedFromInputSign(zodiacSign.GetSignName(), 4); break;
-                // 3rd Chaturthamsa of any sign is 7th from Sign.
-                case 3: return SignCountedFromInputSign(zodiacSign.GetSignName(), 7); break;
-                // 4th Chaturthamsa of any sign is 10th from Sign.
-                case 4: return SignCountedFromInputSign(zodiacSign.GetSignName(), 10); break;
-            }
+            //switch (chaturthamsaIndex)
+            //{
+            //    // 1st Chaturthamsa of any Sign is same as sign
+            //    case 1: return zodiacSign.GetSignName(); break;
+            //    // 2nd Chaturthamsa of sign is 4th from Sign.
+            //    case 2: return SignCountedFromInputSign(zodiacSign.GetSignName(), 4); break;
+            //    // 3rd Chaturthamsa of any sign is 7th from Sign.
+            //    case 3: return SignCountedFromInputSign(zodiacSign.GetSignName(), 7); break;
+            //    // 4th Chaturthamsa of any sign is 10th from Sign.
+            //    case 4: return SignCountedFromInputSign(zodiacSign.GetSignName(), 10); break;
+            //}
 
             throw new Exception("Invalid Chaturthamsa index!");
         }
 
-        public static ZodiacName PanchamsaSignName(ZodiacSign zodiacSign)
+        public static ZodiacSign PanchamsaSignName(ZodiacSign zodiacSign)
         {
             //TODO
-            return ZodiacName.Libra;
+            return new ZodiacSign();
 
             throw new Exception("END OF LINE!");
         }
@@ -4939,7 +5047,6 @@ namespace VedAstro.Library
             //return relationship as enemy
             return PlanetToPlanetRelationship.Enemy;
         }
-
 
         /// <summary>
         /// Gets all the planets in a sign
@@ -11384,14 +11491,14 @@ namespace VedAstro.Library
                 }
 
                 //get planet hora
-                var planetHora = Calculate.PlanetHoraSigns(planetName, time);
+                var planetHora = Calculate.PlanetHoraSigns(planetName, time).GetSignName();
                 var horaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetHora, time);
                 //add planet hora relationship to list
                 planetSignRelationshipList.Add(horaSignRelationship);
 
 
                 //get planet drekkana
-                var planetDrekkana = Calculate.PlanetDrekkanaSign(planetName, time);
+                var planetDrekkana = Calculate.PlanetDrekkanaSign(planetName, time).GetSignName();
                 var drekkanaSignRelationship = Calculate.PlanetRelationshipWithSign(planetName, planetDrekkana, time);
                 //add planet drekkana relationship to list
                 planetSignRelationshipList.Add(drekkanaSignRelationship);

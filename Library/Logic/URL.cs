@@ -118,10 +118,10 @@ public class URL
     public readonly string DeleteVisitorByVisitorId;
     public readonly string AddTaskApi;
     public readonly string AddVisitorApi;
-    public static readonly string AddVisitorApiStable = $"{ApiStable}/addvisitor";
-    public static readonly string AddressToGeoLocationAPIStable = $"{ApiStable}/AddressToGeoLocation";
-    public static readonly string CoordinatesToGeoLocationAPIStable = $"{ApiStable}/CoordinatesToGeoLocation";
-    public static readonly string GeoLocationToTimezoneAPIStable = $"{ApiStable}/GeoLocationToTimezone";
+    public static readonly string AddVisitorApiStable = $"{ApiStableDirect}/addvisitor";
+    public static readonly string AddressToGeoLocationAPIStable = $"{ApiStableDirect}/AddressToGeoLocation";
+    public static readonly string CoordinatesToGeoLocationAPIStable = $"{ApiStableDirect}/CoordinatesToGeoLocation";
+    public static readonly string GeoLocationToTimezoneAPIStable = $"{ApiStableDirect}/GeoLocationToTimezone";
 
     //MATCH
     public readonly string GetSavedMatchReport;

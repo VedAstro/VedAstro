@@ -1314,6 +1314,162 @@ namespace VedAstro.Library.Tests
 
         }
 
+        //REMEMBER!
+        //YOU'RE NOT HERE TO STAY
+        //YOU'RE HERE TO LEAVE
 
+        [TestMethod()]
+        public void PunyaSahamLongitudeTest()
+        {
+            //correct values for standard horoscope from JHora Lahiri
+            var punyaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Gemini, new Angle(5, 39, 15.32))).TotalDegrees;
+            var vidyaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Libra, new Angle(15, 2, 40.83))).TotalDegrees;
+            var yasasPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Pisces, new Angle(12, 16, 10.31))).TotalDegrees;
+            var mitraPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Scorpio, new Angle(6, 38, 35.74))).TotalDegrees;
+            var mahatmyaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Leo, new Angle(12, 58, 33.29))).TotalDegrees;
+            var ashaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Libra, new Angle(10, 16, 2.89))).TotalDegrees;
+            var samarthaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Gemini, new Angle(10, 25, 53.26))).TotalDegrees;
+            var bhratruPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Sagittarius, new Angle(14, 58, 40.71))).TotalDegrees;
+            var gauravaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Pisces, new Angle(12, 16, 10.31))).TotalDegrees;
+            var pitruPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Scorpio, new Angle(28, 49, 2.71))).TotalDegrees;
+            var rajyaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Scorpio, new Angle(28, 49, 2.71))).TotalDegrees;
+            var matruPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Gemini, new Angle(15, 24, 32.09))).TotalDegrees;
+            var putraPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Cancer, new Angle(8, 8, 28.11))).TotalDegrees;
+            var jeevaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Aries, new Angle(5, 43, 15.44))).TotalDegrees;
+            var karmaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Aries, new Angle(13, 17, 41.51))).TotalDegrees;
+            var rogaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Capricorn, new Angle(10, 54, 58.63))).TotalDegrees;
+            var kaliPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Leo, new Angle(29, 53, 45.52))).TotalDegrees;
+            var sastraPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Leo, new Angle(19, 42, 39.30))).TotalDegrees;
+            var bandhuPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Libra, new Angle(15, 38, 27.33))).TotalDegrees;
+            var mrityuPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Virgo, new Angle(10, 54, 58.63))).TotalDegrees;
+            var paradesaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Capricorn, new Angle(20, 36, 59.48))).TotalDegrees;
+            var arthaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Leo, new Angle(17, 45, 11.24))).TotalDegrees;
+            var paradaraPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Capricorn, new Angle(15, 35, 41.30))).TotalDegrees;
+            var vanikPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Gemini, new Angle(5, 2, 58.92))).TotalDegrees;
+            var karyasiddhiPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Leo, new Angle(3, 33, 1.31))).TotalDegrees;
+            var vivahaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Aries, new Angle(12, 7, 36.67))).TotalDegrees;
+            var santapaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Capricorn, new Angle(18, 30, 45.47))).TotalDegrees;
+            var sraddhaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Scorpio, new Angle(27, 2, 41.48))).TotalDegrees;
+            var preetiPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Taurus, new Angle(9, 24, 22.06))).TotalDegrees;
+            var jadyaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Sagittarius, new Angle(15, 9, 51.86))).TotalDegrees;
+            var vyaparaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Gemini, new Angle(10, 25, 53.26))).TotalDegrees;
+            var satruPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Gemini, new Angle(10, 25, 53.26))).TotalDegrees;
+            var jalapatanaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Capricorn, new Angle(7, 24, 13.16))).TotalDegrees;
+            var bandhanaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Scorpio, new Angle(28, 3, 28.48))).TotalDegrees;
+            var apamrityuPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Scorpio, new Angle(2, 40, 16.05))).TotalDegrees;
+            var labhaPosition = Calculate.LongitudeAtZodiacSign(new ZodiacSign(ZodiacName.Pisces, new Angle(2, 40, 16.05))).TotalDegrees;
+
+
+            double errorRate = 0.5;
+
+            //DO THE TESTS
+            var punyaTest = Calculate.PunyaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(punyaPosition - punyaTest) <= errorRate);
+
+            var vidyaTest = Calculate.VidyaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(vidyaPosition - vidyaTest) <= errorRate);
+
+            var yasasTest = Calculate.YasasSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(yasasPosition - yasasTest) <= errorRate);
+
+            var mitraTest = Calculate.MitraSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(mitraPosition - mitraTest) <= errorRate);
+
+            var mahatmyaTest = Calculate.MahatmyaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(mahatmyaPosition - mahatmyaTest) <= errorRate);
+
+            var ashaTest = Calculate.AshaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(ashaPosition - ashaTest) <= errorRate);
+
+            var samarthaTest = Calculate.SamarthaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(samarthaPosition - samarthaTest) <= errorRate);
+
+            var bhratruTest = Calculate.BhratruSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(bhratruPosition - bhratruTest) <= errorRate);
+
+            var gauravaTest = Calculate.GauravaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(gauravaPosition - gauravaTest) <= errorRate);
+
+            var pitruTest = Calculate.PitruSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(pitruPosition - pitruTest) <= errorRate);
+
+            var rajyaTest = Calculate.RajyaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(rajyaPosition - rajyaTest) <= errorRate);
+
+            var matruTest = Calculate.MatruSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(matruPosition - matruTest) <= errorRate);
+
+            var putraTest = Calculate.PutraSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(putraPosition - putraTest) <= errorRate);
+
+            var jeevaTest = Calculate.JeevastambaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(jeevaPosition - jeevaTest) <= errorRate);
+
+            var karmaTest = Calculate.KarmaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(karmaPosition - karmaTest) <= errorRate);
+
+            var rogaTest = Calculate.RogaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(rogaPosition - rogaTest) <= errorRate);
+
+            var kaliTest = Calculate.KalaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(kaliPosition - kaliTest) <= errorRate);
+
+            var sastraTest = Calculate.ShashtrasthanaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(sastraPosition - sastraTest) <= errorRate);
+
+            var bandhuTest = Calculate.BandhuSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(bandhuPosition - bandhuTest) <= errorRate);
+
+            var mrityuTest = Calculate.MrityuSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(mrityuPosition - mrityuTest) <= errorRate);
+
+            var paradesaTest = Calculate.ParadeshSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(paradesaPosition - paradesaTest) <= errorRate);
+
+            var arthaTest = Calculate.ArthastambaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(arthaPosition - arthaTest) <= errorRate);
+
+            var paradaraTest = Calculate.ParameshthisthanaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(paradaraPosition - paradaraTest) <= errorRate);
+
+            var vanikTest = Calculate.VanijSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(vanikPosition - vanikTest) <= errorRate);
+
+            var karyasiddhiTest = Calculate.KaryasiddhiSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(karyasiddhiPosition - karyasiddhiTest) <= errorRate);
+
+            var vivahaTest = Calculate.VivahaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(vivahaPosition - vivahaTest) <= errorRate);
+
+            var santapaTest = Calculate.SanthanasthanaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(santapaPosition - santapaTest) <= errorRate);
+
+            var sraddhaTest = Calculate.SradhdhasthanamSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(sraddhaPosition - sraddhaTest) <= errorRate);
+
+            var preetiTest = Calculate.PreethistambhaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(preetiPosition - preetiTest) <= errorRate);
+
+            var jadyaTest = Calculate.JadysthanamSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(jadyaPosition - jadyaTest) <= errorRate);
+
+            var vyaparaTest = Calculate.VyanjansthanaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(vyaparaPosition - vyaparaTest) <= errorRate);
+
+            var satruTest = Calculate.SathruSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(satruPosition - satruTest) <= errorRate);
+
+            var jalapatanaTest = Calculate.JaladoshamSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(jalapatanaPosition - jalapatanaTest) <= errorRate);
+
+            var bandhanaTest = Calculate.BandhanasthanaSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(bandhanaPosition - bandhanaTest) <= errorRate);
+
+            var apamrityuTest = Calculate.ApamrithyusthanamSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(apamrityuPosition - apamrityuTest) <= errorRate);
+
+            var labhaTest = Calculate.LabhesthanamSahamLongitude(StandardHoroscope).TotalDegrees;
+            Assert.IsTrue(Math.Abs(labhaPosition - labhaTest) <= errorRate);
+        }
     }
 }

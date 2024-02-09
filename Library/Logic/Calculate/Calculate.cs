@@ -58,6 +58,254 @@ namespace VedAstro.Library
 
         //----------------------------------------CORE CODE---------------------------------------------
 
+        #region SAHAMS
+
+        public static Angle PunyaSahamLongitude(Time birthTime)
+        {
+            //# 1 Punya Fortune/good deeds Moon – Sun + Lagna
+            var moonLong = Calculate.PlanetNirayanaLongitude(Moon, birthTime).TotalDegrees; //A
+            var sunLong = Calculate.PlanetNirayanaLongitude(Sun, birthTime).TotalDegrees; //B
+            var lagnaLong = Calculate.HouseDegrees(HouseName.House1, birthTime).GetMiddleLongitude().TotalDegrees; //C
+
+            //Each saham has a formula that looks like A - B + C. What
+            //this means is that we take the longitudes of A, B and C and find (A - B + C).
+            //This is equivalent to finding how far A is from B and then taking the same distance from C.
+            var punyaSahamLong = (moonLong - sunLong) + lagnaLong;
+
+            //if night birth
+            var isNightBirth = Calculate.IsNightBirth(birthTime);
+            if (isNightBirth) { punyaSahamLong = (sunLong - moonLong) + lagnaLong; }
+
+            // However, if C is not between B and A (i.e. we start
+            // from B and go zodiacal till we meet A, and we do not find C on the way),
+            // then we add 30° to the value evaluated above.
+            if (!IsSahamCBetweenBToA(moonLong, sunLong, lagnaLong)) { punyaSahamLong += 30; }
+
+            //expunge 360 degrees
+            var final = Angle.FromDegrees(punyaSahamLong).Expunge360();
+
+            return final;
+        }
+
+        public static Angle VidyaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle YasasSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle MitraSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle MahatmyaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle AshaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle SamarthaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle BhratruSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle GauravaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle PitruSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle RajyaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle MatruSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle PutraSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle JeevastambaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle KarmaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle RogaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle KalaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle ShashtrasthanaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle BandhuSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle MrityuSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle ParadeshSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle ArthastambaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle ParameshthisthanaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle VanijSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle KaryasiddhiSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle VivahaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle SanthanasthanaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle SradhdhasthanamSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle PreethistambhaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle JadysthanamSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle VyanjansthanaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle SathruSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle JaladoshamSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle BandhanasthanaSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle ApamrithyusthanamSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Angle LabhesthanamSahamLongitude(Time standardHoroscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// This function checks if the astrological sign (Rasi) of a point C is between
+        /// the astrological signs of points B and A.
+        /// The astrological sign is calculated by dividing the longitude by 30.
+        /// The function returns true if C’s Rasi is between B’s and A’s Rasi, and false otherwise.
+        /// </summary>
+        private static bool IsSahamCBetweenBToA(double aLong, double bLong, double cLong)
+        {
+            // Convert the longitude values to Rasi (Hindu Astrological Sign) by dividing by 30
+            int aRasi = (int)(aLong / 30);
+            int bRasi = (int)(bLong / 30);
+            int cRasi = (int)(cLong / 30);
+
+            // Initialize a flag to check if C's Rasi is found between B's and A's Rasi
+            bool cRasiFound = false;
+
+            // Loop from B's Rasi to B's Rasi + 11 (covering all 12 Rasis in a circular manner)
+            for (int n = bRasi; n < bRasi + 11; n++)
+            {
+                // Calculate the next Rasi in a circular manner (0 to 11)
+                int nextN = (n + 1) % 12;
+
+                // If the next Rasi is C's Rasi, set the flag to True and break the loop
+                if (nextN == cRasi)
+                {
+                    cRasiFound = true;
+                    break;
+                }
+                // If the next Rasi is A's Rasi before finding C's Rasi, break the loop
+                else if (nextN == aRasi)
+                {
+                    break;
+                }
+            }
+
+            // Return the flag which indicates if C's Rasi is between B's and A's Rasi
+            return cRasiFound;
+        }
+
+
+        #endregion
+
+
+
         #region TAJIKA
 
         /// <summary>

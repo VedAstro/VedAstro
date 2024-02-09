@@ -3114,7 +3114,7 @@ namespace VedAstro.Library
             }
             else
             {
-                rawlunarDate = ((moonLong + new Angle(degrees: 360)) - sunLong).TotalDegrees / 12.0;
+                rawlunarDate = ((moonLong + Angle.Degrees360) - sunLong).TotalDegrees / 12.0;
             }
 
             //round number to next whole number (ceiling)
@@ -7905,7 +7905,7 @@ namespace VedAstro.Library
 
 
                 //data in results at index 0 is longitude
-                var planetSayanaLongitude = new Angle(degrees: results[0]);
+                var planetSayanaLongitude = Angle.FromDegrees(results[0]);
 
                 //if ketu add 180 to rahu
                 if (planetName == Ketu)
@@ -7980,7 +7980,7 @@ namespace VedAstro.Library
                 int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
 
                 //data in results at index 0 is longitude
-                var planetSayanaLongitude = new Angle(degrees: results[0]);
+                var planetSayanaLongitude = Angle.FromDegrees(results[0]);
 
                 //if ketu add 180 to rahu
                 if (planetName == Ketu)
@@ -8111,7 +8111,7 @@ namespace VedAstro.Library
                 int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
 
                 //data in results at index 0 is longitude
-                var planetSayanaLongitude = new Angle(degrees: results[0]);
+                var planetSayanaLongitude = Angle.FromDegrees(results[0]);
 
                 //if ketu add 180 to rahu
                 if (planetName == Library.PlanetName.Ketu)
@@ -8194,7 +8194,7 @@ namespace VedAstro.Library
                 int ret_flag = ephemeris.swe_calc(jul_day_ET, planet, iflag, results, ref err_msg);
 
                 //data in results at index 1 is latitude
-                return new Angle(degrees: results[1]);
+                return Angle.FromDegrees(results[1]);
 
             }
 
@@ -8324,6 +8324,7 @@ namespace VedAstro.Library
 
         }
 
+
         /// <summary>
         /// Converts Planet Longitude to Zodiac Sign equivalent
         /// </summary>
@@ -8339,6 +8340,7 @@ namespace VedAstro.Library
             {
                 //max degrees of each sign
                 const double maxDegreesInSign = 30.0;
+
                 // Adjust longitude to be within 0-360 range
                 double adjustedLongitude = longitude.TotalDegrees;
                 while (adjustedLongitude < 0)
@@ -8347,21 +8349,28 @@ namespace VedAstro.Library
                 }
                 //get rough zodiac number
                 double roughZodiacNumber = (adjustedLongitude % 360.0) / maxDegreesInSign;
+
                 //Calculate degrees in zodiac sign
                 //get remainder from rough zodiac number
                 var roughZodiacNumberRemainder = roughZodiacNumber - Math.Truncate(roughZodiacNumber);
+
                 //convert remainder to degrees in current sign
                 var degreesInSignRaw = roughZodiacNumberRemainder * maxDegreesInSign;
+
                 //round number (too high accuracy causes equality mismtach because of minute difference)
                 var degreesInSign = Math.Round(degreesInSignRaw, 7);
+
                 //Get name of zodiac sign
                 //round to ceiling to get integer zodiac number
                 var zodiacNumber = (int)Math.Ceiling(roughZodiacNumber);
                 if (adjustedLongitude == 0.00) { zodiacNumber = 1; }
+
                 //convert zodiac number to zodiac name
                 var calculatedZodiac = (ZodiacName)zodiacNumber;
+
                 //return new instance of planet sign
                 var degreesAngle = Angle.FromDegrees(Math.Abs(degreesInSign)); //make always positive
+
                 var zodiacSignAtLongitude = new ZodiacSign(calculatedZodiac, degreesAngle);
                 return zodiacSignAtLongitude;
             }
@@ -13437,6 +13446,7 @@ namespace VedAstro.Library
         /// Gets the characteristic of signs
         /// </summary>
         public static SignProperties SignProperties(ZodiacName inputSign) => new SignProperties(inputSign);
+
 
     }
 }

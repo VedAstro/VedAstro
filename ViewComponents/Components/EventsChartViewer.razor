@@ -33,6 +33,7 @@
         <IconButton SmallSize="true" IconName="logos:google-calendar" TooltipText="Add to Google Calendar" OnClickCallback="OnClickAddToGoogleEvents" TooltipPosition="top"  />
         <IconButton SmallSize="true" IconName="material-symbols:download" TooltipText="Download as SVG image file" OnClickCallback="OnClickSaveChartSvg" TooltipPosition="top"  />
         <IconButton SmallSize="true" IconName="ic:round-print" TooltipText="Print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))" TooltipPosition="top"  />
+        <IconButton SmallSize="true" IconName="ri:bookmark-3-fill" TooltipText="Bookmark" OnClickCallback="OnClickBookmarkChart" TooltipPosition="top"  />
         <IconButton SmallSize="true" IconName="tabler:share-2" TooltipText="Share"  TooltipPosition="top" >
             <DropDownList>
                 <li>
@@ -61,7 +62,7 @@
                 </li>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" TooltipText="Copy API" IconName="ph:code-fill" OnClickCallback="OnClickCopyPOSTCall" TooltipPosition="top" />
+        <IconButton SmallSize="true" TooltipText="Copy API" IconName="ph:code-fill" OnClickCallback="OnClickCopyAPICall" TooltipPosition="top" />
         <IconButton SmallSize="true" IconName="gravity-ui:person" TooltipText="Person" ButtonText="Person"  TooltipPosition="top" >
             <DropDownList>
                 <li>
@@ -420,7 +421,7 @@
     /// <summary>
     /// Gets body of POST data used to make chart from API, used for user's debug needs
     /// </summary>
-    private async Task OnClickCopyPOSTCall()
+    private async Task OnClickCopyAPICall()
     {
         //auto calculate precision
         var daysPerPixelRaw = EventsChart.GetDayPerPixel(SelectedTimeRange, MaxWidth);
@@ -433,6 +434,29 @@
 
         //let user know link copied
         await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);
+    }
+
+    /// <summary>
+    /// Make JS bookmark
+    /// </summary>
+    private async Task OnClickBookmarkChart()
+    {
+
+        //auto calculate precision
+        var daysPerPixelRaw = EventsChart.GetDayPerPixel(SelectedTimeRange, MaxWidth);
+
+        //get call exactly as for API
+        //todo use data dropdown
+        var callUrl = AppData.API.EventsChart.GetEventsChartApiUrl(SelectedPerson, SelectedTimeRange, SelectedEventTags, daysPerPixelRaw, SelectedChartOptions, SelectedAyanamsaName);
+
+        //create nice bookmark title
+        var title = "Chart";
+
+        //use js to make bookmark in browser
+        await _jsRuntime.InvokeVoidAsync(JS.AddNewBookmark, title, callUrl);
+
+        //let user know link copied
+        await _jsRuntime.ShowAlert("success", $"Bookmark Made!", false, 2600);
     }
 
 

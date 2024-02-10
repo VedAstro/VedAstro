@@ -948,6 +948,18 @@ export function CopyToClipboard(text) {
         .catch(function (error) { console.log(error); }); //todo raise proper error, logged
 }
 
+//add new bookmark to browser
+export function AddNewBookmark(inputTitle, inputUrl) {
+
+    // Create a new Bookmark object
+    const bookmark = chrome.bookmarks.create({
+        title: inputTitle,
+        url: inputUrl,
+    });
+
+    console.log(`Added bookmark for ${url}`);
+}
+
 //Generates a table using Tabulator table library
 //id to where table will be generated needs to be inputed
 export function generateLifeEventListTable(tableId, tableData) {

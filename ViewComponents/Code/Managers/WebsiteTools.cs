@@ -537,7 +537,7 @@ namespace Website
                 //end here
                 return;
             }
-            
+
             //get line number where code starts
             var lineNumber = metadata.LineNumber;
 
@@ -747,7 +747,7 @@ namespace Website
         }
 
 
-       
+
 
         /// <summary>
         /// only give response if header says ok
@@ -854,6 +854,7 @@ namespace Website
             //try get from browser storage
             var clientLocXml = await AppData.JsRuntime.GetProperty("ClientLocation");
             var isFound = clientLocXml != null;
+
             //if got cache, then just parse that and return (1 http call saved)
             GeoLocation parsedLocation;
             if (isFound)
@@ -864,6 +865,7 @@ namespace Website
             //no cache, call Google API with IP
             else
             {
+                //TODO change to call to API
                 parsedLocation = await GeoLocation.FromIpAddress(apiKey);
                 //save for future use
                 await AppData.JsRuntime.SetProperty("ClientLocation", parsedLocation.ToXml().ToString());

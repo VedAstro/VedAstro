@@ -243,7 +243,7 @@ namespace VedAstro.Library
             {
                 //TODO switch to using VedAstro API
                 //get only coordinates 1st
-                var coordinates = await GetCoordinatesFromIpAddressGoogle(apiKey);
+                var coordinates = await GetCoordinatesFromIpAddressGoogle();
 
                 //get name from coordinates
                 var fromIpAddress = await CoordinatesToGeoLocation(coordinates.Latitude(), coordinates.Longitude());
@@ -263,6 +263,9 @@ namespace VedAstro.Library
         }
 
 
+        /// <summary>
+        /// Gets coordinates with VedAstro API
+        /// </summary>
         public static async Task<GeoLocation> CoordinatesToGeoLocation(double latitude, double longitude)
         {
             //round the coordinates, to match cache better and also because 3 decimal places is enough
@@ -270,7 +273,7 @@ namespace VedAstro.Library
             var longitudeRound = Math.Round(longitude, 3);
 
             //get from API
-            var url = URL.CoordinatesToGeoLocationAPIStable + $"/Latitude/{latitudeRound}/Longitude/{longitudeRound}";
+            var url = URL.CoordinatesToGeoLocationAPI + $"/Latitude/{latitudeRound}/Longitude/{longitudeRound}";
             var webResult = await Tools.ReadFromServerXmlReply(url);
 
             //convert
@@ -279,24 +282,27 @@ namespace VedAstro.Library
             return parsed;
         }
 
-
         /// <summary>
-        /// Will get longitude and latitude from IP using google API
-        /// NOTE: The only place so far Google API outside VedAstro API
+        /// Gets coordinates with VedAstro API
+        /// IP address is auto-detected by API, so need to supply 
         /// </summary>
-        private static async Task<GeoLocation> GetCoordinatesFromIpAddressGoogle(string apiKey)
+        public static async Task<GeoLocation> GetCoordinatesFromIpAddressGoogle()
         {
-            var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={apiKey}";
-            var resultString = await Tools.WriteServer<JObject, object>(HttpMethod.Post, url);
+            //round the coordinates, to match cache better and also because 3 decimal places is enough
+            //var latitudeRound = Math.Round(latitude, 3);
+            //var longitudeRound = Math.Round(longitude, 3);
 
-            //get raw value 
-            var rawLat = resultString["location"]["lat"].Value<double>();
-            var rawLong = resultString["location"]["lng"].Value<double>();
+            //get from API
+            var url = URL.IpAddressToGeoLocationAPI;
+            var webResult = await Tools.ReadFromServerJsonReply(url);
 
-            var result = new GeoLocation("", rawLong, rawLat);
+            //convert
+            var parsed = GeoLocation.FromJson(webResult.Payload);
 
-            return result;
+            return parsed;
         }
+
+
 
 
         /// <summary>

@@ -94,9 +94,8 @@ namespace VedAstro.Library
         {
             var temp = new JObject();
             temp["Name"] = _signName.ToString();
-            temp["DegreesIn"] = _degreesInSign.ToJson();
+            temp["DegreesIn"] = _degreesInSign?.ToJson() ?? new JObject();
             return temp;
-
         }
 
 

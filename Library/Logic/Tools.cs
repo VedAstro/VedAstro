@@ -1311,7 +1311,7 @@ namespace VedAstro.Library
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {
             //get location data from VedAstro API
-            var webResult = await Tools.ReadFromServerJsonReply(URL.AddressToGeoLocationAPIStable + $"/{address}");
+            var webResult = await Tools.ReadFromServerJsonReply(URL.AddressToGeoLocationAPI + $"/{address}");
 
             //if fail to make call, end here
             if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
@@ -1379,7 +1379,7 @@ namespace VedAstro.Library
             {
                 //get location data from VedAstro API
                 var timePackage = new Time(timeAtLocation, geoLocation);
-                var url = URL.GeoLocationToTimezoneAPIStable + timePackage.ToUrl();
+                var url = URL.GeoLocationToTimezoneAPI + timePackage.ToUrl();
                 //var webResult = await Tools.ReadFromServerXmlReply(url);
                 var webResult = await Tools.ReadFromServerJsonReply(url);
 
@@ -1572,7 +1572,7 @@ namespace VedAstro.Library
 
             //only good reply from server is accepted, anything else is marked invalid
             //stops invalid replies from being passed as valid
-            if (!result.IsSuccessStatusCode) { return new WebResult<JToken>(false, new JObject("RawErrorData", rawMessage)); }
+            if (!result.IsSuccessStatusCode) { var json = new JObject(); json.Add("RawErrorData", rawMessage); return new WebResult<JToken>(false, json); }
 
             //tries to parse the raw data received into XML or JSON
             //if all fail will return raw data with fail status

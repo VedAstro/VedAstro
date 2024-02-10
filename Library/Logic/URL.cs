@@ -119,9 +119,10 @@ public class URL
     public readonly string AddTaskApi;
     public readonly string AddVisitorApi;
     public static readonly string AddVisitorApiStable = $"{ApiStableDirect}/addvisitor";
-    public static readonly string AddressToGeoLocationAPIStable = $"{ApiStableDirect}/AddressToGeoLocation";
-    public static readonly string CoordinatesToGeoLocationAPIStable = $"{ApiStableDirect}/CoordinatesToGeoLocation";
-    public static readonly string GeoLocationToTimezoneAPIStable = $"{ApiStableDirect}/GeoLocationToTimezone";
+    public static readonly string AddressToGeoLocationAPI = $"{ApiStableDirect}/AddressToGeoLocation";
+    public static readonly string CoordinatesToGeoLocationAPI = $"{ApiStableDirect}/CoordinatesToGeoLocation";
+    public static readonly string IpAddressToGeoLocationAPI = $"{ApiStableDirect}/IpAddressToGeoLocation";
+    public static readonly string GeoLocationToTimezoneAPI = $"{ApiStableDirect}/GeoLocationToTimezone";
 
     //MATCH
     public readonly string GetSavedMatchReport;

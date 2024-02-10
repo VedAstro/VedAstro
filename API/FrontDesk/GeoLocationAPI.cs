@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using Time = VedAstro.Library.Time;
 using Newtonsoft.Json;
 using System.Net;
+using System.Globalization;
 
 namespace API
 {
@@ -20,6 +21,7 @@ namespace API
     public class GeoLocationAPI
     {
 
+        private const string IpAddressToGeoLocationRoute = "IpAddressToGeoLocation";
         private const string AddressToGeoLocationRoute = "AddressToGeoLocation/{address}";
         private const string CoordinatesToGeoLocationRoute = "CoordinatesToGeoLocation/Latitude/{latitude}/Longitude/{longitude}";
         private const string GeoLocationToTimezoneRoute = "GeoLocationToTimezone/{*timeUrl}";
@@ -46,7 +48,8 @@ namespace API
 
         public enum APIProvider
         {
-            VedAstro, Azure, Google
+            VedAstro, Azure, Google,
+            IpData
         }
 
         /// <summary>
@@ -91,6 +94,61 @@ namespace API
                     //TODO aka consolidate the cache rows
                     //TODO SmartEditAddToCache()
                     AddToCache(parsedGeoLocation, rowKeyData: CreateSearchableName(address));
+                }
+
+                //once found, stop searching for location with APIs
+                if (isNotEmpty) { break; }
+            }
+
+            //2 : SEND TO CALLER
+            return APITools.PassMessageJson(parsedGeoLocation.ToJson(), incomingRequest);
+        }
+
+        /// <summary>
+        /// Will get ip address from caller no need to supply
+        /// https://vedastroapibeta.azurewebsites.net/api/IpAddressToGeoLocation/
+        /// </summary>
+        [Function(nameof(IpAddressToGeoLocation))]
+        public static async Task<HttpResponseData> IpAddressToGeoLocation([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = IpAddressToGeoLocationRoute)] HttpRequestData incomingRequest
+        )
+        {
+            // TODO Currently only return empty
+
+            //0 : LOG CALL
+            //log ip address, call time and URL
+            var call = APILogger.Visit(incomingRequest);
+
+            //1 : CALCULATE
+
+            //get ip address of caller
+            var ipAddress = incomingRequest?.GetCallerIp()?.ToString();
+
+            // Define a list of functions in the order of priority
+            var geoLocationProviders = new Dictionary<APIProvider, Func<string, Task<WebResult<GeoLocation>>>>
+            {
+                {APIProvider.VedAstro, IpAddressToGeoLocation_VedAstro},
+                {APIProvider.IpData, IpAddressToGeoLocation_IpData},
+                {APIProvider.Azure, IpAddressToGeoLocation_Azure},
+                {APIProvider.Google, IpAddressToGeoLocation_Google},
+            };
+
+            //start with empty as default if fail
+            var parsedGeoLocation = GeoLocation.Empty;
+
+            // Iterate over the list of functions
+            foreach (var row in geoLocationProviders)
+            {
+                var provider = row.Value;
+                parsedGeoLocation = await provider(ipAddress);
+
+                // when new location not is cache, we add it
+                // only add to cache if not empty and not VedAstro
+                var isNotEmpty = parsedGeoLocation.Name() != GeoLocation.Empty.Name();
+                var isNotVedAstro = row.Key != APIProvider.VedAstro;
+                if (isNotEmpty && isNotVedAstro)
+                {
+                    //add new data to cache, for future speed up
+                    AddToCache(parsedGeoLocation, rowKeyData: ipAddress);
                 }
 
                 //once found, stop searching for location with APIs
@@ -251,6 +309,23 @@ namespace API
 
         //--------------- VEDASTRO -----------------
 
+        private static async Task<WebResult<GeoLocation>> IpAddressToGeoLocation_VedAstro(string ipAddress)
+        {
+            //make a search for ip address stored under row key
+            Expression<Func<GeoLocationCacheEntity, bool>> expression = call => call.RowKey == ipAddress;
+
+            //execute search
+            Pageable<GeoLocationCacheEntity> linqEntities = tableClient.Query(expression);
+
+
+            //if old call found check if running else default false
+            //NOTE : important return empty, because used to detect later if empty
+            var foundRaw = linqEntities?.FirstOrDefault()?.ToGeoLocation() ?? GeoLocation.Empty;
+
+            return new WebResult<GeoLocation>(true, foundRaw);
+            //return foundRaw;
+        }
+
         private static async Task<string> GeoLocationToTimezone_Vedastro(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
 
@@ -325,6 +400,27 @@ namespace API
 
 
         //--------------- GOOGLE ------------------
+
+        /// <summary>
+        /// Will get longitude and latitude from IP using google API
+        /// NOTE: The only place so far Google API outside VedAstro API
+        /// </summary>
+        private static async Task<WebResult<GeoLocation>> IpAddressToGeoLocation_Google(string ipAddress)
+        {
+            //TODO NOT FIXED, FOR NOW IP NOT INJECTED
+            return new WebResult<GeoLocation>(false, GeoLocation.Empty);
+            var apiKey = Secrets.GoogleAPIKey;
+            var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={apiKey}";
+            var resultString = await Tools.WriteServer<JObject, object>(HttpMethod.Post, url);
+
+            //get raw value 
+            var rawLat = resultString["location"]["lat"].Value<double>();
+            var rawLong = resultString["location"]["lng"].Value<double>();
+
+            var result = new GeoLocation("", rawLong, rawLat);
+
+            return new WebResult<GeoLocation>(true, result); ;
+        }
 
         public static async Task<string> GeoLocationToTimezone_Google(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
@@ -449,6 +545,110 @@ namespace API
 
 
         //--------------- AZURE -----------------
+
+        public static async Task<WebResult<GeoLocation>> IpAddressToGeoLocation_Azure(string ipAddress)
+        {
+
+            //TODO
+            return new WebResult<GeoLocation>(false, GeoLocation.Empty);
+
+            if (string.IsNullOrEmpty(ipAddress)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            var apiKey = Secrets.AzureMapsAPIKey;
+            //var url = $"https://atlas.microsoft.com/ip/reverse/json?api-version=1.0&subscription-key={apiKey}&ipAddress={ipAddress}";
+            //var apiKey = "<YOUR_API_KEY>";
+            var baseUrl = @"https://atlas.microsoft.com/ip/reverse/json?api-version=1.0&subscription-key=";
+            var regionSpecificEndpoint = "WestEurope"; // Change according to your subscription region
+            var url = $"{baseUrl}{apiKey}&ipAddress={Uri.EscapeDataString(ipAddress)}&region={regionSpecificEndpoint}";
+
+            var webResult = await Tools.ReadFromServerJsonReply(url);
+
+            if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            var reverseIPResponseJson = webResult.Payload;
+
+#if DEBUG
+            Console.WriteLine(reverseIPResponseJson.ToString());
+#endif
+
+            //if (reverseIPResponseJson == null || !reverseIPResponseJson.ContainsKey("record")) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            var record = reverseIPResponseJson["record"];
+
+            if (record == null || !(record is JArray array) || array.Count < 1 || !(array[0] is JObject firstRecord)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            JToken positionToken;
+            if (!firstRecord.TryGetValue("position", out positionToken)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); };
+
+            JObject positionObj = (JObject)positionToken;
+
+            double lat;
+            double lon;
+
+            if (!double.TryParse(positionObj["lat"].Value<string>(), NumberStyles.Float, CultureInfo.InvariantCulture, out lat)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+            if (!double.TryParse(positionObj["lon"].Value<string>(), NumberStyles.Float, CultureInfo.InvariantCulture, out lon)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            lat = Math.Round(lat, 3);
+            lon = Math.Round(lon, 3);
+
+            string fullName = "";
+            if (firstRecord.TryGetValue("address", out JToken addressTok))
+            {
+                JObject addressObj = (JObject)addressTok;
+                if (addressObj.TryGetValue("freeformAddress", StringComparison.OrdinalIgnoreCase, out JToken addrTextTok))
+                {
+                    fullName = addrTextTok.Value<string>();
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                if (firstRecord.TryGetValue("locality", out JToken localityTok))
+                {
+                    fullName = localityTok.Value<string>();
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                if (firstRecord.TryGetValue("administrativeArea5", out JToken area5Tok))
+                {
+                    fullName = area5Tok.Value<string>();
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                if (firstRecord.TryGetValue("administrativeArea3", out JToken area3Tok))
+                {
+                    fullName = area3Tok.Value<string>();
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                if (firstRecord.TryGetValue("countrySubdivision", out JToken subDivTok))
+                {
+                    fullName = subDivTok.Value<string>();
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                if (firstRecord.TryGetValue("countryCode", out JToken countryCodeTok))
+                {
+                    fullName = countryCodeTok.Value<string>();
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                return new WebResult<GeoLocation>(false, GeoLocation.Empty);
+            }
+
+            return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lon, lat));
+        }
+
         public static async Task<GeoLocation> AddressToGeoLocation_Azure(string address)
         {
             //if null or empty turn back as nothing
@@ -564,5 +764,81 @@ namespace API
                 return false;
             }
         }
+
+
+
+        //--------------- IP DATA -----------------
+
+        public static async Task<WebResult<GeoLocation>> IpAddressToGeoLocation_IpData(string ipAddress)
+        {
+            //TODO not complete
+            return new WebResult<GeoLocation>(false, GeoLocation.Empty);
+            //if null or empty turn back as nothing
+            if (string.IsNullOrEmpty(ipAddress)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+
+            const string urlTemplate = "http://api.ipdata.co/{0}?api-key={1}";
+            string uriString = String.Format(urlTemplate, ipAddress, "xxx");
+
+            using (var client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(uriString);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JObject jObjResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+                    Console.WriteLine("Country Name: " + jObjResponse["country_name"]);
+                    Console.WriteLine("Region Name: " + jObjResponse["region"]);
+                    Console.WriteLine("City Name: " + jObjResponse["city"]);
+                }
+                else
+                {
+                    Console.WriteLine($"Error: StatusCode={response.StatusCode}, ReasonPhrase=" + response.ReasonPhrase);
+                }
+            }
+
+
+
+            //create the request url for Azure Maps API
+            var apiKey = Secrets.AzureMapsAPIKey;
+            var url = $"https://atlas.microsoft.com/search/address/json?api-version=1.0&subscription-key={apiKey}&query={Uri.EscapeDataString(ipAddress)}";
+
+            //get location data from Azure Maps API
+            var webResult = await Tools.ReadFromServerJsonReply(url);
+
+            //if fail to make call, end here
+            if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            //if success, get the reply data out
+            var geocodeResponseJson = webResult.Payload;
+            var resultJson = geocodeResponseJson["results"][0];
+
+#if DEBUG
+            //DEBUG
+            Console.WriteLine(geocodeResponseJson.ToString());
+#endif
+
+            //check the data, if location was NOT found by Azure Maps API, end here
+            if (resultJson == null || resultJson["type"].Value<string>() != "Geography") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+            //if success, extract out the longitude & latitude
+            var locationElement = resultJson["position"];
+            var lat = double.Parse(locationElement["lat"].Value<string>() ?? "0");
+            var lng = double.Parse(locationElement["lon"].Value<string>() ?? "0");
+
+            //round coordinates to 3 decimal places
+            lat = Math.Round(lat, 3);
+            lng = Math.Round(lng, 3);
+
+            //get full name with country & state
+            var freeformAddress = resultJson["address"]["freeformAddress"].Value<string>();
+            var country = resultJson["address"]["country"].Value<string>();
+            var fullName = $"{freeformAddress}, {country}";
+
+            //return to caller pass
+            return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lng, lat));
+        }
+
     }
 }

@@ -168,7 +168,7 @@ public class URL
     public const string GoogleSignInJs = "https://accounts.google.com/gsi/client";
     public const string ExcelSampleMLFile = "https://github.com/VedAstro/VedAstro/raw/master/DataProcessor/TableGeneratorSampleInput.xlsx";
     public const string GeoJsApiUrl = "https://get.geojs.io/v1/ip/geo.json";
-    public const string TelescopeBuyPage = "https://www.ebay.com/itm/285643731472";
+    public const string TelescopeBuyPage = "https://want.jp/product/A5D9B087602D14";
     public const string LaptopBuyPage = "https://www.ebay.com/itm/304878531330";
     public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
     public const string GitHubDiscussions = "https://github.com/orgs/VedAstro/discussions";

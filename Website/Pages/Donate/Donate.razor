@@ -13,23 +13,71 @@
                   Title="Crowdfunding"
                   DescriptionText="Help to improve &amp; speed up development of the project. Contribute for the future vedic astrology." />
 
-@*KO-FI WIDGET*@
-<div class="vstack" style="">
-    <iframe class="align-self-center border shadow rounded-4" id='kofiframe' src='@URL.KoFiDonateIframe' style="width: @GR.W412px; height: 557px;" title='vedastro'></iframe>
+
+
+<div class="d-md-flex">
+
+    @*CONTACT FORM*@
+    <div class="me-5">
+        <div class="vstack gap-3 me-5 mb-4" style="width:@GR.W352px;">
+
+            @if (showKofi)
+            {
+                @*KO-FI WIDGET*@
+                <div class="vstack" style="">
+                    <iframe class="align-self-center border shadow rounded-4" id='kofiframe' src='@URL.KoFiDonateIframe' style="width: @GR.W412px; height: 557px;" title='vedastro'></iframe>
+                </div>
+            }
+            @if (showStripeJPN)
+            {
+                @* JPN *@
+                <stripe-buy-button
+                    buy-button-id="buy_btn_1OiG8ZJuwVWEHuj3UXbmBkzg"
+                    publishable-key="pk_live_51MfBvdJuwVWEHuj3uTQJ0hdZvml1X9MPmQQnvjABkJ4llLyx2XY8KgTttg5bG5mknT1xDK9hvbTup7BLa0EKgYnX00nbSoo7Hm"
+                >
+                </stripe-buy-button>
+            }
+            @if (showStripeUSD)
+            {
+                @* USD *@
+                <stripe-buy-button buy-button-id="buy_btn_1OiFvLJuwVWEHuj37W4h3TJp"
+                                   publishable-key="pk_live_51MfBvdJuwVWEHuj3uTQJ0hdZvml1X9MPmQQnvjABkJ4llLyx2XY8KgTttg5bG5mknT1xDK9hvbTup7BLa0EKgYnX00nbSoo7Hm">
+                </stripe-buy-button>
+            }
+            @if (showStripeEUR)
+            {
+                @* EUR *@
+                <stripe-buy-button buy-button-id="buy_btn_1OgaoxJuwVWEHuj3UVpd4xe7"
+                                   publishable-key="pk_live_51MfBvdJuwVWEHuj3uTQJ0hdZvml1X9MPmQQnvjABkJ4llLyx2XY8KgTttg5bG5mknT1xDK9hvbTup7BLa0EKgYnX00nbSoo7Hm">
+                </stripe-buy-button>
+            }
+            @if (showStripeINR)
+            {
+                @* INR *@
+                <stripe-buy-button buy-button-id="buy_btn_1OiG3oJuwVWEHuj3NV3qJ1Yc"
+                                   publishable-key="pk_live_51MfBvdJuwVWEHuj3uTQJ0hdZvml1X9MPmQQnvjABkJ4llLyx2XY8KgTttg5bG5mknT1xDK9hvbTup7BLa0EKgYnX00nbSoo7Hm">
+                </stripe-buy-button>
+            }
+
+        </div>
+    </div>
+
+    @*SIDEBAR*@
+    <div class="mt-md-0 mt-4 me-md-5">
+        <!--when small give at top-->
+        <div class="vstack gap-0 gap-md-2">
+            @*STACK BOXES ON RIGHT*@
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Gifts" Description="Donate warm gifts, instead of cold cash" IconName="fluent-emoji:wrapped-gift" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("WishList"))" />
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Crypto" Description="Instant and anonymous donation" IconName="cryptocurrency-color:btc" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("ForCryptoGeeks"))" />
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Patreon" Description="Monthly contribution via Patreon" IconName="logos:patreon" IsNewTabOpen="true" ClickUrl="@URL.PatreonPage" />
+            @* <InfoBox FullWidth="@true" Title="Bank Transfer" Description="Send money via BIC/SWIFT transfer" IconName="noto-v1:bank" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("BankDetails"))" /> *@
+        </div>
+    </div>
 </div>
 
 
-<IconTitle ExtraClass="mt-3" Title="Options" TitleHolder="h4" />
-<div class="hstack gap-3">
-    @*STACK BOXES ON RIGHT*@
-    <InfoBox Width="255" Title="Gifts" Description="Donate warm gifts, instead of cold cash" IconName="fluent-emoji:wrapped-gift" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("WishList"))" />
-    <InfoBox Width="255" Title="Crypto" Description="Instant and anonymous donation" IconName="cryptocurrency-color:btc" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("ForCryptoGeeks"))" />
-    <InfoBox Width="255" Title="Patreon" Description="Monthly contribution via Patreon" IconName="logos:patreon" IsNewTabOpen="true" ClickUrl="@URL.PatreonPage" />
-    @* <InfoBox Width="255" Title="Bank Transfer" Description="Send money via BIC/SWIFT transfer" IconName="noto-v1:bank" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("BankDetails"))" /> *@
-</div>
-
+@* ARTICLES BLOCKS *@
 <hr />
-
 <div class="vstack gap-3 mt-3" style="max-width:@GR.W667px;">
 
     <ArticleBlock Title="Why Donate?" IconName="emojione:convenience-store">
@@ -166,25 +214,43 @@
 
 @code {
 
+    //always start with false, will be set true during init 
+    private bool showKofi = false;
+    private bool showStripeJPN = false;
+    private bool showStripeINR = false;
+    private bool showStripeEUR = false;
+    private bool showStripeUSD = false;
+
     private const string OfficeAddress = "7, Hala Pengkalan Timur 8A,<br/>Taman Pengkalan Puteri, 31650,<br/>Ipoh, Perak, MALAYSIA";
 
 
     protected override async Task OnInitializedAsync()
     {
         //check if from India, then show different payment option
-        var IsFromIndia = AppData.ClientLocation.Name().ToLower().Contains("india");
+        showStripeINR = AppData.ClientLocation.Name().ToLower().Contains("india");
+        showStripeJPN = AppData.ClientLocation.Name().ToLower().Contains("japan");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("germany");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("spain");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("france");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("italy");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("netherlands");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("belgium");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("portugal");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("greece");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("ireland");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("cyprus");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("malta");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("austria");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("estonia");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("finland");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("latvia");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("lithuania");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("luxembourg");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("slovakia");
+        showStripeEUR = AppData.ClientLocation.Name().ToLower().Contains("slovenia");
 
-        //if from india then redirect to special page (Stripe)
-        if (IsFromIndia)
-        {
-            AppData.Go(URL.StripeINRSupportPayementLink);
-        }
-        //todo for each possible country
-        // else
-        // {
-        //     AppData.Go(URL.StripeUSDSupportPayementLink);
-        // }
-
+        //if all above is false then show USD as default
+        showStripeUSD = (!showStripeINR) && (!showStripeJPN) && (!showStripeEUR);
 
         //little log
         await WebsiteTools.SendMailToAPI("User in Donate Page from", AppData.ClientLocation.Name());

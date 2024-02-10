@@ -28,6 +28,267 @@ export var unhighlightByEventName = (keyword) => window.EventsChartLoaded.unhigh
 const RETRY_COUNT = 5;
 
 
+/* Sunday After Noon Jan 2024
+A warm cup of Canadian soy, so fine,
+With dairy milk from New Zealand's vine.
+
+A sweet scent of Illinois' bloom,
+Paired with a device, in the room.
+
+Music so pure, it brings a tear,
+A symphony for the soul to hear.
+
+Pepper and turmeric from India's land,
+With sweet bread, loaf in hand.
+
+With the world at my fingertips, I ponder and muse,
+What will I do for others? Which path will I choose?
+
+ */
+
+
+//below method needs to be called to initialize search with a list of text chunks
+//that can be used later with 2nd call to do a search
+// Initializes the FlexSearch index with a list of text chunks for future searches.
+export async function InitializeSearchForAPICallList(textChunks) {
+
+    //attach listener for input
+    setupSearchInputListener();
+
+    //save for resetting search later
+    window.APICallListTextChunks = textChunks;
+
+    const fuseOptions = {
+        isCaseSensitive: false,
+        includeScore: true,
+        shouldSort: true,
+        // includeMatches: false,
+        findAllMatches: true, //show all possible API's
+        minMatchCharLength: 2,
+        // location: 0,
+        // threshold: 0.6,
+        // distance: 100,
+        // useExtendedSearch: false,
+        // ignoreLocation: false,
+        // ignoreFieldNorm: false,
+        // fieldNormWeight: 1,
+        keys: [
+            "name",
+            "description"
+        ]
+    };
+    window.APICallListSearchIndex = new Fuse(textChunks, fuseOptions);
+
+    console.log('JS: APICallList Search Initialized.');
+
+    // Sets up the search input listener and defines the search logic.
+    function setupSearchInputListener() {
+        let typingTimer; // Timer identifier for debounce mechanism.
+        const typingDelay = 420; // Delay in ms after which search is triggered.
+
+        var searchInput = $('#APICallList-SearchInputElement');
+
+        // Start the debounce timer on keyup event, ignoring arrow keys.
+        //done so that when user is mid-typing search does not slow down browser
+        searchInput.keyup(function (event) {
+
+            clearTimeout(typingTimer);
+            if (![37, 38, 39, 40].includes(event.which)) { // Arrow keys
+                $('#APICallList-LoadingIconHolder').show();//show loading icon
+
+                typingTimer = setTimeout(performSearch, typingDelay);
+            }
+        });
+
+        // Clear the debounce timer on keydown event.
+        searchInput.keydown(function () {
+            clearTimeout(typingTimer);
+        });
+
+        console.log('JS: Search input listener set up.');
+
+        // Performs the search operation based on the user's input.
+        function performSearch() {
+            //remove if only white spaces
+            const searchText = $('#APICallList-SearchInputElement').val().trim();
+
+            //no search word, so show all
+            if (searchText === '') { showHideChildren(window.APICallListTextChunks); }
+
+            //do search for text
+            else { searchApiMethod(searchText); }
+
+            //remove loading once search task over
+            $('#APICallList-LoadingIconHolder').hide();
+        }
+
+        // Searches for API methods using the provided search term.
+        function searchApiMethod(searchTerm) {
+
+            // Perform fuzzy matching and sort results by relevance.
+            var fuseSearchResults = window.APICallListSearchIndex.search(searchTerm);
+
+            // Map the sorted results to get the items.
+            const searchResults = fuseSearchResults.map(result => result.item);
+
+            // Display only the matched method information elements, sorted by score.
+            showHideChildren(searchResults);
+        }
+
+        function showHideChildren(searchResults) {
+            const parent = document.getElementById('APICallList-AllMethodInfoHolder');
+            const children = Array.from(parent.children);
+            const fragment = document.createDocumentFragment();
+            const searchResultsMap = new Map(searchResults.map(result => [result.name, result]));
+
+            // Update the displayed count of found methods.
+            document.getElementById('FoundMethodInfoCountElm').textContent = searchResults.length.toString();
+
+            // Clear the parent container before appending reordered children.
+            parent.innerHTML = '';
+
+            // Append matched children to the fragment in the order of searchResults.
+            searchResults.forEach(result => {
+                const matchedChild = children.find(child => child.classList.contains(result.name));
+                if (matchedChild) {
+                    matchedChild.style.display = '';
+                    fragment.appendChild(matchedChild);
+                }
+            });
+            // Hide unmatched children and append them to the fragment.
+            children.forEach(child => {
+                const className = child.classList.item(0); // Assuming the first class is the name.
+                if (!searchResultsMap.has(className)) {
+                    child.style.display = 'none';
+                    fragment.appendChild(child);
+                }
+            });
+
+            // Append the fragment to the parent to minimize reflows and maintain the new order.
+            parent.appendChild(fragment);
+        }
+    }
+}
+
+export async function InitializeSearchForAPISelector(textChunks) {
+
+    //attach listener for input
+    setupSearchInputListener();
+
+    //save for resetting search later
+    window.APISelectorTextChunks = textChunks;
+
+    const fuseOptions = {
+        isCaseSensitive: false,
+        includeScore: true,
+        shouldSort: true,
+        // includeMatches: false,
+        findAllMatches: true, //show all possible API's
+        minMatchCharLength: 2,
+        // location: 0,
+        // threshold: 0.6,
+        // distance: 100,
+        // useExtendedSearch: false,
+        // ignoreLocation: false,
+        // ignoreFieldNorm: false,
+        // fieldNormWeight: 1,
+        keys: [
+            "name",
+            "description"
+        ]
+    };
+    window.APISelectorSearchIndex = new Fuse(textChunks, fuseOptions);
+
+    console.log('JS: APISelector Search Initialized.');
+
+    // Sets up the search input listener and defines the search logic.
+    function setupSearchInputListener() {
+        let typingTimer; // Timer identifier for debounce mechanism.
+        const typingDelay = 420; // Delay in ms after which search is triggered.
+
+        var searchInput = $('#APISelector-SearchInputElement');
+
+        // Start the debounce timer on keyup event, ignoring arrow keys.
+        //done so that when user is mid-typing search does not slow down browser
+        searchInput.keyup(function (event) {
+
+            clearTimeout(typingTimer);
+            if (![37, 38, 39, 40].includes(event.which)) { // Arrow keys
+                $('#APISelector-LoadingIconHolder').show();//show loading icon
+
+                typingTimer = setTimeout(performSearch, typingDelay);
+            }
+        });
+
+        // Clear the debounce timer on keydown event.
+        searchInput.keydown(function () {
+            clearTimeout(typingTimer);
+        });
+
+        console.log('JS: Search input listener set up.');
+
+        // Performs the search operation based on the user's input.
+        function performSearch() {
+            //remove if only white spaces
+            const searchText = $('#APISelector-SearchInputElement').val().trim();
+
+            //no search word, so show all
+            if (searchText === '') { showHideChildren(window.APISelectorTextChunks); }
+
+            //do search for text
+            else { searchApiMethod(searchText); }
+
+            //remove loading once search task over
+            $('#APISelector-LoadingIconHolder').hide();
+        }
+
+        // Searches for API methods using the provided search term.
+        function searchApiMethod(searchTerm) {
+
+            // Perform fuzzy matching and sort results by relevance.
+            var fuseSearchResults = window.APISelectorSearchIndex.search(searchTerm);
+
+            // Map the sorted results to get the items.
+            const searchResults = fuseSearchResults.map(result => result.item);
+
+            // Display only the matched method information elements, sorted by score.
+            showHideChildren(searchResults);
+        }
+
+        function showHideChildren(searchResults) {
+            const parent = document.getElementById('APISelector-AllMethodInfoHolder');
+            const children = Array.from(parent.children);
+            const fragment = document.createDocumentFragment();
+            const searchResultsMap = new Map(searchResults.map(result => [result.name, result]));
+
+            // Clear the parent container before appending reordered children.
+            parent.innerHTML = '';
+
+            // Append matched children to the fragment in the order of searchResults.
+            searchResults.forEach(result => {
+                const matchedChild = children.find(child => child.classList.contains(result.name));
+                if (matchedChild) {
+                    matchedChild.style.display = '';
+                    fragment.appendChild(matchedChild);
+                }
+            });
+            // Hide unmatched children and append them to the fragment.
+            children.forEach(child => {
+                const className = child.classList.item(0); // Assuming the first class is the name.
+                if (!searchResultsMap.has(className)) {
+                    child.style.display = 'none';
+                    fragment.appendChild(child);
+                }
+            });
+
+            // Append the fragment to the parent to minimize reflows and maintain the new order.
+            parent.appendChild(fragment);
+        }
+    }
+}
+
+
+
 //SCROLL SPY NAV
 //when run will attach events to all with .scrollspy
 //this then will used to highlight the Index link
@@ -626,6 +887,18 @@ export function showWrapper(element) {
     $(element).show();
 };
 
+//Jquery to show inputed element
+//by class and ID (CSS selector) given as an array
+export function showListWrapper(idArray) {
+
+    console.log(`JS: showListWrapper`);
+
+    $.each(idArray, function (index, id) {
+        $('#' + id).show();
+    });
+
+};
+
 //Jquery to hide inputed element
 //by class and ID (CSS selector)
 export function hideWrapper(element) {
@@ -673,6 +946,18 @@ export function CopyToClipboard(text) {
     navigator.clipboard.writeText(text)
         .then(function () { console.log("Copied to clipboard!"); })
         .catch(function (error) { console.log(error); }); //todo raise proper error, logged
+}
+
+//add new bookmark to browser
+export function AddNewBookmark(inputTitle, inputUrl) {
+
+    // Create a new Bookmark object
+    const bookmark = chrome.bookmarks.create({
+        title: inputTitle,
+        url: inputUrl,
+    });
+
+    console.log(`Added bookmark for ${url}`);
 }
 
 //Generates a table using Tabulator table library

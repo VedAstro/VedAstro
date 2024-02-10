@@ -38,10 +38,25 @@ public class EventsChartTools
         var chartSpecsUrl = EventsChart.FromData(person, timeRange, inputedEventTags, daysPerPixelRaw, summaryOptions).ToUrl();
 
         //add in server address & API call name
-        var finalUrl = _api.URL.GetEventsChart + chartSpecsUrl+$"/Ayanamsa/{ayanamsaName}";
+        var finalUrl = _api.URL.GetEventsChart + chartSpecsUrl + $"/Ayanamsa/{ayanamsaName}";
 
         return finalUrl;
     }
+
+    /// <summary>
+    /// Get Events chart api call GET URL that is sent to API, but with time preset in string like "1week"
+    /// </summary>
+    //public string GetEventsChartApiUrl(Person person, string timePreset, List<EventTag> inputedEventTags, double daysPerPixelRaw,
+    //    ChartOptions summaryOptions, string ayanamsaName)
+    //{
+    //    //put specs to make chart into a URL format
+    //    var chartSpecsUrl = EventsChart.FromData(person, timeRange, inputedEventTags, daysPerPixelRaw, summaryOptions).ToUrl();
+
+    //    //add in server address & API call name
+    //    var finalUrl = _api.URL.GetEventsChart + chartSpecsUrl + $"/Ayanamsa/{ayanamsaName}";
+
+    //    return finalUrl;
+    //}
 
 
     /// <summary>

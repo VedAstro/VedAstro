@@ -49,6 +49,7 @@
         public const string InjectIntoElement = "Interop.InjectIntoElement";
         public const string getVisitorData = "Interop.getVisitorData";
         public const string CopyToClipboard = "Interop.CopyToClipboard";
+        public const string AddNewBookmark = "Interop.AddNewBookmark";
         public const string generateLifeEventListTable = "Interop.generateLifeEventListTable";
         public const string generatePlanetDataTable = "Interop.generatePlanetDataTable";
         public const string generatePlanetDataInfoTable = "Interop.generatePlanetDataInfoTable";
@@ -108,7 +109,7 @@
 
 
         //BOOTSTRAP JS
-        
+
         //SPECIAL SIGN IN FUNCS RESIDE IN index.html
         public const string facebookLogin = "window.facebookLogin";
         public const string SetSignInButtonInstance = "window.SetSignInButtonInstance";

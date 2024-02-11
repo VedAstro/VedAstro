@@ -151,44 +151,95 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<EventsChart> FromUrl(string url)
         {
+            //NOTE: 2 possible types URL, with "TimePreset/1Week" or with "Start/.../End/..." 
             //split URL into data pieces
-            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-            //take out the needed data
-            var personId = parts[0];
+            var isType2 = url.Contains("/TimePreset/");
+            return isType2 ? processType2() : processType1();
 
-            //use birth location for chart time (needs testing)
-            var person = Tools.GetPersonById(personId);
-            var location = person.GetBirthLocation();
 
-            //combine time parts to be parsed easy
-            var start = new { hhmmStr = parts[2], dateStr = parts[3], monthStr = parts[4], yearStr = parts[5], offsetStr = parts[11] };
-            var startStr = $"{start.hhmmStr} {start.dateStr}/{start.monthStr}/{start.yearStr} {start.offsetStr}";
-            var startTime = new Time(startStr, location);
 
-            var end = new { hhmmStr = parts[7], dateStr = parts[8], monthStr = parts[9], yearStr = parts[10], offsetStr = parts[11] };
-            var endStr = $"{end.hhmmStr} {end.dateStr}/{end.monthStr}/{end.yearStr} {end.offsetStr}";
-            var endTime = new Time(endStr, location);
-
-            var daysPerPixel = double.Parse(parts[12]);
-            var eventTags = EventTagExtensions.FromString(parts[13]);
-            var summaryOptions = ChartOptions.FromUrl(parts[14]);
-
-            //if custom ayanamsa specified
-            var isCustomAya = url.Contains(nameof(Ayanamsa)); //check if ayanamsa specified anywhere
-            if (isCustomAya)
+            EventsChart processType2()
             {
-                var ayaRaw = $"{parts[^2]}/{parts[^1]}"; //get last since that will be ayanamsa in text or number int
-                var enumFromUrl = Tools.EnumFromUrl(ayaRaw);
-                Calculate.Ayanamsa = (int)enumFromUrl;
+                //take out the needed data
+                var personId = parts[0];
+
+                //use birth location for chart time (needs testing)
+                var person = Tools.GetPersonById(personId);
+                var location = person.GetBirthLocation();
+
+                //start and end time based on preset set
+                var systemTimezone = Tools.GetSystemTimezone();
+
+                var timeRange = EventChartTools.AutoCalculateTimeRange(person, parts[2], systemTimezone);
+                var startTime = timeRange.start;
+                var endTime = timeRange.end;
+
+                //other data pieces
+                var daysPerPixel = double.Parse(parts[4]);
+                var eventTags = EventTagExtensions.FromString(parts[5]);
+                var summaryOptions = ChartOptions.FromUrl(parts[6]);
+
+
+                //if custom ayanamsa specified
+                var isCustomAya = url.Contains(nameof(Ayanamsa)); //check if ayanamsa specified anywhere
+                if (isCustomAya)
+                {
+                    var ayaRaw = $"{parts[^2]}/{parts[^1]}"; //get last since that will be ayanamsa in text or number int
+                    var enumFromUrl = Tools.EnumFromUrl(ayaRaw);
+                    Calculate.Ayanamsa = (int)enumFromUrl;
+                }
+
+
+                //a new chart is born
+                var newChartId = Tools.GenerateId();
+                var newChart = new EventsChart(newChartId, "", person, new TimeRange(startTime, endTime), daysPerPixel, eventTags, summaryOptions);
+
+                return newChart;
+
             }
 
 
-            //a new chart is born
-            var newChartId = Tools.GenerateId();
-            var newChart = new EventsChart(newChartId, "", person, new TimeRange(startTime, endTime), daysPerPixel, eventTags, summaryOptions);
+            EventsChart processType1()
+            {
 
-            return newChart;
+                //take out the needed data
+                var personId = parts[0];
+
+                //use birth location for chart time (needs testing)
+                var person = Tools.GetPersonById(personId);
+                var location = person.GetBirthLocation();
+
+                //combine time parts to be parsed easy
+                var start = new { hhmmStr = parts[2], dateStr = parts[3], monthStr = parts[4], yearStr = parts[5], offsetStr = parts[11] };
+                var startStr = $"{start.hhmmStr} {start.dateStr}/{start.monthStr}/{start.yearStr} {start.offsetStr}";
+                var startTime = new Time(startStr, location);
+
+                var end = new { hhmmStr = parts[7], dateStr = parts[8], monthStr = parts[9], yearStr = parts[10], offsetStr = parts[11] };
+                var endStr = $"{end.hhmmStr} {end.dateStr}/{end.monthStr}/{end.yearStr} {end.offsetStr}";
+                var endTime = new Time(endStr, location);
+
+                var daysPerPixel = double.Parse(parts[12]);
+                var eventTags = EventTagExtensions.FromString(parts[13]);
+                var summaryOptions = ChartOptions.FromUrl(parts[14]);
+
+                //if custom ayanamsa specified
+                var isCustomAya = url.Contains(nameof(Ayanamsa)); //check if ayanamsa specified anywhere
+                if (isCustomAya)
+                {
+                    var ayaRaw = $"{parts[^2]}/{parts[^1]}"; //get last since that will be ayanamsa in text or number int
+                    var enumFromUrl = Tools.EnumFromUrl(ayaRaw);
+                    Calculate.Ayanamsa = (int)enumFromUrl;
+                }
+
+
+                //a new chart is born
+                var newChartId = Tools.GenerateId();
+                var newChart = new EventsChart(newChartId, "", person, new TimeRange(startTime, endTime), daysPerPixel, eventTags, summaryOptions);
+
+                return newChart;
+            }
         }
 
         /// <summary>

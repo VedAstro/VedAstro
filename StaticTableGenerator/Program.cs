@@ -213,24 +213,9 @@ namespace StaticTableGenerator
             //based on created metadata make new C# code file 
             var classAsText = GenerateEventDataStaticTableClass(fileContent);
 
-            //wrap with namespace
-            var newClassFile = $$"""
-                                   using System.Collections.Generic;
-                                   namespace VedAstro.Library
-                                   {
-                                       /// <summary>
-                                       /// Auto generated code by StaticTableGenerator, so that Open API methods have a metadata.
-                                       /// Regenerate when files Calculate.cs gets updated. ✝️Amen for automation!
-                                       /// </summary>
-                                       public static class EventDataListStatic
-                                       {
-                                           {{classAsText}}
-                                       }
-                                   }
-                                   """;
 
             //writes new static table class
-            File.WriteAllText(EventDataListStaticTableFile, newClassFile);
+            File.WriteAllText(EventDataListStaticTableFile, classAsText);
         }
 
         private static string GetExampleOutputJson(MethodInfo openApiCalc)
@@ -288,34 +273,50 @@ namespace StaticTableGenerator
             return sb.ToString();
         }
 
+
         public static string GenerateEventDataStaticTableClass(string xmlString)
         {
             var document = XDocument.Parse(xmlString);
-            var allList = document.Root.Elements().ToList();
+            var allList = document.Root.Elements().Take(3).ToList();
 
-            var xxx = "";
+            var compiledCode = new StringBuilder();
+            string indent = ""; // Adjust this to your desired indentation
             foreach (var eachEventXml in allList)
             {
                 string eventName = eachEventXml.Element("Name").Value;
-                string eventNature = eachEventXml.Element("Nature").Value;
-                string eventDescription = eachEventXml.Element("Description").Value;
-                string eventTag = eachEventXml.Element("Tag").Value;
+                string eventNature = string.IsNullOrEmpty(eachEventXml.Element("Nature").Value) ? "Neutral" : eachEventXml.Element("Nature").Value;
+                string eventDescription = eachEventXml.Element("Description").Value.TrimEnd().TrimStart();
 
-                //default nature to neutral
-                eventNature = string.IsNullOrEmpty(eventNature) ? "Neutral" : eventNature;
-
-                //add with others
-                xxx += $"new(EventName.{eventName}, EventNature.{eventNature}, SpecializedNature.Empty, @\"{eventDescription}\", new List<EventTag>(), null),\n";
+                //add new event data code
+                compiledCode.AppendLine($"new(EventName.{eventName}, EventNature.{eventNature}, SpecializedNature.Empty, @\"{eventDescription}\", new List<EventTag>(), null),");
             }
 
-            string csharpCode = $@"
-                                public static List<EventData> Rows = new List<EventData>
-                                {{
-                                    {xxx}
-                                }};";
+            //NOTE: leave below code as is, to get perfect indentation
+            var newClassFile =
+                $@"using System.Collections.Generic;
 
-            return csharpCode;
+namespace VedAstro.Library
+{{
+    /// <summary>
+    /// Auto generated code by StaticTableGenerator, so that Open API methods have a metadata.
+    /// Regenerate when files Calculate.cs gets updated. ✝️Amen for automation!
+    /// </summary>
+    public static class EventDataListStatic
+    {{
+        public static List<EventData> Rows = new List<EventData>
+        {{
+            {compiledCode}
+        }};
+    }}
+}}";
+
+
+            // Replace all line endings with \r\n (CR LF)
+            newClassFile = newClassFile.Replace("\r\n", "\n").Replace("\n", "\r\n");
+
+            return newClassFile;
         }
+
 
         public static string GeneratePythonStubFile(List<OpenAPIMetadata> metadataList)
         {

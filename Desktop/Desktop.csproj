@@ -12,6 +12,11 @@
             The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
             either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
         <!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
+        
+        <WindowsPackageType>None</WindowsPackageType>
+        <WindowsAppSDKSelfContained Condition="'$(IsUnpackaged)' == 'true'">true</WindowsAppSDKSelfContained>
+        <SelfContained Condition="'$(IsUnpackaged)' == 'true'">true</SelfContained>
+
 
         <OutputType>Exe</OutputType>
         <RootNamespace>Desktop</RootNamespace>
@@ -37,16 +42,17 @@
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-        <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
+        <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
         <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
         <PackageCertificateThumbprint>064C9292195B39362035764DC8F2749656B80F2B</PackageCertificateThumbprint>
         <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
         <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-        <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+        <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
         <GenerateTestArtifacts>True</GenerateTestArtifacts>
         <AppInstallerUri>C:\Users\ASUS\Desktop\Projects\VedAstro\Desktop\Installer</AppInstallerUri>
         <HoursBetweenUpdateChecks>24</HoursBetweenUpdateChecks>
         <Description>An open source vedic astrology calculator</Description>
+        <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
@@ -158,7 +164,6 @@
 		<Content Include="..\ViewComponents\Components\PersonTooltip.razor" Link="ViewComponents\PersonTooltip.razor" />
 		<Content Include="..\ViewComponents\Components\PlanetAPIBuilderPanel.razor" Link="ViewComponents\PlanetAPIBuilderPanel.razor" />
 		<Content Include="..\ViewComponents\Components\PlanetChart.razor" Link="ViewComponents\PlanetChart.razor" />
-		<Content Include="..\ViewComponents\Components\PlanetHouseInfoViewer.razor" Link="ViewComponents\PlanetHouseInfoViewer.razor" />
 		<Content Include="..\ViewComponents\Components\QuoteTextBlock.razor" Link="ViewComponents\QuoteTextBlock.razor" />
 		<Content Include="..\ViewComponents\Components\SearchBox.razor" Link="ViewComponents\SearchBox.razor" />
 		<Content Include="..\ViewComponents\Components\SignInButton.razor" Link="ViewComponents\SignInButton.razor" />

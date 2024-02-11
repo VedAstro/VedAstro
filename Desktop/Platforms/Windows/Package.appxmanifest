@@ -6,13 +6,13 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
 
-  <Identity Name="maui-package-name-placeholder" Publisher="CN=VedAstro" Version="1.5.6.0" />
+  <Identity Name="8976VedAstro.VedAstro" Publisher="CN=9588C6AC-2FD5-4A07-838E-31C9202AD43E" Version="1.8.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="2193D815-32A5-48CB-A6BF-D1DD45DB30F7" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="ea4feaf4-22a2-4618-bb29-028423f70e2f" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>$placeholder$</DisplayName>
-    <PublisherDisplayName>User Name</PublisherDisplayName>
+    <DisplayName>VedAstro</DisplayName>
+    <PublisherDisplayName>VedAstro</PublisherDisplayName>
     <Logo>$placeholder$.png</Logo>
   </Properties>
 
@@ -28,7 +28,7 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="$placeholder$"
+        DisplayName="VedAstro"
         Description="$placeholder$"
         Square150x150Logo="$placeholder$.png"
         Square44x44Logo="$placeholder$.png"

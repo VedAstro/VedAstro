@@ -1950,6 +1950,11 @@ namespace VedAstro.Library
         #region ALL DATA
 
         /// <summary>
+        /// Niryana Constellation of all 9 planets
+        /// </summary>
+        public static Dictionary<PlanetName, Constellation> AllPlanetConstellation(Time time) => All9Planets.ToDictionary(planet => planet, planet => PlanetConstellation(planet, time));
+
+        /// <summary>
         /// Gets all possible calculations for a given Time
         /// </summary>
         /// <param name="time">can be birth or query time</param>
@@ -1964,7 +1969,6 @@ namespace VedAstro.Library
 
             return raw;
         }
-
 
         /// <summary>
         /// Gets all possible calculations for a Planet at a given Time
@@ -3808,50 +3812,7 @@ namespace VedAstro.Library
             return returnList;
         }
 
-        /// <summary>
-        /// Niryana Constellation of all 9 planets
-        /// </summary>
-        public static List<PlanetLongitude> AllPlanetConstellation(Time time)
-        {
-            //get longitudes of all planets
-            var sunLongitude = PlanetConstellation(Sun, time);
-            var sun = new PlanetLongitude(Sun, sunLongitude);
 
-            var moonLongitude = PlanetConstellation(Moon, time);
-            var moon = new PlanetLongitude(Moon, moonLongitude);
-
-            var marsLongitude = PlanetConstellation(Mars, time);
-            var mars = new PlanetLongitude(Mars, marsLongitude);
-
-            var mercuryLongitude = PlanetConstellation(Mercury, time);
-            var mercury = new PlanetLongitude(Mercury, mercuryLongitude);
-
-            var jupiterLongitude = PlanetConstellation(Jupiter, time);
-            var jupiter = new PlanetLongitude(Jupiter, jupiterLongitude);
-
-            var venusLongitude = PlanetConstellation(Venus, time);
-            var venus = new PlanetLongitude(Venus, venusLongitude);
-
-            var saturnLongitude = PlanetConstellation(Saturn, time);
-            var saturn = new PlanetLongitude(Saturn, saturnLongitude);
-
-            var rahuLongitude = PlanetConstellation(Rahu, time);
-            var rahu = new PlanetLongitude(Rahu, rahuLongitude);
-
-            var ketuLongitude = PlanetConstellation(Ketu, time);
-            var ketu = new PlanetLongitude(Ketu, ketuLongitude);
-
-
-            //add longitudes to list
-            var allPlanetLongitudeList = new List<PlanetLongitude>
-            {
-                sun, moon, mars, mercury, jupiter, venus, saturn, ketu, rahu
-            };
-
-
-            //return list;
-            return allPlanetLongitudeList;
-        }
 
 
         /// <summary>
@@ -11481,6 +11442,47 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// A retrograde planet moves in the reverse direction and, instead of
+        /// increasing, its longitude decreases as the time elapses. Rahu and Ketu often
+        /// move in retrograde direction only. Other planets, except the Sun and the
+        /// Moon, are subject to retrogression from time to time.
+        /// </summary>
+        public static bool IsPlanetRetrograde(PlanetName planetName, Time time)
+        {
+            //if planet is Sun or Moon than default retrograde is off
+            if (planetName.Name == PlanetNameEnum.Sun || planetName.Name == PlanetNameEnum.Moon) { return false; }
+
+            //if planet is Rahu or Ketu than default retrograde is always on
+            if (planetName.Name == PlanetNameEnum.Rahu || planetName.Name == PlanetNameEnum.Ketu) { return true; }
+
+            //retro grade 
+            //TODO
+            throw new Exception("END OF LINE!");
+        }
+
+
+        /// <summary>
+        /// Combustion of planets: Planets when too close to the Sun become
+        /// invisible and are labelled as combust. A combust planet loses its strength
+        /// and tends to behave adversely according to predictive astrology. Aryabhata
+        /// has the following to say about combustion:
+        /// ‘When the Moon has no latitude (i.e., when it is at zero degree of
+        /// latitude) it is visible when situated at a distance of 12 degrees from the Sun.
+        /// Venus is visible when 9 degrees distant from the Sun. The other planets
+        /// taken in the order of decreasing sizes (viz., Jupiter, Mercury, Saturn and
+        /// Mars) are visible when they are 9 degrees increased by twos (i.e., when they
+        /// are 11, 13, 15 and 17 degrees) distant from the Sun.’
+        /// The degrees as mentioned above are generally taken as the limits within
+        /// which the respective planets are said to be combust.
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsPlanetCombust()
+        {
+            //todo
+            return false;
+        }
+
+        /// <summary>
         /// circulation time of the objects in years, used by cheshta bala calculation
         /// </summary>
         public static double PlanetCirculationTime(PlanetName planetName)
@@ -11643,7 +11645,6 @@ namespace VedAstro.Library
             }
 
         }
-
 
         /// <summary>
         /// residence of the planet and as such a certain degree of strength or weakness attends on it

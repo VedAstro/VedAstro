@@ -3808,6 +3808,51 @@ namespace VedAstro.Library
             return returnList;
         }
 
+        /// <summary>
+        /// Niryana Constellation of all 9 planets
+        /// </summary>
+        public static List<PlanetLongitude> AllPlanetConstellation(Time time)
+        {
+            //get longitudes of all planets
+            var sunLongitude = PlanetConstellation(Sun, time);
+            var sun = new PlanetLongitude(Sun, sunLongitude);
+
+            var moonLongitude = PlanetConstellation(Moon, time);
+            var moon = new PlanetLongitude(Moon, moonLongitude);
+
+            var marsLongitude = PlanetConstellation(Mars, time);
+            var mars = new PlanetLongitude(Mars, marsLongitude);
+
+            var mercuryLongitude = PlanetConstellation(Mercury, time);
+            var mercury = new PlanetLongitude(Mercury, mercuryLongitude);
+
+            var jupiterLongitude = PlanetConstellation(Jupiter, time);
+            var jupiter = new PlanetLongitude(Jupiter, jupiterLongitude);
+
+            var venusLongitude = PlanetConstellation(Venus, time);
+            var venus = new PlanetLongitude(Venus, venusLongitude);
+
+            var saturnLongitude = PlanetConstellation(Saturn, time);
+            var saturn = new PlanetLongitude(Saturn, saturnLongitude);
+
+            var rahuLongitude = PlanetConstellation(Rahu, time);
+            var rahu = new PlanetLongitude(Rahu, rahuLongitude);
+
+            var ketuLongitude = PlanetConstellation(Ketu, time);
+            var ketu = new PlanetLongitude(Ketu, ketuLongitude);
+
+
+            //add longitudes to list
+            var allPlanetLongitudeList = new List<PlanetLongitude>
+            {
+                sun, moon, mars, mercury, jupiter, venus, saturn, ketu, rahu
+            };
+
+
+            //return list;
+            return allPlanetLongitudeList;
+        }
+
 
         /// <summary>
         /// Gets the Nirayana longitude of all 9 planets

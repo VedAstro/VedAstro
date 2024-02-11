@@ -280,16 +280,23 @@ namespace StaticTableGenerator
             var allList = document.Root.Elements().Take(3).ToList();
 
             var compiledCode = new StringBuilder();
-            string indent = ""; // Adjust this to your desired indentation
+            string indent = "            "; // Adjust this to your desired indentation
             foreach (var eachEventXml in allList)
             {
-                string eventName = eachEventXml.Element("Name").Value;
-                string eventNature = string.IsNullOrEmpty(eachEventXml.Element("Nature").Value) ? "Neutral" : eachEventXml.Element("Nature").Value;
-                string eventDescription = eachEventXml.Element("Description").Value.TrimEnd().TrimStart();
+                var yy = EventData.FromXml(eachEventXml);
+                var xtagsString = "";
+                foreach (var tag in yy.EventTags)
+                {
+                    xtagsString += $"EventTag.{tag.ToString()},";
+                }
 
+                var yTags = $"[{xtagsString}]";
                 //add new event data code
-                compiledCode.AppendLine($"new(EventName.{eventName}, EventNature.{eventNature}, SpecializedNature.Empty, @\"{eventDescription}\", new List<EventTag>(), null),");
+                compiledCode.AppendLine($"{indent}new(EventName.{yy.Name}, EventNature.{yy.Nature}, SpecializedNature.Empty, @\"{yy.Description}\", {yTags}, null),");
             }
+
+            //remove indentation at start of compiled lines
+            var compiledCode2 = compiledCode.ToString().TrimStart();
 
             //NOTE: leave below code as is, to get perfect indentation
             var newClassFile =
@@ -305,7 +312,7 @@ namespace VedAstro.Library
     {{
         public static List<EventData> Rows = new List<EventData>
         {{
-            {compiledCode}
+            {compiledCode2}
         }};
     }}
 }}";

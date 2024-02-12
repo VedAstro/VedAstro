@@ -6,6 +6,7 @@
 #define MyAppPublisher "VedAstro"
 #define MyAppURL "https://vedastro.org/"
 #define MyAppExeName "Desktop.exe"
+#define Net7Installer "windowsdesktop-runtime-7.0.15-win-x64.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -37,13 +38,28 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\ASUS\Desktop\Projects\VedAstro\Desktop\bin\Release\net8.0-windows10.0.19041.0\win10-x64\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\ASUS\Desktop\Projects\VedAstro\Desktop\bin\Release\net8.0-windows10.0.19041.0\win10-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\ASUS\Desktop\Projects\VedAstro\Desktop\bin\Release\net8.0-windows10.0.19041.0\win10-x64\{#MyAppExeName}"; DestDir: "{app}"; Flags: onlyifdoesntexist
+Source: "C:\Users\ASUS\Desktop\Projects\VedAstro\Desktop\bin\Release\net8.0-windows10.0.19041.0\win10-x64\*"; DestDir: "{app}"; Flags: onlyifdoesntexist recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "{#SourcePath}\{#Net7Installer}"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{src}\favicon.ico"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+function InitializeSetup(): Boolean;
+var
+  ErrorCode: Integer;
+begin
+  Result := True;
+  if not RegKeyExists(HKLM, 'SOFTWARE\Microsoft\dotnet\CoreRuntime\7.0') then begin
+    if not Exec('msiexec.exe', '/i netfx_setup.msi /qn', '', SW_SHOWNORMAL, ewWaitUntilTerminated, ErrorCode) then begin
+      MsgBox('Error installing .NET 7.', mbError, MB_OK);
+      Result := False;
+    end;
+  end;
+end;

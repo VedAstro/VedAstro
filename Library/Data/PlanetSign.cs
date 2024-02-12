@@ -85,7 +85,7 @@ namespace VedAstro.Library
         public override string ToString()
         {
             //break down into common view format
-            var dmg = $"{_degreesInSign.Degrees}° {Math.Abs(_degreesInSign.Minutes)}' {Math.Abs(_degreesInSign.Seconds)}";
+            var dmg = $"{_degreesInSign?.Degrees ?? 0}° {Math.Abs(_degreesInSign?.Minutes ?? 0)}' {Math.Abs(_degreesInSign?.Seconds ?? 0)}";
 
             return $"{_signName} : {dmg}";
         }

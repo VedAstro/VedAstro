@@ -4729,7 +4729,6 @@ namespace VedAstro.Library
             throw new Exception("Saptamsa not found, error!");
         }
 
-
         public static ZodiacSign PlanetChaturthamsaSign(PlanetName planetName, Time time) => Calculate.ChaturthamsaSignName(Calculate.PlanetZodiacSign(planetName, time));
 
         public static ZodiacSign PlanetPanchamsaSign(PlanetName planetName, Time time) => Calculate.PanchamsaSignName(Calculate.PlanetZodiacSign(planetName, time));

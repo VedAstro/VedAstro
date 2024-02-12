@@ -277,7 +277,7 @@ namespace StaticTableGenerator
         public static string GenerateEventDataStaticTableClass(string xmlString)
         {
             var document = XDocument.Parse(xmlString);
-            var allList = document.Root.Elements().Take(3).ToList();
+            var allList = document.Root.Elements().ToList();
 
             var compiledCode = new StringBuilder();
             string indent = "            "; // Adjust this to your desired indentation

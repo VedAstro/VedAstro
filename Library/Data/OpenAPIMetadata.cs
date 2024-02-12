@@ -10,15 +10,15 @@ namespace VedAstro.Library;
 // Class to hold method documentation
 public class MethodDocumentation
 {
-	public string Description { get; set; } // Property to hold the summary of the method
-	public Dictionary<string, string> Params { get; set; } // Property to hold the parameters and their comments
-	public int LineNumber { get; set; } // Property to hold the line number of the method signature
-	public string Signature { get; set; }
+    public string Description { get; set; } // Property to hold the summary of the method
+    public Dictionary<string, string> Params { get; set; } // Property to hold the parameters and their comments
+    public int LineNumber { get; set; } // Property to hold the line number of the method signature
+    public string Signature { get; set; }
 
-	public MethodDocumentation()
-	{
-		Params = new Dictionary<string, string>(); // Initialize the Params dictionary
-	}
+    public MethodDocumentation()
+    {
+        Params = new Dictionary<string, string>(); // Initialize the Params dictionary
+    }
 }
 
 /// <summary>
@@ -31,6 +31,7 @@ public class OpenAPIMetadata : EventArgs, IToJson
     public static readonly OpenAPIMetadata Empty = new OpenAPIMetadata("Empty", "Empty", "Empty", "Empty", "Empty");
 
     private PlanetName _selectedPlanet = PlanetName.Sun; //set default so dropdown has something on load
+    private string _name;
 
     /// <summary>
     /// Special name for use in ML Data Tables, includes first param value added to name
@@ -93,8 +94,19 @@ public class OpenAPIMetadata : EventArgs, IToJson
 
     /// <summary>
     /// Direct name of method in code
+    /// can be set, but default to name from Method info if not set
     /// </summary>
-    public string Name => MethodInfo?.Name ?? "";
+    public string Name
+    {
+        get
+        {
+            //if null use name from method info
+            if (string.IsNullOrEmpty(_name)) { _name = MethodInfo?.Name; }
+
+            return _name;
+        }
+        set => _name = value;
+    }
 
     /// <summary>
     /// return type in string for show case
@@ -154,12 +166,12 @@ public class OpenAPIMetadata : EventArgs, IToJson
     {
         // Return cached list if available
         if (OpenAPIMetadata.CachedAllMethoInfoList.Any()) { return OpenAPIMetadata.CachedAllMethoInfoList; }
-        
+
         // Calculate new list if cache is not available
         OpenAPIMetadata.CachedAllMethoInfoList = GenerateMetadataList();
 
         return OpenAPIMetadata.CachedAllMethoInfoList;
-        
+
         //-----------------------------------------------------------
         List<OpenAPIMetadata> GenerateMetadataList()
         {
@@ -179,14 +191,14 @@ public class OpenAPIMetadata : EventArgs, IToJson
                     LibLogger.Error($"METHOD NOT FOUND!!!! --> {signature}");
                     continue;
                 }
-                
+
                 // Link current code instance
                 metadata.MethodInfo = calc;
-                
+
                 // Add to final list
                 finalList.Add(metadata);
             }
-            
+
             // Sort the list alphabetically based on the Name property
             finalList.Sort((metadata1, metadata2) => metadata1.Name.CompareTo(metadata2.Name));
             return finalList;
@@ -226,7 +238,7 @@ public class OpenAPIMetadata : EventArgs, IToJson
     /// </summary>
     public OpenAPIMetadata Clone()
     {
-        var clonedDolly = new OpenAPIMetadata(Signature, LineNumber, ParameterDescription,Description, ExampleOutput, MethodInfo);
+        var clonedDolly = new OpenAPIMetadata(Signature, LineNumber, ParameterDescription, Description, ExampleOutput, MethodInfo);
 
         return clonedDolly;
     }

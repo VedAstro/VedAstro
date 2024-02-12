@@ -43,14 +43,17 @@ namespace VedAstro.Library
             //need to reset list, else won't update properly on 2nd generate
             var rowData = new List<MLTableRow>();
 
+            var expandedColumnData = columnData.ToList();
+
             //using time as 1 column generate the other data columns
-            foreach (var time in timeSlices)
+            for (var rowNumber = 0; rowNumber < timeSlices.Count; rowNumber++)
             {
+                var time = timeSlices[rowNumber];
                 var finalResultList = new List<APIFunctionResult>();
                 foreach (var metaInfo in columnData)
                 {
                     //get the planet or house selected by user in each individual data point packet
-                    var param = metaInfo.SelectedParams.ToList(); //clone else will effect underlying list
+                    var param = metaInfo.SelectedParams.ToList(); //clone else will affect underlying list
                     param.Add((object)time); //time injected from different component
 
                     //calculate together all the parameters given by user (heavy computation)
@@ -64,23 +67,43 @@ namespace VedAstro.Library
                     //check if many or just 1 result (is many results inside)
                     foreach (var calcData in calcDataList)
                     {
-                        //if list hidden inside
-                        if (calcData?.Result is List<APIFunctionResult> subResults) { finalResultList.AddRange(subResults); }
+                        //if list hidden inside, exp when AllPlanetData is used
+                        var subResults = calcData?.Result as List<APIFunctionResult>;
+                        if (subResults != null)
+                        {
+                            //add all the columns data
+                            finalResultList.AddRange(subResults);
 
+                            //add the column header names, BUT only do this once for first row
+                            if (rowNumber == 0)
+                            {
+                                //delete the parent column name, since now child columns are added in place
+                                expandedColumnData.Remove(metaInfo);
+
+                                //add each column into main column list
+                                foreach (var singleResult in subResults)
+                                {
+                                    var tempColumn = new OpenAPIMetadata();
+                                    tempColumn.Name = singleResult.Name;
+                                    expandedColumnData.Add(tempColumn);
+                                }
+                            }
+
+                        }
                         //else add like normal
-                        else { finalResultList.AddRange(calcDataList); }
-
+                        else
+                        {
+                            finalResultList.AddRange(calcDataList);
+                        }
                     }
-
                 }
 
                 //add row to table
                 rowData.Add(new MLTableRow(time, finalResultList));
-
             }
 
             //# BRING DATA TO LIVE AS TABLE
-            var newTable = new MLTable(rowData, columnData);
+            var newTable = new MLTable(rowData, expandedColumnData);
 
             return newTable;
         }

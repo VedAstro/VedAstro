@@ -34,6 +34,8 @@ namespace VedAstro.Library
         private readonly ZodiacName _signName;
         private readonly Angle _degreesInSign;
 
+        public static ZodiacSign Empty = new ZodiacSign(ZodiacName.Empty, Angle.Zero);
+
         //CTOR
         public ZodiacSign(ZodiacName signName, Angle degreesInSign)
         {

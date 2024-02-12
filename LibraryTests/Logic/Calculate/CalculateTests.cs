@@ -752,7 +752,7 @@ namespace VedAstro.Library.Tests
         public void PlanetNirayanaLongitudeTest()
         {
             //set error rate
-            var errorRate = 2;
+            var errorRate = 0.05;
 
             // Test for Sun
             var sunTest1 = Calculate.PlanetNirayanaLongitude(PlanetName.Sun, StandardHoroscope);

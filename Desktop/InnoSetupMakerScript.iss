@@ -6,7 +6,8 @@
 #define MyAppPublisher "VedAstro"
 #define MyAppURL "https://vedastro.org/"
 #define MyAppExeName "Desktop.exe"
-#define NetInstaller "windowsdesktop-runtime-7.0.15-win-x64.exe"
+; IMPORTANT : SET version number below
+#define NetInstaller "windowsdesktop-runtime-8.0.1-win-x64.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -46,11 +47,12 @@ Source: "{#SourcePath}\dotnet\netcorecheck.exe"; DestDir: {tmp}; Flags: deleteaf
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{src}\favicon.ico"; Tasks: desktopicon
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
+; IMPORTANT : SET version number below
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "{tmp}\{#NetInstaller}"; Parameters: /install /quiet /norestart; Check: NetCoreNeedsInstall('7.0.15');  StatusMsg: Installing .NET needed for calculations...
+Filename: "{tmp}\{#NetInstaller}"; Parameters: /install /quiet /norestart; Check: NetCoreNeedsInstall('8.0.1');  StatusMsg: Installing .NET needed for calculations...
 
 
 [Code]

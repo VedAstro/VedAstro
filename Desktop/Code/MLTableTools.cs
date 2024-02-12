@@ -118,13 +118,22 @@ public class MLTableTools
     {
         for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
         {
-            var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
-            // If the cell value can be parsed as a GeoLocation, this is the geoLocation column
-            var tryParse = await GeoLocation.TryParse(cellValue);
-            if (tryParse.Item1) //is parsed, we no need the parsed val
+            // Check if column name has the word "location" in it
+            var columnName = worksheet.Cells[1, colIndex].Value?.ToString();
+            if (columnName != null && columnName.ToLower().Contains("location"))
             {
                 return colIndex;
             }
+
+            //NOTE: sometimes names can be wrongly detected as location
+            //else check the value
+            //var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
+            //// If the cell value can be parsed as a GeoLocation, this is the geoLocation column
+            //var tryParse = await GeoLocation.TryParse(cellValue);
+            //if (tryParse.Item1) //is parsed, we no need the parsed val
+            //{
+            //    return colIndex;
+            //}
         }
         return -1;
     }

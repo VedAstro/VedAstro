@@ -6,7 +6,7 @@
 #define MyAppPublisher "VedAstro"
 #define MyAppURL "https://vedastro.org/"
 #define MyAppExeName "Desktop.exe"
-#define NetInstaller "windowsdesktop-runtime-8.0.1-win-x64.exe"
+#define NetInstaller "windowsdesktop-runtime-7.0.15-win-x64.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -50,17 +50,13 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{src}\favicon.ico"; Tasks: deskto
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "{tmp}\{#NetInstaller}"; Parameters: /install /quiet /norestart; Check: NetCoreNeedsInstall('8.0.1');  StatusMsg: Installing .Net Core 7.0.12...
+Filename: "{tmp}\{#NetInstaller}"; Parameters: /install /quiet /norestart; Check: NetCoreNeedsInstall('7.0.15');  StatusMsg: Installing .NET needed for calculations...
 
 
 [Code]
 
 //////////////////////////////////////////////////////////////////////
-// Credits: https://github.com/domgho/InnoDependencyInstaller
-// NetCoreCheck tool is necessary for detecting if a specific version of .NET Core/.NET 5.0 is installed: https://github.com/dotnet/runtime/issues/36479
-// Source code: https://github.com/dotnet/deployment-tools/tree/master/src/clickonce/native/projects/NetCoreCheck
-// Download netcorecheck.exe: https://go.microsoft.com/fwlink/?linkid=2135256
-// Download netcorecheck_x64.exe: https://go.microsoft.com/fwlink/?linkid=2135504
+// netcorecheck.exe added extra for detecting .net version
 function NetCoreNeedsInstall(version: String): Boolean;
 var
 	netcoreRuntime: String;

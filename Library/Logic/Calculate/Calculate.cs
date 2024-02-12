@@ -4754,6 +4754,7 @@ namespace VedAstro.Library
             //    case 4: return SignCountedFromInputSign(zodiacSign.GetSignName(), 10); break;
             //}
 
+            return ZodiacSign.Empty;
             throw new Exception("Invalid Chaturthamsa index!");
         }
 

@@ -3725,7 +3725,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Given a meta data will give name params stacked
+        /// Given a metadata will give name params stacked
         /// exp : IsPlanetBenefic_Sun
         /// </summary>
         public static string GetSpecialMLTableName(dynamic openApiMetadata, object resultOverride = null)
@@ -3735,6 +3735,7 @@ namespace VedAstro.Library
                 //when using methods like All, need to dig out column name
                 return $"{openApiMetadata.Name}_{resultOverride?.ToString() ?? "PLEASE INJECT VALUE"}";
             }
+
             //stack the param values next to each other exp: Sun_House1
             var paramCombined = "";
             foreach (var selectedParam in openApiMetadata.SelectedParams)
@@ -3754,17 +3755,13 @@ namespace VedAstro.Library
                         }
                         var strData = Tools.AnyToString(xxx);
                         paramCombined += "_" + strData;
-
                     }
                 }
                 else
                 {
                     var strData = Tools.AnyToString(selectedParam);
                     paramCombined += "_" + strData;
-
                 }
-
-
             }
 
             return $"{openApiMetadata.Name}{paramCombined}";

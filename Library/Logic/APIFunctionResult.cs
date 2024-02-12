@@ -13,10 +13,7 @@ public record APIFunctionResult(string Name, object Result)
     /// <summary>
     /// Special name for use in ML Data Tables, includes param value added to name
     /// </summary>
-    public string MLTableName(object resultOverride = null)
-    {
-        return Tools.GetSpecialMLTableName(this, resultOverride);
-    }
+    public string MLTableName(object resultOverride = null) => Tools.GetSpecialMLTableName(this, resultOverride);
 
     /// <summary>
     /// SPECIAL HACK METHOD to inject custom params for use in ML Data Generator
@@ -43,7 +40,7 @@ public record APIFunctionResult(string Name, object Result)
         //normal conversion via to string
         else
         {
-           return Result?.ToString();
+            return Result?.ToString();
         }
 
     }
@@ -86,7 +83,7 @@ public record APIFunctionResult(string Name, object Result)
 
             //pass in name of function as header
             var methodName = apiFunctionResult.Name;
-            var rootPayloadJson = Tools.AnyToJSON(methodName ,content);
+            var rootPayloadJson = Tools.AnyToJSON(methodName, content);
 
             //if already contains mini data inside than we have to this one, else can't add into return object
             if (rootPayloadJson is JObject)

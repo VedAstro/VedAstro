@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -33,16 +34,39 @@ namespace VedAstro.Library
 
         public int ColumnsCount => ColumnData.Count;
 
+
+        private static int _progressCounter;
+
+        /// <summary>
+        /// when incremented will raise trigger event
+        /// which in turn will update data for loading box
+        /// </summary>
+        public static int ProgressCounter
+        {
+            get => _progressCounter;
+            set
+            {
+                //set value
+                _progressCounter = value;
+
+                //trigger event
+                OnProgressCounterChanged?.Invoke(null, value.ToString());
+            }
+        }
+
+        // Declare the event using EventHandler<T>
+        public static event EventHandler<string> OnProgressCounterChanged;
+
         /// <summary>
         /// Given a raw data from User selection in GUI, generate ML Table
         /// </summary>
         public static MLTable FromData(List<Time> timeSlices, List<OpenAPIMetadata> columnData)
         {
             //# PREPARE DATA
-
             //need to reset list, else won't update properly on 2nd generate
             var rowData = new List<MLTableRow>();
 
+            //make copy column for adding & removing dynamic columns at final output
             var expandedColumnData = columnData.ToList();
 
             //using time as 1 column generate the other data columns
@@ -68,8 +92,7 @@ namespace VedAstro.Library
                     foreach (var calcData in calcDataList)
                     {
                         //if list hidden inside, exp when AllPlanetData is used
-                        var subResults = calcData?.Result as List<APIFunctionResult>;
-                        if (subResults != null)
+                        if (calcData?.Result is List<APIFunctionResult> subResults)
                         {
                             //add all the columns data
                             finalResultList.AddRange(subResults);
@@ -83,18 +106,21 @@ namespace VedAstro.Library
                                 //add each column into main column list
                                 foreach (var singleResult in subResults)
                                 {
-                                    var tempColumn = new OpenAPIMetadata();
-                                    tempColumn.Name = singleResult.Name;
+                                    //hack in new column (sub data into main columns)
+                                    var tempColumn = new OpenAPIMetadata
+                                    {
+                                        Name = singleResult.Name,
+                                        SelectedParams = calcData.SelectedParams
+                                    };
                                     expandedColumnData.Add(tempColumn);
                                 }
                             }
+                        }
 
-                        }
                         //else add like normal
-                        else
-                        {
-                            finalResultList.AddRange(calcDataList);
-                        }
+                        else { finalResultList.AddRange(calcDataList); }
+
+                        //NOTE: progress counter not working here because JS single thread
                     }
                 }
 
@@ -106,6 +132,197 @@ namespace VedAstro.Library
             var newTable = new MLTable(rowData, expandedColumnData);
 
             return newTable;
+        }
+
+        //PUBLIC
+
+        /// <summary>
+        /// Given an excel file uploaded by user, send to server to process and extract out a Time list
+        /// </summary>
+        public static async Task<List<Time>> GetTimeListFromExcel(Stream inputedFile)
+        {
+            var foundRawTimeList = await ExtractTimeColumnFromExcel(inputedFile);
+            var foundGeoLocationList = await ExtractLocationColumnFromExcel(inputedFile);
+
+            //3 : COMBINE DATA
+            var returnList = foundRawTimeList.Select(dateTimeOffset => new Time(dateTimeOffset, foundGeoLocationList[foundRawTimeList.IndexOf(dateTimeOffset)])).ToList();
+
+            return returnList;
+
+            /// <summary>
+            /// Given an excel file will extract out 1 column that contains parseable time
+            /// </summary>
+            static async Task<List<DateTimeOffset>> ExtractTimeColumnFromExcel(Stream excelBinary)
+            {
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set the license context for EPPlus
+                var timeList = new List<DateTimeOffset>();
+                int timeColumnIndex = -1;
+
+                var excelFileStream = new MemoryStream();
+                await excelBinary.CopyToAsync(excelFileStream);
+                excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning
+
+                using (var package = new ExcelPackage(excelFileStream))
+                {
+                    var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
+                                                                    // Start from the second row (index 2) to skip the header
+
+                    //NOTE: not all rows will have data, exp 100 rows but only 10 rows have data
+                    var rowsInSheet = worksheet.Dimension.Rows;
+                    for (int rowIndex = 2; rowIndex <= rowsInSheet; rowIndex++)
+                    {
+                        // If we haven't found the time column yet, search for it
+                        if (timeColumnIndex == -1)
+                        {
+                            for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
+                            {
+                                var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
+                                // If the cell value can be parsed as a Time, this is the time column
+                                if (Time.TryParseStd(cellValue, out _))
+                                {
+                                    timeColumnIndex = colIndex;
+                                    break;
+                                }
+                            }
+                        }
+                        // If we've found the time column, add the cell value to the list
+                        if (timeColumnIndex != -1)
+                        {
+                            //get the raw time text to parse
+                            var rawTimeText = worksheet.Cells[rowIndex, timeColumnIndex].Value?.ToString();
+
+                            //NOTE: this will cause even 1 row without data to be the "Stopper"
+                            //if raw text is empty, then assume data rows has ended
+                            if (string.IsNullOrWhiteSpace(rawTimeText))
+                            {
+                                break;
+                            }
+
+                            //parse raw text to time
+                            if (Time.TryParseStd(rawTimeText, out var time))
+                            {
+                                timeList.Add(time);
+                                ProgressCounter++;
+                            }
+                        }
+                    }
+
+                }
+
+#if DEBUG
+                Console.WriteLine($"File Size : {excelBinary.Length}");
+                Console.WriteLine($"Rows Found : {timeList.Count}");
+#endif
+
+                return timeList;
+            }
+
+            /// <summary>
+            /// Given an excel file will extract out 1 column that contains parseable time
+            /// </summary>
+            static async Task<List<GeoLocation>> ExtractLocationColumnFromExcel(Stream excelBinary)
+            {
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set the license context for EPPlus
+                var geoLocations = new List<GeoLocation>();
+                int geoLocationColumnIndex = -1;
+                // Reset the position of the Stream to the beginning
+                excelBinary.Position = 0;
+                // Use 'using' statement to ensure the MemoryStream is disposed off after use
+                using (var excelFileStream = new MemoryStream())
+                {
+                    await excelBinary.CopyToAsync(excelFileStream);
+                    excelFileStream.Position = 0; // Reset the position of the MemoryStream to the beginning
+                    using (var package = new ExcelPackage(excelFileStream))
+                    {
+                        var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
+                                                                        // Start from the second row (index 2) to skip the header
+
+                        //NOTE: not all rows will have data, exp 100 rows but only 10 rows have data
+                        var rowsInSheet = worksheet.Dimension.Rows;
+                        for (int rowIndex = 2; rowIndex <= rowsInSheet; rowIndex++)
+                        {
+                            // If we haven't found the geoLocation column yet, search for it
+                            if (geoLocationColumnIndex == -1)
+                            {
+                                geoLocationColumnIndex = await FindGeoLocationColumnIndex(worksheet, rowIndex);
+                            }
+
+                            // If we've found the geoLocation column, add the cell value to the list
+                            if (geoLocationColumnIndex != -1)
+                            {
+                                //get the raw location text to parse
+                                var rawLocationText = worksheet.Cells[rowIndex, geoLocationColumnIndex].Value?.ToString();
+
+                                //NOTE: this will cause even 1 row without data to be the "Stopper"
+                                //if raw text is empty, then assume data rows has ended
+                                if (string.IsNullOrWhiteSpace(rawLocationText))
+                                {
+                                    break;
+                                }
+
+                                var tryParse = await GeoLocation.TryParse(rawLocationText);
+                                if (tryParse.Item1)
+                                {
+                                    //add in the final parsed location into return list
+                                    geoLocations.Add(tryParse.Item2);
+                                    ProgressCounter++;
+                                }
+                            }
+                        }
+                    }
+                }
+#if DEBUG
+                Console.WriteLine($"File Size : {excelBinary.Length}");
+                Console.WriteLine($"Rows Found : {geoLocations.Count}");
+#endif
+                return geoLocations;
+
+
+
+                static async Task<int> FindGeoLocationColumnIndex(ExcelWorksheet worksheet, int rowIndex)
+                {
+                    for (int colIndex = 1; colIndex <= worksheet.Dimension.Columns; colIndex++)
+                    {
+                        // Check if column name has the word "location" in it
+                        var columnName = worksheet.Cells[1, colIndex].Value?.ToString();
+                        if (columnName != null && columnName.ToLower().Contains("location"))
+                        {
+                            return colIndex;
+                        }
+
+                        //NOTE: sometimes names can be wrongly detected as location
+                        //else check the value
+                        //var cellValue = worksheet.Cells[rowIndex, colIndex].Value?.ToString();
+                        //// If the cell value can be parsed as a GeoLocation, this is the geoLocation column
+                        //var tryParse = await GeoLocation.TryParse(cellValue);
+                        //if (tryParse.Item1) //is parsed, we no need the parsed val
+                        //{
+                        //    return colIndex;
+                        //}
+                    }
+                    return -1;
+                }
+
+            }
+
+        }
+
+
+        /// <summary>
+        /// Send time list column as Json to API to make HTML table
+        /// </summary>
+        public static async Task<T> GenerateMLTable<T>(List<Time> timeList, List<OpenAPIMetadata> columnNameList, string selectedFormat)
+        {
+            var newMLTable = MLTable.FromData(timeList, columnNameList);
+
+            switch (selectedFormat)
+            {
+                case "HTML": { return (T)(object)newMLTable.ToHtml(); }
+                case "CSV": { return (T)(object)newMLTable.ToCSV(); }
+                case "JSON": { return (T)(object)newMLTable.ToJson(); }
+                case "EXCEL": { return (T)(object)newMLTable.ToExcel(); }
+                default: throw new Exception("END OF LINE!");
+            }
         }
 
 

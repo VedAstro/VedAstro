@@ -2,6 +2,7 @@
 @using System.Text
 @using System.IO;
 @using CommunityToolkit.Maui.Storage
+@using Website.Pages
 @attribute [Route(PageRoute.TableGenerator)]
 
 <PageTitle>Data Generator | VedAstro</PageTitle>
@@ -216,7 +217,7 @@
 
     private APISelectorBox ApiSelectorBox;
 
-    private DataColumnSelector _DataColumnSelector;
+    private Website.Pages.DataColumnSelector _DataColumnSelector;
 
     private TimeLocationInput _inputTimeLocation;
 
@@ -281,7 +282,7 @@
         _jsRuntime.HideLoading();
 
         // Subscribe to the event
-        MLTableTools.OnProgressCounterChanged += MLTableToolsOnOnProgressCounterChanged;
+        MLTable.OnProgressCounterChanged += MLTableToolsOnOnProgressCounterChanged;
     }
 
     private void MLTableToolsOnOnProgressCounterChanged(object? sender, string e)
@@ -310,7 +311,7 @@
             ms.Position = 0;
 
             _timeList = new List<Time>();
-            _timeList = await MLTableTools.GetTimeListFromExcel(ms);
+            _timeList = await MLTable.GetTimeListFromExcel(ms);
 
             if (_timeList.Any() && _timeList != null)
             {
@@ -354,7 +355,7 @@
 
         //only show top 10 records as not to overload (download for full)
         var reducedList = _timeList.Take(10).ToList();
-        HtmlTable = await MLTableTools.GenerateMLTable<string>(reducedList, columnNameList, "HTML");
+        HtmlTable = await MLTable.GenerateMLTable<string>(reducedList, columnNameList, "HTML");
 
         //can show now also regenerates table
         _isReady = true;
@@ -378,7 +379,7 @@
 
         //convert created table to CSV string
         var columnNameList = _DataColumnSelector.SelectedMethodMetaList;
-        var htmlString = await MLTableTools.GenerateMLTable<string>(_timeList, columnNameList, "HTML");
+        var htmlString = await MLTable.GenerateMLTable<string>(_timeList, columnNameList, "HTML");
 
         //prompt user to save file and save it there
         var bytes = Encoding.UTF8.GetBytes(htmlString);
@@ -397,7 +398,7 @@
 
         //convert created table to CSV string
         var columnNameList = _DataColumnSelector.SelectedMethodMetaList;
-        var csvString = await MLTableTools.GenerateMLTable<string>(_timeList, columnNameList, "CSV");
+        var csvString = await MLTable.GenerateMLTable<string>(_timeList, columnNameList, "CSV");
 
         //prompt user to save file and save it there
         var bytes = Encoding.UTF8.GetBytes(csvString);
@@ -416,7 +417,7 @@
 
         //convert created table to CSV string
         var _columnNameList = _DataColumnSelector.SelectedMethodMetaList;
-        var jsonString = await MLTableTools.GenerateMLTable<string>(_timeList, _columnNameList, "JSON");
+        var jsonString = await MLTable.GenerateMLTable<string>(_timeList, _columnNameList, "JSON");
 
         //prompt user to save file and save it there
         var bytes = Encoding.UTF8.GetBytes(jsonString);
@@ -435,7 +436,7 @@
 
         //convert created table to Excel file
         var columnNameList = _DataColumnSelector.SelectedMethodMetaList;
-        var excelFileBytes = await MLTableTools.GenerateMLTable<byte[]>(_timeList, columnNameList, "EXCEL");
+        var excelFileBytes = await MLTable.GenerateMLTable<byte[]>(_timeList, columnNameList, "EXCEL");
 
         //prompt user to save file and save it there
         using var stream = new MemoryStream(excelFileBytes);

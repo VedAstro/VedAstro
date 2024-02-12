@@ -29,7 +29,6 @@ namespace Website
         public readonly URL URL;
 
 
-
         //--------CTOR
         public VedAstroAPI(string userId, string visitorId, IJSRuntime jsRuntime, URL url)
         {
@@ -198,7 +197,7 @@ namespace Website
         /// Defaults to GET request when payload is null
         /// NOTE : 5S delay timeout
         /// </summary>
-        
+
         public async Task<string> PollApiTillDataEventsChart(string url, object dataToSend = null)
         {
             var pollRate = TimeSpan.FromMilliseconds(5000);

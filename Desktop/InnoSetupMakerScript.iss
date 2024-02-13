@@ -25,9 +25,14 @@ DisableDirPage=yes
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
-OutputDir=C:\Users\ASUS\Desktop\Projects\VedAstro\Desktop\InnoSetupOutput
+OutputDir=InnoSetupOutput
 OutputBaseFilename=VedAstroSetup
-SetupIconFile=C:\Users\ASUS\Desktop\Projects\VedAstro\Website\wwwroot\images\favicon.ico
+SetupIconFile=wwwroot\images\favicon.ico
+WizardSmallImageFile=wwwroot\images\wizard_small.bmp
+WizardImageFile=wwwroot\images\wizard_large.bmp
+;Default is hide the welcome page, ms guidelines
+DisableWelcomePage=no
+UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern

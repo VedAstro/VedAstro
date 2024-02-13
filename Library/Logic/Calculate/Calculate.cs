@@ -9456,7 +9456,7 @@ namespace VedAstro.Library
                     return PlanetToPlanetRelationship.Enemy;
                 }
 
-                return Empty;
+                return PlanetToPlanetRelationship.Empty;
                 throw new Exception("planet permanent relationship not found, error!");
 
             }

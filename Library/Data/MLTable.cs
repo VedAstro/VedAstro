@@ -32,7 +32,7 @@ namespace VedAstro.Library
 
         public int RowsCount => RowData.Count;
 
-        public int ColumnsCount => ColumnData.Count;
+        public int ColumnsCount { get; set; }
 
 
         private static int _progressCounter;
@@ -313,14 +313,14 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<T> GenerateMLTable<T>(List<Time> timeList, List<OpenAPIMetadata> columnNameList, string selectedFormat)
         {
-            var newMLTable = MLTable.FromData(timeList, columnNameList);
+            var newMlTable = MLTable.FromData(timeList, columnNameList);
 
             switch (selectedFormat)
             {
-                case "HTML": { return (T)(object)newMLTable.ToHtml(); }
-                case "CSV": { return (T)(object)newMLTable.ToCSV(); }
-                case "JSON": { return (T)(object)newMLTable.ToJson(); }
-                case "EXCEL": { return (T)(object)newMLTable.ToExcel(); }
+                case "HTML": { return (T)(object)newMlTable.ToHtml(); }
+                case "CSV": { return (T)(object)newMlTable.ToCSV(); }
+                case "JSON": { return (T)(object)newMlTable.ToJson(); }
+                case "EXCEL": { return (T)(object)newMlTable.ToExcel(); }
                 default: throw new Exception("END OF LINE!");
             }
         }

@@ -40,6 +40,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
+		<PackageReference Include="CommunityToolkit.Maui.Core" Version="7.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all" />
 		<!--<PackageReference Include="VedAstro.Library" Version="1.2.0" />-->
@@ -107,6 +109,10 @@
 
 	<ItemGroup>
 	  <Content Include="..\ViewComponents\Pages\SearchResult.razor" Link="Pages\SearchResult.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="..\ViewComponents\Pages\TableGenerator.razor" Link="Pages\Calculator\TableGenerator.razor" />
 	</ItemGroup>
 
 </Project>

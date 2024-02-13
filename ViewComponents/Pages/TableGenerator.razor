@@ -3,16 +3,22 @@
 @using System.IO;
 @using CommunityToolkit.Maui.Storage
 @using Website.Pages
+@inject IFileSaver _fileSaver
+
 @attribute [Route(PageRoute.TableGenerator)]
 
-<PageTitle>Data Generator | VedAstro</PageTitle>
+<PageTitle>Table Generator | VedAstro</PageTitle>
 
 <PageTop ImageName="table-generator-banner.png"
          Title="ML Data Generator"
          DescriptionText="Easily generate large astronomical tables for use in ML/AI Model training and Data Science for free">
 </PageTop>
 
-<div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
+
+<div class="d-md-flex justify-content-between">
+
+    @*CONTACT FORM*@
+    <div class="me-3">
     @* INPUT *@
     <div class="vstack gap-5" style="max-width: @GR.W412px;">
 
@@ -72,8 +78,24 @@
         <DataColumnSelector CustomAllMethodList="@MethodListALL" @ref="_DataColumnSelector" />
 
         @* GENERATE BUTTON *@
-        <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGenerateHTML" />
+        <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGeneratePreviewHTML" />
     </div>
+    </div>
+
+    @*SIDEBAR*@
+    <div class="mt-md-0 mt-4 me-md-5">
+        <!--when small give at top-->
+        <div class="vstack gap-0 gap-md-2">
+            @*STACK BOXES ON RIGHT*@
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Desktop Version" Description="Download powerfull desktop app that supports over +1 million rows" IconName="emojione-v1:laptop-computer" OnClickCallback="OnClickGotoDesktopVersionSideBar" />
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Video Guide" Description="Watch easy guide to get you started" IconName="vscode-icons:file-type-video" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("HowToGuideElement"))" />
+        </div>
+    </div>
+</div>
+
+
+
+<div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
 
     @* OUTPUT TABLE *@
     <div class="vstack gap-3 mt-4">
@@ -90,13 +112,15 @@
 
         @if (_isReady)
         {
+            @* MESSAGE *@
+            <IconTitle IconName="flat-color-icons:fine-print" Title="Preview" TitleHolder="h5" MaxWidthPx="@((int)GR.W546)" />
+
             @* TITLE & OPTIONS *@
             <div class="hstack gap-4">
-
                 <div class="hstack gap-3">
                     <IconButton SmallSize="true" IconName="iconamoon:zoom-in" TooltipText="Zoom In" OnClickCallback="OnClickZoomIn" />
                     <IconButton SmallSize="true" IconName="iconamoon:zoom-out" TooltipText="Zoom Out" OnClickCallback="OnClickZoomOut" />
-                    <IconButton SmallSize="true" ButtonText="Download" IconName="line-md:cloud-download-loop">
+                    <IconButton SmallSize="true" ButtonText="Download Full" IconName="line-md:cloud-download-loop">
                         <DropDownList>
                             <li>
                                 <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadCSV">
@@ -139,18 +163,17 @@
             <div class="d-flex justify-content-left">
                 @* important needed to override flex *@
                 <span style="color: @AppData.Grey; font-size: 14px;">
-                    Above table is preview, click <strong>Download</strong><br />
+                    Above table is only preview, click <strong>Download</strong><br />
                     for full table with <strong>@(_timeList.Count)</strong> rows.
                 </span>
                 <span style="color: @AppData.Grey; font-size: 14px;"></span>
             </div>
-
         }
         else
         {
             <hr class="mt-2" />
 
-            @* PLACE HOLDER MESSAGE *@
+            @* PLACEHOLDER MESSAGE *@
             @* hide when loaded *@
             <div class="d-flex justify-content-center" style="@((!_isReady) ? "" : "display:none !important;")">
                 @* important needed to override flex *@
@@ -161,22 +184,79 @@
                 <span style="color: @AppData.Grey; font-size: 14px;"></span>
             </div>
             <hr class="" />
-
         }
 
     </div>
 
     @* DOCS *@
-    <div class="">
+    <div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
+
+        <ArticleBlock Title="How To Use?" IconName="flat-color-icons:close-up-mode">
+            <TextHTML>
+                <div id="HowToGuideElement" class="container ">
+                    <div class="row row-cols-3 align-items-center justify-content-start">
+                        <div class="col-auto p-0 align-self-start">
+                            <kbd>STEP 1</kbd>
+                        </div>
+                        <div class="col-6">
+                            <span>Download &amp; install <strong>VedAstro Desktop</strong></span>
+                        </div>
+                        <div class="col">
+                            <IconButton SmallSize="true" ButtonText="Download EXE" OnClickCallback="OnClickDownload" TooltipText="Download .exe file" TextCenter="true" IconName="line-md:download-loop" />
+                        </div>
+                    </div>
+                    <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                        <div class="col-auto p-0 align-self-start">
+                            <kbd>STEP 2</kbd>
+                        </div>
+                        <div class="col-6">
+                            <span>Select <strong>Table Generator</strong> from side menu.</span>
+                            <img src="images/table-generator-guide-step-2.png" class="mt-2 img-fluid rounded border border-secondary" />
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                    <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                        <div class="col-auto p-0 align-self-start">
+                            <kbd>STEP 3</kbd>
+                        </div>
+                        <div class="col-6">
+                            <span>Upload time list, sample provided.</span>
+                            <img src="images/table-generator-guide-step-3.png" class="mt-2 img-fluid rounded border border-secondary" />
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                    <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                        <div class="col-auto p-0 align-self-start">
+                            <kbd>STEP 4</kbd>
+                        </div>
+                        <div class="col-6">
+                            <span>Select <strong>astro data</strong> points as <strong>columns</strong></span>
+                            <img src="images/table-generator-guide-step-4.png" class="mt-2 img-fluid rounded border border-secondary" />
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                    <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                        <div class="col-auto p-0 align-self-start">
+                            <kbd>STEP 5</kbd>
+                        </div>
+                        <div class="col-6">
+                            <span>Click <strong>Generate</strong> &amp; download table.<strong style="color: #007e21;">Easy!</strong></span>
+                            <img src="images/table-generator-guide-step-5.png" class="mt-2 img-fluid rounded border border-secondary" />
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                </div>
+            </TextHTML>
+        </ArticleBlock>
 
         <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
             <TextHTML>
-                After download table in suitable format. Below is a list of things you can do with the data.
-                <ul class="list-group">
-                    <li class="list-group-item">You can feed it into an ML model maker, this can be done Python.</li>
-                    <li class="list-group-item">Second item</li>
-                    <li class="list-group-item">Third item</li>
-                </ul>
+                After download. You can input to a ML model maker, to generate AI data like below.
+                <img src="images/ml-modal-graph-sample-2.png" class="mt-2 img-fluid rounded border border-secondary" />
             </TextHTML>
         </ArticleBlock>
 
@@ -193,10 +273,9 @@
                 Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to keep this service running for yourself and others.
             </TextHTML>
         </ArticleBlock>
-
     </div>
-</div>
 
+</div>
 
 @code {
 
@@ -237,7 +316,6 @@
     private ElementReference uploadFileInfoHolder;
 
 
-
     public string? SelectedSource
     {
         get => _selectedSource;
@@ -273,7 +351,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-
         //give time to pop, because next is heavy
         await _jsRuntime.ShowLoading(100);
 
@@ -322,7 +399,7 @@
                 _jsRuntime.Show(uploadFileInfoHolder);
 
                 //now show data column input
-                //NOTE: this is done reduce clutter until last needed (better UX, sweet heart's idea)
+                //NOTE: this is done reduce clutter until last needed (better UX, sweetheart's idea)
                 _DataColumnSelector.Show();
 
                 _jsRuntime.HideLoading();
@@ -341,7 +418,7 @@
 
 
     //only generates top 10 records for preview
-    private async Task OnClickGenerateHTML()
+    private async Task OnClickGeneratePreviewHTML()
     {
         await _jsRuntime.ShowLoading();
 
@@ -464,6 +541,24 @@
 
         //note : beautiful JS use without call to JS file (AI's awesome "eval" method)
         await _jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('MLTableHolder').style.zoom = '{CurrentZoomLevel}%'");
+    }
+
+    private void OnClickDownload()
+    {
+        AppData.Go(URL.DesktopAppDownload, newTab:true);
+    }
+
+    private async Task OnClickGotoDesktopVersionSideBar()
+    {
+        //tell user the download will start, once done install
+        await _jsRuntime.ShowAlert("success", "Download starting...", false, 2200);
+
+        //start download
+        AppData.Go(URL.DesktopAppDownload, newTab:true);
+
+        //point user to guide
+        await _jsRuntime.ScrollToDivById("HowToGuideElement");
+
     }
 
 }

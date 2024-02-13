@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.JSInterop;
 using System.Net;
 using Microsoft.AspNetCore.Components;
+using CommunityToolkit.Maui.Storage;
 
 namespace Website
 {
@@ -16,7 +17,7 @@ namespace Website
 
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
-            
+
 
             //the client made here is used via AppData everywhere
             var httpClient = new HttpClient
@@ -31,7 +32,8 @@ namespace Website
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             builder.Services.AddScoped(sp => httpClient);
 
-            
+            //enable dialog to save file
+            builder.Services.AddSingleton<IFileSaver>(FileSaver.Default);
 
             //ERROR HANDLING
 

@@ -63,24 +63,24 @@ public class EventsChartTools
     /// calls server for a list of EventDataList.xml in nice JSON form
     /// </summary>
     /// <returns></returns>
-    public async Task<List<EventData>> GetEventDataList()
-    {
+    //public async Task<List<EventData>> GetEventDataList()
+    //{
 
-        //CHECK CACHE
-        //cache will be cleared when update is needed
-        if (CachedEventDataList.Any())
-        {
-            return CachedEventDataList;
-        }
+    //    //CHECK CACHE
+    //    //cache will be cleared when update is needed
+    //    if (CachedEventDataList.Any())
+    //    {
+    //        return CachedEventDataList;
+    //    }
 
-        //prepare url to call
-        var url = $"{_api.URL.GetEventDataList}";
-        var listNoPolling = await _api.GetListNoPolling(url, EventData.FromJsonList);
+    //    //prepare url to call
+    //    var url = $"{_api.URL.GetEventDataList}";
+    //    var listNoPolling = await _api.GetListNoPolling(url, EventData.FromJsonList);
 
-        //NOTE: ToList is needed to make clone, else copies by ref and is lost
-        CachedEventDataList = listNoPolling.ToList();
+    //    //NOTE: ToList is needed to make clone, else copies by ref and is lost
+    //    CachedEventDataList = listNoPolling.ToList();
 
-        return CachedEventDataList;
+    //    return CachedEventDataList;
 
-    }
+    //}
 }

@@ -485,7 +485,7 @@
         if (!AppData.SearchFilesLoaded) { await AppData.LoadSearchFiles(); }
 
         //get list of all event nicely formatted via API
-        EventManager.EventDataList = await AppData.API.EventsChart.GetEventDataList();
+        EventManager.EventDataList = EventDataListStatic.Rows;
 
         //fill default precision
         var timeRange = GetTimeRange();

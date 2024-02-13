@@ -384,3 +384,5 @@ API/Properties/serviceDependencies.karagan - Zip Deploy.json
 API/Properties/ServiceDependencies/karagan - Zip Deploy/storage1.arm.json
 
 API/Properties/ServiceDependencies/karagan - Zip Deploy/
+
+API/Properties/

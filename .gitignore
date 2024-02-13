@@ -386,3 +386,7 @@ API/Properties/ServiceDependencies/karagan - Zip Deploy/storage1.arm.json
 API/Properties/ServiceDependencies/karagan - Zip Deploy/
 
 API/Properties/
+
+Desktop/dotnet/windowsdesktop-runtime-8.0.1-win-x64.exe
+
+Desktop/InnoSetupOutput/VedAstroSetup.exe

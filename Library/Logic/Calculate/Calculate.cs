@@ -5001,6 +5001,8 @@ namespace VedAstro.Library
                 return PlanetToPlanetRelationship.Enemy;
             }
 
+
+            return PlanetToPlanetRelationship.Empty;
             throw new Exception("Combined planet relationship not found, error!");
         }
 

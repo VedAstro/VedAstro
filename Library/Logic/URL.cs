@@ -223,6 +223,6 @@ public class URL
     public const string Donate = "https://vedastro.org/Donate";
     public const string VSLifeSharePublicSession = "https://prod.liveshare.vsengsaas.visualstudio.com/join?CBAE0FED0D849DD2E74F90CD7F4DC639AA89";
     public const string HoroscopeDataListFile = "https://vedastrowebsitestorage.z5.web.core.windows.net/data/HoroscopeDataList.xml";
-    public const string DesktopAppDownload = "https://github.com/VedAstro/VedAstro/raw/master/Desktop/InnoSetupOutput/VedAstroSetup.exe";
+    public const string DesktopAppDownload = "https://vedastrowebsitestorage.blob.core.windows.net/download/VedAstroSetup.exe";
 
 }

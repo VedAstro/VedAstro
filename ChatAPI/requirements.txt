@@ -1,0 +1,10 @@
+# LLM related stuff
+langchain
+langchain-community
+sentence_transformers
+
+# server related stuff
+xmltodict
+fastapi
+xmltodict
+uvicorn

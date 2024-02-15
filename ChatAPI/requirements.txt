@@ -3,6 +3,9 @@ langchain
 langchain-community
 sentence_transformers
 
+# for doing query in CPU via llama.cpp
+faiss-cpu
+
 # server related stuff
 xmltodict
 fastapi

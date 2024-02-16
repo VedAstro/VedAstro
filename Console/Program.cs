@@ -206,7 +206,7 @@ namespace VedAstro.Console
             {
                 var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
 
-                chart = await EventsChartManager.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
+                chart = EventsChartManager.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
                 dict.Add(possibleTime, chart.ContentSvg);
             }
 

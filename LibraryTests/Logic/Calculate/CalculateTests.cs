@@ -1471,5 +1471,16 @@ namespace VedAstro.Library.Tests
             var labhaTest = Calculate.LabhesthanamSahamLongitude(StandardHoroscope).TotalDegrees;
             Assert.IsTrue(Math.Abs(labhaPosition - labhaTest) <= errorRate);
         }
+
+        [TestMethod()]
+        public void HoroscopePredictionsTest()
+        {
+            var test1 = Calculate.HoroscopePredictions(StandardHoroscope);
+            Assert.IsTrue(test1.Any());
+
+            var test2 = Calculate.HoroscopePredictions(NearestHoroscope);
+            Assert.IsTrue(test2.Any());
+
+        }
     }
 }

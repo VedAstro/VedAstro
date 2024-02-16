@@ -40,6 +40,8 @@ namespace StaticTableGenerator
         static string PythonCalculateStubFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro.Python\VedAstro\Library.pyi");
         static string EventDataListFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Website\wwwroot\data\EventDataList.xml");
         static string EventDataListStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\EventDataListStatic.cs");
+        static string HoroscopeDataListFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Website\wwwroot\data\HoroscopeDataList.xml");
+        static string HoroscopeDataListStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\HoroscopeDataListStatic.cs");
 
 
         static void Main(string[] args)
@@ -84,6 +86,9 @@ namespace StaticTableGenerator
 
             //------ TASK 3
             WriteEventDataListStaticTableClass();
+
+            //------ TASK 4
+            WriteHoroscopeDataListStaticTableClass();
 
 
             Console.WriteLine("Done!");
@@ -218,6 +223,18 @@ namespace StaticTableGenerator
             File.WriteAllText(EventDataListStaticTableFile, classAsText);
         }
 
+        private static void WriteHoroscopeDataListStaticTableClass()
+        {
+            // Read the content of the XML event data file
+            string fileContent = File.ReadAllText(HoroscopeDataListFile);
+
+            //based on created metadata make new C# code file 
+            var classAsText = GenerateHoroscopeDataStaticTableClass(fileContent);
+
+            //writes new static table class
+            File.WriteAllText(HoroscopeDataListStaticTableFile, classAsText);
+        }
+
         private static string GetExampleOutputJson(MethodInfo openApiCalc)
         {
             try
@@ -273,7 +290,6 @@ namespace StaticTableGenerator
             return sb.ToString();
         }
 
-
         public static string GenerateEventDataStaticTableClass(string xmlString)
         {
             var document = XDocument.Parse(xmlString);
@@ -292,7 +308,7 @@ namespace StaticTableGenerator
 
                 var yTags = $"[{xtagsString}]";
                 //add new event data code
-                compiledCode.AppendLine($"{indent}new(EventName.{yy.Name}, EventNature.{yy.Nature}, SpecializedNature.Empty, @\"{yy.Description}\", {yTags}, null),");
+                compiledCode.AppendLine($"{indent}new(EventName.{yy.Name}, EventNature.{yy.Nature}, SpecializedNature.Empty, @\"{yy.Description}\", {yTags}, EventManager.GetEventCalculatorMethod(EventName.{yy.Name})),");
             }
 
             //remove indentation at start of compiled lines
@@ -324,6 +340,55 @@ namespace VedAstro.Library
             return newClassFile;
         }
 
+        public static string GenerateHoroscopeDataStaticTableClass(string xmlString)
+        {
+            var document = XDocument.Parse(xmlString);
+            var allList = document.Root.Elements().ToList();
+
+            var compiledCode = new StringBuilder();
+            string indent = "            "; // Adjust this to your desired indentation
+            foreach (var eachEventXml in allList)
+            {
+                var yy = HoroscopeData.FromXml(eachEventXml);
+                var tagsAsText = "";
+                foreach (var tag in yy.EventTags)
+                {
+                    tagsAsText += $"EventTag.{tag.ToString()},";
+                }
+
+                var yTags = $"[{tagsAsText}]";
+                //add new event data code
+                var cleanedDescription = Tools.CleanText(yy.Description);
+                compiledCode.AppendLine($"{indent}new(HoroscopeName.{yy.Name}, EventNature.{yy.Nature}, @\"{cleanedDescription}\", {yTags}, EventManager.GetHoroscopeCalculatorMethod(HoroscopeName.{yy.Name})),");
+            }
+
+            //remove indentation at start of compiled lines
+            var compiledCode2 = compiledCode.ToString().TrimStart();
+
+            //NOTE: leave below code as is, to get perfect indentation
+            var newClassFile =
+                $@"using System.Collections.Generic;
+
+namespace VedAstro.Library
+{{
+    /// <summary>
+    /// Auto generated code by StaticTableGenerator, so that Open API methods have a metadata.
+    /// Regenerate when files Calculate.cs gets updated. ✝️Amen for automation!
+    /// </summary>
+    public static class HoroscopeDataListStatic
+    {{
+        public static List<HoroscopeData> Rows = new List<HoroscopeData>
+        {{
+            {compiledCode2}
+        }};
+    }}
+}}";
+
+            // Replace all line endings with \r\n (CR LF)
+            newClassFile = newClassFile.Replace("\r\n", "\n").Replace("\n", "\r\n");
+
+            return newClassFile;
+        }
 
         public static string GeneratePythonStubFile(List<OpenAPIMetadata> metadataList)
         {

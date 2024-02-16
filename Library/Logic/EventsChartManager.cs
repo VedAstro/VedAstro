@@ -58,7 +58,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Main method that starts making chart
         /// </summary>
-        public static async Task<string> GenerateEventsChartSvg(EventsChart chartSpecs)
+        public static string GenerateEventsChartSvg(EventsChart chartSpecs)
         {
 
             var inputPerson = chartSpecs.Person;
@@ -84,7 +84,7 @@ namespace VedAstro.Library
 
 
             //ACT II : fill the components in order
-            await GenerateComponents(inputPerson, timeRange.start, timeRange.end, daysPerPixel, inputedEventTags, summaryOptions);
+            GenerateComponents(inputPerson, timeRange.start, timeRange.end, daysPerPixel, inputedEventTags, summaryOptions);
 
 
             //ACT III : compile in right placement
@@ -113,7 +113,7 @@ namespace VedAstro.Library
             return final;
 
 
-            async Task GenerateComponents(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags, ChartOptions summaryOptions)
+            void GenerateComponents(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags, ChartOptions summaryOptions)
             {
                 //STEP 1: USER INPUT > USABLE DATA
                 var svgBackgroundColor = "transparent"; //blends nicely with site's back
@@ -134,7 +134,7 @@ namespace VedAstro.Library
 
                 //rows are dynamically generated as needed, hence the extra logic below
                 //list of rows to generate
-                EventsChartManager.UnsortedEventList = await EventManager.CalculateEvents(eventsPrecisionHours, startTime, endTime, inputPerson, inputedEventTags);
+                EventsChartManager.UnsortedEventList = EventManager.CalculateEvents(eventsPrecisionHours, startTime, endTime, inputPerson, inputedEventTags);
 
                 //STEP 2: DATA > SVG COMPONENTS
                 timeHeader = GenerateTimeHeaderRow(timeSlices, daysPerPixel, WidthPerSlice, ref verticalYAxis);
@@ -207,14 +207,14 @@ namespace VedAstro.Library
         /// <summary>
         /// Generates events chart with specs and generated SVG chart
         /// </summary>
-        public static async Task<EventsChart> GenerateEventsChart(Person foundPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTags, ChartOptions summaryOptions)
+        public static EventsChart GenerateEventsChart(Person foundPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTags, ChartOptions summaryOptions)
         {
             //a new chart is born
             var newChartId = Tools.GenerateId();
             var newChart = new EventsChart(newChartId, "", foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
 
             //from person get SVG chart as string
-            var eventsChartSvgString = await GenerateEventsChartSvg(newChart);
+            var eventsChartSvgString = GenerateEventsChartSvg(newChart);
 
             //combine chart and data
             newChart.ContentSvg = eventsChartSvgString;

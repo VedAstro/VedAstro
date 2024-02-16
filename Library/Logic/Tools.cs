@@ -1572,6 +1572,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Makes GET request to given URL, tries 3 times before fail
         /// Handles all JSON replies from VedAstro format, or raw JSON format
         /// </summary>
         public static async Task<WebResult<JToken>> ReadFromServerJsonReply(string apiUrl)

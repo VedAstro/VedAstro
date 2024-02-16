@@ -11,6 +11,9 @@ using Time = VedAstro.Library.Time;
 using Newtonsoft.Json;
 using System.Net;
 using System.Globalization;
+using System;
+using static API.GeoLocationAPI;
+using MimeDetective.Storage;
 
 namespace API
 {
@@ -86,14 +89,16 @@ namespace API
                 // when new location not is cache, we add it
                 // only add to cache if not empty and not VedAstro
                 var isNotEmpty = parsedGeoLocation.Name() != GeoLocation.Empty.Name();
-                var isNotVedAstro = row.Key != APIProvider.VedAstro;
+                var apiProvider = row.Key;
+                var isNotVedAstro = apiProvider != APIProvider.VedAstro;
                 if (isNotEmpty && isNotVedAstro)
                 {
                     //add new data to cache, for future speed up
                     //TODO 8/2/2024 we are over adding, must be way to not add new record if current record can be modified
                     //TODO aka consolidate the cache rows
                     //TODO SmartEditAddToCache()
-                    AddToCache(parsedGeoLocation, rowKeyData: CreateSearchableName(address));
+                    var sourceId = $"{apiProvider}-{nameof(AddressToGeoLocation)}";//id the source for validation
+                    AddToCache(parsedGeoLocation, rowKeyData: CreateSearchableName(address), source: sourceId);
                 }
 
                 //once found, stop searching for location with APIs
@@ -127,9 +132,9 @@ namespace API
             var geoLocationProviders = new Dictionary<APIProvider, Func<string, Task<WebResult<GeoLocation>>>>
             {
                 {APIProvider.VedAstro, IpAddressToGeoLocation_VedAstro},
+                {APIProvider.Google, IpAddressToGeoLocation_Google},
                 {APIProvider.IpData, IpAddressToGeoLocation_IpData},
                 {APIProvider.Azure, IpAddressToGeoLocation_Azure},
-                {APIProvider.Google, IpAddressToGeoLocation_Google},
             };
 
             //start with empty as default if fail
@@ -144,11 +149,13 @@ namespace API
                 // when new location not is cache, we add it
                 // only add to cache if not empty and not VedAstro
                 var isNotEmpty = parsedGeoLocation.Name() != GeoLocation.Empty.Name();
-                var isNotVedAstro = row.Key != APIProvider.VedAstro;
+                var apiProvider = row.Key;
+                var isNotVedAstro = apiProvider != APIProvider.VedAstro;
                 if (isNotEmpty && isNotVedAstro)
                 {
                     //add new data to cache, for future speed up
-                    AddToCache(parsedGeoLocation, rowKeyData: ipAddress);
+                    var sourceId = $"{apiProvider}-{nameof(IpAddressToGeoLocation)}";//id the source for validation
+                    AddToCache(parsedGeoLocation, rowKeyData: ipAddress, source: sourceId);
                 }
 
                 //once found, stop searching for location with APIs
@@ -173,14 +180,45 @@ namespace API
             var call = APILogger.Visit(incomingRequest);
 
             //1 : CALCULATE
-            var parsedGeoLocation = CoordinatesToGeoLocation_Vedastro(longitude, latitude);
-            //use google only if no cache in VedAstro
-            if (parsedGeoLocation.Name() == GeoLocation.Empty.Name())
+            // Define a list of functions in the order of priority
+            var geoLocationProviders = new Dictionary<APIProvider, Func<string, string, Task<GeoLocation>>>
             {
-                parsedGeoLocation = await CoordinatesToGeoLocation_Google(longitude, latitude);
-                //add new data to cache, for future speed up
-                AddToCache(parsedGeoLocation: parsedGeoLocation);
+                {APIProvider.VedAstro, CoordinatesToGeoLocation_Vedastro},
+                {APIProvider.Azure, CoordinatesToGeoLocation_Google},
+            };
+
+            //start with empty as default if fail
+            var parsedGeoLocation = GeoLocation.Empty;
+
+            // Iterate over the list of functions
+            foreach (var row in geoLocationProviders)
+            {
+                var provider = row.Value;
+                parsedGeoLocation = await provider(longitude, latitude);
+
+                // when new location not is cache, we add it
+                // only add to cache if not empty and not VedAstro
+                var isNotEmpty = parsedGeoLocation.Name() != GeoLocation.Empty.Name();
+                var apiProvider = row.Key;
+                var isNotVedAstro = apiProvider != APIProvider.VedAstro;
+                if (isNotEmpty && isNotVedAstro)
+                {
+                    parsedGeoLocation = await CoordinatesToGeoLocation_Google(longitude, latitude);
+                    //add new data to cache, for future speed up
+                    var sourceId = $"{apiProvider}-{nameof(CoordinatesToGeoLocation)}";//id the source for validation
+                    AddToCache(parsedGeoLocation: parsedGeoLocation, source: sourceId);
+                }
+
+                //once found, stop searching for location with APIs
+                if (isNotEmpty) { break; }
             }
+
+
+
+
+
+
+
 
 
             //2 : SEND TO CALLER
@@ -237,15 +275,17 @@ namespace API
                 // when new location not is cache, we add it
                 // only add to cache if not empty and not VedAstro
                 var isNotEmpty = !(string.IsNullOrEmpty(timezoneStr));
-                var isNotVedAstro = row.Key != APIProvider.VedAstro;
+                var apiProvider = row.Key;
+                var isNotVedAstro = apiProvider != APIProvider.VedAstro;
                 if (isNotEmpty && isNotVedAstro)
                 {
                     //NOTE :reduce accuracy to days so time is removed (this only writes, another checks)
                     //      done to reduce cache clogging, so might miss offset by hours but not days
-                    //      !!DO NOT lower accuracy below time as needed for Western day light saving changes!! 
+                    //      !!DO NOT lower accuracy below time as needed for Western daylight saving changes!! 
                     DateTimeOffset roundedTime = new DateTimeOffset(parsedSTDInputTime.Year, parsedSTDInputTime.Month, parsedSTDInputTime.Day, 0, 0, 0, parsedSTDInputTime.Offset);
                     var timeTicks = roundedTime.Ticks.ToString();
-                    AddToCache(geoLocation, rowKeyData: timeTicks, timezone: timezoneStr);
+                    var sourceId = $"{apiProvider}-{nameof(GeoLocationToTimezone)}"; //id the source for validation
+                    AddToCache(geoLocation, rowKeyData: timeTicks, timezone: timezoneStr, source: sourceId);
 
                 }
 
@@ -272,12 +312,17 @@ namespace API
         /// <summary>
         /// Will add new cache to Geo Location Cache
         /// </summary>
-        private static void AddToCache(GeoLocation parsedGeoLocation, string rowKeyData = "", string timezone = "")
+        private static void AddToCache(GeoLocation parsedGeoLocation, string rowKeyData = "", string timezone = "", string source = "")
         {
 
             //if cleaned name is same with user input name (RowKey), than remove cleaned name (save space)
             var cleanedName = CreateSearchableName(parsedGeoLocation.Name());
             cleanedName = cleanedName == rowKeyData ? "" : cleanedName;
+
+            //NOTES
+            //Azure Table Storage is designed for fast point
+            //queries where the client knows the
+            //Partition Key and Row Key
 
             //package the data
             GeoLocationCacheEntity customerEntity = new()
@@ -287,7 +332,8 @@ namespace API
                 RowKey = rowKeyData, //row key data can be time or name inputed by caller
                 Timezone = timezone,
                 Latitude = parsedGeoLocation.Latitude(),
-                Longitude = parsedGeoLocation.Longitude()
+                Longitude = parsedGeoLocation.Longitude(),
+                Source = source // used for identifying who made it, for validation checking
             };
 
             //creates record if no exist, update if already there
@@ -380,7 +426,7 @@ namespace API
         /// <summary>
         /// Will return empty Geo Location if no cache
         /// </summary>
-        public static GeoLocation CoordinatesToGeoLocation_Vedastro(string longitude, string latitude)
+        public static async Task<GeoLocation> CoordinatesToGeoLocation_Vedastro(string longitude, string latitude)
         {
             //do direct search for address in name field 
             var longitudeParsed = double.Parse(longitude);
@@ -753,8 +799,17 @@ namespace API
                 if (referenceTimeObject == null)
                     throw new ArgumentException($"Invalid or missing 'ReferenceTime' object in Azure timezone response.");
 
+
                 var standardOffsetString = referenceTimeObject["StandardOffset"].Value<string>();
-                offsetMinutes = TimeSpan.Parse(standardOffsetString);
+                var stdOffsetMinutes = TimeSpan.Parse(standardOffsetString);
+
+                //difference in daylight savings
+                //when no daylight saving will return 0
+                var daylightSavingsString = referenceTimeObject["DaylightSavings"].Value<string>();
+                var daylightSavingsOffsetMinutes = TimeSpan.Parse(daylightSavingsString);
+
+                //add standard never changing offset to daylight savings to get final accurate timezone
+                offsetMinutes = stdOffsetMinutes + daylightSavingsOffsetMinutes;
 
                 return true;
             }

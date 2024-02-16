@@ -13,21 +13,21 @@ public class GeoLocationCacheEntity : ITableEntity
     /// Name of the location
     /// </summary>
     public string PartitionKey { get; set; }
-    
+
     /// <summary>
     /// official name of location with lowercase with all special characters removed
     /// NOTE : done to do faster server side search
     /// </summary>
     public string CleanedName { get; set; }
 
-	/// <summary>
-	/// date time offset in ticks seconds OR location name given by caller
-	/// NOTE : done to do faster server side search
-	/// </summary>
-	public string RowKey { get; set; }
+    /// <summary>
+    /// date time offset in ticks seconds OR location name given by caller
+    /// NOTE : done to do faster server side search
+    /// </summary>
+    public string RowKey { get; set; }
 
     public DateTimeOffset? Timestamp { get; set; }
-    
+
     /// <summary>
     /// Timezone linked to date time offset in RowKey
     /// </summary>
@@ -35,6 +35,11 @@ public class GeoLocationCacheEntity : ITableEntity
     public ETag ETag { get; set; }
     public double Longitude { get; set; }
     public double Latitude { get; set; }
+
+    /// <summary>
+    /// source of API caller method 
+    /// </summary>
+    public string Source { get; set; }
 
     public GeoLocation ToGeoLocation() => new(PartitionKey, Longitude, Latitude);
 }

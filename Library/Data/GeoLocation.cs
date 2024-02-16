@@ -243,12 +243,12 @@ namespace VedAstro.Library
             {
                 //TODO switch to using VedAstro API
                 //get only coordinates 1st
-                var coordinates = await GetCoordinatesFromIpAddressGoogle();
+                var coordinates = await GetCoordinatesFromIpAddressAPI();
 
                 //get name from coordinates
                 var fromIpAddress = await CoordinatesToGeoLocation(coordinates.Latitude(), coordinates.Longitude());
 
-                //new geo location from the depths
+                //new geolocation from the depths
                 return fromIpAddress;
             }
             catch (Exception e)
@@ -286,12 +286,8 @@ namespace VedAstro.Library
         /// Gets coordinates with VedAstro API
         /// IP address is auto-detected by API, so need to supply 
         /// </summary>
-        public static async Task<GeoLocation> GetCoordinatesFromIpAddressGoogle()
+        public static async Task<GeoLocation> GetCoordinatesFromIpAddressAPI()
         {
-            //round the coordinates, to match cache better and also because 3 decimal places is enough
-            //var latitudeRound = Math.Round(latitude, 3);
-            //var longitudeRound = Math.Round(longitude, 3);
-
             //get from API
             var url = URL.IpAddressToGeoLocationAPI;
             var webResult = await Tools.ReadFromServerJsonReply(url);

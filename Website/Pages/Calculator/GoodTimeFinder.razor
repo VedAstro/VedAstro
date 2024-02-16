@@ -481,9 +481,6 @@
         //this is set here, so on 2nd search in same session it will use back
         if (!AppData.SearchFilesLoaded) { await AppData.LoadSearchFiles(); }
 
-        //get list of all event nicely formatted via API
-        EventManager.EventDataList = EventDataListStatic.Rows;
-
         //fill default precision
         var timeRange = GetTimeRange();
         DaysPerPixelInput = EventsChart.GetDayPerPixel(timeRange, _eventsChartViewer.MaxWidth);

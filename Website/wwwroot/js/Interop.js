@@ -294,6 +294,8 @@ export async function InitializeSearchForAPISelector(textChunks) {
 //this then will used to highlight the Index link
 export async function InitializeInPageNav() {
 
+
+    //# dynamic change highlight
     //attaches a handler when scroll
     $(window).bind('scroll', async function () {
         var currentTop = $(window).scrollTop();

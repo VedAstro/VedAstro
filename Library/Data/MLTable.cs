@@ -307,6 +307,109 @@ namespace VedAstro.Library
 
         }
 
+        public static async Task<List<Time>> GetTimeListFromCsv(Stream inputedFile)
+        {
+
+            using (var copiedInputedFile = new MemoryStream())
+            {
+                inputedFile.CopyTo(copiedInputedFile);
+                copiedInputedFile.Position = 0; // Reset the position of the MemoryStream to the beginning
+
+                var foundRawTimeList = await ExtractTimeColumnFromCsv(copiedInputedFile.Clone());
+                copiedInputedFile.Position = 0; // Reset the position of the MemoryStream to the beginning
+                var foundGeoLocationList = await ExtractLocationColumnFromCsv(copiedInputedFile.Clone());
+
+                //3 : COMBINE DATA
+                var returnList = foundRawTimeList.Select((dateTimeOffset, index) => new Time(dateTimeOffset, foundGeoLocationList[index])).ToList();
+
+                return returnList;
+
+                /// <summary>
+                /// Given a CSV file will extract out 1 column that contains parseable time
+                /// </summary>
+                static async Task<List<DateTimeOffset>> ExtractTimeColumnFromCsv(Stream csvStream)
+                {
+                    using (var reader = new StreamReader(csvStream))
+                    {
+                        string line;
+                        bool headersFound = false;
+                        int timeColumnIndex = -1;
+                        var timeList = new List<DateTimeOffset>();
+
+                        while ((line = await reader.ReadLineAsync()) != null)
+                        {
+                            var values = line.Split(',');
+
+                            if (!headersFound)
+                            {
+                                // Search for the time column by checking for header labels containing the word 'time'
+                                timeColumnIndex = Array.FindIndex(values, v => v.ToLower().Contains("time"));
+                                headersFound = true;
+                            }
+                            else
+                            {
+                                // Parse time when timeColumnIndex is valid
+                                if (timeColumnIndex >= 0 && timeColumnIndex < values.Length)
+                                {
+                                    if (DateTimeOffset.TryParse(values[timeColumnIndex], out DateTimeOffset dateTimeOffset))
+                                    {
+                                        timeList.Add(dateTimeOffset);
+                                        ProgressCounter++;
+                                    }
+                                }
+                            }
+                        }
+
+                        return timeList;
+                    }
+                }
+
+                /// <summary>
+                /// Given a CSV file will extract out 1 column that contains parseable time
+                /// </summary>
+                static async Task<List<GeoLocation>> ExtractLocationColumnFromCsv(Stream csvStream)
+                {
+                    csvStream.Position = 0;
+                    using (var reader = new StreamReader(csvStream))
+                    {
+                        string line;
+                        bool headersFound = false;
+                        int geoLocationColumnIndex = -1;
+                        var geoLocations = new List<GeoLocation>();
+
+                        while ((line = await reader.ReadLineAsync()) != null)
+                        {
+                            var values = line.Split(',');
+
+                            if (!headersFound)
+                            {
+                                // Search for the geoLocation column by checking for header labels containing words like 'location', 'latitude', or 'longitude'
+                                geoLocationColumnIndex = Array.FindIndex(values, v => v.ToLower().Contains("location") || v.ToLower().Contains("latitude") || v.ToLower().Contains("longitude"));
+                                headersFound = true;
+                            }
+                            else
+                            {
+                                // Parse geoLocation when geoLocationColumnIndex is valid
+                                if (geoLocationColumnIndex >= 0 && geoLocationColumnIndex < values.Length)
+                                {
+                                    var tryParse = await GeoLocation.TryParse(values[geoLocationColumnIndex]);
+                                    if (tryParse.Item1)
+                                    {
+                                        geoLocations.Add(tryParse.Item2);
+                                        ProgressCounter++;
+                                    }
+                                }
+                            }
+                        }
+
+                        return geoLocations;
+                    }
+                }
+
+            }
+
+        }
+
 
         /// <summary>
         /// Send time list column as Json to API to make HTML table

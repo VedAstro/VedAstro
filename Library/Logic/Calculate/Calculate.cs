@@ -58,6 +58,49 @@ namespace VedAstro.Library
 
         //----------------------------------------CORE CODE---------------------------------------------
 
+
+        #region CHAT API & MACHINE LEARNING
+
+        /// <summary>
+        /// Searches all horoscopes predictions with LLM
+        /// </summary>
+        public static string HoroscopeLLMSearch(Time birthTime, string textInput)
+        {
+            //make http call to python api server
+            var timeUrl = birthTime.ToUrl();
+            var callUrl = $"";
+            var rawReply = Tools.MakePostRequest(callUrl, textInput);
+
+            return rawReply.ToString();
+        }
+
+        /// <summary>
+        /// Given a start time & end time and space in hours between.
+        /// Will generate massive CSV tables for ML & Data Science
+        /// Will contain 3 columns, "Name","Time","Location"
+        /// this can then be fed into ML Table Generator
+        /// </summary>
+        public static string GenerateTimeListCSV(Time startTime, Time endTime, double hoursBetween)
+        {
+            //make slices to fill list
+            var timeSlices = Time.GetTimeListFromRange(startTime, endTime, hoursBetween);
+
+            //generate CSV string from above time slices
+            StringBuilder csv = new StringBuilder();
+            csv.AppendLine("Name,Time,Location");
+
+            for (var index = 0; index < timeSlices.Count; index++)
+            {
+                var time = timeSlices[index];
+                var locationNameCSVSafe = time.GetGeoLocation().Name().Replace(",", ""); //remove comma, since CSV reserved
+                csv.AppendLine($"row{index},{time.GetStdDateTimeOffsetText()},{locationNameCSVSafe}");
+            }
+
+            return csv.ToString();
+        }
+
+        #endregion
+
         #region SAHAMS
 
         public static Angle PunyaSahamLongitude(Time birthTime)

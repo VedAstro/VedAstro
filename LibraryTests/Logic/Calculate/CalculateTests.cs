@@ -1482,5 +1482,14 @@ namespace VedAstro.Library.Tests
             Assert.IsTrue(test2.Any());
 
         }
+
+        [TestMethod()]
+        public void GenerateTimeListCSVTest()
+        {
+            var start = Time.NowSystem(GeoLocation.Ipoh);
+            var end = start.AddYears(5);
+            var test1 = Calculate.GenerateTimeListCSV(start, end, 24);
+
+        }
     }
 }

@@ -388,7 +388,24 @@
             ms.Position = 0;
 
             _timeList = new List<Time>();
-            _timeList = await MLTable.GetTimeListFromExcel(ms);
+
+            // Check the file extension
+            var extension = Path.GetExtension(file.Name).ToLower();
+
+            // Call the appropriate method based on the file extension
+            if (extension == ".csv")
+            {
+                _timeList = await MLTable.GetTimeListFromCsv(ms);
+            }
+            else if (extension == ".xlsx" || extension == ".xls")
+            {
+                _timeList = await MLTable.GetTimeListFromExcel(ms);
+            }
+            else
+            {
+                // Handle other file types if necessary
+                //todo file type not supported message
+            }
 
             if (_timeList.Any() && _timeList != null)
             {

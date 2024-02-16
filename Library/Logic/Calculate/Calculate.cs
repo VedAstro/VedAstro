@@ -461,7 +461,6 @@ namespace VedAstro.Library
 
         #endregion
 
-
         #region TAJIKA
 
         /// <summary>
@@ -2388,10 +2387,10 @@ namespace VedAstro.Library
         /// Can be filtered.
         /// </summary>
         /// <param name="filterTag">Set to only show certain types of predictions</param>
-        public static async Task<List<HoroscopePrediction>> HoroscopePredictions(Time birthTime, EventTag filterTag = EventTag.Empty)
+        public static List<HoroscopePrediction> HoroscopePredictions(Time birthTime, EventTag filterTag = EventTag.Empty)
         {
             //calculate predictions for current person
-            var predictionList = await Tools.GetHoroscopePrediction(birthTime, URL.HoroscopeDataListFile, filterTag);
+            var predictionList = Tools.GetHoroscopePrediction(birthTime, filterTag);
 
             return predictionList;
         }
@@ -2401,10 +2400,10 @@ namespace VedAstro.Library
         /// example : "Moon House 8", "10th Lord in 8th House"
         /// note : used by AI Chat, when talking to Astro tuned LLM server
         /// </summary>
-        public static async Task<List<string>> HoroscopePredictionNames(Time birthTime)
+        public static List<string> HoroscopePredictionNames(Time birthTime)
         {
             //calculate predictions for current person
-            var predictionList = await Tools.GetHoroscopePrediction(birthTime, URL.HoroscopeDataListFile);
+            var predictionList = Tools.GetHoroscopePrediction(birthTime);
 
             //take out only name
             var namesOnly = predictionList.Select(x => x.Name.ToString()).ToList();
@@ -2419,11 +2418,10 @@ namespace VedAstro.Library
         /// </summary>
         /// <param name="birthTime">birth time of native</param>
         /// <param name="checkTime">time to base calculation on</param>
-        public static async Task<Event> EventDataAtTime(Time birthTime, Time checkTime, EventName nameOfEvent)
+        public static Event EventDataAtTime(Time birthTime, Time checkTime, EventName nameOfEvent)
         {
             //from event name, get full event data
-            if (EventManager.EventDataList == null || !EventManager.EventDataList.Any()) { EventManager.EventDataList = await Tools.ConvertXmlListFileToInstanceList<EventData>(EventManager.UrlEventDataListXml); }
-            EventData eventData = EventManager.EventDataList.Where(x => x.Name == nameOfEvent).FirstOrDefault();
+            EventData eventData = EventDataListStatic.Rows.Where(x => x.Name == nameOfEvent).FirstOrDefault();
 
             //TODO should be changeable for fine events
             var precisionInHours = 1;
@@ -10179,7 +10177,7 @@ namespace VedAstro.Library
         /// set how accurately the start & end time of each event is calculated
         /// exp: setting 1 hour, means given in a time range of 100 years, it will be checked 876600 times 
         /// </param>
-        public static async Task<JObject> DasaForLife(Time birthTime, int levels = 3, int precisionHours = 100, int scanYears = 100)
+        public static JObject DasaForLife(Time birthTime, int levels = 3, int precisionHours = 100, int scanYears = 100)
         {
             //TODO NOTE:
             //precisionHours limits the levels that can be calculated (because of 0 filtering)
@@ -10199,7 +10197,7 @@ namespace VedAstro.Library
             var johnDoe = new Person("", birthTime, Gender.Empty);
 
             //do calculation (heavy computation)
-            List<Event> eventList = await EventManager.CalculateEvents(precisionHours,
+            List<Event> eventList = EventManager.CalculateEvents(precisionHours,
                                                                         startTime,
                                                                         endTime,
                                                                         johnDoe,
@@ -10226,7 +10224,7 @@ namespace VedAstro.Library
         /// exp: setting 1 hour, means given in a time range of 100 years, it will be checked 876600 times 
         /// </param>
         /// <returns></returns>
-        public static async Task<JObject> DasaAtRange(Time birthTime, Time startTime, Time endTime, int levels = 3, int precisionHours = 100)
+        public static JObject DasaAtRange(Time birthTime, Time startTime, Time endTime, int levels = 3, int precisionHours = 100)
         {
             //TODO NOTE:
             //precisionHours limits the levels that can be calculated (because of 0 filtering)
@@ -10244,7 +10242,7 @@ namespace VedAstro.Library
             var johnDoe = new Person("", birthTime, Gender.Empty);
 
             //do calculation (heavy computation)
-            List<Event> eventList = await EventManager.CalculateEvents(precisionHours,
+            List<Event> eventList = EventManager.CalculateEvents(precisionHours,
                                                                         startTime,
                                                                         endTime,
                                                                         johnDoe,
@@ -10259,7 +10257,7 @@ namespace VedAstro.Library
             return dasaEvents1;
         }
 
-        public static async Task<JObject> DasaAtTime(Time birthTime, Time checkTime, int levels = 3)
+        public static JObject DasaAtTime(Time birthTime, Time checkTime, int levels = 3)
         {
             //TODO NOTE:
             //precisionHours limits the levels that can be calculated (because of 0 filtering)
@@ -10276,7 +10274,7 @@ namespace VedAstro.Library
             var johnDoe = new Person("", birthTime, Gender.Empty);
 
             //do calculation (heavy computation)
-            List<Event> eventList = await EventManager.CalculateEvents(1,
+            List<Event> eventList = EventManager.CalculateEvents(1,
                                                                         checkTime,
                                                                         checkTime,
                                                                         johnDoe,
@@ -10292,7 +10290,7 @@ namespace VedAstro.Library
 
         }
 
-        public static async Task<JObject> DasaForNow(Time birthTime, int levels = 3)
+        public static JObject DasaForNow(Time birthTime, int levels = 3)
         {
             //TODO NOTE:
             //precisionHours limits the levels that can be calculated (because of 0 filtering)
@@ -10312,7 +10310,7 @@ namespace VedAstro.Library
             var nowTime = Time.NowSystem(birthTime.GetGeoLocation());
 
             //do calculation (heavy computation)
-            List<Event> eventList = await EventManager.CalculateEvents(1,
+            List<Event> eventList = EventManager.CalculateEvents(1,
                                                                         nowTime,
                                                                         nowTime,
                                                                         johnDoe,
@@ -10731,11 +10729,12 @@ namespace VedAstro.Library
             //check that A conjuncts B and B conjuncts A 
             var conjunctFound = planetAConjunct.Contains(planetB) && planetBConjunct.Contains(planetA);
 
+            //TODO clean or clear
             //erro check, can be removed upon corectness confirmation
-            if (planetAConjunct.Contains(planetB) != planetBConjunct.Contains(planetA))
-            {
-                throw new Exception("Conjunct planet not uniform!");
-            }
+            //if (planetAConjunct.Contains(planetB) != planetBConjunct.Contains(planetA))
+            //{
+            //    throw new Exception("Conjunct planet not uniform!");
+            //}
 
             return conjunctFound;
         }

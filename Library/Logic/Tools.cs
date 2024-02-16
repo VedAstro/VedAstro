@@ -2014,6 +2014,29 @@ namespace VedAstro.Library
             }
         }
 
+        /// <summary>
+        /// Removes all invalid characters for an person name
+        /// used to clean name field user input. Also
+        /// allowed chars : periods (.) and hyphens (-), space ( )
+        /// </summary>
+        public static string CleanText(string uncleanInput)
+        {
+            // Replace invalid characters with empty strings.
+            try
+            {
+                //remove invalid
+                var cleanText = Regex.Replace(uncleanInput, @"[^\w\.\s*-]", "", RegexOptions.None, TimeSpan.FromSeconds(2));
+
+                return cleanText;
+            }
+            // If we timeout when replacing invalid characters,
+            // we should return Empty.
+            catch (RegexMatchTimeoutException)
+            {
+                return string.Empty;
+            }
+        }
+
 
         /// <summary>
         /// Given a parsed XML element will convert to Json string
@@ -4023,6 +4046,20 @@ namespace VedAstro.Library
             }
 
             return dataTable;
+        }
+
+        /// <summary>
+        /// make a POST request and returns the result as a JObject
+        /// </summary>
+        public static async Task<JObject> MakePostRequest(string url, string jsonData)
+        {
+            using (var client = new HttpClient())
+            {
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, content);
+                var result = await response.Content.ReadAsStringAsync();
+                return JObject.Parse(result);
+            }
         }
     }
 

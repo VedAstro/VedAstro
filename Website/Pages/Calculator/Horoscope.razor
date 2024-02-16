@@ -1,4 +1,4 @@
-﻿@using VedAstro.Library
+@using VedAstro.Library
 @attribute [Route(PageRoute.Horoscope)]
 @attribute [Route(PageRoute.HoroscopeParam)]
 
@@ -14,7 +14,7 @@
 <div class="gap-3" style="max-width: @GR.W824px;">
 
     @* IN PAGE NAV BAR *@
-    <div id="inPageNavBar" style="display: none !important; position: fixed;right: 69px;font-family: 'Lexend Deca';font-weight: bold;font-size: 14px; width: fit-content;" class="vstack gap-1 mt-2 pt-2 border-top d-none d-lg-block">
+    <div id="inPageNavBar" style="z-index: 100; display: none !important; position: fixed;right: 69px;font-family: 'Lexend Deca';font-weight: bold;font-size: 14px; width: fit-content;" class="vstack gap-1 mt-2 pt-2 border-top d-none d-lg-block">
         @* HEADER TEXT *@
         <span @onclick="@(() => _jsRuntime.ScrollToDivById("HoroscopeMainInputHolder"))" style="cursor: pointer; font-size: 11.5px;margin-left: 44px;color: grey;margin-top: -19px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">INDEX</span>
         
@@ -24,6 +24,7 @@
             <a id="AutoPrediction-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#AutoPrediction">Auto Prediction</a>
             <a id="Strength-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Strength">Strength</a>
             <a id="SkyChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#SkyChart">Sky Chart</a>
+            <a id="AIAnalysis-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#AIAnalysis">AI Analysis</a>
             <a id="IndianChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#IndianChart">Birth Chart</a>
             <a id="PlanetDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#PlanetDataTable2">Planet Table</a>
             <a id="HouseDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#HouseDataTable2">House Table</a>
@@ -122,12 +123,26 @@
         <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
         
         <IndianChart Id="IndianChart" ExtraClass="scrollspy" @ref="indianChartViewer"/>
-
+        
+        @* below made by vedastro.JS code *@
         <div id="PlanetDataTable2" class="scrollspy" ></div>
 
         <div id="HouseDataTable2" class="scrollspy" ></div>
         
         <div id="Ashtakvarga" class="scrollspy" ></div>
+        
+        @* AI Analysis *@
+        <div id="AIAnalysis" class="scrollspy">
+            <IconTitle Title="AI Analysis" IconName="fluent-emoji:robot" TitleHolder="h4" />
+            <div class="input-group">
+                <input type="text" @bind="llmSearchInputText" class="form-control" placeholder="keywords like wife, money..." aria-label="keywords like wife, money...">
+                <button @onclick="OnClickLLMSearch" class="btn btn-primary" type="button">LLM Search</button>
+                <button class="btn btn-outline-primary" type="button">API</button>
+            </div>
+            <div class="form-text" id="basic-addon4">This will intelligently search all horoscope prediction using AI trained LLM model</div>
+
+            <HoroscopeReferenceList @ref="_llmHoroscopeReferenceList" ShowFilterOptions="false" />
+        </div>
 
         @* Reference *@
         <div id="Reference" class="scrollspy">
@@ -146,8 +161,10 @@
 
 @code {
     private HoroscopeReferenceList _horoscopeReferenceList = null;
+    private HoroscopeReferenceList _llmHoroscopeReferenceList = null;
     private AIPrediction _aiPrediction = null;
     private StrengthChart _strengthChart = null;
+    private string llmSearchInputText;
 
 
     private string _selectedChartStyle = "South";
@@ -457,6 +474,17 @@
 
     }
 
+    private async Task OnClickLLMSearch()
+    {
+        //place user's inputed keyword into API call
+        //https://vedastroapi.azurewebsites.net/api/Calculate/HoroscopeLLMSearch/Location/Singapore/Time/00:00/16/02/2024/+08:00/TextInput/mother money house
+        var apiUrl = $"{AppData.URL.HoroscopePredictions}{Time.StandardHoroscope().ToUrl()}/TextInput/{llmSearchInputText}";
 
+        //make call to API
+        var foundList = await Tools.GetListNoPolling(apiUrl, HoroscopePrediction.FromJsonList);
+
+        //show on screen
+        await _llmHoroscopeReferenceList.ShowPrediction(foundList);
+    }
 
 }

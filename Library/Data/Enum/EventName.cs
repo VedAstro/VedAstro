@@ -1107,5 +1107,15 @@
         BirdDying,
 
         #endregion
+
+        #region GHATAKA CHAKRA
+
+        GhatakaMoonSign,
+        GhatakaTithiGroup,
+        GhatakaWeekDay,
+        GhatakaMoonConstellation,
+        GhatakaLagna,
+
+        #endregion
     }
 }

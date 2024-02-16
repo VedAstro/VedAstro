@@ -3,6 +3,50 @@
 
 	<!--THIS IS THE DATA LIST FOR HOROSCOPE-->
 
+	<!--GHATAKA CHAKRA-->
+	<Event>
+		<Name>GhatakaMoonSign</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			If the ghataka element happens to be Moon, then the injury is on reputation,
+		</Description>
+		<Tag>Personal, GhatakaChakra</Tag>
+	</Event>
+	<Event>
+		<Name>GhatakaTithiGroup</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			If the ghataka element happens to be Tithi or Nakshatra, the injury is more mental and emotional.
+		</Description>
+		<Tag>Personal, GhatakaChakra</Tag>
+	</Event>
+	<Event>
+		<Name>GhatakaWeekDay</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			If the ghataka element happens to be Weekday or the Lagna, the injury is more physical
+		</Description>
+		<Tag>Personal, GhatakaChakra</Tag>
+	</Event>
+	<Event>
+		<Name>GhatakaMoonConstellation</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			If the ghataka element happens to be Tithi or Nakshatra, the injury is more mental and emotional.
+		</Description>
+		<Tag>Personal, GhatakaChakra</Tag>
+	</Event>
+	<Event>
+		<Name>GhatakaLagna</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			If the ghataka element happens to be Weekday or the Lagna, the injury is more physical
+		</Description>
+		<Tag>Personal, GhatakaChakra</Tag>
+	</Event>
+
+
+
 	<!--UPAGRAHA IN HOUSES-->
 	<!--Dhuma-->
 	<Event>

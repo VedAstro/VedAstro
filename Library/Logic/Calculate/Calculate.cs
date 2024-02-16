@@ -2039,6 +2039,62 @@ namespace VedAstro.Library
         #region GENERAL
 
         /// <summary>
+        /// As the name suggests, Ghataka chakra is seen for any kind of injuries,
+        /// may it be Physical or Mental. The injuries can be inflicted at an inopportune
+        /// moment or by an inimical person. Both of these can be seen from the Ghataka Chakra.
+        /// For the first instance, the inopportune time can be seen from the horoscope of the
+        /// moment of occurance of the event and for the latter case, the same can be seen from
+        /// the horoscope of the person inflicting pain and injury.
+        /// </summary>
+        public static List<string> GhatakaChakra(Time time, Time birthTime)
+        {
+            //below table of all possible combinations
+            var GhatakaChakraTable = new Dictionary<ZodiacName, GhatakaRow>()
+            {
+                { ZodiacName.Aries, new GhatakaRow(ZodiacName.Aries, LunarDayGroup.Nanda, VedAstro.Library.DayOfWeek.Sunday, ConstellationName.Makha, ZodiacName.Aries, ZodiacName.Libra)},
+                { ZodiacName.Taurus, new GhatakaRow(ZodiacName.Virgo, LunarDayGroup.Purna, VedAstro.Library.DayOfWeek.Saturday, ConstellationName.Hasta, ZodiacName.Taurus, ZodiacName.Scorpio)},
+                { ZodiacName.Gemini, new GhatakaRow(ZodiacName.Aquarius,LunarDayGroup.Bhadra , VedAstro.Library.DayOfWeek.Monday , ConstellationName.Swathi ,ZodiacName.Cancer,ZodiacName.Capricorn)},
+                { ZodiacName.Cancer, new GhatakaRow(ZodiacName.Leo,LunarDayGroup.Bhadra ,VedAstro.Library.DayOfWeek.Wednesday ,ConstellationName.Anuradha,ZodiacName.Libra,ZodiacName.Aries)},
+                { ZodiacName.Leo, new GhatakaRow(ZodiacName.Capricorn,LunarDayGroup.Jaya ,VedAstro.Library.DayOfWeek.Saturday ,ConstellationName.Moola,ZodiacName.Capricorn,ZodiacName.Cancer)},
+                { ZodiacName.Virgo, new GhatakaRow(ZodiacName.Gemini,LunarDayGroup.Purna ,VedAstro.Library.DayOfWeek.Saturday ,ConstellationName.Sravana,ZodiacName.Pisces,ZodiacName.Virgo)},
+                { ZodiacName.Libra, new GhatakaRow(ZodiacName.Sagittarius,LunarDayGroup.Rikta,VedAstro.Library.DayOfWeek.Thursday,ConstellationName.Satabhisha,ZodiacName.Virgo,ZodiacName.Pisces)},
+                { ZodiacName.Scorpio, new GhatakaRow(ZodiacName.Taurus,LunarDayGroup.Nanda,VedAstro.Library.DayOfWeek.Friday,ConstellationName.Revathi,ZodiacName.Taurus,ZodiacName.Scorpio)},
+                { ZodiacName.Sagittarius, new GhatakaRow(ZodiacName.Pisces,LunarDayGroup.Jaya,VedAstro.Library.DayOfWeek.Friday,ConstellationName.Aswini,ZodiacName.Sagittarius,ZodiacName.Gemini)},
+                { ZodiacName.Capricorn, new GhatakaRow(ZodiacName.Leo,LunarDayGroup.Rikta,VedAstro.Library.DayOfWeek.Tuesday,ConstellationName.Rohini,ZodiacName.Aquarius,ZodiacName.Leo)},
+                { ZodiacName.Aquarius, new GhatakaRow(ZodiacName.Sagittarius,LunarDayGroup.Jaya,VedAstro.Library.DayOfWeek.Thursday,ConstellationName.Aridra,ZodiacName.Gemini,ZodiacName.Sagittarius)},
+                { ZodiacName.Pisces, new GhatakaRow(ZodiacName.Aquarius,LunarDayGroup.Purna,VedAstro.Library.DayOfWeek.Thursday,ConstellationName.Aslesha,ZodiacName.Leo,ZodiacName.Aquarius)}
+            };
+
+            //get janma rasi
+            var janmaRasi = Calculate.MoonSignName(birthTime);
+
+            //get data points that could make this happen at check time
+            ZodiacName moonSign = Calculate.MoonSignName(time);
+            LunarDayGroup tithiGroup = Calculate.LunarDay(time).GetLunarDayGroup();
+            DayOfWeek vedicDay = Calculate.DayOfWeek(time);
+            ConstellationName moonConstellation = Calculate.MoonConstellation(time).GetConstellationName();
+            ZodiacName lagna = Calculate.HouseZodiacSign(HouseName.House1, time).GetSignName();
+
+            //add any to list, can occur more than 1
+            var foundGhataka = new List<string>();
+
+            //if any one of the above data points match with any one GhatakRow then add to list
+            //can be more than 1 added
+            if (GhatakaChakraTable.TryGetValue(janmaRasi, out GhatakaRow ghatakaRow))
+            {
+                //check each and add
+                if (ghatakaRow.MoonSign == moonSign) { foundGhataka.Add(nameof(ghatakaRow.MoonSign)); }
+                if (ghatakaRow.TithiGroup == tithiGroup) { foundGhataka.Add(nameof(ghatakaRow.TithiGroup)); }
+                if (ghatakaRow.WeekDay == vedicDay) { foundGhataka.Add(nameof(ghatakaRow.WeekDay)); }
+                if (ghatakaRow.MoonConstellation == moonConstellation) { foundGhataka.Add(nameof(ghatakaRow.MoonConstellation)); }
+                if (ghatakaRow.LagnaSameSex == lagna) { foundGhataka.Add(nameof(ghatakaRow.LagnaSameSex)); }
+            }
+
+            //return list
+            return foundGhataka;
+        }
+
+        /// <summary>
         /// Gets total hours in a vedic day, that is duration from sunset to sunrise
         /// NOTE: does not account if birth time is outside sunrise & sunset range
         /// </summary>

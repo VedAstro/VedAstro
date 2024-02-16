@@ -11,3 +11,6 @@ xmltodict
 fastapi
 xmltodict
 uvicorn
+
+# astrology
+vedastro

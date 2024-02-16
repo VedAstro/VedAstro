@@ -48,6 +48,19 @@ namespace VedAstro.Library
         public const string BlobContainerName = "vedastro-site-data";
 
 
+        /// <summary>
+        /// Make clone of stream
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static Stream Clone(this Stream stream)
+        {
+            long originalPosition = stream.Position;
+            MemoryStream ms = new MemoryStream();
+            stream.CopyTo(ms);
+            ms.Seek(originalPosition, SeekOrigin.Begin);
+            return ms;
+        }
 
         /// <summary>
         /// Gets XML file from any URL and parses it into xelement list

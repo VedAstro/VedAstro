@@ -3417,6 +3417,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// No parsing direct from horses mouth
+        /// GET Request
         /// </summary>
         public static async Task<T> ReadServerRaw<T>(string receiverAddress)
         {
@@ -4074,6 +4075,27 @@ namespace VedAstro.Library
                 var result = await response.Content.ReadAsStringAsync();
                 return JObject.Parse(result);
             }
+        }
+
+        /// <summary>
+        /// Direct GET request than JSON is parsed into LIST
+        /// VedAstro JSON format supported
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="inputUrl"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
+        public static async Task<List<T>> GetListNoPolling<T>(string inputUrl, Func<JToken, List<T>> converter)
+        {
+            JToken? xListJson = await Tools.ReadServerRaw<JObject>(inputUrl);
+
+            //todo if fail...do something
+            //await _jsRuntime.ShowAlert("error", AlertText.ObliviousErrors(), true);
+
+            var timeListJson = xListJson["Payload"];
+            var cachedPersonList = converter.Invoke(timeListJson);
+
+            return cachedPersonList;
         }
     }
 

@@ -57,7 +57,8 @@ public class URL
         GetNewPersonId = ApiUrl + "/GetNewPersonId";
 
 
-        GetHoroscope = ApiUrl + "/gethoroscope";
+        HoroscopePredictions = ApiUrlDirect + "/Calculate/HoroscopePredictions";
+        HoroscopeLLMSearch = ApiUrlDirect + "/Calculate/HoroscopeLLMSearch";
         AddLifeEventApi = ApiUrl + "/addlifeevent";
         AddMessageApi = ApiUrl + "/addmessage";
         DeleteChartApi = ApiUrl + "/deletesavedchart";
@@ -109,7 +110,8 @@ public class URL
     public readonly string ApiUrlDirect;
     public readonly string WebUrl;
     public readonly string WebUrlDirect;
-    public readonly string GetHoroscope;
+    public readonly string HoroscopePredictions;
+    public readonly string HoroscopeLLMSearch;
     public readonly string AddLifeEventApi;
     public readonly string AddMessageApi;
     public readonly string DeletePerson;

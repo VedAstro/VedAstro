@@ -64,14 +64,21 @@ namespace VedAstro.Library
         /// <summary>
         /// Searches all horoscopes predictions with LLM
         /// </summary>
-        public static string HoroscopeLLMSearch(Time birthTime, string textInput)
+        public static List<HoroscopePrediction> HoroscopeLLMSearch(Time birthTime, string textInput)
         {
-            //make http call to python api server
-            var timeUrl = birthTime.ToUrl();
-            var callUrl = $"";
-            var rawReply = Tools.MakePostRequest(callUrl, textInput);
 
-            return rawReply.ToString();
+            return new List<HoroscopePrediction>()
+            {
+                new HoroscopePrediction(HoroscopeName.AdhiYoga, "", RelatedBody.Empty),
+                new HoroscopePrediction(HoroscopeName.AriesRising, "", RelatedBody.Empty),
+            };
+
+            ////make http call to python api server
+            //var timeUrl = birthTime.ToUrl();
+            //var callUrl = $"";
+            //var rawReply = Tools.MakePostRequest(callUrl, textInput);
+
+            //return rawReply.ToString();
         }
 
         /// <summary>
@@ -11555,9 +11562,16 @@ namespace VedAstro.Library
             //if planet is Rahu or Ketu than default retrograde is always on
             if (planetName.Name == PlanetNameEnum.Rahu || planetName.Name == PlanetNameEnum.Ketu) { return true; }
 
-            //retro grade 
-            //TODO
-            throw new Exception("END OF LINE!");
+            //get longitude of planet at given time
+            var checkTimeLong = PlanetNirayanaLongitude(planetName, time);
+
+            //get longitude of planet next day
+            var nextDay = time.AddHours(24);
+            var nextDayLong = PlanetNirayanaLongitude(planetName, nextDay);
+
+            //if next day longitude is lesser, than retrograde, going backward
+            //else not retro
+            return nextDayLong < checkTimeLong;
         }
 
 

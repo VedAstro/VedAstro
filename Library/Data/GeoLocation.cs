@@ -237,11 +237,10 @@ namespace VedAstro.Library
         /// important is to always have some location for app to use
         /// </summary>
         /// <returns></returns>
-        public static async Task<GeoLocation> FromIpAddress(string apiKey)
+        public static async Task<GeoLocation> FromIpAddress()
         {
             try
             {
-                //TODO switch to using VedAstro API
                 //get only coordinates 1st
                 var coordinates = await GetCoordinatesFromIpAddressAPI();
 

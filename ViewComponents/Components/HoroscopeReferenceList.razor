@@ -3,81 +3,90 @@
 @namespace Website.Pages
 @using VedAstro.Library;
 @using System.Xml.Linq
+@using Newtonsoft.Json
 
 
 <div class="d-flex justify-content-center gap-3 mb-2">
 
-    @*Planet Name*@
-    <div @ref="planetNameSelector" class="form-floating">
-        <select @bind="SelectedPlanet" class="form-select" id="planetNameSelector" aria-label="Planet Name Select">
-            <option value="" selected>Filter by Planet</option>
-            <option value="Sun">Sun</option>
-            <option value="Moon">Moon</option>
-            <option value="Mars">Mars</option>
-            <option value="Mercury">Mercury</option>
-            <option value="Jupiter">Jupiter</option>
-            <option value="Venus">Venus</option>
-            <option value="Saturn">Saturn</option>
-            <option value="Rahu">Rahu</option>
-            <option value="Ketu">Ketu</option>
-        </select>
-        <label style="font-weight: 700; color: black;" for="planetNameSelector">Planet</label>
-    </div>
+    @if (ShowFilterOptions)
+    {
+        @*Planet Name*@
+        <div @ref="planetNameSelector" class="form-floating">
+            <select @bind="SelectedPlanet" class="form-select" id="planetNameSelector" aria-label="Planet Name Select">
+                <option value="" selected>Filter by Planet</option>
+                <option value="Sun">Sun</option>
+                <option value="Moon">Moon</option>
+                <option value="Mars">Mars</option>
+                <option value="Mercury">Mercury</option>
+                <option value="Jupiter">Jupiter</option>
+                <option value="Venus">Venus</option>
+                <option value="Saturn">Saturn</option>
+                <option value="Rahu">Rahu</option>
+                <option value="Ketu">Ketu</option>
+            </select>
+            <label style="font-weight: 700; color: black;" for="planetNameSelector">Planet</label>
+        </div>
 
-    @*House Name*@
-    <div @ref="houseNameSelector" class="form-floating">
-        <select @bind="SelectedHouse" class="form-select" id="houseNameSelector" aria-label="House Name Select">
-            <option value="" selected>Filter by House</option>
-            <option value="House1">House 1</option>
-            <option value="House2">House 2</option>
-            <option value="House3">House 3</option>
-            <option value="House4">House 4</option>
-            <option value="House5">House 5</option>
-            <option value="House6">House 6</option>
-            <option value="House7">House 7</option>
-            <option value="House8">House 8</option>
-            <option value="House9">House 9</option>
-            <option value="House10">House 10</option>
-            <option value="House11">House 11</option>
-            <option value="House12">House 12</option>
-        </select>
-        <label style="font-weight: 700; color: black;" for="houseNameSelector">House</label>
-    </div>
+        @*House Name*@
+        <div @ref="houseNameSelector" class="form-floating">
+            <select @bind="SelectedHouse" class="form-select" id="houseNameSelector" aria-label="House Name Select">
+                <option value="" selected>Filter by House</option>
+                <option value="House1">House 1</option>
+                <option value="House2">House 2</option>
+                <option value="House3">House 3</option>
+                <option value="House4">House 4</option>
+                <option value="House5">House 5</option>
+                <option value="House6">House 6</option>
+                <option value="House7">House 7</option>
+                <option value="House8">House 8</option>
+                <option value="House9">House 9</option>
+                <option value="House10">House 10</option>
+                <option value="House11">House 11</option>
+                <option value="House12">House 12</option>
+            </select>
+            <label style="font-weight: 700; color: black;" for="houseNameSelector">House</label>
+        </div>
 
-    @*House Name*@
-    <div @ref="signNameSelector" class="form-floating">
-        <select @bind="SelectedSign" class="form-select" id="signNameSelector" aria-label="Sign Select">
-            <option value="" selected>Filter by Sign</option>
-            <option value="Aries">House</option>
-            <option value="Taurus">Taurus</option>
-            <option value="Gemini">Gemini</option>
-            <option value="Cancer">Cancer</option>
-            <option value="Leo">Leo</option>
-            <option value="Virgo">Virgo</option>
-            <option value="Libra">Libra</option>
-            <option value="Scorpio">Scorpio</option>
-            <option value="Sagittarius">Sagittarius</option>
-            <option value="Capricorn">Capricorn</option>
-            <option value="Aquarius">Aquarius</option>
-            <option value="Pisces">Pisces</option>
-        </select>
-        <label style="font-weight: 700; color: black;" for="houseNameSelector">Sign</label>
-    </div>
+        @*House Name*@
+        <div @ref="signNameSelector" class="form-floating">
+            <select @bind="SelectedSign" class="form-select" id="signNameSelector" aria-label="Sign Select">
+                <option value="" selected>Filter by Sign</option>
+                <option value="Aries">House</option>
+                <option value="Taurus">Taurus</option>
+                <option value="Gemini">Gemini</option>
+                <option value="Cancer">Cancer</option>
+                <option value="Leo">Leo</option>
+                <option value="Virgo">Virgo</option>
+                <option value="Libra">Libra</option>
+                <option value="Scorpio">Scorpio</option>
+                <option value="Sagittarius">Sagittarius</option>
+                <option value="Capricorn">Capricorn</option>
+                <option value="Aquarius">Aquarius</option>
+                <option value="Pisces">Pisces</option>
+            </select>
+            <label style="font-weight: 700; color: black;" for="houseNameSelector">Sign</label>
+        </div>
 
-    <IconButton ExtraClass="h-auto" ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"/>
+        @* SEARCH BUTTON *@
+        <IconButton ExtraClass="h-auto" ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked" />
+    }
+
 
 </div>
 
 
-<table class="table table-bordered table-striped table-hover">
-    <thead class="table-dark">
+@* only print once data is in *@
+@if (_filteredHoroscopePredictions.Any())
+{
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
         <tr>
             <th>Name</th>
             <th>Description</th>
             <th style="min-width: 123px;">Tags</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         @foreach (var prediction in _filteredHoroscopePredictions)
         {
             @*log when when user reads a predictions*@
@@ -87,11 +96,16 @@
                 <td>@prediction.RelatedBody</td>
             </tr>
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+}
 
 
 @code {
+
+    ///enabled by default, disable to hide filter
+    [Parameter]
+    public bool ShowFilterOptions { get; set; } = true;
 
     private string SelectedHouse;
     private string SelectedPlanet;
@@ -149,8 +163,6 @@
     private async Task SearchButtonClicked() => await InvokeAsync(async () => await _SearchButtonClicked()).Try(_jsRuntime);
 
 
-
-
     private async Task _SearchButtonClicked()
     {
 
@@ -171,25 +183,31 @@
     public async Task ShowPrediction(Person selectedPerson)
     {
         //get horoscope predictions from API server
-        var personIdXml = new XElement("PersonId", selectedPerson.Id);
-        var webResult = await ServerManager.WriteToServerXmlReply(AppData.URL.GetHoroscope, personIdXml);
+        //.../Calculate/HoroscopePredictions/Location/Singapore/Time/00:00/16/02/2024/+08:00
+        var apiUrl = $"{AppData.URL.HoroscopePredictions}{selectedPerson.BirthTime.ToUrl()}";
+        WebResult<Newtonsoft.Json.Linq.JToken> webResult = await Tools.ReadFromServerJsonReply(apiUrl);
 
-        //based on pass of fail handle it
-        if (webResult.IsPass)
-        {
-            //inject horoscope prediction
-            _horoscopePredictions = HoroscopePrediction.FromXmlList(webResult.Payload);
+        //inject horoscope prediction
+        _horoscopePredictions = await Tools.GetListNoPolling(apiUrl, HoroscopePrediction.FromJsonList);
 
-            _filteredHoroscopePredictions = _horoscopePredictions.ToList(); //make a copy for search
-        }
-        else
-        {
-            //log it
-            await WebLogger.Error(webResult.Payload);
+        _filteredHoroscopePredictions = _horoscopePredictions.ToList(); //make a copy for search
 
-            //then tell the user
-            await _jsRuntime.ShowAlert("error", AlertText.ObliviousErrors(), true);
-        }
+        //needed to make visible
+        StateHasChanged();
+
+    }
+
+    public async Task ShowPrediction(List<HoroscopePrediction> inputPredictions)
+    {
+        //get horoscope predictions from API server
+        //.../Calculate/HoroscopePredictions/Location/Singapore/Time/00:00/16/02/2024/+08:00
+        // var apiUrl = $"{AppData.URL.HoroscopePredictions}{selectedPerson.BirthTime.ToUrl()}";
+        // WebResult<Newtonsoft.Json.Linq.JToken> webResult = await Tools.ReadFromServerJsonReply(apiUrl);
+
+        //inject horoscope prediction
+        _horoscopePredictions = inputPredictions;
+
+        _filteredHoroscopePredictions = _horoscopePredictions.ToList(); //make a copy for search
 
         //needed to make visible
         StateHasChanged();

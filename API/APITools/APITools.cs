@@ -881,7 +881,7 @@ namespace API
         /// Given a cache generator function and a name for the data
         /// it'll calculate and save data to cache Data Blob storage
         /// </summary>
-        public static async Task<BlobClient> ExecuteAndSaveToCache(Func<Task<string>> cacheGenerator, string cacheName, string mimeType = "")
+        public static async Task<BlobClient> ExecuteAndSaveToCache(Func<string> cacheGenerator, string cacheName, string mimeType = "")
         {
 
 #if DEBUG
@@ -896,7 +896,7 @@ namespace API
                 CallTracker.CallStart(cacheName);
 
                 //squeeze the Sky Juice!
-                var chartBytes = await cacheGenerator.Invoke();
+                var chartBytes = cacheGenerator.Invoke();
 
                 //save for future
                 chartBlobClient = await AzureCache.Add(cacheName, chartBytes, mimeType);
@@ -1059,7 +1059,7 @@ namespace API
                 {
                     //first convert to json
                     DataTable rawTable = Tools.AnyToDataTable(calculatorName, rawPlanetData);
-                    
+
                     //convert data table to JPEG image
                     var image = Tools.DataTableToJpeg(rawTable);
 
@@ -1089,7 +1089,7 @@ namespace API
             }
             //probably data that can be sent as JSON text
             else
-                    {
+            {
                 //4 : CONVERT TO JSON
                 var payloadJson = Tools.AnyToJSON(calculatorName, rawPlanetData); //use calculator name as key
 

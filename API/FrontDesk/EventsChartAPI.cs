@@ -118,9 +118,9 @@ namespace API
                 var chartId = chartSpecsOnly.GetEventsChartSignature();
 
                 //PREPARE THE CALL
-                Func<Task<string>> generateChart = async () =>
+                Func<string> generateChart = () =>
                 {
-                    var chartSvg = await EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
+                    var chartSvg = EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
                     return chartSvg;
                 };
 
@@ -175,7 +175,7 @@ namespace API
                 var chartSpecsOnly = await EventsChart.FromUrl(settingsUrl);
 
                 //PREPARE THE CALL
-                var chartSvg = await EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
+                var chartSvg = EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
 
                 //send image back to caller
                 return APITools.SendSvgToCaller(chartSvg, incomingRequest);
@@ -217,7 +217,7 @@ namespace API
 
                 //PREPARE THE CALL
                 var foundPerson = Tools.GetPersonById(chartSpecsOnly.Person.Id);
-                var chartSvg = await EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
+                var chartSvg = EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
 
                 //string to binary
                 byte[] rawFileBytes = System.Text.Encoding.UTF8.GetBytes(chartSvg); //SVG uses UTF-8
@@ -363,39 +363,8 @@ namespace API
             //done for fast calculation only for needed viewability
             var daysPerPixel = GetDayPerPixel(timeRange, maxWidth);
 
-            return await EventsChartManager.GenerateEventsChart(foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
+            return EventsChartManager.GenerateEventsChart(foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
         }
-
-
-        ///// <summary>
-        ///// Cache stored in running memory
-        ///// </summary>
-        //private static async Task<Chart> GetChartCached(Person foundPerson, Time startTime, Time endTime,
-        //    double daysPerPixel, List<EventTag> eventTags)
-        //{
-        //    //create a unique signature to identify all future calls that is exactly alike
-        //    var dataSignature = GetEventsChartSignature(foundPerson, startTime,endTime,daysPerPixel, eventTags);
-
-        //    //use cache if exist else use new one
-        //    var result = _cacheList.TryGetValue(dataSignature, out var cachedChartXml);
-
-        //    if (string.IsNullOrEmpty(cachedChartXml))
-        //    {
-        //        //a new chart is born
-        //        var newChart = await GenerateNewChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
-
-        //        //add new chart into cache for future use
-        //        _cacheList[dataSignature] = newChart.ToXml().ToString();
-
-        //        return newChart;
-        //    }
-
-        //    //if available use cached chart
-        //    var oldChart = Chart.FromXml(XElement.Parse(cachedChartXml ?? "<Empty/>"));
-        //    return oldChart;
-
-        //}
-
 
 
         /// <summary>

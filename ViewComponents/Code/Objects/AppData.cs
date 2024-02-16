@@ -365,8 +365,6 @@ namespace Website
         public static async Task LoadSearchFiles()
         {
             //this data is used later search for fast loading
-            //AppData.HoroscopeDataList = await Tools.GetXmlFile("data/HoroscopeDataList.xml", AppData.HttpClient);
-            //AppData.EventDataListXML = await Tools.GetXmlFile("data/EventDataList.xml", AppData.HttpClient);
             AppData.ReferenceList = await Tools.GetXmlFile("data/ReferenceList.xml", AppData.HttpClient);
 
             //mark as loaded so on next search won't reload

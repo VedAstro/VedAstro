@@ -849,7 +849,7 @@ namespace Website
         /// gets from API and saves a copy for future
         /// </summary>
         /// <returns></returns>
-        public static async Task<GeoLocation> GetClientLocation(string apiKey)
+        public static async Task<GeoLocation> GetClientLocation()
         {
             //try get from browser storage
             var clientLocXml = await AppData.JsRuntime.GetProperty("ClientLocation");
@@ -865,8 +865,7 @@ namespace Website
             //no cache, call Google API with IP
             else
             {
-                //TODO change to call to API
-                parsedLocation = await GeoLocation.FromIpAddress(apiKey);
+                parsedLocation = await GeoLocation.FromIpAddress();
                 //save for future use
                 await AppData.JsRuntime.SetProperty("ClientLocation", parsedLocation.ToXml().ToString());
             }

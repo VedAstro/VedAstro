@@ -25,7 +25,7 @@
         <!-- DESKTOP ONLY : SIDEBAR -->
         <div @ref="AppData.DesktopSidebar" class="col-auto align-items-start d-none d-md-block">
             <!--only visible in Desktop-->
-            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 999;">
+            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 100;">
                 <!-- special style to make appear in night mode despite bg-white -->
                 @* SEARCH *@
                 <SearchBox />
@@ -210,8 +210,7 @@
         AppData.API.Person.PreparePersonList();
 
         //get location from IP (uses browser cache if any else google API)
-        var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
-        AppData.ClientLocation = await WebsiteTools.GetClientLocation(apiKey);
+        AppData.ClientLocation = await WebsiteTools.GetClientLocation();
 
         //log it
         WebLogger.Data(AppData.ClientLocation.ToString());
@@ -238,7 +237,6 @@
 
         //uses tags to detect correct version
         var latestPublishedCommitNo = await WebsiteTools.GetLatestCommitNumber();
-
 
         //if lower raise warning
         if (currentCommitNo < latestPublishedCommitNo)

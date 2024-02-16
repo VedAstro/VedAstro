@@ -642,11 +642,12 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Gets all horoscope predictions for a person
+        /// include all when filter not specified
         /// </summary>
-        public static async Task<List<HoroscopePrediction>> GetHoroscopePrediction(Time birthTime, string fileUrl, EventTag filterTag = EventTag.Empty)
+        public static List<HoroscopePrediction> GetHoroscopePrediction(Time birthTime, EventTag filterTag = EventTag.Empty)
         {
-            //get list of horoscope data (file from wwwroot)
-            var horoscopeDataList = await GetHoroscopeDataList(fileUrl);
+            //get list of horoscope data (static cs data in memory)
+            var horoscopeDataList = HoroscopeDataListStatic.Rows;
 
             //filter what to show if any specified
             if (filterTag != EventTag.Empty)
@@ -654,7 +655,7 @@ namespace VedAstro.Library
                 horoscopeDataList = horoscopeDataList.Where(horoData => horoData.EventTags.Contains(filterTag)).ToList();
             }
 
-            //start calculating predictions (mix with time by person's birth date)
+            //start calculating predictions (mix with time by person's birthdate)
             var predictionList = CalculatePredictions(birthTime, horoscopeDataList);
 
             //place important predictions at the top
@@ -1985,7 +1986,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Removes all invalid characters for an person name
-        /// used to clean name field user input
+        /// used to clean name field user input. Also
         /// allowed chars : periods (.) and hyphens (-), space ( )
         /// SRC:https://learn.microsoft.com/en-us/dotnet/standard/base-types/how-to-strip-invalid-characters-from-a-string
         /// </summary>

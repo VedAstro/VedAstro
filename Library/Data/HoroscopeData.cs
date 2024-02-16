@@ -12,7 +12,7 @@ namespace VedAstro.Library
     /// Data structure to encapsulate an event before it's calculated
     /// In other words an object instance of the event data as stored in file
     /// </summary>
-    public struct HoroscopeData 
+    public struct HoroscopeData
     {
         /** FIELDS **/
 
@@ -34,16 +34,16 @@ namespace VedAstro.Library
         /** PROPERTIES **/
         //mainly created for access from WPF binding
         public HoroscopeName Name { get; private set; } = HoroscopeName.Empty;
-        
+
         /// <summary>
         /// Gets human readable Event Name, removes camel case
         /// </summary>
         public string FormattedName => Format.FormatName(this);
-        
+
         public EventNature Nature { get; private set; }
-        
+
         public HoroscopeCalculatorDelegate HoroscopeCalculator { get; private set; }
-        
+
         public string Description
         {
             get => HttpUtility.HtmlDecode(_description);
@@ -55,7 +55,7 @@ namespace VedAstro.Library
         /// Note: filled when IsEventOccuring is called
         /// </summary>
         public RelatedBody RelatedBody { get; set; } = new RelatedBody();
-        
+
         public List<EventTag> EventTags { get; }
 
 
@@ -72,10 +72,9 @@ namespace VedAstro.Library
             //do calculation for this event to get prediction data
             var predictionData = this.HoroscopeCalculator(time);
 
-
             //extract the data out and store it for later use
             //is prediction occuring
-            
+
             bool isEventOccuring = predictionData.Occuring;
 
             //store planets, houses & signs related to result

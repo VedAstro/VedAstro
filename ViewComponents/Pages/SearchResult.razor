@@ -26,14 +26,14 @@
                     <div class="card shadow mt-2">
                         <div class="card-header hstack">
                             <h6 class="mb-0">
-                                @Format.FormatName(prediction.Element("Name")?.Value)
+                                @prediction.FormattedName
                             </h6>
                             <span class="fw-light mx-3" style="font-size: 13px;">
-                                @prediction.Element("Nature")?.Value @prediction.Element("Source")?.Value
+                                @prediction.Nature @prediction.SpecializedNature
                             </span>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">@prediction.Element("Description")?.Value</p>
+                            <p class="card-text">@prediction.Description</p>
                         </div>
                     </div>
                 }
@@ -50,14 +50,14 @@
                     <div class="card shadow mt-2">
                         <div class="card-header hstack">
                             <h6 class="mb-0">
-                                @Format.FormatName(prediction.Element("Name")?.Value)
+                                @prediction.FormattedName
                             </h6>
                             <span class="fw-light mx-3" style="font-size: 13px;">
-                                @prediction.Element("Nature")?.Value @prediction.Element("Source")?.Value
+                                @prediction.Nature
                             </span>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">@prediction.Element("Description")?.Value</p>
+                            <p class="card-text">@prediction.Description</p>
                         </div>
                     </div>
                 }
@@ -112,8 +112,8 @@ else
     private bool _resultReady = false;
 
 
-    IEnumerable<XElement> foundPrediction = new List<XElement>();
-    IEnumerable<XElement> foundEvents = new List<XElement>();
+    IEnumerable<HoroscopeData> foundPrediction = new List<HoroscopeData>();
+    IEnumerable<EventData> foundEvents = new List<EventData>();
     IEnumerable<XElement> foundReference = new List<XElement>();
 
 
@@ -145,11 +145,9 @@ else
         SearchText = searchText;
         _pageTitle = $"Search | {SearchText}";
 
-
-        //search file
-        var horoscopeDataListCached = await AppData.GetHoroscopeDataListCached(); //todo clean
-        foundPrediction = horoscopeDataListCached?.Where(IsFound) ?? Array.Empty<XElement>();
-        foundEvents = AppData.EventDataListXML.Where(IsFound);
+        //search dictionaries
+        foundPrediction =  HoroscopeDataListStatic.Rows.Where(data => data.Contains(SearchText));
+        foundEvents = EventDataListStatic.Rows.Where(data => data.Contains(SearchText));
         foundReference = AppData.ReferenceList.Where(IsFound);
 
         //show search result count

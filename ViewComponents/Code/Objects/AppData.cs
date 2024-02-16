@@ -148,20 +148,9 @@ namespace Website
         /// </summary>
         public static string VisitorId { get; set; } = "101";
 
-        /// <summary>
-        /// Place where global event data list is stored for quick access
-        /// loaded in main layout
-        /// </summary>
-        public static List<XElement>? HoroscopeDataList { get; set; }
 
         public static Stream? HoroscopeDataListStream { get; set; }
 
-        /// <summary>
-        /// Remember to load data first before 
-        /// Place where global event data list is stored for quick access
-        /// loaded in main layout
-        /// </summary>
-        public static List<XElement> EventDataListXML { get; set; }
 
         /// <summary>
         /// global ReferenceList.xml data list is stored for quick access
@@ -308,30 +297,6 @@ namespace Website
 
 
         /// <summary>
-        /// if data already loaded then return the that one,
-        /// else get a new one from server
-        /// </summary>
-        public static async Task<Stream?> GetPredictionDataStreamCached()
-        {
-            //return already loaded if available
-            if (AppData.HoroscopeDataListStream != null) return AppData.HoroscopeDataListStream;
-
-            //else get fresh copy from server
-            AppData.HoroscopeDataListStream = await AppData.HttpClient.GetStreamAsync("data/HoroscopeDataList.xml");
-            return AppData.HoroscopeDataListStream;
-        }
-
-        public static async Task<List<XElement>?> GetHoroscopeDataListCached()
-        {
-            //return already loaded if available
-            if (AppData.HoroscopeDataList != null) return AppData.HoroscopeDataList;
-
-            //else get fresh copy from server
-            AppData.HoroscopeDataList = await Tools.GetXmlFile("data/HoroscopeDataList.xml");
-            return AppData.HoroscopeDataList;
-        }
-
-        /// <summary>
         /// Gets currently set Dark Mode from JS lib and sets in AppData
         /// </summary>
         public static async Task UpdateDarkMode(IJSRuntime jsRuntime)
@@ -400,8 +365,8 @@ namespace Website
         public static async Task LoadSearchFiles()
         {
             //this data is used later search for fast loading
-            AppData.HoroscopeDataList = await Tools.GetXmlFile("data/HoroscopeDataList.xml", AppData.HttpClient);
-            AppData.EventDataListXML = await Tools.GetXmlFile("data/EventDataList.xml", AppData.HttpClient);
+            //AppData.HoroscopeDataList = await Tools.GetXmlFile("data/HoroscopeDataList.xml", AppData.HttpClient);
+            //AppData.EventDataListXML = await Tools.GetXmlFile("data/EventDataList.xml", AppData.HttpClient);
             AppData.ReferenceList = await Tools.GetXmlFile("data/ReferenceList.xml", AppData.HttpClient);
 
             //mark as loaded so on next search won't reload

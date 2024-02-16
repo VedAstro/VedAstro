@@ -20,16 +20,12 @@ namespace VedAstro.Library
         /// </summary>
         private static List<Event> EventList { get; set; } = new List<Event>();
 
-        /// <summary>
-        /// cached copy of EventDataList.xml parsed
-        /// </summary>
-        public static List<EventData> EventDataList { get; set; }
 
         //we use direct storage URL for fast access & solid
         private const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
 
         //used in muhurtha, dasa, etc... events
-        public const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
+        //public const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
 
 
 
@@ -444,7 +440,7 @@ namespace VedAstro.Library
         {
 
             //filter IN event data list by tag
-            var filteredEventDataList = EventDataList.FindAll(eventData =>
+            var filteredEventDataList = EventDataListStatic.Rows.FindAll(eventData =>
             {
                 var filter1 = eventData.EventTags.Contains(tag);
 
@@ -461,7 +457,7 @@ namespace VedAstro.Library
         {
 
             //filter IN event data list by tag
-            var tags = EventDataList.Find(eventData => eventData.Name == eventName).EventTags;
+            var tags = EventDataListStatic.Rows.Find(eventData => eventData.Name == eventName).EventTags;
 
             return tags;
         }
@@ -470,15 +466,8 @@ namespace VedAstro.Library
         /// Calculates events for given person, tags, time period
         /// Parallel already built in
         /// </summary>
-        public static async Task<List<Event>> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, Person inputPerson, List<EventTag> inputedEventTags, bool filter0Duration = true)
+        public static List<Event> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, Person inputPerson, List<EventTag> inputedEventTags, bool filter0Duration = true)
         {
-            //load fresh data list if not loaded already
-            //since list does not change often, it should be save to cache it between calls to azure function
-            //if a second call comes in while 1st call has already loaded this list, the 2nd instance will use 1st call's list
-            //NOTE :
-            //- faster ~6s file is cached, may not be latest
-            //- must be done outside parallel loop
-            if (EventDataList == null || !EventDataList.Any()) { EventDataList = await Tools.ConvertXmlListFileToInstanceList<EventData>(UrlEventDataListXml); }
 
             //reset, if called in the same instance
             EventManager.EventList = new List<Event>();

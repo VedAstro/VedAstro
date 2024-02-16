@@ -90,11 +90,11 @@ namespace VedAstro.Library.Tests
         /// Sample to generate raw events like Dasa, Gochara, Tarabala, etc...
         /// </summary>
         [TestMethod()]
-        public async Task CalculateEventsTest()
+        public void CalculateEventsTest()
         {
             //create needed data to generate events
             var startTime = Time.NowSystem(GeoLocation.Bangkok);
-            var endTime = startTime.AddHours(1000); 
+            var endTime = startTime.AddHours(1000);
             var johnDoe = new Person("Juliet", Time.StandardHoroscope(), Gender.Female);
 
             //# set how accurately the start & end time of each event is calculated
@@ -110,7 +110,7 @@ namespace VedAstro.Library.Tests
             };
 
             //do calculation (heavy computation)
-            var eventList = await EventManager.CalculateEvents(precisionInHours,
+            var eventList = EventManager.CalculateEvents(precisionInHours,
                 startTime,
                 endTime, johnDoe, tagList);
 

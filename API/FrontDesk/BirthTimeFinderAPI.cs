@@ -184,7 +184,7 @@ namespace API
                 foreach (var timeSlice in timeSlices)
                 {
                     //get all predictions for person
-                    var allPredictions = await Tools.GetHoroscopePrediction(timeSlice, URL.HoroscopeDataListFile);
+                    var allPredictions = Tools.GetHoroscopePrediction(timeSlice);
                     //select only rising sign
                     var selected = allPredictions.Where(x => x.FormattedName.Contains("Rising")).FirstOrDefault();
 
@@ -295,7 +295,7 @@ namespace API
                 {
 
                     //get all predictions for person
-                    var allPredictions = await Tools.GetHoroscopePrediction(timeSlice, URL.HoroscopeDataListFile);
+                    var allPredictions = Tools.GetHoroscopePrediction(timeSlice);
 
                     //select only rising sign
                     var selected = allPredictions.Where(x => x.FormattedName.Contains("Rising")).FirstOrDefault();

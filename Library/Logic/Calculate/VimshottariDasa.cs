@@ -71,7 +71,7 @@ namespace VedAstro.Library
             return parentDasaJson;
         }
 
-        public static async Task<List<DasaEvent>> DasaPeriodsOld(Time birthTime, int levels = 4, int scanYears = 120)
+        public static List<DasaEvent> DasaPeriodsOld(Time birthTime, int levels = 4, int scanYears = 120)
         {
 
             //based on scan years, set start & end time
@@ -93,7 +93,7 @@ namespace VedAstro.Library
             var johnDoe = new Person("", birthTime, Gender.Empty);
 
             //do calculation (heavy computation)
-            List<Event> eventList = await EventManager.CalculateEvents(precisionInHours,
+            List<Event> eventList = EventManager.CalculateEvents(precisionInHours,
                                                                         startTime,
                                                                         endTime,
                                                                         johnDoe,

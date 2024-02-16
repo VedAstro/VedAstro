@@ -11,38 +11,6 @@ namespace API
     public class GeneralAPI
     {
 
-        [Function("gethoroscope")]
-        public static async Task<HttpResponseData> GetHoroscope([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-
-            try
-            {
-                //get person from request
-                var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
-                var personId = rootXml.Value;
-
-                var person = Tools.GetPersonById(personId);
-
-                //calculate predictions for current person
-                var predictionList = Tools.GetHoroscopePrediction(person.BirthTime);
-
-                //convert list to xml string in root elm
-                return APITools.PassMessage(Tools.AnyTypeToXmlList(predictionList), incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                APILogger.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-
-
-
-        }
-
 
         /// <summary>
         /// When browser visit API, they ask for FavIcon, so yeah redirect favicon from website

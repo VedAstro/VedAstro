@@ -9,6 +9,7 @@
 
 
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -595,7 +596,68 @@ namespace VedAstro.Library
 
         #endregion
 
+        #region GHATAKA CHAKRA
+
+        /// <summary>
+        ///  If the ghataka element happens to be Moon, then the injury is on reputation,
+        /// </summary>
+        [EventCalculator(EventName.GhatakaMoonSign)]
+        public static CalculatorResult GhatakaMoonSign(Time time, Person person)
+        {
+            var row = new GhatakaRow();
+            var ghatakaRow = nameof(row.MoonSign);
+            return CalculatorResult.New(Calculate.GhatakaChakra(time, person.BirthTime).Contains(ghatakaRow));
+        }
+
+        /// <summary>
+        ///  If the ghataka element happens to be Tithi or Nakshatra, the injury is more mental and emotional.
+        /// </summary>
+        [EventCalculator(EventName.GhatakaTithiGroup)]
+        public static CalculatorResult GhatakaTithiGroup(Time time, Person person)
+        {
+            var row = new GhatakaRow();
+            var ghatakaRow = nameof(row.TithiGroup);
+            return CalculatorResult.New(Calculate.GhatakaChakra(time, person.BirthTime).Contains(ghatakaRow));
+        }
+
+        /// <summary>
+        ///  If the ghataka element happens to be Weekday or the Lagna, the injury is more physical
+        /// </summary>
+        [EventCalculator(EventName.GhatakaWeekDay)]
+        public static CalculatorResult WeekDayGroup(Time time, Person person)
+        {
+            var row = new GhatakaRow();
+            var ghatakaRow = nameof(row.WeekDay);
+            return CalculatorResult.New(Calculate.GhatakaChakra(time, person.BirthTime).Contains(ghatakaRow));
+        }
+
+        /// <summary>
+        /// If the ghataka element happens to be Tithi or Nakshatra, the injury is more mental and emotional.
+        /// </summary>
+        [EventCalculator(EventName.GhatakaMoonConstellation)]
+        public static CalculatorResult MoonConstellationGroup(Time time, Person person)
+        {
+            var row = new GhatakaRow();
+            var ghatakaRow = nameof(row.MoonConstellation);
+            return CalculatorResult.New(Calculate.GhatakaChakra(time, person.BirthTime).Contains(ghatakaRow));
+        }
+
+        /// <summary>
+        /// If the ghataka element happens to be Weekday or the Lagna, the injury is more physical
+        /// </summary>
+        [EventCalculator(EventName.GhatakaLagna)]
+        public static CalculatorResult GhatakaLagna(Time time, Person person)
+        {
+            var row = new GhatakaRow();
+            var ghatakaRow = nameof(row.LagnaSameSex);
+            return CalculatorResult.New(Calculate.GhatakaChakra(time, person.BirthTime).Contains(ghatakaRow));
+        }
+
+
+        #endregion
+
         #region PERSONAL
+
         //[EventCalculator(EventName.GoodTarabala)] TODO Can be removed and fucntion moved to astronomical
         public static CalculatorResult IsGoodTarabalaOccuring(Time time, Person person)
         {

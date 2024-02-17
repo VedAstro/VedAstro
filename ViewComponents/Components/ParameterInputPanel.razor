@@ -181,7 +181,7 @@
     }
 
 
-    //given data on params shows them on screen
+    //given data on params for a method shows them on screen
     //input format List(param name, description, type)
     public void Show(OpenAPIMetadata openApiMetadata)
     {
@@ -197,11 +197,13 @@
         //clear inputs from previous method (if any)
         foreach (var paramInput in paramList) { paramInput?.Hide(); }
 
+        //set new values
         for (int index = 0; index < _requiredParams.Count; index++){paramList[index].SetValue(_requiredParams[index]);}
 
         //clear inputs from previous method (if any)
         foreach (var paramInput in paramListOptional) { paramInput?.Hide(); }
 
+        //set new values
         for (int index = 0; index < _optionalParams.Count; index++){paramListOptional[index].SetValue(_optionalParams[index]);}
 
         StateHasChanged(); //needed to propagate updates

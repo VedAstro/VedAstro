@@ -19,67 +19,69 @@
 
     @*CONTACT FORM*@
     <div class="me-3">
-    @* INPUT *@
-    <div class="vstack gap-5" style="max-width: @GR.W412px;">
+        @* INPUT *@
+        <div class="vstack gap-5" style="max-width: @GR.W412px;">
 
-        @* SOURCE SELECTOR *@
-        <div class="vstack gap-3">
-            <IconTitle IconName="flat-color-icons:list" Title="Time List" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
-                <ButtonRow>
-                    <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.Column1MLData" SmallIcon="true" />
-                </ButtonRow>
-            </IconTitle>
+            @* SOURCE SELECTOR *@
+            <div class="vstack gap-3">
+                <IconTitle IconName="flat-color-icons:list" Title="Time List" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
+                    <ButtonRow>
+                        <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.Column1MLData" SmallIcon="true" />
+                    </ButtonRow>
+                </IconTitle>
 
-            @* SOURCE SELECT *@
-            <div class="input-group">
-                <label class="input-group-text gap-2" for="SourceSelectInput" style="width: 165px;"><Icon IconName="flat-color-icons:data-recovery" Size="34" />Source</label>
-                <select @bind="SelectedSource" class="form-select" id="SourceSelectInput" style="font-weight: 600; font-size: 17px;">
-                    <option value="" selected>Select...</option>
-                    <option value="upload">Upload CSV or Excel</option>
-                    <option value="sample">Public +10k Horoscopes</option>
-                </select>
-            </div>
-
-            @* TIME RANGE UPLOAD *@
-            <div @ref="timeRangeUploadInputHtml" style="display:none;">
-                <div class="vstack gap-3 input-group mb-3">
-                    <div class="form-control" style=" width: 100%; border-radius: 6px; ">
-                        <InputFile id="inputGroupFile02" OnChange="@OnInputFileChange" />
-                    </div>
-                    <div class="ps-2" @ref="SampleInstructHolder">
-                        1. <BoldLink URL="@URL.ExcelSampleMLFile">Download</BoldLink> sample EXCEL file.<br />
-                        2. Modify excel file and upload back here.
-                    </div>
-                </div>
-                <div @ref="uploadFileInfoHolder" class="hstack gap-3" style="display:none;">
-                    <div class="hstack gap-2">
-                        <Icon IconName="icon-park:file-success" Size="30" />
-                        Read Complete!
-                    </div>
-                    <span class="mt-1">Rows : <strong>@_timeList.Count</strong></span>
-                    @* <span class="mt-1">Type : <strong>@UploadedFile?.ContentType</strong></span> *@
-                    <span class="mt-1">Size : <strong>@Tools.BytesToHumanText(UploadedFile?.Size ?? 0)</strong></span>
+                @* SOURCE SELECT *@
+                <div class="input-group">
+                    <label class="input-group-text gap-2" for="SourceSelectInput" style="width: 165px;"><Icon IconName="flat-color-icons:data-recovery" Size="34" />Source</label>
+                    <select @bind="SelectedSource" class="form-select" id="SourceSelectInput" style="font-weight: 600; font-size: 17px;">
+                        <option value="" selected>Select...</option>
+                        <option value="upload">Upload CSV or Excel</option>
+                        <option value="sample">Public +10k Horoscopes</option>
+                    </select>
                 </div>
 
-            </div>
+                @* TIME RANGE UPLOAD EXCEL/CSV *@
+                <div @ref="timeRangeUploadInputHtml" style="display:none;">
+                    <div class="vstack gap-3 input-group mb-3">
+                        <div class="form-control" style=" width: 100%; border-radius: 6px; ">
+                            <InputFile id="inputGroupFile02" OnChange="@OnInputFileChange" />
+                        </div>
+                        <div class="ps-2" @ref="SampleInstructHolder">
+                            1. <BoldLink URL="@URL.ExcelSampleMLFile">Download</BoldLink> sample EXCEL file.<br />
+                            2. Modify excel file and upload back here.
+                            <br /><strong>OR</strong><br />
+                            Use tool <BoldLink URL="@PageRoute.TimeListGenerator">Time List Generator</BoldLink> for auto EXCEL file.<br />
+                        </div>
+                    </div>
+                    <div @ref="uploadFileInfoHolder" class="hstack gap-3" style="display:none;">
+                        <div class="hstack gap-2">
+                            <Icon IconName="icon-park:file-success" Size="30" />
+                            Read Complete!
+                        </div>
+                        <span class="mt-1">Rows : <strong>@_timeList.Count</strong></span>
+                        @* <span class="mt-1">Type : <strong>@UploadedFile?.ContentType</strong></span> *@
+                        <span class="mt-1">Size : <strong>@Tools.BytesToHumanText(UploadedFile?.Size ?? 0)</strong></span>
+                    </div>
 
-            @* TIME RANGE SAMPLE HOROSCOPES *@
-            <div @ref="timeRangeSampleInputHtml" style="display:none;">
-                <div>
-                    <Icon IconName="noto-v1:construction" />
-                    <p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
                 </div>
+
+                @* TIME RANGE SAMPLE HOROSCOPES *@
+                <div @ref="timeRangeSampleInputHtml" style="display:none;">
+                    <div>
+                        <Icon IconName="noto-v1:construction" />
+                        <p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
+                    </div>
+                </div>
+
+
             </div>
 
+            @* DATA POINT / METHOD SELECT *@
+            <DataColumnSelector CustomAllMethodList="@MethodListALL" @ref="_DataColumnSelector" />
 
+            @* GENERATE BUTTON *@
+            <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGeneratePreviewHTML" />
         </div>
-
-        @* DATA POINT / METHOD SELECT *@
-        <DataColumnSelector CustomAllMethodList="@MethodListALL" @ref="_DataColumnSelector" />
-
-        @* GENERATE BUTTON *@
-        <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGeneratePreviewHTML" />
-    </div>
     </div>
 
     @*SIDEBAR*@
@@ -88,11 +90,11 @@
         <div class="vstack gap-0 gap-md-2">
             @*STACK BOXES ON RIGHT*@
             <InfoBox MaxWidth="365" FullWidth="@true" Title="Desktop Version" Description="Download powerfull desktop app that supports over +1 million rows" IconName="emojione-v1:laptop-computer" OnClickCallback="OnClickGotoDesktopVersionSideBar" />
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Generate List" Description="Auto generate time list for +1000 years in seconds" IconName="flat-color-icons:overtime" ClickUrl="@PageRoute.TimeListGenerator" IsNewTabOpen="true" />
             <InfoBox MaxWidth="365" FullWidth="@true" Title="Video Guide" Description="Watch easy guide to get you started" IconName="vscode-icons:file-type-video" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("HowToGuideElement"))" />
         </div>
     </div>
 </div>
-
 
 
 <div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
@@ -562,7 +564,7 @@
 
     private void OnClickDownload()
     {
-        AppData.Go(URL.DesktopAppDownload, newTab:true);
+        AppData.Go(URL.DesktopAppDownload, newTab: true);
     }
 
     private async Task OnClickGotoDesktopVersionSideBar()
@@ -571,7 +573,7 @@
         await _jsRuntime.ShowAlert("success", "Download starting...", false, 2200);
 
         //start download
-        AppData.Go(URL.DesktopAppDownload, newTab:true);
+        AppData.Go(URL.DesktopAppDownload, newTab: true);
 
         //point user to guide
         await _jsRuntime.ScrollToDivById("HowToGuideElement");

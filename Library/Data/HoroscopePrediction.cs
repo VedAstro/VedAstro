@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
@@ -9,7 +10,7 @@ namespace VedAstro.Library
 
     /// <summary>
     /// Simple data wrapper for an instance of Horoscope Prediction (data)
-    /// Note : EventData + Time = HoroscopePrediction
+    /// Note : EventData + Time + Calc MetaData = HoroscopePrediction
     /// </summary>
     public class HoroscopePrediction : IToXml, IToJson
     {
@@ -239,6 +240,23 @@ namespace VedAstro.Library
                 return HoroscopePrediction.Empty;
             }
 
+        }
+
+        /// <summary>
+        /// Given an instance of JSON coming from LLM chat API
+        /// then convert to horoscope prediction
+        /// </summary>
+        internal static HoroscopePrediction FromLLMJson(JToken eachPrediction)
+        {
+            var nameString = eachPrediction["metadata"]["name"].Value<string>();
+            var name = Enum.Parse<HoroscopeName>(nameString);
+            var score = eachPrediction["score"].Value<double>();
+
+            //get description from static db since
+            var horoscopeData = HoroscopeDataListStatic.Rows.FirstOrDefault(x => x.Name == name);
+            var parsed = new HoroscopePrediction(name, horoscopeData.Description, horoscopeData.RelatedBody);
+
+            return parsed;
         }
 
 

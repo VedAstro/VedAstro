@@ -64,21 +64,29 @@ namespace VedAstro.Library
         /// <summary>
         /// Searches all horoscopes predictions with LLM
         /// </summary>
-        public static List<HoroscopePrediction> HoroscopeLLMSearch(Time birthTime, string textInput)
+        public static async Task<List<HoroscopePrediction>> HoroscopeLLMSearch(Time birthTime, string textInput)
         {
+            //make http call to python api server
+            var timeUrl = birthTime.ToUrl();
+            //https://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/llmsearch
+            var callUrl = $"https://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/llmsearch";
+            var jsonString = $@"{{""query"":""{textInput}"",
+                                ""birth_time"":""{timeUrl}"",
+                                ""name"":""vivekananda"",
+                                ""prompt"" : ""use only given context""
+                            }}";
 
-            return new List<HoroscopePrediction>()
+            //result is an array of found
+            var rawReply = await Tools.MakePostRequest(callUrl, jsonString);
+
+            //convert to nice nice format
+            var finalList = new List<HoroscopePrediction>();
+            foreach (var eachPrediction in rawReply)
             {
-                new HoroscopePrediction(HoroscopeName.AdhiYoga, "", RelatedBody.Empty),
-                new HoroscopePrediction(HoroscopeName.AriesRising, "", RelatedBody.Empty),
-            };
+                finalList.Add(HoroscopePrediction.FromLLMJson(eachPrediction));
+            }
 
-            ////make http call to python api server
-            //var timeUrl = birthTime.ToUrl();
-            //var callUrl = $"";
-            //var rawReply = Tools.MakePostRequest(callUrl, textInput);
-
-            //return rawReply.ToString();
+            return finalList;
         }
 
         /// <summary>

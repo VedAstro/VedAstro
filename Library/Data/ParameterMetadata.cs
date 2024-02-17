@@ -17,6 +17,14 @@ namespace VedAstro.Library
             ParamType = param.ParameterType;
             IsOptional = param.IsOptional;
         }
+        public ParameterMetadata(string name, string description, dynamic defaultValue, Type parameterType, bool isOptional)
+        {
+            Name = name;
+            Description = description;
+            DefaultValue = defaultValue?.ToString() ?? "";
+            ParamType = parameterType;
+            IsOptional = isOptional;
+        }
         public string Name { get; set; }
         public string Description { get; set; }
         public string DefaultValue { get; set; }

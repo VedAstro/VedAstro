@@ -105,14 +105,8 @@
 	  <Content Include="..\ViewComponents\Components\UnderConstructionHeader.razor" Link="ViewComponents\UnderConstructionHeader.razor" />
 	  <Content Include="..\ViewComponents\Components\IndianChart.razor" Link="ViewComponents\IndianChart.razor" />
 	  <Content Include="..\ViewComponents\Components\AshtakvargaTable.razor" Link="ViewComponents\AshtakvargaTable.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
+	  <Content Include="..\ViewComponents\Pages\TableGenerator.razor" Link="Pages\Calculator\TableGenerator.razor" />
+	  <Content Include="..\ViewComponents\Pages\TimeListGenerator.razor" Link="Pages\Calculator\TimeListGenerator.razor" />
 	  <Content Include="..\ViewComponents\Pages\SearchResult.razor" Link="Pages\SearchResult.razor" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="..\ViewComponents\Pages\TableGenerator.razor" Link="Pages\Calculator\TableGenerator.razor" />
-	</ItemGroup>
-
 </Project>

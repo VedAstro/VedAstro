@@ -49,7 +49,3 @@ async def horoscopellmsearch(payload: PayloadBody):
     # convert found with score to nice format for sending
     results_formated = ChatTools.doc_with_score_to_dict(results)
     return results_formated
-
-
-
-

@@ -1963,6 +1963,17 @@ namespace VedAstro.Library
 
             return intFromUrl;
         }
+        public static double DoubleFromUrl(string url)
+        {
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //string has simple structure ../Number/5
+            var stringValue = parts[1];
+
+            var intFromUrl = double.Parse(stringValue);
+
+            return intFromUrl;
+        }
 
         private static readonly Random Random = new Random();
 

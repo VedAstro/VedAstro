@@ -45,7 +45,7 @@ namespace API
                 var format = ParseAndGetFormat(fullParamString);
 
                 //process call smartly
-                var rawPlanetData = await HandleOpenAPICalls(calculatorName, fullParamString);
+                var rawProcessedData = await HandleOpenAPICalls(calculatorName, fullParamString);
 
                 // Control API overload
                 //await APITools.AutoControlOpenAPIOverload(callLog);
@@ -59,9 +59,13 @@ namespace API
                     case nameof(VedAstro.Library.Calculate.SouthIndianChart):
                     case nameof(VedAstro.Library.Calculate.NorthIndianChart):
                         //send direct as raw SVG image
-                        return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawPlanetData), incomingRequest, "image/svg+xml");
+                        return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawProcessedData), incomingRequest, "image/svg+xml");
+                    // CSV string
+                    case nameof(VedAstro.Library.Calculate.GenerateTimeListCSV):
+                        //send direct as raw CSV file
+                        return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawProcessedData), incomingRequest, "text/csv");
                     default:
-                        return APITools.SendAnyToCaller(format, calculatorName, rawPlanetData, incomingRequest);
+                        return APITools.SendAnyToCaller(format, calculatorName, rawProcessedData, incomingRequest);
                 }
             }
 
@@ -487,7 +491,17 @@ namespace API
                     //ENUM
                     else if (parameterType == typeof(int))
                     {
+                        //get the parser
                         parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.IntFromUrl), BindingFlags.Public | BindingFlags.Static);
+
+                        //execute param parser
+                        parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                    }
+                    //DOUBLE
+                    else if (parameterType == typeof(double))
+                    {
+                        //get the parser
+                        parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.DoubleFromUrl), BindingFlags.Public | BindingFlags.Static);
 
                         //execute param parser
                         parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL

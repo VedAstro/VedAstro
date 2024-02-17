@@ -135,12 +135,11 @@
         <div id="AIAnalysis" class="scrollspy">
             <IconTitle Title="AI Analysis" IconName="fluent-emoji:robot" TitleHolder="h4" />
             <div class="input-group">
-                <input type="text" @bind="llmSearchInputText" class="form-control" placeholder="keywords like wife, money..." aria-label="keywords like wife, money...">
+                <input type="text" @ref="_searchInput" @onkeyup="OnEnterLLMSearch" class="form-control" placeholder="keywords like wife, money..." aria-label="keywords like wife, money...">
                 <button @onclick="OnClickLLMSearch" class="btn btn-primary" type="button">LLM Search</button>
-                <button class="btn btn-outline-primary" type="button">API</button>
+                <button @onclick="OnClickCopyAPILLMSearch" class="btn btn-outline-primary" type="button">API</button>
             </div>
-            <div class="form-text" id="basic-addon4">This will intelligently search all horoscope prediction using AI trained LLM model</div>
-
+            <div class="form-text mb-3" id="basic-addon4">This will intelligently search all horoscope prediction using AI trained LLM model</div>
             <HoroscopeReferenceList @ref="_llmHoroscopeReferenceList" ShowFilterOptions="false" />
         </div>
 
@@ -222,6 +221,12 @@
     [Parameter]
     public string PersonIdUrl { get; set; } = "";
 
+    public string LlmSearchInputText
+    {
+        get => llmSearchInputText;
+        set => llmSearchInputText = value;
+    }
+
     private string _pageTitle = "Horoscope | VedAstro";
 
     private PersonSelectorBox? _peopleSelectorBox;
@@ -230,6 +235,7 @@
 
     private PageHelpSection _helpSection;
 
+    private ElementReference _searchInput;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -474,17 +480,54 @@
 
     }
 
+    private async Task OnClickCopyAPILLMSearch()
+    {
+        var apiUrl = await GenerateLLMSearchApiUrl();
+
+        //use js to transfer to clipboard
+        await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, apiUrl);
+
+        //let user know link copied
+        await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);
+
+    }
     private async Task OnClickLLMSearch()
     {
-        //place user's inputed keyword into API call
+        _jsRuntime.ShowLoading();
+
         //https://vedastroapi.azurewebsites.net/api/Calculate/HoroscopeLLMSearch/Location/Singapore/Time/00:00/16/02/2024/+08:00/TextInput/mother money house
-        var apiUrl = $"{AppData.URL.HoroscopePredictions}{Time.StandardHoroscope().ToUrl()}/TextInput/{llmSearchInputText}";
+        var apiUrl = await GenerateLLMSearchApiUrl();
 
         //make call to API
         var foundList = await Tools.GetListNoPolling(apiUrl, HoroscopePrediction.FromJsonList);
 
         //show on screen
         await _llmHoroscopeReferenceList.ShowPrediction(foundList);
+
+        _jsRuntime.HideLoading();
+    }
+
+    private async Task<string> GenerateLLMSearchApiUrl()
+    {
+        //get time in url format
+        var timeUrl = _selectedPerson.BirthTime.ToUrl();
+        
+        //get search text, lower case for more results
+        var searchText = (await _jsRuntime.GetValue(_searchInput));
+
+        //place user's inputed keyword into API call
+        var apiUrl = $"{AppData.URL.HoroscopeLLMSearch}{timeUrl}/TextInput/{searchText}";
+
+        return apiUrl;
+    }
+
+    private async Task OnEnterLLMSearch(KeyboardEventArgs e)
+    {
+        Console.WriteLine(e.Code);
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await OnClickLLMSearch();
+        }
     }
 
 }

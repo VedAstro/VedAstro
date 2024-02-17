@@ -4066,14 +4066,14 @@ namespace VedAstro.Library
         /// <summary>
         /// make a POST request and returns the result as a JObject
         /// </summary>
-        public static async Task<JObject> MakePostRequest(string url, string jsonData)
+        public static async Task<JToken> MakePostRequest(string url, string jsonData)
         {
             using (var client = new HttpClient())
             {
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(url, content);
                 var result = await response.Content.ReadAsStringAsync();
-                return JObject.Parse(result);
+                return JToken.Parse(result);
             }
         }
 

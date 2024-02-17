@@ -28,6 +28,20 @@ COPY requirements.txt /
 # install chatapi server (basically pip install)
 RUN ["/bin/bash", "install-chatapi-server.sh"]
 
+RUN pip3 install -r requirements.txt
+
+# Install .NET 7
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        apt-transport-https \
+        dirmngr \
+        gnupg \
+        ca-certificates \
+    && wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
+    && apt-get update \
+    && apt-get install -y dotnet-sdk-7.0
+
 # install file browser server (won't run till called via start-file-server.sh)
 # Download and install File Browser Server
 RUN ["/bin/bash", "install-file-server.sh"]

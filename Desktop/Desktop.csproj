@@ -176,6 +176,7 @@
 		<Content Include="..\ViewComponents\Components\UnderConstructionHeader.razor" Link="ViewComponents\UnderConstructionHeader.razor" />
 		<Content Include="..\ViewComponents\Pages\SearchResult.razor" Link="Pages\SearchResult.razor" />
 		<Content Include="..\ViewComponents\Pages\TableGenerator.razor" Link="Pages\TableGenerator.razor" />
+		<Content Include="..\ViewComponents\Pages\TimeListGenerator.razor" Link="Pages\Calculator\TimeListGenerator.razor" />
 		<None Include="wwwroot\images\vedastro-api-logo.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>

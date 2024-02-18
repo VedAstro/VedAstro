@@ -1,10 +1,8 @@
 import time
 
 from .xml_loader import XMLLoader
-# from langchain_community.document_loaders import ReadTheDocsLoader
-# from langchain.text_splitter import RecursiveCharacterTextSplitter
+from .local_huggingface_embeddings import LocalHuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from embeddings import LocalHuggingFaceEmbeddings
 import json
 from langchain_core.documents import Document
 import os
@@ -18,12 +16,15 @@ LLM_MODEL = os.getenv('LLM_MODEL', "sentence-transformers/all-MiniLM-L6-v2")
 # represents the vectors from file in memory
 class EmbedVectors:
     def __init__(self, vectorStorePath):
-        # Load the data from faiss
-        st = time.time()
-        self.embeddings = LocalHuggingFaceEmbeddings(LLM_MODEL) # works via llama.cpp on CPU (custom glue code)
-        self.db = FAISS.load_local(vectorStorePath, self.embeddings)
-        et = time.time() - st
-        print(f"Loading database took {et} seconds.")
+        try:
+            # Load the data from faiss
+            st = time.time()
+            self.embeddings = LocalHuggingFaceEmbeddings(LLM_MODEL) # works via llama.cpp on CPU (custom glue code)
+            self.db = FAISS.load_local(vectorStorePath, self.embeddings)
+            et = time.time() - st
+            print(f"Loading vector database {vectorStorePath} took {et} seconds.")
+        except Exception as e:
+            raise Exception("Failed to load the model vector.") from e
 
     def search(self, query, k=4, filter=None):
         """

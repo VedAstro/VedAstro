@@ -10,6 +10,9 @@ class PayloadBody(BaseModel):
     birth_time: Optional[str] = None
     name: Optional[str] = None
     llm_model_name: Optional[str] = None
+    search_type: Optional[str] = None
+    fetch_k: Optional[str] = None
+    lambda_mult: Optional[str] = None
 
     def get_birth_time(self) -> Time:
         # raw time string with location is parsed into correct astro time instance

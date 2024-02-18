@@ -31,17 +31,8 @@ loaded_vectors = {}
 # init app to handle HTTP requests
 app = FastAPI(title="Chat API")
 
-def clean_string(s):
-    # Define the characters that can't be used in dictionary keys
-    invalid_chars = ["{", "}", ":", "'"]
 
-    # Remove invalid characters from the string
-    for char in invalid_chars:
-        s = s.replace(char, "")
-
-    return s
-
-async def TextChunksToEmbedingVectors(payload, docs):
+async def TextChunksToEmbedingVectors(payload, docs, savePathPrefix):
 
     # 0 : measure time to regenerate
     st = time.time()
@@ -51,7 +42,7 @@ async def TextChunksToEmbedingVectors(payload, docs):
 
     # 3 : save to local folder, for future use
     db = FAISS.from_documents(docs, embeddings)
-    filePath = f"{FAISS_INDEX_PATH}/{payload.llm_model_name}" #use modal name for multiple modal support
+    filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}" #use modal name for multiple modal support
     db.save_local(filePath)
 
     # 4 : measure time to regenerate
@@ -77,11 +68,12 @@ async def Horoscope_LLMSearch(payload: PayloadBody):
 
         # lazy load for speed
         # use file path as id for dynamic LLM modal support
-        filePath = f"{FAISS_INDEX_PATH}/{payload.llm_model_name}" #use modal name for multiple modal support
+        savePathPrefix = "Horoscope"
+        filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}" #use modal name for multiple modal support
         if loaded_vectors.get(filePath) is None:
-            loaded_vectors[filePath] = EmbedVectors(filePath) # load the horoscope vectors (heavy compute)
+            loaded_vectors[filePath] = EmbedVectors(filePath, payload.llm_model_name) # load the horoscope vectors (heavy compute)
 
-        # # get all predictions for given birth time
+        # # get all predictions for given birth time (aka filter)
         # run calculator to get list of prediction names for given birth time
         birthTime = payload.get_birth_time()
         calcResult = Calculate.HoroscopePredictionNames(birthTime)
@@ -90,35 +82,27 @@ async def Horoscope_LLMSearch(payload: PayloadBody):
         birthPredictions = {"name": [item for item in calcResult]}
 
         # do LLM search on found predictions
-        results = loaded_vectors[filePath].search(payload.query, 100, birthPredictions)
+        # similarity
+        if payload.search_type == "similarity":
+            results = loaded_vectors[filePath].similarity_search_with_score(payload.query, 100, birthPredictions)
+            # convert found with score to nice format for sending
+            results_formated = ChatTools.doc_with_score_to_dict(results)
 
-        # convert found with score to nice format for sending
-        results_formated = ChatTools.doc_with_score_to_dict(results)
+        # MMR
+        # The MaxMarginalRelevanceExampleSelector selects examples
+        # based on a combination of which examples are most similar to the inputs,
+        # while also optimizing for diversity. It does this by finding the examples 
+        # with the embeddings that have the greatest cosine similarity with the inputs,
+        #and then iterativelyadding them while penalizing them for closeness to already selected examples.
+        if payload.search_type == "mmr":
+            results_formated = loaded_vectors[filePath].max_marginal_relevance_search(payload.query, 100, birthPredictions)
+            
         return results_formated
     
     # if fail, fall gracefully
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-# receives HTTP request, processes and returns response
-@app.post('/OpenAPIMetadataLLMSearch')
-async def OpenAPIMetadata_LLMSearch(payload: PayloadBody):
-    global loaded_vectors
-
-    # # get all predictions for given birth time
-    # run calculator to get list of prediction names for given birth time
-    birthTime = payload.get_birth_time()
-    calcResult = Calculate.HoroscopePredictionNames(birthTime)
-
-    # format list nicely so LLM can swallow 
-    birthPredictions = {"name": [item for item in calcResult]}
-
-    # do LLM search on found predictions
-    results = loaded_vectors.search(payload.query, 100, birthPredictions)
-
-    # convert found with score to nice format for sending
-    results_formated = ChatTools.doc_with_score_to_dict(results)
-    return results_formated
 
 
 ## RAG
@@ -141,7 +125,7 @@ async def Horoscope_RegenerateEmbeddings(payload: PayloadBody):
     docs = [Document(page_content=horoscope.Description, metadata={ "name": horoscope.Name.ToString(), "nature": horoscope.Nature.ToString() }) for horoscope in horoscopeDataList]
 
     # 2 : embed the horoscope texts, using CPU LLM (also saves to local disk under modal name)
-    time_minutes = await TextChunksToEmbedingVectors(payload, docs)
+    time_minutes = await TextChunksToEmbedingVectors(payload, docs, "Horoscope")
 
     # tell call all went well
     return {"Status": "Pass",

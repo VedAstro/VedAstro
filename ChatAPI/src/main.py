@@ -23,9 +23,7 @@ from langchain_community.vectorstores import FAISS
 
 FAISS_INDEX_PATH = "faiss_index"
 
-# instances of chat engines 
-# NOTE: keep multiple in global for lazy init & for easy experimentation
-# after 1st slow load, will help speed other faster calls
+# instances embedded vector stored here for speed, shared between all calls
 loaded_vectors = {}
 
 # init app to handle HTTP requests
@@ -53,7 +51,6 @@ async def TextChunksToEmbedingVectors(payload, docs, savePathPrefix):
     return time_minutes
 
 
-
 @app.get("/")
 def home():
     return {"Welcome to Chat API"}
@@ -68,7 +65,7 @@ async def Horoscope_LLMSearch(payload: PayloadBody):
 
         # lazy load for speed
         # use file path as id for dynamic LLM modal support
-        savePathPrefix = "Horoscope"
+        savePathPrefix = "horoscope"
         filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}" #use modal name for multiple modal support
         if loaded_vectors.get(filePath) is None:
             loaded_vectors[filePath] = EmbedVectors(filePath, payload.llm_model_name) # load the horoscope vectors (heavy compute)
@@ -82,27 +79,12 @@ async def Horoscope_LLMSearch(payload: PayloadBody):
         birthPredictions = {"name": [item for item in calcResult]}
 
         # do LLM search on found predictions
-        # similarity
-        if payload.search_type == "similarity":
-            results = loaded_vectors[filePath].similarity_search_with_score(payload.query, 100, birthPredictions)
-            # convert found with score to nice format for sending
-            results_formated = ChatTools.doc_with_score_to_dict(results)
-
-        # MMR
-        # The MaxMarginalRelevanceExampleSelector selects examples
-        # based on a combination of which examples are most similar to the inputs,
-        # while also optimizing for diversity. It does this by finding the examples 
-        # with the embeddings that have the greatest cosine similarity with the inputs,
-        #and then iterativelyadding them while penalizing them for closeness to already selected examples.
-        if payload.search_type == "mmr":
-            results_formated = loaded_vectors[filePath].max_marginal_relevance_search(payload.query, 100, birthPredictions)
-            
+        results_formated = loaded_vectors[filePath].search(payload.query, payload.search_type, birthPredictions)        
         return results_formated
     
     # if fail, fall gracefully
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
 
 
 ## RAG
@@ -125,7 +107,7 @@ async def Horoscope_RegenerateEmbeddings(payload: PayloadBody):
     docs = [Document(page_content=horoscope.Description, metadata={ "name": horoscope.Name.ToString(), "nature": horoscope.Nature.ToString() }) for horoscope in horoscopeDataList]
 
     # 2 : embed the horoscope texts, using CPU LLM (also saves to local disk under modal name)
-    time_minutes = await TextChunksToEmbedingVectors(payload, docs, "Horoscope")
+    time_minutes = await TextChunksToEmbedingVectors(payload, docs, "horoscope")
 
     # tell call all went well
     return {"Status": "Pass",

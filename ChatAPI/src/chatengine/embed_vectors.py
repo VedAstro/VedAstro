@@ -6,6 +6,7 @@ from langchain_community.vectorstores import FAISS
 import json
 from langchain_core.documents import Document
 import os
+from .chat_tools import ChatTools
 
 # Define constants
 FAISS_INDEX_PATH = "faiss_index"
@@ -65,61 +66,21 @@ class EmbedVectors:
 
         return results
 
+    def search(self, query, search_type, filter=None):
+        # similarity
+        if search_type == "similarity":
+            results = self.similarity_search_with_score(query, 100, filter)
+            # convert found with score to nice format for sending
+            results_formated = ChatTools.doc_with_score_to_dict(results)
 
-# import time
+        # MMR
+        # The MaxMarginalRelevanceExampleSelector selects examples
+        # based on a combination of which examples are most similar to the inputs,
+        # while also optimizing for diversity. It does this by finding the examples 
+        # with the embeddings that have the greatest cosine similarity with the inputs,
+        #and then iterativelyadding them while penalizing them for closeness to already selected examples.
+        if search_type == "mmr":
+            results_formated = self.max_marginal_relevance_search(query, 100, filter)
 
-# from .xml_loader import XMLLoader
-# from .local_huggingface_embeddings import LocalHuggingFaceEmbeddings
-# from langchain_community.vectorstores import FAISS
-# import json
-# from langchain_core.documents import Document
-# import os
-
-
-# # represents the vectors from file in memory
-# class EmbedVectors:
-#     def __init__(self, vectorStorePath):
-#         try:
-#             # Load the data from faiss
-#             st = time.time()
-#             self.embeddings = LocalHuggingFaceEmbeddings(LLM_MODEL) # works via llama.cpp on CPU (custom glue code)
-#             self.db = FAISS.load_local(vectorStorePath, self.embeddings)
-#             et = time.time() - st
-#             print(f"Loading vector database {vectorStorePath} took {et} seconds.")
-#         except Exception as e:
-#             raise Exception("Failed to load the model vector.") from e
-
-#     def search(self, query, k=4, filter=None, search_type="similarity", return_scores=False, **kwargs):
-#         """
-#         Searches the FAISS database with different strategies.
-#         :param query: The query string
-#         :param k: Number of docs to return
-#         :param filter: Optional metadata filter
-#         :param search_type: "similarity", "mmr", "relevance"
-#         :param return_scores: Whether to return scores
-#         :param kwargs: Extra params like fetch_k, lambda_mult etc
-#         :return: List of Documents or (Document, Score) tuples
-#         """
-#         #no filter when not supplied
-#         if filter is None:
-#             filter = {}
-        
+        return results_formated
     
-#         if search_type == "similarity":
-#             #similarity_search_with_score, which allows you to return not only the documents 
-#             #but also the distance score of the query to them. 
-#             #The returned distance score is L2 distance. Therefore, a lower score is better.
-#             if return_scores:
-#                 method = "similarity_search_with_score"
-#             else:
-#                 method = "similarity_search"
-#         elif search_type == "mmr":
-#             method = "max_marginal_relevance_search"
-#         elif search_type == "relevance":
-#             method = "similarity_search_with_relevance_scores"
-#         else:
-#             raise ValueError("Invalid search type")
-        
-#         search_fn = getattr(self.db, method)
-#         results = search_fn(query, filter=filter, k=k, **kwargs)
-#         return results

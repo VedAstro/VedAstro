@@ -25,6 +25,7 @@ FAISS_INDEX_PATH = "faiss_index"
 
 # instances embedded vector stored here for speed, shared between all calls
 loaded_vectors = {}
+chat_engines = {}
 
 # init app to handle HTTP requests
 app = FastAPI(title="Chat API")
@@ -88,7 +89,40 @@ async def Horoscope_LLMSearch(payload: PayloadBody):
 
 
 ## RAG
+    
+# query chat
+@app.post('/HoroscopeChat')
+async def Horoscope_Chat(payload: PayloadBody):
+    global chat_engines
 
+    global loaded_vectors
+
+    # lazy load for speed
+    # use file path as id for dynamic LLM modal support
+    savePathPrefix = "horoscope"
+    filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}" #use modal name for multiple modal support
+    if loaded_vectors.get(filePath) is None:
+        loaded_vectors[filePath] = EmbedVectors(filePath, payload.llm_model_name) # load the horoscope vectors (heavy compute)
+
+    savePathPrefix = "horoscope"
+    filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}" #use modal name for multiple modal support
+    if chat_engines.get(filePath) is None:
+        chat_engines[filePath] = ChatEngine(filePath, payload.llm_model_name) # load the horoscope vectors (heavy compute)
+
+    # do LLM search on found predictions
+    # # get all predictions for given birth time (aka filter)
+    # run calculator to get list of prediction names for given birth time
+    birthTime = payload.get_birth_time()
+    calcResult = Calculate.HoroscopePredictionNames(birthTime)
+
+    # format list nicely so LLM can swallow 
+    birthPredictions = {"name": [item for item in calcResult]}
+    results_formated = loaded_vectors[filePath].search(payload.query, payload.search_type, birthPredictions)        
+    # results_formated = loaded_vectors[filePath].similarity_search_with_score(payload.query, 100, birthPredictions)        
+    
+    results = chat_engines[filePath].qa(payload.query, results_formated)
+
+    return results
 
 ## TRAINING
 
@@ -97,7 +131,6 @@ async def Horoscope_LLMSearch(payload: PayloadBody):
 # which will be used later to run queries for search & AI chat
 @app.post('/HoroscopeRegenerateEmbeddings')
 async def Horoscope_RegenerateEmbeddings(payload: PayloadBody):
-    from langchain_community.vectorstores import FAISS
     from langchain_core.documents import Document
     
     # 1 : get all horoscope texts direct from VedAstro library

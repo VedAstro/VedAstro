@@ -14,3 +14,6 @@ uvicorn
 
 # astrology
 vedastro
+
+# for Anyscale support in LangChain
+openai 

@@ -4244,6 +4244,20 @@ namespace VedAstro.Library
 
         }
 
+
+        /// <summary>
+        /// Gets the longitude of a KP house according to placidus house division
+        /// </summary>
+        /// <param name="horaryNumber">if more than 0, will use Horary instead of Kundali calculation</param>
+        /// <param name="rotateDegrees">if more than 0, will rotate house cups by that degree</param>
+        /// <returns></returns>
+        public static Angle HouseLongitudeKP(HouseName inputHouse, Time time, int horaryNumber = 0, double rotateDegrees = 0)
+        {
+            var allHouseCuspsRaw = Krishnamurti.AllHouseCuspLongitudes(time, horaryNumber, rotateDegrees);
+
+            return allHouseCuspsRaw[inputHouse];
+        }
+
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>

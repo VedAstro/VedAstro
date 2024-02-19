@@ -1,6 +1,7 @@
 
 
-# required for API
+# make sure KEY has been supplied
+#exp use : api_key = os.environ["ANYSCALE_API_KEY"]
 from fastapi import HTTPException, FastAPI
 
 import json  # for JSON parsing and packing
@@ -19,6 +20,11 @@ from vedastro import *  # install via pip
 import time # for performance measurements
 
 from langchain_community.vectorstores import FAISS
+
+# load API keys from .env file
+import os
+if "ANYSCALE_API_KEY" not in os.environ:
+    raise RuntimeError("Please add the ANYSCALE_API_KEY environment variable to run this script. Run the following in your terminal `export OPENAI_API_KEY=...`")
 
 
 FAISS_INDEX_PATH = "faiss_index"
@@ -118,7 +124,6 @@ async def Horoscope_Chat(payload: PayloadBody):
     # format list nicely so LLM can swallow 
     birthPredictions = {"name": [item for item in calcResult]}
     results_formated = loaded_vectors[filePath].search(payload.query, payload.search_type, birthPredictions)        
-    # results_formated = loaded_vectors[filePath].similarity_search_with_score(payload.query, 100, birthPredictions)        
     
     results = chat_engines[filePath].qa(payload.query, results_formated)
 

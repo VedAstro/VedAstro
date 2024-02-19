@@ -54,7 +54,7 @@ class ChatEngine:
         except Exception as e:
             raise Exception("Failed to load the model vector.") from e
         
-        # 2 : load LLM huggingface modal
+        # 2 : load access to huggingface LLM via Anyscale
         st = time.time()
 
         # 'BAAI/bge-large-en-v1.5' - A large-scale English language model developed by BAAI.
@@ -70,10 +70,7 @@ class ChatEngine:
         # 'Open-Orca/Mistral-7B-OpenOrca' - A model by Open-Orca, possibly part of the Mistral series.
         # 'thenlper/gte-large' - A large-scale model by TheNLP'er, possibly for general text generation.
         # 'meta-llama/Llama-2-13b-chat-hf' - A chatbot model by Meta-Llama with 13 billion parameters.
-        self.llm = ChatAnyscale(model_name="meta-llama/Llama-2-70b-chat-hf", anyscale_api_key="")
-
-        # Initialize Anyscale model
-        #self.llm = Anyscale(model=ANYSCALE_MODEL, api_key=ANYSCALE_ENDPOINT_TOKEN)
+        self.llm = ChatAnyscale(model_name="meta-llama/Llama-2-70b-chat-hf", anyscale_api_key=os.environ["ANYSCALE_API_KEY"])
 
         # self.llm = StableLMPipeline.from_model_id(
         #     model_id="stabilityai/stablelm-tuned-alpha-7b",
@@ -86,11 +83,7 @@ class ChatEngine:
         self.chain = load_qa_chain(llm=self.llm, chain_type="stuff", prompt=PROMPT)
 
     def qa(self, query, input_documents):
-        from langchain_core.documents import Document
-        # input_documents = [
-        #     Document(page_content="Hello world!"),
-        #     Document(page_content="This is some sample text") 
-        # ]
+
         result = self.chain({"input_documents": input_documents, "question": query})
 
         print(f"Result is: {result}")

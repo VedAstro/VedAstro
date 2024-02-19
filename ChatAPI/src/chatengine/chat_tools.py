@@ -16,5 +16,18 @@ class ChatTools:
                 "score": float(doc[1]),
             }
             docs_list.append(doc_dict)
-        #json_str = json.dumps(docs_list)
         return docs_list
+    
+    # given a list of documents with score, moves scores into metadata
+    # needed else error, since Document is wrapped with value array
+    @staticmethod
+    def doc_with_score_to_doc(input_documents: List[Document]) -> List[Document]:
+        docs_list = []
+        for doc in input_documents:
+            doc_dict = Document(
+                page_content=doc[0].page_content, 
+                metadata = {**doc[0].metadata, "score": float(doc[1])}
+            )
+            docs_list.append(doc_dict)
+        return docs_list
+

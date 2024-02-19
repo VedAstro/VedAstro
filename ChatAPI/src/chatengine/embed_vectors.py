@@ -7,6 +7,7 @@ import json
 from langchain_core.documents import Document
 import os
 from .chat_tools import ChatTools
+from typing import List, Dict, Union
 
 # Define constants
 FAISS_INDEX_PATH = "faiss_index"
@@ -71,7 +72,7 @@ class EmbedVectors:
         if search_type == "similarity":
             results = self.similarity_search_with_score(query, 100, filter)
             # convert found with score to nice format for sending
-            results_formated = ChatTools.doc_with_score_to_dict(results)
+            results_formated = ChatTools.doc_with_score_to_doc(results)
 
         # MMR
         # The MaxMarginalRelevanceExampleSelector selects examples

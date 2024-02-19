@@ -15,7 +15,8 @@
             ],
             "jinja": true,
             "cwd": "${workspaceFolder}/src", // replace 'your_folder' with your specific folder
-            "preLaunchTask": "Install Requirements"
+            "preLaunchTask": "Install Requirements",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

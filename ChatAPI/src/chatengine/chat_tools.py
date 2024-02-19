@@ -3,11 +3,12 @@ from langchain_core.documents import Document
 from .xml_loader import XMLLoader
 from typing import List
 from .payload_body import PayloadBody
+from typing import List, Dict, Union
 
 class ChatTools:        
-    # given a list of documents will convert to JSON
+    # given a list of documents puts into dictionary for Fast API output
     @staticmethod
-    def doc_with_score_to_dict(docs: List[Document]) -> str:
+    def doc_with_score_to_dict(docs: List[Document]) -> List[Dict[str, Union[str, float]]]:
         docs_list = []
         for doc in docs:
             doc_dict = {

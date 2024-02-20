@@ -122,9 +122,7 @@ async def Horoscope_Chat(payload: PayloadBody):
     filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
     if loaded_vectors.get(filePath) is None:  # lazy load for speed
         # load the horoscope vectors (heavy compute)
-        loaded_vectors[filePath] = EmbedVectors(
-            filePath, payload.llm_model_name)
-
+        loaded_vectors[filePath] = EmbedVectors(filePath, payload.llm_model_name)
     # do LLM search on found predictions
     found_predictions = loaded_vectors[filePath].search(
         payload.query, payload.search_type, all_predictions)
@@ -133,8 +131,10 @@ async def Horoscope_Chat(payload: PayloadBody):
     # STEP 3: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
     # run QA prepare the LLM that will answer the query
     if chat_engines.get(filePath) is None:  # lazy load for speed
-        # load the horoscope vectors (heavy compute)
-        chat_engines[filePath] = ChatEngine("meta-llama/Llama-2-70b-chat-hf")
+        wrapper = ChatEngine(payload.variation_name) # select the correct engine variation
+        chat_engines[filePath] = wrapper.create_instance(payload.chat_model_name) # load the modal shards (heavy compute)
+    
+    # query chat engine
     results = chat_engines[filePath].query(query=payload.query,
                                            input_documents=found_predictions,
                                            # Controls the trade-off between randomness and determinism in the response

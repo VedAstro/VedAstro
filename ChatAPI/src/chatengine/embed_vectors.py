@@ -1,7 +1,7 @@
 import time
 
 from .xml_loader import XMLLoader
-from .local_huggingface_embeddings import LocalHuggingFaceEmbeddings
+from .chat_engine.local_huggingface_embeddings import LocalHuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 import json
 from langchain_core.documents import Document

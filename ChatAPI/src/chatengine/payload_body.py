@@ -6,10 +6,12 @@ import asyncio
 
 class PayloadBody(BaseModel):
     """Payload coming from client in POST request"""
+    variation_name: Optional[str] = None
     query: Optional[str] = None
     birth_time: Optional[str] = None
     name: Optional[str] = None
     llm_model_name: Optional[str] = None
+    chat_model_name: Optional[str] = None
     search_type: Optional[str] = None
     temperature: Optional[float] = None
     max_tokens: Optional[float] = None

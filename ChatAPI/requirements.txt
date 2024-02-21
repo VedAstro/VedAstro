@@ -17,3 +17,9 @@ vedastro
 
 # for Anyscale support in LangChain
 openai 
+
+aiohttp 
+aiostream
+async_generator
+
+websockets

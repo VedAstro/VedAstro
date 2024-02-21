@@ -1,7 +1,9 @@
 # __init__.py
-
+# Set engines here to try out variations
 from .chat_engine_mk1 import ChatEngine1
 from .chat_engine_mk2 import ChatEngine2
+from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
+
 
 class ChatEngine:
     def __init__(self, variation_name):

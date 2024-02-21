@@ -318,29 +318,24 @@ async def websocket_endpoint(websocket: websockets.WebSocket):
             if chat_engines.get(filePath) is None:  # lazy load for speed
                 wrapper = ChatEngine(payload.variation_name) # select the correct engine variation
                 chat_engines[filePath] = wrapper.create_instance(payload.chat_model_name) # load the modal shards (heavy compute)
-            
-
-            results = chat_engines[filePath].query(query=payload.query,
-                                                input_documents=found_predictions,
-                                                # Controls the trade-off between randomness and determinism in the response
-                                                # A high value (e.g., 1.0) makes the model more random and creative
-                                                temperature=payload.temperature,
-                                                # Controls diversity of the response
-                                                # A high value (e.g., 0.9) allows for more diversity
-                                                top_p=payload.top_p,
-                                                # Limits the maximum length of the generated text
-                                                max_tokens=payload.max_tokens,
-                                                # Specifies sequences that tell the model when to stop generating text
-                                                stop=payload.stop,
-                                                # Returns debug data like usage statistics
-                                                return_debug_data=False  # Set to True to see detailed information about model usage
-                                                )
 
 
-            stream = await results
-            async for chunk in stream:
+            # Query the chat engine and send the results to the client
+            async for chunk in await chat_engines[filePath].query(query=payload.query,
+                                    input_documents=found_predictions,
+                                    # Controls the trade-off between randomness and determinism in the response
+                                    # A high value (e.g., 1.0) makes the model more random and creative
+                                    temperature=payload.temperature,
+                                    # Controls diversity of the response
+                                    # A high value (e.g., 0.9) allows for more diversity
+                                    top_p=payload.top_p,
+                                    # Limits the maximum length of the generated text
+                                    max_tokens=payload.max_tokens,
+                                    # Specifies sequences that tell the model when to stop generating text
+                                    stop=payload.stop,
+                                    # Returns debug data like usage statistics
+                                    return_debug_data=False  # Set to True to see detailed information about model usage
+                                    ):
                 await websocket.send_text(chunk['output_text'])
-
-    finally:
-        # Clean up and close the connection
-        await websocket.close()
+    except Exception as e:
+        print(e)

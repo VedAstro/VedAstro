@@ -1,34 +1,16 @@
 import os
-from starlette.requests import Request
-from typing import List, Optional, Any
-from langchain.llms.utils import enforce_stop_tokens
-from langchain_community.vectorstores import FAISS
-
-# from langchain.llms import OpenAI
-from langchain.chains.qa_with_sources import load_qa_with_sources_chain
-from langchain.chains.question_answering import load_qa_chain
-# from langchain import HuggingFacePipeline
-from langchain.prompts import PromptTemplate
-from langchain.chains import RetrievalQA
-from transformers import pipeline as hf_pipeline
-from transformers import (
-    AutoModelForCausalLM,
-    AutoModelForSeq2SeqLM,
-    AutoTokenizer,
-)
-import torch
 import time
-from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
-
+from langchain.chains.question_answering import load_qa_chain
+from langchain.prompts import PromptTemplate
 from langchain_community.chat_models.anyscale import ChatAnyscale
-from langchain_community.llms.anyscale import Anyscale
-import asyncio
-import async_generator
-import aiohttp.helpers
+
+
 
 SYSTEM_PROMPT = """use only text in context, context is a person's life description"""
-LLAMA_TEMPLATE = "[INST]<<SYS>>\n" + SYSTEM_PROMPT + "{context}<</SYS>>\n\n{question}[/INST] "
-PROMPT = PromptTemplate(template=LLAMA_TEMPLATE, input_variables=["context", "question"])
+LLAMA_TEMPLATE = "[INST]<<SYS>>\n" + SYSTEM_PROMPT + \
+    "{context}<</SYS>>\n\n{question}[/INST] "
+PROMPT = PromptTemplate(template=LLAMA_TEMPLATE,
+                        input_variables=["context", "question"])
 
 
 class ChatEngine2:
@@ -47,7 +29,7 @@ class ChatEngine2:
             et = time.time() - st
             print(f"Loading HF model took {et} seconds.")
         except Exception as e:
-            raise Exception("Failed to load the Chat Engine.") from e
+            raise Exception(f"Failed to load the Chat Engine.\n{e}") from e
     
 
     async def query(self, **kwargs):

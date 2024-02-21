@@ -38,3 +38,5 @@ link local image with online URI
 upload image to Azure
 
 `docker push vedastrochatapi.azurecr.io/hello-world`
+# prompts 
+craft a response that incorporates the strengths of Response A and Response B, addresses their shortcomings based on the ratings, and leverages insights from the provided ratings:

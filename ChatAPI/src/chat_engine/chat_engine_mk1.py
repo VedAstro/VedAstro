@@ -16,7 +16,7 @@ from transformers import (
 )
 import torch
 import time
-from .local_huggingface_embeddings import LocalHuggingFaceEmbeddings
+from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
 
 from langchain_community.chat_models.anyscale import ChatAnyscale
 from langchain_community.llms.anyscale import Anyscale

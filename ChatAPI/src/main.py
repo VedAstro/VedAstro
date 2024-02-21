@@ -63,7 +63,8 @@ async def TextChunksToEmbedingVectors(payload, docs, savePathPrefix):
 
 @app.get("/")
 def home():
-    return {"Welcome to Chat API"}
+    return {"Welcome to VedAstro"}
+
 
 # SEARCH
 @app.post('/HoroscopeLLMSearch')
@@ -173,11 +174,9 @@ async def horoscope_chat(websocket: websockets.WebSocket):
         print(e)
 
 
-
 # REGENERATE HOROSCOPE EMBEDINGS
 # takes all horoscope predictions text and converts them into LLM embedding vectors
 # which will be used later to run queries for search & AI chat
-
 @app.post('/HoroscopeRegenerateEmbeddings')
 async def horoscope_regenerateEmbeddings(payload: PayloadBody):
     from langchain_core.documents import Document
@@ -222,7 +221,7 @@ async def preset_query_match(payload: PayloadBody):
     print(user_vector)
 
     # compares the user vector to the preset vectors to determine how similar they are
-    user_vector_expanded = np.expand_dims(user_vector, axis=0)
+    user_vector_expanded = np.expand_dims(user_vector, axis=0) # Make the vectors match
     similarities = cosine_similarity(user_vector_expanded, preset_vectors)
 
     most_similar_query = preset_queries[np.argmax(similarities)]

@@ -291,6 +291,8 @@ async def websocket_endpoint(websocket: websockets.WebSocket):
 
             payload = PayloadBody(raw_data)
 
+            await websocket.send_text("Thinking....")
+
             # STEP 1: GET NATIVE'S HOROSCOPE DATA (PREDICTIONS)
             # get all predictions for given birth time (aka filter)
             # run calculator to get list of prediction names for given birth time

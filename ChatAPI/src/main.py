@@ -2,7 +2,7 @@
 
 # make sure KEY has been supplied
 # exp use : api_key = os.environ["ANYSCALE_API_KEY"]
-from fastapi import HTTPException, FastAPI, Response, websockets
+from fastapi import HTTPException, FastAPI, websockets
 
 import json  # for JSON parsing and packing
 
@@ -20,13 +20,11 @@ from vedastro import *  # install via pip
 
 import time  # for performance measurements
 
-from langchain_community.vectorstores import FAISS
 
 # load API keys from .env file
 import os
 if "ANYSCALE_API_KEY" not in os.environ:
-    raise RuntimeError(
-        "Please add the ANYSCALE_API_KEY environment variable to run this script. Run the following in your terminal `export OPENAI_API_KEY=...`")
+    raise RuntimeError("KEY MISSING DINGUS")
 
 
 FAISS_INDEX_PATH = "faiss_index"
@@ -39,28 +37,6 @@ chat_engines = {}
 app = FastAPI(title="Chat API")
 
 
-async def TextChunksToEmbedingVectors(payload, docs, savePathPrefix):
-
-    # 0 : measure time to regenerate
-    st = time.time()
-
-    # 2 : embed the horoscope texts, using CPU LLM
-    embeddings = LocalHuggingFaceEmbeddings(payload.llm_model_name)
-
-    # 3 : save to local folder, for future use
-    db = FAISS.from_documents(docs, embeddings)
-    # use modal name for multiple modal support
-    filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
-    db.save_local(filePath)
-
-    # 4 : measure time to regenerate
-    time_seconds = time.time() - st
-    # convert to minutes
-    time_minutes = time_seconds / 60
-
-    return time_minutes
-
-
 @app.get("/")
 def home():
     return {"Welcome to VedAstro"}
@@ -68,7 +44,7 @@ def home():
 
 # SEARCH
 @app.post('/HoroscopeLLMSearch')
-async def horoscope_llmsearch(payload: PayloadBody):
+async def horoscope_llmsearch(payload: SearchPayload):
     try:
         global loaded_vectors
 
@@ -78,9 +54,7 @@ async def horoscope_llmsearch(payload: PayloadBody):
         # use modal name for multiple modal support
         filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
         if loaded_vectors.get(filePath) is None:
-            # load the horoscope vectors (heavy compute)
-            loaded_vectors[filePath] = EmbedVectors(
-                filePath, payload.llm_model_name)
+            loaded_vectors[filePath] = EmbedVectors(filePath, payload.llm_model_name)# load the horoscope vectors (heavy compute)
 
         # # get all predictions for given birth time (aka filter)
         # run calculator to get list of prediction names for given birth time
@@ -91,8 +65,7 @@ async def horoscope_llmsearch(payload: PayloadBody):
         birthPredictions = {"name": [item for item in calcResult]}
 
         # do LLM search on found predictions
-        results_formated = loaded_vectors[filePath].search(
-            payload.query, payload.search_type, birthPredictions)
+        results_formated = loaded_vectors[filePath].search(payload.query, payload.search_type, birthPredictions)
         return results_formated
 
     # if fail, fall gracefully
@@ -120,7 +93,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 break
             
             # Parse the message
-            payload = PayloadBody(raw_data)
+            payload = ChatPayload(raw_data)
 
             # Let caller process started
             await websocket.send_text("Thinking....")
@@ -178,7 +151,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 # takes all horoscope predictions text and converts them into LLM embedding vectors
 # which will be used later to run queries for search & AI chat
 @app.post('/HoroscopeRegenerateEmbeddings')
-async def horoscope_regenerateEmbeddings(payload: PayloadBody):
+async def horoscope_regenerate_embeddings(payload: RegenPayload):
     from langchain_core.documents import Document
 
     # 1 : get all horoscope texts direct from VedAstro library
@@ -189,7 +162,7 @@ async def horoscope_regenerateEmbeddings(payload: PayloadBody):
     ), "nature": horoscope.Nature.ToString()}) for horoscope in horoscopeDataList]
 
     # 2 : embed the horoscope texts, using CPU LLM (also saves to local disk under modal name)
-    time_minutes = await TextChunksToEmbedingVectors(payload, docs, "horoscope")
+    time_minutes = await ChatTools.TextChunksToEmbedingVectors(payload, docs, "horoscope")
 
     # tell call all went well
     return {"Status": "Pass",
@@ -198,7 +171,7 @@ async def horoscope_regenerateEmbeddings(payload: PayloadBody):
 
 # PRESET MATCH
 @app.post("/PresetQueryMatch")
-async def preset_query_match(payload: PayloadBody):
+async def preset_query_match(payload: TempPayload):
     from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
     import numpy as np
     from sklearn.metrics.pairwise import cosine_similarity

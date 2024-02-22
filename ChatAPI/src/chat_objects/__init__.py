@@ -4,7 +4,10 @@
 # be directly imported from the package
 from .chat_tools import ChatTools
 from .embed_vectors import EmbedVectors
-from .payload_body import PayloadBody
+from .regen_payload import RegenPayload
+from .search_payload import SearchPayload
+from .chat_payload import ChatPayload 
+from .temp_payload import TempPayload 
 from .xml_loader import XMLLoader
 
 

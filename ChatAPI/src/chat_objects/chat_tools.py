@@ -2,8 +2,11 @@ import json
 from langchain_core.documents import Document
 from .xml_loader import XMLLoader
 from typing import List
-from .payload_body import PayloadBody
 from typing import List, Dict, Union
+import time  # for performance measurements
+from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+FAISS_INDEX_PATH = "faiss_index"
 
 class ChatTools:        
     # given a list of documents puts into dictionary for Fast API output
@@ -31,4 +34,25 @@ class ChatTools:
             )
             docs_list.append(doc_dict)
         return docs_list
+
+    @staticmethod
+    async def TextChunksToEmbedingVectors(payload, docs, savePathPrefix):
+        # 0 : measure time to regenerate
+        st = time.time()
+
+        # 2 : embed the horoscope texts, using CPU LLM
+        embeddings = LocalHuggingFaceEmbeddings(payload.llm_model_name)
+
+        # 3 : save to local folder, for future use
+        db = FAISS.from_documents(docs, embeddings)
+        # use modal name for multiple modal support
+        filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
+        db.save_local(filePath)
+
+        # 4 : measure time to regenerate
+        time_seconds = time.time() - st
+        # convert to minutes
+        time_minutes = time_seconds / 60
+
+        return time_minutes
 

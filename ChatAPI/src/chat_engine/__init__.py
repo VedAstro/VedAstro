@@ -2,6 +2,7 @@
 # Set engines here to try out variations
 from .chat_engine_mk1 import ChatEngine1
 from .chat_engine_mk2 import ChatEngine2
+from .chat_engine_mk3 import ChatEngine3
 from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
 
 
@@ -11,6 +12,7 @@ class ChatEngine:
         self.variation_map = {
             "MK1": ChatEngine1,
             "MK2": ChatEngine2,
+            "MK3": ChatEngine3,
             # Add more variations as needed
         }
 
@@ -18,7 +20,7 @@ class ChatEngine:
         variation_class = self.variation_map.get(self.variation_name)
         if variation_class:
             new_instance = variation_class(*args)
-            print(f"Created new instance of MK: {self.variation_name}")
+            print(f"Experiment Number: {self.variation_name}")
             return new_instance
         else:
             raise ValueError(f"Unknown variation: {self.variation_name}")

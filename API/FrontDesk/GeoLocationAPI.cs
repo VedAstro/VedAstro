@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Azure.Data.Tables;
 using Azure;
 using Microsoft.Azure.Functions.Worker;
@@ -128,13 +128,15 @@ namespace API
             //get ip address of caller
             var ipAddress = incomingRequest?.GetCallerIp()?.ToString();
 
+#if DEBUG
+            ipAddress = ipAddress == "255.255.255.255" ? "180.75.241.81" : ipAddress;
+#endif
+
             // Define a list of functions in the order of priority
             var geoLocationProviders = new Dictionary<APIProvider, Func<string, Task<WebResult<GeoLocation>>>>
             {
                 {APIProvider.VedAstro, IpAddressToGeoLocation_VedAstro},
-                {APIProvider.Google, IpAddressToGeoLocation_Google},
                 {APIProvider.IpData, IpAddressToGeoLocation_IpData},
-                {APIProvider.Azure, IpAddressToGeoLocation_Azure},
             };
 
             //start with empty as default if fail
@@ -826,73 +828,43 @@ namespace API
 
         public static async Task<WebResult<GeoLocation>> IpAddressToGeoLocation_IpData(string ipAddress)
         {
-            //TODO not complete
-            return new WebResult<GeoLocation>(false, GeoLocation.Empty);
-            //if null or empty turn back as nothing
-            if (string.IsNullOrEmpty(ipAddress)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+            const string baseUrl = "https://api.ipdata.co";
 
-
-            const string urlTemplate = "http://api.ipdata.co/{0}?api-key={1}";
-            string uriString = String.Format(urlTemplate, ipAddress, "xxx");
-
-            using (var client = new HttpClient())
+            using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(uriString);
-
-                if (response.IsSuccessStatusCode)
+                JObject resultJson;
+                try
                 {
-                    JObject jObjResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
+                    //Construct URL which contains needed data to get location from API  
+                    var apiKey = Secrets.IpDataAPIKey;
+                    var requestUri = $"{baseUrl}/{ipAddress}?api-key={apiKey}";
+                    var response = await httpClient.GetAsync(requestUri);
+                    response.EnsureSuccessStatusCode(); //This will trigger failure, including key problem 
 
-                    Console.WriteLine("Country Name: " + jObjResponse["country_name"]);
-                    Console.WriteLine("Region Name: " + jObjResponse["region"]);
-                    Console.WriteLine("City Name: " + jObjResponse["city"]);
+                    var content = await response.Content.ReadAsStringAsync();
+                    resultJson = JObject.Parse(content);
+
                 }
-                else
-                {
-                    Console.WriteLine($"Error: StatusCode={response.StatusCode}, ReasonPhrase=" + response.ReasonPhrase);
-                }
+                //check the data, if location was NOT found by API, end here
+                catch (Exception e) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+
+                //if success, extract out the longitude & latitude
+                var lat = double.Parse(resultJson["latitude"].Value<string>() ?? "0");
+                var lng = double.Parse(resultJson["longitude"].Value<string>() ?? "0");
+
+                //round coordinates to 3 decimal places
+                lat = Math.Round(lat, 3);
+                lng = Math.Round(lng, 3);
+
+                //get full name with country & state
+                var region = resultJson["region"].Value<string>();
+                var country = resultJson["country_name"].Value<string>();
+                var fullName = $"{region}, {country}";
+
+                //return to caller pass
+                return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lng, lat));
             }
-
-
-
-            //create the request url for Azure Maps API
-            var apiKey = Secrets.AzureMapsAPIKey;
-            var url = $"https://atlas.microsoft.com/search/address/json?api-version=1.0&subscription-key={apiKey}&query={Uri.EscapeDataString(ipAddress)}";
-
-            //get location data from Azure Maps API
-            var webResult = await Tools.ReadFromServerJsonReply(url);
-
-            //if fail to make call, end here
-            if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
-
-            //if success, get the reply data out
-            var geocodeResponseJson = webResult.Payload;
-            var resultJson = geocodeResponseJson["results"][0];
-
-#if DEBUG
-            //DEBUG
-            Console.WriteLine(geocodeResponseJson.ToString());
-#endif
-
-            //check the data, if location was NOT found by Azure Maps API, end here
-            if (resultJson == null || resultJson["type"].Value<string>() != "Geography") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
-
-            //if success, extract out the longitude & latitude
-            var locationElement = resultJson["position"];
-            var lat = double.Parse(locationElement["lat"].Value<string>() ?? "0");
-            var lng = double.Parse(locationElement["lon"].Value<string>() ?? "0");
-
-            //round coordinates to 3 decimal places
-            lat = Math.Round(lat, 3);
-            lng = Math.Round(lng, 3);
-
-            //get full name with country & state
-            var freeformAddress = resultJson["address"]["freeformAddress"].Value<string>();
-            var country = resultJson["address"]["country"].Value<string>();
-            var fullName = $"{freeformAddress}, {country}";
-
-            //return to caller pass
-            return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lng, lat));
         }
 
     }

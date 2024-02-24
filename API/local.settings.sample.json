@@ -9,7 +9,8 @@
     "API_STORAGE": "xxxx",
     "WEB_STORAGE": "xxxx",
     "AutoEmailerConnectString": "xxxx",
-    "SLACK_EMAIL_WEBHOOK": "xxxx"
+    "SLACK_EMAIL_WEBHOOK": "xxxx",
+    "IpDataAPIKey": "xxxx"
   },
   "Host": {
     "LocalHttpPort": 7071,

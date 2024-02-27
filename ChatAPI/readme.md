@@ -33,10 +33,11 @@ visit ```http://localhost``` with default password (admin)
 
 link local image with online URI
 
-`tag chat-api vedastrochatapi.azurecr.io/chat-api`
+`docker tag chat-api vedastrochatapi.azurecr.io/chat-api`
 
 upload image to Azure
 
-`docker push vedastrochatapi.azurecr.io/hello-world`
+`docker push vedastrochatapi.azurecr.io/chat-api`
+
 # prompts 
 craft a response that incorporates the strengths of Response A and Response B, addresses their shortcomings based on the ratings, and leverages insights from the provided ratings:

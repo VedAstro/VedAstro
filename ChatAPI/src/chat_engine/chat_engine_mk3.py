@@ -6,7 +6,7 @@ from langchain_community.chat_models.anyscale import ChatAnyscale
 
 
 
-SYSTEM_PROMPT = """use only text in context, context is my life description, answer in 70 words or less"""
+SYSTEM_PROMPT = """use only text in context, context is my life description, answer in 70 words or less, avoid disclaimers"""
 LLAMA_TEMPLATE = "[INST]<<SYS>>\n" + SYSTEM_PROMPT + \
     "{context}<</SYS>>\n\n{question}[/INST] "
 PROMPT = PromptTemplate(template=LLAMA_TEMPLATE,

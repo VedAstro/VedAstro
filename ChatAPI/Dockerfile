@@ -1,7 +1,18 @@
-FROM python:3.11
+# Use the latest Debian image as the base
+FROM debian:11-slim
+
+# Update the system and install Python,
+# curl --> for file server
+RUN apt-get update && apt-get install -y python3 python3-pip python3-venv curl
 
 # We need to set the host to 0.0.0.0 to allow outside access
 ENV HOST 0.0.0.0
+
+# Create a virtual environment
+RUN python3 -m venv /opt/venv
+
+# Activate the virtual environment
+ENV PATH="/opt/venv/bin:$PATH"
 
 #**********************COPY STUFF***********************
 #script that starts server
@@ -25,22 +36,11 @@ COPY start-chatapi-server.sh /
 COPY src /src
 COPY requirements.txt /
 
-# install chatapi server (basically pip install)
+# install chatapi server
 RUN ["/bin/bash", "install-chatapi-server.sh"]
 
 RUN pip3 install -r requirements.txt
 
-# Install .NET 7
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        apt-transport-https \
-        dirmngr \
-        gnupg \
-        ca-certificates \
-    && wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \
-    && apt-get update \
-    && apt-get install -y dotnet-sdk-7.0
 
 # install file browser server (won't run till called via start-file-server.sh)
 # Download and install File Browser Server

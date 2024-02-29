@@ -1065,10 +1065,22 @@ class AshtakvargaTable {
 }
 
 class ChatInstance {
-  constructor(
-    url = "wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat"
-  ) {
-    this.socket = new WebSocket(url);
+  ServerURL =
+    "wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
+  ElementID = ""; //ID of main div where table & header will be injected
+  ShowHeader = true; //default enabled, header with title, icon and edit button
+  HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
+
+  constructor(rawSettings) {
+    //correct if property names is camel case (for Blazor)
+    var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+
+    //expand data inside settings input
+    this.ElementID = settings.ElementID;
+    this.ShowHeader = settings.ShowHeader;
+    this.HeaderIcon = settings.HeaderIcon;
+
+    this.socket = new WebSocket(this.ServerURL);
     this.connected = false;
     this.queue = [];
 
@@ -1081,6 +1093,67 @@ class ChatInstance {
     });
 
     this.intervalId = null;
+
+    //CHAT GUI INJECTION
+    //clear old data if any
+    $(`#${this.ElementID}`).empty();
+
+    //random ID for edit button
+    this.EditButtonId = Math.floor(Math.random() * 1000000);
+
+    var htmlContent = `
+                      
+<!-- MAIN MESSAGE BODY -->
+<div class="col-md-6 col-lg-7 col-xl-8">
+    
+    <!-- CHAT SESSION PERSON SELECTOR -->
+    <div class="input-group mb-2">
+        <span class="input-group-text gap-2">
+            <span class="iconify me-2" data-icon="flat-color-icons:list" data-width="25" data-height="25"></span> Saved
+        </span>
+        <!--!-->
+        <select class="form-select" onchange="OnChangePersonSelection()" id="PersonListDropdown">
+            <option selected value="">Choose...</option>
+        </select>
+        <button onclick="" style="display: none; height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
+            <span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span>
+        </button>
+        <button onclick="OnClickChatSettings()" style="height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
+            <span class="iconify" data-icon="iconamoon:settings-fill" data-width="25" data-height="25"></span>
+        </button>
+    </div>
+
+
+    <!-- MESSAGES IN VIEW -->
+    <ul class="list-unstyled" id="ChatWindowMessageList">
+        <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
+                 class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between p-3">
+                    <p class="fw-bold mb-0">AI Astrologer</p>
+                    <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
+                    </p>
+                </div>
+            </div>
+        </li>
+        <li class="bg-white mb-3">
+            <textarea class="form-control" id="UserChatInputElement" rows="4"></textarea>
+        </li>
+        <button id="SendChatButton" type="button" class="btn btn-primary btn-rounded float-end">
+            <span class="iconify me-2" data-icon="fluent-mdl2:processing-run" data-width="25" data-height="25"></span>
+            Send
+        </button>
+    </ul>
+</div>
+`;
+
+    //inject into page
+    $(`#${this.ElementID}`).html(htmlContent);
 
     // GUI EVENT HANDLRES
 
@@ -1279,4 +1352,3 @@ class ChatInstance {
     window.chatx.enqueueMessage(JSON.stringify(messagePayload));
   }
 }
-

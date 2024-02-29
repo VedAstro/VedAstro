@@ -60,3 +60,6 @@ var settingsAIChat = {
   ShowHeader: true,
   HeaderIcon: "fluent:table-28-filled",
 };
+
+window.chatx = new ChatInstance(settingsAIChat);
+window.chatx.waitForConnection();

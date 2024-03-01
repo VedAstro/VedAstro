@@ -1,3 +1,20 @@
+//LOGIN DATA
+
+//# LOCAL <--> LIVE Switch
+var domain = "https://vedastroapi.azurewebsites.net/api";
+//var domain = "http://localhost:7071/api";
+
+var Settings = {
+  Ayanamsa: "KRISHNAMURTI", //default to KP
+  ChartStyle: "South", //default to South Indian Chart
+  CurrentPageName: "home",
+  PersonList: {},
+  PublicPersonList: {},
+  SelectedPerson: {},
+  UserId: "101", //public user ID
+};
+
+
 //----------------------PLANET DATA----------------------------
 var planetColumns = [
   { Api: "PlanetZodiacSign", Enabled: true, Name: "Sign" },

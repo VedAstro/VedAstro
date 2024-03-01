@@ -1691,7 +1691,18 @@ class ChatInstance {
         <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
         <div class="card">
             <div class="card-header d-flex justify-content-between p-3">
-                <p class="fw-bold mb-0">Vignes</p>
+                <p class="fw-bold mb-0 me-5">Vignes</p>
+                <div class="hstack gap-2">
+                  <button title="Bad answer" type="button" class="btn btn-danger" style="padding: 0px 5px;">
+                    <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
+                  </button>
+                  <button title="Good answer" type="button" class="btn btn-primary" style="padding: 0px 5px;">
+                    <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
+                  </button>
+                  <button title="Tip astrologer" type="button" class="btn btn-success" style="padding: 0px 5px;">
+                    <span class="iconify" data-icon="solar:hand-money-linear" data-width="18" data-height="18"></span>
+                  </button>
+                </div>
             </div>
             <div class="card-body">
                 <p id="AIReplyOutElement" class="mb-0">

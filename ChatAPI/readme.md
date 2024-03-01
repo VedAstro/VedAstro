@@ -42,6 +42,7 @@ upload image to Azure
 # prompts 
 craft a response that incorporates the strengths of Response A and Response B, addresses their shortcomings based on the ratings, and leverages insights from the provided ratings:
 
-# QUERY METHODS
-in context learning
-![image](https://github.com/VedAstro/VedAstro/assets/43817262/c20f7497-1ed9-4f25-94be-d3ca3a9e779f)
+# Free AI chat, really?
+We're doing this to improve quality for everybody's benefit.
+So we will focus on keeping this free and you focus on giving feedback.
+Lets improve **Vedic Astrology AI Chat** together! 

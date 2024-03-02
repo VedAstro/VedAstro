@@ -8,6 +8,7 @@ from .regen_payload import RegenPayload
 from .search_payload import SearchPayload
 from .chat_payload import ChatPayload 
 from .temp_payload import TempPayload 
+from .summary_payload import SummaryPayload 
 from .xml_loader import XMLLoader
 
 

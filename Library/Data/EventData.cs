@@ -13,7 +13,7 @@ namespace VedAstro.Library
     /// Data structure to encapsulate an event before it's calculated
     /// In other words an object instance of the event data as stored in file
     /// </summary>
-    public struct EventData :  IToXml, IToJson
+    public struct EventData : IToXml, IToJson
     {
         /** FIELDS **/
 
@@ -23,11 +23,11 @@ namespace VedAstro.Library
 
 
         /** CTOR **/
-        public EventData(EventName name, EventNature nature, SpecializedNature specializedNature, string description, List<EventTag> eventTags, EventCalculatorDelegate eventCalculator)
+        public EventData(EventName name, EventNature nature, SpecializedSummary specializedNature, string description, List<EventTag> eventTags, EventCalculatorDelegate eventCalculator)
         {
             Name = name;
             Nature = nature;
-            SpecializedNature = specializedNature;
+            SpecializedSummary = specializedNature;
             EventCalculator = eventCalculator;
             Description = description;
             EventTags = eventTags;
@@ -37,7 +37,7 @@ namespace VedAstro.Library
         /** PROPERTIES **/
         //mainly created for access from WPF binding
         public EventName Name { get; private set; } = EventName.Empty;
-        
+
         /// <summary>
         /// Gets human readable Event Name, removes camel case
         /// </summary>
@@ -45,10 +45,10 @@ namespace VedAstro.Library
 
         public EventNature Nature { get; private set; }
 
-        public SpecializedNature SpecializedNature { get; private set; }
-        
+        public SpecializedSummary SpecializedSummary { get; private set; }
+
         public EventCalculatorDelegate EventCalculator { get; private set; }
-        
+
         /// <summary>
         /// Auto encoding to HTML safe on get & set
         /// </summary>
@@ -63,7 +63,7 @@ namespace VedAstro.Library
         /// Note: filled when IsEventOccuring is called
         /// </summary>
         public RelatedBody RelatedBody { get; set; } = new RelatedBody(); //default empty
-        
+
         public List<EventTag> EventTags { get; }
 
 
@@ -114,8 +114,7 @@ namespace VedAstro.Library
             // Try to parse EventName and EventNature from XML, use Empty as default
             Enum.TryParse(eventData.Element("Name")?.Value ?? "Empty", out EventName name);
             Enum.TryParse(eventData.Element("Nature")?.Value ?? "Empty", out EventNature nature);
-            // Extract SpecializedNature from XML
-            var specializedNature = SpecializedNature.FromXml(eventData.Element("SpecializedNature"));
+            var specializedNature = SpecializedSummary.Empty; //NOTE: specialized is pumped in static generator using llm data, hence here empty 
             // Clean the description text
             var rawDescription = eventData.Element("Description")?.Value ?? "Empty";
             var description = CleanText(rawDescription);
@@ -128,7 +127,7 @@ namespace VedAstro.Library
             var eventX = new EventData(name, nature, specializedNature, description, tagList, calculatorMethod);
             return eventX;
         }
-        
+
         /// <summary>
         /// Handles nulls nicely
         /// </summary>
@@ -151,7 +150,7 @@ namespace VedAstro.Library
                                     .ToList();
             return returnTags;
         }
-       
+
         private static string CleanText(string text)
         {
             // Remove all special characters and decode HTML
@@ -250,29 +249,29 @@ namespace VedAstro.Library
         {
             // Check if eventData is null
             if (this == null) { return new JObject(); }
-            
+
             // Create a new JObject
             var json = new JObject();
-            
+
             // Convert EventName and EventNature to string and add to JObject
             json["Name"] = this.Name.ToString();
             json["Nature"] = this.Nature.ToString();
-            
-            // Convert SpecializedNature to JObject and add to JObject
-            json["SpecializedNature"] = SpecializedNature.ToJson(this.SpecializedNature);
-            
+
+            // Convert SpecializedSummary to JObject and add to JObject
+            json["SpecializedSummary"] = SpecializedSummary.ToJson(this.SpecializedSummary);
+
             // Add the description text to JObject
             json["Description"] = this.Description;
-            
+
             // Convert the list of tags to a comma-separated string and add to JObject
             var tagString = string.Join(",", this.EventTags);
             json["Tag"] = tagString;
-            
+
             // Convert the calculator method to string (if possible) and add to JObject
             // Note: This assumes that the calculator method can be represented as a string. 
             // If it can't, you might need to remove this line or handle it differently.
             json["CalculatorMethod"] = this.EventCalculator.Method.Name;
-            
+
             // Return the JObject
             return json;
         }
@@ -285,21 +284,21 @@ namespace VedAstro.Library
             // Try to parse EventName and EventNature from JSON, use Empty as default
             Enum.TryParse(eventData["Name"]?.Value<string>() ?? "Empty", out EventName name);
             Enum.TryParse(eventData["Nature"]?.Value<string>() ?? "Empty", out EventNature nature);
-            
-            // Extract SpecializedNature from JSON
-            var specializedNature = SpecializedNature.FromJson(eventData["SpecializedNature"] as JObject);
-            
+
+            // Extract SpecializedSummary from JSON
+            var specializedNature = SpecializedSummary.FromJson(eventData["SpecializedSummary"] as JObject);
+
             // Clean the description text
             var rawDescription = eventData["Description"]?.Value<string>() ?? "Empty";
             var description = CleanText(rawDescription);
-            
+
             // Get the list of tags, split by comma and parse each tag
             var tagString = eventData["Tag"]?.Value<string>();
             var tagList = GetEventTags(tagString);
 
             // Get the calculator method for the event
             var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
-            
+
             // Create and return the EventData object
             var eventX = new EventData(name, nature, specializedNature, description, tagList, calculatorMethod);
             return eventX;

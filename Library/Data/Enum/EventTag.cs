@@ -29,7 +29,7 @@ namespace VedAstro.Library
         Astronomical,
         BuyingSelling,
         Building,
-        Education,
+        Studies,
         Horoscope,
         Tarabala,
         Chandrabala,

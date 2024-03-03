@@ -1152,12 +1152,12 @@ class ChatInstance {
         "I feel really heartbroken. What should I do ?",
       ],
     },
-    Education: {
+    Studies: {
       "Study Abroad": [
         "Will I get to travel abroad for education in the year 2024?",
         "Will I be able to get my education abroad one day and settle there between 2024 and 2027?",
       ],
-      "Higher Education": [
+      "Higher Studies": [
         "Will I be able to get a higher education?",
         "What course of education should I enroll in?",
         "Should I go for MBA? Will it really help me to boost my career?",
@@ -1173,12 +1173,12 @@ class ChatInstance {
         "I study a lot but anyway get bad grades. Why is it happening?",
         "I failed exams to a school and it was my dream. Why did it happen?",
       ],
-      "Education Horoscope": [
+      "Studies Horoscope": [
         "Does the birth chart reflect anything about my returning to formal education?",
         "What is my education horoscope for the year 2024?",
         "Will I complete my education between 2024 and 2027 ?",
       ],
-      "Education & Relationships": [
+      "Studies & Relationships": [
         "If I get married on the year 2024 will I be able to continue my education?",
       ],
     },
@@ -1270,7 +1270,7 @@ class ChatInstance {
         "I had a snake in my dream this night. What does it mean?",
       ],
     },
-    Finance: {
+    Money: {
       "Future Financial Outlook": [
         "Is there anything important I should know about money in my future?",
         "Will I be a millionaire or a billionaire one day?",
@@ -1586,7 +1586,7 @@ class ChatInstance {
 
       // <li data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
       //    <h6 class="dropdown-header">
-      //        <span class="iconify me-2" data-icon="fluent-emoji-flat:heart-with-arrow" data-width="23" data-height="23"></span>Romance</h6></li>
+      //        <span class="iconify me-2" data-icon="fluent-emoji-flat:heart-with-arrow" data-width="23" data-height="23"></span>Love</h6></li>
       // <div class="collapse" id="collapseExample">
       //   <div class="card card-body">
       //     <li><a class="dropdown-item">When will I meet the love of my life in the year 2024?</a></li>
@@ -1642,12 +1642,12 @@ class ChatInstance {
           return "fluent-emoji-flat:person";
         case "Travel":
           return "fluent-emoji-flat:airplane-departure";
-        case "Romance":
+        case "Love":
         case "Love":
           return "fluent-emoji-flat:heart-with-arrow";
-        case "Education":
+        case "Studies":
           return "fluent-emoji-flat:books";
-        case "Finance":
+        case "Money":
           return "fluent-emoji-flat:money-bag";
         case "Business":
           return "fluent-emoji-flat:briefcase";

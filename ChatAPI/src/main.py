@@ -222,6 +222,9 @@ async def summarize_prediction(payload: SummaryPayload):
 # PRESET MATCH
 @app.post("/PresetQueryMatch")
 async def preset_query_match(payload: TempPayload):
+
+    ChatTools.password_protect(payload.password); # password is Spotty
+
     from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
     import numpy as np
     from sklearn.metrics.pairwise import cosine_similarity
@@ -230,12 +233,13 @@ async def preset_query_match(payload: TempPayload):
     embeddings = LocalHuggingFaceEmbeddings(payload.llm_model_name)
 
     preset_queries = [
-        "health",
-        "finance",
-        "education",
-        "romance",
-        "travel",
-        "state of mind"
+        "Mind",
+        "Education",
+        "Career",
+        "Family",
+        "Finance",
+        "Romance",
+        "Body"
     ]
     preset_vectors = embeddings.embed_documents(preset_queries)
 

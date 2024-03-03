@@ -20,7 +20,8 @@ class TempPayload(BaseModel):
     stop: Optional[str] = None
     fetch_k: Optional[float] = None
     lambda_mult: Optional[float] = None
-    
+    password: Optional[str] = None
+
     
     def get_birth_time(self) -> Time:
         # raw time string with location is parsed into correct astro time instance

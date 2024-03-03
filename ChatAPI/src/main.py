@@ -221,42 +221,68 @@ async def summarize_prediction(payload: SummaryPayload):
     return json.loads(chat_completion.choices[0].message.content)
 
 
-# PRESET MATCH
+
+import json
+from typing import List, Dict
+
+
 @app.post("/PresetQueryMatch")
 async def preset_query_match(payload: TempPayload):
 
-    ChatTools.password_protect(payload.password); # password is Spotty
+    ChatTools.password_protect(payload.password)  # password is Spotty
 
     from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
     import numpy as np
     from sklearn.metrics.pairwise import cosine_similarity
 
-    # 2 : embed the horoscope texts, using CPU LLM
+    # Initialize the embeddings
     embeddings = LocalHuggingFaceEmbeddings(payload.llm_model_name)
 
-    preset_queries = [
-        "Mind",
-        "Education",
-        "Career",
-        "Family",
-        "Finance",
-        "Romance",
-        "Body"
-    ]
-    preset_vectors = embeddings.embed_documents(preset_queries)
+    # Define preset queries with potential nested sub-queries
+    preset_queries = {
+        "Mind": None,
+        "Education": ["Scholarships", "Study Tips", "Online Courses"],
+        "Career": ["Resume Building", "Interview Tips", "Facing Challenges"],
+        "Family": ["Parenting Advice", "Family Activities"],
+        "Finance": ["Saving Tips", "Investment Strategies"],
+        "Romance": ["When", "How", "Who", "Why"],
+        "Body": ["Fitness Routines", "Healthy Eating"]
+    }
 
+    # Store the vectors of the main queries
+    main_queries = list(preset_queries.keys())
+    main_query_vectors = embeddings.embed_documents(main_queries)
+
+    # Create a dynamic list to contain vectors for sub-queries
+    sub_query_vectors = {main_query: [] for main_query in main_queries}
+    for main_query, sub_queries in preset_queries.items():
+        if sub_queries:  # Check if there are any sub-queries
+            sub_query_vectors[main_query] = embeddings.embed_documents(sub_queries)
+
+    # Embed the user query
     user_vector = embeddings.embed_query(payload.query)
 
-    print(user_vector)
+    # Compare the user vector to the main query vectors
+    user_vector_expanded = np.expand_dims(user_vector, axis=0)  # Make the vectors match
+    main_query_similarities = cosine_similarity(user_vector_expanded, main_query_vectors)
 
-    # compares the user vector to the preset vectors to determine how similar they are
-    user_vector_expanded = np.expand_dims(
-        user_vector, axis=0)  # Make the vectors match
-    similarities = cosine_similarity(user_vector_expanded, preset_vectors)
+    # Find the most similar main query
+    most_similar_main_query = main_queries[np.argmax(main_query_similarities)]
 
-    most_similar_query = preset_queries[np.argmax(similarities)]
+    # If there are sub-queries for the most similar main query, compare the user vector to them
+    found_sub_vectors = sub_query_vectors[most_similar_main_query]
+    most_similar_sub_query = "No sub query matched" # default no match
+    if np.any(found_sub_vectors):
+        sub_query_similarities = cosine_similarity(user_vector_expanded, found_sub_vectors)
+        most_similar_sub_query = preset_queries[most_similar_main_query][np.argmax(sub_query_similarities)]
 
-    return {"result": most_similar_query}
+    # Return the most similar main query and sub-query (if any)
+    return {
+        "result": most_similar_main_query,
+        "sub_result": most_similar_sub_query
+    }
+
+
 
 # SERVER STUFF
 

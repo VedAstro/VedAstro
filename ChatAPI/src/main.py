@@ -183,6 +183,8 @@ async def horoscope_regenerate_embeddings(payload: RegenPayload):
 @app.post('/SummarizePrediction')
 async def summarize_prediction(payload: SummaryPayload):
 
+    ChatTools.password_protect(payload.password); # password is Spotty
+
     from typing import List
     import openai
     from pydantic import BaseModel, Field
@@ -203,14 +205,14 @@ async def summarize_prediction(payload: SummaryPayload):
         Education: str = Field(description="related to studies, learning, education, academic pursuits, knowledge acquisition")
 
     chat_completion = client.chat.completions.create(
-        model="mistralai/Mistral-7B-Instruct-v0.1",
+        model="mistralai/Mistral-7B-Instruct-v0.1", #check for more model
         response_format={
             "type": "json_object",
             "schema": SpecializedSummary.model_json_schema()
         },
         messages=[
             {"role": "system",
-             "content": f"Output JSON. Only use context. \n CONTEXT:\n{payload.input_text} "},
+             "content": f"Output JSON. Only use context. \n CONTEXT:{{{payload.input_text}}} "},
             {"role": "user", "content": payload.instruction_text}
         ],
         temperature=payload.temperature

@@ -7,3 +7,4 @@ import asyncio
 class RegenPayload(BaseModel):
     """Payload coming from client in POST request"""
     llm_model_name: Optional[str] = None
+    password: Optional[str] = None

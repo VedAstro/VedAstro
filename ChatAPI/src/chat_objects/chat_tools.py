@@ -1,4 +1,5 @@
 import json
+import os
 from langchain_core.documents import Document
 from .xml_loader import XMLLoader
 from typing import List
@@ -8,7 +9,14 @@ from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 FAISS_INDEX_PATH = "faiss_index"
 
-class ChatTools:        
+class ChatTools:
+
+    #checks given password with one stored in .env, if fail end here
+    @staticmethod
+    def password_protect(input_string):
+        if input_string != os.environ["PASSWORD"]:
+            raise ValueError(f"The password is Spotty")
+
     # given a list of documents puts into dictionary for Fast API output
     @staticmethod
     def doc_with_score_to_dict(docs: List[Document]) -> List[Dict[str, Union[str, float]]]:

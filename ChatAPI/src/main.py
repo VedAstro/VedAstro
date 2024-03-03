@@ -74,7 +74,7 @@ async def horoscope_llmsearch(payload: SearchPayload):
             payload.query, payload.search_type, birthPredictions)
         return results_formated
 
-    # if fail, fall gracefully
+    # if fail, fall gracefully my dear
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -111,6 +111,8 @@ async def horoscope_chat(websocket: websockets.WebSocket):
             calc_result = Calculate.HoroscopePredictionNames(birth_time)
             # format list nicely so LLM can swallow (dict)
             all_predictions = {"name": [item for item in calc_result]}
+
+            
 
             # STEP 2: GET PREDICTIONS THAT RELATES TO QUESTION
             # load full vector DB (contains all predictions text as numbers)
@@ -161,6 +163,9 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 # which will be used later to run queries for search & AI chat
 @app.post('/HoroscopeRegenerateEmbeddings')
 async def horoscope_regenerate_embeddings(payload: RegenPayload):
+
+    ChatTools.password_protect(payload.password); # password is Spotty
+
     from langchain_core.documents import Document
 
     # 1 : get all horoscope texts direct from VedAstro library

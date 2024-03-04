@@ -1,5 +1,7 @@
 
 
+from typing import List, Dict
+import json
 from fastapi import HTTPException, FastAPI, websockets
 
 import json  # for JSON parsing and packing
@@ -36,7 +38,7 @@ chat_engines = {}
 app = FastAPI(title="Chat API")
 
 
-# ..𝕗𝕠𝕣 𝕚𝕗 𝕪𝕠𝕦 𝕒𝕣𝕖 𝕥𝕙𝕣𝕤𝕥 𝕠𝕗 𝕨𝕠𝕣𝕤𝕥 
+# ..𝕗𝕠𝕣 𝕚𝕗 𝕪𝕠𝕦 𝕒𝕣𝕖𝕥 𝕠𝕗 𝕨𝕠𝕣𝕤𝕥 
 # 𝕒𝕟𝕕 𝕪𝕠𝕦 𝕝𝕠𝕧𝕖 𝔾𝕠𝕕, 𝕪𝕠𝕦❜𝕣𝕖 𝕗𝕣𝕖𝕖❕
 # Yogananda
 
@@ -112,8 +114,6 @@ async def horoscope_chat(websocket: websockets.WebSocket):
             # format list nicely so LLM can swallow (dict)
             all_predictions = {"name": [item for item in calc_result]}
 
-            
-
             # STEP 2: GET PREDICTIONS THAT RELATES TO QUESTION
             # load full vector DB (contains all predictions text as numbers)
             savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
@@ -164,7 +164,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 @app.post('/HoroscopeRegenerateEmbeddings')
 async def horoscope_regenerate_embeddings(payload: RegenPayload):
 
-    ChatTools.password_protect(payload.password); # password is Spotty
+    ChatTools.password_protect(payload.password)  # password is Spotty
 
     from langchain_core.documents import Document
 
@@ -188,7 +188,7 @@ async def horoscope_regenerate_embeddings(payload: RegenPayload):
 @app.post('/SummarizePrediction')
 async def summarize_prediction(payload: SummaryPayload):
 
-    ChatTools.password_protect(payload.password); # password is Spotty
+    ChatTools.password_protect(payload.password)  # password is Spotty
 
     from typing import List
     import openai
@@ -203,14 +203,19 @@ async def summarize_prediction(payload: SummaryPayload):
     class SpecializedSummary(BaseModel):
         """The format of the answer."""
         Body: str = Field(description="related to physical body, health")
-        Mind: str = Field(description="related to state of mind, emotional state")
-        Family: str = Field(description="related to friends, family, people around us")
-        Romance: str = Field(description="related to romantic relationships, love, marriage")
-        Finance: str = Field(description="related to finances, money, income, and wealth")
-        Education: str = Field(description="related to studies, learning, education, academic pursuits, knowledge acquisition")
+        Mind: str = Field(
+            description="related to state of mind, emotional state")
+        Family: str = Field(
+            description="related to friends, family, people around us")
+        Romance: str = Field(
+            description="related to romantic relationships, love, marriage")
+        Finance: str = Field(
+            description="related to finances, money, income, and wealth")
+        Education: str = Field(
+            description="related to studies, learning, education, academic pursuits, knowledge acquisition")
 
     chat_completion = client.chat.completions.create(
-        model="mistralai/Mistral-7B-Instruct-v0.1", #check for more model
+        model="mistralai/Mistral-7B-Instruct-v0.1",  # check for more model
         response_format={
             "type": "json_object",
             "schema": SpecializedSummary.model_json_schema()
@@ -225,10 +230,14 @@ async def summarize_prediction(payload: SummaryPayload):
 
     return json.loads(chat_completion.choices[0].message.content)
 
+# blind sighted on a monday afternoon in 2024
+# brought my hand close to my nose only to smell the past
+# winter in 2015 with a metal burnt with solid flower essence
+#
+# my beloved now stood then by me too,
+# it is through her i see the past,
+# and smile 😊
 
-
-import json
-from typing import List, Dict
 
 
 @app.post("/PresetQueryMatch")
@@ -241,52 +250,162 @@ async def preset_query_match(payload: TempPayload):
     from sklearn.metrics.pairwise import cosine_similarity
 
     # Initialize the embeddings
-    embeddings = LocalHuggingFaceEmbeddings(payload.llm_model_name)
+    embeddingsCreator = LocalHuggingFaceEmbeddings(payload.llm_model_name)
 
     # Define preset queries with potential nested sub-queries
-    preset_queries = {
-        "Mind": None,
-        "Education": ["Scholarships", "Study Tips", "Online Courses"],
-        "Career": ["Resume Building", "Interview Tips", "Facing Challenges"],
-        "Family": ["Parenting Advice", "Family Activities"],
-        "Finance": ["Saving Tips", "Investment Strategies"],
-        "Romance": ["When", "How", "Who", "Why"],
-        "Body": ["Fitness Routines", "Healthy Eating"]
-    }
+    preset_queries = [
+        {
+            "score": 0,
+            "topic": "marriage",
+            "vector": None,
+            "queries": [
+                {
+                    "score": 0,
+                    "topic": "best time",
+                    "vector": None,
+                    "queries": [
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "best time for marriage?",
+                            "vector": None
+                        },
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "find the correct time for my marriage",
+                            "vector": None
+                        },
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "i want to marry soon",
+                            "vector": None
+                        }
+                    ]
+                },
+                {
+                    "score": 0,
+                    "topic": "predict marriage",
+                    "vector": None,
+                    "queries": [
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "when will i meet my wife?",
+                            "vector": None
+                        },
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "when will my marrige happen?",
+                            "vector": None
+                        }
+                    ]
+                },
+            ]
+        },
+        {
+            "score": 0,
+            "topic": "technical",
+            "vector": None,
+            "queries": [
+                {
+                    "score": 0,
+                    "topic": "who",
+                    "vector": None,
+                    "queries": [
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "who are you?",
+                            "vector": None
+                        },
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "describe your self",
+                            "vector": None
+                        },
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "are you a machine?",
+                            "vector": None
+                        },
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "are you a human?",
+                            "vector": None
+                        }
+                    ]
+                },
+                {
+                    "score": 0,
+                    "topic": "what",
+                    "vector": None,
+                    "queries": [
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "what models are you using?",
+                            "vector": None
+                        },
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "LLM chat modal?",
+                            "vector": None
+                        },
+                        {
+                            "total_score":10,
+                            "score": 0,
+                            "topic": "are using open ai?",
+                            "vector": None
+                        }
+                    ]
+                },
+            ]
+        },
+
+    ]
 
     # Store the vectors of the main queries
-    main_queries = list(preset_queries.keys())
-    main_query_vectors = embeddings.embed_documents(main_queries)
+    #main_queries = list(preset_queries.keys())
+    #main_query_vectors = embeddingsCreator.embed_documents(main_queries)
 
     # Create a dynamic list to contain vectors for sub-queries
-    sub_query_vectors = {main_query: [] for main_query in main_queries}
-    for main_query, sub_queries in preset_queries.items():
-        if sub_queries:  # Check if there are any sub-queries
-            sub_query_vectors[main_query] = embeddings.embed_documents(sub_queries)
+    for level1 in preset_queries:
+        #fill standard "vector" property
+        level1 = ChatTools.fill_vector(level1, payload.llm_model_name,embeddingsCreator)
+
+
 
     # Embed the user query
-    user_vector = embeddings.embed_query(payload.query)
-
-    # Compare the user vector to the main query vectors
+    user_vector = embeddingsCreator.embed_query(payload.query)
+        # Compare the user vector to the main query vectors
     user_vector_expanded = np.expand_dims(user_vector, axis=0)  # Make the vectors match
-    main_query_similarities = cosine_similarity(user_vector_expanded, main_query_vectors)
 
-    # Find the most similar main query
-    most_similar_main_query = main_queries[np.argmax(main_query_similarities)]
 
+    # READY TO DO SEARCH
+
+    # fill query map scores for user's query
     # If there are sub-queries for the most similar main query, compare the user vector to them
-    found_sub_vectors = sub_query_vectors[most_similar_main_query]
-    most_similar_sub_query = "No sub query matched" # default no match
-    if np.any(found_sub_vectors):
-        sub_query_similarities = cosine_similarity(user_vector_expanded, found_sub_vectors)
-        most_similar_sub_query = preset_queries[most_similar_main_query][np.argmax(sub_query_similarities)]
+    for level1 in preset_queries:
+        #fill standard "vector" property
+        level1 = ChatTools.fill_similarity_score(user_vector_expanded,level1, payload.llm_model_name,embeddingsCreator)
+
+    # fill in total scores
+    for level1 in preset_queries:
+        #fill standard "total_score" property at end of parent child chain
+        level1 = ChatTools.fill_total_score(level1,0)
+
+
+    result = ChatTools.find_max_scoring_topic(preset_queries)
 
     # Return the most similar main query and sub-query (if any)
-    return {
-        "result": most_similar_main_query,
-        "sub_result": most_similar_sub_query
-    }
-
+    return result
 
 
 # SERVER STUFF

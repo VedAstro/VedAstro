@@ -1126,8 +1126,9 @@ class AshtakvargaTable {
 }
 
 class ChatInstance {
-  ServerURL =
-    "wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
+  ServerURL = "" //filled in later just before use
+  LiveServerURL ="wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
+  LocalServerURL ="ws://127.0.0.1:8000/HoroscopeChat";
   ElementID = ""; //ID of main div where table & header will be injected
   ShowHeader = true; //default enabled, header with title, icon and edit button
   HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
@@ -1369,16 +1370,48 @@ class ChatInstance {
               <option value="Garga Hora - Translated by Sanjay Rath">Garga Hora (Translated by Sanjay Rath)</option>
             </optgroup>
         </select>
-        <button onclick="" style="display: none; height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
-            <span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span>
+        <button type="button" class="btn btn-outline-secondary"><span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span></button>
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="iconify" data-icon="iconamoon:settings-fill" data-width="25" data-height="25"></span>
         </button>
-        <button style="height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
-            <span class="iconify" data-icon="iconamoon:settings-fill" data-width="25" data-height="25"></span>
-        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li class="dropdown-item">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="useLocalServerSwitchInput">
+              <label class="form-check-label" for="flexSwitchCheckChecked">Use local server</label>
+            </div>
+          </li>
+          <li class="dropdown-item">
+            <div class="input-group">
+              <span class="input-group-text" id="serverAddressLabel">Server</span>
+              <input  id="serverAddressInputElement" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="serverAddressLabel">
+            </div>
+          </li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#">Separated link</a></li>
+        </ul>
+
     </div>
 
     <!-- PLACEHOLDER BEFORE CHAT START -->
-    <div id="placeholderElement" style="margin: 50px auto;"><div class="d-flex justify-content-center"><span class="" style="color: rgb(143, 143, 143); font-size: 14px;">Select <!--!--><strong>topic</strong> above to <strong>start</strong></span></div></div>
+    <div id="placeholderElement" style="margin: 50px auto;">
+      <div class="d-flex justify-content-center">
+        <!-- ARROW ICON FOR EYE TO FOLLOW (DRUNK UX) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="73" height="73" viewBox="0 0 24 24">
+          <g fill="none">
+            <path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+            <path fill="#00b3ff" d="M13.06 3.283a1.5 1.5 0 0 0-2.12 0L5.281 8.939a1.5 1.5 0 0 0 2.122 2.122L10.5 7.965V19.5a1.5 1.5 0 0 0 3 0V7.965l3.096 3.096a1.5 1.5 0 1 0 2.122-2.122z" />
+          </g>
+        </svg>
+      </div>
+      <div class="d-flex justify-content-center">
+        <span class="" style="color: rgb(143, 143, 143); font-size: 14px;">
+          Select <strong>topic</strong> above to <strong>start</strong>
+        </span>
+      </div>
+    </div>
     
     <!-- MESSAGES IN VIEW -->
     <ul class="list-unstyled" id="ChatWindowMessageList">
@@ -1387,7 +1420,7 @@ class ChatInstance {
                  class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
             <div class="card">
                 <div class="card-header d-flex justify-content-between p-3">
-                    <p class="fw-bold mb-0">AI Astrologer</p>
+                    <p class="fw-bold mb-0">Vignes</p>
                     <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
                 </div>
                 <div class="card-body">
@@ -1493,6 +1526,9 @@ class ChatInstance {
 
       //open connection to server if has not been open
       if (typeof this.socket === "undefined" && validTopicSelected) {
+
+        this.ServerURL = $('#useLocalServerSwitchInput').is(":checked") ? this.LocalServerURL : this.LiveServerURL;
+
         OpenConnectionToChatBot(this);
       }
     });

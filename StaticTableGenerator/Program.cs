@@ -21,7 +21,9 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Reflection.Metadata;
 using System.IO;
+using System.Security.Cryptography;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace StaticTableGenerator
 {
@@ -42,6 +44,7 @@ namespace StaticTableGenerator
         static string EventDataListStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\EventDataListStatic.cs");
         static string HoroscopeDataListFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Website\wwwroot\data\HoroscopeDataList.xml");
         static string HoroscopeDataListStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\HoroscopeDataListStatic.cs");
+        static string AIPredictionCSSafetyCacheFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\StaticTableGenerator\AI-MADE-DATA\AI-prediction-cs-safety-cache.csv");
 
 
         static void Main(string[] args)
@@ -290,6 +293,9 @@ namespace StaticTableGenerator
             return sb.ToString();
         }
 
+        /// <summary>
+        /// This is where the final massive CS for EvenData is made with LLM use! real pro 😁
+        /// </summary>
         public static string GenerateEventDataStaticTableClass(string xmlString)
         {
             var document = XDocument.Parse(xmlString);
@@ -307,9 +313,16 @@ namespace StaticTableGenerator
                 }
 
                 var yTags = $"[{xtagsString}]";
+
+                //use LLM to get create specialized summary (CACHED to save money 🤑)
+                var specialSummaryCsCode = GenerateCSCodeAsync(yy.Description, useCache: true).Result;
+
                 //add new event data code
-                compiledCode.AppendLine($"{indent}new(EventName.{yy.Name}, EventNature.{yy.Nature}, SpecializedNature.Empty, @\"{yy.Description}\", {yTags}, EventManager.GetEventCalculatorMethod(EventName.{yy.Name})),");
+                compiledCode.AppendLine($"{indent}new(EventName.{yy.Name}, EventNature.{yy.Nature}, {specialSummaryCsCode}, @\"{yy.Description}\", {yTags}, EventManager.GetEventCalculatorMethod(EventName.{yy.Name})),");
             }
+
+            //make new line for next guy
+            Console.WriteLine("\n~~~~~LLM work done~~~~~");
 
             //remove indentation at start of compiled lines
             var compiledCode2 = compiledCode.ToString().TrimStart();
@@ -338,6 +351,130 @@ namespace VedAstro.Library
             newClassFile = newClassFile.Replace("\r\n", "\n").Replace("\n", "\r\n");
 
             return newClassFile;
+        }
+
+        /// <summary>
+        /// A place to track counts, for debugging, info print-outs
+        /// </summary>
+        public static int GenerateCount = 0;
+
+        private static async Task<string> GenerateCSCodeAsync(string predictionText, bool useCache)
+        {
+            string rawOut;
+            string sha256PredictionHash;
+
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(predictionText);
+                byte[] hashBytes = sha256.ComputeHash(inputBytes);
+                sha256PredictionHash = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+            }
+
+            if (useCache)
+            {
+                // Check cache first
+                if (File.Exists(AIPredictionCSSafetyCacheFile))
+                {
+
+                    string[] lines = await File.ReadAllLinesAsync(AIPredictionCSSafetyCacheFile);
+                    foreach (string line in lines)
+                    {
+                        int index = line.IndexOf(',');
+
+
+                        string hash = "";
+                        string prediction = "";
+                        if (index >= 0) // Ensure the comma exists
+                        {
+                            hash = line.Substring(0, index);
+                            prediction = line.Substring(index + 1);
+                        }
+
+                        //hash matched exactly, what are the odds!
+                        // If found a match, return the cached result
+                        if (hash.Equals(sha256PredictionHash))
+                        {
+                            GenerateCount++;
+                            Console.Write($"\rCache used no :{GenerateCount}"); // for easy debug
+                            return prediction;
+                        }
+                    }
+                }
+            }
+
+            // No cache hit or 'useCache' was false, so do risky generation (AI prediction)
+            rawOut = await Task.Run(() => AISummarizePredictionText(predictionText));
+
+            if (!Directory.Exists(Path.GetDirectoryName(AIPredictionCSSafetyCacheFile)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(AIPredictionCSSafetyCacheFile));
+            }
+
+            // Add to csv file immediately by hash as ID
+            await File.AppendAllLinesAsync(AIPredictionCSSafetyCacheFile, new[] { $"{sha256PredictionHash},{rawOut}" });
+
+            return rawOut;
+        }
+
+
+        /// <summary>
+        /// Given raw text sends to LLM and makes it into summarized c# code
+        /// </summary>
+        /// <param name="predictionText"></param>
+        /// <returns></returns>
+        private static async Task<string> AISummarizePredictionText(string predictionText)
+        {
+
+            try
+            {
+                var client = new HttpClient();
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/SummarizePrediction");
+
+                //set settings and package data for LLM server
+                var jsonContent = new JObject
+                {
+                    ["input_text"] = predictionText,
+                    ["temperature"] = 0.1,
+                    ["instruction_text"] = @"Analyze the context text for its relevance to the keywords {Mind, Studies, Family, Money, Love, Body} and determine the overall sentiment of the text only as either one of this tags {Good, Bad, Neutral}",
+                    ["password"] = "empire"
+                };
+
+                //send request to LLM server and get response as raw JSON text
+                request.Content = new StringContent(jsonContent.ToString(), Encoding.UTF8, "application/json");
+                var response = await client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                //make data readable for conversion
+                var rawJson = await response.Content.ReadAsStringAsync();
+                var parsedJson = JObject.Parse(rawJson);
+
+                //convert JSON to c# code
+                //Expected OUT
+                //new() {
+                //     Studies = new(EventNature.Neutral),
+                //     Family = new(EventNature.Neutral),
+                // }
+                StringBuilder sb = new StringBuilder();
+                sb.Append("new() {");
+                JProperty[] properties = parsedJson.Properties().ToArray();
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    JProperty property = properties[i];
+                    sb.Append($"{property.Name} = new(EventNature.{property.Value})");
+
+                    //only add comma if on between, not last 
+                    if (i < properties.Length - 1) { sb.Append(","); }
+                }
+                sb.Append("}");
+                var finalCSharpCode = sb.ToString();
+
+                return finalCSharpCode;
+            }
+            catch (Exception e)
+            {
+                //set empty
+                return "SpecializedSummary.Empty";
+            }
         }
 
         public static string GenerateHoroscopeDataStaticTableClass(string xmlString)

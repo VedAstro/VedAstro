@@ -11,6 +11,124 @@ FAISS_INDEX_PATH = "faiss_index"
 
 class ChatTools:
 
+    @staticmethod
+    def find_max_scoring_topic(preset_queries):
+        max_score = -1
+        max_path = []
+
+        def traverse_query_tree(queries, path=[]):
+            nonlocal max_score, max_path
+            for query in queries:
+                current_path = path + [query['topic']]
+                if 'queries' not in query or not query['queries']:
+                    score = query.get('total_score', 0)
+                    if score > max_score:
+                        max_score = score
+                        max_path = current_path
+                else:
+                    traverse_query_tree(query['queries'], current_path)
+
+        traverse_query_tree(preset_queries)
+        return max_path
+
+    @staticmethod
+    def fill_total_score(query_map, parent_score):
+
+        #take text called "vector" out of main object
+        score = query_map["score"]
+        
+        #sum the available scores
+        total_so_far = score + parent_score
+
+        # do recursive if has chilren
+        if "queries" in query_map:
+            for sub_q in query_map["queries"]:
+                sub_q = ChatTools.fill_total_score(sub_q, total_so_far)
+        else:
+            #end of line add total property
+            query_map["total_score"] = total_so_far
+
+        return query_map
+    
+    @staticmethod
+    def fill_similarity_score(user_query_vector, vector_object, llm_model_name, embeddingsCreator):
+        from sklearn.metrics.pairwise import cosine_similarity
+
+
+        #take text called "vector" out of main object
+        vector = vector_object["vector"]
+
+        sub_query_similarities = cosine_similarity(user_query_vector, vector)[0]  # note how we dig 1 level down
+
+        #place data inside package
+        vector_object["score"] = sub_query_similarities[0]
+        
+        # do recursive if has chilren
+        if "queries" in vector_object:
+            for sub_q in vector_object["queries"]:
+                sub_q = ChatTools.fill_similarity_score(user_query_vector, sub_q, llm_model_name, embeddingsCreator)
+
+        return vector_object
+
+    @staticmethod
+    def fill_vector(vector_object, llm_model_name, embeddingsCreator):
+        import numpy as np
+
+        #take text called "topic" out of main object
+        topic = vector_object["topic"]
+
+        #make vector from the text
+        vector = embeddingsCreator.embed_query(topic)
+
+        user_vector_expanded = np.expand_dims(vector, axis=0)  # Make the vectors match
+
+        #place data inside package
+        vector_object["vector"] = user_vector_expanded
+        
+        # do recursive if has chilren
+        if "queries" in vector_object:
+            for sub_q in vector_object["queries"]:
+                sub_q = ChatTools.fill_vector(sub_q, llm_model_name, embeddingsCreator)
+
+        return vector_object
+
+
+        
+        
+
+
+    @staticmethod
+    def get_highest_scoring_topic(preset_queries):
+        # Initialize a dictionary to hold the sum of scores for each topic
+        topic_scores = {}
+
+        # Iterate over each category in the preset queries
+        for category in preset_queries:
+            # Iterate over each topic in the category
+            for topic_info in preset_queries[category]:
+                topic = topic_info['topic']
+                # Sum the scores for the current topic
+                total_score = sum(query['score'] for query in topic_info['queries'])
+                # Add or update the total score for the topic
+                if topic in topic_scores:
+                    topic_scores[f"{category}_{topic}"] += total_score
+                else:
+                    topic_scores[f"{category}_{topic}"] = total_score
+
+        # Find the topic with the highest total score
+        highest_scoring_topic = max(topic_scores, key=topic_scores.get)
+
+        
+        return highest_scoring_topic
+
+    @staticmethod
+    def extract_vectors(data):
+        return [item['vector'] for item in data]
+    
+    @staticmethod
+    def extract_texts(data):
+        return [item['text'] for item in data]
+    
     #checks given password with one stored in .env, if fail end here
     @staticmethod
     def password_protect(input_string):

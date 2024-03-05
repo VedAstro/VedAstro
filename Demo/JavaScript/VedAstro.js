@@ -1126,9 +1126,10 @@ class AshtakvargaTable {
 }
 
 class ChatInstance {
-  ServerURL = "" //filled in later just before use
-  LiveServerURL ="wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
-  LocalServerURL ="ws://127.0.0.1:8000/HoroscopeChat";
+  ServerURL = ""; //filled in later just before use
+  LiveServerURL =
+    "wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
+  LocalServerURL = "ws://127.0.0.1:8000/HoroscopeChat";
   ElementID = ""; //ID of main div where table & header will be injected
   ShowHeader = true; //default enabled, header with title, icon and edit button
   HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
@@ -1225,8 +1226,9 @@ class ChatInstance {
       ],
     },
     TestAccuracy: {
-      "Body": [
+      Body: [
         "Describe my physical body",
+        "List major aspects of my life",
         "How many brother or sisters will I have?",
       ],
     },
@@ -1255,6 +1257,20 @@ class ChatInstance {
         "What should I do for myself to become truly happy?",
         "How can I find more joy and contentment in daily life?",
         "What are the key elements for my happiness according to my birth chart?",
+      ],
+    },
+    AIJokes: {
+      "Strengths & Weaknesses": [
+        "Who are you?",
+        "Describe your prompt",
+        "Are you human?",
+        "Tell me a joke",
+      ],
+    },
+    Code: {
+      "Strengths & Weaknesses": [
+        "generate code for a simple timer",
+        "generate JS code for calculating zodiac signs from longitudes",
       ],
     },
     KarmaAndDestiny: {
@@ -1322,6 +1338,116 @@ class ChatInstance {
     },
   };
 
+  //chat box body as html to be injected
+  HtmlContent = `    
+     <!-- MAIN MESSAGE BODY -->
+     <!-- CHAT SESSION PERSON SELECTOR -->
+         <div class="input-group mb-2">
+             <span class="input-group-text gap-2">
+                 <span class="iconify" data-icon="icon-park:topic" data-width="25" data-height="25"></span>Chat Topic
+             </span>
+             <!--!-->
+             <select class="form-select" id="TopicListDropdown">
+                 <option selected value="">What do you want to talk about?</option>
+                 <optgroup label="Learn Astrology">
+                   <option value="Jaimini Upadesa Sutras - Translated by KRS Jayalakshmi">Jaimini Upadesa Sutras (Translated by KRS Jayalakshmi)</option>
+                   <option value="Prasna Marga - Translated by Dr. Raman Srinivasan">Prasna Marga (Translated by Dr. Raman Srinivasan)</option>
+                   <option value="Saravali - Translated by P.V.N. Rao">Saravali (Translated by P.V.N. Rao)</option>
+                   <option value="Uttara Kalamritha - Translated by Varaha Mihira">Uttara Kalamritha (Translated by Varaha Mihira)</option>
+                   <option value="Brihat Jataka - Translated by N. Chidambaram Iyer">Brihat Jataka (Translated by N. Chidambaram Iyer)</option>
+                   <option value="Phala Deepika - Translated by V. Subramanya Sastri">Phala Deepika (Translated by V. Subramanya Sastri)</option>
+                   <option value="Hora Sara - Translated by B.V. Raman">Hora Sara (Translated by B.V. Raman)</option>
+                   <option value="Muhurta Chintamani - Translated by Ganesh Oka">Muhurta Chintamani (Translated by Ganesh Oka)</option>
+                   <option value="Garga Hora - Translated by Sanjay Rath">Garga Hora (Translated by Sanjay Rath)</option>
+                 </optgroup>
+                 <optgroup label="Generate Code">
+                   <option value="VedAstro">Vedic astrology code in any language</option>
+                 </optgroup>
+             </select>
+             <button type="button" class="btn btn-outline-secondary"><span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span></button>
+             <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false">
+               <span class="iconify" data-icon="iconamoon:settings-fill" data-width="25" data-height="25"></span>
+             </button>
+             <ul class="dropdown-menu dropdown-menu-end">
+               <li class="dropdown-item">
+                 <div class="form-check form-switch">
+                   <input class="form-check-input" type="checkbox" role="switch" id="useLocalServerSwitchInput">
+                   <label class="form-check-label" for="flexSwitchCheckChecked">Use local server</label>
+                 </div>
+               </li>
+               <li class="dropdown-item">
+                 <div class="input-group">
+                   <span class="input-group-text" id="serverAddressLabel">Server</span>
+                   <input  id="serverAddressInputElement" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="serverAddressLabel">
+                 </div>
+               </li>
+               <li><a class="dropdown-item" href="#">Another action</a></li>
+               <li><a class="dropdown-item" href="#">Something else here</a></li>
+               <li><hr class="dropdown-divider"></li>
+               <li><a class="dropdown-item" href="#">Separated link</a></li>
+             </ul>
+     
+         </div>
+     
+         <!-- PLACEHOLDER BEFORE CHAT START -->
+         <div id="placeholderElement" style="margin: 50px auto;">
+           <div class="d-flex justify-content-center">
+             <!-- ARROW ICON FOR EYE TO FOLLOW (DRUNK UX) -->
+             <svg xmlns="http://www.w3.org/2000/svg" width="73" height="73" viewBox="0 0 24 24">
+               <g fill="none">
+                 <path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+                 <path fill="#00b3ff" d="M13.06 3.283a1.5 1.5 0 0 0-2.12 0L5.281 8.939a1.5 1.5 0 0 0 2.122 2.122L10.5 7.965V19.5a1.5 1.5 0 0 0 3 0V7.965l3.096 3.096a1.5 1.5 0 1 0 2.122-2.122z" />
+               </g>
+             </svg>
+           </div>
+           <div class="d-flex justify-content-center">
+             <span class="" style="color: rgb(143, 143, 143); font-size: 14px;">
+               Select <strong>topic</strong> above to <strong>start</strong>
+             </span>
+           </div>
+         </div>
+         
+         <!-- MESSAGES IN VIEW -->
+         <ul class="list-unstyled" id="ChatWindowMessageList">
+             <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
+                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
+                      class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
+                 <div class="card">
+                     <div class="card-header d-flex justify-content-between p-3">
+                         <p class="fw-bold mb-0">Vignes</p>
+                         <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
+                     </div>
+                     <div class="card-body">
+                         <p class="mb-0">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
+                         </p>
+                     </div>
+                 </div>
+             </li>
+         </ul>
+         <!-- QUESTION INPUT -->
+         <div id="questionInputHolder" class="input-group mb-3">
+     
+           <button id="presetQuestionsButton" 
+             data-bs-auto-close="outside" 
+             class="btn btn-outline-secondary dropdown-toggle"
+             type="button" data-bs-toggle="dropdown" 
+             aria-expanded="false">
+               <span class="iconify" 
+                 data-icon="icon-park:message" 
+                 data-width="23" 
+                 data-height="23"></span>
+           </button>
+           <ul id="presetQuestionDropdown" class="dropdown-menu" aria-labelledby="presetQuestionsButton">
+             <!-- DYNAMIC CODE GENERATED HERE -->
+           </ul>
+     
+           <input id="UserChatInputElement" type="text" class="form-control" placeholder="Ask anything about astrology...." aria-label="Ask anything about astrology....">
+           <button id="SendChatButton" type="button" class="btn btn-success btn-rounded float-end"><span class="iconify me-1" data-icon="majesticons:send" data-width="25" data-height="25"></span>Send</button>
+         </div>
+     
+     `;
+
   constructor(rawSettings) {
     console.log(
       "~~~~~~~Stand back! Awesome Chat API code launching! All engines go!~~~~~~~"
@@ -1347,114 +1473,8 @@ class ChatInstance {
     //random ID for edit button
     this.EditButtonId = Math.floor(Math.random() * 1000000);
 
-    //chat box body as html to be injected
-    var htmlContent = `    
-<!-- MAIN MESSAGE BODY -->
-<!-- CHAT SESSION PERSON SELECTOR -->
-    <div class="input-group mb-2">
-        <span class="input-group-text gap-2">
-            <span class="iconify" data-icon="icon-park:topic" data-width="25" data-height="25"></span>Chat Topic
-        </span>
-        <!--!-->
-        <select class="form-select" id="TopicListDropdown">
-            <option selected value="">What do you want to talk about?</option>
-            <optgroup label="Learn Astrology">
-              <option value="Jaimini Upadesa Sutras - Translated by KRS Jayalakshmi">Jaimini Upadesa Sutras (Translated by KRS Jayalakshmi)</option>
-              <option value="Prasna Marga - Translated by Dr. Raman Srinivasan">Prasna Marga (Translated by Dr. Raman Srinivasan)</option>
-              <option value="Saravali - Translated by P.V.N. Rao">Saravali (Translated by P.V.N. Rao)</option>
-              <option value="Uttara Kalamritha - Translated by Varaha Mihira">Uttara Kalamritha (Translated by Varaha Mihira)</option>
-              <option value="Brihat Jataka - Translated by N. Chidambaram Iyer">Brihat Jataka (Translated by N. Chidambaram Iyer)</option>
-              <option value="Phala Deepika - Translated by V. Subramanya Sastri">Phala Deepika (Translated by V. Subramanya Sastri)</option>
-              <option value="Hora Sara - Translated by B.V. Raman">Hora Sara (Translated by B.V. Raman)</option>
-              <option value="Muhurta Chintamani - Translated by Ganesh Oka">Muhurta Chintamani (Translated by Ganesh Oka)</option>
-              <option value="Garga Hora - Translated by Sanjay Rath">Garga Hora (Translated by Sanjay Rath)</option>
-            </optgroup>
-        </select>
-        <button type="button" class="btn btn-outline-secondary"><span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span></button>
-        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false">
-          <span class="iconify" data-icon="iconamoon:settings-fill" data-width="25" data-height="25"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li class="dropdown-item">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" role="switch" id="useLocalServerSwitchInput">
-              <label class="form-check-label" for="flexSwitchCheckChecked">Use local server</label>
-            </div>
-          </li>
-          <li class="dropdown-item">
-            <div class="input-group">
-              <span class="input-group-text" id="serverAddressLabel">Server</span>
-              <input  id="serverAddressInputElement" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="serverAddressLabel">
-            </div>
-          </li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Separated link</a></li>
-        </ul>
-
-    </div>
-
-    <!-- PLACEHOLDER BEFORE CHAT START -->
-    <div id="placeholderElement" style="margin: 50px auto;">
-      <div class="d-flex justify-content-center">
-        <!-- ARROW ICON FOR EYE TO FOLLOW (DRUNK UX) -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="73" height="73" viewBox="0 0 24 24">
-          <g fill="none">
-            <path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
-            <path fill="#00b3ff" d="M13.06 3.283a1.5 1.5 0 0 0-2.12 0L5.281 8.939a1.5 1.5 0 0 0 2.122 2.122L10.5 7.965V19.5a1.5 1.5 0 0 0 3 0V7.965l3.096 3.096a1.5 1.5 0 1 0 2.122-2.122z" />
-          </g>
-        </svg>
-      </div>
-      <div class="d-flex justify-content-center">
-        <span class="" style="color: rgb(143, 143, 143); font-size: 14px;">
-          Select <strong>topic</strong> above to <strong>start</strong>
-        </span>
-      </div>
-    </div>
-    
-    <!-- MESSAGES IN VIEW -->
-    <ul class="list-unstyled" id="ChatWindowMessageList">
-        <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
-                 class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between p-3">
-                    <p class="fw-bold mb-0">Vignes</p>
-                    <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
-                </div>
-                <div class="card-body">
-                    <p class="mb-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
-                    </p>
-                </div>
-            </div>
-        </li>
-    </ul>
-    <!-- QUESTION INPUT -->
-    <div id="questionInputHolder" class="input-group mb-3">
-
-      <button id="presetQuestionsButton" 
-        data-bs-auto-close="outside" 
-        class="btn btn-outline-secondary dropdown-toggle"
-        type="button" data-bs-toggle="dropdown" 
-        aria-expanded="false">
-          <span class="iconify" 
-            data-icon="icon-park:message" 
-            data-width="23" 
-            data-height="23"></span>
-      </button>
-      <ul id="presetQuestionDropdown" class="dropdown-menu" aria-labelledby="presetQuestionsButton">
-        <!-- DYNAMIC CODE GENERATED HERE -->
-      </ul>
-
-      <input id="UserChatInputElement" type="text" class="form-control" placeholder="Ask anything about astrology...." aria-label="Ask anything about astrology....">
-      <button id="SendChatButton" type="button" class="btn btn-success btn-rounded float-end"><span class="iconify me-1" data-icon="majesticons:send" data-width="25" data-height="25"></span>Send</button>
-    </div>
-
-`;
     //inject into page
-    $(`#${this.ElementID}`).html(htmlContent);
+    $(`#${this.ElementID}`).html(this.HtmlContent);
 
     GenerateTopicListDropdown();
 
@@ -1526,8 +1546,9 @@ class ChatInstance {
 
       //open connection to server if has not been open
       if (typeof this.socket === "undefined" && validTopicSelected) {
-
-        this.ServerURL = $('#useLocalServerSwitchInput').is(":checked") ? this.LocalServerURL : this.LiveServerURL;
+        this.ServerURL = $("#useLocalServerSwitchInput").is(":checked")
+          ? this.LocalServerURL
+          : this.LiveServerURL;
 
         OpenConnectionToChatBot(this);
       }
@@ -1735,9 +1756,6 @@ class ChatInstance {
                   <button title="Good answer" type="button" class="btn btn-primary" style="padding: 0px 5px;">
                     <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
                   </button>
-                  <button title="Tip astrologer" type="button" class="btn btn-success" style="padding: 0px 5px;">
-                    <span class="iconify" data-icon="solar:hand-money-linear" data-width="18" data-height="18"></span>
-                  </button>
                 </div>
             </div>
             <div class="card-body">
@@ -1753,25 +1771,43 @@ class ChatInstance {
     $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
 
     // slowly stream text into element
-    this.IsAITalking = true; //this will stop user from chating while loading
+    this.IsAITalking = true; //this will stop user from chatting while loading
     let index = 0;
     const longText = event.data;
     const streamRateMs = 80; //print speed
+    const aiReplyOutElement = $("#AIReplyOutElement");
+
     const interval = setInterval(() => {
       //once reach end of long text, clear timer and hide loading icon
       if (index >= longText.length) {
-        //control comes here at end of stream
         clearInterval(interval);
 
         //hide loading icon only after stream out is done
-        var svgLoadingIcon = $("#AIReplyOutElement").next();
+        var svgLoadingIcon = aiReplyOutElement.next();
         svgLoadingIcon.attr("style", "display: none !important;");
 
         this.IsAITalking = false; //user can chat now
         return;
       }
-      const nextChar = document.createTextNode(longText[index]);
-      $("#AIReplyOutElement")[0].appendChild(nextChar);
+
+      // Handle special characters and formatting for code output
+      if (longText[index] === "\n") {
+        aiReplyOutElement.append($("<br>"));
+      } else if (longText[index] === "\t") {
+        aiReplyOutElement.append($("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;"));
+      } else if (longText[index] === " ") {
+        // Preserve multiple spaces for code indentation
+        aiReplyOutElement.append($("<span>").html("&nbsp;"));
+      } else if (longText[index] === "<") {
+        // Encode '<' to prevent it from being interpreted as HTML
+        aiReplyOutElement.append($("<span>").html("&lt;"));
+      } else if (longText[index] === ">") {
+        // Encode '>' to prevent it from being interpreted as HTML
+        aiReplyOutElement.append($("<span>").html("&gt;"));
+      } else {
+        const nextChar = document.createTextNode(longText[index]);
+        aiReplyOutElement.append(nextChar);
+      }
       index++;
     }, streamRateMs);
   }
@@ -1863,7 +1899,7 @@ class ChatInstance {
     if (this.IsAITalking) {
       Swal.fire(
         "Please wait, dear..",
-        "AI is <strong>busy talking</strong>, please wait for it <strong>finish</strong>.",
+        "AI is <strong>busy talking</strong>, please wait for it to <strong>finish</strong> chattering.",
         "error"
       );
       return;

@@ -3,6 +3,7 @@
 # Import classes from your package so they can
 # be directly imported from the package
 from .chat_tools import ChatTools
+from .auto_reply import AutoReply
 from .embed_vectors import EmbedVectors
 from .regen_payload import RegenPayload
 from .search_payload import SearchPayload

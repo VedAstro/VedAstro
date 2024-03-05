@@ -4,7 +4,8 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from langchain_community.chat_models.anyscale import ChatAnyscale
 
-
+from langchain.chains import LLMChain
+from langchain.prompts import PromptTemplate
 
 SYSTEM_PROMPT = """use only text in context, context is my life description, answer in 70 words or less, avoid disclaimers"""
 LLAMA_TEMPLATE = "[INST]<<SYS>>\n" + SYSTEM_PROMPT + \
@@ -13,7 +14,23 @@ PROMPT = PromptTemplate(template=LLAMA_TEMPLATE,
                         input_variables=["context", "question"])
 
 
+DEFAULT_LLAMA_SEARCH_PROMPT = PromptTemplate(
+    input_variables=["question"],
+    template="""<<SYS>> \n You are an assistant tasked with improving Google search \
+results. \n <</SYS>> \n\n [INST] Generate THREE Google search queries that \
+are similar to this question. The output should be a numbered list of questions \
+and each should have a question mark at the end: \n\n {question} [/INST]""")
+
+DEFAULT_SEARCH_PROMPT = PromptTemplate(
+    input_variables=["question"],
+    template="""You are an assistant tasked with improving Google search \
+results. Generate THREE Google search queries that are similar to \
+this question. The output should be a numbered list of questions and each \
+should have a question mark at the end: {question}""")
+
+
 class ChatEngine3:
+    
     def __init__(self, model_name):
         try:
             # 1 : load access to huggingface LLM via Anyscale

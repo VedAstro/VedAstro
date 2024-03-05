@@ -102,47 +102,61 @@ def initialize_chat_api():
 
 # brings together the answering mechanism
 async def answer_to_reply(chat_instance_data):
+    global preset_queries
+    global embeddings_creator
 
     # parse incoming data
     # Parse the message
     payload = ChatPayload(chat_instance_data)
 
-    # STEP 1: GET NATIVE'S HOROSCOPE DATA (PREDICTIONS)
-    # get all predictions for given birth time (aka filter)
-    # run calculator to get list of prediction names for given birth time
-    birth_time = payload.get_birth_time()
-    calc_result = Calculate.HoroscopePredictionNames(birth_time)
-    # format list nicely so LLM can swallow (dict)
-    all_predictions = {"name": [item for item in calc_result]}
-
-    # STEP 2: GET PREDICTIONS THAT RELATES TO QUESTION
-    # load full vector DB (contains all predictions text as numbers)
-    savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
-    # use modal name for multiple modal support
-    filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
-    # do LLM search on found predictions
-    found_predictions = loaded_vectors[filePath].search(payload.query, payload.search_type, all_predictions)
+    is_query = payload.query != ""
+    
+    # do query mapping if possible
+    if is_query:
+        auto_reply = ChatTools.map_query_by_similarity(payload.query, payload.llm_model_name, preset_queries, embeddings_creator)
 
 
-    # STEP 3: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
-    # Query the chat engine and send the results to the client
-    async for chunk in await chat_engines[filePath].query(query=payload.query,
-                                                            input_documents=found_predictions,
-                                                            # Controls the trade-off between randomness and determinism in the response
-                                                            # A high value (e.g., 1.0) makes the model more random and creative
-                                                            temperature=payload.temperature,
-                                                            # Controls diversity of the response
-                                                            # A high value (e.g., 0.9) allows for more diversity
-                                                            top_p=payload.top_p,
-                                                            # Limits the maximum length of the generated text
-                                                            max_tokens=payload.max_tokens,
-                                                            # Specifies sequences that tell the model when to stop generating text
-                                                            stop=payload.stop,
-                                                            # Returns debug data like usage statistics
-                                                            return_debug_data=False  # Set to True to see detailed information about model usage
-                                                            ):
-        return chunk['output_text']
+    # if no reply than time to call the in big guns...GPU infantry firing LLMs shells!
+    need_llm = auto_reply == None
+    if need_llm & is_query:
+        # STEP 1: GET NATIVE'S HOROSCOPE DATA (PREDICTIONS)
+        # get all predictions for given birth time (aka filter)
+        # run calculator to get list of prediction names for given birth time
+        birth_time = payload.get_birth_time()
+        calc_result = Calculate.HoroscopePredictionNames(birth_time)
+        # format list nicely so LLM can swallow (dict)
+        all_predictions = {"name": [item for item in calc_result]}
 
+        # STEP 2: GET PREDICTIONS THAT RELATES TO QUESTION
+        # load full vector DB (contains all predictions text as numbers)
+        savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
+        # use modal name for multiple modal support
+        filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
+        # do LLM search on found predictions
+        found_predictions = loaded_vectors[filePath].search(payload.query, payload.search_type, all_predictions)
+
+
+        # STEP 3: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
+        # Query the chat engine and send the results to the client
+        async for chunk in await chat_engines[filePath].query(query=payload.query,
+                                                                input_documents=found_predictions,
+                                                                # Controls the trade-off between randomness and determinism in the response
+                                                                # A high value (e.g., 1.0) makes the model more random and creative
+                                                                temperature=payload.temperature,
+                                                                # Controls diversity of the response
+                                                                # A high value (e.g., 0.9) allows for more diversity
+                                                                top_p=payload.top_p,
+                                                                # Limits the maximum length of the generated text
+                                                                max_tokens=payload.max_tokens,
+                                                                # Specifies sequences that tell the model when to stop generating text
+                                                                stop=payload.stop,
+                                                                # Returns debug data like usage statistics
+                                                                return_debug_data=False  # Set to True to see detailed information about model usage
+                                                                ):
+            return chunk['output_text']
+    else:
+        time.sleep(1.5) # little delay else, no time for "thinkin" msg to make it
+        return auto_reply
 
 
 @app.get("/")
@@ -184,8 +198,8 @@ async def horoscope_llmsearch(payload: SearchPayload):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.websocket("/ChatAPI")
-async def chat_api(websocket: websockets.WebSocket):
+@app.websocket("/HoroscopeChat")
+async def horoscope_chat(websocket: websockets.WebSocket):
     # Import the ast module
     import ast
     
@@ -210,15 +224,6 @@ async def chat_api(websocket: websockets.WebSocket):
             
             # Let caller process started
             await websocket.send_text("Thinking....")
-
-            # read client's raw input
-            #client_input_parsed = ast.literal_eval(raw_data)
-
-            # copy this input arguments into existing memory (keeping previous data safe, only overrite if same key)
-            # prev_chat_instance_data = client_input_parsed.copy() # make clone for later smart comparison
-            # for key in client_input_parsed:
-            #     if key in chat_instance_data:
-            #         chat_instance_data[key] = client_input_parsed[key]
             
             # answer machine (send all needed data)
             ai_reply = await answer_to_reply(client_input)
@@ -235,8 +240,8 @@ async def chat_api(websocket: websockets.WebSocket):
 
 
 # RAG
-@app.websocket("/HoroscopeChat")
-async def horoscope_chat(websocket: websockets.WebSocket):
+@app.websocket("/HoroscopeChatold")
+async def horoscope_chatold(websocket: websockets.WebSocket):
     global chat_engines  # use cache
     global loaded_vectors  # use cache
 

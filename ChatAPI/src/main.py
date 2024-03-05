@@ -33,14 +33,117 @@ FAISS_INDEX_PATH = "faiss_index"
 # instances embedded vector stored here for speed, shared between all calls
 loaded_vectors = {}
 chat_engines = {}
+preset_queries = {}
+embeddings_creator = {}
 
 # init app to handle HTTP requests
 app = FastAPI(title="Chat API")
 
 
-# ..𝕗𝕠𝕣 𝕚𝕗 𝕪𝕠𝕦 𝕒𝕣𝕖𝕥 𝕠𝕗 𝕨𝕠𝕣𝕤𝕥 
+# ..𝕗𝕠𝕣 𝕚𝕗 𝕪𝕠𝕦 𝕒𝕣𝕖 the 𝕠𝕗 𝕨𝕠𝕣𝕤𝕥 the worst
 # 𝕒𝕟𝕕 𝕪𝕠𝕦 𝕝𝕠𝕧𝕖 𝔾𝕠𝕕, 𝕪𝕠𝕦❜𝕣𝕖 𝕗𝕣𝕖𝕖❕
 # Yogananda
+
+# prepares server, run once on startup
+def initialize_chat_api():
+    global chat_engines  # set cache
+    global loaded_vectors  # set cache
+    global preset_queries  # set cache
+    global embeddings_creator  # set cache
+
+    print("T-minus countdown")
+    print("Go/No-Go Poll")
+
+    llm_model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    chat_model_name = "meta-llama/Llama-2-70b-chat-hf"
+    variation_name = "MK3"
+
+    # load full vector DB (contains all predictions text as numbers)
+    savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
+    
+    # use modal name for multiple modal support
+    filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{llm_model_name}"
+
+
+    ####################################
+    if loaded_vectors.get(filePath) is None:  # lazy load for speed
+        # load the horoscope vectors (heavy compute)
+        loaded_vectors[filePath] = EmbedVectors(filePath, llm_model_name)
+
+    print("Loaded Vectors go!")
+
+
+    ####################################
+    # prepare the LLM that will answer the query
+    if chat_engines.get(filePath) is None:  # lazy load for speed
+        # select the correct engine variation
+        wrapper = ChatEngine(variation_name)
+        chat_engines[filePath] = wrapper.create_instance(chat_model_name)  # load the modal shards (heavy compute)
+
+    print("Chat AI LLMs go!")
+
+
+    ####################################
+    # STEP 1 : Prepare Query Map 
+    preset_queries, embeddings_creator = ChatTools.get_parsed_query_map(llm_model_name)
+    
+    print("Query Mapper go!")
+
+
+
+    ####################################
+    print("All systems are go")
+    print("Astronauts, start your engines")
+    print("Main engine start")
+    print("Ignition sequence start")
+    print("All engines running")
+    print("We have lift off!")
+
+
+# brings together the answering mechanism
+async def answer_to_reply(chat_instance_data):
+
+    # parse incoming data
+    # Parse the message
+    payload = ChatPayload(chat_instance_data)
+
+    # STEP 1: GET NATIVE'S HOROSCOPE DATA (PREDICTIONS)
+    # get all predictions for given birth time (aka filter)
+    # run calculator to get list of prediction names for given birth time
+    birth_time = payload.get_birth_time()
+    calc_result = Calculate.HoroscopePredictionNames(birth_time)
+    # format list nicely so LLM can swallow (dict)
+    all_predictions = {"name": [item for item in calc_result]}
+
+    # STEP 2: GET PREDICTIONS THAT RELATES TO QUESTION
+    # load full vector DB (contains all predictions text as numbers)
+    savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
+    # use modal name for multiple modal support
+    filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
+    # do LLM search on found predictions
+    found_predictions = loaded_vectors[filePath].search(payload.query, payload.search_type, all_predictions)
+
+
+    # STEP 3: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
+    # Query the chat engine and send the results to the client
+    async for chunk in await chat_engines[filePath].query(query=payload.query,
+                                                            input_documents=found_predictions,
+                                                            # Controls the trade-off between randomness and determinism in the response
+                                                            # A high value (e.g., 1.0) makes the model more random and creative
+                                                            temperature=payload.temperature,
+                                                            # Controls diversity of the response
+                                                            # A high value (e.g., 0.9) allows for more diversity
+                                                            top_p=payload.top_p,
+                                                            # Limits the maximum length of the generated text
+                                                            max_tokens=payload.max_tokens,
+                                                            # Specifies sequences that tell the model when to stop generating text
+                                                            stop=payload.stop,
+                                                            # Returns debug data like usage statistics
+                                                            return_debug_data=False  # Set to True to see detailed information about model usage
+                                                            ):
+        return chunk['output_text']
+
+
 
 @app.get("/")
 def home():
@@ -81,6 +184,56 @@ async def horoscope_llmsearch(payload: SearchPayload):
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@app.websocket("/ChatAPI")
+async def chat_api(websocket: websockets.WebSocket):
+    # Import the ast module
+    import ast
+    
+    global chat_engines  # use cache
+    global loaded_vectors  # use cache
+
+    await websocket.accept()
+    await websocket.send_text("Welcome to VedAstro!")
+
+    # variable data related to chat instance (filled during chat)
+    chat_instance_data = {}
+    prev_chat_instance_data = {}
+
+    # connection has been made, now keep connection alive in infinite loop,
+    # with fail safe to catch it midway
+    try:
+        
+        while True:
+            # Receive a message from the client
+            # control is held here while waiting for user input
+            client_input = await websocket.receive_text()
+            
+            # Let caller process started
+            await websocket.send_text("Thinking....")
+
+            # read client's raw input
+            #client_input_parsed = ast.literal_eval(raw_data)
+
+            # copy this input arguments into existing memory (keeping previous data safe, only overrite if same key)
+            # prev_chat_instance_data = client_input_parsed.copy() # make clone for later smart comparison
+            # for key in client_input_parsed:
+            #     if key in chat_instance_data:
+            #         chat_instance_data[key] = client_input_parsed[key]
+            
+            # answer machine (send all needed data)
+            ai_reply = await answer_to_reply(client_input)
+
+            # send ans to caller
+            await websocket.send_text(ai_reply)
+
+
+    # Handle failed gracefully
+    except Exception as e:
+        print(e)
+
+
+
+
 # RAG
 @app.websocket("/HoroscopeChat")
 async def horoscope_chat(websocket: websockets.WebSocket):
@@ -90,10 +243,13 @@ async def horoscope_chat(websocket: websockets.WebSocket):
     await websocket.accept()
     await websocket.send_text("Welcome to VedAstro!")
 
+    # connection has been made, now keep connection alive in infinite loop,
+    # with fail safe to catch it midway
     try:
-        # connection has been made, now talk to client
+        
         while True:
             # Receive a message from the client
+            # control is held here while waiting for user input
             raw_data = await websocket.receive_text()
 
             # Check if the client wants to exit
@@ -119,22 +275,10 @@ async def horoscope_chat(websocket: websockets.WebSocket):
             savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
             # use modal name for multiple modal support
             filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
-            if loaded_vectors.get(filePath) is None:  # lazy load for speed
-                # load the horoscope vectors (heavy compute)
-                loaded_vectors[filePath] = EmbedVectors(
-                    filePath, payload.llm_model_name)
             # do LLM search on found predictions
-            found_predictions = loaded_vectors[filePath].search(
-                payload.query, payload.search_type, all_predictions)
+            found_predictions = loaded_vectors[filePath].search(payload.query, payload.search_type, all_predictions)
 
             # STEP 3: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
-            # run QA prepare the LLM that will answer the query
-            if chat_engines.get(filePath) is None:  # lazy load for speed
-                # select the correct engine variation
-                wrapper = ChatEngine(payload.variation_name)
-                chat_engines[filePath] = wrapper.create_instance(
-                    payload.chat_model_name)  # load the modal shards (heavy compute)
-
             # Query the chat engine and send the results to the client
             async for chunk in await chat_engines[filePath].query(query=payload.query,
                                                                   input_documents=found_predictions,
@@ -232,182 +376,24 @@ async def summarize_prediction(payload: SummaryPayload):
 
 # blind sighted on a monday afternoon in 2024
 # brought my hand close to my nose only to smell the past
-# winter in 2015 with a metal burnt with solid flower essence
+# winter in 2015 of a metal burnt with solid flower essence
 #
 # my beloved now stood then by me too,
 # it is through her i see the past,
 # and smile 😊
 
-
-
 @app.post("/PresetQueryMatch")
 async def preset_query_match(payload: TempPayload):
+    global preset_queries
+    global embeddings_creator
 
     ChatTools.password_protect(payload.password)  # password is Spotty
 
-    from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
-    import numpy as np
-    from sklearn.metrics.pairwise import cosine_similarity
+    auto_reply = ChatTools.map_query_by_similarity(payload.query, payload.llm_model_name, preset_queries, embeddings_creator)
 
-    # Initialize the embeddings
-    embeddingsCreator = LocalHuggingFaceEmbeddings(payload.llm_model_name)
-
-    # Define preset queries with potential nested sub-queries
-    preset_queries = [
-        {
-            "score": 0,
-            "topic": "marriage",
-            "vector": None,
-            "queries": [
-                {
-                    "score": 0,
-                    "topic": "best time",
-                    "vector": None,
-                    "queries": [
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "best time for marriage?",
-                            "vector": None
-                        },
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "find the correct time for my marriage",
-                            "vector": None
-                        },
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "i want to marry soon",
-                            "vector": None
-                        }
-                    ]
-                },
-                {
-                    "score": 0,
-                    "topic": "predict marriage",
-                    "vector": None,
-                    "queries": [
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "when will i meet my wife?",
-                            "vector": None
-                        },
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "when will my marrige happen?",
-                            "vector": None
-                        }
-                    ]
-                },
-            ]
-        },
-        {
-            "score": 0,
-            "topic": "technical",
-            "vector": None,
-            "queries": [
-                {
-                    "score": 0,
-                    "topic": "who",
-                    "vector": None,
-                    "queries": [
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "who are you?",
-                            "vector": None
-                        },
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "describe your self",
-                            "vector": None
-                        },
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "are you a machine?",
-                            "vector": None
-                        },
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "are you a human?",
-                            "vector": None
-                        }
-                    ]
-                },
-                {
-                    "score": 0,
-                    "topic": "what",
-                    "vector": None,
-                    "queries": [
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "what models are you using?",
-                            "vector": None
-                        },
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "LLM chat modal?",
-                            "vector": None
-                        },
-                        {
-                            "total_score":10,
-                            "score": 0,
-                            "topic": "are using open ai?",
-                            "vector": None
-                        }
-                    ]
-                },
-            ]
-        },
-
-    ]
-
-    # Store the vectors of the main queries
-    #main_queries = list(preset_queries.keys())
-    #main_query_vectors = embeddingsCreator.embed_documents(main_queries)
-
-    # Create a dynamic list to contain vectors for sub-queries
-    for level1 in preset_queries:
-        #fill standard "vector" property
-        level1 = ChatTools.fill_vector(level1, payload.llm_model_name,embeddingsCreator)
-
-
-
-    # Embed the user query
-    user_vector = embeddingsCreator.embed_query(payload.query)
-        # Compare the user vector to the main query vectors
-    user_vector_expanded = np.expand_dims(user_vector, axis=0)  # Make the vectors match
-
-
-    # READY TO DO SEARCH
-
-    # fill query map scores for user's query
-    # If there are sub-queries for the most similar main query, compare the user vector to them
-    for level1 in preset_queries:
-        #fill standard "vector" property
-        level1 = ChatTools.fill_similarity_score(user_vector_expanded,level1, payload.llm_model_name,embeddingsCreator)
-
-    # fill in total scores
-    for level1 in preset_queries:
-        #fill standard "total_score" property at end of parent child chain
-        level1 = ChatTools.fill_total_score(level1,0)
-
-
-    result = ChatTools.find_max_scoring_topic(preset_queries)
-
-    # Return the most similar main query and sub-query (if any)
-    return result
-
+    return auto_reply
 
 # SERVER STUFF
 
-# TRAINING
+# do init
+initialize_chat_api()

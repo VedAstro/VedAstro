@@ -7,9 +7,72 @@ from typing import List, Dict, Union
 import time  # for performance measurements
 from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
+
+
 FAISS_INDEX_PATH = "faiss_index"
 
 class ChatTools:
+        
+
+
+
+
+    # just gets map from file and loads it
+    @staticmethod
+    def get_parsed_query_map(llm_model_name):
+        from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
+
+        # Initialize the LLM modal to make vectors (local CPU powered)
+        embeddings_creator = LocalHuggingFaceEmbeddings(llm_model_name)
+
+        # get pre-defined "query-map" (store in file)
+        preset_queries = ChatTools.get_query_map_from_file()
+
+        #fill standard "vector" property
+        preset_queries = [ChatTools.fill_vector(level1, llm_model_name, embeddings_creator) for level1 in preset_queries]
+
+        return preset_queries, embeddings_creator
+
+
+    # just gets map from file and loads it
+    @staticmethod
+    def map_query_by_similarity(query, llm_model_name,preset_queries, embeddings_creator):
+        import numpy as np
+
+        # Embed the user query
+        user_vector = embeddings_creator.embed_query(query)
+        user_vector_expanded = np.expand_dims(user_vector, axis=0)  # Make the vectors match
+
+        # STEP 2 : Do search on map
+
+        # fill query map scores for user's query
+        preset_queries = [ChatTools.fill_similarity_score(user_vector_expanded,level1, llm_model_name,embeddings_creator) for level1 in preset_queries]
+
+        # fill standard "total_score" property at end of parent child chain (to find winner)
+        preset_queries = [ChatTools.fill_total_score(level1,0) for level1 in preset_queries]
+
+        # extract out query map path (leading to highest total score)
+        map_route = ChatTools.find_max_scoring_topic(preset_queries)
+        
+        from chat_objects import AutoReply
+
+        # send map route to auto reply engine
+        reply_engine = AutoReply(map_route)
+        reply_text = reply_engine.try_generate_auto_reply() # no reply is empty
+        
+        # Return the most similar main query and sub-query (if any)
+        return reply_text
+
+
+
+    # just gets map from file and loads it
+    @staticmethod
+    def get_query_map_from_file():
+        file_path = "query_map.json"
+        with open(file_path, 'r') as json_file:
+            data = json.load(json_file)
+        return data
+
 
     @staticmethod
     def find_max_scoring_topic(preset_queries):
@@ -19,7 +82,7 @@ class ChatTools:
         def traverse_query_tree(queries, path=[]):
             nonlocal max_score, max_path
             for query in queries:
-                current_path = path + [query['topic']]
+                current_path = path + [query]  # Include the whole object, not just the 'topic'
                 if 'queries' not in query or not query['queries']:
                     score = query.get('total_score', 0)
                     if score > max_score:
@@ -92,9 +155,6 @@ class ChatTools:
 
         return vector_object
 
-
-        
-        
 
 
     @staticmethod

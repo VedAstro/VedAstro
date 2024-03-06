@@ -200,6 +200,7 @@ public class URL
     public const string TelegramContact = "https://t.me/vedastro_org";
     public const string EmailToClick = "mailto:contact@vedastro.org";
     public const string GitHubRepo = "https://github.com/VedAstro/VedAstro";
+    public const string HuggingFaceRepo = "https://huggingface.co/datasets?sort=trending&search=vedastro";
     public const string GitHubPython = "https://github.com/VedAstro/VedAstro.Python";
     public const string GitHubIssues = "https://github.com/VedAstro/VedAstro/issues";
     public const string GitHubCommits = "https://github.com/gen-so/Genso.Astrology/commits/master";

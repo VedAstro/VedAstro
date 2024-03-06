@@ -784,6 +784,24 @@ namespace VedAstro.Library
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Given an LMT date time in string, will convert to full Time instance
+        /// with STD support
+        /// </summary>
+        public static Time FromLMT(string lmtDateTime, GeoLocation geoLocation)
+        {
+            // Parse the LMT string into a DateTime instance
+            if (!DateTime.TryParseExact(lmtDateTime, "HH:mm dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime lmtParsed))
+            {
+                throw new ArgumentException($"Invalid LMT format. Expected format is 'HH:mm MM/dd/yyyy'.", nameof(lmtDateTime));
+            }
+
+            //Create new instance of time 
+            var returnVal = new Time(lmtParsed, geoLocation);
+
+            return returnVal;
+        }
     }
 
 

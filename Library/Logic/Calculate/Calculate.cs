@@ -13,6 +13,7 @@ using Exception = System.Exception;
 using System.Text;
 using ExCSS;
 using System.Numerics;
+using System.Diagnostics.Tracing;
 
 namespace VedAstro.Library
 {
@@ -58,6 +59,146 @@ namespace VedAstro.Library
 
         //----------------------------------------CORE CODE---------------------------------------------
 
+        #region EVENTS
+
+        /// <summary>
+        /// Gets all events occuring at given time. Basically a slice from "Events Chart"
+        /// Can be used by LLM to interprate final prediction
+        /// </summary>
+        /// <param name="birthTime"></param>
+        /// <param name="checkTime"></param>
+        /// <param name="eventTagList"></param>
+        public static List<Event> EventsAtTime(Time birthTime, Time checkTime, List<EventTag> eventTagList)
+        {
+            // TEMP hack to place time in Person (wrapped) 
+            var johnDoe = new Person("", birthTime, Gender.Empty);
+
+            var xx = EventManager.CalculateEvents(1, checkTime, checkTime, johnDoe, eventTagList);
+
+            return xx;
+        }
+
+        /// <summary>
+        /// Given a birth time, current time and event name, gets the event data occuring at current time
+        /// Easy way to check if Gochara is occuring at given time, with start and end time calculated
+        /// Precision hard set to 1 hour TODO
+        /// </summary>
+        /// <param name="birthTime">birth time of native</param>
+        /// <param name="checkTime">time to base calculation on</param>
+        public static Event EventStartEndTime(Time birthTime, Time checkTime, EventName nameOfEvent)
+        {
+            //from event name, get full event data
+            EventData eventData = EventDataListStatic.Rows.Where(x => x.Name == nameOfEvent).FirstOrDefault();
+
+            //TODO should be changeable for fine events
+            var precisionInHours = 1;
+
+            //check if event is occuring
+            //NOTE: hack to enter birth time with existing code
+            var birthTimeWrapped = new Person("", birthTime, Gender.Male);
+            var isOccuringAtCheckTime = EventManager.ConvertToEventSlice(checkTime, eventData, birthTimeWrapped)?.IsOccuring ?? false; //not found default to false
+
+            //if occuring, start scanning for start & end times
+            if (isOccuringAtCheckTime)
+            {
+                //scan for start time given event data
+                var eventStartTime = Calculate.EventStartTime(birthTime, checkTime, eventData, precisionInHours);
+
+                //scan for end time given event data
+                var eventEndTime = Calculate.EventEndTime(birthTime, checkTime, eventData, precisionInHours);
+
+                //TODO: temp
+                var tags = EventManager.GetTagsByEventName(eventData.Name);
+                var finalEvent = new Event(eventData.Name, eventData.Nature, eventData.Description, eventStartTime, eventEndTime, tags);
+
+                return finalEvent;
+            }
+
+            //if not occuring, let user know with empty event
+            else { return Event.Empty; }
+
+        }
+
+        public static Time EventStartTime(Time birthTime, Time checkTime, EventData eventData, int precisionInHours)
+        {
+            //NOTE: hack to enter birth time with existing code
+            var birthTimeWrapped = new Person("", birthTime, Gender.Male);
+
+            //check time will be used as possible start time
+            var possibleStartTime = checkTime;
+            var previousPossibleStartTime = possibleStartTime;
+
+            //start as not found
+            var isFound = false;
+            while (!isFound) //run while not found
+            {
+                //check possible start time if event occurring (heavy computation)
+                var updatedEventData = EventManager.ConvertToEventSlice(possibleStartTime, eventData, birthTimeWrapped);
+
+                //if occuring than continue to next, start time not found
+                if (updatedEventData != null && updatedEventData.IsOccuring)
+                {
+                    //save a copy of possible time, to be used when we go too far
+                    previousPossibleStartTime = possibleStartTime;
+
+                    //decrement entered time, to check next possible start time in the past
+                    possibleStartTime = possibleStartTime.SubtractHours(precisionInHours);
+                }
+                //start time found!, event has stopped occuring (too far)
+                else
+                {
+                    //return possible start time as confirmed!
+                    possibleStartTime = previousPossibleStartTime;
+                    isFound = true; //stop looking
+                }
+            }
+
+            //if control reaches here than start time found
+            return possibleStartTime;
+
+        }
+
+        public static Time EventEndTime(Time birthTime, Time checkTime, EventData eventData, int precisionInHours)
+        {
+            //NOTE: hack to enter birth time with existing code
+            var birthTimeWrapped = new Person("", birthTime, Gender.Male);
+
+            //check time will be used as possible end time
+            var possibleEndTime = checkTime;
+            var previousPossibleEndTime = possibleEndTime;
+
+            //end as not found
+            var isFound = false;
+            while (!isFound) //run while not found
+            {
+                //check possible end time if event occurring (heavy computation)
+                var updatedEventData = EventManager.ConvertToEventSlice(possibleEndTime, eventData, birthTimeWrapped);
+
+                //if occuring than continue to next, end time not found
+                if (updatedEventData != null && updatedEventData.IsOccuring)
+                {
+                    //save a copy of possible time, to be used when we go too far
+                    previousPossibleEndTime = possibleEndTime;
+
+                    //increment possible end time, to check next possible end time in the future
+                    possibleEndTime = possibleEndTime.AddHours(precisionInHours);
+                }
+                //end time found!, event has stopped occuring (too far)
+                else
+                {
+                    //return possible end time as confirmed!
+                    possibleEndTime = previousPossibleEndTime;
+                    isFound = true; //stop looking
+                }
+            }
+
+            //if control reaches here than end time found
+            return possibleEndTime;
+
+        }
+
+
+        #endregion
 
         #region CHAT API & MACHINE LEARNING
 
@@ -68,12 +209,11 @@ namespace VedAstro.Library
         {
             //make http call to python api server
             var timeUrl = birthTime.ToUrl();
-            //https://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/llmsearch
-            var callUrl = $"https://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/llmsearch";
+            var callUrl = $"https://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeLLMSearch";
             var jsonString = $@"{{""query"":""{textInput}"",
                                 ""birth_time"":""{timeUrl}"",
-                                ""name"":""vivekananda"",
-                                ""prompt"" : ""use only given context""
+                                ""llm_model_name"":""sentence-transformers/all-MiniLM-L6-v2"",
+                                ""search_type"" : ""similarity""
                             }}";
 
             //result is an array of found
@@ -93,7 +233,7 @@ namespace VedAstro.Library
         /// Given a start time & end time and space in hours between.
         /// Will generate massive CSV tables for ML & Data Science
         /// Will contain 3 columns, "Name","Time","Location"
-        /// this can then be fed into ML Table Generator
+        /// this can then be fed into ML Table Generator to make datasets worthy of HuggingFace
         /// </summary>
         public static string GenerateTimeListCSV(Time startTime, Time endTime, double hoursBetween)
         {
@@ -116,33 +256,56 @@ namespace VedAstro.Library
 
         #endregion
 
+        //the introduction of certain sensitive points
+        // or sahams signifying events is a novel aspect ofTajaka. 
+        //There are special
+        // positions or points signifying important events in life.
+        // While a Bhava or house comprehends a number of
+        // events, a Saham or sensitive point relates to only one
+        // particular event. 
+
         #region SAHAMS
+
+        //public static Angle PunyaSahamLongitude(Time birthTime)
+        //{
+        //    //# 1 Punya Fortune/good deeds Moon – Sun + Lagna
+        //    var moonLong = Calculate.PlanetNirayanaLongitude(Moon, birthTime).TotalDegrees; //A
+        //    var sunLong = Calculate.PlanetNirayanaLongitude(Sun, birthTime).TotalDegrees; //B
+        //    var lagnaLong = Calculate.HouseLongitude(HouseName.House1, birthTime).GetMiddleLongitude().TotalDegrees; //C
+
+        //    //Each saham has a formula that looks like A - B + C. What
+        //    //this means is that we take the longitudes of A, B and C and find (A - B + C).
+        //    //This is equivalent to finding how far A is from B and then taking the same distance from C.
+        //    var punyaSahamLong = (moonLong - sunLong) + lagnaLong;
+
+        //    //if night birth
+        //    var isNightBirth = Calculate.IsNightBirth(birthTime);
+        //    if (isNightBirth) { punyaSahamLong = (sunLong - moonLong) + lagnaLong; }
+
+        //    // However, if C is not between B and A (i.e. we start
+        //    // from B and go zodiacal till we meet A, and we do not find C on the way),
+        //    // then we add 30° to the value evaluated above.
+        //    if (!IsSahamCBetweenBToA(moonLong, sunLong, lagnaLong)) { punyaSahamLong += 30; }
+
+        //    //expunge 360 degrees
+        //    var final = Angle.FromDegrees(punyaSahamLong).Expunge360();
+
+        //    return final;
+        //}
 
         public static Angle PunyaSahamLongitude(Time birthTime)
         {
-            //# 1 Punya Fortune/good deeds Moon – Sun + Lagna
+            //STEP 1:
+            //in order to find the Punya Saham deduct
+            //the Sun's longitude from the Moon's (if the year
+            //commences during daytime or vice versa if during the
+            //night) and add the ascendant
             var moonLong = Calculate.PlanetNirayanaLongitude(Moon, birthTime).TotalDegrees; //A
             var sunLong = Calculate.PlanetNirayanaLongitude(Sun, birthTime).TotalDegrees; //B
-            var lagnaLong = Calculate.HouseDegrees(HouseName.House1, birthTime).GetMiddleLongitude().TotalDegrees; //C
+            var tajakaBirth = Calculate.TajikaDateForYear(birthTime, 205);
 
-            //Each saham has a formula that looks like A - B + C. What
-            //this means is that we take the longitudes of A, B and C and find (A - B + C).
-            //This is equivalent to finding how far A is from B and then taking the same distance from C.
-            var punyaSahamLong = (moonLong - sunLong) + lagnaLong;
+            return Angle.Degrees180;
 
-            //if night birth
-            var isNightBirth = Calculate.IsNightBirth(birthTime);
-            if (isNightBirth) { punyaSahamLong = (sunLong - moonLong) + lagnaLong; }
-
-            // However, if C is not between B and A (i.e. we start
-            // from B and go zodiacal till we meet A, and we do not find C on the way),
-            // then we add 30° to the value evaluated above.
-            if (!IsSahamCBetweenBToA(moonLong, sunLong, lagnaLong)) { punyaSahamLong += 30; }
-
-            //expunge 360 degrees
-            var final = Angle.FromDegrees(punyaSahamLong).Expunge360();
-
-            return final;
         }
 
         public static Angle VidyaSahamLongitude(Time standardHoroscope)
@@ -564,6 +727,16 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Annual or Progressed Horoscope
+        /// The annual
+        /// or progressed horoscope (sidereal solar return according to Western astrology) is cast the same way as the
+        /// birth horoscope. The time of the commencement of
+        /// the anniversary, known as Varsharambha, is said to
+        /// begin at the exact moment when the Sun comes to
+        /// the same position he was in at the time of birth. In
+        /// other words the individual's New Year begins when
+        /// the Sun comes back to the same point he heJd at the·
+        /// time of birth. 
         /// Given a birth time and scan year, will return exact time for tajika chart
         /// The tājika system attempts to predict in detail the likely happenings in one year of
         /// an individual's life. The system goes to such details as to predict events even on a
@@ -571,11 +744,11 @@ namespace VedAstro.Library
         /// this system is also called the varṣaphala system.
         /// </summary>
         /// <param name="scanYear">4 digit year number</param>
-        public static Time TajikaDateForYear(Time birthTime, int scanYear)
+        public static Time TajikaDateForYear2(Time birthTime, int scanYear)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(TajikaDateForYear), birthTime, scanYear, Ayanamsa), _tajikaDateForYear);
+            return CacheManager.GetCache(new CacheKey(nameof(TajikaDateForYear2), birthTime, scanYear, Ayanamsa), _tajikaDateForYear);
 
 
             //UNDERLYING FUNCTION
@@ -624,6 +797,71 @@ namespace VedAstro.Library
 
                 //possible date confirmed as correct date
                 return possibleTajika;
+            }
+
+        }
+
+
+        /// <summary>
+        /// Annual or Progressed Horoscope
+        /// The annual
+        /// or progressed horoscope (sidereal solar return according to Western astrology) is cast the same way as the
+        /// birth horoscope. The time of the commencement of
+        /// the anniversary, known as Varsharambha, is said to
+        /// begin at the exact moment when the Sun comes to
+        /// the same position he was in at the time of birth. In
+        /// other words the individual's New Year begins when
+        /// the Sun comes back to the same point he heJd at the·
+        /// time of birth. 
+        /// Calculated based on method in BV Raman book "Varshaphala" 
+        /// </summary>
+        /// <param name="scanYear">4 digit year number</param>
+        public static Time TajikaDateForYear(Time birthTime, int scanYear)
+        {
+            //This method of calculating the
+            // Varshaphal horoscope (also called sidereal solar return
+            // chart) is based on the modern value of the duration of
+            // the sidereal year, viz., 365.256374 days or roughJy
+            // 365 days, 6 hours, 9 minutes and 12 seconds differing from. the Hindu sidereal year by ~.5 vighatis or
+            // 3 minutes and 24 seconds. A study· of a number of
+            // annual charts for over 30 years has convinced me
+            // that the moden_:1 value of the sidereal year would yield
+            // better results. H
+
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey(nameof(TajikaDateForYear), birthTime, scanYear, Ayanamsa), _tajikaDateForYear);
+
+
+            //UNDERLYING FUNCTION
+
+            Time _tajikaDateForYear()
+            {
+
+                //Below data was called out from pg 22 of Varshaphala-Hindu Progressed Horoscope - BV. RAMAN
+                var records = new Dictionary<int, Dictionary<string, int>>()
+                {
+                    { 1, new Dictionary<string, int>(){ {"Days", 1}, {"Hrs", 6}, {"Mts", 9}, {"Secs", 12} }},
+                    { 2, new Dictionary<string, int>(){ {"Days", 2}, {"Hrs", 12}, {"Mts", 18}, {"Secs", 18} }},
+                    { 3, new Dictionary<string, int>(){ {"Days", 3}, {"Hrs", 18}, {"Mts", 27}, {"Secs", 30} }},
+                    { 4, new Dictionary<string, int>(){ {"Days", 5}, {"Hrs", 0}, {"Mts", 36}, {"Secs", 36} }},
+                    { 5, new Dictionary<string, int>(){ {"Days", 6}, {"Hrs", 6}, {"Mts", 45}, {"Secs", 48} }},
+                    { 6, new Dictionary<string, int>(){ {"Days", 0}, {"Hrs", 12}, {"Mts", 55}, {"Secs", 0} }},
+                    { 7, new Dictionary<string, int>(){ {"Days", 1}, {"Hrs", 19}, {"Mts", 4}, { "Secs", 6} }},
+                    { 8, new Dictionary<string, int>(){ {"Days", 3}, {"Hrs", 1}, {"Mts", 13}, { "Secs", 18} }},
+                    { 9, new Dictionary<string, int>(){ {"Days", 4}, {"Hrs", 7}, {"Mts", 22}, { "Secs", 30} }},
+                    { 10, new Dictionary<string, int>(){ {"Days", 5}, {"Hrs", 13}, {"Mts", 31}, { "Secs", 36} }},
+                    { 20, new Dictionary<string, int>(){ {"Days", 4}, {"Hrs", 13}, {"Mts", 3}, { "Secs", 12} }},
+                    { 30, new Dictionary<string, int>(){ {"Days", 2}, {"Hrs", 16}, {"Mts", 34}, { "Secs", 54} }},
+                    { 40, new Dictionary<string, int>(){ {"Days", 1}, {"Hrs", 6}, {"Mts", 6}, { "Secs", 30} }},
+                    { 50, new Dictionary<string, int>(){ {"Days", 6}, {"Hrs", 19}, {"Mts", 38}, { "Secs", 6} }},
+                    { 60, new Dictionary<string, int>(){ {"Days", 5}, {"Hrs", 9}, {"Mts", 9}, { "Secs", 42} }},
+                    { 70, new Dictionary<string, int>(){ {"Days", 3}, {"Hrs", 22}, {"Mts", 41}, { "Secs", 24} }},
+                    { 80, new Dictionary<string, int>(){ {"Days", 2}, {"Hrs", 12}, {"Mts", 13}, { "Secs", 00} }},
+                    { 90, new Dictionary<string, int>(){ {"Days", 1}, {"Hrs", 1}, { "Mts", 44 }, { "Secs", 36} }},
+                    { 100, new Dictionary<string, int>(){ {"Days", 6}, {"Hrs", 15}, { "Mts", 13 }, { "Secs", 12} }}
+                };
+
+                throw new Exception();
             }
 
         }
@@ -2418,12 +2656,8 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<List<JObject>> HoroscopePredictionAlpacaTemplateLoRA(Time birthTime)
         {
-
-            //get list of horoscope data (file from wwwroot)
-            var horoscopeDataList = await Tools.GetHoroscopeDataList(URL.HoroscopeDataListFile);
-
             var returnList = new List<JObject>();
-            foreach (var horoscopeData in horoscopeDataList)
+            foreach (var horoscopeData in HoroscopeDataListStatic.Rows)
             {
                 JObject jObject = new JObject
                 {
@@ -2437,7 +2671,6 @@ namespace VedAstro.Library
 
             return returnList;
         }
-
 
         /// <summary>
         /// Given a birth time will calculate all predictions that match for given birth time.
@@ -2467,125 +2700,6 @@ namespace VedAstro.Library
             var namesOnly = predictionList.Select(x => x.Name.ToString()).ToList();
 
             return namesOnly;
-        }
-
-        /// <summary>
-        /// Given a birth time, current time and event name, gets the event data occuring at current time
-        /// Easy way to check if Gochara is occuring at given time, with start and end time calculated
-        /// Precision hard set to 1 hour TODO
-        /// </summary>
-        /// <param name="birthTime">birth time of native</param>
-        /// <param name="checkTime">time to base calculation on</param>
-        public static Event EventDataAtTime(Time birthTime, Time checkTime, EventName nameOfEvent)
-        {
-            //from event name, get full event data
-            EventData eventData = EventDataListStatic.Rows.Where(x => x.Name == nameOfEvent).FirstOrDefault();
-
-            //TODO should be changeable for fine events
-            var precisionInHours = 1;
-
-            //check if event is occuring
-            //NOTE: hack to enter birth time with existing code
-            var birthTimeWrapped = new Person("", birthTime, Gender.Male);
-            var isOccuringAtCheckTime = EventManager.ConvertToEventSlice(checkTime, eventData, birthTimeWrapped)?.IsOccuring ?? false; //not found default to false
-
-            //if occuring, start scanning for start & end times
-            if (isOccuringAtCheckTime)
-            {
-                //scan for start time given event data
-                var eventStartTime = Calculate.EventStartTime(birthTime, checkTime, eventData, precisionInHours);
-
-                //scan for end time given event data
-                var eventEndTime = Calculate.EventEndTime(birthTime, checkTime, eventData, precisionInHours);
-
-                //TODO: temp
-                var tags = EventManager.GetTagsByEventName(eventData.Name);
-                var finalEvent = new Event(eventData.Name, eventData.Nature, eventData.Description, eventStartTime, eventEndTime, tags);
-
-                return finalEvent;
-            }
-
-            //if not occuring, let user know with empty event
-            else { return Event.Empty; }
-
-        }
-
-        public static Time EventStartTime(Time birthTime, Time checkTime, EventData eventData, int precisionInHours)
-        {
-            //NOTE: hack to enter birth time with existing code
-            var birthTimeWrapped = new Person("", birthTime, Gender.Male);
-
-            //check time will be used as possible start time
-            var possibleStartTime = checkTime;
-            var previousPossibleStartTime = possibleStartTime;
-
-            //start as not found
-            var isFound = false;
-            while (!isFound) //run while not found
-            {
-                //check possible start time if event occurring (heavy computation)
-                var updatedEventData = EventManager.ConvertToEventSlice(possibleStartTime, eventData, birthTimeWrapped);
-
-                //if occuring than continue to next, start time not found
-                if (updatedEventData != null && updatedEventData.IsOccuring)
-                {
-                    //save a copy of possible time, to be used when we go too far
-                    previousPossibleStartTime = possibleStartTime;
-
-                    //decrement entered time, to check next possible start time in the past
-                    possibleStartTime = possibleStartTime.SubtractHours(precisionInHours);
-                }
-                //start time found!, event has stopped occuring (too far)
-                else
-                {
-                    //return possible start time as confirmed!
-                    possibleStartTime = previousPossibleStartTime;
-                    isFound = true; //stop looking
-                }
-            }
-
-            //if control reaches here than start time found
-            return possibleStartTime;
-
-        }
-
-        public static Time EventEndTime(Time birthTime, Time checkTime, EventData eventData, int precisionInHours)
-        {
-            //NOTE: hack to enter birth time with existing code
-            var birthTimeWrapped = new Person("", birthTime, Gender.Male);
-
-            //check time will be used as possible end time
-            var possibleEndTime = checkTime;
-            var previousPossibleEndTime = possibleEndTime;
-
-            //end as not found
-            var isFound = false;
-            while (!isFound) //run while not found
-            {
-                //check possible end time if event occurring (heavy computation)
-                var updatedEventData = EventManager.ConvertToEventSlice(possibleEndTime, eventData, birthTimeWrapped);
-
-                //if occuring than continue to next, end time not found
-                if (updatedEventData != null && updatedEventData.IsOccuring)
-                {
-                    //save a copy of possible time, to be used when we go too far
-                    previousPossibleEndTime = possibleEndTime;
-
-                    //increment possible end time, to check next possible end time in the future
-                    possibleEndTime = possibleEndTime.AddHours(precisionInHours);
-                }
-                //end time found!, event has stopped occuring (too far)
-                else
-                {
-                    //return possible end time as confirmed!
-                    possibleEndTime = previousPossibleEndTime;
-                    isFound = true; //stop looking
-                }
-            }
-
-            //if control reaches here than end time found
-            return possibleEndTime;
-
         }
 
         /// <summary>
@@ -5056,7 +5170,7 @@ namespace VedAstro.Library
                 case PlanetToPlanetRelationship.Neutral:
                     return PlanetToSignRelationship.NeutralVarga;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return PlanetToSignRelationship.Empty;
             }
 
         }
@@ -5357,10 +5471,10 @@ namespace VedAstro.Library
         /// <summary>
         /// House start middle and end longitudes
         /// </summary>
-        public static House HouseDegrees(HouseName houseNumber, Time time)
+        public static House HouseLongitude(HouseName houseNumber, Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(HouseDegrees), houseNumber, time, Ayanamsa), _getHouse);
+            return CacheManager.GetCache(new CacheKey(nameof(HouseLongitude), houseNumber, time, Ayanamsa), _getHouse);
 
             //UNDERLYING FUNCTION
             House _getHouse()
@@ -5508,12 +5622,15 @@ namespace VedAstro.Library
             return lmtDateTime.ToOffset(stdOffset);
         }
 
+
         /// <summary>
+        /// Birth Time In Ghatis
         /// Also know as "Suryodayadi Jananakala Ghatikah".
         /// It is customary among the Hindus to mention
         /// the time of birth as "Suryodayadi Jananakala
         /// Ghatikaha ", i.e., the number of ghatis passed
-        /// from sunrise up to the moment of birth. 
+        /// from sunrise up to the moment of birth.
+        /// sunrise to sunrise, and consists of 60 Ghatis
         /// </summary>
         public static Angle IshtaKaala(Time birthTime)
         {
@@ -5538,6 +5655,7 @@ namespace VedAstro.Library
             var ghatis = differenceHours * 2.5;
 
             //return round(ghatis to 2 decimal places)
+            var xx = VedicTime.FromTotalGhatis(ghatis);
             return Angle.FromDegrees(ghatis);
         }
 
@@ -12785,28 +12903,28 @@ namespace VedAstro.Library
             //subtract the longitude of the 4th house from the longitudes of the Sun and Mars.
             if (planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Mars)
             {
-                powerlessHouse = Calculate.HouseDegrees(HouseName.House4, time);
+                powerlessHouse = Calculate.HouseLongitude(HouseName.House4, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
             //Subtract the 7th house, from Jupiter and Mercury.
             if (planetName == Library.PlanetName.Jupiter || planetName == Library.PlanetName.Mercury)
             {
-                powerlessHouse = Calculate.HouseDegrees(HouseName.House7, time);
+                powerlessHouse = Calculate.HouseLongitude(HouseName.House7, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
             //Subtracc the 10th house from Venus and the Moon
             if (planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Moon)
             {
-                powerlessHouse = Calculate.HouseDegrees(HouseName.House10, time);
+                powerlessHouse = Calculate.HouseLongitude(HouseName.House10, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
             //from Saturn, the ascendant.
             if (planetName == Library.PlanetName.Saturn)
             {
-                powerlessHouse = Calculate.HouseDegrees(HouseName.House1, time);
+                powerlessHouse = Calculate.HouseLongitude(HouseName.House1, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
@@ -12986,7 +13104,7 @@ namespace VedAstro.Library
                         foreach (var houseNo in Library.House.AllHouses)
                         {
                             //house is considered as a Drusya Graha (aspected body)
-                            var houseMid = Calculate.HouseDegrees(houseNo, time1).GetMiddleLongitude();
+                            var houseMid = Calculate.HouseLongitude(houseNo, time1).GetMiddleLongitude();
                             var plantLong = Calculate.PlanetNirayanaLongitude(planet, time1);
 
                             //Subtract the longitude of the Drishti (aspecting)
@@ -13044,7 +13162,7 @@ namespace VedAstro.Library
                 //falling in a particular kind of sign.
 
                 //so get mid point of house
-                var mid = Calculate.HouseDegrees(houseNumber, time).GetMiddleLongitude().TotalDegrees;
+                var mid = Calculate.HouseLongitude(houseNumber, time).GetMiddleLongitude().TotalDegrees;
                 var houseSign = Calculate.HouseSignName(houseNumber, time);
 
                 //Therefore first find the number of a given Bhava Madhya and subtract

@@ -405,5 +405,13 @@ namespace VedAstro.Library
             }
         }
 
+        //will be long with lat 
+        public string GetPartitionKey()
+        {
+            var roundedLong1DeciPlaces11Km = Math.Round(this.Longitude(), 1).ToString();
+            var roundedLat1DeciPlaces11Km = Math.Round(this.Latitude(), 1).ToString();
+
+            return $"{roundedLong1DeciPlaces11Km},{roundedLat1DeciPlaces11Km}";
+        }
     }
 }

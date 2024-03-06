@@ -1,9 +1,12 @@
-﻿using System;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
@@ -334,36 +337,45 @@ namespace VedAstro.Library
                         string line;
                         bool headersFound = false;
                         int timeColumnIndex = -1;
-                        var timeList = new List<DateTimeOffset>();
+
+                        ConcurrentBag<DateTimeOffset> timeList = new();
+
+                        ParallelOptions options = new()
+                        {
+                            MaxDegreeOfParallelism = Environment.ProcessorCount * 2
+                        };
 
                         while ((line = await reader.ReadLineAsync()) != null)
                         {
-                            var values = line.Split(',');
+                            var values = line.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(v => v.Trim()).ToList();
 
                             if (!headersFound)
                             {
-                                // Search for the time column by checking for header labels containing the word 'time'
-                                timeColumnIndex = Array.FindIndex(values, v => v.ToLower().Contains("time"));
+                                timeColumnIndex = values.FindLastIndex(x => x.Equals("Date", StringComparison.OrdinalIgnoreCase));
+
                                 headersFound = true;
                             }
                             else
                             {
-                                // Parse time when timeColumnIndex is valid
-                                if (timeColumnIndex >= 0 && timeColumnIndex < values.Length)
+                                if (timeColumnIndex >= 0 && timeColumnIndex < values.Count)
                                 {
-                                    if (DateTimeOffset.TryParse(values[timeColumnIndex], out DateTimeOffset dateTimeOffset))
+
+                                    Parallel.ForEach(values, options, (value) =>
                                     {
-                                        timeList.Add(dateTimeOffset);
-                                        ProgressCounter++;
-                                    }
+                                        if (DateTimeOffset.TryParseExact(value, "yyyy-MM-dd HH:mm:ss zzzz", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset dto))
+                                        {
+
+                                            timeList.Add(dto);
+
+                                        }
+                                    });
                                 }
                             }
                         }
 
-                        return timeList;
+                        return timeList.OrderByDescending(t => t).TakeWhile((_, i) => i <= 5).Reverse().ToList();
                     }
                 }
-
                 /// <summary>
                 /// Given a CSV file will extract out 1 column that contains parseable time
                 /// </summary>

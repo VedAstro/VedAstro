@@ -12885,69 +12885,80 @@ namespace VedAstro.Library
         /// </summary>
         public static Shashtiamsa PlanetDigBala(PlanetName planetName, Time time)
         {
-            //no calculation for rahu and ketu here
-            var isRahu = planetName.Name == Library.PlanetName.PlanetNameEnum.Rahu;
-            var isKetu = planetName.Name == Library.PlanetName.PlanetNameEnum.Ketu;
-            var isRahuKetu = isRahu || isKetu;
-            if (isRahuKetu) { return Shashtiamsa.Zero; }
-
-
-            //get planet longitude
-            var planetLongitude = Calculate.PlanetNirayanaLongitude(planetName, time);
-
-            //
-            Angle powerlessPointLongitude = null;
-            House powerlessHouse;
-
-
-            //subtract the longitude of the 4th house from the longitudes of the Sun and Mars.
-            if (planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Mars)
+            try
             {
-                powerlessHouse = Calculate.HouseLongitude(HouseName.House4, time);
-                powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
-            }
+                //no calculation for rahu and ketu here
+                var isRahu = planetName.Name == PlanetNameEnum.Rahu;
+                var isKetu = planetName.Name == PlanetNameEnum.Ketu;
+                var isRahuKetu = isRahu || isKetu;
+                if (isRahuKetu) { return Shashtiamsa.Zero; }
 
-            //Subtract the 7th house, from Jupiter and Mercury.
-            if (planetName == Library.PlanetName.Jupiter || planetName == Library.PlanetName.Mercury)
+
+                //get planet longitude
+                var planetLongitude = PlanetNirayanaLongitude(planetName, time);
+
+                //
+                Angle powerlessPointLongitude = null;
+                House powerlessHouse;
+
+
+                //subtract the longitude of the 4th house from the longitudes of the Sun and Mars.
+                if (planetName == Sun || planetName == Mars)
+                {
+                    powerlessHouse = HouseLongitude(HouseName.House4, time);
+                    powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
+                }
+
+                //Subtract the 7th house, from Jupiter and Mercury.
+                if (planetName == Jupiter || planetName == Mercury)
+                {
+                    powerlessHouse = HouseLongitude(HouseName.House7, time);
+                    powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
+                }
+
+                //Subtracc the 10th house from Venus and the Moon
+                if (planetName == Venus || planetName == Moon)
+                {
+                    powerlessHouse = HouseLongitude(HouseName.House10, time);
+                    powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
+                }
+
+                //from Saturn, the ascendant.
+                if (planetName == Saturn)
+                {
+                    powerlessHouse = HouseLongitude(HouseName.House1, time);
+                    powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
+                }
+
+                //get Digbala arc
+                //Digbala arc= planet's long. - its powerless cardinal point.
+                //var digBalaArc = planetLongitude.GetDifference(powerlessPointLongitude);
+                var xxx = powerlessPointLongitude.TotalDegrees == null ? Angle.Zero : powerlessPointLongitude;
+                var digBalaArc = DistanceBetweenPlanets(planetLongitude, xxx);
+
+                //If difference is more than 180° 
+                if (digBalaArc > Angle.Degrees180)
+                {
+                    //subtract it from 360 degrees.
+                    //digBalaArc = digBalaArc.GetDifference(Angle.Degrees360);
+                    digBalaArc = DistanceBetweenPlanets(digBalaArc, Angle.Degrees360);
+                }
+
+                //The Digbala arc of a ptanet, divided by 3, gives the Digbala
+                var digBala = digBalaArc.TotalDegrees / 3;
+
+
+
+                return new Shashtiamsa(digBala);
+            }
+            catch (Exception e)
             {
-                powerlessHouse = Calculate.HouseLongitude(HouseName.House7, time);
-                powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
+                //print the error and for server guys
+                Console.WriteLine(e);
+                
+                //continue without a word
+                return Shashtiamsa.Zero;
             }
-
-            //Subtracc the 10th house from Venus and the Moon
-            if (planetName == Library.PlanetName.Venus || planetName == Library.PlanetName.Moon)
-            {
-                powerlessHouse = Calculate.HouseLongitude(HouseName.House10, time);
-                powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
-            }
-
-            //from Saturn, the ascendant.
-            if (planetName == Library.PlanetName.Saturn)
-            {
-                powerlessHouse = Calculate.HouseLongitude(HouseName.House1, time);
-                powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
-            }
-
-            //get Digbala arc
-            //Digbala arc= planet's long. - its powerless cardinal point.
-            //var digBalaArc = planetLongitude.GetDifference(powerlessPointLongitude);
-            var xxx = powerlessPointLongitude.TotalDegrees == null ? Angle.Zero : powerlessPointLongitude;
-            var digBalaArc = Calculate.DistanceBetweenPlanets(planetLongitude, xxx);
-
-            //If difference is more than 180° 
-            if (digBalaArc > Angle.Degrees180)
-            {
-                //subtract it from 360 degrees.
-                //digBalaArc = digBalaArc.GetDifference(Angle.Degrees360);
-                digBalaArc = Calculate.DistanceBetweenPlanets(digBalaArc, Angle.Degrees360);
-            }
-
-            //The Digbala arc of a ptanet, divided by 3, gives the Digbala
-            var digBala = digBalaArc.TotalDegrees / 3;
-
-
-
-            return new Shashtiamsa(digBala);
 
         }
 

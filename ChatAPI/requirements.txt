@@ -18,6 +18,14 @@ vedastro
 # for Anyscale support in LangChain
 openai 
 
+# for azure open ai resource support
+langchain_openai
+
+# smart RAG features
+llama_index
+
+llama-index-llms-langchain
+
 aiohttp 
 aiostream
 async_generator

@@ -37,6 +37,7 @@ class ChatEngine4:
 
             # The base URL for your Azure OpenAI resource. e.g. "https://<your resource name>.openai.azure.com"
             openai_api_base = "https://openaimodelserver.openai.azure.com/openai/deployments/vedastro"
+            text_embedder_api_base = "https://openaimodelserver.openai.azure.com/openai/deployments/text-embedder"
 
             # API version e.g. "2023-07-01-preview"
             openai_api_version = "2024-02-15-preview"
@@ -58,7 +59,10 @@ class ChatEngine4:
                 openai_api_type=openai_api_type,
             )
 
-            self.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
+            #self.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
+
+            text_encoder = OpenAIEmbedding(model="text-embedding-ada-002",api_key=os.getenv("AZURE_OPENAI_API_KEY"), api_base=text_embedder_api_base)
+            self.embed_model = text_encoder
 
             Settings.llm = self.llm
             Settings.embed_model = self.embed_model
@@ -85,10 +89,10 @@ class ChatEngine4:
         response_synthesizer = get_response_synthesizer(response_mode="compact")
 
         user_question = kwargs["query"]
-
+        
         # get response based on nodes as context
         response = response_synthesizer.synthesize(
-            f"{user_question}",
+            f"{user_question}, use only text in context, context is a person's life description",
             nodes=kwargs["input_documents"]
         )
 

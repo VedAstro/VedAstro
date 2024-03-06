@@ -11142,50 +11142,61 @@ namespace VedAstro.Library
         /// </summary>
         public static Shashtiamsa PlanetShadbalaPinda(PlanetName planetName, Time time)
         {
-            //return 0 if null planet
-            if (planetName == null) { return Shashtiamsa.Zero; }
-
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadbalaPinda), planetName, time, Ayanamsa), _getPlanetShadbalaPinda);
-
-
-            //UNDERLYING FUNCTION
-            Shashtiamsa _getPlanetShadbalaPinda()
+            try
             {
+                //return 0 if null planet
+                if (planetName == null) { return Shashtiamsa.Zero; }
 
-                //if planet name is rahu or ketu then replace with house lord's strength
-                if (planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu)
+                //CACHE MECHANISM
+                return CacheManager.GetCache(new CacheKey(nameof(PlanetShadbalaPinda), planetName, time, Ayanamsa), _getPlanetShadbalaPinda);
+
+
+                //UNDERLYING FUNCTION
+                Shashtiamsa _getPlanetShadbalaPinda()
                 {
-                    var houseLord = Calculate.LordOfHousePlanetIsIn(planetName, time);
-                    planetName = houseLord;
+
+                    //if planet name is rahu or ketu then replace with house lord's strength
+                    if (planetName == Rahu || planetName == Ketu)
+                    {
+                        var houseLord = LordOfHousePlanetIsIn(planetName, time);
+                        planetName = houseLord;
+                    }
+
+                    //Sthana bala (Positional Strength)
+                    var sthanaBala = PlanetSthanaBala(planetName, time);
+
+                    //Get dik bala (Directional Strength)
+                    var digBala = PlanetDigBala(planetName, time);
+
+                    //Get kala bala (Temporal Strength)
+                    var kalaBala = PlanetKalaBala(planetName, time);
+
+                    //Get Chesta bala (Motional Strength)
+                    var chestaBala = PlanetChestaBala(planetName, time);
+
+                    //Get Naisargika bala (Natural Strength)
+                    var naisargikaBala = PlanetNaisargikaBala(planetName, time);
+
+                    //Get Drik/drug bala (Aspect Strength)
+                    var drikBala = PlanetDrikBala(planetName, time);
+
+
+                    //Get total Shadbala Pinda
+                    var total = sthanaBala + digBala + kalaBala + chestaBala + naisargikaBala + drikBala;
+
+                    //round it 2 decimal places
+                    var roundedTotal = new Shashtiamsa(Math.Round(total.ToDouble(), 2));
+
+                    return roundedTotal;
                 }
+            }
+            catch (Exception e)
+            {
+                //print the error and for server guys
+                Console.WriteLine(e);
 
-                //Sthana bala (Positional Strength)
-                var sthanaBala = PlanetSthanaBala(planetName, time);
-
-                //Get dik bala (Directional Strength)
-                var digBala = PlanetDigBala(planetName, time);
-
-                //Get kala bala (Temporal Strength)
-                var kalaBala = PlanetKalaBala(planetName, time);
-
-                //Get Chesta bala (Motional Strength)
-                var chestaBala = PlanetChestaBala(planetName, time);
-
-                //Get Naisargika bala (Natural Strength)
-                var naisargikaBala = PlanetNaisargikaBala(planetName, time);
-
-                //Get Drik/drug bala (Aspect Strength)
-                var drikBala = PlanetDrikBala(planetName, time);
-
-
-                //Get total Shadbala Pinda
-                var total = sthanaBala + digBala + kalaBala + chestaBala + naisargikaBala + drikBala;
-
-                //round it 2 decimal places
-                var roundedTotal = new Shashtiamsa(Math.Round(total.ToDouble(), 2));
-
-                return roundedTotal;
+                //continue without a word
+                return Shashtiamsa.Zero;
             }
 
         }

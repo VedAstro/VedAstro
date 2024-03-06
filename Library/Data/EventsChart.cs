@@ -159,7 +159,7 @@ namespace VedAstro.Library
             return isType2 ? processType2() : processType1();
 
 
-
+            //SPECIAL CASE FOR "TIME PRESET"
             EventsChart processType2()
             {
                 //take out the needed data
@@ -200,7 +200,7 @@ namespace VedAstro.Library
 
             }
 
-
+            //DEFAULT WITH STANDARD TIME URL
             EventsChart processType1()
             {
 

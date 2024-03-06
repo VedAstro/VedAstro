@@ -4,8 +4,12 @@ namespace VedAstro.Library
 {
     public class Secrets
     {
+        public static string? Password => Environment.GetEnvironmentVariable("Password");
+        public static string? GeoLocationTimezoneTable => Environment.GetEnvironmentVariable("GeoLocationTimezoneTable");
+        public static string? GeoLocationTimezoneMetadataTable => Environment.GetEnvironmentVariable("GeoLocationTimezoneMetadataTable");
         public static string? GoogleAPIKey => Environment.GetEnvironmentVariable("GoogleAPIKey");
         public static string? AzureMapsAPIKey => Environment.GetEnvironmentVariable("AzureMapsAPIKey");
+        public static string? IpDataAPIKey => Environment.GetEnvironmentVariable("IpDataAPIKey");
         public static string? AutoEmailerConnectString => Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
         public static string? VedAstroApiStorageKey => Environment.GetEnvironmentVariable("VedAstroApiStorageKey"); //vedastro-api-data
         public static string? VedAstroCentralStorageKey => Environment.GetEnvironmentVariable("VedAstroCentralStorageKey"); //vedastro-api-data

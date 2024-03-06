@@ -624,34 +624,6 @@ namespace VedAstro.Library
             return await await Task.WhenAny(task, DelayedTimeoutExceptionTask<T>(timeout));
         }
 
-        public static List<HoroscopeData> SavedHoroscopeDataList { get; set; } = null; //null used for checking empty
-
-        /// <summary>
-        /// Get parsed HoroscopeDataList.xml from wwwroot file / static site
-        /// Note: auto caching is used
-        /// </summary>
-        public static async Task<List<HoroscopeData>> GetHoroscopeDataList(string fileUrl)
-        {
-            //if prediction list already loaded use that instead
-            if (SavedHoroscopeDataList != null) { return SavedHoroscopeDataList; }
-
-            //get data list from Static Website storage
-            //always get from STABLE for reliability, and also no URL instance here
-            var horoscopeDataListXml = await Tools.GetXmlFileHttp(fileUrl);
-
-            //parse each raw event data in list
-            var horoscopeDataList = new List<HoroscopeData>();
-            foreach (var predictionDataXml in horoscopeDataListXml)
-            {
-                //add it to the return list
-                horoscopeDataList.Add(HoroscopeData.FromXml(predictionDataXml));
-            }
-
-            //make a copy to be used later if needed (speed improve)
-            SavedHoroscopeDataList = horoscopeDataList;
-
-            return horoscopeDataList;
-        }
 
         /// <summary>
         /// Gets all horoscope predictions for a person
@@ -4082,6 +4054,7 @@ namespace VedAstro.Library
             using (var client = new HttpClient())
             {
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                client.Timeout = TimeSpan.FromMinutes(10); //long timeout, LLM replies slow sometimes
                 var response = await client.PostAsync(url, content);
                 var result = await response.Content.ReadAsStringAsync();
                 return JToken.Parse(result);
@@ -4107,6 +4080,14 @@ namespace VedAstro.Library
             var cachedPersonList = converter.Invoke(timeListJson);
 
             return cachedPersonList;
+        }
+
+        public static void PasswordProtect(string inputPassword)
+        {
+            if (inputPassword != Secrets.Password)
+            {
+                throw new ArgumentException("Invalid password");
+            }
         }
     }
 

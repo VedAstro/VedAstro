@@ -198,7 +198,7 @@ namespace VedAstro.Library
             json["Nature"] = this.Nature.ToString();
 
             // Convert SpecializedSummary to JObject and add to JObject
-            json["SpecializedSummary"] = SpecializedSummary.ToJson(this.SpecializedSummary);
+            json["SpecializedSummary"] = this.SpecializedSummary.ToJson();
 
             // Add the description text to JObject
             json["Description"] = this.Description;

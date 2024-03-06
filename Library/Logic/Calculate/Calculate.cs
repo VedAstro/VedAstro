@@ -13534,7 +13534,7 @@ namespace VedAstro.Library
                 case PlanetName.PlanetNameEnum.Ketu:
                     return "Paternal relations, Hermaphrodite, malefic, religious, sectarian principles, pride, selfishness, occultism, mendicancy";
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return "";
             }
         }
 

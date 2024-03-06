@@ -13,9 +13,10 @@ FAISS_INDEX_PATH = "faiss_index"
 
 class ChatTools:
         
-
-
-
+    @staticmethod
+    def split_camel_case(s):
+        import re
+        return re.sub('((?<=[a-z])[A-Z]|(?<!\\A)[A-Z](?=[a-z]))', ' \\1', s)
 
     # just gets map from file and loads it
     @staticmethod

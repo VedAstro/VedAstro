@@ -56,14 +56,13 @@ def initialize_chat_api():
 
     llm_model_name = "sentence-transformers/all-MiniLM-L6-v2"
     chat_model_name = "meta-llama/Llama-2-70b-chat-hf"
-    variation_name = "MK3"
+    variation_name = "MK4"
 
     # load full vector DB (contains all predictions text as numbers)
     savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
-    
+
     # use modal name for multiple modal support
     filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{llm_model_name}"
-
 
     ####################################
     if loaded_vectors.get(filePath) is None:  # lazy load for speed
@@ -72,24 +71,22 @@ def initialize_chat_api():
 
     print("Loaded Vectors go!")
 
-
     ####################################
     # prepare the LLM that will answer the query
     if chat_engines.get(filePath) is None:  # lazy load for speed
         # select the correct engine variation
         wrapper = ChatEngine(variation_name)
-        chat_engines[filePath] = wrapper.create_instance(chat_model_name)  # load the modal shards (heavy compute)
+        chat_engines[filePath] = wrapper.create_instance(
+            chat_model_name)  # load the modal shards (heavy compute)
 
-    print("Chat AI LLMs go!")
-
+    print("Chat Model LLMs go!")
 
     ####################################
-    # STEP 1 : Prepare Query Map 
-    preset_queries, embeddings_creator = ChatTools.get_parsed_query_map(llm_model_name)
-    
+    # STEP 1 : Prepare Query Map
+    preset_queries, embeddings_creator = ChatTools.get_parsed_query_map(
+        llm_model_name)
+
     print("Query Mapper go!")
-
-
 
     ####################################
     print("All systems are go")
@@ -98,6 +95,52 @@ def initialize_chat_api():
     print("Ignition sequence start")
     print("All engines running")
     print("We have lift off!")
+
+
+# converts vedastro horoscope predictions (JSON) to_llama-index's NodeWithScore
+# so that llama index can understand vedastro predictions
+def vedastro_predictions_to_llama_index_nodes(birth_time, predictions_list_json):
+    from llama_index.core.schema import NodeWithScore
+    from llama_index.core.schema import TextNode
+
+    # Initialize an empty list
+    prediction_nodes = []
+    for prediction in predictions_list_json:
+
+        related_bod_json = prediction['RelatedBody']
+
+        # shadbala_score = Calculate.PlanetCombinedShadbala()
+        rel_planets = related_bod_json["Planets"]
+        parsed_list = []
+        for planet in rel_planets:
+            parsed_list.append(PlanetName.Parse(planet))
+
+        # TODO temp use 1st planet, house, zodiac
+        planet_tags = []
+        shadbala_score = 0
+        if parsed_list:  # This checks if the list is not empty
+            shadbala_score = Calculate.PlanetShadbalaPinda(
+                parsed_list[0], birth_time).ToDouble()
+            planet_tags = Calculate.GetPlanetTags(parsed_list[0])
+
+        predict_node = TextNode(
+            text=prediction["Description"],
+            metadata={
+                "name": ChatTools.split_camel_case(prediction['Name']),
+                "related_body": prediction['RelatedBody'],
+                "planet_tags": planet_tags,
+            },
+            metadata_seperator="::",
+            metadata_template="{key}=>{value}",
+            text_template="Metadata: {metadata_str}\n-----\nContent: {content}",
+        )
+
+        # add in shadbala to give each prediction weights
+        parsed_node = NodeWithScore(
+            node=predict_node, score=shadbala_score)  # add in shabala score
+        prediction_nodes.append(parsed_node)  # add to main list
+
+    return prediction_nodes
 
 
 # brings together the answering mechanism
@@ -110,52 +153,64 @@ async def answer_to_reply(chat_instance_data):
     payload = ChatPayload(chat_instance_data)
 
     is_query = payload.query != ""
-    
+
     # do query mapping if possible
     if is_query:
-        auto_reply = ChatTools.map_query_by_similarity(payload.query, payload.llm_model_name, preset_queries, embeddings_creator)
-
+        auto_reply = ChatTools.map_query_by_similarity(
+            payload.query, payload.llm_model_name, preset_queries, embeddings_creator)
 
     # if no reply than time to call the in big guns...GPU infantry firing LLMs shells!
     need_llm = auto_reply == None
     if need_llm & is_query:
+
         # STEP 1: GET NATIVE'S HOROSCOPE DATA (PREDICTIONS)
         # get all predictions for given birth time (aka filter)
         # run calculator to get list of prediction names for given birth time
         birth_time = payload.get_birth_time()
-        calc_result = Calculate.HoroscopePredictionNames(birth_time)
-        # format list nicely so LLM can swallow (dict)
-        all_predictions = {"name": [item for item in calc_result]}
+        all_predictions_raw = Calculate.HoroscopePredictions(birth_time)
 
-        # STEP 2: GET PREDICTIONS THAT RELATES TO QUESTION
-        # load full vector DB (contains all predictions text as numbers)
-        savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
+        # show the number of horo records found
+        print(f"Predictions Found : {len(all_predictions_raw)}")
+
+        # convert to json
+        all_predictions_json = json.loads(
+            HoroscopePrediction.ToJsonList(all_predictions_raw).ToString())
+
+        # format list nicely so LLM can swallow (llama_index nodes)
+        # so that llama index can understand vedastro predictions
+        nodesss = vedastro_predictions_to_llama_index_nodes(
+            birth_time, all_predictions_json)
+
+        # STEP 2: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
+        # use file path as id for dynamic LLM modal support
+        savePathPrefix = "horoscope"
         # use modal name for multiple modal support
         filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
-        # do LLM search on found predictions
-        found_predictions = loaded_vectors[filePath].search(payload.query, payload.search_type, all_predictions)
 
-
-        # STEP 3: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
         # Query the chat engine and send the results to the client
-        async for chunk in await chat_engines[filePath].query(query=payload.query,
-                                                                input_documents=found_predictions,
-                                                                # Controls the trade-off between randomness and determinism in the response
-                                                                # A high value (e.g., 1.0) makes the model more random and creative
-                                                                temperature=payload.temperature,
-                                                                # Controls diversity of the response
-                                                                # A high value (e.g., 0.9) allows for more diversity
-                                                                top_p=payload.top_p,
-                                                                # Limits the maximum length of the generated text
-                                                                max_tokens=payload.max_tokens,
-                                                                # Specifies sequences that tell the model when to stop generating text
-                                                                stop=payload.stop,
-                                                                # Returns debug data like usage statistics
-                                                                return_debug_data=False  # Set to True to see detailed information about model usage
-                                                                ):
-            return chunk['output_text']
+        llm_response = chat_engines[filePath].query(query=payload.query,
+                                                    input_documents=nodesss,
+                                                    # Controls the trade-off between randomness and determinism in the response
+                                                    # A high value (e.g., 1.0) makes the model more random and creative
+                                                    temperature=payload.temperature,
+                                                    # Controls diversity of the response
+                                                    # A high value (e.g., 0.9) allows for more diversity
+                                                    top_p=payload.top_p,
+                                                    # Limits the maximum length of the generated text
+                                                    max_tokens=payload.max_tokens,
+                                                    # Specifies sequences that tell the model when to stop generating text
+                                                    stop=payload.stop,
+                                                    # Returns debug data like usage statistics
+                                                    return_debug_data=False  # Set to True to see detailed information about model usage
+                                                    )
+
+        # note: metadata and source nodes used is all here
+        #       but we only take AI text response
+        text_response = llm_response.response
+        return text_response
     else:
-        time.sleep(1.5) # little delay else, no time for "thinkin" msg to make it
+        # little delay else, no time for "thinkin" msg to make it
+        time.sleep(1.5)
         return auto_reply
 
 
@@ -202,41 +257,34 @@ async def horoscope_llmsearch(payload: SearchPayload):
 async def horoscope_chat(websocket: websockets.WebSocket):
     # Import the ast module
     import ast
-    
+
     global chat_engines  # use cache
     global loaded_vectors  # use cache
 
     await websocket.accept()
     await websocket.send_text("Welcome to VedAstro!")
 
-    # variable data related to chat instance (filled during chat)
-    chat_instance_data = {}
-    prev_chat_instance_data = {}
-
     # connection has been made, now keep connection alive in infinite loop,
     # with fail safe to catch it midway
     try:
-        
+
         while True:
             # Receive a message from the client
             # control is held here while waiting for user input
             client_input = await websocket.receive_text()
-            
+
             # Let caller process started
             await websocket.send_text("Thinking....")
-            
+
             # answer machine (send all needed data)
             ai_reply = await answer_to_reply(client_input)
 
             # send ans to caller
             await websocket.send_text(ai_reply)
 
-
     # Handle failed gracefully
     except Exception as e:
         print(e)
-
-
 
 
 # RAG
@@ -251,7 +299,7 @@ async def horoscope_chatold(websocket: websockets.WebSocket):
     # connection has been made, now keep connection alive in infinite loop,
     # with fail safe to catch it midway
     try:
-        
+
         while True:
             # Receive a message from the client
             # control is held here while waiting for user input
@@ -281,7 +329,8 @@ async def horoscope_chatold(websocket: websockets.WebSocket):
             # use modal name for multiple modal support
             filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
             # do LLM search on found predictions
-            found_predictions = loaded_vectors[filePath].search(payload.query, payload.search_type, all_predictions)
+            found_predictions = loaded_vectors[filePath].search(
+                payload.query, payload.search_type, all_predictions)
 
             # STEP 3: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
             # Query the chat engine and send the results to the client
@@ -387,6 +436,7 @@ async def summarize_prediction(payload: SummaryPayload):
 # it is through her i see the past,
 # and smile 😊
 
+
 @app.post("/PresetQueryMatch")
 async def preset_query_match(payload: TempPayload):
     global preset_queries
@@ -394,7 +444,8 @@ async def preset_query_match(payload: TempPayload):
 
     ChatTools.password_protect(payload.password)  # password is Spotty
 
-    auto_reply = ChatTools.map_query_by_similarity(payload.query, payload.llm_model_name, preset_queries, embeddings_creator)
+    auto_reply = ChatTools.map_query_by_similarity(
+        payload.query, payload.llm_model_name, preset_queries, embeddings_creator)
 
     return auto_reply
 

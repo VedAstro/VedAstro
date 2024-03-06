@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
@@ -12,7 +14,7 @@ namespace VedAstro.Library
     /// Data structure to encapsulate an event before it's calculated
     /// In other words an object instance of the event data as stored in file
     /// </summary>
-    public struct HoroscopeData
+    public struct HoroscopeData: IToJson
     {
         /** FIELDS **/
 
@@ -21,10 +23,11 @@ namespace VedAstro.Library
 
 
         /** CTOR **/
-        public HoroscopeData(HoroscopeName name, EventNature nature, string description, List<EventTag> eventTags, HoroscopeCalculatorDelegate horoscopeCalculator)
+        public HoroscopeData(HoroscopeName name, EventNature nature, SpecializedSummary specializedNature, string description, List<EventTag> eventTags, HoroscopeCalculatorDelegate horoscopeCalculator)
         {
             Name = name;
             Nature = nature;
+            SpecializedSummary = specializedNature;
             HoroscopeCalculator = horoscopeCalculator;
             Description = description;
             EventTags = eventTags;
@@ -39,6 +42,11 @@ namespace VedAstro.Library
         /// Gets human readable Event Name, removes camel case
         /// </summary>
         public string FormattedName => Format.FormatName(this);
+
+        /// <summary>
+        /// Filled by LLM during static data rebuild (pre-compile)
+        /// </summary>
+        public SpecializedSummary SpecializedSummary { get; private set; }
 
         public EventNature Nature { get; private set; }
 
@@ -110,7 +118,8 @@ namespace VedAstro.Library
             var calculatorMethod = EventManager.GetHoroscopeCalculatorMethod(name);
 
             //place the data into an event data structure
-            var eventX = new HoroscopeData(name, nature, description, tagList, calculatorMethod);
+            //NOTE: when coming from XML file, no need to set SpecializedSummary
+            var eventX = new HoroscopeData(name, nature, SpecializedSummary.Empty, description, tagList, calculatorMethod);
 
             return eventX;
 
@@ -169,6 +178,66 @@ namespace VedAstro.Library
             var searchResult = Regex.Match(compiledText, pattern, RegexOptions.IgnoreCase).Success;
             return searchResult;
 
+        }
+
+
+        /** JSON SUPPORT **/
+
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
+
+        public JObject ToJson()
+        {
+            // Check if eventData is null
+            if (this == null) { return new JObject(); }
+
+            // Create a new JObject
+            var json = new JObject();
+
+            // Convert EventName and EventNature to string and add to JObject
+            json["Name"] = this.Name.ToString();
+            json["Nature"] = this.Nature.ToString();
+
+            // Convert SpecializedSummary to JObject and add to JObject
+            json["SpecializedSummary"] = SpecializedSummary.ToJson(this.SpecializedSummary);
+
+            // Add the description text to JObject
+            json["Description"] = this.Description;
+
+            // Convert the list of tags to a comma-separated string and add to JObject
+            var tagString = string.Join(",", this.EventTags);
+            json["Tag"] = tagString;
+
+            // Return the JObject
+            return json;
+        }
+
+        public static EventData FromJson(JToken eventData)
+        {
+            throw new NotImplementedException();
+            //// Check if eventData is null
+            //if (eventData == null) { return EventData.Empty; }
+
+            //// Try to parse EventName and EventNature from JSON, use Empty as default
+            //Enum.TryParse(eventData["Name"]?.Value<string>() ?? "Empty", out EventName name);
+            //Enum.TryParse(eventData["Nature"]?.Value<string>() ?? "Empty", out EventNature nature);
+
+            //// Extract SpecializedSummary from JSON
+            //var specializedNature = SpecializedSummary.FromJson(eventData["SpecializedSummary"] as JObject);
+
+            //// Clean the description text
+            //var rawDescription = eventData["Description"]?.Value<string>() ?? "Empty";
+            //var description = CleanText(rawDescription);
+
+            //// Get the list of tags, split by comma and parse each tag
+            //var tagString = eventData["Tag"]?.Value<string>();
+            //var tagList = GetEventTags(tagString);
+
+            //// Get the calculator method for the event
+            //var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
+
+            //// Create and return the EventData object
+            //var eventX = new EventData(name, nature, specializedNature, description, tagList, calculatorMethod);
+            //return eventX;
         }
 
 

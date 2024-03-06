@@ -37,7 +37,7 @@ namespace VedAstro.Library
     /// <summary>
     /// data summary of the event data & horoscope data description
     /// </summary>
-    public class SpecializedSummary
+    public class SpecializedSummary : IToJson
     {
         public static SpecializedSummary Empty => new SpecializedSummary();
 
@@ -49,32 +49,53 @@ namespace VedAstro.Library
         public SummaryMetadata Body { get; set; }
 
 
-        public static SpecializedSummary FromXml(XElement xmlElement)
+
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
+
+
+        public JObject ToJson()
         {
-            //todo marked for oblivion
+            var json = new JObject
+            {
+                ["Mind"] = SummaryMetadataToJson(Mind),
+                ["Studies"] = SummaryMetadataToJson(Studies),
+                ["Family"] = SummaryMetadataToJson(Family),
+                ["Money"] = SummaryMetadataToJson(Money),
+                ["Love"] = SummaryMetadataToJson(Love),
+                ["Body"] = SummaryMetadataToJson(Body)
+            };
 
-            throw new NotImplementedException();
-
+            return json;
         }
 
-        public XElement ToXml()
+        public static SpecializedSummary FromJson(JToken eventData)
         {
-            //todo marked for oblivion
+            var summary = new SpecializedSummary
+            {
+                Mind = eventData["Mind"].ToObject<SummaryMetadata>(),
+                Studies = eventData["Studies"].ToObject<SummaryMetadata>(),
+                Family = eventData["Family"].ToObject<SummaryMetadata>(),
+                Money = eventData["Money"].ToObject<SummaryMetadata>(),
+                Love = eventData["Love"].ToObject<SummaryMetadata>(),
+                Body = eventData["Body"].ToObject<SummaryMetadata>()
+            };
 
-            throw new NotImplementedException();
+            return summary;
+        }
+
+        private static JToken SummaryMetadataToJson(SummaryMetadata metadata)
+        {
+            if (metadata == null) return null;
+
+            return new JObject
+            {
+                ["Weight"] = metadata.Weight,
+                ["Nature"] = metadata.Nature.ToString()
+            };
         }
 
 
-        public static SpecializedSummary FromJson(JObject jsonObject)
-        {
-            throw new Exception();
-        }
 
-
-        public static JObject ToJson(SpecializedSummary specializedNature)
-        {
-            throw new Exception();
-        }
     }
 
 }

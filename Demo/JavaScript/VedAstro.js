@@ -964,6 +964,31 @@ class CommonTools {
     }
     return newObj;
   }
+
+  //
+  //takes JSON person and gives birth time in URL format with birth location as below
+  //exp :  "Location/Singapore/Time/23:59/31/12/2000/+08:00"
+  static BirthTimeUrlOfSelectedPersonJson() {
+    var personJson = Settings.SelectedPerson;
+
+    let birthTimeJson = personJson["BirthTime"];
+
+    var locationName = birthTimeJson.Location.Name;
+    var stdTime = birthTimeJson.StdTime.split(" ");
+    var time = stdTime[0];
+    var date = stdTime[1];
+    var timezone = stdTime[2];
+    var result =
+      "Location/" +
+      locationName +
+      "/Time/" +
+      time +
+      "/" +
+      date +
+      "/" +
+      timezone;
+    return result;
+  }
 }
 
 /**
@@ -1410,7 +1435,7 @@ class ChatInstance {
          <!-- MESSAGES IN VIEW -->
          <ul class="list-unstyled" id="ChatWindowMessageList">
              <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
-                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
+                 <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar"
                       class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
                  <div class="card">
                      <div class="card-header d-flex justify-content-between p-3">
@@ -1498,7 +1523,7 @@ class ChatInstance {
       this.OnClickSendChat();
     });
 
-    //3:
+    //3: ON change topic dropdown
     //attach topic selector dropdown
     $("#TopicListDropdown").on("change", (e) => {
       //get all needed data (what topic was selected)
@@ -1560,8 +1585,8 @@ class ChatInstance {
       // show message to user that location was found and set
       Swal.fire({
         icon: "success",
-        title: "Chat topic changed!",
-        html: `We will talk about <strong>${Settings.SelectedPerson.Name}</strong>'s horoscope now.`,
+        title: "Topic changed!",
+        html: `We will now talk about <strong>${Settings.SelectedPerson.Name}</strong>'s horoscope.`,
         showConfirmButton: true,
       });
     });
@@ -1745,7 +1770,7 @@ class ChatInstance {
     //NOTE: loading icon is default on till shutdown
     var aiInputChatCloud = `
     <li class="d-flex justify-content-start mb-4">
-        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
+        <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
         <div class="card">
             <div class="card-header d-flex justify-content-between p-3">
                 <p class="fw-bold mb-0 me-5">Vignes</p>
@@ -1929,19 +1954,20 @@ class ChatInstance {
 
     //STEP 2:
     //user's input is sent to server for reply
-    await this.SendMessageToServer(userInput);
+    //get selected birth time
+    var xxx = CommonTools.BirthTimeUrlOfSelectedPersonJson()
+    await this.SendMessageToServer(userInput, xxx);
 
     //STEP 3 : GUI CLEAN UP
     //clear question input box for next, question
     $("#UserChatInputElement").val("");
   }
 
-  async SendMessageToServer(message) {
+  async SendMessageToServer(message, birthTimeUrl) {
     const messagePayload = {
-      variation_name: "MK3",
+      variation_name: "MK4",
       query: message,
-      birth_time:
-        "/Location/Ariyanayagipuram,Tirunelveli/Time/07:30/20/07/1978/+08:00",
+      birth_time: birthTimeUrl,
       llm_model_name: "sentence-transformers/all-MiniLM-L6-v2",
       chat_model_name: "meta-llama/Llama-2-70b-chat-hf",
       temperature: 0.2,

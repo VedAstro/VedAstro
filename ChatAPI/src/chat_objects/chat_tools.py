@@ -12,7 +12,14 @@ from langchain_community.vectorstores import FAISS
 FAISS_INDEX_PATH = "faiss_index"
 
 class ChatTools:
-        
+    
+    # given a string will output sha256, used for id purposes
+    @staticmethod
+    def generate_hash(input_string):
+        import hashlib
+        sha_signature = hashlib.sha256(input_string.encode()).hexdigest()
+        return sha_signature
+    
     @staticmethod
     def split_camel_case(s):
         import re

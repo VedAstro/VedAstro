@@ -11,6 +11,7 @@ from .chat_payload import ChatPayload
 from .temp_payload import TempPayload 
 from .summary_payload import SummaryPayload 
 from .xml_loader import XMLLoader
+from .azure_table_manager import AzureTableManager
 
 
 # Initialize a package variable

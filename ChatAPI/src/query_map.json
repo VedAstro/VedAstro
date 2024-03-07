@@ -92,7 +92,6 @@
         "score": 0,
         "topic": "who",
         "vector": "",
-        "call_functions": ["techinical_auto_reply"],
         "queries": [
           {
             "total_score": 10,

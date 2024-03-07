@@ -26,6 +26,18 @@ llama_index
 
 llama-index-llms-langchain
 
+# needed for llama_index RAG
+llama-index-embeddings-langchain
+
+# needed to access azure via llama index
+llama-index-llms-azure-openai
+
+llama-index-readers-faiss
+
+llama-index-vector-stores-faiss
+
+IPython
+
 aiohttp 
 aiostream
 async_generator
@@ -33,3 +45,6 @@ async_generator
 websockets
 
 asyncio
+
+# for chat message logging
+azure-data-tables

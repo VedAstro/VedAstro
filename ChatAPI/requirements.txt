@@ -22,7 +22,7 @@ openai
 langchain_openai
 
 # smart RAG features
-llama_index
+# llama_index
 
 llama-index-llms-langchain
 

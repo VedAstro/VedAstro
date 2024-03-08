@@ -2,14 +2,12 @@
 
 import sys
 import logging
-from typing import List, Dict
 import json
 from fastapi import HTTPException, FastAPI, websockets
 
 import json  # for JSON parsing and packing
 
 # for easy async code
-import asyncio
 
 # for absolute project paths
 import os
@@ -63,7 +61,7 @@ def initialize_chat_api():
 
     llm_model_name = "sentence-transformers/all-MiniLM-L6-v2"
     chat_model_name = "meta-llama/Llama-2-70b-chat-hf"
-    variation_name = "MK6"
+    variation_name = "MK7"
 
     # load full vector DB (contains all predictions text as numbers)
     savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
@@ -72,9 +70,9 @@ def initialize_chat_api():
     filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{llm_model_name}"
 
     ####################################
-    if loaded_vectors.get(filePath) is None:  # lazy load for speed
-        # load the horoscope vectors (heavy compute)
-        loaded_vectors[filePath] = EmbedVectors(filePath, llm_model_name)
+    # if loaded_vectors.get(filePath) is None:  # lazy load for speed
+    #     # load the horoscope vectors (heavy compute)
+    #     loaded_vectors[filePath] = EmbedVectors(filePath, llm_model_name)
 
     print("Loaded Vectors go!")
 

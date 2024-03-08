@@ -194,6 +194,7 @@ def vedastro_predictions_to_llama_index_nodes(birth_time, predictions_list_json)
 def vedastro_predictions_to_llama_index_documents(predictions_list_json):
     from llama_index.core import Document
     from llama_index.core.schema import MetadataMode
+    import copy
 
     # Initialize an empty list
     prediction_nodes = []
@@ -201,10 +202,12 @@ def vedastro_predictions_to_llama_index_documents(predictions_list_json):
 
         #prediction = json.loads(prediction.ToJson().ToString())
 
+        predict_meta = copy.deepcopy(prediction)
+        del predict_meta["Description"]
 
         predict_node = Document(
-            text=prediction["Name"],
-            metadata=prediction,
+            text=prediction["Description"],
+            metadata=predict_meta,
             metadata_seperator="::",
             metadata_template="{key}=>{value}",
             text_template="Metadata: {metadata_str}\n-----\nContent: {content}",
@@ -233,7 +236,7 @@ def vedastro_predictions_to_llama_index_documents(predictions_list_json):
 async def answer_to_reply(chat_instance_data):
     global preset_queries
     global embeddings_creator
-    from llama_index.core import Document, VectorStoreIndex
+    from llama_index.core import VectorStoreIndex
 
     # parse incoming data
     # Parse the message

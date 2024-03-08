@@ -6,6 +6,7 @@ from .chat_engine_mk3 import ChatEngine3
 from .chat_engine_mk4 import ChatEngine4
 from .chat_engine_mk5 import ChatEngine5
 from .chat_engine_mk6 import ChatEngine6
+from .chat_engine_mk7 import ChatEngine7
 from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
 
 
@@ -19,6 +20,7 @@ class ChatEngine:
             "MK4": ChatEngine4,
             "MK5": ChatEngine5,
             "MK6": ChatEngine6,
+            "MK7": ChatEngine7,
             # Add more variations as needed
         }
 

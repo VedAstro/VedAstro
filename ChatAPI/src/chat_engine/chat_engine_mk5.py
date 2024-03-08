@@ -8,37 +8,20 @@ import time
 # from langchain.prompts import PromptTemplate
 
 # import os module & the OpenAI Python library for calling the OpenAI API
-import openai
-import json
 import os
-from langchain_openai import AzureChatOpenAI
-from langchain.schema import HumanMessage
-from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 
-from langchain.prompts.chat import (
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-)
 from llama_index.core import Settings
 
 from llama_index.core import PromptTemplate
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.chat_engine import CondenseQuestionChatEngine
-from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.llms.openai import OpenAI
-from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
 # from llama_index.llms.azure_openai import AzureOpenAI
 from llama_index.core import (
-    SimpleDirectoryReader,
     load_index_from_storage,
-    VectorStoreIndex,
     StorageContext,
 )
-from llama_index.vector_stores.faiss import FaissVectorStore
-from IPython.display import Markdown, display
 import os
 from llama_index.legacy.embeddings import AzureOpenAIEmbedding
 # from llama_index.legacy.llms import AzureOpenAI

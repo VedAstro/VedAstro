@@ -12,6 +12,7 @@ from .temp_payload import TempPayload
 from .summary_payload import SummaryPayload 
 from .xml_loader import XMLLoader
 from .azure_table_manager import AzureTableManager
+from .vedastro_retriever import VedastroRetriever
 
 
 # Initialize a package variable

@@ -63,7 +63,7 @@ def initialize_chat_api():
 
     llm_model_name = "sentence-transformers/all-MiniLM-L6-v2"
     chat_model_name = "meta-llama/Llama-2-70b-chat-hf"
-    variation_name = "MK4"
+    variation_name = "MK6"
 
     # load full vector DB (contains all predictions text as numbers)
     savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
@@ -125,16 +125,16 @@ def vedastro_predictions_to_llama_index_weight_nodes(birth_time, predictions_lis
         planet_tags = []
         shadbala_score = 0
         if parsed_list:  # This checks if the list is not empty
-            shadbala_score = Calculate.PlanetShadbalaPinda(
-                parsed_list[0], birth_time).ToDouble()
-            planet_tags = Calculate.GetPlanetTags(parsed_list[0])
+            for planet in parsed_list:
+                shadbala_score += Calculate.PlanetShadbalaPinda(planet, birth_time).ToDouble()
+                #planet_tags = Calculate.GetPlanetTags(parsed_list[0])
 
         predict_node = TextNode(
             text=prediction["Description"],
             metadata={
-                "name": ChatTools.split_camel_case(prediction['Name']),
-                "related_body": prediction['RelatedBody'],
-                "planet_tags": planet_tags,
+                "name": ChatTools.split_camel_case(prediction['Name'])
+                # "related_body": prediction['RelatedBody'],
+                # "planet_tags": planet_tags,
             },
             metadata_seperator="::",
             metadata_template="{key}=>{value}",
@@ -199,7 +199,7 @@ def vedastro_predictions_to_llama_index_documents(predictions_list_json):
     prediction_nodes = []
     for prediction in predictions_list_json:
 
-        prediction = json.loads(prediction.ToJson().ToString())
+        #prediction = json.loads(prediction.ToJson().ToString())
 
 
         predict_node = Document(
@@ -211,6 +211,7 @@ def vedastro_predictions_to_llama_index_documents(predictions_list_json):
         )
 
         # this is shows difference for understanding output of Documents
+        print("#######################################################")
         print(
             "The LLM sees this: \n",
             predict_node.get_content(metadata_mode=MetadataMode.LLM),
@@ -219,6 +220,8 @@ def vedastro_predictions_to_llama_index_documents(predictions_list_json):
             "The Embedding model sees this: \n",
             predict_node.get_content(metadata_mode=MetadataMode.EMBED),
         )
+        print("#######################################################")
+
 
         # add in shadbala to give each prediction weights
         prediction_nodes.append(predict_node)  # add to main list
@@ -259,30 +262,30 @@ async def answer_to_reply(chat_instance_data):
         # format list nicely so LLM can swallow (llama_index nodes)
         # so that llama index can understand vedastro predictions
         all_predictions_json = json.loads(HoroscopePrediction.ToJsonList(all_predictions_raw).ToString())
-        #prediction_nodes = vedastro_predictions_to_llama_index_documents(all_predictions_json)
-        prediction_nodes = vedastro_predictions_to_llama_index_weight_nodes(birth_time, all_predictions_json)
+        prediction_nodes = vedastro_predictions_to_llama_index_documents(all_predictions_json)
+        #prediction_nodes = vedastro_predictions_to_llama_index_weight_nodes(birth_time, all_predictions_json)
 
         # build index
 
         # Define your criteria in this function
 
-        def criteria(predictionNode):
-            return predictionNode.score > 0
-        # This will create a new array with elements that meet the criteria
-        prediction_nodes_sorted = [
-            element for element in prediction_nodes if criteria(element)]
-        # place higest weight at top so doesn't get chopped off
-        prediction_nodes_sorted = sorted(
-            prediction_nodes_sorted, key=lambda predictionNode: predictionNode.score, reverse=True)
+        # def criteria(predictionNode):
+        #     return predictionNode.score > 0
+        # # This will create a new array with elements that meet the criteria
+        # prediction_nodes_sorted = [
+        #     element for element in prediction_nodes if criteria(element)]
+        # # place higest weight at top so doesn't get chopped off
+        # prediction_nodes_sorted = sorted(
+        #     prediction_nodes_sorted, key=lambda predictionNode: predictionNode.score, reverse=True)
 
-        # Take the top 10 elements
-        top_10_array = prediction_nodes_sorted[:20]
+        # # Take the top 10 elements
+        # top_10_array = prediction_nodes_sorted[:20]
 
         # STEP 2: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
         # use file path as id for dynamic LLM modal support
         # Query the chat engine and send the results to the client
         llm_response = chat_engines[payload.llm_model_name].query(query=payload.query,
-                                                    input_documents=prediction_nodes_sorted,
+                                                    input_documents=prediction_nodes,
                                                     # Controls the trade-off between randomness and determinism in the response
                                                     # A high value (e.g., 1.0) makes the model more random and creative
                                                     temperature=payload.temperature,

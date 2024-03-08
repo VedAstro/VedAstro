@@ -6,65 +6,46 @@ import time
 
 # from langchain.chains import LLMChain
 # from langchain.prompts import PromptTemplate
-from llama_index.core.data_structs import Node
-from llama_index.core.schema import NodeWithScore
 from llama_index.core import get_response_synthesizer
 from llama_index.core import VectorStoreIndex, get_response_synthesizer
 from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.core.query_engine import RetrieverQueryEngine
-from chat_objects import VedastroRetriever
 from llama_index.core import get_response_synthesizer
 from llama_index.core.query_engine import RetrieverQueryEngine
 # Retrievers
 from llama_index.core.retrievers import (
-    BaseRetriever,
     VectorIndexRetriever,
-    KeywordTableSimpleRetriever,
 )
 from llama_index.core import PromptTemplate
-from llama_index.core.response_synthesizers import TreeSummarize
 
 # import os module & the OpenAI Python library for calling the OpenAI API
-import openai
-import json
 import os
-from langchain_openai import AzureChatOpenAI
-from langchain.schema import HumanMessage
-from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 
-from langchain.prompts.chat import (
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-)
 from llama_index.core import Settings
 
 from llama_index.core import PromptTemplate
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.chat_engine import CondenseQuestionChatEngine
-from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.llms.openai import OpenAI
-from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
 # from llama_index.llms.azure_openai import AzureOpenAI
 from llama_index.core import (
-    SimpleDirectoryReader,
     load_index_from_storage,
     VectorStoreIndex,
     StorageContext,
 )
-from llama_index.vector_stores.faiss import FaissVectorStore
-from IPython.display import Markdown, display
 import os
 from llama_index.legacy.embeddings import AzureOpenAIEmbedding
 # from llama_index.legacy.llms import AzureOpenAI
 from llama_index.llms.azure_openai import AzureOpenAI
 from llama_index.core.prompts import SelectorPromptTemplate
-from llama_index.core.prompts.utils import is_chat_model
 from llama_index.core.prompts.base import PromptTemplate
 from llama_index.core.prompts.prompt_type import PromptType
-
+from llama_index.core import PromptTemplate
+from llama_index.core.response_synthesizers import TreeSummarize
+from llama_index.core.retrievers import RecursiveRetriever
+from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.core import get_response_synthesizer
 
 custom_prompt = PromptTemplate(
     """\
@@ -105,7 +86,7 @@ class ChatEngine6:
                 api_version="2024-02-15-preview",
                 azure_endpoint="https://openaimodelserver.openai.azure.com",
                 api_key=os.environ["AZURE_OPENAI_API_KEY"],
-                #SETTINGS
+                # SETTINGS
                 temperature=0.25,
                 max_tokens=4000
             )
@@ -161,91 +142,62 @@ class ChatEngine6:
         docs = kwargs["input_documents"]
 
         # Create index from documents
-        index = VectorStoreIndex.from_documents(
-            docs
-        )
+        index = VectorStoreIndex.from_documents(docs, show_progress=True)
 
-        # configure retriever
-        retriever = VectorIndexRetriever(
-            index=index,
-            similarity_top_k=10,
-        )
+        ## response_synthesizer
+        # templates need to be set here
 
-        # configure response synthesizer
-        DEFAULT_TEXT_QA_PROMPT_TMPL = (
-            "ContextOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO information is below.\n"
+        text_qa_template_str = (
+            "Context information is"
+            " below. Context is my life description.\n---------------------\n{context_str}\n---------------------\nUsing"
+            " only the context information, answer"
+            " the question: {query_str}\nUsing the"
+            " context if needed, update or repeat the existing answer.\n"
+        )
+        text_qa_template = PromptTemplate(text_qa_template_str)
+
+        refine_template_str = (
+            "The original question is as follows: {query_str}\nWe have provided an"
+            " existing answer: {existing_answer}\nWe have the opportunity to refine"
+            " the existing answer with some more context"
+            " below. Context is my life description.\n------------\n{context_msg}\n------------\nUsing the new"
+            " context, update or repeat the existing answer.\n"
+        "Always answer the query using the provided context information, "
+        "and not prior knowledge.\n"
+        "Some rules to follow:\n"
+        "1. Avoid disclaimers like 'astrology is not a definitive predictor'.\n"
+        "2. Avoid statements like 'Based on the context, ...' or "
+        "'The context information ...' or anything along "
+        "those lines."
+        )
+        refine_template = PromptTemplate(refine_template_str)
+
+        new_summary_tmpl_str = (
+            "Context information is below.\n"
             "---------------------\n"
             "{context_str}\n"
             "---------------------\n"
             "Given the context information and not prior knowledge, "
-            "answer the query.\n"
+            "answer the query in a descriptively explanation.\n"
             "Query: {query_str}\n"
             "Answer: "
         )
+        new_summary_tmpl = PromptTemplate(new_summary_tmpl_str)
 
-        DEFAULT_TEXT_QA_PROMPT = PromptTemplate(
-            DEFAULT_TEXT_QA_PROMPT_TMPL, prompt_type=PromptType.QUESTION_ANSWER
-        )
-        # text qa prompt
-        TEXT_QA_SYSTEM_PROMPT = ChatMessage(
-            content=(
-                "YouKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK are an expert Q&A system that is trusted around the world.\n"
-                "Always answer the query using the provided context information, "
-                "and not prior knowledge.\n"
-                "Some rules to follow:\n"
-                "1. Never directly reference the given context in your answer.\n"
-                "2. Avoid statements like 'Based on the context, ...' or "
-                "'The context information ...' or anything along "
-                "those lines."
-            ),
-            role=MessageRole.SYSTEM,
-        )
-
-        TEXT_QA_PROMPT_TMPL_MSGS = [
-            TEXT_QA_SYSTEM_PROMPT,
-            ChatMessage(
-                content=(
-                    "ContextWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW information is below.\n"
-                    "---------------------\n"
-                    "{context_str}\n"
-                    "---------------------\n"
-                    "Given the context information and not prior knowledge, "
-                    "answer the query.\n"
-                    "Query: {query_str}\n"
-                    "Answer: "
-                ),
-                role=MessageRole.USER,
-            ),
-        ]
-
-        TEXT_QA_PROMPT_TMPL_MSGS = [
-        TEXT_QA_SYSTEM_PROMPT,
-            ChatMessage(
-                content=(
-                    "Context information is below.\n"
-                    "---------------------\n"
-                    "{context_str}\n"
-                    "---------------------\n"
-                    "Given the context information and not prior knowledge, "
-                    "answer the query.\n"
-                    "Query: {query_str}\n"
-                    "Answer: "
-                ),
-                role=MessageRole.USER,
-            ),
-        ]
-
-
-        # CHAT_TEXT_QA_PROMPT = ChatPromptTemplate(message_templates=TEXT_QA_PROMPT_TMPL_MSGS)
-
-        DEFAULT_TEXT_QA_PROMPT_SEL = SelectorPromptTemplate(
-            default_template=DEFAULT_TEXT_QA_PROMPT
-        )
-
+        #based on response mode, the template is selected
         response_synthesizer = get_response_synthesizer(
-            response_mode="tree_summarize",
-            text_qa_template=DEFAULT_TEXT_QA_PROMPT_SEL,
+            response_mode="refine",
+            text_qa_template=text_qa_template,
+            refine_template=refine_template,
+            summary_template=new_summary_tmpl,
+            verbose=True
+        )
 
+        # configure retriever
+        # TODO can be upgraded
+        retriever = VectorIndexRetriever(
+            index=index,
+            similarity_top_k=10,
         )
 
         # assemble query engine
@@ -259,39 +211,3 @@ class ChatEngine6:
         result = query_engine.query(user_question)
 
         return result
-
-        # # initialize response synthesizer
-        # summarizer = TreeSummarize(verbose=True, summary_template=qa_prompt)
-        # # configure how the query will be processed
-        # # notes : - SIMPLE_SUMMARIZE : works good (suspect loss of nodes)
-        # #        - COMPACT : works good (good comparison)
-        # #        - COMPACT_ACCUMULATE, ACCUMULATE : not needed here, checks each prediction on own
-        # response_synthesizer = get_response_synthesizer(
-        #     response_mode="tree_summarize", structured_answer_filtering=True)
-
-        # user_question = kwargs["query"]
-
-        # # configure retriever
-        # # define custom retriever
-        # vector_retriever = VectorIndexRetriever(
-        #     index=self.index, similarity_top_k=2)
-        # keyword_retriever = KeywordTableSimpleRetriever(index=self.index)
-        # custom_retriever = VedastroRetriever(kwargs["input_documents"])
-
-        # # define response synthesizer
-        # response_synthesizer = get_response_synthesizer()
-
-        # # assemble query engine
-        # custom_query_engine = RetrieverQueryEngine(
-        #     retriever=custom_retriever,
-        #     response_synthesizer=response_synthesizer,
-        # )
-
-        # self.chat_engine._query_engine = custom_query_engine
-
-        # # remove
-        # ghgh = self.custom_chat_history
-
-        # result = self.chat_engine.chat(user_question)
-
-        # return result

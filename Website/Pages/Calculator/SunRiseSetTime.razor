@@ -42,10 +42,16 @@
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-    private void UpdateSunRiseSetTime()
+    private async Task UpdateSunRiseSetTime()
     {
         //parse location received from user
-        var geoLocation = _geoLocationInput.GetGeoLocation();
+        GeoLocation geoLocation = _geoLocationInput.GetGeoLocation();
+
+        //TODO timezone needs to be converted to browser location
+        // var cc  = await Tools.GetTimezoneOffsetApi(geoLocation, DateTimeOffset.Now());
+
+        // //get time now at location
+        // var timeNowLocation = geoLocation.tim
 
         //get time now
         var timeNow = Time.NowSystem(geoLocation);
@@ -53,7 +59,7 @@
         var rise = Calculate.SunriseTime(timeNow);
         var set = Calculate.SunsetTime(timeNow);
 
-        //show lmt time as string
+        //show std time as string
         _sunRiseTime = rise.GetStdDateTimeOffsetText();
         _sunSetTime = set.GetStdDateTimeOffsetText();
 

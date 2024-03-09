@@ -116,6 +116,11 @@
                 </select>
             </div>
         }
+        else if (paramType == typeof(List<EventTag>))
+        {
+            @* DATA POINT / METHOD SELECT *@
+            <EventTagListSelector @ref="_EventTagListSelector" />
+        }
         else
         {
             <div>
@@ -129,8 +134,12 @@
 }
 
 @code {
+
+    public EventTagListSelector _EventTagListSelector { get; set; }
+    public List<OpenAPIMetadata> MethodListALL { get; set; }
+
     /// <summary>
-    /// id used to sync labels and inputs, for HTML sake
+    /// id used to sync labels and inputs, for HTML’s sake
     /// </summary>
     private static string InstanceId = Guid.NewGuid().ToString();
     private Type paramType;
@@ -156,6 +165,7 @@
     [Parameter]
     public string ParamName { get; set; }
 
+
     public void SetValue(ParameterMetadata item)
     {
         var paramName = item.Name;
@@ -175,7 +185,7 @@
     }
 
     //used to set optional param data
-    //note all all types supported
+    //note: not all types supported
     private void SetValueIntoInputField(string value)
     {
         // if (paramType == typeof(Time)) { combinedUrl = await _inputTimeLocation.ToApiUrl(); }
@@ -271,6 +281,9 @@
                     break;
                 case Type type when type == typeof(int) || type == typeof(double):
                     combinedUrl = $"/{paramNameForUrl}/{_inputNumber}";
+                    break;
+                case Type type when type == typeof(List<EventTag>):
+                    combinedUrl = $"/EventTags/{_EventTagListSelector.ToApiUrl()}";
                     break;
             }
         }

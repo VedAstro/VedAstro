@@ -1,0 +1,126 @@
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+@using System.Reflection
+
+
+<div id="#EventTagListSelector" @ref="mainElementRef">
+
+    <IconTitle IconName="fluent-emoji:label" Title="Event Tags" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
+        <ButtonRow>
+            <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.Column2MLData" SmallIcon="true" />
+        </ButtonRow>
+    </IconTitle>
+
+    <style>
+        .hovered:hover {
+            transform: scale(1.05); /* Increase the size of the card */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Add a shadow effect */
+            transition: all 0.3s ease; /* Add a transition effect */
+        }
+
+            .hovered:hover span {
+                font-weight: 600;
+                /* your styles here */
+            }
+    </style>
+    
+    @if (SelectedEnumList.Any())
+    {
+        @* LIST OF SELECTED DATA POINTS *@
+        <div class="vstack gap-2">
+            @foreach (var selectedEnum in SelectedEnumList)
+            {
+                <div class="hovered border-secondary border px-4 py-2 rounded-4 border-2 hstack d-flex justify-content-between">
+                    <div class="hstack gap-1">
+                        <span class="" style="font-size: 17.5px; color: #030ce1;">@Format.FormatName(selectedEnum.ToString())</span>
+                    </div>
+                    <Icon Size="15" ExtraStyle="cursor: pointer;" TooltipText="Remove" IconName="twemoji:cross-mark" OnClickCallback="@(() => OnClickRemoveEnum(selectedEnum))" />
+                </div>
+            }
+        </div>
+
+    }
+
+    @* ADD NEW METHOD *@
+    <EnumDropdown DefaultMessage="+ Add New" ExtraClass="mt-2" @ref="_EnumDropdown" />
+
+</div>
+
+@code {
+
+    #region FIELDS
+
+    private bool _showAddNewField = false;
+    private ElementReference selectorHtml;
+    private ElementReference mainElementRef;
+
+    private EnumDropdown _EnumDropdown;
+
+    /// <summary>
+    /// The list of selected methods by user
+    /// </summary>
+    public List<Enum?> SelectedEnumList = new List<Enum?>();
+
+    private bool _isEventAttached = false;
+
+    #endregion
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_EnumDropdown != null && !_isEventAttached)
+        {
+            //sub event: when an method is selected, auto show inputs panel
+            _EnumDropdown.OnChangeSelectEventTag += OnChangeSelectEventTag;
+            _isEventAttached = true;
+        }
+    }
+
+    public void Hide() => _jsRuntime.Hide(mainElementRef);
+
+    public void Show() => _jsRuntime.Show(mainElementRef);
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    /// <summary>
+    /// When user selects a method, this code is called
+    /// basically adds new method to selected list
+    /// </summary>
+    private void OnChangeSelectEventTag(object sender, EventArgs e)
+    {
+        //end here if not selected
+        if (_EnumDropdown.GetSelectedMethodName() == "") return;
+
+        //add newly selected data point to main list
+        var newMethod = _EnumDropdown.SelectedEnum;
+
+        SelectedEnumList.Add(newMethod);
+
+        //reset selector to go back to "make new selection"
+        _EnumDropdown.Reset();
+
+        //refresh to make changes appear
+        StateHasChanged();
+    }
+
+    private void OnClickRemoveEnum(Enum? methodData)
+    {
+        //remove method from list
+        SelectedEnumList.Remove(methodData);
+
+        StateHasChanged();
+    }
+
+
+    //covert all selected event tags into 1 list
+    public string ToApiUrl()
+    {
+
+        return Tools.ListToString(SelectedEnumList);
+    }
+
+}

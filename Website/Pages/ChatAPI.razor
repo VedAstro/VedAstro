@@ -1,0 +1,43 @@
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.ChatAPI)]
+
+<PageTitle>Chat API</PageTitle>
+
+<PageTop ImageName="ai-chat-banner.png"
+         Title="Chat API"
+         DescriptionText="Talk with AI powered astrologer to help learn, discuss and improve your knowledge on astrology. Also easy integration into your own app or website.">
+</PageTop>
+
+
+@* vedastro.js builds and runs chat client in below element initialized by js call below*@
+<div id="AIChat" class="my-3 w-75"></div>
+
+
+@code {
+    private Person _selectedPerson = Person.Empty;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //initialize chat instance
+
+            //get time in url format
+            // var timeUrl = _selectedPerson.BirthTime.ToUrl();
+            // timeUrl = timeUrl.Substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
+
+            var settingsAIChat = new {
+                ElementID= "AIChat",
+                ShowHeader= true,
+                HeaderIcon= "fluent:table-28-filled",
+            };
+
+
+            //call VedAstro.js to generate table
+            await _jsRuntime.InvokeVoidAsync("GenerateChatInstance", settingsAIChat);
+
+        }
+    }
+
+}

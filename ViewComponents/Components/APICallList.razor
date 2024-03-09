@@ -18,6 +18,7 @@
     <IconTitle IconSize="AppData.DefaultIconSize" Title="Browse Calls" IconName="fluent:line-horizontal-4-search-16-filled" TitleHolder="h4">
         <ButtonRow>
             <span style="font-size: 25px;">
+                @* id here is to edit data *@
                 Count : <strong id="FoundMethodInfoCountElm">0</strong>
             </span>
         </ButtonRow>
@@ -169,6 +170,8 @@
             //send all search text for creating an index by the special JS search library (FlexSearch)
             _jsRuntime.InvokeVoidAsync(JS.InitializeSearchForAPICallList, methodInfoObjects);
 
+            //set count of all method as start so does not show 0
+            _jsRuntime.SetText("#FoundMethodInfoCountElm", MethodListALL.Count.ToString());
         }
     }
 

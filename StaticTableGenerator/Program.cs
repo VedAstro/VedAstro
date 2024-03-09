@@ -496,7 +496,7 @@ namespace VedAstro.Library
                 var yTags = $"[{tagsAsText}]";
                 //add new event data code
                 var cleanedDescription = Tools.CleanText(yy.Description);
-                compiledCode.AppendLine($"{indent}new(HoroscopeName.{yy.Name}, EventNature.{yy.Nature}, @\"{cleanedDescription}\", {yTags}, EventManager.GetHoroscopeCalculatorMethod(HoroscopeName.{yy.Name})),");
+                compiledCode.AppendLine($"{indent}new(HoroscopeName.{yy.Name}, EventNature.{yy.Nature}, SpecializedSummary.Empty, @\"{cleanedDescription}\", {yTags}, EventManager.GetHoroscopeCalculatorMethod(HoroscopeName.{yy.Name})),");
             }
 
             //remove indentation at start of compiled lines

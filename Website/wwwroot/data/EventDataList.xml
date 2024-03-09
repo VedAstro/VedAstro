@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<!--This is the ULTIMATE DATA list for MUHURTHA Events-->
+	HOW THIS FILE USED BY VEDASTRO
+	Data on what an event is set here by human coder.
+	When "StaticGenerator" is run this file is proccessed to make static c# code.
+	of what the 
 
 	<!--PANCHA PAKSHI-->
 	<Event>
@@ -1668,10 +1672,16 @@
 	<Event>
 		<Name>SunGocharaInHouse1</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
-			<Body>Bad</Body>
-			<Finance>Bad</Finance>
-		</SpecializedNature>
+		<SpecializedSummary>
+			<Body>
+				<Weight>2.2</Weight>
+				<Nature>Bad</Nature>
+			</Body>
+			<Money>
+				<Weight>2.2</Weight>
+				<Nature>Bad</Nature>
+			</Money>
+		</SpecializedSummary>
 		<Description>
 			When the Sun traverses through the Rasi occupied by
 			the Moon, the person suffers from loss of wealth, loss of
@@ -1683,10 +1693,10 @@
 	<Event>
 		<Name>SunGocharaInHouse2</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Bad</Body>
-			<Finance>Bad</Finance>
-		</SpecializedNature>
+			<Money>Bad</Money>
+		</SpecializedSummary>
 		<Description>
 			When he transits in the 2nd house, there will be loss
 			of wealth, he will suffer deceit, he will have full of financial
@@ -1697,11 +1707,11 @@
 	<Event>
 		<Name>SunGocharaInHouse3</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Mind>Good</Mind>
 			<Body>Good</Body>
-			<Finance>Good</Finance>
-		</SpecializedNature>
+			<Money>Good</Money>
+		</SpecializedSummary>
 		<Description>
 			In the 3rd house there will be advent of money,
 			happiness, relief from diseases, recognition from superiors,
@@ -1713,11 +1723,11 @@
 	<Event>
 		<Name>SunGocharaInHouse4</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Mind>Bad</Mind>
 			<Body>Bad</Body>
-			<Finance>Bad</Finance>
-		</SpecializedNature>
+			<Money>Bad</Money>
+		</SpecializedSummary>
 		<Description>
 			In the 4th house, there will be diseases,
 			constant attacks from opponents, no peace of mind, pressure
@@ -1729,10 +1739,10 @@
 	<Event>
 		<Name>SunGocharaInHouse5</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Bad</Body>
 			<Mind>Bad</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			The Sun transiting the 5th will cause mental agitation,
 			ill-health, embarrassment and accidents. Increase of enemies and
@@ -1743,10 +1753,10 @@
 	<Event>
 		<Name>SunGocharaInHouse6</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Good</Body>
 			<Mind>Good</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			The Sun in the 6th gives rise to release from
 			sorrows, worries and troubles, destruction of enemies and
@@ -1757,9 +1767,9 @@
 	<Event>
 		<Name>SunGocharaInHouse7</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Bad</Body>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			The Sun transiting the 7th, produces wearisome
 			travelling, colic and anal troubles, humiliation and
@@ -1770,10 +1780,10 @@
 	<Event>
 		<Name>SunGocharaInHouse8</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Bad</Body>
 			<Mind>Bad</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			In the 8th, Sun's progress gives rise to quarrels
 			with friends, diseases, high blood pressure, royal and official
@@ -1784,10 +1794,10 @@
 	<Event>
 		<Name>SunGocharaInHouse9</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Bad</Body>
 			<Mind>Bad</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			The Sun's transit in the 9th house will cause to
 			the native danger, humiliation, dependency, disappointment
@@ -1799,9 +1809,9 @@
 	<Event>
 		<Name>SunGocharaInHouse10</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Mind>Good</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			One will accomplish his desire and plans,
 			and success will attend on all kinds or undertakings when the
@@ -1813,11 +1823,11 @@
 	<Event>
 		<Name>SunGocharaInHouse11</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Mind>Good</Mind>
 			<Body>Good</Body>
-			<Finance>Good</Finance>
-		</SpecializedNature>
+			<Money>Good</Money>
+		</SpecializedSummary>
 		<Description>
 			In the 11th, the passage of the Sun will
 			confer on a person honour, health, wealth and success.
@@ -1828,10 +1838,10 @@
 	<Event>
 		<Name>SunGocharaInHouse12</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Bad</Body>
 			<Mind>Bad</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			When the Sun passes through the 12th house, there will be sorrow,
 			creation of a situation which causes loss to everything,
@@ -1844,9 +1854,9 @@
 	<Event>
 		<Name>MoonGocharaInHouse1</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
-			<Finance>Good</Finance>
-		</SpecializedNature>
+		<SpecializedSummary>
+			<Money>Good</Money>
+		</SpecializedSummary>
 		<Description>
 			When the Moon transits the sign occupied by her at the time of
 			birth of a person, the native will get excellent food,
@@ -1857,9 +1867,9 @@
 	<Event>
 		<Name>MoonGocharaInHouse2</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
-			<Finance>Bad</Finance>
-		</SpecializedNature>
+		<SpecializedSummary>
+			<Money>Bad</Money>
+		</SpecializedSummary>
 		<Description>
 			When the Moon passes through the 2nd house,
 			loss of respect and of money and obstacles in
@@ -1871,10 +1881,10 @@
 	<Event>
 		<Name>MoonGocharaInHouse3</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Family>Good</Family>
-			<Finance>Good</Finance>
-		</SpecializedNature>
+			<Money>Good</Money>
+		</SpecializedSummary>
 		<Description>
 			In the 3rd house, the native gets clothes,
 			pleasure from wife and finance.
@@ -1885,9 +1895,9 @@
 	<Event>
 		<Name>MoonGocharaInHouse4</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Mind>Bad</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			In the 4th, he becomes mentally uneasy.
 			Loss of trust in others and lack of peace of mind.
@@ -1897,10 +1907,10 @@
 	<Event>
 		<Name>MoonGocharaInHouse5</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Bad</Body>
 			<Mind>Bad</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			In the 5th, suffers from humility, ill-health, pain of mind
 			and other obstacles. Indisposition, grief and disappointment;
@@ -1910,11 +1920,11 @@
 	<Event>
 		<Name>MoonGocharaInHouse6</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Mind>Good</Mind>
 			<Body>Good</Body>
-			<Finance>Good</Finance>
-		</SpecializedNature>
+			<Money>Good</Money>
+		</SpecializedSummary>
 		<Description>
 			In the 6th, enjoys wealth, health, comfort, redemption from enemies.
 			Happiness, success over enemies and good health.
@@ -1924,9 +1934,9 @@
 	<Event>
 		<Name>MoonGocharaInHouse7</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
-			<Finance>Good</Finance>
-		</SpecializedNature>
+		<SpecializedSummary>
+			<Money>Good</Money>
+		</SpecializedSummary>
 		<Description>
 			7th house, conveyances, good food and
 			financial equilibrium. Respect from others and
@@ -1937,10 +1947,10 @@
 	<Event>
 		<Name>MoonGocharaInHouse8</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Bad</Body>
 			<Mind>Bad</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			The Moon transiting the 8th produces misery,
 			ill-health and fear from unexpected sources.
@@ -1951,10 +1961,10 @@
 	<Event>
 		<Name>MoonGocharaInHouse9</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Bad</Body>
 			<Mind>Bad</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			In the 9th from herself, pain of mind, chest pain,
 			fatigue of body and the like are caused.
@@ -1965,9 +1975,9 @@
 	<Event>
 		<Name>MoonGocharaInHouse10</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Mind>Good</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			When the Moon passes through the 10th
 			house, success will attend in every sphere of activity.
@@ -1978,10 +1988,10 @@
 	<Event>
 		<Name>MoonGocharaInHouse11</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
-			<Finance>Good</Finance>
+		<SpecializedSummary>
+			<Money>Good</Money>
 			<Family>Good</Family>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			In the 11th house, the person will enjoy prosperity,
 			will get wealth and new friends. Prosperity, new friends and
@@ -1992,9 +2002,9 @@
 	<Event>
 		<Name>MoonGocharaInHouse12</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Body>Bad</Body>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			When the Moon transits through the 12th sign.
 			He suffers from accidents and injuries.
@@ -2008,9 +2018,9 @@
 	<Event>
 		<Name>MarsGocharaInHouse1</Name>
 		<Nature>Bad</Nature>
-		<SpecializedNature>
+		<SpecializedSummary>
 			<Mind>Bad</Mind>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			When Mars passes through tbe sign occupied by the Moon
 			at the time of birth of a person, be will suffer from troubles.
@@ -3363,11 +3373,11 @@
 	<Event>
 		<Name>AriesSunPD1</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
-			<Finance>Good</Finance>
+		<SpecializedSummary>
+			<Money>Good</Money>
 			<Travel>Good</Travel>
 			<Family>Bad</Family>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			The Dasa of the Sun in Aries in deep exaltation.- Sudden
 			gains in cattle and wealth, much traveling in eastern
@@ -3380,10 +3390,10 @@
 	<Event>
 		<Name>TaurusSunPD1</Name>
 		<Nature>Good</Nature>
-		<SpecializedNature>
-			<Finance>Good</Finance>
+		<SpecializedSummary>
+			<Money>Good</Money>
 			<Family>Good</Family>
-		</SpecializedNature>
+		</SpecializedSummary>
 		<Description>
 			Taurus - Increase in landed properties, fame among relations
 			and friends, cultivation of love and reverence for holy people

@@ -100,10 +100,10 @@
                         </label>
                     </div>
                     <div style="width: @GR.W255px;" class="form-check hstack gap-2">
-                        <input @bind="@(SelectedTagsDictionary[EventTag.Education])" id="@EventTag.Education" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
-                        <label class="form-check-label d-flex gap-2 w-100" for="@EventTag.Education">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.Studies])" id="@EventTag.Studies" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100" for="@EventTag.Studies">
                             <Icon IconName="tabler:school" />
-                            @(Format.FormatName(EventTag.Education.ToString()))
+                            @(Format.FormatName(EventTag.Studies.ToString()))
                             <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
                                 <TooltipHtml>
                                     Coming Soon!

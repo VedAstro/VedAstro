@@ -25,6 +25,6 @@ class TempPayload(BaseModel):
     
     def get_birth_time(self) -> Time:
         # raw time string with location is parsed into correct astro time instance
-        parsed_birth_time = Time.FromUrl(self.birth_time).GetAwaiter().GetResult()
+        parsed_birth_time = Time.FromUrl(self.topic).GetAwaiter().GetResult()
 
         return parsed_birth_time

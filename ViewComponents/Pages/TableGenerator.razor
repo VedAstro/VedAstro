@@ -91,6 +91,7 @@
             @*STACK BOXES ON RIGHT*@
             <InfoBox MaxWidth="365" FullWidth="@true" Title="Desktop Version" Description="Download powerfull desktop app that supports over +1 million rows" IconName="emojione-v1:laptop-computer" OnClickCallback="OnClickGotoDesktopVersionSideBar" />
             <InfoBox MaxWidth="365" FullWidth="@true" Title="Generate List" Description="Auto generate time list for +1000 years in seconds" IconName="flat-color-icons:overtime" ClickUrl="@PageRoute.TimeListGenerator" IsNewTabOpen="true" />
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Ready Made Datasets" Description="Use pre-built astro datasets in HuggingFace" IconName="fluent-emoji:hugging-face" ClickUrl="@URL.HuggingFaceRepo" IsNewTabOpen="true" />
             <InfoBox MaxWidth="365" FullWidth="@true" Title="Video Guide" Description="Watch easy guide to get you started" IconName="vscode-icons:file-type-video" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("HowToGuideElement"))" />
         </div>
     </div>
@@ -375,6 +376,8 @@
     /// </summary>
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
+        long maxFileSize = 1073741824; // 1GB in bytes
+
         var file = e.File;
         if (file != null)
         {
@@ -386,7 +389,7 @@
 
             //once updated here, files rows count can be seen by user
             using var ms = new MemoryStream();
-            await UploadedFile.OpenReadStream().CopyToAsync(ms);
+            await UploadedFile.OpenReadStream(maxAllowedSize: maxFileSize).CopyToAsync(ms);
             ms.Position = 0;
 
             _timeList = new List<Time>();

@@ -385,7 +385,7 @@ export class EventsChart {
         var targetRect = eventObject.target;
 
         //given the SVG rect that was clicked on, process and extract full event data
-        var parsedEvent = (await EventsChart.ParseEventFromSVGRect(targetRect, instance))["EventDataAtTime"];
+        var parsedEvent = (await EventsChart.ParseEventFromSVGRect(targetRect, instance))["EventStartEndTime"];
 
         //if no event found then possible wrongly clicked elm skip, END HERE
         if (parsedEvent?.Name !== undefined) {
@@ -440,8 +440,8 @@ export class EventsChart {
         var eventName = `/EventName/${withSpaces.replace(/\s/g, "")}`; //remove spaces
 
         //put together final API call URL
-        var finalUrl = `${domain}/Calculate/EventDataAtTime${birthTime}${checkTime}${eventName}`;
-        
+        var finalUrl = `${domain}/Calculate/EventStartEndTime${birthTime}${checkTime}${eventName}`;
+
         //make call to API, replies JSON of Event
         var eventDataAtTime = await EventsChart.GetAPIPayload(finalUrl);
 

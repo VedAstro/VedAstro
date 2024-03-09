@@ -48,6 +48,8 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO, force=True)
 # Yogananda
 
 # prepares server, run once on startup
+
+
 def initialize_chat_api():
     global chat_engines  # set cache
     global loaded_vectors  # set cache
@@ -65,7 +67,8 @@ def initialize_chat_api():
     # prepare the LLM that will answer the query
     # select the correct engine variation
     wrapper = ChatEngine("MK7")
-    chat_engines["MK7"] = wrapper.create_instance()  # load the modal shards (heavy compute)
+    # load the modal shards (heavy compute)
+    chat_engines["MK7"] = wrapper.create_instance()
 
     print("Chat Model LLMs go!")
 
@@ -108,8 +111,9 @@ def vedastro_predictions_to_llama_index_weight_nodes(birth_time, predictions_lis
         shadbala_score = 0
         if parsed_list:  # This checks if the list is not empty
             for planet in parsed_list:
-                shadbala_score += Calculate.PlanetShadbalaPinda(planet, birth_time).ToDouble()
-                #planet_tags = Calculate.GetPlanetTags(parsed_list[0])
+                shadbala_score += Calculate.PlanetShadbalaPinda(
+                    planet, birth_time).ToDouble()
+                # planet_tags = Calculate.GetPlanetTags(parsed_list[0])
 
         predict_node = TextNode(
             text=prediction["Description"],
@@ -173,7 +177,7 @@ def vedastro_predictions_to_llama_index_nodes(birth_time, predictions_list_json)
     return prediction_nodes
 
 
-# given list horoscope predictions from 
+# given list horoscope predictions from
 def vedastro_predictions_to_llama_index_documents(predictions_list_json):
     from llama_index.core import Document
     from llama_index.core.schema import MetadataMode
@@ -207,7 +211,6 @@ def vedastro_predictions_to_llama_index_documents(predictions_list_json):
         )
         print("#######################################################")
 
-
         # add in shadbala to give each prediction weights
         prediction_nodes.append(predict_node)  # add to main list
 
@@ -230,7 +233,7 @@ async def answer_to_reply(chat_instance_data):
     #     auto_reply = ChatTools.map_query_by_similarity(
     #         payload.query, payload.llm_model_name, preset_queries, embeddings_creator)
 
-    #time to call the in big guns...GPU infantry firing LLM "chat/completion" shells!
+    # time to call the in big guns...GPU infantry firing LLM "chat/completion" shells!
     if is_query:
 
         # STEP 1: GET NATIVE'S HOROSCOPE DATA (PREDICTIONS)
@@ -244,26 +247,28 @@ async def answer_to_reply(chat_instance_data):
 
         # format list nicely so LLM can swallow (llama_index nodes)
         # so that llama index can understand vedastro predictions
-        all_predictions_json = json.loads(HoroscopePrediction.ToJsonList(all_predictions_raw).ToString())
-        prediction_nodes = vedastro_predictions_to_llama_index_documents(all_predictions_json)
+        all_predictions_json = json.loads(
+            HoroscopePrediction.ToJsonList(all_predictions_raw).ToString())
+        prediction_nodes = vedastro_predictions_to_llama_index_documents(
+            all_predictions_json)
 
         # STEP 2: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
         # Query the chat engine and send the results to the client
         llm_response = chat_engines["MK7"].query(text=payload.text,
-                                                    input_documents=prediction_nodes,
-                                                    # Controls the trade-off between randomness and determinism in the response
-                                                    # A high value (e.g., 1.0) makes the model more random and creative
-                                                    temperature=payload.temperature,
-                                                    # Controls diversity of the response
-                                                    # A high value (e.g., 0.9) allows for more diversity
-                                                    top_p=payload.top_p,
-                                                    # Limits the maximum length of the generated text
-                                                    max_tokens=payload.max_tokens,
-                                                    # Specifies sequences that tell the model when to stop generating text
-                                                    stop=payload.stop,
-                                                    # Returns debug data like usage statistics
-                                                    return_debug_data=False  # Set to True to see detailed information about model usage
-                                                    )
+                                                 input_documents=prediction_nodes,
+                                                 # Controls the trade-off between randomness and determinism in the response
+                                                 # A high value (e.g., 1.0) makes the model more random and creative
+                                                 temperature=payload.temperature,
+                                                 # Controls diversity of the response
+                                                 # A high value (e.g., 0.9) allows for more diversity
+                                                 top_p=payload.top_p,
+                                                 # Limits the maximum length of the generated text
+                                                 max_tokens=payload.max_tokens,
+                                                 # Specifies sequences that tell the model when to stop generating text
+                                                 stop=payload.stop,
+                                                 # Returns debug data like usage statistics
+                                                 return_debug_data=False  # Set to True to see detailed information about model usage
+                                                 )
 
         # note: metadata and source nodes used is all here
         #       but we only take AI text response
@@ -326,36 +331,113 @@ async def horoscope_chat(websocket: websockets.WebSocket):
     # connection has been made, now keep connection alive in infinite loop,
     # with fail safe to catch it midway
     try:
+        session_id = ChatTools.random_id(23)
+        message_count = 0
         # BEATING HEART 💓
         # this is the loop that keeps chat running at the highest level
-        while True: # beat forever....my sweet love 
-            
-            #STAGE 1:
+        while True:  # beat forever....my sweet love
+
+            # STAGE 1:
             # Receive a message from the client
             # control is held here while waiting for user input
             client_input = await websocket.receive_text()
 
-            # format & log message for inteligent past QA
+            # 1.1 : prepare needed data
             input_parsed = json.loads(client_input)
-            msg_id = AzureTableManager.log_message(input_parsed, "Human")
+            # clear command from prev if any (only server gives commands)
+            input_parsed["command"] = ""
+
+            # message_number : needed for quick revisit answer lookup
+            message_count += 1
+            input_parsed["message_number"] = message_count
+            # text
+            if "text" not in input_parsed:
+                input_parsed["text"] = ""  # easy detect if empty
+            # session id
+            if "session_id" not in input_parsed:
+                # overwrite only if not specified
+                input_parsed["session_id"] = session_id
+            # rating
+            if "rating" not in input_parsed:
+                input_parsed["rating"] = 0  # overwrite only if not specified
+            # text_hash : for user to give point to a message and rate it
+            if "text_hash" not in input_parsed:
+                # overwrite only if not specified
+                input_parsed["text_hash"] = ""
+            # user_id : internet fungus filter
+            if "user_id" not in input_parsed or input_parsed["user_id"] == "101":
+                input_parsed["user_id"] = ""  # overwrite only if not specified
+
+            # format & log message for inteligent past QA (id out is for reference)
+            # chat_raw_input : text, session_id, rating, message_number
+            input_parsed["sender"] = "Human"
+            human_question_hash = AzureTableManager.log_message(input_parsed)
 
             # STAGE 2 : THINK
-            # Let caller process started
-            ai_reply = "Thinking....🤔"
-            await websocket.send_text(ChatTools.package_reply_for_shippment(text_html=ai_reply, text=ai_reply, text_hash=ChatTools.random_id()))
+            # standard 1st answer
+            ai_html_reply = ai_reply = "Thinking....🤔"
+            # 2.1 : user not logged in (could be a Machine!) beware internet fungus! (END HERE)
+            if input_parsed["user_id"] == "":
+                # special command recognized by VedAstro.js to show handle login nicely
+                input_parsed["command"] = "please_login"
+                ai_reply = """Please login sir...to verify you are not a robot 🤖\nEasy & secure login with Google or Facebook\n\n.....I understand this is annoying, but I have no choice!🤗\nthere are robots in the internet who target smart AI Chat agents like me.\nPlease login to start talking about astrology...💬
+                """
+                ai_html_reply = """
+                    Please login sir...to verify you are not a robot 🤖<br>
+                    Easy & secure login with <a target="_blank" style="text-decoration-line: none;" href="https://vedastro.org/Account/Login/RememberMe" class="link-primary fw-bold">Google</a> or <a target="_blank" style="text-decoration-line: none;" href="https://vedastro.org/Account/Login/RememberMe" class="link-primary fw-bold">Facebook</a><br><br>
+                    .....I understand this is annoying, but I have no choice!🤗<br>
+                    there are robots in the internet who target smart AI Chat agents like me.<br>
+                    So please login to get started...<br>
+                """
 
-            # answer machine (send all needed data)
-            ai_reply = await answer_to_reply(client_input)
+            # 2.2 : rating AND text_hash specified --> user is givin rating vote NOT QUERY (END HERE)
+            if input_parsed["rating"] != 0 and input_parsed["text_hash"] != "":
+                # memorize Human's rating
+                AzureTableManager.rate_message(
+                    input_parsed["session_id"], input_parsed["text_hash"], 1)
 
-            # STAGE 3 : REPLY
-            #log message for inteligent past QA
-            msg_id = AzureTableManager.log_message(input_parsed, "AI")
+                # increse contribution score
+                contribution_score = AzureTableManager.increase_contribution_score(
+                    input_parsed["user_id"], 1)
 
-            # send ans to caller in JSON form, to support metadata
-            #highlight text with relevant keywords relating to input query
-            #html_str = ChatTools.highlight_relevant_keywords(keywords_text=input_parsed["text"], main_text = ai_reply)
-            html_str_llm = ChatTools.highlight_relevant_keywords_llm(keywords_text=input_parsed["text"], main_text = ai_reply)
-            await websocket.send_text(ChatTools.package_reply_for_shippment(text_html=html_str_llm, text=ai_reply, text_hash=msg_id))
+                # say thanks 🙏
+                # NOTE: DO NOT tell the user explcitly to give more feedback
+                # pysholocgy 101 : give them the sincere motivation to help instead -> better quality/quantity
+                # if we tell the user explicitly, we increase the probablity of deterministic failure, pushing the user into 1 of 2 camps
+                ai_reply = f"""Congratulation!🫡\n You have just helped improve astrology worldwide🌍\n I have now <b>memorized your feedback</b>,🧠\n now on all my answer will take your feedback into consideration.\n Thank you so much for the rating🙏\n <h5>🥇 Your Contribution Score : <b>{contribution_score}</b></h5>"""
+
+                ai_html_reply = """
+                    Congratulation!🫡<br>
+                    You have just helped improve astrology worldwide🌍<br>
+                    I have now <b>memorized your feedback</b>,🧠<br>
+                    now on all my answer will take your feedback into consideration.<br>
+                    Thank you so much for the rating🙏<br>
+                    <h5>🥇 Your Contribution Score : <b>{contribution_score}</b></h5>
+                """
+
+            # update caller with itermidiate message
+            await websocket.send_text(ChatTools.package_reply_for_shippment(text_html=ai_html_reply, text=ai_reply, text_hash=ChatTools.random_id()))
+
+            # only call LLM if all checks and balances are even
+            if ai_reply == "" or ai_reply == "Thinking....🤔":
+                # answer machine (send all needed data)
+                ai_reply = await answer_to_reply(client_input)
+
+                # STAGE 3 : REPLY
+                # log message for inteligent past QA
+                # use later for highlight (UX improve)
+                previous_text = input_parsed["text"]
+                input_parsed["text"] = ai_reply
+                input_parsed["sender"] = "AI"
+                message_count += 1
+                input_parsed["message_number"] = message_count
+                ai_reply_hash = AzureTableManager.log_message(input_parsed)
+
+                # send ans to caller in JSON form, to support metadata
+                # highlight text with relevant keywords relating to input query
+                html_str_llm = ChatTools.highlight_relevant_keywords_llm(
+                    keywords_text=previous_text, main_text=ai_reply)
+                await websocket.send_text(ChatTools.package_reply_for_shippment(text_html=html_str_llm, text=ai_reply, text_hash=ai_reply_hash))
 
     # Handle failed gracefully
     except Exception as e:
@@ -384,18 +466,19 @@ async def horoscope_regenerate_embeddings(payload: RegenPayload):
     # repackage all horoscope data so LLM can understand (docs)
     # format list nicely so LLM can swallow (llama_index nodes)
     # so that llama index can understand vedastro predictions
-    #all_predictions_json = json.loads(HoroscopePrediction.ToJsonList(horoscopeDataList).ToString())
-    prediction_nodes = vedastro_predictions_to_llama_index_documents(horoscopeDataList)
+    # all_predictions_json = json.loads(HoroscopePrediction.ToJsonList(horoscopeDataList).ToString())
+    prediction_nodes = vedastro_predictions_to_llama_index_documents(
+        horoscopeDataList)
 
     # build index
-    index = VectorStoreIndex.from_documents(prediction_nodes, show_progress=True)
-    
+    index = VectorStoreIndex.from_documents(
+        prediction_nodes, show_progress=True)
+
     filePath = """vector_store/horoscope_data"""
 
     index.storage_context.persist(persist_dir=filePath)
 
     # todo commit to GitHub repo
-
 
     # tell call all went well
     return {"Status": "Pass",

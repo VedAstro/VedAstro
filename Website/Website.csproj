@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
@@ -105,6 +105,8 @@
 	  <Content Include="..\ViewComponents\Components\UnderConstructionHeader.razor" Link="ViewComponents\UnderConstructionHeader.razor" />
 	  <Content Include="..\ViewComponents\Components\IndianChart.razor" Link="ViewComponents\IndianChart.razor" />
 	  <Content Include="..\ViewComponents\Components\AshtakvargaTable.razor" Link="ViewComponents\AshtakvargaTable.razor" />
+	  <Content Include="..\ViewComponents\Components\EventTagListSelector.razor" Link="ViewComponents\EventTagListSelector.razor" />
+	  <Content Include="..\ViewComponents\Components\EnumDropdown.razor" Link="ViewComponents\EnumDropdown.razor" />
 	  <Content Include="..\ViewComponents\Pages\TableGenerator.razor" Link="Pages\Calculator\TableGenerator.razor" />
 	  <Content Include="..\ViewComponents\Pages\TimeListGenerator.razor" Link="Pages\Calculator\TimeListGenerator.razor" />
 	  <Content Include="..\ViewComponents\Pages\SearchResult.razor" Link="Pages\SearchResult.razor" />

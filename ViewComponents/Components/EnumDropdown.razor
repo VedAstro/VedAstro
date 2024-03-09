@@ -41,12 +41,12 @@ KEEP IT REAL
             
             @* LIST OF METHODS *@
             <div id="APISelector-AllMethodInfoHolder" >
-                @foreach (var apiMethod in MethodListALL)
+                @foreach (var apiMethod in EventTagListALL)
                 {
                     @* NOTE: method name as class used to show/hide *@
-                    <li class="@apiMethod.Name dropdown-item d-flex gap-2 w-100" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">
-                        <span style=" font-size: 16px; font-weight: 500; ">@(Format.FormatName(apiMethod.Name))</span>
-                        <IconTooltip Opacity="0.3" Interactive="false" ShowOnHover="true" Size="16" TooltipText="@apiMethod.Description" SmallIcon="true" />
+                    <li class="@apiMethod.ToString() dropdown-item d-flex gap-2 w-100" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">
+                    <span style=" font-size: 16px; font-weight: 500; ">@(Format.FormatName(apiMethod.ToString()))</span>
+                        <IconTooltip Opacity="0.3" Interactive="false" ShowOnHover="true" Size="16" TooltipText="@apiMethod.ToString()" SmallIcon="true" />
                     </li>
                 }
             </div>
@@ -59,42 +59,14 @@ KEEP IT REAL
             </div>
 
 
-
         </ul>
     </div>
 
-    @*ADD NEW FUNCTION ICON*@
-    @if (!HideButton)
-    {
-        <IconButton DropDownWidthPx="" DisableDropdownArrow="true" TooltipPosition="bottom" TooltipText="Do Stuff" SmallSize="true" IconName="mingcute:more-3-line">
-            <DropDownList>
-                <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="@(()=>WebsiteTools.OnClickGotoGithubCode(SelectedMethod))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket"/>
-                        <span>View Source Code</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="@OnClickSuggestNewApi">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="fluent:person-feedback-28-regular"/>
-                        <span>Suggest New API</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.OnClickCopyPythonSnippet(SelectedMethod, this))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="vscode-icons:file-type-python"/>
-                        <span>Python Snippet</span>
-                    </a>
-                </li>
-            </DropDownList>
-        </IconButton>
-    }
 </div>
 
 
 @code {
 
-    [Parameter]
     public List<OpenAPIMetadata> CustomAllMethodList { get; set; } = new List<OpenAPIMetadata>(); //set empty list so can detect
 
     /// <summary>
@@ -105,11 +77,6 @@ KEEP IT REAL
 
     private ElementReference mainElementRef;
 
-    /// <summary>
-    /// if set true will hide button, default is false
-    /// </summary>
-    [Parameter]
-    public bool HideButton { get; set; } = false;
 
     public void Show() { _jsRuntime.Show(mainElementRef); StateHasChanged(); }
 
@@ -149,19 +116,14 @@ KEEP IT REAL
     /// </summary>
     //private List<OpenAPIMetadata?> MethodListFiltered { get; set; } = new();
 
-    public OpenAPIMetadata? SelectedMethod { get; set; } = null;
+    public EventTag? SelectedEnum { get; set; } = null;
 
-    private List<OpenAPIMetadata?> MethodListALL = new();
-
-    /// <summary>
-    /// extracted search text for faster search
-    /// </summary>
-    //private string[] MethodListALLSearchText;
+    private List<EventTag> EventTagListALL = new();
 
     /// <summary>
     /// Event fired when selection of method is changed
     /// </summary>
-    public event EventHandler OnChangeSelectMethod;
+    public event EventHandler OnChangeSelectEventTag;
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -171,12 +133,12 @@ KEEP IT REAL
             //extract out name and all search text
             //so that can be used to show and hide divs directly
             var methodInfoObjects = new List<object>();
-            foreach (var metadata in MethodListALL)
+            foreach (var metadata in EventTagListALL)
             {
                 var package = new
                 {
-                    name = metadata.Name,
-                    description = metadata.SearchText
+                    name = metadata.ToString(),
+                    description = metadata.ToString()
                 };
 
                 methodInfoObjects.Add(package);
@@ -198,7 +160,7 @@ KEEP IT REAL
 
         //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
         //if custom list specified use that else default to all from Open API
-        MethodListALL = CustomAllMethodList.Any() ? CustomAllMethodList : OpenAPIMetadata.FromMethodInfoList();
+        EventTagListALL = new List<EventTag>((EventTag[])Enum.GetValues(typeof(EventTag)));
 
         //show data on display
         _isReady = true;
@@ -207,9 +169,9 @@ KEEP IT REAL
     /// <summary>
     /// checks if OnChangeSelectMethod is not null (meaning it has at least one subscriber)
     /// </summary>
-    public void RaiseOnChangeSelectMethod()
+    public void RaiseOnChangeSelectEventTag()
     {
-        OnChangeSelectMethod?.Invoke(this, EventArgs.Empty);
+        OnChangeSelectEventTag?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -223,11 +185,11 @@ KEEP IT REAL
     public void Reset()
     {
         //set value for reference
-        SelectedMethod = null;
+        SelectedEnum = null;
         FormattedMethodName = DefaultMessage;
 
         //fire event, so parent listening can update other elements
-        RaiseOnChangeSelectMethod();
+        RaiseOnChangeSelectEventTag();
 
         //needed to make change appear
         StateHasChanged();
@@ -236,7 +198,7 @@ KEEP IT REAL
     /// <summary>
     /// if not selected will return empty
     /// </summary>
-    public string GetSelectedMethodName() => SelectedMethod?.Name ?? "";
+    public string GetSelectedMethodName() => SelectedEnum?.ToString() ?? "";
 
 
 
@@ -246,14 +208,14 @@ KEEP IT REAL
     /// <summary>
     /// when a method name in tooltip drop down menu is clicked
     /// </summary>
-    private void OnClickMethodName(OpenAPIMetadata? method)
+    private void OnClickMethodName(EventTag eventTag)
     {
         //set value for reference
-        SelectedMethod = method;
-        FormattedMethodName = Format.FormatName(SelectedMethod.Name);
+        SelectedEnum = eventTag;
+        FormattedMethodName = Format.FormatName(SelectedEnum.ToString());
 
         //fire event, so parent listening can update other elements
-        RaiseOnChangeSelectMethod();
+        RaiseOnChangeSelectEventTag();
 
         //needed to make change appear
         StateHasChanged();
@@ -323,9 +285,9 @@ KEEP IT REAL
     }
 
     //programatically set the API, as though selected by dropdown
-    public void SetSelectedMethod(OpenAPIMetadata selected)
-    {
-        OnClickMethodName(selected);
-    }
+    // public void SetSelectedMethod(OpenAPIMetadata selected)
+    // {
+    //     OnClickMethodName(selected);
+    // }
 
 }

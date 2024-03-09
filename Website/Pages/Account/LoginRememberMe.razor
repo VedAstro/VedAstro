@@ -1,0 +1,90 @@
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.LoginRememberMe)]
+@using Desktop.Pages
+
+
+<div class="vstack gap-1 mb-4">
+    <h2 class="align-self-center">Login</h2>
+    <h5 class="align-self-center" style="color: @AppData.Grey;">@LoginHumanMemoryHelperText</h5>
+</div>
+
+<div class="vstack">
+    <div class="align-self-center vstack gap-3 mb-4" style="width: @GR.W291px;">
+        <SignInButton />
+    </div>
+</div>
+
+
+
+<IconTitle Title="Why login?" IconName="flat-color-icons:key" TitleHolder="h4" />
+<div class="hstack gap-3">
+    @*STACK BOXES ON RIGHT*@
+    <InfoBox MaxWidth="365" FullWidth="@true" Title="Secure" Description="Safe & fast with Google or Facebook authentication." IconName="flat-color-icons:approval" />
+    <InfoBox MaxWidth="365" FullWidth="@true" Title="Storage" Description="Free cloud storage for charts, reports and horoscopes" IconName="ic:baseline-cloud-done" />
+    <InfoBox MaxWidth="365" FullWidth="@true" Title="Privacy" Description="We don't collect data or connect to your Google or Facebook account." IconName="flat-color-icons:privacy" />
+</div>
+
+
+@code {
+
+    private string? LoginHumanMemoryHelperText = "";
+
+    //NOTE : this page is exactly like login.razor but it always sends user back, for URL only restricted runtime
+    //TODO merge with login.razor using params
+    protected override async Task OnInitializedAsync()
+    {
+        //set the memory helper text if any
+        LoginHumanMemoryHelperText = await LoginHumanMemoryHelper();
+
+        //after login this page is loaded again,
+        //if login success, redirect user to previous page
+        if (AppData.IsLoginSuccess)
+        {
+            //wait a little and send user back to previous page
+            await _jsRuntime.ShowAlert("info", $"Going back to previous page", false, 500);
+
+            //close current login tab
+            _jsRuntime?.InvokeVoidAsync("window.close");
+        }
+    }
+
+
+    /// <summary>
+    /// if user logged in before using Google then,
+    /// remind them nicely else no show,
+    /// little UX helpers like these makes a difference
+    /// </summary>
+    private async Task<string> LoginHumanMemoryHelper()
+    {
+
+        //get data stored in browser storage (DON'T FORGET SETTER)
+        var loginProvider = await _jsRuntime.GetProperty("PreviousLoginMethod");
+        var noPrevFound = string.IsNullOrEmpty(loginProvider);
+
+        //if first login, then show some nice greeting
+        if (noPrevFound)
+        {
+
+            //list messages here for faster access
+            var msgList = new[]
+            {
+                $"To prove you're a human from Earth",
+                $"To prove you're not a robot",
+                $"To prove you're not from the Machine World",
+                $"To authenticate yourself as a biological entity",
+        };
+
+            var finalGreeting = Tools.RandomSelect(msgList);
+            return finalGreeting;
+
+        }
+
+        //if all good, prev login provider is displayed
+        //combine with text here, so can show/hide easy
+
+        var final = $"On your last visit, you used \"{loginProvider}\"";
+        return final;
+    }
+
+
+}

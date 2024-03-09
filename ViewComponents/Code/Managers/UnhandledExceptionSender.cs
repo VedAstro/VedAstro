@@ -129,8 +129,8 @@ namespace Website
                         showCancelButton = true,
                         confirmButtonColor = "#3085d6",
                         cancelButtonColor = "#d33",
-                        cancelButtonText = "Ignore",
-                        confirmButtonText = "Restart"
+                        cancelButtonText = "Restart",
+                        confirmButtonText = "Ignore"
                     };
 
                     var sweetAlertResult = await AppData.JsRuntime.ShowAlertResult(alertData);

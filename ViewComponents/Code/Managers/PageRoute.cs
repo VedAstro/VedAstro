@@ -78,6 +78,7 @@
         public const string UserAccount = "Account/";
         public const string UserAccountGuest = "Account/Guest";
         public const string Login = "Account/Login";
+        public const string LoginRememberMe = "Account/Login/RememberMe";
         public const string SavedCharts = "Account/SavedCharts";
         public const string PersonList = "Account/Person/List";
         public const string AddPerson = "Account/Person/Add";
@@ -101,7 +102,7 @@
         public const string Sitemap = "/sitemap.xml";
         public const string CancellationRefund = "/CancellationRefund";
         public const string TermsOfService = "/TermsOfService";
-        public const string Chat = "/Chat";
+        public const string ChatAPI = "/ChatAPI";
         public const string Payment = "/Payment";
         public const string Sponsor = "/Sponsor";
         public const string VSLifeSharePublicSession = "/VSLifeSharePublicSession";

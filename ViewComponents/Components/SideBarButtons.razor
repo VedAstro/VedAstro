@@ -51,7 +51,7 @@
         <p style="text-align: center;font-size: 17px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Build your HTTP calls fast and easy</p>
     </div>
 </IconButton>
-<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="AI Chat" IconName="fluent-mdl2:chat-bot" ClickUrl="@PageRoute.Chat">
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="AI Chat" IconName="fluent-mdl2:chat-bot" ClickUrl="@PageRoute.ChatAPI">
     <div style="" class="vstack gap-2 w-100">
         @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
         <p style="text-align: center;font-size: 17px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Chat with AI Astrologer</p>
@@ -120,6 +120,8 @@ else
         //since login status is basically the existence of user data in localstorage
         //removing it removes user's login
         await _jsRuntime.RemoveProperty("UserData");
+        await _jsRuntime.RemoveProperty("UserId");
+        await _jsRuntime.RemoveProperty("UserName");
 
         //clear selected person
         await _jsRuntime.RemoveProperty("SelectedPerson");

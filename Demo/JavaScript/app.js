@@ -1,18 +1,12 @@
 //LOGIN DATA
 
 //# LOCAL <--> LIVE Switch
-var domain = "https://vedastroapi.azurewebsites.net/api";
-//var domain = "http://localhost:7071/api";
+window.vedastro.ApiDomain = "https://vedastroapi.azurewebsites.net/api";
+//window.vedastro.ApiDomain = "http://localhost:7071/api";
 
-var Settings = {
-  Ayanamsa: "KRISHNAMURTI", //default to KP
-  ChartStyle: "South", //default to South Indian Chart
-  CurrentPageName: "home",
-  PersonList: {},
-  PublicPersonList: {},
-  SelectedPerson: {},
-  UserId: "101", //public user ID
-};
+window.vedastro.Ayanamsa = "KRISHNAMURTI"; //default to KP
+window.vedastro.ChartStyle = "South"; //default to South Indian Chart
+ 
 
 
 //----------------------PLANET DATA----------------------------
@@ -78,5 +72,6 @@ var settingsAIChat = {
   HeaderIcon: "fluent:table-28-filled",
 };
 
-window.chatx = new ChatInstance(settingsAIChat);
-window.chatx.waitForConnection();
+//note: on init, chat instance is loaded into window.vedastro.chatapi
+new ChatInstance(settingsAIChat);
+window.vedastro.chatapi.waitForConnection();

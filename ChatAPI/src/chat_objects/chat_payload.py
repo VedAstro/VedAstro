@@ -10,7 +10,7 @@ class ChatPayload(BaseModel):
     variation_name: Optional[str] = None
     query: Optional[str] = None
     text: Optional[str] = None
-    birth_time: Optional[str] = None
+    topic: Optional[str] = None # birth time url or book name
     name: Optional[str] = None
     llm_model_name: Optional[str] = None
     chat_model_name: Optional[str] = None
@@ -35,6 +35,7 @@ class ChatPayload(BaseModel):
 
     def get_birth_time(self) -> Time:
         # raw time string with location is parsed into correct astro time instance
-        parsed_birth_time = Time.FromUrl(self.birth_time).GetAwaiter().GetResult()
+        time_string = self.topic
+        parsed_birth_time = Time.FromUrl(time_string).GetAwaiter().GetResult()
 
         return parsed_birth_time

@@ -151,6 +151,10 @@ class ChatTools:
         for key, value in kwargs.items():
             cardboard_box[key] = value
 
+        #special convert commands dynamic array to static array for transport
+        if hasattr(cardboard_box["command"], 'tolist'):
+            cardboard_box["command"] = cardboard_box["command"].tolist()
+
         return json.dumps(cardboard_box)
 
     # given a string will output sha256, used for id purposes

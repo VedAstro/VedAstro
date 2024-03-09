@@ -9,6 +9,7 @@ class ChatPayload(BaseModel):
     """Payload coming from client in POST request"""
     variation_name: Optional[str] = None
     query: Optional[str] = None
+    text: Optional[str] = None
     birth_time: Optional[str] = None
     name: Optional[str] = None
     llm_model_name: Optional[str] = None

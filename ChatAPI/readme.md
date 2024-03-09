@@ -1,3 +1,51 @@
+
+# ARCHITECTURE
+```
+                       simple RAG pipeline consisting of top-k retrieval + LLM synthesis.                                                                        
+                                                                                                                                                                 
+                                                                                                                                                                 
+                                                                                                                                                                 
+                                           FILTER PREDICTIONS                                                                                                    
+                     ┌──────────────────────────────────────────────────────────────┐                                                                            
+                     │                                                              │                                                                            
+                     │ - FAISS similarity & mmr search                              │                                                                            
+                     │                                                              │                                                                            
+                     │ - Llama-Index :                                              │                                                                            
+                     │                                                              │                                                                            
+                     │                                                              │                                                                            
+                     │                                                              │                                                                            
+                     │                                                              │                                                                            
+                     │                                                              │                                                                            
+                     │                                                              │                                                                            
+                     │                                                              │                                                                            
+                     │                                                              │                                                                            
+                     │                                                              │                                                                            
+                     └──────────────────────────────────────────────────────────────┘                                                                            
+                                                                                                                                                                 
+                                                                                                                                                                 
+                                                                                                                                                                 
+                                                                                                                                                                 
+                                                                                                                                                                 
+                                                                                                                                                                 
+                                                                                                                                                                 
+                                                                                                                                                                 
+                                                                ~30 predictions             LLAMA-INDEX                                                          
+                                                             with query match score    ┌───────────────────┐                                                     
+             QUERY ─────────────────► FILTER PREDICTIONS  ───────────────────────────► │                   │                                                     
+               ▲                               ▲                     OUT               │                   │                                                     
+               │                               │                                       │                   │  ~5 CHAT/COMPLETION CALLS                           
+               │                               │                                       │                   ├────────────────────────────►                        
+USER ──────────┤                               │                                       │                   │                                LLM CALL TO          
+               │                               │~40 predictions                        │                   ├────────────────────────────►   OPENAI/AZURE/ANYSCALE
+               │                               │                                       │                   │                                                     
+               │                               │                                       │                   ├────────────────────────────►                        
+               ▼                               │                                       │                   │                                                     
+           BIRTH TIME ───────────────► HOROSCOPE PREDICTIONS                           │                   │                                                     
+                            via        - list of text                                  │                   │                                                     
+                       VedAstro Lib                                                    └───────────────────┘                                                     
+```
+
+
 # image build,
 when docker file is run to create the image
 it is done locally, then image is manually pushed to "azure image registry"

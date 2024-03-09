@@ -44,7 +44,7 @@ Given a conversation (between Human and Astrologer) and a follow up message from
 
 class ChatEngine7:
 
-    def __init__(self, model_name):
+    def __init__(self):
         try:
             # 1 : load access to huggingface LLM via Anyscale
             st = time.time()
@@ -52,10 +52,6 @@ class ChatEngine7:
             # Initialize the Azure OpenAI embedding model
             # NOTE: using a special legacy version so can access Azure's version
             #       go to portal to get below details
-            # temperature: This can be any float between 0 and 1. For example, temperature: 0.7 would make the output somewhat random, while temperature: 0.2 would make it more deterministic.
-            # max_tokens: This is an integer that sets the maximum length of the generated text. For example, max_tokens: 100 would limit the output to 100 tokens.
-            # frequency_penalty: This can be any float between 0 and 1. For example, frequency_penalty: 0.5 would moderately penalize more frequent tokens.
-            # presence_penalty: This can be any float between 0 and 1. For example, presence_penalty: 0.3 would slightly penalize new tokens.
             Settings.embed_model = AzureOpenAIEmbedding(
                 model="text-embedding-ada-002",
                 deployment_name="text-embedder",
@@ -64,6 +60,10 @@ class ChatEngine7:
                 api_version="2024-02-15-preview"
             )
 
+            # temperature: This can be any float between 0 and 1. For example, temperature: 0.7 would make the output somewhat random, while temperature: 0.2 would make it more deterministic.
+            # max_tokens: This is an integer that sets the maximum length of the generated text. For example, max_tokens: 100 would limit the output to 100 tokens.
+            # frequency_penalty: This can be any float between 0 and 1. For example, frequency_penalty: 0.5 would moderately penalize more frequent tokens.
+            # presence_penalty: This can be any float between 0 and 1. For example, presence_penalty: 0.3 would slightly penalize new tokens.
             Settings.llm = AzureOpenAI(
                 engine="vedastro",
                 model="gpt-35-turbo",
@@ -94,9 +94,6 @@ class ChatEngine7:
             #       who knew? God knew 😁
             Settings.num_output = 3000
 
-
-
-
             # # load index
             self.index = None
 
@@ -111,13 +108,14 @@ class ChatEngine7:
 
         # initialize response synthesizer
         # configure how the query will be processed
-        # notes : - SIMPLE_SUMMARIZE : works good (suspect loss of nodes)
+        # notes :- SIMPLE_SUMMARIZE : works good (suspect loss of nodes)
+        #        - TREE_SUMMARIZE : works best (very accurate readings) ~5 calls
         #        - COMPACT : works good (good comparison)
         #        - COMPACT_ACCUMULATE, ACCUMULATE : not needed here, checks each prediction on own
         response_synthesizer = get_response_synthesizer(
             response_mode="tree_summarize", structured_answer_filtering=True)
 
-        user_question = kwargs["query"]
+        user_question = kwargs["text"]
 
         # docs that can be converted to index
         docs = kwargs["input_documents"]

@@ -28,10 +28,9 @@
 window.vedastro = {
   UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101",
   ApiDomain: "https://vedastroapi.azurewebsites.net/api",
-  Ayanamsa : "Lahiri", //default to 
-  ChartStyle : "South", //default to South Indian Chart
+  Ayanamsa: "Lahiri", //default to
+  ChartStyle: "South", //default to South Indian Chart
 };
-
 
 // Check if jQuery is loaded
 if (typeof jQuery == "undefined") {
@@ -1170,13 +1169,12 @@ class ChatInstance {
   HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
   IsAITalking = false; //default false, to implement "PTT" radio like protocol
   PresetQuestions = {
-
     Previous: {
       "Last 3": [
         "When will I meet the love of my life in the year 2024?",
         "Am I going to be in a new relationship in the year 2024?",
         "Why am I not able to find a life partner?",
-      ]
+      ],
     },
     Love: {
       "Love Awaits Me": [
@@ -1519,8 +1517,8 @@ class ChatInstance {
     console.log(
       "~~~~~~~Stand back! Awesome Chat API code launching! All engines go!~~~~~~~"
     );
-    
-    //make instance accessible 
+
+    //make instance accessible
     window.vedastro.chatapi = this;
 
     //correct if property names is camel case (for Blazor)
@@ -1639,9 +1637,6 @@ class ChatInstance {
       var selectedText = $(this).text();
       $("#UserChatInputElement").val(selectedText);
     });
-
-  
-
 
     console.log("~~~~~~~Huston, we have lift off!~~~~~~~");
 
@@ -1813,9 +1808,25 @@ class ChatInstance {
     this.processQueue();
   }
 
+  rate_message(eventData, rating) {
+    //come here on click rating button
+    // get hash of message, stored as id in holder
+    var messageHolder = $(eventData)
+      .closest(".card")
+      .children(".message-holder");
+    var text_hash = messageHolder.attr("id");
+
+    const messagePayload = {
+      user_id: window.vedastro.UserId,
+      rating: rating,
+      text_hash: text_hash,
+    };
+
+    window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
+  }
+
   // Handler for incoming messages
   onmessage(event) {
-
     // Parse the JSON data from the event
     var raw_json_message = JSON.parse(event.data);
     var ai_text_message_html = raw_json_message.text_html;
@@ -1826,10 +1837,12 @@ class ChatInstance {
     //1: check if server said please login, in command to client
     //   meaning user just say login message given by server,
     //   upon click login, start wait loop (make it seem bot is waiting for user to login)
-    //   then that special login tab (RememberMe) will auto close 
-    var command = raw_json_message.command;
+    //   then that special login tab (RememberMe) will auto close
+    var commands = raw_json_message.command || []; // when no commands given empty to not fail
+
+
     let intervalId;
-    if (command === "please_login") {
+    if (commands.includes("please_login")) {
       // start loop to check every 10 seconds if a property "window.vedastro.UserId" has been filled
       intervalId = setInterval(() => {
         if (window.vedastro && window.vedastro.UserId) {
@@ -1842,15 +1855,23 @@ class ChatInstance {
             "Login done!",
             "Lets <strong>start</strong> chating!",
             "success"
-          ).then(()=>this.OnClickSendChat(this.LastUserMessage));
-  
-          
-
+          ).then(() => this.OnClickSendChat(this.LastUserMessage));
         } else {
           console.log("Waiting for user login...");
         }
       }, 1000);
     }
+
+    //only show feedback buttons for text that need feedback
+    var feedbackButtonHtml = commands.includes("no_feedback") ? "" : `<div class="hstack gap-2">
+    <button title="Bad answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, -1)" class="btn btn-danger" style="padding: 0px 5px;">
+      <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
+    </button>
+    <button title="Good answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, 1)" class="btn btn-primary" style="padding: 0px 5px;">
+      <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
+    </button>
+  </div>`;
+
 
     // Create a chat bubble with the AI's message
     var aiInputChatCloud = `<li class="d-flex justify-content-start mb-4">
@@ -1858,14 +1879,7 @@ class ChatInstance {
         <div class="card">
             <div class="card-header d-flex justify-content-between p-3">
                 <p class="fw-bold mb-0 me-5">Vignes</p>
-                <div class="hstack gap-2">
-                  <button title="Bad answer" type="button" onclick="(e)=>window.vedastro.chatapi.rate_message(e, -1)" class="btn btn-danger" style="padding: 0px 5px;">
-                    <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
-                  </button>
-                  <button title="Good answer" type="button" onclick="(e)=>window.vedastro.chatapi.rate_message(e, 1)" class="btn btn-primary" style="padding: 0px 5px;">
-                    <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
-                  </button>
-                </div>
+                ${feedbackButtonHtml}
             </div>
             <div id="${message_hash}" class="message-holder card-body">
                 <p style="display:none;" class="text-html-out-elm mb-0">
@@ -1911,7 +1925,11 @@ class ChatInstance {
       }
 
       // Append the next character or handle special formatting
-      ChatInstance.appendNextCharacter(ai_text_message, index, `#${message_hash} .temp-text-stream-elm`);
+      ChatInstance.appendNextCharacter(
+        ai_text_message,
+        index,
+        `#${message_hash} .temp-text-stream-elm`
+      );
       index++;
     }, streamRateMs);
   }
@@ -1995,7 +2013,7 @@ class ChatInstance {
   }
 
   //control comes here from both Button click and keyboard press enter
-  async OnClickSendChat(userInput="") {
+  async OnClickSendChat(userInput = "") {
     //STEP 0 : Validation
     //make sure the topic has been selected, else end here
     var selectedTopic = $("#TopicListDropdown").val();
@@ -2072,22 +2090,6 @@ class ChatInstance {
 
     window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
   }
-
-  //come here on click rating button 
-  rate_message(eventData, rating){
-
-    // get hash of message, stored as id in holder
-    var messageHolder = $(eventData.target).closest('.message-holder');
-    var text_hash = messageHolder.attr('id'); 
-
-    const messagePayload = {
-      user_id: window.vedastro.UserId,
-      rating: rating,
-      text_hash: text_hash,
-    };
-
-    window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
-  }
 }
 
 /**
@@ -2096,7 +2098,7 @@ class ChatInstance {
  * @param {Object} settings - The settings for the AstroTable.
  * @param {Object} inputArguments - The Time and other data needed to generate table.
  */
-window.GenerateChatInstance = (settingsAIChat) => {  
+window.GenerateChatInstance = (settingsAIChat) => {
   //note: on init, chat instance is loaded into window.vedastro.chatapi
   new ChatInstance(settingsAIChat);
   window.vedastro.chatapi.waitForConnection();

@@ -1,5 +1,5 @@
 
-
+import numpy as np
 import sys
 import logging
 import json
@@ -326,7 +326,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 
     await websocket.accept()
     ai_reply = "👋 Welcome, how may i help?"
-    await websocket.send_text(ChatTools.package_reply_for_shippment(text_html=ai_reply, text=ai_reply, text_hash=ChatTools.random_id()))
+    await websocket.send_text(ChatTools.package_reply_for_shippment(command=np.array(["no_feedback"]), text_html=ai_reply, text=ai_reply, text_hash=ChatTools.random_id()))
 
     # connection has been made, now keep connection alive in infinite loop,
     # with fail safe to catch it midway
@@ -345,14 +345,14 @@ async def horoscope_chat(websocket: websockets.WebSocket):
             # 1.1 : prepare needed data
             input_parsed = json.loads(client_input)
             # clear command from prev if any (only server gives commands)
-            input_parsed["command"] = ""
+            input_parsed["command"] = np.array([""])
 
-            # message_number : needed for quick revisit answer lookup
-            message_count += 1
-            input_parsed["message_number"] = message_count
             # text
             if "text" not in input_parsed:
                 input_parsed["text"] = ""  # easy detect if empty
+            # topic
+            if "topic" not in input_parsed:
+                input_parsed["topic"] = ""  # easy detect if empty
             # session id
             if "session_id" not in input_parsed:
                 # overwrite only if not specified
@@ -367,11 +367,9 @@ async def horoscope_chat(websocket: websockets.WebSocket):
             # user_id : internet fungus filter
             if "user_id" not in input_parsed or input_parsed["user_id"] == "101":
                 input_parsed["user_id"] = ""  # overwrite only if not specified
-
-            # format & log message for inteligent past QA (id out is for reference)
-            # chat_raw_input : text, session_id, rating, message_number
-            input_parsed["sender"] = "Human"
-            human_question_hash = AzureTableManager.log_message(input_parsed)
+            # sender
+            if "sender" not in input_parsed:
+                input_parsed["sender"] = "Human"  # incoming is always Human
 
             # STAGE 2 : THINK
             # standard 1st answer
@@ -379,7 +377,8 @@ async def horoscope_chat(websocket: websockets.WebSocket):
             # 2.1 : user not logged in (could be a Machine!) beware internet fungus! (END HERE)
             if input_parsed["user_id"] == "":
                 # special command recognized by VedAstro.js to show handle login nicely
-                input_parsed["command"] = "please_login"
+                input_parsed["command"] = np.append(
+                    input_parsed["command"], "please_login")
                 ai_reply = """Please login sir...to verify you are not a robot 🤖\nEasy & secure login with Google or Facebook\n\n.....I understand this is annoying, but I have no choice!🤗\nthere are robots in the internet who target smart AI Chat agents like me.\nPlease login to start talking about astrology...💬
                 """
                 ai_html_reply = """
@@ -390,7 +389,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                     So please login to get started...<br>
                 """
 
-            # 2.2 : rating AND text_hash specified --> user is givin rating vote NOT QUERY (END HERE)
+            # 2.2 : rating AND text_hash specified --> user is giving rating vote NOT QUERY (END HERE)
             if input_parsed["rating"] != 0 and input_parsed["text_hash"] != "":
                 # memorize Human's rating
                 AzureTableManager.rate_message(
@@ -404,22 +403,38 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 # NOTE: DO NOT tell the user explcitly to give more feedback
                 # pysholocgy 101 : give them the sincere motivation to help instead -> better quality/quantity
                 # if we tell the user explicitly, we increase the probablity of deterministic failure, pushing the user into 1 of 2 camps
-                ai_reply = f"""Congratulation!🫡\n You have just helped improve astrology worldwide🌍\n I have now <b>memorized your feedback</b>,🧠\n now on all my answer will take your feedback into consideration.\n Thank you so much for the rating🙏\n <h5>🥇 Your Contribution Score : <b>{contribution_score}</b></h5>"""
-
-                ai_html_reply = """
+                ai_reply = f"""Congratulation!🫡\n You have just helped improve astrology worldwide🌍\n I have now <b>memorized your feedback</b>,🧠\n now on all my answer will take your feedback into consideration.\n Thank you so much for the rating🙏\n"""
+                ai_html_reply = f"""
                     Congratulation!🫡<br>
-                    You have just helped improve astrology worldwide🌍<br>
+                    You have just helped improve astrology worldwide🌍<br><br>
                     I have now <b>memorized your feedback</b>,🧠<br>
-                    now on all my answer will take your feedback into consideration.<br>
-                    Thank you so much for the rating🙏<br>
-                    <h5>🥇 Your Contribution Score : <b>{contribution_score}</b></h5>
+                    now on all my answer will take your feedback into consideration.<br><br>
+                    Thank you so much for the rating🙏<br><br>
+                    <h5>🥇 AI Contributor Score : <b>{contribution_score*10}</b></h5>
                 """
 
+            # no feedback needed here
+            input_parsed["command"] = np.append(
+                input_parsed["command"], "no_feedback")
             # update caller with itermidiate message
-            await websocket.send_text(ChatTools.package_reply_for_shippment(text_html=ai_html_reply, text=ai_reply, text_hash=ChatTools.random_id()))
+            await websocket.send_text(ChatTools.package_reply_for_shippment(command=input_parsed["command"], text_html=ai_html_reply, text=ai_reply, text_hash=ChatTools.random_id()))
+
+            # get start feedback beyond this point
+            # this will START showing give feedback buttons 🗣️🙏
+            index = np.where(input_parsed["command"] == "no_feedback")
+            input_parsed["command"] = np.delete(input_parsed["command"], index)
 
             # only call LLM if all checks and balances are even
             if ai_reply == "" or ai_reply == "Thinking....🤔":
+                # message_number : needed for quick revisit answer lookup
+                message_count += 1
+                input_parsed["message_number"] = message_count
+
+                # format & log message for inteligent past QA (id out is for reference)
+                # chat_raw_input : text, session_id, rating, message_number
+                human_question_hash = AzureTableManager.log_message(
+                    input_parsed)
+
                 # answer machine (send all needed data)
                 ai_reply = await answer_to_reply(client_input)
 
@@ -437,7 +452,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 # highlight text with relevant keywords relating to input query
                 html_str_llm = ChatTools.highlight_relevant_keywords_llm(
                     keywords_text=previous_text, main_text=ai_reply)
-                await websocket.send_text(ChatTools.package_reply_for_shippment(text_html=html_str_llm, text=ai_reply, text_hash=ai_reply_hash))
+                await websocket.send_text(ChatTools.package_reply_for_shippment(command=input_parsed["command"], text_html=html_str_llm, text=ai_reply, text_hash=ai_reply_hash))
 
     # Handle failed gracefully
     except Exception as e:

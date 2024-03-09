@@ -41,15 +41,13 @@ app = FastAPI(title="Chat API")
 
 
 # ログレベルの設定 (make server output more fun to watch 😁 📺)
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, force=True)
+logging.basicConfig(stream=sys.stdout, level=logging.INFO, force=True)
 
 # ..𝕗𝕠𝕣 𝕚𝕗 𝕪𝕠𝕦 𝕒𝕣𝕖 the 𝕠𝕗 𝕨𝕠𝕣𝕤𝕥 the worst
 # 𝕒𝕟𝕕 𝕪𝕠𝕦 𝕝𝕠𝕧𝕖 𝔾𝕠𝕕, 𝕪𝕠𝕦❜𝕣𝕖 𝕗𝕣𝕖𝕖❕
 # Yogananda
 
 # prepares server, run once on startup
-
-
 def initialize_chat_api():
     global chat_engines  # set cache
     global loaded_vectors  # set cache
@@ -59,38 +57,24 @@ def initialize_chat_api():
     print("T-minus countdown")
     print("Go/No-Go Poll")
 
-    llm_model_name = "sentence-transformers/all-MiniLM-L6-v2"
-    chat_model_name = "meta-llama/Llama-2-70b-chat-hf"
     variation_name = "MK7"
-
-    # load full vector DB (contains all predictions text as numbers)
-    savePathPrefix = "horoscope"  # use file path as id for dynamic LLM modal support
-
-    # use modal name for multiple modal support
-    filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{llm_model_name}"
-
-    ####################################
-    # if loaded_vectors.get(filePath) is None:  # lazy load for speed
-    #     # load the horoscope vectors (heavy compute)
-    #     loaded_vectors[filePath] = EmbedVectors(filePath, llm_model_name)
 
     print("Loaded Vectors go!")
 
     ####################################
     # prepare the LLM that will answer the query
-    if chat_engines.get(filePath) is None:  # lazy load for speed
-        # select the correct engine variation
-        wrapper = ChatEngine(variation_name)
-        chat_engines[llm_model_name] = wrapper.create_instance(chat_model_name)  # load the modal shards (heavy compute)
+    # select the correct engine variation
+    wrapper = ChatEngine("MK7")
+    chat_engines["MK7"] = wrapper.create_instance()  # load the modal shards (heavy compute)
 
     print("Chat Model LLMs go!")
 
     ####################################
     # STEP 1 : Prepare Query Map
-    preset_queries, embeddings_creator = ChatTools.get_parsed_query_map(
-        llm_model_name)
+    # this will be used to find preset user query intentions, with standard answers
+    # preset_queries, embeddings_creator = ChatTools.get_parsed_query_map()
 
-    print("Query Mapper go!")
+    # print("Query Mapper go!")
 
     ####################################
     print("All systems are go")
@@ -189,6 +173,7 @@ def vedastro_predictions_to_llama_index_nodes(birth_time, predictions_list_json)
     return prediction_nodes
 
 
+# given list horoscope predictions from 
 def vedastro_predictions_to_llama_index_documents(predictions_list_json):
     from llama_index.core import Document
     from llama_index.core.schema import MetadataMode
@@ -198,8 +183,7 @@ def vedastro_predictions_to_llama_index_documents(predictions_list_json):
     prediction_nodes = []
     for prediction in predictions_list_json:
 
-        #prediction = json.loads(prediction.ToJson().ToString())
-
+        # take out description (long text) from metadata, becasue already in as "content"
         predict_meta = copy.deepcopy(prediction)
         del predict_meta["Description"]
 
@@ -234,7 +218,6 @@ def vedastro_predictions_to_llama_index_documents(predictions_list_json):
 async def answer_to_reply(chat_instance_data):
     global preset_queries
     global embeddings_creator
-    from llama_index.core import VectorStoreIndex
 
     # parse incoming data
     # Parse the message
@@ -243,13 +226,12 @@ async def answer_to_reply(chat_instance_data):
     is_query = payload.query != ""
 
     # do query mapping if possible
-    if is_query:
-        auto_reply = ChatTools.map_query_by_similarity(
-            payload.query, payload.llm_model_name, preset_queries, embeddings_creator)
+    # if is_query:
+    #     auto_reply = ChatTools.map_query_by_similarity(
+    #         payload.query, payload.llm_model_name, preset_queries, embeddings_creator)
 
-    # if no reply than time to call the in big guns...GPU infantry firing LLMs shells!
-    need_llm = auto_reply == None
-    if need_llm & is_query:
+    #time to call the in big guns...GPU infantry firing LLM "chat/completion" shells!
+    if is_query:
 
         # STEP 1: GET NATIVE'S HOROSCOPE DATA (PREDICTIONS)
         # get all predictions for given birth time (aka filter)
@@ -264,28 +246,10 @@ async def answer_to_reply(chat_instance_data):
         # so that llama index can understand vedastro predictions
         all_predictions_json = json.loads(HoroscopePrediction.ToJsonList(all_predictions_raw).ToString())
         prediction_nodes = vedastro_predictions_to_llama_index_documents(all_predictions_json)
-        #prediction_nodes = vedastro_predictions_to_llama_index_weight_nodes(birth_time, all_predictions_json)
-
-        # build index
-
-        # Define your criteria in this function
-
-        # def criteria(predictionNode):
-        #     return predictionNode.score > 0
-        # # This will create a new array with elements that meet the criteria
-        # prediction_nodes_sorted = [
-        #     element for element in prediction_nodes if criteria(element)]
-        # # place higest weight at top so doesn't get chopped off
-        # prediction_nodes_sorted = sorted(
-        #     prediction_nodes_sorted, key=lambda predictionNode: predictionNode.score, reverse=True)
-
-        # # Take the top 10 elements
-        # top_10_array = prediction_nodes_sorted[:20]
 
         # STEP 2: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
-        # use file path as id for dynamic LLM modal support
         # Query the chat engine and send the results to the client
-        llm_response = chat_engines[payload.llm_model_name].query(query=payload.query,
+        llm_response = chat_engines["MK7"].query(text=payload.text,
                                                     input_documents=prediction_nodes,
                                                     # Controls the trade-off between randomness and determinism in the response
                                                     # A high value (e.g., 1.0) makes the model more random and creative
@@ -308,7 +272,7 @@ async def answer_to_reply(chat_instance_data):
     else:
         # little delay else, no time for "thinkin" msg to make it
         time.sleep(1.5)
-        return auto_reply
+        return ""
 
 
 @app.get("/")
@@ -356,50 +320,42 @@ async def horoscope_chat(websocket: websockets.WebSocket):
     global loaded_vectors  # use cache
 
     await websocket.accept()
-    await websocket.send_text("Welcome to VedAstro!")
+    ai_reply = "👋 Welcome, how may i help?"
+    await websocket.send_text(ChatTools.package_reply_for_shippment(text_html=ai_reply, text=ai_reply, text_hash=ChatTools.random_id()))
 
     # connection has been made, now keep connection alive in infinite loop,
     # with fail safe to catch it midway
     try:
-
-        while True:
-            
+        # BEATING HEART 💓
+        # this is the loop that keeps chat running at the highest level
+        while True: # beat forever....my sweet love 
             
             #STAGE 1:
             # Receive a message from the client
             # control is held here while waiting for user input
             client_input = await websocket.receive_text()
 
+            # format & log message for inteligent past QA
             input_parsed = json.loads(client_input)
-            entity = {
-            "PartitionKey": ChatTools.generate_hash(input_parsed["query"]), #message will be main id
-            "RowKey": ChatTools.generate_hash(time.ctime(time.time())), # time of msg will be 2n id 
-            "sender": "user",
-            "text": client_input,
-            "chat_session_hash": "comming soon!" # hash as id leading to data of chat instance metadata
-            }
-            AzureTableManager.write_to_table(entity)
+            msg_id = AzureTableManager.log_message(input_parsed, "Human")
 
             # STAGE 2 : THINK
             # Let caller process started
-            await websocket.send_text("Thinking....")
+            ai_reply = "Thinking....🤔"
+            await websocket.send_text(ChatTools.package_reply_for_shippment(text_html=ai_reply, text=ai_reply, text_hash=ChatTools.random_id()))
 
             # answer machine (send all needed data)
             ai_reply = await answer_to_reply(client_input)
 
-
             # STAGE 3 : REPLY
-            entity = {
-            "PartitionKey": ChatTools.generate_hash(input_parsed["query"]), #message will be main id
-            "RowKey": ChatTools.generate_hash(time.ctime(time.time())), # time of msg will be 2n id 
-            "sender": input_parsed["chat_model_name"], # specify modal's name, so we know who made what
-            "text": ai_reply,
-            "chat_session_hash": "comming soon!" # hash as id leading to data of chat instance metadata
-            }
-            AzureTableManager.write_to_table(entity)
+            #log message for inteligent past QA
+            msg_id = AzureTableManager.log_message(input_parsed, "AI")
 
-            # send ans to caller
-            await websocket.send_text(ai_reply)
+            # send ans to caller in JSON form, to support metadata
+            #highlight text with relevant keywords relating to input query
+            #html_str = ChatTools.highlight_relevant_keywords(keywords_text=input_parsed["text"], main_text = ai_reply)
+            html_str_llm = ChatTools.highlight_relevant_keywords_llm(keywords_text=input_parsed["text"], main_text = ai_reply)
+            await websocket.send_text(ChatTools.package_reply_for_shippment(text_html=html_str_llm, text=ai_reply, text_hash=msg_id))
 
     # Handle failed gracefully
     except Exception as e:

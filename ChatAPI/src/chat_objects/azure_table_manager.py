@@ -1,9 +1,34 @@
 from azure.data.tables import TableClient
 import os
+from .chat_tools import ChatTools
+import time
+import json
 
 class AzureTableManager:
     connection_string = os.getenv("CENTRAL_API_STORAGE_CONNECTION_STRING")
     table_name = "ChatMessage"
+
+    @staticmethod
+    def log_message(chat_raw_input, sender_name)-> str:
+        # Extract the main text message and default sender value
+        sender = sender_name
+        timestamp = time.ctime(time.time())
+        partition_key = ChatTools.generate_hash(chat_raw_input["text"])
+        row_key = ChatTools.generate_hash(timestamp)
+        
+        entity = {
+            "PartitionKey": partition_key,
+            "RowKey": row_key,
+            "sender": sender,
+            "text": chat_raw_input["text"],
+            "object": json.dumps(chat_raw_input),
+        }
+        
+        AzureTableManager.write_to_table(entity)
+
+        return f"{partition_key}-{row_key}"
+
+
 
     @staticmethod
     def write_to_table(entity):

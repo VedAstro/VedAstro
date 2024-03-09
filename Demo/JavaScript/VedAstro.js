@@ -1151,6 +1151,7 @@ class AshtakvargaTable {
 }
 
 class ChatInstance {
+  LastUserMessage = ""; //used for post ai reply highlight
   ServerURL = ""; //filled in later just before use
   LiveServerURL =
     "wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
@@ -1177,6 +1178,30 @@ class ChatInstance {
         "Why did my past relationship end?",
         "Will my ex and I ever get back together?",
         "I feel really heartbroken. What should I do ?",
+      ],
+    },
+    Astrology: {
+      Planets: [
+        "How does Sun effect me?",
+        "How does Mercury effect me?",
+        "How does Moon effect me?",
+        "How does Mars effect me?",
+        "How does Jupiter effect me?",
+        "How does Saturn effect me?",
+        "How does Venus effect me?",
+        "How does Ketu effect me?",
+        "How does Rahu effect me?",
+      ],
+      Planets: [
+        "How does Sun effect me?",
+        "How does Mercury effect me?",
+        "How does Moon effect me?",
+        "How does Mars effect me?",
+        "How does Jupiter effect me?",
+        "How does Saturn effect me?",
+        "How does Venus effect me?",
+        "How does Ketu effect me?",
+        "How does Rahu effect me?",
       ],
     },
     Studies: {
@@ -1725,8 +1750,9 @@ class ChatInstance {
         case "Travel":
           return "fluent-emoji-flat:airplane-departure";
         case "Love":
-        case "Love":
           return "fluent-emoji-flat:heart-with-arrow";
+        case "Astrology":
+          return "twemoji:ringed-planet";
         case "Studies":
           return "fluent-emoji-flat:books";
         case "Money":
@@ -1738,9 +1764,11 @@ class ChatInstance {
         case "HomeAndFamily":
           return "fluent-emoji-flat:house-with-garden";
         case "KarmaAndDestiny":
-          return "fluent-emoji-flat:money-bag";
+          return "noto:milky-way";
         case "TestAccuracy":
           return "fluent-emoji-flat:test-tube";
+        case "AIJokes":
+          return "fxemoji:smiletongue";
         default:
           return "fluent-emoji-flat:heart-with-arrow";
       }
@@ -1762,14 +1790,16 @@ class ChatInstance {
     this.processQueue();
   }
 
+  // Handler for incoming messages
   onmessage(event) {
-    //clear ID from last AI reply box so new one can be made TODO CHECK
-    $("#AIReplyOutElement").attr("id", "");
+    // Parse the JSON data from the event
+    var raw_json_message = JSON.parse(event.data);
+    var ai_text_message_html = raw_json_message.text_html;
+    var message_hash = raw_json_message.text_hash;
+    var ai_text_message = raw_json_message.text;
 
-    //format reply into nice format
-    //NOTE: loading icon is default on till shutdown
-    var aiInputChatCloud = `
-    <li class="d-flex justify-content-start mb-4">
+    // Create a chat bubble with the AI's message
+    var aiInputChatCloud = `<li class="d-flex justify-content-start mb-4">
         <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
         <div class="card">
             <div class="card-header d-flex justify-content-between p-3">
@@ -1783,59 +1813,79 @@ class ChatInstance {
                   </button>
                 </div>
             </div>
-            <div class="card-body">
-                <p id="AIReplyOutElement" class="mb-0">
-                  <!-- DYNAMIC CONTENT INPUTED HERE -->
+            <div id="${message_hash}" class="card-body">
+                <p style="display:none;" class="text-html-out-elm mb-0">
+                  ${ai_text_message_html}
                 </p>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
+                <p class="temp-text-stream-elm mb-0">
+                  <!-- Content will be streamed here -->
+                </p>
+                <!-- SVG for loading icon -->
+                <svg class="loading-icon-elm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
             </div>
         </div>
     </li>`;
 
-    //inject AI's reply into chat view
+    // Append the chat bubble to the chat window
     $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
 
-    // slowly stream text into element
-    this.IsAITalking = true; //this will stop user from chatting while loading
-    let index = 0;
-    const longText = event.data;
-    const streamRateMs = 80; //print speed
-    const aiReplyOutElement = $("#AIReplyOutElement");
+    // Flag to prevent user input while AI is 'typing'
+    this.IsAITalking = true;
 
+    // Initialize the index for streaming text
+    let index = 0;
+    const streamRateMs = 23; // Rate at which characters are displayed
+
+    // Stream the AI's message into the chat bubble
     const interval = setInterval(() => {
-      //once reach end of long text, clear timer and hide loading icon
-      if (index >= longText.length) {
+      // Check if the entire message has been displayed
+      if (index >= ai_text_message.length) {
         clearInterval(interval);
 
-        //hide loading icon only after stream out is done
-        var svgLoadingIcon = aiReplyOutElement.next();
-        svgLoadingIcon.attr("style", "display: none !important;");
+        // Hide the temporary element and loading icon, then show the formatted message
+        //remove stream shower and loading for this bubble since not needed anymore
+        $(`#${message_hash} .temp-text-stream-elm`).hide();
+        $(`#${message_hash} .loading-icon-elm`).hide();
 
-        this.IsAITalking = false; //user can chat now
+        //make visible hidden formatted output
+        $(`#${message_hash} .text-html-out-elm`).show();
+
+        // Allow user input again
+        this.IsAITalking = false;
+
         return;
       }
 
-      // Handle special characters and formatting for code output
-      if (longText[index] === "\n") {
-        aiReplyOutElement.append($("<br>"));
-      } else if (longText[index] === "\t") {
-        aiReplyOutElement.append($("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;"));
-      } else if (longText[index] === " ") {
-        // Preserve multiple spaces for code indentation
-        aiReplyOutElement.append($("<span>").html("&nbsp;"));
-      } else if (longText[index] === "<") {
-        // Encode '<' to prevent it from being interpreted as HTML
-        aiReplyOutElement.append($("<span>").html("&lt;"));
-      } else if (longText[index] === ">") {
-        // Encode '>' to prevent it from being interpreted as HTML
-        aiReplyOutElement.append($("<span>").html("&gt;"));
-      } else {
-        const nextChar = document.createTextNode(longText[index]);
-        aiReplyOutElement.append(nextChar);
-      }
+      // Append the next character or handle special formatting
+      ChatInstance.appendNextCharacter(ai_text_message, index, `#${message_hash} .temp-text-stream-elm`);
       index++;
     }, streamRateMs);
   }
+
+
+  
+  // Function to append the next character or handle special formatting
+  static appendNextCharacter(text, index, elementSelector) {
+    const specialChars = {
+      "\n": $("<br>"),
+      "\t": $("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;"),
+      " ": $("<span>").html("&nbsp;"),
+      "<": $("<span>").html("&lt;"),
+      ">": $("<span>").html("&gt;"),
+    };
+
+    // Check for special characters
+    if (specialChars[text[index]]) {
+      $(elementSelector).append(specialChars[text[index]]);
+    } else {
+      // Append regular character
+      const nextChar = document.createTextNode(text[index]);
+      $(elementSelector).append(nextChar);
+    }
+  }
+
+
+
 
   onclose() {
     console.log("Connection closed");
@@ -1909,7 +1959,7 @@ class ChatInstance {
       return;
     }
 
-    //make sure the topic has been selected, else end here
+    //make sure the chat input has something, else end here
     var userInput = $("#UserChatInputElement").val(); //get chat message to send to API that user inputed
     if (userInput === "") {
       Swal.fire(
@@ -1955,8 +2005,9 @@ class ChatInstance {
     //STEP 2:
     //user's input is sent to server for reply
     //get selected birth time
-    var xxx = CommonTools.BirthTimeUrlOfSelectedPersonJson()
-    await this.SendMessageToServer(userInput, xxx);
+    var birth_time_json = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+    await this.SendMessageToServer(userInput, birth_time_json);
+    this.LastUserMessage = userInput; //save to used later for highlight
 
     //STEP 3 : GUI CLEAN UP
     //clear question input box for next, question
@@ -1965,18 +2016,8 @@ class ChatInstance {
 
   async SendMessageToServer(message, birthTimeUrl) {
     const messagePayload = {
-      variation_name: "MK4",
-      query: message,
+      text: message,
       birth_time: birthTimeUrl,
-      llm_model_name: "sentence-transformers/all-MiniLM-L6-v2",
-      chat_model_name: "meta-llama/Llama-2-70b-chat-hf",
-      temperature: 0.2,
-      top_p: 0.9,
-      max_tokens: 10,
-      stop: "",
-      search_type: "mmr",
-      fetch_k: 10,
-      lambda_mult: 0.3,
     };
 
     window.chatx.enqueueMessage(JSON.stringify(messagePayload));

@@ -199,17 +199,17 @@ def vedastro_predictions_to_llama_index_documents(predictions_list_json):
             text_template="Metadata: {metadata_str}\n-----\nContent: {content}",
         )
 
-        # this is shows difference for understanding output of Documents
-        print("#######################################################")
-        print(
-            "The LLM sees this: \n",
-            predict_node.get_content(metadata_mode=MetadataMode.LLM),
-        )
-        print(
-            "The Embedding model sees this: \n",
-            predict_node.get_content(metadata_mode=MetadataMode.EMBED),
-        )
-        print("#######################################################")
+        # # this is shows difference for understanding output of Documents
+        # print("#######################################################")
+        # print(
+        #     "The LLM sees this: \n",
+        #     predict_node.get_content(metadata_mode=MetadataMode.LLM),
+        # )
+        # print(
+        #     "The Embedding model sees this: \n",
+        #     predict_node.get_content(metadata_mode=MetadataMode.EMBED),
+        # )
+        # print("#######################################################")
 
         # add in shadbala to give each prediction weights
         prediction_nodes.append(predict_node)  # add to main list
@@ -344,9 +344,13 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 
             # 1.1 : prepare needed data
             input_parsed = json.loads(client_input)
-            # clear command from prev if any (only server gives commands)
-            input_parsed["command"] = np.array([""])
 
+            # command : can come from client as well (exp:follow-up question)
+            if "command" in input_parsed and not hasattr(input_parsed["command"], 'tolist') :  # convert to numpy
+                input_parsed["command"] = np.array(input_parsed["command"])
+            if "command" not in input_parsed:
+                # make new command
+                input_parsed["command"] = np.array([""])
             # text
             if "text" not in input_parsed:
                 input_parsed["text"] = ""  # easy detect if empty
@@ -393,7 +397,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
             if input_parsed["rating"] != 0 and input_parsed["text_hash"] != "":
                 # memorize Human's rating
                 AzureTableManager.rate_message(
-                    input_parsed["session_id"], input_parsed["text_hash"], 1)
+                    input_parsed["session_id"], input_parsed["text_hash"], input_parsed["rating"])
 
                 # increse contribution score
                 contribution_score = AzureTableManager.increase_contribution_score(

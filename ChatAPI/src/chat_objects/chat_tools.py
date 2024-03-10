@@ -16,7 +16,11 @@ FAISS_INDEX_PATH = "faiss_index"
 
 
 class ChatTools:
-
+    
+    @staticmethod
+    def remove_spaces(input_string)->str:
+        return input_string.replace(' ', '')
+    
     @staticmethod
     def random_id(length=8):
         """Generate a random ID of the given length."""

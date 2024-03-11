@@ -11,16 +11,44 @@ import random
 import string
 import re
 from bs4 import BeautifulSoup, NavigableString, CData, Comment
+from vedastro import *  # install via pip
 
 FAISS_INDEX_PATH = "faiss_index"
 
+import json
+from typing import Optional
+from pydantic import BaseModel
+from datetime import datetime
+from vedastro import Time
+import asyncio
+
 
 class ChatTools:
-    
+
+
+
     @staticmethod
-    def remove_spaces(input_string)->str:
+    def list_file_names_with_paths(directory, prefix):
+        file_dict = {}
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                file_blob_name =f"{prefix}-{file}"
+                local_file_path = os.path.join(root, file)
+                file_dict[file_blob_name] = local_file_path
+        return file_dict
+
+    @staticmethod
+    def list_file_paths(directory) -> str:
+        file_paths = []
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                file_paths.append(os.path.join(root, file))
+        return file_paths
+
+    @staticmethod
+    def remove_spaces(input_string) -> str:
         return input_string.replace(' ', '')
-    
+
     @staticmethod
     def random_id(length=8):
         """Generate a random ID of the given length."""
@@ -45,15 +73,23 @@ class ChatTools:
         client = AzureOpenAI(
             azure_endpoint="https://openaimodelserver.openai.azure.com/",
             api_key=os.getenv("AZURE_OPENAI_KEY"),
-            api_version="2024-02-15-preview"
-        )
+            api_version="2024-02-15-preview")
 
-        messages=[
-                {"role": "system", "content": "Repeat text in 'Answer' with keywords related to text in 'Question' bolded. Output as HTML."},
-                {"role": "user", "name": "keywords_text", "content": f"{keywords_text}"},
-                {"role": "assistant", "name": "main_text", "content": f"<p><b>{keywords_text}</b>: {main_text}</p>"}
-            ]
-        
+        messages = [{
+            "role":
+                "system",
+            "content":
+                "Repeat text in 'Answer' with keywords related to text in 'Question' bolded. Output as HTML."
+        }, {
+            "role": "user",
+            "name": "keywords_text",
+            "content": f"{keywords_text}"
+        }, {
+            "role": "assistant",
+            "name": "main_text",
+            "content": f"<p><b>{keywords_text}</b>: {main_text}</p>"
+        }]
+
         chat_completion = client.chat.completions.create(
             model="vedastro",  # model = "deployment_name"
             messages=messages,
@@ -62,8 +98,7 @@ class ChatTools:
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0,
-            stop=None
-        )
+            stop=None)
 
         # go through the chaos, and bring forth the answer!🕍🪼
         choices = chat_completion.choices
@@ -79,11 +114,11 @@ class ChatTools:
     @staticmethod
     def highlight_relevant_keywords(keywords_text: str, main_text: str):
         """
-        Highlights relevant keywords found in the given text by wrapping them in <strong> tags.
-        :param keywords_text: The text containing keywords to search for and highlight.
-        :param main_text: The text to perform keyword highlighting on.
-        :return: A string of highlighted text within its HTML structure.
-        """
+            Highlights relevant keywords found in the given text by wrapping them in <strong> tags.
+            :param keywords_text: The text containing keywords to search for and highlight.
+            :param main_text: The text to perform keyword highlighting on.
+            :return: A string of highlighted text within its HTML structure.
+            """
         # Convert the main_text argument into a BeautifulSoup object
         soup = BeautifulSoup(main_text, 'html.parser')
 
@@ -107,17 +142,18 @@ class ChatTools:
                     break
 
                 # Perform keyword highlighting only for Text and CData elements
-                if isinstance(current_node, NavigableString) or isinstance(current_node, Comment):
+                if isinstance(current_node, NavigableString) or isinstance(
+                        current_node, Comment):
                     tagged_words = []
                     split_string = current_node.string.strip().lower()
                     prev_index = -1
 
                     # Tokenize the text node into separate words
                     for index, word in enumerate(split_string.split(' ')):
-                        if word != '' and any(keyword in word for keyword in words):
+                        if word != '' and any(
+                                keyword in word for keyword in words):
                             # Wrap matched words in <strong> tags
-                            tagged_words.append(
-                                '<strong>' + word + '</strong>')
+                            tagged_words.append('<strong>' + word + '</strong>')
                         elif word == '':
                             tagged_words.append('&nbsp;')
                         else:
@@ -129,15 +165,18 @@ class ChatTools:
                                 tagged_words[-2] += ' '
 
                     # Combine tagged_words back together replacing original text node
-                    combined = ' '.join(tagged_words).replace(
-                        '\n', '\n').replace('  ', ' ')
+                    combined = ' '.join(tagged_words).replace('\n',
+                                                              '\n').replace(
+                                                                  '  ', ' ')
                     if prev_index >= 0:
                         # Preserve whitespace before and after this text node
-                        leading_space = ' ' * (len(current_node.previousSibling) - len(
-                            current_node.previousSibling.strip())) if current_node.previousSibling else ''
+                        leading_space = ' ' * (
+                            len(current_node.previousSibling) -
+                            len(current_node.previousSibling.strip())
+                        ) if current_node.previousSibling else ''
                         trailing_space = ' ' * \
                             (len(current_node) - len(current_node.strip())
-                             ) if current_node else ''
+                            ) if current_node else ''
                         combined = leading_space + combined + trailing_space
                     current_node.replaceWith(combined)
 
@@ -190,31 +229,40 @@ class ChatTools:
 
         # NOTE : at this stage the "map" only contains topic text, no vectors for it
         # fill standard "vector" property
-        preset_queries = [ChatTools.fill_vector(
-            level1, "sentence-transformers/all-MiniLM-L6-v2", embeddings_creator) for level1 in preset_queries]
+        preset_queries = [
+            ChatTools.fill_vector(level1,
+                                  "sentence-transformers/all-MiniLM-L6-v2",
+                                  embeddings_creator)
+            for level1 in preset_queries
+        ]
 
         return preset_queries, embeddings_creator
 
     # just gets map from file and loads it
 
     @staticmethod
-    def map_query_by_similarity(query, llm_model_name, preset_queries, embeddings_creator):
+    def map_query_by_similarity(query, llm_model_name, preset_queries,
+                                embeddings_creator):
         import numpy as np
 
         # Embed the user query
         user_vector = embeddings_creator.embed_query(query)
-        user_vector_expanded = np.expand_dims(
-            user_vector, axis=0)  # Make the vectors match
+        user_vector_expanded = np.expand_dims(user_vector,
+                                              axis=0)  # Make the vectors match
 
         # STEP 2 : Do search on map
 
         # fill query map scores for user's query
-        preset_queries = [ChatTools.fill_similarity_score(
-            user_vector_expanded, level1, llm_model_name, embeddings_creator) for level1 in preset_queries]
+        preset_queries = [
+            ChatTools.fill_similarity_score(user_vector_expanded, level1,
+                                            llm_model_name, embeddings_creator)
+            for level1 in preset_queries
+        ]
 
         # fill standard "total_score" property at end of parent child chain (to find winner)
-        preset_queries = [ChatTools.fill_total_score(
-            level1, 0) for level1 in preset_queries]
+        preset_queries = [
+            ChatTools.fill_total_score(level1, 0) for level1 in preset_queries
+        ]
 
         # extract out query map path (leading to highest total score)
         map_route = ChatTools.find_max_scoring_topic(preset_queries)
@@ -278,14 +326,15 @@ class ChatTools:
         return query_map
 
     @staticmethod
-    def fill_similarity_score(user_query_vector, vector_object, llm_model_name, embeddings_creator):
+    def fill_similarity_score(user_query_vector, vector_object, llm_model_name,
+                              embeddings_creator):
         from sklearn.metrics.pairwise import cosine_similarity
 
         # take text called "vector" out of main object
         vector = vector_object["vector"]
 
-        sub_query_similarities = cosine_similarity(user_query_vector, vector)[
-            0]  # note how we dig 1 level down
+        sub_query_similarities = cosine_similarity(
+            user_query_vector, vector)[0]  # note how we dig 1 level down
 
         # place data inside package
         vector_object["score"] = sub_query_similarities[0]
@@ -293,8 +342,9 @@ class ChatTools:
         # do recursive if has chilren
         if "queries" in vector_object:
             for sub_q in vector_object["queries"]:
-                sub_q = ChatTools.fill_similarity_score(
-                    user_query_vector, sub_q, llm_model_name, embeddings_creator)
+                sub_q = ChatTools.fill_similarity_score(user_query_vector,
+                                                        sub_q, llm_model_name,
+                                                        embeddings_creator)
 
         return vector_object
 
@@ -308,8 +358,8 @@ class ChatTools:
         # make vector from the text
         vector = embeddings_creator.embed_query(topic)
 
-        user_vector_expanded = np.expand_dims(
-            vector, axis=0)  # Make the vectors match
+        user_vector_expanded = np.expand_dims(vector,
+                                              axis=0)  # Make the vectors match
 
         # place data inside package
         vector_object["vector"] = user_vector_expanded
@@ -317,8 +367,8 @@ class ChatTools:
         # do recursive if has chilren
         if "queries" in vector_object:
             for sub_q in vector_object["queries"]:
-                sub_q = ChatTools.fill_vector(
-                    sub_q, llm_model_name, embeddings_creator)
+                sub_q = ChatTools.fill_vector(sub_q, llm_model_name,
+                                              embeddings_creator)
 
         return vector_object
 
@@ -333,8 +383,8 @@ class ChatTools:
             for topic_info in preset_queries[category]:
                 topic = topic_info['topic']
                 # Sum the scores for the current topic
-                total_score = sum(query['score']
-                                  for query in topic_info['queries'])
+                total_score = sum(
+                    query['score'] for query in topic_info['queries'])
                 # Add or update the total score for the topic
                 if topic in topic_scores:
                     topic_scores[f"{category}_{topic}"] += total_score
@@ -362,7 +412,8 @@ class ChatTools:
 
     # given a list of documents puts into dictionary for Fast API output
     @staticmethod
-    def doc_with_score_to_dict(docs: List[Document]) -> List[Dict[str, Union[str, float]]]:
+    def doc_with_score_to_dict(
+            docs: List[Document]) -> List[Dict[str, Union[str, float]]]:
         docs_list = []
         for doc in docs:
             doc_dict = {
@@ -376,13 +427,14 @@ class ChatTools:
     # given a list of documents with score, moves scores into metadata
     # needed else error, since Document is wrapped with value array
     @staticmethod
-    def doc_with_score_to_doc(input_documents: List[Document]) -> List[Document]:
+    def doc_with_score_to_doc(
+            input_documents: List[Document]) -> List[Document]:
         docs_list = []
         for doc in input_documents:
-            doc_dict = Document(
-                page_content=doc[0].page_content,
-                metadata={**doc[0].metadata, "score": float(doc[1])}
-            )
+            doc_dict = Document(page_content=doc[0].page_content,
+                                metadata={
+                                    **doc[0].metadata, "score": float(doc[1])
+                                })
             docs_list.append(doc_dict)
         return docs_list
 

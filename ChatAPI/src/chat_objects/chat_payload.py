@@ -33,6 +33,7 @@ class ChatPayload(BaseModel):
         else:
             super().__init__()
 
+    #marked for oblivion
     def get_birth_time(self) -> Time:
         # raw time string with location is parsed into correct astro time instance
         time_string = self.topic

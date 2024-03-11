@@ -4,10 +4,117 @@ from .chat_tools import ChatTools
 import time
 import json
 from typing import Any, Dict
+import os
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+
+import re
 
 
 class AzureTableManager:
     connection_string = os.getenv("CENTRAL_API_STORAGE_CONNECTION_STRING")
+
+    #downloads index from azure storage
+    #if success will return true
+    # will return false if no cache in azure
+    @staticmethod
+    def blob_to_directory(directory_path, birth_time_hash) -> bool:
+        try:
+            #update directory path to what it should look like
+            new_directory_path = f"{directory_path}{birth_time_hash}"
+
+            # Check if local directory exists
+            if not os.path.exists(new_directory_path):
+                # Create directory if it doesn't exist
+                os.makedirs(new_directory_path)
+
+            blob_service_client = BlobServiceClient.from_connection_string(
+                AzureTableManager.connection_string)
+            container_name = "vector-store"
+
+            # Get the container client
+            container_client = blob_service_client.get_container_client(
+                container_name)
+
+            # List all blobs in the container
+            blob_list = container_client.list_blobs()
+
+            count = 0 # to check if any
+            for blob in blob_list:
+                # Check if the blob name starts with the birth_time_hash
+                if blob.name.startswith(birth_time_hash):
+                    # Get the blob client
+                    blob_client = blob_service_client.get_blob_client(
+                        container_name, blob.name)
+
+                    # Download the blob to a local file
+                    download_file_path = os.path.join(directory_path, blob.name)
+
+                    #remove birth time hash from vector file, as might interfere with reader
+                    # NOTE: removing the postfix hyphen and replace with file slash
+                    download_file_path = re.sub(f"{birth_time_hash}-",
+                                                f"{birth_time_hash}/",
+                                                download_file_path,
+                                                count=1)
+
+                    with open(download_file_path, "wb") as download_file:
+                        download_file.write(blob_client.download_blob().readall())
+                    
+                    count += 1 #increment so we know
+
+            if count >= 1:
+                print("All blobs downloaded successfully to local directory.")
+                return True
+            else:
+                return False
+
+        except Exception as e:
+            # failure here means, index not in Azure
+            return True
+
+    #transers local index vector at path to cloud
+    @staticmethod
+    def upload_directory_to_blob(directory_path, birth_time_hash):
+        blob_service_client = BlobServiceClient.from_connection_string(
+            AzureTableManager.connection_string)
+        container_name = "vector-store"
+
+        # get all files at given directory with special blob names added
+        files = ChatTools.list_file_names_with_paths(directory_path,
+                                                     birth_time_hash)
+
+        # one by one upload each file to Azure blob
+        for index, blob_name in enumerate(files):
+            with open(files[blob_name], "rb") as data:
+                blob_client = blob_service_client.get_blob_client(
+                    container_name, blob_name)
+                blob_client.upload_blob(data)
+
+        print("All files uploaded successfully to Azure Blob Storage.")
+
+    # chat_raw_input :topic, text, session_id, rating, message_number
+    @staticmethod
+    def upload_file_to_blob(file_path):
+        blob_service_client = BlobServiceClient.from_connection_string(
+            AzureTableManager.connection_string)
+        container_name = "vector-store"
+        blob_client = blob_service_client.get_blob_client(
+            container_name, 'your_blob_name')
+
+        # Check if the file exists
+        if os.path.isfile(file_path):
+            # Check if you have read permissions
+            if os.access(file_path, os.R_OK):
+                with open(file_path, "rb") as data:
+                    blob_client.upload_blob(data)
+            else:
+                print(f"No permission to read the file: {file_path}")
+        else:
+            print(f"The file does not exist: {file_path}")
+
+        with open(file_path, "rb") as data:
+            blob_client.upload_blob(data)
+
+        print("File uploaded successfully to Azure Blob Storage.")
 
     # chat_raw_input :topic, text, session_id, rating, message_number
     @staticmethod
@@ -49,7 +156,6 @@ class AzureTableManager:
             "vector_store_hash": "$$$"  # coming soon!
         }
 
-
         # now add to table forever!
         AzureTableManager.write_to_table(entity)
 
@@ -72,9 +178,8 @@ class AzureTableManager:
             # check if user already has contributed before
             parameters = {"user_id": user_id}
             odata_query = "PartitionKey eq @user_id"
-            msg_list = table_client.query_entities(
-                query_filter=odata_query, parameters=parameters
-            )
+            msg_list = table_client.query_entities(query_filter=odata_query,
+                                                   parameters=parameters)
 
             # user already has record, so just add to existing score
             for contribution_score_row in msg_list:
@@ -107,11 +212,13 @@ class AzureTableManager:
             AzureTableManager.connection_string, "ChatMessage")
 
         # find the exact message to rate, hence no need to break ques_topic hash
-        parameters = {"session_id": session_id, "ques_topic_hash": ques_topic_hash}
+        parameters = {
+            "session_id": session_id,
+            "ques_topic_hash": ques_topic_hash
+        }
         odata_query = "PartitionKey eq @session_id and RowKey eq @ques_topic_hash"
-        msg_list = table_client.query_entities(
-            query_filter=odata_query, parameters=parameters
-        )
+        msg_list = table_client.query_entities(query_filter=odata_query,
+                                               parameters=parameters)
 
         for found_msg in msg_list:
             # update rating score with existing
@@ -148,17 +255,18 @@ class AzureTableManager:
         # ‘KJV-C1-V3’, ‘KJV-C2-V1’, ‘KJV-C2-V2’, ‘KJV-C2-V3’,
         # you can retrieve all entities with row keys that start with ‘KJV-C1’.
         # This is possible with a query like: PartitionKey eq 'your partition key' and (RowKey ge 'KJV-C1' and RowKey lt 'KJV-C2')
-        parameters = {"partition_key": partition_key,
-                      "comb_hash": row_key}  # todo needs testing
+        parameters = {
+            "partition_key": partition_key,
+            "comb_hash": row_key
+        }  # todo needs testing
 
         # ge = greater than or equal
-        odata_query2 = "PartitionKey eq @partition_key and RowKey ge @comb_hash and RowKey lt @comb_hash"
+        #odata_query2 = "PartitionKey eq @partition_key and RowKey ge @comb_hash and RowKey lt @comb_hash"
         # ge = greater than or equal
         odata_query = "PartitionKey eq @partition_key and RowKey ge @comb_hash"
 
-        msg_list = table_client.query_entities(
-            query_filter=odata_query, parameters=parameters
-        )
+        msg_list = table_client.query_entities(query_filter=odata_query,
+                                               parameters=parameters)
 
         count = 0
         for index, value in enumerate(msg_list):
@@ -174,7 +282,7 @@ class AzureTableManager:
     @staticmethod
     def read_from_table(partition_key, row_key):
         table_client = TableClient.from_connection_string(
-            AzureTableManager.connection_string, AzureTableManager.table_name)
+            AzureTableManager.connection_string, "ChatMessage")
         try:
             entity = table_client.get_entity(partition_key, row_key)
             return entity

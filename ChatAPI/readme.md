@@ -70,12 +70,16 @@ visit ```http://localhost``` with default password (admin)
 # set correct sub first
 ` az account set --subscription c4a47a40-5870-4dbc-91b8-6c967556bfeb`
 
-# push code and build in azure (sometimes faster)
+# OPTION 1
+## push code and build in azure (sometimes faster)
+
+`az acr build --registry vedastrochatapi --image chat-api . --verbose`
 ` az acr build --registry vedastrochatapi --image chat-api .`
 
 NOTE: live ACA server needs to be restarted for new image to kick in
 
-# build local then push to Azure
+# OPTION 2
+## build local then push to Azure
 
  credentials from Access keys blade.
 
@@ -91,6 +95,11 @@ upload image to Azure
 
 # prompts 
 craft a response that incorporates the strengths of Response A and Response B, addresses their shortcomings based on the ratings, and leverages insights from the provided ratings:
+
+
+# start file server
+1. change env start file
+2. visit via browser at http://localhost/
 
 # Free AI chat, really?
 Yes, we're doing this to improve vedic prediction quality for the common good of human race.

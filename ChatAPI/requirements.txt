@@ -1,10 +1,10 @@
 # LLM related stuff
-langchain
-langchain-community
+#langchain
+#langchain-community
 sentence_transformers
 
 # for doing query in CPU via llama.cpp
-faiss-cpu
+#faiss-cpu
 
 # server related stuff
 xmltodict
@@ -19,7 +19,7 @@ vedastro
 openai 
 
 # for azure open ai resource support
-langchain_openai
+#langchain_openai
 
 # smart RAG features
 # llama_index
@@ -32,9 +32,9 @@ llama-index-embeddings-langchain
 # needed to access azure via llama index
 llama-index-llms-azure-openai
 
-llama-index-readers-faiss
+#llama-index-readers-faiss
 
-llama-index-vector-stores-faiss
+#llama-index-vector-stores-faiss
 
 IPython
 
@@ -50,10 +50,10 @@ asyncio
 azure-data-tables
 
 # prelude to vedastro's custom llama-hub connector
-llama-index-readers-web
+#llama-index-readers-web
 
 # for web page index quick builder
-html2text
+#html2text
 
 # for vector_store
 azure-storage-blob

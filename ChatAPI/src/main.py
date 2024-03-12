@@ -1,6 +1,4 @@
 import numpy as np
-import sys
-import logging
 import json
 from fastapi import HTTPException, FastAPI, websockets
 
@@ -24,7 +22,7 @@ import time  # for performance measurements
 # load API keys from .env file
 import os
 if "ANYSCALE_API_KEY" not in os.environ:
-	raise RuntimeError("KEY MISSING DINGUS")
+    raise RuntimeError("KEY MISSING DINGUS")
 
 FAISS_INDEX_PATH = "faiss_index"
 
@@ -38,7 +36,7 @@ embeddings_creator = {}
 app = FastAPI(title="Chat API")
 
 # ログレベルの設定 (make server output more fun to watch 😁 📺)
-logging.basicConfig(stream=sys.stdout, level=logging.INFO, force=True)
+# logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, force=True)
 
 # ..𝕗𝕠𝕣 𝕚𝕗 𝕪𝕠𝕦 𝕒𝕣𝕖 the 𝕠𝕗 𝕨𝕠𝕣𝕤𝕥 the worst
 # 𝕒𝕟𝕕 𝕪𝕠𝕦 𝕝𝕠𝕧𝕖 𝔾𝕠𝕕, 𝕪𝕠𝕦❜𝕣𝕖 𝕗𝕣𝕖𝕖❕

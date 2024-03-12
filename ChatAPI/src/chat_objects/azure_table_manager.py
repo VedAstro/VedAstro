@@ -116,7 +116,9 @@ class AzureTableManager:
     def save_message_in_azure(chat_raw_input) -> str:
 
         sender = chat_raw_input["sender"]
-        message_text = chat_raw_input["text"]
+        # use question in text else use question followup
+        # will also consider empty strings (""), 0, and False as None
+        message_text = chat_raw_input["text"] 
         message_text_hash = ChatTools.generate_hash(message_text)[:20]
         topic_text = chat_raw_input["topic"]
 

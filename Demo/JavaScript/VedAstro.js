@@ -1473,7 +1473,7 @@ class ChatInstance {
          </div>
          
          <!-- MESSAGES IN VIEW -->
-         <ul class="list-unstyled" id="ChatWindowMessageList" style=" max-height: 720px; scroll-behavior: smooth; ">
+         <ul class="list-unstyled px-3" id="ChatWindowMessageList" style=" max-height: 420px;overflow: auto; ">
              <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
                  <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar"
                       class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
@@ -1491,7 +1491,7 @@ class ChatInstance {
              </li>
          </ul>
          <!-- QUESTION INPUT -->
-         <div id="questionInputHolder" class="input-group mb-3" style=" margin-top: 94px; ">
+         <div id="questionInputHolder" class="input-group mb-3" style="">
      
            <button id="presetQuestionsButton" 
              data-bs-auto-close="outside" 
@@ -1808,6 +1808,8 @@ class ChatInstance {
     this.processQueue();
   }
 
+  //called direct from static HTML hookup without seperate attach code
+  //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
   rate_message(eventData, rating) {
     //come here on click rating button
     // get hash of message, stored as id in holder
@@ -1820,6 +1822,24 @@ class ChatInstance {
       user_id: window.vedastro.UserId,
       rating: rating,
       text_hash: text_hash,
+    };
+
+    window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
+  }
+
+  //when on of the follow up questions gets clicked
+  ask_followup_question(eventData, followupQuestion) {
+    // get hash of message, stored as id in holder
+    var messageHolder = $(eventData)
+      .closest(".card")
+      .children(".message-holder");
+    var primaryAnswerHash = messageHolder.attr("id");
+
+    //note the switch to python naming covention
+    const messagePayload = {
+      user_id: window.vedastro.UserId,
+      primary_answer_hash: primaryAnswerHash,
+      followup_question: followupQuestion,
     };
 
     window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
@@ -1867,27 +1887,29 @@ class ChatInstance {
       }, 1000);
     }
 
-
-
     //## BUILD HTML
 
+    //HANDLE FOLLOWUP
     // only add follow up questions if server specified them
     var followupQuestionsHtml = "";
+    // convert questions into visible buttons, for user to click 
     if (followup_questions.length > 0) {
+      followupQuestionsHtml +=
+        '<div class="hstack gap-2 w-100 justify-content-end" style=" position: absolute; bottom: -43px; right: -1px; ">';
 
-      followupQuestionsHtml += '<div class="hstack gap-2 w-100 justify-content-end" style=" position: absolute; bottom: -43px; right: -1px; ">';
-
-      followup_questions.forEach(function(question) {
+      followup_questions.forEach(function (question) {
         followupQuestionsHtml += `
-            <button type="button" class="btn btn-outline-primary">${question}</button>
+            <button type="button" onclick="window.vedastro.chatapi.ask_followup_question(this, '${question}')"  class="btn btn-outline-primary">${question}</button>
         `;
       });
 
-      followupQuestionsHtml += '</div>';
+      followupQuestionsHtml += "</div>";
     }
 
     //only show feedback buttons for text that need feedback
-    var feedbackButtonHtml = commands.includes("no_feedback") ? "" : `<div class="hstack gap-2">
+    var feedbackButtonHtml = commands.includes("no_feedback")
+      ? ""
+      : `<div class="hstack gap-2">
     <button title="Bad answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, -1)" class="btn btn-danger" style="padding: 0px 5px;">
       <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
     </button>
@@ -1895,7 +1917,6 @@ class ChatInstance {
       <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
     </button>
   </div>`;
-
 
     // Create a chat bubble with the AI's message
     var aiInputChatCloud = `<li class="d-flex justify-content-start" style=" margin-bottom: 70px; ">

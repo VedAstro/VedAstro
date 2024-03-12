@@ -1828,6 +1828,7 @@ class ChatInstance {
   }
 
   //when on of the follow up questions gets clicked
+  //get called direct from html code
   ask_followup_question(eventData, followupQuestion) {
     // get hash of message, stored as id in holder
     var messageHolder = $(eventData)
@@ -1835,11 +1836,15 @@ class ChatInstance {
       .children(".message-holder");
     var primaryAnswerHash = messageHolder.attr("id");
 
+    //set topic text TODO support DOB and books
+    var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+
     //note the switch to python naming covention
     const messagePayload = {
       user_id: window.vedastro.UserId,
       primary_answer_hash: primaryAnswerHash,
       followup_question: followupQuestion,
+      topic: topicText,
     };
 
     window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
@@ -1942,6 +1947,10 @@ class ChatInstance {
 
     // Append the chat bubble to the chat window
     $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
+
+
+    // # AUTO SCROLL DOWN
+    $('#ChatWindowMessageList').scrollTop($('#ChatWindowMessageList')[0].scrollHeight);
 
     // Flag to prevent user input while AI is 'typing'
     this.IsAITalking = true;
@@ -2118,8 +2127,9 @@ class ChatInstance {
     //STEP 2:
     //user's input is sent to server for reply
     //get selected birth time
-    var birth_time_json = CommonTools.BirthTimeUrlOfSelectedPersonJson();
-    await this.SendMessageToServer(userInput, birth_time_json);
+    //TODO can be DOB or bookname
+    var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+    await this.SendMessageToServer(userInput, topicText);
     this.LastUserMessage = userInput; //save to used later for highlight
 
     //STEP 3 : GUI CLEAN UP
@@ -2127,11 +2137,11 @@ class ChatInstance {
     $("#UserChatInputElement").val("");
   }
 
-  async SendMessageToServer(message, birthTimeUrl) {
+  async SendMessageToServer(message, topicText) {
     const messagePayload = {
       user_id: window.vedastro.UserId,
       text: message,
-      topic: birthTimeUrl,
+      topic: topicText,
     };
 
     window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));

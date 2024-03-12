@@ -84,13 +84,12 @@ def initialize_chat_api():
 
 
 # brings together the answering mechanism
+# marked for OBLIVION
 async def answer_to_reply(chat_input):
     print("################ START: ANSWER_TO_REPLY  ################")
+    global chat_engines
     global preset_queries
     global embeddings_creator
-
-    # is_query = chat_input.query != ""
-    is_query = True
 
     # TODO
     # do query mapping if possible
@@ -99,39 +98,34 @@ async def answer_to_reply(chat_input):
     #         payload.query, payload.llm_model_name, preset_queries, embeddings_creator)
 
     # time to call the in big guns...GPU infantry firing LLM "chat/completion" shells!
-    if is_query:
         # STEP 2: COMBINE CONTEXT AND QUESTION AND SEND TO CHAT LLM
         # Query the chat engine and send the results to the client
-        llm_response = chat_engines["MK7"].query(
-            text=chat_input["text"],
-            topic=chat_input["topic"],  # birth time/book name
-            # Controls the trade-off between randomness and determinism in the response
-            # A high value (e.g., 1.0) makes the model more random and creative
-            # temperature=chat_input["temperature"],
-            # # Controls diversity of the response
-            # # A high value (e.g., 0.9) allows for more diversity
-            # top_p=chat_input["top_p"],
-            # # Limits the maximum length of the generated text
-            # max_tokens=chat_input["max_tokens"],
-            # # Specifies sequences that tell the model when to stop generating text
-            # stop=chat_input["stop"],
-            # # Returns debug data like usage statistics
-            # return_debug_data=False  # Set to True to see detailed information about model usage
-        )
+    llm_response = chat_engines["MK7"].query(
+        text=chat_input["text"],
+        topic=chat_input["topic"],  # birth time/book name
+        # Controls the trade-off between randomness and determinism in the response
+        # A high value (e.g., 1.0) makes the model more random and creative
+        # temperature=chat_input["temperature"],
+        # # Controls diversity of the response
+        # # A high value (e.g., 0.9) allows for more diversity
+        # top_p=chat_input["top_p"],
+        # # Limits the maximum length of the generated text
+        # max_tokens=chat_input["max_tokens"],
+        # # Specifies sequences that tell the model when to stop generating text
+        # stop=chat_input["stop"],
+        # # Returns debug data like usage statistics
+        # return_debug_data=False  # Set to True to see detailed information about model usage
+    )
 
-        # note: metadata and source nodes used is all here
-        #       but we only take AI text response
-        text_response = llm_response.response
-        return text_response
-    else:
-        # little delay else, no time for "thinkin" msg to make it
-        time.sleep(1.5)
-        return ""
+    # note: metadata and source nodes used is all here
+    #       but we only take AI text response
+    text_response = llm_response.response
+    return text_response
 
 
 @app.get("/")
 def home():
-    return {"Welcome to VedAstro"}
+    return {"Welcome to ChatAPI : open-source chat AI for vedic astrology"}
 
 
 # SEARCH
@@ -288,18 +282,21 @@ async def horoscope_chat(websocket: websockets.WebSocket):
             message_count += 1
             input_parsed["message_number"] = message_count
 
+            # SAVE QUESTION
+            # format & log message for inteligent past QA (id out is for reference)
+            # chat_raw_input : text, session_id, rating, message_number
+            human_question_hash = AzureTableManager.save_message_in_azure(input_parsed)
+
             # UNRELATED
             if not is_followup and all_checks_pass:  # only call LLM if all checks and balances are even
 
                 #FOLLOW UP
                 print("################ DETECTED: LLM UNRELATED REPLY  ################")
 
-                # format & log message for inteligent past QA (id out is for reference)
-                # chat_raw_input : text, session_id, rating, message_number
-                human_question_hash = AzureTableManager.save_message_in_azure(input_parsed)
-
                 # answer machine (send all needed data)
-                ai_reply = await answer_to_reply(input_parsed)
+                raw_result = chat_engines["MK7"].query(user_question=input_parsed["text"], topic_text=input_parsed["topic"])
+                ai_reply = raw_result.response
+
 
                 # STAGE 3 : REPLY
                 # log message for inteligent past QA
@@ -331,9 +328,13 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 primary_question_msg_number = int(primary_answer_data["message_number"]) - 1  # go up 1 step
                 primary_question_data = AzureTableManager.read_from_table_message_number(session_id=session_id, message_number=primary_question_msg_number)
                 primary_question = primary_question_data["text"]
-
-                horoscope_predictions = ""
                 followup_question = input_parsed["followup_question"]  # single question sent by client
+
+                # NOTE: SPECIAL DOCS RETRIVEL
+                # create a new systhetic query, coposing all possible data
+                #to fetch more relevant context than 1st time question asked
+                synthetic_user_question = f"{primary_question}\n\n{primary_answer}\n\n{followup_question}"
+                horoscope_predictions = chat_engines["MK7"].vector_index_search(topic = input_parsed["topic"], user_question=synthetic_user_question)
 
                 ai_reply = ChatTools.answer_followup_questions_llm(primary_question=primary_question, primary_answer=primary_answer, horoscope_predictions=horoscope_predictions, followup_question=followup_question)
 
@@ -345,9 +346,9 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 input_parsed["message_number"] = message_count
                 ai_reply_hash = AzureTableManager.save_message_in_azure(input_parsed)
 
-                html_str_llm = ChatTools.highlight_relevant_keywords_llm(keywords_text=user_question, main_text=ai_reply)
+                ai_reply_html = ChatTools.highlight_relevant_keywords_llm(keywords_text=user_question, main_text=ai_reply)
                 followup_questions = ChatTools.generate_followup_questions_llm(keywords_text=user_question, main_text=ai_reply)
-                packed_box = ChatTools.package_reply_for_shippment(text_html=html_str_llm, text=ai_reply, text_hash=ai_reply_hash, followup_questions=followup_questions)
+                packed_box = ChatTools.package_reply_for_shippment(text_html=ai_reply_html, text=ai_reply, text_hash=ai_reply_hash, followup_questions=followup_questions)
                 await websocket.send_text(packed_box)
 
             # end of line no conditions met

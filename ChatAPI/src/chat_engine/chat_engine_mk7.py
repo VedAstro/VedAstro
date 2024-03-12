@@ -6,6 +6,9 @@ from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.core import get_response_synthesizer
 from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.core import QueryBundle
+from llama_index.core.retrievers import VectorIndexRetriever
+from llama_index.core.schema import NodeWithScore
 
 # Retrievers
 from llama_index.core.retrievers import (
@@ -112,29 +115,29 @@ class ChatEngine7:
             print(e)
             raise Exception(f"Failed to load the Chat Engine.\n{e}") from e
 
-    # this is where the query starts,
-    def query(self, **kwargs):
-        print("################ START: query  ################")
-        # STAGE 1 : DATA
-        # user's question as text
-        user_question = kwargs["text"]
-        topic_text = kwargs["topic"]
+    # all access to index via get & set
+    # include "topic_text" only if want auto build index if not exist,
+    # else leave empty to only use stored
+    def get_index(self, topic_hash, topic_text=""):
         directory_path = "vector_store/birth_time_predictions/"
 
-        # STAGE 2 : HASH FOR CACHING
-        # create hash of topic given (birth time/book name)
-        topic_hash = ChatTools.generate_hash(topic_text)
         # check if index already exist in memory
         index_exist_in_memory = self.is_index_exist_in_memory(topic_text=topic_text, topic_hash=topic_hash, directory_path=directory_path)
 
-        # if exist in memory, then ready to use! You pass to the next level, collect 200 points 🪙
-        if index_exist_in_memory:
-            result = self.retrieve_vector_query_llm(topic_hash=topic_hash, user_question=user_question)
-            return result
+        return self.index[topic_hash] 
 
-        # run query agains index and process calls from there
+
+    # this is where the query starts,
+    def query(self, user_question, topic_text):
+        print("################ START: query  ################")
+        # STAGE 2 : HASH FOR CACHING
+        # create hash of topic given (birth time/book name)
+        topic_hash = ChatTools.generate_hash(topic_text)
+
+        # if exist in memory, then ready to use! You pass to the next level, collect 200 points 🪙
         result = self.retrieve_vector_query_llm(topic_hash=topic_hash, user_question=user_question)
         return result
+
 
     # downloads & loads index into memory if exist in azure
     # then return true
@@ -157,6 +160,8 @@ class ChatEngine7:
 
     # downloads & loads index into memory if exist in azure
     # then return true
+    # include "topic_text" only if want auto build index if not exist,
+    # else leave empty to only use stored
     def is_index_exist_in_memory(self, **kwargs) -> bool:
         print("################ START: is_index_exist_in_memory  ################")
 
@@ -189,7 +194,7 @@ class ChatEngine7:
                 documents = SimpleBirthTimeReader().load_data(topic_text)  # get predictions for given birth time
 
                 # call LLM and embed predictions into vector index (stored in RAM)
-                self.index[topic_hash] = VectorStoreIndex.from_documents(documents, show_progress=True)  # TODO checkout summaryindex and FAISS index
+                self.index[topic_hash] = VectorStoreIndex.from_documents(documents, show_progress=True) # TODO checkout summaryindex and FAISS index
 
                 # make copy in cache db to save future LLM calls 💰
                 self.save_index_to_azure_db_and_local(topic_hash=topic_hash)
@@ -226,7 +231,8 @@ class ChatEngine7:
 
         # find local index
         topic_hash = kwargs["topic_hash"]
-        index = self.index[topic_hash]
+        index = self.get_index(topic_hash)
+        index.show_progress=True
         vector_retriever = VectorIndexRetriever(index=index, similarity_top_k=40)
 
         # STAGE 5
@@ -235,3 +241,24 @@ class ChatEngine7:
 
         result = custom_query_engine.query(kwargs["user_question"])
         return result
+
+    def vector_index_search(self, **kwargs):
+
+        # Assuming vector_index is already defined
+        topic = kwargs["topic"]
+        user_question = kwargs["user_question"]
+        topic_hash = ChatTools.generate_hash(topic)
+        topic_index = self.get_index(topic_hash, topic) #note we specify text, so can create index if don't have
+        vector_retriever = VectorIndexRetriever(index=topic_index, similarity_top_k=30)
+
+        # Define a query
+        query_bundle = QueryBundle(query_str=user_question)
+
+        # Retrieve nodes
+        retrieved_nodes = vector_retriever.retrieve(query_bundle)
+
+        # Print retrieved nodes
+        # for node in retrieved_nodes:
+        #     print(node)
+        
+        return retrieved_nodes

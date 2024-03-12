@@ -14,6 +14,10 @@ import json
 class ChatTools:
 
     @staticmethod
+    def convert_to_kwargs(json_obj):
+        return "**"+str(json_obj)+"**"
+
+    @staticmethod
     def list_file_names_with_paths(directory, prefix):
         file_dict = {}
         for root, dirs, files in os.walk(directory):
@@ -30,10 +34,6 @@ class ChatTools:
             for file in files:
                 file_paths.append(os.path.join(root, file))
         return file_paths
-
-    @staticmethod
-    def remove_spaces(input_string) -> str:
-        return input_string.replace(' ', '')
 
     @staticmethod
     def remove_spaces(input_string) -> str:
@@ -142,8 +142,10 @@ class ChatTools:
         horoscope_predictions = kwargs["horoscope_predictions"]
         followup_question = kwargs["followup_question"] # single question sent by client
         
+        combined_horscope = ' '.join([node.node.text for node in horoscope_predictions])
+
         #stack question perfectly, to get perfect response
-        messages = [{"role": "system", "content": f"Answer questions based only context text\n\n CONTEXT:\n\n {horoscope_predictions}"},
+        messages = [{"role": "system", "content": f"Answer questions based only context text\n\n CONTEXT:\n\n {combined_horscope}"},
                     {"role": "user", "content": f"{primary_question}"},
                     {"role": "assistant", "content": f"{primary_answer}"},
                     {"role": "user", "content": f"{followup_question}"},
@@ -170,21 +172,6 @@ class ChatTools:
 
         return text_html
 
-    # given a couple of dynamic inputs, will format to message for client
-    # @staticmethod
-    # def package_reply_for_shippment(**kwargs) -> str:
-
-    #     cardboard_box = {}
-
-    #     # Add any additional keyword arguments to the cardboard box
-    #     for key, value in kwargs.items():
-    #         cardboard_box[key] = value
-
-    #     #special convert commands dynamic array to static array for transport
-    #     if hasattr(cardboard_box["command"], 'tolist'):
-    #         cardboard_box["command"] = cardboard_box["command"].tolist()
-
-    #     return json.dumps(cardboard_box)
 
     @staticmethod
     def package_reply_for_shippment(**kwargs) -> str:
@@ -388,6 +375,10 @@ class ChatTools:
     def password_protect(input_string):
         if input_string != os.environ["PASSWORD"]:
             raise ValueError(f"The password is Spotty")
+
+
+
+
 
     # given a list of documents puts into dictionary for Fast API output
     # from langchain_core.documents import Document

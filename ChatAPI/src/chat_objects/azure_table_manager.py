@@ -121,7 +121,7 @@ class AzureTableManager:
         topic_text = chat_raw_input["topic"]
 
         # Remove characters not valid for HTML ID
-        valid_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"
+        valid_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" # API KEY for everything 😜
         topic_text_cleaned = "".join(c for c in topic_text if c in valid_characters)
 
 
@@ -277,3 +277,37 @@ class AzureTableManager:
             return entity
         except Exception as e:
             print(f"Failed to read entity: {e}")
+
+    @staticmethod
+    def read_from_table_message_number(session_id, message_number):
+        table_client = TableClient.from_connection_string(AzureTableManager.connection_string, "ChatMessage")
+
+        # find the exact message to rate, hence no need to break ques_topic hash
+        parameters = {"session_id": session_id, "message_number": message_number}
+        odata_query = "PartitionKey eq @session_id and message_number eq @message_number"
+        msg_list = table_client.query_entities(query_filter=odata_query, parameters=parameters)
+
+        #send 1st message found
+        for found_msg in msg_list:
+            return found_msg
+
+        # end of line!
+        return None
+
+
+    # @staticmethod
+    # def get_message_by_row_key(session_id, ques_topic_hash):
+    #     table_client = TableClient.from_connection_string(AzureTableManager.connection_string, "ChatMessage")
+        
+
+    #     # find the exact message to rate, hence no need to break ques_topic hash
+    #     parameters = {"session_id": session_id, "ques_topic_hash": ques_topic_hash}
+    #     odata_query = "PartitionKey eq @session_id and RowKey eq @ques_topic_hash"
+    #     msg_list = table_client.query_entities(query_filter=odata_query, parameters=parameters)
+
+    #     #send 1st message found
+    #     for found_msg in msg_list:
+    #         return found_msg
+
+    #     # end of line!
+    #     return None

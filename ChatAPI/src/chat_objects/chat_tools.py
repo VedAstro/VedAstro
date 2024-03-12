@@ -6,7 +6,6 @@ import string
 from vedastro import *  # install via pip
 import numpy as np
 
-
 FAISS_INDEX_PATH = "faiss_index"
 
 import json
@@ -14,14 +13,12 @@ import json
 
 class ChatTools:
 
-
-
     @staticmethod
     def list_file_names_with_paths(directory, prefix):
         file_dict = {}
         for root, dirs, files in os.walk(directory):
             for file in files:
-                file_blob_name =f"{prefix}-{file}"
+                file_blob_name = f"{prefix}-{file}"
                 local_file_path = os.path.join(root, file)
                 file_dict[file_blob_name] = local_file_path
         return file_dict
@@ -37,11 +34,11 @@ class ChatTools:
     @staticmethod
     def remove_spaces(input_string) -> str:
         return input_string.replace(' ', '')
-    
+
     @staticmethod
     def remove_spaces(input_string) -> str:
         return input_string.replace(' ', '')
-    
+
     # removes all chars that can't go into file name
     @staticmethod
     def sanitize_filename(filename):
@@ -69,25 +66,9 @@ class ChatTools:
         import os
         from openai import AzureOpenAI
 
-        client = AzureOpenAI(
-            azure_endpoint="https://openaimodelserver.openai.azure.com/",
-            api_key=os.getenv("AZURE_OPENAI_KEY"),
-            api_version="2024-02-15-preview")
+        client = AzureOpenAI(azure_endpoint="https://openaimodelserver.openai.azure.com/", api_key=os.getenv("AZURE_OPENAI_KEY"), api_version="2024-02-15-preview")
 
-        messages = [{
-            "role":
-                "system",
-            "content":
-                "Repeat text in 'Answer' with keywords related to text in 'Question' bolded. Output as HTML."
-        }, {
-            "role": "user",
-            "name": "keywords_text",
-            "content": f"{keywords_text}"
-        }, {
-            "role": "assistant",
-            "name": "main_text",
-            "content": f"<p><b>{keywords_text}</b>: {main_text}</p>"
-        }]
+        messages = [{"role": "system", "content": "Repeat text in 'Answer' with keywords related to text in 'Question' bolded. Output as HTML."}, {"role": "user", "name": "keywords_text", "content": f"{keywords_text}"}, {"role": "assistant", "name": "main_text", "content": f"<p><b>{keywords_text}</b>: {main_text}</p>"}]
 
         chat_completion = client.chat.completions.create(
             model="vedastro",  # model = "deployment_name"
@@ -116,30 +97,14 @@ class ChatTools:
         #below prompt engineering needs manual work
         #output is not perfect reply with bolded words in html
 
-        return ["When","Why?","Tell me more...", "How?"]
+        return ["When?", "Why?", "How?", "Tell me more..."]
 
         import os
         from openai import AzureOpenAI
 
-        client = AzureOpenAI(
-            azure_endpoint="https://openaimodelserver.openai.azure.com/",
-            api_key=os.getenv("AZURE_OPENAI_KEY"),
-            api_version="2024-02-15-preview")
+        client = AzureOpenAI(azure_endpoint="https://openaimodelserver.openai.azure.com/", api_key=os.getenv("AZURE_OPENAI_KEY"), api_version="2024-02-15-preview")
 
-        messages = [{
-            "role":
-                "system",
-            "content":
-                "Repeat text in 'Answer' with keywords related to text in 'Question' bolded. Output as HTML."
-        }, {
-            "role": "user",
-            "name": "keywords_text",
-            "content": f"{keywords_text}"
-        }, {
-            "role": "assistant",
-            "name": "main_text",
-            "content": f"<p><b>{keywords_text}</b>: {main_text}</p>"
-        }]
+        messages = [{"role": "system", "content": "Repeat text in 'Answer' with keywords related to text in 'Question' bolded. Output as HTML."}, {"role": "user", "name": "keywords_text", "content": f"{keywords_text}"}, {"role": "assistant", "name": "main_text", "content": f"<p><b>{keywords_text}</b>: {main_text}</p>"}]
 
         chat_completion = client.chat.completions.create(
             model="vedastro",  # model = "deployment_name"
@@ -159,7 +124,51 @@ class ChatTools:
         text_html = message.content
 
         return text_html
+
+    @staticmethod
+    def answer_followup_questions_llm(**kwargs) -> List[str]:
+        print("################ START: answer_followup_questions_llm  ################")
+
+        import os
+        from openai import AzureOpenAI
+
+        # create connetion to azure
+        client = AzureOpenAI(azure_endpoint="https://openaimodelserver.openai.azure.com/", api_key=os.getenv("AZURE_OPENAI_KEY"), api_version="2024-02-15-preview")
+
+        # prepare follow up question in correct format
+        # NOTE: here is important to obey chat like speech for best answers
+        primary_question = kwargs["primary_question"] # base question to ask against
+        primary_answer = kwargs["primary_answer"] # base question to ask against
+        horoscope_predictions = kwargs["horoscope_predictions"]
+        followup_question = kwargs["followup_question"] # single question sent by client
         
+        #stack question perfectly, to get perfect response
+        messages = [{"role": "system", "content": f"Answer questions based only context text\n\n CONTEXT:\n\n {horoscope_predictions}"},
+                    {"role": "user", "content": f"{primary_question}"},
+                    {"role": "assistant", "content": f"{primary_answer}"},
+                    {"role": "user", "content": f"{followup_question}"},
+                    ]
+
+        # call LLM (GPU power to the rescue!)
+        #TODO adjust below knobs
+        chat_completion = client.chat.completions.create(
+            model="vedastro",  # model = "deployment_name"
+            messages=messages,
+            temperature=0.0,
+            max_tokens=4096,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+            stop=None)
+
+        # go through the chaos, and bring forth the answer!🕍🪼
+        choices = chat_completion.choices
+        message = choices[0].message
+
+        #this should be raw text with html bold tags here and there
+        text_html = message.content
+
+        return text_html
 
     # given a couple of dynamic inputs, will format to message for client
     # @staticmethod
@@ -176,7 +185,6 @@ class ChatTools:
     #         cardboard_box["command"] = cardboard_box["command"].tolist()
 
     #     return json.dumps(cardboard_box)
-    
 
     @staticmethod
     def package_reply_for_shippment(**kwargs) -> str:
@@ -191,12 +199,6 @@ class ChatTools:
             cardboard_box[key] = value
 
         return json.dumps(cardboard_box)
-
-
-
-
-
-
 
     # given a string will output sha256, used for id purposes
 
@@ -219,48 +221,34 @@ class ChatTools:
         from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
 
         # Initialize the LLM modal to make vectors (local CPU powered)
-        embeddings_creator = LocalHuggingFaceEmbeddings(
-            "sentence-transformers/all-MiniLM-L6-v2")
+        embeddings_creator = LocalHuggingFaceEmbeddings("sentence-transformers/all-MiniLM-L6-v2")
 
         # get pre-defined "query-map" (store in file)
         preset_queries = ChatTools.get_query_map_from_file()
 
         # NOTE : at this stage the "map" only contains topic text, no vectors for it
         # fill standard "vector" property
-        preset_queries = [
-            ChatTools.fill_vector(level1,
-                                  "sentence-transformers/all-MiniLM-L6-v2",
-                                  embeddings_creator)
-            for level1 in preset_queries
-        ]
+        preset_queries = [ChatTools.fill_vector(level1, "sentence-transformers/all-MiniLM-L6-v2", embeddings_creator) for level1 in preset_queries]
 
         return preset_queries, embeddings_creator
 
     # just gets map from file and loads it
 
     @staticmethod
-    def map_query_by_similarity(query, llm_model_name, preset_queries,
-                                embeddings_creator):
+    def map_query_by_similarity(query, llm_model_name, preset_queries, embeddings_creator):
         import numpy as np
 
         # Embed the user query
         user_vector = embeddings_creator.embed_query(query)
-        user_vector_expanded = np.expand_dims(user_vector,
-                                              axis=0)  # Make the vectors match
+        user_vector_expanded = np.expand_dims(user_vector, axis=0)  # Make the vectors match
 
         # STEP 2 : Do search on map
 
         # fill query map scores for user's query
-        preset_queries = [
-            ChatTools.fill_similarity_score(user_vector_expanded, level1,
-                                            llm_model_name, embeddings_creator)
-            for level1 in preset_queries
-        ]
+        preset_queries = [ChatTools.fill_similarity_score(user_vector_expanded, level1, llm_model_name, embeddings_creator) for level1 in preset_queries]
 
         # fill standard "total_score" property at end of parent child chain (to find winner)
-        preset_queries = [
-            ChatTools.fill_total_score(level1, 0) for level1 in preset_queries
-        ]
+        preset_queries = [ChatTools.fill_total_score(level1, 0) for level1 in preset_queries]
 
         # extract out query map path (leading to highest total score)
         map_route = ChatTools.find_max_scoring_topic(preset_queries)
@@ -324,15 +312,13 @@ class ChatTools:
         return query_map
 
     @staticmethod
-    def fill_similarity_score(user_query_vector, vector_object, llm_model_name,
-                              embeddings_creator):
+    def fill_similarity_score(user_query_vector, vector_object, llm_model_name, embeddings_creator):
         from sklearn.metrics.pairwise import cosine_similarity
 
         # take text called "vector" out of main object
         vector = vector_object["vector"]
 
-        sub_query_similarities = cosine_similarity(
-            user_query_vector, vector)[0]  # note how we dig 1 level down
+        sub_query_similarities = cosine_similarity(user_query_vector, vector)[0]  # note how we dig 1 level down
 
         # place data inside package
         vector_object["score"] = sub_query_similarities[0]
@@ -340,9 +326,7 @@ class ChatTools:
         # do recursive if has chilren
         if "queries" in vector_object:
             for sub_q in vector_object["queries"]:
-                sub_q = ChatTools.fill_similarity_score(user_query_vector,
-                                                        sub_q, llm_model_name,
-                                                        embeddings_creator)
+                sub_q = ChatTools.fill_similarity_score(user_query_vector, sub_q, llm_model_name, embeddings_creator)
 
         return vector_object
 
@@ -356,8 +340,7 @@ class ChatTools:
         # make vector from the text
         vector = embeddings_creator.embed_query(topic)
 
-        user_vector_expanded = np.expand_dims(vector,
-                                              axis=0)  # Make the vectors match
+        user_vector_expanded = np.expand_dims(vector, axis=0)  # Make the vectors match
 
         # place data inside package
         vector_object["vector"] = user_vector_expanded
@@ -365,8 +348,7 @@ class ChatTools:
         # do recursive if has chilren
         if "queries" in vector_object:
             for sub_q in vector_object["queries"]:
-                sub_q = ChatTools.fill_vector(sub_q, llm_model_name,
-                                              embeddings_creator)
+                sub_q = ChatTools.fill_vector(sub_q, llm_model_name, embeddings_creator)
 
         return vector_object
 
@@ -381,8 +363,7 @@ class ChatTools:
             for topic_info in preset_queries[category]:
                 topic = topic_info['topic']
                 # Sum the scores for the current topic
-                total_score = sum(
-                    query['score'] for query in topic_info['queries'])
+                total_score = sum(query['score'] for query in topic_info['queries'])
                 # Add or update the total score for the topic
                 if topic in topic_scores:
                     topic_scores[f"{category}_{topic}"] += total_score

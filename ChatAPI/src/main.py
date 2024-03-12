@@ -277,17 +277,22 @@ async def horoscope_chat(websocket: websockets.WebSocket):
             #             |
             #             +> UNRELATED --> full llama raq synthesis
 
-            is_followup = "followup" in input_parsed["command"]
+            # mark as follow up only if a follow up question is present
+            is_followup = input_parsed.get("followup_question") is not None
             all_checks_pass = ai_reply == "" or ai_reply == "Thinking....🤔"
-            #UNRELATED
+
+            # use later for highlight (UX improve)
+            user_question = input_parsed["text"]  # user's question
+
+            # message_number : needed for quick revisit answer lookup
+            message_count += 1
+            input_parsed["message_number"] = message_count
+
+            # UNRELATED
             if not is_followup and all_checks_pass:  # only call LLM if all checks and balances are even
 
                 #FOLLOW UP
                 print("################ DETECTED: LLM UNRELATED REPLY  ################")
-
-                # message_number : needed for quick revisit answer lookup
-                message_count += 1
-                input_parsed["message_number"] = message_count
 
                 # format & log message for inteligent past QA (id out is for reference)
                 # chat_raw_input : text, session_id, rating, message_number
@@ -299,7 +304,6 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 # STAGE 3 : REPLY
                 # log message for inteligent past QA
                 # use later for highlight (UX improve)
-                previous_text = input_parsed["text"]
                 input_parsed["text"] = ai_reply
                 input_parsed["sender"] = "AI"
                 message_count += 1
@@ -308,13 +312,46 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 
                 # send ans to caller in JSON form, to support metadata
                 # highlight text with relevant keywords relating to input query
-                html_str_llm = ChatTools.highlight_relevant_keywords_llm(keywords_text=previous_text, main_text=ai_reply)
-                followup_questions = ChatTools.generate_followup_questions_llm(keywords_text=previous_text, main_text=ai_reply)
+                html_str_llm = ChatTools.highlight_relevant_keywords_llm(keywords_text=user_question, main_text=ai_reply)
+                followup_questions = ChatTools.generate_followup_questions_llm(keywords_text=user_question, main_text=ai_reply)
                 packed_box = ChatTools.package_reply_for_shippment(command=input_parsed["command"], text_html=html_str_llm, text=ai_reply, text_hash=ai_reply_hash, followup_questions=followup_questions)
                 await websocket.send_text(packed_box)
+            
             # FOLLOW-UP
-            else:
+            if is_followup and all_checks_pass: 
                 print("################ DETECTED: FOLLOW UP QUESTION ################")
+
+                #prepare needed data
+                primary_answer_hash = input_parsed["primary_answer_hash"]  # base question to ask against
+                #based on hash get full question as pure text
+                primary_answer_data = AzureTableManager.read_from_table(session_id, primary_answer_hash)
+                primary_answer = primary_answer_data["text"]
+
+                #based on primary answer, back track to primary question
+                primary_question_msg_number = int(primary_answer_data["message_number"]) - 1  # go up 1 step
+                primary_question_data = AzureTableManager.read_from_table_message_number(session_id=session_id, message_number=primary_question_msg_number)
+                primary_question = primary_question_data["text"]
+
+                horoscope_predictions = ""
+                followup_question = input_parsed["followup_question"]  # single question sent by client
+
+                ai_reply = ChatTools.answer_followup_questions_llm(primary_question=primary_question, primary_answer=primary_answer, horoscope_predictions=horoscope_predictions, followup_question=followup_question)
+
+                # SAVE AI REPLY
+                # log message for inteligent past QA
+                input_parsed["text"] = ai_reply
+                input_parsed["sender"] = "AI"
+                message_count += 1
+                input_parsed["message_number"] = message_count
+                ai_reply_hash = AzureTableManager.save_message_in_azure(input_parsed)
+
+                html_str_llm = ChatTools.highlight_relevant_keywords_llm(keywords_text=user_question, main_text=ai_reply)
+                followup_questions = ChatTools.generate_followup_questions_llm(keywords_text=user_question, main_text=ai_reply)
+                packed_box = ChatTools.package_reply_for_shippment(text_html=html_str_llm, text=ai_reply, text_hash=ai_reply_hash, followup_questions=followup_questions)
+                await websocket.send_text(packed_box)
+
+            # end of line no conditions met
+            print("END OF LINE!")
 
     # Handle failed gracefully
     except Exception as e:

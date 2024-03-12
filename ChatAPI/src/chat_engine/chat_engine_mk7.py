@@ -18,7 +18,6 @@ from llama_index.core.node_parser import SentenceSplitter
 
 # from llama_index.llms.azure_openai import AzureOpenAI
 from llama_index.core import (
-    
     load_index_from_storage,
     StorageContext,
 )
@@ -148,7 +147,7 @@ class ChatEngine7:
             topic_hash = kwargs["topic_hash"]
             vi_out_path = f"{directory_path}{topic_hash}"
             temp_index = load_index_from_storage(StorageContext.from_defaults(persist_dir=vi_out_path))
-            print("Cached topic vector loaded! Money in the bank 🏦")
+            print("Cached topic vector loaded from disk! Money in the bank 🏦")
             self.index[topic_hash] = temp_index  # only safe to RAM once confirmed no errors
             return True  # let caller know idex is ready in RAM
 
@@ -177,9 +176,9 @@ class ChatEngine7:
 
             # if found, load into memory please 🫡
             if is_found:
-                vi_out_path = f"{directory_path}{topic_hash}" # standard path where indexes are placed by all methods
-                self.index[topic_hash] = load_index_from_storage(StorageContext.from_defaults(persist_dir=vi_out_path))
-                print("Cached topic vector loaded! Money in the bank 🏦")
+                # vi_out_path = f"{directory_path}{topic_hash}"  # standard path where indexes are placed by all methods
+                # self.index[topic_hash] = load_index_from_storage(StorageContext.from_defaults(persist_dir=vi_out_path))
+                # print("Cached topic vector loaded! Money in the bank 🏦")
                 return True  # let caller know idex is ready in RAM
 
             # possibility 2 : not found,

@@ -35,11 +35,18 @@ COPY start-chatapi-server.sh /
 #copy chatapi app python files before pip install (maintain same structure)
 COPY src /src
 COPY requirements.txt /
+COPY nvidia-requirements.txt /
 
 # install chatapi server
 RUN ["/bin/bash", "install-chatapi-server.sh"]
 
 RUN pip3 install -r requirements.txt
+
+#clean up uneeded pip files
+#NVIDIA is see you!
+#RUN pip3 uninstall -r nvidia-requirements.txt -y
+
+#RUN rm /path/to/large/unused/wheelfile.whl
 
 
 # install file browser server (won't run till called via start-file-server.sh)

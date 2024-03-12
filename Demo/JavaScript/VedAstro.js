@@ -1473,7 +1473,7 @@ class ChatInstance {
          </div>
          
          <!-- MESSAGES IN VIEW -->
-         <ul class="list-unstyled" id="ChatWindowMessageList">
+         <ul class="list-unstyled" id="ChatWindowMessageList" style=" max-height: 720px; scroll-behavior: smooth; ">
              <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
                  <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar"
                       class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
@@ -1491,7 +1491,7 @@ class ChatInstance {
              </li>
          </ul>
          <!-- QUESTION INPUT -->
-         <div id="questionInputHolder" class="input-group mb-3">
+         <div id="questionInputHolder" class="input-group mb-3" style=" margin-top: 94px; ">
      
            <button id="presetQuestionsButton" 
              data-bs-auto-close="outside" 
@@ -1825,6 +1825,9 @@ class ChatInstance {
     window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
   }
 
+  //YOU CANNOT FIGHT A DYING MAN,
+  //HE HOLDS THE UPPER HAND ALWAYS
+
   // Handler for incoming messages
   onmessage(event) {
     // Parse the JSON data from the event
@@ -1832,14 +1835,16 @@ class ChatInstance {
     var ai_text_message_html = raw_json_message.text_html;
     var message_hash = raw_json_message.text_hash;
     var ai_text_message = raw_json_message.text;
+    var followup_questions = raw_json_message?.followup_questions ?? [];
 
-    //SPECIAL HANDLE FOR LOGIN PROMPTS
+    //PROCESS SERVER COMMANDS
+    var commands = raw_json_message.command || []; // when no commands given empty to not fail
+
+    //## SPECIAL HANDLE FOR LOGIN PROMPTS
     //1: check if server said please login, in command to client
     //   meaning user just say login message given by server,
     //   upon click login, start wait loop (make it seem bot is waiting for user to login)
     //   then that special login tab (RememberMe) will auto close
-    var commands = raw_json_message.command || []; // when no commands given empty to not fail
-
 
     let intervalId;
     if (commands.includes("please_login")) {
@@ -1862,6 +1867,25 @@ class ChatInstance {
       }, 1000);
     }
 
+
+
+    //## BUILD HTML
+
+    // only add follow up questions if server specified them
+    var followupQuestionsHtml = "";
+    if (followup_questions.length > 0) {
+
+      followupQuestionsHtml += '<div class="hstack gap-2 w-100 justify-content-end" style=" position: absolute; bottom: -43px; right: -1px; ">';
+
+      followup_questions.forEach(function(question) {
+        followupQuestionsHtml += `
+            <button type="button" class="btn btn-outline-primary">${question}</button>
+        `;
+      });
+
+      followupQuestionsHtml += '</div>';
+    }
+
     //only show feedback buttons for text that need feedback
     var feedbackButtonHtml = commands.includes("no_feedback") ? "" : `<div class="hstack gap-2">
     <button title="Bad answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, -1)" class="btn btn-danger" style="padding: 0px 5px;">
@@ -1874,7 +1898,7 @@ class ChatInstance {
 
 
     // Create a chat bubble with the AI's message
-    var aiInputChatCloud = `<li class="d-flex justify-content-start mb-4">
+    var aiInputChatCloud = `<li class="d-flex justify-content-start" style=" margin-bottom: 70px; ">
         <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
         <div class="card">
             <div class="card-header d-flex justify-content-between p-3">
@@ -1890,6 +1914,7 @@ class ChatInstance {
                 </p>
                 <!-- SVG for loading icon -->
                 <svg class="loading-icon-elm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
+                ${followupQuestionsHtml}
             </div>
         </div>
     </li>`;

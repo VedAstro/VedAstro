@@ -133,19 +133,30 @@ class ChatTools:
         from openai import AzureOpenAI
 
         # create connetion to azure
-        client = AzureOpenAI(azure_endpoint="https://openaimodelserver.openai.azure.com/", api_key=os.getenv("AZURE_OPENAI_KEY"), api_version="2024-02-15-preview")
+        client = AzureOpenAI(
+            azure_endpoint="https://openaimodelserver.openai.azure.com/", api_key=os.getenv("AZURE_OPENAI_KEY"), api_version="2024-02-15-preview")
 
         # prepare follow up question in correct format
         # NOTE: here is important to obey chat like speech for best answers
         primary_question = kwargs["primary_question"] # base question to ask against
         primary_answer = kwargs["primary_answer"] # base question to ask against
         horoscope_predictions = kwargs["horoscope_predictions"]
-        followup_question = kwargs["followup_question"] # single question sent by client
+        followup_question = kwargs["text"] # single question sent by client
         
         combined_horscope = ' '.join([node.node.text for node in horoscope_predictions])
+        
+        #SPECIAL CASE:
+        conditional_prompt = ""
+        #when user say's "tell me more", means wants more text
+        if "more" in followup_question:
+            conditional_prompt += "\n\nAnswer minimum 300 words\n\n"
 
         #stack question perfectly, to get perfect response
-        messages = [{"role": "system", "content": f"Answer questions based only context text\n\n CONTEXT:\n\n {combined_horscope}"},
+        messages = [{"role": "system", "content": f"{conditional_prompt} Rules to follow: 1.Do not disclaim astrology. 2.Generate unique response\n\n"},
+                    {"role": "user", "content": f"Below text is a description of a human's life:\n\n {combined_horscope}"},
+                    {"role": "assistant", "content": f"Okay, I've read and understood this person's life description."},
+                    {"role": "user", "content": f"Based only on knowledge from given text answer all questions."},
+                    {"role": "assistant", "content": f"Okay, ask your question I'll give a clear and easy to understand answer."},
                     {"role": "user", "content": f"{primary_question}"},
                     {"role": "assistant", "content": f"{primary_answer}"},
                     {"role": "user", "content": f"{followup_question}"},
@@ -156,11 +167,11 @@ class ChatTools:
         chat_completion = client.chat.completions.create(
             model="vedastro",  # model = "deployment_name"
             messages=messages,
-            temperature=0.0,
+            temperature=0.25,
             max_tokens=4096,
             top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
+            frequency_penalty=0.5,
+            presence_penalty=0.1,
             stop=None)
 
         # go through the chaos, and bring forth the answer!🕍🪼

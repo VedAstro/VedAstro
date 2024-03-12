@@ -1840,10 +1840,13 @@ class ChatInstance {
     var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
 
     //note the switch to python naming covention
+    var commandsToSend = [];
+    commandsToSend.push(followupQuestion); //add command for server to read as "follow up"
     const messagePayload = {
       user_id: window.vedastro.UserId,
       primary_answer_hash: primaryAnswerHash,
-      followup_question: followupQuestion,
+      commands: commandsToSend, //server uses this to do special handling
+      text: followupQuestion,
       topic: topicText,
     };
 
@@ -1899,8 +1902,8 @@ class ChatInstance {
     var followupQuestionsHtml = "";
     // convert questions into visible buttons, for user to click 
     if (followup_questions.length > 0) {
-      followupQuestionsHtml +=
-        '<div class="hstack gap-2 w-100 justify-content-end" style=" position: absolute; bottom: -43px; right: -1px; ">';
+      followupQuestionsHtml += //start out hidden, then js will bring to live with animation at right time (class)
+        '<div class="followUpQuestionHolder hstack gap-2 w-100 justify-content-end" style="display:none; position: absolute; bottom: -43px; right: -1px; ">';
 
       followup_questions.forEach(function (question) {
         followupQuestionsHtml += `
@@ -1962,6 +1965,7 @@ class ChatInstance {
     // Stream the AI's message into the chat bubble
     const interval = setInterval(() => {
       // Check if the entire message has been displayed
+      //MESSAGE STREAM COMPLETE
       if (index >= ai_text_message.length) {
         clearInterval(interval);
 
@@ -1975,6 +1979,10 @@ class ChatInstance {
 
         // Allow user input again
         this.IsAITalking = false;
+
+        //make follow up questions if any slowly appear
+        //narrow by message bubble, then holder
+        $(`#${message_hash} .followUpQuestionHolder`).fadeIn("slow");
 
         return;
       }

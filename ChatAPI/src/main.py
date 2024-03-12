@@ -272,7 +272,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
             #             +> UNRELATED --> full llama raq synthesis
 
             # mark as follow up only if a follow up question is present
-            is_followup = input_parsed.get("followup_question") is not None
+            is_followup = "followup_question" in input_parsed["command"]
             all_checks_pass = ai_reply == "" or ai_reply == "Thinking....🤔"
 
             # use later for highlight (UX improve)
@@ -328,14 +328,15 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 primary_question_msg_number = int(primary_answer_data["message_number"]) - 1  # go up 1 step
                 primary_question_data = AzureTableManager.read_from_table_message_number(session_id=session_id, message_number=primary_question_msg_number)
                 primary_question = primary_question_data["text"]
-                followup_question = input_parsed["followup_question"]  # single question sent by client
+                followup_question = input_parsed["text"]  # single question sent by client
 
                 # NOTE: SPECIAL DOCS RETRIVEL
                 # create a new systhetic query, coposing all possible data
                 #to fetch more relevant context than 1st time question asked
                 synthetic_user_question = f"{primary_question}\n\n{primary_answer}\n\n{followup_question}"
                 horoscope_predictions = chat_engines["MK7"].vector_index_search(topic = input_parsed["topic"], user_question=synthetic_user_question)
-
+                
+                # get reply from LLM 🚅
                 ai_reply = ChatTools.answer_followup_questions_llm(primary_question=primary_question, primary_answer=primary_answer, horoscope_predictions=horoscope_predictions, followup_question=followup_question)
 
                 # SAVE AI REPLY

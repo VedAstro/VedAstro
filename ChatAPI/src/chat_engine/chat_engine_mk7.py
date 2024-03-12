@@ -14,12 +14,11 @@ from langchain.prompts import PromptTemplate
 from llama_index.core import Settings
 
 from llama_index.core import PromptTemplate
-from llama_index.core.llms import ChatMessage, MessageRole
-from llama_index.core.chat_engine import CondenseQuestionChatEngine
 from llama_index.core.node_parser import SentenceSplitter
 
 # from llama_index.llms.azure_openai import AzureOpenAI
 from llama_index.core import (
+    
     load_index_from_storage,
     StorageContext,
 )
@@ -29,25 +28,15 @@ from llama_index.legacy.embeddings import AzureOpenAIEmbedding
 # from llama_index.legacy.llms import AzureOpenAI
 from llama_index.llms.azure_openai import AzureOpenAI
 from chat_objects import ChatTools
-from llama_index.core import SummaryIndex
-from llama_index.readers.web import SimpleWebPageReader
 from llama_index.readers.vedastro import SimpleBirthTimeReader
-from IPython.display import Markdown, display
 import os
 
-import json
-from typing import Optional
-from pydantic import BaseModel
-from datetime import datetime
 from vedastro import *
-import asyncio
 from chat_objects import *
 
 from llama_index.core import (
-    load_index_from_storage,
-    load_indices_from_storage,
-    load_graph_from_storage,
-)
+    load_index_from_storage, )
+import numpy as np
 
 custom_prompt = PromptTemplate("""\
 Given a conversation (between Human and Astrologer) and a follow up message from Human, \
@@ -126,6 +115,7 @@ class ChatEngine7:
 
     # this is where the query starts,
     def query(self, **kwargs):
+        print("################ START: query  ################")
         # STAGE 1 : DATA
         # user's question as text
         user_question = kwargs["text"]
@@ -140,16 +130,17 @@ class ChatEngine7:
 
         # if exist in memory, then ready to use! You pass to the next level, collect 200 points 🪙
         if index_exist_in_memory:
-            result = self.stage_5(topic_hash=topic_hash, user_question=user_question)
+            result = self.retrieve_vector_query_llm(topic_hash=topic_hash, user_question=user_question)
             return result
 
         # run query agains index and process calls from there
-        result = self.stage_5(topic_hash=topic_hash, user_question=user_question)
+        result = self.retrieve_vector_query_llm(topic_hash=topic_hash, user_question=user_question)
         return result
 
     # downloads & loads index into memory if exist in azure
     # then return true
     def is_index_exist_in_disk(self, **kwargs) -> bool:
+        print("################ START: is_index_exist_in_disk  ################")
 
         #try to load index with 50/50 failure expected
         try:
@@ -168,6 +159,7 @@ class ChatEngine7:
     # downloads & loads index into memory if exist in azure
     # then return true
     def is_index_exist_in_memory(self, **kwargs) -> bool:
+        print("################ START: is_index_exist_in_memory  ################")
 
         # get data out nice nice 😁
         directory_path = kwargs["directory_path"]
@@ -179,13 +171,13 @@ class ChatEngine7:
             #if got copy in local files
             is_found = self.is_index_exist_in_disk(directory_path=directory_path, topic_hash=topic_hash)
 
-            #if don't have then check azure
+            #if don't have then check & auto download from azure
             if not is_found:
-                is_found = AzureTableManager.blob_to_directory(directory_path, topic_hash)
+                is_found = AzureTableManager.download_index_if_any(directory_path, topic_hash)
 
             # if found, load into memory please 🫡
             if is_found:
-                vi_out_path = f"{directory_path}{topic_hash}"
+                vi_out_path = f"{directory_path}{topic_hash}" # standard path where indexes are placed by all methods
                 self.index[topic_hash] = load_index_from_storage(StorageContext.from_defaults(persist_dir=vi_out_path))
                 print("Cached topic vector loaded! Money in the bank 🏦")
                 return True  # let caller know idex is ready in RAM
@@ -193,6 +185,7 @@ class ChatEngine7:
             # possibility 2 : not found,
             # hence new topic, need to generate new index (CALL LLM) TODO for book, now only DOB
             else:
+                print("Building new index with LLM 🚄")
                 # calculate new prediction text for birth time (topic) (using vedastro lib)
                 documents = SimpleBirthTimeReader().load_data(topic_text)  # get predictions for given birth time
 
@@ -207,6 +200,8 @@ class ChatEngine7:
             return True
 
     def save_index_to_azure_db_and_local(self, **kwargs):
+        print("################ START: save_index_to_azure_db_and_local  ################")
+
         # save index to local temp storage
         directory_path = f"vector_store/birth_time_predictions/"
         topic_hash = kwargs["topic_hash"]
@@ -218,7 +213,9 @@ class ChatEngine7:
         # upload file to azure
         AzureTableManager.upload_directory_to_blob(filePath, topic_hash)
 
-    def stage_5(self, **kwargs):
+    # standard RAG operation
+    def retrieve_vector_query_llm(self, **kwargs):
+        print("################ START: retrieve_vector_query_llm  ################")
         # initialize response synthesizer
         # configure how the query will be processed
         # TODO : stack multiple simpler systesizer back to back

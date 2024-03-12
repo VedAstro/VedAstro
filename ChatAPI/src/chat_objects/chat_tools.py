@@ -1,26 +1,15 @@
 import json
 import os
-from langchain_core.documents import Document
-from .xml_loader import XMLLoader
-from typing import List
-from typing import List, Dict, Union
-import time  # for performance measurements
-from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
 import random
+from typing import List, Dict, Union
 import string
-import re
-from bs4 import BeautifulSoup, NavigableString, CData, Comment
 from vedastro import *  # install via pip
+import numpy as np
+
 
 FAISS_INDEX_PATH = "faiss_index"
 
 import json
-from typing import Optional
-from pydantic import BaseModel
-from datetime import datetime
-from vedastro import Time
-import asyncio
 
 
 class ChatTools:
@@ -48,6 +37,18 @@ class ChatTools:
     @staticmethod
     def remove_spaces(input_string) -> str:
         return input_string.replace(' ', '')
+    
+    @staticmethod
+    def remove_spaces(input_string) -> str:
+        return input_string.replace(' ', '')
+    
+    # removes all chars that can't go into file name
+    @staticmethod
+    def sanitize_filename(filename):
+        import re
+        # Remove invalid characters
+        filename = re.sub('[\\\\/:*?"<>|]', '', filename)
+        return filename
 
     @staticmethod
     def random_id(length=8):
@@ -58,15 +59,13 @@ class ChatTools:
     # given a couple of dynamic inputs, will format to message for client (AZURE LLM)
     @staticmethod
     def highlight_relevant_keywords_llm(keywords_text: str, main_text: str):
+        print("################ START: highlight_relevant_keywords_llm  ################")
 
         #TODO TEMP!!!
         #below prompt engineering needs manual work
         #output is not perfect reply with bolded words in html
         return main_text
 
-        # Note: The openai-python library support for Azure OpenAI is in preview.
-        # Note: The openai-python library support for Azure OpenAI is in preview.
-        # Note: This code sample requires OpenAI Python library version 1.0.0 or higher.
         import os
         from openai import AzureOpenAI
 
@@ -109,82 +108,76 @@ class ChatTools:
 
         return text_html
 
-    # given a couple of dynamic inputs, will format to message for client
-
     @staticmethod
-    def highlight_relevant_keywords(keywords_text: str, main_text: str):
-        """
-            Highlights relevant keywords found in the given text by wrapping them in <strong> tags.
-            :param keywords_text: The text containing keywords to search for and highlight.
-            :param main_text: The text to perform keyword highlighting on.
-            :return: A string of highlighted text within its HTML structure.
-            """
-        # Convert the main_text argument into a BeautifulSoup object
-        soup = BeautifulSoup(main_text, 'html.parser')
+    def generate_followup_questions_llm(keywords_text: str, main_text: str) -> List[str]:
+        print("################ START: generate_followup_questions_llm  ################")
 
-        # Split the keywords_text into individual words
-        words = keywords_text.strip().lower().split(' ')
+        #TODO TEMP!!!
+        #below prompt engineering needs manual work
+        #output is not perfect reply with bolded words in html
 
-        # Iterate through all the text nodes in the parsed HTML
-        for node in soup.findAll(text=True):
-            # Reset current_node variable to None before iterating over child nodes
-            current_node = None
+        return ["When","Why?","Tell me more...", "How?"]
 
-            # Loop over parent nodes recursively until reaching the root or finding the target node
-            while True:
-                if current_node is None:
-                    current_node = node
-                else:
-                    current_node = current_node.parent
+        import os
+        from openai import AzureOpenAI
 
-                # Check if we have reached the target node
-                if current_node == soup:
-                    break
+        client = AzureOpenAI(
+            azure_endpoint="https://openaimodelserver.openai.azure.com/",
+            api_key=os.getenv("AZURE_OPENAI_KEY"),
+            api_version="2024-02-15-preview")
 
-                # Perform keyword highlighting only for Text and CData elements
-                if isinstance(current_node, NavigableString) or isinstance(
-                        current_node, Comment):
-                    tagged_words = []
-                    split_string = current_node.string.strip().lower()
-                    prev_index = -1
+        messages = [{
+            "role":
+                "system",
+            "content":
+                "Repeat text in 'Answer' with keywords related to text in 'Question' bolded. Output as HTML."
+        }, {
+            "role": "user",
+            "name": "keywords_text",
+            "content": f"{keywords_text}"
+        }, {
+            "role": "assistant",
+            "name": "main_text",
+            "content": f"<p><b>{keywords_text}</b>: {main_text}</p>"
+        }]
 
-                    # Tokenize the text node into separate words
-                    for index, word in enumerate(split_string.split(' ')):
-                        if word != '' and any(
-                                keyword in word for keyword in words):
-                            # Wrap matched words in <strong> tags
-                            tagged_words.append('<strong>' + word + '</strong>')
-                        elif word == '':
-                            tagged_words.append('&nbsp;')
-                        else:
-                            # Copy unmatched words without modification
-                            tagged_words.append(word)
-                        if len(tagged_words) > 1:
-                            # Insert space between words except when adding &nbsp;
-                            if tagged_words[-2].strip() != '&nbsp;':
-                                tagged_words[-2] += ' '
+        chat_completion = client.chat.completions.create(
+            model="vedastro",  # model = "deployment_name"
+            messages=messages,
+            temperature=0.0,
+            max_tokens=4096,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+            stop=None)
 
-                    # Combine tagged_words back together replacing original text node
-                    combined = ' '.join(tagged_words).replace('\n',
-                                                              '\n').replace(
-                                                                  '  ', ' ')
-                    if prev_index >= 0:
-                        # Preserve whitespace before and after this text node
-                        leading_space = ' ' * (
-                            len(current_node.previousSibling) -
-                            len(current_node.previousSibling.strip())
-                        ) if current_node.previousSibling else ''
-                        trailing_space = ' ' * \
-                            (len(current_node) - len(current_node.strip())
-                            ) if current_node else ''
-                        combined = leading_space + combined + trailing_space
-                    current_node.replaceWith(combined)
+        # go through the chaos, and bring forth the answer!🕍🪼
+        choices = chat_completion.choices
+        message = choices[0].message
 
-                    # Exit loop since we performed keyword replacement on the target node
-                    break
-        return str(soup)
+        #this should be raw text with html bold tags here and there
+        text_html = message.content
+
+        return text_html
+        
 
     # given a couple of dynamic inputs, will format to message for client
+    # @staticmethod
+    # def package_reply_for_shippment(**kwargs) -> str:
+
+    #     cardboard_box = {}
+
+    #     # Add any additional keyword arguments to the cardboard box
+    #     for key, value in kwargs.items():
+    #         cardboard_box[key] = value
+
+    #     #special convert commands dynamic array to static array for transport
+    #     if hasattr(cardboard_box["command"], 'tolist'):
+    #         cardboard_box["command"] = cardboard_box["command"].tolist()
+
+    #     return json.dumps(cardboard_box)
+    
+
     @staticmethod
     def package_reply_for_shippment(**kwargs) -> str:
 
@@ -192,13 +185,18 @@ class ChatTools:
 
         # Add any additional keyword arguments to the cardboard box
         for key, value in kwargs.items():
+            # Check if value is a list or an array and convert to list if necessary
+            if isinstance(value, (list, np.ndarray)):
+                value = list(value)
             cardboard_box[key] = value
 
-        #special convert commands dynamic array to static array for transport
-        if hasattr(cardboard_box["command"], 'tolist'):
-            cardboard_box["command"] = cardboard_box["command"].tolist()
-
         return json.dumps(cardboard_box)
+
+
+
+
+
+
 
     # given a string will output sha256, used for id purposes
 
@@ -411,50 +409,55 @@ class ChatTools:
             raise ValueError(f"The password is Spotty")
 
     # given a list of documents puts into dictionary for Fast API output
-    @staticmethod
-    def doc_with_score_to_dict(
-            docs: List[Document]) -> List[Dict[str, Union[str, float]]]:
-        docs_list = []
-        for doc in docs:
-            doc_dict = {
-                "page_content": doc[0].page_content,
-                "metadata": doc[0].metadata,
-                "score": float(doc[1]),
-            }
-            docs_list.append(doc_dict)
-        return docs_list
+    # from langchain_core.documents import Document
+    # @staticmethod
+    # def doc_with_score_to_dict(
+    #         docs: List[Document]) -> List[Dict[str, Union[str, float]]]:
+    #     docs_list = []
+    #     for doc in docs:
+    #         doc_dict = {
+    #             "page_content": doc[0].page_content,
+    #             "metadata": doc[0].metadata,
+    #             "score": float(doc[1]),
+    #         }
+    #         docs_list.append(doc_dict)
+    #     return docs_list
 
-    # given a list of documents with score, moves scores into metadata
-    # needed else error, since Document is wrapped with value array
-    @staticmethod
-    def doc_with_score_to_doc(
-            input_documents: List[Document]) -> List[Document]:
-        docs_list = []
-        for doc in input_documents:
-            doc_dict = Document(page_content=doc[0].page_content,
-                                metadata={
-                                    **doc[0].metadata, "score": float(doc[1])
-                                })
-            docs_list.append(doc_dict)
-        return docs_list
+    # # given a list of documents with score, moves scores into metadata
+    # # needed else error, since Document is wrapped with value array
+    # @staticmethod
+    # def doc_with_score_to_doc(
+    #         input_documents: List[Document]) -> List[Document]:
+    #     docs_list = []
+    #     for doc in input_documents:
+    #         doc_dict = Document(page_content=doc[0].page_content,
+    #                             metadata={
+    #                                 **doc[0].metadata, "score": float(doc[1])
+    #                             })
+    #         docs_list.append(doc_dict)
+    #     return docs_list
 
-    @staticmethod
-    async def TextChunksToEmbedingVectors(payload, docs, savePathPrefix):
-        # 0 : measure time to regenerate
-        st = time.time()
+    # @staticmethod
+    # async def TextChunksToEmbedingVectors(payload, docs, savePathPrefix):
+    #     #note keep here for production thining
+    #     from local_huggingface_embeddings import LocalHuggingFaceEmbeddings
+    #     from langchain_community.vectorstores import FAISS
 
-        # 2 : embed the horoscope texts, using CPU LLM
-        embeddings = LocalHuggingFaceEmbeddings(payload.llm_model_name)
+    #     # 0 : measure time to regenerate
+    #     st = time.time()
 
-        # 3 : save to local folder, for future use
-        db = FAISS.from_documents(docs, embeddings)
-        # use modal name for multiple modal support
-        filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
-        db.save_local(filePath)
+    #     # 2 : embed the horoscope texts, using CPU LLM
+    #     embeddings = LocalHuggingFaceEmbeddings(payload.llm_model_name)
 
-        # 4 : measure time to regenerate
-        time_seconds = time.time() - st
-        # convert to minutes
-        time_minutes = time_seconds / 60
+    #     # 3 : save to local folder, for future use
+    #     db = FAISS.from_documents(docs, embeddings)
+    #     # use modal name for multiple modal support
+    #     filePath = f"{FAISS_INDEX_PATH}/{savePathPrefix}/{payload.llm_model_name}"
+    #     db.save_local(filePath)
 
-        return time_minutes
+    #     # 4 : measure time to regenerate
+    #     time_seconds = time.time() - st
+    #     # convert to minutes
+    #     time_minutes = time_seconds / 60
+
+    #     return time_minutes

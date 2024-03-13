@@ -297,7 +297,6 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 raw_result = chat_engines["MK7"].query(user_question=input_parsed["text"], topic_text=input_parsed["topic"])
                 ai_reply = raw_result.response
 
-
                 # STAGE 3 : REPLY
                 # log message for inteligent past QA
                 # use later for highlight (UX improve)
@@ -309,7 +308,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 
                 # send ans to caller in JSON form, to support metadata
                 # highlight text with relevant keywords relating to input query
-                html_str_llm = ChatTools.highlight_relevant_keywords_llm(keywords_text=user_question, main_text=ai_reply)
+                html_str_llm = ChatTools.highlight_relevant_keywords_llm(question_text=user_question, answer_text=ai_reply)
                 followup_questions = ChatTools.generate_followup_questions_llm(keywords_text=user_question, main_text=ai_reply)
                 packed_box = ChatTools.package_reply_for_shippment(command=input_parsed["command"], text_html=html_str_llm, text=ai_reply, text_hash=ai_reply_hash, followup_questions=followup_questions)
                 await websocket.send_text(packed_box)
@@ -333,7 +332,8 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 # NOTE: SPECIAL DOCS RETRIVEL
                 # create a new systhetic query, coposing all possible data
                 #to fetch more relevant context than 1st time question asked
-                synthetic_user_question = f"{primary_question}\n\n{primary_answer}\n\n{followup_question}"
+                #NOTE : this not for LLM only to fetch vectors, hence keep it clean and targeted to the docs sim score
+                synthetic_user_question = f"{primary_question}" 
                 horoscope_predictions = chat_engines["MK7"].vector_index_search(topic = input_parsed["topic"], user_question=synthetic_user_question)
                 
                 # get reply from LLM 🚅
@@ -347,7 +347,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 input_parsed["message_number"] = message_count
                 ai_reply_hash = AzureTableManager.save_message_in_azure(input_parsed)
 
-                ai_reply_html = ChatTools.highlight_relevant_keywords_llm(keywords_text=user_question, main_text=ai_reply)
+                ai_reply_html = ChatTools.highlight_relevant_keywords_llm(question_text=user_question, answer_text=ai_reply)
                 followup_questions = ChatTools.generate_followup_questions_llm(keywords_text=user_question, main_text=ai_reply)
                 packed_box = ChatTools.package_reply_for_shippment(text_html=ai_reply_html, text=ai_reply, text_hash=ai_reply_hash, followup_questions=followup_questions)
                 await websocket.send_text(packed_box)

@@ -296,20 +296,3 @@ class AzureTableManager:
         # end of line!
         return None
 
-
-    # @staticmethod
-    # def get_message_by_row_key(session_id, ques_topic_hash):
-    #     table_client = TableClient.from_connection_string(AzureTableManager.connection_string, "ChatMessage")
-        
-
-    #     # find the exact message to rate, hence no need to break ques_topic hash
-    #     parameters = {"session_id": session_id, "ques_topic_hash": ques_topic_hash}
-    #     odata_query = "PartitionKey eq @session_id and RowKey eq @ques_topic_hash"
-    #     msg_list = table_client.query_entities(query_filter=odata_query, parameters=parameters)
-
-    #     #send 1st message found
-    #     for found_msg in msg_list:
-    #         return found_msg
-
-    #     # end of line!
-    #     return None

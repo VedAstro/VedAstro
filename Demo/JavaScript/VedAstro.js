@@ -1830,22 +1830,47 @@ class ChatInstance {
   //when on of the follow up questions gets clicked
   //get called direct from html code
   ask_followup_question(eventData, followupQuestion) {
+
     // get hash of message, stored as id in holder
     var messageHolder = $(eventData)
       .closest(".card")
       .children(".message-holder");
     var primaryAnswerHash = messageHolder.attr("id");
 
+    //UPDATE GUI WITH USER MSG (UX)
+    var aiInput = $("#UserChatInputElement").val();
+    var userName = "You";
+    var userInputChatCloud = `
+        <li class="d-flex justify-content-end mb-4">
+            <div class="card ">
+                <div class="card-header d-flex justify-content-between p-3">
+                    <p class="fw-bold mb-0">${userName}</p>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        ${followupQuestion}
+                    </p>
+                </div>
+            </div>
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
+                 class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="45">
+        </li>
+        `;
+    //inject in User's input into chat window
+    $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+
+
+
     //set topic text TODO support DOB and books
     var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
 
     //note the switch to python naming covention
     var commandsToSend = [];
-    commandsToSend.push(followupQuestion); //add command for server to read as "follow up"
+    commandsToSend.push("followup_question"); //add command for server to read as "follow up"
     const messagePayload = {
       user_id: window.vedastro.UserId,
       primary_answer_hash: primaryAnswerHash,
-      commands: commandsToSend, //server uses this to do special handling
+      command: commandsToSend, //server uses this to do special handling
       text: followupQuestion,
       topic: topicText,
     };
@@ -1935,9 +1960,9 @@ class ChatInstance {
                 ${feedbackButtonHtml}
             </div>
             <div id="${message_hash}" class="message-holder card-body">
-                <p style="display:none;" class="text-html-out-elm mb-0">
+                <div style="display:none;" class="text-html-out-elm mb-0">
                   ${ai_text_message_html}
-                </p>
+                </div>
                 <p class="temp-text-stream-elm mb-0">
                   <!-- Content will be streamed here -->
                 </p>

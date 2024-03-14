@@ -8556,19 +8556,32 @@ namespace VedAstro.Library
 
                 var remainder = roughConstellationNumber - Math.Floor(roughConstellationNumber);
 
-                if (remainder >= 0 && remainder <= 0.25) quarter = 1;
-                else if (remainder > 0.25 && remainder <= 0.5) quarter = 2;
-                else if (remainder > 0.5 && remainder <= 0.75) quarter = 3;
-                else if (remainder > 0.75 && remainder <= 1) quarter = 4;
+                //CPJ Amnded Code - March 13, 2024 - changed the upper limit not to be <= 0.25 but only < 0.25. 
+                //This returns the Pada correctly. Try edge case Long 270 degrees. It is the start of U-Ashada Pada 2.
+                //The equal to value is the lower limit of each case below
+                if (remainder >= 0 && remainder < 0.25) quarter = 1;
+                else if (remainder >= 0.25 && remainder < 0.5) quarter = 2;
+                else if (remainder >= 0.5 && remainder < 0.75) quarter = 3;
+                else if (remainder >= 0.75 && remainder <= 1) quarter = 4;
                 else quarter = 0;
 
                 //calculate "degrees in constellation" from the remainder
                 var minutesInConstellation = remainder * 800.0;
                 var degreesInConstellation = new Angle(0, minutesInConstellation, 0);
 
-
+                var constellation = new Constellation();
                 //put together all the info of this point in the constellation
-                var constellation = new Constellation(constellationNumber, quarter, degreesInConstellation);
+                //CPJ Added Code Change - March 13, 2024 - to fix an error with edge cases - example 266.666667Long results in remainder = 0.
+                //CPJ - When remainder = 0, new Constellation should return next Constellation Pada 1. Hence the if-else code change
+                if (minutesInConstellation == 0)
+                {
+                    constellation = new Constellation((constellationNumber+1), quarter, degreesInConstellation);
+                }
+                else
+                {
+
+                    constellation = new Constellation(constellationNumber, quarter, degreesInConstellation);
+                }
 
                 //return constellation value
                 return constellation;

@@ -11724,7 +11724,7 @@ namespace VedAstro.Library
             if (planetName.Name == PlanetNameEnum.Sun || planetName.Name == PlanetNameEnum.Moon) { return false; }
 
             //if planet is Rahu or Ketu than default retrograde is always on
-            if (planetName.Name == PlanetNameEnum.Rahu || planetName.Name == PlanetNameEnum.Ketu) { return true; }
+            if (planetName.Name == PlanetNameEnum.Rahu || planetName.Name == PlanetNameEnum.Ketu) { return false; } //RahuKetu never go retro. Thier retro is direct.
 
             //get longitude of planet at given time
             var checkTimeLong = PlanetNirayanaLongitude(planetName, time);

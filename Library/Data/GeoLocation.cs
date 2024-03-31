@@ -38,7 +38,8 @@ namespace VedAstro.Library
         public static GeoLocation Brasilia = new GeoLocation("Brasilia, Brazil", -47.8825, -15.7942);
         public static GeoLocation Moscow = new GeoLocation("Moscow, Russia", 37.6176, 55.7558);
         public static GeoLocation Beijing = new GeoLocation("Beijing, China", 116.4074, 39.9042);
-
+        public static GeoLocation Mumbai = new GeoLocation("Mumbai, India", 72.8775, 19.0761);
+        public static GeoLocation Singapore = new GeoLocation("Singapore, Singapore", 103.8198, 1.3521);
 
         //FIELDS
         private readonly string _name;

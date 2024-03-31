@@ -764,7 +764,8 @@ namespace VedAstro.Library
             //get time from birth to current time 
             //NOTE: much debate on this number. Tests prove Raman's 360 is accurate.
             //      365.25 is used by 3rd party astrology software like LoKPA
-            var timeBetween = currentTime.Subtract(birthTime).TotalDays / 360; //365.25;
+            //var timeBetween = currentTime.Subtract(birthTime).TotalDays / 360; //365.25;
+            var timeBetween = currentTime.Subtract(birthTime).TotalDays / 365.35; //365.2564 True Sidereal Solar Year
 
             //combine years traversed at birth and years to current time
             //this is done to easily calculate to current dasa, bhukti & antaram

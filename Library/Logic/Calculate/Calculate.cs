@@ -11720,6 +11720,7 @@ namespace VedAstro.Library
         /// </summary>
         public static bool IsPlanetRetrograde(PlanetName planetName, Time time)
         {
+            bool retro = false;
             //if planet is Sun or Moon than default retrograde is off
             if (planetName.Name == PlanetNameEnum.Sun || planetName.Name == PlanetNameEnum.Moon) { return false; }
 
@@ -11733,9 +11734,40 @@ namespace VedAstro.Library
             var nextDay = time.AddHours(24);
             var nextDayLong = PlanetNirayanaLongitude(planetName, nextDay);
 
-            //if next day longitude is lesser, than retrograde, going backward
-            //else not retro
-            return nextDayLong < checkTimeLong;
+            var dayplus2 = time.AddHours(48);
+            var dayplus2Long = PlanetNirayanaLongitude(planetName, dayplus2);
+
+            var dayplus3 = time.AddHours(72);
+            var dayplus3Long = PlanetNirayanaLongitude(planetName, dayplus3);
+            //Console.WriteLine("Long: {0} {1} {2} {3}", dayplus3Long.TotalDegrees, dayplus2Long.TotalDegrees, nextDayLong.TotalDegrees, checkTimeLong.TotalDegrees);
+
+            if (nextDayLong <= checkTimeLong)
+            {
+                //check if the next day long is less than checktimelong because its crossing over 0.00 - this is not a retro condition
+                if ((checkTimeLong.TotalDegrees >= 355.00 && checkTimeLong.TotalDegrees <= 360.00) && (nextDayLong.TotalDegrees >= 0.00 && nextDayLong.TotalDegrees <= 5.00))
+                {
+                    retro = false;
+                }
+                else
+                {
+                    retro = true;
+                }
+            }
+            if (nextDayLong >= checkTimeLong)
+            {
+                //check if the next day long is more than checktimelong because its reverse crossing over 0.00 - this is a retro condition
+                if ((checkTimeLong.TotalDegrees >= 0.00 && checkTimeLong.TotalDegrees <= 5.00) && (nextDayLong.TotalDegrees >= 355.00 && nextDayLong.TotalDegrees <= 0.00))
+                {
+                    retro = true;
+                    
+                }
+                else
+                {
+                    retro = false;
+                    
+                }
+            }
+            return retro;
         }
 
 

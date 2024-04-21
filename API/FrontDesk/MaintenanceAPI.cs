@@ -1,4 +1,4 @@
-using Microsoft.Azure.Functions.Worker;
+﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Xml.Linq;
 using VedAstro.Library;
@@ -52,31 +52,31 @@ namespace API
         [Function(nameof(DEBUG))]
         public static async Task<HttpResponseData> DEBUG([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DEBUG")] HttpRequestData incomingRequest)
         {
-	        throw new NotImplementedException();
-	        //      //get latest all match reports
-	        //      var personListXml = await Tools.GetXmlFileFromAzureStorage(Tools.PersonListFile, Tools.BlobContainerName);
+            throw new NotImplementedException();
+            //      //get latest all match reports
+            //      var personListXml = await Tools.GetXmlFileFromAzureStorage(Tools.PersonListFile, Tools.BlobContainerName);
 
-	        //      //list of person XMLs
-	        //      var personXmlList = personListXml?.Root?.Elements() ?? new List<XElement>();
+            //      //list of person XMLs
+            //      var personXmlList = personListXml?.Root?.Elements() ?? new List<XElement>();
 
-	        //      var personList = Person.FromXml(personXmlList);
+            //      var personList = Person.FromXml(personXmlList);
 
-	        //      var xxx = ConvertListToCsv(personList);
+            //      var xxx = ConvertListToCsv(personList);
 
-	        //return APITools.SendTextToCaller(xxx, incomingRequest);
+            //return APITools.SendTextToCaller(xxx, incomingRequest);
 
-	        // string ConvertListToCsv(List<Person> people)
-	        //{
-	        //	var csv = new StringBuilder();
-	        //	// Add headers
-	        //	csv.AppendLine("Name,Gender,BirthDate,BirthLocation");
-	        //	foreach (var person in people)
-	        //	{
-	        //		var localNameClean = person.GetBirthLocation().Name().Replace(",", "");
-	        //		csv.AppendLine($"{person.Name.Truncate(5," ")},{person.Gender},{person.BirthTimeString},{localNameClean}");
-	        //	}
-	        //	return csv.ToString();
-	        //}
+            // string ConvertListToCsv(List<Person> people)
+            //{
+            //	var csv = new StringBuilder();
+            //	// Add headers
+            //	csv.AppendLine("Name,Gender,BirthDate,BirthLocation");
+            //	foreach (var person in people)
+            //	{
+            //		var localNameClean = person.GetBirthLocation().Name().Replace(",", "");
+            //		csv.AppendLine($"{person.Name.Truncate(5," ")},{person.Gender},{person.BirthTimeString},{localNameClean}");
+            //	}
+            //	return csv.ToString();
+            //}
 
         }
 
@@ -88,7 +88,7 @@ namespace API
             Route = "SearchImage/Keywords/{keywords}")] HttpRequestData incomingRequest,
             string keywords)
         {
-	        APILogger.Visit(incomingRequest);
+            APILogger.Visit(incomingRequest);
 
             //IMPORTANT: replace this variable with your Cognitive Services subscription key
             string subscriptionKey = Secrets.BING_IMAGE_SEARCH;
@@ -106,7 +106,7 @@ namespace API
 
             var possibleImages = new JArray();
             foreach (var image in jpegOnly)
-            {            
+            {
                 //pack data nicely
                 var temp = new JObject();
                 temp["Name"] = image.Name; //keywords to image
@@ -120,9 +120,6 @@ namespace API
 
         }
 
-
-
-
         /// <summary>
         /// designed to be called directly, getting ANY and ALL needed data in one simple GET call
         /// </summary>
@@ -132,9 +129,9 @@ namespace API
             HttpRequestData req,
             string callerId, string formatName)
         {
-	        APILogger.Visit(req);
+            APILogger.Visit(req);
 
-			if (formatName.ToLower() == "json")
+            if (formatName.ToLower() == "json")
             {
                 string jsonText = await AzureCache.GetData<string>(callerId);
 
@@ -165,7 +162,6 @@ namespace API
             throw new Exception("END OF THE LINE");
         }
 
-
         /// <summary>
         /// to allow client to send match report and other files to email via a single call
         /// </summary>
@@ -173,10 +169,10 @@ namespace API
         public static async Task<HttpResponseData> SendFileToEmail([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Send/{fileName}/{fileFormat}/{receiverEmail}")] HttpRequestData incomingRequest,
             string fileName, string fileFormat, string receiverEmail)
         {
-	        APILogger.Visit(incomingRequest);
+            APILogger.Visit(incomingRequest);
 
-			try
-			{
+            try
+            {
                 //log the call todo log causes errors in reading body, maybe read first
                 //APILogger.Visitor(incomingRequest);
 
@@ -208,11 +204,11 @@ namespace API
         [Function("getipaddress")]
         public static HttpResponseData GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-	        APILogger.Visit(incomingRequest);
+            APILogger.Visit(incomingRequest);
 
-			try
-			{
-				return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
+            try
+            {
+                return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
             }
             catch (Exception e)
             {
@@ -229,11 +225,11 @@ namespace API
         [Function("version")]
         public static HttpResponseData GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-	        APILogger.Visit(incomingRequest);
+            APILogger.Visit(incomingRequest);
 
 
-			try
-			{
+            try
+            {
                 var holder = new XElement("Root");
                 var versionNumberXml = new XElement("Version", ThisAssembly.Version);
                 holder.Add(versionNumberXml, Tools.TimeStampServerXml);
@@ -253,15 +249,14 @@ namespace API
 
         }
 
-
         [Function("Stats")]
         public static async Task<HttpResponseData> GetStats([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-	        APILogger.Visit(incomingRequest);
+            APILogger.Visit(incomingRequest);
 
 
-			try
-			{
+            try
+            {
                 //get visitor log from storage
                 var visitorLogDocument = await Tools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, Tools.BlobContainerName);
 
@@ -292,10 +287,10 @@ namespace API
         [Function("health")]
         public static HttpResponseData GetHealth([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-	        APILogger.Visit(incomingRequest);
+            APILogger.Visit(incomingRequest);
 
-			try
-			{
+            try
+            {
 
                 //so long as respond as OK 200, then will pass (Render server)
                 //todo real health check please

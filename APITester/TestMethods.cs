@@ -13,12 +13,37 @@ namespace APITester
         private string SubDomain { get; set; }
         private string LocalAPIServer { get; set; }
 
-
+        //save data here to be used during all test
         public TestMethods(string subDomain, string localApiServer)
         {
             SubDomain = subDomain;
             LocalAPIServer = localApiServer;
         }
+
+
+
+        /// <summary>
+        /// Simple test for over calls
+        /// .../CoordinatesToGeoLocation/Location/SydneyNSW,Australia/Time/14:02/09/11/1977/+00:00
+        /// </summary>
+        public async Task<bool> AbuseFirewallTest()
+        {
+            var url =
+                $"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45";
+            var json = JObject.Parse(await new HttpClient().GetStringAsync(url));
+
+            Console.WriteLine(json); //print everything
+
+            //check some key values
+            Assert.IsTrue(json["Status"]?.Value<string>() == "Pass");
+            Assert.IsTrue(json["Payload"]["AllPlanetData"].HasValues);
+            Assert.IsTrue(json["Payload"]["AllPlanetData"][0]["Sun"].HasValues);
+
+            //control comes here once all pass
+            return true; //todo default pass
+
+        }
+
 
         #region GEO_LOCATION
 
@@ -38,21 +63,14 @@ namespace APITester
         /// <summary>
         /// .../CoordinatesToGeoLocation/Location/SydneyNSW,Australia/Time/14:02/09/11/1977/+00:00
         /// </summary>
-        public async Task<bool> CoordinatesToGeoLocationTest()
+        public async Task<dynamic> CoordinatesToGeoLocationTest()
         {
-            var url =
-                $"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45";
+            //.../Calculate/AddressToGeoLocation/London
+            var url = $"{LocalAPIServer}Calculate/CoordinatesToGeoLocation/Latitude/35.6764/Longitude/139.6500";
             var json = JObject.Parse(await new HttpClient().GetStringAsync(url));
 
-            Console.WriteLine(json); //print everything
-
-            //check some key values
-            Assert.IsTrue(json["Status"]?.Value<string>() == "Pass");
-            Assert.IsTrue(json["Payload"]["AllPlanetData"].HasValues);
-            Assert.IsTrue(json["Payload"]["AllPlanetData"][0]["Sun"].HasValues);
-
-            //control comes here once all pass
-            return true; //todo default pass
+            //send data back to caller
+            return new { URL = url, OUTPUT = json };
 
         }
 

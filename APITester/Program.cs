@@ -6,9 +6,11 @@
         {
             // TARGET SERVER
             string SubDomain = "vedastroapi";
-            string LocalAPIServer = "http://localhost:7071/api/";
             // string SubDomain = "vedastroapibeta";
             // string SubDomain = "vedicastrogpt";
+
+            //
+            string LocalAPIServer = "http://localhost:7071/api/";
             var appInstance = new TestMethods(SubDomain, LocalAPIServer);
 
             //PAUSE BEFORE TEST START
@@ -21,6 +23,7 @@
             Console.WriteLine("###### TEST START ######\n");
             CoalesceException(() => appInstance.GeoLocationToTimezoneTest().Result, null);
             CoalesceException(() => appInstance.AddressToGeoLocationTest().Result, null);
+            CoalesceException(() => appInstance.CoordinatesToGeoLocationTest().Result, null);
 
 
             //HOLD CONTROL

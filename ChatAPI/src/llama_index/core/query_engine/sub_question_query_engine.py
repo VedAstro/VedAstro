@@ -115,6 +115,8 @@ class SubQuestionQueryEngine(BaseQueryEngine):
                 question_gen = OpenAIQuestionGenerator.from_defaults(llm=llm)
 
             except ImportError as e:
+                #note: original error message is hidden
+                raise e # rethrow error
                 raise ImportError(
                     "`llama-index-question-gen-openai` package cannot be found. "
                     "Please install it by using `pip install `llama-index-question-gen-openai`"

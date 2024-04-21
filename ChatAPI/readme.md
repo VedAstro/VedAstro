@@ -101,6 +101,12 @@ craft a response that incorporates the strengths of Response A and Response B, a
 1. change env start file
 2. visit via browser at http://localhost/
 
+# LLAMA-INDEX notes
+- agents screw up vedic accuracy when answering direct questions, probably because to many absrtaction layer (loose control over fine detail)
+- use agents for follow up questions where injecting previous question is crucial with proper prompt cleaning
+- if use direct complete call for Azure some success, but prompts must be perfect and at times very bad answers (llama-index) will stop wrong answers
+- as such stick with multiple query engine use
+
 # Free AI chat, really?
 Yes, we're doing this to improve vedic prediction quality for the common good of human race.
 So we will focus on keeping this free and you focus on giving feedback.

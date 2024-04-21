@@ -450,12 +450,8 @@ namespace API
             //note: placed inside to use same fullParamString 
             async Task<dynamic> ParseUrlParameterByType(Type parameterType)
             {
-                //get inches to cut based on Type of cloth (ask the cloth aka type)
-                var nameOfField = nameof(IFromUrl.OpenAPILength);
-                FieldInfo fieldInfo = parameterType.GetField(nameOfField, BindingFlags.Public | BindingFlags.Static);
-
-                //note: enums can't set this, so default to 2 /{EnumName}/{EnumAsString}
-                var cutCount = (int)(fieldInfo?.GetValue(null) ?? 2);
+                //get inches to cut based on Type of cloth (ask the "cloth" aka type)
+                var cutCount = OpenAPI.GetInchesToCutClothBasedOnType(parameterType);
 
                 //cut out the string that contains data of the parameter (URL version of Time, PlanetName, etc.)
                 var extractedUrl = Tools.CutOutString(fullParamString, cutCount);
@@ -465,51 +461,70 @@ namespace API
 
                 //convert URL to understandable data (magic!)
                 var nameOfMethod = nameof(IFromUrl.FromUrl);
-                var parsedParamInstance = parameterType.GetMethod(nameOfMethod, BindingFlags.Public | BindingFlags.Static);
+                var parsedParamInstance = parameterType.GetMethod(nameOfMethod);
 
                 //if not found then probably special types, like Enum & string, so use special Enum converter
                 dynamic parsedParam;
                 if (parsedParamInstance == null)
                 {
-                    //STRING
-                    if (parameterType == typeof(string))
+                    try
                     {
-                        parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.StringFromUrl), BindingFlags.Public | BindingFlags.Static);
+                        //STRING
+                        if (parameterType == typeof(string))
+                        {
+                            parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.StringFromUrl), BindingFlags.Public | BindingFlags.Static);
 
-                        //execute param parser
-                        parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                            //execute param parser
+                            parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+
+                        }
+                        //ENUM
+                        else if (parameterType.IsEnum)
+                        {
+                            //parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static);
+
+                            //execute param parser
+                            parsedParam = Tools.EnumFromUrl(extractedUrl, parameterType); //pass in extracted URL
+                        }
+                        //ENUM
+                        else if (parameterType == typeof(int))
+                        {
+                            //get the parser
+                            parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.IntFromUrl), BindingFlags.Public | BindingFlags.Static);
+
+                            //execute param parser
+                            parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                        }
+                        //DOUBLE
+                        else if (parameterType == typeof(double))
+                        {
+                            //get the parser
+                            parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.DoubleFromUrl), BindingFlags.Public | BindingFlags.Static);
+
+                            //execute param parser
+                            parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                        }
+
+                        //DATE TIME OFFSET
+                        //NOTE: cut count set in 
+                        else if (parameterType == typeof(DateTimeOffset))
+                        {
+                            //get the parser
+                            parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.DateTimeOffsetFromUrl), BindingFlags.Public | BindingFlags.Static);
+
+                            //execute param parser
+                            parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                        }
+
+                        //UNPREPARED TYPES
+                        else
+                            throw new Exception($"Type URL Parser not implemented! {parameterType.Name}");
 
                     }
-                    //ENUM
-                    else if (parameterType.IsEnum)
+                    catch (Exception e)
                     {
-                        //parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static);
-
-                        //execute param parser
-                        parsedParam = Tools.EnumFromUrl(extractedUrl, parameterType); //pass in extracted URL
+                        throw new Exception($"Error when parsing the params you gave sweetheart! Try to regenerate latest URL from vedastro.org/APIBuilder");
                     }
-                    //ENUM
-                    else if (parameterType == typeof(int))
-                    {
-                        //get the parser
-                        parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.IntFromUrl), BindingFlags.Public | BindingFlags.Static);
-
-                        //execute param parser
-                        parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
-                    }
-                    //DOUBLE
-                    else if (parameterType == typeof(double))
-                    {
-                        //get the parser
-                        parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.DoubleFromUrl), BindingFlags.Public | BindingFlags.Static);
-
-                        //execute param parser
-                        parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
-                    }
-
-                    //UNPREPARED TYPES
-                    else
-                        throw new Exception($"Type URL Parser not implemented! {parameterType.Name}");
                 }
                 //if not NULL process as normal
                 else
@@ -525,6 +540,30 @@ namespace API
 
             //checks if URL is empty or has only "//"
             bool IsNoURLDataLeft(string s) => s == "//" || string.IsNullOrEmpty(s);
+        }
+
+        /// <summary>
+        /// Based on cloth like "Time", "PlanetName", "Double"
+        /// </summary>
+        private static int GetInchesToCutClothBasedOnType(Type parameterType)
+        {
+            //get inches to cut based on Type of cloth (ask the "cloth" aka type)
+            var nameOfField = nameof(IFromUrl.OpenAPILength);
+            FieldInfo fieldInfo = parameterType.GetField(nameOfField, BindingFlags.Public | BindingFlags.Static);
+
+            //if cut count not found in type, then must be Native cloth, so special handle them
+            if (fieldInfo == null)
+            {
+                //      0    1    2  3   4    5
+                //.../Time/14:02/09/11/1977/+00:00
+                if (parameterType == typeof(DateTimeOffset)) { return 6; }
+            }
+
+            //if the "cloth" does not speak, then we assume!
+            //note: enums can't set this, so default to 2 /{EnumName}/{EnumAsString}
+            var cutCount = (int)(fieldInfo?.GetValue(null) ?? 2);
+
+            return cutCount;
         }
 
 

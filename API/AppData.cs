@@ -5,10 +5,10 @@ namespace API
     internal static class AppData
     {
 
-         static AppData()
+        static AppData()
         {
             //load data at startup
-            URL = new URL(GetIsBetaRuntime(), false);
+            URL = new URL(GetIsBetaRuntime());
         }
 
         public static bool GetIsBetaRuntime() => ThisAssembly.BranchName.Contains("beta");

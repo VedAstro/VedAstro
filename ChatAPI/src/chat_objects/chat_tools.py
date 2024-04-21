@@ -176,7 +176,7 @@ class ChatTools:
 		        "role": "system",
 		        "content": f"""Answer with minimum 500 words. \nRules to follow:\n
 				1.Avoid disclaimers like 'astrology is not a definitive predictor'.\n
-				2.Avoid statements like 'Based on the context, ...' or 'The context information ...' or 'However, it's important to consider ...' or 'However, it's important to note ...'\n
+				2.Avoid statements like 'Based on the context, ...' or 'The context information ...' or 'However, it's important to consider ...' or 'However, it's important to note ...'\n\n
 				CONTEXT:\n{combined_horscope}"""
 		    },
 		    {

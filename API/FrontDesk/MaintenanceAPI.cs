@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Xml.Linq;
 using VedAstro.Library;
@@ -17,17 +17,33 @@ namespace API
     public static class MaintenanceAPI
     {
         /// <summary>
+        /// scans through dates and rebuilds maps cache table
+        /// </summary>
+        [Function(nameof(RebuildGeoLocationTimezoneTable))]
+        public static async Task<HttpResponseData> RebuildGeoLocationTimezoneTable([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "RebuildGeoLocationTimezoneTable")] HttpRequestData incomingRequest)
+        {
+
+            Tools.PasswordProtect("123"); //password is Spotty
+
+
+            //get chart special API home page and send that to caller
+            var APIHomePageTxt = "";
+
+            return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
+        }
+
+        /// <summary>
         /// API Home page
         /// </summary>
         [Function(nameof(Home))]
         public static async Task<HttpResponseData> Home([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Home")] HttpRequestData incomingRequest)
         {
-	        APILogger.Visit(incomingRequest);
+            APILogger.Visit(incomingRequest);
 
-			//get chart special API home page and send that to caller
-			var APIHomePageTxt = await Tools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
+            //get chart special API home page and send that to caller
+            var apiHomePageTxt = await Tools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
 
-            return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
+            return APITools.SendTextToCaller(apiHomePageTxt, incomingRequest);
         }
 
         /// <summary>

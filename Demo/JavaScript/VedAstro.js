@@ -1093,8 +1093,8 @@ class AshtakvargaTable {
 
         //generate table from inputed data
         //get data from API
-        var sarvashtakavargaUrl = `https://api.vedastro.org/Calculate/SarvashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
-        var bhinnashtakavargaUrl = `https://api.vedastro.org/Calculate/BhinnashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
+        var sarvashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/SarvashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
+        var bhinnashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/BhinnashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
 
         //get data from API and generate the HTML tables
         await this.GenerateHTMLTableFromAPI(

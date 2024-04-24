@@ -134,7 +134,7 @@
         public const string import = "import";
 
 
-        public const string ChartFromSVG = "window.API.ChartFromSVG";
+        public const string ChartFromSVG = "window.ChartFromSVG";
 
     }
 }

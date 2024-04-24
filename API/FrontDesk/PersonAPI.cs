@@ -165,24 +165,46 @@ namespace API
         {
             try
             {
-                //TODO
-                ////STAGE 2 : SWAP DATA
-                ////swap visitor ID with user ID if any (data follows user when log in)
-                //if (!callerInfo.Both101) //only swap if needed
-                //{
-                //    bool didSwap = await APITools.SwapUserId(callerInfo, Tools.PersonListFile);
-                //    //if (didSwap) { APILogger.LogBookClient()} //TODO change to .Data()
-                //}
 
                 var foundCalls = AzureTable.PersonList.Query<PersonRow>(call => call.PartitionKey == ownerId);
 
+                //add each to return list
                 var personJsonList = new JArray();
-                foreach (var call in foundCalls)
-                {
-                    personJsonList.Add(Person.FromAzureRow(call).ToJson());
-                }
+                foreach (var call in foundCalls) { personJsonList.Add(Person.FromAzureRow(call).ToJson()); }
 
+                //send to caller
+                return APITools.PassMessageJson(personJsonList, req);
+            }
 
+            //if any failure, show error in payload
+            catch (Exception e)
+            {
+                APILogger.Error(e, req);
+                return APITools.FailMessageJson(e.Message, req);
+            }
+        }
+
+        /// <summary>
+        /// Gets person list with swap function
+        /// </summary>
+        [Function(nameof(GetPersonListSwap))]
+        public static async Task<HttpResponseData> GetPersonListSwap(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(GetPersonList)}/OwnerId/{{ownerId}}/VisitorId/{{visitorId}}")] HttpRequestData req,
+            string ownerId, string visitorId)
+        {
+            try
+            {
+                //STAGE 1 : swap visitor ID with user ID if any (data follows user when log in)
+                await APITools.SwapUserId(ownerId, visitorId);
+
+                //STAGE 2 : continue as normal to get person list
+                var foundPersons = AzureTable.PersonList.Query<PersonRow>(call => call.PartitionKey == ownerId);
+
+                //add each to return list
+                var personJsonList = new JArray();
+                foreach (var call in foundPersons) { personJsonList.Add(Person.FromAzureRow(call).ToJson()); }
+
+                //send to caller
                 return APITools.PassMessageJson(personJsonList, req);
             }
 
@@ -306,7 +328,7 @@ namespace API
             }
         }
 
-        
+
         [Function(nameof(DeleteLifeEvent))]
         public static async Task<HttpResponseData> DeleteLifeEvent(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DeleteLifeEvent/PersonId/{personId}/LifeEventId/{lifeEventId}")] HttpRequestData req,
@@ -315,10 +337,10 @@ namespace API
             try
             {
                 //# get full person copy to place in recycle bin
-                
+
                 //query the database
                 //var foundCalls = AzureTable.PersonList?.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
-                
+
                 //make into readable format
                 //var personAzureRow = foundCalls?.FirstOrDefault();
                 //var personToDelete = Person.FromAzureRow(personAzureRow);

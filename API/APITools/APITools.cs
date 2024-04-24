@@ -570,9 +570,36 @@ namespace API
             }
         }
 
+        public static async Task SwapUserId(string ownerId, string visitorId)
+        {
+            //if not yet logged in then skip
+            if (ownerId == "101") { return; }
+
+            //get all person's under visitor id
+            var visitorIdPersons = AzureTable.PersonList.Query<PersonRow>(call => call.PartitionKey == visitorId);
+
+            //if no records, then end here
+            if (!visitorIdPersons.Any()) { return; }
+
+            //transfer each person one by one
+            foreach (var personOriRecord in visitorIdPersons)
+            {
+                //1: make duplicate record with new owner id
+                //overwrite visitor id with user id
+                var modifiedPerson = personOriRecord.Clone();
+                modifiedPerson.PartitionKey = ownerId;
+                AzureTable.PersonList.AddEntity(modifiedPerson);
+
+                //2: delete original "visitor" record 
+                await AzureTable.PersonList.DeleteEntityAsync(personOriRecord.PartitionKey, personOriRecord.RowKey);
+            }
+
+
+        }
+
         //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
         //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
-        public static async Task<bool> SwapUserId(CallerInfo callerInfo, string cloudXmlFile)
+        public static async Task<bool> SwapUserId2(CallerInfo callerInfo, string cloudXmlFile)
         {
             var allListXmlDoc = await Tools.GetXmlFileFromAzureStorage(cloudXmlFile, Tools.BlobContainerName);
 

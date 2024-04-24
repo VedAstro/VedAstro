@@ -159,9 +159,9 @@ namespace API
                 var userId = rootXml.Element("UserId")?.Value;
                 var visitorId = rootXml.Element("VisitorId")?.Value;
 
-                //STAGE 2 : SWAP DATA
+                //STAGE 2 : SWAP DATA TODO
                 //swap visitor ID with user ID if any (data follows user when log in)
-                await APITools.SwapUserId(new CallerInfo(visitorId, userId), APITools.SavedMatchReportList);
+                //await APITools.SwapUserId(new CallerInfo(visitorId, userId), APITools.SavedMatchReportList);
 
                 //STAGE 3 : FILTER
                 //get updated all match reports (after swap)

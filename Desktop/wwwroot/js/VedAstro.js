@@ -23,15 +23,16 @@
 // █░▀░█ ░█░   █▀█ █▀▄ ░█░   █ ▄█   ██▄ ▀▄▀ █ █▄▀ ██▄ █░▀█ ░█░ ▄
 
 //LOAD DEPENDENCIES
+//NOTE: below only possible becasue HTML: <script src="js/VedAstro.js" type="module"></script>
+import { EventsChart, ID } from '/js/EventsChart.js';
 
 //make accesible to interop
 window.vedastro = {
-    UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101",
+    UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101", //get user id from browser storage
     ApiDomain: "https://vedastroapi.azurewebsites.net/api",
-    Ayanamsa: "Lahiri", //default to 
+    Ayanamsa: "Lahiri", //default to
     ChartStyle: "South", //default to South Indian Chart
 };
-
 
 // Check if jQuery is loaded
 if (typeof jQuery == "undefined") {
@@ -1092,8 +1093,8 @@ class AshtakvargaTable {
 
         //generate table from inputed data
         //get data from API
-        var sarvashtakavargaUrl = `https://api.vedastro.org/Calculate/SarvashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
-        var bhinnashtakavargaUrl = `https://api.vedastro.org/Calculate/BhinnashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
+        var sarvashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/SarvashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
+        var bhinnashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/BhinnashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
 
         //get data from API and generate the HTML tables
         await this.GenerateHTMLTableFromAPI(
@@ -1167,13 +1168,12 @@ class ChatInstance {
     HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
     IsAITalking = false; //default false, to implement "PTT" radio like protocol
     PresetQuestions = {
-
         Previous: {
             "Last 3": [
-                "When will I meet the love of my life in the year 2024?",
-                "Am I going to be in a new relationship in the year 2024?",
+                "Describe my general character",
+                "Is this a good or bad person?",
                 "Why am I not able to find a life partner?",
-            ]
+            ],
         },
         Love: {
             "Love Awaits Me": [
@@ -1195,16 +1195,9 @@ class ChatInstance {
             ],
         },
         Astrology: {
-            Planets: [
-                "How does Sun effect me?",
-                "How does Mercury effect me?",
-                "How does Moon effect me?",
-                "How does Mars effect me?",
-                "How does Jupiter effect me?",
-                "How does Saturn effect me?",
-                "How does Venus effect me?",
-                "How does Ketu effect me?",
-                "How does Rahu effect me?",
+            Yoga: [
+                "Any special yoga in my chart?",
+                "Describe in detail all my yogas",
             ],
             Planets: [
                 "How does Sun effect me?",
@@ -1216,6 +1209,21 @@ class ChatInstance {
                 "How does Venus effect me?",
                 "How does Ketu effect me?",
                 "How does Rahu effect me?",
+                "How does Sub-grahas effect me?",
+            ],
+            House: [
+                "How does House 1 effect me?",
+                "How does House 2 effect me?",
+                "How does House 3 effect me?",
+                "How does House 4 effect me?",
+                "How does House 5 effect me?",
+                "How does House 6 effect me?",
+                "How does House 7 effect me?",
+                "How does House 8 effect me?",
+                "How does House 9 effect me?",
+                "How does House 10 effect me?",
+                "How does House 11 effect me?",
+                "How does House 12 effect me?",
             ],
         },
         Studies: {
@@ -1331,12 +1339,12 @@ class ChatInstance {
                 "Tell me a joke",
             ],
         },
-        Code: {
-            "Strengths & Weaknesses": [
-                "generate code for a simple timer",
-                "generate JS code for calculating zodiac signs from longitudes",
-            ],
-        },
+        // Code: {
+        //   "Strengths & Weaknesses": [
+        //     "generate code for a simple timer",
+        //     "generate JS code for calculating zodiac signs from longitudes",
+        //   ],
+        // },
         KarmaAndDestiny: {
             "Life Lessons": [
                 "What karmic tasks do I have to solve in the current incarnation?",
@@ -1410,7 +1418,7 @@ class ChatInstance {
              <span class="input-group-text gap-2">
                  <span class="iconify" data-icon="icon-park:topic" data-width="25" data-height="25"></span>Chat Topic
              </span>
-             <!--!-->
+             <!-- TOPIC SELECTOR -->
              <select class="form-select" id="TopicListDropdown">
                  <option selected value="">What do you want to talk about?</option>
                  <optgroup label="Learn Astrology">
@@ -1428,15 +1436,19 @@ class ChatInstance {
                    <option value="VedAstro">Vedic astrology code in any language</option>
                  </optgroup>
              </select>
-             <button type="button" class="btn btn-outline-secondary"><span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span></button>
+             <!-- ADD PERSON BUTTON -->
+             <button type="button" onclick="window.vedastro.chatapi.onclick_add_person()" class="btn btn-outline-secondary"><span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span></button>
+             <!-- RESET CHAT BUTTON -->
+             <button type="button" class="btn btn-outline-danger"><span class="iconify" data-icon="carbon:restart" onclick="window.vedastro.chatapi.restart_baby()" data-width="25" data-height="25"></span></button>
+             <!-- ADVANCED SETTINGS BUTTON -->
              <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false">
                <span class="iconify" data-icon="iconamoon:settings-fill" data-width="25" data-height="25"></span>
              </button>
              <ul class="dropdown-menu dropdown-menu-end">
                <li class="dropdown-item">
                  <div class="form-check form-switch">
-                   <input class="form-check-input" type="checkbox" role="switch" id="useLocalServerSwitchInput">
-                   <label class="form-check-label" for="flexSwitchCheckChecked">Use local server</label>
+                   <input class="form-check-input" type="checkbox" role="switch" onchange="localStorage.setItem('IsLocalServerMode', this.checked)" id="useLocalServerSwitchInput">
+                   <label class="form-check-label" for="useLocalServerSwitchInput">Local Server Mode</label>
                  </div>
                </li>
                <li class="dropdown-item">
@@ -1445,10 +1457,22 @@ class ChatInstance {
                    <input  id="serverAddressInputElement" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="serverAddressLabel">
                  </div>
                </li>
-               <li><a class="dropdown-item" href="#">Another action</a></li>
-               <li><a class="dropdown-item" href="#">Super Advanced</a></li>
+               <li class="dropdown-item">
+                  <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" role="switch" onchange="localStorage.setItem('IsTeacherMode', this.checked)" id="useTeacherModeSwitchInput">
+                      <label class="form-check-label" for="useTeacherModeSwitchInput">Teacher Mode</label>
+                  </div>
+               </li>
+               <li class="dropdown-item">
+                  <div class="input-group">
+                    <span class="input-group-text" id="teacherKeyLabel">Teacher Key</span>
+                    <input id="teacherKeyInputElement" type="text" class="form-control" placeholder="Teacher Key" aria-label="Teacher Key" aria-describedby="teacherKeyLabel">
+                  </div>
+               </li>
+               <li><a class="dropdown-item" href="#">Warning under</a></li>
+               <li><a class="dropdown-item" href="#">Development</a></li>
                <li><hr class="dropdown-divider"></li>
-               <li><a class="dropdown-item" href="#">Separated link</a></li>
+               <li><a class="dropdown-item" href="#">Advanced users only</a></li>
              </ul>
      
          </div>
@@ -1472,7 +1496,7 @@ class ChatInstance {
          </div>
          
          <!-- MESSAGES IN VIEW -->
-         <ul class="list-unstyled" id="ChatWindowMessageList">
+         <ul class="list-unstyled px-3" id="ChatWindowMessageList" style="max-height:667.5px; overflow: auto; ">
              <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
                  <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar"
                       class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
@@ -1490,7 +1514,7 @@ class ChatInstance {
              </li>
          </ul>
          <!-- QUESTION INPUT -->
-         <div id="questionInputHolder" class="input-group mb-3">
+         <div id="questionInputHolder" class="input-group mb-3" style="">
      
            <button id="presetQuestionsButton" 
              data-bs-auto-close="outside" 
@@ -1517,7 +1541,7 @@ class ChatInstance {
             "~~~~~~~Stand back! Awesome Chat API code launching! All engines go!~~~~~~~"
         );
 
-        //make instance accessible 
+        //make instance accessible
         window.vedastro.chatapi = this;
 
         //correct if property names is camel case (for Blazor)
@@ -1545,7 +1569,25 @@ class ChatInstance {
 
         GenerateTopicListDropdown();
 
-        generateHtmlFromJson(this.PresetQuestions, "presetQuestionDropdown");
+        //generate preset question drop down
+        ChatInstance.generateHtmlFromJson(
+            this.PresetQuestions,
+            "presetQuestionDropdown"
+        );
+
+        //GUI LOAD SAVED VALUES
+        //load settings stored browser storage
+        let isLocalServerModeStr = localStorage.getItem("IsLocalServerMode");
+        $("#useLocalServerSwitchInput").prop(
+            "checked",
+            JSON.parse(isLocalServerModeStr)
+        );
+
+        let isTeacherModeStr = localStorage.getItem("IsTeacherMode");
+        $("#useTeacherModeSwitchInput").prop(
+            "checked",
+            JSON.parse(isTeacherModeStr)
+        );
 
         // GUI EVENT HANDLRES
         // NOTE: do handle only
@@ -1610,6 +1652,18 @@ class ChatInstance {
                 $("#TopicListDropdown").val("");
             }
 
+            //2 : CODE
+            if (selectedOptgroupLabel === "Generate Code") {
+                Swal.fire(
+                    "Coming soon!",
+                    "<strong>Come</strong> back later or choose another topic",
+                    "info"
+                );
+
+                //reset to make selection again
+                $("#TopicListDropdown").val("");
+            }
+
             //open connection to server if has not been open
             if (typeof this.socket === "undefined" && validTopicSelected) {
                 this.ServerURL = $("#useLocalServerSwitchInput").is(":checked")
@@ -1627,19 +1681,24 @@ class ChatInstance {
                 icon: "success",
                 title: "Topic changed!",
                 html: `We will now talk about <strong>${window.vedastro.SelectedPerson.Name}</strong>'s horoscope.`,
-                showConfirmButton: true,
+                showConfirmButton: false,
+                timer: 1000,
             });
+
+            // execute once execution que is empty (so pop up stays open) via 0ms
+            setTimeout(function () {
+                //auto open presets questions drop down for super speed users (UX ⚡)
+                $("#presetQuestionsButton").dropdown("toggle");
+            }, 0);
         });
 
-        //5: autofill preset questions handle (attach after generate)
-        $("#questionInputHolder .dropdown-menu a").click(function () {
-            var selectedText = $(this).text();
-            $("#UserChatInputElement").val(selectedText);
-        });
+        //7: handle local server switch
+        //when swith is fliped record into memory for future use (save user's time)
 
+        // Save a string value to local storage
+        localStorage.setItem("myKey", "Hello World!");
 
-
-
+        //update control center back on earth
         console.log("~~~~~~~Huston, we have lift off!~~~~~~~");
 
         function OpenConnectionToChatBot(instance) {
@@ -1703,96 +1762,6 @@ class ChatInstance {
                 );
             });
         }
-
-        function generateHtmlFromJson(json, targetElementId) {
-            const presetQuestionsJson = json;
-            const targetElement = document.getElementById(targetElementId);
-            let htmlContent = "";
-
-            // <li data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-            //    <h6 class="dropdown-header">
-            //        <span class="iconify me-2" data-icon="fluent-emoji-flat:heart-with-arrow" data-width="23" data-height="23"></span>Love</h6></li>
-            // <div class="collapse" id="collapseExample">
-            //   <div class="card card-body">
-            //     <li><a class="dropdown-item">When will I meet the love of my life in the year 2024?</a></li>
-            //     <li><a class="dropdown-item">Am I going to be in a new relationship in the year 2024?</a></li>
-            //     <li><a class="dropdown-item">Tell me about my love life.</a></li>
-            //     <li><a class="dropdown-item">Will I meet my soulmate in the year between 2024 to 2027?</a></li>
-            //   </div>
-            // </div>
-
-            //${getCategoryIconClass(categoryKey)}
-            Object.entries(presetQuestionsJson).forEach(
-                ([categoryKey, categoryValueList]) => {
-                    htmlContent += `<li 
-          data-bs-toggle="collapse" 
-          href="#collapse_${categoryKey}"
-          role="button" aria-expanded="false"
-          aria-controls="collapse_${categoryKey}">
-            <h6 class="dropdown-header">
-              <span class="iconify me-2" data-icon="${getCategoryIconClass(
-                        categoryKey
-                    )}" data-width="23" data-height="23"></span>
-              ${categoryKey}
-            </h6></li>`;
-                    htmlContent += `<div class="collapse" id="collapse_${categoryKey}">`;
-                    htmlContent += '<div class="card card-body">';
-
-                    let combinedArray = [];
-                    for (let category in categoryValueList) {
-                        combinedArray = combinedArray.concat(categoryValueList[category]);
-                    }
-
-                    if (Array.isArray(combinedArray)) {
-                        combinedArray.forEach((questionText) => {
-                            htmlContent += `<li><a class="dropdown-item">${questionText}</a></li>`;
-                        });
-                    } else {
-                        htmlContent += `<li><a class="dropdown-item">${combinedArray}</a></li>`;
-                    }
-
-                    htmlContent += "</div>"; // Close .card-body div
-                    htmlContent += "</div>"; // Close #collapse_{categoryKey} div
-                }
-            );
-
-            targetElement.innerHTML = htmlContent;
-        }
-
-        function getCategoryIconClass(categoryKey) {
-            switch (categoryKey) {
-                case "BestDates":
-                    return "fluent-emoji-flat:spiral-calendar";
-                case "Personality":
-                    return "fluent-emoji-flat:person";
-                case "Travel":
-                    return "fluent-emoji-flat:airplane-departure";
-                case "Love":
-                    return "fluent-emoji-flat:heart-with-arrow";
-                case "Astrology":
-                    return "twemoji:ringed-planet";
-                case "Studies":
-                    return "fluent-emoji-flat:books";
-                case "Money":
-                    return "fluent-emoji-flat:money-bag";
-                case "Business":
-                    return "fluent-emoji-flat:briefcase";
-                case "Career":
-                    return "fluent-emoji-flat:graduation-cap";
-                case "HomeAndFamily":
-                    return "fluent-emoji-flat:house-with-garden";
-                case "KarmaAndDestiny":
-                    return "noto:milky-way";
-                case "TestAccuracy":
-                    return "fluent-emoji-flat:test-tube";
-                case "AIJokes":
-                    return "fxemoji:smiletongue";
-                case "Previous":
-                    return "mdi:comment-previous";
-                default:
-                    return "fluent-emoji-flat:heart-with-arrow";
-            }
-        }
     }
 
     /*
@@ -1810,75 +1779,243 @@ class ChatInstance {
         this.processQueue();
     }
 
+    //called direct from static HTML hookup without seperate attach code
+    //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
+    restart_baby() {
+        //TODO do proper restart of only client connetion now whole dang system!!
+
+        //restart dank system
+        location.reload();
+    }
+
+    //called direct from static HTML hookup without seperate attach code
+    //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
+    rate_message(eventData, rating) {
+        //come here on click rating button
+        // get hash of message, stored as id in holder
+        var messageHolder = $(eventData)
+            .closest(".card")
+            .children(".message-holder");
+        var text_hash = messageHolder.attr("id");
+
+        const messagePayload = {
+            user_id: window.vedastro.UserId,
+            rating: rating,
+            text_hash: text_hash,
+        };
+
+        window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
+    }
+
+    onclick_add_person() {
+
+        //NOTE : "add person page" has auto return to previous page on save
+        //navigate to person add page
+        window.location.href = "./Account/Person/Add";
+    }
+
+    onclick_login() {
+
+        //NOTE : "add person page" has auto return to previous page on save
+        //navigate to login page
+        window.location.href = "./Account/Login";
+    }
+
+
+    //called direct from static HTML hookup without seperate attach code
+    //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
+    onclick_preset_question(eventData) {
+        //6: autofill preset questions handle (attach after generate)
+        var selectedText = $(eventData).text();
+        $("#UserChatInputElement").val(selectedText);
+    }
+
+    //when on of the follow up questions gets clicked
+    //get called direct from html code
+    ask_followup_question(eventData, followupQuestion) {
+        // get hash of message, stored as id in holder
+        var messageHolder = $(eventData)
+            .closest(".card")
+            .children(".message-holder");
+        var primaryAnswerHash = messageHolder.attr("id");
+
+        //UPDATE GUI WITH USER MSG (UX)
+        var aiInput = $("#UserChatInputElement").val();
+        var userName = "You";
+        var userInputChatCloud = `
+        <li class="d-flex justify-content-end mb-4">
+            <div class="card ">
+                <div class="card-header d-flex justify-content-between p-3">
+                    <p class="fw-bold mb-0">${userName}</p>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        ${followupQuestion}
+                    </p>
+                </div>
+            </div>
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
+                 class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="45">
+        </li>
+        `;
+        //inject in User's input into chat window
+        $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+
+        //set topic text TODO support DOB and books
+        var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+
+        //note the switch to python naming covention
+        var commandsToSend = [];
+        commandsToSend.push("followup_question"); //add command for server to read as "follow up"
+        const messagePayload = {
+            user_id: window.vedastro.UserId,
+            primary_answer_hash: primaryAnswerHash,
+            command: commandsToSend, //server uses this to do special handling
+            text: followupQuestion,
+            topic: topicText,
+        };
+
+        window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
+    }
+
+    //YOU CANNOT FIGHT A DYING MAN,
+    //HE HOLDS THE UPPER HAND ALWAYS
+
     // Handler for incoming messages
     onmessage(event) {
-
         // Parse the JSON data from the event
         var raw_json_message = JSON.parse(event.data);
         var ai_text_message_html = raw_json_message.text_html;
+        var ai_text_2_message_html = raw_json_message.text_2;
+        var ai_text_3_message_html = raw_json_message.text_3;
         var message_hash = raw_json_message.text_hash;
         var ai_text_message = raw_json_message.text;
+        var followup_questions = raw_json_message?.followup_questions ?? [];
 
-        //SPECIAL HANDLE FOR LOGIN PROMPTS
+        //PROCESS SERVER COMMANDS
+        var commands = raw_json_message.command || []; // when no commands given empty to not fail
+
+        //## SPECIAL HANDLE FOR LOGIN PROMPTS
         //1: check if server said please login, in command to client
         //   meaning user just say login message given by server,
         //   upon click login, start wait loop (make it seem bot is waiting for user to login)
-        //   then that special login tab (RememberMe) will auto close 
-        var command = raw_json_message.command;
+        //   then that special login tab (RememberMe) will auto close
+
         let intervalId;
-        if (command === "please_login") {
-            // start loop to check every 10 seconds if a property "window.vedastro.UserId" has been filled
-            intervalId = setInterval(() => {
-                if (window.vedastro && window.vedastro.UserId) {
-                    clearInterval(intervalId); // stop checking loop once UserId is found
-                    console.log("User ID found:", window.vedastro.UserId);
-
-                    //once login, send back previous message (easy UX)
-                    //thanks user for login
-                    Swal.fire(
-                        "Login done!",
-                        "Lets <strong>start</strong> chating!",
-                        "success"
-                    ).then(() => this.OnClickSendChat(this.LastUserMessage));
-
-
-
-                } else {
-                    console.log("Waiting for user login...");
-                }
-            }, 1000);
+        if (commands.includes("please_login")) {
+            //TODO maybe not needed anymore
+            //set marker in browser asking Blazor login page to redirect back
+            localStorage.setItem('PreviousPage', '/ChatAPI');
         }
 
+        //## BUILD HTML
+
+        //HANDLE FOLLOWUP
+        // only add follow up questions if server specified them
+        var followupQuestionsHtml = "";
+        // convert questions into visible buttons, for user to click
+        if (followup_questions.length > 0) {
+            followupQuestionsHtml += //start out hidden, then js will bring to live with animation at right time (class)
+                '<div class="followUpQuestionHolder hstack gap-2 w-100 justify-content-end" style="display:none; position: absolute; bottom: -43px; right: -1px; ">';
+
+            followup_questions.forEach(function (question) {
+                followupQuestionsHtml += `
+            <button type="button" onclick="window.vedastro.chatapi.ask_followup_question(this, '${question}')"  class="btn btn-outline-primary">${question}</button>
+        `;
+            });
+
+            followupQuestionsHtml += "</div>";
+        }
+
+        //only show feedback buttons for text that need feedback
+        var feedbackButtonHtml = commands.includes("no_feedback")
+            ? ""
+            : `<div class="hstack gap-2">
+    <button title="Bad answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, -1)" class="btn btn-danger" style="padding: 0px 5px;">
+      <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
+    </button>
+    <button title="Good answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, 1)" class="btn btn-primary" style="padding: 0px 5px;">
+      <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
+    </button>
+  </div>`;
+
+        //based on number of answers received use correct GUI
+        //so, if only 1 ans then show standard gui, else do special multi ans accordian
+        var isMultiAns = ai_text_2_message_html !== undefined;
+        var aiFinalAnswerHolder = isMultiAns
+            ? `                <!-- Multiple answer holder -->
+    <div class="accordion text-html-out-elm" style="display:none;" >
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Answer #1
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            ${ai_text_message_html}
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+           Answer #2
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            ${ai_text_2_message_html}
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Answer #3
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            ${ai_text_3_message_html}
+          </div>
+        </div>
+      </div>
+    </div>
+`
+            : `
+<div style="display:none;" class="text-html-out-elm mb-0">
+${ai_text_message_html}
+</div>
+`;
+
         // Create a chat bubble with the AI's message
-        var aiInputChatCloud = `<li class="d-flex justify-content-start mb-4">
+        var aiInputChatCloud = `<li class="d-flex justify-content-start" style=" margin-bottom: 70px; ">
         <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
         <div class="card">
             <div class="card-header d-flex justify-content-between p-3">
                 <p class="fw-bold mb-0 me-5">Vignes</p>
-                <div class="hstack gap-2">
-                  <button title="Bad answer" type="button" onclick="(e)=>window.vedastro.chatapi.rate_message(e, -1)" class="btn btn-danger" style="padding: 0px 5px;">
-                    <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
-                  </button>
-                  <button title="Good answer" type="button" onclick="(e)=>window.vedastro.chatapi.rate_message(e, 1)" class="btn btn-primary" style="padding: 0px 5px;">
-                    <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
-                  </button>
-                </div>
+                ${feedbackButtonHtml}
             </div>
             <div id="${message_hash}" class="message-holder card-body">
-                <p style="display:none;" class="text-html-out-elm mb-0">
-                  ${ai_text_message_html}
-                </p>
+                ${aiFinalAnswerHolder}
                 <p class="temp-text-stream-elm mb-0">
                   <!-- Content will be streamed here -->
                 </p>
                 <!-- SVG for loading icon -->
                 <svg class="loading-icon-elm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
+                ${followupQuestionsHtml}
             </div>
         </div>
     </li>`;
 
         // Append the chat bubble to the chat window
         $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
+
+        // # AUTO SCROLL DOWN
+        $("#ChatWindowMessageList").scrollTop(
+            $("#ChatWindowMessageList")[0].scrollHeight
+        );
 
         // Flag to prevent user input while AI is 'typing'
         this.IsAITalking = true;
@@ -1890,6 +2027,7 @@ class ChatInstance {
         // Stream the AI's message into the chat bubble
         const interval = setInterval(() => {
             // Check if the entire message has been displayed
+            //MESSAGE STREAM COMPLETE
             if (index >= ai_text_message.length) {
                 clearInterval(interval);
 
@@ -1904,11 +2042,19 @@ class ChatInstance {
                 // Allow user input again
                 this.IsAITalking = false;
 
+                //make follow up questions if any slowly appear
+                //narrow by message bubble, then holder
+                $(`#${message_hash} .followUpQuestionHolder`).fadeIn("slow");
+
                 return;
             }
 
             // Append the next character or handle special formatting
-            ChatInstance.appendNextCharacter(ai_text_message, index, `#${message_hash} .temp-text-stream-elm`);
+            ChatInstance.appendNextCharacter(
+                ai_text_message,
+                index,
+                `#${message_hash} .temp-text-stream-elm`
+            );
             index++;
         }, streamRateMs);
     }
@@ -1930,6 +2076,96 @@ class ChatInstance {
             // Append regular character
             const nextChar = document.createTextNode(text[index]);
             $(elementSelector).append(nextChar);
+        }
+    }
+
+    //TODO Needs rename
+    static generateHtmlFromJson(json, targetElementId) {
+        const presetQuestionsJson = json;
+        const targetElement = document.getElementById(targetElementId);
+        let htmlContent = "";
+
+        //NOTE: below sample of full render
+        // <li data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        //    <h6 class="dropdown-header">
+        //        <span class="iconify me-2" data-icon="fluent-emoji-flat:heart-with-arrow" data-width="23" data-height="23"></span>Love</h6></li>
+        // <div class="collapse" id="collapseExample">
+        //   <div class="card card-body">
+        //     <li><a class="dropdown-item">When will I meet the love of my life in the year 2024?</a></li>
+        //     <li><a class="dropdown-item">Am I going to be in a new relationship in the year 2024?</a></li>
+        //     <li><a class="dropdown-item">Tell me about my love life.</a></li>
+        //     <li><a class="dropdown-item">Will I meet my soulmate in the year between 2024 to 2027?</a></li>
+        //   </div>
+        // </div>
+
+        Object.entries(presetQuestionsJson).forEach(
+            ([categoryKey, categoryValueList]) => {
+                htmlContent += `<li 
+        data-bs-toggle="collapse" 
+        href="#collapse_${categoryKey}"
+        role="button" aria-expanded="false"
+        aria-controls="collapse_${categoryKey}">
+          <h6 class="dropdown-header">
+            <span class="iconify me-2" data-icon="${ChatInstance.getCategoryIconClass(
+                    categoryKey
+                )}" data-width="23" data-height="23"></span>
+            ${categoryKey}
+          </h6></li>`;
+                htmlContent += `<div class="collapse" id="collapse_${categoryKey}">`;
+                htmlContent += '<div class="card card-body">';
+
+                let combinedArray = [];
+                for (let category in categoryValueList) {
+                    combinedArray = combinedArray.concat(categoryValueList[category]);
+                }
+
+                if (Array.isArray(combinedArray)) {
+                    combinedArray.forEach((questionText) => {
+                        htmlContent += `<li><a  onclick="window.vedastro.chatapi.onclick_preset_question(this)" class="dropdown-item">${questionText}</a></li>`;
+                    });
+                } else {
+                    htmlContent += `<li><a class="dropdown-item">${combinedArray}</a></li>`;
+                }
+
+                htmlContent += "</div>"; // Close .card-body div
+                htmlContent += "</div>"; // Close #collapse_{categoryKey} div
+            }
+        );
+
+        targetElement.innerHTML = htmlContent;
+    }
+    static getCategoryIconClass(categoryKey) {
+        switch (categoryKey) {
+            case "BestDates":
+                return "fluent-emoji-flat:spiral-calendar";
+            case "Personality":
+                return "fluent-emoji-flat:person";
+            case "Travel":
+                return "fluent-emoji-flat:airplane-departure";
+            case "Love":
+                return "fluent-emoji-flat:heart-with-arrow";
+            case "Astrology":
+                return "twemoji:ringed-planet";
+            case "Studies":
+                return "fluent-emoji-flat:books";
+            case "Money":
+                return "fluent-emoji-flat:money-bag";
+            case "Business":
+                return "fluent-emoji-flat:briefcase";
+            case "Career":
+                return "fluent-emoji-flat:graduation-cap";
+            case "HomeAndFamily":
+                return "fluent-emoji-flat:house-with-garden";
+            case "KarmaAndDestiny":
+                return "noto:milky-way";
+            case "TestAccuracy":
+                return "fluent-emoji-flat:test-tube";
+            case "AIJokes":
+                return "fxemoji:smiletongue";
+            case "Previous":
+                return "mdi:comment-previous";
+            default:
+                return "fluent-emoji-flat:heart-with-arrow";
         }
     }
 
@@ -2051,36 +2287,62 @@ class ChatInstance {
         //STEP 2:
         //user's input is sent to server for reply
         //get selected birth time
-        var birth_time_json = CommonTools.BirthTimeUrlOfSelectedPersonJson();
-        await this.SendMessageToServer(userInput, birth_time_json);
+        //TODO can be DOB or bookname
+        var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+        await this.SendMessageToServer(userInput, topicText);
         this.LastUserMessage = userInput; //save to used later for highlight
 
         //STEP 3 : GUI CLEAN UP
         //clear question input box for next, question
         $("#UserChatInputElement").val("");
+
+        //STEP 4: ADD EASY TO EASY REASK LIST
+        // Add the new question at the beginning of the 'Last 3' array
+        // Check if the new question already exists in the 'Last 3' array
+        var index = this.PresetQuestions.Previous["Last 3"].indexOf(userInput);
+
+        if (index === -1) {
+            // If the new question does not exist, add it at the beginning of the array
+            this.PresetQuestions.Previous["Last 3"].unshift(newQuestion);
+        } else {
+            // If the new question exists, remove it from its current position
+            this.PresetQuestions.Previous["Last 3"].splice(index, 1);
+            // Then add it at the beginning of the array
+            this.PresetQuestions.Previous["Last 3"].unshift(userInput);
+        }
+
+        // If there are more than 3 questions, remove the 4th one
+        if (this.PresetQuestions.Previous["Last 3"].length > 5) {
+            this.PresetQuestions.Previous["Last 3"].pop();
+        }
+        //re-generate preset question drop down
+        ChatInstance.generateHtmlFromJson(
+            this.PresetQuestions,
+            "presetQuestionDropdown"
+        );
     }
 
-    async SendMessageToServer(message, birthTimeUrl) {
+    //this is where final JSON packaged before sending to server
+    async SendMessageToServer(message, topicText) {
+        //build all commands based on set user settings
+        var command_list = [];
+        var password = $("#useTeacherModeSwitchInput").val();
+        var isTeacherMode = $("#useTeacherModeSwitchInput").is(":checked");
+        //teacher mode enables all answers, but slower
+        if (isTeacherMode) {
+            command_list.push("teacher_mode");
+        }
+
+        //NOTE: also equivelant to answer processing expriments
+        //set answer level
+        command_list.push("level_1");
+
         const messagePayload = {
-            user_id: window.vedastro.UserId,
+            user_id: window.vedastro.UserId, //gotten from browser storage if any when script was init
             text: message,
-            topic: birthTimeUrl,
-        };
-
-        window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
-    }
-
-    //come here on click rating button 
-    rate_message(eventData, rating) {
-
-        // get hash of message, stored as id in holder
-        var messageHolder = $(eventData.target).closest('.message-holder');
-        var text_hash = messageHolder.attr('id');
-
-        const messagePayload = {
-            user_id: window.vedastro.UserId,
-            rating: rating,
-            text_hash: text_hash,
+            topic: topicText,
+            command: command_list,
+            password: password,
         };
 
         window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
@@ -2098,3 +2360,70 @@ window.GenerateChatInstance = (settingsAIChat) => {
     new ChatInstance(settingsAIChat);
     window.vedastro.chatapi.waitForConnection();
 };
+
+
+/**
+ * Shortcut method to aimate events chart.
+ * Used by Blazor to call JS code.
+ */
+window.ChartFromSVG = async (chartStr) => {
+
+    //inject into default div on page to hold, "EventsChartSvgHolder"
+    var $chartElm = injectIntoElement($(ID.EventsChartSvgHolder)[0], chartStr);
+
+    //things done here:
+    //- get the unique ID of the chart
+    //- use ID to maintain clean code
+    //- chart is available in window.EventsChartList
+    var chartId = $chartElm.attr('id');
+    var index = new EventsChart(chartId); //brings to life
+
+    //let caller know all went well
+    console.log(`Amen! Chart Loaded : INDEX:${index}, ID:${chartId}`);
+
+
+
+    //-----------------------------LOCAL FUNCS---------------------------------------
+
+    //todo marked for update
+    async function getEventsChartFromApiXml(url, payload) {
+        console.log(`JS : Getting events chart from API...`);
+
+        var response = await window.fetch(url, {
+            "headers": { "accept": "*/*", "Connection": "keep-alive" },
+            "body": payload,
+            "method": "GET"
+        });
+
+        //API should always give a OK reply, else it has failed internally
+        if (!response.ok) { console.log("ERROR : API Call Crashed!"); }
+
+        //inject new svg chart into page
+        var svgChartString = await response.text();
+
+        return svgChartString;
+    }
+
+
+    //returns the reference to the SVG element in DOM
+    function injectIntoElement(parentElement, valueToInject) {
+        console.log(`JS : Injecting SVG Chart into page...`);
+
+        //if parent not found raise alarm
+        if (parentElement === undefined) { console.log("ERROR: Parent element ID'd EventsChartSvgHolder not found"); }
+
+        //convert string to html node
+        var template = document.createElement("template");
+        template.innerHTML = valueToInject;
+        var svgElement = template.content.firstElementChild;
+
+        //place new node in parent
+        parentElement.innerHTML = ''; //clear current children if any
+        parentElement.appendChild(svgElement);
+
+        //return reference in to SVG elm in DOM (jquery for ease)
+        return $(svgElement);
+    }
+
+
+}

@@ -422,7 +422,7 @@ export class EventsChart {
     static async ParseEventFromSVGRect(targetRect, instance) {
 
         //prepare the URL
-        var domain = "https://api.vedastro.org";
+        var domain = "https://vedastroapi.azurewebsites.net/api";
 
         //get birth time from main svg element
         var birthTimeAry = instance.$SvgChartElm[0].getAttribute("birthtime").split(" ");

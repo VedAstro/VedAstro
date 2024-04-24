@@ -199,9 +199,9 @@ async def horoscope_chat(websocket: websockets.WebSocket):
                 """
 				ai_html_reply = """
                     Please login sir...to verify you are not a robot 🤖<br>
-                    Easy & secure login with <a target="_blank" style="text-decoration-line: none;" href="https://vedastro.org/Account/Login/RememberMe" class="link-primary fw-bold">Google</a> or <a target="_blank" style="text-decoration-line: none;" href="https://vedastro.org/Account/Login/RememberMe" class="link-primary fw-bold">Facebook</a><br><br>
+                    Easy & secure login with <a style="text-decoration-line: none;" href="https://vedastro.org/Account/Login" class="link-primary fw-bold">Google</a> or <a style="text-decoration-line: none;" href="https://vedastro.org/Account/Login" class="link-primary fw-bold">Facebook</a><br><br>
                     .....I understand this is annoying, but I have no choice!🤗<br>
-                    there are robots in the internet who target smart AI Chat agents like me.<br>
+                    there are bad robots in the internet who target smart AI Chat agents like me.<br>
                     So please login to get started...<br>
                 """
 

@@ -1416,7 +1416,7 @@ class ChatInstance {
              <span class="input-group-text gap-2">
                  <span class="iconify" data-icon="icon-park:topic" data-width="25" data-height="25"></span>Chat Topic
              </span>
-             <!--!-->
+             <!-- TOPIC SELECTOR -->
              <select class="form-select" id="TopicListDropdown">
                  <option selected value="">What do you want to talk about?</option>
                  <optgroup label="Learn Astrology">
@@ -1434,8 +1434,11 @@ class ChatInstance {
                    <option value="VedAstro">Vedic astrology code in any language</option>
                  </optgroup>
              </select>
-             <button type="button" class="btn btn-outline-secondary"><span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span></button>
+             <!-- ADD PERSON BUTTON -->
+             <button type="button" onclick="window.vedastro.chatapi.onclick_add_person()" class="btn btn-outline-secondary"><span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span></button>
+             <!-- RESET CHAT BUTTON -->
              <button type="button" class="btn btn-outline-danger"><span class="iconify" data-icon="carbon:restart" onclick="window.vedastro.chatapi.restart_baby()" data-width="25" data-height="25"></span></button>
+             <!-- ADVANCED SETTINGS BUTTON -->
              <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false">
                <span class="iconify" data-icon="iconamoon:settings-fill" data-width="25" data-height="25"></span>
              </button>
@@ -1464,10 +1467,10 @@ class ChatInstance {
                     <input id="teacherKeyInputElement" type="text" class="form-control" placeholder="Teacher Key" aria-label="Teacher Key" aria-describedby="teacherKeyLabel">
                   </div>
                </li>
-               <li><a class="dropdown-item" href="#">Another action</a></li>
-               <li><a class="dropdown-item" href="#">Super Advanced</a></li>
+               <li><a class="dropdown-item" href="#">Warning under</a></li>
+               <li><a class="dropdown-item" href="#">Development</a></li>
                <li><hr class="dropdown-divider"></li>
-               <li><a class="dropdown-item" href="#">Separated link</a></li>
+               <li><a class="dropdown-item" href="#">Advanced users only</a></li>
              </ul>
      
          </div>
@@ -1802,6 +1805,21 @@ class ChatInstance {
         window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
     }
 
+    onclick_add_person() {
+
+        //NOTE : "add person page" has auto return to previous page on save
+        //navigate to person add page
+        window.location.href = "./Account/Person/Add";
+    }
+
+    onclick_login() {
+
+        //NOTE : "add person page" has auto return to previous page on save
+        //navigate to login page
+        window.location.href = "./Account/Login";
+    }
+
+
     //called direct from static HTML hookup without seperate attach code
     //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
     onclick_preset_question(eventData) {
@@ -1883,6 +1901,7 @@ class ChatInstance {
 
         let intervalId;
         if (commands.includes("please_login")) {
+            //TODO maybe not needed anymore
             //set marker in browser asking Blazor login page to redirect back
             localStorage.setItem('PreviousPage', '/ChatAPI');
         }

@@ -508,7 +508,7 @@ namespace Website
         /// false = disabled, enabled = true
         /// defaults to false
         /// </summary>
-        public static async Task<bool> GetDebugModeBool()
+        public static async Task<bool> IsLocalServerDebugMode()
         {
             var dataInBrowser = await AppData.JsRuntime.GetProperty("DebugMode"); //enabled/disabled
             var debugMode = string.IsNullOrEmpty(dataInBrowser) ? false : (dataInBrowser == "enabled" ? true : false);
@@ -518,7 +518,7 @@ namespace Website
 
         public static async Task<string> GetDebugModeText()
         {
-            var debugMode = await WebsiteTools.GetDebugModeBool();
+            var debugMode = await WebsiteTools.IsLocalServerDebugMode();
             var selectedDebugMode = debugMode ? "enabled" : "disabled";
 
             return selectedDebugMode;

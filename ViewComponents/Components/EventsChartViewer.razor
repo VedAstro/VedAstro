@@ -298,7 +298,7 @@
         var personId = SelectedPerson.Id;
         var eventPreset = _eventPreset;
         var timePreset = _timePreset;
-        var url = $"{AppData.URL.ApiUrl}/chart/{personId}/{eventPreset}/{timePreset}";
+        var url = $"{AppData.URL.ApiUrlDirect}/chart/{personId}/{eventPreset}/{timePreset}";
 
         _jsRuntime.OpenNewTab(url);
     }
@@ -306,7 +306,7 @@
     private async Task OnClickCopyChartLink()
     {
         //generate the url
-        var url = AppData.URL.ApiUrl + $"/savedchart/{CurrentChartId}";
+        var url = AppData.URL.ApiUrlDirect + $"/savedchart/{CurrentChartId}";
 
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, url);

@@ -120,12 +120,12 @@ namespace VedAstro.Library
         /// <summary>
         /// Does the heavy computation to know if event is occuring.
         /// Note also same reason this is run separately only when needed & not run during startup
-        /// and it also allows the code to be managed easily for parallel computation
+        /// , and it also allows the code to be managed easily for parallel computation
         /// combines event data and calculator result 
         /// </summary>
         public static EventSlice? ConvertToEventSlice(Time time, EventData eventData, Person person)
         {
-            //if event is Empty than not occuring
+            //if event is Empty, then not occuring
             if (eventData == EventData.Empty) { return EventSlice.Empty; }
 
             //do calculation for this event to get prediction data
@@ -151,7 +151,7 @@ namespace VedAstro.Library
                 }
 
                 //send caller the updated event data, since override possibility
-                return new EventSlice(eventData.Name, nature, description, time, predictionData.Occuring);
+                return new EventSlice(eventData.Name, nature, description, eventData.SpecializedSummary, time, predictionData.Occuring);
 
             }
 
@@ -193,7 +193,7 @@ namespace VedAstro.Library
 
                 var tags = GetTagsByEventName(startSlice.Name);
 
-                var convertedEvent = new Event(startSlice.Name, startSlice.Nature, startSlice.Description, startTime, endTime, tags);
+                var convertedEvent = new Event(startSlice.Name, startSlice.Nature, startSlice.Description, startSlice.SpecializedSummary, startTime, endTime, tags);
 
                 return convertedEvent;
             }
@@ -322,6 +322,7 @@ namespace VedAstro.Library
                 var name = _event.GetName();
                 var eventNature = _event.GetNature();
                 var description = _event.GetDescription();
+                var specializedSummary = _event.SpecializedSummary;
                 var geoLocation = _event.GetStartTime().GetGeoLocation();
                 var stdOffset = _event.GetStartTime().GetStdDateTimeOffset().Offset;
 
@@ -351,7 +352,7 @@ namespace VedAstro.Library
                     //create a new event
                     //todo temp
                     var tags2 = EventManager.GetTagsByEventName(name);
-                    newEvent = new Event(name, eventNature, description, newStartTime, newEndTime, tags2);
+                    newEvent = new Event(name, eventNature, description, specializedSummary, newStartTime, newEndTime, tags2);
 
                     //place the event inside the return list
                     splitedEventList.Add(newEvent);
@@ -371,7 +372,7 @@ namespace VedAstro.Library
                 //create a new event
                 //todo temp
                 var tags = EventManager.GetTagsByEventName(name);
-                newEvent = new Event(name, eventNature, description, newStartTime, endTime, tags); //use the original end time
+                newEvent = new Event(name, eventNature, description, specializedSummary, newStartTime, endTime, tags); //use the original end time
 
                 //place the event inside the return list
                 splitedEventList.Add(newEvent);

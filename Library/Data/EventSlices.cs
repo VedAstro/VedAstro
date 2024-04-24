@@ -3,8 +3,10 @@
 namespace VedAstro.Library
 {
     /// <summary>
+    /// A temporary event data holder for use during generation
+    /// TODO
     /// increase efficiency by using struct
-    /// struct shaves a few seconds vs classes
+    /// shaves a few seconds vs classes
     /// note : the lack of GetDurationMinutes compared to the other Event class
     /// </summary>
     public class EventSlice 
@@ -14,33 +16,38 @@ namespace VedAstro.Library
         /// for debugging and generating empty dasa svg lines
         /// marked as not occuring
         /// </summary>
-        public static EventSlice Empty = new EventSlice(EventName.Empty, EventNature.Empty, "", Time.Empty, false);
+        public static EventSlice Empty = new EventSlice(EventName.Empty, EventNature.Empty, "", SpecializedSummary.Empty, Time.Empty, false);
 
         //FIELDS
         private readonly string _description;
 
 
         //CTOR
-        public EventSlice(EventName name, EventNature nature, string description, Time time, bool isOccuring)
+        public EventSlice(EventName name, EventNature nature, string description, SpecializedSummary specializedSummary, Time time, bool isOccuring)
         {
             //initialize fields
             Name = name;
             Nature = nature;
             _description = HttpUtility.HtmlEncode(description); //HTML character safe
+            SpecializedSummary = specializedSummary;
             Time = time;
             IsOccuring = isOccuring;
         }
 
 
         //PROPERTIES
-        //Note: Created mainly for ease of use with WPF binding
         public EventName Name { get; }
 
         public string FormattedName => Format.FormatName(this);
+
         public string Description => HttpUtility.HtmlDecode(_description);
+
+        public SpecializedSummary SpecializedSummary { get; private set; }
+
         public EventNature Nature { get; }
 
         public Time Time { get; }
+
         public bool IsOccuring { get; init; }
 
 

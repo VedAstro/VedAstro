@@ -28,6 +28,24 @@ namespace VedAstro.Library
         public string BirthTime { get; set; }
         public string Gender { get; set; }
         public string Notes { get; set; }
+
+        /// <summary>
+        /// Full clone for easy modification
+        /// </summary>
+        public PersonRow Clone()
+        {
+            return new PersonRow()
+            {
+                PartitionKey = PartitionKey,
+                RowKey = RowKey,
+                Timestamp = Timestamp,
+                ETag = ETag,
+                Name = Name,
+                BirthTime = BirthTime,
+                Gender = Gender,
+                Notes = Notes
+            };
+        }
     }
 
 }

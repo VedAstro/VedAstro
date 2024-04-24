@@ -609,7 +609,6 @@ namespace VedAstro.Library
             return returnVal;
         }
 
-
         private static double GetTextWidthPx(string textInput)
         {
 
@@ -1707,10 +1706,12 @@ namespace VedAstro.Library
 
                         //save current event too previous to draw border later
                         //border ONLY for top 3 rows (long duration events), lower row borders block color
-                        if (finalYAxis <= 29)
-                        {
-                            prevEventList[finalYAxis] = foundEvent.Name;
-                        }
+                        prevEventList[finalYAxis] = foundEvent.Name;
+
+                        //if (finalYAxis <= 29)
+                        //{
+                        //    prevEventList[finalYAxis] = foundEvent.Name;
+                        //}
 
                         //generate and add to row
                         //the hard coded attribute names used here are used in App.js
@@ -1718,6 +1719,11 @@ namespace VedAstro.Library
                                    $"eventname=\"{foundEvent?.FormattedName}\" " +
                                    $"eventdescription=\"{foundEvent?.Description}\" " +
                                    $"naturescore=\"{foundEvent?.NatureScore}\" " +
+                                   $"mind=\"{foundEvent?.SpecializedSummary.Mind}\" " +
+                                   $"body=\"{foundEvent?.SpecializedSummary.Body}\" " +
+                                   $"family=\"{foundEvent?.SpecializedSummary.Family}\" " +
+                                   $"money=\"{foundEvent?.SpecializedSummary.Money}\" " +
+                                   $"studies=\"{foundEvent?.SpecializedSummary.Studies}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
                                    $"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\" " +
                                    $"x=\"{horizontalPosition}\" " +

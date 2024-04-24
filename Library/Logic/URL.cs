@@ -20,7 +20,7 @@ public class URL
     /// All API functions can be accessed by this .org URL
     /// Note: possible via azure CDN rules engine : AccessApiViaWebDomain
     /// </summary>
-    public URL(bool isBetaRuntime, bool debugMode) //don't hide to make obvious easy id
+    public URL(bool isBetaRuntime, bool? debugMode = null) //don't hide to make obvious easy id
     {
         //set beta or stable based on Runtime Stamp data
         ApiUrl = isBetaRuntime ? ApiBeta : ApiStable;
@@ -28,8 +28,20 @@ public class URL
         WebUrl = isBetaRuntime ? WebBeta : WebStable;
         WebUrlDirect = WebDirect;
 
+        //if not set then will use system debug mode
+        //NOTE : this is done specifically to enable local routing when debugging API
+        //       meaning when API makes calls to API it will in local debug environment, it won't go call online API 
+        if (debugMode == null)
+        {
+#if DEBUG
+            debugMode = true;
+#else
+            debugMode = false;
+#endif
+        }
+
         //if DEBUG MODE set all to local (bye bye Postman! we don't need you anymore!)
-        if (debugMode)
+        if (debugMode ?? false) //default to false
         {
             ApiUrl = "http://localhost:7071/api";
             ApiUrlDirect = "http://localhost:7071/api";
@@ -39,54 +51,61 @@ public class URL
         //--------------done here so that can be readonly------------------
 
         //GENERAL
-        GetCallData = ApiUrl + "/GetCallData";
+        GetCallData = ApiUrlDirect + "/GetCallData";
         Login = WebUrl + "/Account/Login"; //note must match with page route
 
         //ML TABLE
-        GetMLTimeListFromExcel = ApiUrl + "/GetMLTimeListFromExcel";
-        GenerateMLTable = ApiUrl + "/GenerateMLTable";
+        GetMLTimeListFromExcel = ApiUrlDirect + "/GetMLTimeListFromExcel";
+        GenerateMLTable = ApiUrlDirect + "/GenerateMLTable";
 
         //PERSON
-        GetPersonList = ApiUrl + "/GetPersonList";
-        AddPerson = ApiUrl + "/AddPerson";
-        DeletePerson = ApiUrl + "/DeletePerson";
-        UpdatePerson = ApiUrl + "/UpdatePerson";
-        UpsertLifeEvent = ApiUrl + "/UpsertLifeEvent";
-        GetPerson = ApiUrl + "/GetPerson";
-        GetPersonImage = ApiUrl + "/GetPersonImage/PersonId";
-        GetNewPersonId = ApiUrl + "/GetNewPersonId";
+        GetPersonList = ApiUrlDirect + "/GetPersonList";
+        AddPerson = ApiUrlDirect + "/AddPerson";
+        DeletePerson = ApiUrlDirect + "/DeletePerson";
+        UpdatePerson = ApiUrlDirect + "/UpdatePerson";
+        UpsertLifeEvent = ApiUrlDirect + "/UpsertLifeEvent";
+        GetPerson = ApiUrlDirect + "/GetPerson";
+        GetPersonImage = ApiUrlDirect + "/GetPersonImage/PersonId";
+        GetNewPersonId = ApiUrlDirect + "/GetNewPersonId";
+
+
+        //NOTE: below api location access URLs are used by all including in server communication
+        AddressToGeoLocationAPI = $"{ApiUrlDirect}/Calculate/AddressToGeoLocation";
+        CoordinatesToGeoLocationAPI = $"{ApiUrlDirect}/Calculate/CoordinatesToGeoLocation";
+        IpAddressToGeoLocationAPI = $"{ApiUrlDirect}/Calculate/IpAddressToGeoLocation";
+        GeoLocationToTimezoneAPI = $"{ApiUrlDirect}/Calculate/GeoLocationToTimezone";
 
 
         HoroscopePredictions = ApiUrlDirect + "/Calculate/HoroscopePredictions";
         HoroscopeLLMSearch = ApiUrlDirect + "/Calculate/HoroscopeLLMSearch";
-        AddLifeEventApi = ApiUrl + "/addlifeevent";
-        AddMessageApi = ApiUrl + "/addmessage";
-        DeleteChartApi = ApiUrl + "/deletesavedchart";
-        DeleteVisitorByUserId = ApiUrl + "/deletevisitorbyuserid";
-        DeleteVisitorByVisitorId = ApiUrl + "/deletevisitorbyvisitorid";
-        AddTaskApi = ApiUrl + "/addtask";
-        AddVisitorApi = ApiUrl + "/addvisitor";
-        GetTaskListApi = ApiUrl + "/gettasklist";
-        GetVisitorList = ApiUrl + "/getvisitorlist";
-        GetMessageList = ApiUrl + "/getmessagelist";
+        AddLifeEventApi = ApiUrlDirect + "/addlifeevent";
+        AddMessageApi = ApiUrlDirect + "/addmessage";
+        DeleteChartApi = ApiUrlDirect + "/deletesavedchart";
+        DeleteVisitorByUserId = ApiUrlDirect + "/deletevisitorbyuserid";
+        DeleteVisitorByVisitorId = ApiUrlDirect + "/deletevisitorbyvisitorid";
+        AddTaskApi = ApiUrlDirect + "/addtask";
+        AddVisitorApi = ApiUrlDirect + "/addvisitor";
+        GetTaskListApi = ApiUrlDirect + "/gettasklist";
+        GetVisitorList = ApiUrlDirect + "/getvisitorlist";
+        GetMessageList = ApiUrlDirect + "/getmessagelist";
 
-        FindMatch = ApiUrl + "/FindMatch";
-        GetMatchReportList = ApiUrl + "/GetMatchReportList";
-        GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
-        GetMatchReportApi = ApiUrl + "/getmatchreport";
-        GetSavedMatchReport = ApiUrl + "/GetSavedMatchReport";
-        SaveMatchReportApi = ApiUrl + "/SaveMatchReport";
-        GetEventsChart = ApiUrl + "/EventsChart";
-        GetCallStatus = ApiUrl + "/GetCallStatus";
+        FindMatch = ApiUrlDirect + "/FindMatch";
+        GetMatchReportList = ApiUrlDirect + "/GetMatchReportList";
+        GetPersonIdFromSavedChartId = ApiUrlDirect + "/getpersonidfromsavedchartid";
+        GetMatchReportApi = ApiUrlDirect + "/getmatchreport";
+        GetSavedMatchReport = ApiUrlDirect + "/GetSavedMatchReport";
+        SaveMatchReportApi = ApiUrlDirect + "/SaveMatchReport";
+        GetEventsChart = ApiUrlDirect + "/EventsChart";
+        GetCallStatus = ApiUrlDirect + "/GetCallStatus";
         //TODO special URL for chart because timeout Azure CDN timeout >30s
         GetEventsChartDirect = ApiUrlDirect + "/geteventschart";
-        GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
-        GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
-        SaveEventsChart = ApiUrl + "/SaveEventsChart";
-        GetEventDataList = ApiUrl + "/GetEventDataList";
-        GetEventsApi = ApiUrl + "/getevents";
-        SignInGoogle = ApiUrl + "/SignInGoogle";
-        SignInFacebook = ApiUrl + "/SignInFacebook";
+        GetSavedEventsChart = ApiUrlDirect + "/getsavedeventschart";
+        GetSavedEventsChartIdList = ApiUrlDirect + "/getsavedchartnamelist";
+        SaveEventsChart = ApiUrlDirect + "/SaveEventsChart";
+        GetEventDataList = ApiUrlDirect + "/GetEventDataList";
+        GetEventsApi = ApiUrlDirect + "/getevents";
+        SignInGoogle = ApiUrlDirect + "/SignInGoogle";
+        SignInFacebook = ApiUrlDirect + "/SignInFacebook";
         //NOTE: special use of "direct" url for max speed (no CDN)
         HoroscopeDataListXml = $"{WebUrlDirect}/data/HoroscopeDataList.xml";//used in horoscope prediction
         EventsChartViewerHtml = $"{WebUrlDirect}/data/EventsChartViewer.html";
@@ -110,6 +129,14 @@ public class URL
     public readonly string ApiUrlDirect;
     public readonly string WebUrl;
     public readonly string WebUrlDirect;
+
+    //NOTE: below api location access URLs are used by all including in server communication
+    public readonly string AddressToGeoLocationAPI;
+    public readonly string CoordinatesToGeoLocationAPI;
+    public readonly string IpAddressToGeoLocationAPI;
+    public readonly string GeoLocationToTimezoneAPI;
+
+
     public readonly string HoroscopePredictions;
     public readonly string HoroscopeLLMSearch;
     public readonly string AddLifeEventApi;
@@ -121,10 +148,7 @@ public class URL
     public readonly string AddTaskApi;
     public readonly string AddVisitorApi;
     public static readonly string AddVisitorApiStable = $"{ApiStableDirect}/addvisitor";
-    public static readonly string AddressToGeoLocationAPI = $"{ApiStableDirect}/AddressToGeoLocation";
-    public static readonly string CoordinatesToGeoLocationAPI = $"{ApiStableDirect}/CoordinatesToGeoLocation";
-    public static readonly string IpAddressToGeoLocationAPI = $"{ApiStableDirect}/IpAddressToGeoLocation";
-    public static readonly string GeoLocationToTimezoneAPI = $"{ApiStableDirect}/GeoLocationToTimezone";
+
 
     //MATCH
     public readonly string GetSavedMatchReport;
@@ -201,6 +225,7 @@ public class URL
     public const string EmailToClick = "mailto:contact@vedastro.org";
     public const string GitHubRepo = "https://github.com/VedAstro/VedAstro";
     public const string HuggingFaceRepo = "https://huggingface.co/datasets?sort=trending&search=vedastro";
+    public const string JHoraEasyImportYoutube = "https://youtu.be/7K0N-2VWno8?si=7O09Xq_3u0YrFiT9";
     public const string GitHubPython = "https://github.com/VedAstro/VedAstro.Python";
     public const string GitHubIssues = "https://github.com/VedAstro/VedAstro/issues";
     public const string GitHubCommits = "https://github.com/gen-so/Genso.Astrology/commits/master";

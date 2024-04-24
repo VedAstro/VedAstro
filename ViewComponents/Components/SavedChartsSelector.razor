@@ -1,0 +1,168 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+@using System.Text.RegularExpressions
+
+
+<div @ref="mainElement">
+    @* GENDER *@
+    <div class="input-group">
+        <label class="input-group-text gap-2" for="genderSelectInput" style="width: 165px;"><Icon IconName="mdi:human-male-female" Size="34" />Gender</label>
+        <select @bind="_selectedSavedChart" class="form-select" id="genderSelectInput" style="font-weight: 600; font-size: 17px;">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+    </div>
+
+</div>
+
+@code {
+    
+    //used to update precision when parent is hooked to this event
+    public event Action MonthYearChanged;
+    
+    //used to hide/show
+    ElementReference mainElement;
+
+    private string _selectedSavedChart;
+    private string _selectedYearStart;
+    private string _selectedYearEnd;
+
+    private string _selectedMonthStart;
+    private string _selectedMonthEnd;
+
+    /// <summary>
+    /// auto removes spaces if any from copy pasting
+    /// </summary>
+    public string SelectedYearStart
+    {
+        get => _selectedYearStart;
+        set
+        {
+            //clean
+            _selectedYearStart = value.Replace(" ", string.Empty);
+
+            //make a copy in for use back later
+            _jsRuntime.SetProperty("SelectedYearStart", _selectedYearStart);
+
+            MonthYearChanged?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// auto removes spaces if any from copy pasting
+    /// </summary>
+    public string SelectedYearEnd
+    {
+        get => _selectedYearEnd;
+        set
+        {
+            _selectedYearEnd = value.Replace(" ", string.Empty);
+
+            //make a copy in for use back later
+            _jsRuntime.SetProperty("SelectedYearEnd", _selectedYearEnd);
+
+            MonthYearChanged?.Invoke();
+        }
+    }
+
+    public string SelectedMonthStart
+    {
+        get => _selectedMonthStart;
+        set
+        {
+            _selectedMonthStart = value;
+
+            //make a copy in for use back later
+            _jsRuntime.SetProperty("SelectedMonthStart", _selectedMonthStart);
+
+            MonthYearChanged?.Invoke();
+        }
+    }
+
+    public string SelectedMonthEnd
+    {
+        get => _selectedMonthEnd;
+        set
+        {
+            _selectedMonthEnd = value;
+
+            //make a copy in for use back later
+            _jsRuntime.SetProperty("SelectedMonthEnd", _selectedMonthEnd);
+
+            MonthYearChanged?.Invoke();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //try get previously set value from storage for better UX
+        //NOTE: update direct to avoid duplicate set local storage
+
+        //YEAR
+        var raw = await _jsRuntime.GetProperty("SelectedYearStart");
+        _selectedYearStart = raw ?? DateTime.Now.Year.ToString();
+        raw = await _jsRuntime.GetProperty("SelectedYearEnd");
+        _selectedYearEnd = raw ?? DateTime.Now.Year.ToString();
+
+        //MONTH
+        raw = await _jsRuntime.GetProperty("SelectedMonthStart");
+        _selectedMonthStart = raw ?? "01"; //defaults needs set else wont work without 1st select
+        raw = await _jsRuntime.GetProperty("SelectedMonthEnd");
+        _selectedMonthEnd = raw ?? "12"; //defaults needs set else wont work without 1st select
+
+    }
+
+    /// <summary>
+    /// Remember to call is valid data before getting data out
+    /// </summary>
+    public TimeRange GetTimeRange(GeoLocation birthLocation)
+    {
+
+        //create time at start and end of year
+        var startTime = new Time($"00:00 01/{_selectedMonthStart}/{SelectedYearStart} {Tools.GetSystemTimezoneStr()}", birthLocation);
+
+        //note: last day month dynamically set
+        var lastDay = Tools.GetLastDay($"{_selectedMonthEnd}/{SelectedYearEnd}");
+        var endTime = new Time($"00:00 {lastDay}/{_selectedMonthEnd}/{SelectedYearEnd} {Tools.GetSystemTimezoneStr()}", birthLocation);
+        return new TimeRange(startTime, endTime);
+
+    }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// true if all good
+    /// </summary>
+    public bool IsValid()
+    {
+        //TEST 1
+        //start year must be 4 digits 0001-9999
+        var isFourDigits = Regex.IsMatch(SelectedYearStart, @"^\d{4}$");
+        if (!isFourDigits)
+        {
+            //mark invalid & alert user
+            _jsRuntime.ShowAlert("error", "Start year is wrong", "Must be a number from 0001 to 9999");
+            return false;
+        }
+
+        //TEST 2
+        //start year must be 4 digits 0001-9999
+        isFourDigits = Regex.IsMatch(SelectedYearEnd, @"^\d{4}$");
+        if (!isFourDigits)
+        {
+            //mark invalid & alert user
+            _jsRuntime.ShowAlert("error", "End year is wrong", "Must be a number from 0001 to 9999");
+            return false;
+        }
+
+
+        //if control reaches here than, it's valid
+        return true;
+    }
+
+
+    public void Hide() => _jsRuntime.Hide(mainElement);
+
+    public void Show() => _jsRuntime.Show(mainElement);
+
+}

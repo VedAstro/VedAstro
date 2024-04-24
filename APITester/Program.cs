@@ -24,6 +24,7 @@
             CoalesceException(() => appInstance.GeoLocationToTimezoneTest().Result, null);
             CoalesceException(() => appInstance.AddressToGeoLocationTest().Result, null);
             CoalesceException(() => appInstance.CoordinatesToGeoLocationTest().Result, null);
+            CoalesceException(() => appInstance.IpAddressToGeoLocationTest().Result, null);
 
 
             //HOLD CONTROL

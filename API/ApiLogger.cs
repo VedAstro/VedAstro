@@ -3,6 +3,8 @@ using Azure;
 using Azure.Data.Tables;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.AspNetCore.Http;
+using System.Reflection;
 
 namespace API;
 
@@ -150,8 +152,20 @@ public static class APILogger
                 Timestamp = DateTimeOffset.UtcNow //utc used later to check for overload control
             };
 
+            var requestHeaderList = httpRequestData.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+
+            for (int i = 0; i < requestHeaderList.Count; i++)
+            {
+                string propertyName = $"Header{i}"; //can go up to 15 exp: Header2
+                var xxx = requestHeaderList.ElementAt(i);
+                string newValue = Tools.ListToString(xxx.Value.ToList());
+
+                PropertyInfo propertyInfo = customerEntity.GetType().GetProperty(propertyName);
+                propertyInfo.SetValue(customerEntity, newValue);
+            }
+
             //NOTE: control here, ramming here can raise TABLE STORAGE prices too
-            await APITools.AutoControlOpenAPIOverload(customerEntity);
+            await APITools.AutoControlOpenAPIOverload(customerEntity); //slows down if needed
 
             //creates record if no exist, update if already there
             LogBookClient.UpsertEntity(customerEntity);

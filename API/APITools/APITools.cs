@@ -244,6 +244,10 @@ namespace API
         public static IPAddress GetCallerIp(this HttpRequestData req)
         {
             var headerDictionary = req.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+            
+            //debug print
+            //foreach (var item in headerDictionary) { Console.WriteLine($"Key: {item.Key}, Value: {Tools.ListToString<string>(item.Value.ToList())}"); }
+            
             var key = "x-forwarded-for";
             var key2 = "x-azure-clientip";
             IPAddress? ipAddress = null;

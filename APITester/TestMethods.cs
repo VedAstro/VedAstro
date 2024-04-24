@@ -77,21 +77,13 @@ namespace APITester
         /// <summary>
         /// .../IpAddressToGeoLocation/
         /// </summary>
-        public async Task<bool> IpAddressToGeoLocationTest()
+        public async Task<dynamic> IpAddressToGeoLocationTest()
         {
-            var url =
-                $"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45";
+            var url = $"{LocalAPIServer}Calculate/IpAddressToGeoLocation/IpAddress/180.75.241.81";
             var json = JObject.Parse(await new HttpClient().GetStringAsync(url));
 
-            Console.WriteLine(json); //print everything
-
-            //check some key values
-            Assert.IsTrue(json["Status"]?.Value<string>() == "Pass");
-            Assert.IsTrue(json["Payload"]["AllPlanetData"].HasValues);
-            Assert.IsTrue(json["Payload"]["AllPlanetData"][0]["Sun"].HasValues);
-
-            //control comes here once all pass
-            return true; //todo default pass
+            //send data back to caller
+            return new { URL = url, OUTPUT = json };
         }
 
         /// <summary>

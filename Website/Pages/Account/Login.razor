@@ -38,11 +38,14 @@
         //if login success, redirect user to previous page
         if (AppData.IsLoginSuccess)
         {
-            //get the previously saved page before login, if any else default to home
-            var previousPage = await _jsRuntime.GetProperty("PreviousPage");
-            previousPage = string.IsNullOrEmpty(previousPage) ? PageRoute.Home : previousPage;
-            AppData.Go(previousPage);
+            // //get the previously saved page before login, if any else default to home
+            // var previousPage = await _jsRuntime.GetProperty("PreviousPage");
+            // previousPage = string.IsNullOrEmpty(previousPage) ? PageRoute.Home : previousPage;
+            // AppData.Go(previousPage);
 
+            //wait a little and send user back to previous page
+            await _jsRuntime.ShowAlert("info", $"Login complete.", false, 500);
+            _jsRuntime?.GoBack();
         }
     }
 

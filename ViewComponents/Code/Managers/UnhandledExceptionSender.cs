@@ -109,7 +109,7 @@ namespace Website
 
                 //get debug mode, most likely cause for errors
                 //if debug mode enabled tell user it could be the cause of errors
-                if (await WebsiteTools.GetDebugModeBool())
+                if (await WebsiteTools.IsLocalServerDebugMode())
                 {
                     await AppData.JsRuntime.ShowAlert(
                         icon: "warning",

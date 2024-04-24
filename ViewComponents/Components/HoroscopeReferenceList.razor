@@ -185,7 +185,7 @@
         //get horoscope predictions from API server
         //.../Calculate/HoroscopePredictions/Location/Singapore/Time/00:00/16/02/2024/+08:00
         var apiUrl = $"{AppData.URL.HoroscopePredictions}{selectedPerson.BirthTime.ToUrl()}";
-        WebResult<Newtonsoft.Json.Linq.JToken> webResult = await Tools.ReadFromServerJsonReply(apiUrl);
+        WebResult<Newtonsoft.Json.Linq.JToken> webResult = await Tools.ReadFromServerJsonReplyVedAstro(apiUrl);
 
         //inject horoscope prediction
         _horoscopePredictions = await Tools.GetListNoPolling(apiUrl, HoroscopePrediction.FromJsonList);

@@ -5,14 +5,29 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 
+//HOW TO BE WISE?
+//THINK OF ALL THE STUPID THINGS
+//...AND DON'T DO IT
+
+//YOUTH, 
+
 namespace VedAstro.Library
 {
 
     //IMMUTABLE CLASS
     [Serializable()]
     //TODO CANDIDATE FOR RECORD STRUCT
-    public class GeoLocation : IToXml, IToJpeg, IToJson, IToDataTable
+    public class GeoLocation : IToXml, IToJpeg, IToJson, IToDataTable, IFromUrl
     {
+        /// <summary>
+        /// The number of pieces the URL version of this instance needs to be cut for processing
+        /// used to segregate out the combined URL with other data
+        /// EXP -> ../Location/Tokyo, Japan/Coordinates/35.65,139.83/ == 4 PIECES
+        ///      
+        /// </summary>
+        public static int OpenAPILength = 4;
+
+
         /// <summary>
         /// Returns an Empty Time instance meant to be used as null/void filler
         /// for debugging and generating empty dasa svg lines
@@ -117,6 +132,39 @@ namespace VedAstro.Library
             return $"{_name} {_longitude} {_latitude}";
         }
 
+        /// <summary>
+        /// .../Location/Tokyo, Japan/Coordinates/35.65,139.83/
+        /// </summary>
+        public static async Task<dynamic> FromUrl(string url)
+        {
+            //              0           1           2           3
+            // INPUT -> "/Location/Tokyo, Japan/Coordinates/35.65,139.83"
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries); //remove empty needed for back handling last slash
+
+            //extract the needed data out
+            var locationName = parts[1];
+            var coordinatesPart = parts[3].Split(',');
+            var latitude = double.Parse(coordinatesPart[0]);
+            var longitude = double.Parse(coordinatesPart[1]);
+
+            var parsedGeoLocation = new GeoLocation(locationName, longitude, latitude);
+
+            return parsedGeoLocation;
+
+        }
+
+        /// <summary>
+        /// Convert current instance of geolocation for use in OpenAPI url
+        /// EXP: .../Location/Tokyo, Japan/Coordinates/35.65,139.83
+        /// </summary>
+        public string ToUrl()
+        {
+            //out .../Location/Tokyo, Japan/Coordinates/35.65,139.83
+            var url = $"/Location/{this.Name()}/Coordinates/{this.Latitude()},{this.Longitude()}";
+
+            return url;
+        }
+
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
@@ -145,7 +193,6 @@ namespace VedAstro.Library
 
             return table;
         }
-
 
         public JToken ToJson()
         {
@@ -203,11 +250,18 @@ namespace VedAstro.Library
 
         public static GeoLocation FromJson(JToken locationJson)
         {
-            var name = locationJson["Name"].Value<string>();
-            var longitude = locationJson["Longitude"].Value<double>();
-            var latitude = locationJson["Latitude"].Value<double>();
+            try
+            {
+                var name = locationJson["Name"].Value<string>();
+                var longitude = locationJson["Longitude"].Value<double>();
+                var latitude = locationJson["Latitude"].Value<double>();
 
-            return new GeoLocation(name, longitude, latitude);
+                return new GeoLocation(name, longitude, latitude);
+            }
+            catch (Exception e)
+            {
+                return GeoLocation.Empty;
+            }
 
         }
 
@@ -243,10 +297,10 @@ namespace VedAstro.Library
             try
             {
                 //get only coordinates 1st
-                var coordinates = await GetCoordinatesFromIpAddressAPI();
+                var fromIpAddress = await GetCoordinatesFromIpAddressAPI();
 
                 //get name from coordinates
-                var fromIpAddress = await CoordinatesToGeoLocation(coordinates.Latitude(), coordinates.Longitude());
+                //var fromIpAddress = await CoordinatesToGeoLocation(coordinates.Latitude(), coordinates.Longitude());
 
                 //new geolocation from the depths
                 return fromIpAddress;
@@ -258,10 +312,9 @@ namespace VedAstro.Library
                 await LibLogger.Error(e);
 
                 //return some location to avert meltdown
-                return Tokyo;
+                return Empty;
             }
         }
-
 
         /// <summary>
         /// Gets coordinates with VedAstro API
@@ -273,7 +326,8 @@ namespace VedAstro.Library
             var longitudeRound = Math.Round(longitude, 3);
 
             //get from API
-            var url = URL.CoordinatesToGeoLocationAPI + $"/Latitude/{latitudeRound}/Longitude/{longitudeRound}";
+            var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
+            var url = allUrls.CoordinatesToGeoLocationAPI + $"/Latitude/{latitudeRound}/Longitude/{longitudeRound}";
             var webResult = await Tools.ReadFromServerXmlReply(url);
 
             //convert
@@ -289,14 +343,17 @@ namespace VedAstro.Library
         public static async Task<GeoLocation> GetCoordinatesFromIpAddressAPI()
         {
             //get from API
-            var url = URL.IpAddressToGeoLocationAPI;
-            var webResult = await Tools.ReadFromServerJsonReply(url);
+            var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
+            var ipAddress = await Tools.GetIPAddress();
+            var url = allUrls.IpAddressToGeoLocationAPI + $"/IpAddress/{ipAddress}";
+            var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
 
             //convert
             var parsed = GeoLocation.FromJson(webResult.Payload);
 
             return parsed;
         }
+
 
 
 
@@ -406,13 +463,17 @@ namespace VedAstro.Library
             }
         }
 
-        //will be long with lat 
+        /// <summary>
+        /// Returns lat long in google format
+        /// EXP: -3.9571599,103.8723379
+        /// </summary>
+        /// <returns></returns>
         public string GetPartitionKey()
         {
             var roundedLong1DeciPlaces11Km = Math.Round(this.Longitude(), 1).ToString();
             var roundedLat1DeciPlaces11Km = Math.Round(this.Latitude(), 1).ToString();
 
-            return $"{roundedLong1DeciPlaces11Km},{roundedLat1DeciPlaces11Km}";
+            return $"{roundedLat1DeciPlaces11Km},{roundedLong1DeciPlaces11Km}";
         }
     }
 }

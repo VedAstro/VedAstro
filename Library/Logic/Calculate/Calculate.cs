@@ -12,8 +12,6 @@ using static VedAstro.Library.PlanetName;
 using Exception = System.Exception;
 using System.Text;
 using ExCSS;
-using System.Numerics;
-using System.Diagnostics.Tracing;
 
 namespace VedAstro.Library
 {
@@ -42,6 +40,15 @@ namespace VedAstro.Library
         public static int Ayanamsa { get; set; } = (int)Library.Ayanamsa.LAHIRI;
 
         /// <summary>
+        /// Number of days in a year. Used for dasa related calculations.
+        /// much debate on this number. Tests prove Raman's 360 is accurate.
+        /// 365.25 is used by 3rd party astrology software like LoKPA
+        /// default to 365.25 for the sake of DEAR CP JOIS 🙈
+        /// 365.2564 True Sidereal Solar Year
+        /// </summary>
+        public static double SolarYearTimeSpan { get; set; } = 365.35;
+
+        /// <summary>
         /// If set true, will not include gochara that was obstructed by "Vedhanka Point" calculation
         /// Enabled by default, recommend only disabled for research & debugging.
         /// Vedhanka needed for accuracy, recommended leave true
@@ -55,9 +62,78 @@ namespace VedAstro.Library
         /// </summary>
         public static bool UseMeanRahuKetu { get; set; } = true;
 
+        public static Secrets Secrets { get; set; }
+
         #endregion
 
         //----------------------------------------CORE CODE---------------------------------------------
+
+        #region GEO LOCATION
+
+        /// <summary>
+        /// Given an address will convert to it's geo location equivelant
+        /// http://localhost:7071/api/Calculate/AddressToGeoLocation/Address/Gaithersburg
+        /// </summary>
+        /// <param name="address">can be any location name or coordinates like -3.9571599,103.8723379</param>
+        /// <returns></returns>
+        public static async Task<GeoLocation> AddressToGeoLocation(string address)
+        {
+            //inject api key from parent
+            var locationProvider = new Location();
+
+            //do calculation using API and cache inteligently
+            var returnVal = await locationProvider.AddressToGeoLocation(address);
+
+            return returnVal;
+        }
+
+
+        /// <summary>
+        /// Given coordinates will convert to it's geo location equivelant
+        /// http://localhost:7071/api/Calculate/CoordinatesToGeoLocation/Latitude/35.6764/Longitude/139.6500
+        /// </summary>
+        public static async Task<GeoLocation> CoordinatesToGeoLocation(string latitude, string longitude)
+        {
+            //inject api key from parent
+            var locationProvider = new Location();
+
+            //do calculation using API and cache inteligently
+            var returnVal = await locationProvider.CoordinatesToGeoLocation(latitude, longitude);
+
+            return returnVal;
+        }
+
+        /// <summary>
+        /// ...../api/Calculate/GeoLocationToTimezone/Location/Chennai,TamilNadu,India/Time/23:37/07/08/1990/+01:00
+        /// </summary>
+        public static async Task<string> GeoLocationToTimezone(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
+        {
+            //inject api key from parent
+            var locationProvider = new Location();
+
+            //do calculation using API and cache inteligently
+            var returnVal = await locationProvider.GeoLocationToTimezone(geoLocation, timeAtLocation);
+
+            return returnVal;
+        }
+
+        /// <summary>
+        /// ...../api/Calculate/IpAddressToGeoLocation/IpAddress/180.89.33.89
+        /// </summary>
+        public static async Task<GeoLocation> IpAddressToGeoLocation(string ipAddress)
+        {
+            //inject api key from parent
+            var locationProvider = new Location();
+
+            //do calculation using API and cache inteligently
+            var returnVal = await locationProvider.IpAddressToGeoLocation(ipAddress);
+
+            return returnVal;
+        }
+
+
+
+        #endregion
 
         #region EVENTS
 
@@ -109,7 +185,7 @@ namespace VedAstro.Library
 
                 //TODO: temp
                 var tags = EventManager.GetTagsByEventName(eventData.Name);
-                var finalEvent = new Event(eventData.Name, eventData.Nature, eventData.Description, eventStartTime, eventEndTime, tags);
+                var finalEvent = new Event(eventData.Name, eventData.Nature, eventData.Description, eventData.SpecializedSummary, eventStartTime, eventEndTime, tags);
 
                 return finalEvent;
             }
@@ -2441,19 +2517,6 @@ namespace VedAstro.Library
 
             //if so then day birth!
             return xx && cc;
-        }
-
-        /// <summary>
-        /// Given a time and location will return the coordinates at that location
-        /// Longitude and latitude at a location from Google Maps API
-        /// </summary>
-        public static async Task<GeoLocation> LocationGeoCoordinates(string locationName)
-        {
-            //get coordinates for location (API)
-            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
-
-            return geoLocation;
         }
 
         /// <summary>
@@ -13011,7 +13074,7 @@ namespace VedAstro.Library
             {
                 //print the error and for server guys
                 Console.WriteLine(e);
-                
+
                 //continue without a word
                 return Shashtiamsa.Zero;
             }

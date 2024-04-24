@@ -4,6 +4,7 @@ using Azure.Storage.Blobs.Models;
 using HtmlAgilityPack;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using MimeDetective.Storage.Xml.v2;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
@@ -30,12 +31,28 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Formatting = Newtonsoft.Json.Formatting;
+using XmlSerializer = System.Xml.Serialization.XmlSerializer;
 
 
 
-//    𝕀❜𝕞 𝕟𝕠𝕥 𝕒𝕟 𝕚𝕟𝕔𝕙 𝕥𝕠𝕠 𝕗𝕒𝕣 𝕠𝕣 𝕒 𝕤𝕖𝕔𝕠𝕟𝕕 𝕥𝕠𝕠 𝕝𝕒𝕥𝕖,
-//    𝕀❜𝕞 𝕖𝕩𝕒𝕔𝕥𝕝𝕪 𝕨𝕙𝕖𝕣𝕖 𝕀❜𝕞 𝕤𝕦𝕡𝕡𝕠𝕤𝕖𝕕 𝕥𝕠 𝕓𝕖 𝕒𝕝𝕨𝕒𝕪𝕤.
-//    ℍ𝕖𝕣𝕖 𝕒𝕟𝕕 ℕ𝕠𝕨.
+//█ ▀ █▀▄▀█   █▄░█ █▀█ ▀█▀   ▄▀█ █▄░█   █ █▄░█ █▀▀ █░█   ▀█▀ █▀█ █▀█   █▀▀ ▄▀█ █▀█
+//█ ░ █░▀░█   █░▀█ █▄█ ░█░   █▀█ █░▀█   █ █░▀█ █▄▄ █▀█   ░█░ █▄█ █▄█   █▀░ █▀█ █▀▄
+
+//█▀█ █▀█   ▄▀█   █▀ █▀▀ █▀▀ █▀█ █▄░█ █▀▄   ▀█▀ █▀█ █▀█   █░░ ▄▀█ ▀█▀ █▀▀ ░  
+//█▄█ █▀▄   █▀█   ▄█ ██▄ █▄▄ █▄█ █░▀█ █▄▀   ░█░ █▄█ █▄█   █▄▄ █▀█ ░█░ ██▄ █  
+
+//█ ▀ █▀▄▀█   █▀▀ ▀▄▀ ▄▀█ █▀▀ ▀█▀ █░░ █▄█   █░█░█ █░█ █▀▀ █▀█ █▀▀  
+//█ ░ █░▀░█   ██▄ █░█ █▀█ █▄▄ ░█░ █▄▄ ░█░   ▀▄▀▄▀ █▀█ ██▄ █▀▄ ██▄  
+
+//█ ▀ █▀▄▀█   █▀ █░█ █▀█ █▀█ █▀█ █▀ █▀▀ █▀▄   ▀█▀ █▀█   █▄▄ █▀▀   ▄▀█ █░░ █░█░█ ▄▀█ █▄█ █▀ ░
+//█ ░ █░▀░█   ▄█ █▄█ █▀▀ █▀▀ █▄█ ▄█ ██▄ █▄▀   ░█░ █▄█   █▄█ ██▄   █▀█ █▄▄ ▀▄▀▄▀ █▀█ ░█░ ▄█ █
+
+//█░█ █▀▀ █▀█ █▀▀   ▄▀█ █▄░█ █▀▄   █▄░█ █▀█ █░█░█  
+//█▀█ ██▄ █▀▄ ██▄   █▀█ █░▀█ █▄▀   █░▀█ █▄█ ▀▄▀▄▀  
+
+//█░█░█ █ ▀█▀ █░█   █▀▄▀█ █▄█   █▀ █░█░█ █▀▀ █▀▀ ▀█▀ █░█ █▀▀ ▄▀█ █▀█ ▀█▀ ░
+//▀▄▀▄▀ █ ░█░ █▀█   █░▀░█ ░█░   ▄█ ▀▄▀▄▀ ██▄ ██▄ ░█░ █▀█ ██▄ █▀█ █▀▄ ░█░ ▄
+
 
 namespace VedAstro.Library
 {
@@ -446,9 +463,33 @@ namespace VedAstro.Library
             string monthStr,
             string yearStr)
         {
-            //get coordinates for location (API)
-            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
+            //NOTE: location name can be "coordinates" or "real location names" 
+            //      detect here which is which based on pattern
+            //  EXP: 4°32'55.1"S,101°04'57.0"E
+            //      -3.9571599,103.8723379
+            string coordinatesPattern = @"^-?\d+(\.\d+)?,\-?\d+(\.\d+)?$"; ; //ask AI to explain
+
+            bool isCoordinates = Regex.IsMatch(locationName, coordinatesPattern);
+            GeoLocation geoLocation;
+            if (isCoordinates)
+            {
+                //NOTE : must be sample : "-3.9571599,103.8723379"
+                var splitted = locationName.Split(',');
+                double latitude = Convert.ToDouble(splitted[0]);
+                double longitude = Convert.ToDouble(splitted[1]);
+
+                //NOTE: we preserve lat and long into name as well, since technically
+                //      no location name has a coordinate but a radius. So in that sense,
+                //      lat and long as location name is valid, though the data seem little duplicated
+                geoLocation = new GeoLocation(locationName, longitude, latitude);
+            }
+            else
+            {
+                //get coordinates for location (API)
+                WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
+                geoLocation = geoLocationResult.Payload;
+            }
+
 
             //compile the time string into standard format
             //NOTE : offset hard set to UTC 0, because not used, only format filler (will be overriden later)
@@ -1289,32 +1330,41 @@ namespace VedAstro.Library
         /// </summary>
         public static TimeSpan GetSystemTimezone() => DateTimeOffset.Now.Offset;
 
-
         /// <summary>
         /// Given a place's name, using VedAstro API will get location
         /// via HTTP request
         /// </summary>
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {
-            //get location data from VedAstro API
-            var webResult = await Tools.ReadFromServerJsonReply(URL.AddressToGeoLocationAPI + $"/{address}");
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey("Tools.AddressToGeoLocation", address), addressToGeoLocation);
 
-            //if fail to make call, end here
-            if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+            WebResult<GeoLocation> addressToGeoLocation()
+            {
+                //get location data from VedAstro API
+                var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
+                //exp : .../Calculate/AddressToGeoLocation/London
+                var url = allUrls.AddressToGeoLocationAPI + $"/Address/{address}";
+                var webResult = Tools.ReadFromServerJsonReplyVedAstro(url).Result;
 
-            //if success, get the reply data out
-            var rootJson = webResult.Payload;
-            var parsed = GeoLocation.FromJson(rootJson);
+                //if fail to make call, end here
+                if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
 
-            //return to caller pass
-            return new WebResult<GeoLocation>(true, parsed);
+                //if success, get the reply data out
+                var rootJson = webResult.Payload;
+                var parsed = GeoLocation.FromJson(rootJson);
+
+                //return to caller pass
+                return new WebResult<GeoLocation>(true, parsed);
+            }
+
+
         }
-
 
         /// <summary>
         /// Given a location & time, will use Google Timezone API
         /// to get accurate time zone that was/is used
-        /// Must input valid geo location 
+        /// Must input valid geolocation 
         /// NOTE:
         /// - offset of timeAtLocation not important
         /// - googleGeoLocationApiKey needed to work
@@ -1350,40 +1400,46 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Given a location & time, will use Google Timezone API
-        /// to get accurate time zone that was/is used, if Google fail,
-        /// then auto default to system timezone
-        /// NOTE:
-        /// - sometimes unexpected failure to call google by some clients only
-        /// - offset of timeAtLocation not important
-        /// - googleGeoLocationApiKey needed to work
+        /// Given a location & time, will use live/local VedAstro API server to get data
+        /// also in memory cached
         /// </summary>
         public static async Task<WebResult<string>> GetTimezoneOffsetApi(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
+            //CACHE MECHANISM
+            return await CacheManager.GetCache(new CacheKey("Tools.GetTimezoneOffsetApi", geoLocation, timeAtLocation), getTimezoneOffsetApi);
 
-            try
+            async Task<WebResult<string>> getTimezoneOffsetApi()
             {
-                //get location data from VedAstro API
-                var timePackage = new Time(timeAtLocation, geoLocation);
-                var url = URL.GeoLocationToTimezoneAPI + timePackage.ToUrl();
-                //var webResult = await Tools.ReadFromServerXmlReply(url);
-                var webResult = await Tools.ReadFromServerJsonReply(url);
+                try
+                {
+                    //get location data from VedAstro API
+                    var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
 
-                //if fail to make call, end here
-                if (!webResult.IsPass) { return new WebResult<string>(false, ""); }
+                    //call url must be correct format
+                    //.../Calculate/GeoLocationToTimezone/Location/Tokyo, Japan/Coordinates/35.65,139.83/Time/14:02/09/11/1977/+00:00
+                    var url = allUrls.GeoLocationToTimezoneAPI + geoLocation.ToUrl() + timeAtLocation.ToUrl();
 
-                //if success, get the reply data out
-                var data = webResult.Payload.Value<string>();
+                    //make call to Vedastro Live/Local API
+                    //NOTE: when running from python lib will default to live server
+                    var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
 
-                //return to caller pass
-                return new WebResult<string>(true, data);
+                    //if fail to make call, end here
+                    if (!webResult.IsPass) { return new WebResult<string>(false, ""); }
 
-            }
-            catch (Exception e)
-            {
-                LibLogger.Error(e);
-                //return to caller pass
-                return new WebResult<string>(false, "");
+                    //if success, get the reply data out
+                    var box = webResult.Payload["GeoLocationToTimezone"];
+                    var data = box.Value<string>();
+
+                    //return to caller pass
+                    return new WebResult<string>(true, data);
+
+                }
+                catch (Exception e)
+                {
+                    LibLogger.Error(e);
+                    //return to caller pass
+                    return new WebResult<string>(false, "");
+                }
             }
         }
 
@@ -1576,6 +1632,82 @@ namespace VedAstro.Library
             {
                 try
                 {
+                    //OPTION 1 : json 3rd party reply
+                    var parsedJson = JObject.Parse(inputRawString);
+                    return new WebResult<JToken>(true, parsedJson);
+                }
+                catch (Exception e1)
+                {
+
+                    LibLogger.Error(e1, inputRawString);
+
+                    //if control reaches here all has failed
+                    return new WebResult<JToken>(false, new JObject("Failed"));
+                }
+
+            }
+
+            //note uses GET request
+            //tries several times, note if all tries fail will return null
+            //small delay between calls
+            async Task<HttpResponseMessage> RequestServer(string receiverAddress, int retryCount)
+            {
+                var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+                using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
+                var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+                for (int attempt = 0; attempt < retryCount; attempt++)
+                {
+                    try
+                    {
+                        var response = await client.SendAsync(httpRequestMessage, waitForContent);
+                        return response;
+                    }
+                    catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
+                    {
+                        // Wait before next attempt.
+                        await Task.Delay(350);
+                    }
+                }
+
+                // All attempts have failed, return null.
+                return null;
+            }
+
+        }
+
+        /// <summary>
+        /// Makes GET request to given URL, tries 3 times before fail
+        /// Handles all JSON replies from VedAstro format, or raw JSON format
+        /// </summary>
+        public static async Task<WebResult<JToken>> ReadFromServerJsonReplyVedAstro(string apiUrl)
+        {
+
+            //send request to API server
+            var result = await RequestServer(apiUrl, 3);
+
+            //get raw reply from the server response
+            var rawMessage = await result.Content?.ReadAsStringAsync() ?? "";
+
+            //only good reply from server is accepted, anything else is marked invalid
+            //stops invalid replies from being passed as valid
+            if (!result.IsSuccessStatusCode) { var json = new JObject(); json.Add("RawErrorData", rawMessage); return new WebResult<JToken>(false, json); }
+
+            //tries to parse the raw data received into XML or JSON
+            //if all fail will return raw data with fail status
+            var parsed = ParseData(rawMessage);
+
+
+            return parsed;
+
+
+            //----------------------------------------------------------
+            // FUNCTIONS
+
+            WebResult<JToken> ParseData(string inputRawString)
+            {
+                try
+                {
                     //OPTION 1 : VedAstro API format
                     //make JSON data readable
                     var parsedJson = JObject.Parse(inputRawString);
@@ -1588,18 +1720,9 @@ namespace VedAstro.Library
                 catch (Exception e1)
                 {
 
-                    try
-                    {
-                        //OPTION 2 : json 3rd party reply
-                        var parsedJson = JObject.Parse(inputRawString);
-                        return new WebResult<JToken>(true, parsedJson);
-                    }
-                    catch (Exception e3) { exceptionList.Add(e3); } //if fail just void print
-
-                    exceptionList.Add(e1);
-
+                    Console.WriteLine(apiUrl);
                     //send all exception data to server
-                    foreach (var exception in exceptionList) { LibLogger.Error(exception, inputRawString); }
+                    LibLogger.Error(e1, inputRawString);
 
                     //if control reaches here all has failed
                     return new WebResult<JToken>(false, new JObject("Failed"));
@@ -1905,7 +2028,6 @@ namespace VedAstro.Library
             }
         }
 
-
         /// <summary>
         /// Converts any String from URL epx : ../Text/Juliet
         /// </summary>
@@ -1935,6 +2057,7 @@ namespace VedAstro.Library
 
             return intFromUrl;
         }
+
         public static double DoubleFromUrl(string url)
         {
             string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
@@ -1946,6 +2069,46 @@ namespace VedAstro.Library
 
             return intFromUrl;
         }
+
+        /// <summary>
+        /// .../Time/14:02/09/11/1977/+00:00
+        /// </summary>
+        public static DateTimeOffset DateTimeOffsetFromUrl(string timeUrl)
+        {
+            //convert from URL format to standard Vedastro time string format
+            //              0     1   2  3   4    5   
+            // INPUT -> "/Time/23:59/31/12/2000/+08:00/"
+            string[] parts = timeUrl.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var timeStr = $"{parts[1]} {parts[2]}/{parts[3]}/{parts[4]} {parts[5]}";
+
+            //if fail raise alarm
+            var timeInputPassed = Time.TryParseStd(timeStr, out var parsedSTDInputTime);
+            if (!timeInputPassed) { throw new Exception("Failed to get timezone!"); }
+
+            return parsedSTDInputTime;
+        }
+
+        /// <summary>
+        /// Convert current instance of DateTimeOffset for use in OpenAPI URL
+        /// EXP: .../Time/14:02/09/11/1977/+00:00
+        /// </summary>
+        public static string ToUrl(this DateTimeOffset dateTimeOffset)
+        {
+
+            var part1 = dateTimeOffset.ToString("HH:mm");
+            var part2 = dateTimeOffset.ToString("dd/MM/yyyy");
+            var part3 = dateTimeOffset.ToString("zzz"); //timezone separate so can clean date time
+
+            //god knows why, in some time zones date comes with "." instead of "/" (despite above formatting)
+            part2 = part2.Replace('.', '/');
+
+            //god knows why, in some time zones date comes with "-" instead of "/" (despite above formatting)
+            part2 = part2.Replace('-', '/');
+
+            var url = $"/Time/{part1}/{part2}/{part3}";
+            return url;
+        }
+
 
         private static readonly Random Random = new Random();
 
@@ -1982,6 +2145,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Also converts to Title case
         /// Removes all invalid characters for an person name
         /// used to clean name field user input. Also
         /// allowed chars : periods (.) and hyphens (-), space ( )
@@ -2401,6 +2565,22 @@ namespace VedAstro.Library
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public static string ToRowKey(this DateTimeOffset dateTimeOffset)
+        {
+            //get time in standard format without timezone
+            var rawString = dateTimeOffset.ToString(Time.DateTimeFormat);
+
+            //convert all spaces to hyphens
+            var cleaned1 = rawString.Replace('/', '-');
+
+            //remove all spaces into hypes
+            //var cleaned2 = cleaned1.Replace(' ', '-');
+
+            return cleaned1;
+        }
 
         /// <summary>
         /// Gets input params of methods nicely formatted string for display
@@ -4087,6 +4267,40 @@ namespace VedAstro.Library
             if (inputPassword != Secrets.Password)
             {
                 throw new ArgumentException("Invalid password");
+            }
+        }
+
+        /// <summary>
+        /// data as it saved to table for easy search, user can input sandiago and San Diago, both will match here
+        /// </summary>
+        public static string CleanLocationName(string inputLocationName)
+        {
+            //lower case it
+            var lower = inputLocationName.ToLower();
+
+            //removes any character that is not a letter or a number
+            var cleanInputAddress = Regex.Replace(lower, @"[^a-zA-Z0-9]", string.Empty);
+
+            return cleanInputAddress;
+        }
+
+
+        /// <summary>
+        /// Get's ip address from api.ipify.org
+        /// </summary>
+        public static async Task<string> GetIPAddress()
+        {
+            // You may also want to handle exceptions here depending upon the needs
+            try
+            {
+                //NOTE: simple API get request call to get ip as raw text
+                var requestUri = "https://api.ipify.org";
+                var ipAddressStr = await Tools.ReadServerRaw<string>(requestUri);
+                return ipAddressStr;
+            }
+            catch (System.Net.WebException wex)
+            {
+                throw new Exception("Failed to connect to external endpoint.", wex);
             }
         }
     }

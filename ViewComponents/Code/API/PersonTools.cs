@@ -23,8 +23,6 @@ public class PersonTools
         //get person list from server or cache and stores reference for later use
         AppData.API.Person.GetPersonList();
         AppData.API.Person.GetPublicPersonList();
-
-
     }
 
 
@@ -39,9 +37,11 @@ public class PersonTools
         var cachedPersonList = await AppData.GetCachedPersonList();
         if (cachedPersonList.Any()) { return cachedPersonList; }
 
-        //prepare url to call
+        //if not yet logged in then use visitor id as owner id
         var ownerId = _api.UserId == "101" ? _api.VisitorID : _api.UserId;
-        var url = $"{_api.URL.GetPersonList}/OwnerId/{ownerId}";
+
+        //prepare url to call
+        var url = $"{_api.URL.GetPersonList}/OwnerId/{ownerId}/VisitorId/{_api.VisitorID}";
         var listNoPolling = await _api.GetListNoPolling(url, Person.FromJsonList);
 
         //NOTE: ToList is needed to make clone, else copies by ref and is lost
@@ -58,7 +58,7 @@ public class PersonTools
         if (cachedPersonList.Any()) { return cachedPersonList; }
 
         //tell API to get started
-        var url2 = $"{_api.URL.GetPersonList}/OwnerId/101/";
+        var url2 = $"{_api.URL.GetPersonList}/OwnerId/101";
         var listNoPolling = await _api.GetListNoPolling(url2, Person.FromJsonList);
 
         //NOTE: ToList is needed to make clone, else copies by ref and is lost

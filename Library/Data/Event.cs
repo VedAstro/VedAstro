@@ -25,7 +25,7 @@ namespace VedAstro.Library
         /// Returns an Empty Time instance meant to be used as null/void filler
         /// for debugging and generating empty dasa svg lines
         /// </summary>
-        public static Event Empty = new Event(EventName.Empty, EventNature.Empty, "", Time.Empty, Time.Empty, new List<EventTag>());
+        public static Event Empty = new Event(EventName.Empty, EventNature.Empty, "", SpecializedSummary.Empty,  Time.Empty, Time.Empty, new List<EventTag>());
 
         //FIELDS
         private readonly EventName _name;
@@ -37,12 +37,13 @@ namespace VedAstro.Library
 
 
         //CTOR
-        public Event(EventName name, EventNature nature, string description, Time startTime, Time endTime, List<EventTag> eventTags)
+        public Event(EventName name, EventNature nature, string description, SpecializedSummary specializedSummary, Time startTime, Time endTime, List<EventTag> eventTags)
         {
             //initialize fields
             _name = name;
             _nature = nature;
             _description = HttpUtility.HtmlEncode(description); //HTML character safe
+            SpecializedSummary = specializedSummary;
             _startTime = startTime;
             _endTime = endTime;
             _eventTags = eventTags;
@@ -58,6 +59,8 @@ namespace VedAstro.Library
         public Time StartTime => _startTime;
         public Time EndTime => _endTime;
         public List<EventTag> EventTags => _eventTags;
+        public SpecializedSummary SpecializedSummary { get; private set; }
+
 
         /// <summary>
         /// total duration of event in minutes
@@ -226,7 +229,10 @@ namespace VedAstro.Library
                 var tagString = eventXml.Element("Tag")?.Value;
                 var tagList = EventData.GetEventTags(tagString);
 
-                var parsedPerson = new Event(name, nature, description, startTime, endTime, tagList);
+                //note: specialized summary only pumped in at static tables with LLM preprocessing
+                //      so when coming from XML file touched by user, there should not be any specialized summary
+                var specializedSummary = SpecializedSummary.Empty;
+                var parsedPerson = new Event(name, nature, description, specializedSummary,  startTime, endTime, tagList);
 
                 return parsedPerson;
 
@@ -390,12 +396,13 @@ namespace VedAstro.Library
                 
                 var startTime = Time.FromJson(planetInput["StartTime"]);
                 var endTime = Time.FromJson(planetInput["EndTime"]);
+                var specializedSummary = SpecializedSummary.FromJson(planetInput["SpecializedSummary"]);
 
                 // Get the list of tags, split by comma and parse each tag
                 var tagString = planetInput["Tag"]?.Value<string>();
                 var tagList = EventData.GetEventTags(tagString);
 
-                var parsedHoroscope = new Event(name, nature, description, startTime, endTime, tagList);
+                var parsedHoroscope = new Event(name, nature, description, specializedSummary, startTime, endTime, tagList);
 
                 return parsedHoroscope;
             }

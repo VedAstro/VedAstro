@@ -80,14 +80,18 @@ namespace VedAstro.Library
                 //store std time
                 _stdTime = stdDateTime;
 
-                //store geo location for later use
+                //store geolocation for later use
                 _geoLocation = geoLocation;
 
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                //return Empty;
+                //Console.WriteLine(e);
+                //throw e;
+
+                //if can't parse just make empty instance
+                _stdTime = DateTimeOffset.MinValue;
+                _geoLocation = GeoLocation.Empty;
             }
         }
 
@@ -545,9 +549,9 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("Time.FromUrl", url), NewFunction);
+            return CacheManager.GetCache(new CacheKey("Time.FromUrl", url), fromUrl);
 
-            Task<dynamic> NewFunction()
+            Task<dynamic> fromUrl()
             {
                 try
                 {
@@ -567,6 +571,7 @@ namespace VedAstro.Library
                 }
                 catch (Exception e)
                 {
+                    //TODO log to server
                     Console.WriteLine(e);
                     return Task.FromResult<dynamic>(Time.Empty);
                 }
@@ -657,7 +662,7 @@ namespace VedAstro.Library
         {
             //combine all the hash of the fields
             var hash1 = (int)_stdTime.Ticks;
-            var hash2 = _geoLocation.GetHashCode();
+            var hash2 = _geoLocation?.GetHashCode() ?? 0;
 
             return hash1 + hash2;
         }

@@ -105,13 +105,13 @@
                         @* SOCIAL ICONS *@
                         <ul class="list-unstyled d-flex">
                             <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon TooltipText="Buy us Coffee" IconName="line-md:coffee-half-empty-twotone-loop" Size="24" /></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon TooltipText="Buy us Cupcake" IconName="fluent-emoji:cupcake" Size="24"/></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.Twitter"><Icon TooltipText="Updates via Twitter" IconName="skill-icons:twitter" Size="22"/></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.PatreonPage"><Icon TooltipText="Become a Patron" IconName="logos:patreon" Size="22"/></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.GitHubRepo"><Icon TooltipText="View Awesome Source Code" IconName="skill-icons:github-dark" Size="22"/></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.Instagram"><Icon TooltipText="Updates via Instagram" IconName="skill-icons:instagram" Size="22"/></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.YoutubeChannel"><Icon TooltipText="Watch How To Guide" IconName="logos:youtube-icon" Size="22"/></a></li>
-                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.FacebookPage"><Icon TooltipText="Updates via Facebook" IconName="devicon:facebook" Size="22"/></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.KoFiPage"><Icon TooltipText="Buy us Cupcake" IconName="fluent-emoji:cupcake" Size="24" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.Twitter"><Icon TooltipText="Updates via Twitter" IconName="skill-icons:twitter" Size="22" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.PatreonPage"><Icon TooltipText="Become a Patron" IconName="logos:patreon" Size="22" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.GitHubRepo"><Icon TooltipText="View Awesome Source Code" IconName="skill-icons:github-dark" Size="22" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.Instagram"><Icon TooltipText="Updates via Instagram" IconName="skill-icons:instagram" Size="22" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.YoutubeChannel"><Icon TooltipText="Watch How To Guide" IconName="logos:youtube-icon" Size="22" /></a></li>
+                            <li class="ms-3"><a target="_blank" class="link-body-emphasis" href="@URL.FacebookPage"><Icon TooltipText="Updates via Facebook" IconName="devicon:facebook" Size="22" /></a></li>
                         </ul>
 
                     </div>
@@ -160,11 +160,9 @@
             await _jsRuntime.InvokeVoidAsync(JS.InitErrorCatcher);
 
             //log visit only 1 once when page is rendered
-            await WebLogger.Visitor(_jsRuntime);
+            //await WebLogger.Visitor(_jsRuntime);
 
             _loadExtra = false;
-            Console.WriteLine("ORI TAKEN OUT OF DOM!!!!!!!!!!!!");
-
         }
     }
 
@@ -193,11 +191,9 @@
         //note : must do after
         //---------------------
         bool debugMode;
-
-
         //user already logged in, get debug mode from browser setting if any
         //note: "debug mode" is stored local instead of online, because possible mobile use under same account
-        debugMode = await WebsiteTools.GetDebugModeBool();
+        debugMode = await WebsiteTools.IsLocalServerDebugMode();
 
         AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime(), debugMode);
 
@@ -231,29 +227,30 @@
     /// </summary>
     private async Task CheckRaiseOutdatedWarning()
     {
-        #region RELEASE
 
+#if RELEASE
         //higher number is latest
-        var currentCommitNo = int.Parse(ThisAssembly.CommitNumber);
+    var currentCommitNo = int.Parse(ThisAssembly.CommitNumber);
 
-        //uses tags to detect correct version
-        var latestPublishedCommitNo = await WebsiteTools.GetLatestCommitNumber();
+    //uses tags to detect correct version
+    var latestPublishedCommitNo = await WebsiteTools.GetLatestCommitNumber();
 
-        //if lower raise warning
-        if (currentCommitNo < latestPublishedCommitNo)
-        {
-            await AppData.JsRuntime.ShowAlert(
-                icon: "warning",
-                title: "Please Update!",
-                descriptionText: "Press <kbd>CTRL + SHIFT + R</kbd> to get <strong>latest</strong> version. " +
-                                 $"Also try clearing your <strong>Cookies & Cache</strong>. <br>" +
-                                 $"<span style=\"font-size: 14px;color: grey;\">Your version is {currentCommitNo}, latest is {latestPublishedCommitNo}</span>");
+    //if lower raise warning
+    if (currentCommitNo < latestPublishedCommitNo)
+    {
+    await AppData.JsRuntime.ShowAlert(
+        icon: "warning",
+        title: "Please Update!",
+        descriptionText: "Press <kbd>CTRL + SHIFT + R</kbd> to get <strong>latest</strong> version. " +
+                         $"Also try clearing your <strong>Cookies & Cache</strong>. <br>" +
+                         $"<span style=\"font-size: 14px;color: grey;\">Your version is {currentCommitNo}, latest is {latestPublishedCommitNo}</span>");
 
-            //reloads page
-            await AppData.JsRuntime.ReloadPage();
-        }
+    //reloads page
+    await AppData.JsRuntime.ReloadPage();
+    }
 
-        #endregion
+#endif
+
     }
 
     /// <summary>

@@ -17,6 +17,11 @@
 
 @code {
 
+    protected override async Task OnInitializedAsync()
+    {
+        //little log
+        await WebsiteTools.SendMailToAPI("User in Thank You page", AppData.ClientLocation.Name());
 
+    }
 
 }

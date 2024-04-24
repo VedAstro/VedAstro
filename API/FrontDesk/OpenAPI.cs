@@ -39,7 +39,7 @@ namespace API
             try
             {
                 //0 : LOG CALL : used later for throttle limit
-                //var callLog = await APILogger.Visit(incomingRequest);
+                var callLog = await APILogger.Visit(incomingRequest);
 
                 //1 : extract out custom format else empty string (removed from url)
                 var format = ParseAndGetFormat(fullParamString);

@@ -195,7 +195,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 			if input_parsed["user_id"] == "":
 				# add special command recognized by VedAstro.js to show handle login nicely
 				input_parsed["command"] = np.append(input_parsed["command"], "please_login")
-				ai_reply = """Please login sir...to verify you are not a robot 🤖\nEasy & secure login with Google or Facebook\n\n.....I understand this is annoying, but I have no choice!🤗\nthere are robots in the internet who target smart AI Chat agents like me.\nPlease login to start talking about astrology...💬
+				ai_reply = """Please login sir...to verify you are not a robot 🤖\nEasy & secure login with Google or Facebook\n\n.....I know this is annoying, but I have no choice!🤗\nthere are bad robots in the internet who target smart AI Chat agents like me.\nPlease login to start talking about astrology...💬
                 """
 				ai_html_reply = """
                     Please login sir...to verify you are not a robot 🤖<br>
@@ -267,7 +267,7 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 			# 
 			# WRITE CODE ONLY WHEN YOUR FINGERS CAN'T KEEP UP
 			# WRITE CODE ONLY WHEN YOUR HEART IS FILLED WITH JOY
-			# WRITE CODE ONLY WHEN 
+			# WRITE CODE ONLY WHEN YOU ARE A HUMAN AND NOT A MACHINE!
 
 
 
@@ -281,31 +281,32 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 				is_level_1_response = "level_1" in input_parsed["command"]
 
 				# answer machine (send all needed data)
-				response_synthesizer, raw_result = chat_engines["MK7"].query_level_1(user_question=user_question, topic_text=topic_text, include_response=is_include_response)
-				ai_reply = raw_result.get('response', "")
+				response_synthesizer, raw_result = chat_engines["MK7"].query_level_1(user_question=user_question, topic_text=topic_text, include_response=is_level_1_response)
+				ai_reply = raw_result.response
 
 				## need to sleep before ramming LLM again
-				time.sleep(2)
+				# time.sleep(2)
 
-				query_engine_tools, raw_result2 = chat_engines["MK7"].query_level_2(response_synthesizer=response_synthesizer, user_question=user_question, topic_text=topic_text, include_response=is_include_response)
-				ai_reply_2 = raw_result2.get('response', "")
+				# query_engine_tools, raw_result2 = chat_engines["MK7"].query_level_2(response_synthesizer=response_synthesizer, user_question=user_question, topic_text=topic_text, include_response=is_include_response)
+				# ai_reply_2 = raw_result2.get('response', "")
 
-				## need to sleep before ramming LLM again
-				time.sleep(2)
+				# ## need to sleep before ramming LLM again
+				# time.sleep(2)
 
-				agent, raw_result3 = chat_engines["MK7"].query_level_3(query_engine_tools=query_engine_tools, user_question=user_question, topic_text=topic_text, include_response=is_include_response)
-				ai_reply_3 = raw_result3.get('response', "")
+				# agent, raw_result3 = chat_engines["MK7"].query_level_3(query_engine_tools=query_engine_tools, user_question=user_question, topic_text=topic_text, include_response=is_include_response)
+				# ai_reply_3 = raw_result3.get('response', "")
 
 				# STAGE 3 : REPLY
 				# log message for inteligent past QA
 				# use later for highlight (UX improve)
 				input_parsed["text"] = ai_reply
-				input_parsed["text_2"] = ai_reply_2
-				input_parsed["text_3"] = ai_reply_3
+				# input_parsed["text_2"] = ai_reply_2
+				# input_parsed["text_3"] = ai_reply_3
 				input_parsed["sender"] = "AI"
 				message_count += 1
 				input_parsed["message_number"] = message_count
-				input_parsed["text_hash"] = AzureTableManager.save_message_in_azure(input_parsed)
+				text_hash = AzureTableManager.save_message_in_azure(input_parsed)
+				input_parsed["text_hash"] = text_hash
 
 				# send ans to caller in JSON form, to support metadata
 				# highlight text with relevant keywords relating to input query

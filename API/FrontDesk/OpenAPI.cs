@@ -317,20 +317,28 @@ namespace API
         /// </summary>
         public static string ParseAndGetFormat(string fullParamString)
         {
-            //if url contains word "ayanamsa" than process it
-            var isCustomFormat = fullParamString.Contains("Format/");
-            if (isCustomFormat)
+            try
             {
-                //scan URL and take out ayanamsa and set it
-                var splitParamString = fullParamString.Split('/');
-                var formatLocation = Array.IndexOf(splitParamString, "Format");
-                var formatValue = splitParamString[formatLocation + 1];
+                //if url contains word "ayanamsa" than process it
+                var isCustomFormat = fullParamString.Contains("Format/");
+                if (isCustomFormat)
+                {
+                    //scan URL and take out ayanamsa and set it
+                    var splitParamString = fullParamString.Split('/');
+                    var formatLocation = Array.IndexOf(splitParamString, "Format");
+                    var formatValue = splitParamString[formatLocation + 1];
 
-                return formatValue;
+                    return formatValue;
+                }
+
+                //if no ayanamsa, then return as is
+                else
+                {
+                    return "";
+                }
+
             }
-
-            //if no ayanamsa, then return as is
-            else
+            catch (Exception e)
             {
                 return "";
             }

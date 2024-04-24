@@ -16,10 +16,10 @@ dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 
 # Install the runtime set version number here
-apt-get update && \
-   apt-get install -y aspnetcore-runtime-7.0
+apt-get update
+apt-get install -y aspnetcore-runtime-7.0
 
 # Verify the installation
-dotnet --list-runtimes 
+dotnet --list-runtimes
 
 echo "*****************CHAT SERVER INSTALL COMPLETE*****************"

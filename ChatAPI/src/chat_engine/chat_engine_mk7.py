@@ -206,7 +206,7 @@ class ChatEngine7:
 		    response_mode="tree_summarize",
 		    structured_answer_filtering=True)
 
-		#make LLM call with only synthesizer ONLY if specified else none (Teacher Mode)
+		#make LLM call with only synthesizer ONLY (Teacher Mode) if specified else none 
 		reponse_data = {"response":""} if include_response == False else response_synthesizer.synthesize(user_question, nodes=astro_scored_nodes)
 
 		return (response_synthesizer, reponse_data)
@@ -264,7 +264,7 @@ class ChatEngine7:
 		)
 
 		# FINAL FANTASY
-		#make LLM call with only synthesizer ONLY if specified else none (Teacher Mode)
+		#make LLM call with only synthesizer ONLY (Teacher Mode) if specified else none 
 		reponse_data = None if include_response == False else base_sub_query_engine.query(user_question)
 
 		return (query_engine_tools, reponse_data)

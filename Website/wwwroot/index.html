@@ -212,7 +212,7 @@ Allen Mullen
          * Callback after api.js is loaded.
          */
         function gapiLoaded() {
-            window.gapi.load('client', initializeGapiClient);
+            //window.gapi.load('client', initializeGapiClient);
         }
 
         /**
@@ -220,11 +220,11 @@ Allen Mullen
          * discovery doc to initialize the API.
          */
         async function initializeGapiClient() {
-            await window.gapi.client.init({
-                apiKey: API_KEY,
-                discoveryDocs: [DISCOVERY_DOC],
-            });
-            window.gapiInited = true;
+            // await window.gapi.client.init({
+            //     apiKey: API_KEY,
+            //     discoveryDocs: [DISCOVERY_DOC],
+            // });
+            // window.gapiInited = true;
         }
 
         /**

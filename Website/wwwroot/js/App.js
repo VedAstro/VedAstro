@@ -5,7 +5,6 @@
 //PRODUCTIONS FUNCTION IN USE CALLED FROM BLAZOR CODE
 
 import { URLS } from '/js/URLS.js';
-import { VedAstro } from '/js/tempVedAstro.js';
 import * as Tools from '/js/Tools.js';
 import * as Interop from '/js/Interop.js';
 
@@ -41,9 +40,10 @@ onerror = handleErr;
 //make interop available to blazor
 window.Interop = Interop;
 
-var apiKey = "089J89JF9W8JFJN49"; //copy from account page
-//this will be called by blazor as window.API.GetChart()
-window.API = new VedAstro(apiKey);
+//TODO marked for oblivion
+//var apiKey = "089J89JF9W8JFJN49"; //copy from account page
+////this will be called by blazor as window.API.GetChart()
+//window.API = new VedAstro(apiKey);
 
 
 //print console greeting (file in wwwroot)

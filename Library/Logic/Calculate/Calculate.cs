@@ -73,7 +73,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Basic bounce back data to confirm validity or ML table needs
         /// </summary>
-        public static async GeoLocation CurrentGeoLocation(Time time)
+        public static GeoLocation CurrentGeoLocation(Time time)
         {
             return time.GetGeoLocation();
         }

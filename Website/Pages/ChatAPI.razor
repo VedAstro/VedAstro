@@ -9,8 +9,118 @@
 </PageTop>
 
 
-@* vedastro.js builds and runs chat client in below element initialized by js call below*@
-<div id="AIChat" class="my-3 w-75"></div>
+
+@*API DROP DOWN SELECTORS*@
+<div class="d-flex flex-wrap gap-5" style="max-width: @GR.W764px;">
+    @* vedastro.js builds and runs chat client in below element initialized by js call below*@
+    <div id="AIChat" class="my-3 w-100"></div>
+
+    @*GUIDE TEXT*@
+    <div class="vstack gap-3 mt-4">
+
+        <ArticleBlock Title="Instant Learning" IconName="devicon:networkx">
+            <TextHTML>
+                <p>
+                    Every feedback you give is <strong>instantly</strong> added to the CPU's neural network decision paths.
+                    Hence, this AI chatbot is effectively learning instantly from mistakes and errors, thanks to guidance from user's like you.🙏
+                </p>
+                <p>
+                    Your <strong>contribution</strong> counts!
+                    The <strong>anonymous learning models</strong> made from <strong>live learning</strong> will be uploaded to open-source <strong>HuggingFace</strong>.
+                    Hence, benefiting the whole world not only for our present era, but for <strong>generations</strong> to come!
+                </p>
+            </TextHTML>
+        </ArticleBlock>
+        
+        <ArticleBlock Title="Price" IconName="flat-color-icons:money-transfer">
+            <ButtonRow>
+                <IconButton PlaceBottom="true" SmallSize="true" Color="warning" ButtonText="Donate" IconName="openmoji:love-letter" ClickUrl="@PageRoute.Donate" />
+            </ButtonRow>
+            <TextHTML>
+                This service will run for <kbd>FREE</kbd>, so long there is money in the <strong>donation box</strong>.
+                Below is the <strong>live</strong> balance with auto deducting server &amp; maintenance costs.
+
+                <DonationBalanceViewer />
+
+                Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to keep this service running for yourself and others.
+            </TextHTML>
+        </ArticleBlock>
+
+
+        <ArticleBlock Title="AI Teachers" IconName="twemoji:teacher">
+            <TextHTML>
+                <p>
+                    If you are serious about contributing to the benefit of open-source vedic astrology.
+                    Then you are a perfect candidate to become an <strong>AI Teacher</strong>.
+                </p>
+                <p>
+                    <strong>What does this mean? </strong>
+                    AI Teachers gets <strong>unrestricted access</strong> to our full AI server power.
+                    Instead of getting just 1 answer you'll get <strong>3!</strong>.
+                    Then it is your task as the <strong>teacher</strong> to analyse all answers, think carefully
+                    and finally give a <strong>good</strong> or <strong>bad</strong> feedback. Done!
+                </p>
+                <p>
+                    So in just a few steps mentioned above you can easily train the world's first open source AI chatbot.
+                    <strong>Who directly benefits?</strong>
+                    <strong>You</strong>, me your neighbour and the whole of the human race for <strong>generations</strong>
+                    to come can benefit from the sincere effort you put to train this AI model today.
+                    Also, you need to promise not to lie, be a bad actor and teach the AI wrong prediction.
+                    Once approved by our team in less than 12h, you can start your journey as an open-source AI contributor <strong>for free.
+                        Contact us to get started</strong>.
+                </p>
+
+            </TextHTML>
+        </ArticleBlock>
+
+
+        <ArticleBlock Title="Democratize AI" IconName="bi:filetype-json">
+            <TextHTML>
+                <p>
+                    Get this intelligent astro AI chatbot into your custom app or website <strong>in no time</strong>.
+                    Contact us, and we can help you set up and customize AI chat for you with Zero costs.
+                </p>
+                <p>
+                    This project is <strong>100% open source</strong> because we want everybody to have access to advanced
+                    astrological tools not just people with extra income. <strong>Democratize AI</strong> and make it available to the common man.
+                </p>
+            </TextHTML>
+        </ArticleBlock>
+
+        <ArticleBlock Title="Sponsor Music" IconName="emojione:violin">
+            <ButtonRow>
+                <IconButton ClickUrl="@PageRoute.Donate" IconName="flat-color-icons:donate" ButtonText="Tip" Outline="true" SmallSize="true"></IconButton>
+            </ButtonRow>
+            <TextHTML>
+                Running this Chat API service, is like playing a <strong>beautiful public orchestra</strong>.
+                It is only possible because of many moving parts by many people.
+                Servers need to be optimized, updated and maintained. Code needs to be improved, tested and cleaned.
+
+                <img src="images/public-orchestra.jpg" class="img-thumbnail my-3" alt="...">
+
+                And all this has to be juggled to create the final product you see. Its a group effort.
+                Please consider supporting this service to keep the "music" playing.
+                <strong>Everybody</strong> can enjoy the music, so long as there's <strong>one</strong> person, willing to <BoldLink URL="@PageRoute.Donate">tip</BoldLink>
+
+                <QuoteTextBlock Author="W.H. Auden" URL="@URL.WHAudenWiki">
+                    We are all here on earth to help others:<br />what on earth the others are here for,<br />I don't know.
+                </QuoteTextBlock>
+            </TextHTML>
+        </ArticleBlock>
+
+        <ArticleBlock Title="Reverse Engineer" IconName="emojione:hammer-and-wrench">
+            <TextHTML>
+                To maximize the use of the Chat API, you need to understand its <strong>basic structure</strong>.
+                And the best way todo so is to <strong>play with it</strong>. Try modifying the API URL in your browser,
+                and see what data you get. Experiment with different data formats.
+                The API is designed to handle this, so don't worry about breaking it.🎈Have fun.
+            </TextHTML>
+        </ArticleBlock>
+
+    </div>
+
+</div>
+
 
 
 @code {
@@ -27,10 +137,11 @@
             // var timeUrl = _selectedPerson.BirthTime.ToUrl();
             // timeUrl = timeUrl.Substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
 
-            var settingsAIChat = new {
-                ElementID= "AIChat",
-                ShowHeader= true,
-                HeaderIcon= "fluent:table-28-filled",
+            var settingsAIChat = new
+            {
+                ElementID = "AIChat",
+                ShowHeader = true,
+                HeaderIcon = "fluent:table-28-filled",
             };
 
 

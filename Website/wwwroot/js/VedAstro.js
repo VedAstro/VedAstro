@@ -28,10 +28,9 @@
 window.vedastro = {
     UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101",
     ApiDomain: "https://vedastroapi.azurewebsites.net/api",
-    Ayanamsa: "Lahiri", //default to 
+    Ayanamsa: "Lahiri", //default to
     ChartStyle: "South", //default to South Indian Chart
 };
-
 
 // Check if jQuery is loaded
 if (typeof jQuery == "undefined") {
@@ -1167,13 +1166,12 @@ class ChatInstance {
     HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
     IsAITalking = false; //default false, to implement "PTT" radio like protocol
     PresetQuestions = {
-
         Previous: {
             "Last 3": [
                 "When will I meet the love of my life in the year 2024?",
                 "Am I going to be in a new relationship in the year 2024?",
                 "Why am I not able to find a life partner?",
-            ]
+            ],
         },
         Love: {
             "Love Awaits Me": [
@@ -1472,7 +1470,7 @@ class ChatInstance {
          </div>
          
          <!-- MESSAGES IN VIEW -->
-         <ul class="list-unstyled" id="ChatWindowMessageList">
+         <ul class="list-unstyled px-3" id="ChatWindowMessageList" style="max-height:667.5px; overflow: auto; ">
              <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
                  <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar"
                       class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
@@ -1490,7 +1488,7 @@ class ChatInstance {
              </li>
          </ul>
          <!-- QUESTION INPUT -->
-         <div id="questionInputHolder" class="input-group mb-3">
+         <div id="questionInputHolder" class="input-group mb-3" style="">
      
            <button id="presetQuestionsButton" 
              data-bs-auto-close="outside" 
@@ -1517,7 +1515,7 @@ class ChatInstance {
             "~~~~~~~Stand back! Awesome Chat API code launching! All engines go!~~~~~~~"
         );
 
-        //make instance accessible 
+        //make instance accessible
         window.vedastro.chatapi = this;
 
         //correct if property names is camel case (for Blazor)
@@ -1636,9 +1634,6 @@ class ChatInstance {
             var selectedText = $(this).text();
             $("#UserChatInputElement").val(selectedText);
         });
-
-
-
 
         console.log("~~~~~~~Huston, we have lift off!~~~~~~~");
 
@@ -1810,23 +1805,99 @@ class ChatInstance {
         this.processQueue();
     }
 
+    //called direct from static HTML hookup without seperate attach code
+    //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
+    rate_message(eventData, rating) {
+        //come here on click rating button
+        // get hash of message, stored as id in holder
+        var messageHolder = $(eventData)
+            .closest(".card")
+            .children(".message-holder");
+        var text_hash = messageHolder.attr("id");
+
+        const messagePayload = {
+            user_id: window.vedastro.UserId,
+            rating: rating,
+            text_hash: text_hash,
+        };
+
+        window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
+    }
+
+    //when on of the follow up questions gets clicked
+    //get called direct from html code
+    ask_followup_question(eventData, followupQuestion) {
+
+        // get hash of message, stored as id in holder
+        var messageHolder = $(eventData)
+            .closest(".card")
+            .children(".message-holder");
+        var primaryAnswerHash = messageHolder.attr("id");
+
+        //UPDATE GUI WITH USER MSG (UX)
+        var aiInput = $("#UserChatInputElement").val();
+        var userName = "You";
+        var userInputChatCloud = `
+        <li class="d-flex justify-content-end mb-4">
+            <div class="card ">
+                <div class="card-header d-flex justify-content-between p-3">
+                    <p class="fw-bold mb-0">${userName}</p>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        ${followupQuestion}
+                    </p>
+                </div>
+            </div>
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
+                 class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="45">
+        </li>
+        `;
+        //inject in User's input into chat window
+        $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+
+
+
+        //set topic text TODO support DOB and books
+        var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+
+        //note the switch to python naming covention
+        var commandsToSend = [];
+        commandsToSend.push("followup_question"); //add command for server to read as "follow up"
+        const messagePayload = {
+            user_id: window.vedastro.UserId,
+            primary_answer_hash: primaryAnswerHash,
+            command: commandsToSend, //server uses this to do special handling
+            text: followupQuestion,
+            topic: topicText,
+        };
+
+        window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
+    }
+
+    //YOU CANNOT FIGHT A DYING MAN,
+    //HE HOLDS THE UPPER HAND ALWAYS
+
     // Handler for incoming messages
     onmessage(event) {
-
         // Parse the JSON data from the event
         var raw_json_message = JSON.parse(event.data);
         var ai_text_message_html = raw_json_message.text_html;
         var message_hash = raw_json_message.text_hash;
         var ai_text_message = raw_json_message.text;
+        var followup_questions = raw_json_message?.followup_questions ?? [];
 
-        //SPECIAL HANDLE FOR LOGIN PROMPTS
+        //PROCESS SERVER COMMANDS
+        var commands = raw_json_message.command || []; // when no commands given empty to not fail
+
+        //## SPECIAL HANDLE FOR LOGIN PROMPTS
         //1: check if server said please login, in command to client
         //   meaning user just say login message given by server,
         //   upon click login, start wait loop (make it seem bot is waiting for user to login)
-        //   then that special login tab (RememberMe) will auto close 
-        var command = raw_json_message.command;
+        //   then that special login tab (RememberMe) will auto close
+
         let intervalId;
-        if (command === "please_login") {
+        if (commands.includes("please_login")) {
             // start loop to check every 10 seconds if a property "window.vedastro.UserId" has been filled
             intervalId = setInterval(() => {
                 if (window.vedastro && window.vedastro.UserId) {
@@ -1840,45 +1911,71 @@ class ChatInstance {
                         "Lets <strong>start</strong> chating!",
                         "success"
                     ).then(() => this.OnClickSendChat(this.LastUserMessage));
-
-
-
                 } else {
                     console.log("Waiting for user login...");
                 }
             }, 1000);
         }
 
+        //## BUILD HTML
+
+        //HANDLE FOLLOWUP
+        // only add follow up questions if server specified them
+        var followupQuestionsHtml = "";
+        // convert questions into visible buttons, for user to click 
+        if (followup_questions.length > 0) {
+            followupQuestionsHtml += //start out hidden, then js will bring to live with animation at right time (class)
+                '<div class="followUpQuestionHolder hstack gap-2 w-100 justify-content-end" style="display:none; position: absolute; bottom: -43px; right: -1px; ">';
+
+            followup_questions.forEach(function (question) {
+                followupQuestionsHtml += `
+            <button type="button" onclick="window.vedastro.chatapi.ask_followup_question(this, '${question}')"  class="btn btn-outline-primary">${question}</button>
+        `;
+            });
+
+            followupQuestionsHtml += "</div>";
+        }
+
+        //only show feedback buttons for text that need feedback
+        var feedbackButtonHtml = commands.includes("no_feedback")
+            ? ""
+            : `<div class="hstack gap-2">
+    <button title="Bad answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, -1)" class="btn btn-danger" style="padding: 0px 5px;">
+      <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
+    </button>
+    <button title="Good answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, 1)" class="btn btn-primary" style="padding: 0px 5px;">
+      <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
+    </button>
+  </div>`;
+
         // Create a chat bubble with the AI's message
-        var aiInputChatCloud = `<li class="d-flex justify-content-start mb-4">
+        var aiInputChatCloud = `<li class="d-flex justify-content-start" style=" margin-bottom: 70px; ">
         <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
         <div class="card">
             <div class="card-header d-flex justify-content-between p-3">
                 <p class="fw-bold mb-0 me-5">Vignes</p>
-                <div class="hstack gap-2">
-                  <button title="Bad answer" type="button" onclick="(e)=>window.vedastro.chatapi.rate_message(e, -1)" class="btn btn-danger" style="padding: 0px 5px;">
-                    <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
-                  </button>
-                  <button title="Good answer" type="button" onclick="(e)=>window.vedastro.chatapi.rate_message(e, 1)" class="btn btn-primary" style="padding: 0px 5px;">
-                    <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
-                  </button>
-                </div>
+                ${feedbackButtonHtml}
             </div>
             <div id="${message_hash}" class="message-holder card-body">
-                <p style="display:none;" class="text-html-out-elm mb-0">
+                <div style="display:none;" class="text-html-out-elm mb-0">
                   ${ai_text_message_html}
-                </p>
+                </div>
                 <p class="temp-text-stream-elm mb-0">
                   <!-- Content will be streamed here -->
                 </p>
                 <!-- SVG for loading icon -->
                 <svg class="loading-icon-elm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
+                ${followupQuestionsHtml}
             </div>
         </div>
     </li>`;
 
         // Append the chat bubble to the chat window
         $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
+
+
+        // # AUTO SCROLL DOWN
+        $('#ChatWindowMessageList').scrollTop($('#ChatWindowMessageList')[0].scrollHeight);
 
         // Flag to prevent user input while AI is 'typing'
         this.IsAITalking = true;
@@ -1890,6 +1987,7 @@ class ChatInstance {
         // Stream the AI's message into the chat bubble
         const interval = setInterval(() => {
             // Check if the entire message has been displayed
+            //MESSAGE STREAM COMPLETE
             if (index >= ai_text_message.length) {
                 clearInterval(interval);
 
@@ -1904,11 +2002,19 @@ class ChatInstance {
                 // Allow user input again
                 this.IsAITalking = false;
 
+                //make follow up questions if any slowly appear
+                //narrow by message bubble, then holder
+                $(`#${message_hash} .followUpQuestionHolder`).fadeIn("slow");
+
                 return;
             }
 
             // Append the next character or handle special formatting
-            ChatInstance.appendNextCharacter(ai_text_message, index, `#${message_hash} .temp-text-stream-elm`);
+            ChatInstance.appendNextCharacter(
+                ai_text_message,
+                index,
+                `#${message_hash} .temp-text-stream-elm`
+            );
             index++;
         }, streamRateMs);
     }
@@ -2051,8 +2157,9 @@ class ChatInstance {
         //STEP 2:
         //user's input is sent to server for reply
         //get selected birth time
-        var birth_time_json = CommonTools.BirthTimeUrlOfSelectedPersonJson();
-        await this.SendMessageToServer(userInput, birth_time_json);
+        //TODO can be DOB or bookname
+        var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+        await this.SendMessageToServer(userInput, topicText);
         this.LastUserMessage = userInput; //save to used later for highlight
 
         //STEP 3 : GUI CLEAN UP
@@ -2060,27 +2167,11 @@ class ChatInstance {
         $("#UserChatInputElement").val("");
     }
 
-    async SendMessageToServer(message, birthTimeUrl) {
+    async SendMessageToServer(message, topicText) {
         const messagePayload = {
             user_id: window.vedastro.UserId,
             text: message,
-            topic: birthTimeUrl,
-        };
-
-        window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
-    }
-
-    //come here on click rating button 
-    rate_message(eventData, rating) {
-
-        // get hash of message, stored as id in holder
-        var messageHolder = $(eventData.target).closest('.message-holder');
-        var text_hash = messageHolder.attr('id');
-
-        const messagePayload = {
-            user_id: window.vedastro.UserId,
-            rating: rating,
-            text_hash: text_hash,
+            topic: topicText,
         };
 
         window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));

@@ -29,6 +29,7 @@ Know good and bad periods of your life years ahead.*@
                 <label class="form-label">Time Range<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.DasaTimeRange" /></label>
                 <select @bind="SelectedTimeRangePreset" class="form-control" style="width: @GR.W255px;">
                     <option value="FullLife">Full Life</option>
+                    <option style=" font-weight: bold; color: green; " value="viewsaved">View Saved 💾</option>
                     <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
                     <option style=" font-weight: bold; color: #0d6efd; " value="selectage">Custom Age</option>
                     <option value="1day">+/- 1 Day</option>
@@ -494,6 +495,7 @@ Know good and bad periods of your life years ahead.*@
     private EventsChartViewer? _eventsChartViewer;
 
     private MonthYearTimeRangeSelector? monthYearTimeRangeSelector;
+    private SavedChartsSelector? savedChartsSelector;
 
     public Person SelectedPerson { get; set; }
 
@@ -512,6 +514,10 @@ Know good and bad periods of your life years ahead.*@
             //show/hide if select year menu, since hidden by default
             if (value == "selectyear") { monthYearTimeRangeSelector?.Show(); }
             else { monthYearTimeRangeSelector?.Hide(); }
+
+            //show/hide saved list, since hidden by default
+            if (value == "viewsaved") { savedChartsSelector?.Show(); }
+            else { savedChartsSelector?.Hide(); }
 
             //auto update precision
             var timeRange = GetTimeRange();
@@ -767,6 +773,13 @@ Know good and bad periods of your life years ahead.*@
         //if custom year selected then, make sure range selector report valid
         var customSelect = SelectedTimeRangePreset == "selectyear";
         if (customSelect && !(monthYearTimeRangeSelector?.IsValid() ?? true)) //if not available then not selected
+        {
+            return false;
+        }
+
+        //if saved charts selected then, make it is valid
+        var savedCharts = SelectedTimeRangePreset == "viewsaved";
+        if (savedCharts && !(savedChartsSelector?.IsValid() ?? true)) //if not available then not selected
         {
             return false;
         }

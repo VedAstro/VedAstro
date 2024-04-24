@@ -31,10 +31,8 @@
             @if (showStripeJPN)
             {
                 @* JPN *@
-                <stripe-buy-button
-                    buy-button-id="buy_btn_1OiG8ZJuwVWEHuj3UXbmBkzg"
-                    publishable-key="pk_live_51MfBvdJuwVWEHuj3uTQJ0hdZvml1X9MPmQQnvjABkJ4llLyx2XY8KgTttg5bG5mknT1xDK9hvbTup7BLa0EKgYnX00nbSoo7Hm"
-                >
+                <stripe-buy-button buy-button-id="buy_btn_1OiG8ZJuwVWEHuj3UXbmBkzg"
+                                   publishable-key="pk_live_51MfBvdJuwVWEHuj3uTQJ0hdZvml1X9MPmQQnvjABkJ4llLyx2XY8KgTttg5bG5mknT1xDK9hvbTup7BLa0EKgYnX00nbSoo7Hm">
                 </stripe-buy-button>
             }
             @if (showStripeUSD)
@@ -54,27 +52,38 @@
             @if (showStripeINR)
             {
                 @* INR *@
-                <stripe-buy-button buy-button-id="buy_btn_1OiG3oJuwVWEHuj3NV3qJ1Yc"
-                                   publishable-key="pk_live_51MfBvdJuwVWEHuj3uTQJ0hdZvml1X9MPmQQnvjABkJ4llLyx2XY8KgTttg5bG5mknT1xDK9hvbTup7BLa0EKgYnX00nbSoo7Hm">
-                </stripe-buy-button>
+                <div class="hstack">
+                    <div class="vstack gap-3">
+                        <div class="hstack gap-2" style="">
+                            <img src="images/vedastro-upi-qr-code.png" class="" style="align-self: center;width: 242px;">
+                            <img src="images/vedastro-phonepe-qr-code.png" class="" style="align-self: center;width: 242px;">
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <IconButton ButtonText="I've paid via UPI" OnClickCallback="() => AppData.Go(PageRoute.ThankYou)"></IconButton>
+                        </div>
+                    </div>
+
+                    <stripe-buy-button buy-button-id="buy_btn_1OiG3oJuwVWEHuj3NV3qJ1Yc" publishable-key="pk_live_51MfBvdJuwVWEHuj3uTQJ0hdZvml1X9MPmQQnvjABkJ4llLyx2XY8KgTttg5bG5mknT1xDK9hvbTup7BLa0EKgYnX00nbSoo7Hm"></stripe-buy-button>
+                </div>
+
             }
 
         </div>
     </div>
 
-    @*SIDEBAR*@
-    <div class="mt-md-0 mt-4 me-md-5">
-        <!--when small give at top-->
-        <div class="vstack gap-0 gap-md-2">
-            @*STACK BOXES ON RIGHT*@
-            <InfoBox MaxWidth="365" FullWidth="@true" Title="Gifts" Description="Donate warm gifts, instead of cold cash" IconName="fluent-emoji:wrapped-gift" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("WishList"))" />
-            <InfoBox MaxWidth="365" FullWidth="@true" Title="Crypto" Description="Instant and anonymous donation" IconName="cryptocurrency-color:btc" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("ForCryptoGeeks"))" />
-            <InfoBox MaxWidth="365" FullWidth="@true" Title="Patreon" Description="Monthly contribution via Patreon" IconName="logos:patreon" IsNewTabOpen="true" ClickUrl="@URL.PatreonPage" />
-            @* <InfoBox FullWidth="@true" Title="Bank Transfer" Description="Send money via BIC/SWIFT transfer" IconName="noto-v1:bank" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("BankDetails"))" /> *@
-        </div>
-    </div>
 </div>
 
+@*SIDEBAR*@
+<div class="mt-md-0 mt-4 me-md-5">
+    <!--when small give at top-->
+    <div class="hstack gap-0 gap-md-2">
+        @*STACK BOXES ON RIGHT*@
+        <InfoBox MaxWidth="365" FullWidth="@true" Title="Gifts" Description="Donate warm gifts, instead of cold cash" IconName="fluent-emoji:wrapped-gift" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("WishList"))" />
+        <InfoBox MaxWidth="365" FullWidth="@true" Title="Crypto" Description="Instant and anonymous donation" IconName="cryptocurrency-color:btc" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("ForCryptoGeeks"))" />
+        <InfoBox MaxWidth="365" FullWidth="@true" Title="Patreon" Description="Monthly contribution via Patreon" IconName="logos:patreon" IsNewTabOpen="true" ClickUrl="@URL.PatreonPage" />
+        @* <InfoBox FullWidth="@true" Title="Bank Transfer" Description="Send money via BIC/SWIFT transfer" IconName="noto-v1:bank" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("BankDetails"))" /> *@
+    </div>
+</div>
 
 @* ARTICLES BLOCKS *@
 <hr />
@@ -82,7 +91,7 @@
 
     <ArticleBlock Title="Why Donate?" IconName="emojione:convenience-store">
         <TextHTML>
-            Donations help to keep this website you're looking at alive <strong>24/7</strong> and to continually improve
+            Donations help to keep this website's heart beating <strong>24/7</strong>💓 and to continually improve
             the project with new features and bug fixes. 1st priority goes to hosting costs.
             Currently, VedAstro is hosted in Microsoft Azure as a Static Web App which reduces running costs.
             With support from users we hope to diversify the hosting platform for a <strong>more stable & reliable</strong> service.
@@ -107,8 +116,8 @@
     <ArticleBlock Title="Bank Transfer" IconName="noto-v1:bank">
         <TextHTML>
             <div id="BankDetails" class="hstack gap-3">
-                @* id so can auto navigate here *@
-                @*STACK BOXES ON RIGHT*@
+    @* id so can auto navigate here *@
+    @*STACK BOXES ON RIGHT*@
                 <InfoBox Title="India" IconName="twemoji:flag-india">
                     <DescriptionHTML>
                         <ul class="list-group" style="font-size: 15px;">
@@ -214,7 +223,7 @@
 
 @code {
 
-    //always start with false, will be set true during init 
+    //always start with false, will be set true during init
     private bool showKofi = false;
     private bool showStripeJPN = false;
     private bool showStripeINR = false;
@@ -253,7 +262,7 @@
         showStripeUSD = (!showStripeINR) && (!showStripeJPN) && (!showStripeEUR);
 
         //little log
-        await WebsiteTools.SendMailToAPI("User in Donate Page from", AppData.ClientLocation.Name());
+        //await WebsiteTools.SendMailToAPI("User in Donate Page from", AppData.ClientLocation.Name());
     }
 
     private async Task OnClickBankTransfer()

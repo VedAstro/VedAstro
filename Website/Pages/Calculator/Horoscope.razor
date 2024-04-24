@@ -10,30 +10,10 @@
          DescriptionText="Insight into a peron's character, nature and general future. Over +370 planetary combinations are used.">
 </PageTop>
 
-
-<div class="gap-3" style="max-width: @GR.W824px;">
-
-    @* IN PAGE NAV BAR *@
-    <div id="inPageNavBar" style="z-index: 100; display: none !important; position: fixed;right: 69px;font-family: 'Lexend Deca';font-weight: bold;font-size: 14px; width: fit-content;" class="vstack gap-1 mt-2 pt-2 border-top d-none d-lg-block">
-        @* HEADER TEXT *@
-        <span @onclick="@(() => _jsRuntime.ScrollToDivById("HoroscopeMainInputHolder"))" style="cursor: pointer; font-size: 11.5px;margin-left: 44px;color: grey;margin-top: -19px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">INDEX</span>
-        
-        @* NAV LINKS *@
-        @* js function will set active by ID *@
-        <div class="list-group">
-            <a id="AutoPrediction-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#AutoPrediction">Auto Prediction</a>
-            <a id="Strength-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Strength">Strength</a>
-            <a id="SkyChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#SkyChart">Sky Chart</a>
-            <a id="AIAnalysis-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#AIAnalysis">AI Analysis</a>
-            <a id="IndianChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#IndianChart">Birth Chart</a>
-            <a id="PlanetDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#PlanetDataTable2">Planet Table</a>
-            <a id="HouseDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#HouseDataTable2">House Table</a>
-            <a id="Ashtakvarga-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Ashtakvarga">Ashtakvarga</a>
-            <a id="Reference-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Reference">Reference</a>
-        </div>
-    </div>
-
-    @*INPUT*@
+<div class="d-md-flex justify-content-between">
+    @*SELECTOR*@
+    <div class="me-5">
+            @*INPUT*@
     <div class="d-flex flex-wrap mb-5" style="max-width: @GR.W352px;">
         <div id="HoroscopeMainInputHolder" class="vstack gap-3">
             <PersonSelectorBox Width="100%" @ref="_peopleSelectorBox" />
@@ -103,6 +83,42 @@
 
         </div>
     </div>
+
+    </div>
+
+    @*SIDEBAR*@
+    <div class="mt-md-0 mt-4 me-md-5">
+        <!--when small give at top-->
+        <div class="vstack gap-0 gap-md-2">
+            <InfoBox MaxWidth="365" Title="Easy Import" Description="Birth data from Jagannatha Hora, Light of KP (LOKPA) or Parashara's Light 9" IconName="fluent-emoji-flat:outbox-tray" ClickUrl="@PageRoute.Import"  />
+            <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
+            <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="noto:alarm-clock" IsNewTabOpen="true" ClickUrl="@PageRoute.BirthTimeFinder" />
+        </div>
+    </div>
+</div>
+
+<div class="gap-3" style="max-width: @GR.W824px;">
+
+    @* IN PAGE NAV BAR *@
+    <div id="inPageNavBar" style="z-index: 100; display: none !important; position: fixed;right: 69px;font-family: 'Lexend Deca';font-weight: bold;font-size: 14px; width: fit-content;" class="vstack gap-1 mt-2 pt-2 border-top d-none d-lg-block">
+        @* HEADER TEXT *@
+        <span @onclick="@(() => _jsRuntime.ScrollToDivById("HoroscopeMainInputHolder"))" style="cursor: pointer; font-size: 11.5px;margin-left: 44px;color: grey;margin-top: -19px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">INDEX</span>
+        
+        @* NAV LINKS *@
+        @* js function will set active by ID *@
+        <div class="list-group">
+            <a id="AutoPrediction-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#AutoPrediction">Auto Prediction</a>
+            <a id="Strength-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Strength">Strength</a>
+            <a id="SkyChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#SkyChart">Sky Chart</a>
+            <a id="AIAnalysis-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#AIAnalysis">AI Analysis</a>
+            <a id="IndianChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#IndianChart">Birth Chart</a>
+            <a id="PlanetDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#PlanetDataTable2">Planet Table</a>
+            <a id="HouseDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#HouseDataTable2">House Table</a>
+            <a id="Ashtakvarga-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Ashtakvarga">Ashtakvarga</a>
+            <a id="Reference-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Reference">Reference</a>
+        </div>
+    </div>
+
 
     @* OUTPUT *@
     <div id="outputHoroscope" class="vstack gap-4" style="display: none;">

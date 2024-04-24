@@ -71,6 +71,14 @@ namespace VedAstro.Library
         #region GEO LOCATION
 
         /// <summary>
+        /// Basic bounce back data to confirm validity or ML table needs
+        /// </summary>
+        public static async GeoLocation CurrentGeoLocation(Time time)
+        {
+            return time.GetGeoLocation();
+        }
+
+        /// <summary>
         /// Given an address will convert to it's geo location equivelant
         /// http://localhost:7071/api/Calculate/AddressToGeoLocation/Address/Gaithersburg
         /// </summary>
@@ -86,7 +94,6 @@ namespace VedAstro.Library
 
             return returnVal;
         }
-
 
         /// <summary>
         /// Given coordinates will convert to it's geo location equivelant

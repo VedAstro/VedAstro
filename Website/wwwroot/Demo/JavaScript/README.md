@@ -1,6 +1,8 @@
 ## Easy to use JS library help your app or website to talk with VedAstro API
 
-## 🛜 JS CDN --> https://vedastro.org/js/VedAstro.js
+## 🛜 LIVE DEMO SITE --> https://vedastro.org/Demo/JavaScript/index.html
+
+## 🧩 JS CDN --> https://vedastro.org/js/VedAstro.js
 
 ## 🏎️ Quick Start
 

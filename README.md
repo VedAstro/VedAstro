@@ -29,7 +29,7 @@
 - [Website](https://vedastro.org/Docs/QuickGuide) --> easy & fast astrology data for **normal users**
 - [Chat API](https://vedastro.org/ChatAPI) --> world's 1st open source **Vedic AI Chat** bot
 - [Open API](https://vedastro.org/APIBuilder) --> free astrology data for your app or website with a simple `HTTP GET`
-- [JavaScript SDK](https://github.com/VedAstro/VedAstro/tree/master/Demo/JavaScript) --> easy to use JS library to simplify API access and use
+- [JavaScript SDK](https://github.com/VedAstro/VedAstro/tree/master/Website/wwwroot/Demo/JavaScript) --> easy to use JS library to simplify API access and use
 - [Swiss Ephemeris API](https://vedastro.org/APIBuilder) --> free advanced astronomy data from NASA's JPL Ephemeris
 - [Learn Astro Computation](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> learn exact math & logic used in astrology via **`Free Open Source`** code
 - [ML Table Generator](https://vedastro.org/TableGenerator) --> easily generate large astronomical tables for use in ML/AI Model training and Data Science

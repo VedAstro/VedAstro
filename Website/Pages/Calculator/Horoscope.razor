@@ -13,76 +13,76 @@
 <div class="d-md-flex justify-content-between">
     @*SELECTOR*@
     <div class="me-5">
-            @*INPUT*@
-    <div class="d-flex flex-wrap mb-5" style="max-width: @GR.W352px;">
-        <div id="HoroscopeMainInputHolder" class="vstack gap-3">
-            <PersonSelectorBox Width="100%" @ref="_peopleSelectorBox" />
+        @*INPUT*@
+        <div class="d-flex flex-wrap mb-5" style="max-width: @GR.W352px;">
+            <div id="HoroscopeMainInputHolder" class="vstack gap-3">
+                <PersonSelectorBox Width="100%" @ref="_peopleSelectorBox" />
 
-            @* ADVANCED PANEL DROP *@
-            <div id="HoroscopeAdvancedInputHolder" class="vstack gap-1 mt-2 pt-2 border-top" style="display: none">
-                @* HEADER TEXT *@
-                <span style="font-size: 11.5px;margin-left: 0px;color: grey;margin-top: -20px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
+                @* ADVANCED PANEL DROP *@
+                <div id="HoroscopeAdvancedInputHolder" class="vstack gap-1 mt-2 pt-2 border-top" style="display: none">
+                    @* HEADER TEXT *@
+                    <span style="font-size: 11.5px;margin-left: 0px;color: grey;margin-top: -20px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
 
-                @* AYANAMSA *@
-                <div class="input-group mb-2">
-                    <label style="width:@GR.W134px;" class="input-group-text">
-                        <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
-                    </label>
-                    <select @bind="SelectedAyanamsa" class="form-select">
+                    @* AYANAMSA *@
+                    <div class="input-group mb-2">
+                        <label style="width:@GR.W134px;" class="input-group-text">
+                            <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
+                        </label>
+                        <select @bind="SelectedAyanamsa" class="form-select">
 
-                        <optgroup label="Easy">
-                            @foreach (var ayanamsa in @AppData.SimpleAyanamsaAll)
-                            {
-                                <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
-                            }
-                        </optgroup>
-                        <optgroup label="Advanced">
-                            @foreach (var ayanamsa in @AppData.AdvancedAyanamsaAll)
-                            {
-                                <option value="@ayanamsa">@ayanamsa</option>
-                            }
-                        </optgroup>
-                    </select>
+                            <optgroup label="Easy">
+                                @foreach (var ayanamsa in @AppData.SimpleAyanamsaAll)
+                                {
+                                    <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
+                                }
+                            </optgroup>
+                            <optgroup label="Advanced">
+                                @foreach (var ayanamsa in @AppData.AdvancedAyanamsaAll)
+                                {
+                                    <option value="@ayanamsa">@ayanamsa</option>
+                                }
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    @* CHART STYLE *@
+                    <div class="input-group">
+                        <label style="width: 134.4px;" class="input-group-text">
+                            <span class="iconify me-2" data-icon="gridicons:types" data-width="25" data-height="25"></span>
+                            Chart
+                        </label>
+                        <select @bind="SelectedChartStyle" id="ChartStyleSelectElement" class="form-select">
+                            <option value="South" selected="">South Style</option>
+                            <option value="North">North Style</option>
+                        </select>
+                    </div>
+
+                    @* HORARY NUMBER *@
+                    @*                 <div class="input-group">
+                    <span class="input-group-text" style="font-weight: 600; color: red;" id="2defe66d-ab03-4275-ba36-1c35a008063b">
+                    Horary Number
+                    <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" _bl_2596="" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
+                    </div>
+                    </span>
+                    <input type="number" class="form-control" placeholder="0">
+                    </div>
+                    *@
+                    @* YEAR OF ZERO COINCIDENCE *@
+                    <div class="input-group" style="display: none">
+                        <span class="input-group-text">Year of Zero Coincidence</span>
+                        <input type="text" class="form-control" placeholder="397">
+                    </div>
                 </div>
 
-                @* CHART STYLE *@
-                <div class="input-group">
-                    <label style="width: 134.4px;" class="input-group-text">
-                        <span class="iconify me-2" data-icon="gridicons:types" data-width="25" data-height="25"></span>
-                        Chart
-                    </label>
-                    <select @bind="SelectedChartStyle" id="ChartStyleSelectElement" class="form-select">
-                        <option value="South" selected="">South Style</option>
-                        <option value="North">North Style</option>
-                    </select>
+                @* BUTTONS *@
+                <div class="mt-2 d-flex justify-content-between">
+                    <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle("HoroscopeAdvancedInputHolder"))" SmallSize="true" />
+                    <IconButton @ref="_calculateButton" Id="HoroscopeCalculateButton" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" />
                 </div>
 
-                @* HORARY NUMBER *@
-                @*                 <div class="input-group">
-                <span class="input-group-text" style="font-weight: 600; color: red;" id="2defe66d-ab03-4275-ba36-1c35a008063b">
-                Horary Number
-                <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" _bl_2596="" aria-expanded="false">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
-                </div>
-                </span>
-                <input type="number" class="form-control" placeholder="0">
-                </div>
-                *@
-                @* YEAR OF ZERO COINCIDENCE *@
-                <div class="input-group" style="display: none">
-                    <span class="input-group-text">Year of Zero Coincidence</span>
-                    <input type="text" class="form-control" placeholder="397">
-                </div>
             </div>
-
-            @* BUTTONS *@
-            <div class="mt-2 d-flex justify-content-between">
-                <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle("HoroscopeAdvancedInputHolder"))" SmallSize="true" />
-                <IconButton @ref="_calculateButton" Id="HoroscopeCalculateButton" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" />
-            </div>
-
         </div>
-    </div>
 
     </div>
 
@@ -90,12 +90,16 @@
     <div class="mt-md-0 mt-4 me-md-5">
         <!--when small give at top-->
         <div class="vstack gap-0 gap-md-2">
-            <InfoBox MaxWidth="365" Title="Easy Import" Description="Birth data from Jagannatha Hora, Light of KP (LOKPA) or Parashara's Light 9" IconName="fluent-emoji-flat:outbox-tray" ClickUrl="@PageRoute.Import"  />
-            <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
-            <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="noto:alarm-clock" IsNewTabOpen="true" ClickUrl="@PageRoute.BirthTimeFinder" />
-        </div>
+            <InfoBox MaxWidth="365" Title="Ask AI Chat" Description="Ask AI astrologer about your life aspects and horoscope" IconName="fluent-emoji:robot" IsNewTabOpen="true" ClickUrl="@PageRoute.ChatAPI" />
+            <InfoBox MaxWidth="365" Title="Easy Import" Description="Birth data from Jagannatha Hora, Light of KP (LOKPA) or Parashara's Light 9" IconName="fluent-emoji-flat:outbox-tray" ClickUrl="@PageRoute.Import"/>
+            <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="noto:alarm-clock" IsNewTabOpen="true" ClickUrl="@PageRoute.BirthTimeFinder"/>
+@*             <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy"/>
+ *@        </div>
     </div>
 </div>
+
+@*SIDEBAR*@
+<hr>
 
 <div class="gap-3" style="max-width: @GR.W824px;">
 
@@ -103,14 +107,13 @@
     <div id="inPageNavBar" style="z-index: 100; display: none !important; position: fixed;right: 69px;font-family: 'Lexend Deca';font-weight: bold;font-size: 14px; width: fit-content;" class="vstack gap-1 mt-2 pt-2 border-top d-none d-lg-block">
         @* HEADER TEXT *@
         <span @onclick="@(() => _jsRuntime.ScrollToDivById("HoroscopeMainInputHolder"))" style="cursor: pointer; font-size: 11.5px;margin-left: 44px;color: grey;margin-top: -19px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">INDEX</span>
-        
+
         @* NAV LINKS *@
         @* js function will set active by ID *@
         <div class="list-group">
-            <a id="AutoPrediction-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#AutoPrediction">Auto Prediction</a>
-            <a id="Strength-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Strength">Strength</a>
             <a id="SkyChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#SkyChart">Sky Chart</a>
-            <a id="AIAnalysis-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#AIAnalysis">AI Analysis</a>
+            <a id="Prediction-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Prediction">Prediction</a>
+            <a id="Strength-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Strength">Strength</a>
             <a id="IndianChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#IndianChart">Birth Chart</a>
             <a id="PlanetDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#PlanetDataTable2">Planet Table</a>
             <a id="HouseDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#HouseDataTable2">House Table</a>
@@ -122,49 +125,58 @@
 
     @* OUTPUT *@
     <div id="outputHoroscope" class="vstack gap-4" style="display: none;">
-        
-        @* Auto Prediction *@
-        <div id="AutoPrediction" class="scrollspy">
-            <IconTitle Title="Auto Prediction" IconName="twemoji:robot" TitleHolder="h4" />
+
+        @* <IconButton ButtonText="AI Chat" ClickUrl="@PageRoute.CalculatorList" SmallSize="true" ExtraClass="ms-3" Outline="true" /> *@
+        @* Chat API *@
+@*         <div id="AIAnalysis" class="scrollspy">
+            <IconTitle Title="AI Chat" IconName="fluent-emoji:robot" TitleHolder="h4"/>
+                
+                     <div class="input-group">
+            <input type="text" @ref="_searchInput" @onkeyup="OnEnterLLMSearch" class="form-control" placeholder="keywords like wife, money..." aria-label="keywords like wife, money...">
+            <button @onclick="OnClickLLMSearch" class="btn btn-primary" type="button">LLM Search</button>
+            <button @onclick="OnClickCopyAPILLMSearch" class="btn btn-outline-primary" type="button">API</button>
+            </div>
+            
+            <div class="form-text mb-3" id="basic-addon4">
+                Talk to an AI astrologer about your horoscope for free.<br/>
+                The machine learning model reads your hundreds of life<br />
+                predictions and answers your questions intelligently. <BoldLink URL="@PageRoute.Donate">Chat now...</BoldLink>
+            </div>
+             <HoroscopeReferenceList @ref="_llmHoroscopeReferenceList" ShowFilterOptions="false" /> 
+        </div>
+ *@
+        <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
+
+        @* Predictions *@
+        <div id="Prediction" class="scrollspy">
+            <IconTitle Title="Basic Predictions" IconName="noto:scroll" TitleHolder="h4" />
             <AIPrediction @ref="_aiPrediction" />
         </div>
-    
+
         @* Strength *@
         <div id="Strength" class="scrollspy">
             <IconTitle Title="Strength" IconName="twemoji:antenna-bars" TitleHolder="h4" />
             @*only show when all is loaded*@
             <StrengthChart @ref="_strengthChart" />
         </div>
-         
-        <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
-        
-        <IndianChart Id="IndianChart" ExtraClass="scrollspy" @ref="indianChartViewer"/>
-        
-        @* below made by vedastro.JS code *@
-        <div id="PlanetDataTable2" class="scrollspy" ></div>
 
-        <div id="HouseDataTable2" class="scrollspy" ></div>
-        
-        <div id="Ashtakvarga" class="scrollspy" ></div>
-        
-        @* AI Analysis *@
-        <div id="AIAnalysis" class="scrollspy">
-            <IconTitle Title="AI Analysis" IconName="fluent-emoji:robot" TitleHolder="h4" />
-            <div class="input-group">
-                <input type="text" @ref="_searchInput" @onkeyup="OnEnterLLMSearch" class="form-control" placeholder="keywords like wife, money..." aria-label="keywords like wife, money...">
-                <button @onclick="OnClickLLMSearch" class="btn btn-primary" type="button">LLM Search</button>
-                <button @onclick="OnClickCopyAPILLMSearch" class="btn btn-outline-primary" type="button">API</button>
-            </div>
-            <div class="form-text mb-3" id="basic-addon4">This will intelligently search all horoscope prediction using AI trained LLM model</div>
-            <HoroscopeReferenceList @ref="_llmHoroscopeReferenceList" ShowFilterOptions="false" />
-        </div>
+        @* TODO convert to JS code *@
+        <IndianChart Id="IndianChart" ExtraClass="scrollspy" @ref="indianChartViewer" />
+
+        @* below made by vedastro.JS code *@
+        <div id="PlanetDataTable2" class="scrollspy"></div>
+
+        <div id="HouseDataTable2" class="scrollspy"></div>
+
+        <div id="Ashtakvarga" class="scrollspy"></div>
+
 
         @* Reference *@
         <div id="Reference" class="scrollspy">
             <IconTitle Title="Reference" IconName="twemoji:books" TitleHolder="h4" />
             <HoroscopeReferenceList @ref="_horoscopeReferenceList" />
         </div>
-        
+
         <PlanetChart @ref="planetChart" />
 
     </div>
@@ -369,7 +381,7 @@
         _jsRuntime.Show("#inPageNavBar");
 
         //scroll page to top of results so "index" legend can show nicely, plus saves user 10ms in scrolling
-        _jsRuntime.ScrollToDivById("AutoPrediction");
+        _jsRuntime.ScrollToDivById("Prediction");
 
         //play sound for better ux
         _jsRuntime.PlayDoneSound();
@@ -423,7 +435,7 @@
         await _jsRuntime.InvokeVoidAsync("GenerateAstroTable", settings, inputArguments);
 
     }
-    
+
     private async Task _InitHouseDataTable()
     {
         //load vedastro.js planet table
@@ -527,7 +539,7 @@
     {
         //get time in url format
         var timeUrl = _selectedPerson.BirthTime.ToUrl();
-        
+
         //get search text, lower case for more results
         var searchText = (await _jsRuntime.GetValue(_searchInput));
 

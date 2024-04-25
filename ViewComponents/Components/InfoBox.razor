@@ -3,7 +3,7 @@
 @using System.Xml.Linq
 
 <div @onclick="OnClick" class="@(FullWidth?"":"")" style="@InlineStyle">
-    <div class="alert alert-primary d-flex align-items-center vstack" role="alert" style="background-color: @Color !important; ">
+    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color: @Color !important; ">
         <div class="hstack mb-2">
             <span class="iconify bi flex-shrink-0 me-2" data-icon="@IconName" data-width="50"></span>
             <div style="@AppData.DescriptionFont line-break: auto;">

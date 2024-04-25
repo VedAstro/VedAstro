@@ -154,6 +154,7 @@
 		<Content Include="..\ViewComponents\Components\LifeEventViewer.razor" Link="ViewComponents\LifeEventViewer.razor" />
 		<Content Include="..\ViewComponents\Components\MatchReportListViewer.razor" Link="ViewComponents\MatchReportListViewer.razor" />
 		<Content Include="..\ViewComponents\Components\MonthYearTimeRangeSelector.razor" Link="ViewComponents\MonthYearTimeRangeSelector.razor" />
+		<Content Include="..\ViewComponents\Components\SavedChartsSelector.razor" Link="ViewComponents\SavedChartsSelector.razor" />
 		<Content Include="..\ViewComponents\Components\NotificationSound.razor" Link="ViewComponents\NotificationSound.razor" />
 		<Content Include="..\ViewComponents\Components\PageHelpSection.razor" Link="ViewComponents\PageHelpSection.razor" />
 		<Content Include="..\ViewComponents\Components\PageTop.razor" Link="ViewComponents\PageTop.razor" />

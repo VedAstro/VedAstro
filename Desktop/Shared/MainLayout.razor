@@ -92,24 +92,24 @@
         //if plugged from Program.cs won't work
         AppData.Navigation = NavManager;
 
-    //2: create url based on beta or stable
-    //note : must do after
-    //---------------------
+        //2: create url based on beta or stable
+        //note : must do after
+        //---------------------
         bool debugMode;
 
 
-    //user already logged in, get debug mode from browser setting if any
-    //note: "debug mode" is stored local instead of online, because possible mobile use under same account
+        //user already logged in, get debug mode from browser setting if any
+        //note: "debug mode" is stored local instead of online, because possible mobile use under same account
         //debugMode = await WebsiteTools.GetDebugModeBool();
 
-        AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime(), false);
+        AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime());
 
     }
 
 
     private async Task OnClickStamp()
     {
-    //count click
+        //count click
         AppData.StampClickCount++;
 
         switch (AppData.StampClickCount)

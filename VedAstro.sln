@@ -61,25 +61,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desktop", "Desktop\Desktop.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewComponents", "ViewComponents\ViewComponents.csproj", "{D5663FD0-6516-4C12-BD40-0079C15163F3}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Demo", "Demo\", "{2F09E7A5-58C0-4EFD-BD22-71678744D513}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Demo", "Website\wwwroot\Demo\", "{2F09E7A5-58C0-4EFD-BD22-71678744D513}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_64057"
-		Debug.AspNetCompiler.PhysicalPath = "Demo\"
+		Debug.AspNetCompiler.PhysicalPath = "Website\wwwroot\Demo\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64057\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_64057"
-		Release.AspNetCompiler.PhysicalPath = "Demo\"
+		Release.AspNetCompiler.PhysicalPath = "Website\wwwroot\Demo\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64057\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "64057"
-		SlnRelativePath = "Demo\"
+		SlnRelativePath = "Website\wwwroot\Demo\"
 	EndProjectSection
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ChatAPI", "ChatAPI\ChatAPI.pyproj", "{33A6DE3E-71E5-4E92-9B26-3B2DD9AC1269}"

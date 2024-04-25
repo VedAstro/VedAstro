@@ -33,7 +33,7 @@
         //if null end here
         //if (string.IsNullOrEmpty(stringWithSpace)) { return ""; }
 
-        var url = $"{AppData.URL.ApiUrl}{time?.ToUrl()}/{ending}";
+        var url = $"{AppData.URL.ApiUrlDirect}{time?.ToUrl()}/{ending}";
         return url;
 
     }

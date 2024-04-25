@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 
 namespace VedAstro.Library;
 
 public class URL
 {
     //keep inside
-    public const string ApiBeta = "https://beta.api.vedastro.org";
+    //public const string ApiBeta = "https://beta.api.vedastro.org";
     public const string ApiBetaDirect = "https://vedastroapibeta.azurewebsites.net/api";
-    public const string ApiStable = "https://api.vedastro.org";
+    //public const string ApiStable = "https://api.vedastro.org";
     public const string ApiStableDirect = "https://vedastroapi.azurewebsites.net/api";
     public const string WebBeta = "https://beta.vedastro.org";
     public const string WebStable = "https://vedastro.org";
@@ -23,27 +23,32 @@ public class URL
     public URL(bool isBetaRuntime, bool? debugMode = null) //don't hide to make obvious easy id
     {
         //set beta or stable based on Runtime Stamp data
-        ApiUrl = isBetaRuntime ? ApiBeta : ApiStable;
+        //ApiUrl = isBetaRuntime ? ApiBetaDirect : ApiStableDirect;
         ApiUrlDirect = isBetaRuntime ? ApiBetaDirect : ApiStableDirect;
         WebUrl = isBetaRuntime ? WebBeta : WebStable;
         WebUrlDirect = WebDirect;
 
+
+        //TODO marked for oblivion
         //if not set then will use system debug mode
         //NOTE : this is done specifically to enable local routing when debugging API
         //       meaning when API makes calls to API it will in local debug environment, it won't go call online API 
-        if (debugMode == null)
-        {
-#if DEBUG
-            debugMode = true;
-#else
-            debugMode = false;
-#endif
-        }
+//        if (debugMode == null)
+//        {
+//#if DEBUG
+//            debugMode = true;
+//#else
+//            debugMode = false;
+//#endif
+//        }
+
+
 
         //if DEBUG MODE set all to local (bye bye Postman! we don't need you anymore!)
-        if (debugMode ?? false) //default to false
+        var mode = debugMode ?? false;
+        if (mode) //default to false
         {
-            ApiUrl = "http://localhost:7071/api";
+            //ApiUrl = "http://localhost:7071/api";
             ApiUrlDirect = "http://localhost:7071/api";
         }
 
@@ -125,7 +130,7 @@ public class URL
     public readonly string EventsChartViewerHtml;
     public readonly string HoroscopeDataListXml;
     public readonly string APIHomePageTxt;
-    public readonly string ApiUrl;
+    //public readonly string ApiUrl;
     public readonly string ApiUrlDirect;
     public readonly string WebUrl;
     public readonly string WebUrlDirect;

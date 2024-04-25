@@ -6,8 +6,31 @@ namespace VedAstro.Library.Tests
     [TestClass()]
     public class CalculateTests
     {
+        /// <summary>
+        /// In order
+        /// to.illustrate the various principles described in
+        /// this book, we shall consider the nativity of a
+        /// fernale born on 16th October 1918 A.D.; at 2 h 20 m. P.M. (Indian Standard Time) at a place
+        /// on 13° N. Lat. and 77° 35' E. Long. This
+        /// horoscope will henceforth be termed as the
+        /// Stan~1rd Horoscope
+        /// </summary>
         public static Time StandardHoroscope = new("14:20 16/10/1918 +05:30", GeoLocation.Bangalore);
+
+        /// <summary>
+        /// -ln order to illustrate
+        /// the principles of Tajaka system, we shall consider the
+        /// nativity of a male born on 8th August 1912 A.D. at
+        /// 33-52 ghaties after sunrise or 7-23-6 (L.M.T.) Thursday, at a place on 13° N. Lat., and 5h. 10m. 20s. E.
+        /// Long. The Standard Horoscope is the yearly chart
+        /// cast for the commencement of the 24th year in respect
+        /// of this nativity.
+        /// Varshaphala-Hindu Progressed Horoscope - BV. RAMAN
+        /// </summary>
+        public static Time StandardHoroscopeTajika = new("05:33 08/08/1912 +05:30", new GeoLocation("", 77.58333, 13));
+
         public static Time NearestHoroscope = new("12:44 23/04/1994 +08:00", GeoLocation.Ipoh);
+
         public static Time MarilynMonroe = new("09:30 01/06/1926 -08:00", GeoLocation.LosAngeles);
 
         public static Time HavelockEllis = new("08:15 02/02/1859 +00:00", new GeoLocation("", 0.0957, 51.377));
@@ -164,6 +187,68 @@ namespace VedAstro.Library.Tests
             new GeoLocation("",
                 Angle.ConvertDegreeMinuteToTotalDegrees(62, 46),
                 Angle.ConvertDegreeMinuteToTotalDegrees(18, 54)));
+
+        //-------------------------------TEST BELOW-------------------------------------------
+
+
+        //PASS 25/02/2024
+        [TestMethod()]
+        public void STDToLMTTest()
+        {
+            //-------------------TEST 1------------------------
+            // Culled from BV Raman's  A Manual of Hindu Astrology (1935).pdf
+            // if it is 12 noon at Greenwich, (STD)
+            // it will be 12 h. 4 m. (P.M.) in a place 1° E. to it,
+            // 11,56 A.M. in a place 1° W. to it and so on.
+            //Greenwich/Coordinates 51.4934° N = lat, 0.0098° E = long
+            Time greenwichNoonE = new("12:00 01/01/2000 +00:00", new GeoLocation("GreenwichE", Angle.FromDegrees(1).TotalDegrees, Angle.FromDegrees(51.4934).TotalDegrees));
+            Time greenwichNoonW = new("12:00 01/01/2000 +00:00", new GeoLocation("GreenwichW", Angle.FromDegrees(-1).TotalDegrees, Angle.FromDegrees(51.4934).TotalDegrees));
+
+            //get the time component out
+            var lmtE = greenwichNoonE.GetLmtDateTimeOffset().TimeOfDay.ToString(@"hh\:mm");
+            var lmtW = greenwichNoonW.GetLmtDateTimeOffset().TimeOfDay.ToString(@"hh\:mm");
+
+            Assert.IsTrue(lmtE == "12:04");
+            Assert.IsTrue(lmtW == "11:56");
+
+            //-------------------TEST 2------------------------
+            var lmtStdHoro = StandardHoroscope.GetLmtDateTimeOffset().TimeOfDay.ToString(@"hh\:mm");
+
+            Assert.IsTrue(lmtStdHoro == "14:00");
+
+        }
+
+        [TestMethod()]
+        public void LMTToSTDTest()
+        {
+
+            //-------------------TEST 2------------------------
+            var lmtStdHoro = StandardHoroscope.GetLmtDateTimeOffset();
+
+            var std = Time.FromLMT("14:00 16/10/1918", GeoLocation.Bangalore);
+            Assert.IsTrue(lmtStdHoro == null);
+
+        }
+
+        [TestMethod()]
+        public void SuryodayadiJananakalaGhatikahaTest()
+        {
+            //Miss N. Born on 3-5-1932 at 5-45 A.M.
+            // (L.M.T.) Lat. 13° N. and 75° O' E. Long. Find
+            // Suryodayadi J ananakala Ghatikaha. 
+
+            //-------------------TEST 2------------------------
+            var lmtStdHoro = StandardHoroscope.GetLmtDateTimeOffset();
+
+            var std = Time.FromLMT("05:45 03/05/1932", new GeoLocation("", 75, 13));
+
+            var ishtaKala = Calculate.IshtaKaala(std);
+
+            Assert.IsTrue(ishtaKala == null);
+
+        }
+
+
 
 
         [TestMethod()]
@@ -924,7 +1009,7 @@ namespace VedAstro.Library.Tests
         [TestMethod()]
         public void IshtaKaalaTest()
         {
-            double errorRate = 2;
+            double errorRate = 0.5;
 
             var test1 = Calculate.IshtaKaala(StandardHoroscope);
 
@@ -1489,6 +1574,19 @@ namespace VedAstro.Library.Tests
             var start = Time.NowSystem(GeoLocation.Ipoh);
             var end = start.AddYears(5);
             var test1 = Calculate.GenerateTimeListCSV(start, end, 24);
+
+        }
+
+        [TestMethod()]
+        public void TajikaDateForYearTest()
+        {
+            var test1 = Calculate.TajikaDateForYear(StandardHoroscopeTajika, StandardHoroscopeTajika.StdYear() + 24);
+
+            var xx = test1.GetStdDateTimeOffsetText();
+            var xzx = test1.GetLmtDateTimeOffsetText();
+
+            Assert.AreEqual("xx", xzx);
+            Assert.AreEqual("xx", xx);
 
         }
     }

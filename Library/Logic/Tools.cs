@@ -4303,6 +4303,22 @@ namespace VedAstro.Library
                 throw new Exception("Failed to connect to external endpoint.", wex);
             }
         }
+
+        public static string CleanAzureTableKey(string input, string newValue = "")
+        {
+            var invalidChars = new[] { '/', '\\', '#', '?' };
+            foreach (var c in invalidChars)
+            {
+                input = input.Replace(c.ToString(), newValue);
+            }
+
+            // Remove control characters
+            input = new string(input.Where(ch => !char.IsControl(ch)).ToArray());
+
+            return input;
+        }
+
+
     }
 
 

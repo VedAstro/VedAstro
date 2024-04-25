@@ -22,12 +22,6 @@ namespace VedAstro.Library
         /// </summary>
         public record GeoLocationRawAPI(dynamic MainRow, dynamic MetadataRow);
 
-
-        private const string IpAddressToGeoLocationRoute = "IpAddressToGeoLocation";
-        private const string AddressToGeoLocationRoute = "AddressToGeoLocation/{address}";
-        private const string CoordinatesToGeoLocationRoute = "CoordinatesToGeoLocation/Latitude/{latitude}/Longitude/{longitude}";
-        private const string GeoLocationToTimezoneRoute = "GeoLocationToTimezone/{*timeUrl}";
-
         private readonly TableServiceClient timezoneServiceClient;
         private readonly TableServiceClient timezoneMetadataServiceClient;
         private readonly TableServiceClient addressServiceClient;
@@ -154,7 +148,7 @@ namespace VedAstro.Library
             {
                 {APIProvider.VedAstro, AddressToGeoLocation_VedAstro},
                 {APIProvider.Azure, AddressToGeoLocation_Azure},
-                //{APIProvider.Google, AddressToGeoLocation_Google},
+                {APIProvider.Google, AddressToGeoLocation_Google},
             };
 
             //start with empty as default if fail
@@ -722,52 +716,47 @@ namespace VedAstro.Library
 
         }
 
-        private static async Task<GeoLocationRawAPI> AddressToGeoLocation_Google(string address)
+        private static async Task<GeoLocationRawAPI> AddressToGeoLocation_Google(string userInputAddress)
         {
-            throw new NotImplementedException();
-
-            //if null or empty turn back as nothing
-            //if (string.IsNullOrEmpty(address)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+            var returnResult = new WebResult<GeoLocationRawAPI>();
 
             //create the request url for Google API
             var apiKey = Secrets.GoogleAPIKey;
-            var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={apiKey}&address={Uri.EscapeDataString(address)}&sensor=false";
+            var url = $"https://maps.googleapis.com/maps/api/geocode/json?key={apiKey}&address={Uri.EscapeDataString(userInputAddress)}&sensor=false";
 
-            //get location data from GoogleAPI
-            var webResult = await Tools.ReadFromServerXmlReply(url);
+            //get location data from Azure Maps API
+            var apiResult = await Tools.ReadFromServerJsonReply(url);
 
-            //if fail to make call, end here
-            //if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+            // If result from API is a failure, use the system time zone as fallback
+            if (apiResult.IsPass) // All well
+            {
+                // Parse Azure API's payload
+                var outData = TryParseGoogleAddressResponse(apiResult.Payload, userInputAddress);
+                bool isParsed = outData.IsParsed;
+                if (isParsed)
+                {
+                    // Convert to string (example: +08:00)
+                    returnResult.Payload = new GeoLocationRawAPI(outData.MainRow, null);
+                    returnResult.IsPass = true;
+                }
+                else
+                {
+                    // Mark as fail & return empty for fail detection
+                    returnResult.IsPass = false;
+                    returnResult.Payload = new GeoLocationRawAPI(AddressGeoLocationEntity.Empty, null);
+                }
+            }
+            else
+            {
+                // Mark as fail & return empty for fail detection
+                returnResult.IsPass = false;
+                returnResult.Payload = new GeoLocationRawAPI(GeoLocationTimezoneEntity.Empty, GeoLocationTimezoneMetadataEntity.Empty);
+            }
 
-            //if success, get the reply data out
-            var geocodeResponseXml = webResult.Payload;
-            var resultXml = geocodeResponseXml.Element("result");
-            var statusXml = geocodeResponseXml.Element("status");
+            return returnResult;
 
-#if DEBUG
-            //DEBUG
-            Console.WriteLine(geocodeResponseXml.ToString());
-#endif
-
-            //check the data, if location was NOT found by google API, end here
-            var statusMsg = statusXml.Value;
-            //if (statusXml == null || statusMsg == "ZERO_RESULTS" || statusMsg == "REQUEST_DENIED") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
-
-            //if success, extract out the longitude & latitude
-            var locationElement = resultXml?.Element("geometry")?.Element("location");
-            var lat = double.Parse(locationElement?.Element("lat")?.Value ?? "0");
-            var lng = double.Parse(locationElement?.Element("lng")?.Value ?? "0");
-
-            //round coordinates to 3 decimal places
-            lat = Math.Round(lat, 3);
-            lng = Math.Round(lng, 3);
-
-            //get full name with country & state
-            var fullName = resultXml?.Element("formatted_address")?.Value;
-
-            //return to caller pass
-            //return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lng, lat));
         }
+
 
 
 
@@ -1052,6 +1041,56 @@ namespace VedAstro.Library
                 var freeformAddress = rawAzureReply["address"]["freeformAddress"].Value<string>();
                 var country = rawAzureReply["address"]["country"].Value<string>();
                 var fullName = $"{freeformAddress}, {country}";
+
+
+                //# MAIN ROW
+                var mainRow = new AddressGeoLocationEntity();
+                mainRow.Latitude = lat;
+                mainRow.Longitude = lng;
+                mainRow.PartitionKey = fullName;
+                mainRow.RowKey = Tools.CleanText(userInputAddress); //todo verify clean procedure
+
+
+                return new { IsParsed = true, MainRow = mainRow };
+
+            }
+            catch
+            {
+                //if fail return empty and fail
+                return new { IsParsed = false, TimezoneRow = AddressGeoLocationEntity.Empty };
+            }
+        }
+        
+        private static dynamic TryParseGoogleAddressResponse(JToken geocodeResponseJson, string userInputAddress)
+        {
+            try
+            {
+                var resultJson = geocodeResponseJson["results"];
+                var statusJson = geocodeResponseJson["status"];
+
+#if DEBUG
+                //DEBUG
+                Console.WriteLine(geocodeResponseJson.ToString());
+#endif
+
+                //check the data, if location was NOT found by google API, end here
+                //TODO log error properly
+                var statusMsg = statusJson.Value<string>();
+                //if (statusXml == null || statusMsg == "ZERO_RESULTS" || statusMsg == "REQUEST_DENIED") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
+                //if success, extract out the longitude & latitude
+                var locationData = resultJson[0]; //select first result
+                var locationElement = locationData["geometry"]["location"];
+                var lat = locationElement["lat"].Value<double>();
+                var lng = locationElement["lng"].Value<double>();
+
+
+                //round coordinates to 3 decimal places
+                lat = Math.Round(lat, 3);
+                lng = Math.Round(lng, 3);
+
+                //get full name with country & state
+                var fullName = locationData["formatted_address"].Value<string>();
 
 
                 //# MAIN ROW

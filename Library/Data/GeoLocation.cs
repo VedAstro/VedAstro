@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -248,19 +249,45 @@ namespace VedAstro.Library
             }
         }
 
-        public static GeoLocation FromJson(JToken locationJson)
+        public static GeoLocation FromJson(JToken rawJson)
         {
             try
             {
-                var name = locationJson["Name"].Value<string>();
-                var longitude = locationJson["Longitude"].Value<double>();
-                var latitude = locationJson["Latitude"].Value<double>();
+                //PROBABILITY 1 :
+                var name = rawJson["Name"].Value<string>();
+                var longitude = rawJson["Longitude"].Value<double>();
+                var latitude = rawJson["Latitude"].Value<double>();
 
                 return new GeoLocation(name, longitude, latitude);
             }
             catch (Exception e)
             {
-                return GeoLocation.Empty;
+
+                try
+                {
+                    //PROBABILITY 2 :
+                    //rawJson sample JSON
+                    //"{
+                    //   "AddressToGeoLocation": {
+                    //     "Name": "Ipoh, Perak, Malaysia",
+                    //     "Longitude": 101.077,
+                    //     "Latitude": 4.599
+                    //   }
+                    // }
+                    var locationJson = ((JObject)rawJson).Properties().FirstOrDefault()?.Value;
+
+                    var name = locationJson["Name"].Value<string>();
+                    var longitude = locationJson["Longitude"].Value<double>();
+                    var latitude = locationJson["Latitude"].Value<double>();
+
+                    return new GeoLocation(name, longitude, latitude);
+
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                    return GeoLocation.Empty;
+                }
             }
 
         }

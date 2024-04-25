@@ -1337,15 +1337,15 @@ namespace VedAstro.Library
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("Tools.AddressToGeoLocation", address), addressToGeoLocation);
+            return await CacheManager.GetCache(new CacheKey("Tools.AddressToGeoLocation", address), addressToGeoLocation);
 
-            WebResult<GeoLocation> addressToGeoLocation()
+            async Task<WebResult<GeoLocation>> addressToGeoLocation()
             {
                 //get location data from VedAstro API
                 var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
                 //exp : .../Calculate/AddressToGeoLocation/London
                 var url = allUrls.AddressToGeoLocationAPI + $"/Address/{address}";
-                var webResult = Tools.ReadFromServerJsonReplyVedAstro(url).Result;
+                var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
 
                 //if fail to make call, end here
                 if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }

@@ -139,8 +139,9 @@ namespace VedAstro.Library
         /// </summary>
         public async Task<GeoLocation> AddressToGeoLocation(string userInputAddressRaw)
         {
-            //NOTE: we want to include misspelled and under-case to save
-            var userInputAddress = Tools.CleanLocationName(userInputAddressRaw); //possible
+            //NOTE: make all lower case better match AND only remove invalid chars for RowKey,
+            //      otherwise maintain user input as is for better accuracy matching
+            var userInputAddress = Tools.CleanAzureTableKey(userInputAddressRaw.ToLower());
 
             //1 : CALCULATE
             // Define a list of functions in the order of priority
@@ -1048,7 +1049,7 @@ namespace VedAstro.Library
                 mainRow.Latitude = lat;
                 mainRow.Longitude = lng;
                 mainRow.PartitionKey = fullName;
-                mainRow.RowKey = Tools.CleanText(userInputAddress); //todo verify clean procedure
+                mainRow.RowKey = Tools.CleanAzureTableKey(userInputAddress); //todo verify clean procedure
 
 
                 return new { IsParsed = true, MainRow = mainRow };
@@ -1098,7 +1099,7 @@ namespace VedAstro.Library
                 mainRow.Latitude = lat;
                 mainRow.Longitude = lng;
                 mainRow.PartitionKey = fullName;
-                mainRow.RowKey = Tools.CleanText(userInputAddress); //todo verify clean procedure
+                mainRow.RowKey = Tools.CleanAzureTableKey(userInputAddress); //todo verify clean procedure
 
 
                 return new { IsParsed = true, MainRow = mainRow };

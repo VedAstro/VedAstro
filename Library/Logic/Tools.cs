@@ -4270,19 +4270,19 @@ namespace VedAstro.Library
             }
         }
 
-        /// <summary>
-        /// data as it saved to table for easy search, user can input sandiago and San Diago, both will match here
-        /// </summary>
-        public static string CleanLocationName(string inputLocationName)
-        {
-            //lower case it
-            var lower = inputLocationName.ToLower();
+        ///// <summary>
+        ///// make lower case
+        ///// </summary>
+        //public static string CleanLocationName(string inputLocationName)
+        //{
+        //    //lower case it
+        //    var lower = inputLocationName.ToLower();
 
-            //removes any character that is not a letter or a number
-            var cleanInputAddress = Regex.Replace(lower, @"[^a-zA-Z0-9]", string.Empty);
+        //    //removes any character that is not a letter or a number
+        //    var cleanInputAddress = Regex.Replace(lower, @"[^a-zA-Z0-9]", string.Empty);
 
-            return cleanInputAddress;
-        }
+        //    return cleanInputAddress;
+        //}
 
 
         /// <summary>

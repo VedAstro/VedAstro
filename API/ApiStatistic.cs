@@ -206,7 +206,8 @@ namespace API
 
             //step 2: generate hash to identify the data
             newRow.PartitionKey = newRow.CalculateCombinedHash();
-            newRow.RowKey = Tools.GenerateId(); //unique
+            var url = incomingRequest.Url.ToString() ?? "no URL";
+            newRow.RowKey = Tools.CleanAzureTableKey(url,"|"); //place url
 
             //step 3: add entry to database
             rawRequestStatisticTableClient.AddEntity(newRow);

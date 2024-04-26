@@ -1,4 +1,4 @@
-﻿// █ ▀ █▀▄▀█   █▄░█ █▀█ ▀█▀   █░█ █▀▀ █▀█ █▀▀   ▀█▀ █▀█   █░█ ▄▀█ █░█░█ █▄▀ ░
+// █ ▀ █▀▄▀█   █▄░█ █▀█ ▀█▀   █░█ █▀▀ █▀█ █▀▀   ▀█▀ █▀█   █░█ ▄▀█ █░█░█ █▄▀ ░
 // █ ░ █░▀░█   █░▀█ █▄█ ░█░   █▀█ ██▄ █▀▄ ██▄   ░█░ █▄█   █▀█ █▀█ ▀▄▀▄▀ █░█ █
 
 // █ ▀ █▀▄▀█   █░█ █▀▀ █▀█ █▀▀   ▀█▀ █▀█   █▀ █▀█ ▄▀█ █▀█ █▄▀   █▀▄ █▀▀ █░░ █ █▀▀ █░█ ▀█▀ ░
@@ -2303,7 +2303,7 @@ ${ai_text_message_html}
 
         if (index === -1) {
             // If the new question does not exist, add it at the beginning of the array
-            this.PresetQuestions.Previous["Last 3"].unshift(newQuestion);
+            this.PresetQuestions.Previous["Last 3"].unshift(userInput);
         } else {
             // If the new question exists, remove it from its current position
             this.PresetQuestions.Previous["Last 3"].splice(index, 1);

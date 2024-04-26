@@ -10,13 +10,11 @@ namespace APITester
 {
     public class TestMethods
     {
-        private string SubDomain { get; set; }
         private string LocalAPIServer { get; set; }
 
         //save data here to be used during all test
-        public TestMethods(string subDomain, string localApiServer)
+        public TestMethods(string localApiServer)
         {
-            SubDomain = subDomain;
             LocalAPIServer = localApiServer;
         }
 
@@ -117,7 +115,7 @@ namespace APITester
         /// </summary>
         public async Task AllPlanetDataTest()
         {
-            var json = JObject.Parse(await new HttpClient().GetStringAsync($"https://{SubDomain}.azurewebsites.net/api/Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
+            var json = JObject.Parse(await new HttpClient().GetStringAsync($"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
 
             Assert.IsTrue(json["Status"]?.Value<string>() == "Pass");
             Assert.IsTrue(json["Payload"]["AllPlanetData"].HasValues);
@@ -129,7 +127,7 @@ namespace APITester
         /// </summary>
         public async Task AllHouseData()
         {
-            var json = JObject.Parse(await new HttpClient().GetStringAsync($"https://{SubDomain}.azurewebsites.net/api/Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
+            var json = JObject.Parse(await new HttpClient().GetStringAsync($"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
 
             Assert.IsTrue(json["Status"]?.Value<string>() == "Pass");
             Assert.IsTrue(json["Payload"]["AllPlanetData"].HasValues);
@@ -141,7 +139,7 @@ namespace APITester
         /// </summary>
         public async Task DasaAtRangeTest()
         {
-            var json = JObject.Parse(await new HttpClient().GetStringAsync($"https://{SubDomain}.azurewebsites.net/api/Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
+            var json = JObject.Parse(await new HttpClient().GetStringAsync($"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
 
             Assert.IsTrue(json["Status"]?.Value<string>() == "Pass");
             Assert.IsTrue(json["Payload"]["AllPlanetData"].HasValues);
@@ -153,7 +151,7 @@ namespace APITester
         /// </summary>
         public async Task BhinnashtakavargaChartTest()
         {
-            var json = JObject.Parse(await new HttpClient().GetStringAsync($"https://{SubDomain}.azurewebsites.net/api/Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
+            var json = JObject.Parse(await new HttpClient().GetStringAsync($"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
 
             Assert.IsTrue(json["Status"]?.Value<string>() == "Pass");
             Assert.IsTrue(json["Payload"]["AllPlanetData"].HasValues);

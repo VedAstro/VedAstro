@@ -192,18 +192,18 @@ async def horoscope_chat(websocket: websockets.WebSocket):
 			# standard 1st answer
 			ai_html_reply = ai_reply = "Thinking....🤔"
 			# 2.1 : user not logged in (could be a Machine!) beware internet fungus! (END HERE)
-			if input_parsed["user_id"] == "":
-				# add special command recognized by VedAstro.js to show handle login nicely
-				input_parsed["command"] = np.append(input_parsed["command"], "please_login")
-				ai_reply = """Please login sir...to verify you are not a robot 🤖\nEasy & secure login with Google or Facebook\n\n.....I know this is annoying, but I have no choice!🤗\nthere are bad robots in the internet who target smart AI Chat agents like me.\nPlease login to start talking about astrology...💬
-                """
-				ai_html_reply = """
-                    Please login sir...to verify you are not a robot 🤖<br>
-                    Easy & secure login with <a style="text-decoration-line: none;" href="https://vedastro.org/Account/Login" class="link-primary fw-bold">Google</a> or <a style="text-decoration-line: none;" href="https://vedastro.org/Account/Login" class="link-primary fw-bold">Facebook</a><br><br>
-                    .....I understand this is annoying, but I have no choice!🤗<br>
-                    there are bad robots in the internet who target smart AI Chat agents like me.<br>
-                    So please login to get started...<br>
-                """
+			# if input_parsed["user_id"] == "":
+			# 	# add special command recognized by VedAstro.js to show handle login nicely
+			# 	input_parsed["command"] = np.append(input_parsed["command"], "please_login")
+			# 	ai_reply = """Please login sir...to verify you are not a robot 🤖\nEasy & secure login with Google or Facebook\n\n.....I know this is annoying, but I have no choice!🤗\nthere are bad robots in the internet who target smart AI Chat agents like me.\nPlease login to start talking about astrology...💬
+            #     """
+			# 	ai_html_reply = """
+            #         Please login sir...to verify you are not a robot 🤖<br>
+            #         Easy & secure login with <a style="text-decoration-line: none;" href="https://vedastro.org/Account/Login" class="link-primary fw-bold">Google</a> or <a style="text-decoration-line: none;" href="https://vedastro.org/Account/Login" class="link-primary fw-bold">Facebook</a><br><br>
+            #         .....I understand this is annoying, but I have no choice!🤗<br>
+            #         there are bad robots in the internet who target smart AI Chat agents like me.<br>
+            #         So please login to get started...<br>
+            #     """
 
 			# 2.2 : rating AND text_hash specified --> user is giving rating vote NOT QUERY (END HERE)
 			if input_parsed["rating"] != 0 and input_parsed["text_hash"] != "":

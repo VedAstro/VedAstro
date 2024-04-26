@@ -106,72 +106,72 @@ public static class APILogger
     /// Logs API requests. It extracts the IP address, URL, and body data from the request, and then logs this information.
     /// For binary data in the request body, it adds the data to a cache location. (note can't store binary above 64KB in table)
     /// </summary>
-    public static async Task<OpenAPILogBookEntity> Visit(HttpRequestData httpRequestData)
-    {
-        //adds log to DB and returns saved data for checking
-        var openApiLogBookEntity = await OpenApiLogBookEntity();
+    //public static async Task<OpenAPILogBookEntity> Visit(HttpRequestData httpRequestData)
+    //{
+    //    //adds log to DB and returns saved data for checking
+    //    var openApiLogBookEntity = await OpenApiLogBookEntity();
 
-        return openApiLogBookEntity;
+    //    return openApiLogBookEntity;
 
-        async Task<OpenAPILogBookEntity> OpenApiLogBookEntity()
-        {
-            //var get ip address & URL and save it for future use
-            APILogger.IpAddress = httpRequestData?.GetCallerIp()?.ToString() ?? "no ip";
-            APILogger.URL = httpRequestData?.Url.ToString() ?? "no URL";
+    //    async Task<OpenAPILogBookEntity> OpenApiLogBookEntity()
+    //    {
+    //        //var get ip address & URL and save it for future use
+    //        APILogger.IpAddress = httpRequestData?.GetCallerIp()?.ToString() ?? "no ip";
+    //        APILogger.URL = httpRequestData?.Url.ToString() ?? "no URL";
 
-            //# extract out the body data (POST/GET/...)
-            var streamReader = new StreamReader(httpRequestData?.Body);
-            var payload = await streamReader?.ReadToEndAsync();
-            var bodyData = "no Body";
-            var generateRowKey = Tools.GenerateId(); // random so each call is logged without conflict
+    //        //# extract out the body data (POST/GET/...)
+    //        var streamReader = new StreamReader(httpRequestData?.Body);
+    //        var payload = await streamReader?.ReadToEndAsync();
+    //        var bodyData = "no Body";
+    //        var generateRowKey = Tools.GenerateId(); // random so each call is logged without conflict
 
-            // Check if the payload is a valid string or binary
-            if (payload != null)
-            {
-                bool isBinary = payload.Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n');
-                bodyData = isBinary ? $"Binary data stored in cache : {generateRowKey}" : payload; //link to cache
-                if (isBinary)
-                {
-                    var chartBytes = Encoding.UTF8.GetBytes(payload); // Convert the payload to bytes
-                    var mimeType =
-                        "application/octet-stream"; // This is a general MIME type for binary data. Don't waste time detecting file type, just logging.
-                    //add Binary file to cache location (debugging & reference purposes)
-                    var cacheBinaryBody = $"BinaryBody_{IpAddress}_{generateRowKey}";
-                    await AzureCache.Add(cacheBinaryBody, chartBytes, mimeType);
-                }
-            }
+    //        // Check if the payload is a valid string or binary
+    //        if (payload != null)
+    //        {
+    //            bool isBinary = payload.Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n');
+    //            bodyData = isBinary ? $"Binary data stored in cache : {generateRowKey}" : payload; //link to cache
+    //            if (isBinary)
+    //            {
+    //                var chartBytes = Encoding.UTF8.GetBytes(payload); // Convert the payload to bytes
+    //                var mimeType =
+    //                    "application/octet-stream"; // This is a general MIME type for binary data. Don't waste time detecting file type, just logging.
+    //                //add Binary file to cache location (debugging & reference purposes)
+    //                var cacheBinaryBody = $"BinaryBody_{IpAddress}_{generateRowKey}";
+    //                await AzureCache.Add(cacheBinaryBody, chartBytes, mimeType);
+    //            }
+    //        }
 
-            //make the cache row to be added
-            var customerEntity = new OpenAPILogBookEntity()
-            {
-                //can have many IP as partition key
-                PartitionKey = IpAddress,
-                RowKey = generateRowKey,
-                URL = URL,
-                Body = bodyData,
-                Timestamp = DateTimeOffset.UtcNow //utc used later to check for overload control
-            };
+    //        //make the cache row to be added
+    //        var customerEntity = new OpenAPILogBookEntity()
+    //        {
+    //            //can have many IP as partition key
+    //            PartitionKey = IpAddress,
+    //            RowKey = generateRowKey,
+    //            URL = URL,
+    //            Body = bodyData,
+    //            Timestamp = DateTimeOffset.UtcNow //utc used later to check for overload control
+    //        };
 
-            var requestHeaderList = httpRequestData.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+    //        var requestHeaderList = httpRequestData.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
 
-            for (int i = 0; i < requestHeaderList.Count; i++)
-            {
-                string propertyName = $"Header{i}"; //can go up to 15 exp: Header2
-                var xxx = requestHeaderList.ElementAt(i);
-                string newValue = Tools.ListToString(xxx.Value.ToList());
+    //        for (int i = 0; i < requestHeaderList.Count; i++)
+    //        {
+    //            string propertyName = $"Header{i}"; //can go up to 15 exp: Header2
+    //            var xxx = requestHeaderList.ElementAt(i);
+    //            string newValue = Tools.ListToString(xxx.Value.ToList());
 
-                PropertyInfo propertyInfo = customerEntity.GetType().GetProperty(propertyName);
-                propertyInfo.SetValue(customerEntity, newValue);
-            }
+    //            PropertyInfo propertyInfo = customerEntity?.GetType()?.GetProperty(propertyName);
+    //            propertyInfo?.SetValue(customerEntity, newValue);
+    //        }
 
-            //NOTE: control here, ramming here can raise TABLE STORAGE prices too
-            await APITools.AutoControlOpenAPIOverload(customerEntity); //slows down if needed
+    //        //NOTE: control here, ramming here can raise TABLE STORAGE prices too
+    //        await APITools.AutoControlOpenAPIOverload(customerEntity); //slows down if needed
 
-            //creates record if no exist, update if already there
-            LogBookClient.UpsertEntity(customerEntity);
-            return customerEntity;
-        }
-    }
+    //        //creates record if no exist, update if already there
+    //        LogBookClient.UpsertEntity(customerEntity);
+    //        return customerEntity;
+    //    }
+    //}
 
 
 

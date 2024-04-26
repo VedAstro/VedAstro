@@ -205,11 +205,13 @@ namespace API
             }
 
             //step 2: generate hash to identify the data
-            newRow.PartitionKey = newRow.CalculateCombinedHash();
+            newRow.PartitionKey = incomingRequest?.GetCallerIp()?.ToString() ?? "no ip";
+            //newRow.PartitionKey = newRow.CalculateCombinedHash();
             var url = incomingRequest.Url.ToString() ?? "no URL";
             newRow.RowKey = Tools.CleanAzureTableKey(url,"|"); //place url
 
             //step 3: add entry to database
+            //TODO check if exist before overwrite
             rawRequestStatisticTableClient.UpsertEntity(newRow);
         }
 

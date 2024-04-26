@@ -390,6 +390,42 @@ public class RawRequestStatisticEntity : ITableEntity
     public string SecChUaPlatformVersion { get; set; }
 
 
+    /// <summary>
+    /// Gets or sets the 'X-Azure-ClientIP' header value
+    /// Custom header to store client IP address
+    /// </summary>
+    [Description("X-Azure-ClientIP")]
+    public string XAzureClientIP { get; set; }
+
+    /// <summary>
+    /// Gets or sets the 'X-Forwarded-For' header value
+    /// Standard header used by proxies and load balancers to identify the originating IP address
+    /// </summary>
+    [Description("X-Forwarded-For")]
+    public string XForwardedFor { get; set; }
+
+    /// <summary>
+    /// Gets or sets the 'X-Forwarded-Host' header value
+    /// Standard header used by proxies and load balancers to indicate original host requested by the client
+    /// </summary>
+    [Description("X-Forwarded-Host")]
+    public string XForwardedHost { get; set; }
+
+    /// <summary>
+    /// Gets or sets the 'X-Forwarded-Proto' header value
+    /// Standard header used by proxies and load balancers to indicate the protocol (http or https) used by the client
+    /// </summary>
+    [Description("X-Forwarded-Proto")]
+    public string XForwardedProto { get; set; }
+
+    /// <summary>
+    /// Gets or sets the 'X-Real-IP' header value
+    /// Nginx reverse proxy uses this header to pass real client IP address
+    /// </summary>
+    [Description("X-Real-IP")]
+    public string XRealIP { get; set; }
+
+
     #endregion
 
     /// <summary>

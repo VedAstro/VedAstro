@@ -39,7 +39,11 @@ namespace API
             try
             {
                 //0 : LOG CALL : used later for throttle limit
-                var callLog = await APILogger.Visit(incomingRequest);
+                //var callLog = await APILogger.Visit(incomingRequest);
+                var apiStatistic = new ApiStatistic();
+                apiStatistic.LogIpAddress(incomingRequest);
+                apiStatistic.LogRequestUrl(incomingRequest);
+                apiStatistic.LogRawRequest(incomingRequest);
 
                 //1 : extract out custom format else empty string (removed from url)
                 var format = ParseAndGetFormat(fullParamString);
@@ -267,10 +271,13 @@ namespace API
         {
             //0 : LOG CALL
             //log ip address, call time and URL,  used later for throttle limit
-            var callLog = await APILogger.Visit(incomingRequest);
+            var apiStatistic = new ApiStatistic();
+            apiStatistic.LogIpAddress(incomingRequest);
+            apiStatistic.LogRequestUrl(incomingRequest);
+            apiStatistic.LogRawRequest(incomingRequest);
 
             // Control API overload, even this if hit hard can COST Money via CDN
-            await APITools.AutoControlOpenAPIOverload(callLog);
+            //await APITools.AutoControlOpenAPIOverload(callLog);
 
             var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
             return APITools.FailMessageJson(message, incomingRequest);

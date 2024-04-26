@@ -210,7 +210,7 @@ namespace API
             newRow.RowKey = Tools.CleanAzureTableKey(url,"|"); //place url
 
             //step 3: add entry to database
-            rawRequestStatisticTableClient.AddEntity(newRow);
+            rawRequestStatisticTableClient.UpsertEntity(newRow);
         }
 
 

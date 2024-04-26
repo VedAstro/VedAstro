@@ -5,13 +5,14 @@
         static void Main(string[] args)
         {
             // TARGET SERVER
-            string SubDomain = "vedastroapi";
+            //string SubDomain = "vedastroapi";
             // string SubDomain = "vedastroapibeta";
-            // string SubDomain = "vedicastrogpt";
+            //string SubDomain = "vedicastrogpt";
 
             //
-            string LocalAPIServer = "http://localhost:7071/api/";
-            var appInstance = new TestMethods(SubDomain, LocalAPIServer);
+            string LocalAPIServer = "https://vedicastrogpt.azurewebsites.net/api/";
+            //string LocalAPIServer = "http://localhost:7071/api/";
+            var appInstance = new TestMethods(LocalAPIServer);
 
             //PAUSE BEFORE TEST START
             Console.WriteLine("Press ENTER to start...");

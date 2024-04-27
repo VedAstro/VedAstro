@@ -89,6 +89,7 @@ namespace API
             apiStatistic.LogIpAddress(incomingRequest);
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
+            apiStatistic.LogSubscriber(incomingRequest);
 
             return APITools.PassMessage(incomingRequest);
         }

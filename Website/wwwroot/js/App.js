@@ -108,10 +108,10 @@ async function EyesOnPageLogger() {
     var msg = `EYES ON PAGE ${window.MinutesPassed} MIN`;
 
     //get log payload from blazor
-    var payload = await DotNet.invokeMethodAsync('Website', 'GetDataLogPayload', msg);
+    //var payload = await DotNet.invokeMethodAsync('Website', 'GetDataLogPayload', msg);
 
     //send a copy to server for logging
-    window.LogThread.postMessage(payload);
+    //window.LogThread.postMessage(payload);
 }
 
 //makes sure every function needed by blazor is ready to be called

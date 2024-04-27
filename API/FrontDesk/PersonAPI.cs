@@ -158,6 +158,40 @@ namespace API
         /// <summary>
         /// Gets person list
         /// </summary>
+        [Function(nameof(VerifyPersonList))]
+        public static async Task<HttpResponseData> VerifyPersonList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(VerifyPersonList)}/OwnerId/{{ownerId}}/LocalHash/{{localPersonListHash}}")] HttpRequestData req,
+            string ownerId, string localPersonListHash)
+        {
+            try
+            {
+                var foundCalls = AzureTable.PersonList.Query<PersonRow>(call => call.PartitionKey == ownerId);
+
+                //add each to return list
+                var personJsonList = new JArray();
+                foreach (var call in foundCalls) { personJsonList.Add(Person.FromAzureRow(call).ToJson()); }
+
+                //calculate latest hash
+                var latestPersonListHash = Tools.GetStringHashCode(personJsonList.ToString());
+
+                //check if match with inputed hash
+                var isMatch = latestPersonListHash.Equals(localPersonListHash);
+
+                //send to caller
+                return APITools.PassMessageJson(isMatch.ToString(), req);
+            }
+
+            //if any failure, show error in payload
+            catch (Exception e)
+            {
+                APILogger.Error(e, req);
+                return APITools.FailMessageJson(e.Message, req);
+            }
+        }
+
+        /// <summary>
+        /// Gets person list
+        /// </summary>
         [Function(nameof(GetPersonList))]
         public static async Task<HttpResponseData> GetPersonList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(GetPersonList)}/OwnerId/{{ownerId}}")] HttpRequestData req,

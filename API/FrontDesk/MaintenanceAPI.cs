@@ -248,23 +248,30 @@ namespace API
             apiStatistic.LogRawRequest(incomingRequest);
 
 
-            try
-            {
-                var holder = new XElement("Root");
-                var versionNumberXml = new XElement("Version", ThisAssembly.Version);
-                holder.Add(versionNumberXml, Tools.TimeStampServerXml);
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
 
-                return APITools.PassMessage(holder, incomingRequest);
+            //place in response body
+            response.WriteString(ThisAssembly.CommitNumber);
 
-            }
-            catch (Exception e)
-            {
-                //log it
-                APILogger.Error(e);
+            return response;
 
-                //let user know
-                return APITools.FailMessageJson(e, incomingRequest);
-            }
+            //try
+            //{
+            //    var holder = new XElement("Root");
+            //    var versionNumberXml = new XElement("Version", ThisAssembly.Version);
+            //    holder.Add(versionNumberXml, Tools.TimeStampServerXml);
+
+            //    return APITools.PassMessage(holder, incomingRequest);
+
+            //}
+            //catch (Exception e)
+            //{
+            //    //log it
+            //    APILogger.Error(e);
+
+            //    //let user know
+            //    return APITools.FailMessageJson(e, incomingRequest);
+            //}
 
 
         }

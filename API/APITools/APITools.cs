@@ -576,6 +576,9 @@ namespace API
 
         public static async Task SwapUserId(string ownerId, string visitorId)
         {
+            //if both same no swap needed
+            if (ownerId == visitorId) { return; }
+
             //if not yet logged in then skip
             if (ownerId == "101") { return; }
 

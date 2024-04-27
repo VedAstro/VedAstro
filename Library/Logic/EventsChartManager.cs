@@ -372,7 +372,7 @@ namespace VedAstro.Library
             //load order is important
             jsCode += "<script href=\"https://code.jquery.com/jquery-3.6.3.min.js\" />";
             jsCode += "<script href=\"https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js\" />";//used in events chart inside js
-            jsCode += "<script href=\"https://www.vedastro.org/js/EventsChartClass.js\" />";
+            jsCode += "<script href=\"https://www.vedastro.org/js/VedAstro.js\" />";
 
             //random id is created here to link svg element with JS instance
             jsCode += $@"

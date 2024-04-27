@@ -33,11 +33,13 @@ namespace API
 
         private readonly TableServiceClient ipAddressServiceClient;
         private readonly TableServiceClient requestUrlStatisticServiceClient;
+        private readonly TableServiceClient subscriberStatisticServiceClient;
         private readonly TableServiceClient rawRequestStatisticServiceClient;
         private readonly TableServiceClient ipAddressMetadataServiceClient;
 
         private readonly TableClient ipAddressStatisticTableClient;
         private readonly TableClient requestUrlStatisticTableClient;
+        private readonly TableClient subscriberStatisticTableClient;
         private readonly TableClient rawRequestStatisticTableClient;
         private readonly TableClient ipAddressStatisticMetadataTableClient;
 
@@ -71,6 +73,15 @@ namespace API
             //save reference for late use
             requestUrlStatisticServiceClient = new TableServiceClient(new Uri(storageUriRequestUrlStatistic), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
             requestUrlStatisticTableClient = requestUrlStatisticServiceClient.GetTableClient(tableNameRequestUrlStatistic);
+
+            //# SUBSCRIBER
+            //------------------------------------
+            //Initialize address table 
+            string tableNameSubscriberStatistic = "SubscriberStatistic";
+            var storageUriSubscriberStatistic = $"https://{accountName}.table.core.windows.net/{tableNameSubscriberStatistic}";
+            //save reference for late use
+            subscriberStatisticServiceClient = new TableServiceClient(new Uri(storageUriSubscriberStatistic), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            subscriberStatisticTableClient = subscriberStatisticServiceClient.GetTableClient(tableNameSubscriberStatistic);
 
             
             //# IP ADDRESS
@@ -164,6 +175,47 @@ namespace API
                 newRow.RowKey = "0";
                 newRow.CallCount = 1;
                 requestUrlStatisticTableClient.AddEntity(newRow);
+            }
+        }
+
+
+        public void LogSubscriber(HttpRequestData incomingRequest)
+        {
+            //get host address as main ID of record
+            var requestHeaderList = incomingRequest.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+            var host = requestHeaderList["Host"].FirstOrDefault() ?? "no host";
+
+            //# check if URL already exist
+            //make a search for ip address stored under row key
+            var cleanHostAddress = Tools.CleanAzureTableKey(host, "|");
+            Expression<Func<RequestUrlStatisticEntity, bool>> expression = call => call.PartitionKey == cleanHostAddress;
+
+            //execute search
+            var recordFound = subscriberStatisticTableClient.Query(expression).FirstOrDefault();
+
+            //# if existed, update call count
+            var isExist = recordFound != null;
+            if (isExist)
+            {
+                //update row
+                recordFound.CallCount = ++recordFound.CallCount; //increment call count
+                subscriberStatisticTableClient.UpsertEntity(recordFound);
+            }
+
+            //# if not exist, make new log
+            else
+            {
+                var newRow = new SubscriberStatisticEntity();
+                
+                newRow.PartitionKey = cleanHostAddress;
+
+                //get month and year in correct format 2019-10
+                newRow.RowKey =  DateTime.Now.ToString("yyyy-MM");
+
+                newRow.CallCount = 1;
+
+                //save to db
+                subscriberStatisticTableClient.AddEntity(newRow);
             }
         }
 

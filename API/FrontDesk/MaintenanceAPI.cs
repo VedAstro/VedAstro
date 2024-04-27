@@ -43,6 +43,7 @@ namespace API
             apiStatistic.LogIpAddress(incomingRequest);
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
+            apiStatistic.LogSubscriber(incomingRequest);
 
 
             //get chart special API home page and send that to caller
@@ -97,6 +98,7 @@ namespace API
             apiStatistic.LogIpAddress(incomingRequest);
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
+            apiStatistic.LogSubscriber(incomingRequest);
 
             //IMPORTANT: replace this variable with your Cognitive Services subscription key
             string subscriptionKey = Secrets.BING_IMAGE_SEARCH;
@@ -134,19 +136,21 @@ namespace API
         [Function(nameof(GetCallData))]
         public static async Task<HttpResponseData> GetCallData(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetCallData/CallerId/{callerId}/Format/{formatName}")]
-            HttpRequestData req,
+            HttpRequestData incomingRequest,
             string callerId, string formatName)
         {
             var apiStatistic = new ApiStatistic();
-            apiStatistic.LogIpAddress(req);
-            apiStatistic.LogRequestUrl(req);
-            apiStatistic.LogRawRequest(req);
+            apiStatistic.LogIpAddress(incomingRequest);
+            apiStatistic.LogRequestUrl(incomingRequest);
+            apiStatistic.LogRawRequest(incomingRequest);
+            apiStatistic.LogSubscriber(incomingRequest);
+
 
             if (formatName.ToLower() == "json")
             {
                 string jsonText = await AzureCache.GetData<string>(callerId);
 
-                var response = req.CreateResponse(HttpStatusCode.OK);
+                var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
 
                 //place in response body
@@ -160,14 +164,14 @@ namespace API
                 //for images get and send direct with as less operations as possible
                 var fileBlobClient = await AzureCache.GetData<BlobClient>(callerId);
 
-                return APITools.SendFileToCaller(fileBlobClient, req, MediaTypeNames.Image.Gif);
+                return APITools.SendFileToCaller(fileBlobClient, incomingRequest, MediaTypeNames.Image.Gif);
             }
             else if (formatName.ToLower() == "svg")
             {
                 //for images get and send direct with as less operations as possible
                 var fileBlobClient = await AzureCache.GetData<BlobClient>(callerId);
 
-                return APITools.SendFileToCaller(fileBlobClient, req, "image/svg+xml");
+                return APITools.SendFileToCaller(fileBlobClient, incomingRequest, "image/svg+xml");
             }
 
             throw new Exception("END OF THE LINE");
@@ -184,6 +188,8 @@ namespace API
             apiStatistic.LogIpAddress(incomingRequest);
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
+            apiStatistic.LogSubscriber(incomingRequest);
+
 
             try
             {
@@ -222,6 +228,7 @@ namespace API
             apiStatistic.LogIpAddress(incomingRequest);
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
+            apiStatistic.LogSubscriber(incomingRequest);
 
             try
             {
@@ -246,6 +253,7 @@ namespace API
             apiStatistic.LogIpAddress(incomingRequest);
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
+            apiStatistic.LogSubscriber(incomingRequest);
 
 
             var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
@@ -283,6 +291,7 @@ namespace API
             apiStatistic.LogIpAddress(incomingRequest);
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
+            apiStatistic.LogSubscriber(incomingRequest);
 
 
             try
@@ -321,6 +330,7 @@ namespace API
             apiStatistic.LogIpAddress(incomingRequest);
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
+            apiStatistic.LogSubscriber(incomingRequest);
 
             try
             {

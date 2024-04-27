@@ -44,6 +44,7 @@ namespace API
                 apiStatistic.LogIpAddress(incomingRequest);
                 apiStatistic.LogRequestUrl(incomingRequest);
                 apiStatistic.LogRawRequest(incomingRequest);
+                apiStatistic.LogSubscriber(incomingRequest);
 
                 //1 : extract out custom format else empty string (removed from url)
                 var format = ParseAndGetFormat(fullParamString);
@@ -275,6 +276,7 @@ namespace API
             apiStatistic.LogIpAddress(incomingRequest);
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
+            apiStatistic.LogSubscriber(incomingRequest);
 
             // Control API overload, even this if hit hard can COST Money via CDN
             //await APITools.AutoControlOpenAPIOverload(callLog);

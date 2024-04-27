@@ -136,7 +136,8 @@ namespace API
             {
                 var newRow = new IpAddressStatisticEntity();
                 newRow.PartitionKey = Tools.CleanAzureTableKey(ipAddress);
-                newRow.RowKey = "0";
+                //get month and year in correct format 2019-10
+                newRow.RowKey = DateTime.Now.ToString("yyyy-MM");
                 newRow.CallCount = 1;
                 ipAddressStatisticTableClient.AddEntity(newRow);
             }
@@ -172,7 +173,8 @@ namespace API
                 var newRow = new RequestUrlStatisticEntity();
                 
                 newRow.PartitionKey = cleanAzureTableKey;
-                newRow.RowKey = "0";
+                //get month and year in correct format 2019-10
+                newRow.RowKey = DateTime.Now.ToString("yyyy-MM");
                 newRow.CallCount = 1;
                 requestUrlStatisticTableClient.AddEntity(newRow);
             }
@@ -206,14 +208,10 @@ namespace API
             else
             {
                 var newRow = new SubscriberStatisticEntity();
-                
                 newRow.PartitionKey = cleanHostAddress;
-
                 //get month and year in correct format 2019-10
                 newRow.RowKey =  DateTime.Now.ToString("yyyy-MM");
-
-                newRow.CallCount = 1;
-
+                newRow.CallCount = 1; //start with 1
                 //save to db
                 subscriberStatisticTableClient.AddEntity(newRow);
             }

@@ -115,7 +115,10 @@
 
         //wait a little and send user back to previous page
         await _jsRuntime.ShowAlert("info", $"Going back to previous page", false, 500);
-        _jsRuntime?.GoBack();
+
+        //if caller specified remember, then use that else just go history back page
+        await _jsRuntime.GoBackRememberMePageOrBackHistory();
+
     }
 
     /// <summary>

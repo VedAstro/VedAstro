@@ -238,15 +238,36 @@
     //if lower raise warning
     if (currentCommitNo < latestPublishedCommitNo)
     {
-    await AppData.JsRuntime.ShowAlert(
-        icon: "warning",
-        title: "Please Update!",
-        descriptionText: "Press <kbd>CTRL + SHIFT + R</kbd> to get <strong>latest</strong> version. " +
-                         $"Also try clearing your <strong>Cookies & Cache</strong>. <br>" +
-                         $"<span style=\"font-size: 14px;color: grey;\">Your version is {currentCommitNo}, latest is {latestPublishedCommitNo}</span>");
+   
+        //prepare question to ask user
+        var alertData = new
+        {
+            icon = "warning",
+            title = "App outdated!",
+            html = "Press <kbd>CTRL + SHIFT + R</kbd> to get <strong>latest</strong> version. " +
+                   $"Also try clearing your <strong>Cookies & Cache</strong>. <br>" +
+                   $"<span style=\"font-size: 14px;color: grey;\">Your version is {currentCommitNo}, latest is {latestPublishedCommitNo}</span>");,
+            showCancelButton = true,
+            confirmButtonColor = "#3085d6",
+            cancelButtonColor = "#d33",
+            cancelButtonText = "Restart",
+            confirmButtonText = "Ignore"
+        };
 
-    //reloads page
-    await AppData.JsRuntime.ReloadPage();
+        var sweetAlertResult = await AppData.JsRuntime.ShowAlertResult(alertData);
+
+        //if user clicked "Ignore", then continue like nothing
+        var continueClicked = sweetAlertResult.GetProperty("isConfirmed").GetBoolean();
+
+        //user clicked "Restart"
+        if (!continueClicked)
+        {
+            //reloads page
+            await AppData.JsRuntime.ReloadPage();
+        }
+
+
+
     }
 
 #endif

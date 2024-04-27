@@ -70,8 +70,9 @@ public class PersonTools
     /// <summary>
     /// Adds new person to API server main list
     /// </summary>
-    public async Task AddPerson(Person person, bool disableAlert = false)
+    public async Task<string> AddPerson(Person person, bool disableAlert = false)
     {
+
         //create id that will own person, if logged in use "user id" else use "session id"
         var ownerId = _api.UserId == "101" ? _api.VisitorID : _api.UserId;
 
@@ -82,14 +83,30 @@ public class PersonTools
                   $"/Gender/{person.Gender}" +
                   $"/Location/{Tools.RemoveWhiteSpace(person.GetBirthLocation().Name())}" +
                   $"/Time/{person.BirthHourMinute}/{person.BirthDateMonthYear}";
-        var jsonResult = await Tools.WriteServer<JObject, JToken>(HttpMethod.Get, url);
 
-#if DEBUG
-        Console.WriteLine($"SERVER SAID:\n{jsonResult}");
-#endif
+        //get location data from Azure Maps API
+        var apiResult = await Tools.ReadFromServerJsonReply(url);
 
-        //if pass, clear local person cache & show appropriate done message to user
-        await HandleResultClearLocalCache(person.DisplayName, jsonResult, "add", disableAlert);
+        if (apiResult.IsPass) // All well
+        {
+            //get new person id out
+            var personId = apiResult.Payload["Payload"].Value<string>();
+
+            //if pass, clear local person cache & show appropriate done message to user
+            await HandleResultClearLocalCache(person.DisplayName, apiResult, "add", disableAlert);
+
+            return personId;
+        }
+        // If result from API is a failure
+        else
+        {
+            //TODO better logging
+            var errorText = apiResult.Payload["Payload"].Value<string>();
+            Console.WriteLine(errorText);
+            throw new Exception("FAILED TO ADD PERSON!");
+        }
+
+
 
     }
 

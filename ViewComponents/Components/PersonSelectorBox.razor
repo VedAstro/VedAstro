@@ -95,7 +95,7 @@ KEEP IT REAL
 
 
         @*add person icon*@
-        <IconButton ExtraClass="ms-2" TooltipText="Add New Person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
+        <IconButton ExtraClass="ms-2" TooltipText="Add New Person" IconName="ant-design:user-add-outlined" OnClickCallback="OnClickAddPersonButton" />
     </div>
 </div>
 
@@ -197,7 +197,7 @@ KEEP IT REAL
     {
         if (firstRender)
         {
-            await FillDropDown();
+            await FillDropDownAndSetPerson();
         }
 
     }
@@ -241,7 +241,7 @@ KEEP IT REAL
 
     }
 
-    private async Task FillDropDown()
+    private async Task FillDropDownAndSetPerson()
     {
         //only this way of marking works
         IsReady = false;
@@ -262,10 +262,8 @@ KEEP IT REAL
             //programmatically select the person
             var fromJson = Person.FromJson(JToken.Parse(rawJson));
             //simulate click
-            OnClickPersonName(fromJson);
+            await OnClickPersonName(fromJson);
         }
-
-
 
         IsReady = true;
 
@@ -323,6 +321,11 @@ KEEP IT REAL
     private void OnClickTrigger()
     {
         _searchInput.FocusAsync();
+    }
+
+    private void OnClickAddPersonButton()
+    {
+        AppData.Go(url: PageRoute.AddPerson, rememberMe: true);
     }
 
 }

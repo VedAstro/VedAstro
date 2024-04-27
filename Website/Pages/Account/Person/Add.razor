@@ -100,7 +100,10 @@
         _person = await GetPersonInstanceFromInput();
 
         //send newly created person to API server
-        await AppData.API.Person.AddPerson(_person);
+        var newPersonId = await AppData.API.Person.AddPerson(_person);
+
+        //update new id, before saving into browser storage
+        _person.Id = newPersonId;
 
         //after adding new person set person, as selected to make life easier for user (UX)
         await _jsRuntime.SetProperty("SelectedPerson", _person.ToJson().ToString());

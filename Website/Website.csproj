@@ -24,7 +24,7 @@
 	  <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
 	  <DebugType>full</DebugType>
 	</PropertyGroup>
-	<ItemGroup>
+	<!--<ItemGroup>
 	  <Compile Include="..\ViewComponents\Code\API\EventsChartTools.cs" Link="Code\API\EventsChartTools.cs" />
 	  <Compile Include="..\ViewComponents\Code\API\MatchTools.cs" Link="Code\API\MatchTools.cs" />
 	  <Compile Include="..\ViewComponents\Code\API\PersonTools.cs" Link="Code\API\PersonTools.cs" />
@@ -37,7 +37,7 @@
 	  <Compile Include="..\ViewComponents\Code\Managers\PageRoute.cs" Link="Code\Managers\PageRoute.cs" />
 	  <Compile Include="..\ViewComponents\Code\Managers\WebLogger.cs" Link="Code\Managers\WebLogger.cs" />
 	  <Compile Include="..\ViewComponents\Code\Managers\WebsiteTools.cs" Link="Code\Managers\WebsiteTools.cs" />
-	</ItemGroup>
+	</ItemGroup>-->
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
@@ -49,13 +49,14 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Library\Library.csproj" />
+	  <ProjectReference Include="..\ViewComponents\ViewComponents.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<!--<ItemGroup>
 	  <Folder Include="ViewComponents\" />
-	</ItemGroup>
+	</ItemGroup>-->
 
-	<ItemGroup>
+	<!--<ItemGroup>
 	  <Content Include="..\ViewComponents\Components\AIPrediction.razor" Link="ViewComponents\AIPrediction.razor" />
 	  <Content Include="..\ViewComponents\Components\APICallList.razor" Link="ViewComponents\APICallList.razor" />
 	  <Content Include="..\ViewComponents\Components\APISelectorBox.razor" Link="ViewComponents\APISelectorBox.razor" />
@@ -111,5 +112,5 @@
 	  <Content Include="..\ViewComponents\Pages\TableGenerator.razor" Link="Pages\Calculator\TableGenerator.razor" />
 	  <Content Include="..\ViewComponents\Pages\TimeListGenerator.razor" Link="Pages\Calculator\TimeListGenerator.razor" />
 	  <Content Include="..\ViewComponents\Pages\SearchResult.razor" Link="Pages\SearchResult.razor" />
-	</ItemGroup>
+	</ItemGroup>-->
 </Project>

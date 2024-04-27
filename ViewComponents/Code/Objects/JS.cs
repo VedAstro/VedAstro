@@ -28,6 +28,7 @@
         public const string PopupTextInput = "Interop.PopupTextInput";
         public const string loadJs = "Interop.loadJs";
         public const string getOriginUrl = "Interop.getOriginUrl";
+        public const string GoBackReload = "Interop.GoBackReload";
         public const string InitErrorCatcher = "Interop.InitErrorCatcher";
         public const string watchProperty = "Interop.watchProperty";
         public const string getElementWidth = "Interop.getElementWidth";

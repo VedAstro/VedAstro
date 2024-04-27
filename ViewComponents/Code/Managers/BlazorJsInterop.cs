@@ -80,6 +80,30 @@ namespace Website
         /// </summary>
         /// <param name="timer">milliseconds to auto close alert, if 0 then won't close which is default (optional)</param>
         /// <param name="useHtml">If true title can be HTML, default is false (optional)</param>
+        public static async Task GoBackRememberMePageOrBackHistory(this IJSRuntime jsRuntime)
+        {
+            //get the previously saved page before login, if any else default to home
+            var previousPage = await jsRuntime.GetProperty("PreviousPage");
+
+            //if not specified
+            if (string.IsNullOrEmpty(previousPage))
+            {
+                jsRuntime?.GoBack();
+            }
+            //page has been specified time to go
+            else
+            {
+                AppData.Go(previousPage, forceReload: true);
+            }
+
+        }
+
+
+        /// <summary>
+        /// Shows alert using sweet alert js
+        /// </summary>
+        /// <param name="timer">milliseconds to auto close alert, if 0 then won't close which is default (optional)</param>
+        /// <param name="useHtml">If true title can be HTML, default is false (optional)</param>
         public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, bool showConfirmButton, int timer = 0, bool useHtml = false)
         {
             object alertData;
@@ -590,7 +614,10 @@ namespace Website
         /// Equal to pressing Back button
         /// goes back to when things were simple
         /// </summary>
-        public static async Task GoBack(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync(JS.history_back);
+        public static async Task GoBack(this IJSRuntime jsRuntime)
+        {
+            await jsRuntime.InvokeVoidAsync(JS.history_back);
+        }
 
 
         /// <summary>

@@ -135,8 +135,10 @@ namespace Website
 
                     var sweetAlertResult = await AppData.JsRuntime.ShowAlertResult(alertData);
 
-                    //if user clicked continue, then 00:00 is correct, so pass validation
+                    //if user clicked "Ignore", then continue like nothing
                     var continueClicked = sweetAlertResult.GetProperty("isConfirmed").GetBoolean();
+
+                    //user clicked "Restart"
                     if (!continueClicked)
                     {
                         //send user to home page to restart

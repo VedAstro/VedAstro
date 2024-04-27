@@ -7,40 +7,45 @@
 	<Event>
 		<Name>GhatakaMoonSign</Name>
 		<Nature>Bad</Nature>
+		<ConditionDescription>If the ghataka element happens to be Moon</ConditionDescription>
 		<Description>
-			If the ghataka element happens to be Moon, then the injury is on reputation,
+			injury is on reputation,
 		</Description>
 		<Tag>Personal, GhatakaChakra</Tag>
 	</Event>
 	<Event>
 		<Name>GhatakaTithiGroup</Name>
 		<Nature>Bad</Nature>
+		<ConditionDescription>If the ghataka element happens to be Tithi or Nakshatra</ConditionDescription>
 		<Description>
-			If the ghataka element happens to be Tithi or Nakshatra, the injury is more mental and emotional.
+			the injury is more mental and emotional.
 		</Description>
 		<Tag>Personal, GhatakaChakra</Tag>
 	</Event>
 	<Event>
 		<Name>GhatakaWeekDay</Name>
 		<Nature>Bad</Nature>
+		<ConditionDescription>If the ghataka element happens to be Weekday or the Lagna, </ConditionDescription>
 		<Description>
-			If the ghataka element happens to be Weekday or the Lagna, the injury is more physical
+			the injury is more physical
 		</Description>
 		<Tag>Personal, GhatakaChakra</Tag>
 	</Event>
 	<Event>
 		<Name>GhatakaMoonConstellation</Name>
 		<Nature>Bad</Nature>
+		<ConditionDescription>If the ghataka element happens to be Tithi or Nakshatra, </ConditionDescription>
 		<Description>
-			If the ghataka element happens to be Tithi or Nakshatra, the injury is more mental and emotional.
+			the injury is more mental and emotional.
 		</Description>
 		<Tag>Personal, GhatakaChakra</Tag>
 	</Event>
 	<Event>
 		<Name>GhatakaLagna</Name>
 		<Nature>Bad</Nature>
+		<ConditionDescription>If the ghataka element happens to be Weekday or the Lagna, </ConditionDescription>
 		<Description>
-			If the ghataka element happens to be Weekday or the Lagna, the injury is more physical
+			the injury is more physical
 		</Description>
 		<Tag>Personal, GhatakaChakra</Tag>
 	</Event>
@@ -145,7 +150,7 @@
 		</Description>
 		<Tag>Yoga, Upagraha</Tag>
 	</Event>
-	
+
 	<!--Vyatipaata-->
 	<Event>
 		<Name>VyatipaataInHouse1</Name>
@@ -850,7 +855,7 @@
 		<Tag>Yoga, Upagraha</Tag>
 	</Event>
 
-	
+
 	<!--Qualities of Gulika or Mandi associated with Planets-->
 	<Event>
 		<Name>MaandiGulikaWithSun</Name>
@@ -949,9 +954,11 @@
 	<Event>
 		<Name>MoonAshtakavargaYoga</Name>
 		<Nature>Bad</Nature>
-		<Description>
+		<ConditionDescription>
 			If the Rasi occupied by the Moon is
 			associated with 1,2,3 bindus (in his own Ashtakavarga),
+		</ConditionDescription>
+		<Description>
 			the person suffers from distress, diseases, litigation and ill-health.
 			In addition to this, if two or three planets join the Moon,
 			the native is likely to pass away in his 37th year.
@@ -961,8 +968,17 @@
 	<Event>
 		<Name>MoonAshtakavargaYoga2</Name>
 		<Nature>Bad</Nature>
+		<ConditionDescription>MoonAshtakavargaYoga and if two or three planets join the Moon</ConditionDescription>
 		<Description>
-			
+			the native is likely to pass away in his 37th year
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MoonAshtakavargaYoga2</Name>
+		<Nature>Bad</Nature>
+		<Description>
+
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
@@ -973,7 +989,7 @@
 			The Moon in the 6th or 11th associated with
 			more than 6 bindus is found to make one rich
 			and when there is Jupiter's aspect, philanthropic
-			also. 
+			also.
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
@@ -996,12 +1012,13 @@
 	<Event>
 		<Name>SunaphaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If there are planets (excepting the
+		<ConditionDescription>
+			If there are planets (excepting the
 			Sun) in the second house from the Moon, Sunapha
 			is caused.
-
-			Results: Self-earned property, king, ruler or his
+		</ConditionDescription>
+		<Description>
+			Self-earned property, king, ruler or his
 			equal, intelligent, wealthy and good reputation.
 		</Description>
 		<Tag>Yoga</Tag>
@@ -1009,11 +1026,12 @@
 	<Event>
 		<Name>AnaphaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If there are planets in the 12th from
+		<ConditionDescription>
+			If there are planets in the 12th from
 			the Moon, Anapha Yoga is formed.
-
-			Results: Well-formed organs, majestic appearance,
+		</ConditionDescription>
+		<Description>
+			Well-formed organs, majestic appearance,
 			good reputation, polite, generous, self-respect,
 			fond of dress and sense pleasures. In later life,
 			renunciation and austerity
@@ -1023,12 +1041,13 @@
 	<Event>
 		<Name>DhurdhuraYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If there are planets on either side of
+		<ConditionDescription>
+			If there are planets on either side of
 			the Moon, the combination goes under the name of
 			Dhurdhura.
-
-			Results: The native is bountiful. He will be
+		</ConditionDescription>
+		<Description>
+			The native is bountiful. He will be
 			blessed with much wealth and conveyances.
 		</Description>
 		<Tag>Yoga</Tag>
@@ -1036,11 +1055,12 @@
 	<Event>
 		<Name>KemadrumaYoga</Name>
 		<Nature>Bad</Nature>
-		<Description>
-			Definition: When there are no planets on both
+		<ConditionDescription>
+			When there are no planets on both
 			sides of the Moon, Kemadruma Yoga is formed
-
-			Results: The person will be dirty, sorrowful,
+		</ConditionDescription>
+		<Description>
+			The person will be dirty, sorrowful,
 			doing unrighteous deeds, poor, dependent, a rogue
 			and a swindler
 		</Description>
@@ -1049,11 +1069,12 @@
 	<Event>
 		<Name>ChandraMangalaYoga</Name>
 		<Nature>Bad</Nature>
-		<Description>
-			Definition: If Mars conjoins the Moon this
+		<ConditionDescription>
+			If Mars conjoins the Moon this
 			yoga is formed.
-
-			Results: Earnings through unscrupulous means,
+		</ConditionDescription>
+		<Description>
+			Earnings through unscrupulous means,
 			a seller of women, treating mother harshly and doing
 			mischief to her and other relatives
 		</Description>
@@ -1062,12 +1083,13 @@
 	<Event>
 		<Name>AdhiYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If benefics are situated in the 6th,
+		<ConditionDescription>
+			If benefics are situated in the 6th,
 			7th and 8th from the Moon, the combination goes
 			under the name of Adhi Yoga
-
-			Results: The person will be polite and trustworthy, will have an enjoyable and happy life,
+		</ConditionDescription>
+		<Description>
+			The person will be polite and trustworthy, will have an enjoyable and happy life,
 			surrounded by luxuries and affluence, will inflict
 			defeats on his enemies, will be healthy and will live long.
 		</Description>
@@ -1076,11 +1098,12 @@
 	<Event>
 		<Name>ChatussagaraYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: Chatussagara Yoga is caused when
+		<ConditionDescription>
+			Chatussagara Yoga is caused when
 			all the kendras are occupied by planets
-
-			Results: The person will earn good reputation,
+		</ConditionDescription>
+		<Description>
+			The person will earn good reputation,
 			be an equal to a ruler, have a long and prosperous
 			life, be blessed with good children and health and
 			his name will travel to the confines of the four
@@ -1091,13 +1114,14 @@
 	<Event>
 		<Name>VasumathiYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If benefics occupy the upachayas
+		<ConditionDescription>
+			If benefics occupy the upachayas
 			(3,6,10 and 11) either from the ascendant or from
 			the Moon, the combination goes under the name of
 			Vasumathi Yoga.
-
-			Results: The person will not be a dependent
+		</ConditionDescription>
+		<Description>
+			The person will not be a dependent
 			but will always command plenty of wealth.
 			oceans
 		</Description>
@@ -1106,12 +1130,13 @@
 	<Event>
 		<Name>RajalakshanaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: Jupiter, Venus, Mercury and the
+		<ConditionDescription>
+			Jupiter, Venus, Mercury and the
 			Moon should be in Lagna or they should be placed
 			in kendra.
-
-			Results: The native will possess an attractive
+		</ConditionDescription>
+		<Description>
+			The native will possess an attractive
 			appearance and he will be endowed with all the
 			good qualities of high personages.
 		</Description>
@@ -1120,13 +1145,14 @@
 	<Event>
 		<Name>VanchanaChoraBheethiYoga</Name>
 		<Nature>Bad</Nature>
-		<Description>
-			Definition: The Lagna is occupied by a malefic
+		<ConditionDescription>
+			The Lagna is occupied by a malefic
 			with Gulika in a trine: or Gulika is associated with
 			the lords of Kendras and Thrikonas; or the lord of
 			Lagna is combined with Rahu, Saturn or Kethu.
-
-			Results: The native will always entertain feelings
+		</ConditionDescription>
+		<Description>
+			The native will always entertain feelings
 			of suspicion towards others around him. He is afraid
 			of being cheated, swindled and robbed.
 		</Description>
@@ -1135,11 +1161,12 @@
 	<Event>
 		<Name>SakataYoga</Name>
 		<Nature>Bad</Nature>
-		<Description>
-			Definition: The Moon in the 12th, 6th or 8th
+		<ConditionDescription>
+			The Moon in the 12th, 6th or 8th
 			from Jupiter gives rise to Sakata Yoga
-
-			Results: The native loses fortune and may regain
+		</ConditionDescription>
+		<Description>
+			The native loses fortune and may regain
 			it. He will be ordinary nd insignificant. He will
 			suffer from poverty, privation and misery. He will
 			be stubborn and hated by relatives.
@@ -1149,11 +1176,12 @@
 	<Event>
 		<Name>AmalaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: The 10th from the Moon or Lagna
+		<ConditionDescription>
+			The 10th from the Moon or Lagna
 			should be occupied by a benefic planet
-
-			Results: The person will achieve lasting fame
+		</ConditionDescription>
+		<Description>
+			The person will achieve lasting fame
 			and reputation. His character will be spotless and he
 			will lead a prosperous life.
 		</Description>
@@ -1162,13 +1190,14 @@
 	<Event>
 		<Name>ParvataYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: Benefics being disposed in Kendras,
+		<ConditionDescription>
+			Benefics being disposed in Kendras,
 			the 6th and 8th houses should either be unoccupied
 			or occupied by benefic planets. This combination
 			goes under the name of Parvata Yoga
-
-			Results:The person will become wealthy, prosperous,
+		</ConditionDescription>
+		<Description>
+			The person will become wealthy, prosperous,
 			liberal, charitable, humorous and head of a
 			town or village. He will be passionate also.
 		</Description>
@@ -1177,12 +1206,13 @@
 	<Event>
 		<Name>KahalaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: Lords of the fourth and ninth houses
+		<ConditionDescription>
+			Lords of the fourth and ninth houses
 			should be in Kendras from each other and the lord
 			of Lagna should be strongly disposed.
-
-			Results: The native will be stubborn, not well
+		</ConditionDescription>
+		<Description>
+			The native will be stubborn, not well
 			informed, daring, head of a small army and a few
 			villages
 		</Description>
@@ -1191,11 +1221,12 @@
 	<Event>
 		<Name>VesiYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If planets other than the Moon
+		<ConditionDescription>
+			If planets other than the Moon
 			occupy the 2nd from the Sun, Vesi Yoga is formed.
-
-			Results: The person will be fortunate, happy,
+		</ConditionDescription>
+		<Description>
+			The person will be fortunate, happy,
 			virtuous, famous and aristocratic.
 		</Description>
 		<Tag>Yoga</Tag>
@@ -1203,10 +1234,9 @@
 	<Event>
 		<Name>VasiYoga</Name>
 		<Nature>Good</Nature>
+		<ConditionDescription>Planets other than the Moon occupying the l2th from the Sun gives rise to Vasi Yoga.</ConditionDescription>
 		<Description>
-			Definition: Planets other than the Moon occupying the l2th from the Sun gives rise to Vasi Yoga.
-
-			Results: The subject will be happy, prosperous,
+			The subject will be happy, prosperous,
 			liberal and the favourite of the ruling classes
 		</Description>
 		<Tag>Yoga</Tag>
@@ -1214,12 +1244,13 @@
 	<Event>
 		<Name>ObhayachariYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition:If planets other than the Moon are
+		<ConditionDescription>
+			If planets other than the Moon are
 			present on either side of the Sun, Obhayachari is
 			caused
-
-			Results:The person will be an eloquent speaker.
+		</ConditionDescription>
+		<Description>
+			The person will be an eloquent speaker.
 			He will have well-proportioned limbs, will take delight in everything,
 			will be liked by all. Wealthy and famous.
 		</Description>
@@ -1228,11 +1259,12 @@
 	<Event>
 		<Name>HamsaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: Jupiter should occupy a Kendra
+		<ConditionDescription>
+			Jupiter should occupy a Kendra
 			which should be his own house or exaltation sign.
-
-			Results: His legs will have the markings of a conch, lotus, fish and ankusa. 
+		</ConditionDescription>
+		<Description>
+			His legs will have the markings of a conch, lotus, fish and ankusa.
 			He will possess a handsome body; he will be liked by others;
 			he will be righteous in disposition and pure in mind.
 		</Description>
@@ -1241,11 +1273,12 @@
 	<Event>
 		<Name>MalavyaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: Venus should occupy a quadrant
+		<ConditionDescription>
+			Venus should occupy a quadrant
 			which should be his own or exaltation sign.
-
-			Results: The person will have a well-developed
+		</ConditionDescription>
+		<Description>
+			The person will have a well-developed
 			physique, will be strong-minded, wealthy, happy with
 			children and wife, will command vehicles, endowed
 			with clean sense-organs and renowned and learned.
@@ -1255,14 +1288,15 @@
 	<Event>
 		<Name>SasaYoga</Name>
 		<Nature>Bad</Nature>
-		<Description>
-			Definition: Sasa Yoga is given rise to if Saturn
+		<ConditionDescription>
+			Sasa Yoga is given rise to if Saturn
 			occupies a Kendra which should be his own or exaltation
 			sign.
-
-			Results: One born in this yoga will command good servants. 
+		</ConditionDescription>
+		<Description>
+			One born in this yoga will command good servants.
 			His character will be questionable. He will be head of a village
-			or a town or even a king, will covet others riches and will be 
+			or a town or even a king, will covet others riches and will be
 			wicked in disposition.
 		</Description>
 		<Tag>Yoga</Tag>
@@ -1270,11 +1304,12 @@
 	<Event>
 		<Name>RuchakaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: Mars should be exalted in a Kendra
+		<ConditionDescription>
+			Mars should be exalted in a Kendra
 			or occupy a Kendra which should be his own sign.
-
-			Results: The person born in Ruchaka will have
+		</ConditionDescription>
+		<Description>
+			The person born in Ruchaka will have
 			a strong physique, famous, well-versed in ancient
 			lore, King or an equal to a King, conforming to
 			traditions and customs. He will have a ruddy complexion,
@@ -1286,11 +1321,12 @@
 	<Event>
 		<Name>BhadraYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition:Bhadra Yoga is caused by the disposition of
+		<ConditionDescription>
+			Bhadra Yoga is caused by the disposition of
 			Mercury in a Kendra which should be identical with his own or exaltation sign.
-
-			Results: The person born in Bhadra Yoga will
+		</ConditionDescription>
+		<Description>
+			The person born in Bhadra Yoga will
 			be strong, will have a lion-like face, well-developed
 			chest, well-proportioned limbs, will be taciturn, will
 			help relatives and will live upto a good old age.
@@ -1300,33 +1336,48 @@
 	<Event>
 		<Name>BudhaAdityaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If Mercury combines with the Sun,
+		<ConditionDescription>
+			If Mercury combines with the Sun,
 			the combination goes under the name of Budha Aditya
 			Yoga.
-
-			Results: Highly intelligent, skilful in all works,
+		</ConditionDescription>
+		<Description>
+			Highly intelligent, skilful in all works,
 			good reputation, personal respect and surrounded by
 			all comforts and happiness.
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
-		<Name>MahabhagyaYoga</Name>
+		<Name>MahabhagyaYogaMale</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: In the case of a man, when the birth
+		<ConditionDescription>
+			In the case of a man, when the birth
 			is during daytime the Sun, the Moon and the Lagna
 			should be in odd signs. In the case of women, when
 			the birth is during night, the Sun, the Moon and
-			Lagna must be in even signs.
-
-
-			Results: A male born under this Yoga will have
+			Lagna must be in even signs. and MALE
+		</ConditionDescription>
+		<Description>
+			will have
 			good character, will be a source of pleasure to others,
 			will be liberal, generous, famous, a ruler or an equal
-			to him and lives to a good old age. A female born
-			in this combination will be blessed with long-lived
+			to him and lives to a good old age.
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MahabhagyaYogaFemale</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>
+			In the case of a man, when the birth
+			is during daytime the Sun, the Moon and the Lagna
+			should be in odd signs. In the case of women, when
+			the birth is during night, the Sun, the Moon and
+			Lagna must be in even signs. and FEMALE
+		</ConditionDescription>
+		<Description>
+			will be blessed with long-lived
 			children and wealth and she will be of good conduct.
 		</Description>
 		<Tag>Yoga</Tag>
@@ -1334,27 +1385,29 @@
 	<Event>
 		<Name>PushkalaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: The lord of the sign occupied by the
+		<ConditionDescription>
+			The lord of the sign occupied by the
 			Moon (who should be associated with lord of Lagna)
 			should be in a Kendra or in the house of an intimate
 			friend aspecting Lagna and at the same time, Lagna
 			should be occupied by a powerful planet.
-
-			Results: Wealthy, sweet speech, famous, honored by the king and a lord
+		</ConditionDescription>
+		<Description>
+			Wealthy, sweet speech, famous, honored by the king and a lord
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>LakshmiYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If the lord of Lagna is powerful and
+		<ConditionDescription>
+			If the lord of Lagna is powerful and
 			the lord of the 9th occupies own or exaltation sign
 			identical with a Kendra or Thrikona, Lakshmi Yoga
 			is caused.
-
-			Results: The person will be wealthy, noble,
+		</ConditionDescription>
+		<Description>
+			The person will be wealthy, noble,
 			learned, a man of high integrity and reputation,
 			handsome appearance, a good ruler, and enjoying
 			all the pleasures and comforts of life.
@@ -1364,12 +1417,13 @@
 	<Event>
 		<Name>GauriYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: The lord of the Navamsa occupied by
+		<ConditionDescription>
+			The lord of the Navamsa occupied by
 			the lord of the 10th should join the 10th in exaltation
 			and combined with the lord of Lagna.
-
-			Results: The person belongs to a respectable
+		</ConditionDescription>
+		<Description>
+			The person belongs to a respectable
 			family, owns several lands, charitable, performs,
 			religious rites, his sons will be of good character and
 			he will be praised by all.
@@ -1379,11 +1433,12 @@
 	<Event>
 		<Name>BharathiYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: The lord of the Navamsa occupied by the lords
+		<ConditionDescription>
+			The lord of the Navamsa occupied by the lords
 			of the 2nd, 5th and 11th should be exalted and combined with the 9th lord.
-
-			Results: World famous, a reputed scholar, fond
+		</ConditionDescription>
+		<Description>
+			World famous, a reputed scholar, fond
 			of music, romantic, handsome, attractive, religiously
 			inclined and bewitching eyes.
 		</Description>
@@ -1392,12 +1447,13 @@
 	<Event>
 		<Name>ChapaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If the Ascendant lord is exalted and
+		<ConditionDescription>
+			If the Ascendant lord is exalted and
 			the 4th and 10th lords have interchanged houses,
 			Chapa Yoga is caused.
-
-			Results: The person will grace a King's Council,
+		</ConditionDescription>
+		<Description>
+			The person will grace a King's Council,
 			be wealthy and full of strength and an Exchequer or
 			a Controller of treasury.
 		</Description>
@@ -1406,12 +1462,13 @@
 	<Event>
 		<Name>SreenathaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If the exalted lord of the 7th occupies the 10th
+		<ConditionDescription>
+			If the exalted lord of the 7th occupies the 10th
 			and the lord of the lOth is with the 9th
 			lord, Sreenatha Yoga is caused.
-
-			Results: The native will have on his body the
+		</ConditionDescription>
+		<Description>
+			The native will have on his body the
 			insignia of Vishnu, viz., the conch, the wheel, etc..
 			be an agreeable speaker, godly, have a good wife
 			and children and be loved by all.
@@ -1421,123 +1478,133 @@
 	<Event>
 		<Name>LagnaMalikaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If all the seven planets occupy the
+		<ConditionDescription>
+			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-
-			Results: King, ruler or commander, wealthy.
+		</ConditionDescription>
+		<Description>
+			King, ruler or commander, wealthy.
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>DhanaMalikaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If all the seven planets occupy the
+		<ConditionDescription>
+			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-
-			Results: very wealthy, dutiful, resolute and unsympathetic
+		</ConditionDescription>
+		<Description>
+			very wealthy, dutiful, resolute and unsympathetic
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>VikramaMalikaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If all the seven planets occupy the
+		<ConditionDescription>
+			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-
-			Results: ruler, rich, sickly, surrounded by brave men
+		</ConditionDescription>
+		<Description>
+			ruler, rich, sickly, surrounded by brave men
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>SukhaMalikaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If all the seven planets occupy the
+		<ConditionDescription>
+			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-
-			Results: charitable and wealthy
+		</ConditionDescription>
+		<Description>
+			charitable and wealthy
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>PutraMalikaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If all the seven planets occupy the
+		<ConditionDescription>
+			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-
-			Results: highly religious and famous
+		</ConditionDescription>
+		<Description>
+			highly religious and famous
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>SatruMalikaYoga</Name>
 		<Nature>Bad</Nature>
-		<Description>
-			Definition: If all the seven planets occupy the
+		<ConditionDescription>
+			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-
-			Results: greedy and somewhat poor
+		</ConditionDescription>
+		<Description>
+			greedy and somewhat poor
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>KalatraMalikaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If all the seven planets occupy the
+		<ConditionDescription>
+			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-
-			Results: coveted by women and influential
+		</ConditionDescription>
+		<Description>
+			coveted by women and influential
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>RandhraMalikaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If all the seven planets occupy the
+		<ConditionDescription>
+			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-
-			Results: poor and hen-pecked
+		</ConditionDescription>
+		<Description>
+			poor and hen-pecked
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>BhagyaMalikaYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition: If all the seven planets occupy the
+		<ConditionDescription>
+			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-
-			Results: religious, well-to-do, mighty and good
+		</ConditionDescription>
+		<Description>
+			religious, well-to-do, mighty and good
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>KarmaMalikaYoga</Name>
 		<Nature>Good</Nature>
+		<ConditionDescription></ConditionDescription>
 		<Description>
 			Definition:
 
@@ -2277,7 +2344,7 @@
 		<Name>House1LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Generally fortunate, protector of others, religious, if a Hindu—worshipper of Vishnu, good orator, happiness on account of wife and children, and rich.
+			Generally fortunate, protector of others, religious, is a Hindu—worshipper of Vishnu, good orator, happiness on account of wife and children, and rich.
 			Provided the lord is well disposed, he will inherit good ancestral and paternal property. The father will be famous, philanthropic and god-fearing.
 		</Description>
 		<Tag>Personal</Tag>
@@ -2300,7 +2367,6 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>House1LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -2361,12 +2427,25 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
-		<Name>House2LordInHouse6</Name>
+		<Name>House2LordInHouse6Afflicted</Name>
 		<Nature>Neutral</Nature>
+		<ConditionDescription>House2LordInHouse6 AND if the second lord joins the 6th and is afflicted</ConditionDescription>
 		<Description>
 			Income and expenditure from enemies. He will suffer from defects or diseases in the anus and thighs.
-			Amassing of wealth by black-marketing, deceit, dissimulation and by creating misunderstandings and troubles between friends and relatives and through questionable and suspicious dealings can be anticipated if the second lord joins the 6th and is well fortified. If afflicted, he will be involved in these troubles and sentenced for such crimes as breach of trust, forgeries and perjuries.
+			black-marketing, deceit, dissimulation and by creating misunderstandings and troubles
+			between friends and relatives and through questionable and suspicious dealings can be anticipated
+			He will be involved in these troubles and sentenced for such crimes as breach of trust, forgeries and perjuries.
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House2LordInHouse6Fortified</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>House2LordInHouse6 AND if the second lord joins the 6th and is well fortified</ConditionDescription>
+		<Description>
+			Income and expenditure from enemies. He will suffer from defects or diseases in the anus and thighs.
+			Amassing of wealth by black-marketing, deceit, dissimulation and by creating misunderstandings and troubles
+			between friends and relatives and through questionable and suspicious dealings can be anticipated
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -2418,21 +2497,35 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>House2LordInHouse12</Name>
 		<Nature>Neutral</Nature>
+		<ConditionDescription>If the second lord is NOT afflicted</ConditionDescription>
 		<Description>
-			The native becomes a respectable man. In all probability he will be a government servant, and will be deprived of the happiness of elder brother.
-			The income will be through ecclesiastical sources. If the second lord is afflicted, he will lose money on this account.
+			The native becomes a respectable man. In all probability he will be a government servant,
+			and will be deprived of the happiness of elder brother. The income will be through ecclesiastical sources.
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House2LordInHouse12Afflicted</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>House2LordInHouse12 AND If the second lord is afflicted</ConditionDescription>
+		<Description>
+			The native becomes a respectable man. In all probability he will be a government servant,
+			and will be deprived of the happiness of elder brother. He will lose money through ecclesiastical sources.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<!--Results of Lord of 3rd being Situated in Different Houses-->
 	<Event>
-
 		<Name>House3LordInHouse1</Name>
 		<Nature>Neutral</Nature>
-		<Description>Earns livelihood by self-exertion, becomes vindictive, lean and tall body, brave and courageous, always sickly and serving others. When well fortified he will become an expert in dancing, music and acting, and the means of livelihood will be primarily fine arts. He will earn a good name as an actor.</Description>
+		<ConditionDescription></ConditionDescription>
+		<Description>
+			Earns livelihood by self-exertion, becomes vindictive, lean and tall body,
+			brave and courageous, always sickly and serving others. When well fortified he will become an expert in dancing,
+			music and acting, and the means of livelihood will be primarily fine arts. He will earn a good name as an actor.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -2450,28 +2543,92 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>House3LordInHouse4</Name>
 		<Nature>Neutral</Nature>
-		<Description>If the lord of the 3rd is in the 4th, life will be happy on the whole. He becomes rich and learned. But the wife will be cruel-hearted and mean. When the lord of the 3rd is well fortified in the 4th and the lords of Lagna and 9th are rendered weak, his brothers will survive him. He will have step-brothers if the 9th lord is strong. When Mars is weak he will lose his lands and he will have to live in others' houses. Evil results will be minimised if the 3rd house is beneficially disposed.</Description>
+		<Description>
+			life will be happy on the whole.
+			He becomes rich and learned. But the wife will be cruel-hearted and mean.
+
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House3LordInHouse4Strong9th</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			House3LordInHouse4 AND  if the 9th lord is strong.
+		</ConditionDescription>
+		<Description>
+			He will have step-brothers
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House3LordInHouse4WeakMars</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>
+			House3LordInHouse4 AND  When Mars is weak AND if the 3rd house is NOT beneficially disposed
+		</ConditionDescription>
+		<Description>
+			he will lose his lands and he will have to live in others' houses.
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House3LordInHouse4Fortified</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			House3LordInHouse4 AND
+			When the lord of the 3rd is well fortified in the 4th and the lords of
+			Lagna and 9th are rendered weak,
+		</ConditionDescription>
+		<Description>
+			his brothers will survive him.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
 
 		<Name>House3LordInHouse5</Name>
 		<Nature>Neutral</Nature>
-		<Description>Much pleasure will not be derived from children. Financially well off in life. Friction will prevail in the domestic life. If the 3rd lord is in the 5th, well disposed, the native will be highly benefited by his brothers. He will carry on agricultural operations on a large scale, or he will be adopted by a rich family. He will also shine well in Government service.</Description>
+		<Description>
+			Much pleasure will not be derived from children.
+			Financially well off in life. Friction will prevail in the domestic life.
+			well disposed, the native will be highly benefited by his brothers.
+			He will carry on agricultural operations on a large scale, or he will be adopted by a rich family.
+			He will also shine well in Government service.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>House3LordInHouse6</Name>
 		<Nature>Neutral</Nature>
-		<Description>Hates brothers and relatives and difficulty through them. Becomes rich. Maternal relatives will suffer. Accepts illegal gratifications. When the 3rd lord is in the 6th, well disposed, younger brother joins the Army. One of the brothers will become a successful physician. If the 6th lord also joins the 3rd, the native becomes either a sportsman, physical culturist or an athlete. When the 6th and the 3rd are both afflicted, he will suffer from diseases and be tormented by enemies and he will himself be deceitful.</Description>
+		<Description>
+			Hates brothers and relatives and difficulty through them. Becomes rich.
+			Maternal relatives will suffer. Accepts illegal gratifications. When the 3rd lord is in the 6th,
+			well disposed, younger brother joins the Army. One of the brothers will become a successful physician.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
+		<Name>House3LordInHouse6Lord3rd</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>House3LordInHouse6 AND If the 6th lord also joins the 3rd, </ConditionDescription>
+		<Description>
+			the native becomes either a sportsman, physical culturist or an athlete.
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House3LordInHouse6Lord3rd</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>House3LordInHouse6 AND When the 6th and the 3rd are both afflicted </ConditionDescription>
+		<Description>
+			he will suffer from diseases and be tormented by enemies and he will himself be deceitful.
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
 		<Name>House3LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>May incur the displeasure of rulers or authorities. Many vicissitudes in life. Much suffering in childhood. The union will be unfortunate. Danger while travelling. When the 3rd lord is in the 7th, well fortified, there will be cordial feelings between brothers. When the 7th lord is in Lagna, one of the brothers will settle in a foreign country and he will help the native.</Description>
@@ -2577,10 +2734,19 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>House4LordInHouse10</Name>
 		<Nature>Neutral</Nature>
-		<Description>Will have political success. He will be an expert chemist. He will vanquish his enemies and make his personality felt by the world. Loss of reputation is posible if the 4th lord is afflicted.</Description>
+		<Description>Will have political success. He will be an expert chemist.
+		He will vanquish his enemies and make his personality felt by the world. 
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House4LordInHouse10Afflicted</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>House4LordInHouse10 AND if the 4th lord is afflicted</ConditionDescription>
+		<Description> 
+		Loss of reputation is possible</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -2600,10 +2766,38 @@
 
 	<!--Results of Lord of 5th being Situated in Different Houses-->
 	<Event>
-
-		<Name>House5LordInHouse1</Name>
+		<Name>House5LordInHouse1Fortified</Name>
 		<Nature>Neutral</Nature>
-		<Description>If the 5th lord is favourably combined and associated, the person commands a number of servants, becomes a Judge, Magistrate or Minister empowered to punish the evil-minded. He will earn the grace of God , few children , will have foes and gives happiness to others. If the 5th lord is afflicted, there will be no issues, will invoke kshudra devatas (evil and destructive forces), will be evil-minded and leader of a gang of deceitful persons , a tale-bearer with a sting. If the lord is moderately good, mixed results will follow.</Description>
+		<ConditionDescription>House5LordInHouse1 AND If the 5th lord is favourably combined and associated,</ConditionDescription>
+		<Description> the person commands a number of servants,
+		becomes a Judge, Magistrate or Minister empowered to punish the evil-minded. 
+		He will earn the grace of God , few children , will have foes and gives happiness to others. 
+		
+		If the 5th lord is afflicted, there will be no issues, 
+		will invoke kshudra devatas (evil and destructive forces), 
+		will be evil-minded and leader of a gang of deceitful persons , a tale-bearer with a sting.
+		
+		If the lord is moderately good, mixed results will follow.</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House5LordInHouse1Afflicted</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>House5LordInHouse1 AND If the 5th lord is afflicted</ConditionDescription>
+		<Description> 
+		 there will be no issues, 
+		will invoke kshudra devatas (evil and destructive forces), 
+		will be evil-minded and leader of a gang of deceitful persons , a tale-bearer with a sting.
+		
+		If the lord is moderately good, mixed results will follow.</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House5LordInHouse1AfflictedModerate</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>House5LordInHouse1 AND If the 5th lord is moderately good</ConditionDescription>
+		<Description> 
+		 mixed results will follow.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -2614,10 +2808,19 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
-		<Name>House5LordInHouse3</Name>
+		<Name>House5LordInHouse3Fortified</Name>
 		<Nature>Neutral</Nature>
-		<Description>Favourably disposed, many good children and brothers, If unfavourably disposed, loss of children, misunderstandings with brothers and continuous occupational troubles. He will become stingy and a tale bearer.</Description>
+		<ConditionDescription>House5LordInHouse3 AND Favourably disposed</ConditionDescription>
+		<Description>, many good children and brothers</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House5LordInHouse3Afflicted</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>House5LordInHouse3 AND unfavourably disposed</ConditionDescription>
+		<Description>
+		loss of children, misunderstandings with brothers and continuous occupational troubles.
+		He will become stingy and a tale bearer.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -2635,10 +2838,13 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>House5LordInHouse6</Name>
 		<Nature>Neutral</Nature>
-		<Description>If the fifth lord is favourably disposed, the maternal uncle will be a famous man. He will have enmity with his own son. If the lord is afflicted, issues will not be born and he may have to adopt one from maternal uncle's line.</Description>
+		<ConditionDescription></ConditionDescription>
+		<Description>If the fifth lord is favourably disposed, the maternal uncle will be a famous man.
+		He will have enmity with his own son. 
+		
+		If the lord is afflicted, issues will not be born and he may have to adopt one from maternal uncle's line.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>

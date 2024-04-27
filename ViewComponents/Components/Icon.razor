@@ -1,4 +1,5 @@
 ﻿@namespace Website.Pages
+@using Microsoft.AspNetCore.Components.Web
 @using VedAstro.Library;
 @using System.Xml.Linq
 
@@ -89,7 +90,7 @@
     {
         if (firstRender)
         {
-    //attach tooltip lib element if tooltip provided
+            //attach tooltip lib element if tooltip provided
             if (!string.IsNullOrEmpty(TooltipText))
             {
                 await _jsRuntime.Tippy(HolderDiv, new { content = this.TooltipText });

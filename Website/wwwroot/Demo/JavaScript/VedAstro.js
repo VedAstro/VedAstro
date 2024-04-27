@@ -22,9 +22,6 @@
 // █▀▄▀█ █▄█   ▄▀█ █▀█ ▀█▀   █ █▀   █▀▀ █░█ █ █▀▄ █▀▀ █▄░█ ▀█▀ ░
 // █░▀░█ ░█░   █▀█ █▀▄ ░█░   █ ▄█   ██▄ ▀▄▀ █ █▄▀ ██▄ █░▀█ ░█░ ▄
 
-//LOAD DEPENDENCIES
-//NOTE: below only possible becasue HTML: <script src="js/VedAstro.js" type="module"></script>
-//import { EventsChart, ID } from '/js/EventsChart.js';
 
 /*
 
@@ -939,6 +936,7 @@ class EventsChart {
                 // Add class to the new summary row and append it to the holder
                 newSummaryRow.addClass(ID.CursorLineLegendClone).appendTo(instance.$CursorLineLegendHolder);
 
+
                 // Show the new summary row
                 SVG(newSummaryRow[0]).show();
 
@@ -963,7 +961,7 @@ class EventsChart {
     }
 }
 
-
+//-------------------------------------------------------------------------------------------------FILE STITCH-------------------------------------
 
 //make accesible to interop
 window.vedastro = {
@@ -2981,6 +2979,11 @@ ${ai_text_message_html}
                 // Allow user input again
                 this.IsAITalking = false;
 
+                // # AUTO SCROLL DOWN
+                $("#ChatWindowMessageList").scrollTop(
+                    $("#ChatWindowMessageList")[0].scrollHeight
+                );
+
                 //make follow up questions if any slowly appear
                 //narrow by message bubble, then holder
                 $(`#${message_hash} .followUpQuestionHolder`).fadeIn("slow");
@@ -2995,6 +2998,12 @@ ${ai_text_message_html}
                 `#${message_hash} .temp-text-stream-elm`
             );
             index++;
+
+            // # AUTO SCROLL DOWN
+            $("#ChatWindowMessageList").scrollTop(
+                $("#ChatWindowMessageList")[0].scrollHeight
+            );
+
         }, streamRateMs);
     }
 

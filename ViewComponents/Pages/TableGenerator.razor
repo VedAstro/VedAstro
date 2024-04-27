@@ -1,10 +1,9 @@
 ﻿@using VedAstro.Library
 @using System.Text
 @using System.IO;
-@using CommunityToolkit.Maui.Storage
 @using Website.Pages
-@inject IFileSaver _fileSaver
-
+@* @inject IFileSaver _fileSaver
+ *@
 @attribute [Route(PageRoute.TableGenerator)]
 
 <PageTitle>Table Generator | VedAstro</PageTitle>
@@ -483,7 +482,7 @@
         //prompt user to save file and save it there
         var bytes = Encoding.UTF8.GetBytes(htmlString);
         using var stream = new MemoryStream(bytes);
-        var savePath = await _fileSaver.SaveAsync("ml-table.html", stream, default);
+        //var savePath = await _fileSaver.SaveAsync("ml-table.html", stream, default);
 
         //tactile feedback to user
         _jsRuntime.PlayDoneSound();
@@ -502,7 +501,7 @@
         //prompt user to save file and save it there
         var bytes = Encoding.UTF8.GetBytes(csvString);
         using var stream = new MemoryStream(bytes);
-        var savePath = await _fileSaver.SaveAsync("ml-table.csv", stream, default);
+        //var savePath = await _fileSaver.SaveAsync("ml-table.csv", stream, default);
 
         //tactile feedback to user
         _jsRuntime.PlayDoneSound();
@@ -521,7 +520,7 @@
         //prompt user to save file and save it there
         var bytes = Encoding.UTF8.GetBytes(jsonString);
         using var stream = new MemoryStream(bytes);
-        var savePath = await _fileSaver.SaveAsync("ml-table.json", stream, default);
+        //var savePath = await _fileSaver.SaveAsync("ml-table.json", stream, default);
 
         //tactile feedback to user
         _jsRuntime.PlayDoneSound();
@@ -539,7 +538,7 @@
 
         //prompt user to save file and save it there
         using var stream = new MemoryStream(excelFileBytes);
-        var savePath = await _fileSaver.SaveAsync("ml-table.xlsx", stream, default);
+        // var savePath = await _fileSaver.SaveAsync("ml-table.xlsx", stream, default);
 
         //tactile feedback to user
         _jsRuntime.PlayDoneSound();

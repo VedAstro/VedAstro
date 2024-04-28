@@ -960,15 +960,13 @@
 		</ConditionDescription>
 		<Description>
 			the person suffers from distress, diseases, litigation and ill-health.
-			In addition to this, if two or three planets join the Moon,
-			the native is likely to pass away in his 37th year.
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
 		<Name>MoonAshtakavargaYoga2</Name>
 		<Nature>Bad</Nature>
-		<ConditionDescription>MoonAshtakavargaYoga and if two or three planets join the Moon</ConditionDescription>
+		<ConditionDescription>MoonAshtakavargaYoga AND  if two or three planets join the Moon</ConditionDescription>
 		<Description>
 			the native is likely to pass away in his 37th year
 		</Description>
@@ -2259,22 +2257,31 @@
 
 	<!--Results of Lord of 1st House Occupying Different Houses-->
 	<Event>
-		<Name>House1LordInHouse1</Name>
+		<Name>House1LordInHouse1Fortified</Name>
 		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			House1LordInHouse1 AND
+			If the Lagnadhipati is well disposed in Lagna
+		</ConditionDescription>
 		<Description>
-			The subject lives by his own exertion, will have an independent spirit and will have two wives or one married and another illegal.
-			If the Lagnadhipati is well disposed in Lagna, the person becomes famous in his own community and country.
-			The reader must note that the combination is of general application. The exact nature of the results should be interpreted by taking into account the strength, weakness and other factors attendant upon the house lord. If Lagnadhipati is in Lagna and aspected by evil planets, the results produced will be quite different from those which he would have produced by being aspected by benefics. The same rules apply to all Bhavas which should be borne in mind by every reader.
+			The subject lives by his own exertion, will have an independent spirit and will have
+			two wives or one married and another illegal.
+			the person becomes famous in his own community and country.
+
+			,
+			the results produced will be quite different from those which he would have produced by
+			being aspected by benefics. The same rules apply to all Bhavas which should be borne in mind by every reader.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>House1LordInHouse2</Name>
 		<Nature>Neutral</Nature>
+		<ConditionDescription></ConditionDescription>
 		<Description>
 			There will be more of gains, teased or worried by enemies, good character respectable and generous hearted.
-			Well disposed. He will gladly discharge his duties towards his kith and kin, and will be ambitious. He will possess prominent eyes and be blessed with forethought.
+			Well-disposed. He will gladly discharge his duties towards his kith and kin, and will be ambitious.
+			He will possess prominent eyes and be blessed with forethought.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -2377,13 +2384,24 @@
 	</Event>
 	<!--Results of Lord of 2nd being Situated in Different Houses-->
 	<Event>
-
 		<Name>House2LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The native becomes no doubt wealthy but he hates his own family, lacks polite manners, becomes passionate, subservient and time-serving.
-			When the lord of the 2nd is in Lagna, one will earn money by his own effort, intelligence and learning or he will get inherited wealth if the 9th
+			The native becomes no doubt wealthy but he hates his own family,
+			lacks polite manners, becomes passionate, subservient and time-serving.
+			one will earn money by his own effort, intelligence and learning
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House2LordInHouse1</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			House2LordInHouse1 AND if the 9th
 			lord or the Sun has anything to do with this combination.
+		</ConditionDescription>
+		<Description>
+			he will get inherited wealth
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -2410,12 +2428,34 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>House2LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The above results will apply in addition to the following. He will spend money for his own happiness. He will be highly frugal in dealing with money.
-			When the 2nd lord in the 4th is well fortified, one will earn well as an automobile dealer or agent or an agriculturist or landlord or commission agent. He will also be benefited by his maternal relations. There will be losses on this account if the 4th lord is afflicted.
+			The above results will apply in addition to the following.
+			He will spend money for his own happiness.
+			He will be highly frugal in dealing with money.
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House2LordInHouse4Fortified</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>House2LordInHouse4 AND fortified</ConditionDescription>
+		<Description>
+			one will earn well as
+			an automobile dealer or agent or an agriculturist or landlord or commission agent.
+			He will also be benefited by his maternal relations.
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House2LordInHouse4Afflicted</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>House2LordInHouse4 AND afflicted</ConditionDescription>
+		<Description>
+			one will have losses as
+			an automobile dealer or agent or an agriculturist or landlord or commission agent.
+			He will also be not benefited by his maternal relations.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -2624,7 +2664,7 @@
 		<Nature>Neutral</Nature>
 		<ConditionDescription>House3LordInHouse6 AND When the 6th and the 3rd are both afflicted </ConditionDescription>
 		<Description>
-			he will suffer from diseases and be tormented by enemies and he will himself be deceitful.
+			he will suffer from diseases and be tormented by enemies, and he will himself be deceitful.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -2736,8 +2776,9 @@
 	<Event>
 		<Name>House4LordInHouse10</Name>
 		<Nature>Neutral</Nature>
-		<Description>Will have political success. He will be an expert chemist.
-		He will vanquish his enemies and make his personality felt by the world. 
+		<Description>
+			Will have political success. He will be an expert chemist.
+			He will vanquish his enemies and make his personality felt by the world.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -2745,8 +2786,9 @@
 		<Name>House4LordInHouse10Afflicted</Name>
 		<Nature>Neutral</Nature>
 		<ConditionDescription>House4LordInHouse10 AND if the 4th lord is afflicted</ConditionDescription>
-		<Description> 
-		Loss of reputation is possible</Description>
+		<Description>
+			Loss of reputation is possible
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -2769,35 +2811,39 @@
 		<Name>House5LordInHouse1Fortified</Name>
 		<Nature>Neutral</Nature>
 		<ConditionDescription>House5LordInHouse1 AND If the 5th lord is favourably combined and associated,</ConditionDescription>
-		<Description> the person commands a number of servants,
-		becomes a Judge, Magistrate or Minister empowered to punish the evil-minded. 
-		He will earn the grace of God , few children , will have foes and gives happiness to others. 
-		
-		If the 5th lord is afflicted, there will be no issues, 
-		will invoke kshudra devatas (evil and destructive forces), 
-		will be evil-minded and leader of a gang of deceitful persons , a tale-bearer with a sting.
-		
-		If the lord is moderately good, mixed results will follow.</Description>
+		<Description>
+			the person commands a number of servants,
+			becomes a Judge, Magistrate or Minister empowered to punish the evil-minded.
+			He will earn the grace of God , few children , will have foes and gives happiness to others.
+
+			If the 5th lord is afflicted, there will be no issues,
+			will invoke kshudra devatas (evil and destructive forces),
+			will be evil-minded and leader of a gang of deceitful persons , a tale-bearer with a sting.
+
+			If the lord is moderately good, mixed results will follow.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
 		<Name>House5LordInHouse1Afflicted</Name>
 		<Nature>Neutral</Nature>
 		<ConditionDescription>House5LordInHouse1 AND If the 5th lord is afflicted</ConditionDescription>
-		<Description> 
-		 there will be no issues, 
-		will invoke kshudra devatas (evil and destructive forces), 
-		will be evil-minded and leader of a gang of deceitful persons , a tale-bearer with a sting.
-		
-		If the lord is moderately good, mixed results will follow.</Description>
+		<Description>
+			there will be no issues,
+			will invoke kshudra devatas (evil and destructive forces),
+			will be evil-minded and leader of a gang of deceitful persons , a tale-bearer with a sting.
+
+			If the lord is moderately good, mixed results will follow.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
 		<Name>House5LordInHouse1AfflictedModerate</Name>
 		<Nature>Neutral</Nature>
 		<ConditionDescription>House5LordInHouse1 AND If the 5th lord is moderately good</ConditionDescription>
-		<Description> 
-		 mixed results will follow.</Description>
+		<Description>
+			mixed results will follow.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -2819,8 +2865,9 @@
 		<Nature>Neutral</Nature>
 		<ConditionDescription>House5LordInHouse3 AND unfavourably disposed</ConditionDescription>
 		<Description>
-		loss of children, misunderstandings with brothers and continuous occupational troubles.
-		He will become stingy and a tale bearer.</Description>
+			loss of children, misunderstandings with brothers and continuous occupational troubles.
+			He will become stingy and a tale bearer.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -2841,10 +2888,12 @@
 		<Name>House5LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<ConditionDescription></ConditionDescription>
-		<Description>If the fifth lord is favourably disposed, the maternal uncle will be a famous man.
-		He will have enmity with his own son. 
-		
-		If the lord is afflicted, issues will not be born and he may have to adopt one from maternal uncle's line.</Description>
+		<Description>
+			If the fifth lord is favourably disposed, the maternal uncle will be a famous man.
+			He will have enmity with his own son.
+
+			If the lord is afflicted, issues will not be born and he may have to adopt one from maternal uncle's line.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -2862,10 +2911,22 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>House5LordInHouse9</Name>
 		<Nature>Neutral</Nature>
-		<Description>He will become a teacher or a preceptor. Renovates ancient temples, wells, choultries and gardens. One of the sons attains distinction as an orator or author. If the lord is afflicted, he will earn divine wrath and consequent destruction of fortune.</Description>
+		<ConditionDescription>House2LordInHouse4 AND fortified</ConditionDescription>
+		<Description>
+			He will become a teacher or a preceptor. Renovates ancient temples, wells, choultries and gardens.
+			One of the sons attains distinction as an orator or author.
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
+		<Name>House5LordInHouse9Afflicted</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>House2LordInHouse4 AND afflicted</ConditionDescription>
+		<Description>
+			he will earn divine wrath and consequent destruction of fortune.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -2892,17 +2953,40 @@
 
 	<!--Results of Lord of 6th being Situated in Different Houses-->
 	<Event>
-
-		<Name>House6LordInHouse1</Name>
+		<Name>House6LordInHouse1Fortified</Name>
 		<Nature>Neutral</Nature>
-		<Description>Well aspected, the person may Join the army as a soldier or Commander consistent with the strength or otherwise of the disposition. Or he may become a Minister of War or. an official or officer concerned with prisons. He will live in the house of his maternal uncle. If the sixth lord is weak and otherwise afflicted, he will become a robber or a thief or leader of a criminal gang.</Description>
+		<ConditionDescription>House6LordInHouse1 AND Well aspected</ConditionDescription>
+		<Description>
+			the person may Join the army as a soldier or Commander
+			consistent with the strength or otherwise of the disposition.
+			Or he may become a Minister of War or an official or officer concerned with prisons.
+			He will live in the house of his maternal uncle.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
+		<Name>House6LordInHouse1Afflicted</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>House6LordInHouse1 AND If the sixth lord is weak and otherwise afflicted</ConditionDescription>
+		<Description>
+			he will become a robber or a thief or leader of a criminal gang.
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+	<Event>
 		<Name>House6LordInHouse2</Name>
 		<Nature>Neutral</Nature>
-		<Description>Conjoined with or aspected by benefics the native will have untold suffering in family life and deep sorrows, loss of money through enemies, defective vision, uneven teeth and stammering. If the sixth lord is weak and otherwise ill-disposed in the 2nd, there will be loss of wife in the Dasa or Bhukti of the malefic lord. If Venus is weak, the native will be a celibate and poverty stricken, just able to get a morsel of food when hungry.</Description>
+		<Description>
+			Conjoined with or aspected by benefics the native
+			will have untold suffering in family life and deep sorrows,
+			loss of money through enemies, defective vision, uneven teeth and stammering.
+			
+			If the sixth lord is weak and otherwise ill-disposed in the 2nd,
+			there will be loss of wife in the Dasa or Bhukti of the malefic lord.
+			
+			If Venus is weak, the native will be a celibate and poverty-stricken,
+			just able to get a morsel of food when hungry.
+		</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>

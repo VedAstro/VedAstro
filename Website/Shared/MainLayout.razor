@@ -228,49 +228,44 @@
     private async Task CheckRaiseOutdatedWarning()
     {
 
-#if RELEASE
         //higher number is latest
-    var currentCommitNo = int.Parse(ThisAssembly.CommitNumber);
+        var currentCommitNo = int.Parse(ThisAssembly.CommitNumber);
 
-    //uses tags to detect correct version
-    var latestPublishedCommitNo = await WebsiteTools.GetLatestCommitNumber();
+        //uses tags to detect correct version
+        var latestPublishedCommitNo = await WebsiteTools.GetLatestCommitNumber();
 
-    //if lower raise warning
-    if (currentCommitNo < latestPublishedCommitNo)
-    {
-   
-        //prepare question to ask user
-        var alertData = new
+        //if lower raise warning
+        if (currentCommitNo < latestPublishedCommitNo)
         {
-            icon = "warning",
-            title = "App outdated!",
-            html = "Press <kbd>CTRL + SHIFT + R</kbd> to get <strong>latest</strong> version. " +
-                   $"Also try clearing your <strong>Cookies & Cache</strong>. <br>" +
-                   $"<span style=\"font-size: 14px;color: grey;\">Your version is {currentCommitNo}, latest is {latestPublishedCommitNo}</span>");,
-            showCancelButton = true,
-            confirmButtonColor = "#3085d6",
-            cancelButtonColor = "#d33",
-            cancelButtonText = "Restart",
-            confirmButtonText = "Ignore"
-        };
 
-        var sweetAlertResult = await AppData.JsRuntime.ShowAlertResult(alertData);
+            //prepare question to ask user
+            var alertData = new
+            {
+                icon = "warning",
+                title = "Please Update",
+                html = "Press <kbd>CTRL + SHIFT + R</kbd> to get <strong>latest</strong> version. " +
+                       $"Also try clearing your <strong>Cookies & Cache</strong>. <br>" +
+                       $"<span style=\"font-size: 14px;color: grey;\">Your version is {currentCommitNo}, latest is {latestPublishedCommitNo}</span>",
+                showCancelButton = true,
+                confirmButtonColor = "#3085d6",
+                cancelButtonColor = "#d33",
+                cancelButtonText = "Update",
+                confirmButtonText = "Ignore"
+            };
 
-        //if user clicked "Ignore", then continue like nothing
-        var continueClicked = sweetAlertResult.GetProperty("isConfirmed").GetBoolean();
+            var sweetAlertResult = await AppData.JsRuntime.ShowAlertResult(alertData);
 
-        //user clicked "Restart"
-        if (!continueClicked)
-        {
-            //reloads page
-            await AppData.JsRuntime.ReloadPage();
+            //if user clicked "Ignore", then continue like nothing
+            var continueClicked = sweetAlertResult.GetProperty("isConfirmed").GetBoolean();
+
+            //user clicked "Restart"
+            if (!continueClicked)
+            {
+                //reloads page
+                await AppData.JsRuntime.ReloadPage();
+            }
         }
 
-
-
-    }
-
-#endif
 
     }
 

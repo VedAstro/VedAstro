@@ -34,12 +34,14 @@ namespace API
         private readonly TableServiceClient ipAddressServiceClient;
         private readonly TableServiceClient requestUrlStatisticServiceClient;
         private readonly TableServiceClient subscriberStatisticServiceClient;
+        private readonly TableServiceClient userAgentStatisticServiceClient;
         private readonly TableServiceClient rawRequestStatisticServiceClient;
         private readonly TableServiceClient ipAddressMetadataServiceClient;
 
         private readonly TableClient ipAddressStatisticTableClient;
         private readonly TableClient requestUrlStatisticTableClient;
         private readonly TableClient subscriberStatisticTableClient;
+        private readonly TableClient userAgentStatisticTableClient;
         private readonly TableClient rawRequestStatisticTableClient;
         private readonly TableClient ipAddressStatisticMetadataTableClient;
 
@@ -82,6 +84,15 @@ namespace API
             //save reference for late use
             subscriberStatisticServiceClient = new TableServiceClient(new Uri(storageUriSubscriberStatistic), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
             subscriberStatisticTableClient = subscriberStatisticServiceClient.GetTableClient(tableNameSubscriberStatistic);
+
+            //# USER AGENT
+            //------------------------------------
+            //Initialize address table 
+            string tableNameUserAgentStatistic = "UserAgentStatistic";
+            var storageUriUserAgentStatistic = $"https://{accountName}.table.core.windows.net/{tableNameUserAgentStatistic}";
+            //save reference for late use
+            userAgentStatisticServiceClient = new TableServiceClient(new Uri(storageUriUserAgentStatistic), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            userAgentStatisticTableClient = userAgentStatisticServiceClient.GetTableClient(tableNameUserAgentStatistic);
 
             
             //# IP ADDRESS
@@ -214,6 +225,42 @@ namespace API
                 newRow.CallCount = 1; //start with 1
                 //save to db
                 subscriberStatisticTableClient.AddEntity(newRow);
+            }
+        }
+        
+        public void LogUserAgent(HttpRequestData incomingRequest)
+        {
+            //get host address as main ID of record
+            var requestHeaderList = incomingRequest.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+            var userAgent = requestHeaderList["User-Agent"].FirstOrDefault() ?? "no User-Agent";
+
+            //# check if User-Agent already exist
+            //make a search for ip address stored under row key
+            var cleanUserAgent = Tools.CleanAzureTableKey(userAgent, "|");
+            Expression<Func<UserAgentStatisticEntity, bool>> expression = call => call.PartitionKey == cleanUserAgent;
+
+            //execute search
+            var recordFound = userAgentStatisticTableClient.Query(expression).FirstOrDefault();
+
+            //# if existed, update call count
+            var isExist = recordFound != null;
+            if (isExist)
+            {
+                //update row
+                recordFound.CallCount = ++recordFound.CallCount; //increment call count
+                userAgentStatisticTableClient.UpsertEntity(recordFound);
+            }
+
+            //# if not exist, make new log
+            else
+            {
+                var newRow = new UserAgentStatisticEntity();
+                newRow.PartitionKey = cleanUserAgent;
+                //get month and year in correct format 2019-10
+                newRow.RowKey =  DateTime.Now.ToString("yyyy-MM");
+                newRow.CallCount = 1; //start with 1
+                //save to db
+                userAgentStatisticTableClient.AddEntity(newRow);
             }
         }
 

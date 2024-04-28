@@ -2096,6 +2096,8 @@ class AshtakvargaTable {
 
 class ChatInstance {
     LastUserMessage = ""; //used for post ai reply highlight
+    SelectedTopicId = "";  //she's filled in when set
+    SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
     LiveServerURL =
         "wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
@@ -2551,7 +2553,10 @@ class ChatInstance {
             const selectedOptgroupLabel = selectedOption
                 .closest("optgroup")
                 .prop("label");
-            const selectedTopicId = selectedOption.val();
+
+            //save what user choose for use throughout the code
+            window.vedastro.chatapi.SelectedTopicId = selectedOption.val();
+            window.vedastro.chatapi.SelectedTopicText = selectedOption[0].innerText;
 
             //handle possible different selection types
             //nothing much done here, basically let caller context has been swicthed
@@ -2565,28 +2570,30 @@ class ChatInstance {
             ) {
                 //get full details of the person
                 let selectedPerson = window.vedastro.PersonList.find(
-                    (obj) => obj.PersonId === selectedTopicId
+                    (obj) => obj.PersonId === window.vedastro.chatapi.SelectedTopicId
                 );
 
                 //save for use by other
                 window.vedastro.SelectedPerson = selectedPerson;
 
+                //convert person name to birth DOB (so unregistered person can be checked)
+                var newTopicId = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+                window.vedastro.chatapi.SelectedTopicId = newTopicId;
+
                 //let others know (context changer)
-                $(document).trigger("onChangeSelectedTopic", "Hello, World!");
+                $(document).trigger("onChangeSelectedTopic");
 
                 validTopicSelected = true; //ready to connect to server
             }
 
             //2 : BOOKS
             if (selectedOptgroupLabel === "Learn Astrology") {
-                Swal.fire(
-                    "Coming soon!",
-                    "<strong>Come</strong> back later or choose another topic",
-                    "info"
-                );
 
-                //reset to make selection again
-                $("#TopicListDropdown").val("");
+                //let others know (context changer)
+                $(document).trigger("onChangeSelectedTopic");
+
+                validTopicSelected = true; //ready to connect to server
+
             }
 
             //2 : CODE
@@ -2617,9 +2624,9 @@ class ChatInstance {
             Swal.fire({
                 icon: "success",
                 title: "Topic changed!",
-                html: `We will now talk about <strong>${window.vedastro.SelectedPerson.Name}</strong>'s horoscope.`,
+                html: `We'll will now talk about <strong>${window.vedastro.chatapi.SelectedTopicText}</strong>`,
                 showConfirmButton: false,
-                timer: 1000,
+                timer: 1500,
             });
 
             // execute once execution que is empty (so pop up stays open) via 0ms
@@ -2798,9 +2805,6 @@ class ChatInstance {
         //inject in User's input into chat window
         $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
 
-        //set topic text TODO support DOB and books
-        var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
-
         //note the switch to python naming covention
         var commandsToSend = [];
         commandsToSend.push("followup_question"); //add command for server to read as "follow up"
@@ -2809,7 +2813,7 @@ class ChatInstance {
             primary_answer_hash: primaryAnswerHash,
             command: commandsToSend, //server uses this to do special handling
             text: followupQuestion,
-            topic: topicText,
+            topic: window.vedastro.chatapi.SelectedTopicId, //can be DOB or book name, or astrology coder
         };
 
         window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
@@ -3237,7 +3241,8 @@ ${ai_text_message_html}
         //get selected birth time
         //TODO can be DOB or bookname
         var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
-        await this.SendMessageToServer(userInput, topicText);
+
+        await this.SendMessageToServer(userInput);
         this.LastUserMessage = userInput; //save to used later for highlight
 
         //STEP 3 : GUI CLEAN UP
@@ -3271,7 +3276,7 @@ ${ai_text_message_html}
     }
 
     //this is where final JSON packaged before sending to server
-    async SendMessageToServer(message, topicText) {
+    async SendMessageToServer(message) {
         //build all commands based on set user settings
         var command_list = [];
         var password = $("#useTeacherModeSwitchInput").val();
@@ -3288,7 +3293,7 @@ ${ai_text_message_html}
         const messagePayload = {
             user_id: window.vedastro.UserId, //gotten from browser storage if any when script was init
             text: message,
-            topic: topicText,
+            topic: window.vedastro.chatapi.SelectedTopicId, //can be DOB or book name, or astrology coder,
             command: command_list,
             password: password,
         };

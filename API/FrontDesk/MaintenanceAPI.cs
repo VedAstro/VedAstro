@@ -44,6 +44,7 @@ namespace API
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
             apiStatistic.LogSubscriber(incomingRequest);
+            apiStatistic.LogUserAgent(incomingRequest);
 
 
             //get chart special API home page and send that to caller
@@ -99,6 +100,7 @@ namespace API
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
             apiStatistic.LogSubscriber(incomingRequest);
+            apiStatistic.LogUserAgent(incomingRequest);
 
             //IMPORTANT: replace this variable with your Cognitive Services subscription key
             string subscriptionKey = Secrets.BING_IMAGE_SEARCH;
@@ -144,7 +146,7 @@ namespace API
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
             apiStatistic.LogSubscriber(incomingRequest);
-
+            apiStatistic.LogUserAgent(incomingRequest);
 
             if (formatName.ToLower() == "json")
             {
@@ -189,6 +191,7 @@ namespace API
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
             apiStatistic.LogSubscriber(incomingRequest);
+            apiStatistic.LogUserAgent(incomingRequest);
 
 
             try
@@ -229,6 +232,7 @@ namespace API
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
             apiStatistic.LogSubscriber(incomingRequest);
+            apiStatistic.LogUserAgent(incomingRequest);
 
             try
             {
@@ -254,6 +258,7 @@ namespace API
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
             apiStatistic.LogSubscriber(incomingRequest);
+            apiStatistic.LogUserAgent(incomingRequest);
 
 
             var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
@@ -292,6 +297,7 @@ namespace API
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
             apiStatistic.LogSubscriber(incomingRequest);
+            apiStatistic.LogUserAgent(incomingRequest);
 
 
             try
@@ -331,6 +337,7 @@ namespace API
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
             apiStatistic.LogSubscriber(incomingRequest);
+            apiStatistic.LogUserAgent(incomingRequest);
 
             try
             {

@@ -90,6 +90,7 @@ namespace API
             apiStatistic.LogRequestUrl(incomingRequest);
             apiStatistic.LogRawRequest(incomingRequest);
             apiStatistic.LogSubscriber(incomingRequest);
+            apiStatistic.LogUserAgent(incomingRequest);
 
             return APITools.PassMessage(incomingRequest);
         }

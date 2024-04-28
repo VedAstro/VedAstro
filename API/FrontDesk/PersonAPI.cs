@@ -7,6 +7,8 @@ using Person = VedAstro.Library.Person;
 using Azure.Data.Tables;
 using Newtonsoft.Json.Linq;
 using System.Dynamic;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace API
 {
@@ -165,14 +167,19 @@ namespace API
         {
             try
             {
+                //get data from DB
                 var foundCalls = AzureTable.PersonList.Query<PersonRow>(call => call.PartitionKey == ownerId);
 
-                //add each to return list
-                var personJsonList = new JArray();
-                foreach (var call in foundCalls) { personJsonList.Add(Person.FromAzureRow(call).ToJson()); }
+                //get person list from DB data
+                var foundPersonList = new List<Person>();
+                foreach (var call in foundCalls) { foundPersonList.Add(Person.FromAzureRow(call)); }
+                var personJsonList = Person.ListToJson(foundPersonList); //convert to json
+
+                //NOTE: set formatting none needed so can create matching hash with client
+                var jsonString = personJsonList.ToString(Formatting.None);
 
                 //calculate latest hash
-                var latestPersonListHash = Tools.GetStringHashCode(personJsonList.ToString());
+                var latestPersonListHash = Tools.GetStringHashCode(jsonString).ToString();
 
                 //check if match with inputed hash
                 var isMatch = latestPersonListHash.Equals(localPersonListHash);

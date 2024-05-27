@@ -12,6 +12,7 @@ using static VedAstro.Library.PlanetName;
 using Exception = System.Exception;
 using System.Text;
 using ExCSS;
+using ScottPlot.Drawing.Colormaps;
 
 namespace VedAstro.Library
 {
@@ -7537,7 +7538,7 @@ namespace VedAstro.Library
             //is multiplied by its Chesta Bala(motional strength)
             //and then the square root of the product extracted.
             var ochchaBala = PlanetOchchaBala(planet, birthTime).ToDouble();
-            var chestaBala = PlanetChestaBala(planet, birthTime).ToDouble();
+            var chestaBala = PlanetChestaBala(planet, birthTime, true).ToDouble();
             var product = (60 - ochchaBala) * (60 - chestaBala);
 
             //Square root of the product extracted.
@@ -7557,7 +7558,7 @@ namespace VedAstro.Library
             //is multiplied by its Chesta Bala(motional strength)
             //and then the square root of the product extracted.
             var ochchaBala = PlanetOchchaBala(planet, birthTime).ToDouble();
-            var chestaBala = PlanetChestaBala(planet, birthTime).ToDouble();
+            var chestaBala = PlanetChestaBala(planet, birthTime, true).ToDouble();
             var product = ochchaBala * chestaBala;
 
             //Square root of the product extracted.
@@ -8646,7 +8647,7 @@ namespace VedAstro.Library
                 //CPJ - When remainder = 0, new Constellation should return next Constellation Pada 1. Hence the if-else code change
                 if (minutesInConstellation == 0)
                 {
-                    constellation = new Constellation((constellationNumber+1), quarter, degreesInConstellation);
+                    constellation = new Constellation((constellationNumber + 1), quarter, degreesInConstellation);
                 }
                 else
                 {
@@ -11504,7 +11505,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// NOTE: sun, moon get score for ISHTA/KESHA calculation TODO
+        /// NOTE: sun, moon get score for ISHTA/KESHA calculation only when specified for IshataKashta
         /// MOTIONAL STRENGTH
         /// Chesta here means Vakra Chesta or act of retrogression. Each planet, except the Sun and the Moon,
         /// and shadowy planets get into the state of Vakra or retrogression
@@ -11526,14 +11527,14 @@ namespace VedAstro.Library
         /// from the Sun, it gradually loses the power
         /// of the Sun's gravitation and consequently, 
         /// </summary>
-        public static Shashtiamsa PlanetChestaBala(PlanetName planetName, Time time)
+        public static Shashtiamsa PlanetChestaBala(PlanetName planetName, Time time, bool useSpecialSunMoon = false)
         {
             //if include Sun/Moon specified, then use special function (used for Ishta/Kashta score)
-            if (planetName == Sun) { return SunChestaBala(time); }
-            if (planetName == Moon) { return MoonChestaBala(time); }
+            if (planetName == Sun && useSpecialSunMoon) { return SunChestaBala(time); }
+            if (planetName == Moon && useSpecialSunMoon) { return MoonChestaBala(time); }
 
             //the Sun,Moon,Rahu and Ketu does not not retrograde, so 0 chesta bala
-            if (planetName == Rahu || planetName == Ketu) { return Shashtiamsa.Zero; }
+            if (planetName == Sun || planetName == Moon || planetName == Rahu || planetName == Ketu) { return Shashtiamsa.Zero; }
 
             //get the interval between birth date and the date of the epoch (1900)
             //verified standard horoscope = 6862.579
@@ -11544,7 +11545,7 @@ namespace VedAstro.Library
             var madhya = Madhya(interval, time);
 
             //get the apogee of all planets (apogee=earth, aphelion=sun)
-            // aphelion (the part of a planet's orbit most distant from the Sun) 
+            //aphelion (the part of a planet's orbit most distant from the Sun) 
             var seegh = GetSeeghrochcha(madhya, interval, time);
 
 
@@ -11784,6 +11785,75 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// </summary>
+        public static PlanetMotion PlanetMotionName2(PlanetName planetName, Time time)
+        {
+            //Brihat Parashara Hora Shatra > Ch.27 Shl.21-23
+            //
+            //Motions of Grahas (Mangal to Shani): Eight kinds of motions are attributed to grahas.
+            //These are Vakra (retrogression),
+            //Anuvakr (entering the previous rashi in retrograde motion),
+            //Vikal (devoid of motion or in stationary position),
+            //Mand (somewhat slower motion than usual),
+            //Mandatar (slower than the previous mentioned motion),
+            //Sama (somewhat increasing in motion as against Mand),
+            //Chara (faster than Sama) and
+            //Atichara (entering next rashi in accelerated motion).
+            //The strengths allotted due to such 8 motions are: 60, 30, 15, 30, 15, 7.5, 45, and 30.
+
+            //There is an easy method to find out Gati or speed of Mars, Jupiter & Saturn which are beyond Earth with respect to Sun (outer planets).
+            // Whenever these planets are transmitting 2nd or 1st or 12th sign from Sun, these planets will be in - Atichara
+            // In 3rd - Sama
+            // In 4th - Chara
+            // In 5th - Manda & Mandatara
+            // In 6th - Vikala
+            // In 7th & 8th - Vakra
+            // In 9th - Vikala & Forward (Manda)
+            // In 10th - Sama
+            // In 11 th -Chara
+            // (Source - Bhaavartha Ratnakara-Last Chapters-Translated by B. V. Raman ji)
+            //
+            
+            //Ancient Siddhaanta and Phalit classics mention eight types of speeds (Gati) of planets. All these eight types apply to Pancha-taaraa planets only : Mercury, Venus, Mars, Jupiter and Saturn. Rahu and Ketu are always retrograde. Sun and Moon are never retrograde.
+            // 
+            // The eight types of speeds are as follows :-
+            // 
+            // Vakra (Faster Retrograde)
+            // Anuvakra (Slower Retrograde)
+            // Kutila (complicated and very slow retrograde, sometimes relapsing into non-retro)
+            // Mandatara (slowest forward motion)
+            // Manda (slow forward motion)
+            // Sama (normal forward motion)
+            // Sheeghra (fast forward)
+            // Sheeghratara (very fast forward)
+            // These eight speeds according to their numbers are shown in the picture below, which is GEOCENTRIC epicycloidal motion of any Pancha-taara planet. In heliocentric model, there is no such differentiation and speed is always "sama". In Geocentric system too, speed of Sun or Moon is always "sama".
+
+            //sun, moon, rahu & ketu don't have retrograde so always direct
+            if (planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu) { return PlanetMotion.Direct; }
+
+            //get chestaBala
+            var signsFromSun = Calculate.IsPlanetsInSignsFromPlanet() (planetName, time).ToDouble();
+
+            //based on chesta bala assign name to it
+            //Chesta kendra = 180 degrees = Retrograde
+            switch (chestaBala)
+            {
+                case <= 60 and > 30: return PlanetMotion.Retrograde;
+                case <= 30 and > 15: return PlanetMotion.Direct;
+                case <= 15 and > 15: return PlanetMotion.Direct;
+                case <= 30 and >= 0: return PlanetMotion.Stationary;
+                case <= 15 and >= 0: return PlanetMotion.Stationary;
+                case <= 7.5 and >= 0: return PlanetMotion.Stationary;
+                case <= 45 and >= 0: return PlanetMotion.Stationary;
+                case <= 30 and >= 0: return PlanetMotion.Stationary;
+                default:
+                    throw new Exception($"Error in GetPlanetMotionName : {chestaBala}");
+            }
+
+        }
+
+
+        /// <summary>
         /// A retrograde planet moves in the reverse direction and, instead of
         /// increasing, its longitude decreases as the time elapses. Rahu and Ketu often
         /// move in retrograde direction only. Other planets, except the Sun and the
@@ -11830,12 +11900,12 @@ namespace VedAstro.Library
                 if ((checkTimeLong.TotalDegrees >= 0.00 && checkTimeLong.TotalDegrees <= 5.00) && (nextDayLong.TotalDegrees >= 355.00 && nextDayLong.TotalDegrees <= 0.00))
                 {
                     retro = true;
-                    
+
                 }
                 else
                 {
                     retro = false;
-                    
+
                 }
             }
             return retro;

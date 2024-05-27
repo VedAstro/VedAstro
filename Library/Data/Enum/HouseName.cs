@@ -159,8 +159,7 @@ namespace VedAstro.Library
             }
             catch (Exception e)
             {
-                LibLogger.Error($"Failed to parse:\n{planetInput.ToString()}");
-
+                LibLogger.Debug($"Failed to parse:\n{planetInput.ToString()}");
                 return HouseName.Empty;
             }
 

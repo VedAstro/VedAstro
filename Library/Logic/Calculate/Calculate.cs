@@ -13,6 +13,12 @@ using Exception = System.Exception;
 using System.Text;
 using ExCSS;
 using ScottPlot.Drawing.Colormaps;
+using Azure;
+// Note: The Azure OpenAI client library for .NET is in preview.
+// Install the .NET library via NuGet: dotnet add package Azure.AI.OpenAI --version 1.0.0-beta.5
+using Azure;
+using Azure.AI.OpenAI;
+using Newtonsoft.Json;
 
 namespace VedAstro.Library
 {
@@ -67,10 +73,15 @@ namespace VedAstro.Library
 
         #endregion
 
+
         //----------------------------------------CORE CODE---------------------------------------------
 
+        #region MAINTAINANCE
 
-        #region GEO LOCATION
+        /// <summary>
+        /// Special debug function
+        /// </summary>
+        public static string BouncBackInputAsString(PlanetName planetName, Time time) => planetName.ToString();
 
         /// <summary>
         /// Basic bounce back data to confirm validity or ML table needs
@@ -79,6 +90,11 @@ namespace VedAstro.Library
         {
             return time.GetGeoLocation();
         }
+
+        #endregion
+
+        #region GEO LOCATION
+
 
         /// <summary>
         /// Given an address will convert to it's geo location equivelant
@@ -286,6 +302,30 @@ namespace VedAstro.Library
         #endregion
 
         #region CHAT API & MACHINE LEARNING
+
+        /// <summary>
+        /// Ask questions to AI astrologer about life horoscope predictions
+        /// </summary>
+        /// <param name="birthTime">time of person hprtson horoscope to check</param>
+        /// <param name="userQuestion">question related horoscope</param>
+        /// <param name="chatSession"></param>
+        /// <returns></returns>
+        public static async Task<JObject> HoroscopeChat(Time birthTime, string userQuestion, string chatSession = "")
+        {
+            return await ChatAPI.SendMessageHoroscope(birthTime, userQuestion, chatSession);
+        }
+
+        /// <summary>
+        /// Ask questions to AI astrologer about life horoscope predictions
+        /// </summary>
+        /// <param name="birthTime">time of person hprtson horoscope to check</param>
+        /// <param name="userQuestion">question related horoscope</param>
+        /// <param name="chatSession"></param>
+        /// <returns></returns>
+        public static async Task<JObject> MatchChat(Time maleBirthTime, Time femaleBirthTime, string userQuestion, string chatSession = "")
+        {
+            return await ChatAPI.SendMessageMatch(maleBirthTime, femaleBirthTime, userQuestion, chatSession);
+        }
 
         /// <summary>
         /// Searches all horoscopes predictions with LLM
@@ -11813,7 +11853,7 @@ namespace VedAstro.Library
             // In 11 th -Chara
             // (Source - Bhaavartha Ratnakara-Last Chapters-Translated by B. V. Raman ji)
             //
-            
+
             //Ancient Siddhaanta and Phalit classics mention eight types of speeds (Gati) of planets. All these eight types apply to Pancha-taaraa planets only : Mercury, Venus, Mars, Jupiter and Saturn. Rahu and Ketu are always retrograde. Sun and Moon are never retrograde.
             // 
             // The eight types of speeds are as follows :-

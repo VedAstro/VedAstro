@@ -3396,7 +3396,7 @@ class HoroscopeChat {
     ShowHeader = true; //default enabled, header with title, icon and edit button
     HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
     IsAITalking = false; //default false, to implement "PTT" radio like protocol
-
+    PaddingTopApplied = false; //basic switch will go once
 
     constructor(rawSettings) {
         console.log(
@@ -3430,36 +3430,40 @@ class HoroscopeChat {
 
     //chat box body as html to be injected
     generateHtmlBody() {
-        return `    
-     <!-- MAIN MESSAGE BODY -->
-    
-     <!-- CHAT SESSION PERSON SELECTOR -->
-         
-    
-         <!-- MESSAGES IN VIEW -->
-         <ul class="list-unstyled px-3" id="ChatWindowMessageList" style="max-height:667.5px; overflow: auto; ">
-             <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
-                 <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar"
-                      class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
-                 <div class="card">
-                     <div class="card-header d-flex justify-content-between p-3">
-                         <p class="fw-bold mb-0">Vignes</p>
-                         <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
-                     </div>
-                     <div class="card-body">
-                         <p class="mb-0">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
-                         </p>
-                     </div>
-                 </div>
-             </li>
-         </ul>
-         <!-- QUESTION INPUT -->
-        <div id="questionInputHolder" class="input-group mb-3" style="">
-            <input id="UserChatInputElement" class="form-control dropdown-toggle text-start" data-bs-toggle="dropdown" aria-expanded="false" type="text" placeholder="" aria-label="">
-            <ul id="UserPresetDropDownElement" class="dropdown-menu " aria-labelledby="UserChatInputElement" style="position: absolute;"></ul>
-            <button id="SendChatButton" onclick="window.vedastro.horoscopechat.onClickSendChat()" type="button" class="btn btn-success btn-rounded float-end"><span class="iconify me-1" data-icon="majesticons:send" data-width="25" data-height="25"></span>Send</button>
-        </div>
+        return `
+        
+        <!-- MAIN MESSAGE BODY -->
+        <div class="shadow" id="BorderHolderDiv" style="border-radius: 19px;background: linear-gradient(to bottom, #ececec, #e0edff);">
+            <!-- MESSAGES IN VIEW -->
+            <ul class="list-unstyled mx-2" id="ChatWindowMessageList" style="max-height:667.5px;">
+                <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
+                    <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar"
+                        class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between p-3">
+                            <p class="fw-bold mb-0">Vignes</p>
+                            <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!-- QUESTION INPUT -->
+            <div id="questionInputHolder" class="input-group p-2" style="">
+                <input id="UserChatInputElement" class="rounded-0 rounded-start-4 form-control dropdown-toggle text-start" data-bs-toggle="dropdown" aria-expanded="false" type="text" placeholder="" aria-label="">
+                <ul id="UserPresetDropDownElement" class="dropdown-menu rounded-4" aria-labelledby="UserChatInputElement" style="position: absolute;"></ul>
+                <button id="SendChatButton"
+                        onclick="window.vedastro.horoscopechat.onClickSendChat()"type="button"
+                        class="rounded-0 rounded-end-4 btn btn-success btn-rounded float-end">
+                            <span class="iconify me-1" data-icon="majesticons:send" data-width="25" data-height="25"></span>
+                            Send
+                </button>
+            </div>
+        </div> 
      `;
     }
 
@@ -3499,7 +3503,7 @@ class HoroscopeChat {
     initializeChatInputElement() {
 
         //preset questions used by both elements below
-        let presetQuestions = ['\uD83E\uDDD1\u200D\uD83C\uDFA8 Will higher educational benefit me?','\uD83C\uDF7B Will a party lifestyle benefit me?','\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Who will benefit me more friends or family?', '\uD83D\uDC9D Will marriage bring me happiness?', '\uD83D\uDE4F Will becoming a monk benefit me?', '\uD83D\uDE0D Predict my sex life?', '\uD83C\uDF0D Can travel improve my life?', '\uD83C\uDF78 Why am I an alcoholic?', '\uD83D\uDCCA Will I succeed in stock trading?', '\uD83E\uDD29 Will I become famous?', '\uD83D\uDCB0 Will I become a millionaire?', '\uD83D\uDC98 Describe my future wife?', '\uD83D\uDC74 Relationship with my father?', '\uD83C\uDFB0 Can I win lottery prize?', '\uD83C\uDF0D Special yogas in my chart?', '\uD83D\uDCDA Best career for me?', '\uD83C\uDF93 Will I get foreign education?'];
+        let presetQuestions = ['\uD83E\uDDD1\u200D\uD83C\uDFA8 Will higher educational benefit me?', '\uD83C\uDF7B Will a party lifestyle benefit me?', '\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Who will benefit me more friends or family?', '\uD83D\uDC9D Will marriage bring me happiness?', '\uD83D\uDE4F Will becoming a monk benefit me?', '\uD83D\uDE0D Predict my sex life?', '\uD83C\uDF0D Can travel improve my life?', '\uD83C\uDF78 Why am I an alcoholic?', '\uD83D\uDCCA Will I succeed in stock trading?', '\uD83E\uDD29 Will I become famous?', '\uD83D\uDCB0 Will I become a millionaire?', '\uD83D\uDC98 Describe my future wife?', '\uD83D\uDC74 Relationship with my father?', '\uD83C\uDFB0 Can I win lottery prize?', '\uD83C\uDF0D Special yogas in my chart?', '\uD83D\uDCDA Best career for me?', '\uD83C\uDF93 Will I get foreign education?'];
 
 
         //build the input element
@@ -3616,6 +3620,9 @@ class HoroscopeChat {
             return;
         }
 
+        //add top padding so top message don't hit top border
+        if (!this.PaddingTopApplied) { $("#ChatWindowMessageList").addClass("pt-3"); this.PaddingTopApplied = true; }
+
         // STEP 1 : UPDATE GUI WITH USER MSG (UX)
         var aiInput = $("#UserChatInputElement").val();
         var userName = "You";
@@ -3640,7 +3647,7 @@ class HoroscopeChat {
 
 
         // STEP 2 : UPDATE GUI WITH "THINKING" MSG (UX)
-        
+
 
 
 
@@ -3655,12 +3662,15 @@ class HoroscopeChat {
         //var timeInputUrl = CommonTools.BirthTimeUrlOfSelectedPersonJson();
         var timeInputUrl = "Location/Singapore/Time/12:44/23/04/1998/+08:00";
 
+
+
         //send user's message 
         var aiReplyData = await this.sendMessageToServer(timeInputUrl, userInput);
         this.LastUserMessage = userInput; //save to used later for highlight
 
         //print to user
         this.printAIReplyMessageToView(aiReplyData);
+
 
     }
 
@@ -3761,7 +3771,7 @@ class HoroscopeChat {
 
 
         //define html for answer
-        var aiFinalAnswerHolder =  `
+        var aiFinalAnswerHolder = `
             <div style="display:none;" class="text-html-out-elm mb-0">
                 ${aiTextMessageHtml}
             </div>

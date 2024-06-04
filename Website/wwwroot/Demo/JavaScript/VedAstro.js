@@ -1840,6 +1840,12 @@ class NatalChart { }
  * Tools used by others in this repo
  */
 class CommonTools {
+
+    //used as delay sleep execution
+    static delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     //will auto get payload out of json and checks reports failures to user
     // Define an asynchronous function named 'GetAPIPayload'
     static async GetAPIPayload(url, payload = null) {
@@ -3636,7 +3642,7 @@ class HoroscopeChat {
         var userInputChatCloud = `
         <li class="d-flex justify-content-end mb-4">
             <div class="card ">
-                <div class="card-header d-flex justify-content-between p-3">
+                <div class="card-header d-flex justify-content-between py-2">
                     <p class="fw-bold mb-0">${userName}</p>
                 </div>
                 <div class="card-body">
@@ -3669,14 +3675,18 @@ class HoroscopeChat {
         //var timeInputUrl = CommonTools.BirthTimeUrlOfSelectedPersonJson();
         var timeInputUrl = "Location/Singapore/Time/12:44/23/04/1998/+08:00";
 
+        //show temperoray "Thinking" message to user before calling API as that will take time
+        this.showTempThinkingMessage();
 
-
-        //send user's message 
+        //send user's message
         var aiReplyData = await this.sendMessageToServer(timeInputUrl, userInput);
         this.LastUserMessage = userInput; //save to used later for highlight
 
         //print to user
         this.printAIReplyMessageToView(aiReplyData);
+
+        //hide thinking message, for less clutered UX
+        this.hideTempThinkingMessage();
 
 
     }
@@ -3729,7 +3739,7 @@ class HoroscopeChat {
         try {
             rawJsonMessage = JSON.parse(rawJson);
         } catch (error) {
-           //expected fail because no need parse
+            //expected fail because no need parse
             rawJsonMessage = rawJson;
         }
         var aiTextMessageHtml = rawJsonMessage.textHtml;
@@ -3825,7 +3835,7 @@ class HoroscopeChat {
 
         // Flag to prevent user input while AI is 'typing'
         //NOTE: access via global, because deeply nested
-        window.vedastro.horoscopechat.isAiTalking = true;
+        window.vedastro.horoscopechat.IsAITalking = true;
 
 
         // Initialize the index for streaming text
@@ -3902,4 +3912,56 @@ class HoroscopeChat {
 
     }
 
+    async showTempThinkingMessage() {
+
+        //little lag for simulation reality
+        await CommonTools.delay(1000);
+
+        //define html for answer
+        var aiFinalAnswerHolder = `
+            <div class="text-html-out-elm mb-0">
+                Thinking...
+                <svg class="loading-icon-elm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
+            </div>
+        `;
+
+        // Create a chat bubble with the AI's message
+        var aiInputChatCloud = `
+        <li id="tempThinkingMshBubble" class="d-flex justify-content-start" style=" margin-bottom: 70px; ">
+            <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between py-2">
+                    <p class="fw-bold mb-0 me-5">Vignes</p>                   
+                </div>
+                <div class="message-holder card-body">
+                    ${aiFinalAnswerHolder}                   
+                </div>
+            </div>
+        </li>
+        `;
+
+        // Append the chat bubble to the chat window
+        $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
+
+        // # AUTO SCROLL DOWN
+        $("#ChatWindowMessageList").scrollTop(
+            $("#ChatWindowMessageList")[0].scrollHeight
+        );
+
+        // Flag to prevent user input while AI is 'typing'
+        //NOTE: access via global, because deeply nested
+        window.vedastro.horoscopechat.IsAITalking = true;
+
+
+
+    }
+
+    hideTempThinkingMessage() {
+        $("#tempThinkingMshBubble").remove();
+
+        // Flag to prevent user input while AI is 'typing'
+        //NOTE: access via global, because deeply nested
+        window.vedastro.horoscopechat.IsAITalking = false;
+
+    }
 }

@@ -3392,9 +3392,8 @@ class HoroscopeChat {
     SelectedTopicId = "";  //she's filled in when set
     SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
-    LiveServerURL =
-        "wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
-    LocalServerURL = "ws://127.0.0.1:8000/HoroscopeChat";
+    LiveServerURL ="https://vedastroapi.azurewebsites.net/api/HoroscopeChat";
+    LocalServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
     ElementID = ""; //ID of main div where table & header will be injected
     ShowHeader = true; //default enabled, header with title, icon and edit button
     HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
@@ -3409,44 +3408,15 @@ class HoroscopeChat {
         //make instance accessible
         window.vedastro.horoscopechat = this;
 
-        //correct if property names is camel case (for Blazor)
-        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+        //process the input variables and set them
+        this.initializeSettingData(rawSettings);
 
-        //expand data inside settings input
-        this.ElementID = settings.ElementID;
-        this.ShowHeader = settings.ShowHeader;
-        this.HeaderIcon = settings.HeaderIcon;
-
-
-        //CHAT GUI INJECTION
-        //clear old gui data if any
-        $(`#${this.ElementID}`).css("max-width", "667px");
-
-        //random ID for edit button
-        this.EditButtonId = Math.floor(Math.random() * 1000000);
-
-        //inject into page
-        $(`#${this.ElementID}`).html(this.generateHtmlBody());
-
-
-        //GUI LOAD SAVED VALUES
-        //load settings stored browser storage, reflected in gui
-        let isLocalServerModeStr = localStorage.getItem("IsLocalServerMode");
-        $("#useLocalServerSwitchInput").prop(
-            "checked",
-            JSON.parse(isLocalServerModeStr)
-        );
-
-        // GUI EVENT HANDLRES
-        // NOTE: do handle only
+        //make the main chat window structure
+        this.initializeChatMainBody();
 
         //creates ever changing placeholder questios to engage users
         this.initializeChatInputElement();
 
-        //2:handle send button click
-        $("#SendChatButton").on("click", () => {
-            this.OnClickSendChat();
-        });
 
         //update control center back on earth
         console.log("~~~~~~~Huston, we have lift off!~~~~~~~");
@@ -3454,8 +3424,10 @@ class HoroscopeChat {
     }
 
 
+
     //----------------------------------------FUNCS---------------------------------------
     //---------------------BELOW LIES FUNCS, AS WE ARE SO YOU SHALL BE--------------------
+
 
 
     //chat box body as html to be injected
@@ -3488,7 +3460,7 @@ class HoroscopeChat {
         <div id="questionInputHolder" class="input-group mb-3" style="">
             <input id="UserChatInputElement" class="form-control dropdown-toggle text-start" data-bs-toggle="dropdown" aria-expanded="false" type="text" placeholder="" aria-label="">
             <ul id="UserPresetDropDownElement" class="dropdown-menu " aria-labelledby="UserChatInputElement" style="position: absolute;"></ul>
-            <button id="SendChatButton" type="button" class="btn btn-success btn-rounded float-end"><span class="iconify me-1" data-icon="majesticons:send" data-width="25" data-height="25"></span>Send</button>
+            <button id="SendChatButton" onclick="window.vedastro.horoscopechat.onClickSendChat()" type="button" class="btn btn-success btn-rounded float-end"><span class="iconify me-1" data-icon="majesticons:send" data-width="25" data-height="25"></span>Send</button>
         </div>
      `;
     }
@@ -3499,6 +3471,30 @@ class HoroscopeChat {
         //6: autofill preset questions handle (attach after generate)
         var selectedText = $(eventData).text();
         $("#UserChatInputElement").val(selectedText);
+    }
+
+    initializeSettingData(rawSettings) {
+
+        //correct if property names is camel case (for Blazor)
+        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+
+        //expand data inside settings input
+        this.ElementID = settings.ElementID;
+        this.ShowHeader = settings.ShowHeader;
+        this.HeaderIcon = settings.HeaderIcon;
+
+        //birth time can be inserted at init 
+        this.SelectedBirthTime = settings.SelectedBirthTime;
+
+
+        //GUI LOAD SAVED VALUES
+        //load settings stored browser storage, reflected in gui
+        let isLocalServerModeStr = localStorage.getItem("IsLocalServerMode");
+        $("#useLocalServerSwitchInput").prop(
+            "checked",
+            JSON.parse(isLocalServerModeStr)
+        );
+
     }
 
     //this makes sure the input element has dynamic text and dropdowns work well
@@ -3560,7 +3556,7 @@ class HoroscopeChat {
             $("#UserChatInputElement").keypress((e) => {
                 if (e.which === 13) {
                     // Enter key pressed
-                    this.OnClickSendChat();
+                    this.onClickSendChat();
                     e.preventDefault(); // Prevents the default action
                 }
             });
@@ -3579,5 +3575,85 @@ class HoroscopeChat {
             }
         }
     }
+
+    initializeChatMainBody() {
+        //CHAT GUI INJECTION
+        //clear old gui data if any
+
+        $(`#${this.ElementID}`).empty();
+
+        //set max width here since declared in html
+        $(`#${this.ElementID}`).css("max-width", "667px");
+
+        //random ID for edit button
+        this.EditButtonId = Math.floor(Math.random() * 1000000);
+
+        //inject into page
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+
+    }
+
+    //control comes here from both Button click and keyboard press enter
+    async onClickSendChat(userInput = "") {
+        //STEP 0 : Validation
+
+        //make sure the chat input has something, else end here
+        userInput = userInput === "" ? $("#UserChatInputElement").val() : userInput; //get chat message to send to API that user inputed
+        if (userInput === "") {
+            Swal.fire(
+                "How to send nothing, sweetheart?",
+                "Please <strong>type a question</strong> in the chatbox first. Also there's <strong>commonly asked questions</strong> on left of the input.",
+                "error"
+            );
+            return;
+        }
+
+        //make sure AI is not busy talking
+        if (this.IsAITalking) {
+            Swal.fire(
+                "Please wait, dear..",
+                "AI is <strong>busy talking</strong>, please wait for it to <strong>finish</strong> chattering.",
+                "error"
+            );
+            return;
+        }
+
+        // STEP 1 : UPDATE GUI WITH USER MSG (UX)
+        var aiInput = $("#UserChatInputElement").val();
+        var userName = "You";
+        var userInputChatCloud = `
+        <li class="d-flex justify-content-end mb-4">
+            <div class="card ">
+                <div class="card-header d-flex justify-content-between p-3">
+                    <p class="fw-bold mb-0">${userName}</p>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        ${userInput}
+                    </p>
+                </div>
+            </div>
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
+                 class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="45">
+        </li>
+        `;
+        //inject in User's input into chat window
+        $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+
+        //STEP 2 : GUI CLEAN UP
+        //clear question input box for next, question
+        $("#UserChatInputElement").val("");
+
+        //STEP 3:
+        //user's input is sent to server for reply
+        //get selected birth time
+        //TODO can be DOB or bookname
+        //var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+
+        await this.SendMessageToServer(userInput);
+        this.LastUserMessage = userInput; //save to used later for highlight
+        
+    }
+
 
 }

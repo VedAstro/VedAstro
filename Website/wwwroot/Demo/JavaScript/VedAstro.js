@@ -1,4 +1,4 @@
-﻿// █ ▀ █▀▄▀█   █▄░█ █▀█ ▀█▀   █░█ █▀▀ █▀█ █▀▀   ▀█▀ █▀█   █░█ ▄▀█ █░█░█ █▄▀ ░
+// █ ▀ █▀▄▀█   █▄░█ █▀█ ▀█▀   █░█ █▀▀ █▀█ █▀▀   ▀█▀ █▀█   █░█ ▄▀█ █░█░█ █▄▀ ░
 // █ ░ █░▀░█   █░▀█ █▄█ ░█░   █▀█ ██▄ █▀▄ ██▄   ░█░ █▄█   █▀█ █▀█ ▀▄▀▄▀ █░█ █
 
 // █ ▀ █▀▄▀█   █░█ █▀▀ █▀█ █▀▀   ▀█▀ █▀█   █▀ █▀█ ▄▀█ █▀█ █▄▀   █▀▄ █▀▀ █░░ █ █▀▀ █░█ ▀█▀ ░
@@ -2094,13 +2094,15 @@ class AshtakvargaTable {
     }
 }
 
+//YOU CANNOT FIGHT A DYING MAN,
+//HE HOLDS THE UPPER HAND ALWAYS
+
 class ChatInstance {
     LastUserMessage = ""; //used for post ai reply highlight
     SelectedTopicId = "";  //she's filled in when set
     SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
-    LiveServerURL =
-        "wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
+    LiveServerURL = "wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
     LocalServerURL = "ws://127.0.0.1:8000/HoroscopeChat";
     ElementID = ""; //ID of main div where table & header will be injected
     ShowHeader = true; //default enabled, header with title, icon and edit button
@@ -2765,7 +2767,6 @@ class ChatInstance {
         window.location.href = "./Account/Login";
     }
 
-
     //called direct from static HTML hookup without seperate attach code
     //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
     onclick_preset_question(eventData) {
@@ -2818,9 +2819,6 @@ class ChatInstance {
 
         window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
     }
-
-    //YOU CANNOT FIGHT A DYING MAN,
-    //HE HOLDS THE UPPER HAND ALWAYS
 
     // Handler for incoming messages
     onmessage(event) {
@@ -3392,14 +3390,14 @@ class HoroscopeChat {
     SelectedTopicId = "";  //she's filled in when set
     SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
-    LiveServerURL ="https://vedastroapi.azurewebsites.net/api/HoroscopeChat";
+    LiveServerURL = "https://vedastroapi.azurewebsites.net/api/HoroscopeChat";
     LocalServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
     ElementID = ""; //ID of main div where table & header will be injected
     ShowHeader = true; //default enabled, header with title, icon and edit button
     HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
     IsAITalking = false; //default false, to implement "PTT" radio like protocol
 
-   
+
     constructor(rawSettings) {
         console.log(
             "~~~~~~~Stand back! Awesome Chat API code launching! All engines go!~~~~~~~"
@@ -3432,7 +3430,7 @@ class HoroscopeChat {
 
     //chat box body as html to be injected
     generateHtmlBody() {
-    return `    
+        return `    
      <!-- MAIN MESSAGE BODY -->
     
      <!-- CHAT SESSION PERSON SELECTOR -->
@@ -3501,7 +3499,7 @@ class HoroscopeChat {
     initializeChatInputElement() {
 
         //preset questions used by both elements below
-        let presetQuestions = ['👨‍👩‍👧‍👦 Who will benefit me more friends or family?','💝 Will marriage bring me happiness?','🙏 Will becoming a monk benefit me?','😍 Predict my sex life?','🗺️ Can travel improve my life?', '🍸 Why am I an alcoholic?', '📊 Will I succeed in stock trading?', '🤩 Will I become famous?', '💰 Will I become a millionaire?', '💘 Describe my future wife?', '👴 Relationship with my father?', '🎰 Can I win lottery prize?', '🌍 Special yogas in my chart?', '📚 Best career for me?', '🎓 Will I get foreign education?'];
+        let presetQuestions = ['\uD83E\uDDD1\u200D\uD83C\uDFA8 Will higher educational benefit me?','\uD83C\uDF7B Will a party lifestyle benefit me?','\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Who will benefit me more friends or family?', '\uD83D\uDC9D Will marriage bring me happiness?', '\uD83D\uDE4F Will becoming a monk benefit me?', '\uD83D\uDE0D Predict my sex life?', '\uD83C\uDF0D Can travel improve my life?', '\uD83C\uDF78 Why am I an alcoholic?', '\uD83D\uDCCA Will I succeed in stock trading?', '\uD83E\uDD29 Will I become famous?', '\uD83D\uDCB0 Will I become a millionaire?', '\uD83D\uDC98 Describe my future wife?', '\uD83D\uDC74 Relationship with my father?', '\uD83C\uDFB0 Can I win lottery prize?', '\uD83C\uDF0D Special yogas in my chart?', '\uD83D\uDCDA Best career for me?', '\uD83C\uDF93 Will I get foreign education?'];
 
 
         //build the input element
@@ -3513,7 +3511,7 @@ class HoroscopeChat {
 
         //--------LOCAL
 
-        function initializeInputElement(){
+        function initializeInputElement() {
             let $inputField = $('#UserChatInputElement'); // replace 'chatInput' with your input field's ID
             let currentQuestionIndex = 0;
             let currentCharIndex = 0;
@@ -3563,7 +3561,7 @@ class HoroscopeChat {
 
         }
 
-        function initializePresetDropdownElement(){
+        function initializePresetDropdownElement() {
             let dropdownElement = document.getElementById('UserPresetDropDownElement');
 
             // Clear the dropdown
@@ -3640,6 +3638,12 @@ class HoroscopeChat {
         //inject in User's input into chat window
         $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
 
+
+        // STEP 2 : UPDATE GUI WITH "THINKING" MSG (UX)
+        
+
+
+
         //STEP 2 : GUI CLEAN UP
         //clear question input box for next, question
         $("#UserChatInputElement").val("");
@@ -3648,12 +3652,228 @@ class HoroscopeChat {
         //user's input is sent to server for reply
         //get selected birth time
         //TODO can be DOB or bookname
-        //var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+        //var timeInputUrl = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+        var timeInputUrl = "Location/Singapore/Time/12:44/23/04/1998/+08:00";
 
-        await this.SendMessageToServer(userInput);
+        //send user's message 
+        var aiReplyData = await this.sendMessageToServer(timeInputUrl, userInput);
         this.LastUserMessage = userInput; //save to used later for highlight
-        
+
+        //print to user
+        this.printAIReplyMessageToView(aiReplyData);
+
     }
 
+    //sends final user message to API server and returns only relevant text (handles errors)
+    async sendMessageToServer(timeInputUrl, userQuestionInput) {
+
+        //construct the final URL
+        const url = `${this.LiveServerURL}/${timeInputUrl}/UserQuestion/${userQuestionInput}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.status === "Pass") {
+                return data.payload;
+            } else {
+                console.error(`Request failed with status: ${data.status}`);
+
+                //note: the minimal message strucuture
+                let jsonObject = {
+                    "text": "Sorry sir, my server brain is not talking...",
+                    "textHtml": "Sorry sir, my server brain is not talking...",
+                    "textHash": "xxxxx",
+                    "commands": ["noFeedback"]
+                };
+                return JSON.stringify(jsonObject);
+            }
+        } catch (error) {
+            console.error(`Error making GET request: ${error}`);
+
+            //note: the minimal message strucuture
+            let jsonObject = {
+                "text": "Sorry sir, my server brain is not talking...",
+                "textHtml": "Sorry sir, my server brain is not talking...",
+                "textHash": "xxxxx",
+                "commands": ["noFeedback"],
+            };
+            return JSON.stringify(jsonObject);
+        }
+    }
+
+    // Handler for incoming messages
+    printAIReplyMessageToView(rawJson) {
+        // Parse the JSON data from the event
+        var rawJsonMessage = JSON.parse(rawJson);
+        var aiTextMessageHtml = rawJsonMessage.textHtml;
+        var messageHash = rawJsonMessage.textHash;
+        var aiTextMessage = rawJsonMessage.text;
+        var followupQuestions = rawJsonMessage?.followupQuestions ?? [];
+
+        //PROCESS SERVER COMMANDS
+        var commands = rawJsonMessage.commands || []; // when no commands given empty to not fail
+
+        //## SPECIAL HANDLE FOR LOGIN PROMPTS
+        //1: check if server said please login, in command to client
+        //   meaning user just say login message given by server,
+        //   upon click login, start wait loop (make it seem bot is waiting for user to login)
+        //   then that special login tab (RememberMe) will auto close
+
+        let intervalId;
+        if (commands.includes("pleaseLogin")) {
+            //TODO maybe not needed anymore
+            //set marker in browser asking Blazor login page to redirect back
+            localStorage.setItem('PreviousPage', '/ChatAPI');
+        }
+
+        //## BUILD HTML
+
+        //HANDLE FOLLOWUP
+        // only add follow up questions if server specified them
+        var followupQuestionsHtml = "";
+        // convert questions into visible buttons, for user to click
+        if (followupQuestions.length > 0) {
+            followupQuestionsHtml += //start out hidden, then js will bring to live with animation at right time (class)
+                '<div class="followUpQuestionHolder hstack gap-2 w-100 justify-content-end" style="display:none; position: absolute; bottom: -43px; right: -1px; ">';
+
+            followupQuestions.forEach(function (question) {
+                followupQuestionsHtml += `
+            <button type="button" onclick="window.vedastro.chatapi.ask_followup_question(this, '${question}')"  class="btn btn-outline-primary">${question}</button>
+        `;
+            });
+
+            followupQuestionsHtml += "</div>";
+        }
+
+        //HANDLE FEEBACK BUTTON
+        //only hide feedback button if server explicitly says so
+        var feedbackButtonHtml = commands.includes("noFeedback")
+            ? ""
+            : `<div class="hstack gap-2">
+    <button title="Bad answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, -1)" class="btn btn-danger" style="padding: 0px 5px;">
+      <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
+    </button>
+    <button title="Good answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, 1)" class="btn btn-primary" style="padding: 0px 5px;">
+      <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
+    </button>
+  </div>`;
+
+
+        //define html for answer
+        var aiFinalAnswerHolder =  `
+            <div style="display:none;" class="text-html-out-elm mb-0">
+                ${aiTextMessageHtml}
+            </div>
+        `;
+
+        // Create a chat bubble with the AI's message
+        var aiInputChatCloud = `
+        <li class="d-flex justify-content-start" style=" margin-bottom: 70px; ">
+            <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between p-3">
+                    <p class="fw-bold mb-0 me-5">Vignes</p>
+                    ${feedbackButtonHtml}
+                </div>
+                <div id="${messageHash}" class="message-holder card-body">
+                    ${aiFinalAnswerHolder}
+                    <p class="temp-text-stream-elm mb-0">
+                      <!-- Content will be streamed here -->
+                    </p>
+                    <!-- SVG for loading icon -->
+                    <svg class="loading-icon-elm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
+                    ${followupQuestionsHtml}
+                </div>
+            </div>
+        </li>
+        `;
+
+        // Append the chat bubble to the chat window
+        $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
+
+        // # AUTO SCROLL DOWN
+        $("#ChatWindowMessageList").scrollTop(
+            $("#ChatWindowMessageList")[0].scrollHeight
+        );
+
+        // Flag to prevent user input while AI is 'typing'
+        //NOTE: access via global, because deeply nested
+        window.vedastro.horoscopechat.isAiTalking = true;
+
+
+        // Initialize the index for streaming text
+        let index = 0;
+        const streamRateMs = 23; // Rate at which characters are displayed
+
+        // Stream the AI's message into the chat bubble
+        const interval = setInterval(() => {
+            // Check if the entire message has been displayed
+            //MESSAGE STREAM COMPLETE
+            if (index >= aiTextMessage.length) {
+                clearInterval(interval);
+
+                // Hide the temporary element and loading icon, then show the formatted message
+                //remove stream shower and loading for this bubble since not needed anymore
+                $(`#${messageHash} .temp-text-stream-elm`).hide();
+                $(`#${messageHash} .loading-icon-elm`).hide();
+
+                //make visible hidden formatted output
+                $(`#${messageHash} .text-html-out-elm`).show();
+
+                // Allow user input again
+                this.IsAITalking = false;
+
+                // # AUTO SCROLL DOWN
+                $("#ChatWindowMessageList").scrollTop(
+                    $("#ChatWindowMessageList")[0].scrollHeight
+                );
+
+                //make follow up questions if any slowly appear
+                //narrow by message bubble, then holder
+                $(`#${messageHash} .followUpQuestionHolder`).fadeIn("slow");
+
+                return;
+            }
+
+            // Append the next character or handle special formatting
+            appendNextCharacter(
+                aiTextMessage,
+                index,
+                `#${messageHash} .temp-text-stream-elm`
+            );
+            index++;
+
+            // # AUTO SCROLL DOWN
+            $("#ChatWindowMessageList").scrollTop(
+                $("#ChatWindowMessageList")[0].scrollHeight
+            );
+
+            //------locals---------
+
+            // Function to append the next character or handle special formatting
+            function appendNextCharacter(text, index, elementSelector) {
+                const specialChars = {
+                    "\n": $("<br>"),
+                    "\t": $("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;"),
+                    " ": $("<span>").html("&nbsp;"),
+                    "<": $("<span>").html("&lt;"),
+                    ">": $("<span>").html("&gt;"),
+                };
+
+                // Check for special characters
+                if (specialChars[text[index]]) {
+                    $(elementSelector).append(specialChars[text[index]]);
+                } else {
+                    // Append regular character
+                    const nextChar = document.createTextNode(text[index]);
+                    $(elementSelector).append(nextChar);
+                }
+            }
+
+        }, streamRateMs);
+
+
+    }
 
 }

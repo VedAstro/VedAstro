@@ -2442,7 +2442,7 @@ class ChatInstance {
                  <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar"
                       class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
                  <div class="card">
-                     <div class="card-header d-flex justify-content-between p-3">
+                     <div class="card-header d-flex justify-content-between py-2">
                          <p class="fw-bold mb-0">Vignes</p>
                          <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
                      </div>
@@ -2790,7 +2790,7 @@ class ChatInstance {
         var userInputChatCloud = `
         <li class="d-flex justify-content-end mb-4">
             <div class="card ">
-                <div class="card-header d-flex justify-content-between p-3">
+                <div class="card-header d-flex justify-content-between py-2">
                     <p class="fw-bold mb-0">${userName}</p>
                 </div>
                 <div class="card-body">
@@ -3390,8 +3390,10 @@ class HoroscopeChat {
     SelectedTopicId = "";  //she's filled in when set
     SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
-    LiveServerURL = "https://vedastroapi.azurewebsites.net/api/HoroscopeChat";
-    LocalServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
+    //LiveServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
+    LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate/HoroscopeChat";
+    //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate/HoroscopeChat";
+    //LocalServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
     ElementID = ""; //ID of main div where table & header will be injected
     ShowHeader = true; //default enabled, header with title, icon and edit button
     HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
@@ -3435,7 +3437,7 @@ class HoroscopeChat {
         <!-- MAIN MESSAGE BODY -->
         <div class="shadow" id="BorderHolderDiv" style="border-radius: 19px;background: linear-gradient(to bottom, #ececec, #e0edff);">
             <!-- MESSAGES IN VIEW -->
-            <ul class="list-unstyled mx-2" id="ChatWindowMessageList" style="max-height:667.5px;">
+            <ul class="list-unstyled mx-2 pe-2" id="ChatWindowMessageList" style="max-height:667.5px;">
                 <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
                     <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar"
                         class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
@@ -3621,7 +3623,12 @@ class HoroscopeChat {
         }
 
         //add top padding so top message don't hit top border
-        if (!this.PaddingTopApplied) { $("#ChatWindowMessageList").addClass("pt-3"); this.PaddingTopApplied = true; }
+        if (!this.PaddingTopApplied) {
+            $("#ChatWindowMessageList").addClass("pt-3");
+            $("#ChatWindowMessageList").css("overflow", "auto");
+            $("#ChatWindowMessageList").addClass("pe-2");
+            this.PaddingTopApplied = true;
+        }
 
         // STEP 1 : UPDATE GUI WITH USER MSG (UX)
         var aiInput = $("#UserChatInputElement").val();
@@ -3684,10 +3691,10 @@ class HoroscopeChat {
             const response = await fetch(url);
             const data = await response.json();
 
-            if (data.status === "Pass") {
-                return data.payload;
+            if (data.Status === "Pass") {
+                return data.Payload["HoroscopeChat"];
             } else {
-                console.error(`Request failed with status: ${data.status}`);
+                console.error(`Request failed with status: ${data.Status}${data.Payload}`);
 
                 //note: the minimal message strucuture
                 let jsonObject = {
@@ -3714,8 +3721,17 @@ class HoroscopeChat {
 
     // Handler for incoming messages
     printAIReplyMessageToView(rawJson) {
-        // Parse the JSON data from the event
-        var rawJsonMessage = JSON.parse(rawJson);
+
+        // Initialize rawJsonMessage
+        var rawJsonMessage;
+
+        // Try to parse the JSON data from the event
+        try {
+            rawJsonMessage = JSON.parse(rawJson);
+        } catch (error) {
+           //expected fail because no need parse
+            rawJsonMessage = rawJson;
+        }
         var aiTextMessageHtml = rawJsonMessage.textHtml;
         var messageHash = rawJsonMessage.textHash;
         var aiTextMessage = rawJsonMessage.text;
@@ -3782,7 +3798,7 @@ class HoroscopeChat {
         <li class="d-flex justify-content-start" style=" margin-bottom: 70px; ">
             <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
             <div class="card">
-                <div class="card-header d-flex justify-content-between p-3">
+                <div class="card-header d-flex justify-content-between py-2">
                     <p class="fw-bold mb-0 me-5">Vignes</p>
                     ${feedbackButtonHtml}
                 </div>

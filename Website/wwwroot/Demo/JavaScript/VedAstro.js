@@ -3396,8 +3396,8 @@ class HoroscopeChat {
     SelectedTopicId = "";  //she's filled in when set
     SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
-    //LiveServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
-    LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate/HoroscopeChat";
+    LiveServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
+    //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate/HoroscopeChat";
     //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate/HoroscopeChat";
     //LocalServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
     ElementID = ""; //ID of main div where table & header will be injected
@@ -3708,8 +3708,8 @@ class HoroscopeChat {
 
                 //note: the minimal message strucuture
                 let jsonObject = {
-                    "text": "Sorry sir, my server brain is not talking...",
-                    "textHtml": "Sorry sir, my server brain is not talking...",
+                    "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
                     "textHash": "xxxxx",
                     "commands": ["noFeedback"]
                 };
@@ -3720,8 +3720,8 @@ class HoroscopeChat {
 
             //note: the minimal message strucuture
             let jsonObject = {
-                "text": "Sorry sir, my server brain is not talking...",
-                "textHtml": "Sorry sir, my server brain is not talking...",
+                "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
                 "textHash": "xxxxx",
                 "commands": ["noFeedback"],
             };

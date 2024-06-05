@@ -2,8 +2,10 @@ using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using HtmlAgilityPack;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
 using MimeDetective.Storage.Xml.v2;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -20,6 +22,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Reflection;
@@ -62,7 +65,55 @@ namespace VedAstro.Library
     /// </summary>
     public static class Tools
     {
+
         public const string BlobContainerName = "vedastro-site-data";
+
+        /// <summary>
+        /// Gets public IP address of client sending the http request
+        /// </summary>
+        public static IPAddress GetCallerIp(this HttpRequestData req)
+        {
+            var headerDictionary = req.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+
+            //debug print
+            //foreach (var item in headerDictionary) { Console.WriteLine($"Key: {item.Key}, Value: {Tools.ListToString<string>(item.Value.ToList())}"); }
+
+            var key = "x-forwarded-for";
+            var key2 = "x-azure-clientip";
+            IPAddress? ipAddress = null;
+
+            if (headerDictionary.ContainsKey(key) || headerDictionary.ContainsKey(key2))
+            {
+                var headerValues = headerDictionary[key];
+                var ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()
+                    ?.Split(new char[] { ':' }).FirstOrDefault();
+                var key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
+
+                //if key 1 fail , try key 2
+                if (!key1ParseResult)
+                {
+                    headerValues = headerDictionary[key];
+                    ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()
+                        ?.Split(new char[] { ':' }).FirstOrDefault();
+                    key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
+                }
+            }
+
+            return ipAddress ?? IPAddress.None;
+        }
+
+        public static IPAddress GetCallerIp(this HttpRequestMessage request)
+        {
+            IPAddress result = null;
+            if (request.Headers.TryGetValues("X-Forwarded-For", out IEnumerable<string> values))
+            {
+                var ipn = values.FirstOrDefault().Split(new char[] { ',' }).FirstOrDefault().Split(new char[] { ':' })
+                    .FirstOrDefault();
+                IPAddress.TryParse(ipn, out result);
+            }
+
+            return result;
+        }
 
 
         /// <summary>
@@ -77,31 +128,6 @@ namespace VedAstro.Library
             stream.CopyTo(ms);
             ms.Seek(originalPosition, SeekOrigin.Begin);
             return ms;
-        }
-
-        /// <summary>
-        /// Gets XML file from any URL and parses it into xelement list
-        /// </summary>
-        /// <param name="url">The URL of the XML file</param>
-        /// <param name="httpClient">An optional HttpClient instance to use for the request</param>
-        /// <returns>A list of XElement objects representing the elements in the XML file</returns>
-        public static async Task<List<XElement>> GetXmlFile(string url, HttpClient httpClient = null)
-        {
-            // If no HttpClient is provided, create a new one
-            if (httpClient == null)
-            {
-                httpClient = new HttpClient();
-            }
-
-            // Load xml event data files before hand to be used quickly later for search
-            // Get main horoscope prediction file (located in wwwroot)
-            var fileStream = await httpClient.GetStreamAsync(url);
-
-            // Parse raw file to xml doc
-            var document = XDocument.Load(fileStream);
-
-            // Get all records in document
-            return document.Root.Elements().ToList();
         }
 
         public static async Task<T> WithCancellation<T>(this Task<T> task, CancellationToken cancellationToken)
@@ -311,29 +337,47 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<string> GetStringFileHttp(string url)
         {
-            try
-            {
+            //get the data sender
+            using var client = new HttpClient();
 
-                //get the data sender
-                using var client = new HttpClient();
+            client.Timeout = Timeout.InfiniteTimeSpan;
 
-                client.Timeout = Timeout.InfiniteTimeSpan;
+            //load xml event data files beforehand to be used quickly later for search
+            //get main horoscope prediction file (located in wwwroot)
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
 
-                //load xml event data files before hand to be used quickly later for search
-                //get main horoscope prediction file (located in wwwroot)
-                var fileString = await client.GetStringAsync(url, CancellationToken.None);
+            //copy caller data from original caller if any, so calls are traceable
+            CurrentCallerData.AddOriginalCallerHeadersIfAny(request);
 
-                return fileString;
-            }
-            catch (Exception e)
-            {
-                var msg = $"FAILED TO GET FILE:/n{url}";
-                Console.WriteLine(msg);
-                LibLogger.Error(msg); //log it
-                return "";
-            }
+            HttpResponseMessage response = await client.SendAsync(request, CancellationToken.None);
+            var fileString = await response.Content.ReadAsStringAsync();
+            return fileString;
+        }
 
+        /// <summary>
+        /// Gets any file at given WWW url will return as bytes
+        /// </summary>
+        public static async Task<byte[]> GetFileHttp(string url)
+        {
+            using var client = new HttpClient();
+            client.Timeout = Timeout.InfiniteTimeSpan;
 
+            // Create HttpRequestMessage
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+            //copy caller data from original caller if any, so calls are traceable
+            CurrentCallerData.AddOriginalCallerHeadersIfAny(request);
+
+            // Send the request and get the response
+            using var response = await client.SendAsync(request, CancellationToken.None);
+
+            // Ensure the request was successful
+            response.EnsureSuccessStatusCode();
+
+            // Read the content as byte array
+            var fileBytes = await response.Content.ReadAsByteArrayAsync();
+
+            return fileBytes;
         }
 
 
@@ -787,24 +831,38 @@ namespace VedAstro.Library
             return xml.ToString(SaveOptions.DisableFormatting);
         }
 
+
         /// <summary>
         /// Gets XML file from any URL and parses it into xelement list
         /// </summary>
-        public static async Task<List<XElement>> GetXmlFileHttp(string url)
+        /// <param name="url">The URL of the XML file</param>
+        /// <param name="httpClient">An optional HttpClient instance to use for the request</param>
+        /// <returns>A list of XElement objects representing the elements in the XML file</returns>
+        public static async Task<List<XElement>> GetXmlFile(string url, HttpClient httpClient = null)
         {
-            //get the data sender
-            using var client = new HttpClient();
+            // If no HttpClient is provided, create a new one
+            if (httpClient == null)
+            {
+                httpClient = new HttpClient();
+            }
 
-            //load xml event data files before hand to be used quickly later for search
-            //get main horoscope prediction file (located in wwwroot)
-            var fileStream = await client.GetStreamAsync(url);
+            // Create HttpRequestMessage
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
 
-            //parse raw file to xml doc
+            //copy caller data from original caller if any, so calls are traceable
+            CurrentCallerData.AddOriginalCallerHeadersIfAny(request);
+
+            // Send the request and get the response stream
+            var response = await httpClient.SendAsync(request);
+            var fileStream = await response.Content.ReadAsStreamAsync();
+
+            // Parse raw file to xml doc
             var document = XDocument.Load(fileStream);
 
-            //get all records in document
+            // Get all records in document
             return document.Root.Elements().ToList();
         }
+
 
         /// <summary>
         /// Converts any type to XML, it will use Type's own ToXml() converter if available
@@ -889,7 +947,7 @@ namespace VedAstro.Library
         {
             //get data list from Static Website storage
             //note : done so that any updates to that live file will be instantly reflected in API results
-            var eventDataListXml = await Tools.GetXmlFileHttp(httpUrl);
+            var eventDataListXml = await Tools.GetXmlFile(httpUrl);
 
             var finalInstance = await ConvertXmlListFileToInstanceList<T>(eventDataListXml);
 
@@ -1336,27 +1394,29 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {
-            //CACHE MECHANISM
-            return await CacheManager.GetCache(new CacheKey("Tools.AddressToGeoLocation", address), addressToGeoLocation);
+            //get location data from VedAstro API
+            var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
+            //exp : .../Calculate/AddressToGeoLocation/London
+            var url = allUrls.AddressToGeoLocationAPI + $"/Address/{address}";
+            var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
 
-            async Task<WebResult<GeoLocation>> addressToGeoLocation()
-            {
-                //get location data from VedAstro API
-                var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
-                //exp : .../Calculate/AddressToGeoLocation/London
-                var url = allUrls.AddressToGeoLocationAPI + $"/Address/{address}";
-                var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
+            //if fail to make call, end here
+            if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
 
-                //if fail to make call, end here
-                if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+            //if success, get the reply data out
+            var rootJson = webResult.Payload;
+            var parsed = GeoLocation.FromJson(rootJson);
 
-                //if success, get the reply data out
-                var rootJson = webResult.Payload;
-                var parsed = GeoLocation.FromJson(rootJson);
+            //return to caller pass
+            return new WebResult<GeoLocation>(true, parsed);
 
-                //return to caller pass
-                return new WebResult<GeoLocation>(true, parsed);
-            }
+
+            ////CACHE MECHANISM
+            //return await CacheManager.GetCache(new CacheKey("Tools.AddressToGeoLocation", address), addressToGeoLocation);
+
+            //async Task<WebResult<GeoLocation>> addressToGeoLocation()
+            //{
+            //}
 
 
         }
@@ -1436,7 +1496,7 @@ namespace VedAstro.Library
                 }
                 catch (Exception e)
                 {
-                    LibLogger.Error(e);
+                    LibLogger.Debug(e);
                     //return to caller pass
                     return new WebResult<string>(false, "");
                 }
@@ -1452,60 +1512,6 @@ namespace VedAstro.Library
             return x;
         }
 
-        /// <summary>
-        /// When using google api to get timezone data, the API returns a reply in XML similar to one below
-        /// This function parses this raw XML data from google to TimeSpan data we need
-        /// It also checks for other failures like wrong location name
-        /// Failing when parsing this TimeZoneResponse XML has occurred enough times, for its own method
-        /// </summary>
-        public static bool TryParseGoogleTimeZoneResponse(XElement timeZoneResponseXml, out TimeSpan offsetMinutes)
-        {
-            //<?xml version="1.0" encoding="UTF-8"?>
-            //<TimeZoneResponse>
-            //    <status>INVALID_REQUEST </ status >
-            //    < error_message > Invalid request.Invalid 'location' parameter.</ error_message >
-            //</ TimeZoneResponse >
-
-            //extract out the data from google's reply timezone offset
-            var status = timeZoneResponseXml?.Element("status")?.Value ?? "";
-            var failed = status.Contains("INVALID_REQUEST");
-
-            //try process data if did NOT fail so far
-            if (!failed)
-            {
-                double offsetSeconds;
-
-                //get raw data from XML
-                var rawOffsetData = timeZoneResponseXml?.Element("raw_offset")?.Value;
-
-                //at times google api returns no valid data, but call is replied as normal
-                //so check for that here, if fail end here
-                if (string.IsNullOrEmpty(rawOffsetData)) { goto Fail; }
-
-                //try to parse what ever value there is, should be number
-                else
-                {
-                    var isNumber = double.TryParse(rawOffsetData, out offsetSeconds);
-                    if (!isNumber) { goto Fail; } //if not number end here
-                }
-
-                //offset needs to be "whole" minutes, else fail
-                //purposely hard cast to int to remove not whole minutes
-                var notWhole = TimeSpan.FromSeconds(offsetSeconds).TotalMinutes;
-                offsetMinutes = TimeSpan.FromMinutes((int)Math.Round(notWhole)); //set
-
-                //let caller know valid data
-                return true;
-            }
-
-        //if fail let caller know something went wrong & set to 0s
-        Fail:
-            LibLogger.Error(timeZoneResponseXml);
-            offsetMinutes = TimeSpan.Zero;
-            return false;
-
-
-        }
 
         /// <summary>
         /// Calls a URL and returns the content of the result as XML
@@ -1572,7 +1578,7 @@ namespace VedAstro.Library
                     exceptionList.Add(e1);
 
                     //send all exception data to server
-                    foreach (var exception in exceptionList) { LibLogger.Error(exception, inputRawString); }
+                    foreach (var exception in exceptionList) { LibLogger.Debug(exception, inputRawString); }
 
                     //if control reaches here all has failed
                     return new WebResult<XElement>(false, new XElement("Failed"));
@@ -1584,8 +1590,12 @@ namespace VedAstro.Library
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, receiverAddress);
 
+                //copy caller data from original caller if any, so calls are traceable
+                CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
+
                 //get the data sender 
-                using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
+                using var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite); //no timeout
 
                 //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
@@ -1638,8 +1648,7 @@ namespace VedAstro.Library
                 }
                 catch (Exception e1)
                 {
-
-                    LibLogger.Error(e1, inputRawString);
+                    LibLogger.Debug(e1, inputRawString);
 
                     //if control reaches here all has failed
                     return new WebResult<JToken>(false, new JObject("Failed"));
@@ -1653,6 +1662,9 @@ namespace VedAstro.Library
             async Task<HttpResponseMessage> RequestServer(string receiverAddress, int retryCount)
             {
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+                //copy caller data from original caller if any, so calls are traceable
+                CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
+
                 using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
 
@@ -1719,10 +1731,8 @@ namespace VedAstro.Library
                 }
                 catch (Exception e1)
                 {
-
-                    Console.WriteLine(apiUrl);
                     //send all exception data to server
-                    LibLogger.Error(e1, inputRawString);
+                    LibLogger.Debug(e1, $"URL:{apiUrl}-->{inputRawString}");
 
                     //if control reaches here all has failed
                     return new WebResult<JToken>(false, new JObject("Failed"));
@@ -1735,14 +1745,19 @@ namespace VedAstro.Library
             //small delay between calls
             async Task<HttpResponseMessage> RequestServer(string receiverAddress, int retryCount)
             {
-                var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
-                using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
 
+                using var client = new HttpClient(); //no timeout
+                client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
                 for (int attempt = 0; attempt < retryCount; attempt++)
                 {
                     try
                     {
+                        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+
+                        //copy caller data from original caller if any, so calls are traceable
+                        //CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
+
                         var response = await client.SendAsync(httpRequestMessage, waitForContent);
                         return response;
                     }
@@ -3555,14 +3570,13 @@ namespace VedAstro.Library
         public static async Task<bool> DoesFileExist(string url)
         {
             var client = new HttpClient();
+            using var request = new HttpRequestMessage(HttpMethod.Head, url);
 
-            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, url))
-            {
-                using (HttpResponseMessage response = await client.SendAsync(request))
-                {
-                    return response.StatusCode == System.Net.HttpStatusCode.OK;
-                }
-            }
+            //copy caller data from original caller if any, so calls are traceable
+            CurrentCallerData.AddOriginalCallerHeadersIfAny(request);
+
+            using var response = await client.SendAsync(request);
+            return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
         /// <summary>
@@ -3585,6 +3599,10 @@ namespace VedAstro.Library
         public static async Task<T> ReadServerRaw<T>(string receiverAddress)
         {
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+
+            //copy caller data from original caller if any, so calls are traceable
+            CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
+
             var waitForContent = HttpCompletionOption.ResponseContentRead;
             using var client = new HttpClient();
             client.Timeout = Timeout.InfiniteTimeSpan;
@@ -3620,6 +3638,9 @@ namespace VedAstro.Library
         {
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(method, receiverAddress);
+
+            //copy caller data from original caller if any, so calls are traceable
+            CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
 
             //tell sender to wait for complete reply before exiting
             var waitForContent = HttpCompletionOption.ResponseContentRead;
@@ -3733,13 +3754,13 @@ namespace VedAstro.Library
             // Log error if more than 1 person found
             if (foundCalls.Count() > 1)
             {
-                LibLogger.Error($"More than 1 Person found : PersonId -> {personId} OwnerId -> {ownerId}");
+                LibLogger.Debug($"More than 1 Person found : PersonId -> {personId} OwnerId -> {ownerId}");
             }
 
             // Log error and return empty if person not found
             if (!foundCalls.Any())
             {
-                LibLogger.Error($"Person NOT FOUND : {personId} OwnerID :{ownerId}, EMPTY GIVEN");
+                LibLogger.Debug($"Person NOT FOUND : {personId} OwnerID :{ownerId}, EMPTY GIVEN");
                 return Person.Empty;
             }
 
@@ -4231,14 +4252,24 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<JToken> MakePostRequest(string url, string jsonData)
         {
-            using (var client = new HttpClient())
+
+            using var client = new HttpClient();
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            HttpRequestMessage request = new HttpRequestMessage
             {
-                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                client.Timeout = TimeSpan.FromMinutes(10); //long timeout, LLM replies slow sometimes
-                var response = await client.PostAsync(url, content);
-                var result = await response.Content.ReadAsStringAsync();
-                return JToken.Parse(result);
-            }
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Content = content
+            };
+
+            //copy caller data from original caller if any, so calls are traceable
+            CurrentCallerData.AddOriginalCallerHeadersIfAny(request);
+
+            client.Timeout = TimeSpan.FromMinutes(10); //long timeout, LLM replies slow sometimes
+            var response = await client.SendAsync(request);
+            var result = await response.Content.ReadAsStringAsync();
+            return JToken.Parse(result);
         }
 
         /// <summary>

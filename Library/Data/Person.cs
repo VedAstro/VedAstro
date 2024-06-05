@@ -500,7 +500,7 @@ namespace VedAstro.Library
                 Console.WriteLine(e);
                 #endregion
 
-                LibLogger.Error($"Failed to parse Person:\n{personInput.ToString()}");
+                LibLogger.Debug($"Failed to parse Person:\n{personInput.ToString()}");
 
                 return Person.Empty;
             }

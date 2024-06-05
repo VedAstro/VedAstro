@@ -1918,5 +1918,9 @@ namespace VedAstro.Library
         }
 
 
+        public static object GenerateEventsChartForChat(Time birthTime, TimeRange timeRangeParsed)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -314,6 +314,11 @@ namespace VedAstro.Library
         {
             return await ChatAPI.SendMessageHoroscope(birthTime, userQuestion, chatSession);
         }
+        public static async Task<JObject> HoroscopeFollowUpChat(Time birthTime, string followUpQuestion,
+            string sessionId, string primaryAnswerHash)
+        {
+            return await ChatAPI.SendMessageHoroscopeFollowUp(birthTime, followUpQuestion, sessionId, primaryAnswerHash);
+        }
 
         /// <summary>
         /// Ask questions to AI astrologer about life horoscope predictions
@@ -11872,7 +11877,7 @@ namespace VedAstro.Library
             if (planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu) { return PlanetMotion.Direct; }
 
             //get chestaBala
-            var signsFromSun = Calculate.IsPlanetsInSignsFromPlanet() (planetName, time).ToDouble();
+            var chestaBala = Calculate.PlanetChestaBala(planetName, time).ToDouble();
 
             //based on chesta bala assign name to it
             //Chesta kendra = 180 degrees = Retrograde
@@ -11880,12 +11885,6 @@ namespace VedAstro.Library
             {
                 case <= 60 and > 30: return PlanetMotion.Retrograde;
                 case <= 30 and > 15: return PlanetMotion.Direct;
-                case <= 15 and > 15: return PlanetMotion.Direct;
-                case <= 30 and >= 0: return PlanetMotion.Stationary;
-                case <= 15 and >= 0: return PlanetMotion.Stationary;
-                case <= 7.5 and >= 0: return PlanetMotion.Stationary;
-                case <= 45 and >= 0: return PlanetMotion.Stationary;
-                case <= 30 and >= 0: return PlanetMotion.Stationary;
                 default:
                     throw new Exception($"Error in GetPlanetMotionName : {chestaBala}");
             }
@@ -13958,13 +13957,6 @@ namespace VedAstro.Library
 
         //--------------------------------------------------------------------------------------------
 
-#if DEBUG
-        /// <summary>
-        /// Special debug function
-        /// </summary>
-        public static string BouncBackInputAsString(PlanetName planetName, Time time) => planetName.ToString();
-
-#endif
 
 
         /// <summary>

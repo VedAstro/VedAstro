@@ -11,9 +11,21 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using Fizzler;
+using Azure.Data.Tables;
 
 namespace VedAstro.Library
 {
+    public class PredictionSettings
+    {
+        public string ServerUrl { get; set; }
+        public string ApiKey { get; set; }
+        public double MaxTokens { get; set; }
+        public double Temperature { get; set; }
+        public double TopP { get; set; }
+        public object[] SysMessage { get; set; }
+    }
+
+
     public static class ChatAPI
     {
         //auth details to talk to Azure OpenAI
@@ -25,6 +37,57 @@ namespace VedAstro.Library
         static string azureMistralSmallAPIKey = Environment.GetEnvironmentVariable("AzureMistralSmallAPIKey");
         static OpenAIClient client = new(azureOpenAIResourceUri, azureOpenAIApiKey);
 
+        private static string chatTableconnectionString = Environment.GetEnvironmentVariable("CENTRAL_API_STORAGE_CONNECTION_STRING");
+        private static List<string> followupQuestions = new List<string> { "Why?", "How?", "Tell me more..." };
+
+
+        //#             +> FOLLOW-UP --> specialized lite llm call
+        //#             |
+        //# QUESTION ---+> GIVE FEEDBACK --> 
+        //#             |
+        //#             +> UNRELATED --> full llama raq synthesis
+
+
+        public static TableEntity ReadFromTable(string partitionKey, string rowKey)
+        {
+            var tableClient = new TableClient(chatTableconnectionString, "ChatMessage");
+            try
+            {
+                var entity = tableClient.GetEntity<TableEntity>(partitionKey, rowKey);
+                return entity.Value;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to read entity: {e}");
+                return null;
+            }
+        }
+
+        public static async Task<JObject> SendMessageHoroscopeFollowUp(Time birthTime, string followUpQuestion,
+            string sessionId, string primaryAnswerHash)
+        {
+            //based on hash get full question as pure text
+            var primaryAnswerData = ReadFromTable(sessionId, primaryAnswerHash);
+
+            var primaryAnswer = primaryAnswerData["text"].ToString();
+
+            //based on primary answer, back track to primary question
+            var primaryQuestionMsgNumber = (int)primaryAnswerData["message_number"] - 1; // go up 1 step
+            var primaryQuestionData = ReadFromTableMessageNumber(sessionId, primaryQuestionMsgNumber);
+
+            var primaryQuestion = primaryQuestionData["text"].ToString();
+
+            //get predictions used as before
+            var horoscopePredictions = ChatAPI.GetPredictionAsChunks(birthTime)[0];
+
+            //get reply from LLM 🚅
+            var aiReply = await AnswerFollowUpHoroscopeQuestion_CohereCommandRPlus(primaryQuestion,
+                 primaryAnswer, horoscopePredictions, followUpQuestion);
+
+
+            return PackageReply("", aiReply, followupQuestions);
+        }
+
 
 
         /// <summary>
@@ -33,13 +96,7 @@ namespace VedAstro.Library
         /// <param name="longitude">planet or house cusp longitude</param>
         public static async Task<JObject> SendMessageHoroscope(Time birthTime, string userQuestion, string sessionId = "")
         {
-
-            //#             +> FOLLOW-UP --> specialized lite llm call
-            //#             |
-            //# QUESTION ---+
-            //#             |
-            //#             +> UNRELATED --> full llama raq synthesis
-
+            var replyText = "";
 
 
             //         USER QUESTION          
@@ -50,8 +107,6 @@ namespace VedAstro.Library
             //           ◄───┴───►            
             //#1 ELECTIONAL       #2 HOROSCOPE    
 
-            var replyText = "";
-            var followupQuestions = new List<string> { "Why?", "How?", "Tell me more..." };
 
             //#0 is question valid and sane?
             //var isValid = IsQuestionValid(userQuestion, out replyText);
@@ -68,42 +123,6 @@ namespace VedAstro.Library
             return PackageReply(userQuestion, replyText, followupQuestions);
 
 
-
-            //----------------------------------LOCALS---------------------------------------
-
-
-
-            JObject PackageReply(string userQuestion, string aiReplyText, List<string> followupQuestions)
-            {
-
-                //using user question and LLM make answer more readable in HTML, bolding, paragraphing...etc
-                //string textHtml = ChatAPI.HighlightKeywords_MistralSmall(aiReplyText, userQuestion).Result;
-                string textHtml = aiReplyText; //todo use back same because formatter is faulty
-
-                var reply = new JObject
-                {
-                    { "sessionId", GetSessionId() },
-                    { "text", aiReplyText },
-                    { "textHtml", textHtml },
-                    { "textHash", Tools.GetStringHashCode(aiReplyText) },
-                    { "followupQuestions", new JArray(followupQuestions) }
-                };
-
-                return reply;
-
-            }
-
-
-            //if session id provided use back same, else create a new one
-            string GetSessionId()
-            {
-                if (string.IsNullOrEmpty(sessionId))
-                {
-                    sessionId = Tools.GenerateId();
-                }
-                return sessionId;
-            }
-
         }
 
 
@@ -116,7 +135,97 @@ namespace VedAstro.Library
 
 
 
+
         //---------------------------------------------------PRIVATE------------------------------------------------------
+
+        private static async Task<string> AnswerFollowUpHoroscopeQuestion_CohereCommandRPlus(string primaryQuestion, string primaryAnswer, string horoscopePredictions, string followUpQuestion)
+        {
+
+
+            var sysMessageArray = new[]
+            {
+                new
+                {
+                    role = "system",
+                    content = $"CONTEXT:\n\n{horoscopePredictions}"
+                },
+                new
+                {
+                    role = "user",
+                    content = $"{primaryQuestion}"
+                },
+                new
+                {
+                    role = "assistant",
+                    content = $"{primaryAnswer}"
+                },
+                new
+                {
+                    role = "user",
+                    content = $"{followUpQuestion}"
+                },
+
+            };
+
+            var settings = new PredictionSettings
+            {
+                ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
+                ApiKey = azureCohereCommandRPlusAPIKey,
+                MaxTokens = 600,
+                Temperature = 0.5,
+                TopP = 0.5,
+                SysMessage = sysMessageArray
+            };
+
+
+            //make call to LLM, NOTE : high time consumption in chain
+            var llmReply = await ProcessPrediction(settings);
+
+            return llmReply;
+
+        }
+
+
+
+        private static JObject PackageReply(string userQuestion, string aiReplyText, List<string> followupQuestions, string sessionId = "")
+        {
+
+            //using user question and LLM make answer more readable in HTML, bolding, paragraphing...etc
+            //string textHtml = ChatAPI.HighlightKeywords_MistralSmall(aiReplyText, userQuestion).Result;
+            string textHtml = aiReplyText; //todo use back same because formatter is faulty
+
+            var reply = new JObject
+            {
+                { "sessionId", sessionId },
+                { "text", aiReplyText },
+                { "textHtml", textHtml },
+                { "textHash", Tools.GetStringHashCode(aiReplyText) },
+                { "followupQuestions", new JArray(followupQuestions) }
+            };
+
+            return reply;
+
+        }
+
+        private static Dictionary<string, object> ReadFromTableMessageNumber(string sessionId, int messageNumber)
+        {
+            var tableClient = new TableClient(chatTableconnectionString, "ChatMessage");
+
+            var parameters = new Dictionary<string, object> { { "sessionId", sessionId }, { "messageNumber", messageNumber } };
+            var filter = $"PartitionKey eq @sessionId and message_number eq @messageNumber";
+            var msgList = tableClient.Query<Dictionary<string, object>>(filter, parameters);
+
+            //send 1st message found
+            foreach (var foundMsg in msgList)
+            {
+                return foundMsg;
+            }
+
+            // end of line!
+            return null;
+        }
+
+
         private static bool IsElectionalAstrology(Time birthTime, string userQuestion, out string replyText)
         {
             //#0 extract time range if any
@@ -634,7 +743,6 @@ namespace VedAstro.Library
             }
         }
 
-
         private static async Task<string> ImproveFinalAnswer(string answerLevel1, string userQuestion)
         {
             var sysMessage =
@@ -826,7 +934,6 @@ namespace VedAstro.Library
                 }
             }
         }
-
 
         private static async Task<string> PickOutMostRelevantPredictions_GPT4(Time birthTime, string userQuestion)
         {
@@ -1043,15 +1150,6 @@ namespace VedAstro.Library
             }
         }
 
-        public class PredictionSettings
-        {
-            public string ServerUrl { get; set; }
-            public string ApiKey { get; set; }
-            public double MaxTokens { get; set; }
-            public double Temperature { get; set; }
-            public double TopP { get; set; }
-            public object[] SysMessage { get; set; }
-        }
 
         private static async Task<string> ProcessPrediction(PredictionSettings settings)
         {

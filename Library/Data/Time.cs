@@ -367,6 +367,7 @@ namespace VedAstro.Library
         /// </summary>
         public readonly string StdHourMinuteText => _stdTime.ToString("HH:mm");
 
+
         /// <summary>
         /// return internal std time
         /// </summary>
@@ -483,7 +484,7 @@ namespace VedAstro.Library
             catch (Exception e)
             {
                 //log it
-                LibLogger.Error(e, $"Time.FromXml FAIL! : {timeXmlElement}");
+                LibLogger.Debug(e, $"Time.FromXml FAIL! : {timeXmlElement}");
 
                 //return empty time to stop keep things running
                 return Time.Empty;
@@ -548,35 +549,37 @@ namespace VedAstro.Library
         public static Task<dynamic> FromUrl(string url)
         {
 
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("Time.FromUrl", url), fromUrl);
-
-            Task<dynamic> fromUrl()
+            try
             {
-                try
-                {
-                    // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/+08:00/"
-                    string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/+08:00/"
+                string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    //parse time range from caller (possible to fail)
-                    var parsedTime = Tools.ParseTime(
-                        locationName: parts[1], //note skip "Location"
-                        hhmmStr: parts[3], //note skip "Time"
-                        dateStr: parts[4],
-                        monthStr: parts[5],
-                        yearStr: parts[6]).Result;
+                //parse time range from caller (possible to fail)
+                var parsedTime = Tools.ParseTime(
+                    locationName: parts[1], //note skip "Location"
+                    hhmmStr: parts[3], //note skip "Time"
+                    dateStr: parts[4],
+                    monthStr: parts[5],
+                    yearStr: parts[6]).Result;
 
-                    return Task.FromResult<dynamic>(parsedTime);
-
-                }
-                catch (Exception e)
-                {
-                    //TODO log to server
-                    Console.WriteLine(e);
-                    return Task.FromResult<dynamic>(Time.Empty);
-                }
+                return Task.FromResult<dynamic>(parsedTime);
 
             }
+            catch (Exception e)
+            {
+                //TODO log to server
+                Console.WriteLine(e);
+                return Task.FromResult<dynamic>(Time.Empty);
+            }
+
+
+            ////CACHE MECHANISM
+            //return CacheManager.GetCache(new CacheKey("Time.FromUrl", url), fromUrl);
+
+            //Task<dynamic> fromUrl()
+            //{
+
+            //}
         }
 
         /// <summary>
@@ -764,7 +767,7 @@ namespace VedAstro.Library
             catch (Exception e)
             {
                 //let caller know failure silently
-                LibLogger.Error(e);
+                LibLogger.Debug(e);
 
                 //return empty LMT for controlled failure
                 return TimeSpan.Zero;

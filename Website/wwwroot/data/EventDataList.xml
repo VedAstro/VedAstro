@@ -1,10 +1,59 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<!--This is the ULTIMATE DATA list for MUHURTHA Events-->
-	HOW THIS FILE USED BY VEDASTRO
+	<!--HOW THIS FILE USED BY VEDASTRO
 	Data on what an event is set here by human coder.
 	When "StaticGenerator" is run this file is proccessed to make static c# code.
-	of what the 
+	of what the-->
+
+
+	<!--GHATAKA CHAKRA-->
+	<Event>
+		<Name>GhatakaMoonSign</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If the ghataka element happens to be Moon</ConditionDescription>
+		<Description>
+			injury is on reputation,
+		</Description>
+		<Tag>Personal, GhatakaChakra</Tag>
+	</Event>
+	<Event>
+		<Name>GhatakaTithiGroup</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If the ghataka element happens to be Tithi or Nakshatra</ConditionDescription>
+		<Description>
+			the injury is more mental and emotional.
+		</Description>
+		<Tag>Personal, GhatakaChakra</Tag>
+	</Event>
+	<Event>
+		<Name>GhatakaWeekDay</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If the ghataka element happens to be Weekday or the Lagna, </ConditionDescription>
+		<Description>
+			the injury is more physical
+		</Description>
+		<Tag>Personal, GhatakaChakra</Tag>
+	</Event>
+	<Event>
+		<Name>GhatakaMoonConstellation</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If the ghataka element happens to be Tithi or Nakshatra, </ConditionDescription>
+		<Description>
+			the injury is more mental and emotional.
+		</Description>
+		<Tag>Personal, GhatakaChakra</Tag>
+	</Event>
+	<Event>
+		<Name>GhatakaLagna</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If the ghataka element happens to be Weekday or the Lagna, </ConditionDescription>
+		<Description>
+			the injury is more physical
+		</Description>
+		<Tag>Personal, GhatakaChakra</Tag>
+	</Event>
+
 
 	<!--PANCHA PAKSHI-->
 	<Event>
@@ -61,7 +110,7 @@
 		</Description>
 		<Tag>PanchaPakshi</Tag>
 	</Event>
-	
+
 
 	<!--TRAVEL-->
 	<Event>
@@ -151,7 +200,7 @@
 			Provided the journey is timed to begin
 			beyond 12 ghatis on Tuesday and Wednesday, the
 			above restriction does not hold good
-			
+
 			In our view, Tuesday must
 			preferably be avoided.
 		</Description>
@@ -265,7 +314,7 @@
 		<Tag>Travel</Tag>
 	</Event>
 
-	
+
 	<!--GENERAL-->
 	<Event>
 		<Name>AmritaSiddhaYoga</Name>
@@ -955,7 +1004,7 @@
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
-	
+
 	<!--ASTRONOMICAL-->
 	<Event>
 		<Name>Yama1</Name>
@@ -3138,7 +3187,7 @@
 		<Description>disease in the stomach, fits and exhaustion</Description>
 		<Tag>AshtakvargaGochara</Tag>
 	</Event>
-	
+
 	<!--Mercury -->
 	<Event>
 		<Name>MercuryTransit8Bindu</Name>
@@ -3194,7 +3243,7 @@
 		<Description>unexpected loss of everytime and consequent mental worries</Description>
 		<Tag>AshtakvargaGochara</Tag>
 	</Event>
-	
+
 	<!--Jupiter -->
 	<Event>
 		<Name>JupiterTransit8Bindu</Name>
@@ -3250,13 +3299,15 @@
 		<Description>derangement of the mind, loss of wealth and children</Description>
 		<Tag>AshtakvargaGochara</Tag>
 	</Event>
-	
+
 	<!--Venus -->
 	<Event>
 		<Name>VenusTransit8Bindu</Name>
 		<Nature>Good</Nature>
-		<Description>comfort from good clothes, women, flowers and
-			wholesome food</Description>
+		<Description>
+			comfort from good clothes, women, flowers and
+			wholesome food
+		</Description>
 		<Tag>AshtakvargaGochara</Tag>
 	</Event>
 	<Event>
@@ -3307,13 +3358,15 @@
 		<Description>all sorts of calamities</Description>
 		<Tag>AshtakvargaGochara</Tag>
 	</Event>
-	
+
 	<!--Saturn -->
 	<Event>
 		<Name>SaturnTransit8Bindu</Name>
 		<Nature>Good</Nature>
-		<Description>acquisition of administrative control over a
-			village or town</Description>
+		<Description>
+			acquisition of administrative control over a
+			village or town
+		</Description>
 		<Tag>AshtakvargaGochara</Tag>
 	</Event>
 	<Event>
@@ -3366,9 +3419,9 @@
 	</Event>
 
 
-	
+
 	<!--DASA-->
-	
+
 	<!--Sun Dasa-->
 	<Event>
 		<Name>AriesSunPD1</Name>

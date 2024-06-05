@@ -4,6 +4,7 @@ using SwissEphNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -39,6 +40,7 @@ namespace VedAstro.Library
 
         private static string chatTableconnectionString = Environment.GetEnvironmentVariable("CENTRAL_API_STORAGE_CONNECTION_STRING");
         private static List<string> followupQuestions = new List<string> { "Why?", "How?", "Tell me more..." };
+        private static TableClient chatTableClient = new TableClient(chatTableconnectionString, "ChatMessage");
 
 
         //#             +> FOLLOW-UP --> specialized lite llm call
@@ -48,20 +50,6 @@ namespace VedAstro.Library
         //#             +> UNRELATED --> full llama raq synthesis
 
 
-        public static TableEntity ReadFromTable(string partitionKey, string rowKey)
-        {
-            var tableClient = new TableClient(chatTableconnectionString, "ChatMessage");
-            try
-            {
-                var entity = tableClient.GetEntity<TableEntity>(partitionKey, rowKey);
-                return entity.Value;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Failed to read entity: {e}");
-                return null;
-            }
-        }
 
         public static async Task<JObject> SendMessageHoroscopeFollowUp(Time birthTime, string followUpQuestion,
             string sessionId, string primaryAnswerHash)
@@ -69,13 +57,13 @@ namespace VedAstro.Library
             //based on hash get full question as pure text
             var primaryAnswerData = ReadFromTable(sessionId, primaryAnswerHash);
 
-            var primaryAnswer = primaryAnswerData["text"].ToString();
+            var primaryAnswer = primaryAnswerData.Text;
 
             //based on primary answer, back track to primary question
-            var primaryQuestionMsgNumber = (int)primaryAnswerData["message_number"] - 1; // go up 1 step
-            var primaryQuestionData = ReadFromTableMessageNumber(sessionId, primaryQuestionMsgNumber);
+            var primaryQuestionMsgNumber = primaryAnswerData.MessageNumber - 1; // go up 1 step
+            var primaryQuestionData = ReadFromTableByMessageNumber(sessionId, primaryQuestionMsgNumber);
 
-            var primaryQuestion = primaryQuestionData["text"].ToString();
+            var primaryQuestion = primaryQuestionData.Text;
 
             //get predictions used as before
             var horoscopePredictions = ChatAPI.GetPredictionAsChunks(birthTime)[0];
@@ -207,23 +195,35 @@ namespace VedAstro.Library
 
         }
 
-        private static Dictionary<string, object> ReadFromTableMessageNumber(string sessionId, int messageNumber)
+        private static ChatMessageEntity ReadFromTableByMessageNumber(string sessionId, int messageNumber)
         {
-            var tableClient = new TableClient(chatTableconnectionString, "ChatMessage");
 
-            var parameters = new Dictionary<string, object> { { "sessionId", sessionId }, { "messageNumber", messageNumber } };
-            var filter = $"PartitionKey eq @sessionId and message_number eq @messageNumber";
-            var msgList = tableClient.Query<Dictionary<string, object>>(filter, parameters);
+            Expression<Func<ChatMessageEntity, bool>> expression = call =>
+                call.PartitionKey == sessionId &&
+                call.MessageNumber == messageNumber;
 
-            //send 1st message found
-            foreach (var foundMsg in msgList)
-            {
-                return foundMsg;
-            }
+            //execute search
+            var recordFound = chatTableClient.Query(expression).FirstOrDefault();
 
-            // end of line!
-            return null;
+
+            return recordFound;
+
         }
+
+        public static ChatMessageEntity ReadFromTable(string sessionId, string messageHash)
+        {
+
+            Expression<Func<ChatMessageEntity, bool>> expression = call =>
+                call.PartitionKey == sessionId &&
+                call.RowKey == messageHash;
+
+            //execute search
+            var recordFound = chatTableClient.Query(expression).FirstOrDefault();
+
+            return recordFound;
+
+        }
+
 
 
         private static bool IsElectionalAstrology(Time birthTime, string userQuestion, out string replyText)

@@ -136,7 +136,7 @@ namespace VedAstro.Library
             }
             catch (Exception e)
             {
-                LibLogger.Error($"Failed to parse Person:\n{horoscopeInput.ToString()}");
+                LibLogger.Debug($"Failed to parse Person:\n{horoscopeInput.ToString()}");
 
                 return RelatedBody.Empty;
             }

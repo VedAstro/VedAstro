@@ -188,7 +188,7 @@ public class OpenAPIMetadata : EventArgs, IToJson
                 // Log to server and skip current iteration if metadata is null
                 if (metadata == null)
                 {
-                    LibLogger.Error($"METHOD NOT FOUND!!!! --> {signature}");
+                    LibLogger.Debug($"METHOD NOT FOUND!!!! --> {signature}");
                     continue;
                 }
 
@@ -310,7 +310,7 @@ public class OpenAPIMetadata : EventArgs, IToJson
         }
         catch (Exception e)
         {
-            LibLogger.Error(e, "Failed to Parse");
+            LibLogger.Debug(e, "Failed to Parse");
             return OpenAPIMetadata.Empty;
         }
     }

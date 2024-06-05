@@ -65,6 +65,7 @@ public class URL
 
         //PERSON
         GetPersonList = ApiUrlDirect + "/GetPersonList";
+        VerifyPersonList = ApiUrlDirect + "/VerifyPersonList";
         AddPerson = ApiUrlDirect + "/AddPerson";
         DeletePerson = ApiUrlDirect + "/DeletePerson";
         UpdatePerson = ApiUrlDirect + "/UpdatePerson";
@@ -171,6 +172,7 @@ public class URL
     public readonly string GetMLTimeListFromExcel;
     public readonly string GenerateMLTable;
     public readonly string GetPersonList;
+    public readonly string VerifyPersonList;
     public readonly string GetPerson;
     public readonly string GetPersonImage;
     public readonly string GetNewPersonId;

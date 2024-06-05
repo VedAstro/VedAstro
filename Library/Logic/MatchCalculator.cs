@@ -56,7 +56,7 @@ namespace VedAstro.Library
                 catch (Exception e)
                 {
                     //log error
-                    LibLogger.Error(e, $"Male:{male.Name} Female:{female.Name}");
+                    LibLogger.Debug(e, $"Male:{male.Name} Female:{female.Name}");
 
                     //return empty
                     prediction = MatchPrediction.Empty; //default empty

@@ -240,7 +240,7 @@ namespace VedAstro.Library
             catch (Exception e)
             {
                 //log it
-                LibLogger.Error(e, $"GeoLocation.FromXml FAIL! : {locationXml}");
+                LibLogger.Debug(e, $"GeoLocation.FromXml FAIL! : {locationXml}");
 
                 //instead of giving up return something
                 return GeoLocation.Empty;
@@ -324,7 +324,7 @@ namespace VedAstro.Library
             try
             {
                 //get only coordinates 1st
-                var fromIpAddress = await GetCoordinatesFromIpAddressAPI();
+                var fromIpAddress = await SystemIpAddressToGeoLocation();
 
                 //get name from coordinates
                 //var fromIpAddress = await CoordinatesToGeoLocation(coordinates.Latitude(), coordinates.Longitude());
@@ -335,8 +335,7 @@ namespace VedAstro.Library
             catch (Exception e)
             {
                 //log it
-                Console.WriteLine($"Client Location: FAILED!!!");
-                await LibLogger.Error(e);
+                LibLogger.Debug(e, $"Client Location: FAILED!!!");
 
                 //return some location to avert meltdown
                 return Empty;
@@ -355,10 +354,10 @@ namespace VedAstro.Library
             //get from API
             var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
             var url = allUrls.CoordinatesToGeoLocationAPI + $"/Latitude/{latitudeRound}/Longitude/{longitudeRound}";
-            var webResult = await Tools.ReadFromServerXmlReply(url);
+            var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
 
             //convert
-            var parsed = GeoLocation.FromXml(webResult.Payload);
+            var parsed = GeoLocation.FromJson(webResult.Payload);
 
             return parsed;
         }
@@ -367,7 +366,7 @@ namespace VedAstro.Library
         /// Gets coordinates with VedAstro API
         /// IP address is auto-detected by API, so need to supply 
         /// </summary>
-        public static async Task<GeoLocation> GetCoordinatesFromIpAddressAPI()
+        public static async Task<GeoLocation> SystemIpAddressToGeoLocation()
         {
             //get from API
             var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up

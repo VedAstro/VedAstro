@@ -21,6 +21,7 @@ namespace VedAstro.Library
         static AzureKeyCredential azureOpenAIApiKey = new(Environment.GetEnvironmentVariable("AzureOpenAIAPIKey"));
         static string azureMetaLlama3APIKey = Environment.GetEnvironmentVariable("AzureMetaLlama3APIKey");
         static string azureMistralLargeAPIKey = Environment.GetEnvironmentVariable("AzureMistralLargeAPIKey");
+        static string azureCohereCommandRPlusAPIKey = Environment.GetEnvironmentVariable("AzureCohereCommandRPlusAPIKey");
         static string azureMistralSmallAPIKey = Environment.GetEnvironmentVariable("AzureMistralSmallAPIKey");
         static OpenAIClient client = new(azureOpenAIResourceUri, azureOpenAIApiKey);
 
@@ -53,13 +54,13 @@ namespace VedAstro.Library
             var followupQuestions = new List<string> { "Why?", "How?", "Tell me more..." };
 
             //#0 is question valid and sane?
-            var isValid = IsQuestionValid(userQuestion, out replyText);
-            if (!isValid) { return PackageReply(userQuestion, replyText, followupQuestions); } //end here if not valid
+            //var isValid = IsQuestionValid(userQuestion, out replyText);
+            //if (!isValid) { return PackageReply(userQuestion, replyText, followupQuestions); } //end here if not valid
 
 
-            //#1 is question about Electional astrology?
-            var isElectional = IsElectionalAstrology(birthTime, userQuestion, out replyText);
-            if (isElectional) { return PackageReply(userQuestion, replyText, followupQuestions); } //end here if is Electional
+            ////#1 is question about Electional astrology?
+            //var isElectional = IsElectionalAstrology(birthTime, userQuestion, out replyText);
+            //if (isElectional) { return PackageReply(userQuestion, replyText, followupQuestions); } //end here if is Electional
 
 
             //#2 answer question about Horoscope
@@ -72,18 +73,19 @@ namespace VedAstro.Library
 
 
 
-            JObject PackageReply(string userQuestion, string text, List<string> followupQuestions)
+            JObject PackageReply(string userQuestion, string aiReplyText, List<string> followupQuestions)
             {
 
                 //using user question and LLM make answer more readable in HTML, bolding, paragraphing...etc
-                string textHtml = ChatAPI.HighlightKeywords_MistralSmall(userQuestion, text).Result;
+                //string textHtml = ChatAPI.HighlightKeywords_MistralSmall(aiReplyText, userQuestion).Result;
+                string textHtml = aiReplyText; //todo use back same because formatter is faulty
 
                 var reply = new JObject
                 {
                     { "sessionId", GetSessionId() },
-                    { "text", text },
+                    { "text", aiReplyText },
                     { "textHtml", textHtml },
-                    { "textHash", Tools.GetStringHashCode(text) },
+                    { "textHash", Tools.GetStringHashCode(aiReplyText) },
                     { "followupQuestions", new JArray(followupQuestions) }
                 };
 
@@ -184,23 +186,11 @@ namespace VedAstro.Library
             var predictionListChunks = ChatAPI.GetPredictionAsChunks(birthTime);
 
             //#1 pick out most relevant predictions to question
-            var tasks1 = new List<Task<string>>
-            {
-                PickOutMostRelevantPredictions_MistralSmall(birthTime, userQuestion, predictionListChunks[0]),
-                //PickOutMostRelevantPredictions_MistralLarge(birthTime, userQuestion, predictionListChunks[0]),
-                //PickOutMostRelevantPredictions_GPT4(birthTime, userQuestion),
-                //PickOutMostRelevantPredictions_MetaLlama3(birthTime, userQuestion)
-            };
-            var relevantPredictions = await Task.WhenAll(tasks1); //call all models in parallel
+            var relevantPredictions = await PickOutMostRelevantPredictions_MistralSmall(birthTime, userQuestion, predictionListChunks[0]); //call all models in parallel
 
             //#2 answer question based on relevant predictions
-            var tasks2 = new List<Task<string>>
-            {
-                //AnswerQuestionDirectly(relevantPredictions[0], userQuestion),
-                //AnswerQuestionDirectly_MetaLlama3(relevantPredictions[0], userQuestion),
-                AnswerQuestionDirectly_MistralSmall(relevantPredictions[0], userQuestion),
-            };
-            var answerLevel1 = await Task.WhenAll(tasks2); //call all models in parallel
+            //var answerLevel1 = await AnswerQuestionDirectly_MistralSmall(relevantPredictions, userQuestion); //call all models in parallel
+            var answerLevel1 = await AnswerQuestionDirectly_CohereCommandRPlus(relevantPredictions, userQuestion); //call all models in parallel
 
             //#3 simplify answer
             //var answerLevel2 = await ImproveFinalAnswer_MistralLarge(answerLevel1[0], userQuestion);
@@ -210,7 +200,7 @@ namespace VedAstro.Library
             //todo check if contains disclaimers then remove
             //var answerLevel3 = await RemoveAnyDisclaimers_MistralLarge(answerLevel2, userQuestion);
 
-            return answerLevel1[0];
+            return answerLevel1;
         }
 
         private static List<string> GetPredictionAsChunks(Time birthTime)
@@ -219,14 +209,39 @@ namespace VedAstro.Library
             var predictionList = Tools.GetHoroscopePrediction(birthTime);
 
             //extract only name and description and place nicely
-            var jsonString = $"[{string.Join(",",
-                predictionList.Select(o => $"{{\"Name\":\"{o.FormattedName}\",\"Description\":\"{o.Description}\"}}"))}]";
+            // Create a new list to hold the modified prediction objects
+            List<dynamic> modifiedPredictionList = new List<dynamic>();
 
-            //nicely create convert to text form
+            // Iterate over each object in the predictionList
+            foreach (var prediction in predictionList)
+            {
+                //calculate weigh of each prediction based on shadbala
+                //NOTE: sum all weights of all houses and planets
+                var weight = prediction.RelatedBody.RelatedHouses.Sum(relatedHouse => Calculate.HouseStrength(relatedHouse, birthTime).ToDouble());
 
-            //convert prediction to text 
-            //var predictJson = Tools.ListToJson(predictionList);
-            //var predictText = predictJson.ToString(Formatting.None);
+                //add in planets
+                weight += prediction.RelatedBody.RelatedPlanets.Sum(relatedHouse => Calculate.PlanetStrength(relatedHouse, birthTime).ToDouble());
+
+                // Create a new anonymous object with the properties you want
+                var modifiedPrediction = new
+                {
+                    Name = prediction.FormattedName,
+                    Description = prediction.Description,
+                    Relevance = string.Empty,
+                    Weight = weight
+                };
+
+                // Add the modified prediction object to the new list
+                modifiedPredictionList.Add(modifiedPrediction);
+            }
+
+            // Sort the list by weight in descending order and remove predictions with zero weight
+            modifiedPredictionList = modifiedPredictionList.OrderByDescending(prediction => prediction.Weight).ToList();
+            modifiedPredictionList.RemoveAll(prediction => prediction.Weight == 0);
+
+
+            // Convert the list of modified prediction objects to a JSON string
+            var jsonString = JsonConvert.SerializeObject(modifiedPredictionList, Formatting.None);
 
             var chunkedList = new List<string>() { jsonString };
 
@@ -310,89 +325,67 @@ namespace VedAstro.Library
 
         private static async Task<string> AnswerQuestionDirectly_MistralSmall(string answerLevelN, string userQuestion)
         {
-            var handler = CreateHttpClientHandler();
-            var sysMessage = PrepareSystemMessage();
-            var requestBody = CreateRequestBody(sysMessage);
-            var content = new StringContent(requestBody);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            using (var client = new HttpClient(handler))
+            var sysMessageArray = new[]
             {
-                HttpResponseMessage response = await PostRequestAsync(client, content);
-                return await ProcessResponseAsync(response);
-            }
-
-
-            //------------------------------- LOCALS --------------
-
-            HttpClientHandler CreateHttpClientHandler()
-            {
-                return new HttpClientHandler()
+                new
                 {
-                    ClientCertificateOptions = ClientCertificateOption.Manual,
-                    ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true
-                };
-            }
+                    role = "system",
+                    content = $"as expert astrologer analyse life description text, concise answer, based on relevance and weight answer question with reason\n" +
+                              $"QUESTION:\n{userQuestion}" +
+                              $"\nLIFE DESCRIPTION:\n{answerLevelN}"
+                }
+            };
 
-            string PrepareSystemMessage()
+            var settings = new PredictionSettings
             {
-                var sysMessage =
-                    $"analyse life description text, answer question directly\n" +
-                    $"QUESTION:\n{userQuestion}\n" +
-                    $"LIFE DESCRIPTION:\n{answerLevelN}";
+                ServerUrl = "https://Mistral-small-xcvuv-serverless.westus.inference.ai.azure.com/v1/chat/completions",
+                ApiKey = azureMistralSmallAPIKey,
+                MaxTokens = 600,
+                Temperature = 0.5,
+                TopP = 0.2,
+                SysMessage = sysMessageArray
+            };
 
-                return System.Text.RegularExpressions.Regex.Unescape(sysMessage);
-            }
 
-            string CreateRequestBody(string sysMessage)
+            //make call to LLM, NOTE : high time consumption in chain
+            var llmReply = await ProcessPrediction(settings);
+
+            return llmReply;
+
+        }
+
+        private static async Task<string> AnswerQuestionDirectly_CohereCommandRPlus(string answerLevelN, string userQuestion)
+        {
+
+            var sysMessageArray = new[]
             {
-                var requestBodyObject = new
-                {
-                    messages = new[]
-                    {
                 new
                 {
                     role = "user",
-                    content = sysMessage
+                    content = $"as expert astrologer analyse life description text, concise answer, based on relevance and weight answer question with reason\n" +
+                              $"QUESTION:\n{userQuestion}" +
+                              $"\nLIFE DESCRIPTION:\n{answerLevelN}"
                 }
-            },
-                    max_tokens = 2000,
-                    temperature = 0.5,
-                    top_p = 0.5,
-                    safe_prompt = "false"
-                };
+            };
 
-                return JsonConvert.SerializeObject(requestBodyObject);
-            }
-
-            async Task<HttpResponseMessage> PostRequestAsync(HttpClient client, StringContent content)
+            var settings = new PredictionSettings
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMistralSmallAPIKey);
-                client.BaseAddress = new Uri("https://Mistral-small-xcvuv-serverless.westus.inference.ai.azure.com/v1/chat/completions");
+                ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
+                ApiKey = azureCohereCommandRPlusAPIKey,
+                MaxTokens = 600,
+                Temperature = 0.5,
+                TopP = 0.5,
+                SysMessage = sysMessageArray
+            };
 
-                return await client.PostAsync("", content);
-            }
 
-            async Task<string> ProcessResponseAsync(HttpResponseMessage response)
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    string fullReplyRaw = await response.Content.ReadAsStringAsync();
-                    var fullReply = new LlamaReplyJson(fullReplyRaw);
+            //make call to LLM, NOTE : high time consumption in chain
+            var llmReply = await ProcessPrediction(settings);
 
-                    return fullReply.Choices.FirstOrDefault().Message.Content;
-                }
-                else
-                {
-                    Console.WriteLine($"The request failed with status code: {response.StatusCode}");
-                    Console.WriteLine(response.Headers.ToString());
+            return llmReply;
 
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return responseContent;
-                }
-            }
         }
-
 
         private static async Task<string> HighlightKeywords(string userQuestion, string answerLevel3)
         {
@@ -481,92 +474,68 @@ namespace VedAstro.Library
 
         private static async Task<string> HighlightKeywords_MistralSmall(string answerText, string userQuestion)
         {
-            var handler = CreateHttpClientHandler();
-            var sysMessage = PrepareSystemMessage();
-            var requestBody = CreateRequestBody(sysMessage);
-            var content = new StringContent(requestBody);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var sysMessage =
+                             "1. Output ANSWER text in HTML format for use between <p> tag element\n" +
+                             "2. Highlight relevant words and phrases in ANSWER that is related to QUESTION\n" +
+                             "3. Break long text and organize ANSWER text structure for easy readability." +
+                             "4. All html element must be valid to be placed inside <p> tag element\n\n";
 
-            using (var client = new HttpClient(handler))
+
+            var sysMessageArray = new[]
             {
-                HttpResponseMessage response = await PostRequestAsync(client, content);
-                return await ProcessResponseAsync(response);
-            }
-
-
-            //------------------------------- LOCALS --------------
-
-            HttpClientHandler CreateHttpClientHandler()
-            {
-                return new HttpClientHandler()
+                new
                 {
-                    ClientCertificateOptions = ClientCertificateOption.Manual,
-                    ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true
-                };
-            }
-
-            string PrepareSystemMessage()
-            {
-                var sysMessage = "Follow rules:\n" +
-                                 "1. Output ANSWER text in HTML format for use between <p> tag element\n" +
-                                 "2. Highlight relevant words and phrases in ANSWER that is related to QUESTION\n" +
-                                 "3. Break long text and organize ANSWER text structure for easy readability." +
-                                 "4. All html element must be valid to be placed inside <p> tag element\n\n" +
-                                 $"QUESTION:\n\n{userQuestion}\n\nANSWER:\n\n{answerText}";
-
-
-                return System.Text.RegularExpressions.Regex.Unescape(sysMessage);
-            }
-
-            string CreateRequestBody(string sysMessage)
-            {
-                var requestBodyObject = new
-                {
-                    messages = new[]
-                    {
+                    role = "system",
+                    content = "bold and paragraph structure DESCRIPTION text as HTML based on relevance to TOPIC text"
+                },
                 new
                 {
                     role = "user",
-                    content = sysMessage
-                }
-            },
-                    max_tokens = 1000,
-                    temperature = 0.2,
-                    top_p = 0.1,
-                    safe_prompt = "false"
-                };
-
-                return JsonConvert.SerializeObject(requestBodyObject);
-            }
-
-            async Task<HttpResponseMessage> PostRequestAsync(HttpClient client, StringContent content)
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMistralSmallAPIKey);
-                client.BaseAddress = new Uri("https://Mistral-small-xcvuv-serverless.westus.inference.ai.azure.com/v1/chat/completions");
-
-                return await client.PostAsync("", content);
-            }
-
-            async Task<string> ProcessResponseAsync(HttpResponseMessage response)
-            {
-                if (response.IsSuccessStatusCode)
+                    content = @"{TOPIC:""Quantum Computing"", DESCRIPTION:""Quantum Computing uses principles of quantum mechanics to process information. It’s expected to revolutionize computing by performing complex calculations quickly.""}"
+                },
+                new
                 {
-                    string fullReplyRaw = await response.Content.ReadAsStringAsync();
-                    var fullReply = new LlamaReplyJson(fullReplyRaw);
-
-                    return fullReply.Choices.FirstOrDefault().Message.Content;
-                }
-                else
+                    role = "assistant",
+                    content = "<p><strong>Quantum Computing</strong> uses principles of <strong>quantum mechanics</strong> to process information.<br> It's expected to revolutionize computing by performing complex calculations quickly. </p>"
+                },
+                new
                 {
-                    Console.WriteLine($"The request failed with status code: {response.StatusCode}");
-                    Console.WriteLine(response.Headers.ToString());
+                    role = "user",
+                    content = @"{TOPIC:""Artificial Intelligence"", DESCRIPTION:""Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think like humans and mimic their actions.""}"
+                },
+                new
+                {
+                    role = "assistant",
+                    content = @"<p>This term refers to the simulation of <strong>human intelligence in machines</strong>.<br>  These machines are <strong>programmed to think</strong> like humans and mimic their actions, <br> which is a significant advancement in the field of technology.</p>"
+                },
+                new
+                {
+                    role = "user",
+                    content = @$"{{TOPIC:""{userQuestion}"", DESCRIPTION:""{answerText}""}}"
+                },
+            };
 
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return responseContent;
-                }
-            }
+            var settings = new PredictionSettings
+            {
+                ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
+                ApiKey = azureCohereCommandRPlusAPIKey,
+                //ServerUrl = "https://Mistral-large-cahy-serverless.westus.inference.ai.azure.com/v1/chat/completions",
+                //ApiKey = azureMistralLargeAPIKey,
+                //ServerUrl = "https://Mistral-small-xcvuv-serverless.westus.inference.ai.azure.com/v1/chat/completions",
+                //ApiKey = azureMistralSmallAPIKey,
+                MaxTokens = 8196,
+                Temperature = 0.4,
+                TopP = 0.1,
+                SysMessage = sysMessageArray
+            };
+
+
+            //make call to LLM, NOTE : high time consumption in chain
+            var llmReply = await ProcessPrediction(settings);
+
+            return llmReply;
+
         }
-
 
         private static async Task<string> RemoveAnyDisclaimers(string rawAnswer, string userQuestion)
         {
@@ -1074,88 +1043,137 @@ namespace VedAstro.Library
             }
         }
 
+        public class PredictionSettings
+        {
+            public string ServerUrl { get; set; }
+            public string ApiKey { get; set; }
+            public double MaxTokens { get; set; }
+            public double Temperature { get; set; }
+            public double TopP { get; set; }
+            public object[] SysMessage { get; set; }
+        }
 
-        private static async Task<string> PickOutMostRelevantPredictions_MistralSmall(Time birthTime, string userQuestion, string predictText)
+        private static async Task<string> ProcessPrediction(PredictionSettings settings)
         {
             var handler = CreateHttpClientHandler();
-            var sysMessage = PrepareSystemMessage();
-            var requestBody = CreateRequestBody(sysMessage);
+            var requestBody = CreateRequestBody(settings.SysMessage, settings.MaxTokens, settings.Temperature, settings.TopP);
             var content = new StringContent(requestBody);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             using (var client = new HttpClient(handler))
             {
-                HttpResponseMessage response = await PostRequestAsync(client, content);
+                HttpResponseMessage response = await PostRequestAsync(client, content, settings.ServerUrl, settings.ApiKey);
                 return await ProcessResponseAsync(response);
             }
+        }
 
+        private static async Task<string> PickOutMostRelevantPredictions_MistralSmall(Time birthTime, string userQuestion, string predictText)
+        {
 
-            //------------------------------- LOCALS --------------
-
-            HttpClientHandler CreateHttpClientHandler()
+            var sysMessageArray = new[]
             {
-                return new HttpClientHandler()
+                new
                 {
-                    ClientCertificateOptions = ClientCertificateOption.Manual,
-                    ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true
-                };
-            }
+                    role = "system",
+                    content =
+                        $"Output JSON.\n" +
+                        $"Filter DESCRIPTION relevant to the QUESTION.\n" +
+                        $"Judge based on weight.\n" +
+                        $"Sort based on relevance, most relevant at top.\n\n"
 
-            string PrepareSystemMessage()
-            {
-                var sysMessage = $"Output only JSON.\nReturn all predictions that is relevant to the question, '{userQuestion}'.Sort based on relevance, most relevant at top\n```JSON\n{predictText}```";
-                return System.Text.RegularExpressions.Regex.Unescape(sysMessage);
-            }
-
-            string CreateRequestBody(string sysMessage)
-            {
-                var requestBodyObject = new
-                {
-                    messages = new[]
-                    {
+                },
                 new
                 {
                     role = "user",
-                    content = sysMessage
-                }
-            },
-                    max_tokens = 8192,
-                    temperature = 0.8,
-                    top_p = 0.1,
-                    safe_prompt = "false"
-                };
-
-                return JsonConvert.SerializeObject(requestBodyObject);
-            }
-
-            async Task<HttpResponseMessage> PostRequestAsync(HttpClient client, StringContent content)
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMistralSmallAPIKey);
-                client.BaseAddress = new Uri("https://Mistral-small-xcvuv-serverless.westus.inference.ai.azure.com/v1/chat/completions");
-
-                return await client.PostAsync("", content);
-            }
-
-            async Task<string> ProcessResponseAsync(HttpResponseMessage response)
-            {
-                if (response.IsSuccessStatusCode)
+                    content = "QUESTION:{userQuestion}" +
+                              "LIFE DESCRIPTION:{descriptionText}"
+                },
+                new
                 {
-                    string fullReplyRaw = await response.Content.ReadAsStringAsync();
-                    var fullReply = new LlamaReplyJson(fullReplyRaw);
-
-                    return fullReply.Choices.FirstOrDefault().Message.Content;
-                }
-                else
+                    role = "assistant",
+                    content = @"{name:""{predictionName}"", description:""{description}"", relevance:""{relevanceScore}"", weight:""{weightScore}""}"
+                },
+                new
                 {
-                    Console.WriteLine($"The request failed with status code: {response.StatusCode}");
-                    Console.WriteLine(response.Headers.ToString());
+                    role = "user",
+                    content = $"QUESTION:\n{userQuestion}\n" +
+                              $"LIFE DESCRIPTION:\n{predictText}"
+                },
 
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return responseContent;
-                }
+            };
+
+
+
+            var settings = new PredictionSettings
+            {
+                ServerUrl = "https://Mistral-small-xcvuv-serverless.westus.inference.ai.azure.com/v1/chat/completions",
+                ApiKey = azureMistralSmallAPIKey,
+                MaxTokens = 8196,
+                Temperature = 0.5,
+                TopP = 0.5,
+                SysMessage = sysMessageArray
+            };
+
+
+            //make call to LLM, NOTE : high time consumption in chain
+            var llmReply = await ProcessPrediction(settings);
+
+            return llmReply;
+
+        }
+
+
+
+        private static string CreateRequestBody(object[] sysMessage, double maxTokens, double temperature, double topP)
+        {
+            var requestBodyObject = new
+            {
+                messages = sysMessage,
+                max_tokens = maxTokens,
+                temperature = temperature,
+                top_p = topP,
+                safe_prompt = "false"
+            };
+
+            return JsonConvert.SerializeObject(requestBodyObject);
+        }
+
+        private static async Task<HttpResponseMessage> PostRequestAsync(HttpClient client, StringContent content, string serverUrl, string apiKey)
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+            client.BaseAddress = new Uri(serverUrl);
+
+            return await client.PostAsync("", content);
+        }
+
+
+        private static HttpClientHandler CreateHttpClientHandler() =>
+            new()
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true
+            };
+
+
+        private static async Task<string> ProcessResponseAsync(HttpResponseMessage response)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                string fullReplyRaw = await response.Content.ReadAsStringAsync();
+                var fullReply = new LlamaReplyJson(fullReplyRaw);
+
+                return fullReply.Choices.FirstOrDefault().Message.Content;
+            }
+            else
+            {
+                Console.WriteLine($"The request failed with status code: {response.StatusCode}");
+                Console.WriteLine(response.Headers.ToString());
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return responseContent;
             }
         }
-        
+
 
         private static async Task<string> ExtractTimeRange_MistralLarge(Time birthTime, string userQuestion)
         {

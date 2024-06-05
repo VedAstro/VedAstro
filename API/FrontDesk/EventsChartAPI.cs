@@ -69,16 +69,11 @@ namespace API
             try
             {
                 //get raw xml file
-                var eventDataListXml = await Tools.GetXmlFile("https://vedastrowebsitestorage.z5.web.core.windows.net/data/EventDataList.xml");
-
-                //convert to parsed type, so can convert to JSON
-                var xx = await Tools.ConvertXmlListFileToInstanceList<EventData>(eventDataListXml);
-
                 //package nicely into JSON
                 var eventDataList = new JArray();
-                foreach (var x in xx)
+                foreach (var eventData in EventDataListStatic.Rows)
                 {
-                    eventDataList.Add(x.ToJson());
+                    eventDataList.Add(eventData.ToJson());
                 }
 
 

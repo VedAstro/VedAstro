@@ -30,22 +30,22 @@ namespace API
         /// /.../Calculator/DistanceBetweenPlanets/PlanetName/Sun/PlanetName/Moon/Location/Singapore/Time/23:59/31/12/2000/+08:00
         /// </summary>
         [Function(nameof(Calculate))]
-        public static async Task<HttpResponseData> Calculate([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = CalculateRoute)]
-            HttpRequestData incomingRequest,
+        public static async Task<HttpResponseData> Calculate([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = CalculateRoute)] HttpRequestData incomingRequest,
         string calculatorName,
         string fullParamString
         )
         {
             try
             {
+                //make caller data global to all children calling HTTP
+                CurrentCallerData.originalHttpRequest = incomingRequest;
+
                 //0 : LOG CALL : used later for throttle limit
-                //var callLog = await APILogger.Visit(incomingRequest);
-                var apiStatistic = new ApiStatistic();
-                apiStatistic.LogIpAddress(incomingRequest);
-                apiStatistic.LogRequestUrl(incomingRequest);
-                apiStatistic.LogRawRequest(incomingRequest);
-                apiStatistic.LogSubscriber(incomingRequest);
-                apiStatistic.LogUserAgent(incomingRequest);
+                ApiStatistic.LogIpAddress(incomingRequest);
+                ApiStatistic.LogRequestUrl(incomingRequest);
+                ApiStatistic.LogRawRequest(incomingRequest);
+                ApiStatistic.LogSubscriber(incomingRequest);
+                ApiStatistic.LogUserAgent(incomingRequest);
 
                 //1 : extract out custom format else empty string (removed from url)
                 var format = ParseAndGetFormat(fullParamString);
@@ -273,12 +273,11 @@ namespace API
         {
             //0 : LOG CALL
             //log ip address, call time and URL,  used later for throttle limit
-            var apiStatistic = new ApiStatistic();
-            apiStatistic.LogIpAddress(incomingRequest);
-            apiStatistic.LogRequestUrl(incomingRequest);
-            apiStatistic.LogRawRequest(incomingRequest);
-            apiStatistic.LogSubscriber(incomingRequest);
-            apiStatistic.LogUserAgent(incomingRequest);
+            ApiStatistic.LogIpAddress(incomingRequest);
+            ApiStatistic.LogRequestUrl(incomingRequest);
+            ApiStatistic.LogRawRequest(incomingRequest);
+            ApiStatistic.LogSubscriber(incomingRequest);
+            ApiStatistic.LogUserAgent(incomingRequest);
 
             // Control API overload, even this if hit hard can COST Money via CDN
             //await APITools.AutoControlOpenAPIOverload(callLog);

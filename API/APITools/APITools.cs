@@ -55,11 +55,9 @@ namespace API
         public const string LiveChartHtml = "LiveChart.html";
 
         public const string VisitorLogFile = "VisitorLog.xml";
-        public const string TaskListFile = "TaskList.xml";
         public const string MessageListFile = "MessageList.xml";
         public const string SavedEventsChartListFile = "SavedChartList.xml";
         public const string SavedMatchReportList = "SavedMatchReportList.xml";
-        public const string RecycleBinFile = "RecycleBin.xml";
         public const string UserDataListXml = "UserDataList.xml";
 
 
@@ -238,52 +236,6 @@ namespace API
             return rawStream;
         }
 
-        /// <summary>
-        /// Gets public IP address of client sending the http request
-        /// </summary>
-        public static IPAddress GetCallerIp(this HttpRequestData req)
-        {
-            var headerDictionary = req.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
-            
-            //debug print
-            //foreach (var item in headerDictionary) { Console.WriteLine($"Key: {item.Key}, Value: {Tools.ListToString<string>(item.Value.ToList())}"); }
-            
-            var key = "x-forwarded-for";
-            var key2 = "x-azure-clientip";
-            IPAddress? ipAddress = null;
-
-            if (headerDictionary.ContainsKey(key) || headerDictionary.ContainsKey(key2))
-            {
-                var headerValues = headerDictionary[key];
-                var ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()
-                    ?.Split(new char[] { ':' }).FirstOrDefault();
-                var key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
-
-                //if key 1 fail , try key 2
-                if (!key1ParseResult)
-                {
-                    headerValues = headerDictionary[key];
-                    ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()
-                        ?.Split(new char[] { ':' }).FirstOrDefault();
-                    key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
-                }
-            }
-
-            return ipAddress ?? IPAddress.None;
-        }
-
-        public static IPAddress GetCallerIp(this HttpRequestMessage request)
-        {
-            IPAddress result = null;
-            if (request.Headers.TryGetValues("X-Forwarded-For", out IEnumerable<string> values))
-            {
-                var ipn = values.FirstOrDefault().Split(new char[] { ',' }).FirstOrDefault().Split(new char[] { ':' })
-                    .FirstOrDefault();
-                IPAddress.TryParse(ipn, out result);
-            }
-
-            return result;
-        }
 
         /// <summary>
         /// Reads data stamped build version, if "beta" is found in that name, return true
@@ -422,34 +374,6 @@ namespace API
             }
         }
 
-        /// <summary>
-        /// Gets any file at given WWW url will return as bytes
-        /// </summary>
-        public static async Task<byte[]> GetFileHttp(string url)
-        {
-            try
-            {
-                //get the data sender
-                using var client = new HttpClient();
-
-                client.Timeout = Timeout.InfiniteTimeSpan;
-
-                //load xml event data files before hand to be used quickly later for search
-                //get main horoscope prediction file (located in wwwroot)
-                var fileBytes = await client.GetByteArrayAsync(url, CancellationToken.None);
-
-                return fileBytes;
-            }
-            catch (Exception e)
-            {
-                var msg = $"FAILED TO GET FILE:/n{url}";
-                Console.WriteLine(msg);
-                APILogger.Error(msg); //log it
-                return new byte[] { };
-            }
-
-
-        }
 
         /// <summary>
         /// Makes a HTTP GET request and return the data as HTTP response message
@@ -458,6 +382,9 @@ namespace API
         {
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+
+            //copy caller data from original caller if any, so calls are traceable
+            CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
 
             //get the data sender
             using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
@@ -990,7 +917,7 @@ namespace API
 
             //get 1st image in list as data
             var topImageUrl = handPickedApples.First().ThumbnailUrl;
-            var imageBytes = await APITools.GetFileHttp(topImageUrl);
+            var imageBytes = await Tools.GetFileHttp(topImageUrl);
 
             //return to caller
             return imageBytes;

@@ -2,6 +2,7 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Net;
+using System.Net.Http;
 
 namespace API
 {
@@ -26,6 +27,10 @@ namespace API
             {
                 var bytes = await client.GetByteArrayAsync(url);
                 var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+                
+                //copy caller data from original caller if any, so calls are traceable
+                CurrentCallerData.AddOriginalCallerHeadersIfAny(response);
+
                 response.Headers.Add("Content-Type", "image/x-icon");
                 await response.Body.WriteAsync(bytes, 0, bytes.Length);
                 return response;

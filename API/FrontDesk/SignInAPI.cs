@@ -2,6 +2,7 @@
 using Google.Apis.Auth;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using VedAstro.Library;
 
 namespace API
 {
@@ -85,12 +86,11 @@ namespace API
             //facebook pings this when user Deauthorize facebook login
             //https://api.vedastro.org/FacebookDeauthorize 
 
-            var apiStatistic = new ApiStatistic();
-            apiStatistic.LogIpAddress(incomingRequest);
-            apiStatistic.LogRequestUrl(incomingRequest);
-            apiStatistic.LogRawRequest(incomingRequest);
-            apiStatistic.LogSubscriber(incomingRequest);
-            apiStatistic.LogUserAgent(incomingRequest);
+            ApiStatistic.LogIpAddress(incomingRequest);
+            ApiStatistic.LogRequestUrl(incomingRequest);
+            ApiStatistic.LogRawRequest(incomingRequest);
+            ApiStatistic.LogSubscriber(incomingRequest);
+            ApiStatistic.LogUserAgent(incomingRequest);
 
             return APITools.PassMessage(incomingRequest);
         }

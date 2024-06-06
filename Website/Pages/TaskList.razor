@@ -38,7 +38,7 @@
        await _jsRuntime.ShowLoading();
 
         //get all task from API server
-        var result = await ServerManager.ReadFromServerXmlReply(AppData.URL.GetTaskListApi);
+        var result = await Tools.ReadFromServerXmlReply(AppData.URL.GetTaskListApi);
         var tasksListXml = result.Payload;
 
         //convert xml to objects

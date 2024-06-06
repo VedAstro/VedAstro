@@ -3396,15 +3396,17 @@ class HoroscopeChat {
     SelectedTopicId = "";  //she's filled in when set
     SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
-    LiveServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
-    //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate/HoroscopeChat";
-    //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate/HoroscopeChat";
+    //LiveServerURL = "http://localhost:7071/api/Calculate";
+    //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
+    LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
     //LocalServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
     ElementID = ""; //ID of main div where table & header will be injected
     ShowHeader = true; //default enabled, header with title, icon and edit button
     HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
     IsAITalking = false; //default false, to implement "PTT" radio like protocol
     PaddingTopApplied = false; //basic switch will go once
+    SelectedBirthTime = ""; //if mentioned during init use it else, GUI will change ask for it
+    SessionId = ""; //start clean, updated as message comes in
 
     constructor(rawSettings) {
         console.log(
@@ -3566,7 +3568,7 @@ class HoroscopeChat {
             $("#UserChatInputElement").keypress((e) => {
                 if (e.which === 13) {
                     // Enter key pressed
-                    this.onClickSendChat();
+                    window.vedastro.horoscopechat.onClickSendChat();
                     e.preventDefault(); // Prevents the default action
                 }
             });
@@ -3619,7 +3621,7 @@ class HoroscopeChat {
         }
 
         //make sure AI is not busy talking
-        if (this.IsAITalking) {
+        if (window.vedastro.horoscopechat.IsAITalking) {
             Swal.fire(
                 "Please wait, dear..",
                 "AI is <strong>busy talking</strong>, please wait for it to <strong>finish</strong> chattering.",
@@ -3673,14 +3675,17 @@ class HoroscopeChat {
         //get selected birth time
         //TODO can be DOB or bookname
         //var timeInputUrl = CommonTools.BirthTimeUrlOfSelectedPersonJson();
-        var timeInputUrl = "Location/Singapore/Time/12:44/23/04/1998/+08:00";
+        //var timeInputUrl = "Location/Ipoh/Time/12:44/23/04/1994/+08:00";
 
         //show temperoray "Thinking" message to user before calling API as that will take time
         this.showTempThinkingMessage();
 
         //send user's message
-        var aiReplyData = await this.sendMessageToServer(timeInputUrl, userInput);
+        var aiReplyData = await this.sendMessageToServer(this.SelectedBirthTime, userInput);
         this.LastUserMessage = userInput; //save to used later for highlight
+
+        //update local session id
+        this.SessionId = aiReplyData["SessionId"];
 
         //print to user
         this.printAIReplyMessageToView(aiReplyData);
@@ -3695,7 +3700,8 @@ class HoroscopeChat {
     async sendMessageToServer(timeInputUrl, userQuestionInput) {
 
         //construct the final URL
-        const url = `${this.LiveServerURL}/${timeInputUrl}/UserQuestion/${userQuestionInput}`;
+        userQuestionInput = userQuestionInput.replace(/\?/g, ''); //remove question marks as it break API detection
+        const url = `${this.LiveServerURL}/HoroscopeChat/${timeInputUrl}/UserQuestion/${userQuestionInput}/UserId/${window.vedastro.UserId}/SessionId/${this.SessionId}`;
 
         try {
             const response = await fetch(url);
@@ -3742,13 +3748,13 @@ class HoroscopeChat {
             //expected fail because no need parse
             rawJsonMessage = rawJson;
         }
-        var aiTextMessageHtml = rawJsonMessage.textHtml;
-        var messageHash = rawJsonMessage.textHash;
-        var aiTextMessage = rawJsonMessage.text;
-        var followupQuestions = rawJsonMessage?.followupQuestions ?? [];
+        var aiTextMessageHtml = rawJsonMessage.TextHtml;
+        var messageHash = rawJsonMessage.TextHash;
+        var aiTextMessage = rawJsonMessage.Text;
+        var followupQuestions = rawJsonMessage?.FollowUpQuestions ?? [];
 
         //PROCESS SERVER COMMANDS
-        var commands = rawJsonMessage.commands || []; // when no commands given empty to not fail
+        var commands = rawJsonMessage.Commands || []; // when no commands given empty to not fail
 
         //## SPECIAL HANDLE FOR LOGIN PROMPTS
         //1: check if server said please login, in command to client
@@ -3775,7 +3781,7 @@ class HoroscopeChat {
 
             followupQuestions.forEach(function (question) {
                 followupQuestionsHtml += `
-            <button type="button" onclick="window.vedastro.chatapi.ask_followup_question(this, '${question}')"  class="btn btn-outline-primary">${question}</button>
+            <button type="button" onclick="window.vedastro.horoscopechat.askFollowUpQuestion(this, '${question}')"  class="btn btn-outline-primary">${question}</button>
         `;
             });
 
@@ -3851,11 +3857,11 @@ class HoroscopeChat {
 
                 // Hide the temporary element and loading icon, then show the formatted message
                 //remove stream shower and loading for this bubble since not needed anymore
-                $(`#${messageHash} .temp-text-stream-elm`).hide();
+                //$(`#${messageHash} .temp-text-stream-elm`).hide();
                 $(`#${messageHash} .loading-icon-elm`).hide();
 
                 //make visible hidden formatted output
-                $(`#${messageHash} .text-html-out-elm`).show();
+                //$(`#${messageHash} .text-html-out-elm`).show();
 
                 // Allow user input again
                 this.IsAITalking = false;
@@ -3962,6 +3968,106 @@ class HoroscopeChat {
         // Flag to prevent user input while AI is 'typing'
         //NOTE: access via global, because deeply nested
         window.vedastro.horoscopechat.IsAITalking = false;
+
+    }
+
+    //called here direct from HTML button
+    async askFollowUpQuestion(eventData, followUpQuestion) {
+
+        //make sure AI is not busy talking
+        if (window.vedastro.horoscopechat.IsAITalking) {
+            Swal.fire(
+                "Please wait, dear..",
+                "AI is <strong>busy talking</strong>, please wait for it to <strong>finish</strong> chattering.",
+                "error"
+            );
+            return;
+        }
+
+
+        // get hash of message, stored as id in holder
+        var messageHolder = $(eventData)
+            .closest(".card")
+            .children(".message-holder");
+        var primaryAnswerHash = messageHolder.attr("id");
+
+        //UPDATE GUI WITH USER MSG (UX)
+        var aiInput = $("#UserChatInputElement").val();
+        var userName = "You";
+        var userInputChatCloud = `
+        <li class="d-flex justify-content-end mb-4">
+            <div class="card ">
+                <div class="card-header d-flex justify-content-between py-2">
+                    <p class="fw-bold mb-0">${userName}</p>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        ${followUpQuestion}
+                    </p>
+                </div>
+            </div>
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
+                 class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="45">
+        </li>
+        `;
+        //inject in User's input into chat window
+        $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+
+
+        //show temperoray "Thinking" message to user before calling API as that will take time
+        this.showTempThinkingMessage();
+
+        //prepare message and send to caller
+        //construct the final URL
+        var followUpAIReplyData = await getFollowUpAIReplyFromAPI(followUpQuestion, primaryAnswerHash);
+
+        //inject reply into view
+        //print to user
+        this.printAIReplyMessageToView(followUpAIReplyData);
+
+        //hide thinking message, for less clutered UX
+        this.hideTempThinkingMessage();
+
+
+
+        async function getFollowUpAIReplyFromAPI(followUpQuestion, primaryAnswerHash) {
+
+            followUpQuestion = followUpQuestion.replace(/\?/g, ''); //remove question marks as it break API detection
+            const url = `${window.vedastro.horoscopechat.LiveServerURL}/HoroscopeFollowUpChat/${window.vedastro.horoscopechat.SelectedBirthTime}/FollowUpQuestion/${followUpQuestion}/PrimaryAnswerHash/${primaryAnswerHash}/UserId/${window.vedastro.UserId}/SessionId/${window.vedastro.horoscopechat.SessionId}`;
+
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.Status === "Pass") {
+                    return data.Payload["HoroscopeFollowUpChat"];
+                } else {
+                    console.error(`Request failed with status: ${data.Status}${data.Payload}`);
+
+                    //note: the minimal message strucuture
+                    let jsonObject = {
+                        "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        "textHash": "xxxxx",
+                        "commands": ["noFeedback"]
+                    };
+                    return JSON.stringify(jsonObject);
+                }
+            } catch (error) {
+                console.error(`Error making GET request: ${error}`);
+
+                //note: the minimal message strucuture
+                let jsonObject = {
+                    "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "textHash": "xxxxx",
+                    "commands": ["noFeedback"],
+                };
+                return JSON.stringify(jsonObject);
+            }
+
+        }
 
     }
 }

@@ -1,0 +1,588 @@
+﻿@using VedAstro.Library
+@using System.Text
+@using System.IO;
+@using Website.Pages
+@namespace Website.Pages
+
+@* @inject IFileSaver _fileSaver
+ *@
+@attribute [Route(PageRoute.TableGenerator)]
+
+<PageTitle>Table Generator | VedAstro</PageTitle>
+
+<PageTop ImageName="table-generator-banner.png"
+         Title="ML Data Generator"
+         DescriptionText="Easily generate large astronomical tables for use in ML/AI Model training and Data Science for free">
+</PageTop>
+
+
+<div class="d-md-flex justify-content-between">
+
+    @*CONTACT FORM*@
+    <div class="me-3">
+        @* INPUT *@
+        <div class="vstack gap-5" style="max-width: @GR.W412px;">
+
+            @* SOURCE SELECTOR *@
+            <div class="vstack gap-3">
+                <IconTitle IconName="flat-color-icons:list" Title="Time List" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)">
+                    <ButtonRow>
+                        <HelpIconTooltip ShowOnHover="true" HelpText="@HelpText.Column1MLData" SmallIcon="true" />
+                    </ButtonRow>
+                </IconTitle>
+
+                @* SOURCE SELECT *@
+                <div class="input-group">
+                    <label class="input-group-text gap-2" for="SourceSelectInput" style="width: 165px;"><Icon IconName="flat-color-icons:data-recovery" Size="34" />Source</label>
+                    <select @bind="SelectedSource" class="form-select" id="SourceSelectInput" style="font-weight: 600; font-size: 17px;">
+                        <option value="" selected>Select...</option>
+                        <option value="upload">Upload CSV or Excel</option>
+                        <option value="sample">Public +10k Horoscopes</option>
+                    </select>
+                </div>
+
+                @* TIME RANGE UPLOAD EXCEL/CSV *@
+                <div @ref="timeRangeUploadInputHtml" style="display:none;">
+                    <div class="vstack gap-3 input-group mb-3">
+                        <div class="form-control" style=" width: 100%; border-radius: 6px; ">
+                            <InputFile id="inputGroupFile02" OnChange="@OnInputFileChange" />
+                        </div>
+                        <div class="ps-2" @ref="SampleInstructHolder">
+                            1. <BoldLink URL="@URL.ExcelSampleMLFile">Download</BoldLink> sample EXCEL file.<br />
+                            2. Modify excel file and upload back here.
+                            <br /><strong>OR</strong><br />
+                            Use tool <BoldLink URL="@PageRoute.TimeListGenerator">Time List Generator</BoldLink> for auto EXCEL file.<br />
+                        </div>
+                    </div>
+                    <div @ref="uploadFileInfoHolder" class="hstack gap-3" style="display:none;">
+                        <div class="hstack gap-2">
+                            <Icon IconName="icon-park:file-success" Size="30" />
+                            Read Complete!
+                        </div>
+                        <span class="mt-1">Rows : <strong>@_timeList.Count</strong></span>
+                        @* <span class="mt-1">Type : <strong>@UploadedFile?.ContentType</strong></span> *@
+                        <span class="mt-1">Size : <strong>@Tools.BytesToHumanText(UploadedFile?.Size ?? 0)</strong></span>
+                    </div>
+
+                </div>
+
+                @* TIME RANGE SAMPLE HOROSCOPES *@
+                <div @ref="timeRangeSampleInputHtml" style="display:none;">
+                    <div>
+                        <Icon IconName="noto-v1:construction" />
+                        <p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate</a> to speed development</p>
+                    </div>
+                </div>
+
+
+            </div>
+
+            @* DATA POINT / METHOD SELECT *@
+            <DataColumnSelector CustomAllMethodList="@MethodListALL" @ref="_DataColumnSelector" />
+
+            @* GENERATE BUTTON *@
+            <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="OnClickGeneratePreviewHTML" />
+        </div>
+    </div>
+
+    @*SIDEBAR*@
+    <div class="mt-md-0 mt-4 me-md-5">
+        <!--when small give at top-->
+        <div class="vstack gap-0 gap-md-2">
+            @*STACK BOXES ON RIGHT*@
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Desktop Version" Description="Download powerfull desktop app that supports over +1 million rows" IconName="emojione-v1:laptop-computer" OnClickCallback="OnClickGotoDesktopVersionSideBar" />
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Generate List" Description="Auto generate time list for +1000 years in seconds" IconName="flat-color-icons:overtime" ClickUrl="@PageRoute.TimeListGenerator" IsNewTabOpen="true" />
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Ready Made Datasets" Description="Use pre-built astro datasets in HuggingFace" IconName="fluent-emoji:hugging-face" ClickUrl="@URL.HuggingFaceRepo" IsNewTabOpen="true" />
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Video Guide" Description="Watch easy guide to get you started" IconName="vscode-icons:file-type-video" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("HowToGuideElement"))" />
+        </div>
+    </div>
+</div>
+
+
+<div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
+
+    @* OUTPUT TABLE *@
+    <div class="vstack gap-3 mt-4">
+        @*dont wrap table, looks untidy*@
+        <style>
+            th {
+                white-space: nowrap;
+            }
+
+            td {
+                white-space: nowrap;
+            }
+        </style>
+
+        @if (_isReady)
+        {
+            @* MESSAGE *@
+            <IconTitle IconName="flat-color-icons:fine-print" Title="Preview" TitleHolder="h5" MaxWidthPx="@((int)GR.W546)" />
+
+            @* TITLE & OPTIONS *@
+            <div class="hstack gap-4">
+                <div class="hstack gap-3">
+                    <IconButton SmallSize="true" IconName="iconamoon:zoom-in" TooltipText="Zoom In" OnClickCallback="OnClickZoomIn" />
+                    <IconButton SmallSize="true" IconName="iconamoon:zoom-out" TooltipText="Zoom Out" OnClickCallback="OnClickZoomOut" />
+                    <IconButton SmallSize="true" ButtonText="Download Full" IconName="line-md:cloud-download-loop">
+                        <DropDownList>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadCSV">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="eos-icons:csv-file" />
+                                    <span>CSV</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadJson">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="bxs:file-json" />
+                                    <span>JSON</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadExcel">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mdi:microsoft-excel" />
+                                    <span>Excel</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadHTML">
+                                    <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="simple-icons:apacheparquet" />
+                                    <span>HTML</span>
+                                </a>
+                            </li>
+                        </DropDownList>
+                    </IconButton>
+                </div>
+                <div class="hstack gap-3">
+                    <span class="mt-1">Rows : <strong>@_timeList.Count</strong></span>
+                    <span class="mt-1">Columns : <strong>@_DataColumnSelector.SelectedMethodMetaList.Count</strong></span>
+                </div>
+            </div>
+
+
+            @* TABLE *@
+            <div id="MLTableHolder">
+                @((MarkupString)HtmlTable)
+            </div>
+            <div class="d-flex justify-content-left">
+                @* important needed to override flex *@
+                <span style="color: @AppData.Grey; font-size: 14px;">
+                    Above table is only preview, click <strong>Download</strong><br />
+                    for full table with <strong>@(_timeList.Count)</strong> rows.
+                </span>
+                <span style="color: @AppData.Grey; font-size: 14px;"></span>
+            </div>
+        }
+        else
+        {
+            <hr class="mt-2" />
+
+            @* PLACEHOLDER MESSAGE *@
+            @* hide when loaded *@
+            <div class="d-flex justify-content-center" style="@((!_isReady) ? "" : "display:none !important;")">
+                @* important needed to override flex *@
+                <span style="color: @AppData.Grey; font-size: 14px;">
+                    Table will appear here, after click <strong>Generate</strong>.<br />
+                    ...download as <strong>CSV</strong>, <strong>Excel</strong>, <strong>JSON</strong> or <strong>HTML</strong>.
+                </span>
+                <span style="color: @AppData.Grey; font-size: 14px;"></span>
+            </div>
+            <hr class="" />
+        }
+
+    </div>
+
+    @* DOCS *@
+    <div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
+
+        <ArticleBlock Title="How To Use?" IconName="flat-color-icons:close-up-mode">
+            <TextHTML>
+                <div id="HowToGuideElement" class="container ">
+                    <div class="row row-cols-3 align-items-center justify-content-start">
+                        <div class="col-auto p-0 align-self-start">
+                            <kbd>STEP 1</kbd>
+                        </div>
+                        <div class="col-6">
+                            <span>Download &amp; install <strong>VedAstro Desktop</strong></span>
+                        </div>
+                        <div class="col">
+                            <IconButton SmallSize="true" ButtonText="Download EXE" OnClickCallback="OnClickDownload" TooltipText="Download .exe file" TextCenter="true" IconName="line-md:download-loop" />
+                        </div>
+                    </div>
+                    <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                        <div class="col-auto p-0 align-self-start">
+                            <kbd>STEP 2</kbd>
+                        </div>
+                        <div class="col-6">
+                            <span>Select <strong>Table Generator</strong> from side menu.</span>
+                            <img src="images/table-generator-guide-step-2.png" class="mt-2 img-fluid rounded border border-secondary" />
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                    <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                        <div class="col-auto p-0 align-self-start">
+                            <kbd>STEP 3</kbd>
+                        </div>
+                        <div class="col-6">
+                            <span>Upload time list, sample provided.</span>
+                            <img src="images/table-generator-guide-step-3.png" class="mt-2 img-fluid rounded border border-secondary" />
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                    <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                        <div class="col-auto p-0 align-self-start">
+                            <kbd>STEP 4</kbd>
+                        </div>
+                        <div class="col-6">
+                            <span>Select <strong>astro data</strong> points as <strong>columns</strong></span>
+                            <img src="images/table-generator-guide-step-4.png" class="mt-2 img-fluid rounded border border-secondary" />
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                    <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                        <div class="col-auto p-0 align-self-start">
+                            <kbd>STEP 5</kbd>
+                        </div>
+                        <div class="col-6">
+                            <span>Click <strong>Generate</strong> &amp; download table.<strong style="color: #007e21;">Easy!</strong></span>
+                            <img src="images/table-generator-guide-step-5.png" class="mt-2 img-fluid rounded border border-secondary" />
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                </div>
+            </TextHTML>
+        </ArticleBlock>
+
+        <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
+            <TextHTML>
+                After download. You can input to a ML model maker, to generate AI data like below.
+                <img src="images/ml-modal-graph-sample-2.png" class="mt-2 img-fluid rounded border border-secondary" />
+            </TextHTML>
+        </ArticleBlock>
+
+        <ArticleBlock Title="Price" IconName="flat-color-icons:money-transfer">
+            <ButtonRow>
+                <IconButton PlaceBottom="true" SmallSize="true" Color="warning" ButtonText="Donate" IconName="openmoji:love-letter" ClickUrl="@PageRoute.Donate" />
+            </ButtonRow>
+            <TextHTML>
+                This service will run for <kbd>FREE</kbd>, so long there is money in the <strong>donation box</strong>.
+                Below is the <strong>live</strong> balance with auto deducting server &amp; maintenance costs.
+
+                <DonationBalanceViewer />
+
+                Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to keep this service running for yourself and others.
+            </TextHTML>
+        </ArticleBlock>
+    </div>
+
+</div>
+
+@code {
+
+    #region FIELDS
+
+    /// <summary>
+    /// generated after upload or after selecting time range
+    /// </summary>
+    List<Time> _timeList = new List<Time>();
+
+    private int CurrentZoomLevel = 100; //defaults to 100 on start
+
+    private ElementReference timeRangeUploadInputHtml;
+
+    private ElementReference SampleInstructHolder;
+
+    private ElementReference timeRangeSampleInputHtml;
+
+    private APISelectorBox ApiSelectorBox;
+
+    private Website.Pages.DataColumnSelector _DataColumnSelector;
+
+    private TimeLocationInput _inputTimeLocation;
+
+    private static List<OpenAPIMetadata> MethodListALL
+    {
+        get
+        {
+            //get all the calc for time & planet (possible data points)
+            var foundCalcs = AutoCalculator.FindCalcs(null, Time.Empty, PlanetName.Sun); //note data does not matter
+            var tempAll = OpenAPIMetadata.FromMethodInfoList(foundCalcs);
+            return tempAll;
+        }
+    }
+
+    private bool _isReady;
+    public IBrowserFile? UploadedFile { get; set; }
+    private ElementReference uploadFileInfoHolder;
+
+
+    public string? SelectedSource
+    {
+        get => _selectedSource;
+        set
+        {
+            //hide & show the correct inputs
+            switch (value)
+            {
+                case "upload":
+                    _jsRuntime.Show(timeRangeUploadInputHtml);
+                    _jsRuntime.Hide(timeRangeSampleInputHtml);
+                    break;
+                case "sample":
+                    _jsRuntime.Show(timeRangeSampleInputHtml);
+                    _jsRuntime.Hide(timeRangeUploadInputHtml);
+                    break;
+            }
+
+            _selectedSource = value;
+        }
+    }
+
+
+    private string? _selectedSource;
+
+    /// <summary>
+    /// Filled with data when Generate button is clicked
+    /// </summary>
+    private string? HtmlTable;
+
+
+    #endregion
+
+    protected override async Task OnInitializedAsync()
+    {
+        //give time to pop, because next is heavy
+        await _jsRuntime.ShowLoading(100);
+
+        _DataColumnSelector.Hide();
+
+        _jsRuntime.HideLoading();
+
+        // Subscribe to the event
+        MLTable.OnProgressCounterChanged += MLTableToolsOnOnProgressCounterChanged;
+    }
+
+    private void MLTableToolsOnOnProgressCounterChanged(object? sender, string e)
+    {
+        _jsRuntime.SetText("#LoadingBoxStatus", e);
+    }
+
+
+    //// <summary>
+    /// Once received file send for processing (API) to extract time list for later use
+    /// </summary>
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        long maxFileSize = 1073741824; // 1GB in bytes
+
+        var file = e.File;
+        if (file != null)
+        {
+            //keep a copy of the file to be used later
+            UploadedFile = file;
+
+            //show icon that file is being processed hold tight
+            await _jsRuntime.ShowLoading();
+
+            //once updated here, files rows count can be seen by user
+            using var ms = new MemoryStream();
+            await UploadedFile.OpenReadStream(maxAllowedSize: maxFileSize).CopyToAsync(ms);
+            ms.Position = 0;
+
+            _timeList = new List<Time>();
+
+            // Check the file extension
+            var extension = Path.GetExtension(file.Name).ToLower();
+
+            // Call the appropriate method based on the file extension
+            if (extension == ".csv")
+            {
+                _timeList = await MLTable.GetTimeListFromCsv(ms);
+            }
+            else if (extension == ".xlsx" || extension == ".xls")
+            {
+                _timeList = await MLTable.GetTimeListFromExcel(ms);
+            }
+            else
+            {
+                // Handle other file types if necessary
+                //todo file type not supported message
+            }
+
+            if (_timeList.Any() && _timeList != null)
+            {
+                //hide distracting sample info
+                _jsRuntime.Hide(SampleInstructHolder);
+
+                //show info about parsed file
+                _jsRuntime.Show(uploadFileInfoHolder);
+
+                //now show data column input
+                //NOTE: this is done reduce clutter until last needed (better UX, sweetheart's idea)
+                _DataColumnSelector.Show();
+
+                _jsRuntime.HideLoading();
+            }
+            else
+            {
+                //mark invalid & alert user
+                await _jsRuntime.ShowAlert("error", AlertText.FailedFileProcess, true);
+            }
+
+        }
+    }
+
+
+    //----------TABLE GENERATORS--------------
+
+
+    //only generates top 10 records for preview
+    private async Task OnClickGeneratePreviewHTML()
+    {
+        await _jsRuntime.ShowLoading();
+
+        //hide & also regenerates table
+        _isReady = false;
+
+        //convert inputed data via API into fully calculated html table (conversion to CSV,.. on client side)
+        //note: Time list should be generated by previous API call and should be ready for use
+        var columnNameList = _DataColumnSelector.SelectedMethodMetaList;
+        HtmlTable = "";
+
+        //only show top 10 records as not to overload (download for full)
+        var reducedList = _timeList.Take(10).ToList();
+        HtmlTable = await MLTable.GenerateMLTable<string>(reducedList, columnNameList, "HTML");
+
+        //can show now also regenerates table
+        _isReady = true;
+
+        //tactile feedback to user
+        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
+
+        _jsRuntime.PlayDoneSound();
+
+        //update view
+        StateHasChanged();
+
+        //auto scroll to URL display out, so user can see better
+        AppData.Go(PageRoute.GeneratedTableOut);
+    }
+
+    private async Task OnClickDownloadHTML()
+    {
+        //show loading
+        await _jsRuntime.ShowLoading(100);
+
+        //convert created table to CSV string
+        var columnNameList = _DataColumnSelector.SelectedMethodMetaList;
+        var htmlString = await MLTable.GenerateMLTable<string>(_timeList, columnNameList, "HTML");
+
+        //prompt user to save file and save it there
+        var bytes = Encoding.UTF8.GetBytes(htmlString);
+        using var stream = new MemoryStream(bytes);
+        //var savePath = await _fileSaver.SaveAsync("ml-table.html", stream, default);
+
+        //tactile feedback to user
+        _jsRuntime.PlayDoneSound();
+        await _jsRuntime.ShowAlert("success", "File Saved!", false, 2200);
+    }
+
+    private async Task OnClickDownloadCSV()
+    {
+        //show loading
+        await _jsRuntime.ShowLoading(100);
+
+        //convert created table to CSV string
+        var columnNameList = _DataColumnSelector.SelectedMethodMetaList;
+        var csvString = await MLTable.GenerateMLTable<string>(_timeList, columnNameList, "CSV");
+
+        //prompt user to save file and save it there
+        var bytes = Encoding.UTF8.GetBytes(csvString);
+        using var stream = new MemoryStream(bytes);
+        //var savePath = await _fileSaver.SaveAsync("ml-table.csv", stream, default);
+
+        //tactile feedback to user
+        _jsRuntime.PlayDoneSound();
+        await _jsRuntime.ShowAlert("success", "File Saved!", false, 2200);
+    }
+
+    private async Task OnClickDownloadJson()
+    {
+        //show loading
+        await _jsRuntime.ShowLoading(100);
+
+        //convert created table to CSV string
+        var _columnNameList = _DataColumnSelector.SelectedMethodMetaList;
+        var jsonString = await MLTable.GenerateMLTable<string>(_timeList, _columnNameList, "JSON");
+
+        //prompt user to save file and save it there
+        var bytes = Encoding.UTF8.GetBytes(jsonString);
+        using var stream = new MemoryStream(bytes);
+        //var savePath = await _fileSaver.SaveAsync("ml-table.json", stream, default);
+
+        //tactile feedback to user
+        _jsRuntime.PlayDoneSound();
+        await _jsRuntime.ShowAlert("success", "File Saved!", false, 2200);
+    }
+
+    private async Task OnClickDownloadExcel()
+    {
+        //show loading
+        await _jsRuntime.ShowLoading(100);
+
+        //convert created table to Excel file
+        var columnNameList = _DataColumnSelector.SelectedMethodMetaList;
+        var excelFileBytes = await MLTable.GenerateMLTable<byte[]>(_timeList, columnNameList, "EXCEL");
+
+        //prompt user to save file and save it there
+        using var stream = new MemoryStream(excelFileBytes);
+        // var savePath = await _fileSaver.SaveAsync("ml-table.xlsx", stream, default);
+
+        //tactile feedback to user
+        _jsRuntime.PlayDoneSound();
+        await _jsRuntime.ShowAlert("success", "File Saved!", false, 2200);
+
+    }
+
+    private async Task OnClickZoomIn()
+    {
+        //increment current zoom level
+        CurrentZoomLevel += 10;
+
+        //note : beautiful JS use without call to JS file (AI's awesome "eval" method)
+        await _jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('MLTableHolder').style.zoom = '{CurrentZoomLevel}%'");
+    }
+
+    private async Task OnClickZoomOut()
+    {
+        //increment current zoom level
+        CurrentZoomLevel -= 10;
+
+        //note : beautiful JS use without call to JS file (AI's awesome "eval" method)
+        await _jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('MLTableHolder').style.zoom = '{CurrentZoomLevel}%'");
+    }
+
+    private void OnClickDownload()
+    {
+        AppData.Go(URL.DesktopAppDownload, newTab: true);
+    }
+
+    private async Task OnClickGotoDesktopVersionSideBar()
+    {
+        //tell user the download will start, once done install
+        await _jsRuntime.ShowAlert("success", "Download starting...", false, 2200);
+
+        //start download
+        AppData.Go(URL.DesktopAppDownload, newTab: true);
+
+        //point user to guide
+        await _jsRuntime.ScrollToDivById("HowToGuideElement");
+
+    }
+
+}
+

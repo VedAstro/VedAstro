@@ -1238,19 +1238,6 @@ namespace VedAstro.Library
         }
 
 
-        private static async Task<string> ProcessPrediction(PredictionSettings settings)
-        {
-            var handler = CreateHttpClientHandler();
-            var requestBody = CreateRequestBody(settings.SysMessage, settings.MaxTokens, settings.Temperature, settings.TopP);
-            var content = new StringContent(requestBody);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            using (var client = new HttpClient(handler))
-            {
-                HttpResponseMessage response = await PostRequestAsync(client, content, settings.ServerUrl, settings.ApiKey);
-                return await ProcessResponseAsync(response);
-            }
-        }
 
         private static async Task<string> PickOutMostRelevantPredictions_MistralSmall(Time birthTime, string userQuestion, string predictText)
         {
@@ -1307,6 +1294,19 @@ namespace VedAstro.Library
 
         }
 
+        private static async Task<string> ProcessPrediction(PredictionSettings settings)
+        {
+            var handler = CreateHttpClientHandler();
+            var requestBody = CreateRequestBody(settings.SysMessage, settings.MaxTokens, settings.Temperature, settings.TopP);
+            var content = new StringContent(requestBody);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            using (var client = new HttpClient(handler))
+            {
+                HttpResponseMessage response = await PostRequestAsync(client, content, settings.ServerUrl, settings.ApiKey);
+                return await ProcessResponseAsync(response);
+            }
+        }
 
 
         private static string CreateRequestBody(object[] sysMessage, double maxTokens, double temperature, double topP)

@@ -111,13 +111,14 @@
         @* NAV LINKS *@
         @* js function will set active by ID *@
         <div class="list-group">
-            <a id="SkyChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#SkyChart">Sky Chart</a>
-            <a id="Prediction-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Prediction">Prediction</a>
+            <a id="HoroscopeChat-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#HoroscopeChat">AI Chat</a>
             <a id="Strength-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Strength">Strength</a>
+            <a id="SkyChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#SkyChart">Sky Chart</a>
             <a id="IndianChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#IndianChart">Birth Chart</a>
             <a id="PlanetDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#PlanetDataTable2">Planet Table</a>
             <a id="HouseDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#HouseDataTable2">House Table</a>
             <a id="Ashtakvarga-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Ashtakvarga">Ashtakvarga</a>
+            <a id="Prediction-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Prediction">Prediction</a>
             <a id="Reference-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Reference">Reference</a>
         </div>
     </div>
@@ -128,30 +129,8 @@
 
         @* <IconButton ButtonText="AI Chat" ClickUrl="@PageRoute.CalculatorList" SmallSize="true" ExtraClass="ms-3" Outline="true" /> *@
         @* Chat API *@
-@*         <div id="AIAnalysis" class="scrollspy">
-            <IconTitle Title="AI Chat" IconName="fluent-emoji:robot" TitleHolder="h4"/>
-                
-                     <div class="input-group">
-            <input type="text" @ref="_searchInput" @onkeyup="OnEnterLLMSearch" class="form-control" placeholder="keywords like wife, money..." aria-label="keywords like wife, money...">
-            <button @onclick="OnClickLLMSearch" class="btn btn-primary" type="button">LLM Search</button>
-            <button @onclick="OnClickCopyAPILLMSearch" class="btn btn-outline-primary" type="button">API</button>
-            </div>
-            
-            <div class="form-text mb-3" id="basic-addon4">
-                Talk to an AI astrologer about your horoscope for free.<br/>
-                The machine learning model reads your hundreds of life<br />
-                predictions and answers your questions intelligently. <BoldLink URL="@PageRoute.Donate">Chat now...</BoldLink>
-            </div>
-             <HoroscopeReferenceList @ref="_llmHoroscopeReferenceList" ShowFilterOptions="false" /> 
-        </div>
- *@
-        <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
+        <div id="HoroscopeChat" class="scrollspy mb-5"></div>
 
-        @* Predictions *@
-        <div id="Prediction" class="scrollspy">
-            <IconTitle Title="Basic Predictions" IconName="noto:scroll" TitleHolder="h4" />
-            <AIPrediction @ref="_aiPrediction" />
-        </div>
 
         @* Strength *@
         <div id="Strength" class="scrollspy">
@@ -159,6 +138,10 @@
             @*only show when all is loaded*@
             <StrengthChart @ref="_strengthChart" />
         </div>
+        
+        @* Sky Chart *@
+@*         <IconTitle Title="Sky Chart" IconName="solar:moon-stars-bold-duotone" TitleHolder="h4" />
+ *@        <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
 
         @* TODO convert to JS code *@
         <IndianChart Id="IndianChart" ExtraClass="scrollspy" @ref="indianChartViewer" />
@@ -169,7 +152,12 @@
         <div id="HouseDataTable2" class="scrollspy"></div>
 
         <div id="Ashtakvarga" class="scrollspy"></div>
-
+        
+        @* Predictions *@
+        <div id="Prediction" class="scrollspy">
+            <IconTitle Title="Basic Predictions" IconName="noto:scroll" TitleHolder="h4" />
+            <AIPrediction @ref="_aiPrediction" />
+        </div>
 
         @* Reference *@
         <div id="Reference" class="scrollspy">
@@ -372,6 +360,7 @@
         await _strengthChart.Show(_selectedPerson);
 
         //init planet data table
+        await _InitHoroscopeChat();
         await _InitPlanetDataTable();
         await _InitHouseDataTable();
         await _InitAshtakvargaTable();
@@ -390,6 +379,30 @@
         _jsRuntime.HideLoading();
 
     }
+
+    private async Task _InitHoroscopeChat()
+    {
+
+
+        //get time in url format
+        var timeUrl = _selectedPerson.BirthTime.ToUrl();
+        timeUrl = timeUrl.Substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
+
+        //data used to generate table
+        var inputArguments = new
+        {
+            ElementID = "HoroscopeChat",
+            ShowHeader = true,
+            HeaderIcon = "fluent:table-28-filled",
+            SelectedBirthTime = timeUrl
+        };
+
+
+        //call VedAstro.js to generate table
+        await _jsRuntime.InvokeVoidAsync("GenerateHoroscopeChat", inputArguments);
+
+    }
+
 
     private async Task _InitPlanetDataTable()
     {

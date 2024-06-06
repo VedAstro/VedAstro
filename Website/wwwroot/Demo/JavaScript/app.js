@@ -82,7 +82,7 @@ var settingsHoroscopeChat = {
     ElementID: "HoroscopeChat",
     ShowHeader: true,
     HeaderIcon: "fluent:table-28-filled",
-    SelectedBirthTime: "Location/Ipoh/Time/12:44/23/04/1994/+08:00"
+    /*SelectedBirthTime: "Location/Ipoh/Time/12:44/23/04/1994/+08:00"*/
 };
 
 //note: on init, chat instance is loaded into window.vedastro.horoscopechat

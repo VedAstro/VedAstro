@@ -13,25 +13,13 @@
 @*API DROP DOWN SELECTORS*@
 <div class="d-flex flex-wrap gap-5" style="max-width: @GR.W764px;">
     @* vedastro.js builds and runs chat client in below element initialized by js call below*@
-    <div id="AIChat" class="my-3 w-100"></div>
+    <div id="HoroscopeChat" class="scrollspy mb-4 w-100"></div>
+
+
 
     @*GUIDE TEXT*@
     <div class="vstack gap-3 mt-4">
 
-        <ArticleBlock Title="Instant Learning" IconName="devicon:networkx">
-            <TextHTML>
-                <p>
-                    Every feedback you give is <strong>instantly</strong> added to the CPU's neural network decision paths.
-                    Hence, this AI chatbot is effectively learning instantly from mistakes and errors, thanks to guidance from user's like you.🙏
-                </p>
-                <p>
-                    Your <strong>contribution</strong> counts!
-                    The <strong>anonymous learning models</strong> made from <strong>live learning</strong> will be uploaded to open-source <strong>HuggingFace</strong>.
-                    Hence, benefiting the whole world not only for our present era, but for <strong>generations</strong> to come!
-                </p>
-            </TextHTML>
-        </ArticleBlock>
-        
         <ArticleBlock Title="Price" IconName="flat-color-icons:money-transfer">
             <ButtonRow>
                 <IconButton PlaceBottom="true" SmallSize="true" Color="warning" ButtonText="Donate" IconName="openmoji:love-letter" ClickUrl="@PageRoute.Donate" />
@@ -45,6 +33,21 @@
                 Please <BoldLink URL="@PageRoute.Donate">Donate</BoldLink> to keep this service running for yourself and others.
             </TextHTML>
         </ArticleBlock>
+        
+        <ArticleBlock Title="Instant Learning" IconName="devicon:networkx">
+            <TextHTML>
+                <p>
+                    Every feedback you give is <strong>instantly</strong> added to the CPU's neural network decision paths.
+                    Hence, this AI chatbot is effectively learning instantly from mistakes and errors, thanks to guidance from user's like you.🙏
+                </p>
+                <p>
+                    Your <strong>contribution</strong> counts!
+                    The <strong>anonymous learning models</strong> made from <strong>live learning</strong> will be uploaded to open-source <strong>HuggingFace</strong>.
+                    Hence, benefiting the whole world not only for our present era, but for <strong>generations</strong> to come!
+                </p>
+            </TextHTML>
+        </ArticleBlock>
+
 
 
         <ArticleBlock Title="AI Teachers" IconName="twemoji:teacher">
@@ -133,20 +136,23 @@
         {
             //initialize chat instance
 
-            //get time in url format
+
+            // //get time in url format
             // var timeUrl = _selectedPerson.BirthTime.ToUrl();
             // timeUrl = timeUrl.Substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
 
-            var settingsAIChat = new
+            //data used to generate table
+            var inputArguments = new
             {
-                ElementID = "AIChat",
+                ElementID = "HoroscopeChat",
                 ShowHeader = true,
-                HeaderIcon = "fluent:table-28-filled",
+                HeaderIcon = "fluent:table-28-filled"
             };
 
 
             //call VedAstro.js to generate table
-            await _jsRuntime.InvokeVoidAsync("GenerateChatInstance", settingsAIChat);
+            await _jsRuntime.InvokeVoidAsync("GenerateHoroscopeChat", inputArguments);
+
 
         }
     }

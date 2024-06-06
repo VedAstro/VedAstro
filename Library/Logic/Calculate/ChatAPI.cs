@@ -1,4 +1,4 @@
-﻿using Azure.AI.OpenAI;
+using Azure.AI.OpenAI;
 using Azure;
 using SwissEphNet;
 using System;
@@ -235,6 +235,44 @@ namespace VedAstro.Library
                 MaxTokens = 600,
                 Temperature = 0.9,
                 TopP = 0.1,
+                SysMessage = sysMessageArray
+            };
+
+
+            //make call to LLM, NOTE : high time consumption in chain
+            var llmReply = await ProcessPrediction(settings);
+
+            return llmReply;
+
+        }
+        
+        private static async Task<string> AnswerHoroscopeQuestion_CohereCommandRPlus(string userQuestion, string horoscopePredictions)
+        {
+
+
+            var sysMessageArray = new[]
+            {
+                new
+                {
+                    role = "system",
+                    content = $"confident expert astrologer, based on CONTEXT text, judge based on Weight\n" +
+                              $"CONTEXT:\n\n{horoscopePredictions}"
+                },
+                new
+                {
+                    role = "user",
+                    content = $"{userQuestion}"
+                },
+
+            };
+
+            var settings = new PredictionSettings
+            {
+                ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
+                ApiKey = azureCohereCommandRPlusAPIKey,
+                MaxTokens = 600,
+                Temperature = 0.7,
+                TopP = 0.4,
                 SysMessage = sysMessageArray
             };
 
@@ -1283,6 +1321,61 @@ namespace VedAstro.Library
                 MaxTokens = 8196,
                 Temperature = 0.5,
                 TopP = 0.5,
+                SysMessage = sysMessageArray
+            };
+
+
+            //make call to LLM, NOTE : high time consumption in chain
+            var llmReply = await ProcessPrediction(settings);
+
+            return llmReply;
+
+        }
+        
+        private static async Task<string> PickOutMostRelevantPredictions_CohereCommandR(Time birthTime, string userQuestion, string predictText)
+        {
+
+            var sysMessageArray = new[]
+            {
+                new
+                {
+                    role = "system",
+                    content =
+                        $"Output JSON.\n" +
+                        $"Filter DESCRIPTION relevant to the QUESTION.\n" +
+                        $"Judge based on weight.\n" +
+                        $"Sort based on relevance, most relevant at top.\n\n"
+
+                },
+                new
+                {
+                    role = "user",
+                    content = "QUESTION:{userQuestion}" +
+                              "LIFE DESCRIPTION:{descriptionText}"
+                },
+                new
+                {
+                    role = "assistant",
+                    content = @"{name:""{predictionName}"", description:""{description}"", relevance:""{relevanceScore}"", weight:""{weightScore}""}"
+                },
+                new
+                {
+                    role = "user",
+                    content = $"QUESTION:\n{userQuestion}\n" +
+                              $"LIFE DESCRIPTION:\n{predictText}"
+                },
+
+            };
+
+
+
+            var settings = new PredictionSettings
+            {
+                ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
+                ApiKey = azureCohereCommandRPlusAPIKey,
+                MaxTokens = 20000,
+                Temperature = 1,
+                TopP = 1,
                 SysMessage = sysMessageArray
             };
 

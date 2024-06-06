@@ -3396,9 +3396,9 @@ class HoroscopeChat {
     SelectedTopicId = "";  //she's filled in when set
     SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
-    //LiveServerURL = "http://localhost:7071/api/Calculate";
+    LiveServerURL = "http://localhost:7071/api/Calculate";
     //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
-    LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
+    //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
     //LocalServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
     ElementID = ""; //ID of main div where table & header will be injected
     ShowHeader = true; //default enabled, header with title, icon and edit button
@@ -3793,10 +3793,10 @@ class HoroscopeChat {
         var feedbackButtonHtml = commands.includes("noFeedback")
             ? ""
             : `<div class="hstack gap-2">
-    <button title="Bad answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, -1)" class="btn btn-danger" style="padding: 0px 5px;">
+    <button title="Bad answer" type="button" onclick="window.vedastro.horoscopechat.rateMessage(this, -1)" class="btn btn-danger" style="padding: 0px 5px;">
       <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
     </button>
-    <button title="Good answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, 1)" class="btn btn-primary" style="padding: 0px 5px;">
+    <button title="Good answer" type="button" onclick="window.vedastro.horoscopechat.rateMessage(this, 1)" class="btn btn-primary" style="padding: 0px 5px;">
       <span class="iconify" data-icon="icon-park-outline:good-two" data-width="18" data-height="18"></span>
     </button>
   </div>`;
@@ -4029,7 +4029,7 @@ class HoroscopeChat {
         this.hideTempThinkingMessage();
 
 
-
+        //--------------local funcs
         async function getFollowUpAIReplyFromAPI(followUpQuestion, primaryAnswerHash) {
 
             followUpQuestion = followUpQuestion.replace(/\?/g, ''); //remove question marks as it break API detection
@@ -4070,4 +4070,68 @@ class HoroscopeChat {
         }
 
     }
+
+    //called direct from static HTML hookup without seperate attach code
+    //exp use : onclick="window.vedastro.horoscopechat.rateMessage(this, -1)"
+    async rateMessage(eventData, rating) {
+        //come here on click rating button
+        // get hash of message, stored as id in holder
+        var messageHolder = $(eventData)
+            .closest(".card")
+            .children(".message-holder");
+        var textHash = messageHolder.attr("id");
+
+        //send feedback to API 
+        var feedbackAIReplyData = await SendFeedbackToApi(textHash, rating);
+
+        //inject reply into view
+        //print to user
+        this.printAIReplyMessageToView(feedbackAIReplyData);
+
+        //hide thinking message, for less clutered UX
+        this.hideTempThinkingMessage();
+
+
+        //--------------local funcs
+        async function SendFeedbackToApi(answerHash, feedbackScore) {
+
+            const url = `${window.vedastro.horoscopechat.LiveServerURL}/HoroscopeChatFeedback/AnswerHash/${answerHash}/FeedbackScore/${feedbackScore}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.Status === "Pass") {
+                    return data.Payload["HoroscopeChatFeedback"];
+                } else {
+                    console.error(`Request failed with status: ${data.Status}${data.Payload}`);
+
+                    //note: the minimal message strucuture
+                    let jsonObject = {
+                        "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        "textHash": "xxxxx",
+                        "commands": ["noFeedback"]
+                    };
+                    return JSON.stringify(jsonObject);
+                }
+            } catch (error) {
+                console.error(`Error making GET request: ${error}`);
+
+                //note: the minimal message strucuture
+                let jsonObject = {
+                    "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "textHash": "xxxxx",
+                    "commands": ["noFeedback"],
+                };
+                return JSON.stringify(jsonObject);
+            }
+
+        }
+
+
+    }
+
+
 }

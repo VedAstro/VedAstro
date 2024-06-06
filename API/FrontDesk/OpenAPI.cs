@@ -13,7 +13,7 @@ namespace API
     {
         //.../Calculate/Karana/Location/Singapore/Time/23:59/31/12/2000/+08:00
         private const string CalculateRoute = $"{nameof(Calculate)}/{{calculatorName}}/{{*fullParamString}}"; //* that captures the rest of the URL path
-        private const string ListRoute = $"{nameof(ListCalls)}"; //* that captures the rest of the URL path
+        private const string ListRoute = $"{nameof(ListCalls)}"; 
 
         [Function(nameof(ListCalls))]
         public static async Task<HttpResponseData> ListCalls(

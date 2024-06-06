@@ -25,13 +25,13 @@ namespace VedAstro.Library
 
         public static void Debug(Exception message, string s)
         {
-            throw new NotImplementedException();
+            
         }
 
 
         public static void Debug(Exception message)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -114,9 +114,6 @@ namespace VedAstro.Library
                     Content = content
                 };
 
-                //copy caller data from original caller if any, so calls are traceable
-                CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
-
 
                 HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
                 if (response.IsSuccessStatusCode)

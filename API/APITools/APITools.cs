@@ -383,9 +383,6 @@ namespace API
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
 
-            //copy caller data from original caller if any, so calls are traceable
-            CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
-
             //get the data sender
             using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
 

@@ -40,25 +40,25 @@ namespace VedAstro.Library
         //    }
         //}
 
-        public static void AddOriginalCallerHeadersIfAny(HttpRequestMessage httpRequestMessage)
-        {
-            try
-            {
-                if (originalHttpRequest != null && originalHttpRequest.Headers.Contains("Host"))
-                {
-                    httpRequestMessage.Headers.TryAddWithoutValidation("Host", originalHttpRequest.Headers.GetValues("Host").ToArray());
-                    LibLogger.Debug("HOST OVERRIDE!!!");
+        //public static void AddOriginalCallerHeadersIfAny(HttpRequestMessage httpRequestMessage)
+        //{
+        //    try
+        //    {
+        //        if (originalHttpRequest != null && originalHttpRequest.Headers.Contains("Host"))
+        //        {
+        //            httpRequestMessage.Headers.TryAddWithoutValidation("Host", originalHttpRequest.Headers.GetValues("Host").ToArray());
+        //            LibLogger.Debug("HOST OVERRIDE!!!");
 
-                }
+        //        }
 
-            }
-            catch
-            {
-                LibLogger.Debug("HOST OVERRIDE FAIL!!!");
+        //    }
+        //    catch
+        //    {
+        //        LibLogger.Debug("HOST OVERRIDE FAIL!!!");
 
-                // Handle all exceptions silently
-            }
-        }
+        //        // Handle all exceptions silently
+        //    }
+        //}
 
         public static void AddOriginalCallerHeadersIfAny(HttpResponseData httpResponseData)
         {

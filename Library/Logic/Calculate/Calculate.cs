@@ -310,14 +310,15 @@ namespace VedAstro.Library
         /// <param name="userQuestion">question related horoscope</param>
         /// <param name="chatSession"></param>
         /// <returns></returns>
-        public static async Task<JObject> HoroscopeChat(Time birthTime, string userQuestion, string chatSession = "")
+        public static async Task<JObject> HoroscopeChat(Time birthTime, string userQuestion, string userId, string sessionId = "")
         {
-            return await ChatAPI.SendMessageHoroscope(birthTime, userQuestion, chatSession);
+            return await ChatAPI.SendMessageHoroscope(birthTime, userQuestion, sessionId, userId);
         }
-        public static async Task<JObject> HoroscopeFollowUpChat(Time birthTime, string followUpQuestion,
-            string sessionId, string primaryAnswerHash)
+
+        public static async Task<JObject> HoroscopeFollowUpChat(Time birthTime, string followUpQuestion, string primaryAnswerHash, string userId,
+            string sessionId)
         {
-            return await ChatAPI.SendMessageHoroscopeFollowUp(birthTime, followUpQuestion, sessionId, primaryAnswerHash);
+            return await ChatAPI.SendMessageHoroscopeFollowUp(birthTime, followUpQuestion, primaryAnswerHash, userId, sessionId );
         }
 
         /// <summary>

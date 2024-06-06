@@ -2714,6 +2714,7 @@ class ChatInstance {
                 );
             });
         }
+
     }
 
     /*
@@ -3442,7 +3443,7 @@ class HoroscopeChat {
     generateHtmlBody() {
         return `
 
-        <div class="fw-bold hstack gap-2 d-flex" style="margin-bottom: -11px;">
+        <div class="fw-bold hstack gap-2 d-flex" style="">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--fluent-emoji" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32" data-icon="fluent-emoji:robot" data-width="38" style="vertical-align: text-bottom;"><g fill="none"><path fill="url(#IconifyId18fec41c6ed170cd6117)" d="M22.05 30H9.95C6.66 30 4 27.34 4 24.05V12.03C4 8.7 6.7 6 10.03 6h11.95C25.3 6 28 8.7 28 12.03v12.03c0 3.28-2.66 5.94-5.95 5.94"></path><path fill="url(#IconifyId18fec41c6ed170cd6104)" d="M4 12a6 6 0 0 1 6-6h2v24h-2a6 6 0 0 1-6-6z"></path><path fill="url(#IconifyId18fec41c6ed170cd6105)" d="M4 24h24a6 6 0 0 1-6 6H10a6 6 0 0 1-6-6"></path><path fill="url(#IconifyId18fec41c6ed170cd6118)" d="M20 6h2a6 6 0 0 1 6 6v12a6 6 0 0 1-6 6h-2z"></path><path stroke="url(#IconifyId18fec41c6ed170cd6106)" stroke-miterlimit="10" d="M3.5 3.95v9.1"></path><path fill="url(#IconifyId18fec41c6ed170cd6107)" d="M4 12v11c-1.1 0-2-.9-2-1.998v-7.004C2 12.9 2.9 12 4 12"></path><path fill="url(#IconifyId18fec41c6ed170cd6108)" d="M22.753 18.5H9.247A4.257 4.257 0 0 1 5 14.25A4.257 4.257 0 0 1 9.247 10h13.506A4.257 4.257 0 0 1 27 14.25c0 2.331-1.918 4.25-4.247 4.25"></path><path fill="url(#IconifyId18fec41c6ed170cd6109)" d="M18.528 26h-5.056C12.66 26 12 25.326 12 24.5s.66-1.5 1.472-1.5h5.056c.811 0 1.472.674 1.472 1.5s-.66 1.5-1.472 1.5"></path><path fill="url(#IconifyId18fec41c6ed170cd6119)" d="M3.5 5a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3"></path><path stroke="url(#IconifyId18fec41c6ed170cd6110)" stroke-miterlimit="10" d="M28.5 4v9.09"></path><path fill="url(#IconifyId18fec41c6ed170cd6120)" d="M28.5 5.1a1.55 1.55 0 1 0 0-3.1a1.55 1.55 0 0 0 0 3.1"></path><rect width="4.5" height="6" x="7" y="12" fill="url(#IconifyId18fec41c6ed170cd6121)" rx="2"></rect><rect width="4.5" height="6" x="18.5" y="12" fill="url(#IconifyId18fec41c6ed170cd6122)" rx="2"></rect><rect width="10" height="3" x="11" y="3" fill="url(#IconifyId18fec41c6ed170cd6111)" rx="1.5"></rect><rect width="10" height="3" x="11" y="3" fill="url(#IconifyId18fec41c6ed170cd6123)" rx="1.5"></rect><path fill="url(#IconifyId18fec41c6ed170cd6112)" d="M28 22.94V11.93c1.1 0 2 .9 2 2v7.01c0 1.1-.9 2-2 2"></path><rect width="2.5" height="5" x="9" y="12" fill="url(#IconifyId18fec41c6ed170cd6113)" rx="1.25"></rect><rect width="2.5" height="5" x="9" y="12" fill="url(#IconifyId18fec41c6ed170cd6124)" rx="1.25"></rect><rect width="2.5" height="5" x="20.5" y="12" fill="url(#IconifyId18fec41c6ed170cd6114)" rx="1.25"></rect><rect width="2.5" height="5" x="20.5" y="12" fill="url(#IconifyId18fec41c6ed170cd6125)" rx="1.25"></rect><g filter="url(#IconifyId18fec41c6ed170cd6129)"><path stroke="url(#IconifyId18fec41c6ed170cd6115)" stroke-width=".25" d="M3.625 5v6"></path></g><g filter="url(#IconifyId18fec41c6ed170cd6130)"><path stroke="url(#IconifyId18fec41c6ed170cd6116)" stroke-width=".25" d="M28.625 5v6"></path></g><ellipse cx="29" cy="13.5" fill="url(#IconifyId18fec41c6ed170cd6126)" rx="1" ry="1.5"></ellipse><ellipse cx="29" cy="16.5" fill="url(#IconifyId18fec41c6ed170cd6127)" rx="1" ry="4.5"></ellipse><path fill="url(#IconifyId18fec41c6ed170cd6128)" fill-rule="evenodd" d="M19.776 3.025a1.501 1.501 0 0 1 1.199 1.2a1 1 0 1 1-1.2-1.2" clip-rule="evenodd"></path><defs><linearGradient id="IconifyId18fec41c6ed170cd6104" x1="12" x2="4" y1="18" y2="18" gradientUnits="userSpaceOnUse"><stop stop-color="#D5B2C0" stop-opacity="0"></stop><stop offset="1" stop-color="#B4878D"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6105" x1="16" x2="16" y1="27" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#B17EDB" stop-opacity="0"></stop><stop offset="1" stop-color="#A56BD6"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6106" x1="4" x2="4" y1="3.95" y2="13.05" gradientUnits="userSpaceOnUse"><stop stop-color="#EA248A"></stop><stop offset="1" stop-color="#DF2232"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6107" x1="3" x2="3" y1="12" y2="23" gradientUnits="userSpaceOnUse"><stop stop-color="#E93273"></stop><stop offset="1" stop-color="#D21844"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6108" x1="15.998" x2="15.998" y1="17.701" y2="11.391" gradientUnits="userSpaceOnUse"><stop offset=".006" stop-color="#443E75"></stop><stop offset="1" stop-color="#2F1A3B"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6109" x1="15.998" x2="15.998" y1="25.686" y2="22.889" gradientUnits="userSpaceOnUse"><stop offset=".006" stop-color="#39325E"></stop><stop offset="1" stop-color="#2B1831"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6110" x1="29" x2="29" y1="4" y2="13.09" gradientUnits="userSpaceOnUse"><stop stop-color="#EA248A"></stop><stop offset="1" stop-color="#DF2232"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6111" x1="16" x2="14.5" y1="3" y2="6.5" gradientUnits="userSpaceOnUse"><stop stop-color="#FFCE2B"></stop><stop offset="1" stop-color="#D9862D"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6112" x1="29" x2="29" y1="11.93" y2="22.94" gradientUnits="userSpaceOnUse"><stop stop-color="#FF30AA"></stop><stop offset="1" stop-color="#FF2353"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6113" x1="11.5" x2="9" y1="14" y2="14" gradientUnits="userSpaceOnUse"><stop stop-color="#29B6FE"></stop><stop offset="1" stop-color="#1769A8"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6114" x1="23" x2="20.5" y1="14" y2="14" gradientUnits="userSpaceOnUse"><stop stop-color="#29B6FE"></stop><stop offset="1" stop-color="#1769A8"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6115" x1="3.5" x2="3.5" y1="7" y2="9" gradientUnits="userSpaceOnUse"><stop stop-color="#FF96CB"></stop><stop offset="1" stop-color="#FF6DB7" stop-opacity="0"></stop></linearGradient><linearGradient id="IconifyId18fec41c6ed170cd6116" x1="28.5" x2="28.5" y1="7" y2="9" gradientUnits="userSpaceOnUse"><stop stop-color="#FF96CB"></stop><stop offset="1" stop-color="#FF6DB7" stop-opacity="0"></stop></linearGradient><radialGradient id="IconifyId18fec41c6ed170cd6117" cx="0" cy="0" r="1" gradientTransform="rotate(141.911 10.515 10.065)scale(23.5053)" gradientUnits="userSpaceOnUse"><stop stop-color="#EEEBF0"></stop><stop offset=".493" stop-color="#D1BEE3"></stop><stop offset="1" stop-color="#D0BCE2"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6118" cx="0" cy="0" r="1" gradientTransform="matrix(5 -.5 1.9111 19.11108 25 13.5)" gradientUnits="userSpaceOnUse"><stop stop-color="#F0EAF6"></stop><stop offset="1" stop-color="#E7E0EF" stop-opacity="0"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6119" cx="0" cy="0" r="1" gradientTransform="matrix(-.5 2 -2 -.5 4 3)" gradientUnits="userSpaceOnUse"><stop stop-color="#FF6C82"></stop><stop offset=".441" stop-color="#FF2455"></stop><stop offset="1" stop-color="#D9206C"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6120" cx="0" cy="0" r="1" gradientTransform="rotate(104.036 13.324 12.844)scale(2.13027)" gradientUnits="userSpaceOnUse"><stop stop-color="#FF6C82"></stop><stop offset=".441" stop-color="#FF2455"></stop><stop offset="1" stop-color="#D9206C"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6121" cx="0" cy="0" r="1" gradientTransform="matrix(-2.5 .5 -.68428 -3.42136 9.5 15)" gradientUnits="userSpaceOnUse"><stop stop-color="#322649"></stop><stop offset="1" stop-color="#342950" stop-opacity="0"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6122" cx="0" cy="0" r="1" gradientTransform="matrix(-2.5 .5 -.68428 -3.42136 21 15)" gradientUnits="userSpaceOnUse"><stop stop-color="#322649"></stop><stop offset="1" stop-color="#342950" stop-opacity="0"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6123" cx="0" cy="0" r="1" gradientTransform="matrix(0 3 -10 0 16 4)" gradientUnits="userSpaceOnUse"><stop offset=".431" stop-color="#CA7E29" stop-opacity="0"></stop><stop offset="1" stop-color="#673F13"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6124" cx="0" cy="0" r="1" gradientTransform="matrix(0 2.5 -1.14393 0 11 13.5)" gradientUnits="userSpaceOnUse"><stop stop-color="#54C8FF"></stop><stop offset="1" stop-color="#54C8FF" stop-opacity="0"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6125" cx="0" cy="0" r="1" gradientTransform="matrix(0 2.5 -1.14393 0 22.5 13.5)" gradientUnits="userSpaceOnUse"><stop stop-color="#54C8FF"></stop><stop offset="1" stop-color="#54C8FF" stop-opacity="0"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6126" cx="0" cy="0" r="1" gradientTransform="matrix(0 1.5 -1 0 29 13.5)" gradientUnits="userSpaceOnUse"><stop stop-color="#FF72C1"></stop><stop offset="1" stop-color="#FF6EBF" stop-opacity="0"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6127" cx="0" cy="0" r="1" gradientTransform="matrix(0 4.5 -.55944 0 29 16.5)" gradientUnits="userSpaceOnUse"><stop stop-color="#FF4B9C"></stop><stop offset="1" stop-color="#FF73C1" stop-opacity="0"></stop></radialGradient><radialGradient id="IconifyId18fec41c6ed170cd6128" cx="0" cy="0" r="1" gradientTransform="rotate(90 8 12)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFEA60"></stop><stop offset="1" stop-color="#FFEF66" stop-opacity="0"></stop></radialGradient><filter id="IconifyId18fec41c6ed170cd6129" width="1.25" height="7" x="3" y="4.5" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend><feGaussianBlur result="effect1_foregroundBlur_31_1501" stdDeviation=".25"></feGaussianBlur></filter><filter id="IconifyId18fec41c6ed170cd6130" width="1.25" height="7" x="28" y="4.5" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend><feGaussianBlur result="effect1_foregroundBlur_31_1501" stdDeviation=".25"></feGaussianBlur></filter></defs></g></svg>
             </div>
@@ -3452,7 +3453,7 @@ class HoroscopeChat {
         <!-- MAIN MESSAGE BODY -->
         <div class="shadow" id="BorderHolderDiv" style="border-radius: 19px;background: linear-gradient(to bottom, #ececec, #e0edff);">
             <!-- MESSAGES IN VIEW -->
-            <ul class="list-unstyled mx-2 pe-2" id="ChatWindowMessageList" style="max-height:667.5px;">
+            <ul class="list-unstyled mx-2 pe-2 pt-2" id="ChatWindowMessageList" style="max-height:667.5px;">
                 <li class="d-flex justify-content-start mb-4" id="AIChatLoadingWaitElement" style="display: none !important;">
                     <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar"
                         class="rounded-circle d-flex align-self-start me-1 shadow-1-strong" width="45">
@@ -3480,6 +3481,21 @@ class HoroscopeChat {
                             Send
                 </button>
             </div>
+            <div id="personSelectorHolder" style="display:none;" class="input-group p-2" style="">
+                <span class="input-group-text gap-2 rounded-0 rounded-start-4 text-end">
+                    I want to talk about 
+                </span>
+                <select class="form-select" id="PersonListDropdown" onchange="window.vedastro.horoscopechat.onSelectPerson(this)">
+                     <option value="" selected>Select Horoscope</option>
+                     <option value="AddNewPerson" style="font-weight: 700; color: blue;" >Add New Person</option>
+                </select>
+                <button id="StartChatButton"
+                        onclick="window.vedastro.horoscopechat.onStartChatButton()"type="button"
+                        class="rounded-0 rounded-end-4 btn btn-success btn-rounded float-end">
+                            <span class="iconify me-1" data-icon="majesticons:send" data-width="25" data-height="25"></span>
+                            Start Chat
+                </button>
+            </div>
         </div> 
      `;
     }
@@ -3503,6 +3519,7 @@ class HoroscopeChat {
         this.HeaderIcon = settings.HeaderIcon;
 
         //birth time can be inserted at init 
+
         this.SelectedBirthTime = settings.SelectedBirthTime;
 
 
@@ -3610,7 +3627,85 @@ class HoroscopeChat {
         //inject into page
         $(`#${this.ElementID}`).html(this.generateHtmlBody());
 
+
+        //if birth time not yet set, aka person not selected
+        if (this.SelectedBirthTime == undefined) {
+            //show person selector
+            $("#personSelectorHolder").show();
+            //hide normal chat input
+            $("#questionInputHolder").hide();
+
+            //generate person list drop down
+            GeneratePersonListDropdown();
+
+            //enter inviting message from AI
+            //note: the minimal message strucuture
+            let jsonObject = {
+                "Text": String.fromCodePoint(0x1F44B) + " Hi, I'm your AI astrologer. Any questions?",
+                "TextHtml": String.fromCodePoint(0x1F44B) + " Hi, I'm your AI astrologer. Any questions?",
+                "TextHash": Math.floor(Math.random() * 1000000), //keep random for injection
+                "Commands": ["noFeedback"],
+            };
+            var aiReplyData = JSON.stringify(jsonObject);
+            this.printAIReplyMessageToView(aiReplyData);
+
+        }
+
+
+
+        //---------
+
+        async function GeneratePersonListDropdown(idToSelect = "") {
+            //get the main dropdown element
+            var $dropdown = $("#PersonListDropdown");
+
+            //DO FOR USER'S SAVED LIST
+            window.vedastro.PersonList = await CommonTools.GetAPIPayload(
+                `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/${window.vedastro.UserId}`
+            );
+
+            //create a header in the list
+            let $horoscopeGroup = $("<optgroup>", {
+                label: "Horoscopes",
+            });
+
+            $dropdown.append($horoscopeGroup); //add to main list
+
+            //populate slection list at bottom with horoscopes
+            $.each(window.vedastro.PersonList, function (i, person) {
+                $horoscopeGroup.append(
+                    $("<option>", {
+                        value: person.PersonId,
+                        text: person.Name,
+                        selected: person.PersonId === idToSelect,
+                    })
+                );
+            });
+
+            //DO FOR PUBLIC LIST
+            window.vedastro.PublicPersonList = await CommonTools.GetAPIPayload(
+                `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/101`
+            );
+            //create a header in the list
+            let $publicHoroscopeGroup = $("<optgroup>", {
+                label: "Example Horoscopes",
+            });
+            $dropdown.append($publicHoroscopeGroup); //add to main list
+
+            //populate slection list at bottom with horoscopes
+            $.each(window.vedastro.PublicPersonList, function (i, person) {
+                $publicHoroscopeGroup.append(
+                    $("<option>", {
+                        value: person.PersonId,
+                        text: person.Name,
+                        selected: person.PersonId === idToSelect,
+                    })
+                );
+            });
+        }
+
     }
+
 
     //control comes here from both Button click and keyboard press enter
     async onClickSendChat(userInput = "") {
@@ -3721,10 +3816,10 @@ class HoroscopeChat {
 
                 //note: the minimal message strucuture
                 let jsonObject = {
-                    "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                    "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                    "textHash": "xxxxx",
-                    "commands": ["noFeedback"]
+                    "Text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "TextHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "TextHash": Math.floor(Math.random() * 1000000), //keep random for injection
+                    "Commands": ["noFeedback"]
                 };
                 return JSON.stringify(jsonObject);
             }
@@ -3733,10 +3828,10 @@ class HoroscopeChat {
 
             //note: the minimal message strucuture
             let jsonObject = {
-                "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                "textHash": "xxxxx",
-                "commands": ["noFeedback"],
+                "Text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                "TextHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                "TextHash": Math.floor(Math.random() * 1000000), //keep random for injection
+                "Commands": ["noFeedback"]
             };
             return JSON.stringify(jsonObject);
         }
@@ -3991,7 +4086,6 @@ class HoroscopeChat {
             return;
         }
 
-
         // get hash of message, stored as id in holder
         var messageHolder = $(eventData)
             .closest(".card")
@@ -3999,7 +4093,7 @@ class HoroscopeChat {
         var primaryAnswerHash = messageHolder.attr("id");
 
         //UPDATE GUI WITH USER MSG (UX)
-        var aiInput = $("#UserChatInputElement").val();
+        var aiInput = $("#UserChatInputElement").val(); //clear chat input
         var userName = "You";
         var userInputChatCloud = `
         <li class="d-flex justify-content-end mb-4">
@@ -4054,10 +4148,10 @@ class HoroscopeChat {
 
                     //note: the minimal message strucuture
                     let jsonObject = {
-                        "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                        "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                        "textHash": "xxxxx",
-                        "commands": ["noFeedback"]
+                        "Text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        "TextHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        "TextHash": Math.floor(Math.random() * 1000000), //keep random for injection
+                        "Commands": ["noFeedback"]
                     };
                     return JSON.stringify(jsonObject);
                 }
@@ -4066,10 +4160,10 @@ class HoroscopeChat {
 
                 //note: the minimal message strucuture
                 let jsonObject = {
-                    "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                    "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                    "textHash": "xxxxx",
-                    "commands": ["noFeedback"],
+                    "Text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "TextHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "TextHash": Math.floor(Math.random() * 1000000), //keep random for injection
+                    "Commands": ["noFeedback"]
                 };
                 return JSON.stringify(jsonObject);
             }
@@ -4115,10 +4209,10 @@ class HoroscopeChat {
 
                     //note: the minimal message strucuture
                     let jsonObject = {
-                        "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                        "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                        "textHash": "xxxxx",
-                        "commands": ["noFeedback"]
+                        "Text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        "TextHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        "TextHash": Math.floor(Math.random() * 1000000), //keep random for injection
+                        "Commands": ["noFeedback"]
                     };
                     return JSON.stringify(jsonObject);
                 }
@@ -4127,10 +4221,10 @@ class HoroscopeChat {
 
                 //note: the minimal message strucuture
                 let jsonObject = {
-                    "text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                    "textHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
-                    "textHash": "xxxxx",
-                    "commands": ["noFeedback"],
+                    "Text": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "TextHtml": "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    "TextHash": Math.floor(Math.random() * 1000000), //keep random for injection
+                    "Commands": ["noFeedback"]
                 };
                 return JSON.stringify(jsonObject);
             }
@@ -4140,7 +4234,92 @@ class HoroscopeChat {
 
     }
 
+    async onStartChatButton(eventData) {
 
+
+    }
+
+    async onSelectPerson(eventData) {
+
+        //attach topic selector dropdown
+        //get all needed data (what topic was selected)
+        const selectedOption = $("#PersonListDropdown option:selected");
+        const selectedOptgroupLabel = selectedOption
+            .closest("optgroup")
+            .prop("label");
+
+        //save what user choose for use throughout the code
+        var selectedPersonId = selectedOption.val();
+
+        //if id is add new person, then redirect page to add person site, same tab so refresh onreturn
+        if (selectedPersonId == "AddNewPerson") {
+            window.location.href = "http://vedastro.org/Account/Person/Add";
+            return; //end here
+        }
+
+        //get full details of the person
+        let selectedPerson = window.vedastro.PersonList.find(
+            (obj) => obj.PersonId === selectedPersonId
+        );
+
+        //save for use by other
+        window.vedastro.SelectedPerson = selectedPerson;
+
+        //convert person name to birth DOB (so unregistered person can be checked)
+        var newTopicId = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+        window.vedastro.horoscopechat.SelectedBirthTime = newTopicId;
+
+        //person now selected, ready to chat so change GUI
+        //show person selector
+        $("#personSelectorHolder").hide();
+        //hide normal chat input
+        $("#questionInputHolder").show();
+
+        //show user's selection on screen so explicit rememberence
+        //UPDATE GUI WITH USER MSG (UX)
+        var userName = "You";
+        const locationName = window.vedastro.SelectedPerson["BirthTime"]["Location"]["Name"];
+        const birthTime = window.vedastro.SelectedPerson[`BirthTime`][`StdTime`];
+        const personName = window.vedastro.SelectedPerson[`Name`];
+        var userInputChatCloud = `
+        <li class="d-flex justify-content-end mb-4">
+            <div class="card ">
+                <div class="card-header d-flex justify-content-between py-2">
+                    <p class="fw-bold mb-0">${userName}</p>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                       Lets talk about <strong>${personName}</strong><br>
+                       born on <strong>${birthTime}</strong><br>
+                       at <strong>${locationName}</strong>
+                    </p>
+                </div>
+            </div>
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
+                 class="rounded-circle d-flex align-self-start ms-1 shadow-1-strong" width="45">
+        </li>
+        `;
+        //inject in User's input into chat window
+        $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+
+        //little lag for simulation reality
+        await CommonTools.delay(1000);
+
+        //reply with AI as ready to respond
+        //enter inviting message from AI
+        //note: the minimal message strucuture
+        let jsonObject = {
+            "Text": `Ok, I've analysed the horoscope.${String.fromCodePoint(0x1F9D0)} \nAny questions?`,
+            "TextHtml": `Ok, I've analysed the horoscope.${String.fromCodePoint(0x1F9D0)} \nAny questions?`,
+            "TextHash": Math.floor(Math.random() * 1000000), //keep random for injection
+            "Commands": ["noFeedback"],
+        };
+        var aiReplyData = JSON.stringify(jsonObject);
+        this.printAIReplyMessageToView(aiReplyData);
+
+
+
+    }
 }
 
 /**

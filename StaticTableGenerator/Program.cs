@@ -44,6 +44,7 @@ namespace StaticTableGenerator
         static string EventDataListStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\EventDataListStatic.cs");
         static string HoroscopeDataListFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Website\wwwroot\data\HoroscopeDataList.xml");
         static string HoroscopeDataListStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\HoroscopeDataListStatic.cs");
+        static string HoroscopeNameEnumFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\Enum\HoroscopeName.cs");
         static string AIPredictionCSSafetyCacheFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\StaticTableGenerator\AI-MADE-DATA\AI-prediction-cs-safety-cache.csv");
 
 
@@ -233,9 +234,11 @@ namespace StaticTableGenerator
 
             //based on created metadata make new C# code file 
             var classAsText = GenerateHoroscopeDataStaticTableClass(fileContent);
+            var horoscopeNameEnumAsText = GenerateHoroscopeNameEnumAsText(fileContent);
 
             //writes new static table class
             File.WriteAllText(HoroscopeDataListStaticTableFile, classAsText);
+            File.WriteAllText(HoroscopeNameEnumFile, horoscopeNameEnumAsText);
         }
 
         private static string GetExampleOutputJson(MethodInfo openApiCalc)
@@ -496,7 +499,11 @@ namespace VedAstro.Library
                 var yTags = $"[{tagsAsText}]";
                 //add new event data code
                 var cleanedDescription = Tools.CleanText(yy.Description);
-                compiledCode.AppendLine($"{indent}new(HoroscopeName.{yy.Name}, EventNature.{yy.Nature}, SpecializedSummary.Empty, @\"{cleanedDescription}\", {yTags}, EventManager.GetHoroscopeCalculatorMethod(HoroscopeName.{yy.Name})),");
+
+                //raw horoscope name because not yet compiled
+                var rawHoroscopeName = eachEventXml.Element("Name")?.Value;
+
+                compiledCode.AppendLine($"{indent}new(HoroscopeName.{rawHoroscopeName}, EventNature.{yy.Nature}, SpecializedSummary.Empty, @\"{cleanedDescription}\", {yTags}, EventManager.GetHoroscopeCalculatorMethod(HoroscopeName.{rawHoroscopeName})),");
             }
 
             //remove indentation at start of compiled lines
@@ -518,6 +525,47 @@ namespace VedAstro.Library
         {{
             {compiledCode2}
         }};
+    }}
+}}";
+
+            // Replace all line endings with \r\n (CR LF)
+            newClassFile = newClassFile.Replace("\r\n", "\n").Replace("\n", "\r\n");
+
+            return newClassFile;
+        }
+        
+        public static string GenerateHoroscopeNameEnumAsText(string xmlString)
+        {
+            var document = XDocument.Parse(xmlString);
+            var allList = document.Root.Elements().ToList();
+
+            var compiledCode = new StringBuilder();
+            string indent = "            "; // Adjust this to your desired indentation
+            foreach (var eachEventXml in allList)
+            {
+                //raw horoscope name because not yet compiled
+                var rawHoroscopeName = eachEventXml.Element("Name")?.Value;
+
+                compiledCode.AppendLine($"{indent}{rawHoroscopeName},");
+            }
+
+            //remove indentation at start of compiled lines
+            var compiledCode2 = compiledCode.ToString().TrimStart();
+
+            //NOTE: leave below code as is, to get perfect indentation
+            var newClassFile =
+                $@"
+namespace VedAstro.Library
+{{
+    /// <summary>
+    /// Hard coded names of Horoscope calculators, this is the glue between LOGIC and DATA
+    /// Auto generated code by StaticTableGenerator, so that Open API methods have a metadata.
+    /// Regenerate when files Calculate.cs gets updated. ✝️Amen for automation!
+    /// </summary>
+    public enum HoroscopeName
+    {{
+        Empty = 0,
+        {compiledCode2}
     }}
 }}";
 

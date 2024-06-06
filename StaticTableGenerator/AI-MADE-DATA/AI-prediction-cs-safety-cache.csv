@@ -508,3 +508,8 @@ d98328a487b4c3d6243cc67a1b087b33af3e7a34985686e94ca69bfaf6dbe93a,new() {Mind = n
 ea3250ded24a6245e687defa68831034a074f65d917d3980432ffad6082ace20,new() {Mind = new(EventNature.Neutral),Studies = new(EventNature.Neutral),Family = new(EventNature.Neutral),Money = new(EventNature.Good),Love = new(EventNature.Neutral),Body = new(EventNature.Neutral)}
 e911d52b94a3999144ab6a148d15cc7d3ed1b7a55b8fb9c241cd4097f130536d,new() {Mind = new(EventNature.Neutral),Studies = new(EventNature.Neutral),Family = new(EventNature.Neutral),Money = new(EventNature.Bad),Love = new(EventNature.Neutral),Body = new(EventNature.Bad)}
 2fe6b03949397d8acf8a2d2d59890f4d7aac153c54daf4b4bb36163e652485a9,new() {Mind = new(EventNature.Neutral),Studies = new(EventNature.Neutral),Family = new(EventNature.Bad),Money = new(EventNature.Good),Love = new(EventNature.Good),Body = new(EventNature.Neutral)}
+ab962716de97aa495f09b377f0dcd5fcaf40d52630fdf5f1ae96395005a8bc87,SpecializedSummary.Empty
+f12464550ab053a1309cf886e5541baee4b6b921296d98e731bd94fd43079268,SpecializedSummary.Empty
+0f5fa6261e0d516f882b6911ecbb2b5b7bebe57c8edbf9513a329d9ab8ca8477,SpecializedSummary.Empty
+f1f8a095f5f17d94fd44f826f6a5979d59377284de2dd636859bdc7a102f1d55,SpecializedSummary.Empty
+acaf399e15c0d8930474e5cdaa4983f5138f67d1ce1fd76d023a0d47cd9d6865,SpecializedSummary.Empty

@@ -249,7 +249,7 @@ namespace Website
         {
             //get name list of all charts
             //note: API will return readable name & hash for finding the chart later
-            var result = await ServerManager.ReadFromServerXmlReply(AppData.URL.GetSavedEventsChartIdList);
+            var result = await Tools.ReadFromServerXmlReply(AppData.URL.GetSavedEventsChartIdList);
 
             if (result.IsPass)
             {

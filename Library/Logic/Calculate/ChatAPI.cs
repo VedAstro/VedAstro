@@ -13,6 +13,7 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using Fizzler;
 using Azure.Data.Tables;
+using System.Collections.Concurrent;
 
 namespace VedAstro.Library
 {
@@ -51,9 +52,12 @@ namespace VedAstro.Library
 
 
 
-        public static async Task<JObject> SendMessageHoroscopeFollowUp(Time birthTime, string followUpQuestion,
-            string sessionId, string primaryAnswerHash)
+        public static async Task<JObject> SendMessageHoroscopeFollowUp(Time birthTime, string followUpQuestion = "", string primaryAnswerHash = "",
+            string userId = "", string sessionId = "")
         {
+            //log the follow-up first
+            SaveToTable(new ChatMessageEntity(sessionId, birthTime, followUpQuestion, "Human", userId));
+
             //based on hash get full question as pure text
             var primaryAnswerData = ReadFromTable(sessionId, primaryAnswerHash);
 
@@ -72,8 +76,11 @@ namespace VedAstro.Library
             var aiReply = await AnswerFollowUpHoroscopeQuestion_CohereCommandRPlus(primaryQuestion,
                  primaryAnswer, horoscopePredictions, followUpQuestion);
 
+            //log the AI reply
+            SaveToTable(new ChatMessageEntity(sessionId, birthTime, aiReply, "AI", userId));
 
-            return PackageReply("", aiReply, followupQuestions);
+            var noFollowUpAnyMore = new List<string>(); //no follow up to a follow-up
+            return PackageReply("", aiReply, noFollowUpAnyMore, sessionId);
         }
 
 
@@ -82,8 +89,19 @@ namespace VedAstro.Library
         /// Gets sub-lord at a given longitude (planet or house cusp) 
         /// </summary>
         /// <param name="longitude">planet or house cusp longitude</param>
-        public static async Task<JObject> SendMessageHoroscope(Time birthTime, string userQuestion, string sessionId = "")
+        public static async Task<JObject> SendMessageHoroscope(Time birthTime, string userQuestion, string sessionId, string userId)
         {
+
+            //save incoming message to log
+            // If session id is empty, generate a new one
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                sessionId = Tools.GenerateId();
+               
+            }
+
+            SaveToTable(new ChatMessageEntity(sessionId, birthTime, userQuestion, "Human", userId));
+
             var replyText = "";
 
 
@@ -108,9 +126,31 @@ namespace VedAstro.Library
 
             //#2 answer question about Horoscope
             replyText = await IsHoroscopeAstrology(birthTime, userQuestion);
-            return PackageReply(userQuestion, replyText, followupQuestions);
+
+            //save AI's reply
+            SaveToTable(new ChatMessageEntity(sessionId, birthTime, replyText, "AI", userId));
 
 
+            return PackageReply(userQuestion, replyText, followupQuestions, sessionId);
+
+
+        }
+
+        public static int GetLastMessageNumberNumberFromSessionId(string sessionId)
+        {
+
+            // If session id already exists, check Azure data tables and get the message number of the latest record by timestamp
+            Expression<Func<ChatMessageEntity, bool>> expression = call => call.PartitionKey == sessionId;
+
+            // Execute search
+            var recordFound = chatTableClient?.Query(expression)
+                ?.OrderByDescending(call => call.Timestamp)
+                ?.FirstOrDefault();
+
+            // If no record is found, start with message number 0
+            var messageNumber = recordFound?.MessageNumber ?? 0; //set 0 so caller can easily add 1 on top
+
+            return messageNumber;
         }
 
 
@@ -135,7 +175,8 @@ namespace VedAstro.Library
                 new
                 {
                     role = "system",
-                    content = $"CONTEXT:\n\n{horoscopePredictions}"
+                    content = $"as over confident astrologer, use context text\n" +
+                              $"CONTEXT:\n\n{horoscopePredictions}"
                 },
                 new
                 {
@@ -150,7 +191,7 @@ namespace VedAstro.Library
                 new
                 {
                     role = "user",
-                    content = $"{followUpQuestion}"
+                    content = $"{followUpQuestion}?"
                 },
 
             };
@@ -175,7 +216,7 @@ namespace VedAstro.Library
 
 
 
-        private static JObject PackageReply(string userQuestion, string aiReplyText, List<string> followupQuestions, string sessionId = "")
+        private static JObject PackageReply(string userQuestion, string aiReplyText, List<string> followUpQuestions, string sessionId)
         {
 
             //using user question and LLM make answer more readable in HTML, bolding, paragraphing...etc
@@ -184,11 +225,11 @@ namespace VedAstro.Library
 
             var reply = new JObject
             {
-                { "sessionId", sessionId },
-                { "text", aiReplyText },
-                { "textHtml", textHtml },
-                { "textHash", Tools.GetStringHashCode(aiReplyText) },
-                { "followupQuestions", new JArray(followupQuestions) }
+                { "SessionId", sessionId },
+                { "Text", aiReplyText },
+                { "TextHtml", textHtml },
+                { "TextHash", Tools.GetStringHashCodeMD5(aiReplyText, 15) }, //NOTE :maintain with ChatEntity construct
+                { "FollowUpQuestions", new JArray(followUpQuestions) }
             };
 
             return reply;
@@ -212,15 +253,21 @@ namespace VedAstro.Library
 
         public static ChatMessageEntity ReadFromTable(string sessionId, string messageHash)
         {
+            string filter = $"PartitionKey eq '{sessionId}' and RowKey ge '{messageHash}'";
 
-            Expression<Func<ChatMessageEntity, bool>> expression = call =>
-                call.PartitionKey == sessionId &&
-                call.RowKey == messageHash;
-
-            //execute search
-            var recordFound = chatTableClient.Query(expression).FirstOrDefault();
+            var recordFound = chatTableClient.Query<ChatMessageEntity>(filter).FirstOrDefault();
 
             return recordFound;
+
+        }
+
+
+        public static void SaveToTable(ChatMessageEntity inputChatMessageEntity)
+        {
+
+            var response = chatTableClient.AddEntity(inputChatMessageEntity);
+
+            //Console.WriteLine(response);
 
         }
 

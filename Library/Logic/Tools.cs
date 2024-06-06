@@ -26,6 +26,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -346,9 +347,6 @@ namespace VedAstro.Library
             //get main horoscope prediction file (located in wwwroot)
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
 
-            //copy caller data from original caller if any, so calls are traceable
-            CurrentCallerData.AddOriginalCallerHeadersIfAny(request);
-
             HttpResponseMessage response = await client.SendAsync(request, CancellationToken.None);
             var fileString = await response.Content.ReadAsStringAsync();
             return fileString;
@@ -364,9 +362,6 @@ namespace VedAstro.Library
 
             // Create HttpRequestMessage
             var request = new HttpRequestMessage(HttpMethod.Get, url);
-
-            //copy caller data from original caller if any, so calls are traceable
-            CurrentCallerData.AddOriginalCallerHeadersIfAny(request);
 
             // Send the request and get the response
             using var response = await client.SendAsync(request, CancellationToken.None);
@@ -545,6 +540,12 @@ namespace VedAstro.Library
             //get timezone as text
             var timezoneSTDOffsetResult = await Tools.GetTimezoneOffsetApi(geoLocation, parsedInputTime);
             var timeZone = timezoneSTDOffsetResult.Payload;
+
+            //if failed to get timezone raise alarm
+            if (string.IsNullOrEmpty(timeZone))
+            {
+                throw new Exception("Timezone failed to get from API!");
+            }
 
             //create time with perfect coordinates & time zone
             var correctTimeString = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {timeZone}";
@@ -848,9 +849,6 @@ namespace VedAstro.Library
 
             // Create HttpRequestMessage
             var request = new HttpRequestMessage(HttpMethod.Get, url);
-
-            //copy caller data from original caller if any, so calls are traceable
-            CurrentCallerData.AddOriginalCallerHeadersIfAny(request);
 
             // Send the request and get the response stream
             var response = await httpClient.SendAsync(request);
@@ -1232,17 +1230,44 @@ namespace VedAstro.Library
                 return hash1 + (hash2 * 1566083941);
             }
 
+        }
 
-            //MD5 md5Hasher = MD5.Create();
-            //var hashedByte = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(stringToHash));
-            //return BitConverter.ToInt32(hashedByte, 0);
+        /// <summary>
+        /// Custom hash generator for Strings. Returns consistent/deterministic values
+        /// If null returns 0
+        /// </summary>
+        /// <param name="stringToHash"></param>
+        /// <param name="truncateLength">The number of characters to truncate the hash to. Default is 32.</param>
+        /// <returns></returns>
+        public static string GetStringHashCodeMD5(string stringToHash, int truncateLength = 32)
+        {
+            if (stringToHash == null)
+            {
+                return "0";
+            }
 
+            using (MD5 md5Hasher = MD5.Create())
+            {
+                var hashedBytes = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(stringToHash));
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashedBytes.Length; i++)
+                {
+                    sb.Append(hashedBytes[i].ToString("x2"));
+                }
+                string hash = sb.ToString();
+                return hash.Length > truncateLength ? hash.Substring(0, truncateLength) : hash;
+            }
         }
 
         /// <summary>
         /// Gets random unique ID
         /// </summary>
-        public static string GenerateId() => Guid.NewGuid().ToString("N");
+        /// <param name="truncate">Optional parameter to truncate the generated ID</param>
+        public static string GenerateId(int? truncate = null)
+        {
+            var id = Guid.NewGuid().ToString("N");
+            return truncate.HasValue && truncate.Value < id.Length ? id.Substring(0, truncate.Value) : id;
+        }
 
 
         /// <summary>
@@ -1590,8 +1615,6 @@ namespace VedAstro.Library
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, receiverAddress);
 
-                //copy caller data from original caller if any, so calls are traceable
-                CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
 
                 //get the data sender 
                 using var client = new HttpClient();
@@ -1662,8 +1685,6 @@ namespace VedAstro.Library
             async Task<HttpResponseMessage> RequestServer(string receiverAddress, int retryCount)
             {
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
-                //copy caller data from original caller if any, so calls are traceable
-                CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
 
                 using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
@@ -3572,9 +3593,6 @@ namespace VedAstro.Library
             var client = new HttpClient();
             using var request = new HttpRequestMessage(HttpMethod.Head, url);
 
-            //copy caller data from original caller if any, so calls are traceable
-            CurrentCallerData.AddOriginalCallerHeadersIfAny(request);
-
             using var response = await client.SendAsync(request);
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
@@ -3599,9 +3617,6 @@ namespace VedAstro.Library
         public static async Task<T> ReadServerRaw<T>(string receiverAddress)
         {
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
-
-            //copy caller data from original caller if any, so calls are traceable
-            CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
 
             var waitForContent = HttpCompletionOption.ResponseContentRead;
             using var client = new HttpClient();
@@ -3638,9 +3653,6 @@ namespace VedAstro.Library
         {
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(method, receiverAddress);
-
-            //copy caller data from original caller if any, so calls are traceable
-            CurrentCallerData.AddOriginalCallerHeadersIfAny(httpRequestMessage);
 
             //tell sender to wait for complete reply before exiting
             var waitForContent = HttpCompletionOption.ResponseContentRead;
@@ -4262,9 +4274,6 @@ namespace VedAstro.Library
                 RequestUri = new Uri(url),
                 Content = content
             };
-
-            //copy caller data from original caller if any, so calls are traceable
-            CurrentCallerData.AddOriginalCallerHeadersIfAny(request);
 
             client.Timeout = TimeSpan.FromMinutes(10); //long timeout, LLM replies slow sometimes
             var response = await client.SendAsync(request);

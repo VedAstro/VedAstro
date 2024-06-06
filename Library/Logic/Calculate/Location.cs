@@ -450,7 +450,7 @@ namespace VedAstro.Library
 #if DEBUG
                 Console.WriteLine(errorMessage);
 #else
-                LibLogger.Error(errorMessage);
+                //LibLogger.Error(errorMessage);
 #endif
                 //this is critical and should not propagate!
 
@@ -475,7 +475,7 @@ namespace VedAstro.Library
 #if DEBUG
                 Console.WriteLine(errorMessage);
 #else
-                LibLogger.Error(errorMessage);
+                //LibLogger.Error(errorMessage);
 #endif
                 //this is critical and should not propagate!
 
@@ -500,7 +500,7 @@ namespace VedAstro.Library
 #if DEBUG
                 Console.WriteLine(errorMessage);
 #else
-                LibLogger.Error(errorMessage);
+                //LibLogger.Error(errorMessage);
 #endif
                 //this is critical and should not propagate!
 

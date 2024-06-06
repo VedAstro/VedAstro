@@ -21,7 +21,13 @@
 
         //RUN TESTS
         RUN_TEST:
-            Console.WriteLine("###### TEST START ######\n");
+            Console.WriteLine("###### GEOLOCATION TEST START ######\n");
+            CoalesceException(() => appInstance.GeoLocationToTimezoneTest().Result, null);
+            CoalesceException(() => appInstance.AddressToGeoLocationTest().Result, null);
+            CoalesceException(() => appInstance.CoordinatesToGeoLocationTest().Result, null);
+            CoalesceException(() => appInstance.IpAddressToGeoLocationTest().Result, null);
+
+            Console.WriteLine("###### DATA TEST START ######\n");
             CoalesceException(() => appInstance.GeoLocationToTimezoneTest().Result, null);
             CoalesceException(() => appInstance.AddressToGeoLocationTest().Result, null);
             CoalesceException(() => appInstance.CoordinatesToGeoLocationTest().Result, null);

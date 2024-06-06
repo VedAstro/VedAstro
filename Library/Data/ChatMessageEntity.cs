@@ -5,20 +5,35 @@ using VedAstro.Library;
 
 namespace VedAstro.Library;
 
-/// <summary>
-/// Represents 1 row in Geo Location Timezone table used in API
-/// used to store world timezone data
-/// Facts:
-/// 1 decimal place: 11.1 km
-/// 2 decimal places: 1.11 km
-/// 3 decimal places: 111 m
-/// 4 decimal places: 11.1 m
-/// 5 decimal places: 1.11 m
-/// 6 decimal places: 0.111 m
-/// </summary>
 public class ChatMessageEntity : ITableEntity
 {
-    public static ChatMessageEntity Empty = new ChatMessageEntity();
+
+    public ChatMessageEntity()
+    {
+        
+    }
+
+    public ChatMessageEntity(string sessionId, Time birthTime, string text, string sender,  string userId)
+    {
+        PartitionKey = sessionId;
+
+        //generate row key
+        var textHash = Tools.GetStringHashCodeMD5(text, 15);
+        var birthTimeSimple = birthTime.ToUrl().Replace("/","-");
+        var rawRowKey = $"{textHash}{birthTimeSimple}-{Tools.GenerateId(5)}";
+        string cleanRowKey = System.Text.RegularExpressions.Regex.Replace(rawRowKey, @"[^a-zA-Z0-9\-\.\/_]", "");
+        RowKey = cleanRowKey;
+
+        UserId = userId;
+        Sender = sender;
+        Text = text;
+
+        //NOTE: - internal ease use value, calculated and handled within
+        //      - if new message will return 0
+        int messageNumber = ChatAPI.GetLastMessageNumberNumberFromSessionId(sessionId); //autofill new session id
+
+        MessageNumber = messageNumber + 1; // add 1 for next message
+    }
 
     /// <summary>
     /// session id

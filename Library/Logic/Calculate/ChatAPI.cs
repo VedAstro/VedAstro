@@ -77,13 +77,52 @@ namespace VedAstro.Library
                  primaryAnswer, horoscopePredictions, followUpQuestion);
 
             //log the AI reply
-            SaveToTable(new ChatMessageEntity(sessionId, birthTime, aiReply, "AI", userId));
+            var textHash = SaveToTable(new ChatMessageEntity(sessionId, birthTime, aiReply, "AI", userId)).RowKey;
 
             var noFollowUpAnyMore = new List<string>(); //no follow up to a follow-up
-            return PackageReply("", aiReply, noFollowUpAnyMore, sessionId);
+            return PackageReply("", aiReply, textHash, noFollowUpAnyMore, sessionId);
         }
 
+        public static async Task<JObject> HoroscopeChatFeedback(string answerHash, int feedbackScore)
+        {
 
+            //find answer record that user has asked to rate
+            string filter = $"RowKey eq '{answerHash}'";
+
+            var recordFound = chatTableClient.Query<ChatMessageEntity>(filter).FirstOrDefault();
+
+            //combine rating
+            recordFound.Rating += feedbackScore;
+
+            //save back to DB
+            chatTableClient.UpsertEntity(recordFound, TableUpdateMode.Replace);
+
+            //# say thanks 🙏
+            //# NOTE: DO NOT tell the user explicitly to give more feedback
+            //# psychology 101 : give them the sincere motivation to help instead -> better quality/quantity
+            //#if we tell the user explicitly, we increase the probability of deterministic failure, pushing the user into 1 of 2 camps
+            var aiReply =
+                "Congratulation!🫡\n You have just helped improve astrology worldwide🌍\n I have now memorized your feedback,🧠\n now on all my answer will take your feedback into consideration.\n Thank you so much for the rating🙏\n";
+
+            //<h5>🥇 AI Contributor Score : <b>{contribution_score*10}</b></h5>
+            var aiHtmlReply = """
+                              	
+                                  Congratulation!🫡<br>
+                                  You have just helped improve astrology worldwide🌍<br><br>
+                                  I have now <b>memorized your feedback</b>,🧠<br>
+                                  now on all my answer will take your feedback into consideration.<br><br>
+                                  Thank you so much for the rating🙏<br><br>
+                              """;
+
+
+
+            var noFollowUpAnyMore = new List<string>(); //no follow up to a follow-up
+            var sameSessionId = recordFound.PartitionKey; //use back same session ID
+            var noFeedbackCommand = new List<string>(){ "noFeedback" }; //stop the feedback on feedback loop
+            var randomHash = Tools.GenerateId(10); //has to be unique else will interfere with client rendering
+            return PackageReply("", aiReply, randomHash, noFollowUpAnyMore, sameSessionId, aiHtmlReply, noFeedbackCommand);
+
+        }
 
         /// <summary>
         /// Gets sub-lord at a given longitude (planet or house cusp) 
@@ -94,12 +133,7 @@ namespace VedAstro.Library
 
             //save incoming message to log
             // If session id is empty, generate a new one
-            if (string.IsNullOrEmpty(sessionId))
-            {
-                sessionId = Tools.GenerateId();
-               
-            }
-
+            if (string.IsNullOrEmpty(sessionId)) { sessionId = Tools.GenerateId(); }
             SaveToTable(new ChatMessageEntity(sessionId, birthTime, userQuestion, "Human", userId));
 
             var replyText = "";
@@ -128,12 +162,10 @@ namespace VedAstro.Library
             replyText = await IsHoroscopeAstrology(birthTime, userQuestion);
 
             //save AI's reply
-            SaveToTable(new ChatMessageEntity(sessionId, birthTime, replyText, "AI", userId));
+            var textHash = SaveToTable(new ChatMessageEntity(sessionId, birthTime, replyText, "AI", userId)).RowKey;
 
-
-            return PackageReply(userQuestion, replyText, followupQuestions, sessionId);
-
-
+            //pack nicely and send to user
+            return PackageReply(userQuestion, replyText, textHash, followupQuestions, sessionId);
         }
 
         public static int GetLastMessageNumberNumberFromSessionId(string sessionId)
@@ -175,7 +207,7 @@ namespace VedAstro.Library
                 new
                 {
                     role = "system",
-                    content = $"as over confident astrologer, use context text\n" +
+                    content = $"an over confident astrologer, use context text\n" +
                               $"CONTEXT:\n\n{horoscopePredictions}"
                 },
                 new
@@ -201,8 +233,8 @@ namespace VedAstro.Library
                 ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
                 ApiKey = azureCohereCommandRPlusAPIKey,
                 MaxTokens = 600,
-                Temperature = 0.5,
-                TopP = 0.5,
+                Temperature = 0.9,
+                TopP = 0.1,
                 SysMessage = sysMessageArray
             };
 
@@ -216,20 +248,27 @@ namespace VedAstro.Library
 
 
 
-        private static JObject PackageReply(string userQuestion, string aiReplyText, List<string> followUpQuestions, string sessionId)
+        private static JObject PackageReply(string userQuestion, string aiReplyText, string textHash, List<string> followUpQuestions, string sessionId, string aiReplyHtml = "", List<string> commands = null)
         {
 
             //using user question and LLM make answer more readable in HTML, bolding, paragraphing...etc
             //string textHtml = ChatAPI.HighlightKeywords_MistralSmall(aiReplyText, userQuestion).Result;
-            string textHtml = aiReplyText; //todo use back same because formatter is faulty
+
+            //use back same if not specified custom HTML version
+            string finalHtml = string.IsNullOrEmpty(aiReplyHtml) ? aiReplyText : aiReplyHtml;
+
+            //only generate if not specified
+            //string finalTextHash = string.IsNullOrEmpty(textHash) ? Tools.GetStringHashCodeMD5(aiReplyText, 15) : aiReplyHtml;
+            commands ??= new List<string>();
 
             var reply = new JObject
             {
                 { "SessionId", sessionId },
                 { "Text", aiReplyText },
-                { "TextHtml", textHtml },
-                { "TextHash", Tools.GetStringHashCodeMD5(aiReplyText, 15) }, //NOTE :maintain with ChatEntity construct
-                { "FollowUpQuestions", new JArray(followUpQuestions) }
+                { "TextHtml", finalHtml },
+                { "TextHash", textHash},
+                { "FollowUpQuestions", new JArray(followUpQuestions) },
+                { "Commands", new JArray(commands) }
             };
 
             return reply;
@@ -262,11 +301,12 @@ namespace VedAstro.Library
         }
 
 
-        public static void SaveToTable(ChatMessageEntity inputChatMessageEntity)
+        public static ChatMessageEntity SaveToTable(ChatMessageEntity inputChatMessageEntity)
         {
 
             var response = chatTableClient.AddEntity(inputChatMessageEntity);
 
+            return inputChatMessageEntity;
             //Console.WriteLine(response);
 
         }

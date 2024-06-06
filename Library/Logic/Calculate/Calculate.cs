@@ -315,6 +315,11 @@ namespace VedAstro.Library
             return await ChatAPI.SendMessageHoroscope(birthTime, userQuestion, sessionId, userId);
         }
 
+        public static async Task<JObject> HoroscopeChatFeedback(string answerHash, int feedbackScore)
+        {
+            return await ChatAPI.HoroscopeChatFeedback( answerHash, feedbackScore);
+        }
+
         public static async Task<JObject> HoroscopeFollowUpChat(Time birthTime, string followUpQuestion, string primaryAnswerHash, string userId,
             string sessionId)
         {

@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mobile First with Bootstrap 5</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!--LOAD FONTS-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lexend Deca"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varta"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gowun Dodum"> <!--  article text -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Homemade Apple"> <!--  cursive for quotes -->
+
+
+</head>
+<body>
+
+    <nav class="p-1 navbar rounded-bottom-4" data-bs-theme="dark" style="background-color: #1877f2 !important;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="image/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
+                <span class="ms-1 align-middle">VedAstro</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-nav navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="nav nav-fill">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <iconify-icon class="align-bottom" icon="mdi:home" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Chat.html">
+                            <iconify-icon class="align-bottom" icon="mage:we-chat" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">AI Chat</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Horoscope.html">
+                            <iconify-icon class="align-bottom" icon="fluent:book-star-20-filled" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Horoscope</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="LifePredictor.html">
+                            <iconify-icon class="align-bottom" icon="gis:map-time" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Life Predictor</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Match.html" aria-current="page">
+                            <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Match Checker</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="GoodTimeFinder.html">
+                            <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Good Time Finder</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- MAIN TITLE LOGO -->
+        <div class="px-4 py-1 my-2 text-center">
+            <img class="d-block mx-auto" src="image/vedastro-api-logo.png" style=" -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%); mask-image: linear-gradient(to bottom, black 0%, transparent 100%); margin-bottom: -69px; " alt="">
+            <div class="col-lg-6 mx-auto">
+                <p class="lead mb-4">
+                    A non-profit, open source project to make
+                    Vedic Astrology easily available to all.
+                </p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3">
+                        <iconify-icon class="align-bottom" icon="mdi:book-open-variant" width="28" height="28"></iconify-icon>
+                        Quick Guide
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg px-4">
+                        <iconify-icon class="align-bottom" icon="uil:github" width="28" height="28"></iconify-icon>
+                        Source Code
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!--     new(PageRoute.ChatAPI, "ai-chat-card.jpg", "AI Astrologer", "Talk & learn with AI powered astrologer for any queries"),
+        new(URL.SlackInviteURL, "live-coding-card.jpg", "Watch Live Coding", "Watch & chat with a developer editing code live"),
+        new(PageRoute.TableGenerator, "table-generator-card.jpg", "ML Data Generator", "Easily create large ML & AI data tables"),
+        new(PageRoute.MatchFinder, "match-finder-card.jpg", "Find Soulmate", "Free search astrological database for perfect match"),
+        new(PageRoute.LifePredictor, "dasa-card.jpg", "Life Predictor", "Know good and bad periods of your life years ahead"),
+        new(PageRoute.Match, "match-card.jpg", "Match", "Check astro chemistry for romance & relationship"),
+        new(PageRoute.Horoscope, "horoscope-card.jpg", "Horoscope", "Predict a person's character, speech, body & general life"),
+        new(PageRoute.GoodTimeFinder, "muhurtha-card.jpg", "Muhurtha", "Find a good time for buying car, travel, studies, building.."),
+        new(PageRoute.Journal, "add-life-event-card.jpg", "Journal", "Astrological journal to help understand your life events"),
+        new(PageRoute.APIBuilder, "open-api-card.jpg", "Open API", "Access powerful astrological tools via a HTTP request"),
+        new(PageRoute.BirthTimeFinder, "birth-time-finder-card.jpg", "Birth Time Finder", "Find forgotten or lost birth time using astrological"),
+        new(PageRoute.SunRiseSetTime, "sunrise-card.jpg", "Sunrise Time", "Time when Sun's disc center meets the horizon"),
+
+        -->
+        <!-- QUICK LINKS -->
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+            <div class="col">
+                <a href="Match.html" class="text-decoration-none text-dark">
+                    <div class="card h-100">
+                        <img src="image/match-card.jpg" class="card-img-top" style=" object-fit: cover; object-position: center top; height: 172px; " alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Match</h5>
+                            <p class="card-text">Check astro chemistry for romance & relationship</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="Chat.html" class="text-decoration-none text-dark">
+                    <div class="card h-100">
+                        <img src="image/ai-chat-card.jpg" class="card-img-top" style=" object-fit: cover; object-position: center top; height: 172px; " alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">AI Astrologer</h5>
+                            <p class="card-text">Talk & learn with AI powered astrologer for any queries</p>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="image/dasa-card.jpg" class="card-img-top" style=" object-fit: cover; object-position: center top; height: 172px; " alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Life Predictor</h5>
+                        <p class="card-text">Know good and bad periods of your life years ahead</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="image/dasa-card.jpg" class="card-img-top" style=" object-fit: cover; object-position: center top; height: 172px; " alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Life Predictor</h5>
+                        <p class="card-text">Know good and bad periods of your life years ahead</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--LOAD PAGE CSS-->
+    <!-- Bootstrap CSS : Used for styling everything-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- LOAD JS HERE TO SHOWS INITIAL LOADING BOX ASAP -->
+    <!--JQuery-->
+    <!--Note: JQuery needs to be loaded before bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap  JS : Used to animate some components like Accordion, dropdown, BUNDLE because popper.js-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!--Icon Generator Lib -->
+    <!--     <script type="text/javascript" src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+     -->
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+
+    <!--Sweet Alert Lib -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mattboldt/typed.js@2.0.11/lib/typed.min.js"></script>
+
+    <script>
+
+
+
+    </script>
+</body>
+</html>

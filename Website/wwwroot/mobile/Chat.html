@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mobile First with Bootstrap 5</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!--LOAD FONTS-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lexend Deca"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varta"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gowun Dodum"> <!--  article text -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Homemade Apple"> <!--  cursive for quotes -->
+
+
+</head>
+<body>
+
+    <nav class="p-1 navbar rounded-bottom-4" data-bs-theme="dark" style="background-color: #1877f2 !important;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="image/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
+                <span class="ms-1 align-middle">VedAstro</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-nav navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="nav nav-fill">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <iconify-icon class="align-bottom" icon="mdi:home" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Chat.html">
+                            <iconify-icon class="align-bottom" icon="mage:we-chat" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">AI Chat</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Horoscope.html">
+                            <iconify-icon class="align-bottom" icon="fluent:book-star-20-filled" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Horoscope</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="LifePredictor.html">
+                            <iconify-icon class="align-bottom" icon="gis:map-time" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Life Predictor</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Match.html" aria-current="page">
+                            <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Match Checker</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="GoodTimeFinder.html">
+                            <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Good Time Finder</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container pt-3">
+
+        <!--         <div class="mt-3 col d-flex align-items-start">
+                   <div>
+                       <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">AI Chat</h3>
+                       <p>Check compatibility between two people. Easily predict your relationship's future.</p>
+                   </div>
+                   <img class="bi text-body-secondary flex-shrink-0 mt-3 ms-3" style=" width: 141px; " src="https://vedastro.org/images/match-checker.svg" />
+
+               </div>
+
+        -->
+        <div id="HoroscopeChat" class=""></div>
+
+
+
+        <div class="mt-md-0 mt-4 me-md-5">
+            <div class="vstack gap-0 gap-md-2">
+                <!--!--><div class="" style=" cursor: pointer; max-width:365px;">
+                    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color: #ffbdf7 !important; ">
+                        <div class="hstack mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64" data-icon="emojione:heart-with-arrow" data-width="50"><path fill="#ffce31" d="m12.7 54.6l-2-2.1l19.1-19l2.1 2z"></path><path fill="#42ade2" d="M4.2 61s-.7-8.3 6.4-15.3l2.1 6.9z"></path><path fill="#467591" d="M4.2 61s8.3.7 15.4-6.4l-6.9-2.1z"></path><path fill="#ff5a79" d="M54.7 24.3c-5.7-15-24.2-8.3-26-.8c-2.4-8-20.4-14-26 .8c-6.1 16.4 23.8 31.2 26 33.6c2.2-1.9 32.2-17.4 26-33.6"></path><path fill="#ffce31" d="m37.1 30.1l-2.4-2.3l16.8-16.7l2.3 2.4z"></path><path fill="#467591" d="M40.9 21.7s-.4-9.9 8.4-18.7l2.2 8.1zm2.3 2.3s9.9.4 18.8-8.4l-8.2-2.2z"></path></svg><!--!-->
+                            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+                                <strong>Find Perfect Match</strong><!--!--><br>
+                                Your soulmate is out there. Start a search in our global database<!--!-->
+                            </div>
+                        </div><!--!-->
+                    </div>
+                </div><!--!-->
+                <!--!--><div class="" style=" max-width:365px;">
+                    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color: #d1e7dd !important; ">
+                        <div class="hstack mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--line-md bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="line-md:check-list-3-twotone" data-width="50"><g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><g fill="none" stroke-dasharray="10" stroke-dashoffset="10" stroke-width="2"><path d="M3 5L5 7L9 3"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.2s" values="10;0"></animate></path><path d="M3 12L5 14L9 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s" values="10;0"></animate></path><path d="M3 19L5 21L9 17"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="10;0"></animate></path></g><g fill="currentColor" fill-opacity="0" stroke-dasharray="22" stroke-dashoffset="22"><rect width="9" height="3" x="11.5" y="3.5" rx="1.5"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.2s" dur="0.5s" values="22;0"></animate><animate fill="freeze" attributeName="fill-opacity" begin="1.7s" dur="0.15s" values="0;0.3"></animate></rect><rect width="9" height="3" x="11.5" y="10.5" rx="1.5"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.5s" values="22;0"></animate><animate fill="freeze" attributeName="fill-opacity" begin="1.9s" dur="0.15s" values="0;0.3"></animate></rect><rect width="9" height="3" x="11.5" y="17.5" rx="1.5"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1.2s" dur="0.5s" values="22;0"></animate><animate fill="freeze" attributeName="fill-opacity" begin="2.1s" dur="0.15s" values="0;0.3"></animate></rect></g></g></svg><!--!-->
+                            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+                                <strong>Full Check</strong><!--!--><br>
+                                16 astrological factors used to make this accurate prediction<!--!-->
+                            </div>
+                        </div><!--!-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <!--LOAD PAGE CSS-->
+    <!-- Bootstrap CSS : Used for styling everything-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- LOAD JS HERE TO SHOWS INITIAL LOADING BOX ASAP -->
+    <!--JQuery-->
+    <!--Note: JQuery needs to be loaded before bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap  JS : Used to animate some components like Accordion, dropdown, BUNDLE because popper.js-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!--Icon Generator Lib -->
+    <!--     <script type="text/javascript" src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+     -->
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+
+    <!--Sweet Alert Lib -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mattboldt/typed.js@2.0.11/lib/typed.min.js"></script>
+
+
+    <script src="VedAstro.js"></script>
+
+    <script>
+
+        //----------------------HOROSCOPE CHAT----------------------------
+        var settingsHoroscopeChat = {
+            ElementID: "HoroscopeChat",
+            ShowHeader: true,
+            HeaderIcon: "fluent:table-28-filled",
+            /*SelectedBirthTime: "Location/Ipoh/Time/12:44/23/04/1994/+08:00"*/
+        };
+
+        //note: on init, chat instance is loaded into window.vedastro.horoscopechat
+        new HoroscopeChat(settingsHoroscopeChat);
+
+
+    </script>
+
+</body>
+</html>

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.ComponentModel;
+using ScottPlot.Palettes;
+using System.Net;
 
 namespace VedAstro.Library
 {
@@ -15,12 +17,14 @@ namespace VedAstro.Library
         public record GeoLocationRawAPI(dynamic MainRow, dynamic MetadataRow);
 
         private static readonly TableServiceClient ipAddressServiceClient;
+        private static readonly TableServiceClient webPageServiceClient;
         private static readonly TableServiceClient requestUrlStatisticServiceClient;
         private static readonly TableServiceClient subscriberStatisticServiceClient;
         private static readonly TableServiceClient userAgentStatisticServiceClient;
         private static readonly TableServiceClient rawRequestStatisticServiceClient;
 
         private static readonly TableClient ipAddressStatisticTableClient;
+        private static readonly TableClient webPageStatisticTableClient;
         private static readonly TableClient requestUrlStatisticTableClient;
         private static readonly TableClient subscriberStatisticTableClient;
         private static readonly TableClient userAgentStatisticTableClient;
@@ -85,6 +89,16 @@ namespace VedAstro.Library
             ipAddressServiceClient = new TableServiceClient(new Uri(storageUriIpAddressStatistic), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
             ipAddressStatisticTableClient = ipAddressServiceClient.GetTableClient(tableNameIpAddressStatistic);
 
+
+            //# WEB PAGE
+            //------------------------------------
+            //Initialize address table 
+            string tableNameWebPageStatistic = "WebPageStatistic";
+            var storageUriWebPageStatistic = $"https://{accountName}.table.core.windows.net/{tableNameWebPageStatistic}";
+            //save reference for late use
+            webPageServiceClient = new TableServiceClient(new Uri(storageUriWebPageStatistic), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            webPageStatisticTableClient = webPageServiceClient.GetTableClient(tableNameWebPageStatistic);
+
         }
 
         //-------------------------------------
@@ -95,13 +109,15 @@ namespace VedAstro.Library
         /// </summary>
         public static void LogIpAddress(HttpRequestData incomingRequest)
         {
+            //get month and year in correct format 2019-10
+            var todayRecord = DateTime.Now.ToString("yyyy-MM");
 
             //# get ip address out
             var ipAddress = incomingRequest?.GetCallerIp()?.ToString() ?? "0.0.0.0";
 
             //# check if ip address already exist
             //make a search for ip address stored under row key
-            Expression<Func<IpAddressStatisticEntity, bool>> expression = call => call.PartitionKey == ipAddress;
+            Expression<Func<IpAddressStatisticEntity, bool>> expression = call => call.PartitionKey == ipAddress && call.RowKey == todayRecord;
 
             //execute search
             var recordFound = ipAddressStatisticTableClient.Query(expression).FirstOrDefault();
@@ -121,9 +137,45 @@ namespace VedAstro.Library
                 var newRow = new IpAddressStatisticEntity();
                 newRow.PartitionKey = Tools.CleanAzureTableKey(ipAddress);
                 //get month and year in correct format 2019-10
-                newRow.RowKey = DateTime.Now.ToString("yyyy-MM");
+                newRow.RowKey = todayRecord;
                 newRow.CallCount = 1;
                 ipAddressStatisticTableClient.AddEntity(newRow);
+            }
+        }
+
+        public static void LogWebPage(string webPage)
+        {
+            //get month and year in correct format 2019-10
+            var todayRecord = DateTime.Now.ToString("yyyy-MM");
+
+            //# get ip address out
+            //var ipAddress = incomingRequest?.GetCallerIp()?.ToString() ?? "0.0.0.0";
+            var cleanWebPageUrl = Tools.CleanAzureTableKey(webPage);
+            //# check if already exist
+            Expression<Func<WebPageStatisticEntity, bool>> expression = call => call.PartitionKey == cleanWebPageUrl && call.RowKey == todayRecord;
+
+            //execute search
+            var recordFound = webPageStatisticTableClient.Query(expression).FirstOrDefault();
+
+            //# if existed, update call count
+            var isExist = recordFound != null;
+            if (isExist)
+            {
+                //update row
+                recordFound.CallCount = ++recordFound.CallCount; //increment call count
+                webPageStatisticTableClient.UpsertEntity(recordFound);
+            }
+
+            //# if not exist, make new log
+            else
+            {
+                var newRow = new WebPageStatisticEntity();
+                
+                newRow.PartitionKey = cleanWebPageUrl;
+                //get month and year in correct format 2019-10
+                newRow.RowKey = todayRecord;
+                newRow.CallCount = 1;
+                webPageStatisticTableClient.AddEntity(newRow);
             }
         }
 
@@ -131,12 +183,15 @@ namespace VedAstro.Library
         {
 
             //# get request URL
-            var requestUrl = incomingRequest?.Url.ToString() ?? "no URL";
+            var requestUrl = incomingRequest?.Url.AbsolutePath ?? "no URL";
+
+            //get month and year in correct format 2019-10
+            var todayRecord = DateTime.Now.ToString("yyyy-MM");
 
             //# check if URL already exist
             //make a search for ip address stored under row key
-            var cleanAzureTableKey = Tools.CleanAzureTableKey(requestUrl, "|");
-            Expression<Func<RequestUrlStatisticEntity, bool>> expression = call => call.PartitionKey == cleanAzureTableKey;
+            var cleanAzureTableKey = Tools.CleanAzureTableKey(requestUrl, "-").Truncate(100);
+            Expression<Func<RequestUrlStatisticEntity, bool>> expression = call => call.PartitionKey == cleanAzureTableKey && call.RowKey == todayRecord;
 
             //execute search
             var recordFound = requestUrlStatisticTableClient.Query(expression).FirstOrDefault();
@@ -157,12 +212,11 @@ namespace VedAstro.Library
 
                 newRow.PartitionKey = cleanAzureTableKey;
                 //get month and year in correct format 2019-10
-                newRow.RowKey = DateTime.Now.ToString("yyyy-MM");
+                newRow.RowKey = todayRecord;
                 newRow.CallCount = 1;
                 requestUrlStatisticTableClient.AddEntity(newRow);
             }
         }
-
 
         public static void LogSubscriber(HttpRequestData incomingRequest)
         {
@@ -219,7 +273,7 @@ namespace VedAstro.Library
             //# check if User-Agent already exist
             //make a search for ip address stored under row key
             var cleanUserAgent = Tools.CleanAzureTableKey(userAgent, "|");
-            Expression<Func<UserAgentStatisticEntity, bool>> expression = call => call.PartitionKey == cleanUserAgent;
+            Expression<Func<UserAgentStatisticEntity, bool>> expression = call => call.PartitionKey == cleanUserAgent && call.RowKey == currentDate;
 
             //execute search
             var recordFound = userAgentStatisticTableClient.Query(expression).FirstOrDefault();
@@ -326,6 +380,15 @@ namespace VedAstro.Library
             }
         }
 
+        public static void Log(HttpRequestData incomingRequest)
+        {
+            ApiStatistic.LogIpAddress(incomingRequest);
+            ApiStatistic.LogRequestUrl(incomingRequest);
+            //ApiStatistic.LogRawRequest(incomingRequest);
+            ApiStatistic.LogSubscriber(incomingRequest);
+            ApiStatistic.LogUserAgent(incomingRequest);
+
+        }
     }
 
 }

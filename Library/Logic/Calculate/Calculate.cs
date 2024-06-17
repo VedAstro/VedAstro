@@ -2919,7 +2919,8 @@ namespace VedAstro.Library
         public static int FortunaPoint(ZodiacName ascZodiacSignName, Time time)
         {
             //Fortune Point is calculated as Asc Degrees + Moon Degrees - Sun Degrees
-
+            var a1 = Calculate.AllHouseMiddleLongitudes(time)[0].GetBeginLongitude().TotalDegrees;
+           
             //Find Lagna, Moon and Sun longitude degree
             var _asc_Degrees = Calculate.AllHouseMiddleLongitudes(time)[0].GetMiddleLongitude().TotalDegrees;
             var _moonDegrees = Calculate.PlanetNirayanaLongitude(PlanetName.Moon, time).TotalDegrees;
@@ -2927,6 +2928,25 @@ namespace VedAstro.Library
 
             //fortuna point is the point that is same distance from Ascendant
             //as Moon is from Sun
+            var _fortunaPointDegrees = 0.00;
+
+            /*
+            //if its a day chart
+            
+
+            if (_sunDegrees >= 180.000 && _sunDegrees < 360.000) 
+            {
+                _fortunaPointDegrees = _asc_Degrees + _moonDegrees - _sunDegrees;
+            }
+
+            else
+            {
+                if (_sunDegrees >= 0.000 && _sunDegrees < 180.000)
+                {
+                    _fortunaPointDegrees = _asc_Degrees + _sunDegrees - _moonDegrees;
+                }
+            }
+            */
 
             //first let's compute how far the Moon is from Sun
             var _moon_sun_distance = _moonDegrees - _sunDegrees;
@@ -2937,18 +2957,22 @@ namespace VedAstro.Library
             }
 
             //now lets compute the Fortuna point 
-            var _fortunaPointDegrees = _asc_Degrees + _moon_sun_distance;
+            _fortunaPointDegrees = _asc_Degrees + _moon_sun_distance;
 
             if (_fortunaPointDegrees >= 360)
             {
                 _fortunaPointDegrees = _fortunaPointDegrees - 360;
             }
 
+
             //convert Degrees to Angle
             var _angleAtFortunaPointDegrees = VedAstro.Library.Angle.FromDegrees(_fortunaPointDegrees);
 
             //find zodiacSignAtFP Longitude
             var _zodiacSignAtFP = Calculate.ZodiacSignAtLongitude(_angleAtFortunaPointDegrees).GetSignName();
+
+           // var houseNo = Calculate.HouseFromSignName(_zodiacSignAtFP, time);
+            
 
             //find how many signs the FP is from Lagna
             var _signCount = Calculate.CountFromSignToSign(ascZodiacSignName, _zodiacSignAtFP);

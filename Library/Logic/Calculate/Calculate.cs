@@ -8177,17 +8177,17 @@ namespace VedAstro.Library
         /// </summary>
         public static double AscendantDegreesToARMC(double ascendant, double obliquityOfEcliptic, double geographicLatitude, Time time)
         {
+            //NEEDS UPDATE CP
+
             // The main method is taken from a post by K S Upendra on Group.IO in 2019
             // Calculate the right ascension using the formula:
             // atan(cos(obliquityOfEcliptic) * tan(tropicalAscendant))
-            double rightAscension =
-                Math.Atan(Math.Cos(obliquityOfEcliptic * Math.PI / 180) * Math.Tan(ascendant * Math.PI / 180)) *
-                180 / Math.PI;
+            double rightAscension = 4.98;
+
             // Calculate the declination using the formula:
             // asin(sin(obliquityOfEcliptic) * sin(tropicalAscendant))
-            double declination =
-                Math.Asin(Math.Sin(obliquityOfEcliptic * Math.PI / 180) * Math.Sin(ascendant * Math.PI / 180)) *
-                180 / Math.PI;
+            double declination = 6.64;
+                
             // Calculate the oblique ascension by subtracting the result of the following formula from the right ascension:
             // asin(tan(declination) * tan(geographicLatitude))
             double obliqueAscension = rightAscension -

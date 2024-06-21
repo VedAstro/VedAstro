@@ -15,6 +15,8 @@ using Fizzler;
 using Azure.Data.Tables;
 using System.Collections.Concurrent;
 
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Collections;
 namespace VedAstro.Library
 {
     public class PredictionSettings
@@ -36,6 +38,7 @@ namespace VedAstro.Library
         static string azureMetaLlama3APIKey = Environment.GetEnvironmentVariable("AzureMetaLlama3APIKey");
         static string azureMistralLargeAPIKey = Environment.GetEnvironmentVariable("AzureMistralLargeAPIKey");
         static string azureCohereCommandRPlusAPIKey = Environment.GetEnvironmentVariable("AzureCohereCommandRPlusAPIKey");
+        static string azureCohereEmbedAPIKey = Environment.GetEnvironmentVariable("AzureCohereEmbedAPIKey");
         static string azureMistralSmallAPIKey = Environment.GetEnvironmentVariable("AzureMistralSmallAPIKey");
         static OpenAIClient client = new(azureOpenAIResourceUri, azureOpenAIApiKey);
 
@@ -43,6 +46,27 @@ namespace VedAstro.Library
         private static List<string> followupQuestions = new List<string> { "Why?", "How?", "Tell me more..." };
         private static TableClient chatTableClient = new TableClient(chatTableconnectionString, "ChatMessage");
 
+        private static TableServiceClient presetQuestionEmbeddingsServiceClient;
+        private static TableClient presetQuestionEmbeddingsTableClient;
+
+
+        public static void InitChatAPI()
+        {
+            string accountName = "centralapistorage"; //indic heritage 
+            //string accountName = "vedastroapistorage"; //vedastro 
+
+            //#SEARCH ADDRESS
+            //------------------------------------
+            //Initialize address table 
+            string tableNamePresetQuestionEmbeddings = "PresetQuestionEmbeddings";
+
+            var storageUriPresetQuestionEmbeddings = $"https://{accountName}.table.core.windows.net/{tableNamePresetQuestionEmbeddings}";
+            //save reference for late use
+            presetQuestionEmbeddingsServiceClient = new TableServiceClient(new Uri(storageUriPresetQuestionEmbeddings), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            presetQuestionEmbeddingsTableClient = presetQuestionEmbeddingsServiceClient.GetTableClient(tableNamePresetQuestionEmbeddings);
+
+
+        }
 
         //#             +> FOLLOW-UP --> specialized lite llm call
         //#             |
@@ -51,6 +75,86 @@ namespace VedAstro.Library
         //#             +> UNRELATED --> full llama raq synthesis
 
 
+
+        public static async Task<string> AutoReplySillyQuestion(string userQuestion)
+        {
+            //# question too short
+            if (userQuestion.Length < 5)
+            {
+                return "That's not a valid question! Please use your brain dear friendo 🧠<br>" +
+                       "Ask a proper question about understanding your horoscope's predictions<br>" +
+                       "Use the ready made questions as a template. 😉";
+            }
+
+            //# based on common keywords, give quick replies
+            var responses = new Dictionary<List<string>, string>
+            {
+                {["dasa", "when", "month", "week", "day", "hour", "minute", "date", "time", "tomorrow"],
+                    "My job is to interpret Horoscope text, not predict <strong>when</strong> things will happen<br>" +
+                    "🎯The super accurate <strong>Life Predictor</strong> is what you need!" +
+                    "1. Go to <strong>Life Predictor</strong> page<br>" +
+                    "2. Click <strong>Calculate</strong>, make a cup of tea while waiting 🍵<br>" +
+                    "3. Scroll down and analyse Steve, Marilyn's and Elon's chart 🧐<br>" +
+                    "4. Based on that analysis, you can accurately <strong>predict your future</strong> to the week! 🗓️<br>" +
+                    "Very easy, give it a try friendo 😁"
+
+                },
+                { ["fastAsker"],
+                    "You're asking question like a race car 🏎️ (so fast, but going no where)<br>" +
+                    "Did you even properly read the replies I've given?😅<br>" +
+                    "Please take the time and understand first! 🧐" +
+                    "else you're just wasting public compute resources without care."
+                },
+                { ["show", "zodiac", "sign", "house", "planet", "lagna"],
+                    "I'm not a Super AI that can do everything.😅<br>" +
+                    "To see <strong>raw astro</strong> details :<br>" +
+                    "1. Go to <strong>Horoscope</strong> page<br>" +
+                    "2. Click <strong>Calculate</strong> and scroll down! 🖱️<br>" +
+                    "It's not that difficult friendo 😁"
+                },
+                { ["noFeedbackEver"],
+                    "You've asked many questions. And yet <strong>not 1 feedback</strong> you gave!😅<br>" +
+                    "Why friendo?<br>" +
+                    "Is all my answers not worthy of feedback?<br>" +
+                    "If you don't rate the quality of the answers,<br>" +
+                    "how am supposed to learn and improve? (I'm not a mind reader)<br>" +
+                    "Please click Good 👍 or Bad 👎 feedback button" +
+                    "...so I can <strong>better serve you</strong> friendo 😁"
+                },
+                { ["tellFriends"],
+                    "You like to chat with me. 💌<br>" +
+                    "But you <strong>have not introduced me</strong> to your friends in FB, Insta or Twitter<br>" +
+                    "Why friendo? 🤔<br>" +
+                    "Don't you want others to be helped also?<br>" +
+                    "If you don't share me with friends and family,<br>" +
+                    "how is the world we share supposed to improve?<br>" +
+                    "Please post about me in FB, Insta or Twitter, " +
+                    "...so I can <strong>better serve you</strong> friendo 😁"
+                },
+            };
+
+            //check and give reply if keyword detected
+            return FindResponse(userQuestion);
+
+
+
+
+
+            //-------LOCALS---------
+
+            string FindResponse(string userQuestion)
+            {
+                foreach (var pair in responses)
+                {
+                    if (pair.Key.Any(keyword => userQuestion.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0))
+                    {
+                        return pair.Value;
+                    }
+                }
+                return "";
+            }
+
+        }
 
         public static async Task<JObject> SendMessageHoroscopeFollowUp(Time birthTime, string followUpQuestion = "", string primaryAnswerHash = "",
             string userId = "", string sessionId = "")
@@ -80,7 +184,9 @@ namespace VedAstro.Library
             var textHash = SaveToTable(new ChatMessageEntity(sessionId, birthTime, aiReply, "AI", userId)).RowKey;
 
             var noFollowUpAnyMore = new List<string>(); //no follow up to a follow-up
-            return PackageReply("", aiReply, textHash, noFollowUpAnyMore, sessionId);
+
+            throw new NotImplementedException();
+            // return PackageReply("", aiReply, textHash, noFollowUpAnyMore, sessionId);
         }
 
         public static async Task<JObject> HoroscopeChatFeedback(string answerHash, int feedbackScore)
@@ -118,22 +224,34 @@ namespace VedAstro.Library
 
             var noFollowUpAnyMore = new List<string>(); //no follow up to a follow-up
             var sameSessionId = recordFound.PartitionKey; //use back same session ID
-            var noFeedbackCommand = new List<string>(){ "noFeedback" }; //stop the feedback on feedback loop
+            var noFeedbackCommand = new List<string>() { "noFeedback" }; //stop the feedback on feedback loop
             var randomHash = Tools.GenerateId(10); //has to be unique else will interfere with client rendering
-            return PackageReply("", aiReply, randomHash, noFollowUpAnyMore, sameSessionId, aiHtmlReply, noFeedbackCommand);
+            throw new NotImplementedException();
+
+            //return PackageReply("", aiReply, randomHash, noFollowUpAnyMore, sameSessionId, aiHtmlReply, noFeedbackCommand);
 
         }
 
-        /// <summary>
-        /// Gets sub-lord at a given longitude (planet or house cusp) 
-        /// </summary>
-        /// <param name="longitude">planet or house cusp longitude</param>
+        public static async Task<JObject> SendMessageHoroscope2(Time birthTime, string userQuestion, string sessionId, string userId)
+        {
+            var aiReplyText = "";
+
+            //#1 quick auto reply silly question
+            if (string.IsNullOrEmpty(aiReplyText)) { await AutoReplySillyQuestion(userQuestion); }
+
+            //#2 llm reply about horoscope
+            if (string.IsNullOrEmpty(aiReplyText)) { await AnswerHoroscopeQuestion(birthTime, userQuestion); }
+
+            throw new NotImplementedException();
+        }
+
         public static async Task<JObject> SendMessageHoroscope(Time birthTime, string userQuestion, string sessionId, string userId)
         {
 
-            //save incoming message to log
             // If session id is empty, generate a new one
             if (string.IsNullOrEmpty(sessionId)) { sessionId = Tools.GenerateId(); }
+
+            //save incoming message to log
             SaveToTable(new ChatMessageEntity(sessionId, birthTime, userQuestion, "Human", userId));
 
             var replyText = "";
@@ -161,11 +279,10 @@ namespace VedAstro.Library
             //#2 answer question about Horoscope
             replyText = await IsHoroscopeAstrology(birthTime, userQuestion);
 
-            //save AI's reply
-            var textHash = SaveToTable(new ChatMessageEntity(sessionId, birthTime, replyText, "AI", userId)).RowKey;
+            throw new NotImplementedException();
 
             //pack nicely and send to user
-            return PackageReply(userQuestion, replyText, textHash, followupQuestions, sessionId);
+            //return PackageReply(userQuestion, replyText, textHash, followupQuestions, sessionId);
         }
 
         public static int GetLastMessageNumberNumberFromSessionId(string sessionId)
@@ -197,6 +314,243 @@ namespace VedAstro.Library
 
 
         //---------------------------------------------------PRIVATE------------------------------------------------------
+
+
+        public static async Task<List<PresetQuestionEmbeddingsEntity>> FindPresetQuestionEmbeddings_CohereEmbed(string userQuestion)
+        {
+            //get embeddings for fresh query meat
+            var rawEmbeddingsData = await GetEmbeddingsForTextList_CohereEmbed([userQuestion], "search_query");
+
+            var allEmbeddings = rawEmbeddingsData["embeddings"];
+            var embed = allEmbeddings[0];
+
+            //find answer record that user has asked to rate
+            //find answer record that user has asked to rate
+            StringBuilder filter = new StringBuilder();
+
+            for (int i = 0; i < 100; i++)
+            {
+                var centerVal = double.Parse(embed[i].ToString());
+                var percentile = centerVal * 2; //30%
+                var lowVal = (centerVal - percentile).ToString().Truncate(7, "");
+                var highVal = (centerVal + percentile).ToString().Truncate(7, "");
+                filter.Append($"(Vector{i + 1} ge {lowVal} and Vector{i + 1} le {highVal})");
+
+                if (i != 99) // not the last iteration
+                {
+                    filter.Append(" or ");
+                }
+            }
+
+            string finalFilter = filter.ToString();
+
+            InitChatAPI();
+            var recordFound = presetQuestionEmbeddingsTableClient.Query<PresetQuestionEmbeddingsEntity>(finalFilter)?.ToList();
+
+
+            return recordFound ?? new List<PresetQuestionEmbeddingsEntity>();
+        }
+
+        public static async Task LLMSearchAPICall_CohereEmbed(string searchKeywords)
+        {
+            //#1 EMBED QUERY
+            //get embeddings for fresh query meat
+            var rawEmbeddingsData = await GetEmbeddingsForTextList_CohereEmbed([searchKeywords], "search_query");
+
+            var allEmbeddings = rawEmbeddingsData["embeddings"];
+            var searchKeywordVector = allEmbeddings[0];
+            var newQueryEmbeds = searchKeywordVector.Select(jv => (double)jv).ToArray();
+
+            //#2 GET EMBED API DOCS
+
+            var finalFilter = $"PartitionKey eq 'APICall'"; //get all
+            InitChatAPI();
+            var allDocsEmbeddings = presetQuestionEmbeddingsTableClient.Query<PresetQuestionEmbeddingsEntity>(finalFilter)?.ToList();
+
+
+            //var allDocsEmbeddings = docsEmbedRaw["embeddings"];
+
+
+            //var candidates = new List<double[]>();
+            //foreach (var docEmbeddingVVV in allDocsEmbeddings)
+            //{
+            //    var docEmbedding = JArray.Parse(docEmbeddingVVV.Embeddings);
+            //    var newQueryEmbedsgg = docEmbedding.Select(jv => (double)jv).ToArray();
+
+            //    candidates.Add(newQueryEmbedsgg);
+            //}
+
+
+            // Assuming newQueryEmbeds and embeds are defined and initialized
+            var similarity = GetSimilarity(newQueryEmbeds, allDocsEmbeddings);
+            var methodListAll = OpenAPIMetadata.FromMethodInfoList();
+
+            // Take top 30
+            var top30List = similarity.Take(10).ToDictionary(x => x.Key, x => x.Value);
+
+            // Take the top 30
+
+            // Print the top 30
+            //var returnList = new List<OpenAPIMetadata>();
+            foreach (var item in top30List)
+            {
+
+                //var xxdx = methodListAll[item.Value.Position+1];
+                Console.WriteLine($"{item.Key} = {item.Value.RowKey}");
+            }
+
+            //throw new NotImplementedException();
+        }
+
+
+        public static double CosineSimilarity(double[] vector1, double[] vector2)
+        {
+            double dotProduct = DotProduct(vector1, vector2);
+            double magnitude1 = Magnitude(vector1);
+            double magnitude2 = Magnitude(vector2);
+            return dotProduct / (magnitude1 * magnitude2);
+        }
+
+        public static double DotProduct(double[] vector1, double[] vector2)
+        {
+            return vector1.Zip(vector2, (a, b) => a * b).Sum();
+        }
+
+        public static double Magnitude(double[] vector)
+        {
+            return Math.Sqrt(vector.Sum(i => i * i));
+        }
+
+        public static Dictionary<double, PresetQuestionEmbeddingsEntity> GetSimilarity(double[] target, List<PresetQuestionEmbeddingsEntity> candidatesList)
+        {
+            //get score for each row and save it in dictionary
+            var finalList = new Dictionary<double, PresetQuestionEmbeddingsEntity>() { };
+
+            foreach (var candidate in candidatesList)
+            {
+                //var similarityScore =  Accord.Math.Distance.Cosine(target, candidate.GetEmbeddingsArray());
+                var similarityScore2 = CosineSimilarity(target, candidate.GetEmbeddingsArray());
+                finalList.Add(similarityScore2, candidate);
+            }
+
+
+            // Sort dictionary into high score at top
+            var sortedList = finalList.OrderByDescending(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+
+            return sortedList;
+        }
+
+        /// <summary>
+        /// creates and saves them to DB for finding later
+        /// </summary>
+        public static async Task CreatePresetQuestionEmbeddings_CohereEmbed()
+        {
+
+            var methodListAll = OpenAPIMetadata.FromMethodInfoList().Take(10).ToList();
+            //convert to text data
+            var methodInfoObjects = new List<string>();
+            foreach (var metadata in methodListAll)
+            {
+                var packed = $"{metadata.Name}:{metadata.SearchText}"; //keep text going in clean, no need JSON structure
+
+                methodInfoObjects.Add(packed);
+            }
+
+            var presetQuestions = methodInfoObjects.ToArray();
+
+            //use Cohere API model to get embeddings for presets
+            var rawEmbeddingsData = await GetEmbeddingsForTextList_CohereEmbed(presetQuestions, "search_document");
+
+            //array of embeddings for each text
+            var allEmbeddings = rawEmbeddingsData["embeddings"];
+            var dbReadyRecords = new List<PresetQuestionEmbeddingsEntity>();
+
+            //combine embeddings with their corresponding API call
+            for (int presetQIndex = 0; presetQIndex < presetQuestions.Length; presetQIndex++)
+            {
+                var newRow = new PresetQuestionEmbeddingsEntity();
+                //newRow.Tag = methodListAll[presetQIndex].Name; //text that made the numbers
+                //newRow.RowKey = Tools.GetStringHashCodeMD5(presetQuestions[presetQIndex]);
+                newRow.RowKey = methodListAll[presetQIndex].Name;
+                newRow.PartitionKey = "APICall";
+                newRow.Embeddings = allEmbeddings[presetQIndex].ToString(Formatting.None);
+
+                dbReadyRecords.Add(newRow);
+
+            }
+
+
+            //STAGE 2 : SAVE TO DB
+            InitChatAPI();
+            foreach (var embedRow in dbReadyRecords)
+            {
+                presetQuestionEmbeddingsTableClient.UpsertEntity(embedRow);
+            }
+
+
+        }
+
+        public static HttpClientHandler Handler { get; } = new HttpClientHandler
+        {
+            ClientCertificateOptions = ClientCertificateOption.Manual,
+            ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true
+        };
+
+        // This method retrieves embeddings for a list of texts using the Cohere Embed API.
+        // It handles the case where the inputTextList is more than 95, as each API call can only handle 95 texts at a time.
+        // It combines the results from all API calls into one JObject.
+        public static async Task<JObject> GetEmbeddingsForTextList_CohereEmbed(string[] inputTextList, string inputType)
+        {
+            JObject finalResult = new JObject();
+            var textsPerBatch = 95;
+
+            using var client = new HttpClient(Handler)
+            {
+                DefaultRequestHeaders = { Authorization = new AuthenticationHeaderValue("Bearer", azureCohereEmbedAPIKey) },
+                BaseAddress = new Uri("https://Cohere-embed-v3-english-bkovp-serverless.westus.inference.ai.azure.com/v1/embed")
+            };
+
+            for (int i = 0; i < inputTextList.Length; i += textsPerBatch)
+            {
+                var batch = inputTextList.Skip(i).Take(textsPerBatch).ToArray();
+                var response = await MakeApiCall(client, batch, inputType);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    var batchResult = JObject.Parse(result);
+                    finalResult.Merge(batchResult, new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Concat });
+                }
+                else
+                {
+                    Console.WriteLine($"The request failed with status code: {response.StatusCode}");
+                    Console.WriteLine(response.Headers.ToString());
+                    Console.WriteLine(await response.Content.ReadAsStringAsync());
+                }
+            }
+
+            return finalResult;
+        }
+
+        private static async Task<HttpResponseMessage> MakeApiCall(HttpClient client, string[] textArray, string inputType)
+        {
+            // Create the request body
+            var requestBodyRaw = new
+            {
+                model = "embed-english-v3.0",
+                texts = textArray,
+                input_type = inputType,
+                truncate = "NONE"
+            };
+
+            // Convert the request body to JSON and create the content for the request
+            var json = JsonConvert.SerializeObject(requestBodyRaw);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Make the API call
+            return await client.PostAsync("", content);
+        }
+
 
         private static async Task<string> AnswerFollowUpHoroscopeQuestion_CohereCommandRPlus(string primaryQuestion, string primaryAnswer, string horoscopePredictions, string followUpQuestion)
         {
@@ -245,7 +599,7 @@ namespace VedAstro.Library
             return llmReply;
 
         }
-        
+
         private static async Task<string> AnswerHoroscopeQuestion_CohereCommandRPlus(string userQuestion, string horoscopePredictions)
         {
 
@@ -285,9 +639,11 @@ namespace VedAstro.Library
         }
 
 
-
-        private static JObject PackageReply(string userQuestion, string aiReplyText, string textHash, List<string> followUpQuestions, string sessionId, string aiReplyHtml = "", List<string> commands = null)
+        private static JObject PackageReply(Time birthTime, string userId, string userQuestion, string aiReplyText, List<string> followUpQuestions, string sessionId, string aiReplyHtml = "", List<string> commands = null)
         {
+
+            //save AI's reply
+            var textHash = SaveToTable(new ChatMessageEntity(sessionId, birthTime, aiReplyText, "AI", userId)).RowKey;
 
             //using user question and LLM make answer more readable in HTML, bolding, paragraphing...etc
             //string textHtml = ChatAPI.HighlightKeywords_MistralSmall(aiReplyText, userQuestion).Result;
@@ -338,7 +694,6 @@ namespace VedAstro.Library
 
         }
 
-
         public static ChatMessageEntity SaveToTable(ChatMessageEntity inputChatMessageEntity)
         {
 
@@ -348,7 +703,6 @@ namespace VedAstro.Library
             //Console.WriteLine(response);
 
         }
-
 
 
         private static bool IsElectionalAstrology(Time birthTime, string userQuestion, out string replyText)
@@ -433,6 +787,20 @@ namespace VedAstro.Library
             //#4 remove disclaimers if any
             //todo check if contains disclaimers then remove
             //var answerLevel3 = await RemoveAnyDisclaimers_MistralLarge(answerLevel2, userQuestion);
+
+            return answerLevel1;
+        }
+
+        private static async Task<string> AnswerHoroscopeQuestion(Time birthTime, string userQuestion)
+        {
+            //#0 split predictions into sizeable chunks (BV Raman's predictions, from how to judge horoscope book)
+            var predictionListChunks = ChatAPI.GetPredictionAsChunks(birthTime);
+
+            //#1 pick out most relevant predictions to question
+            var relevantPredictions = await PickOutMostRelevantPredictions_MistralSmall(birthTime, userQuestion, predictionListChunks[0]); //call all models in parallel
+
+            //#2 answer question based on relevant predictions
+            var answerLevel1 = await AnswerQuestionDirectly_CohereCommandRPlus(relevantPredictions, userQuestion); //call all models in parallel
 
             return answerLevel1;
         }
@@ -868,6 +1236,75 @@ namespace VedAstro.Library
             }
         }
 
+        public static async Task<string> RemoveAnyDisclaimers_CohereEmebed(Time birthTime, string userQuestion, string sessionId, string userId)
+        {
+            var handler = new HttpClientHandler()
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                ServerCertificateCustomValidationCallback =
+                  (httpRequestMessage, cert, cetChain, policyErrors) => { return true; }
+            };
+            string result = "";
+
+            using (var client = new HttpClient(handler))
+            {
+                // Request data goes here
+                // input_type — Specifies the type of document to be embedded. At the time of writing, there are four options:
+                // 
+                // search_document: For documents against which search is performed
+                // search_query: For query documents
+                // classification: For when the embeddings will be used as an input to a text classifier
+                // clustering: For when you want to cluster the embeddings
+
+                //  --data-raw '{
+                //   "model": "embed-english-v3.0",
+                //   "inputs": ["How can I set up a 3rd party contribution to my RRSP?", "Where can I find my unused RRSP contribution?", "How do I link my return with my partners?", "Do I need to complete a return if I moved to Canada this year?", "Can I set up a business account on your platform?", "Do you offer self-directed and managed investments?", "What is the current interest rate in your savings account?"],
+                //   "examples": [{"label": "Savings accounts (chequing & savings)", "text": "I want to set up a recurring monthly transfer between my chequing and savings account.  How do I do this?"}, {"label": "Savings accounts (chequing & savings)", "text": "I would like to add my wife to my current chequing account so it'"'"'s a joint account. What do I need to do?"}, {"label": "Savings accounts (chequing & savings)", "text": "Can I set up automated payment for my bills?"}, {"label": "Savings accounts (chequing & savings)", "text": "Interest rates are going up - does this impact the interest rate in my savings account?"}, {"label": "Savings accounts (chequing & savings)", "text": "What is the best option for a student savings account?"}, {"label": "Investments", "text": "My family situation is changing and I need to update my risk profile for my equity investments"}, {"label": "Investments", "text": "Where can I see the YTD return in my investment account?"}, {"label": "Investments", "text": "How can I change my beneficiaries of my investment accounts?"}, {"label": "Investments", "text": "Is crypto an option for my investment account?"}, {"label": "Investments", "text": "How often do you rebalance your investment portfolios?"}, {"label": "Investments", "text": "What is the monthly fee on the investment accounts?"}, {"label": "Investments", "text": "How can I withdraw funds from my investment account?"}, {"label": "Investments", "text": "Can I buy stocks and ETFs listed on non Canadian exchanges?"}, {"label": "Taxes", "text": "How can I minimize my tax exposure?"}, {"label": "Taxes", "text": "I\"m going to be late filing my ${currentYear - 1} tax returns. Is there a penalty?"}, {"label": "Taxes", "text": "I'"'"'m going to have a baby in November - what happens to my taxes?"}, {"label": "Taxes", "text": "How can I see my ${currentYear - 2} tax assessment?"}, {"label": "Taxes", "text": "When will I get my tax refund back?"}, {"label": "Taxes", "text": "How much does it cost to use your tax filing platform?"}, {"label": "RRSP", "text": "I'"'"'d like to increase my monthly RRSP contributions to my RRSP"}, {"label": "RRSP", "text": "I want to take advantage of the First Time Home Buyers program and take money out of my RRSP.  How does the program work?"}, {"label": "RRSP", "text": "What is the ${currentYear} RRSP limit?"}, {"label": "RRSP", "text": "Does your system ensure I won'"'"'t overcontribute to my RRSP?"}, {"label": "RRSP", "text": "How do I set up employer contributions to my RRSP"}]
+                // }'
+
+                var requestBodyRaw = new
+                {
+                    texts = new string[] { "NATO Parliamentary Assembly declares Russia to be a ‘terrorist state’", "Fifa and Qatar in urgent talks after Wales rainbow hats confiscated | Fifa and the Qataris were in talks on the matter on Tuesday, where Fifa reminded their hosts of their assurances before the tournament that everyone was welcome and rainbow flags would be allowed.", "Qatar Bans Beer Sales at World Cup Stadiums", "Biden calls 'emergency' meeting after missile hits Poland" },
+                    input_type = "classification",
+                    truncate = "NONE"
+                };
+
+                var json = Newtonsoft.Json.JsonConvert.SerializeObject(requestBodyRaw);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Replace this with the primary/secondary key, AMLToken, or Microsoft Entra ID token for the endpoint
+                const string apiKey = "vM3mewMokdtgovcDOWcCLztwj0IBWlc4";
+                if (string.IsNullOrEmpty(apiKey))
+                {
+                    throw new Exception("A key should be provided to invoke the endpoint");
+                }
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+                client.BaseAddress = new Uri("https://Cohere-embed-v3-english-bkovp-serverless.westus.inference.ai.azure.com/v1/embed");
+
+                HttpResponseMessage response = await client.PostAsync("", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    result = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Result: {0}", result);
+                }
+                else
+                {
+                    Console.WriteLine(string.Format("The request failed with status code: {0}", response.StatusCode));
+
+                    // Print the headers - they include the requert ID and the timestamp,
+                    // which are useful for debugging the failure
+                    Console.WriteLine(response.Headers.ToString());
+
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(responseContent);
+                }
+            }
+
+
+            return result;
+        }
+
         private static async Task<string> ImproveFinalAnswer(string answerLevel1, string userQuestion)
         {
             var sysMessage =
@@ -1275,8 +1712,6 @@ namespace VedAstro.Library
             }
         }
 
-
-
         private static async Task<string> PickOutMostRelevantPredictions_MistralSmall(Time birthTime, string userQuestion, string predictText)
         {
 
@@ -1331,7 +1766,7 @@ namespace VedAstro.Library
             return llmReply;
 
         }
-        
+
         private static async Task<string> PickOutMostRelevantPredictions_CohereCommandR(Time birthTime, string userQuestion, string predictText)
         {
 

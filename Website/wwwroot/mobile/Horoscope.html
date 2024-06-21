@@ -1,0 +1,558 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Horoscope | Vedic Astrology</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!--LOAD FONTS-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lexend Deca"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varta"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gowun Dodum"> <!--  article text -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Homemade Apple"> <!--  cursive for quotes -->
+
+
+</head>
+<body>
+
+    <nav class="p-1 navbar rounded-bottom-4" data-bs-theme="dark" style="background-color: #1877f2 !important;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="image/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
+                <span class="ms-1 align-middle">VedAstro</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-nav border-opacity-10 border-2 border-top border-white navbar-collapse collapse" id="navbarTogglerDemo02">
+                <ul class="nav nav-fill">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <iconify-icon class="align-bottom" icon="mdi:home" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-1" href="Chat.html">
+                            <iconify-icon class="align-bottom" icon="mage:we-chat" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">AI Chat</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-1" href="Horoscope.html">
+                            <iconify-icon class="align-bottom" icon="fluent:book-star-20-filled" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Horoscope</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-1" href="LifePredictor.html">
+                            <iconify-icon class="align-bottom" icon="gis:map-time" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Life Predictor</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-1 active" href="Match.html" aria-current="page">
+                            <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Match Checker</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-1" href="GoodTimeFinder.html">
+                            <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Good Time Finder</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+    
+
+    <div class="mt-3 col d-flex align-items-start">
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Horoscope</h3>
+                <p>Insight into a peron's character, nature and general future. Over +370 planetary combinations</p>
+            </div>
+            <img class="bi text-body-secondary flex-shrink-0 mt-3 ms-3" style="width: 141px;" src="https://vedastro.org/images/stars-above-me-banner.png" />
+
+        </div>
+
+        <hr />
+
+        
+        <input list="countries" placeholder="Start typing...">
+        <datalist id="countries">
+            <option>United States of America</option>
+            <option>Kenya</option>
+            <option>United Kingdom</option>
+            <option>India</option>
+            <option>China</option>
+            <option>Canada</option>
+            <option>Russia</option>
+            <option>Germany</option>
+            <option>South Africa</option>
+            <option>Brazil</option>
+        </datalist>
+
+        
+
+        <div class="d-flex flex-wrap mb-5" style="max-width: 352.2px;">
+            <div id="HoroscopeMainInputHolder" class="vstack gap-3">
+                <!--!--><div>
+                    <label class="form-label">Person</label><div class="hstack">
+                        <div class="btn-group" style="width:100%;">
+                            <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+                                <!--!--><!--!-->
+
+                                <div style="cursor: pointer;white-space: nowrap; display: inline-table;" _bl_4202="" aria-expanded="false">Nagarajan Lingam - 1981</div>
+                            </button><!--!-->
+
+                            <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
+                                <div class="hstack gap-2">
+                                    <input type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search..." _bl_4185=""><!--!-->
+                                    <!--!--><div class="mb-2" style="cursor: pointer;" _bl_4192=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--pepicons-pop" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" data-icon="pepicons-pop:list" data-width="25"><g fill="currentColor"><path d="M6.5 6a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0"></path><path fill-rule="evenodd" d="M7.5 6a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1" clip-rule="evenodd"></path></g></svg></div>
+                                </div>
+                                <li class="dropdown-item" style="cursor: pointer;">Risyaalini Priyaa - 1992</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Manogharan Subramaniam - 1989</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Niranjan - 1989</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Jooa - 1994</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Nagarajan Lingam - 1981</li>
+                                <li class="dropdown-item" style="cursor: pointer;">World Events - 2022</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Kanmani Supramaniam - 1983</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Darrsvinlingam - 2020</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Benjamin - 1964</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Kaliammah Devi - 1963</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Perakaran - 1958</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Papaty Sinnasamy - 1918</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Alameloo Ramasamy - 1946</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Haravin - 1991</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Parvethi - 1947</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Xavier - 1951</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Kailashwaran - 1990</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Rubeshen - 1992</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Ganesha - 2000</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Sindhu - 1998</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Sanda Malar Client - 1970</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Nishanthini - 1995</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Kanagavali - 1959</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Ramesh - 1978</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Adolf Hitler - 1889</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Aishwarya Rai - 1973</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Alan Turing - 1912</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Anba - 1963</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Bala - 1968</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Britney Spears - 1981</li>
+                                <li class="dropdown-item" style="cursor: pointer;"> Catherine Middleton - 1982</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Colt Harris Moore - 1991</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Cpjois - 1967</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Dead Baby - 2017</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Dharrvern Shah - 2000</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Dharrvern Shah Pm - 2000</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Dhiviya - 1992</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Donald Trump - 1946</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Dsfsdfsf - 2024</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Edward John Smith - 1850</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Elon Musk - 1971</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Elvis Presley - 1935</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Fggfgfgfgf - 2024</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Gdgfdgdfgd555555 - 2024</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Genghis Khan - 1162</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Govindha - 1943</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Hbjhbhbjhbbhjb9999 - 2024</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Htain Lin Shwe - 1987</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Indira Gandhi - 1917</li>
+                                <li class="dropdown-item" style="cursor: pointer;">James Almost - 2023</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Jkhjkhkh - 2024</li>
+                                <li class="dropdown-item" style="cursor: pointer;">John F. Kennedy - 1917</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Kiran Ramana - 1990</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Margaret Thatcher - 1925</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Marilyn Monroe - 1926</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Marilyn Monroe - 1926</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Michael Jackson - 1958</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Mohandas Gandhi - 1869</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Mother Teresa - 1910</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Mridul - 1993</li>
+                                <li class="dropdown-item" style="cursor: pointer;">N. Venkateshan - 1957</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Nagayah - 1949</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Napoleon Bonaparte - 1768</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Pablo Escobar - 1949</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Pramish Paudel - 2000</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Prema - 1967</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Princess Diana - 1961</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Queen Victoria - 1819</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Ranka Takakuwa - 1994</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Ravi - 1964</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Razu KC - 1983</li>
+                                <li class="dropdown-item" style="cursor: pointer;">RMS Titanic - 1909</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Rushitaa - 1990</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Sathiya Devi - 1951</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Sfsfsdfsf - 2024</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Shadtharcharan - 1988</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Shivarni - 2004</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Srinivasa Ramanujan - 1887</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Standard Horoscope - 1918</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Standard Horoscope Add 1 Hour - 1918</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Suren - 2002</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Swee Chee - 1953</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Tevaasiny - 1996</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Thanusha - 1992</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Vasantha - 1956</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Viknesh - 1994</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Vimala - 1971</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Vladimir Lenin - 1870</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Wewewwewew - 2024</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Vanija - 1977</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Kristaps Bunts - 1986</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Moses Client - 1968</li><!--!-->
+                                <li><hr class="dropdown-divider"></li>
+                                <div class="ms-3 d-flex justify-content-between">
+                                    <!--!--><div class=" hstack gap-2" style=" ">
+                                        <!--!--><div class="" style="" _bl_4209=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--material-symbols" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="material-symbols:demography-rounded" data-width="25"><path fill="currentColor" d="M18 18q.625 0 1.063-.437T19.5 16.5t-.437-1.062T18 15t-1.062.438T16.5 16.5t.438 1.063T18 18m0 3q.75 0 1.4-.35t1.075-.975q-.575-.35-1.2-.513T18 19t-1.275.162t-1.2.513q.425.625 1.075.975T18 21m0 2q-2.075 0-3.537-1.463T13 18t1.463-3.537T18 13t3.538 1.463T23 18t-1.463 3.538T18 23M8 9h8q.425 0 .713-.288T17 8t-.288-.712T16 7H8q-.425 0-.712.288T7 8t.288.713T8 9M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v5.45q0 .45-.375.7t-.8.1q-.425-.125-.888-.188T18 11q-.275 0-.513.013t-.487.062q-.225-.05-.5-.062T16 11H8q-.425 0-.712.288T7 12t.288.713T8 13h5.125q-.45.425-.812.925T11.675 15H8q-.425 0-.712.288T7 16t.288.713T8 17h3.075q-.05.25-.062.488T11 18q0 .5.05.95t.175.875t-.125.8t-.675.375z"></path></svg></div><!--!-->
+                                        <span style="font-size: 13px; color: #8f8f8f;">
+                                            <!--!-->
+                                            Examples
+                                        </span>
+                                    </div>
+                                </div><!--!-->
+                                <!--!-->
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="dropdown-item" style="cursor: pointer;">John Legend - 1978</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Laura Linney - 1964</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Christina Jolie - 1986</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Victoria Beckham - 1974</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Portia de Rossi - 1973</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Margaret Thatcher - 1925</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Volodymyr Zelenskyy - 1978</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Alexandra Horvath - 1990</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Alejandra Guilmant - 1993</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Courtney Shea - 1993</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Sarada Devi - 1853</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Winston Churchill - 1874</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Brittany Bliss - 1995</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Anjelika Vision - 1994</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Chrissy Teigen - 1985</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Boris Johnson - 1964</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Rishi Sunak - 1980</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Sri Ramakrishna - 1836</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Rosario Dawson - 1979</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Olivia Preston - 1990</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Sean Young - 1959</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Abraham Lincoln - 1809</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Adolf Hitler - 1889</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Albert Einstein - 1879</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Alexis Blaze - 1992</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Angelina Jolie - 1975</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Bill Gates - 1955</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Brad Pitt - 1963</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Dax Shepard - 1975</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Elon Musk - 1971</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Emily Ratajkowski - 1991</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Eva Braun - 1912</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Fidel Castro - 1926</li>
+                                <li class="dropdown-item" style="cursor: pointer;">John Lennon - 1940</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Jokin - 1984</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Joseph Stalin - 1878</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Joséphine de Beauharnais - 1763</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Kali Dutt - 1980</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Kristen Bell - 1980</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Louis Armstrong - 1901</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Luciana Barroso - 1976</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Matt Damon - 1970</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Miley Cyrus - 1992</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Monica Bellucci - 1964</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Mukesh Ambani - 1957</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Napoleon Bonaparte - 1769</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Narendra Modi - 1950</li>
+                                <li class="dropdown-item" style="cursor: pointer;">NeehaS - 1999</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Piyush Bali - 2004</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Praween Kumar - 1981</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Queen Elizabeth II - 1926</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Rabindranath Tagore - 1861</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Ratan Tata - 1937</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Rita Wilson - 1956</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Saddam Hussein - 1937</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Snehal - 1979</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Standard Horoscope - 1918</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Steve Jobs - 1955</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Swami Vivekananda - 1863</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Tom Hanks - 1956</li>
+                                <li class="dropdown-item" style="cursor: pointer;">W. H. Auden - 1907</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Yevgeny Prigozhin - 1961</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Paramahansa Yogananda - 1893</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Yogi Adityanath - 1971</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Yoko Ono - 1933</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Blake Pickett - 1963</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Jang Mi In-Ae - 1984</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Alisa Amore - 1997</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Ellen DeGeneres - 1958</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Arkida Reeves - 1988</li>
+                                <li class="dropdown-item" style="cursor: pointer;">David Beckham - 1975</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Eva Green - 1980</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Christy Carlson Romano - 1984</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Ruri Saijo - 1990</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Maggie Duran - 1993</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Ralph Waldo Emerson - 1803</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Emily Browning - 1988</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Bella Gray - 1996</li>
+                                <li class="dropdown-item" style="cursor: pointer;">Aya Beshen - 1995</li>
+                            </ul>
+                        </div><!--!-->
+                        <!--!--><!--!--><style>
+                                            .no-dropdown-arrow.dropdown-toggle::after {
+                                                display: none !important;
+                                            }
+                        </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2" _bl_4193=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ant-design" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024" data-icon="ant-design:user-add-outlined" data-width="25"><path fill="currentColor" d="M678.3 642.4c24.2-13 51.9-20.4 81.4-20.4h.1c3 0 4.4-3.6 2.2-5.6a371.7 371.7 0 0 0-103.7-65.8c-.4-.2-.8-.3-1.2-.5C719.2 505 759.6 431.7 759.6 349c0-137-110.8-248-247.5-248S264.7 212 264.7 349c0 82.7 40.4 156 102.6 201.1c-.4.2-.8.3-1.2.5c-44.7 18.9-84.8 46-119.3 80.6a373.4 373.4 0 0 0-80.4 119.5A373.6 373.6 0 0 0 137 888.8a8 8 0 0 0 8 8.2h59.9c4.3 0 7.9-3.5 8-7.8c2-77.2 32.9-149.5 87.6-204.3C357 628.2 432.2 597 512.2 597c56.7 0 111.1 15.7 158 45.1a8.1 8.1 0 0 0 8.1.3M512.2 521c-45.8 0-88.9-17.9-121.4-50.4A171.2 171.2 0 0 1 340.5 349c0-45.9 17.9-89.1 50.3-121.6S466.3 177 512.2 177s88.9 17.9 121.4 50.4A171.2 171.2 0 0 1 683.9 349c0 45.9-17.9 89.1-50.3 121.6C601.1 503.1 558 521 512.2 521M880 759h-84v-84c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v84h-84c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h84v84c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-84h84c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8"></path></svg></button>
+                    </div>
+                </div><!--!-->
+
+                <div id="HoroscopeAdvancedInputHolder" class="vstack gap-1 mt-2 pt-2 border-top" style="display: none">
+                    <!--!--><span style="font-size: 11.5px;margin-left: 0px;color: grey;margin-top: -20px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
+
+                    <div class="input-group mb-2">
+                        <label style="width:134.4px;" class="input-group-text">
+                            <!--!--><div class="me-2" style="" _bl_4186=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--solar" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="solar:stars-line-broken" data-width="25"><g fill="none" stroke="currentColor"><path stroke-width="1.5" d="M12.55 3.44c-.432-.931-.648-1.396-1.029-1.435c-.38-.04-.674.373-1.262 1.198l-.152.214c-.166.234-.25.351-.37.422c-.12.07-.263.087-.55.119l-.26.03c-1.01.112-1.514.168-1.664.52c-.15.351.154.765.761 1.592l.158.214c.172.235.258.352.29.49c.031.138.004.28-.05.564l-.05.259c-.192 1-.288 1.5 0 1.757c.289.256.77.099 1.733-.215l.249-.081c.274-.09.41-.134.55-.12c.14.015.266.086.519.23l.23.13c.89.506 1.335.759 1.663.566c.328-.193.322-.704.31-1.725l-.004-.264c-.003-.29-.005-.436.05-.564c.055-.129.16-.227.371-.422l.192-.178c.742-.688 1.113-1.032 1.027-1.408c-.085-.375-.57-.534-1.54-.851L13.47 4.4c-.276-.09-.414-.135-.52-.23c-.105-.093-.166-.225-.289-.49z"></path><path stroke-linecap="round" stroke-width="1.5" d="M11 22c-.334-2.167-.8-7.2 0-10m3.5 10c0-1.125.17-2.516.628-4M22 9.5c-2.2 1.283-3.794 2.857-4.931 4.5"></path><path stroke-linejoin="round" d="M5 13.268s.65.747 1.223.9c.573.155 1.51-.168 1.51-.168s-.749.65-.902 1.222c-.154.573.17 1.51.17 1.51s-.65-.748-1.223-.902c-.573-.153-1.51.17-1.51.17s.748-.65.901-1.223c.154-.573-.169-1.51-.169-1.51Z"></path></g></svg></div><!--!--> Ayanamsa
+                        </label><!--!-->
+                        <select class="form-select">
+                            <optgroup label="Easy"><option value="LahiriChitrapaksha">Lahiri Chitrapaksha</option><option value="KrishnamurtiKP">Krishnamurti KP</option><option value="Raman">Raman</option><option value="FaganBradley">Fagan Bradley</option><option value="J2000">J2000</option><option value="Yukteshwar">Yukteshwar</option></optgroup><!--!-->
+                            <optgroup label="Advanced"><option value="FAGAN_BRADLEY">FAGAN_BRADLEY</option><option value="LAHIRI">LAHIRI</option><option value="DELUCE">DELUCE</option><option value="RAMAN">RAMAN</option><option value="USHASHASHI">USHASHASHI</option><option value="KRISHNAMURTI">KRISHNAMURTI</option><option value="DJWHAL_KHUL">DJWHAL_KHUL</option><option value="YUKTESHWAR">YUKTESHWAR</option><option value="JN_BHASIN">JN_BHASIN</option><option value="BABYL_KUGLER1">BABYL_KUGLER1</option><option value="BABYL_KUGLER2">BABYL_KUGLER2</option><option value="BABYL_KUGLER3">BABYL_KUGLER3</option><option value="BABYL_HUBER">BABYL_HUBER</option><option value="BABYL_ETPSC">BABYL_ETPSC</option><option value="ALDEBARAN_15TAU">ALDEBARAN_15TAU</option><option value="HIPPARCHOS">HIPPARCHOS</option><option value="SASSANIAN">SASSANIAN</option><option value="GALCENT_0SAG">GALCENT_0SAG</option><option value="J1900">J1900</option><option value="B1950">B1950</option><option value="SURYASIDDHANTA">SURYASIDDHANTA</option><option value="SURYASIDDHANTA_MSUN">SURYASIDDHANTA_MSUN</option><option value="ARYABHATA">ARYABHATA</option><option value="ARYABHATA_MSUN">ARYABHATA_MSUN</option><option value="SS_REVATI">SS_REVATI</option><option value="SS_CITRA">SS_CITRA</option><option value="TRUE_CITRA">TRUE_CITRA</option><option value="TRUE_REVATI">TRUE_REVATI</option><option value="TRUE_PUSHYA">TRUE_PUSHYA</option><option value="GALCENT_RGBRAND">GALCENT_RGBRAND</option><option value="GALEQU_IAU1958">GALEQU_IAU1958</option><option value="GALEQU_TRUE">GALEQU_TRUE</option><option value="GALEQU_MULA">GALEQU_MULA</option><option value="GALALIGN_MARDYKS">GALALIGN_MARDYKS</option><option value="TRUE_MULA">TRUE_MULA</option><option value="GALCENT_MULA_WILHELM">GALCENT_MULA_WILHELM</option><option value="ARYABHATA_522">ARYABHATA_522</option><option value="BABYL_BRITTON">BABYL_BRITTON</option><option value="TRUE_SHEORAN">TRUE_SHEORAN</option><option value="GALCENT_COCHRANE">GALCENT_COCHRANE</option><option value="GALEQU_FIORENZA">GALEQU_FIORENZA</option><option value="VALENS_MOON">VALENS_MOON</option><option value="LAHIRI_1940">LAHIRI_1940</option><option value="LAHIRI_VP285">LAHIRI_VP285</option><option value="KRISHNAMURTI_VP291">KRISHNAMURTI_VP291</option><option value="LAHIRI_ICRC">LAHIRI_ICRC</option></optgroup>
+                        </select>
+                    </div><!--!-->
+
+                    <div class="input-group">
+                        <!--!--><label style="width: 134.4px;" class="input-group-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--gridicons me-2" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="gridicons:types" data-width="25" data-height="25"><path fill="currentColor" d="M22 17a5 5 0 1 1-10.001-.001A5 5 0 0 1 22 17M6.5 6.5h3.8L7 1L1 11h5.5zm9.5 4.085V8H8v8h2.585A6.505 6.505 0 0 1 16 10.585"></path></svg>
+                            Chart
+                        </label>
+                        <select id="ChartStyleSelectElement" class="form-select">
+                            <option value="South" selected="">South Style</option><!--!-->
+                            <option value="North">North Style</option>
+                        </select>
+                    </div><!--!-->
+                    <!--!--><div class="input-group" style="display: none">
+                        <span class="input-group-text">Year of Zero Coincidence</span>
+                        <input type="text" class="form-control" placeholder="397">
+                    </div>
+                </div><!--!-->
+
+                <div class="mt-2 d-flex justify-content-between">
+                    <!--!--><!--!--><style>
+                                        .no-dropdown-arrow.dropdown-toggle::after {
+                                            display: none !important;
+                                        }
+                    </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4187=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--gala" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256" data-icon="gala:settings" data-width="25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"><path d="M 48.000002,16 H 208 c 17.728,0 32,14.272 32,32 v 160 c 0,17.728 -14.272,32 -32,32 H 48.000002 c -17.728,0 -32,-14.272 -32,-32 V 48 c 0,-17.728 14.272,-32 32,-32 z"></path><path d="M 64.000006,64.000001 H 79.999993"></path><path d="m 79.999996,-96.000015 a 16,16 0 0 1 -16,16 16,16 0 0 1 -16,-16 16,16 0 0 1 16,-16.000005 16,16 0 0 1 16,16.000005 z" transform="rotate(90)"></path><path d="m 112.00001,64.000353 79.99997,-3.52e-4"></path><path d="M 191.99998,128 H 176"></path><path d="m 144,159.99997 a 16,16 0 0 1 -16,16 16,16 0 0 1 -16,-16 16,16 0 0 1 16,-16 16,16 0 0 1 16,16 z" transform="matrix(0 1 1 0 0 0)"></path><path d="M 143.99998,128.00035 64.000006,128"></path><path d="M 64.000006,192.00001 H 79.999993"></path><path d="m 208,-96.000015 a 16,16 0 0 1 -16,16 16,16 0 0 1 -16,-16 16,16 0 0 1 16,-16.000005 16,16 0 0 1 16,16.000005 z" transform="rotate(90)"></path><path d="m 112.00001,192.00036 79.99997,-3.5e-4"></path></g></svg></button><!--!-->
+                    <!--!--><!--!--><style>
+                                        .no-dropdown-arrow.dropdown-toggle::after {
+                                            display: none !important;
+                                        }
+                    </style><button id="HoroscopeCalculateButton" style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="hstack gap-2 iconButton btn-success btn " _bl_4188=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--uim" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="uim:process" data-width="25"><path fill="currentColor" d="M8.625 8.5h-4.5a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v3.5h3.5a1 1 0 0 1 0 2"></path><path fill="currentColor" d="M21 13a1 1 0 0 1-1-1A7.995 7.995 0 0 0 5.08 8.001a1 1 0 0 1-1.731-1.002A9.995 9.995 0 0 1 22 12a1 1 0 0 1-1 1m-1.125 9a1 1 0 0 1-1-1v-3.5h-3.5a1 1 0 0 1 0-2h4.5a1 1 0 0 1 1 1V21a1 1 0 0 1-1 1"></path><path fill="currentColor" d="M12 22A10.012 10.012 0 0 1 2 12a1 1 0 0 1 2 0a7.995 7.995 0 0 0 14.92 3.999a1 1 0 0 1 1.731 1.002A10.032 10.032 0 0 1 12 22"></path></svg>Calculate</button>
+                </div>
+            </div>
+        </div>
+
+
+
+        <button id="myButton">Test 123</button>
+
+        <div id="HoroscopeChat" class="my-3"></div>
+
+
+        <div id="PlanetDataTable" class="my-3 table-responsive bg-light border rounded-3"></div>
+
+        <div id="HouseDataTable" class="my-3"></div>
+
+        <div id="AshtakvargaTable" class="my-3 table-responsive bg-light border rounded-3"></div>
+
+
+
+
+    </div>
+
+
+
+
+
+    <!--LOAD PAGE CSS-->
+    <!-- Bootstrap CSS : Used for styling everything-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- LOAD JS HERE TO SHOWS INITIAL LOADING BOX ASAP -->
+    <!--JQuery-->
+    <!--Note: JQuery needs to be loaded before bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap  JS : Used to animate some components like Accordion, dropdown, BUNDLE because popper.js-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!--Icon Generator Lib -->
+    <!--     <script type="text/javascript" src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+
+    <!--Sweet Alert Lib -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mattboldt/typed.js@2.0.11/lib/typed.min.js"></script>
+
+    <script src="VedAstro.js"></script>
+
+
+    <script>
+
+        //----------------------PLANET DATA----------------------------
+        var planetColumns = [
+            { Api: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
+            { Api: "PlanetConstellation", Enabled: true, Name: "Star" },
+            { Api: "HousePlanetOccupiesKP", Enabled: true, Name: "Occupies" },
+            { Api: "HousesOwnedByPlanetKP", Enabled: true, Name: "Owns" },
+            { Api: "PlanetLordOfZodiacSign", Enabled: true, Name: "Sign Lord" },
+            { Api: "PlanetLordOfConstellation", Enabled: true, Name: "Star Lord" },
+            { Api: "PlanetSubLordKP", Enabled: true, Name: "Sub Lord" },
+            { Api: "Empty", Enabled: false, Name: "Empty" },
+            { Api: "Empty", Enabled: false, Name: "Empty" },
+        ];
+
+        //initialize astro table
+        var settings = {
+            ElementID: "PlanetDataTable",
+            KeyColumn: "Planet",
+            ShowHeader: true,
+            HeaderIcon: "twemoji:ringed-planet",
+            ColumnData: planetColumns, //columns names to create table
+            EnableSorting: false,
+            SaveSettings: false,
+        };
+
+        //make new astro table
+        var planetDataTable = new AstroTable(settings);
+
+        //data used to generate table
+        var inputArguments = {
+            TimeUrl: "Location/Bengaluru/Time/11:00/25/07/1984/+00:00/",
+            HoraryNumber: 0,
+            RotateDegrees: 0,
+            Ayanamsa: "KRISHNAMURTI", //default is Lahiri
+        };
+
+        //generate table
+        planetDataTable.GenerateTable(inputArguments);
+
+        //----------------------Ashtakvarga Table----------------------------
+        var settingsAshtakvarga = {
+            ElementID: "AshtakvargaTable",
+            KeyColumn: "Ashtakvarga",
+            ShowHeader: true,
+            HeaderIcon: "fluent:table-28-filled",
+        };
+
+        var ashtakvargaTable = new AshtakvargaTable(settingsAshtakvarga);
+
+        //data used to generate table
+        var inputArguments = {
+            TimeUrl: "Location/Bengaluru/Time/11:00/25/07/1984/+00:00/",
+            Ayanamsa: "KRISHNAMURTI", //default is Lahiri
+        };
+
+        ashtakvargaTable.GenerateTable(inputArguments);
+
+
+        //----------------------HOROSCOPE CHAT----------------------------
+        var settingsHoroscopeChat = {
+            ElementID: "HoroscopeChat",
+            ShowHeader: true,
+            HeaderIcon: "fluent:table-28-filled",
+            SelectedBirthTime: "Location/Ipoh/Time/12:44/23/04/1994/+08:00"
+        };
+
+        //note: on init, chat instance is loaded into window.vedastro.horoscopechat
+        new HoroscopeChat(settingsHoroscopeChat);
+
+
+        // Assuming you have a button with id 'myButton'
+        $('#myButton').click(function() {
+
+
+            Swal.fire({
+                title: 'Select user',
+                html: `
+        <select id="userSelect" class="swal2-input">
+            <option value="">Select a user</option>
+            <option value="User1">User1</option>
+            <option value="User2">User2</option>
+            <option value="User3">User3</option>
+            <!-- add more users as needed -->
+        </select>
+        <button id="addUserButton" class="swal2-confirm swal2-styled">Add New User</button>
+    `,
+                showCancelButton: true,
+                onOpen: () => {
+                    document.getElementById('addUserButton').addEventListener('click', function() {
+                        Swal.fire({
+                            title: 'Enter new user name',
+                            input: 'text',
+                            inputAttributes: {
+                                autocapitalize: 'off'
+                            },
+                            showCancelButton: true,
+                            confirmButtonText: 'Add',
+                            showLoaderOnConfirm: true,
+                            preConfirm: (login) => {
+                                // Here goes your function to add a new user
+                                // For example, you could make an AJAX call here
+                            },
+                            allowOutsideClick: () => !Swal.isLoading()
+                        }).then((result) => {
+                            if (result.value) {
+                                Swal.fire({
+                                    type: 'success',
+                                    title: 'New user added',
+                                    html: 'User name: ' + result.value
+                                })
+                            }
+                        })
+                    });
+                }
+            });
+
+
+
+
+
+
+        });
+
+// Assuming you have a button with id 'addUserButton'
+        $('#addUserButton').click(function() {
+            Swal.fire({
+                title: 'Enter new user name',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Add',
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    // Here goes your function to add a new user
+                    // For example, you could make an AJAX call here
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.value) {
+                    Swal.fire({
+                        type: 'success',
+                        title: 'New user added',
+                        html: 'User name: ' + result.value
+                    })
+                }
+            })
+        });
+
+
+
+    </script>
+</body>
+</html>

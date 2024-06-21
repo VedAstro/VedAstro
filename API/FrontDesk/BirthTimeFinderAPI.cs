@@ -123,7 +123,7 @@ namespace API
                 {
                     //replace original birth time
                     var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
-                    var newChart = EventsChartManager.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
+                    var newChart = EventsChartFactory.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
                     var adjustedBirth = personAdjusted.BirthTimeString;
 
                     //place in group with time above the chart
@@ -143,7 +143,7 @@ namespace API
                 }
 
                 //put all charts in 1 big container
-                var finalSvg = EventsChartManager.WrapSvgElements(
+                var finalSvg = EventsChartFactory.WrapSvgElements(
                     svgClass: "MultipleDasa",
                     combinedSvgString: combinedSvg,
                     svgWidth: 800,

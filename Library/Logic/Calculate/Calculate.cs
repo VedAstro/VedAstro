@@ -301,6 +301,32 @@ namespace VedAstro.Library
 
         #endregion
 
+
+        #region MATCH CHECK KUTA SCORE
+
+        /// <summary>
+        /// Get full kuta match data for 2 horoscopes
+        /// </summary>
+        public static MatchReport CompatibilityMatch(Time maleBirthTime, Time femaleBirthTime)
+        {
+            //get 1st and 2nd only for now (todo support more)
+            var male = new Person("", maleBirthTime, Gender.Male);
+            var female = new Person("", femaleBirthTime, Gender.Female);
+
+            //generate compatibility report
+            var compatibilityReport = MatchReportFactory.GetNewMatchReport(male, female, "101");
+            
+            var reportJSON = compatibilityReport.ToJson();
+
+            return reportJSON;
+        }
+
+
+        
+
+
+        #endregion
+
         #region CHAT API & MACHINE LEARNING
 
         /// <summary>

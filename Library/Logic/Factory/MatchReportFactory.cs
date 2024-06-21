@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScottPlot.Drawing.Colormaps;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -282,8 +283,11 @@ namespace VedAstro.Library
 
         }
 
-
-        public static List<double> CalculateEmbeddings(MatchReport report)
+        /// <summary>
+        /// Using the available kuta data in report embeddings similar to LLM is generated
+        /// Embeddings is not normalized, since this is only 1 row
+        /// </summary>
+        public static double[] CalculateEmbeddings(MatchReport report)
         {
             //list each embedding
             double yoniKutaPoints = 0;
@@ -297,7 +301,7 @@ namespace VedAstro.Library
             //ideas
             //total = compiled over 36 TODO needs testings
 
-            //#2 : CREATE EMBEDDINGS
+            //#1 : CREATE RAW EMBEDDING VECTORS
             //extract needed data from the prediction list
             foreach (var prediction in report.PredictionList)
             {
@@ -344,14 +348,14 @@ namespace VedAstro.Library
 
             }
 
+
+            //#2 : PACK & NORMALIZE EMBEDDINGS
             //put data in 1 big row (raw data)
-            var rawEmbeddings = new List<double>()
-            {
-                dinaKutaPoints, gunaKutaPoints, nadiKutaPoints, rasiKutaPoints, grahaMaitramPoints, vasyaKutaPoints, varnaPoints, yoniKutaPoints,
-            };
+            //NOTE: normalization abandoned at this stage since proper Geometry can be formed with just 1 row
+            //NOTE: we need a modal to make embeddings, as such seems silly to do at this level
+            var rawEmbeddings = new double[] { dinaKutaPoints, gunaKutaPoints, nadiKutaPoints, rasiKutaPoints, grahaMaitramPoints, vasyaKutaPoints, varnaPoints, yoniKutaPoints, };
 
-            //normalizing data using min-max (so that 1 value does not break the geometry)
-
+            return rawEmbeddings;
 
         }
 
@@ -816,7 +820,7 @@ namespace VedAstro.Library
                 return animalGrade;
             }
 
-            
+
         }
 
         public static MatchPrediction VedhaKuta(Person male, Person female)

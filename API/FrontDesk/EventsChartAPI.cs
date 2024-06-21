@@ -115,7 +115,7 @@ namespace API
                 //PREPARE THE CALL
                 Func<string> generateChart = () =>
                 {
-                    var chartSvg = EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
+                    var chartSvg = EventsChartFactory.GenerateEventsChartSvg(chartSpecsOnly);
                     return chartSvg;
                 };
 
@@ -170,7 +170,7 @@ namespace API
                 var chartSpecsOnly = await EventsChart.FromUrl(settingsUrl);
 
                 //PREPARE THE CALL
-                var chartSvg = EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
+                var chartSvg = EventsChartFactory.GenerateEventsChartSvg(chartSpecsOnly);
 
                 //send image back to caller
                 return APITools.SendSvgToCaller(chartSvg, incomingRequest);
@@ -212,7 +212,7 @@ namespace API
 
                 //PREPARE THE CALL
                 var foundPerson = Tools.GetPersonById(chartSpecsOnly.Person.Id);
-                var chartSvg = EventsChartManager.GenerateEventsChartSvg(chartSpecsOnly);
+                var chartSvg = EventsChartFactory.GenerateEventsChartSvg(chartSpecsOnly);
 
                 //string to binary
                 byte[] rawFileBytes = System.Text.Encoding.UTF8.GetBytes(chartSvg); //SVG uses UTF-8
@@ -358,7 +358,7 @@ namespace API
             //done for fast calculation only for needed viewability
             var daysPerPixel = GetDayPerPixel(timeRange, maxWidth);
 
-            return EventsChartManager.GenerateEventsChart(foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
+            return EventsChartFactory.GenerateEventsChart(foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
         }
 
 

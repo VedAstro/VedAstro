@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
-using static VedAstro.Library.EventsChartManager;
+using static VedAstro.Library.EventsChartFactory;
 
 namespace VedAstro.Library
 {

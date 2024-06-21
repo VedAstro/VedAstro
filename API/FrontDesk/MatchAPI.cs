@@ -48,7 +48,7 @@ namespace API
                 var female = personList[1];
 
                 //generate compatibility report
-                var compatibilityReport = MatchCalculator.GetNewMatchReport(male, female, ownerId);
+                var compatibilityReport = MatchReportFactory.GetNewMatchReport(male, female, ownerId);
                 var reportJSON = compatibilityReport.ToJson();
                 return APITools.PassMessageJson(reportJSON, incomingRequest);
             }
@@ -275,7 +275,7 @@ namespace API
             var notEmpty = !Person.Empty.Equals(male) && !Person.Empty.Equals(female);
             if (notEmpty)
             {
-                return Task.FromResult(MatchCalculator.GetNewMatchReport(male, female, userId));
+                return Task.FromResult(MatchReportFactory.GetNewMatchReport(male, female, userId));
             }
             else
             {
@@ -313,12 +313,12 @@ namespace API
                 //       & male can be checked from female position
                 if (inputPersonIsMale)
                 {
-                    report = MatchCalculator.GetNewMatchReport(inputPerson, personMatch, "101");
+                    report = MatchReportFactory.GetNewMatchReport(inputPerson, personMatch, "101");
                 }
                 //input person is female
                 else
                 {
-                    report = MatchCalculator.GetNewMatchReport(personMatch, inputPerson, "101");
+                    report = MatchReportFactory.GetNewMatchReport(personMatch, inputPerson, "101");
                 }
 
                 resultList.Add(report);

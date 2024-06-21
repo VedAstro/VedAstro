@@ -9,7 +9,7 @@ namespace VedAstro.Library
     /// <summary>
     /// Collection of calculators for match/compatibility 
     /// </summary>
-    public static class MatchCalculator
+    public static class MatchReportFactory
     {
         /// <summary>
         /// Gets the compatibility report for a male & female
@@ -23,22 +23,22 @@ namespace VedAstro.Library
             //list all calculators here, to be processed one by one
             List<Func<Person, Person, MatchPrediction>> calculatorList = new List<Func<Person, Person, MatchPrediction>>()
             {
-                MatchCalculator.GrahaMaitram, //5
-                MatchCalculator.Rajju,
-                MatchCalculator.NadiKuta, //8
-                MatchCalculator.VasyaKuta, //2
-                MatchCalculator.DinaKuta, //3
-                MatchCalculator.GunaKuta,//6
-                MatchCalculator.Mahendra,
-                MatchCalculator.StreeDeergha,
-                MatchCalculator.RasiKuta,//7
-                MatchCalculator.VedhaKuta,
-                MatchCalculator.Varna, //1
-                MatchCalculator.YoniKuta,//4
-                MatchCalculator.LagnaAndHouse7Good,
-                MatchCalculator.KujaDosa,
-                MatchCalculator.BadConstellations,
-                MatchCalculator.SexEnergy
+                MatchReportFactory.GrahaMaitram, //5
+                MatchReportFactory.Rajju,
+                MatchReportFactory.NadiKuta, //8
+                MatchReportFactory.VasyaKuta, //2
+                MatchReportFactory.DinaKuta, //3
+                MatchReportFactory.GunaKuta,//6
+                MatchReportFactory.Mahendra,
+                MatchReportFactory.StreeDeergha,
+                MatchReportFactory.RasiKuta,//7
+                MatchReportFactory.VedhaKuta,
+                MatchReportFactory.Varna, //1
+                MatchReportFactory.YoniKuta,//4
+                MatchReportFactory.LagnaAndHouse7Good,
+                MatchReportFactory.KujaDosa,
+                MatchReportFactory.BadConstellations,
+                MatchReportFactory.SexEnergy
             };
 
             //place to put results
@@ -72,6 +72,9 @@ namespace VedAstro.Library
 
             //count the total points
             report.KutaScore = CalculateTotalPoints(report);
+
+            //generate ML embeddings
+            report.Embeddings = CalculateEmbeddings(report);
 
             //check results for exceptions
             HandleExceptions(ref report);
@@ -276,6 +279,79 @@ namespace VedAstro.Library
 
                 return rounded;
             }
+
+        }
+
+
+        public static List<double> CalculateEmbeddings(MatchReport report)
+        {
+            //list each embedding
+            double yoniKutaPoints = 0;
+            double varnaPoints = 0;
+            double vasyaKutaPoints = 0;
+            double grahaMaitramPoints = 0;
+            double rasiKutaPoints = 0;
+            double nadiKutaPoints = 0;
+            double gunaKutaPoints = 0;
+            double dinaKutaPoints = 0;
+            //ideas
+            //total = compiled over 36 TODO needs testings
+
+            //#2 : CREATE EMBEDDINGS
+            //extract needed data from the prediction list
+            foreach (var prediction in report.PredictionList)
+            {
+                //only count if prediction is good
+                if (prediction.Nature != EventNature.Good) { continue; }
+
+                //based on prediction name add together the score
+                //only certain kuta have points to consider others do not
+                switch (prediction.Name)
+                {
+                    //Dina Kuta (3 pts)
+                    case MatchPredictionName.DinaKuta:
+                        dinaKutaPoints = 3;
+                        break;
+                    //Gana Kuta: (6 pts)
+                    case MatchPredictionName.GunaKuta:
+                        gunaKutaPoints = 6;
+                        break;
+                    //Nadi Kuta: (8 pts)
+                    case MatchPredictionName.NadiKuta:
+                        nadiKutaPoints = 8;
+                        break;
+                    //Rashi Kuta - (7 pts)
+                    case MatchPredictionName.RasiKuta:
+                        rasiKutaPoints = 7;
+                        break;
+                    //Graha Maitram - (5 pts)
+                    case MatchPredictionName.GrahaMaitram:
+                        grahaMaitramPoints = 5;
+                        break;
+                    // Vasyu Kuta - (2 pts).
+                    case MatchPredictionName.VasyaKuta:
+                        vasyaKutaPoints = 2;
+                        break;
+                    // Varna Kuta - (1 pt)
+                    case MatchPredictionName.Varna:
+                        varnaPoints = 1;
+                        break;
+                    //Yoni Kuta - (4 pts)
+                    case MatchPredictionName.YoniKuta:
+                        yoniKutaPoints = 4;
+                        break;
+                }
+
+            }
+
+            //put data in 1 big row (raw data)
+            var rawEmbeddings = new List<double>()
+            {
+                dinaKutaPoints, gunaKutaPoints, nadiKutaPoints, rasiKutaPoints, grahaMaitramPoints, vasyaKutaPoints, varnaPoints, yoniKutaPoints,
+            };
+
+            //normalizing data using min-max (so that 1 value does not break the geometry)
+
 
         }
 

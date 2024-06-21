@@ -14,7 +14,7 @@ namespace VedAstro.Library
     /// <summary>
     /// Central place to for all things related to generating an Events Chart in SVG
     /// </summary>
-    public static class EventsChartManager
+    public static class EventsChartFactory
     {
         //1 GENERATE DATA FOR EVENT ROWS
         public const int SingleRowHeight = 15;
@@ -134,7 +134,7 @@ namespace VedAstro.Library
 
                 //rows are dynamically generated as needed, hence the extra logic below
                 //list of rows to generate
-                EventsChartManager.UnsortedEventList = EventManager.CalculateEvents(eventsPrecisionHours, startTime, endTime, inputPerson, inputedEventTags);
+                EventsChartFactory.UnsortedEventList = EventManager.CalculateEvents(eventsPrecisionHours, startTime, endTime, inputPerson, inputedEventTags);
 
                 //STEP 2: DATA > SVG COMPONENTS
                 timeHeader = GenerateTimeHeaderRow(timeSlices, daysPerPixel, WidthPerSlice, ref verticalYAxis);
@@ -1612,7 +1612,7 @@ namespace VedAstro.Library
             //sort event by duration, so that events are ordered nicely in chart
             //todo events are breaking up between rows
             //todo order by planet strength
-            var eventList = EventsChartManager.UnsortedEventList.OrderByDescending(x => x.DurationMin).ToList();
+            var eventList = EventsChartFactory.UnsortedEventList.OrderByDescending(x => x.DurationMin).ToList();
 
             //1. FILTER
             //remove events 85% shorter duration than time shown by 1 pixel

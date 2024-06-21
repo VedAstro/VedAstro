@@ -210,7 +210,7 @@ namespace VedAstro.Console
             {
                 var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
 
-                chart = EventsChartManager.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
+                chart = EventsChartFactory.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
                 dict.Add(possibleTime, chart.ContentSvg);
             }
 
@@ -277,7 +277,7 @@ namespace VedAstro.Console
             }
 
             //put all charts in 1 big container
-            var finalSvg = EventsChartManager.WrapSvgElements(
+            var finalSvg = EventsChartFactory.WrapSvgElements(
                 svgClass: "MultipleDasa",
                 combinedSvgString: combinedSvg,
                 svgWidth: maxWidth + 100,

@@ -41,11 +41,7 @@ namespace API
                 CurrentCallerData.originalHttpRequest = incomingRequest;
 
                 //0 : LOG CALL : used later for throttle limit
-                ApiStatistic.LogIpAddress(incomingRequest);
-                ApiStatistic.LogRequestUrl(incomingRequest);
-                ApiStatistic.LogRawRequest(incomingRequest);
-                ApiStatistic.LogSubscriber(incomingRequest);
-                ApiStatistic.LogUserAgent(incomingRequest);
+                ApiStatistic.Log(incomingRequest); //logger
 
                 //1 : extract out custom format else empty string (removed from url)
                 var format = ParseAndGetFormat(fullParamString);
@@ -273,11 +269,7 @@ namespace API
         {
             //0 : LOG CALL
             //log ip address, call time and URL,  used later for throttle limit
-            ApiStatistic.LogIpAddress(incomingRequest);
-            ApiStatistic.LogRequestUrl(incomingRequest);
-            ApiStatistic.LogRawRequest(incomingRequest);
-            ApiStatistic.LogSubscriber(incomingRequest);
-            ApiStatistic.LogUserAgent(incomingRequest);
+            ApiStatistic.Log(incomingRequest); //logger
 
             // Control API overload, even this if hit hard can COST Money via CDN
             //await APITools.AutoControlOpenAPIOverload(callLog);

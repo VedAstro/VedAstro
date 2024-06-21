@@ -976,6 +976,12 @@ namespace API
 
         }
 
+
+        /// <summary>
+        /// only for specified table vedastroapistorage
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
         public static TableClient GetTableClientFromTableName(string tableName)
         {
             //prepare call stuff

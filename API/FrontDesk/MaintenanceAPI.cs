@@ -16,6 +16,7 @@ namespace API
     /// </summary>
     public static class MaintenanceAPI
     {
+
         /// <summary>
         /// scans through dates and rebuilds maps cache table
         /// </summary>
@@ -38,13 +39,8 @@ namespace API
         [Function(nameof(Home))]
         public static async Task<HttpResponseData> Home([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Home")] HttpRequestData incomingRequest)
         {
-            //logger
-            ApiStatistic.LogIpAddress(incomingRequest);
-            ApiStatistic.LogRequestUrl(incomingRequest);
-            ApiStatistic.LogRawRequest(incomingRequest);
-            ApiStatistic.LogSubscriber(incomingRequest);
-            ApiStatistic.LogUserAgent(incomingRequest);
-
+            
+            ApiStatistic.Log(incomingRequest); //logger
 
             //get chart special API home page and send that to caller
             var apiHomePageTxt = await Tools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
@@ -94,11 +90,7 @@ namespace API
             Route = "SearchImage/Keywords/{keywords}")] HttpRequestData incomingRequest,
             string keywords)
         {
-            ApiStatistic.LogIpAddress(incomingRequest);
-            ApiStatistic.LogRequestUrl(incomingRequest);
-            ApiStatistic.LogRawRequest(incomingRequest);
-            ApiStatistic.LogSubscriber(incomingRequest);
-            ApiStatistic.LogUserAgent(incomingRequest);
+            ApiStatistic.Log(incomingRequest); //logger
 
             //IMPORTANT: replace this variable with your Cognitive Services subscription key
             string subscriptionKey = Secrets.BING_IMAGE_SEARCH;
@@ -139,11 +131,7 @@ namespace API
             HttpRequestData incomingRequest,
             string callerId, string formatName)
         {
-            ApiStatistic.LogIpAddress(incomingRequest);
-            ApiStatistic.LogRequestUrl(incomingRequest);
-            ApiStatistic.LogRawRequest(incomingRequest);
-            ApiStatistic.LogSubscriber(incomingRequest);
-            ApiStatistic.LogUserAgent(incomingRequest);
+            ApiStatistic.Log(incomingRequest); //logger
 
             if (formatName.ToLower() == "json")
             {
@@ -183,11 +171,7 @@ namespace API
         public static async Task<HttpResponseData> SendFileToEmail([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Send/{fileName}/{fileFormat}/{receiverEmail}")] HttpRequestData incomingRequest,
             string fileName, string fileFormat, string receiverEmail)
         {
-            ApiStatistic.LogIpAddress(incomingRequest);
-            ApiStatistic.LogRequestUrl(incomingRequest);
-            ApiStatistic.LogRawRequest(incomingRequest);
-            ApiStatistic.LogSubscriber(incomingRequest);
-            ApiStatistic.LogUserAgent(incomingRequest);
+            ApiStatistic.Log(incomingRequest); //logger
 
 
             try
@@ -223,11 +207,7 @@ namespace API
         [Function("getipaddress")]
         public static HttpResponseData GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-            ApiStatistic.LogIpAddress(incomingRequest);
-            ApiStatistic.LogRequestUrl(incomingRequest);
-            ApiStatistic.LogRawRequest(incomingRequest);
-            ApiStatistic.LogSubscriber(incomingRequest);
-            ApiStatistic.LogUserAgent(incomingRequest);
+            ApiStatistic.Log(incomingRequest); //logger
 
             try
             {
@@ -248,11 +228,7 @@ namespace API
         [Function("version")]
         public static HttpResponseData GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-            ApiStatistic.LogIpAddress(incomingRequest);
-            ApiStatistic.LogRequestUrl(incomingRequest);
-            ApiStatistic.LogRawRequest(incomingRequest);
-            ApiStatistic.LogSubscriber(incomingRequest);
-            ApiStatistic.LogUserAgent(incomingRequest);
+            ApiStatistic.Log(incomingRequest); //logger
 
 
             var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
@@ -286,11 +262,7 @@ namespace API
         [Function("Stats")]
         public static async Task<HttpResponseData> GetStats([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-            ApiStatistic.LogIpAddress(incomingRequest);
-            ApiStatistic.LogRequestUrl(incomingRequest);
-            ApiStatistic.LogRawRequest(incomingRequest);
-            ApiStatistic.LogSubscriber(incomingRequest);
-            ApiStatistic.LogUserAgent(incomingRequest);
+            ApiStatistic.Log(incomingRequest); //logger
 
 
             try
@@ -325,11 +297,7 @@ namespace API
         [Function("health")]
         public static HttpResponseData GetHealth([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-            ApiStatistic.LogIpAddress(incomingRequest);
-            ApiStatistic.LogRequestUrl(incomingRequest);
-            ApiStatistic.LogRawRequest(incomingRequest);
-            ApiStatistic.LogSubscriber(incomingRequest);
-            ApiStatistic.LogUserAgent(incomingRequest);
+            ApiStatistic.Log(incomingRequest); //logger
 
             try
             {

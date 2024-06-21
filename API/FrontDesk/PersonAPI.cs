@@ -204,9 +204,10 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(GetPersonList)}/OwnerId/{{ownerId}}")] HttpRequestData req,
             string ownerId)
         {
+            ApiStatistic.Log(req); //logger
+
             try
             {
-
                 var foundCalls = AzureTable.PersonList.Query<PersonRow>(call => call.PartitionKey == ownerId);
 
                 //add each to return list

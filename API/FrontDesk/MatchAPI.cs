@@ -21,6 +21,10 @@ namespace API
 
         //PUBLIC API
 
+        /// <summary>
+        /// Called by API callers
+        /// TODO MARKED FOR OBLIVIONS REPLACED BY OPEN API
+        /// </summary>
         [Function(nameof(Match))]
         public static async Task<HttpResponseData> Match([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {

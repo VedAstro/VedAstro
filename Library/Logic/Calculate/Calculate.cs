@@ -390,6 +390,7 @@ namespace VedAstro.Library
             return csv.ToString();
         }
 
+
         #endregion
 
         //the introduction of certain sensitive points
@@ -3127,12 +3128,12 @@ namespace VedAstro.Library
         /// <summary>
         /// Get sky chart as animated GIF. URL can be used like a image source link
         /// </summary>
-        public static async Task<byte[]> SkyChartGIF(Time time) => await SkyChartManager.GenerateChartGif(time, 750, 230);
+        public static async Task<byte[]> SkyChartGIF(Time time) => await SkyChartFactory.GenerateChartGif(time, 750, 230);
 
         /// <summary>
         /// Get sky chart at a given time. SVG image file. URL can be used like a image source link
         /// </summary>
-        public static async Task<string> SkyChart(Time time) => await SkyChartManager.GenerateChart(time, 750, 230);
+        public static async Task<string> SkyChart(Time time) => await SkyChartFactory.GenerateChart(time, 750, 230);
 
 
         /// <summary>
@@ -3140,7 +3141,7 @@ namespace VedAstro.Library
         /// </summary>
         public static string SouthIndianChart(Time time, ChartType chartType = ChartType.Rasi)
         {
-            var svgString = (new SouthChartManager(time, 1000, 1000, chartType)).SVGChart;
+            var svgString = (new SouthChartFactory(time, 1000, 1000, chartType)).SVGChart;
 
             return svgString;
         }
@@ -3150,7 +3151,7 @@ namespace VedAstro.Library
         /// </summary>
         public static string NorthIndianChart(Time time)
         {
-            var svgString = NorthChartManager.GenerateChart(time, 1000, 1000);
+            var svgString = NorthChartFactory.GenerateChart(time, 1000, 1000);
 
             return svgString;
         }

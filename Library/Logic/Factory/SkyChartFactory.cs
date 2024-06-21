@@ -13,7 +13,7 @@ namespace VedAstro.Library
 	/// <summary>
 	/// Logic to create Sky Chart, simple chart with zodiac and planets in it
 	/// </summary>
-	public static class SkyChartManager
+	public static class SkyChartFactory
 	{
 
 		public static async Task<byte[]> GenerateChartGif(Time time, double width, double height)
@@ -30,7 +30,7 @@ namespace VedAstro.Library
 			var chartSvgList = new List<string>();
 			foreach (var timesSlice in timeSliceList)
 			{
-				var xss = await SkyChartManager.GenerateChart(timesSlice, width, height);
+				var xss = await SkyChartFactory.GenerateChart(timesSlice, width, height);
 				chartSvgList.Add(xss);
 			}
 

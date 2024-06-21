@@ -3397,10 +3397,9 @@ class HoroscopeChat {
     SelectedTopicId = "";  //she's filled in when set
     SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
-    //LiveServerURL = "http://localhost:7071/api/Calculate";
+    LiveServerURL = "http://localhost:7071/api/Calculate";
     //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
-    LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
-    //LocalServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
+    //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
     ElementID = ""; //ID of main div where table & header will be injected
     ShowHeader = true; //default enabled, header with title, icon and edit button
     HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
@@ -3705,7 +3704,6 @@ class HoroscopeChat {
         }
 
     }
-
 
     //control comes here from both Button click and keyboard press enter
     async onClickSendChat(userInput = "") {
@@ -4236,7 +4234,7 @@ class HoroscopeChat {
 
     async onStartChatButton(eventData) {
 
-        
+
     }
 
     async onSelectPerson(eventData) {
@@ -4309,7 +4307,7 @@ class HoroscopeChat {
         //enter inviting message from AI
         //note: the minimal message strucuture
         let jsonObject = {
-            "Text": `Ok, I've analysed the horoscope.${String.fromCodePoint(0x1F9D0) } \nAny questions?`,
+            "Text": `Ok, I've analysed the horoscope.${String.fromCodePoint(0x1F9D0)} \nAny questions?`,
             "TextHtml": `Ok, I've analysed the horoscope.${String.fromCodePoint(0x1F9D0)} \nAny questions?`,
             "TextHash": Math.floor(Math.random() * 1000000), //keep random for injection
             "Commands": ["noFeedback"],
@@ -4331,3 +4329,99 @@ window.GenerateHoroscopeChat = (settingsHoroscopeChat) => {
     //note: on init, chat instance is loaded into window.vedastro.horoscopechat
     new HoroscopeChat(settingsHoroscopeChat);
 };
+
+
+class LocationSearchSelector {
+
+    ElementID = "LocationSearchSelector";
+    LiveServerURL = "http://localhost:7071/api/Calculate";
+    //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
+    //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
+
+    constructor(rawSettings) {
+
+        //make instance accessible
+        window.vedastro.LocationSearchSelector = this;
+
+        //process the input variables and set them
+        //this.initializeSettingData(rawSettings);
+
+        //make the main chat window structure
+        this.initializeChatMainBody();
+
+        //creates ever changing placeholder questios to engage users
+        //this.initializeChatInputElement();
+
+
+    }
+
+
+    initializeChatMainBody() {
+
+        $(`#${this.ElementID}`).empty();
+
+        //set max width here since declared in html
+        $(`#${this.ElementID}`).css("max-width", "667px");
+
+        //inject into page
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+
+    }
+
+    generateHtmlBody() {
+        return `
+       
+        
+
+        <div id="LocationSearchSelectorHolder" class="input-group p-2" style="">
+    <input id="LocationSearchTextInputElement" class="rounded-0 rounded-start-4 form-control dropdown-toggle text-middle" data-bs-toggle="dropdown" aria-expanded="false" type="text" placeholder="ðŸ’° W" aria-label="" onkeyup=" window.vedastro.LocationSearchSelector.fetchLocationSuggestions(this.value)">
+    <ul id="LocationSearchAutoSuggestDropDownElement" class="dropdown-menu rounded-4" aria-labelledby="LocationSearchTextInputElement" style="">
+        <!-- Location suggestions will be populated here -->
+    </ul>
+    <button id="SendChatButton" onclick="window.vedastro.horoscopechat.onClickSendChat()" type="button" class="rounded-0 rounded-end-4 btn btn-success btn-rounded float-end">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--majesticons me-1" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="majesticons:send" data-width="25" data-height="25"><path fill="currentColor" fill-rule="evenodd" d="M2.345 2.245a1 1 0 0 1 1.102-.14l18 9a1 1 0 0 1 0 1.79l-18 9a1 1 0 0 1-1.396-1.211L4.613 13H10a1 1 0 1 0 0-2H4.613L2.05 3.316a1 1 0 0 1 .294-1.071z" clip-rule="evenodd" data-darkreader-inline-fill="" style="--darkreader-inline-fill: currentColor;"></path></svg>
+        Send
+    </button>
+</div>
+
+
+     `;
+    }
+
+    async fetchLocationSuggestions(query) {
+
+        //make search location to API 
+        const url = `${this.LiveServerURL}/SearchLocation/${query}`;
+        const response = await fetch(url);
+        const rawData = await response.json();
+
+        //extract out the needed data
+
+        const dropdown = document.getElementById('LocationSearchAutoSuggestDropDownElement');
+        dropdown.innerHTML = ''; // Clear existing suggestions
+        data.forEach(location => {
+            const li = document.createElement('li');
+            li.classList.add('dropdown-item');
+            li.style.cursor = 'pointer';
+            li.style.marginLeft = '-4px';
+            li.textContent = location;
+            dropdown.appendChild(li);
+        });
+    }
+
+}
+
+
+//NOTE: auto loads/inits location search if element in page exits, simplify init
+$(document).ready(function () {
+    if ($('#LocationSearchSelector').length) {
+        // Element with ID 'elementId' exists, do some work here
+        console.log("Element exists!");
+
+        new LocationSearchSelector();
+
+    } else {
+        // Element with ID 'elementId' does not exist
+        console.log("Element does not exist!");
+    }
+});

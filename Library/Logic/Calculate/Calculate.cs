@@ -113,6 +113,17 @@ namespace VedAstro.Library
             return returnVal;
         }
 
+        public static async Task<dynamic> SearchLocation(string address)
+        {
+            //inject api key from parent
+            var locationProvider = new Location();
+
+            //do calculation using API and cache inteligently
+            var returnVal = await locationProvider.SearchAddressToGeoLocation(address);
+
+            return returnVal;
+        }
+
         /// <summary>
         /// Given coordinates will convert to it's geo location equivelant
         /// http://localhost:7071/api/Calculate/CoordinatesToGeoLocation/Latitude/35.6764/Longitude/139.6500
@@ -155,6 +166,7 @@ namespace VedAstro.Library
 
             return returnVal;
         }
+
 
 
 
@@ -340,16 +352,32 @@ namespace VedAstro.Library
         {
             return await ChatAPI.SendMessageHoroscope(birthTime, userQuestion, sessionId, userId);
         }
+        
+        public static async Task HoroscopeChat2(Time birthTime, string userQuestion, string userId, string sessionId = "")
+        {
+            //await ChatAPI.CreatePresetQuestionEmbeddings_CohereEmbed();
+
+            await ChatAPI.LLMSearchAPICall_CohereEmbed(userQuestion);
+            //var foundQuestions = await ChatAPI.FindPresetQuestionEmbeddings_CohereEmbed(userQuestion);
+
+            //throw new NotImplementedException();
+            //return foundQuestions.Select(jv => jv.ToJson()).ToList();
+            
+
+
+            //return await ChatAPI.SendMessageHoroscope(birthTime, userQuestion, sessionId, userId);
+
+        }
 
         public static async Task<JObject> HoroscopeChatFeedback(string answerHash, int feedbackScore)
         {
-            return await ChatAPI.HoroscopeChatFeedback( answerHash, feedbackScore);
+            return await ChatAPI.HoroscopeChatFeedback(answerHash, feedbackScore);
         }
 
         public static async Task<JObject> HoroscopeFollowUpChat(Time birthTime, string followUpQuestion, string primaryAnswerHash, string userId,
             string sessionId)
         {
-            return await ChatAPI.SendMessageHoroscopeFollowUp(birthTime, followUpQuestion, primaryAnswerHash, userId, sessionId );
+            return await ChatAPI.SendMessageHoroscopeFollowUp(birthTime, followUpQuestion, primaryAnswerHash, userId, sessionId);
         }
 
         /// <summary>

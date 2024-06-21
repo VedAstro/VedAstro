@@ -1,13 +1,5 @@
-﻿namespace Astro_ML_NCC_Classification
+﻿namespace MatchMLPipeline
 {
-    //internal class Program
-    //{
-    //    static void Main(string[] args)
-    //    {
-    //        Console.WriteLine("Hello, World!");
-    //    }
-    //}
-
 
     internal class NearestCentroidProgram
     {
@@ -17,18 +9,14 @@
               "centroid classification demo ");
 
             // 1. load and normalize training data
-            Console.WriteLine("\nLoading penguin subset " +
-              "train (30) and test (10) data ");
-            string trainFile =
-              "..\\..\\..\\Data\\penguin_train_30.txt";
-            double[][] trainX = MatLoad(trainFile,
-              new int[] { 1, 2, 3, 4 }, ',', "#");
+            Console.WriteLine("\nLoading penguin subset " + "train (30) and test (10) data ");
+            string trainFile = "..\\..\\..\\Data\\penguin_train_30.txt";
+            double[][] trainX = MatLoad(trainFile, new int[] { 1, 2, 3, 4 }, ',', "#");
             Console.WriteLine("\nX training raw: ");
             MatShow(trainX, 1, 9, 4, true);
 
             // get normalized X and mins-maxs
-            Console.WriteLine("\nNormalizing train X" +
-              " using min-max ");
+            Console.WriteLine("\nNormalizing train X" + " using min-max ");
             double[][] minsMaxs = MatMinMaxValues(trainX);
             trainX = MatNormalizeUsing(trainX, minsMaxs);
             Console.WriteLine("Done ");
@@ -41,22 +29,17 @@
             VecShow(trainY, wid: 3);
 
             // 2. load and normalize test data
-            Console.WriteLine("\nLoading and " +
-              "normalizing test data ");
-            string testFile =
-              "..\\..\\..\\Data\\penguin_test_10.txt";
-            double[][] testX = MatLoad(testFile,
-              new int[] { 1, 2, 3, 4 }, ',', "#");
+            Console.WriteLine("\nLoading and " + "normalizing test data ");
+            string testFile = "..\\..\\..\\Data\\penguin_test_10.txt";
+            double[][] testX = MatLoad(testFile, new int[] { 1, 2, 3, 4 }, ',', "#");
             testX = MatNormalizeUsing(testX, minsMaxs);
             int[] testY = VecLoad(testFile, 0, "#");
             Console.WriteLine("Done ");
 
             // 3. create and train classifier
-            Console.WriteLine("\nCreating " +
-              "NearestCentroidClassifier object ");
+            Console.WriteLine("\nCreating " + "NearestCentroidClassifier object ");
             int numClasses = 3;
-            NearestCentroidClassifier ncc =
-              new NearestCentroidClassifier(numClasses);
+            NearestCentroidClassifier ncc = new NearestCentroidClassifier(numClasses);
             Console.WriteLine("Training the classifier ");
             ncc.Train(trainX, trainY);
             Console.WriteLine("Done ");
@@ -83,8 +66,7 @@
             Console.WriteLine("\nPredicting species" +
               " for x = 46.5, 17.9, 192, 3500");
 
-            string[] speciesNames = new string[] { "Adelie",
-        "Chinstrap", "Gentoo" };
+            string[] speciesNames = new string[] { "Adelie", "Chinstrap", "Gentoo" };
             double[] xRaw = { 46.5, 17.9, 192, 3500 };
             double[] xNorm = VecNormalizeUsing(xRaw, minsMaxs);
             Console.Write("Normalized x =");
@@ -92,8 +74,7 @@
 
             int lbl = ncc.Predict(xNorm);
             Console.WriteLine("predicted label/class = " + lbl);
-            Console.WriteLine("predicted species = " +
-              speciesNames[lbl]);
+            Console.WriteLine("predicted species = " + speciesNames[lbl]);
 
             double[] pseudoProbs = ncc.PredictProbs(xNorm);
             Console.WriteLine("\nprediction pseudo-probs = ");
@@ -490,5 +471,4 @@
         }
 
     } // class NearestCentroidClassifier
-
 }

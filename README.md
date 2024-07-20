@@ -45,6 +45,22 @@ The sage **`Parashara taught everybody`** the ways of astrology without asking m
 ![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
 
 
+# 🛖 Philosophy
+Philosophy's the scaffold we use when we build,<br>
+Without it, a mud hut, not a structure fulfilled.<br>
+For creating grand codes, like VedAstro’s design,<br>
+Philosophy’s essential, its role is divine.<br>
+
+The purpose of VedAstro, we must understand,<br>
+Born of joy, in development it must stand.<br>
+This project thrives on happiness, pure and bright,<br>
+Don’t code till your heart feels the building's delight.<br>
+
+When your fingers can’t keep up, joy fills the air,<br>
+You’ll know that your code is placed right with care.<br>
+In the universe vast, it finds its own way,<br>
+Your work shines with brilliance, come what may.<br>
+
 # 🎯 Perfect Predictions
 [![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-steve.jpg)](https://vedastro.org/LifePredictor)   
 [![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-monroe.jpg)](https://vedastro.org/LifePredictor)   
@@ -205,14 +221,14 @@ But the database will be shared between these. Meaning data changes in Beta will
 
  
  # 🥀 Digital Astrology
-The wisdom of ages, once passed down by word,
-Now stored in circuits, rarely heard.
+The wisdom of ages, once passed down by word,<br>
+Now stored in circuits, rarely heard.<br>
 
-Once this knowledge was held in minds so keen,
-Now it's coded in machines unseen.
+Once this knowledge was held in minds so keen,<br>
+Now it's coded in machines unseen.<br>
 
-The human touch, that once gave knowledge birth,
-Replaced by algorithms, shaping future's girth.
+The human touch, that once gave knowledge birth,<br>
+Replaced by algorithms, shaping future's girth.<br>
 
 # 🛖 Philosophy
 Philosophy is equivalent to the **scaffolding** used when constructing a building.

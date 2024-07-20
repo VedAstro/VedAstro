@@ -398,3 +398,11 @@ ChatAPI/src/env/
 ChatAPI/venv/
 
 ChatAPI/src/vector_store/birth_time_predictions/
+/LLMCallExperimenter/secrets.txt
+/LLMCallExperimenter/secrets.json
+/Library/Secrets-hidden.cs
+/Library/Secrets-HideMe.cs
+/Desktop/Windows/dotnet/windowsdesktop-runtime-8.0.6-win-x64.exe
+/Desktop/Windows/InnoSetupOutput/VedAstroSetup.exe
+
+MatchMLPipeline/secrets.json

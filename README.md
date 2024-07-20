@@ -40,7 +40,7 @@
 [![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library) [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://pypi.org/project/VedAstro/)  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
 
 # 🆓 100% Open Source
-The sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
+As the great sage [Parashara](https://en.wikipedia.org/wiki/Parashara) imparted the wisdom of the stars freely, unbound by wealth or claim, so too does VedAstro, a gift unencumbered by price or title.
 
 ![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
 
@@ -529,26 +529,26 @@ than for a rich man to enter the kingdom of God"
 
 
 # POEMS
-Oh so bright, On a Tuesday morning,
-I'm pondering life, and what's in sight.
-Is it fear, fate, justice, or a test of might?
+Oh so bright, On a Tuesday morning,<br>
+I'm pondering life, and what's in sight.<br>
+Is it fear, fate, justice, or a test of might?<br>
 
-From my father's voice rings a resounding insight.
-Joy of my love, it's your guiding light!
-All men that have joy, have God, just right,
-Making love to their sweet wife, there, God's in sight!
+From my father's voice rings a resounding insight.<br>
+Joy of my love, it's your guiding light!<br>
+All men that have joy, have God, just right,<br>
+Making love to their sweet wife, there, God's in sight!<br>
 
-When men love their wives, with all their heart,
-They see a glimpse of God, a work of art.
-In those precious moments, they see God's might.
-Yet, swiftly it fades, like a star in the night
+When men love their wives, with all their heart,<br>
+They see a glimpse of God, a work of art.<br>
+In those precious moments, they see God's might.<br>
+Yet, swiftly it fades, like a star in the night<br>
 
-When fleeting moments pass, and cries are heard,
-And we're left to wonder, if joy's been blurred.
-Chasing worldly delights, may bring us cheer
-But joy is what lasts, and banishes all fear.
+When fleeting moments pass, and cries are heard,<br>
+And we're left to wonder, if joy's been blurred.<br>
+Chasing worldly delights, may bring us cheer<br>
+But joy is what lasts, and banishes all fear.<br>
 
-To pursue worldly pleasures, is not quite right,
-It's short-sighted, like a bat in the daylight.
-They seek joy, in their ceaseless flight,
+To pursue worldly pleasures, is not quite right,<br>
+It's short-sighted, like a bat in the daylight.<br>
+They seek joy, in their ceaseless flight,<br>
 Forgetting it's joy that makes their wings ignite.

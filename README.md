@@ -219,11 +219,11 @@ Philosophy is equivalent to the **scaffolding** used when constructing a buildin
 You can build without **scaffolding** it is called a **mud hut** not a building.
 Thus philosophy is essential to build a large & complex code structure like **VedAstro**.
 
-The reason for the existence of **VedAstro** needs to understood and kept in mind during development.
+The reason for the existence of **VedAstro** needs to be understood and kept in mind during development.
 This is a project born of joy, kept alive by it and as such do not touch the code until 
 your heart is filled with the joy of building beauty with electrons and your fingers can't keep up.
 
-Then you know your code is right, and has a place for it in this universe.
+Then you know your code is right, and **has a place for it in this universe**.
 
 
 # 🙏 Special Thanks
@@ -510,3 +510,29 @@ To all those who say we need money todo good. Jesus said not.
 than for a rich man to enter the kingdom of God"
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Hoffman-ChristAndTheRichYoungRuler.jpg/1024px-Hoffman-ChristAndTheRichYoungRuler.jpg" width="600"/>
+
+
+# POEMS
+Oh so bright, On a Tuesday morning,
+I'm pondering life, and what's in sight.
+Is it fear, fate, justice, or a test of might?
+
+From my father's voice rings a resounding insight.
+Joy of my love, it's your guiding light!
+All men that have joy, have God, just right,
+Making love to their sweet wife, there, God's in sight!
+
+When men love their wives, with all their heart,
+They see a glimpse of God, a work of art.
+In those precious moments, they see God's might.
+Yet, swiftly it fades, like a star in the night
+
+When fleeting moments pass, and cries are heard,
+And we're left to wonder, if joy's been blurred.
+Chasing worldly delights, may bring us cheer
+But joy is what lasts, and banishes all fear.
+
+To pursue worldly pleasures, is not quite right,
+It's short-sighted, like a bat in the daylight.
+They seek joy, in their ceaseless flight,
+Forgetting it's joy that makes their wings ignite.

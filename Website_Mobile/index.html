@@ -1,8 +1,6 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" style="background-color: #f0f2f5">
 <head>
-
-
     <!--to stop caching during active development-->
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
@@ -55,10 +53,10 @@
     <!-- TO PLAY BAKING DONE SOUND -->
     <audio autoplay="">Your browser does not support the html audio tag.</audio>
 
-
+    <!-- MOBILE TOP NAV BAR -->
     <nav class="p-1 navbar rounded-bottom-4" data-bs-theme="dark" style="background-color: #1877f2 !important;">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" onclick="showSection('Home')">
                 <img src="image/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
                 <span class="ms-1 align-middle">VedAstro</span>
             </a>
@@ -68,37 +66,37 @@
             <div class="navbar-nav border-opacity-10 border-2 border-top border-white navbar-collapse collapse" id="navbarTogglerDemo02">
                 <ul class="nav nav-fill">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link" onclick="showSection('Home')">
                             <iconify-icon class="align-bottom" icon="mdi:home" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Home</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Chat.html">
+                        <a class="nav-link" onclick="showSection('AIChat')">
                             <iconify-icon class="align-bottom" icon="mage:we-chat" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">AI Chat</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Horoscope.html">
+                        <a class="nav-link" onclick="showSection('Horoscope')">
                             <iconify-icon class="align-bottom" icon="fluent:book-star-20-filled" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Horoscope</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="LifePredictor.html">
+                        <a class="nav-link" onclick="showSection('LifePredictor')">
                             <iconify-icon class="align-bottom" icon="gis:map-time" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Life Predictor</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="Match.html" aria-current="page">
+                        <a class="nav-link active" onclick="showSection('MatchChecker')">
                             <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Match Checker</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="GoodTimeFinder.html">
+                        <a class="nav-link" onclick="showSection('GoodTimeFinder')">
                             <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Good Time Finder</span>
                         </a>
@@ -118,50 +116,46 @@
 
                 <!-- MAIN TITLE LOGO -->
                 <div class="px-4 py-1 my-2 text-center">
-                    <img class="d-block mx-auto" src="image/vedastro-api-logo.png" style=" -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%); mask-image: linear-gradient(to bottom, black 0%, transparent 100%); margin-bottom: -69px; " alt="">
+                    <img class="d-block mx-auto" src="image/vedastro-api-logo.png" style=" -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%); mask-image: linear-gradient(to bottom, black 0%, transparent 100%); margin-bottom: -75px; " alt="">
                     <div class="col-lg-6 mx-auto">
                         <p class="lead mb-4">
                             A non-profit, open source project to make
                             Vedic Astrology easily available to all.
                         </p>
                         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                            <button type="button" class="btn btn-primary btn-lg px-4 gap-3">
+                            <!-- BUTTONS -->
+                            <button onclick="showSection('QuickGuide')" type="button" class="btn btn-primary btn-lg px-4 gap-3">
                                 <iconify-icon class="align-bottom" icon="mdi:book-open-variant" width="28" height="28"></iconify-icon>
                                 Quick Guide
                             </button>
-                            <button type="button" class="btn btn-outline-secondary btn-lg px-4">
+                            <a href="https://github.com/VedAstro/VedAstro" target="_blank" class="btn btn-outline-secondary btn-lg px-4">
                                 <iconify-icon class="align-bottom" icon="uil:github" width="28" height="28"></iconify-icon>
                                 Source Code
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
 
-
-
-
-
+                <!-- QUICK LINKS -->
                 <style>
                     /*to make card look clickable*/
                     .card:hover {
                         border: 2px solid #3E7DC0 !important;
                     }
                 </style>
-
                 <div class="py-4" id="icon-grid">
+                    <!-- HEADER -->
                     <div class="">
                         <div class="fw-bold hstack gap-2 d-flex" style="">
-                            <div class="" style="" _bl_71=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:mind-map" data-width="38" style="vertical-align: text-bottom;"><path fill="#CFD8DC" d="m39.4 23l-.8-4L26 21.6V8h-4v12.3l-13.9-9l-2.2 3.4l15.2 9.8L9.4 39.8l3.2 2.4l11.3-14.8l8.4 12.7l3.4-2.2l-8.4-12.5z"></path><circle cx="24" cy="24" r="7" fill="#3F51B5"></circle><g fill="#00BCD4"><circle cx="24" cy="8" r="5"></circle><circle cx="39" cy="21" r="5"></circle><circle cx="7" cy="13" r="5"></circle><circle cx="11" cy="41" r="5"></circle><circle cx="34" cy="39" r="5"></circle></g></svg></div><h4 class="mt-2 me-auto">Quick Links </h4><style>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           .no-dropdown-arrow.dropdown-toggle::after {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               display: none !important;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           }
-                            </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm btn-outline-primary btn ms-3" _bl_72="">View All</button>
+                            <div class="" style="" _bl_71="">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:mind-map" data-width="38" style="vertical-align: text-bottom;"><path fill="#CFD8DC" d="m39.4 23l-.8-4L26 21.6V8h-4v12.3l-13.9-9l-2.2 3.4l15.2 9.8L9.4 39.8l3.2 2.4l11.3-14.8l8.4 12.7l3.4-2.2l-8.4-12.5z"></path><circle cx="24" cy="24" r="7" fill="#3F51B5"></circle><g fill="#00BCD4"><circle cx="24" cy="8" r="5"></circle><circle cx="39" cy="21" r="5"></circle><circle cx="7" cy="13" r="5"></circle><circle cx="11" cy="41" r="5"></circle><circle cx="34" cy="39" r="5"></circle></g></svg>
+                            </div>
+                            <h4 class="mt-2 me-auto">Quick Links </h4>
                         </div>
                         <hr class="mt-1 mb-2">
                     </div>
 
-
-
+                    <!-- PAGE LINKS -->
                     <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
                         <div style="cursor: pointer;" class="col">
                             <div class="card">
@@ -171,7 +165,8 @@
                                     <p class="card-text">Find a good time for buying car, travel, studies, building..</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/dasa-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -179,7 +174,8 @@
                                     <p class="card-text">Know good and bad periods of your life years ahead</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/match-finder-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -187,7 +183,8 @@
                                     <p class="card-text">Free search astrological database for perfect match</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/open-api-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -195,7 +192,8 @@
                                     <p class="card-text">Access powerful astrological tools via a HTTP request</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/horoscope-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -203,7 +201,8 @@
                                     <p class="card-text">Predict a person's character, speech, body &amp; general life</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/match-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -211,7 +210,8 @@
                                     <p class="card-text">Check astro chemistry for romance &amp; relationship</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/sunrise-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -219,7 +219,8 @@
                                     <p class="card-text">Time when Sun's disc center meets the horizon</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/table-generator-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -227,7 +228,8 @@
                                     <p class="card-text">Easily create large ML &amp; AI data tables</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/birth-time-finder-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -235,7 +237,8 @@
                                     <p class="card-text">Find forgotten or lost birth time using astrological</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/live-coding-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -243,7 +246,8 @@
                                     <p class="card-text">Watch &amp; chat with a developer editing code live</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/ai-chat-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -251,7 +255,8 @@
                                     <p class="card-text">Talk &amp; learn with AI powered astrologer for any queries</p>
                                 </div>
                             </div>
-                        </div><div style="cursor: pointer;" class="col">
+                        </div>
+                        <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/add-life-event-card.jpg" class="card-img-top">
                                 <div class="card-body">
@@ -263,33 +268,293 @@
                     </div>
                 </div>
             </section>
+            <section id="QuickGuide">
+                <div>
+                    
+                    <div class="vstack mb-2"><div class="hstack"><div class="vstack gap-2"><h1 class="fw-bold">Quick Guide</h1><span style=" max-width:412.5px; font-size: 21px; font-weight: lighter; font-family: inherit;">This is a web app to help you use vedic astrology. It is designed to work like an app running in the cloud.</span></div><div class="w-100 d-none d-md-block" style="max-width: 412.5px; text-align: center;"><img src="images/user-guide-banner.png" style="width: 195px;" class=""></div></div><hr class="border-secondary border mt-3"></div>
+
+
+                    <div class="vstack gap-4" style="max-width:667.5px;">
+                        <div class="py-2" _bl_68="">
+                            <div class="">
+                                <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_76=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:close-up-mode" data-width="38" style="vertical-align: text-bottom;"><path fill="#2E7D32" d="M5 24c0 18.9 14.8 19 17 19h4S24.1 26.5 5 24"></path><path fill="#388E3C" d="M22 26h4v17h-4z"></path><path fill="#C62828" d="M34 16c0 5.1-5.2 8.2-8 8.2s-2-3.1-2-8.2s5-9.2 5-9.2s5 4.1 5 9.2"></path><path fill="#C62828" d="M14 16c0 5.1 5.2 8.2 8 8.2s2-3.1 2-8.2s-5-9.2-5-9.2s-5 4.1-5 9.2"></path><path fill="#E53935" d="M24 27c-2.2-1.6-1.9-4.5 2.4-8.8C30.8 13.8 32 7 32 7s5 3.4 5 9c0 5.9-5.7 11-13 11"></path><path fill="#E53935" d="M24 27c2.2-1.6 1.9-4.5-2.4-8.8C17.2 13.8 16 7 16 7s-5 3.4-5 9c0 5.9 5.7 11 13 11"></path><path fill="#F44336" d="M30 16c0 6.1-2.7 11-6 11s-6-4.9-6-11s6-11 6-11s6 4.9 6 11"></path><path fill="#4CAF50" d="M22 43h4c2.2 0 17-.1 17-19c-19.1 2.5-21 19-21 19"></path></svg></div><h4 class="mt-2 me-auto">How To Use? </h4></div>
+                                <hr class="mt-1 mb-2">
+                            </div>
+                            <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;">
+                                <div class="container ">
+                                    <div class="row row-cols-3 align-items-center justify-content-start">
+                                        <div class="col-auto p-0"><kbd>STEP 1</kbd></div>
+                                        <div class="col-6"><span>Choose or add person's horoscope</span></div>
+                                        <div class="col">
+                                            <div>
+                                                <div class="hstack">
+                                                    <div class="btn-group" style="width:254.9px;">
+                                                        <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            
+
+                                                            <div style="cursor: pointer;white-space: nowrap; display: inline-table;" _bl_87="" aria-expanded="false">John Legend - 1978</div>
+                                                        </button>
+
+                                                        <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow-y: scroll; overflow-x: clip;">
+                                                            <div class="hstack gap-2">
+                                                                <input type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search..." _bl_74="">
+                                                                <div class="mb-2" style="cursor: pointer;" _bl_77=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--pepicons-pop" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" data-icon="pepicons-pop:list" data-width="25"><g fill="currentColor"><path d="M6.5 6a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0"></path><path fill-rule="evenodd" d="M7.5 6a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1" clip-rule="evenodd"></path></g></svg></div>
+                                                            </div>
+                                                            <li><hr class="dropdown-divider"></li>
+                                                            <div class="ms-3 d-flex justify-content-between">
+                                                                <div class=" hstack gap-2" style=" ">
+                                                                    <div class="" style="" _bl_94=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--material-symbols" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="material-symbols:demography-rounded" data-width="25"><path fill="currentColor" d="M18 18q.625 0 1.063-.437T19.5 16.5t-.437-1.062T18 15t-1.062.438T16.5 16.5t.438 1.063T18 18m0 3q.75 0 1.4-.35t1.075-.975q-.575-.35-1.2-.513T18 19t-1.275.162t-1.2.513q.425.625 1.075.975T18 21m0 2q-2.075 0-3.537-1.463T13 18t1.463-3.537T18 13t3.538 1.463T23 18t-1.463 3.538T18 23M8 9h8q.425 0 .713-.288T17 8t-.288-.712T16 7H8q-.425 0-.712.288T7 8t.288.713T8 9M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v5.45q0 .45-.375.7t-.8.1q-.425-.125-.888-.188T18 11q-.275 0-.513.013t-.487.062q-.225-.05-.5-.062T16 11H8q-.425 0-.712.288T7 12t.288.713T8 13h5.125q-.45.425-.812.925T11.675 15H8q-.425 0-.712.288T7 16t.288.713T8 17h3.075q-.05.25-.062.488T11 18q0 .5.05.95t.175.875t-.125.8t-.675.375z"></path></svg></div>
+                                                                    <span style="font-size: 13px; color: #8f8f8f;">
+                                                                        
+                                                                        Examples
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <li><hr class="dropdown-divider"></li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">John Legend - 1978</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Laura Linney - 1964</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Christina Jolie - 1986</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Victoria Beckham - 1974</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Portia de Rossi - 1973</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Margaret Thatcher - 1925</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Volodymyr Zelenskyy - 1978</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Alexandra Horvath - 1990</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Alejandra Guilmant - 1993</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Courtney Shea - 1993</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Sarada Devi - 1853</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Winston Churchill - 1874</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Brittany Bliss - 1995</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Anjelika Vision - 1994</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Chrissy Teigen - 1985</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Boris Johnson - 1964</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Rishi Sunak - 1980</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Sri Ramakrishna - 1836</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Rosario Dawson - 1979</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Olivia Preston - 1990</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Sean Young - 1959</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Abraham Lincoln - 1809</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Adolf Hitler - 1889</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Albert Einstein - 1879</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Alexis Blaze - 1992</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Angelina Jolie - 1975</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Bill Gates - 1955</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Brad Pitt - 1963</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Dax Shepard - 1975</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Elon Musk - 1971</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Emily Ratajkowski - 1991</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Eva Braun - 1912</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Fidel Castro - 1926</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">John Lennon - 1940</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Jokin - 1984</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Joseph Stalin - 1878</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Joséphine de Beauharnais - 1763</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Kali Dutt - 1980</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Kristen Bell - 1980</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Louis Armstrong - 1901</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Luciana Barroso - 1976</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Matt Damon - 1970</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Miley Cyrus - 1992</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Monica Bellucci - 1964</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Mukesh Ambani - 1957</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Napoleon Bonaparte - 1769</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Narendra Modi - 1950</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">NeehaS - 1999</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Piyush Bali - 2004</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Praween Kumar - 1981</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Queen Elizabeth II - 1926</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Rabindranath Tagore - 1861</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Ratan Tata - 1937</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Rita Wilson - 1956</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Saddam Hussein - 1937</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Snehal - 1979</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Standard Horoscope - 1918</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Steve Jobs - 1955</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Swami Vivekananda - 1863</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Tom Hanks - 1956</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">W. H. Auden - 1907</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Yevgeny Prigozhin - 1961</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Paramahansa Yogananda - 1893</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Yogi Adityanath - 1971</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Yoko Ono - 1933</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Blake Pickett - 1963</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Jang Mi In-Ae - 1984</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Alisa Amore - 1997</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Ellen DeGeneres - 1958</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Arkida Reeves - 1988</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">David Beckham - 1975</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Eva Green - 1980</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Christy Carlson Romano - 1984</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Ruri Saijo - 1990</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Maggie Duran - 1993</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Ralph Waldo Emerson - 1803</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Emily Browning - 1988</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Bella Gray - 1996</li>
+                                                            <li class="dropdown-item" style="cursor: pointer;">Aya Beshen - 1995</li>
+                                                        </ul>
+                                                    </div>
+                                                    <style>
+                                                                        .no-dropdown-arrow.dropdown-toggle::after {
+                                                                            display: none !important;
+                                                                        }
+                                                    </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2" _bl_78=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ant-design" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024" data-icon="ant-design:user-add-outlined" data-width="25"><path fill="currentColor" d="M678.3 642.4c24.2-13 51.9-20.4 81.4-20.4h.1c3 0 4.4-3.6 2.2-5.6a371.7 371.7 0 0 0-103.7-65.8c-.4-.2-.8-.3-1.2-.5C719.2 505 759.6 431.7 759.6 349c0-137-110.8-248-247.5-248S264.7 212 264.7 349c0 82.7 40.4 156 102.6 201.1c-.4.2-.8.3-1.2.5c-44.7 18.9-84.8 46-119.3 80.6a373.4 373.4 0 0 0-80.4 119.5A373.6 373.6 0 0 0 137 888.8a8 8 0 0 0 8 8.2h59.9c4.3 0 7.9-3.5 8-7.8c2-77.2 32.9-149.5 87.6-204.3C357 628.2 432.2 597 512.2 597c56.7 0 111.1 15.7 158 45.1a8.1 8.1 0 0 0 8.1.3M512.2 521c-45.8 0-88.9-17.9-121.4-50.4A171.2 171.2 0 0 1 340.5 349c0-45.9 17.9-89.1 50.3-121.6S466.3 177 512.2 177s88.9 17.9 121.4 50.4A171.2 171.2 0 0 1 683.9 349c0 45.9-17.9 89.1-50.3 121.6C601.1 503.1 558 521 512.2 521M880 759h-84v-84c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v84h-84c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h84v84c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-84h84c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8"></path></svg></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                                        <div class="col-auto p-0"><kbd>STEP 2</kbd></div>
+                                        <div class="col-6"><span>Choose calculator to use</span></div>
+                                        <div class="col">
+                                            <select class="form-control" style="width: 225px; height: 37.1px;">
+                                                <option value="" selected="">Choose...</option>
+                                                <option value="Match">Match Checker</option>
+                                                <option value="Horoscope">Horoscope</option>
+                                                <option value="LifePredictor">Life Predictor</option>
+                                                <option value="GoodTimeFinder">Good Time Finder</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                                        <div class="col-auto p-0"><kbd>STEP 3</kbd></div>
+                                        <div class="col-6"><span>Click calculate to view predictions. <strong style="color: #007e21;">Easy!</strong></span></div>
+                                        <div class="col">
+                                            <style>
+                                                                .no-dropdown-arrow.dropdown-toggle::after {
+                                                                    display: none !important;
+                                                                }
+                                            </style><button style=" place-content: center !important; height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-primary btn " _bl_75=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--gg" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="gg:calendar-next" data-width="25"><g fill="currentColor"><path d="m11.725 16.546l4.5-2.598l-4.5-2.598v1.598h-3.95v2h3.95zM8 7a1 1 0 0 0 0 2h8a1 1 0 1 0 0-2z"></path><path fill-rule="evenodd" d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3zm12 2H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1" clip-rule="evenodd"></path></g></svg>Goto Calculator</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+                        <div class="py-2" _bl_69="">
+                            <div class="">
+                                <div class="fw-bold hstack gap-2 d-flex" style="">
+                                    <div class="" style="" _bl_79=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:calculator" data-width="38" style="vertical-align: text-bottom;"><g fill="none" stroke-linejoin="round" stroke-width="4"><path fill="#2F88FF" stroke="#000" d="M40 4H8.0002C6.89565 4 6.00022 4.89541 6.0002 5.99996L5.99955 42C5.99953 43.1045 6.89497 44 7.99955 44H40C41.1046 44 42 43.1046 42 42V6C42 4.89543 41.1046 4 40 4Z"></path><path fill="#43CCF8" stroke="#fff" d="M35 10H13V19H35V10Z"></path><path stroke="#fff" stroke-linecap="round" d="M12 28L19 35"></path><path stroke="#fff" stroke-linecap="round" d="M19 28L12 35"></path><path stroke="#fff" stroke-linecap="round" d="M28 35H36"></path><path stroke="#fff" stroke-linecap="round" d="M28 29H36"></path></g></svg></div><h4 class="mt-2 me-auto">What is a calculator? </h4><style>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               .no-dropdown-arrow.dropdown-toggle::after {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   display: none !important;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               }
+                                    </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-primary btn " _bl_80=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="25" height="17.58" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 180" data-icon="logos:youtube-icon" data-width="25"><path fill="red" d="M250.346 28.075A32.18 32.18 0 0 0 227.69 5.418C207.824 0 127.87 0 127.87 0S47.912.164 28.046 5.582A32.18 32.18 0 0 0 5.39 28.24c-6.009 35.298-8.34 89.084.165 122.97a32.18 32.18 0 0 0 22.656 22.657c19.866 5.418 99.822 5.418 99.822 5.418s79.955 0 99.82-5.418a32.18 32.18 0 0 0 22.657-22.657c6.338-35.348 8.291-89.1-.164-123.134"></path><path fill="#FFF" d="m102.421 128.06l66.328-38.418l-66.328-38.418z"></path></svg>Tutorials</button>
+                                    <style>
+                                                        .no-dropdown-arrow.dropdown-toggle::after {
+                                                            display: none !important;
+                                                        }
+                                    </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-primary btn " _bl_81=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--fluent" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="fluent:calculator-multiple-24-regular" data-width="25"><path fill="currentColor" d="M7.75 5A1.75 1.75 0 0 0 6 6.75v1c0 .966.784 1.75 1.75 1.75h5.5A1.75 1.75 0 0 0 15 7.75v-1A1.75 1.75 0 0 0 13.25 5zM7.5 6.75a.25.25 0 0 1 .25-.25h5.5a.25.25 0 0 1 .25.25v1a.25.25 0 0 1-.25.25h-5.5a.25.25 0 0 1-.25-.25zm3 4a1.25 1.25 0 1 0 0 2.5a1.25 1.25 0 0 0 0-2.5M9.25 15.5a1.25 1.25 0 1 1 2.5 0a1.25 1.25 0 0 1-2.5 0M7 10.75a1.25 1.25 0 1 0 0 2.5a1.25 1.25 0 0 0 0-2.5M5.75 15.5a1.25 1.25 0 1 1 2.5 0a1.25 1.25 0 0 1-2.5 0M14 10.75a1.25 1.25 0 1 0 0 2.5a1.25 1.25 0 0 0 0-2.5m-1.25 4.75a1.25 1.25 0 1 1 2.5 0a1.25 1.25 0 0 1-2.5 0M6.137 2A3.137 3.137 0 0 0 3 5.137v11.226A3.137 3.137 0 0 0 6.137 19.5h8.726A3.137 3.137 0 0 0 18 16.363V5.137A3.137 3.137 0 0 0 14.863 2zM4.5 5.137c0-.904.733-1.637 1.637-1.637h8.726c.904 0 1.637.733 1.637 1.637v11.226c0 .904-.733 1.637-1.637 1.637H6.137A1.637 1.637 0 0 1 4.5 16.363zm1.3 15.35A2.75 2.75 0 0 0 8.259 22h6.992c2.9 0 5.25-2.35 5.25-5.25v-9.5a2.75 2.75 0 0 0-1.514-2.457q.015.17.014.344V16.75a3.75 3.75 0 0 1-3.75 3.75H6.137q-.17 0-.336-.013"></path></svg>View All</button>
+                                </div>
+                                <hr class="mt-1 mb-2">
+                            </div>
+                            <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;">
+                                
+                                Each calculator shows an aspect of astrology. For example <a target="_blank" rel="noopener noreferrer" style="text-decoration-line: none;" href="Match" class="link-primary fw-bold">Match</a> is a calculator for
+                                checking marriage or friendship compatibility. <a target="_blank" rel="noopener noreferrer" style="text-decoration-line: none;" href="LifePredictor" class="link-primary fw-bold">Life Predictor</a>
+                                can help predict major life events <strong>decades ahead</strong> and using <a target="_blank" rel="noopener noreferrer" style="text-decoration-line: none;" href="GoodTimeFinder" class="link-primary fw-bold">Good Time Finder</a>
+                                you can find the perfect time for important occasions like marriage, job interviews or starting a project.
+                                Explore each calculator to get a deep understanding of Vedic Astrology.
+                            </p>
+                        </div>
+                        <div class="py-2" _bl_70="">
+                            <div class="">
+                                <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_82=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:broken-link" data-width="38" style="vertical-align: text-bottom;"><path fill="#1976D2" d="M17.5 27c-1.1 1.2-2.7 2-4.5 2h-3c-3.3 0-6-2.7-6-6s2.7-6 6-6h3c1.8 0 3.4.8 4.5 2h4.7c-1.5-3.5-5.1-6-9.2-6h-3C4.5 13 0 17.5 0 23s4.5 10 10 10h3c4.1 0 7.6-2.5 9.2-6zM38 13h-3c-4.1 0-7.6 2.5-9.2 6h4.7c1.1-1.2 2.7-2 4.5-2h3c3.3 0 6 2.7 6 6s-2.7 6-6 6h-3c-1.8 0-3.4-.8-4.5-2h-4.7c1.5 3.5 5.1 6 9.2 6h3c5.5 0 10-4.5 10-10s-4.5-10-10-10"></path><path fill="#00BCD4" d="M19.5 4L16 6l6.1 8.1l1.3-.8zm9 0L32 6l-6.1 8.1l-1.3-.8zm0 40l3.5-2l-6.1-8.1l-1.3.8zm-9 0L16 42l6.1-8.1l1.3.8z"></path></svg></div><h4 class="mt-2 me-auto">Unexpected errors? </h4></div>
+                                <hr class="mt-1 mb-2">
+                            </div>
+                            <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p>
+                                
+                                Press <kbd>CTRL + SHIFT + R</kbd>. This will clear the old copy (cache), and
+                                solve 90% of the errors you face. VedAstro gets new updates almost <a target="_blank" rel="noopener noreferrer" style="text-decoration-line: none;" href="https://github.com/gen-so/Genso.Astrology/commits/master" class="link-primary fw-bold">everyday!</a>
+                            </p>
+                            <p>
+                                So it's important that you're using the latest version.
+                                The browser caches the old version, which causes errors as it fails to work with the updated API Server.
+                                For <strong>Mac OSX</strong> users, try <kbd>COMMAND + SHIFT + R</kbd> in Chrome.
+                            </p></p>
+                        </div>
+                        <div class="py-2" _bl_71="">
+                            <div class="">
+                                <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_83=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:conference-call" data-width="38" style="vertical-align: text-bottom;"><circle cx="12" cy="21" r="5" fill="#FFA726"></circle><path fill="#455A64" d="M2 34.7s2.8-6.3 10-6.3s10 6.3 10 6.3V38H2zm44 0s-2.8-6.3-10-6.3s-10 6.3-10 6.3V38h20z"></path><circle cx="24" cy="17" r="6" fill="#FFB74D"></circle><path fill="#607D8B" d="M36 34.1s-3.3-7.5-12-7.5s-12 7.5-12 7.5V38h24z"></path><circle cx="36" cy="21" r="5" fill="#FFA726"></circle><circle cx="12" cy="21" r="5" fill="#FFA726"></circle><circle cx="36" cy="21" r="5" fill="#FFA726"></circle></svg></div><h4 class="mt-2 me-auto">Who is this for? </h4></div>
+                                <hr class="mt-1 mb-2">
+                            </div>
+                            <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p class="text-justify">
+                                Both an <strong>average</strong> person and expert astrologer can find VedAstro useful.
+                                In every calculator there is an "<strong>Easy</strong>" and "<strong>Advanced</strong>"
+                                version of the results.
+                            </p>
+                            <p class="text-justify">
+                                These calculators a constantly being improved. The ideal goal of this project is to make all tools
+                                <strong>easily usable</strong> by anybody. So if you find any of the calculator too difficult,
+                                just leave a note and it might be better the next time you visit.
+                            </p></p>
+                        </div>
+                        <div class="py-2" _bl_72="">
+                            <div class="">
+                                <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_84=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:neutral-decision" data-width="38" style="vertical-align: text-bottom;"><g fill="#FFCC80"><circle cx="38" cy="26" r="4"></circle><circle cx="10" cy="26" r="4"></circle><path d="M39 19c0-12.7-30-8.3-30 0v10c0 8.3 6.7 15 15 15s15-6.7 15-15z"></path><path d="M24 4C15.2 4 8 11.2 8 20v3.5l2.1.6V19l19.5-6.3l8.2 6.3v5.1l2.1-.6V20C40 12.5 34.6 4 24 4"></path></g><g fill="#37474F"><circle cx="24" cy="25" r="2"></circle><circle cx="32" cy="25" r="2"></circle><circle cx="16" cy="25" r="2"></circle></g></svg></div><h4 class="mt-2 me-auto">Must I login to use? </h4></div>
+                                <hr class="mt-1 mb-2">
+                            </div>
+                            <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p>
+                                <strong>No</strong>. VedAstro was designed with <strong>ease and speed</strong> in mind. So all tools are available
+                                for use without login. But if you don't login, we can't save the data you add.
+                                For example, if you add a Person profile it will only be available the next time you
+                                visit if you login first.
+                            </p>
+                            <p>
+                                
+                                Else it <strong>will be deleted</strong> when you close &amp; clear cache.
+                                To login is very simple using <a target="" rel="" style="text-decoration-line: none;" href="Account/Login" class="link-primary fw-bold">Google &amp; Facebook</a>.
+                                So you don't have to waste your time creating a new account with boring passwords to remember.
+                                We strongly believe in user <strong>privacy</strong>. So we <strong>don't collect or connect</strong> to any
+                                data from your Google or Facebook account, it is only to authenticate your access. You can verify
+                                this in the open source code.
+                            </p></p>
+                        </div>
+                        <div class="py-2" _bl_73="">
+                            <div class="">
+                                <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_85=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:engineering" data-width="38" style="vertical-align: text-bottom;"><path fill="#EF6C00" d="m37.4 24.6l-11.6-2.2l-3.9-11.2l-3.8 1.3L22 23.6l-7.8 9l3 2.6l7.8-9l11.6 2.2z"></path><g fill="#FF9800"><path d="M24 19c-2.8 0-5 2.2-5 5s2.2 5 5 5s5-2.2 5-5s-2.2-5-5-5m0 7c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2"></path><path d="M40.7 27c.2-1 .3-2 .3-3s-.1-2-.3-3l3.3-2.4c.4-.3.6-.9.3-1.4L40 9.8c-.3-.5-.8-.7-1.3-.4L35 11c-1.5-1.3-3.3-2.3-5.2-3l-.4-4.1c-.1-.5-.5-.9-1-.9h-8.6c-.5 0-1 .4-1 .9L18.2 8c-1.9.7-3.7 1.7-5.2 3L9.3 9.3c-.5-.2-1.1 0-1.3.5l-4.3 7.4c-.3.5-.1 1.1.3 1.4L7.3 21c-.2 1-.3 2-.3 3s.1 2 .3 3L4 29.4c-.4.3-.6.9-.3 1.4L8 38.2c.3.5.8.7 1.3.4L13 37c1.5 1.3 3.3 2.3 5.2 3l.4 4.1c.1.5.5.9 1 .9h8.6c.5 0 1-.4 1-.9l.4-4.1c1.9-.7 3.7-1.7 5.2-3l3.7 1.7c.5.2 1.1 0 1.3-.4l4.3-7.4c.3-.5.1-1.1-.3-1.4zM24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11s11 4.9 11 11s-4.9 11-11 11"></path></g></svg></div><h4 class="mt-2 me-auto">Info For Coders </h4></div>
+                                <hr class="mt-1 mb-2">
+                            </div>
+                            <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p>
+                                Under the hood, VedAstro is a hybrid Blazor WebAssembly + JS web application.
+                                The cloud method of using VedAstro is the recommended way for most users.
+                                But if you're feeling adventurous, try out VedAstro in Windows &amp; Open API.
+                            </p>
+
+                            <img src="images/4-parts-of-vedastro.jpg" width="667.5px" class="img-thumbnail my-3" alt="...">
+                            <p>
+                                These 4 parts come together to make the final service you see. You can incorporate individual parts of VedAstro
+                                into your own projects as well. You can find the Windows exe build in our github repo.
+                                If you need help with our API or Code, just drop us a mail.
+                            </p></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section id="MatchChecker">
-                <h1>About</h1>
-                <p>This is the about page.</p>
+                <h1>Construction</h1>
+                <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
             </section>
             <section id="AIChat">
-                <h1>Contact</h1>
-                <p>Contact us at contact@example.com</p>
+                <h1>Construction</h1>
+                <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
             </section>
             <section id="LifePredictor">
-                <h1>Contact</h1>
-                <p>Contact us at contact@example.com</p>
+                <h1>Construction</h1>
+                <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
             </section>
             <section id="MatchFinder">
-                <h1>Contact</h1>
-                <p>Contact us at contact@example.com</p>
+                <h1>Construction</h1>
+                <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
             </section>
             <section id="Horoscope">
-                <h1>Contact</h1>
-                <p>Contact us at contact@example.com</p>
+                <h1>Construction</h1>
+                <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
             </section>
             <section id="GoodTimeFinder">
-                <h1>Contact</h1>
-                <p>Contact us at contact@example.com</p>
+                <h1>Construction</h1>
+                <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
             </section>
             <section id="APIBuilder">
-                <h1>Contact</h1>
-                <p>Contact us at contact@example.com</p>
+                <h1>Construction</h1>
+                <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
             </section>
             <section id="Numerology">
                 <div class="vstack mb-2"><div class="hstack"><div class="vstack gap-2"><h1 class="fw-bold" tabindex="-1">Numerology</h1><span style=" max-width:667.5px; font-size: 21px; font-weight: lighter; font-family: inherit;">A person's life can be predicted through his name spellings. From Mantra Shastra, uses vibration frequency of alphabets.</span></div><div class="w-100 d-none d-md-block" style="max-width: 412.5px; text-align: center;"><img src="images/numerology-banner.svg" style="width: 235px;" class=""></div></div><hr class="border-secondary border mt-3"></div>
@@ -417,8 +682,8 @@
                 </div>
             </section>
             <section id="StarsAboveMe">
-                <h1>Contact</h1>
-                <p>Contact us at contact@example.com</p>
+                <h1>Construction</h1>
+                <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
             </section>
             <section id="Contact">
                 <div>
@@ -433,7 +698,6 @@
                             </div>
                         </div><p class="fs-5 col-md-8 mb-0" style=" max-width:667.5px;">Report a bug, suggest a feature or just say Hi</p><hr class="border-secondary border mt-3">
                     </div>
-
 
                     <div class="d-md-flex justify-content-between">
                         <div class="me-2">
@@ -520,7 +784,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
 
     <!-- Bootstrap  JS : Used to animate some components like Accordion, dropdown, BUNDLE because popper.js-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js">                </script>
     <!--Icon Generator Lib -->
     <!--     <script type="text/javascript" src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
     -->
@@ -536,37 +800,37 @@
     <script>
 
         function showSection(sectionId) {
-            const sections = document.querySelectorAll('section');
+                            const sections = document.querySelectorAll('section');
                     sections.forEach(section => {
                 section.classList.remove('active');
                     if (section.id === sectionId) {
                                         section.classList.add('active');
-                }
+                                }
                     });
         }
 
                             //-----------------------------> CONTACT PAGE
-        function sendMessage() {
+                        function sendMessage() {
 
         }
 
 
-        //-----------------------------> NUMEROLOGY PAGE
+                        //-----------------------------> NUMEROLOGY PAGE
                 async function getNameNumber(fullName) {
             try {
                     const response = await fetch(`https://vedastroapi.azurewebsites.net/api/Calculate/NameNumber/FullName/${fullName}`);
                                     const data = await response.json();
-                if (data.Status === 'Pass') {
+                                if (data.Status === 'Pass') {
                             const nameNumber = parseInt(data.Payload.NameNumber, 10);
                     return nameNumber;
                     } else {
                                         throw new Error(`API returned error: ${data.Status}`);
-                }
+                                }
                     } catch (error) {
                 console.error(error);
                     return null; // or throw error, depending on your use case
                                 }
-        }
+                        }
 
         function updateNumerologyPrediction(number, text) {
                 const numberOutput = document.getElementById('NumerologyPredictionNumberOutput');
@@ -576,7 +840,7 @@
             textOutput.textContent = text;
 
                                 //make visible, since default start hidden
-            document.getElementById('NumerologyPredictionOutputHolder').style.display = 'block';
+                            document.getElementById('NumerologyPredictionOutputHolder').style.display = 'block';
                 }
 
     </script>

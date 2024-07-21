@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" style="background-color: #f0f2f5">
 <head>
+
+
     <!--to stop caching during active development-->
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
@@ -19,11 +21,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varta"> <!-- link, button, nav etc -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gowun Dodum"> <!--  article text -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Homemade Apple"> <!--  cursive for quotes -->
-
     <!-- JQUERY -->
-
-
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,31 +74,31 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link p-1" href="Chat.html">
+                        <a class="nav-link" href="Chat.html">
                             <iconify-icon class="align-bottom" icon="mage:we-chat" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">AI Chat</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link p-1" href="Horoscope.html">
+                        <a class="nav-link" href="Horoscope.html">
                             <iconify-icon class="align-bottom" icon="fluent:book-star-20-filled" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Horoscope</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link p-1" href="LifePredictor.html">
+                        <a class="nav-link" href="LifePredictor.html">
                             <iconify-icon class="align-bottom" icon="gis:map-time" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Life Predictor</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link p-1 active" href="Match.html" aria-current="page">
+                        <a class="nav-link active" href="Match.html" aria-current="page">
                             <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Match Checker</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link p-1" href="GoodTimeFinder.html">
+                        <a class="nav-link" href="GoodTimeFinder.html">
                             <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Good Time Finder</span>
                         </a>
@@ -117,7 +115,7 @@
         <!-- ALL WEB PAGES -->
         <div>
             <section id="Home" class="active">
-                
+
                 <!-- MAIN TITLE LOGO -->
                 <div class="px-4 py-1 my-2 text-center">
                     <img class="d-block mx-auto" src="image/vedastro-api-logo.png" style=" -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%); mask-image: linear-gradient(to bottom, black 0%, transparent 100%); margin-bottom: -69px; " alt="">
@@ -139,8 +137,8 @@
                     </div>
                 </div>
 
-                
-                
+
+
 
 
                 <style>
@@ -512,54 +510,39 @@
 
     </div>
 
+    <!--LOAD PAGE CSS-->
+    <!-- Bootstrap CSS : Used for styling everything-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+
     <!-- LOAD JS HERE TO SHOWS INITIAL LOADING BOX ASAP -->
     <!--JQuery-->
     <!--Note: JQuery needs to be loaded before bootstrap-->
     <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
 
-    <!-- Date Time Picker -->
-    <link href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar/build/vanilla-calendar.min.css"
-          rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar/build/themes/light.min.css"
-          rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar/build/themes/dark.min.css"
-          rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar/build/vanilla-calendar.min.js"
-            defer></script>
-
-    <!-- JS Dark Mode button-->
-    <script src="https://cdn.jsdelivr.net/npm/darkmode-js/lib/darkmode-js.min.js"></script>
-
-    <!-- CUSTOM JS & CSS -->
-    <script src="https://vedastro.org/js/VedAstro.js"></script>
-
-    <!--LOAD PAGE CSS-->
-    <!-- Bootstrap CSS : Used for styling everything-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
-
-
     <!-- Bootstrap  JS : Used to animate some components like Accordion, dropdown, BUNDLE because popper.js-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
     <!--Icon Generator Lib -->
-    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js">        </script>
+    <!--     <script type="text/javascript" src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
 
     <!--Sweet Alert Lib -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mattboldt/typed.js@2.0.11/lib/typed.min.js"></script>
 
+
     <!-- JS APP CODE -->
     <script>
 
         function showSection(sectionId) {
             const sections = document.querySelectorAll('section');
-            sections.forEach(section => {
+                    sections.forEach(section => {
                 section.classList.remove('active');
                     if (section.id === sectionId) {
                                         section.classList.add('active');
                 }
-            });
+                    });
         }
 
                             //-----------------------------> CONTACT PAGE
@@ -569,17 +552,17 @@
 
 
         //-----------------------------> NUMEROLOGY PAGE
-        async function getNameNumber(fullName) {
+                async function getNameNumber(fullName) {
             try {
                     const response = await fetch(`https://vedastroapi.azurewebsites.net/api/Calculate/NameNumber/FullName/${fullName}`);
                                     const data = await response.json();
                 if (data.Status === 'Pass') {
-                    const nameNumber = parseInt(data.Payload.NameNumber, 10);
+                            const nameNumber = parseInt(data.Payload.NameNumber, 10);
                     return nameNumber;
                     } else {
                                         throw new Error(`API returned error: ${data.Status}`);
                 }
-            } catch (error) {
+                    } catch (error) {
                 console.error(error);
                     return null; // or throw error, depending on your use case
                                 }
@@ -589,12 +572,12 @@
                 const numberOutput = document.getElementById('NumerologyPredictionNumberOutput');
                                 const textOutput = document.getElementById('NumerologyPredictionTextOutput');
 
-            numberOutput.textContent = number;
+                    numberOutput.textContent = number;
             textOutput.textContent = text;
 
                                 //make visible, since default start hidden
             document.getElementById('NumerologyPredictionOutputHolder').style.display = 'block';
-        }
+                }
 
     </script>
 </body>

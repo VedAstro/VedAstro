@@ -446,7 +446,7 @@ namespace Website
             var notEmpty = !Person.Empty.Equals(male) && !Person.Empty.Equals(female);
             if (notEmpty)
             {
-                return MatchCalculator.GetNewMatchReport(male, female, "101");
+                return MatchReportFactory.GetNewMatchReport(male, female, "101");
             }
             else
             {

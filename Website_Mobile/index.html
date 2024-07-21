@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #f0f2f5">
+<head>
+    <!--to stop caching during active development-->
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>VedAstro</title>
+
+    <!--LOAD FONTS-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lexend Deca"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varta"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gowun Dodum"> <!--  article text -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Homemade Apple"> <!--  cursive for quotes -->
+
+    <!-- JQUERY -->
+
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            display: flex;
+            justify-content: space-around;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+            }
+
+        section {
+            display: none;
+        }
+
+            section.active {
+                display: block;
+            }
+    </style>
+</head>
+<body style="background: #F0F2F5;">
+    <!-- TO PLAY BAKING DONE SOUND -->
+    <audio autoplay="">Your browser does not support the html audio tag.</audio>
+
+
+    <nav class="p-1 navbar rounded-bottom-4" data-bs-theme="dark" style="background-color: #1877f2 !important;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="image/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
+                <span class="ms-1 align-middle">VedAstro</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-nav border-opacity-10 border-2 border-top border-white navbar-collapse collapse" id="navbarTogglerDemo02">
+                <ul class="nav nav-fill">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <iconify-icon class="align-bottom" icon="mdi:home" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-1" href="Chat.html">
+                            <iconify-icon class="align-bottom" icon="mage:we-chat" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">AI Chat</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-1" href="Horoscope.html">
+                            <iconify-icon class="align-bottom" icon="fluent:book-star-20-filled" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Horoscope</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-1" href="LifePredictor.html">
+                            <iconify-icon class="align-bottom" icon="gis:map-time" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Life Predictor</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-1 active" href="Match.html" aria-current="page">
+                            <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Match Checker</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link p-1" href="GoodTimeFinder.html">
+                            <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Good Time Finder</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- STRUCTURE -->
+    <div class="container" style="background: #F0F2F5;">
+
+
+        <!-- ALL WEB PAGES -->
+        <div>
+            <section id="Home" class="active">
+                
+                <!-- MAIN TITLE LOGO -->
+                <div class="px-4 py-1 my-2 text-center">
+                    <img class="d-block mx-auto" src="image/vedastro-api-logo.png" style=" -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%); mask-image: linear-gradient(to bottom, black 0%, transparent 100%); margin-bottom: -69px; " alt="">
+                    <div class="col-lg-6 mx-auto">
+                        <p class="lead mb-4">
+                            A non-profit, open source project to make
+                            Vedic Astrology easily available to all.
+                        </p>
+                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                            <button type="button" class="btn btn-primary btn-lg px-4 gap-3">
+                                <iconify-icon class="align-bottom" icon="mdi:book-open-variant" width="28" height="28"></iconify-icon>
+                                Quick Guide
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-lg px-4">
+                                <iconify-icon class="align-bottom" icon="uil:github" width="28" height="28"></iconify-icon>
+                                Source Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                
+                
+
+
+                <style>
+                    /*to make card look clickable*/
+                    .card:hover {
+                        border: 2px solid #3E7DC0 !important;
+                    }
+                </style>
+
+                <div class="py-4" id="icon-grid">
+                    <div class="">
+                        <div class="fw-bold hstack gap-2 d-flex" style="">
+                            <div class="" style="" _bl_71=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:mind-map" data-width="38" style="vertical-align: text-bottom;"><path fill="#CFD8DC" d="m39.4 23l-.8-4L26 21.6V8h-4v12.3l-13.9-9l-2.2 3.4l15.2 9.8L9.4 39.8l3.2 2.4l11.3-14.8l8.4 12.7l3.4-2.2l-8.4-12.5z"></path><circle cx="24" cy="24" r="7" fill="#3F51B5"></circle><g fill="#00BCD4"><circle cx="24" cy="8" r="5"></circle><circle cx="39" cy="21" r="5"></circle><circle cx="7" cy="13" r="5"></circle><circle cx="11" cy="41" r="5"></circle><circle cx="34" cy="39" r="5"></circle></g></svg></div><h4 class="mt-2 me-auto">Quick Links </h4><style>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           .no-dropdown-arrow.dropdown-toggle::after {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               display: none !important;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           }
+                            </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm btn-outline-primary btn ms-3" _bl_72="">View All</button>
+                        </div>
+                        <hr class="mt-1 mb-2">
+                    </div>
+
+
+
+                    <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
+                        <div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/muhurtha-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">Muhurtha</h5>
+                                    <p class="card-text">Find a good time for buying car, travel, studies, building..</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/dasa-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">Life Predictor</h5>
+                                    <p class="card-text">Know good and bad periods of your life years ahead</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/match-finder-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">Find Soulmate</h5>
+                                    <p class="card-text">Free search astrological database for perfect match</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/open-api-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">Open API</h5>
+                                    <p class="card-text">Access powerful astrological tools via a HTTP request</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/horoscope-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">Horoscope</h5>
+                                    <p class="card-text">Predict a person's character, speech, body &amp; general life</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/match-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">Match</h5>
+                                    <p class="card-text">Check astro chemistry for romance &amp; relationship</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/sunrise-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sunrise Time</h5>
+                                    <p class="card-text">Time when Sun's disc center meets the horizon</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/table-generator-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">ML Data Generator</h5>
+                                    <p class="card-text">Easily create large ML &amp; AI data tables</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/birth-time-finder-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">Birth Time Finder</h5>
+                                    <p class="card-text">Find forgotten or lost birth time using astrological</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/live-coding-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">Watch Live Coding</h5>
+                                    <p class="card-text">Watch &amp; chat with a developer editing code live</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/ai-chat-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">AI Astrologer</h5>
+                                    <p class="card-text">Talk &amp; learn with AI powered astrologer for any queries</p>
+                                </div>
+                            </div>
+                        </div><div style="cursor: pointer;" class="col">
+                            <div class="card">
+                                <img src="images/add-life-event-card.jpg" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">Journal</h5>
+                                    <p class="card-text">Astrological journal to help understand your life events</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="MatchChecker">
+                <h1>About</h1>
+                <p>This is the about page.</p>
+            </section>
+            <section id="AIChat">
+                <h1>Contact</h1>
+                <p>Contact us at contact@example.com</p>
+            </section>
+            <section id="LifePredictor">
+                <h1>Contact</h1>
+                <p>Contact us at contact@example.com</p>
+            </section>
+            <section id="MatchFinder">
+                <h1>Contact</h1>
+                <p>Contact us at contact@example.com</p>
+            </section>
+            <section id="Horoscope">
+                <h1>Contact</h1>
+                <p>Contact us at contact@example.com</p>
+            </section>
+            <section id="GoodTimeFinder">
+                <h1>Contact</h1>
+                <p>Contact us at contact@example.com</p>
+            </section>
+            <section id="APIBuilder">
+                <h1>Contact</h1>
+                <p>Contact us at contact@example.com</p>
+            </section>
+            <section id="Numerology">
+                <div class="vstack mb-2"><div class="hstack"><div class="vstack gap-2"><h1 class="fw-bold" tabindex="-1">Numerology</h1><span style=" max-width:667.5px; font-size: 21px; font-weight: lighter; font-family: inherit;">A person's life can be predicted through his name spellings. From Mantra Shastra, uses vibration frequency of alphabets.</span></div><div class="w-100 d-none d-md-block" style="max-width: 412.5px; text-align: center;"><img src="images/numerology-banner.svg" style="width: 235px;" class=""></div></div><hr class="border-secondary border mt-3"></div>
+
+                <div class="d-flex flex-wrap gap-5" style="max-width:667.5px;">
+                    <div>
+                        <!-- HEADER -->
+                        <div class="">
+                            <div class="fw-bold hstack gap-2 d-flex" style=" max-width:667px;">
+                                <div class="" style="" _bl_77="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--fluent" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" data-icon="fluent:text-number-format-20-filled" data-width="38" style="vertical-align: text-bottom;"><path fill="currentColor" d="M16.965 2.977c.523.258.917.738 1.179 1.468a.75.75 0 0 1-1.412.506c-.168-.468-.345-.587-.43-.628c-.124-.062-.272-.073-.583-.073c-.244 0-.389.075-.494.17c-.12.107-.226.275-.307.494a2.8 2.8 0 0 0-.167.882v.01c0 .406.007.89.163 1.289q.107.277.29.427c.117.097.297.19.598.223c.092.01.29.01.483-.062a.8.8 0 0 0 .469-.454a.75.75 0 0 1 1.367.616c-.635 1.411-2.034 1.441-2.485 1.391c-.559-.062-1.022-.256-1.389-.559a2.5 2.5 0 0 1-.73-1.037c-.267-.683-.267-1.425-.267-1.807v-.074l.005-.094a4.3 4.3 0 0 1 .258-1.275c.133-.357.35-.765.713-1.09a2.2 2.2 0 0 1 1.493-.55h.035c.273 0 .748-.001 1.211.227M4.696 2.75a.75.75 0 0 1 .697.5l1.774 5a.75.75 0 0 1-1.414.5l-.089-.25h-2.11l-.104.27a.75.75 0 1 1-1.4-.54l1.936-5a.75.75 0 0 1 .71-.48m-.04 2.907L4.135 7h.996zm.644 5.095a.75.75 0 0 1 .694.748v5a.75.75 0 0 1-1.5 0v-2.7q-.097.075-.198.141a.75.75 0 1 1-.832-1.248c.56-.373.961-.963 1.047-1.354a.75.75 0 0 1 .79-.588m4.535 1.498c-.309 0-.585.29-.585.614a.75.75 0 1 1-1.5 0c0-1.04.84-2.114 2.085-2.114c.71 0 1.406.332 1.8.938c.417.64.417 1.46-.04 2.237c-.235.4-.552.694-.846.926c-.148.117-.298.224-.436.322l-.06.042q-.175.123-.328.236a3 3 0 0 0-.351.299h1.62a.75.75 0 0 1 0 1.5H8.5a.75.75 0 0 1-.75-.75c0-1.158.688-1.807 1.273-2.247c.123-.093.251-.183.368-.265l.056-.04c.137-.097.259-.184.372-.274c.228-.18.383-.34.482-.508c.211-.36.14-.562.077-.66c-.087-.133-.281-.256-.543-.256m4.887.365a.5.5 0 0 1 .14-.223c.066-.057.2-.142.485-.142c.492 0 .596.31.596.386c0 .17-.038.314-.109.403c-.045.056-.194.211-.712.211a.75.75 0 0 0 0 1.5c.202 0 .463.028.646.114a.34.34 0 0 1 .135.098c.012.017.04.06.04.174c0 .335-.102.448-.155.493c-.075.063-.218.121-.441.121c-.261 0-.382-.046-.44-.082c-.045-.028-.123-.094-.194-.311a.75.75 0 0 0-1.425.468c.153.464.411.854.816 1.11c.39.247.83.315 1.243.315c.45 0 .98-.113 1.409-.475c.452-.382.687-.95.687-1.639a1.77 1.77 0 0 0-.424-1.177c.362-.464.424-.996.424-1.323c0-.923-.794-1.886-2.096-1.886c-.629 0-1.121.203-1.477.517a2 2 0 0 0-.59.936a.75.75 0 1 0 1.442.412M8 3.5v5a.75.75 0 0 0 .872.74v.01H10.5c.238 0 .733-.037 1.195-.305c.52-.303.923-.86.923-1.704c0-.42-.092-.794-.283-1.107a1.7 1.7 0 0 0-.283-.35c.152-.279.242-.62.242-1.025c0-.409-.081-.772-.25-1.08a1.7 1.7 0 0 0-.66-.669c-.463-.26-.958-.26-1.126-.26H8.75A.75.75 0 0 0 8 3.5m2.5 4.25h-1v-1h.936c.191 0 .38.01.517.077c.052.026.08.053.101.087c.022.035.064.127.064.327a.6.6 0 0 1-.06.297a.3.3 0 0 1-.117.11a.96.96 0 0 1-.44.102m-.878-2.5H9.5v-1h.75c.157 0 .301.013.398.068a.2.2 0 0 1 .08.08c.024.044.066.149.066.36a.63.63 0 0 1-.06.31a.25.25 0 0 1-.095.096a.76.76 0 0 1-.357.086z"></path></svg>
+                                </div><h5 class="mt-2 me-auto">Name Number </h5>
+                            </div>
+                            <hr class="mt-1 mb-2">
+                        </div>
+
+                        <!-- INPUT -->
+                        <div class="hstack gap-2 mt-3">
+                            <div class="input-group">
+                                <span class="input-group-text gap-2" style="width: 136px;">
+                                    <div class="" style="" _bl_74="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="35" height="35" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:butting-in" data-width="35"><path fill="#CFD8DC" d="M24 3C12.4 3 3 12.4 3 24s9.4 21 21 21c.3 0 .7 0 1-.1V3.1c-.3-.1-.7-.1-1-.1"></path><path fill="#37474F" d="M25 3.1V45c4.1-.2 7.9-1.5 11-3.7V6.8c-3.1-2.2-6.9-3.6-11-3.7"></path><path fill="#FFB74D" d="M20.5 13c-6.4.3-11.6 5.7-11.5 12.1c0 2.8 1 5.4 2.7 7.5c1.4 1.7 2.3 3.9 2.3 6.1v3.8c3 1.6 6.4 2.5 10 2.5c.3 0 .7 0 1-.1c.7 0 1.3-.1 2-.2v-9.4c3.6-2.1 6-5.9 6-10.4c0-6.7-5.6-12.2-12.5-11.9"></path><path fill="#FFB74D" d="m29 38.6l-4-.6v-9h8l-.7 7c-.2 1.6-1.6 2.8-3.3 2.6"></path><path fill="#FFB74D" d="m39 29l-7 2l-1-5l1-4z"></path><circle cx="29.5" cy="25.5" r="1.5" fill="#784719"></circle><path fill="#FF5722" d="M21 12c-7.2 0-13 5.8-13 13c0 7.6 5.1 9 6 13l4-3v-8l5-2l1-4c3.2 0 6-3.9 6-6.1c-2.1-1.9-5.6-2.9-9-2.9"></path><circle cx="19" cy="27" r="3" fill="#FFB74D"></circle><path fill="#CFD8DC" d="M45 24c0-7.1-3.6-13.4-9-17.2v34.4c5.4-3.8 9-10.1 9-17.2"></path><path fill="#FF9800" d="M20 44.6c1.3.2 2.6.4 4 .4c.3 0 .7 0 1-.1c.7 0 1.3-.1 2-.2v-6.5l-7-1z"></path></svg>
+                                    </div>Name
+                                    <div style="cursor: help; float: right; margin-left: 8px;margin-top: -2px; scale: 0.75;opacity: 0.8;" _bl_75="" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
+                                    </div>
+                                </span>
+                                <!-- NAME TEXT INPUT -->
+                                <input type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 17px;">
+                            </div>
+
+                            <button style=" height:47px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="hstack gap-2 iconButton btn-success btn " _bl_76="">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--uim" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="uim:process" data-width="25"><path fill="currentColor" d="M8.625 8.5h-4.5a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v3.5h3.5a1 1 0 0 1 0 2"></path><path fill="currentColor" d="M21 13a1 1 0 0 1-1-1A7.995 7.995 0 0 0 5.08 8.001a1 1 0 0 1-1.731-1.002A9.995 9.995 0 0 1 22 12a1 1 0 0 1-1 1m-1.125 9a1 1 0 0 1-1-1v-3.5h-3.5a1 1 0 0 1 0-2h4.5a1 1 0 0 1 1 1V21a1 1 0 0 1-1 1"></path><path fill="currentColor" d="M12 22A10.012 10.012 0 0 1 2 12a1 1 0 0 1 2 0a7.995 7.995 0 0 0 14.92 3.999a1 1 0 0 1 1.731 1.002A10.032 10.032 0 0 1 12 22"></path></svg>Calculate
+                            </button>
+                        </div>
+
+                        <!-- PREDICTION OUTPUT -->
+                        <div id="NumerologyPredictionOutputHolder" class="mt-3" style="display: none;">
+                            <h4>Number: <strong><span id="NumerologyPredictionNumberOutput" /></strong></h4>
+                            <p id="NumerologyPredictionTextOutput" class="p-2 rounded" style="background: #fff; font-family: 'Gowun Dodum'; font-size: 20px; "></p>
+                        </div>
+                    </div>
+
+                    <!-- ACCURATE SAMPLE -->
+                    <div class="mt-3" style="max-width:667.5px;">
+                        <div class="">
+                            <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_78=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto-v1" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="noto-v1:direct-hit" data-width="38" style="vertical-align: text-bottom;"><circle cx="64.65" cy="65.14" r="54.49" fill="#006ca2"></circle><circle cx="64.65" cy="65.14" r="35.33" fill="#ed6c30"></circle><path fill="#fff" d="M64.65 102.59c-20.66 0-37.46-16.8-37.46-37.46s16.8-37.46 37.46-37.46c20.65 0 37.46 16.81 37.46 37.46c0 20.66-16.81 37.46-37.46 37.46m0-70.65c-18.3 0-33.19 14.89-33.19 33.19c0 18.3 14.89 33.19 33.19 33.19c18.3 0 33.19-14.89 33.19-33.19c0-18.3-14.88-33.19-33.19-33.19"></path><circle cx="64.65" cy="65.14" r="16.66" fill="#fff"></circle><path fill="#fff" d="M122.15 20.3c-1.67-1.7-3.92-1.7-4.67-1.7h-.28l-1.92.03c-1.35.02-3.19.42-3.98-.91c-.62-1.04-1.12-1.25-2.33-1.54c-1-.24-2.17-.39-2.44-1.57c-.15-.64-.06-1.3-.14-1.96c-.11-.91-.31-1.74-.31-2.69c.01-.94-.07-1.82-.15-2.74c-.03-.41-.03-.87-.29-1.22c-.56-.73-1.14-.95-2.12-.95c-.33 0-.68.04-1.02.1c-2.42.47-3.76 2.43-4.49 3.48c-.08.12-.16.24-.23.33l-.09.14c-.74.92-1.58 1.97-2.32 3.16c-.71 1.16-1.6 2.3-2.54 3.5l-.24.31c-.69.88-1.28 1.76-1.84 2.61c-.32.48-.63.97-.97 1.44l-.19.25c-.42.56-1 1.33-1.38 2.33c-.57 1.52-.57 3.02-.5 4.01c.05.8.17 1.63.36 2.56c.14.7.32 1.4.49 2.1c.15.58.3 1.16.42 1.75c.21 1.09.44 2.17.67 3.26l.03.15l.06.28c.07.3.17.58.3.85c-2.35 2.95-4.9 6.18-7.41 9.35c-4.93 6.25-10.97 13.76-14.13 17.7c-1.2 1.5-1.98 2.48-2.14 2.68c-.46.58-.74 1.15-.87 1.73c-.12.59.02 1.18.41 1.66c.44.55 1.17.89 1.88.89c.26 0 .51-.05.74-.13c.21-.07.8-.31 3.54-3.35c2.03-2.25 4.84-5.49 7.86-8.97c2.31-2.68 4.75-5.5 7.06-8.12c2.9-3.29 5.51-6.25 7.89-8.91l.33.01c1.1.04 2.2.06 3.31.09c.58.01 1.18.05 1.78.1c.72.05 1.45.1 2.17.12c.19 0 .39.01.58.01c.72 0 1.38-.04 2.01-.11c.98-.11 2.47-.37 3.87-1.2c.91-.55 1.57-1.25 2.04-1.76l.22-.23c.4-.41.82-.8 1.23-1.2c.74-.71 1.51-1.44 2.26-2.28l.25-.28c1.02-1.15 1.98-2.23 3-3.14c1.05-.95 1.91-1.93 2.74-2.88c.12-.15.23-.24.33-.35c.91-.9 2.6-2.56 2.63-5.03c.03-1.46-.49-2.78-1.47-3.76"></path><path fill="#fff" d="M92.41 31.57c-.23-1.08-.45-2.14-.67-3.21c-.25-1.3-.64-2.56-.91-3.86c-.13-.65-.24-1.3-.28-1.97c-.04-.74-.03-1.54.23-2.24c.22-.56.7-1.12 1.05-1.62c.91-1.28 1.71-2.65 2.69-3.9c1.08-1.36 2.16-2.72 3.07-4.2c.62-1 1.37-1.92 2.1-2.85c.55-.68 1.27-2.11 2.2-2.29c1.05-.2 1.33 1.08 1.45 1.85c.19 1.18.39 2.36.59 3.54c.08.51.21 1.03.33 1.54c.16.74.36 1.48.4 2.24c.03.55.19 1.12-.04 1.65c-.17.42-.54.75-.82 1.1c-.43.55-.73 1.19-1.14 1.76c-.37.5-.78.98-1.08 1.52c-.41.71-.62 1.34-1.19 1.98c-.62.7-1.23 1.43-1.88 2.11c-.6.62-1.41 1.11-1.94 1.77c-.42.51-.62 1.16-1.04 1.69c-.58.75-1.18 1.5-1.75 2.26c-.37.47-.76 1.23-1.28 1.54c-.02-.13-.06-.27-.09-.41"></path><path fill="#2f2f2f" d="M102.11 5.42c.88 0 1.12 1.16 1.23 1.87c.19 1.18.39 2.36.59 3.54c.08.51.21 1.03.33 1.54c.16.74.36 1.48.4 2.24c.03.55.19 1.12-.04 1.65c-.17.42-.54.75-.82 1.1c-.43.55-.73 1.19-1.14 1.76c-.37.5-.78.98-1.08 1.52c-.41.71-.62 1.34-1.19 1.98c-.62.7-1.23 1.43-1.88 2.11c-.6.62-1.41 1.11-1.94 1.77c-.42.51-.62 1.16-1.04 1.69c-.58.75-1.18 1.5-1.75 2.26c-.37.47-.76 1.23-1.28 1.54c-.03-.15-.06-.29-.09-.43c-.23-1.08-.45-2.14-.67-3.21c-.25-1.3-.64-2.56-.91-3.86c-.13-.65-.24-1.3-.28-1.97c-.04-.74-.03-1.54.23-2.24c.22-.56.7-1.12 1.05-1.62c.91-1.28 1.71-2.65 2.69-3.9c1.08-1.36 2.16-2.72 3.07-4.2c.62-1 1.37-1.92 2.1-2.85c.55-.68 1.27-2.11 2.2-2.29c.08.01.15 0 .22 0m0-4.27c-.34 0-.69.03-1.02.1c-2.42.47-3.76 2.42-4.48 3.46c-.08.12-.17.24-.24.34l-.11.14c-.74.92-1.57 1.96-2.3 3.15c-.73 1.18-1.64 2.34-2.6 3.57l-.18.23c-.69.89-1.28 1.76-1.83 2.61c-.33.49-.65.97-.99 1.45l-.2.27c-.41.56-.98 1.32-1.37 2.32c-.58 1.52-.56 3.02-.5 4.01c.05.8.17 1.62.36 2.56c.15.7.32 1.39.49 2.09c.15.59.3 1.17.42 1.76c.22 1.09.43 2.17.67 3.27l.05.22l.03.15l1.19 5.96l5.2-3.15c1.18-.71 1.87-1.74 2.29-2.35c.05-.08.1-.16.16-.23c.45-.59.9-1.16 1.35-1.74l.39-.5c.43-.55.71-1.07.91-1.44c.04-.07.07-.14.11-.21c.09-.08.29-.25.44-.37c.36-.29.8-.65 1.23-1.11c.49-.51.95-1.04 1.4-1.57c.2-.22.39-.45.59-.67c.76-.86 1.17-1.66 1.47-2.25c.08-.14.15-.29.23-.44c.08-.15.27-.39.45-.62c.12-.17.26-.34.38-.51c.26-.35.5-.74.73-1.13c.11-.17.2-.35.33-.5l.12-.14c.33-.38.88-1.01 1.26-1.92c.61-1.4.47-2.69.4-3.38l-.02-.18c-.06-.99-.26-1.85-.42-2.55l-.08-.38l-.12-.52c-.06-.26-.12-.52-.17-.78l-.24-1.47l-.33-2.05c-.82-5.11-4.38-5.5-5.45-5.5"></path><path fill="#fff" d="M93.91 34.02c1.1.03 2.2.06 3.28.08c1.33.03 2.65.18 3.96.22c.67.01 1.33 0 1.98-.08c.74-.09 1.53-.24 2.17-.63c.52-.31.98-.88 1.41-1.31c1.1-1.13 2.3-2.16 3.35-3.35c1.16-1.29 2.3-2.6 3.59-3.76c.88-.79 1.66-1.68 2.43-2.57c.57-.65 1.85-1.62 1.86-2.57c.02-1.07-1.3-1.11-2.08-1.1c-1.2.02-2.39.03-3.59.05c-.52.01-1.05-.03-1.57-.05c-.76-.03-1.52-.1-2.27 0c-.55.07-1.14.01-1.62.33c-.38.25-.64.67-.94 1c-.47.52-1.05.93-1.53 1.44c-.43.45-.83.93-1.31 1.34c-.63.53-1.21.85-1.74 1.52c-.58.74-1.19 1.46-1.75 2.22c-.5.7-.84 1.58-1.4 2.23c-.43.5-1.03.82-1.48 1.33c-.63.71-1.27 1.42-1.91 2.13c-.4.44-1.08.96-1.28 1.52c.15 0 .3.01.44.01"></path><path fill="#2f2f2f" d="M109.33 18.91c.46 0 .92.03 1.38.05c.46.02.93.06 1.38.06h.19c1.2-.02 2.39-.03 3.59-.05h.2c.78 0 1.89.12 1.87 1.1c-.01.95-1.29 1.92-1.86 2.57c-.78.89-1.55 1.78-2.43 2.57c-1.29 1.16-2.43 2.47-3.59 3.76c-1.05 1.18-2.25 2.21-3.35 3.35c-.42.43-.89 1-1.41 1.31c-.64.39-1.42.54-2.17.63c-.52.06-1.04.08-1.57.08h-.42c-1.31-.03-2.63-.18-3.96-.22c-1.08-.02-2.18-.05-3.28-.08c-.14 0-.29-.01-.43-.02c.21-.56.88-1.08 1.28-1.52c.64-.7 1.27-1.42 1.91-2.13c.45-.5 1.05-.82 1.48-1.33c.56-.64.9-1.53 1.4-2.23c.56-.76 1.17-1.48 1.75-2.22c.53-.67 1.11-.99 1.74-1.52c.48-.4.88-.89 1.31-1.34c.48-.51 1.06-.92 1.53-1.44c.3-.34.55-.75.94-1c.48-.32 1.07-.26 1.62-.33c.3-.04.6-.05.9-.05m0-4.27c-.52 0-.98.03-1.43.09l-.17.01c-.68.05-1.96.13-3.25.99c-.84.56-1.35 1.2-1.66 1.59l-.11.14c-.12.12-.26.25-.42.38c-.35.31-.7.62-1.03.97c-.12.13-.28.29-.42.46c-.2.21-.4.44-.53.54c-.13.11-.27.21-.39.3c-.53.4-1.24.94-1.95 1.84l-.47.59c-.47.58-.94 1.16-1.38 1.76c-.38.52-.66 1.02-.88 1.42c-.09.16-.21.38-.28.5c-.06.05-.12.1-.18.14c-.33.27-.8.64-1.28 1.16l-.63.7c-.42.46-.83.93-1.26 1.39c-.06.07-.12.13-.2.2c-.53.52-1.43 1.39-1.92 2.69l-2.12 5.6l5.98.17l.16.01l.29.01l3.3.09c.58.01 1.18.06 1.78.1c.72.05 1.44.1 2.16.12h.53c.76 0 1.43-.03 2.06-.11c1.01-.12 2.5-.38 3.89-1.22c.89-.54 1.54-1.23 2.01-1.74l.22-.24c.42-.42.83-.82 1.25-1.22c.74-.7 1.5-1.44 2.25-2.28l.3-.33c1-1.13 1.95-2.19 2.95-3.09c1.07-.96 1.95-1.97 2.8-2.95c.08-.09.18-.18.29-.29c.9-.9 2.58-2.56 2.62-5.03c.02-1.42-.5-2.74-1.48-3.72c-1.68-1.7-3.92-1.7-4.66-1.7h-.3c-.67.01-1.35.03-2.02.03l-1.56.02h-.11c-.22 0-.46-.01-.68-.03l-.53-.03l-.33-.02c-.4.01-.81-.01-1.21-.01"></path><path fill="#2f2f2f" d="M110.89 14.27c-.34-.58-1.05-1.35-2.48-1.71c-.32-.08-.64-.12-.95-.12c-1.74 0-2.82 1.25-3.79 2.37c-1.35 1.57-2.63 3.23-3.88 4.83c-.63.81-1.26 1.63-1.9 2.43c-1.42 1.79-9.23 11.64-16.67 21.03c-4.94 6.24-10.98 13.76-14.13 17.69c-1.2 1.5-1.99 2.48-2.15 2.68c-.46.58-.74 1.15-.87 1.73c-.12.59.02 1.18.42 1.66c.44.55 1.16.89 1.88.89c.26 0 .51-.05.74-.13c.2-.08.8-.31 3.55-3.35c2.03-2.25 4.84-5.49 7.85-8.97c2.32-2.68 4.75-5.5 7.07-8.12c14.29-16.23 21.74-24.74 22.74-26.02l.35-.43c1.51-1.86 2.37-3 2.55-3.69c.25-.96.13-1.97-.33-2.77"></path></svg></div><h5 class="mt-2 me-auto">Accurate </h5></div>
+                            <hr class="mt-1 mb-2">
+                        </div>
+                        <table class="table mb-5" style="width:667.5px;">
+
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Number</th>
+                                    <th scope="col">Prediction</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>THOMAS ALVA EDISON</td>
+                                    <td>60</td>
+                                    <td>This number signifies peace, prosperity, appreciation of fine arts, a balanced state of mind and wisdom. They are skilled conversationalists who can put forth very logical arguments. Their famil...</td>
+                                </tr>
+                                <tr>
+                                    <td>ADOLF HITLER</td>
+                                    <td>43</td>
+                                    <td>This is a strange number. Their whole life will be revolutionary. Whatever profession in which they are involved, this number produces new enemies. They have the tendency to resign from their jo...</td>
+                                </tr>
+                                <tr>
+                                    <td>MICHAEL JACKSON</td>
+                                    <td>44</td>
+                                    <td>This number helps in earning money easily. Industries involving many people, like cinema theatres, printing presses, coal and iron mining, painting, making of furniture and sports goods, and org...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr class="mt-5">
+                <!-- DROP DOWN FAQ -->
+                <div class="accordion rounded-4 border shadow " id="advancedTabAccordion" style="max-width: 667.5px; margin-bottom: 157.5px;">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="35" height="35" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="bx:book-reader" data-width="35" style="margin-right: 7px;"><path fill="currentColor" d="M21 8c-.202 0-4.85.029-9 2.008C7.85 8.029 3.202 8 3 8a1 1 0 0 0-1 1v9.883a1 1 0 0 0 .305.719c.195.188.48.305.729.28l.127-.001c.683 0 4.296.098 8.416 2.025c.016.008.034.005.05.011c.119.049.244.083.373.083s.254-.034.374-.083c.016-.006.034-.003.05-.011c4.12-1.928 7.733-2.025 8.416-2.025l.127.001c.238.025.533-.092.729-.28c.194-.189.304-.449.304-.719V9a1 1 0 0 0-1-1M4 10.049c1.485.111 4.381.48 7 1.692v7.742c-3-1.175-5.59-1.494-7-1.576zm16 7.858c-1.41.082-4 .401-7 1.576v-7.742c2.619-1.212 5.515-1.581 7-1.692z"></path><circle cx="12" cy="5" r="3" fill="currentColor"></circle></svg>
+                                <strong style="font-size: 25px;">Help</strong>
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#advancedTabAccordion">
+                            <div class="accordion-body">
+                                <div class="vstack">
+                                    <h4 class="fw-bold">What is Numerology?</h4>
+                                    <p class="">
+                                        To put things in a nutshell, every man
+                                        or woman is represented by a Number (since he is born on a
+                                        particular date, month and year) and also defined by letters
+                                        pertaining to their names.
+                                    </p>
+                                    <p class="mb-4">
+                                        According to these sastras the
+                                        <strong>man is a Yantra</strong> and his <strong>name is a Mantra</strong>.
+                                        Favourable results can be
+                                        obtained only if <strong>both agree</strong> with each other and any disagreement
+                                        will be harmful to them. This is the basic foundation of this science.
+                                    </p>
+
+                                    <h4 class="fw-bold">Source of Numerology?</h4>
+                                    <p class="">
+                                        <strong>Mantra Sastra</strong> helps us to understand the latent powers of
+                                        nature, and we learn to command them through sound vibrations.
+                                        Finding out the forms of those invisible powers and then using them
+                                        is the <strong>aim of Tantra Sastra</strong>.
+                                    </p>
+                                    <p class="mb-4">
+                                        Only these two mutually related sastras
+                                        can help us to understand nature and live in accordance with it.
+                                        These two sastras have <strong>been kept secret</strong> to this day lest it
+                                        should fall in the hands of the unscrupulous. These are still
+                                        sustained only under a Guru-Disciple set-up.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="StarsAboveMe">
+                <h1>Contact</h1>
+                <p>Contact us at contact@example.com</p>
+            </section>
+            <section id="Contact">
+                <div>
+
+                    <div class="vstack mb-2">
+                        <div class="hstack">
+                            <div class="vstack gap-2">
+                                <div class="hstack gap-3 mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--fluent" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" data-icon="fluent:chat-mail-20-filled" data-width="50" style="margin-top: -10px;"><g fill="currentColor"><path d="M2 7a6 6 0 1 1 2.996 5.195l-2.338.78a.5.5 0 0 1-.639-.612l.712-2.491A6 6 0 0 1 2 7m4.5-1.5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm2 2h-2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1"></path><path d="m12.276 14.947l-2.402-1.2q.662-.185 1.263-.488l1.363.682l4.5-2.25V11a1 1 0 0 0-1-1h-1.674q.23-.481.384-1H16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-2.07q.49.07 1 .07v2a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-3.191l-4.276 2.138a.5.5 0 0 1-.448 0"></path></g></svg>
+                                    <h1 class="fw-bold" tabindex="-1">Contact us</h1>
+                                </div>
+                            </div>
+                        </div><p class="fs-5 col-md-8 mb-0" style=" max-width:667.5px;">Report a bug, suggest a feature or just say Hi</p><hr class="border-secondary border mt-3">
+                    </div>
+
+
+                    <div class="d-md-flex justify-content-between">
+                        <div class="me-2">
+                            <div style="display: none;" _bl_79="">
+                                <h3>
+                                    Thank you for your message.<br>
+                                    We'll reply soon.
+                                </h3>
+                            </div>
+                            <div class="vstack gap-3 me-5 mb-4" style="width:352.2px;">
+                                <div class="vstack gap-2" style="max-width: 667.5px;" _bl_80="">
+                                    <div>
+                                        <label for="emailInputId">Email</label>
+                                        <input type="text" id="emailInputId" class="form-control" placeholder="john@example.com">
+                                    </div>
+                                    <div>
+                                        <label for="messageInputId">Message</label>
+                                        <textarea style="min-height: 132px;" class="form-control" id="messageInputId" placeholder="Hi, this is a short message."></textarea>
+                                    </div>
+                                    <style>
+                                        .no-dropdown-arrow.dropdown-toggle::after {
+                                            display: none !important;
+                                        }
+                                    </style>
+                                    <button onclick="sendMessage()" style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-primary btn " _bl_81="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bi" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16" data-icon="bi:send-check" data-width="25"><g fill="currentColor"><path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855a.75.75 0 0 0-.124 1.329l4.995 3.178l1.531 2.406a.5.5 0 0 0 .844-.536L6.637 10.07l7.494-7.494l-1.895 4.738a.5.5 0 1 0 .928.372zm-2.54 1.183L5.93 9.363L1.591 6.602z"></path><path d="M16 12.5a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0m-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95l-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686"></path></g></svg>Send
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-md-0 mt-4 me-md-5">
+                            <div class="vstack gap-0 gap-md-2">
+                                <div class="" style=" cursor: pointer; max-width:365px;">
+                                    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color:  !important; ">
+                                        <div class="hstack mb-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos bi flex-shrink-0 me-2" width="50" height="50.4" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 258" data-icon="logos:whatsapp-icon" data-width="50"><defs><linearGradient id="IconifyId190b0b54c3714361377" x1="50%" x2="50%" y1="100%" y2="0%"><stop offset="0%" stop-color="#1FAF38"></stop><stop offset="100%" stop-color="#60D669"></stop></linearGradient><linearGradient id="IconifyId190b0b54c3714361378" x1="50%" x2="50%" y1="100%" y2="0%"><stop offset="0%" stop-color="#F9F9F9"></stop><stop offset="100%" stop-color="#FFF"></stop></linearGradient></defs><path fill="url(#IconifyId190b0b54c3714361377)" d="M5.463 127.456c-.006 21.677 5.658 42.843 16.428 61.499L4.433 252.697l65.232-17.104a123 123 0 0 0 58.8 14.97h.054c67.815 0 123.018-55.183 123.047-123.01c.013-32.867-12.775-63.773-36.009-87.025c-23.23-23.25-54.125-36.061-87.043-36.076c-67.823 0-123.022 55.18-123.05 123.004"></path><path fill="url(#IconifyId190b0b54c3714361378)" d="M1.07 127.416c-.007 22.457 5.86 44.38 17.014 63.704L0 257.147l67.571-17.717c18.618 10.151 39.58 15.503 60.91 15.511h.055c70.248 0 127.434-57.168 127.464-127.423c.012-34.048-13.236-66.065-37.3-90.15C194.633 13.286 162.633.014 128.536 0C58.276 0 1.099 57.16 1.071 127.416m40.24 60.376l-2.523-4.005c-10.606-16.864-16.204-36.352-16.196-56.363C22.614 69.029 70.138 21.52 128.576 21.52c28.3.012 54.896 11.044 74.9 31.06c20.003 20.018 31.01 46.628 31.003 74.93c-.026 58.395-47.551 105.91-105.943 105.91h-.042c-19.013-.01-37.66-5.116-53.922-14.765l-3.87-2.295l-40.098 10.513z"></path><path fill="#FFF" d="M96.678 74.148c-2.386-5.303-4.897-5.41-7.166-5.503c-1.858-.08-3.982-.074-6.104-.074c-2.124 0-5.575.799-8.492 3.984c-2.92 3.188-11.148 10.892-11.148 26.561s11.413 30.813 13.004 32.94c1.593 2.123 22.033 35.307 54.405 48.073c26.904 10.609 32.379 8.499 38.218 7.967c5.84-.53 18.844-7.702 21.497-15.139c2.655-7.436 2.655-13.81 1.859-15.142c-.796-1.327-2.92-2.124-6.105-3.716s-18.844-9.298-21.763-10.361c-2.92-1.062-5.043-1.592-7.167 1.597c-2.124 3.184-8.223 10.356-10.082 12.48c-1.857 2.129-3.716 2.394-6.9.801c-3.187-1.598-13.444-4.957-25.613-15.806c-9.468-8.442-15.86-18.867-17.718-22.056c-1.858-3.184-.199-4.91 1.398-6.497c1.431-1.427 3.186-3.719 4.78-5.578c1.588-1.86 2.118-3.187 3.18-5.311c1.063-2.126.531-3.986-.264-5.579c-.798-1.593-6.987-17.343-9.819-23.64"></path></svg>
+                                            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+                                                <strong>WhatsApp</strong><br>
+                                                Call or chat with us.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="" style=" max-width:365px;">
+                                    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color: success !important; ">
+                                        <div class="hstack mb-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:address-book" data-width="50"><path fill="#673AB7" d="M38 44H12V4h26c2.2 0 4 1.8 4 4v32c0 2.2-1.8 4-4 4"></path><path fill="#311B92" d="M10 4h2v40h-2c-2.2 0-4-1.8-4-4V8c0-2.2 1.8-4 4-4"></path><path fill="#fff" d="M36 24.2c-.1 4.8-3.1 6.9-5.3 6.7c-.6-.1-2.1-.1-2.9-1.6c-.8 1-1.8 1.6-3.1 1.6c-2.6 0-3.3-2.5-3.4-3.1c-.1-.7-.2-1.4-.1-2.2c.1-1 1.1-6.5 5.7-6.5c2.2 0 3.5 1.1 3.7 1.3l-.6 6.8c0 .3-.2 1.6 1.1 1.6c2.1 0 2.4-3.9 2.4-4.6c.1-1.2.3-8.2-7-8.2c-6.9 0-7.9 7.4-8 9.2c-.5 8.5 6 8.5 7.2 8.5c1.7 0 3.7-.7 3.9-.8l.4 2c-.3.2-2 1.1-4.4 1.1c-2.2 0-10.1-.4-9.8-10.8c.3-2.1 1.6-11.2 10.8-11.2c9.2 0 9.4 8.1 9.4 10.2m-11.9 1.3c-.1 1 0 1.8.2 2.3c.2.5.6.8 1.2.8c.1 0 .3 0 .4-.1c.2-.1.3-.1.5-.3c.2-.1.3-.3.5-.6c.2-.2.3-.6.4-1l.5-5.4c-.2-.1-.5-.1-.7-.1c-.5 0-.9.1-1.2.3c-.3.2-.6.5-.9.8c-.2.4-.4.8-.6 1.3s-.2 1.3-.3 2"></path></svg>
+                                            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+                                                <strong>Email</strong><br>
+                                                contact@vedastro.org
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="" style=" cursor: pointer; max-width:365px;">
+                                    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color:  !important; ">
+                                        <div class="hstack mb-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256" data-icon="logos:telegram" data-width="50"><defs><linearGradient id="IconifyId190b0b54c3714361379" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#2AABEE"></stop><stop offset="100%" stop-color="#229ED9"></stop></linearGradient></defs><path fill="url(#IconifyId190b0b54c3714361379)" d="M128 0C94.06 0 61.48 13.494 37.5 37.49A128.04 128.04 0 0 0 0 128c0 33.934 13.5 66.514 37.5 90.51C61.48 242.506 94.06 256 128 256s66.52-13.494 90.5-37.49c24-23.996 37.5-56.576 37.5-90.51s-13.5-66.514-37.5-90.51C194.52 13.494 161.94 0 128 0"></path><path fill="#FFF" d="M57.94 126.648q55.98-24.384 74.64-32.152c35.56-14.786 42.94-17.354 47.76-17.441c1.06-.017 3.42.245 4.96 1.49c1.28 1.05 1.64 2.47 1.82 3.467c.16.996.38 3.266.2 5.038c-1.92 20.24-10.26 69.356-14.5 92.026c-1.78 9.592-5.32 12.808-8.74 13.122c-7.44.684-13.08-4.912-20.28-9.63c-11.26-7.386-17.62-11.982-28.56-19.188c-12.64-8.328-4.44-12.906 2.76-20.386c1.88-1.958 34.64-31.748 35.26-34.45c.08-.338.16-1.598-.6-2.262c-.74-.666-1.84-.438-2.64-.258c-1.14.256-19.12 12.152-54 35.686c-5.1 3.508-9.72 5.218-13.88 5.128c-4.56-.098-13.36-2.584-19.9-4.708c-8-2.606-14.38-3.984-13.82-8.41c.28-2.304 3.46-4.662 9.52-7.072"></path></svg>
+                                            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+                                                <strong>Telegram</strong><br>
+                                                Call or chat with us.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+    </div>
+
+    <!-- LOAD JS HERE TO SHOWS INITIAL LOADING BOX ASAP -->
+    <!--JQuery-->
+    <!--Note: JQuery needs to be loaded before bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+    <!-- Date Time Picker -->
+    <link href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar/build/vanilla-calendar.min.css"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar/build/themes/light.min.css"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar/build/themes/dark.min.css"
+          rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar/build/vanilla-calendar.min.js"
+            defer></script>
+
+    <!-- JS Dark Mode button-->
+    <script src="https://cdn.jsdelivr.net/npm/darkmode-js/lib/darkmode-js.min.js"></script>
+
+    <!-- CUSTOM JS & CSS -->
+    <script src="https://vedastro.org/js/VedAstro.js"></script>
+
+    <!--LOAD PAGE CSS-->
+    <!-- Bootstrap CSS : Used for styling everything-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+
+
+    <!-- Bootstrap  JS : Used to animate some components like Accordion, dropdown, BUNDLE because popper.js-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!--Icon Generator Lib -->
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js">        </script>
+
+    <!--Sweet Alert Lib -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mattboldt/typed.js@2.0.11/lib/typed.min.js"></script>
+
+    <!-- JS APP CODE -->
+    <script>
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+                    if (section.id === sectionId) {
+                                        section.classList.add('active');
+                }
+            });
+        }
+
+                            //-----------------------------> CONTACT PAGE
+        function sendMessage() {
+
+        }
+
+
+        //-----------------------------> NUMEROLOGY PAGE
+        async function getNameNumber(fullName) {
+            try {
+                    const response = await fetch(`https://vedastroapi.azurewebsites.net/api/Calculate/NameNumber/FullName/${fullName}`);
+                                    const data = await response.json();
+                if (data.Status === 'Pass') {
+                    const nameNumber = parseInt(data.Payload.NameNumber, 10);
+                    return nameNumber;
+                    } else {
+                                        throw new Error(`API returned error: ${data.Status}`);
+                }
+            } catch (error) {
+                console.error(error);
+                    return null; // or throw error, depending on your use case
+                                }
+        }
+
+        function updateNumerologyPrediction(number, text) {
+                const numberOutput = document.getElementById('NumerologyPredictionNumberOutput');
+                                const textOutput = document.getElementById('NumerologyPredictionTextOutput');
+
+            numberOutput.textContent = number;
+            textOutput.textContent = text;
+
+                                //make visible, since default start hidden
+            document.getElementById('NumerologyPredictionOutputHolder').style.display = 'block';
+        }
+
+    </script>
+</body>
+</html>

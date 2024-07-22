@@ -76,7 +76,7 @@ namespace API
                 var visitorId = rootXml.Element("VisitorId")?.Value;
                 var userId = rootXml.Element("UserId")?.Value;
 
-                var callerId = APITools.GetCallerId(userId, visitorId);
+                var callerId = Tools.GetCallerId(userId, visitorId);
 
                 //generate compatibility report
                 var compatibilityReport = await GetNewMatchReport(maleId, femaleId, callerId); //caller id will be unique
@@ -128,7 +128,7 @@ namespace API
                 var userId = rootXml.Element("UserId")?.Value; //
                 var visitorId = rootXml.Element("VisitorId")?.Value; //id of the owner can be visitor id
 
-                var callerId = APITools.GetCallerId(userId, visitorId);
+                var callerId = Tools.GetCallerId(userId, visitorId);
 
                 //generate compatibility report
                 var compatibilityReport = await GetNewMatchReport(maleId, femaleId, callerId);
@@ -247,7 +247,7 @@ namespace API
                 var nameInput = Tools.CleanAndFormatNameText(name);
 
                 //new person ID made from thin air 
-                var brandNewHumanReadyId = await APITools.GeneratePersonId(ownerId, nameInput, birthTime.StdYear().ToString());
+                var brandNewHumanReadyId = await PersonManagerTools.GeneratePersonId(ownerId, nameInput, birthTime.StdYear().ToString());
 
                 //get gender from gender string
                 var gender = Enum.Parse<Gender>(genderText);

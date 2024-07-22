@@ -8,7 +8,7 @@ public class CallerInfo
         this.UserId = userId;
 
         //set caller ID here 
-        CallerId = APITools.GetCallerId(UserId, VisitorId);
+        CallerId = VedAstro.Library.Tools.GetCallerId(UserId, VisitorId);
     }
 
     /// <summary>

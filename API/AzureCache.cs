@@ -20,7 +20,7 @@ namespace API
         {
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Secrets.API_STORAGE;
+            var storageConnectionString = Secrets.Get("API_STORAGE");
 
             //get image from storage
             blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
@@ -76,7 +76,7 @@ namespace API
 
                 if (typeof(T) == typeof(string))
                 {
-                    var data = await APITools.BlobClientToString(blobClient);
+                    var data = await Tools.BlobClientToString(blobClient);
                     return data;
 
                 }
@@ -218,7 +218,7 @@ namespace API
                     Console.WriteLine($"USING CACHE : {callerInfo.CallerId} SIZE:{xxx}");
 #endif
 
-                    var httpResponseData = APITools.SendPassHeaderToCaller(chartBlobClient, httpRequestData, MediaTypeNames.Application.Json);
+                    var httpResponseData = Tools.SendPassHeaderToCaller(chartBlobClient, httpRequestData, MediaTypeNames.Application.Json);
                     return httpResponseData;
 
                 }

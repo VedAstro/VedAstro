@@ -113,7 +113,7 @@ namespace API
 			var byteArray = CreateBarChart(xxList);
 
 			//send file as JPEG image to caller
-			return APITools.SendFileToCaller(byteArray, incomingRequest, MediaTypeNames.Image.Jpeg);
+			return VedAstro.Library.Tools.SendFileToCaller(byteArray, incomingRequest, MediaTypeNames.Image.Jpeg);
 
 		}
 
@@ -228,7 +228,7 @@ namespace API
 		/// </summary>
 		public static List<string> GetAllTableNames()
 		{
-			string connectionString = Secrets.API_STORAGE; // Replace with your storage account's connection string
+			string connectionString = Secrets.Get("API_STORAGE"); // Replace with your storage account's connection string
 			var serviceClient = new TableServiceClient(connectionString);
 			var tableResponses = serviceClient.Query();
 			var tableNames = new List<string>();

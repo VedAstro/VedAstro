@@ -41,7 +41,7 @@ public static class APILogger
         var logBookUri = $"https://vedastroapistorage.table.core.windows.net/{OpenApiLogBook}";
         var errorBookUri = $"https://vedastroapistorage.table.core.windows.net/{OpenApiErrorBook}";
         string accountName = "vedastroapistorage";
-        string storageAccountKey = Secrets.VedAstroApiStorageKey;
+        string storageAccountKey = Secrets.Get("VedAstroApiStorageKey");
 
         //get connection & load tables
         var _tableServiceClient = new TableServiceClient(new Uri(logBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));

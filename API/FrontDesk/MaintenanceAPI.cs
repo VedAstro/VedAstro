@@ -93,7 +93,7 @@ namespace API
             ApiStatistic.Log(incomingRequest); //logger
 
             //IMPORTANT: replace this variable with your Cognitive Services subscription key
-            string subscriptionKey = Secrets.BING_IMAGE_SEARCH;
+            string subscriptionKey = Secrets.Get("BING_IMAGE_SEARCH");
             //stores the image results returned by Bing
             Images imageResults = null;
 
@@ -151,14 +151,14 @@ namespace API
                 //for images get and send direct with as less operations as possible
                 var fileBlobClient = await AzureCache.GetData<BlobClient>(callerId);
 
-                return APITools.SendFileToCaller(fileBlobClient, incomingRequest, MediaTypeNames.Image.Gif);
+                return Tools.SendFileToCaller(fileBlobClient, incomingRequest, MediaTypeNames.Image.Gif);
             }
             else if (formatName.ToLower() == "svg")
             {
                 //for images get and send direct with as less operations as possible
                 var fileBlobClient = await AzureCache.GetData<BlobClient>(callerId);
 
-                return APITools.SendFileToCaller(fileBlobClient, incomingRequest, "image/svg+xml");
+                return Tools.SendFileToCaller(fileBlobClient, incomingRequest, "image/svg+xml");
             }
 
             throw new Exception("END OF THE LINE");

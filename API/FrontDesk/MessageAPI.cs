@@ -102,7 +102,7 @@ namespace API
 
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
-            var slackUserMessageWebHook = Secrets.SLACK_EMAIL_WEBHOOK;
+            var slackUserMessageWebHook = Secrets.Get("SLACK_EMAIL_WEBHOOK");
 
             var response = await httpClient.PostAsync(slackUserMessageWebHook, content);
 

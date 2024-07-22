@@ -70,7 +70,27 @@ namespace API
         }
 
 
+        public static async Task<JObject> ExtractDataFromRequestJson(HttpRequestData request)
+        {
+            try
+            {
 
+                //get xml string from caller
+                var readAsStringAsync = await request?.ReadAsStringAsync();
+                var xmlString = readAsStringAsync ?? (new JObject()).ToString();
+
+                //parse xml string todo needs catch here
+                var parsedJson = JObject.Parse(xmlString);
+
+                return parsedJson;
+            }
+            catch (Exception e)
+            {
+                APILogger.Error("ERROR NO DATA FROM CALLER"); //log it
+                APILogger.Error(e); //log it
+                return new JObject(); //null to be detected by caller
+            }
+        }
 
 
         /// <summary>
@@ -263,27 +283,7 @@ namespace API
             }
         }
 
-        public static async Task<JObject> ExtractDataFromRequestJson(HttpRequestData request)
-        {
-            try
-            {
-
-                //get xml string from caller
-                var readAsStringAsync = await request?.ReadAsStringAsync();
-                var xmlString = readAsStringAsync ?? (new JObject()).ToString();
-
-                //parse xml string todo needs catch here
-                var parsedJson = JObject.Parse(xmlString);
-
-                return parsedJson;
-            }
-            catch (Exception e)
-            {
-                APILogger.Error("ERROR NO DATA FROM CALLER"); //log it
-                APILogger.Error(e); //log it
-                return new JObject(); //null to be detected by caller
-            }
-        }
+        
 
 
         ///// <summary>
@@ -400,7 +400,7 @@ namespace API
         public static List<Person> GetAllPersonList()
         {
             //get all
-            var foundCalls = AzureTable.PersonList.Query<PersonRow>();
+            var foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>();
 
             var returnList = new List<Person>();
             foreach (var call in foundCalls)
@@ -484,7 +484,7 @@ namespace API
             EmailClient getEmailClient()
             {
                 //read the connection string
-                var connectionString = Secrets.AutoEmailerConnectString;
+                var connectionString = Secrets.Get("AutoEmailerConnectString");
 
 
                 //raise alarm if no connection string
@@ -507,7 +507,7 @@ namespace API
             if (ownerId == "101") { return; }
 
             //get all person's under visitor id
-            var visitorIdPersons = AzureTable.PersonList.Query<PersonRow>(call => call.PartitionKey == visitorId);
+            var visitorIdPersons = AzureTable.PersonList_Indic.Query<PersonListEntity>(call => call.PartitionKey == visitorId);
 
             //if no records, then end here
             if (!visitorIdPersons.Any()) { return; }
@@ -519,72 +519,15 @@ namespace API
                 //overwrite visitor id with user id
                 var modifiedPerson = personOriRecord.Clone();
                 modifiedPerson.PartitionKey = ownerId;
-                AzureTable.PersonList.AddEntity(modifiedPerson);
+                AzureTable.PersonList_Indic.AddEntity(modifiedPerson);
 
                 //2: delete original "visitor" record 
-                await AzureTable.PersonList.DeleteEntityAsync(personOriRecord.PartitionKey, personOriRecord.RowKey);
+                await AzureTable.PersonList_Indic.DeleteEntityAsync(personOriRecord.PartitionKey, personOriRecord.RowKey);
             }
 
 
         }
 
-        //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
-        //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
-        public static async Task<bool> SwapUserId2(CallerInfo callerInfo, string cloudXmlFile)
-        {
-            var allListXmlDoc = await Tools.GetXmlFileFromAzureStorage(cloudXmlFile, Tools.BlobContainerName);
-
-            //filter out record by visitor id
-            var visitorIdList = Tools.FindXmlByUserId(allListXmlDoc, callerInfo.VisitorId);
-
-            //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
-            //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
-            var loggedIn = callerInfo.UserId != "101" && !(string.IsNullOrEmpty(callerInfo.UserId)); //already logged in if true
-            var visitorProfileExists = visitorIdList.Any();
-
-            if (loggedIn && visitorProfileExists)
-            {
-                //convert visitor to user
-                foreach (var xmlRecord in visitorIdList)
-                {
-                    //get existing data
-                    var existingOwners = xmlRecord?.Element("UserId")?.Value ?? "";
-
-                    //replace visitor id with user id
-                    var updatedOwners = existingOwners.Replace(callerInfo.VisitorId, callerInfo.UserId);
-
-                    //check if data is valid, should not match
-                    if (updatedOwners.Equals(existingOwners))
-                    {
-                        throw new Exception("ID Swap Failed");
-                    }
-
-                    //pump value into local updated list
-                    var cleaned = Tools.RemoveWhiteSpace(updatedOwners); //remove any space crept it
-                    xmlRecord.Element("UserId")!.Value = cleaned;
-                }
-
-                //upload modified list file to storage
-                await SaveXDocumentToAzure(allListXmlDoc, cloudXmlFile, Tools.BlobContainerName);
-
-                //since heavy computation, log if happens
-                #region DEBUG
-                Console.WriteLine($"Profiles swapped : {visitorIdList.Count}");
-                #endregion
-
-
-                //clear cache
-                await AzureCache.Delete(callerInfo.CallerId);
-
-                //return true of swap was done
-                return true;
-            }
-            //false if no swap
-            else
-            {
-                return false;
-            }
-        }
 
         public static IEnumerable<LogItem> GetOnlineVisitors(XDocument visitorLogDocument)
         {
@@ -604,63 +547,6 @@ namespace API
             return uniqueList;
         }
 
-        /// <summary>
-        /// Uses name and birth year to generate human readable ID for a new person record
-        /// created so that user can type ID direct into URL based on only memory of name and birth year
-        /// </summary>
-        public static async Task<string> GeneratePersonId(string ownerId, string personName, string birthYear)
-        {
-            //remove all space from name : Jamés Brown > JamésBrown
-            var spaceLessName = Tools.RemoveWhiteSpace(personName);
-
-            //almost done, name with birth year at the back
-            var humanId = spaceLessName + birthYear;
-
-            //check if ID is really unique, else it would need a number at the back 
-            //try to find a person, if null then no new id is unique
-            //jamesbrown and JamesBrown, both should by common sense work
-            var idIsSafe = IsUniquePersonId(humanId);
-
-            //if id NOT safe, add nonce and try again, possible nonce has been used
-            //JamésBrown > JamésBrown1
-            var nonceCount = 1; //start nonce at 1
-        TryAgain:
-            var noncedId = humanId; //clear pre nonce if any 
-            if (!idIsSafe)
-            {
-                //make unique
-                noncedId += nonceCount;
-                nonceCount++; //increment for next if needed
-                              //try again
-                idIsSafe = IsUniquePersonId(noncedId);
-
-                //if unique found, end here
-                if (idIsSafe) { return noncedId; }
-
-                //try again with higher nonce
-                else { goto TryAgain; }
-            }
-
-            //once control reaches here id should be all good
-            return noncedId;
-
-
-            //---------------LOCAL FUNCTIONS-------------------------------
-
-            //returns true if no other record exist with same id
-            //note search without owner ID, thus making person ID unique without owner ID for easy linking with images & other data
-            bool IsUniquePersonId(string personId)
-            {
-                var findPersonXmlById = AzureTable.PersonList?.Query<PersonRow>(row => row.RowKey == personId);
-                var x = !findPersonXmlById.Any();
-
-                return x;
-            }
-
-
-
-
-        }
 
         /// <summary>
         /// data comes in as XML should leave as JSON ready for sending to client via HTTP
@@ -722,83 +608,7 @@ namespace API
             return response;
         }
 
-        public static HttpResponseData SendFileToCaller(byte[] gif, HttpRequestData incomingRequest, string mimeType)
-        {
-            //send image back to caller
-            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", mimeType);
-            //place in response body
-            response.WriteBytes(gif);
-            return response;
-        }
 
-        /// <summary>
-        /// SPECIAL METHOD made to allow files straight from blob to be sent to caller
-        /// as fast as possible
-        /// </summary>
-        public static HttpResponseData SendFileToCaller(BlobClient fileBlobClient, HttpRequestData incomingRequest, string mimeType)
-        {
-            //send image back to caller
-            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", mimeType);
-
-            //place in response body
-            //NOTE: very important to pass as stream to make work
-            //      if convert to byte array will not work!
-            //      needs to be direct stream to response
-            response.Body = fileBlobClient.OpenRead();
-            return response;
-        }
-
-        public static HttpResponseData SendPassHeaderToCaller(BlobClient fileBlobClient, HttpRequestData req, string mimeType)
-        {
-            //send image back to caller
-            //response = incomingRequest.CreateResponse(HttpStatusCode.OK);
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Call-Status", "Pass"); //lets caller know data is in payload
-            response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
-            response.Headers.Add("Content-Type", mimeType);
-
-            //place in response body
-            //NOTE: very important to pass as stream to make work
-            //      if convert to byte array will not work!
-            //      needs to be direct stream to response
-            response.Body = fileBlobClient.OpenRead();
-            return response;
-        }
-
-        public static async Task<HttpResponseData> SendPassHeaderToCaller(string dataToSend, HttpRequestData req, string mimeType)
-        {
-            //send image back to caller
-            //response = incomingRequest.CreateResponse(HttpStatusCode.OK);
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Call-Status", "Pass"); //lets caller know data is in payload
-            response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
-            response.Headers.Add("Content-Type", mimeType);
-
-            //place in response body
-            //NOTE: very important to pass as stream to make work
-            //      if convert to byte array will not work!
-            //      needs to be direct stream to response
-            await response.WriteStringAsync(dataToSend);
-
-            return response;
-        }
-
-        public static string GetCallerId(string userId, string visitorId)
-        {
-            var IsLoggedIn = userId != "101";
-            if (IsLoggedIn)
-            {
-                return userId;
-            }
-            //if user NOT logged in then take his visitor ID as caller id
-            else
-            {
-                return visitorId;
-            }
-
-        }
 
 
 
@@ -882,43 +692,7 @@ namespace API
         }
 
 
-        /// <summary>
-        /// Searches for person's image on BING and return one most probable as result
-        /// note uses thumbnail version for speed and data save
-        /// </summary>
-        public static async Task<byte[]> GetSearchImage(VedAstro.Library.Person personToImage)
-        {
-
-            //IMPORTANT: replace this variable with your Cognitive Services subscription key
-            string subscriptionKey = Secrets.BING_IMAGE_SEARCH;
-            //stores the image results returned by Bing
-            Images imageResults = null;
-
-            var client = new ImageSearchClient(new ApiKeyServiceClientCredentials(subscriptionKey));
-
-            //make search query based on person's details
-            var keywords = personToImage.DisplayName; //todo maybe location can help
-
-            // make the search request to the Bing Image API, and get the results
-            imageResults = await client.Images.SearchAsync(query: keywords); //search query
-
-
-            //pick out the images that seems most suited
-            var handPickedApples = imageResults.Value.Where(delegate (ImageObject x)
-            {
-                var isJpeg = x.EncodingFormat == "jpeg";//get only jpeg images for ease of handling down the road
-                var isCorrectShape = x.Width < x.Height; //rectangle image to fit site style better
-                return isJpeg && isCorrectShape;
-            });
-
-
-            //get 1st image in list as data
-            var topImageUrl = handPickedApples.First().ThumbnailUrl;
-            var imageBytes = await Tools.GetFileHttp(topImageUrl);
-
-            //return to caller
-            return imageBytes;
-        }
+       
 
 
         /// <summary>
@@ -932,8 +706,8 @@ namespace API
             var ipAddress = callData.PartitionKey;
             var lastCallsCount = APILogger.GetAllCallsWithinLastTimeperiod(ipAddress, minute1);
 
-            //rate set in runtime settings is multiplied
-            var msDelayRate = int.Parse(Secrets.OpenAPICallDelayMs);
+            //rate set in runtime settings is multipliedfull 
+            var msDelayRate = int.Parse(Secrets.Get("OpenAPICallDelayMs"));
             var freeCallRate = 50;//allowed high speed calls per minute //int.Parse(Secrets.OpenAPICallDelayMs); TODO add to Secrets
 
             //if more than 1 abuse count in the last 10 minutes than end the call here with no reply
@@ -987,7 +761,7 @@ namespace API
             //prepare call stuff
             var tableUlr = $"https://vedastroapistorage.table.core.windows.net/{tableName}";
             string accountName = "vedastroapistorage";
-            string storageAccountKey = Secrets.VedAstroApiStorageKey;
+            string storageAccountKey = Secrets.Get("VedAstroApiStorageKey");
 
             //get connection
             var _tableServiceClient = new TableServiceClient(new Uri(tableUlr), new TableSharedKeyCredential(accountName, storageAccountKey));
@@ -1014,7 +788,7 @@ namespace API
                     //get correct mime type so browser or receiver knows how to present
                     var mimeType = GetMimeType(rawFileData);
 
-                    return APITools.SendFileToCaller(rawFileData, incomingRequest, mimeType);
+                    return Tools.SendFileToCaller(rawFileData, incomingRequest, mimeType);
                 }
                 //JSON convert to table needs extra step
                 //NOTE: this generic JSON to JPEG converter,
@@ -1030,7 +804,7 @@ namespace API
                     //get correct mime type so browser or receiver knows how to present
                     var mimeType = GetMimeType(image);
 
-                    return APITools.SendFileToCaller(image, incomingRequest, mimeType);
+                    return Tools.SendFileToCaller(image, incomingRequest, mimeType);
                 }
 
                 Type type = rawPlanetData.GetType();
@@ -1043,7 +817,7 @@ namespace API
                 //get correct mime type so browser or receiver knows how to present
                 var mimeType = GetMimeType(rawFileData);
 
-                return APITools.SendFileToCaller(rawFileData, incomingRequest, mimeType);
+                return Tools.SendFileToCaller(rawFileData, incomingRequest, mimeType);
             }
 
             //if array pass directly

@@ -11,6 +11,7 @@ namespace API
 {
     public static class OpenAPI
     {
+
         //.../Calculate/Karana/Location/Singapore/Time/23:59/31/12/2000/+08:00
         private const string CalculateRoute = $"{nameof(Calculate)}/{{calculatorName}}/{{*fullParamString}}"; //* that captures the rest of the URL path
         private const string ListRoute = $"{nameof(ListCalls)}"; 
@@ -40,6 +41,9 @@ namespace API
                 //make caller data global to all children calling HTTP
                 CurrentCallerData.originalHttpRequest = incomingRequest;
 
+                //0 : SET LOCAL HOST : used when making same API server sub calls  "http://localhost:7071/api"
+                VedAstro.Library.Calculate.CurrentServerAddress = incomingRequest.ExtractHostAddress()+"/api";
+
                 //0 : LOG CALL : used later for throttle limit
                 ApiStatistic.Log(incomingRequest); //logger
 
@@ -61,11 +65,11 @@ namespace API
                     case nameof(VedAstro.Library.Calculate.SouthIndianChart):
                     case nameof(VedAstro.Library.Calculate.NorthIndianChart):
                         //send direct as raw SVG image
-                        return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawProcessedData), incomingRequest, "image/svg+xml");
+                        return Tools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawProcessedData), incomingRequest, "image/svg+xml");
                     // CSV string
                     case nameof(VedAstro.Library.Calculate.GenerateTimeListCSV):
                         //send direct as raw CSV file
-                        return APITools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawProcessedData), incomingRequest, "text/csv");
+                        return Tools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawProcessedData), incomingRequest, "text/csv");
                     default:
                         return APITools.SendAnyToCaller(format, calculatorName, rawProcessedData, incomingRequest);
                 }
@@ -601,6 +605,11 @@ namespace API
             else if (type == typeof(double))
             {
                 return (input) => double.Parse(input);
+            }
+            //handle double
+            else if (type == typeof(bool))
+            {
+                return (input) => bool.Parse(input.ToLower());
             }
             else
             {

@@ -16,7 +16,7 @@ public static class CallTracker
         //todo cleanup
         var storageUri = $"https://vedastroapistorage.table.core.windows.net/{tableName}";
         string accountName = "vedastroapistorage";
-        string storageAccountKey = Secrets.VedAstroApiStorageKey;
+        string storageAccountKey = Secrets.Get("VedAstroApiStorageKey");
 
         //save reference for late use
         tableServiceClient = new TableServiceClient(new Uri(storageUri), new TableSharedKeyCredential(accountName, storageAccountKey));

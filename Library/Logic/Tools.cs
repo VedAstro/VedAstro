@@ -34,6 +34,9 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Microsoft.Bing.ImageSearch;
+using Microsoft.Bing.ImageSearch.Models;
+using MimeDetective.Definitions;
 using Formatting = Newtonsoft.Json.Formatting;
 using XmlSerializer = System.Xml.Serialization.XmlSerializer;
 
@@ -69,6 +72,303 @@ namespace VedAstro.Library
 
         public const string BlobContainerName = "vedastro-site-data";
 
+
+        /// <summary>
+        /// Searches for person's image on BING and return one most probable as result
+        /// note uses thumbnail version for speed and data save
+        /// </summary>
+        public static async Task<byte[]> GetSearchImage(Person personToImage)
+        {
+            Console.WriteLine("NOT IMPLEMENTED!");
+            return new[] { byte.MinValue };
+
+            ////IMPORTANT: replace this variable with your Cognitive Services subscription key
+            //string subscriptionKey = Secrets.Get("BING_IMAGE_SEARCH");
+            ////stores the image results returned by Bing
+            //Default.FileTypes.Images imageResults = null;
+
+            //var client = new ImageSearchClient(new ApiKeyServiceClientCredentials(subscriptionKey));
+
+            ////make search query based on person's details
+            //var keywords = personToImage.DisplayName; //todo maybe location can help
+
+            //// make the search request to the Bing Image API, and get the results
+            //imageResults = await client.Images.SearchAsync(query: keywords); //search query
+
+
+            ////pick out the images that seems most suited
+            //var handPickedApples = imageResults.Value.Where(delegate (ImageObject x)
+            //{
+            //    var isJpeg = x.EncodingFormat == "jpeg";//get only jpeg images for ease of handling down the road
+            //    var isCorrectShape = x.Width < x.Height; //rectangle image to fit site style better
+            //    return isJpeg && isCorrectShape;
+            //});
+
+
+            ////get 1st image in list as data
+            //var topImageUrl = handPickedApples.First().ThumbnailUrl;
+            //var imageBytes = await Tools.GetFileHttp(topImageUrl);
+
+            ////return to caller
+            //return imageBytes;
+        }
+
+        public static HttpResponseData SendFileToCaller(byte[] gif, HttpRequestData incomingRequest, string mimeType)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", mimeType);
+            //place in response body
+            response.WriteBytes(gif);
+            return response;
+        }
+       
+
+        /// <summary>
+        /// SPECIAL METHOD made to allow files straight from blob to be sent to caller
+        /// as fast as possible
+        /// </summary>
+        public static HttpResponseData SendFileToCaller(BlobClient fileBlobClient, HttpRequestData incomingRequest, string mimeType)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", mimeType);
+
+            //place in response body
+            //NOTE: very important to pass as stream to make work
+            //      if convert to byte array will not work!
+            //      needs to be direct stream to response
+            response.Body = fileBlobClient.OpenRead();
+            return response;
+        }
+
+
+        /// <summary>
+        /// Given an image in byte form, will save it as Person profile image in correct place with ID as file name
+        /// </summary>
+        public static async Task SaveNewPersonImage(string personId, byte[] imageBytes)
+        {
+
+            var blobContainerName = "vedastro-site-data";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.Get("API_STORAGE"); //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //get access to file
+            var imageFile = $"images/person/{personId}.jpg";
+            var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
+
+            using var ms = new MemoryStream(imageBytes);
+            var blobUploadOptions = new BlobUploadOptions();
+            blobUploadOptions.AccessTier = AccessTier.Cool; //save money!
+
+            //note no override needed because specifying BlobUploadOptions, is auto override
+            await fileBlobClient.UploadAsync(content: ms, options: blobUploadOptions);
+
+        }
+
+        /// <summary>
+        /// Given an image in blob form, will save it as Person profile image in correct place with ID as file name
+        /// </summary>
+        public static async Task SaveNewPersonImage(string personId, BlobClient blobToUpload)
+        {
+
+            var blobContainerName = "$web";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.Get("WEB_STORAGE"); //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //place to save new image
+            var imageFile = $"images/person/{personId}.jpg";
+            var oldImageToReplace = blobContainerClient.GetBlobClient(imageFile);
+
+            // assume that if the following doesn't throw an exception, then it is successful.
+            CopyFromUriOperation operation = await oldImageToReplace.StartCopyFromUriAsync(blobToUpload.Uri, null, AccessTier.Cool);
+            await operation.WaitForCompletionAsync();
+        }
+
+        /// <summary>
+        /// gets image already stored in Images/Person as blobclient based on image name, without file format
+        /// </summary>
+        public static BlobClient GetPersonImage(string personId)
+        {
+
+            var blobContainerName = "vedastro-site-data";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.Get("API_STORAGE"); //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //get access to file
+            var imageFile = $"images/person/{personId}.jpg";
+            var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
+
+            return fileBlobClient;
+
+
+        }
+
+
+        ///// <summary>
+        ///// Gets any file from Azure blob storage in string form
+        ///// </summary>
+        //public static async Task<string> GetStringFileFromAzureStorage(string fileName, string blobContainerName)
+        //{
+        //    var fileClient = await Tools.GetBlobClientAzure(fileName, blobContainerName);
+        //    var xmlFile = await BlobClientToString(fileClient);
+
+        //    return xmlFile;
+        //}
+
+
+
+        /// <summary>
+        /// Saves XML file direct to Azure storage
+        /// </summary>
+        public static async Task SaveXDocumentToAzure(XDocument dataXml, string fileName, string containerName)
+        {
+            //get file client for file
+            var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
+
+            //upload modified list to storage
+            await Tools.OverwriteBlobData(fileClient, dataXml);
+        }
+
+
+
+        /// <summary>
+        /// check if a person's profile image already exist on server
+        /// </summary>
+        public static async Task<bool> IsCustomPersonImageExist(string personId)
+        {
+
+            var blobContainerName = "vedastro-site-data";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.Get("API_STORAGE"); //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //get access to file
+            var imageFile = $"images/person/{personId}.jpg";
+            var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
+
+            //do the actual code 
+            var isCustomPersonImageExist = await fileBlobClient.ExistsAsync();
+
+            var x = isCustomPersonImageExist.Value;
+            return x;
+
+        }
+
+        public static bool IsSecureConnection(this HttpRequestData incomingRequest)
+        {
+            // Check X-Forwarded-Proto header for requests coming via a proxy
+            //if (incomingRequest.Headers.ContainsKey("X-Forwarded-Proto"))
+            //{
+            //    var protoValues = incomingRequest.Headers["X-Forwarded-Proto"].ToString().Split(",");
+            //    foreach (var proto in protoValues)
+            //    {
+            //        if ("https".Equals(proto.Trim(), StringComparison.OrdinalIgnoreCase))
+            //            return true;
+            //    }
+            //}
+
+            // Fall back to checking URL for direct requests
+            if (incomingRequest.Url.Port == 443 || incomingRequest.Url.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        }
+
+        public static string ExtractHostAddress(this HttpRequestData incomingRequest)
+        {
+
+            const string SCHEME_HTTP = "http";
+            const string SCHEME_HTTPS = "https";
+
+            var scheme = SCHEME_HTTP;
+            if (incomingRequest.IsSecureConnection())
+                scheme = SCHEME_HTTPS;
+
+            var requestHeaderList = incomingRequest.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+            requestHeaderList.TryGetValue("Host", out var hostValues);
+            var host = hostValues?.FirstOrDefault() ?? "no host";
+
+            return $"{scheme}://{host}";
+
+            ////from incoming request instance extract full host address like  "http://localhost:7071/api"
+            //var requestHeaderList = incomingRequest.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+            //requestHeaderList.TryGetValue("Host", out var hostValues);
+            //var host = hostValues?.FirstOrDefault() ?? "no host";
+            //return host;
+        }
+
+        public static HttpResponseData SendPassHeaderToCaller(BlobClient fileBlobClient, HttpRequestData req, string mimeType)
+        {
+            //send image back to caller
+            //response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Call-Status", "Pass"); //lets caller know data is in payload
+            response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
+            response.Headers.Add("Content-Type", mimeType);
+
+            //place in response body
+            //NOTE: very important to pass as stream to make work
+            //      if convert to byte array will not work!
+            //      needs to be direct stream to response
+            response.Body = fileBlobClient.OpenRead();
+            return response;
+        }
+
+        public static async Task<HttpResponseData> SendPassHeaderToCaller(string dataToSend, HttpRequestData req, string mimeType)
+        {
+            //send image back to caller
+            //response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Call-Status", "Pass"); //lets caller know data is in payload
+            response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
+            response.Headers.Add("Content-Type", mimeType);
+
+            //place in response body
+            //NOTE: very important to pass as stream to make work
+            //      if convert to byte array will not work!
+            //      needs to be direct stream to response
+            await response.WriteStringAsync(dataToSend);
+
+            return response;
+        }
+
+
+        public static string GetCallerId(string userId, string visitorId)
+        {
+            var IsLoggedIn = userId != "101";
+            if (IsLoggedIn)
+            {
+                return userId;
+            }
+            //if user NOT logged in then take his visitor ID as caller id
+            else
+            {
+                return visitorId;
+            }
+
+        }
+
+
         /// <summary>
         /// Gets public IP address of client sending the http request
         /// </summary>
@@ -103,6 +403,64 @@ namespace VedAstro.Library
             return ipAddress ?? IPAddress.None;
         }
 
+        /// <summary>
+        /// Method from Azure Website
+        /// </summary>
+        public static async Task<string> DownloadToText(BlobClient blobClient)
+        {
+            var isFileExist = (await blobClient.ExistsAsync()).Value;
+
+            if (isFileExist)
+            {
+                BlobDownloadResult downloadResult = await blobClient.DownloadContentAsync();
+                string downloadedData = downloadResult.Content.ToString();
+
+                return downloadedData;
+            }
+            else
+            {
+                //will be logged by caller
+                throw new Exception($"No File in Cloud : {blobClient.Name}");
+            }
+
+        }
+
+
+        /// <summary>
+        /// Converts a blob client of a file to string
+        /// </summary>
+        public static async Task<string> BlobClientToString(BlobClient blobClient)
+        {
+            try
+            {
+                var xmlFileString = await DownloadToText(blobClient);
+
+                return xmlFileString;
+            }
+            catch (Exception e)
+            {
+                //APILogger.Error(e); //log it
+                throw new Exception($"Azure Storage Failure : {blobClient.Name}");
+            }
+
+            //Console.WriteLine(blobClient.Name);
+            //Console.WriteLine(blobClient.AccountName);
+            //Console.WriteLine(blobClient.BlobContainerName);
+            //Console.WriteLine(blobClient.Uri);
+            //Console.WriteLine(blobClient.CanGenerateSasUri);
+
+            //if does not exist raise alarm
+            if (!await blobClient.ExistsAsync())
+            {
+                Console.WriteLine("NO FILE!");
+            }
+
+            //parse string as xml doc
+            //var valueContent = blobClient.Download().Value.Content;
+            //Console.WriteLine("Text:"+Tools.StreamToString(valueContent));
+        }
+
+
         public static IPAddress GetCallerIp(this HttpRequestMessage request)
         {
             IPAddress result = null;
@@ -116,6 +474,16 @@ namespace VedAstro.Library
             return result;
         }
 
+        /// <summary>
+        /// Subtracts the specified number of hours from the given DateTimeOffset value.
+        /// </summary>
+        /// <param name="value">The original DateTimeOffset value.</param>
+        /// <param name="hours">The number of hours to subtract.</param>
+        /// <returns>A new DateTimeOffset value with the specified hours subtracted.</returns>
+        public static DateTimeOffset RemoveHours(this DateTimeOffset value, double hours)
+        {
+            return value.AddHours(-hours);
+        }
 
         /// <summary>
         /// Make clone of stream
@@ -1163,6 +1531,12 @@ namespace VedAstro.Library
         /// </summary>
         /// <returns></returns>
         public static double DaysToHours(double days) => days * 24.0;
+
+        public static double WeeksToHours(double weeks) => weeks * 7.0 * 24.0;
+        public static double MonthsToHours(double months) => months * 30.44 * 24.0; // Approximate average number of days in a month
+        public static double YearsToHours(double years) => years * 365.25 * 24.0; // Approximate average number of days in a year (accounting for leap years)
+        public static double DecadesToHours(double decades) => decades * 10.0 * 365.25 * 24.0;
+
 
         public static double MinutesToHours(double minutes) => minutes / 60.0;
 
@@ -3739,28 +4113,28 @@ namespace VedAstro.Library
         public static Person GetPersonById(string personId, string ownerId = "")
         {
             // Initialize foundCalls to null
-            Pageable<PersonRow> foundCalls = null;
+            Pageable<PersonListEntity> foundCalls = null;
 
             // Query the database based on ownerId
             if (string.IsNullOrEmpty(ownerId))
             {
                 // Query without person Id, possible to return multiple values
-                foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.RowKey == personId);
+                foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(row => row.RowKey == personId);
             }
             else
             {
                 // Query with both ownerId and personId for accurate hit
-                foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+                foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(row => row.PartitionKey == ownerId && row.RowKey == personId);
             }
 
             // If person not found, check shared list
             if (!foundCalls.Any())
             {
-                var rawSharedList = AzureTable.PersonShareList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+                var rawSharedList = AzureTable.PersonShareList.Query<PersonListEntity>(row => row.PartitionKey == ownerId && row.RowKey == personId);
                 // If share found, get person directly without original ownerId
                 if (rawSharedList.Any())
                 {
-                    foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.RowKey == personId);
+                    foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(row => row.RowKey == personId);
                 }
             }
             // Log error if more than 1 person found
@@ -3843,7 +4217,7 @@ namespace VedAstro.Library
         {
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Secrets.API_STORAGE;
+            var storageConnectionString = Secrets.Get("API_STORAGE");
 
             //get image from storage
             var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
@@ -4304,7 +4678,7 @@ namespace VedAstro.Library
 
         public static void PasswordProtect(string inputPassword)
         {
-            if (inputPassword != Secrets.Password)
+            if (inputPassword != Secrets.Get("Password"))
             {
                 throw new ArgumentException("Invalid password");
             }
@@ -4359,6 +4733,30 @@ namespace VedAstro.Library
         }
 
 
+        public static double[] ConvertStringToDoubleArray(string input)
+        {
+            // Remove square brackets and split the string by commas
+            string[] stringValues = input.Trim('[', ']').Split(',');
+
+            // Initialize an array to store the converted double values
+            double[] result = new double[stringValues.Length];
+
+            // Convert each string value to a double
+            for (int i = 0; i < stringValues.Length; i++)
+            {
+                if (double.TryParse(stringValues[i], NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+                {
+                    result[i] = value;
+                }
+                else
+                {
+                    // Handle invalid input (e.g., non-numeric values)
+                    throw new ArgumentException($"Invalid value at index {i}: {stringValues[i]}");
+                }
+            }
+
+            return result;
+        }
     }
 
 

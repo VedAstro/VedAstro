@@ -5,12 +5,12 @@
         static void Main(string[] args)
         {
             // TARGET SERVER
-            //string SubDomain = "vedastroapi";
-            // string SubDomain = "vedastroapibeta";
+            string SubDomain = "vedastroapi";
+            //string SubDomain = "vedastroapibeta";
             //string SubDomain = "vedicastrogpt";
 
             //
-            string LocalAPIServer = "https://vedicastrogpt.azurewebsites.net/api/";
+            string LocalAPIServer = $"https://{SubDomain}.azurewebsites.net/api/";
             //string LocalAPIServer = "http://localhost:7071/api/";
             var appInstance = new TestMethods(LocalAPIServer);
 
@@ -32,6 +32,11 @@
             CoalesceException(() => appInstance.AddressToGeoLocationTest().Result, null);
             CoalesceException(() => appInstance.CoordinatesToGeoLocationTest().Result, null);
             CoalesceException(() => appInstance.IpAddressToGeoLocationTest().Result, null);
+
+            Console.WriteLine("###### MISSION CRITICAL ASTRO TEST ######\n");
+            CoalesceException(() => appInstance.AllHouseData().Result, null);
+            CoalesceException(() => appInstance.DasaAtRangeTest().Result, null);
+            CoalesceException(() => appInstance.AllPlanetDataTest().Result, null);
 
 
             //HOLD CONTROL

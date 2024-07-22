@@ -92,34 +92,33 @@ namespace VedAstro.Library
                     case "today":
                     case "day":
                     case "days":
-                        start = new Time($"00:00 {yesterday}", birthLocation);
-                        end = timeNow.AddHours(Tools.DaysToHours(number));
+                        hoursToAdd = Tools.DaysToHours(number); //convert DAYS to HOURS
+                        var startDays = now.RemoveHours(hoursToAdd); //back by input
+                        var endDays = now.AddHours(hoursToAdd); //front by input
+                        start = new Time(startDays, birthLocation);
+                        end = new Time(endDays, birthLocation);
                         return new TimeRange(start, end);
                     case "week":
                     case "weeks":
-                        days = number * 7;
-                        hoursToAdd = Tools.DaysToHours(days);
-                        start = new Time($"00:00 {yesterday}", birthLocation);
-                        end = timeNow.AddHours(hoursToAdd);
+                        hoursToAdd = Tools.WeeksToHours(number);
+                        start = timeNow.RemoveHours(hoursToAdd);
+                        end = timeNow.AddHours(hoursToAdd); //+the days
                         return new TimeRange(start, end);
                     case "month":
                     case "months":
-                        days = number * 30;
-                        hoursToAdd = Tools.DaysToHours(days);
+                        hoursToAdd = Tools.MonthsToHours(number);
                         start = new Time($"00:00 {_1WeekAgo}", birthLocation);
                         end = timeNow.AddHours(hoursToAdd);
                         return new TimeRange(start, end);
                     case "year":
                     case "years":
-                        days = number * 365;
-                        hoursToAdd = Tools.DaysToHours(days);
+                        hoursToAdd = Tools.YearsToHours(number);
                         start = new Time($"00:00 {_6MonthsAgo}", birthLocation);
                         end = timeNow.AddHours(hoursToAdd);
                         return new TimeRange(start, end);
                     case "decades":
                     case "decade":
-                        days = number * 3652;
-                        hoursToAdd = Tools.DaysToHours(days);
+                        hoursToAdd = Tools.DecadesToHours(number);
                         start = new Time($"00:00 {_1YearAgo}", birthLocation);
                         end = timeNow.AddHours(hoursToAdd);
                         return new TimeRange(start, end);

@@ -31,13 +31,20 @@ public class IpAddressStatisticEntity : ITableEntity
     public string RowKey { get; set; }
 
 
-    public double CallCount { get; set; }
+    public double CallsPerSecond { get; set; }
+    public DateTimeOffset? PerSecondTimestamp { get; set; }
 
+    public double CallsPerMinute { get; set; }
+    public DateTimeOffset? PerMinuteTimestamp { get; set; }
 
-    /// <summary>
-    /// hash that links to metadata (not shatter or wax)
-    /// </summary>
-    public string MetadataHash { get; set; }
+    public double CallsPerHour { get; set; }
+    public DateTimeOffset? PerHourTimestamp { get; set; }
+
+    public double CallsPerDay { get; set; }
+    public DateTimeOffset? PerDayTimestamp { get; set; }
+
+    public double CallsPerMonth { get; set; }
+    public DateTimeOffset? PerMonthTimestamp { get; set; }
 
 
     /// <summary>
@@ -49,9 +56,6 @@ public class IpAddressStatisticEntity : ITableEntity
     /// mandatory
     /// </summary>
     public ETag ETag { get; set; }
-
-
-    
 
 
 }

@@ -22,35 +22,13 @@ public class URL
     /// </summary>
     public URL(bool isBetaRuntime, bool? debugMode = null) //don't hide to make obvious easy id
     {
+        //NOTE: for api use back the currently running instance, so local will call back local
+        ApiUrlDirect = Calculate.CurrentServerAddress;
+
         //set beta or stable based on Runtime Stamp data
-        //ApiUrl = isBetaRuntime ? ApiBetaDirect : ApiStableDirect;
-        ApiUrlDirect = isBetaRuntime ? ApiBetaDirect : ApiStableDirect;
         WebUrl = isBetaRuntime ? WebBeta : WebStable;
         WebUrlDirect = WebDirect;
 
-
-        //TODO marked for oblivion
-        //if not set then will use system debug mode
-        //NOTE : this is done specifically to enable local routing when debugging API
-        //       meaning when API makes calls to API it will in local debug environment, it won't go call online API 
-//        if (debugMode == null)
-//        {
-//#if DEBUG
-//            debugMode = true;
-//#else
-//            debugMode = false;
-//#endif
-//        }
-
-
-
-        //if DEBUG MODE set all to local (bye bye Postman! we don't need you anymore!)
-        var mode = debugMode ?? false;
-        if (mode) //default to false
-        {
-            //ApiUrl = "http://localhost:7071/api";
-            ApiUrlDirect = "http://localhost:7071/api";
-        }
 
 
         //--------------done here so that can be readonly------------------

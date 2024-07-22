@@ -1,86 +1,198 @@
-﻿using VedAstro.Library;
+using ILGPU;
+using ILGPU.Runtime;
+using ILGPU.Runtime.Cuda;
+using VedAstro.Library;
 
 namespace MatchMLPipeline
 {
 
     internal class NearestCentroidProgram
     {
+
+        /// <summary>
+        /// A simple 1D kernel using math functions.
+        /// The <see cref="IntrinsicMath"/> class contains intrinsic math functions that -
+        /// in contrast to the default .Net Math class - work on both floats and doubles. Note that
+        /// the /// <see cref="IntrinsicMath"/> class is supported on all accelerators.
+        /// The CompileUnitFlags.FastMath flag can be used during the creation of the compile unit
+        /// to enable fast math intrinsics.
+        /// Note that the full power of math functions on all accelerators is available via the
+        /// Algorithms library (see ILGPU.Algorithms.Math sample).
+        /// </summary>
+        /// <param name="index">The current thread index.</param>
+        /// <param name="dataView">The view pointing to our memory buffer.</param>
+        /// <param name="constant">A uniform constant.</param>
+        static void MathKernel(
+            Index1D index,                  // The global thread index (1D in this case)
+            ArrayView<float> singleView,    // A view of floats to store float results from GPUMath
+            ArrayView<double> doubleView,   // A view of doubles to store double results from GPUMath
+            ArrayView<double> doubleView2)  // A view of doubles to store double results from .Net Math
+        {
+            // Note the different returns type of GPUMath.Sqrt and Math.Sqrt.
+            singleView[index] = IntrinsicMath.Abs(index);
+            doubleView[index] = IntrinsicMath.Clamp(index, 0.0, 12.0);
+
+            // Note that use can safely use functions from the Math class as long as they have a counterpart
+            // in the IntrinsicMath class.
+            doubleView2[index] = Math.Min(0.2, index);
+        }
+
+        /// <summary>
+        /// Launches a simple math kernel.
+        /// </summary>
+        static void Main5()
+        {
+            // Create main context
+            using var context = Context.CreateDefault();
+
+            // For each available device...
+            foreach (var device in context)
+            {
+                // Create accelerator for the given device
+                using var accelerator = device.CreateAccelerator(context);
+                Console.WriteLine($"Performing operations on {accelerator}");
+
+                var kernel = accelerator.LoadAutoGroupedStreamKernel<
+                    Index1D, ArrayView<float>, ArrayView<double>, ArrayView<double>>(MathKernel);
+
+                using var buffer = accelerator.Allocate1D<float>(128);
+                using var buffer2 = accelerator.Allocate1D<double>(128);
+                using var buffer3 = accelerator.Allocate1D<double>(128);
+
+                // Launch buffer.Length many threads
+                kernel((int)buffer.Length, buffer.View, buffer2.View, buffer3.View);
+
+                // Reads data from the GPU buffer into a new CPU array.
+                // Implicitly calls accelerator.DefaultStream.Synchronize() to ensure
+                // that the kernel and memory copy are completed first.
+                var data = buffer.GetAsArray1D();
+                var data2 = buffer2.GetAsArray1D();
+                var data3 = buffer3.GetAsArray1D();
+                for (int i = 0, e = data.Length; i < e; ++i)
+                    Console.WriteLine($"Math results: {data[i]} (float) {data2[i]} (double [GPUMath]) {data3[i]} (double [.Net Math])");
+            }
+        }
+
+
+        static void Main2(string[] args)
+        {
+
+
+            //DatasetFactory.AddPersonIdToMarriageInfoDataset();
+
+
+            //DatasetFactory.AddPersonIdToNameEmbeddingsDataset();
+
+            //DatasetFactory.CleanPersonList();
+
+            //DatasetFactory.PrintDatasetHighDataCredibility<MarriageInfoDatasetEntity>(DatasetFactory.marriageInfoDatasetClient_LocalEmulator);
+            
+            //DatasetFactory.PrintDatasetHighDataCredibility<MarriageInfoDatasetEntity>(DatasetFactory.marriageInfoDatasetClient_LocalEmulator);
+
+            DatasetFactory.GenerateAllRoddenAAMarriges();
+            //DatasetFactory.PrintAllRoddenAAMarriges();
+
+            //DatasetFactory.CleanDatasetFromCharacter("```");
+
+            //DatasetFactory.CleanDatasetFromCharacter<MarriageInfoDatasetEntity>("```", DatasetFactory.marriageInfoDatasetClient_LocalEmulator);
+
+            //var result = DatasetFactory.FillPersonNameEmbeddings().Result;
+
+            //var result = DatasetFactory.FamousPersonNameLLMSearch("mrilyn monroe");
+
+            //var result = DatasetFactory.GeneratePersonLifeDataset();
+
+            //var result = DatasetFactory.GenerateMarriageKutaDataset();
+
+            Console.WriteLine("\nEnd demo ");
+            Console.ReadLine();
+        } // Main
+
+
         static void Main(string[] args)
         {
             Console.WriteLine("\nBegin nearest " +
               "centroid classification demo ");
 
             // 1. load and normalize training data
-            Console.WriteLine("\nLoading penguin subset " + "train (30) and test (10) data ");
-            string trainFile = "..\\..\\..\\Data\\penguin_train_30.txt";
-            double[][] trainX = NearestCentroidClassification.MatLoad(trainFile, new int[] { 1, 2, 3, 4 }, ',', "#");
-            Console.WriteLine("\nX training raw: ");
-            NearestCentroidClassification.MatShow(trainX, 1, 9, 4, true);
+            //Console.WriteLine("\nLoading penguin subset " + "train (30) and test (10) data ");
+            //string trainFile = "..\\..\\..\\Data\\penguin_train_30.txt";
+            //double[][] trainX = NearestCentroidClassification.MatLoad(trainFile, new int[] { 1, 2, 3, 4 }, ',', "#");
+            //double[][] trainX = DatasetFactory.LoadMarriageInfoTrainingVectors();
+            //Console.WriteLine("\nX training raw: ");
+            //NearestCentroidClassificationTools.MatShow(trainX, 1, 9, 4, true);
 
             // get normalized X and mins-maxs
-            Console.WriteLine("\nNormalizing train X" + " using min-max ");
-            double[][] minsMaxs = NearestCentroidClassification.MatMinMaxValues(trainX);
-            trainX = NearestCentroidClassification.MatNormalizeUsing(trainX, minsMaxs);
-            Console.WriteLine("Done ");
-            Console.WriteLine("\nX training normalized: ");
-            NearestCentroidClassification.MatShow(trainX, 4, 9, 4, true);
+            //Console.WriteLine("\nNormalizing train X" + " using min-max ");
+            //double[][] minsMaxs = NearestCentroidClassificationTools.MatMinMaxValues(trainX);
+            //trainX = NearestCentroidClassification.MatNormalizeUsing(trainX, minsMaxs);
+            //Console.WriteLine("Done ");
+            //Console.WriteLine("\nX training normalized: ");
+            //NearestCentroidClassification.MatShow(trainX, 4, 9, 4, true);
 
             // get the training data labels/classes/species
-            int[] trainY = NearestCentroidClassification.VecLoad(trainFile, 0, "#");
-            Console.WriteLine("\nY training: ");
-            NearestCentroidClassification.VecShow(trainY, wid: 3);
+            //int[] trainY = NearestCentroidClassification.VecLoad(trainFile, 0, "#");
+            //int[] trainY = DatasetFactory.GetMarriageTrainingDataLabels();
+            //Console.WriteLine("\nY training: ");
+            //NearestCentroidClassificationTools.VecShow(trainY, wid: 3);
 
-            // 2. load and normalize test data
-            Console.WriteLine("\nLoading and " + "normalizing test data ");
-            string testFile = "..\\..\\..\\Data\\penguin_test_10.txt";
-            double[][] testX = NearestCentroidClassification.MatLoad(testFile, new int[] { 1, 2, 3, 4 }, ',', "#");
-            testX = NearestCentroidClassification.MatNormalizeUsing(testX, minsMaxs);
-            int[] testY = NearestCentroidClassification.VecLoad(testFile, 0, "#");
-            Console.WriteLine("Done ");
+            //// 2. load and normalize test data
+            //Console.WriteLine("\nLoading and " + "normalizing test data ");
+            //string testFile = "..\\..\\..\\Data\\penguin_test_10.txt";
+            //double[][] testX = NearestCentroidClassification.MatLoad(testFile, new int[] { 1, 2, 3, 4 }, ',', "#");
+            //testX = NearestCentroidClassification.MatNormalizeUsing(testX, minsMaxs);
+            //int[] testY = NearestCentroidClassification.VecLoad(testFile, 0, "#");
+            //Console.WriteLine("Done ");
 
             // 3. create and train classifier
             Console.WriteLine("\nCreating " + "NearestCentroidClassifier object ");
-            int numClasses = 3;
+            int numClasses = 4;
             NearestCentroidClassifier ncc = new NearestCentroidClassifier(numClasses);
-            Console.WriteLine("Training the classifier ");
-            ncc.Train(trainX, trainY);
+            ncc.LoadFromTable("marriagePredictMK1");
+            //Console.WriteLine("Training the classifier ");
+            //ncc.Train(trainX, trainY);
+            //ncc.SaveToTable("marriagePredictMK1");
+            //ncc.Train(trainX2, trainY2);
             Console.WriteLine("Done ");
 
             Console.WriteLine("\nClass centroids: ");
-            NearestCentroidClassification.MatShow(ncc.centroids, 4, 9, 3, true);
+            NearestCentroidClassificationTools.MatShow(ncc.centroids, 4, 9, 3, true);
 
             // 4. evaluate model
-            Console.WriteLine("\nEvaluating model ");
-            double accTrain = ncc.Accuracy(trainX, trainY);
-            Console.WriteLine("Accuracy on train: " +
-              accTrain.ToString("F4"));
+            //Console.WriteLine("\nEvaluating model ");
+            //double accTrain = ncc.Accuracy(trainX, trainY);
+            //Console.WriteLine("Accuracy on train: " +
+            //  accTrain.ToString("F4"));
 
-            double accTest = ncc.Accuracy(testX, testY);
-            Console.WriteLine("Accuracy on test: " +
-              accTest.ToString("F4"));
+            ////double accTest = ncc.Accuracy(testX, testY);
+            ////Console.WriteLine("Accuracy on test: " +
+            ////  accTest.ToString("F4"));
 
-            Console.WriteLine("\nConfusion matrix" +
-              " for training data: ");
-            int[][] cm = ncc.ConfusionMatrix(trainX, trainY);
-            ncc.ShowConfusion(cm);
+            //Console.WriteLine("\nConfusion matrix" +
+            //  " for training data: ");
+            //int[][] cm = ncc.ConfusionMatrix(trainX, trainY);
+            //ncc.ShowConfusion(cm);
 
             // 5. use model
             Console.WriteLine("\nPredicting species" +
               " for x = 46.5, 17.9, 192, 3500");
 
-            string[] speciesNames = new string[] { "Adelie", "Chinstrap", "Gentoo" };
-            double[] xRaw = { 46.5, 17.9, 192, 3500 };
-            double[] xNorm = NearestCentroidClassification.VecNormalizeUsing(xRaw, minsMaxs);
+            //string[] speciesNames = new string[] { "Adelie", "Chinstrap", "Gentoo" };
+            string[] speciesNames = Enum.GetNames(typeof(DatasetFactory.Outcome));
+            //double[] xRaw = { 46.5, 17.9, 192, 3500 };
+            double[] xRaw = { 8.0, 0.0, 0.0, 8.0, 0.0, 0.0, 8.0, 0.0 };
+            double[][] minsMaxs = new[] { new[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }, new[] { 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0 } };
+            //double[] xNorm = NearestCentroidClassificationTools.VecNormalizeUsing(xRaw, minsMaxs);
             Console.Write("Normalized x =");
-            NearestCentroidClassification.VecShow(xNorm, 4, 9);
+            NearestCentroidClassificationTools.VecShow(xRaw, 4, 9);
 
-            int lbl = ncc.Predict(xNorm);
+            int lbl = ncc.Predict(xRaw);
             Console.WriteLine("predicted label/class = " + lbl);
             Console.WriteLine("predicted species = " + speciesNames[lbl]);
 
-            double[] pseudoProbs = ncc.PredictProbs(xNorm);
+            double[] pseudoProbs = ncc.PredictProbs(xRaw);
             Console.WriteLine("\nprediction pseudo-probs = ");
-            NearestCentroidClassification.VecShow(pseudoProbs, 4, 9);
+            NearestCentroidClassificationTools.VecShow(pseudoProbs, 4, 9);
 
             // 6. TODO: consider saving model (centroids)
 
@@ -91,198 +203,5 @@ namespace MatchMLPipeline
         // ------------------------------------------------------
 
 
-    } // Program
-
-
-    public class NearestCentroidClassifier
-    {
-        public int numClasses;
-        public double[][] centroids;  // of each class
-
-        public NearestCentroidClassifier(int numClasses)
-        {
-            this.numClasses = numClasses;
-            this.centroids = new double[0][]; // keep compiler happy
-        }
-
-        public void Train(double[][] trainX, int[] trainY)
-        {
-            // compute centroid of each class
-            int n = trainX.Length;
-            int dim = trainX[0].Length;
-
-            this.centroids = new double[this.numClasses][];
-            for (int c = 0; c < numClasses; ++c)
-                this.centroids[c] = new double[dim];
-
-            double[][] sums = new double[this.numClasses][];
-            for (int c = 0; c < numClasses; ++c)
-                sums[c] = new double[dim];
-
-            int[][] counts = new int[this.numClasses][];
-            for (int c = 0; c < numClasses; ++c)
-                counts[c] = new int[dim];
-
-            for (int i = 0; i < n; ++i)
-            {
-                int c = trainY[i];
-                for (int j = 0; j < dim; ++j)
-                {
-                    sums[c][j] += trainX[i][j];
-                    ++counts[c][j];
-                }
-            }
-
-            for (int c = 0; c < this.numClasses; ++c)
-                for (int j = 0; j < dim; ++j)
-                    this.centroids[c][j] = sums[c][j] / counts[c][j];
-
-            // // less efficient but more clear
-            //for (int c = 0; c < this.numClasses; ++c)
-            //{
-            //  for (int j = 0; j < dim; ++j) // each col
-            //  {
-            //    double colSum = 0.0;
-            //    int colCount = 0;
-            //    for (int i = 0; i < n; ++i)  // each row
-            //    {
-            //      if (trainY[i] != c) continue;
-            //      colSum += trainX[i][j];
-            //      ++colCount;
-            //    }
-            //    this.means[c][j] = colSum / colCount;
-            //  } // each col
-            // } // each class
-
-        } // Train
-
-        // ------------------------------------------------------
-
-        public int Predict(double[] x)
-        {
-            double[] distances = new double[this.numClasses];
-            for (int c = 0; c < this.numClasses; ++c)
-                distances[c] = EucDistance(x, this.centroids[c]);
-            double smallestDist = distances[0];
-            int result = 0;
-            for (int c = 0; c < this.numClasses; ++c)
-            {
-                if (distances[c] < smallestDist)
-                {
-                    smallestDist = distances[c];
-                    result = c;
-                }
-            }
-            return result;
-        }
-
-        // ------------------------------------------------------
-
-        public double[] PredictProbs(double[] x)
-        {
-            double[] probs = new double[this.numClasses];
-            double[] distances = new double[this.numClasses];
-            double[] invDists = new double[this.numClasses];
-
-            double sum = 0.0;  // of inverse distances
-            for (int c = 0; c < this.numClasses; ++c)
-            {
-                distances[c] = EucDistance(x, this.centroids[c]);
-                if (distances[c] < 0.00000001)
-                    distances[c] = 0.00000001;  // avoid div by 0
-                invDists[c] = 1.0 / distances[c];
-                sum += invDists[c];
-            }
-            for (int c = 0; c < this.numClasses; ++c)
-                probs[c] = invDists[c] / sum;
-            return probs;  // pseudo-probabilities
-        }
-
-        // ------------------------------------------------------
-
-        public double Accuracy(double[][] dataX, int[] dataY)
-        {
-            int nCorrect = 0;
-            int nWrong = 0;
-            int n = dataX.Length;
-            for (int i = 0; i < n; ++i)
-            {
-                int c = this.Predict(dataX[i]);
-                //Console.WriteLine("actual = " + dataY[i]);
-                //Console.WriteLine("predicted = " + c);
-                //Console.ReadLine();
-                if (c == dataY[i])
-                    ++nCorrect;
-                else
-                    ++nWrong;
-            }
-            return (nCorrect * 1.0) / (nCorrect + nWrong);
-        }
-
-        // ------------------------------------------------------
-
-        private double EucDistance(double[] v1, double[] v2)
-        {
-            int dim = v1.Length;
-            double sum = 0.0;
-            for (int d = 0; d < dim; ++d)
-                sum += (v1[d] - v2[d]) * (v1[d] - v2[d]);
-            return Math.Sqrt(sum);
-        }
-
-        // ------------------------------------------------------
-
-        public int[][] ConfusionMatrix(double[][] dataX,
-          int[] dataY)
-        {
-            int n = this.numClasses;
-            int[][] result = new int[n][];  // nxn
-            for (int i = 0; i < n; ++i)
-                result[i] = new int[n];
-
-            for (int i = 0; i < dataX.Length; ++i)
-            {
-                double[] x = dataX[i];  // inputs
-                int actualY = dataY[i];
-                int predY = this.Predict(x);
-                ++result[actualY][predY];
-            }
-            return result;
-        }
-
-        public void ShowConfusion(int[][] cm)
-        {
-            int n = cm.Length;
-            int[] counts = new int[n];
-            double[] accs = new double[n];
-            for (int act = 0; act < n; ++act)
-            {
-                for (int pred = 0; pred < n; ++pred)
-                {
-                    counts[act] += cm[act][pred];
-                }
-            }
-
-            for (int act = 0; act < n; ++act)
-            {
-                accs[act] = (cm[act][act] * 1.0) / counts[act];
-            }
-
-            for (int i = 0; i < n; ++i)
-            {
-                Console.Write("actual " + i + ": ");
-                for (int j = 0; j < n; ++j)
-                {
-                    Console.Write(cm[i][j].ToString().
-                      PadLeft(4) + " ");
-                }
-                Console.Write(" | " +
-                  counts[i].ToString().PadLeft(4));
-                Console.Write(" | " +
-                  accs[i].ToString("F4").PadLeft(7));
-                Console.WriteLine("");
-            }
-        }
-
-    } // class NearestCentroidClassifier
+    }
 }

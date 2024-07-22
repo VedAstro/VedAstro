@@ -58,6 +58,7 @@ namespace VedAstro.Library
         public static GeoLocation Singapore = new GeoLocation("Singapore, Singapore", 103.8198, 1.3521);
         public static GeoLocation Chicago = new GeoLocation("Chicago, USA", -87.6298, 47.8781);
         public static GeoLocation TestLocB = new GeoLocation("TestLocB, TestLocationB", 80.25, 13.0667);
+        public static GeoLocation Barrington = new GeoLocation("Barrington, USA", -88.13611, 42.1538);
 
         //FIELDS
         private readonly string _name;

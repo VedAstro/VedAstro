@@ -256,11 +256,24 @@ namespace VedAstro.Library
             try
             {
                 //PROBABILITY 1 :
-                var name = rawJson["Name"].Value<string>();
-                var longitude = rawJson["Longitude"].Value<double>();
-                var latitude = rawJson["Latitude"].Value<double>();
+                //rawJson sample JSON
+                //"{
+                //   "AddressToGeoLocation": {
+                //     "Name": "Ipoh, Perak, Malaysia",
+                //     "Longitude": 101.077,
+                //     "Latitude": 4.599
+                //   }
+                // }
+
+                //auto dig 1 level into package
+                var locationJson = ((JObject)rawJson).Properties().FirstOrDefault()?.Value;
+
+                var name = locationJson["Name"].Value<string>();
+                var longitude = locationJson["Longitude"].Value<double>();
+                var latitude = locationJson["Latitude"].Value<double>();
 
                 return new GeoLocation(name, longitude, latitude);
+                
             }
             catch (Exception e)
             {
@@ -268,21 +281,12 @@ namespace VedAstro.Library
                 try
                 {
                     //PROBABILITY 2 :
-                    //rawJson sample JSON
-                    //"{
-                    //   "AddressToGeoLocation": {
-                    //     "Name": "Ipoh, Perak, Malaysia",
-                    //     "Longitude": 101.077,
-                    //     "Latitude": 4.599
-                    //   }
-                    // }
-                    var locationJson = ((JObject)rawJson).Properties().FirstOrDefault()?.Value;
-
-                    var name = locationJson["Name"].Value<string>();
-                    var longitude = locationJson["Longitude"].Value<double>();
-                    var latitude = locationJson["Latitude"].Value<double>();
+                    var name = rawJson["Name"].Value<string>();
+                    var longitude = rawJson["Longitude"].Value<double>();
+                    var latitude = rawJson["Latitude"].Value<double>();
 
                     return new GeoLocation(name, longitude, latitude);
+
 
                 }
                 catch (Exception exception)

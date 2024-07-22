@@ -76,7 +76,7 @@ namespace VedAstro.Library
 
             var storageUriAddress = $"https://{accountName}.table.core.windows.net/{tableNameAddress}";
             //save reference for late use
-            addressServiceClient = new TableServiceClient(new Uri(storageUriAddress), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            addressServiceClient = new TableServiceClient(new Uri(storageUriAddress), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
             addressTableClient = addressServiceClient.GetTableClient(tableNameAddress);
 
             //Initialize address metadata table 
@@ -84,7 +84,7 @@ namespace VedAstro.Library
             var storageUriAddressMetadata = $"https://{accountName}.table.core.windows.net/{tableNameAddressMetadata}";
 
             //save reference for late use
-            addressMetadataServiceClient = new TableServiceClient(new Uri(storageUriAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            addressMetadataServiceClient = new TableServiceClient(new Uri(storageUriAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
             addressMetadataTableClient = addressMetadataServiceClient.GetTableClient(tableNameAddressMetadata);
 
 
@@ -95,7 +95,7 @@ namespace VedAstro.Library
 
             var storageUriCoordinates = $"https://{accountName}.table.core.windows.net/{tableNameCoordinates}";
             //save reference for late use
-            coordinatesServiceClient = new TableServiceClient(new Uri(storageUriCoordinates), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            coordinatesServiceClient = new TableServiceClient(new Uri(storageUriCoordinates), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
             coordinatesTableClient = coordinatesServiceClient.GetTableClient(tableNameCoordinates);
 
             //Initialize coordinates metadata table 
@@ -103,7 +103,7 @@ namespace VedAstro.Library
             var storageUriCoordinatesMetadata = $"https://{accountName}.table.core.windows.net/{tableNameCoordinatesMetadata}";
 
             //save reference for late use
-            coordinatesMetadataServiceClient = new TableServiceClient(new Uri(storageUriCoordinatesMetadata), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            coordinatesMetadataServiceClient = new TableServiceClient(new Uri(storageUriCoordinatesMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
             coordinatesMetadataTableClient = coordinatesMetadataServiceClient.GetTableClient(tableNameCoordinatesMetadata);
 
 
@@ -113,7 +113,7 @@ namespace VedAstro.Library
             string tableNameIpAddress = "IpAddressGeoLocation";
             var storageUriIpAddress = $"https://{accountName}.table.core.windows.net/{tableNameIpAddress}";
             //save reference for late use
-            ipAddressServiceClient = new TableServiceClient(new Uri(storageUriIpAddress), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            ipAddressServiceClient = new TableServiceClient(new Uri(storageUriIpAddress), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
             ipAddressTableClient = ipAddressServiceClient.GetTableClient(tableNameIpAddress);
 
             //Initialize address metadata table 
@@ -121,7 +121,7 @@ namespace VedAstro.Library
             var storageUriIpAddressMetadata = $"https://{accountName}.table.core.windows.net/{tableNameIpAddressMetadata}";
 
             //save reference for late use
-            ipAddressMetadataServiceClient = new TableServiceClient(new Uri(storageUriIpAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            ipAddressMetadataServiceClient = new TableServiceClient(new Uri(storageUriIpAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
             ipAddressMetadataTableClient = ipAddressMetadataServiceClient.GetTableClient(tableNameIpAddressMetadata);
 
 
@@ -132,7 +132,7 @@ namespace VedAstro.Library
             var storageUriTimezone = $"https://{accountName}.table.core.windows.net/{tableNameTimezone}";
 
             //save reference for late use
-            timezoneServiceClient = new TableServiceClient(new Uri(storageUriTimezone), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            timezoneServiceClient = new TableServiceClient(new Uri(storageUriTimezone), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
             timezoneTableClient = timezoneServiceClient.GetTableClient(tableNameTimezone);
 
             //Initialize timezone table 
@@ -140,7 +140,7 @@ namespace VedAstro.Library
             var storageUriTimezoneMetadata = $"https://{accountName}.table.core.windows.net/{tableNameTimezoneMetadata}";
 
             //save reference for late use
-            timezoneMetadataServiceClient = new TableServiceClient(new Uri(storageUriTimezoneMetadata), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            timezoneMetadataServiceClient = new TableServiceClient(new Uri(storageUriTimezoneMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
             timezoneMetadataTableClient = timezoneMetadataServiceClient.GetTableClient(tableNameTimezoneMetadata);
 
 
@@ -727,7 +727,7 @@ namespace VedAstro.Library
             var latitude = geoLocation.Latitude();
 
             //create the request url for Google API 
-            var apiKey = Secrets.GoogleAPIKey;
+            var apiKey = Secrets.Get("GoogleAPIKey");
             var url = string.Format($@"https://maps.googleapis.com/maps/api/timezone/xml?location={latitude},{longitude}&timestamp={locationTimeUnix}&key={apiKey}");
 
             //get raw location data from GoogleAPI
@@ -769,7 +769,7 @@ namespace VedAstro.Library
         /// </summary>
         private static async Task<GeoLocationRawAPI> CoordinatesToGeoLocation_Google(double longitude, double latitude)
         {
-            var apiKey = Secrets.GoogleAPIKey;
+            var apiKey = Secrets.Get("GoogleAPIKey");
             var urlReverse = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={apiKey}";
 
             //get location data from Azure Maps API
@@ -811,7 +811,7 @@ namespace VedAstro.Library
             var returnResult = new WebResult<GeoLocationRawAPI>();
 
             //create the request url for Google API
-            var apiKey = Secrets.GoogleAPIKey;
+            var apiKey = Secrets.Get("GoogleAPIKey");
             var url = $"https://maps.googleapis.com/maps/api/geocode/json?key={apiKey}&address={Uri.EscapeDataString(userInputAddress)}&sensor=false";
 
             //get location data from Azure Maps API
@@ -965,7 +965,7 @@ namespace VedAstro.Library
             var returnResult = new WebResult<GeoLocationRawAPI>();
 
             //create the request url for Azure Maps API
-            var apiKey = Secrets.AzureMapsAPIKey;
+            var apiKey = Secrets.Get("AzureMapsAPIKey");
             var url = $"https://atlas.microsoft.com/search/address/json?api-version=1.0&subscription-key={apiKey}&query={Uri.EscapeDataString(userInputAddress)}";
 
             //get location data from Azure Maps API
@@ -1005,7 +1005,7 @@ namespace VedAstro.Library
             var returnResult = new WebResult<GeoLocationRawAPI>();
 
             //create the request url for Azure Maps API
-            var apiKey = Secrets.AzureMapsAPIKey;
+            var apiKey = Secrets.Get("AzureMapsAPIKey");
             var url = $"https://atlas.microsoft.com/search/address/json?api-version=1.0&subscription-key={apiKey}&query={Uri.EscapeDataString(userInputAddress)}";
 
             //get location data from Azure Maps API
@@ -1049,7 +1049,7 @@ namespace VedAstro.Library
             var locationTimeIso8601 = timeAtLocation.ToString("O", System.Globalization.CultureInfo.InvariantCulture);
 
             // Create the request URL for Azure Maps API
-            var apiKey = Secrets.AzureMapsAPIKey;
+            var apiKey = Secrets.Get("AzureMapsAPIKey");
             var url = $@"https://atlas.microsoft.com/timezone/byCoordinates/json?api-version=1.0&subscription-key={apiKey}&query={geoLocation.Latitude()},{geoLocation.Longitude()}&timestamp={Uri.EscapeDataString(locationTimeIso8601)}";
 
             // Get raw location data from Azure Maps API
@@ -1450,7 +1450,7 @@ namespace VedAstro.Library
         private static async Task<GeoLocationRawAPI> IpAddressToGeoLocation_IpData(string ipAddress)
         {
             const string baseUrl = "https://api.ipdata.co";
-            var apiKey = Secrets.IpDataAPIKey;
+            var apiKey = Secrets.Get("IpDataAPIKey");
             var requestUri = $"{baseUrl}/{ipAddress}?api-key={apiKey}";
 
             //get location data from Azure Maps API

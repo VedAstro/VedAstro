@@ -763,7 +763,12 @@ namespace VedAstro.Library
             var timeTraversedInDasa = YearsTraversedInBirthDasa(moonConstellation, birthTime);
 
             //NOTE: variable number of days per year here dynamically set for BV. RAMAN ayanamsa only
-            if (Calculate.Ayanamsa == (int)Ayanamsa.RAMAN) { Calculate.SolarYearTimeSpan = 360; }
+           // if (Calculate.Ayanamsa == (int)Ayanamsa.RAMAN) { Calculate.SolarYearTimeSpan = 360; }
+            if (Calculate.Ayanamsa == (int)Ayanamsa.KRISHNAMURTI) 
+            { 
+                Calculate.SolarYearTimeSpan = 365.2564; 
+            } //CPJ 
+
             //get time from birth to current time 
             var timeBetween = currentTime.Subtract(birthTime).TotalDays / Calculate.SolarYearTimeSpan;
 

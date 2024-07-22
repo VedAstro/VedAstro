@@ -330,7 +330,8 @@ namespace VedAstro.Library
             
             var reportJSON = compatibilityReport.ToJson();
 
-            return reportJSON;
+           // return reportJSON; causing issues
+            return compatibilityReport;
         }
 
 
@@ -11970,6 +11971,7 @@ namespace VedAstro.Library
             {
                 case <= 60 and > 30: return PlanetMotion.Retrograde;
                 case <= 30 and > 15: return PlanetMotion.Direct;
+                case <= 15 and >= 0: return PlanetMotion.Stationary;
                 default:
                     throw new Exception($"Error in GetPlanetMotionName : {chestaBala}");
             }

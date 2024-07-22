@@ -34,15 +34,10 @@ namespace VedAstro.Library
     {
         //auth details to talk to Azure OpenAI
         static Uri azureOpenAIResourceUri = new("https://openaimodelserver.openai.azure.com/");
-        static AzureKeyCredential azureOpenAIApiKey = new(Environment.GetEnvironmentVariable("AzureOpenAIAPIKey"));
-        static string azureMetaLlama3APIKey = Environment.GetEnvironmentVariable("AzureMetaLlama3APIKey");
-        static string azureMistralLargeAPIKey = Environment.GetEnvironmentVariable("AzureMistralLargeAPIKey");
-        static string azureCohereCommandRPlusAPIKey = Environment.GetEnvironmentVariable("AzureCohereCommandRPlusAPIKey");
-        static string azureCohereEmbedAPIKey = Environment.GetEnvironmentVariable("AzureCohereEmbedAPIKey");
-        static string azureMistralSmallAPIKey = Environment.GetEnvironmentVariable("AzureMistralSmallAPIKey");
+        static AzureKeyCredential azureOpenAIApiKey = new(Secrets.Get("AzureOpenAIAPIKey"));
         static OpenAIClient client = new(azureOpenAIResourceUri, azureOpenAIApiKey);
 
-        private static string chatTableconnectionString = Environment.GetEnvironmentVariable("CENTRAL_API_STORAGE_CONNECTION_STRING");
+        private static string chatTableconnectionString = Secrets.Get("CENTRAL_API_STORAGE_CONNECTION_STRING");
         private static List<string> followupQuestions = new List<string> { "Why?", "How?", "Tell me more..." };
         private static TableClient chatTableClient = new TableClient(chatTableconnectionString, "ChatMessage");
 
@@ -62,7 +57,7 @@ namespace VedAstro.Library
 
             var storageUriPresetQuestionEmbeddings = $"https://{accountName}.table.core.windows.net/{tableNamePresetQuestionEmbeddings}";
             //save reference for late use
-            presetQuestionEmbeddingsServiceClient = new TableServiceClient(new Uri(storageUriPresetQuestionEmbeddings), new TableSharedKeyCredential(accountName, Secrets.AzureGeoLocationStorageKey));
+            presetQuestionEmbeddingsServiceClient = new TableServiceClient(new Uri(storageUriPresetQuestionEmbeddings), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
             presetQuestionEmbeddingsTableClient = presetQuestionEmbeddingsServiceClient.GetTableClient(tableNamePresetQuestionEmbeddings);
 
 
@@ -316,6 +311,11 @@ namespace VedAstro.Library
         //---------------------------------------------------PRIVATE------------------------------------------------------
 
 
+        /// <summary>
+        /// TODO MARKED FOR OBLIVION 
+        /// </summary>
+        /// <param name="userQuestion"></param>
+        /// <returns></returns>
         public static async Task<List<PresetQuestionEmbeddingsEntity>> FindPresetQuestionEmbeddings_CohereEmbed(string userQuestion)
         {
             //get embeddings for fresh query meat
@@ -403,23 +403,6 @@ namespace VedAstro.Library
         }
 
 
-        public static double CosineSimilarity(double[] vector1, double[] vector2)
-        {
-            double dotProduct = DotProduct(vector1, vector2);
-            double magnitude1 = Magnitude(vector1);
-            double magnitude2 = Magnitude(vector2);
-            return dotProduct / (magnitude1 * magnitude2);
-        }
-
-        public static double DotProduct(double[] vector1, double[] vector2)
-        {
-            return vector1.Zip(vector2, (a, b) => a * b).Sum();
-        }
-
-        public static double Magnitude(double[] vector)
-        {
-            return Math.Sqrt(vector.Sum(i => i * i));
-        }
 
         public static Dictionary<double, PresetQuestionEmbeddingsEntity> GetSimilarity(double[] target, List<PresetQuestionEmbeddingsEntity> candidatesList)
         {
@@ -429,10 +412,9 @@ namespace VedAstro.Library
             foreach (var candidate in candidatesList)
             {
                 //var similarityScore =  Accord.Math.Distance.Cosine(target, candidate.GetEmbeddingsArray());
-                var similarityScore2 = CosineSimilarity(target, candidate.GetEmbeddingsArray());
+                var similarityScore2 = NLPTools.CosineSimilarity(target, candidate.GetEmbeddingsArray());
                 finalList.Add(similarityScore2, candidate);
             }
-
 
             // Sort dictionary into high score at top
             var sortedList = finalList.OrderByDescending(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
@@ -506,7 +488,7 @@ namespace VedAstro.Library
 
             using var client = new HttpClient(Handler)
             {
-                DefaultRequestHeaders = { Authorization = new AuthenticationHeaderValue("Bearer", azureCohereEmbedAPIKey) },
+                DefaultRequestHeaders = { Authorization = new AuthenticationHeaderValue("Bearer", Secrets.Get("azureCohereEmbedAPIKey")) },
                 BaseAddress = new Uri("https://Cohere-embed-v3-english-bkovp-serverless.westus.inference.ai.azure.com/v1/embed")
             };
 
@@ -585,7 +567,7 @@ namespace VedAstro.Library
             var settings = new PredictionSettings
             {
                 ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
-                ApiKey = azureCohereCommandRPlusAPIKey,
+                ApiKey = Secrets.Get("azureCohereCommandRPlusAPIKey"),
                 MaxTokens = 600,
                 Temperature = 0.9,
                 TopP = 0.1,
@@ -623,7 +605,7 @@ namespace VedAstro.Library
             var settings = new PredictionSettings
             {
                 ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
-                ApiKey = azureCohereCommandRPlusAPIKey,
+                ApiKey = Secrets.Get("azureCohereCommandRPlusAPIKey"),
                 MaxTokens = 600,
                 Temperature = 0.7,
                 TopP = 0.4,
@@ -892,7 +874,7 @@ namespace VedAstro.Library
 
                 string requestBody = JsonConvert.SerializeObject(requestBodyObject);
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMetaLlama3APIKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Secrets.Get("azureMetaLlama3APIKey"));
                 client.BaseAddress = new Uri("https://Meta-Llama-3-70B-Instruct-ydbrc-serverless.westus.inference.ai.azure.com/v1/chat/completions");
 
                 var content = new StringContent(requestBody);
@@ -942,7 +924,7 @@ namespace VedAstro.Library
             var settings = new PredictionSettings
             {
                 ServerUrl = "https://Mistral-small-xcvuv-serverless.westus.inference.ai.azure.com/v1/chat/completions",
-                ApiKey = azureMistralSmallAPIKey,
+                ApiKey = Secrets.Get("azureMistralSmallAPIKey"),
                 MaxTokens = 600,
                 Temperature = 0.5,
                 TopP = 0.2,
@@ -974,7 +956,7 @@ namespace VedAstro.Library
             var settings = new PredictionSettings
             {
                 ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
-                ApiKey = azureCohereCommandRPlusAPIKey,
+                ApiKey = Secrets.Get("azureCohereCommandRPlusAPIKey"),
                 MaxTokens = 600,
                 Temperature = 0.5,
                 TopP = 0.5,
@@ -1041,7 +1023,7 @@ namespace VedAstro.Library
 
                 string requestBody = JsonConvert.SerializeObject(requestBodyObject);
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMistralLargeAPIKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Secrets.Get("azureMistralLargeAPIKey"));
                 client.BaseAddress = new Uri("https://Mistral-large-cahy-serverless.westus.inference.ai.azure.com/v1/chat/completions");
 
                 var content = new StringContent(requestBody);
@@ -1120,7 +1102,7 @@ namespace VedAstro.Library
             var settings = new PredictionSettings
             {
                 ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
-                ApiKey = azureCohereCommandRPlusAPIKey,
+                ApiKey = Secrets.Get("azureCohereCommandRPlusAPIKey"),
                 //ServerUrl = "https://Mistral-large-cahy-serverless.westus.inference.ai.azure.com/v1/chat/completions",
                 //ApiKey = azureMistralLargeAPIKey,
                 //ServerUrl = "https://Mistral-small-xcvuv-serverless.westus.inference.ai.azure.com/v1/chat/completions",
@@ -1203,7 +1185,7 @@ namespace VedAstro.Library
 
                 string requestBody = JsonConvert.SerializeObject(requestBodyObject);
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMistralLargeAPIKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Secrets.Get("azureCohereCommandRPlusAPIKey"));
                 client.BaseAddress = new Uri("https://Mistral-large-cahy-serverless.westus.inference.ai.azure.com/v1/chat/completions");
 
                 var content = new StringContent(requestBody);
@@ -1371,7 +1353,7 @@ namespace VedAstro.Library
 
                 string requestBody = JsonConvert.SerializeObject(requestBodyObject);
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMistralLargeAPIKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Secrets.Get("azureCohereCommandRPlusAPIKey"));
                 client.BaseAddress = new Uri("https://Mistral-large-cahy-serverless.westus.inference.ai.azure.com/v1/chat/completions");
 
                 var content = new StringContent(requestBody);
@@ -1471,7 +1453,7 @@ namespace VedAstro.Library
 
             async Task<HttpResponseMessage> PostRequestAsync(HttpClient client, StringContent content)
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMistralSmallAPIKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Secrets.Get("azureCohereCommandRPlusAPIKey"));
                 client.BaseAddress = new Uri("https://Mistral-small-xcvuv-serverless.westus.inference.ai.azure.com/v1/chat/completions");
 
                 return await client.PostAsync("", content);
@@ -1588,7 +1570,7 @@ namespace VedAstro.Library
 
                 string requestBody = JsonConvert.SerializeObject(requestBodyObject);
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMetaLlama3APIKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Secrets.Get("azureCohereCommandRPlusAPIKey"));
                 client.BaseAddress = new Uri("https://Meta-Llama-3-70B-Instruct-ydbrc-serverless.westus.inference.ai.azure.com/v1/chat/completions");
 
                 var content = new StringContent(requestBody);
@@ -1671,7 +1653,7 @@ namespace VedAstro.Library
 
                 string requestBody = JsonConvert.SerializeObject(requestBodyObject);
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMistralLargeAPIKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Secrets.Get("azureCohereCommandRPlusAPIKey"));
                 client.BaseAddress = new Uri("https://Mistral-large-cahy-serverless.westus.inference.ai.azure.com/v1/chat/completions");
 
                 var content = new StringContent(requestBody);
@@ -1752,7 +1734,7 @@ namespace VedAstro.Library
             var settings = new PredictionSettings
             {
                 ServerUrl = "https://Mistral-small-xcvuv-serverless.westus.inference.ai.azure.com/v1/chat/completions",
-                ApiKey = azureMistralSmallAPIKey,
+                ApiKey = Secrets.Get("azureCohereCommandRPlusAPIKey"),
                 MaxTokens = 8196,
                 Temperature = 0.5,
                 TopP = 0.5,
@@ -1807,7 +1789,7 @@ namespace VedAstro.Library
             var settings = new PredictionSettings
             {
                 ServerUrl = "https://Cohere-command-r-plus-rusng-serverless.westus.inference.ai.azure.com/v1/chat/completions",
-                ApiKey = azureCohereCommandRPlusAPIKey,
+                ApiKey = Secrets.Get("azureCohereCommandRPlusAPIKey"),
                 MaxTokens = 20000,
                 Temperature = 1,
                 TopP = 1,
@@ -1999,7 +1981,7 @@ namespace VedAstro.Library
 
                 string requestBody = JsonConvert.SerializeObject(requestBodyObject);
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMistralLargeAPIKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Secrets.Get("azureCohereCommandRPlusAPIKey"));
                 client.BaseAddress = new Uri("https://Mistral-large-cahy-serverless.westus.inference.ai.azure.com/v1/chat/completions");
 
                 var content = new StringContent(requestBody);
@@ -2229,7 +2211,7 @@ namespace VedAstro.Library
 
                 string requestBody = JsonConvert.SerializeObject(requestBodyObject);
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", azureMistralLargeAPIKey);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Secrets.Get("azureCohereCommandRPlusAPIKey"));
                 client.BaseAddress = new Uri("https://Mistral-large-cahy-serverless.westus.inference.ai.azure.com/v1/chat/completions");
 
                 var content = new StringContent(requestBody);

@@ -1081,11 +1081,6 @@ window.GenerateAstroTable = (settings, inputArguments) => {
  * Helps to create a table with astro data columns
  */
 class AstroTable {
-    //# LOCAL <--> LIVE Switch
-    //APIDomain = "https://vedastroapibeta.azurewebsites.net/api";
-    APIDomain = "https://vedastroapi.azurewebsites.net/api";
-    //APIDomain = "http://localhost:7071/api";
-
     // Class fields
     Ayanamsa = "Lahiri";
     ElementID = ""; //ID of main div where table & header will be injected
@@ -1156,8 +1151,7 @@ class AstroTable {
         //pump in data about table settings to show in popup
         var htmlPopup = await AstroTable.GenerateTableEditorHtml(
             this.ColumnData,
-            this.KeyColumn,
-            this.APIDomain
+            this.KeyColumn
         );
 
         //used to "Hoist" table reference for later event handlers firing
@@ -1304,7 +1298,7 @@ class AstroTable {
         //get all API calls from server only if empty
         if (this.APICalls.length === 0) {
             this.APICalls = await AstroTable.GetAPIPayload(
-                `${this.APIDomain}/ListCalls`
+                `${window.vedastro.APIDomain}/ListCalls`
             );
         }
 
@@ -1508,7 +1502,7 @@ class AstroTable {
         var selectedMethodInfo = await instance.GetAPIMetadata(endpoint);
 
         //construct the base url
-        var finalUrl = `${instance.APIDomain}/Calculate/${endpoint}/`;
+        var finalUrl = `${window.vedastro.APIDomain}/Calculate/${endpoint}/`;
 
         //if metadata not found, alert user
         if (selectedMethodInfo === undefined) {
@@ -1614,7 +1608,7 @@ class AstroTable {
     }
 
     // generate Table Editor column options popup panel
-    static async GenerateTableEditorHtml(columnData, keyColumnName, apiDomain) {
+    static async GenerateTableEditorHtml(columnData, keyColumnName) {
         var formHtml = "";
 
         for (
@@ -1639,7 +1633,7 @@ class AstroTable {
                                 ${await AstroTable.GetAPICallsListSelectOptionHTML(
                     columnData[columnNumber].Api,
                     keyColumnName,
-                    apiDomain
+                    window.vedastro.ApiDomain
                 )}
                             </select>
                         </div>
@@ -1706,11 +1700,10 @@ class AstroTable {
     //get list of all API calls in HTML options element string
     static async GetAPICallsListSelectOptionHTML(
         selectValue,
-        keyColumnName,
-        apiDomain
+        keyColumnName
     ) {
         //get raw API calls list from Server
-        var apiCalls = await AstroTable.GetAPIPayload(`${apiDomain}/ListCalls`);
+        var apiCalls = await AstroTable.GetAPIPayload(`${window.vedastro.ApiDomain}/ListCalls`);
 
         //filter out call that can NOT be used in columns (make User's live easier)
         apiCalls = AstroTable.FilterOutIncompatibleAPICalls(
@@ -2108,8 +2101,6 @@ class ChatInstance {
     SelectedTopicId = "";  //she's filled in when set
     SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
-    LiveServerURL = "wss://vedastrocontainer.delightfulground-a2445e4b.westus2.azurecontainerapps.io/HoroscopeChat";
-    LocalServerURL = "ws://127.0.0.1:8000/HoroscopeChat";
     ElementID = ""; //ID of main div where table & header will be injected
     ShowHeader = true; //default enabled, header with title, icon and edit button
     HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
@@ -4427,19 +4418,11 @@ $(document).ready(function () {
 });
 
 
-
-
 class PersonListSelector {
 
     ElementID = "PersonListSelector";
-    LiveServerURL = "http://localhost:7071/api/Calculate";
-    //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
-    //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
 
     constructor(rawSettings) {
-
-        //make instance accessible
-        //window.vedastro.PersonListSelector = this;
 
         //process the input variables and set them
         //this.initializeSettingData(rawSettings);
@@ -4447,9 +4430,8 @@ class PersonListSelector {
         //make the main chat window structure
         this.initializeMainBody();
 
-        //creates ever changing placeholder questios to engage users
+        //creates ever-changing placeholder questios to engage users
         //this.initializeChatInputElement();
-
 
     }
 
@@ -4476,10 +4458,13 @@ class PersonListSelector {
 
                  <!-- DROP PERSON DOWN LIST -->
                  <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow-y: scroll; overflow-x: clip;">
+                     <!-- SEARCH BAR -->
                      <div class="hstack gap-2">
                          <input type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search..." _bl_74="">
                          <div class="mb-2" style="cursor: pointer;" _bl_77=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--pepicons-pop" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" data-icon="pepicons-pop:list" data-width="25"><g fill="currentColor"><path d="M6.5 6a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0"></path><path fill-rule="evenodd" d="M7.5 6a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1" clip-rule="evenodd"></path></g></svg></div>
                      </div>
+
+                     <!-- PRIVATE PERSON LIST -->
                      <li class="dropdown-item" style="cursor: pointer;">John Legend - 1978</li>
 
                      <!-- EXAMPLES HEADER -->
@@ -4493,9 +4478,12 @@ class PersonListSelector {
                          </div>
                      </div>
                      <li><hr class="dropdown-divider"></li>
-                     <li class="dropdown-item" style="cursor: pointer;" value="Johnlegend1978">John Legend - 1978</li>
-                     <li class="dropdown-item" style="cursor: pointer;" value="BellaGray1966">Bella Gray - 1996</li>
-                     <li class="dropdown-item" style="cursor: pointer;" value="Ayabeshen1995">Aya Beshen - 1995</li>
+
+                     <!-- PUBLIC PERSON LIST -->
+                     ${PersonListSelector.getPersonList('101')}
+                     <li class="dropdown-item" style="cursor: pointer;">John Legend - 1978</li>
+                     <li class="dropdown-item" style="cursor: pointer;">Bella Gray - 1996</li>
+                     <li class="dropdown-item" style="cursor: pointer;">Aya Beshen - 1995</li>
                  </ul>
              </div>
              <style>
@@ -4521,6 +4509,26 @@ class PersonListSelector {
             });
         </script>
      `;
+    }
+
+    static async getPersonList(userId) {
+        try {
+            // STEP 1: Get request API URL
+            const response = await fetch(`${window.vedastro.ApiDomain}/Calculate/PersonList/UserId/${userId}`);
+            const jsonData = await response.json();
+
+            // STEP 2: Extract person list data and generate HTML for dropdown list
+            const personList = jsonData.Payload.PersonList;
+            const html = personList.map((person) => {
+                return `<li class="dropdown-item" style="cursor: pointer;">${person.Name} - ${person.PersonId}</li>`;
+            }).join('');
+
+            // STEP 3: Return HTML as string to caller
+            return html;
+        } catch (error) {
+            console.error(error);
+            return '';
+        }
     }
 
     async fetchLocationSuggestions(query) {

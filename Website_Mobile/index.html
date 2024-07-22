@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varta"> <!-- link, button, nav etc -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gowun Dodum"> <!--  article text -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Homemade Apple"> <!--  cursive for quotes -->
+    <!--Vanilla Calender-->
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro@2.9.6/build/vanilla-calendar.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro@2.9.6/build/vanilla-calendar.min.css" rel="stylesheet">
     <!-- JQUERY -->
     <style>
         body {
@@ -701,6 +704,151 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+            <section id="PersonData">
+                <!-- HEADER -->
+                <br>
+                <!--  <hr /> -->
+                <!-- BODY CONTENT -->
+                <div class="vstack gap-4" style="max-width: 667.5px;">
+                    <div class="py-2" _bl_68="">
+                        <!-- HEADER -->
+                        <div class="">
+                            <div class="fw-bold hstack gap-2 d-flex" style="">
+                                <div class="" style="" _bl_76="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icomoon-free" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16" data-icon="icomoon-free:profile" data-width="50" style="margin-top: -10px;"><path fill="currentColor" d="M13.5 0h-12C.675 0 0 .675 0 1.5v13c0 .825.675 1.5 1.5 1.5h12c.825 0 1.5-.675 1.5-1.5v-13c0-.825-.675-1.5-1.5-1.5M13 14H2V2h11zM4 9h7v1H4zm0 2h7v1H4zm1-6.5a1.5 1.5 0 1 1 3.001.001A1.5 1.5 0 0 1 5 4.5M7.5 6h-2C4.675 6 4 6.45 4 7v1h5V7c0-.55-.675-1-1.5-1"></path></svg>
+                                </div><h1 class="mt-2 me-auto fw-bold">Add a New Person </h1>
+                            </div>
+                            <hr class="mt-1 mb-2">
+                        </div>
+                        <!--Body of Adding New Person-->
+                        <div class="FormAddingPerson" style="max-width: 412.5px">
+                            <div class="input-group">
+                              <span class="input-group-text gap-2">
+                                <div class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="35" height="35" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:butting-in" data-width="35"><path fill="#CFD8DC" d="M24 3C12.4 3 3 12.4 3 24s9.4 21 21 21c.3 0 .7 0 1-.1V3.1c-.3-.1-.7-.1-1-.1"></path><path fill="#37474F" d="M25 3.1V45c4.1-.2 7.9-1.5 11-3.7V6.8c-3.1-2.2-6.9-3.6-11-3.7"></path><path fill="#FFB74D" d="M20.5 13c-6.4.3-11.6 5.7-11.5 12.1c0 2.8 1 5.4 2.7 7.5c1.4 1.7 2.3 3.9 2.3 6.1v3.8c3 1.6 6.4 2.5 10 2.5c.3 0 .7 0 1-.1c.7 0 1.3-.1 2-.2v-9.4c3.6-2.1 6-5.9 6-10.4c0-6.7-5.6-12.2-12.5-11.9"></path><path fill="#FFB74D" d="m29 38.6l-4-.6v-9h8l-.7 7c-.2 1.6-1.6 2.8-3.3 2.6"></path><path fill="#FFB74D" d="m39 29l-7 2l-1-5l1-4z"></path><circle cx="29.5" cy="25.5" r="1.5" fill="#784719"></circle><path fill="#FF5722" d="M21 12c-7.2 0-13 5.8-13 13c0 7.6 5.1 9 6 13l4-3v-8l5-2l1-4c3.2 0 6-3.9 6-6.1c-2.1-1.9-5.6-2.9-9-2.9"></path><circle cx="19" cy="27" r="3" fill="#FFB74D"></circle><path fill="#CFD8DC" d="M45 24c0-7.1-3.6-13.4-9-17.2v34.4c5.4-3.8 9-10.1 9-17.2"></path><path fill="#FF9800" d="M20 44.6c1.3.2 2.6.4 4 .4c.3 0 .7 0 1-.1c.7 0 1.3-.1 2-.2v-6.5l-7-1z"></path></svg>
+                                </div>
+                                Name
+                              </span>
+                              <input type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 17px;">
+                            </div>
+                          
+                            <div class="input-group">
+                              <span class="input-group-text gap-2">
+                                <div class="icon">
+                                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto-v1" width="30" height="30" preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="noto-v1:timer-clock" data-width="30"><path fill="#1a6ca2" d="M125.2 63.91c0-33.74-27.46-61.19-61.2-61.19c-33.75 0-61.2 27.45-61.2 61.19v55.42c0 3.31 2.69 6 6 6h110.4c3.31 0 6-2.69 6-6zc0 .01 0 0 0 0"></path><defs><path id="IconifyId190d8772ef225be82134" d="M64 111.95c26.49 0 48.04-21.55 48.04-48.04c0-26.48-21.55-48.03-48.04-48.03S15.96 37.43 15.96 63.91c0 26.49 21.55 48.04 48.04 48.04"></path></defs><use fill="#fff" href="#IconifyId190d8772ef225be82134"></use><path fill="#b8e9f4" d="M64 10.76c29.31 0 53.16 23.85 53.16 53.16c0 29.32-23.85 53.17-53.16 53.17S10.84 93.23 10.84 63.91c0-29.31 23.84-53.15 53.16-53.15m0 101.19c26.49 0 48.04-21.55 48.04-48.04c0-26.48-21.55-48.03-48.04-48.03S15.96 37.43 15.96 63.91c0 26.49 21.55 48.04 48.04 48.04"></path><circle cx="22.45" cy="63.91" r="3.06" fill="#2f2f2f"></circle><path fill="#2f2f2f" d="M25.37 86.22a3.081 3.081 0 0 1 1.12-4.19c1.47-.85 3.34-.35 4.19 1.12c.85 1.47.35 3.34-1.12 4.19c-1.47.85-3.35.35-4.19-1.12m16.32 16.33a3.061 3.061 0 0 1-1.12-4.19a3.061 3.061 0 0 1 4.19-1.12c1.47.84 1.98 2.72 1.13 4.19a3.082 3.082 0 0 1-4.2 1.12"></path><circle cx="84.77" cy="99.89" r="3.06" fill="#2f2f2f" transform="rotate(-30 84.76 99.893)"></circle><path fill="#2f2f2f" d="M102.63 86.22a3.067 3.067 0 0 1-4.19 1.11a3.058 3.058 0 0 1-1.12-4.18a3.061 3.061 0 0 1 4.19-1.12c1.47.85 1.97 2.72 1.12 4.19m5.98-22.31c0 1.7-1.37 3.06-3.06 3.06a3.06 3.06 0 0 1-3.06-3.06c0-1.7 1.37-3.07 3.06-3.07c1.69.01 3.06 1.38 3.06 3.07m-5.97-22.3c.84 1.47.34 3.34-1.12 4.19c-1.47.85-3.34.35-4.19-1.11a3.064 3.064 0 0 1 1.13-4.19c1.45-.86 3.33-.36 4.18 1.11M86.3 25.28c1.47.85 1.96 2.72 1.13 4.19a3.073 3.073 0 0 1-4.19 1.13a3.07 3.07 0 0 1-1.12-4.19a3.053 3.053 0 0 1 4.18-1.13m-44.6 0c1.47-.84 3.34-.34 4.19 1.12c.85 1.47.35 3.34-1.12 4.19c-1.46.85-3.34.35-4.19-1.12a3.059 3.059 0 0 1 1.12-4.19M25.37 41.61a3.07 3.07 0 0 1 4.19-1.12a3.068 3.068 0 1 1-4.19 1.12"></path><g fill="#2f2f2f"><circle cx="64" cy="63.92" r="8.14"></circle><path d="M60.17 66.74h7.66V23.1c0-1.66-1.34-3-3-3h-1.66c-1.66 0-3 1.34-3 3z"></path><circle cx="64" cy="63.92" r="8.14"></circle></g><path fill="#2f2f2f" d="m67.73 60.95l-1.98 7.39l-26.6-7.12a2.995 2.995 0 0 1-2.12-3.67l.43-1.61a3 3 0 0 1 3.68-2.12z"></path><ellipse cx="64" cy="63.91" fill="#fff" rx="3.07" ry="3.06"></ellipse><path fill="#2f2f2f" d="M64 108.53a3.06 3.06 0 0 0 3.06-3.06c0-1.69-1.36-3.06-3.06-3.06c-1.69 0-3.07 1.37-3.07 3.06c0 1.68 1.38 3.07 3.07 3.06"></path></svg>
+                                </div>
+                                Birth Time
+                              </span>
+                              <div class="form-control">
+                                <div class="hstack">
+                                  <span class="inputPerfect" id="HourInput">00</span>:
+                                  <span class="inputPerfect" id="MinuteInput">00</span>:
+                                  <span class="inputPerfect" id="MeridianInput">AM</span>
+                                  <span class="inputPerfect" id="DateInput">22</span>/
+                                  <span class="inputPerfect" id="MonthInput">07</span>/
+                                  <span class="inputPerfect" id="YearInput">2024</span>
+                                </div>
+                                <div class="calendar-container" id="calendar-container"></div>
+                              </div>
+                            </div>
+                          
+                            <div class="input-group">
+                              <span class="input-group-text gap-2">
+                                <div class="icon">
+                                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--streamline-emojis" width="34" height="34" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="streamline-emojis:globe-showing-americas" data-width="34"><path fill="#45413c" d="M12.5 45.5a11.5 1.5 0 1 0 23 0a11.5 1.5 0 1 0-23 0" opacity=".15"></path><path fill="#00b8f0" d="M4.33 22.83a19.67 19.67 0 1 0 39.34 0a19.67 19.67 0 1 0-39.34 0"></path><path fill="#009fd9" d="M41.34 13.55a18.12 18.12 0 1 1-34.68 0a19.67 19.67 0 1 0 34.68 0"></path><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M4.33 22.83a19.67 19.67 0 1 0 39.34 0a19.67 19.67 0 1 0-39.34 0"></path><path fill="#6dd627" d="m25.15 23.5l-1.06 2a.89.89 0 0 1-.24.3l-.85.71a1 1 0 0 0-.26 1.19l1.47 3.12a1 1 0 0 0 .67.55l.63.15a1 1 0 0 1 .73 1.23l-1.35 5.11a1 1 0 0 0 0 .46l.11.55a1 1 0 0 0 1.63.56l6.26-5.25a1 1 0 0 1 .46-.22l1.09-.2a1 1 0 0 0 .71-.53l2-4a1 1 0 0 0-.49-1.37l-3.21-1.43A1 1 0 0 1 33 26l-.71-1.35a1 1 0 0 0-.68-.52L26.24 23a1 1 0 0 0-1.09.5"></path><path fill="#46b000" d="m26.62 39.45l5-4.18a17.88 17.88 0 0 1-6.45 1.63l-.26 1a1 1 0 0 0 0 .46l.11.55a1 1 0 0 0 1.6.54m8.52-6.2l.12-.23c-.35.28-.71.56-1.08.81h.25a1 1 0 0 0 .71-.58"></path><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="m25.15 23.5l-1.06 2a.89.89 0 0 1-.24.3l-.85.71a1 1 0 0 0-.26 1.19l1.47 3.12a1 1 0 0 0 .67.55l.63.15a1 1 0 0 1 .73 1.23l-1.35 5.11a1 1 0 0 0 0 .46l.11.55a1 1 0 0 0 1.63.56l6.26-5.25a1 1 0 0 1 .46-.22l1.09-.2a1 1 0 0 0 .71-.53l2-4a1 1 0 0 0-.49-1.37l-3.21-1.43A1 1 0 0 1 33 26l-.71-1.35a1 1 0 0 0-.68-.52L26.24 23a1 1 0 0 0-1.09.5"></path><path fill="#6dd627" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="m22.41 9.82l-2-1.15a1 1 0 0 1-.3-1.46l.15-.21a1 1 0 0 0-.49-1.54l-2.49-.82a1 1 0 0 0-.7 0A19.63 19.63 0 0 0 11 8.07a1 1 0 0 0-.34.68l-.42 5.33a1 1 0 0 0 .19.66l3.9 5.26a1 1 0 0 0 .45.34l5.06 1.95l.15.07L22.6 24a1 1 0 0 0 .84.08l1-.35l-2.65-2.32a.91.91 0 0 0-.23-.15l-3.32-1.61a1 1 0 0 1-.55-.74l-.13-.74A1 1 0 0 1 18.61 17l3.3.27a1 1 0 0 0 .84-.35L26.09 13a1 1 0 0 1 .62-.34l2.47-.33a1 1 0 0 0 .86-1v-.76a1 1 0 0 0-.54-.89l-3.93-2a1 1 0 0 0-1.41.6l-.3 1a1 1 0 0 1-1.45.54M24 3.17a19.29 19.29 0 0 0-2.42.16l7 3a1 1 0 0 0 .42.07l3.16-.25l.46-1A19.53 19.53 0 0 0 24 3.17"></path><path fill="#6dd627" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M28.75 19L26 18.1a.49.49 0 0 0-.62.27l-.64 1.52a.5.5 0 0 0 .52.69l2.13-.28a.51.51 0 0 0 .3-.15Z"></path></svg>
+                                </div>
+                                Location
+                              </span>
+                              <input type="text" class="form-control" placeholder="New York" style="font-weight: 600; font-size: 17px;">
+                              <button class="btn-sm iconButton btn-primary btn ms-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="bx:search-alt" data-width="25"><path fill="currentColor" d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396l1.414-1.414l-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8s3.589 8 8 8m0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6s-6-2.691-6-6s2.691-6 6-6"></path><path fill="currentColor" d="M11.412 8.586c.379.38.588.882.588 1.414h2a3.977 3.977 0 0 0-1.174-2.828c-1.514-1.512-4.139-1.512-5.652 0l1.412 1.416c.76-.758 2.07-.756 2.826-.002"></path></svg>
+                              </button>
+                            </div>
+                          
+                            <div class="input-group">
+                              <label class="input-group-text gap-2" for="genderSelectInput" style="width: 165px;">
+                                <div class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="34" height="34" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="mdi:human-male-female" data-width="34"><path fill="currentColor" d="M7.5 2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2M6 7h3a2 2 0 0 1 2 2v5.5H9.5V22h-4v-7.5H4V9a2 2 0 0 1 2-2m10.5-5a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2M15 22v-6h-3l2.59-7.59C14.84 7.59 15.6 7 16.5 7s1.66.59 1.91 1.41L21 16h-3v6z"></path></svg>
+                                </div>
+                                Gender
+                              </label>
+                              <select class="form-select" id="genderSelectInput" style="font-weight: 600; font-size: 17px;">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                              </select>
+                            </div>
+                          
+                            <div class="mt-2 d-flex justify-content-between">
+                              <button class="btn-sm hstack gap-2 iconButton btn-primary btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--akar-icons" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="akar-icons:arrow-back" data-width="25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m8 5l-5 5l5 5"></path><path d="M3 10h8c5.523 0 10 4.477 10 10v1"></path></g></svg>
+                                Back
+                              </button>
+                              <button class="btn-sm hstack gap-2 iconButton btn-success btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="bx:save" data-width="25"><path fill="currentColor" d="M5 21h14a2 2 0 0 0 2-2V8a1 1 0 0 0-.29-.71l-4-4A1 1 0 0 0 16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2m10-2H9v-5h6zM13 7h-2V5h2zM5 5h2v4h8V5h.59L19 8.41V19h-2v-5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v5H5z"></path></svg>
+                                Save
+                              </button>
+                            </div>
+                          </div>
+                          
+                          <style>
+                           .icon {
+                              display: inline-block;
+                              width: 30px;
+                              height: 30px;
+                            }
+                          
+                           .inputPerfect {
+                              border: 0;
+                              background: transparent;
+                              font-weight: 600;
+                              font-size: 18px;
+                            }
+                          
+                           .hstack {
+                              display: flex;
+                              align-items: center;
+                              gap: 10px;
+                            }
+                          
+                           .iconButton {
+                              height: 37.1px;
+                              width: fit-content;
+                              font-family: 'Lexend Deca', serif;
+                            }
+                          
+                           .no-dropdown-arrow.dropdown-toggle::after {
+                              display: none!important;
+                            }
+                          </style>
+                    </div>
+
+                    <!-- List of Added Person -->
+
+                    <div class="py-2" _bl_71="">
+                        <div class="">
+                            <div class="fw-bold hstack gap-2 d-flex" style="">
+                                <div class="" style="" _bl_83="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--fluent" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" data-icon="fluent:people-list-20-filled" data-width="50" style="margin-top: -10px;"><path fill="currentColor" d="M6.75 10a3.25 3.25 0 1 0 0-6.5a3.25 3.25 0 0 0 0 6.5m3.75 2.5c0-.481.227-.91.58-1.184A2 2 0 0 0 10 11H3.5a2 2 0 0 0-2 2s0 4 5.25 4c1.953 0 3.18-.554 3.95-1.25q.078-.135.182-.25a1.5 1.5 0 0 1-.382-1c0-.384.144-.735.382-1a1.5 1.5 0 0 1-.382-1m6.5-5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0M12 12a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1z"></path></svg>
+                                </div><h2 class="mt-2 me-auto fw-bold">Person List</h2>
+                            </div>
+                            <hr class="mt-1 mb-2">
+                            <div class="hstack gap-2">
+                                <input type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search..." _bl_70="">
+                            </div>
+                            <hr>
+                            <table class="table table-bordered table-hover"><!--!--><thead class="table-dark"><tr><th>Name</th>
+                                <th>Birth Date &amp; Time</th>
+                                <th>Location</th>
+                                <th>Notes</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+
+                        </div>
+                        <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px; line-break: auto;">
+                        
                     </div>
                 </div>
             </section>

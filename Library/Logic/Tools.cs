@@ -34,6 +34,9 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Microsoft.Bing.ImageSearch;
+using Microsoft.Bing.ImageSearch.Models;
+using MimeDetective.Definitions;
 using Formatting = Newtonsoft.Json.Formatting;
 using XmlSerializer = System.Xml.Serialization.XmlSerializer;
 
@@ -68,6 +71,208 @@ namespace VedAstro.Library
     {
 
         public const string BlobContainerName = "vedastro-site-data";
+
+
+        /// <summary>
+        /// Searches for person's image on BING and return one most probable as result
+        /// note uses thumbnail version for speed and data save
+        /// </summary>
+        public static async Task<byte[]> GetSearchImage(Person personToImage)
+        {
+            Console.WriteLine("NOT IMPLEMENTED!");
+            return new[] { byte.MinValue };
+
+            ////IMPORTANT: replace this variable with your Cognitive Services subscription key
+            //string subscriptionKey = Secrets.Get("BING_IMAGE_SEARCH");
+            ////stores the image results returned by Bing
+            //Default.FileTypes.Images imageResults = null;
+
+            //var client = new ImageSearchClient(new ApiKeyServiceClientCredentials(subscriptionKey));
+
+            ////make search query based on person's details
+            //var keywords = personToImage.DisplayName; //todo maybe location can help
+
+            //// make the search request to the Bing Image API, and get the results
+            //imageResults = await client.Images.SearchAsync(query: keywords); //search query
+
+
+            ////pick out the images that seems most suited
+            //var handPickedApples = imageResults.Value.Where(delegate (ImageObject x)
+            //{
+            //    var isJpeg = x.EncodingFormat == "jpeg";//get only jpeg images for ease of handling down the road
+            //    var isCorrectShape = x.Width < x.Height; //rectangle image to fit site style better
+            //    return isJpeg && isCorrectShape;
+            //});
+
+
+            ////get 1st image in list as data
+            //var topImageUrl = handPickedApples.First().ThumbnailUrl;
+            //var imageBytes = await Tools.GetFileHttp(topImageUrl);
+
+            ////return to caller
+            //return imageBytes;
+        }
+
+        public static HttpResponseData SendFileToCaller(byte[] gif, HttpRequestData incomingRequest, string mimeType)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", mimeType);
+            //place in response body
+            response.WriteBytes(gif);
+            return response;
+        }
+       
+
+        /// <summary>
+        /// SPECIAL METHOD made to allow files straight from blob to be sent to caller
+        /// as fast as possible
+        /// </summary>
+        public static HttpResponseData SendFileToCaller(BlobClient fileBlobClient, HttpRequestData incomingRequest, string mimeType)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", mimeType);
+
+            //place in response body
+            //NOTE: very important to pass as stream to make work
+            //      if convert to byte array will not work!
+            //      needs to be direct stream to response
+            response.Body = fileBlobClient.OpenRead();
+            return response;
+        }
+
+
+        /// <summary>
+        /// Given an image in byte form, will save it as Person profile image in correct place with ID as file name
+        /// </summary>
+        public static async Task SaveNewPersonImage(string personId, byte[] imageBytes)
+        {
+
+            var blobContainerName = "vedastro-site-data";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.Get("API_STORAGE"); //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //get access to file
+            var imageFile = $"images/person/{personId}.jpg";
+            var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
+
+            using var ms = new MemoryStream(imageBytes);
+            var blobUploadOptions = new BlobUploadOptions();
+            blobUploadOptions.AccessTier = AccessTier.Cool; //save money!
+
+            //note no override needed because specifying BlobUploadOptions, is auto override
+            await fileBlobClient.UploadAsync(content: ms, options: blobUploadOptions);
+
+        }
+
+        /// <summary>
+        /// Given an image in blob form, will save it as Person profile image in correct place with ID as file name
+        /// </summary>
+        public static async Task SaveNewPersonImage(string personId, BlobClient blobToUpload)
+        {
+
+            var blobContainerName = "$web";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.Get("WEB_STORAGE"); //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //place to save new image
+            var imageFile = $"images/person/{personId}.jpg";
+            var oldImageToReplace = blobContainerClient.GetBlobClient(imageFile);
+
+            // assume that if the following doesn't throw an exception, then it is successful.
+            CopyFromUriOperation operation = await oldImageToReplace.StartCopyFromUriAsync(blobToUpload.Uri, null, AccessTier.Cool);
+            await operation.WaitForCompletionAsync();
+        }
+
+        /// <summary>
+        /// gets image already stored in Images/Person as blobclient based on image name, without file format
+        /// </summary>
+        public static BlobClient GetPersonImage(string personId)
+        {
+
+            var blobContainerName = "vedastro-site-data";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.Get("API_STORAGE"); //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //get access to file
+            var imageFile = $"images/person/{personId}.jpg";
+            var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
+
+            return fileBlobClient;
+
+
+        }
+
+
+        ///// <summary>
+        ///// Gets any file from Azure blob storage in string form
+        ///// </summary>
+        //public static async Task<string> GetStringFileFromAzureStorage(string fileName, string blobContainerName)
+        //{
+        //    var fileClient = await Tools.GetBlobClientAzure(fileName, blobContainerName);
+        //    var xmlFile = await BlobClientToString(fileClient);
+
+        //    return xmlFile;
+        //}
+
+
+
+        /// <summary>
+        /// Saves XML file direct to Azure storage
+        /// </summary>
+        public static async Task SaveXDocumentToAzure(XDocument dataXml, string fileName, string containerName)
+        {
+            //get file client for file
+            var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
+
+            //upload modified list to storage
+            await Tools.OverwriteBlobData(fileClient, dataXml);
+        }
+
+
+
+        /// <summary>
+        /// check if a person's profile image already exist on server
+        /// </summary>
+        public static async Task<bool> IsCustomPersonImageExist(string personId)
+        {
+
+            var blobContainerName = "vedastro-site-data";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.Get("API_STORAGE"); //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //get access to file
+            var imageFile = $"images/person/{personId}.jpg";
+            var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
+
+            //do the actual code 
+            var isCustomPersonImageExist = await fileBlobClient.ExistsAsync();
+
+            var x = isCustomPersonImageExist.Value;
+            return x;
+
+        }
 
         public static bool IsSecureConnection(this HttpRequestData incomingRequest)
         {

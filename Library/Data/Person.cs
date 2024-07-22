@@ -394,10 +394,10 @@ namespace VedAstro.Library
         /// This makes owner ID as primary key and person id as 
         /// </summary>
         /// <returns></returns>
-        public PersonRow ToAzureRow()
+        public PersonListEntity ToAzureRow()
         {
             //make the cache row to be added
-            var newRow = new PersonRow()
+            var newRow = new PersonListEntity()
             {
                 //can have many IP as partition key
                 PartitionKey = this.OwnerId,
@@ -405,7 +405,7 @@ namespace VedAstro.Library
                 Name = this.Name,
                 BirthTime = this.BirthTime.ToJson().ToString(),
                 Gender = this.Gender.ToString(),
-                Notes = "",
+                Notes = Notes,
             };
 
             return newRow;
@@ -414,7 +414,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Brings back Owner ID from Primary key & 
         /// </summary>
-        public static Person FromAzureRow(PersonRow rowData)
+        public static Person FromAzureRow(PersonListEntity rowData)
         {
             //parse the person only
             var birthTime = Time.FromJson(JToken.Parse(rowData.BirthTime));
@@ -423,7 +423,7 @@ namespace VedAstro.Library
             var newPerson = new Person(rowData.PartitionKey, personId, rowData.Name, birthTime, rowDataGender);
 
             //get person life event list (partition key = person id)
-            var lifeEvents = AzureTable.LifeEventList.Query<LifeEventRow>(call => call.PartitionKey == personId);
+            var lifeEvents = AzureTable.LifeEventList_Indic.Query<LifeEventRow>(call => call.PartitionKey == personId);
 
             //convert to list
             var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();

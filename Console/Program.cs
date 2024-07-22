@@ -170,7 +170,7 @@ namespace VedAstro.Console
 
             //ACT 1 : Generate data needed to make charts
             //get person specified by caller
-            var foundPerson = await Tools.GetPersonByIdViaAPI(personId, "102111269113114363117");
+            var foundPerson = await Tools.GetPersonByIdViaAPI(personId, "101");
 
             //generate the needed charts
             var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.PD6, EventTag.PD7 };

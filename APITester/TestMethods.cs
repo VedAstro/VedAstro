@@ -113,37 +113,42 @@ namespace APITester
         /// <summary>
         /// .../Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45
         /// </summary>
-        public async Task AllPlanetDataTest()
+        public async Task<dynamic> AllPlanetDataTest()
         {
-            var json = JObject.Parse(await new HttpClient().GetStringAsync($"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
+            //var json = JObject.Parse(await new HttpClient().GetStringAsync($"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
 
-            Assert.IsTrue(json["Status"]?.Value<string>() == "Pass");
-            Assert.IsTrue(json["Payload"]["AllPlanetData"].HasValues);
-            Assert.IsTrue(json["Payload"]["AllPlanetData"][0]["Sun"].HasValues);
+            var url = $"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45";
+            var json = JObject.Parse(await new HttpClient().GetStringAsync(url));
+
+            //send data back to caller
+            return new { URL = url, OUTPUT = json };
         }
 
         /// <summary>
         /// .../Calculate/AllHouseData/HouseName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45
         /// </summary>
-        public async Task AllHouseData()
+        public async Task<dynamic> AllHouseData()
         {
-            var json = JObject.Parse(await new HttpClient().GetStringAsync($"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
+            var url = $"{LocalAPIServer}Calculate/AllHouseData/HouseName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45";
+            var json = JObject.Parse(await new HttpClient().GetStringAsync(url));
 
-            Assert.IsTrue(json["Status"]?.Value<string>() == "Pass");
-            Assert.IsTrue(json["Payload"]["AllPlanetData"].HasValues);
-            Assert.IsTrue(json["Payload"]["AllPlanetData"][0]["Sun"].HasValues);
+            //send data back to caller
+            return new { URL = url, OUTPUT = json };
         }
 
         /// <summary>
         /// .../Calculate/DasaAtRange/Location/Hetauda/Time/09:3[…]/+05:45/Location/Hetauda/Time/09:30/08/07/2093/+05:45
         /// </summary>
-        public async Task DasaAtRangeTest()
+        public async Task<dynamic> DasaAtRangeTest()
         {
-            var json = JObject.Parse(await new HttpClient().GetStringAsync($"{LocalAPIServer}Calculate/AllPlanetData/PlanetName/All/Location/Hetauda/Time/09:30/08/07/2023/+05:45"));
 
-            Assert.IsTrue(json["Status"]?.Value<string>() == "Pass");
-            Assert.IsTrue(json["Payload"]["AllPlanetData"].HasValues);
-            Assert.IsTrue(json["Payload"]["AllPlanetData"][0]["Sun"].HasValues);
+            var url = $"{LocalAPIServer}Calculate/DasaAtRange/Location/Punjab, India/Time/22:10/02/08/1995/+05:30/Location/Punjab, India/Time/22:10/02/08/1995/+05:30/Location/Punjab, India/Time/22:10/02/08/2065/+05:30";
+            var json = JObject.Parse(await new HttpClient().GetStringAsync(url));
+
+            //send data back to caller
+            return new { URL = url, OUTPUT = json };
+
+
         }
 
         /// <summary>

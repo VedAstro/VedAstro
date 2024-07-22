@@ -40,10 +40,26 @@
 [![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library) [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://pypi.org/project/VedAstro/)  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
 
 # 🆓 100% Open Source
-The sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
+As the great sage [Parashara](https://en.wikipedia.org/wiki/Parashara) imparted the wisdom of the stars freely, unbound by wealth or claim, so too does VedAstro, a gift unencumbered by price or title.
 
 ![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
 
+
+# 🛖 Philosophy
+Philosophy's the scaffold we use when we build,<br>
+Without it, a mud hut, not a structure fulfilled.<br>
+For creating grand codes, like VedAstro’s design,<br>
+Philosophy’s essential, its role is divine.<br>
+
+The purpose of VedAstro, we must understand,<br>
+Born of joy, in development it must stand.<br>
+This project thrives on happiness, pure and bright,<br>
+Don’t code till your heart feels the building's delight.<br>
+
+When your fingers can’t keep up, joy fills the air,<br>
+You’ll know that your code is placed right with care.<br>
+In the universe vast, it finds its own way,<br>
+Your work shines with brilliance, come what may.<br>
 
 # 🎯 Perfect Predictions
 [![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-steve.jpg)](https://vedastro.org/LifePredictor)   
@@ -205,25 +221,25 @@ But the database will be shared between these. Meaning data changes in Beta will
 
  
  # 🥀 Digital Astrology
-The wisdom of ages, once passed down by word,
-Now stored in circuits, rarely heard.
+The wisdom of ages, once passed down by word,<br>
+Now stored in circuits, rarely heard.<br>
 
-Once this knowledge was held in minds so keen,
-Now it's coded in machines unseen.
+Once this knowledge was held in minds so keen,<br>
+Now it's coded in machines unseen.<br>
 
-The human touch, that once gave knowledge birth,
-Replaced by algorithms, shaping future's girth.
+The human touch, that once gave knowledge birth,<br>
+Replaced by algorithms, shaping future's girth.<br>
 
 # 🛖 Philosophy
 Philosophy is equivalent to the **scaffolding** used when constructing a building.
 You can build without **scaffolding** it is called a **mud hut** not a building.
 Thus philosophy is essential to build a large & complex code structure like **VedAstro**.
 
-The reason for the existence of **VedAstro** needs to understood and kept in mind during development.
+The reason for the existence of **VedAstro** needs to be understood and kept in mind during development.
 This is a project born of joy, kept alive by it and as such do not touch the code until 
 your heart is filled with the joy of building beauty with electrons and your fingers can't keep up.
 
-Then you know your code is right, and has a place for it in this universe.
+Then you know your code is right, and **has a place for it in this universe**.
 
 
 # 🙏 Special Thanks
@@ -510,3 +526,29 @@ To all those who say we need money todo good. Jesus said not.
 than for a rich man to enter the kingdom of God"
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Hoffman-ChristAndTheRichYoungRuler.jpg/1024px-Hoffman-ChristAndTheRichYoungRuler.jpg" width="600"/>
+
+
+# POEMS
+Oh so bright, On a Tuesday morning,<br>
+I'm pondering life, and what's in sight.<br>
+Is it fear, fate, justice, or a test of might?<br>
+
+From my father's voice rings a resounding insight.<br>
+Joy of my love, it's your guiding light!<br>
+All men that have joy, have God, just right,<br>
+Making love to their sweet wife, there, God's in sight!<br>
+
+When men love their wives, with all their heart,<br>
+They see a glimpse of God, a work of art.<br>
+In those precious moments, they see God's might.<br>
+Yet, swiftly it fades, like a star in the night<br>
+
+When fleeting moments pass, and cries are heard,<br>
+And we're left to wonder, if joy's been blurred.<br>
+Chasing worldly delights, may bring us cheer<br>
+But joy is what lasts, and banishes all fear.<br>
+
+To pursue worldly pleasures, is not quite right,<br>
+It's short-sighted, like a bat in the daylight.<br>
+They seek joy, in their ceaseless flight,<br>
+Forgetting it's joy that makes their wings ignite.

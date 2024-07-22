@@ -1,0 +1,10 @@
+{
+  "description": {
+    "language": "dotnet-isolated",
+    "extensions": [ ".dll" ],
+    "defaultExecutablePath": "{WorkerRoot}API",
+    "defaultWorkerPath": "API.dll",
+    "workerIndexing": "true",
+    "canUsePlaceholder": true
+  }
+}

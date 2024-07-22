@@ -19,6 +19,10 @@ using Azure;
 using Azure;
 using Azure.AI.OpenAI;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Web;
+using System.IO;
 
 namespace VedAstro.Library
 {
@@ -39,6 +43,12 @@ namespace VedAstro.Library
     {
 
         #region SETTINGS
+
+        /// <summary>
+        /// updated when calls come in, then when sub calls go out, then are this address is used
+        /// </summary>
+        public static string CurrentServerAddress;
+
 
         /// <summary>
         /// Defaults to RAMAN, but can be set before calling any funcs,
@@ -69,12 +79,41 @@ namespace VedAstro.Library
         /// </summary>
         public static bool UseMeanRahuKetu { get; set; } = true;
 
-        public static Secrets Secrets { get; set; }
 
         #endregion
 
 
         //----------------------------------------CORE CODE---------------------------------------------
+
+        #region PERSON
+
+        /// <summary>
+        /// Add new person to DB,
+        /// returns ID of newly created person so caller can get use it
+        /// http://localhost:7071/api/Calculate/AddPerson/OwnerId/xxx/Location/Singapore/Time/00:00/24/06/2024/+08:00/PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%22%7D
+        /// </summary>
+        public static async Task<string> AddPerson(string ownerId, Time birthTime, string personName, Gender gender, string notes = "", bool failIfDuplicate = false)
+        {
+            //special ID made for human brains 🧠
+            var brandNewHumanReadyId = await PersonManagerTools.GeneratePersonId(ownerId, personName, birthTime.StdYearText, failIfDuplicate);
+
+            //make new person
+            var newPerson = new Person(ownerId, brandNewHumanReadyId, personName, birthTime, gender, notes);
+
+            //possible old cache of person with same id lived, so clear cache if any
+            //delete data related to person (NOT USER, PERSON PROFILE)
+            await AzureCache.DeleteCacheRelatedToPerson(newPerson);
+
+            //creates record if no exist, update if already there
+            AzureTable.PersonList_Indic.UpsertEntity(newPerson.ToAzureRow());
+
+            //return ID of newly created person so caller can get use it
+            return newPerson.Id;
+
+        }
+
+
+        #endregion
 
         #region MAINTAINANCE
 
@@ -109,6 +148,17 @@ namespace VedAstro.Library
 
             //do calculation using API and cache inteligently
             var returnVal = await locationProvider.AddressToGeoLocation(address);
+
+            return returnVal;
+        }
+
+        public static async Task<dynamic> SearchLocation(string address)
+        {
+            //inject api key from parent
+            var locationProvider = new Location();
+
+            //do calculation using API and cache inteligently
+            var returnVal = await locationProvider.SearchAddressToGeoLocation(address);
 
             return returnVal;
         }
@@ -155,6 +205,7 @@ namespace VedAstro.Library
 
             return returnVal;
         }
+
 
 
 
@@ -301,6 +352,238 @@ namespace VedAstro.Library
 
         #endregion
 
+        #region MATCH CHECK KUTA SCORE
+
+        /// <summary>
+        /// Get full kuta match data for 2 horoscopes
+        /// </summary>
+        public static MatchReport CompatibilityMatch(Time maleBirthTime, Time femaleBirthTime)
+        {
+            //get 1st and 2nd only for now (todo support more)
+            var male = new Person("", maleBirthTime, Gender.Male);
+            var female = new Person("", femaleBirthTime, Gender.Female);
+
+            //generate compatibility report
+            var compatibilityReport = MatchReportFactory.GetNewMatchReport(male, female, "101");
+
+
+            return compatibilityReport;
+        }
+
+        public static async Task<string> BirthTimeLocationAutoAIFill(string personFullName)
+        {
+            //get birth time as compatible text
+            var birthTime = await BirthTimeAutoAIFill(personFullName);
+
+            //get birth location as compatible text, without comma
+            var birthLocation = await BirthLocationAutoAIFill(personFullName);
+
+            //get birth location as compatible text, without comma
+            var marriagePartnerName = await MarriagePartnerNameAutoAIFill(personFullName);
+
+            //get partner data
+            var marriagePartnerBirthTime = await BirthTimeAutoAIFill(marriagePartnerName);
+            var marriagePartnerBirthLocation = await BirthLocationAutoAIFill(marriagePartnerName);
+
+            //get marriage data
+            var marriageTags = await MarriageTagsAutoAIFill(personFullName, marriagePartnerName);
+
+            return $"{marriageTags},{personFullName},{birthTime},{birthLocation},{marriagePartnerName},{marriagePartnerBirthTime},{marriagePartnerBirthLocation}";
+        }
+
+        /// <summary>
+        /// Given a famous person name will auto find birth time using LLM AI
+        /// </summary>
+        public static async Task<string> BirthTimeAutoAIFill(string personFullName)
+        {
+            string anyScaleAPIKey = Environment.GetEnvironmentVariable("AnyScaleAPIKey");
+
+            using (var client = new HttpClient())
+            {
+                var requestBodyObject = new
+                {
+                    model = "meta-llama/Meta-Llama-3-70B-Instruct",
+                    messages = new List<object>
+                    {
+                        new { role = "system", content = "given person name output birth time as {HH:mm DD/MM/YYYY zzz}" },
+                        new { role = "user", content = "Monroe, Marilyn" },
+                        new { role = "assistant", content = "09:30 01/06/1926 -08:00" },
+                        new { role = "user", content = personFullName }
+                    }
+                };
+
+                string requestBody = JsonConvert.SerializeObject(requestBodyObject);
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", anyScaleAPIKey);
+                client.BaseAddress = new Uri("https://api.endpoints.anyscale.com/v1/chat/completions");
+
+                var content = new StringContent(requestBody);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpResponseMessage response = await client.PostAsync("", content);
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var fullResponse = JObject.Parse(responseContent);
+                var message = fullResponse["choices"][0]["message"]["content"].Value<string>();
+
+                return message;
+            }
+        }
+
+        public static async Task<string> MarriageTagsAutoAIFill(string personA, string personB)
+        {
+            string anyScaleAPIKey = Environment.GetEnvironmentVariable("AnyScaleAPIKey");
+
+            using (var client = new HttpClient())
+            {
+                var requestBodyObject = new
+                {
+                    model = "meta-llama/Meta-Llama-3-70B-Instruct",
+                    messages = new List<object>
+                    {
+                        new { role = "system", content = "given married couple name output marriage duration in years" },
+                        new { role = "user", content = "Brad Pitt & Angelina Jolie" },
+                        new { role = "assistant", content = "#2Years" },
+                        new { role = "user", content = "Napoleon Bonaparte & Joséphine" },
+                        new { role = "assistant", content = "#14Years" },
+                        new { role = "user", content = "Dax Shepard & Kristen Bell" },
+                        new { role = "assistant", content = "#StillMarried" },
+                        new { role = "user", content = $"{personA} & {personB}" }
+                    }
+                };
+
+                string requestBody = JsonConvert.SerializeObject(requestBodyObject);
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", anyScaleAPIKey);
+                client.BaseAddress = new Uri("https://api.endpoints.anyscale.com/v1/chat/completions");
+
+                var content = new StringContent(requestBody);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpResponseMessage response = await client.PostAsync("", content);
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var fullResponse = JObject.Parse(responseContent);
+                var message = fullResponse["choices"][0]["message"]["content"].Value<string>();
+
+                return message;
+            }
+        }
+
+        /// <summary>
+        /// Given a famous person name will auto find birth location using LLM AI
+        /// </summary>
+        public static async Task<string> BirthLocationAutoAIFill(string personFullName)
+        {
+            string anyScaleAPIKey = Environment.GetEnvironmentVariable("AnyScaleAPIKey");
+
+            using (var client = new HttpClient())
+            {
+                var requestBodyObject = new
+                {
+                    model = "meta-llama/Meta-Llama-3-70B-Instruct",
+                    messages = new List<object>
+                    {
+                        new { role = "system", content = "given person name output birth location as {city state country}" },
+                        new { role = "user", content = "Monroe, Marilyn" },
+                        new { role = "assistant", content = "Los Angeles California USA" },
+                        new { role = "user", content = personFullName }
+                    }
+                };
+
+                string requestBody = JsonConvert.SerializeObject(requestBodyObject);
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", anyScaleAPIKey);
+                client.BaseAddress = new Uri("https://api.endpoints.anyscale.com/v1/chat/completions");
+
+                var content = new StringContent(requestBody);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpResponseMessage response = await client.PostAsync("", content);
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var fullResponse = JObject.Parse(responseContent);
+                var message = fullResponse["choices"][0]["message"]["content"].Value<string>(); ;
+
+                return message;
+            }
+        }
+
+        /// <summary>
+        /// Given a famous person name will auto find marriage partner using LLM AI
+        /// </summary>
+        public static async Task<string> MarriagePartnerNameAutoAIFill(string personFullName)
+        {
+            string anyScaleAPIKey = Environment.GetEnvironmentVariable("AnyScaleAPIKey");
+
+            using (var client = new HttpClient())
+            {
+                var requestBodyObject = new
+                {
+                    model = "meta-llama/Meta-Llama-3-70B-Instruct",
+                    messages = new List<object>
+                    {
+                        new { role = "system", content = "given person name output first marriage partner name" },
+                        new { role = "user", content = "Monroe, Marilyn" },
+                        new { role = "assistant", content = "James Dougherty" },
+                        new { role = "user", content = personFullName }
+                    }
+                };
+
+                string requestBody = JsonConvert.SerializeObject(requestBodyObject);
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", anyScaleAPIKey);
+                client.BaseAddress = new Uri("https://api.endpoints.anyscale.com/v1/chat/completions");
+
+                var content = new StringContent(requestBody);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpResponseMessage response = await client.PostAsync("", content);
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var fullResponse = JObject.Parse(responseContent);
+                var message = fullResponse["choices"][0]["message"]["content"].Value<string>(); ;
+
+                return message;
+            }
+        }
+
+        public class Movie
+        {
+            public string Title { get; set; }
+            public string Director { get; set; }
+            // Add other properties as needed
+        }
+
+        public class SearchResults
+        {
+            public Movie[] Value { get; set; }
+        }
+
+        public static async Task<JObject> GetData(string searchQuery)
+        {
+            string subscriptionKey = Secrets.Get("BING_IMAGE_SEARCH");
+
+            //string searchQuery = $"movies directed by {director}";
+            string bingAPIEndpoint = "https://api.bing.microsoft.com/v7.0/entities";
+
+            using (var client = new HttpClient())
+            {
+                var uri = new Uri($"{bingAPIEndpoint}?q={Uri.EscapeDataString(searchQuery)}&count=100&mkt=en-US");
+                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+
+                var response = await client.GetAsync(uri);
+
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                JObject jobj = JObject.Parse(jsonResponse);
+
+                return jobj;
+            }
+
+
+            throw new NotImplementedException();
+        }
+
+
+        #endregion
+
         #region CHAT API & MACHINE LEARNING
 
         /// <summary>
@@ -315,15 +598,31 @@ namespace VedAstro.Library
             return await ChatAPI.SendMessageHoroscope(birthTime, userQuestion, sessionId, userId);
         }
 
+        public static async Task HoroscopeChat2(Time birthTime, string userQuestion, string userId, string sessionId = "")
+        {
+            //await ChatAPI.CreatePresetQuestionEmbeddings_CohereEmbed();
+
+            await ChatAPI.LLMSearchAPICall_CohereEmbed(userQuestion);
+            //var foundQuestions = await ChatAPI.FindPresetQuestionEmbeddings_CohereEmbed(userQuestion);
+
+            //throw new NotImplementedException();
+            //return foundQuestions.Select(jv => jv.ToJson()).ToList();
+
+
+
+            //return await ChatAPI.SendMessageHoroscope(birthTime, userQuestion, sessionId, userId);
+
+        }
+
         public static async Task<JObject> HoroscopeChatFeedback(string answerHash, int feedbackScore)
         {
-            return await ChatAPI.HoroscopeChatFeedback( answerHash, feedbackScore);
+            return await ChatAPI.HoroscopeChatFeedback(answerHash, feedbackScore);
         }
 
         public static async Task<JObject> HoroscopeFollowUpChat(Time birthTime, string followUpQuestion, string primaryAnswerHash, string userId,
             string sessionId)
         {
-            return await ChatAPI.SendMessageHoroscopeFollowUp(birthTime, followUpQuestion, primaryAnswerHash, userId, sessionId );
+            return await ChatAPI.SendMessageHoroscopeFollowUp(birthTime, followUpQuestion, primaryAnswerHash, userId, sessionId);
         }
 
         /// <summary>
@@ -389,6 +688,7 @@ namespace VedAstro.Library
 
             return csv.ToString();
         }
+
 
         #endregion
 
@@ -2920,7 +3220,7 @@ namespace VedAstro.Library
         {
             //Fortune Point is calculated as Asc Degrees + Moon Degrees - Sun Degrees
             var a1 = Calculate.AllHouseMiddleLongitudes(time)[0].GetBeginLongitude().TotalDegrees;
-           
+
             //Find Lagna, Moon and Sun longitude degree
             var _asc_Degrees = Calculate.AllHouseMiddleLongitudes(time)[0].GetMiddleLongitude().TotalDegrees;
             var _moonDegrees = Calculate.PlanetNirayanaLongitude(PlanetName.Moon, time).TotalDegrees;
@@ -2932,7 +3232,7 @@ namespace VedAstro.Library
 
             /*
             //if its a day chart
-            
+
 
             if (_sunDegrees >= 180.000 && _sunDegrees < 360.000) 
             {
@@ -2971,8 +3271,8 @@ namespace VedAstro.Library
             //find zodiacSignAtFP Longitude
             var _zodiacSignAtFP = Calculate.ZodiacSignAtLongitude(_angleAtFortunaPointDegrees).GetSignName();
 
-           // var houseNo = Calculate.HouseFromSignName(_zodiacSignAtFP, time);
-            
+            // var houseNo = Calculate.HouseFromSignName(_zodiacSignAtFP, time);
+
 
             //find how many signs the FP is from Lagna
             var _signCount = Calculate.CountFromSignToSign(ascZodiacSignName, _zodiacSignAtFP);
@@ -3127,12 +3427,12 @@ namespace VedAstro.Library
         /// <summary>
         /// Get sky chart as animated GIF. URL can be used like a image source link
         /// </summary>
-        public static async Task<byte[]> SkyChartGIF(Time time) => await SkyChartManager.GenerateChartGif(time, 750, 230);
+        public static async Task<byte[]> SkyChartGIF(Time time) => await SkyChartFactory.GenerateChartGif(time, 750, 230);
 
         /// <summary>
         /// Get sky chart at a given time. SVG image file. URL can be used like a image source link
         /// </summary>
-        public static async Task<string> SkyChart(Time time) => await SkyChartManager.GenerateChart(time, 750, 230);
+        public static async Task<string> SkyChart(Time time) => await SkyChartFactory.GenerateChart(time, 750, 230);
 
 
         /// <summary>
@@ -3140,7 +3440,7 @@ namespace VedAstro.Library
         /// </summary>
         public static string SouthIndianChart(Time time, ChartType chartType = ChartType.Rasi)
         {
-            var svgString = (new SouthChartManager(time, 1000, 1000, chartType)).SVGChart;
+            var svgString = (new SouthChartFactory(time, 1000, 1000, chartType)).SVGChart;
 
             return svgString;
         }
@@ -3150,7 +3450,7 @@ namespace VedAstro.Library
         /// </summary>
         public static string NorthIndianChart(Time time)
         {
-            var svgString = NorthChartManager.GenerateChart(time, 1000, 1000);
+            var svgString = NorthChartFactory.GenerateChart(time, 1000, 1000);
 
             return svgString;
         }
@@ -4783,6 +5083,9 @@ namespace VedAstro.Library
         /// <returns></returns>
         public static PlanetName PlanetSubLordKP(PlanetName inputPlanet, Time time)
         {
+            //TODO dummy data, failing on 27/6/2024
+            return PlanetName.Sun;
+
             // Calculate the Nirayana longitude (sidereal longitude in Vedic astrology) 
             // of the current planet at the birth time.
             var nirayanaDegrees = PlanetNirayanaLongitude(inputPlanet, time);
@@ -8187,7 +8490,7 @@ namespace VedAstro.Library
             // Calculate the declination using the formula:
             // asin(sin(obliquityOfEcliptic) * sin(tropicalAscendant))
             double declination = 6.64;
-                
+
             // Calculate the oblique ascension by subtracting the result of the following formula from the right ascension:
             // asin(tan(declination) * tan(geographicLatitude))
             double obliqueAscension = rightAscension -
@@ -11840,86 +12143,89 @@ namespace VedAstro.Library
         /// </summary>
         public static PlanetMotion PlanetMotionName(PlanetName planetName, Time time)
         {
-            //sun, moon, rahu & ketu don' have retrograde so always direct
-            if (planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu) { return PlanetMotion.Direct; }
+            return PlanetMotion.Direct; //RETURN DUMMY DATA
 
-            //get chestaBala
-            var chestaBala = Calculate.PlanetChestaBala(planetName, time).ToDouble();
+            ////sun, moon, rahu & ketu don' have retrograde so always direct
+            //if (planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu) { return PlanetMotion.Direct; }
 
-            //based on chesta bala assign name to it
-            //Chesta kendra = 180 degrees = Retrograde
-            switch (chestaBala)
-            {
-                case <= 60 and > 45: return PlanetMotion.Retrograde;
-                case <= 45 and > 15: return PlanetMotion.Direct;
-                case <= 15 and >= 0: return PlanetMotion.Stationary;
-                default:
-                    throw new Exception($"Error in GetPlanetMotionName : {chestaBala}");
-            }
+            ////get chestaBala
+            //var chestaBala = Calculate.PlanetChestaBala(planetName, time).ToDouble();
 
+            ////based on chesta bala assign name to it
+            ////Chesta kendra = 180 degrees = Retrograde
+            //switch (chestaBala)
+            //{
+            //    case <= 60 and > 45: return PlanetMotion.Retrograde;
+            //    case <= 45 and > 15: return PlanetMotion.Direct;
+            //    case <= 15 and >= 0: return PlanetMotion.Stationary;
+            //    default:
+            //        throw new Exception($"Error in GetPlanetMotionName : {chestaBala}");
+            //}
+
+            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// </summary>
-        public static PlanetMotion PlanetMotionName2(PlanetName planetName, Time time)
-        {
-            //Brihat Parashara Hora Shatra > Ch.27 Shl.21-23
-            //
-            //Motions of Grahas (Mangal to Shani): Eight kinds of motions are attributed to grahas.
-            //These are Vakra (retrogression),
-            //Anuvakr (entering the previous rashi in retrograde motion),
-            //Vikal (devoid of motion or in stationary position),
-            //Mand (somewhat slower motion than usual),
-            //Mandatar (slower than the previous mentioned motion),
-            //Sama (somewhat increasing in motion as against Mand),
-            //Chara (faster than Sama) and
-            //Atichara (entering next rashi in accelerated motion).
-            //The strengths allotted due to such 8 motions are: 60, 30, 15, 30, 15, 7.5, 45, and 30.
+        ///// <summary>
+        ///// </summary>
+        //public static PlanetMotion PlanetMotionName2(PlanetName planetName, Time time)
+        //{
+        //    //Brihat Parashara Hora Shatra > Ch.27 Shl.21-23
+        //    //
+        //    //Motions of Grahas (Mangal to Shani): Eight kinds of motions are attributed to grahas.
+        //    //These are Vakra (retrogression),
+        //    //Anuvakr (entering the previous rashi in retrograde motion),
+        //    //Vikal (devoid of motion or in stationary position),
+        //    //Mand (somewhat slower motion than usual),
+        //    //Mandatar (slower than the previous mentioned motion),
+        //    //Sama (somewhat increasing in motion as against Mand),
+        //    //Chara (faster than Sama) and
+        //    //Atichara (entering next rashi in accelerated motion).
+        //    //The strengths allotted due to such 8 motions are: 60, 30, 15, 30, 15, 7.5, 45, and 30.
 
-            //There is an easy method to find out Gati or speed of Mars, Jupiter & Saturn which are beyond Earth with respect to Sun (outer planets).
-            // Whenever these planets are transmitting 2nd or 1st or 12th sign from Sun, these planets will be in - Atichara
-            // In 3rd - Sama
-            // In 4th - Chara
-            // In 5th - Manda & Mandatara
-            // In 6th - Vikala
-            // In 7th & 8th - Vakra
-            // In 9th - Vikala & Forward (Manda)
-            // In 10th - Sama
-            // In 11 th -Chara
-            // (Source - Bhaavartha Ratnakara-Last Chapters-Translated by B. V. Raman ji)
-            //
+        //    //There is an easy method to find out Gati or speed of Mars, Jupiter & Saturn which are beyond Earth with respect to Sun (outer planets).
+        //    // Whenever these planets are transmitting 2nd or 1st or 12th sign from Sun, these planets will be in - Atichara
+        //    // In 3rd - Sama
+        //    // In 4th - Chara
+        //    // In 5th - Manda & Mandatara
+        //    // In 6th - Vikala
+        //    // In 7th & 8th - Vakra
+        //    // In 9th - Vikala & Forward (Manda)
+        //    // In 10th - Sama
+        //    // In 11 th -Chara
+        //    // (Source - Bhaavartha Ratnakara-Last Chapters-Translated by B. V. Raman ji)
+        //    //
 
-            //Ancient Siddhaanta and Phalit classics mention eight types of speeds (Gati) of planets. All these eight types apply to Pancha-taaraa planets only : Mercury, Venus, Mars, Jupiter and Saturn. Rahu and Ketu are always retrograde. Sun and Moon are never retrograde.
-            // 
-            // The eight types of speeds are as follows :-
-            // 
-            // Vakra (Faster Retrograde)
-            // Anuvakra (Slower Retrograde)
-            // Kutila (complicated and very slow retrograde, sometimes relapsing into non-retro)
-            // Mandatara (slowest forward motion)
-            // Manda (slow forward motion)
-            // Sama (normal forward motion)
-            // Sheeghra (fast forward)
-            // Sheeghratara (very fast forward)
-            // These eight speeds according to their numbers are shown in the picture below, which is GEOCENTRIC epicycloidal motion of any Pancha-taara planet. In heliocentric model, there is no such differentiation and speed is always "sama". In Geocentric system too, speed of Sun or Moon is always "sama".
+        //    //Ancient Siddhaanta and Phalit classics mention eight types of speeds (Gati) of planets. All these eight types apply to Pancha-taaraa planets only : Mercury, Venus, Mars, Jupiter and Saturn. Rahu and Ketu are always retrograde. Sun and Moon are never retrograde.
+        //    // 
+        //    // The eight types of speeds are as follows :-
+        //    // 
+        //    // Vakra (Faster Retrograde)
+        //    // Anuvakra (Slower Retrograde)
+        //    // Kutila (complicated and very slow retrograde, sometimes relapsing into non-retro)
+        //    // Mandatara (slowest forward motion)
+        //    // Manda (slow forward motion)
+        //    // Sama (normal forward motion)
+        //    // Sheeghra (fast forward)
+        //    // Sheeghratara (very fast forward)
+        //    // These eight speeds according to their numbers are shown in the picture below, which is GEOCENTRIC epicycloidal motion of any Pancha-taara planet. In heliocentric model, there is no such differentiation and speed is always "sama". In Geocentric system too, speed of Sun or Moon is always "sama".
 
-            //sun, moon, rahu & ketu don't have retrograde so always direct
-            if (planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu) { return PlanetMotion.Direct; }
+        //    //sun, moon, rahu & ketu don't have retrograde so always direct
+        //    if (planetName == Library.PlanetName.Sun || planetName == Library.PlanetName.Moon || planetName == Library.PlanetName.Rahu || planetName == Library.PlanetName.Ketu) { return PlanetMotion.Direct; }
 
-            //get chestaBala
-            var chestaBala = Calculate.PlanetChestaBala(planetName, time).ToDouble();
+        //    //get chestaBala
+        //    var chestaBala = Calculate.PlanetChestaBala(planetName, time).ToDouble();
 
-            //based on chesta bala assign name to it
-            //Chesta kendra = 180 degrees = Retrograde
-            switch (chestaBala)
-            {
-                case <= 60 and > 30: return PlanetMotion.Retrograde;
-                case <= 30 and > 15: return PlanetMotion.Direct;
-                default:
-                    throw new Exception($"Error in GetPlanetMotionName : {chestaBala}");
-            }
+        //    //based on chesta bala assign name to it
+        //    //Chesta kendra = 180 degrees = Retrograde
+        //    switch (chestaBala)
+        //    {
+        //        case <= 60 and > 30: return PlanetMotion.Retrograde;
+        //        case <= 30 and > 15: return PlanetMotion.Direct;
+        //        default:
+        //            throw new Exception($"Error in GetPlanetMotionName : {chestaBala}");
+        //    }
 
-        }
+        //}
 
 
         /// <summary>

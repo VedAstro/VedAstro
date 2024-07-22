@@ -25,6 +25,11 @@ namespace VedAstro.Library
         /// </summary>
         public double KutaScore { get; set; }
 
+        /// <summary>
+        /// Yeah! ML Embeddings for kuta! world's 1st 🌍
+        /// </summary>
+        public double[] Embeddings { get; set; }
+
         public Person Male { get; set; }
 
         public Person Female { get; set; }
@@ -109,6 +114,7 @@ namespace VedAstro.Library
         {
 
             var temp = new JObject();
+            temp["Embeddings"] = new JArray(this.Embeddings);
             temp["KutaScore"] = this.KutaScore;  //not rounded
             temp["Notes"] = this.Notes;  //not rounded
             temp["Male"] = Male.ToJson();

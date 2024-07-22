@@ -236,6 +236,23 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Returns a new instance of the modified time.
+        /// Only input positive numbers
+        /// </summary>
+        public Time RemoveHours(double granularityHours)
+        {
+            //increment time by hours
+            var stdTime = _stdTime.RemoveHours(granularityHours);
+
+            //create new instance of incremented time
+            var newTime = new Time(stdTime, _geoLocation);
+
+            //return time to caller
+            return newTime;
+
+        }
+
+        /// <summary>
         /// Returns new instance.
         /// Moves current date to exactly next day, without altering time (hh:ss)
         /// </summary>
@@ -355,6 +372,11 @@ namespace VedAstro.Library
         /// Returns STD time in string dd/MM/yyyy
         /// </summary>
         public readonly string StdDateMonthYearText => _stdTime.ToString("dd/MM/yyyy");
+
+        /// <summary>
+        /// returns year as 1995
+        /// </summary>
+        public readonly string StdYearText => _stdTime.ToString("yyyy");
 
         /// <summary>
         /// Returns STD time zone as text "+08:00"

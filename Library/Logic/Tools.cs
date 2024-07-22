@@ -69,6 +69,101 @@ namespace VedAstro.Library
 
         public const string BlobContainerName = "vedastro-site-data";
 
+        public static bool IsSecureConnection(this HttpRequestData incomingRequest)
+        {
+            // Check X-Forwarded-Proto header for requests coming via a proxy
+            //if (incomingRequest.Headers.ContainsKey("X-Forwarded-Proto"))
+            //{
+            //    var protoValues = incomingRequest.Headers["X-Forwarded-Proto"].ToString().Split(",");
+            //    foreach (var proto in protoValues)
+            //    {
+            //        if ("https".Equals(proto.Trim(), StringComparison.OrdinalIgnoreCase))
+            //            return true;
+            //    }
+            //}
+
+            // Fall back to checking URL for direct requests
+            if (incomingRequest.Url.Port == 443 || incomingRequest.Url.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        }
+
+        public static string ExtractHostAddress(this HttpRequestData incomingRequest)
+        {
+
+            const string SCHEME_HTTP = "http";
+            const string SCHEME_HTTPS = "https";
+
+            var scheme = SCHEME_HTTP;
+            if (incomingRequest.IsSecureConnection())
+                scheme = SCHEME_HTTPS;
+
+            var requestHeaderList = incomingRequest.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+            requestHeaderList.TryGetValue("Host", out var hostValues);
+            var host = hostValues?.FirstOrDefault() ?? "no host";
+
+            return $"{scheme}://{host}";
+
+            ////from incoming request instance extract full host address like  "http://localhost:7071/api"
+            //var requestHeaderList = incomingRequest.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+            //requestHeaderList.TryGetValue("Host", out var hostValues);
+            //var host = hostValues?.FirstOrDefault() ?? "no host";
+            //return host;
+        }
+
+        public static HttpResponseData SendPassHeaderToCaller(BlobClient fileBlobClient, HttpRequestData req, string mimeType)
+        {
+            //send image back to caller
+            //response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Call-Status", "Pass"); //lets caller know data is in payload
+            response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
+            response.Headers.Add("Content-Type", mimeType);
+
+            //place in response body
+            //NOTE: very important to pass as stream to make work
+            //      if convert to byte array will not work!
+            //      needs to be direct stream to response
+            response.Body = fileBlobClient.OpenRead();
+            return response;
+        }
+
+        public static async Task<HttpResponseData> SendPassHeaderToCaller(string dataToSend, HttpRequestData req, string mimeType)
+        {
+            //send image back to caller
+            //response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Call-Status", "Pass"); //lets caller know data is in payload
+            response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
+            response.Headers.Add("Content-Type", mimeType);
+
+            //place in response body
+            //NOTE: very important to pass as stream to make work
+            //      if convert to byte array will not work!
+            //      needs to be direct stream to response
+            await response.WriteStringAsync(dataToSend);
+
+            return response;
+        }
+
+
+        public static string GetCallerId(string userId, string visitorId)
+        {
+            var IsLoggedIn = userId != "101";
+            if (IsLoggedIn)
+            {
+                return userId;
+            }
+            //if user NOT logged in then take his visitor ID as caller id
+            else
+            {
+                return visitorId;
+            }
+
+        }
+
+
         /// <summary>
         /// Gets public IP address of client sending the http request
         /// </summary>
@@ -103,6 +198,64 @@ namespace VedAstro.Library
             return ipAddress ?? IPAddress.None;
         }
 
+        /// <summary>
+        /// Method from Azure Website
+        /// </summary>
+        public static async Task<string> DownloadToText(BlobClient blobClient)
+        {
+            var isFileExist = (await blobClient.ExistsAsync()).Value;
+
+            if (isFileExist)
+            {
+                BlobDownloadResult downloadResult = await blobClient.DownloadContentAsync();
+                string downloadedData = downloadResult.Content.ToString();
+
+                return downloadedData;
+            }
+            else
+            {
+                //will be logged by caller
+                throw new Exception($"No File in Cloud : {blobClient.Name}");
+            }
+
+        }
+
+
+        /// <summary>
+        /// Converts a blob client of a file to string
+        /// </summary>
+        public static async Task<string> BlobClientToString(BlobClient blobClient)
+        {
+            try
+            {
+                var xmlFileString = await DownloadToText(blobClient);
+
+                return xmlFileString;
+            }
+            catch (Exception e)
+            {
+                //APILogger.Error(e); //log it
+                throw new Exception($"Azure Storage Failure : {blobClient.Name}");
+            }
+
+            //Console.WriteLine(blobClient.Name);
+            //Console.WriteLine(blobClient.AccountName);
+            //Console.WriteLine(blobClient.BlobContainerName);
+            //Console.WriteLine(blobClient.Uri);
+            //Console.WriteLine(blobClient.CanGenerateSasUri);
+
+            //if does not exist raise alarm
+            if (!await blobClient.ExistsAsync())
+            {
+                Console.WriteLine("NO FILE!");
+            }
+
+            //parse string as xml doc
+            //var valueContent = blobClient.Download().Value.Content;
+            //Console.WriteLine("Text:"+Tools.StreamToString(valueContent));
+        }
+
+
         public static IPAddress GetCallerIp(this HttpRequestMessage request)
         {
             IPAddress result = null;
@@ -116,6 +269,16 @@ namespace VedAstro.Library
             return result;
         }
 
+        /// <summary>
+        /// Subtracts the specified number of hours from the given DateTimeOffset value.
+        /// </summary>
+        /// <param name="value">The original DateTimeOffset value.</param>
+        /// <param name="hours">The number of hours to subtract.</param>
+        /// <returns>A new DateTimeOffset value with the specified hours subtracted.</returns>
+        public static DateTimeOffset RemoveHours(this DateTimeOffset value, double hours)
+        {
+            return value.AddHours(-hours);
+        }
 
         /// <summary>
         /// Make clone of stream
@@ -1163,6 +1326,12 @@ namespace VedAstro.Library
         /// </summary>
         /// <returns></returns>
         public static double DaysToHours(double days) => days * 24.0;
+
+        public static double WeeksToHours(double weeks) => weeks * 7.0 * 24.0;
+        public static double MonthsToHours(double months) => months * 30.44 * 24.0; // Approximate average number of days in a month
+        public static double YearsToHours(double years) => years * 365.25 * 24.0; // Approximate average number of days in a year (accounting for leap years)
+        public static double DecadesToHours(double decades) => decades * 10.0 * 365.25 * 24.0;
+
 
         public static double MinutesToHours(double minutes) => minutes / 60.0;
 
@@ -3739,28 +3908,28 @@ namespace VedAstro.Library
         public static Person GetPersonById(string personId, string ownerId = "")
         {
             // Initialize foundCalls to null
-            Pageable<PersonRow> foundCalls = null;
+            Pageable<PersonListEntity> foundCalls = null;
 
             // Query the database based on ownerId
             if (string.IsNullOrEmpty(ownerId))
             {
                 // Query without person Id, possible to return multiple values
-                foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.RowKey == personId);
+                foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(row => row.RowKey == personId);
             }
             else
             {
                 // Query with both ownerId and personId for accurate hit
-                foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+                foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(row => row.PartitionKey == ownerId && row.RowKey == personId);
             }
 
             // If person not found, check shared list
             if (!foundCalls.Any())
             {
-                var rawSharedList = AzureTable.PersonShareList.Query<PersonRow>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+                var rawSharedList = AzureTable.PersonShareList.Query<PersonListEntity>(row => row.PartitionKey == ownerId && row.RowKey == personId);
                 // If share found, get person directly without original ownerId
                 if (rawSharedList.Any())
                 {
-                    foundCalls = AzureTable.PersonList.Query<PersonRow>(row => row.RowKey == personId);
+                    foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(row => row.RowKey == personId);
                 }
             }
             // Log error if more than 1 person found
@@ -3843,7 +4012,7 @@ namespace VedAstro.Library
         {
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Secrets.API_STORAGE;
+            var storageConnectionString = Secrets.Get("API_STORAGE");
 
             //get image from storage
             var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
@@ -4304,7 +4473,7 @@ namespace VedAstro.Library
 
         public static void PasswordProtect(string inputPassword)
         {
-            if (inputPassword != Secrets.Password)
+            if (inputPassword != Secrets.Get("Password"))
             {
                 throw new ArgumentException("Invalid password");
             }
@@ -4359,6 +4528,30 @@ namespace VedAstro.Library
         }
 
 
+        public static double[] ConvertStringToDoubleArray(string input)
+        {
+            // Remove square brackets and split the string by commas
+            string[] stringValues = input.Trim('[', ']').Split(',');
+
+            // Initialize an array to store the converted double values
+            double[] result = new double[stringValues.Length];
+
+            // Convert each string value to a double
+            for (int i = 0; i < stringValues.Length; i++)
+            {
+                if (double.TryParse(stringValues[i], NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+                {
+                    result[i] = value;
+                }
+                else
+                {
+                    // Handle invalid input (e.g., non-numeric values)
+                    throw new ArgumentException($"Invalid value at index {i}: {stringValues[i]}");
+                }
+            }
+
+            return result;
+        }
     }
 
 

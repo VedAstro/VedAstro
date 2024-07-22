@@ -818,10 +818,35 @@
                                 </div>
                                 Location
                               </span>
-                              <input type="text" class="form-control" placeholder="New York" style="font-weight: 600; font-size: 17px;">
-                              <button class="btn-sm iconButton btn-primary btn ms-1" style="z-index: 0">
+                              <input type="text" class="form-control" id="location-input" placeholder="New York" style="font-weight: 600; font-size: 17px;">
+                              <input type="hidden" id="address-to-geolocation" name="addressToGeoLocation">
+                              <button class="btn-sm iconButton btn-primary btn ms-1" style="z-index: 0" id="location-search-button">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="bx:search-alt" data-width="25"><path fill="currentColor" d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396l1.414-1.414l-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8s3.589 8 8 8m0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6s-6-2.691-6-6s2.691-6 6-6"></path><path fill="currentColor" d="M11.412 8.586c.379.38.588.882.588 1.414h2a3.977 3.977 0 0 0-1.174-2.828c-1.514-1.512-4.139-1.512-5.652 0l1.412 1.416c.76-.758 2.07-.756 2.826-.002"></path></svg>
                               </button>
+                              <!--To search for a perticular address-->
+                              <script>
+                                    const locationSearchButton = document.getElementById('location-search-button');
+                                    const locationInput = document.getElementById('location-input');
+                                    const locationinfo = document.getElementById('address-to-geolocation');
+                                    locationSearchButton.addEventListener('click', () => {
+                                    const location = locationInput.value.trim();
+                                    if (location) {
+                                        const apiUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/AddressToGeoLocation/Address/${location}`;
+                                        fetch(apiUrl)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.Status === "Pass") {
+                                            const addressToGeoLocation = data.Payload.AddressToGeoLocation;
+                                            locationinfo.value = JSON.stringify(addressToGeoLocation);
+                                            locationInput.value = addressToGeoLocation.Name;
+                                            } else {
+                                            console.log("Address not found!!");
+                                            }
+                                        })
+                                        .catch(error => console.error(error));
+                                    }
+                                    });
+                              </script>
                             </div>
                           
                             <div class="input-group">

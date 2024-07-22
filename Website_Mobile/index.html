@@ -724,7 +724,7 @@
                             <hr class="mt-1 mb-2">
                         </div>
                         <!--Body of Adding New Person-->
-                        <div class="FormAddingPerson" style="max-width: 412.5px">
+                        <div class="FormAddingPerson" style="display:grid; max-width: 412.5px; gap:1rem !important">
                             <div class="input-group">
                               <span class="input-group-text gap-2">
                                 <div class="icon">
@@ -743,7 +743,7 @@
                                 Birth Time
                               </span>
                               <div class="form-control">
-                                <div class="hstack">
+                                <div class="hstack" id="calendar-button">
                                   <span class="inputPerfect" id="HourInput">00</span>:
                                   <span class="inputPerfect" id="MinuteInput">00</span>:
                                   <span class="inputPerfect" id="MeridianInput">AM</span>
@@ -751,7 +751,63 @@
                                   <span class="inputPerfect" id="MonthInput">07</span>/
                                   <span class="inputPerfect" id="YearInput">2024</span>
                                 </div>
-                                <div class="calendar-container" id="calendar-container"></div>
+                                <div class="calendar-container" id="calendar-container" style="display: none; position: absolute; z-index: 1;"></div>
+                                <!--Adding calender picker-->
+                                <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro@2.9.6/build/vanilla-calendar.min.js"></script>
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const calendarButton = document.getElementById('calendar-button');
+                                        const calendarContainer = document.getElementById('calendar-container');
+                                        const dateInput = document.getElementById('DateInput');
+                                        const monthInput = document.getElementById('MonthInput');
+                                        const yearInput = document.getElementById('YearInput');
+                                        const hourInput = document.getElementById('HourInput');
+                                        const minuteInput = document.getElementById('MinuteInput');
+                                        const meridianInput = document.getElementById('MeridianInput');
+                                        const calendar = new VanillaCalendar(calendarContainer, {
+                                            settings: {
+                                                visibility: { month: true, year: true },
+                                                lang: 'en',
+                                                iso8601: true,
+                                                selection: {
+                                                    month: true,
+                                                    year: true,
+                                                    time: true,
+                                                },
+                                                popups: {
+                                                    position: 'top',
+                                                    className: 'vc--red',
+                                                }
+                                            },
+                                            actions: {
+                                                clickDay(event,self){
+                                                    if(self.selectedDates[0]){
+                                                        const selectedDate = new Date(self.selectedDates[0]);
+                                                        dateInput.textContent = String(selectedDate.getDate()).padStart(2, '0');
+                                                        monthInput.textContent = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                                                        yearInput.textContent = selectedDate.getFullYear();
+                                                    }
+                                                    const selectedTime = new Date(self.selectedTime[0]);
+                                                    console.log(self.selectedDates[0]);
+                                                    const hours = self.selectedHours;
+                                                    const minutes = self.selectedMinutes;
+                                                    const meridian = self.selectedKeeping;
+                                                    hourInput.textContent = String(hours).padStart(2, '0');
+                                                    minuteInput.textContent = String(minutes).padStart(2, '0');
+                                                    meridianInput.textContent = meridian;
+                                                    calendarContainer.style.display = 'none';
+                                                    showCalendar = false;
+                                                }
+                                                
+                                            }
+                                        });
+                                        calendar.init();
+                                        calendarButton.addEventListener('click', function() {
+                                            calendarContainer.style.display = calendarContainer.style.display === 'none' ? 'block' : 'none';
+                                        });
+                                    });
+                                </script>
                               </div>
                             </div>
                           
@@ -763,7 +819,7 @@
                                 Location
                               </span>
                               <input type="text" class="form-control" placeholder="New York" style="font-weight: 600; font-size: 17px;">
-                              <button class="btn-sm iconButton btn-primary btn ms-1">
+                              <button class="btn-sm iconButton btn-primary btn ms-1" style="z-index: 0">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="bx:search-alt" data-width="25"><path fill="currentColor" d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396l1.414-1.414l-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8s3.589 8 8 8m0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6s-6-2.691-6-6s2.691-6 6-6"></path><path fill="currentColor" d="M11.412 8.586c.379.38.588.882.588 1.414h2a3.977 3.977 0 0 0-1.174-2.828c-1.514-1.512-4.139-1.512-5.652 0l1.412 1.416c.76-.758 2.07-.756 2.826-.002"></path></svg>
                               </button>
                             </div>

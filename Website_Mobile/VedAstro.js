@@ -4436,7 +4436,7 @@ class PersonListSelector {
     }
 
 
-    initializeMainBody() {
+    async initializeMainBody() {
 
         $(`#${this.ElementID}`).empty();
 
@@ -4444,11 +4444,11 @@ class PersonListSelector {
         $(`#${this.ElementID}`).css("max-width", "667px");
 
         //inject into page
-        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
 
     }
 
-    generateHtmlBody() {
+    async generateHtmlBody() {
         return `
         <div class="hstack">
              <div class="btn-group" style="width: 254.9px;">
@@ -4480,10 +4480,7 @@ class PersonListSelector {
                      <li><hr class="dropdown-divider"></li>
 
                      <!-- PUBLIC PERSON LIST -->
-                     ${PersonListSelector.getPersonList('101')}
-                     <li class="dropdown-item-person-list" style="cursor: pointer;" data-value="john1978">John Legend - 1978</li>
-                     <li class="dropdown-item-person-list" style="cursor: pointer;" data-value="bella1996">Bella Gray - 1996</li>
-                     <li class="dropdown-item-person-list" style="cursor: pointer;" data-value="aya1995">Aya Beshen - 1995</li>
+                     ${await PersonListSelector.getPersonList('101')}
                  </ul>
              </div>
              <style>
@@ -4516,11 +4513,11 @@ class PersonListSelector {
     static async getPersonList(userId) {
         try {
             // STEP 1: Get request API URL
-            const response = await fetch(`${window.vedastro.ApiDomain}/Calculate/PersonList/UserId/${userId}`);
+            const response = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/${userId}`);
             const jsonData = await response.json();
 
             // STEP 2: Extract person list data and generate HTML for dropdown list
-            const personList = jsonData.Payload.PersonList;
+            const personList = jsonData.Payload;
             const html = personList.map((person) => {
                 return `<li class="dropdown-item" style="cursor: pointer;">${person.Name} - ${person.PersonId}</li>`;
             }).join('');

@@ -32,7 +32,7 @@ namespace API
             try
             {
                 //get data from DB
-                var foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(call => call.PartitionKey == ownerId);
+                var foundCalls = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == ownerId);
 
                 //get person list from DB data
                 var foundPersonList = new List<Person>();
@@ -75,7 +75,7 @@ namespace API
                 await APITools.SwapUserId(ownerId, visitorId);
 
                 //STAGE 2 : continue as normal to get person list
-                var foundPersons = AzureTable.PersonList_Indic.Query<PersonListEntity>(call => call.PartitionKey == ownerId);
+                var foundPersons = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == ownerId);
 
                 //add each to return list
                 var personJsonList = new JArray();
@@ -118,7 +118,7 @@ namespace API
 
                 //upsert to database
                 var tableRow = parsedLifeEvent.ToAzureRow();
-                await AzureTable.LifeEventList_Indic?.UpsertEntityAsync(tableRow);
+                await AzureTable.LifeEventList?.UpsertEntityAsync(tableRow);
 
                 return APITools.PassMessageJson(req);
             }
@@ -150,7 +150,7 @@ namespace API
                 //await AzureTable.PersonListRecycleBin.UpsertEntityAsync(personAzureRow);
 
                 //# do final delete from MAIN DATABASE
-                await AzureTable.LifeEventList_Indic.DeleteEntityAsync(personId, lifeEventId);
+                await AzureTable.LifeEventList.DeleteEntityAsync(personId, lifeEventId);
 
                 return APITools.PassMessageJson(req);
 

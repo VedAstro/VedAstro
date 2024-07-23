@@ -31,12 +31,12 @@ namespace VedAstro.Library
         public const string LifeEventListUri = $"https://vedastrocentralstorage.table.core.windows.net/{LifeEventListName}";
         public const string LifeEventListUri_Indic = $"https://centralapistorage.table.core.windows.net/{LifeEventListName}";
         //TABLE
-        //public static readonly TableClient? PersonList = (new TableServiceClient(new Uri(PersonListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonListName);
-        public static readonly TableClient? PersonList_Indic = (new TableServiceClient(new Uri(PersonListUri_Indic), new TableSharedKeyCredential(AccountName_Indic, StorageAccountKey_Indic))).GetTableClient(PersonListName);
+        public static readonly TableClient? PersonList = (new TableServiceClient(new Uri(PersonListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonListName);
+        //public static readonly TableClient? PersonList_Indic = (new TableServiceClient(new Uri(PersonListUri_Indic), new TableSharedKeyCredential(AccountName_Indic, StorageAccountKey_Indic))).GetTableClient(PersonListName);
         public static readonly TableClient? APIAbuseList = (new TableServiceClient(new Uri(APIAbuseListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(APIAbuseListName);
         public static readonly TableClient? PersonListRecycleBin = (new TableServiceClient(new Uri(PersonListRecycleBinUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonListRecycleBinName);
-        //public static readonly TableClient? LifeEventList = (new TableServiceClient(new Uri(LifeEventListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(LifeEventListName);
-        public static readonly TableClient? LifeEventList_Indic = (new TableServiceClient(new Uri(LifeEventListUri_Indic), new TableSharedKeyCredential(AccountName_Indic, StorageAccountKey_Indic))).GetTableClient(LifeEventListName);
+        public static readonly TableClient? LifeEventList = (new TableServiceClient(new Uri(LifeEventListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(LifeEventListName);
+        //public static readonly TableClient? LifeEventList_Indic = (new TableServiceClient(new Uri(LifeEventListUri_Indic), new TableSharedKeyCredential(AccountName_Indic, StorageAccountKey_Indic))).GetTableClient(LifeEventListName);
         public static readonly TableClient? PersonShareList = (new TableServiceClient(new Uri(PersonShareListUri), new TableSharedKeyCredential(AccountName, StorageAccountKey))).GetTableClient(PersonShareListName);
 
     }

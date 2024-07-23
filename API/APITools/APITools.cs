@@ -400,7 +400,7 @@ namespace API
         public static List<Person> GetAllPersonList()
         {
             //get all
-            var foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>();
+            var foundCalls = AzureTable.PersonList.Query<PersonListEntity>();
 
             var returnList = new List<Person>();
             foreach (var call in foundCalls)
@@ -507,7 +507,7 @@ namespace API
             if (ownerId == "101") { return; }
 
             //get all person's under visitor id
-            var visitorIdPersons = AzureTable.PersonList_Indic.Query<PersonListEntity>(call => call.PartitionKey == visitorId);
+            var visitorIdPersons = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == visitorId);
 
             //if no records, then end here
             if (!visitorIdPersons.Any()) { return; }
@@ -519,10 +519,10 @@ namespace API
                 //overwrite visitor id with user id
                 var modifiedPerson = personOriRecord.Clone();
                 modifiedPerson.PartitionKey = ownerId;
-                AzureTable.PersonList_Indic.AddEntity(modifiedPerson);
+                AzureTable.PersonList.AddEntity(modifiedPerson);
 
                 //2: delete original "visitor" record 
-                await AzureTable.PersonList_Indic.DeleteEntityAsync(personOriRecord.PartitionKey, personOriRecord.RowKey);
+                await AzureTable.PersonList.DeleteEntityAsync(personOriRecord.PartitionKey, personOriRecord.RowKey);
             }
 
 

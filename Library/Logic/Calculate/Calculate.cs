@@ -111,7 +111,7 @@ namespace VedAstro.Library
             await AzureCache.DeleteCacheRelatedToPerson(newPerson);
 
             //creates record if no exist, update if already there
-            AzureTable.PersonList_Indic.UpsertEntity(newPerson.ToAzureRow());
+            AzureTable.PersonList.UpsertEntity(newPerson.ToAzureRow());
 
             //return ID of newly created person so caller can get use it
             return newPerson.Id;
@@ -127,7 +127,7 @@ namespace VedAstro.Library
             await AzureCache.DeleteCacheRelatedToPerson(personParsed);
 
             //person updated based on Person ID which is immutable
-            await AzureTable.PersonList_Indic?.UpsertEntityAsync(personParsed.ToAzureRow());
+            await AzureTable.PersonList?.UpsertEntityAsync(personParsed.ToAzureRow());
 
             return "Updated!";
 
@@ -144,7 +144,7 @@ namespace VedAstro.Library
         {
             //# get full person copy to place in recycle bin
             //query the database
-            var foundCalls = AzureTable.PersonList_Indic?.Query<PersonListEntity>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+            var foundCalls = AzureTable.PersonList?.Query<PersonListEntity>(row => row.PartitionKey == ownerId && row.RowKey == personId);
             //make into readable format
             var personAzureRow = foundCalls?.FirstOrDefault();
             var personToDelete = Person.FromAzureRow(personAzureRow);
@@ -156,7 +156,7 @@ namespace VedAstro.Library
             await AzureTable.PersonListRecycleBin.UpsertEntityAsync(personAzureRow);
 
             //# do final delete from MAIN DATABASE
-            await AzureTable.PersonList_Indic.DeleteEntityAsync(ownerId, personId);
+            await AzureTable.PersonList.DeleteEntityAsync(ownerId, personId);
 
             return "Updated!";
 
@@ -168,7 +168,7 @@ namespace VedAstro.Library
         public static async Task<JArray> GetPersonList(string ownerId)
         {
 
-            var foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(call => call.PartitionKey == ownerId);
+            var foundCalls = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == ownerId);
 
             //add each to return list
             var personJsonList = new JArray();
@@ -178,7 +178,6 @@ namespace VedAstro.Library
             return personJsonList;
 
         }
-
 
         public static async Task<Person> GetPerson(string ownerId, string personId)
         {
@@ -256,8 +255,6 @@ namespace VedAstro.Library
 
 
         }
-
-
 
 
         #endregion

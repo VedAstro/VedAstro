@@ -58,7 +58,7 @@ namespace VedAstro.Library
             //note search without owner ID, thus making person ID unique without owner ID for easy linking with images & other data
             bool IsUniquePersonId(string personId)
             {
-                var findPersonXmlById = AzureTable.PersonList_Indic?.Query<PersonListEntity>(row => row.RowKey == personId);
+                var findPersonXmlById = AzureTable.PersonList?.Query<PersonListEntity>(row => row.RowKey == personId);
                 var x = !findPersonXmlById.Any();
 
                 return x;

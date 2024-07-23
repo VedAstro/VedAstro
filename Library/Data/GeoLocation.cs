@@ -281,6 +281,7 @@ namespace VedAstro.Library
 
                 try
                 {
+                    //TODO AS BACKUP BECAUSE ANOTHER WAY OF SAVING IN DB, MINOR SCHEMA CHANGE
                     //PROBABILITY 2 :
                     var name = rawJson["Name"].Value<string>();
                     var longitude = rawJson["Longitude"].Value<double>();

@@ -28,7 +28,7 @@ namespace API
             {
 
 
-                var foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(call => call.PartitionKey == userId);
+                var foundCalls = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == userId);
 
                 //add each to return list
                 var personJsonList = new JArray();
@@ -71,7 +71,7 @@ namespace API
                 }
 
 
-                var foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(call => call.PartitionKey == userId);
+                var foundCalls = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == userId);
 
                 //add each to return list
                 var personJsonList = new JArray();

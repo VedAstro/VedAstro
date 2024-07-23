@@ -4119,12 +4119,12 @@ namespace VedAstro.Library
             if (string.IsNullOrEmpty(ownerId))
             {
                 // Query without person Id, possible to return multiple values
-                foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(row => row.RowKey == personId);
+                foundCalls = AzureTable.PersonList.Query<PersonListEntity>(row => row.RowKey == personId);
             }
             else
             {
                 // Query with both ownerId and personId for accurate hit
-                foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(row => row.PartitionKey == ownerId && row.RowKey == personId);
+                foundCalls = AzureTable.PersonList.Query<PersonListEntity>(row => row.PartitionKey == ownerId && row.RowKey == personId);
             }
 
             // If person not found, check shared list
@@ -4134,7 +4134,7 @@ namespace VedAstro.Library
                 // If share found, get person directly without original ownerId
                 if (rawSharedList.Any())
                 {
-                    foundCalls = AzureTable.PersonList_Indic.Query<PersonListEntity>(row => row.RowKey == personId);
+                    foundCalls = AzureTable.PersonList.Query<PersonListEntity>(row => row.RowKey == personId);
                 }
             }
             // Log error if more than 1 person found

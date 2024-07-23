@@ -4438,7 +4438,12 @@ class PersonListSelector {
 
 
     async initializeMainBody() {
-
+        const elementsofdropdown = document.querySelectorAll("#PersonListSelector");
+        elementsofdropdown.forEach(async (elementdrop) => {
+            $(elementdrop).empty();
+            $(elementdrop).css('max-width', '667px');
+            $(elementdrop).html(await this.generateHtmlBody());
+        });
         $(`#${this.ElementID}`).empty();
 
         //set max width here since declared in html
@@ -4453,8 +4458,8 @@ class PersonListSelector {
         return `
         <div class="hstack">
              <div class="btn-group" style="width: 254.9px;">
-                 <button type="button" class="btn dropdown-toggle dropdown-toggle-person btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
-                     <div data-value="" id="personidval" style="cursor: pointer; white-space: nowrap; display: inline-table;" _bl_87="" aria-expanded="false">John Legend - 1978</div>
+                 <button type="button" class="btn dropdown-toggle dropdown-toggle-person btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false" value="">
+                     Select Person<!--<div data-value="" id="personidval" style="cursor: pointer; white-space: nowrap; display: inline-table;" _bl_87="" aria-expanded="false">John Legend - 1978</div>-->
                  </button>
 
                  <!-- DROP PERSON DOWN LIST -->
@@ -4494,15 +4499,19 @@ class PersonListSelector {
              </button>
          </div>
          <script>
-            const dropdownItems = document.querySelectorAll('.dropdown-item-person-list');
+            var dropdownItems = document.querySelectorAll('.dropdown-item-person-list');
             console.log(dropdownItems);
-            const dropdownButton = document.querySelector('.dropdown-toggle-person');
+            var dropdownButton = document.querySelectorAll('.dropdown-toggle-person');
             dropdownItems.forEach((item) => {
                 item.addEventListener('click', () => {
-                const selectedItemText = item.textContent;
-                const personidvalue = item.getAttribute('data-value');
-                dropdownButton.textContent = selectedItemText;
-                dropdownButton.value = personidvalue;
+                var selectedItemText = item.textContent;
+                var personidvalue = item.getAttribute('data-value');
+                dropdownButton.forEach((button) => {
+                    button.textContent = selectedItemText;
+                    button.value = personidvalue;
+                });
+                //dropdownButton.textContent = selectedItemText;
+                //dropdownButton.value = personidvalue;
                 // Close the dropdown menu
                 document.querySelector('.dropdown-menu').classList.remove('show');
                 });

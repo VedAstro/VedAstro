@@ -641,7 +641,7 @@
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col p-0">
-                                        <div id="PersonListSelector"></div>
+                                        <div class="person-list-selector" id="PersonListSelector"></div>
                                     </div>
                                 </div>
 
@@ -828,8 +828,204 @@
                 <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
             </section>
             <section id="Horoscope">
-                <h1>Construction</h1>
-                <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
+                <!--Head of this section-->
+                <div class="mt-3 col d-flex align-items-start">
+                    <div class="vstack gap-2">
+                        <h1 class="fw-bold" tabindex="-1">Horoscope</h1><span
+                            style=" max-width:412.5px; font-size: 21px; font-weight: lighter; font-family: inherit;">Insight into a peron's
+                            character, nature and general future. Over +370 planetary combinations are used.</span>
+                    </div>
+                    <div class="w-100 d-none d-md-block" style="max-width: 412.5px; text-align: center;"><img
+                            src="images/horoscope-banner.png" style="width: 352.2px;" class=""></div>
+                </div>
+                <hr class="border-secondary border mt-3">
+                <!-- Body of this section-->
+                <div class="d-md-flex justify-content-between">
+                    <div class="me-5">
+                        <div class="d-flex flex-wrap mb-5" style="max-width: 352.2px;">
+                            <div id="HoroscopeMainInputHolder" class="vstack gap-3"><!--!-->
+                                <div><label class="form-label">Person</label>
+                                    <div class="hstack">
+                                        <div id="PersonListSelector" class="horoscope"></div>
+                                        <div class="person-list-selector"></div>
+                                </div><!--!-->
+                
+                                <div id="HoroscopeAdvancedInputHolder" class="vstack gap-1 mt-2 pt-2 border-top" style="display: none">
+                                    <!--!--><span
+                                        style="font-size: 11.5px;margin-left: 0px;color: grey;margin-top: -20px;position: absolute;background-color: rgb(240, 242, 245);"
+                                        class="px-1">Advanced Options</span>
+                
+                                    <div class="input-group mb-2"><label style="width:134.4px;" class="input-group-text"><!--!-->
+                                            <div class="me-2" style="" _bl_143=""><svg xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                                    class="iconify iconify--solar" width="25" height="25"
+                                                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
+                                                    data-icon="solar:stars-line-broken" data-width="25">
+                                                    <g fill="none" stroke="currentColor">
+                                                        <path stroke-width="1.5"
+                                                            d="M12.55 3.44c-.432-.931-.648-1.396-1.029-1.435c-.38-.04-.674.373-1.262 1.198l-.152.214c-.166.234-.25.351-.37.422c-.12.07-.263.087-.55.119l-.26.03c-1.01.112-1.514.168-1.664.52c-.15.351.154.765.761 1.592l.158.214c.172.235.258.352.29.49c.031.138.004.28-.05.564l-.05.259c-.192 1-.288 1.5 0 1.757c.289.256.77.099 1.733-.215l.249-.081c.274-.09.41-.134.55-.12c.14.015.266.086.519.23l.23.13c.89.506 1.335.759 1.663.566c.328-.193.322-.704.31-1.725l-.004-.264c-.003-.29-.005-.436.05-.564c.055-.129.16-.227.371-.422l.192-.178c.742-.688 1.113-1.032 1.027-1.408c-.085-.375-.57-.534-1.54-.851L13.47 4.4c-.276-.09-.414-.135-.52-.23c-.105-.093-.166-.225-.289-.49z">
+                                                        </path>
+                                                        <path stroke-linecap="round" stroke-width="1.5"
+                                                            d="M11 22c-.334-2.167-.8-7.2 0-10m3.5 10c0-1.125.17-2.516.628-4M22 9.5c-2.2 1.283-3.794 2.857-4.931 4.5">
+                                                        </path>
+                                                        <path stroke-linejoin="round"
+                                                            d="M5 13.268s.65.747 1.223.9c.573.155 1.51-.168 1.51-.168s-.749.65-.902 1.222c-.154.573.17 1.51.17 1.51s-.65-.748-1.223-.902c-.573-.153-1.51.17-1.51.17s.748-.65.901-1.223c.154-.573-.169-1.51-.169-1.51Z">
+                                                        </path>
+                                                    </g>
+                                                </svg></div><!--!--> Ayanamsa
+                                        </label><!--!-->
+                                        <select class="form-select">
+                                            <optgroup label="Easy">
+                                                <option value="LahiriChitrapaksha">Lahiri Chitrapaksha</option>
+                                                <option value="KrishnamurtiKP">Krishnamurti KP</option>
+                                                <option value="Raman">Raman</option>
+                                                <option value="FaganBradley">Fagan Bradley</option>
+                                                <option value="J2000">J2000</option>
+                                                <option value="Yukteshwar">Yukteshwar</option>
+                                            </optgroup><!--!-->
+                                            <optgroup label="Advanced">
+                                                <option value="FAGAN_BRADLEY">FAGAN_BRADLEY</option>
+                                                <option value="LAHIRI">LAHIRI</option>
+                                                <option value="DELUCE">DELUCE</option>
+                                                <option value="RAMAN">RAMAN</option>
+                                                <option value="USHASHASHI">USHASHASHI</option>
+                                                <option value="KRISHNAMURTI">KRISHNAMURTI</option>
+                                                <option value="DJWHAL_KHUL">DJWHAL_KHUL</option>
+                                                <option value="YUKTESHWAR">YUKTESHWAR</option>
+                                                <option value="JN_BHASIN">JN_BHASIN</option>
+                                                <option value="BABYL_KUGLER1">BABYL_KUGLER1</option>
+                                                <option value="BABYL_KUGLER2">BABYL_KUGLER2</option>
+                                                <option value="BABYL_KUGLER3">BABYL_KUGLER3</option>
+                                                <option value="BABYL_HUBER">BABYL_HUBER</option>
+                                                <option value="BABYL_ETPSC">BABYL_ETPSC</option>
+                                                <option value="ALDEBARAN_15TAU">ALDEBARAN_15TAU</option>
+                                                <option value="HIPPARCHOS">HIPPARCHOS</option>
+                                                <option value="SASSANIAN">SASSANIAN</option>
+                                                <option value="GALCENT_0SAG">GALCENT_0SAG</option>
+                                                <option value="J1900">J1900</option>
+                                                <option value="B1950">B1950</option>
+                                                <option value="SURYASIDDHANTA">SURYASIDDHANTA</option>
+                                                <option value="SURYASIDDHANTA_MSUN">SURYASIDDHANTA_MSUN</option>
+                                                <option value="ARYABHATA">ARYABHATA</option>
+                                                <option value="ARYABHATA_MSUN">ARYABHATA_MSUN</option>
+                                                <option value="SS_REVATI">SS_REVATI</option>
+                                                <option value="SS_CITRA">SS_CITRA</option>
+                                                <option value="TRUE_CITRA">TRUE_CITRA</option>
+                                                <option value="TRUE_REVATI">TRUE_REVATI</option>
+                                                <option value="TRUE_PUSHYA">TRUE_PUSHYA</option>
+                                                <option value="GALCENT_RGBRAND">GALCENT_RGBRAND</option>
+                                                <option value="GALEQU_IAU1958">GALEQU_IAU1958</option>
+                                                <option value="GALEQU_TRUE">GALEQU_TRUE</option>
+                                                <option value="GALEQU_MULA">GALEQU_MULA</option>
+                                                <option value="GALALIGN_MARDYKS">GALALIGN_MARDYKS</option>
+                                                <option value="TRUE_MULA">TRUE_MULA</option>
+                                                <option value="GALCENT_MULA_WILHELM">GALCENT_MULA_WILHELM</option>
+                                                <option value="ARYABHATA_522">ARYABHATA_522</option>
+                                                <option value="BABYL_BRITTON">BABYL_BRITTON</option>
+                                                <option value="TRUE_SHEORAN">TRUE_SHEORAN</option>
+                                                <option value="GALCENT_COCHRANE">GALCENT_COCHRANE</option>
+                                                <option value="GALEQU_FIORENZA">GALEQU_FIORENZA</option>
+                                                <option value="VALENS_MOON">VALENS_MOON</option>
+                                                <option value="LAHIRI_1940">LAHIRI_1940</option>
+                                                <option value="LAHIRI_VP285">LAHIRI_VP285</option>
+                                                <option value="KRISHNAMURTI_VP291">KRISHNAMURTI_VP291</option>
+                                                <option value="LAHIRI_ICRC">LAHIRI_ICRC</option>
+                                            </optgroup>
+                                        </select>
+                                    </div><!--!-->
+                
+                                    <div class="input-group"><!--!--><label style="width: 134.4px;" class="input-group-text"><svg
+                                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                aria-hidden="true" role="img" class="iconify iconify--gridicons me-2" width="25"
+                                                height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
+                                                data-icon="gridicons:types" data-width="25" data-height="25">
+                                                <path fill="currentColor"
+                                                    d="M22 17a5 5 0 1 1-10.001-.001A5 5 0 0 1 22 17M6.5 6.5h3.8L7 1L1 11h5.5zm9.5 4.085V8H8v8h2.585A6.505 6.505 0 0 1 16 10.585">
+                                                </path>
+                                            </svg>
+                                            Chart
+                                        </label>
+                                        <select id="ChartStyleSelectElement" class="form-select">
+                                            <option value="South" selected="">South Style</option><!--!-->
+                                            <option value="North">North Style</option>
+                                        </select>
+                                    </div><!--!-->
+                
+                                    <!--!-->
+                                    <div class="input-group" style="display: none"><span class="input-group-text">Year of Zero
+                                            Coincidence</span>
+                                        <input type="text" class="form-control" placeholder="397">
+                                    </div>
+                                </div><!--!-->
+                
+                                <div class="mt-2 d-flex justify-content-between"><!--!--><!--!-->
+                                    <style>
+                                        .no-dropdown-arrow.dropdown-toggle::after {
+                                            display: none !important;
+                                        }
+                                    </style><button
+                                        style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                                        class="btn-sm iconOnlyButton btn-primary btn " _bl_144="" id="advancedhoroscopebutton"><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            aria-hidden="true" role="img" class="iconify iconify--gala" width="25" height="25"
+                                            preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256" data-icon="gala:settings"
+                                            data-width="25">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="16">
+                                                <path
+                                                    d="M 48.000002,16 H 208 c 17.728,0 32,14.272 32,32 v 160 c 0,17.728 -14.272,32 -32,32 H 48.000002 c -17.728,0 -32,-14.272 -32,-32 V 48 c 0,-17.728 14.272,-32 32,-32 z">
+                                                </path>
+                                                <path d="M 64.000006,64.000001 H 79.999993"></path>
+                                                <path
+                                                    d="m 79.999996,-96.000015 a 16,16 0 0 1 -16,16 16,16 0 0 1 -16,-16 16,16 0 0 1 16,-16.000005 16,16 0 0 1 16,16.000005 z"
+                                                    transform="rotate(90)"></path>
+                                                <path d="m 112.00001,64.000353 79.99997,-3.52e-4"></path>
+                                                <path d="M 191.99998,128 H 176"></path>
+                                                <path
+                                                    d="m 144,159.99997 a 16,16 0 0 1 -16,16 16,16 0 0 1 -16,-16 16,16 0 0 1 16,-16 16,16 0 0 1 16,16 z"
+                                                    transform="matrix(0 1 1 0 0 0)"></path>
+                                                <path d="M 143.99998,128.00035 64.000006,128"></path>
+                                                <path d="M 64.000006,192.00001 H 79.999993"></path>
+                                                <path
+                                                    d="m 208,-96.000015 a 16,16 0 0 1 -16,16 16,16 0 0 1 -16,-16 16,16 0 0 1 16,-16.000005 16,16 0 0 1 16,16.000005 z"
+                                                    transform="rotate(90)"></path>
+                                                <path d="m 112.00001,192.00036 79.99997,-3.5e-4"></path>
+                                            </g>
+                                        </svg></button><!--!-->
+                                        <script>
+                                            const advancedhoroscopebutton = document.getElementById('advancedhoroscopebutton');
+                                            const divadvanced = document.getElementById('HoroscopeAdvancedInputHolder');
+                                            advancedhoroscopebutton.addEventListener('click', () => {
+                                            divadvanced.classList.toggle('d-block');
+                                            });
+                                        </script>
+                                    <!--!--><!--!-->
+                                    <style>
+                                        .no-dropdown-arrow.dropdown-toggle::after {
+                                            display: none !important;
+                                        }
+                                    </style><button id="HoroscopeCalculateButton"
+                                        style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                                        class="hstack gap-2 iconButton btn-success btn " _bl_145=""><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            aria-hidden="true" role="img" class="iconify iconify--uim" width="25" height="25"
+                                            preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="uim:process"
+                                            data-width="25">
+                                            <path fill="currentColor"
+                                                d="M8.625 8.5h-4.5a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v3.5h3.5a1 1 0 0 1 0 2"></path>
+                                            <path fill="currentColor"
+                                                d="M21 13a1 1 0 0 1-1-1A7.995 7.995 0 0 0 5.08 8.001a1 1 0 0 1-1.731-1.002A9.995 9.995 0 0 1 22 12a1 1 0 0 1-1 1m-1.125 9a1 1 0 0 1-1-1v-3.5h-3.5a1 1 0 0 1 0-2h4.5a1 1 0 0 1 1 1V21a1 1 0 0 1-1 1">
+                                            </path>
+                                            <path fill="currentColor"
+                                                d="M12 22A10.012 10.012 0 0 1 2 12a1 1 0 0 1 2 0a7.995 7.995 0 0 0 14.92 3.999a1 1 0 0 1 1.731 1.002A10.032 10.032 0 0 1 12 22">
+                                            </path>
+                                        </svg>Calculate</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--!-->
+                
+                </div>
             </section>
             <section id="GoodTimeFinder">
                 <h1>Construction</h1>

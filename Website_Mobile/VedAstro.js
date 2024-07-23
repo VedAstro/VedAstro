@@ -4452,8 +4452,8 @@ class PersonListSelector {
         return `
         <div class="hstack">
              <div class="btn-group" style="width: 254.9px;">
-                 <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
-                     <div style="cursor: pointer; white-space: nowrap; display: inline-table;" _bl_87="" aria-expanded="false">John Legend - 1978</div>
+                 <button type="button" class="btn dropdown-toggle dropdown-toggle-person btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+                     <div data-value="" id="personidval" style="cursor: pointer; white-space: nowrap; display: inline-table;" _bl_87="" aria-expanded="false">John Legend - 1978</div>
                  </button>
 
                  <!-- DROP PERSON DOWN LIST -->
@@ -4465,7 +4465,7 @@ class PersonListSelector {
                      </div>
 
                      <!-- PRIVATE PERSON LIST -->
-                     <li class="dropdown-item" style="cursor: pointer;">John Legend - 1978</li>
+                     <li class="dropdown-item-person-list" style="cursor: pointer;">John Legend - 1978</li>
 
                      <!-- EXAMPLES HEADER -->
                      <li><hr class="dropdown-divider"></li>
@@ -4481,9 +4481,9 @@ class PersonListSelector {
 
                      <!-- PUBLIC PERSON LIST -->
                      ${PersonListSelector.getPersonList('101')}
-                     <li class="dropdown-item" style="cursor: pointer;">John Legend - 1978</li>
-                     <li class="dropdown-item" style="cursor: pointer;">Bella Gray - 1996</li>
-                     <li class="dropdown-item" style="cursor: pointer;">Aya Beshen - 1995</li>
+                     <li class="dropdown-item-person-list" style="cursor: pointer;" data-value="john1978">John Legend - 1978</li>
+                     <li class="dropdown-item-person-list" style="cursor: pointer;" data-value="bella1996">Bella Gray - 1996</li>
+                     <li class="dropdown-item-person-list" style="cursor: pointer;" data-value="aya1995">Aya Beshen - 1995</li>
                  </ul>
              </div>
              <style>
@@ -4496,13 +4496,15 @@ class PersonListSelector {
              </button>
          </div>
          <script>
-            const dropdownItems = document.querySelectorAll('.dropdown-item');
-            const dropdownButton = document.querySelector('.dropdown-toggle');
-
+            const dropdownItems = document.querySelectorAll('.dropdown-item-person-list');
+            console.log(dropdownItems);
+            const dropdownButton = document.querySelector('.dropdown-toggle-person');
             dropdownItems.forEach((item) => {
                 item.addEventListener('click', () => {
                 const selectedItemText = item.textContent;
+                const personidvalue = item.getAttribute('data-value');
                 dropdownButton.textContent = selectedItemText;
+                dropdownButton.value = personidvalue;
                 // Close the dropdown menu
                 document.querySelector('.dropdown-menu').classList.remove('show');
                 });

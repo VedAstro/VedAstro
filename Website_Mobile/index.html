@@ -2388,7 +2388,7 @@
                 <hr class="border-secondary border mt-3">
                 <!--Body of this section-->
                 <div class="d-md-flex justify-content-between">
-                    <div class="me-5" style="width: 546.9px;">
+                    <div class="me-5" style="max-width: 667.5px;">
                         <div class="vstack gap-3 p-3"><!--!-->
                             <div><label class="form-label">Person</label>
                                 <div id="PersonListSelector" class="horoscope" style="max-width: 667px;"></div>
@@ -2478,7 +2478,7 @@
                                 </div><!--!-->
                                 <hr class="mt-1 mb-2">
                             </div><!--!-->
-                            <div style="width: 667.5px;margin-top:-14px;font-size: 15px;font-family: 'Lexend Deca';"
+                            <div style="max-width: 667.5px;margin-top:-14px;font-size: 15px;font-family: 'Lexend Deca';"
                                 class="d-flex flex-wrap gap-1 mb-3">
                                 <div style="width: 254.9px;" class="form-check hstack gap-2"><input id="General"
                                         style=" width: 40px; height: 28px;" class="form-check-input" type="checkbox"><!--!-->
@@ -3703,8 +3703,64 @@
                 </div>
             </section>
             <section id="StarsAboveMe">
-                <h1>Construction</h1>
-                <p>🏗️🏗️🏗️🏗️🏗️🏗️</p>
+                <!--Head of this section-->
+                <div class="mt-3 col d-flex align-items-start">
+                    <div class="vstack gap-2">
+                        <h1 class="fw-bold" tabindex="-1">Star Above Me</h1><span
+                            style=" max-width:412.5px; font-size: 21px; font-weight: lighter; font-family: inherit;">Info of stars and planets above you now. View pure astronomical and inteprated Vedic data for past and future anywhere in the world.</span>
+                    </div>
+                    <div class="w-100 d-none d-md-block" style="max-width: 412.5px; text-align: center;"><img
+                            src="images/stars-above-me-banner.png" style="width: 235.2px;" class=""></div>
+                </div>
+                <hr class="border-secondary border mt-3">
+                <!--Body of this section-->
+                <div style="width: 825px">
+                    <div class="vstack gap-3 mt-4 mb-5" style="max-width: 412.5px;"><!--!--><!--!-->
+                        <div id="PersonListSelector" class="horoscope" style="max-width: 667px;"></div>
+                        <style>
+                            .no-dropdown-arrow.dropdown-toggle::after {
+                                display: none !important;
+                            }
+                        </style>
+                        <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                            class="hstack gap-2 iconButton btn-success btn align-self-end" _bl_9042=""><svg
+                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                                role="img" class="iconify iconify--uim" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 24 24" data-icon="uim:process" data-width="25">
+                                <path fill="currentColor" d="M8.625 8.5h-4.5a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v3.5h3.5a1 1 0 0 1 0 2">
+                                </path>
+                                <path fill="currentColor"
+                                    d="M21 13a1 1 0 0 1-1-1A7.995 7.995 0 0 0 5.08 8.001a1 1 0 0 1-1.731-1.002A9.995 9.995 0 0 1 22 12a1 1 0 0 1-1 1m-1.125 9a1 1 0 0 1-1-1v-3.5h-3.5a1 1 0 0 1 0-2h4.5a1 1 0 0 1 1 1V21a1 1 0 0 1-1 1">
+                                </path>
+                                <path fill="currentColor"
+                                    d="M12 22A10.012 10.012 0 0 1 2 12a1 1 0 0 1 2 0a7.995 7.995 0 0 0 14.92 3.999a1 1 0 0 1 1.731 1.002A10.032 10.032 0 0 1 12 22">
+                                </path>
+                            </svg>Refresh</button>
+                    </div><!--!-->
+                
+                
+                    <!--!-->
+                    <div>
+                        <div class="vstack"><img id="" style=""
+                                src="https://vedastroapi.azurewebsites.net/api/Calculate/SkyChart/Location/Singapore/Time/00:00/23/07/2024/+08:00">
+                        </div>
+                    </div><!--!-->
+                
+                    <hr>
+                
+                
+                    <!--!-->
+                    <div style="cursor: pointer; margin-top:60.1px;">
+                        <figure class="text-center">
+                            <blockquote class="blockquote">
+                                <p style="font-family: 'Homemade Apple', serif;"><!--!-->
+                                    We're made of star stuff
+                                </p>
+                            </blockquote><!--!-->
+                            <figcaption class="blockquote-footer">Carl Sagan</figcaption>
+                        </figure>
+                    </div>
+                </div>
             </section>
             <section id="Contact">
                 <div>

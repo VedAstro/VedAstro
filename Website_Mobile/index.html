@@ -395,7 +395,7 @@
     <!-- MOBILE TOP NAV BAR -->
     <nav class="p-1 navbar rounded-bottom-4" data-bs-theme="dark" style="background-color: #1877f2 !important; margin-top: -1.5rem!important; margin-left: -0.73rem !important; margin-right: -0.73rem !important;" id="mobilenavbar">
         <div class="container-fluid">
-            <a class="navbar-brand" onclick="showSection('Home')">
+            <a class="navbar-brand active" onclick="showSection('Home')">
                 <img src="image/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
                 <span class="ms-1 align-middle">VedAstro</span>
             </a>
@@ -405,37 +405,49 @@
             <div class="navbar-nav border-opacity-10 border-2 border-top border-white navbar-collapse collapse" id="navbarTogglerDemo02">
                 <ul class="nav nav-fill">
                     <li class="nav-item">
-                        <a class="nav-link" onclick="showSection('Home')">
+                        <a class="nav-link active" onclick="showSection('Home')">
                             <iconify-icon class="align-bottom" icon="mdi:home" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Home</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" onclick="showSection('AIChat')">
+                        <a class="nav-link active" onclick="showSection('AIChat')">
                             <iconify-icon class="align-bottom" icon="mage:we-chat" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">AI Chat</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" onclick="showSection('Horoscope')">
+                        <a class="nav-link active" onclick="showSection('Horoscope')">
                             <iconify-icon class="align-bottom" icon="fluent:book-star-20-filled" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Horoscope</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" onclick="showSection('LifePredictor')">
+                        <a class="nav-link active" onclick="showSection('MatchChecker')">
+                            <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Match</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" onclick="showSection('Numerology')">
+                            <iconify-icon class="align-bottom" icon="mdi:numbers" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Numerology</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" onclick="showSection('MatchFinder')">
+                            <iconify-icon class="align-bottom" icon="game-icons:lovers" width="28" height="28"></iconify-icon>
+                            <span class="ms-1 align-middle" style="">Find Match</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" onclick="showSection('LifePredictor')">
                             <iconify-icon class="align-bottom" icon="gis:map-time" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Life Predictor</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" onclick="showSection('MatchChecker')">
-                            <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
-                            <span class="ms-1 align-middle" style="">Match Checker</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="showSection('GoodTimeFinder')">
+                        <a class="nav-link active" onclick="showSection('GoodTimeFinder')">
                             <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
                             <span class="ms-1 align-middle" style="">Good Time Finder</span>
                         </a>
@@ -495,7 +507,7 @@
                     </div>
 
                     <!-- PAGE LINKS -->
-                    <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
+                    <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4"><a onclick="showSection('GoodTimeFinder')">
                         <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/muhurtha-card.jpg" class="card-img-top">
@@ -504,7 +516,7 @@
                                     <p class="card-text">Find a good time for buying car, travel, studies, building..</p>
                                 </div>
                             </div>
-                        </div>
+                        </div></a><a onclick="showSection('LifePredictor')">
                         <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/dasa-card.jpg" class="card-img-top">
@@ -513,7 +525,7 @@
                                     <p class="card-text">Know good and bad periods of your life years ahead</p>
                                 </div>
                             </div>
-                        </div>
+                        </div></a><a onclick="showSection('MatchFinder')">
                         <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/match-finder-card.jpg" class="card-img-top">
@@ -522,7 +534,7 @@
                                     <p class="card-text">Free search astrological database for perfect match</p>
                                 </div>
                             </div>
-                        </div>
+                        </div></a><a onclick="showSection('APIBuilder')">
                         <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/open-api-card.jpg" class="card-img-top">
@@ -531,7 +543,7 @@
                                     <p class="card-text">Access powerful astrological tools via a HTTP request</p>
                                 </div>
                             </div>
-                        </div>
+                        </div></a><a onclick="showSection('Horoscope')">
                         <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/horoscope-card.jpg" class="card-img-top">
@@ -540,7 +552,7 @@
                                     <p class="card-text">Predict a person's character, speech, body &amp; general life</p>
                                 </div>
                             </div>
-                        </div>
+                        </div></a><a onclick="showSection('MatchFinder')">
                         <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/match-card.jpg" class="card-img-top">
@@ -549,7 +561,7 @@
                                     <p class="card-text">Check astro chemistry for romance &amp; relationship</p>
                                 </div>
                             </div>
-                        </div>
+                        </div></a>
                         <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/sunrise-card.jpg" class="card-img-top">
@@ -585,7 +597,7 @@
                                     <p class="card-text">Watch &amp; chat with a developer editing code live</p>
                                 </div>
                             </div>
-                        </div>
+                        </div><a onclick="showSection('AIChat')">
                         <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/ai-chat-card.jpg" class="card-img-top">
@@ -594,7 +606,7 @@
                                     <p class="card-text">Talk &amp; learn with AI powered astrologer for any queries</p>
                                 </div>
                             </div>
-                        </div>
+                        </div></a>
                         <div style="cursor: pointer;" class="col">
                             <div class="card">
                                 <img src="images/add-life-event-card.jpg" class="card-img-top">
@@ -4319,6 +4331,7 @@
                     </div>
                 </div>
             </section>
+            <div id="DDScriptLoader"></div>
             <footer id="LegalComplianceFooter" class="mb-2 pt-3 border-top"
                 style="opacity: 0.65; margin-top: 231.7px; font-size: 11px !important;">
                 <div class="d-flex justify-content-between">

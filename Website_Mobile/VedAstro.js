@@ -967,6 +967,7 @@ class EventsChart {
 window.vedastro = {
     UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101", //get user id from browser storage
     ApiDomain: "https://vedastroapi.azurewebsites.net/api",
+    //ApiDomain: " http://localhost:7071/api",
     Ayanamsa: "Lahiri", //default to
     ChartStyle: "South", //default to South Indian Chart
 };
@@ -4519,7 +4520,8 @@ class PersonListSelector {
             // STEP 2: Extract person list data and generate HTML for dropdown list
             const personList = jsonData.Payload;
             const html = personList.map((person) => {
-                return `<li class="dropdown-item" style="cursor: pointer;">${person.Name} - ${person.PersonId}</li>`;
+                //
+                return `<li class="dropdown-item-person-list" data-value="${person.PersonId}" style="cursor: pointer;">${person.Name} - 1994</li>`;
             }).join('');
 
             // STEP 3: Return HTML as string to caller

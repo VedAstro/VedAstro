@@ -4836,7 +4836,7 @@
                                         </div>
 
                                         <div class="mt-2 d-flex justify-content-between">
-                                            <button class="btn-sm hstack gap-2 iconButton btn-primary btn">
+                                            <button class="btn-sm hstack gap-2 iconButton btn-primary btn" id="BackButtonPersonData">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--akar-icons" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="akar-icons:arrow-back" data-width="25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m8 5l-5 5l5 5"></path><path d="M3 10h8c5.523 0 10 4.477 10 10v1"></path></g></svg>
                                                 Back
                                             </button>
@@ -5910,7 +5910,7 @@
     <script>
         //-----------------------------> MAIN APP CODE
 
-        function showSection(sectionId) {
+        function showSection(sectionId,prev = '') {
             const sections = document.querySelectorAll('section');
             sections.forEach(section => {
                 section.classList.remove('active');
@@ -5918,6 +5918,11 @@
                     section.classList.add('active');
                 }
             });
+            if(sectionId == 'PersonData' && prev!=''){
+                const backbutton = document.getElementById("BackButtonPersonData");
+                backbutton.setAttribute('onClick',`showSection('${prev}')`);
+                console.log(prev);
+            }
         }
 
         //-----------------------------> QUICK GUIDE PAGE

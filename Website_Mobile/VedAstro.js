@@ -4941,3 +4941,10 @@ function locationsearch(id) {
       .catch((error) => console.error(error));
   }
 }
+
+
+//attach event handlers to
+//auto change tabbed dropdown name Kundali/Horary
+function updatedropdownkundali(id) {
+    document.getElementById('KundaliHoraryHeader').textContent = id;
+}

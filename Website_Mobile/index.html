@@ -2760,8 +2760,8 @@
                                                         <span id="KundaliHoraryHeader" style="vertical-align: text-top;">Kundali</span>
                                                     </a>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                        <a class="dropdown-item active" id="tab1-tab" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Kundali</a>
-                                                        <a class="dropdown-item" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Horary</a>
+                                                        <a onclick="updatedropdownkundali('Kundali')" class="dropdown-item dropdown-kundali active" id="tab1-tab" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Kundali</a>
+                                                        <a onclick="updatedropdownkundali('Horary')" class="dropdown-item dropdown-kundali" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Horary</a>
                                                     </div>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
@@ -2792,7 +2792,7 @@
                                                             </span>
                                                             <!--!-->
                                                             <div class="form-control">
-                                                                <div class="hstack" id="calendar-button-kundali" style="gap: inherit; overflow-x: auto;">
+                                                                <div class="hstack" id="calendar-button-kundali" style="gap: inherit; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;">
                                                                     <span class="inputPerfect" id="DateInput-kundali">22</span>/
                                                                     <span class="inputPerfect" id="MonthInput-kundali">07</span>/
                                                                     <span class="inputPerfect" id="YearInput-kundali">2024</span>&nbsp;

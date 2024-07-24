@@ -521,8 +521,7 @@ class EventsChart {
     var eventName = `/EventName/${withSpaces.replace(/\s/g, "")}`; //remove spaces
 
     //put together final API call URL
-      var finalUrl = `${domain}/Calculate/EventStartEndTime${birthTime}${checkTime}${eventName}`;
-      console.log(finalUrl);
+    var finalUrl = `${domain}/Calculate/EventStartEndTime${birthTime}${checkTime}${eventName}`;
 
     //make call to API, replies JSON of Event
     var eventDataAtTime = await EventsChart.GetAPIPayload(finalUrl);
@@ -1183,7 +1182,6 @@ window.GenerateAstroTable = (settings, inputArguments) => {
  * Helps to create a table with astro data columns
  */
 class AstroTable {
-  APIDomain = "https://vedastroapi.azurewebsites.net/api";
   // Class fields
   Ayanamsa = "Lahiri";
   ElementID = ""; //ID of main div where table & header will be injected
@@ -1213,6 +1211,7 @@ class AstroTable {
   constructor(rawSettings) {
     //correct if property names is camel case (for Blazor)
     var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+
     //if column data is not supplied use default
     if (!settings.ColumnData) {
       settings.ColumnData = AstroTable.DefaultColumns;
@@ -1253,8 +1252,7 @@ class AstroTable {
     //pump in data about table settings to show in popup
     var htmlPopup = await AstroTable.GenerateTableEditorHtml(
       this.ColumnData,
-        this.KeyColumn,
-        this.APIDomain
+      this.KeyColumn
     );
 
     //used to "Hoist" table reference for later event handlers firing
@@ -1399,10 +1397,9 @@ class AstroTable {
   //given name of API call, will return the metadata
   async GetAPIMetadata(apiName) {
     //get all API calls from server only if empty
-      if (this.APICalls.length === 0) {
-          console.log(this.APIDomain);
+    if (this.APICalls.length === 0) {
       this.APICalls = await AstroTable.GetAPIPayload(
-        `${this.APIDomain}/ListCalls`
+        `${window.vedastro.APIDomain}/ListCalls`
       );
     }
 
@@ -1603,10 +1600,11 @@ class AstroTable {
 
   static async GetPayLoad2(endpoint, userInputParams, instance) {
     //given a API name, get the metadata of the API call
-      var selectedMethodInfo = await instance.GetAPIMetadata(endpoint);
+    var selectedMethodInfo = await instance.GetAPIMetadata(endpoint);
+
     //construct the base url
-      var finalUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/${endpoint}/`;
-      console.log(finalUrl);
+    var finalUrl = `${window.vedastro.APIDomain}/Calculate/${endpoint}/`;
+
     //if metadata not found, alert user
     if (selectedMethodInfo === undefined) {
       Swal.fire({
@@ -1738,7 +1736,7 @@ class AstroTable {
                                 ${await AstroTable.GetAPICallsListSelectOptionHTML(
                                   columnData[columnNumber].Api,
                                   keyColumnName,
-                                  this.APIDomain
+                                  window.vedastro.ApiDomain
                                 )}
                             </select>
                         </div>
@@ -1806,7 +1804,7 @@ class AstroTable {
   static async GetAPICallsListSelectOptionHTML(selectValue, keyColumnName) {
     //get raw API calls list from Server
     var apiCalls = await AstroTable.GetAPIPayload(
-      `${this.APIDomain}/ListCalls`
+      `${window.vedastro.ApiDomain}/ListCalls`
     );
 
     //filter out call that can NOT be used in columns (make User's live easier)
@@ -2765,7 +2763,7 @@ class ChatInstance {
 
       //DO FOR USER'S SAVED LIST
       window.vedastro.PersonList = await CommonTools.GetAPIPayload(
-        `${this.APIDomain}/GetPersonList/OwnerId/${window.vedastro.UserId}`
+        `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/${window.vedastro.UserId}`
       );
 
       //create a header in the list
@@ -2788,7 +2786,7 @@ class ChatInstance {
 
       //DO FOR PUBLIC LIST
       window.vedastro.PublicPersonList = await CommonTools.GetAPIPayload(
-        `${this.APIDomain}/GetPersonList/OwnerId/101`
+        `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/101`
       );
       //create a header in the list
       let $publicHoroscopeGroup = $("<optgroup>", {
@@ -3481,9 +3479,9 @@ class HoroscopeChat {
   SelectedTopicId = ""; //she's filled in when set
   SelectedTopicText = ""; //she's filled in when set
   ServerURL = ""; //filled in later just before use
-  //LiveServerURL = "http://localhost:7071/api/Calculate";
+  LiveServerURL = "http://localhost:7071/api/Calculate";
   //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
-  LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
+  //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
   ElementID = ""; //ID of main div where table & header will be injected
   ShowHeader = true; //default enabled, header with title, icon and edit button
   HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
@@ -3756,7 +3754,7 @@ class HoroscopeChat {
 
       //DO FOR USER'S SAVED LIST
       window.vedastro.PersonList = await CommonTools.GetAPIPayload(
-        `${this.APIDomain}/GetPersonList/OwnerId/${window.vedastro.UserId}`
+        `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/${window.vedastro.UserId}`
       );
 
       //create a header in the list
@@ -3779,7 +3777,7 @@ class HoroscopeChat {
 
       //DO FOR PUBLIC LIST
       window.vedastro.PublicPersonList = await CommonTools.GetAPIPayload(
-        `${this.APIDomain}/GetPersonList/OwnerId/101`
+        `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/101`
       );
       //create a header in the list
       let $publicHoroscopeGroup = $("<optgroup>", {
@@ -4415,9 +4413,9 @@ window.GenerateHoroscopeChat = (settingsHoroscopeChat) => {
 
 class LocationSearchSelector {
   ElementID = "LocationSearchSelector";
-  //LiveServerURL = "http://localhost:7071/api/Calculate";
+  LiveServerURL = "http://localhost:7071/api/Calculate";
   //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
-  LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
+  //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
 
   constructor(rawSettings) {
     //make instance accessible
@@ -4680,7 +4678,7 @@ class PersonListSelector {
     try {
       // STEP 1: Get request API URL
       const response = await fetch(
-        `${this.APIDomain}/Calculate/GetPersonList/UserId/${userId}`
+        `${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/${userId}`
       );
       const jsonData = await response.json();
 
@@ -4950,37 +4948,3 @@ function locationsearch(id) {
 function updatedropdownkundali(id) {
     document.getElementById('KundaliHoraryHeader').textContent = id;
 }
-
-// Clicked anywhere outside the calender will close calender
-//calendar - container
-function closeCalendarOnOutsideClick(event) {
-    if (!event.target.closest('.calendar-container') && document.querySelector('.calendar-container').style.display === 'block') {
-        document.querySelector('.calendar-container').style.display = 'none';
-        document.removeEventListener('click', closeCalendarOnOutsideClick);
-        console.log("hide");
-    }
-}
-
-// PlanetDataTable Table In KP Chart:
-// Initialize the AstroTable class
-var astroTable = new AstroTable({
-    ElementID: "PlanetDataTable",
-    KeyColumn: "Planet",
-    ColumnData: [
-        { Api: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
-        { Api: "PlanetConstellation", Enabled: true, Name: "Star" },
-        // Add more columns as needed
-    ],
-    ShowHeader: true,
-    HeaderIcon: "twemoji:ringed-planet",
-});
-
-// Generate the table
-astroTable.GenerateTable({
-    TimeUrl: "2022-01-01T00:00:00",
-    HoraryNumber: 0,
-    RotateDegrees: 0,
-    Ayanamsa: "Lahiri",
-});
-
-

@@ -4658,3 +4658,71 @@ $(document).ready(function () {
         console.log("Element does not exist!");
     }
 });
+
+
+class PageHeader {
+
+    ElementID = "";
+    TitleText = "Title Goes Here";
+    DescriptionText = "Description Goes Here";
+    ImageSrc = "images/user-guide-banner.png";
+
+    constructor(elementId) {
+
+        this.ElementID = elementId; //save for later access
+
+        //get title and description from the elements custom attributes
+        const element = document.getElementById(elementId);
+        this.TitleText = element.getAttribute('title-text') || 'Title Goes Here';
+        this.DescriptionText = element.getAttribute('description-text') || 'Description Goes Here';
+        this.ImageSrc = element.getAttribute('image-src') || 'images/user-guide-banner.png';
+
+        //inject in html
+        this.initializeMainBody();
+    }
+
+
+    async initializeMainBody() {
+
+        //clean if any old stuff
+        $(`#${this.ElementID}`).empty();
+
+        //inject into page
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+    }
+
+    async generateHtmlBody() {
+        return `
+       
+        <!-- DESKTOP AND TABLET ONLY -->
+        <div class="d-none d-md-block">
+            <div class="vstack mb-2">
+              <div class="hstack">
+                <div class="vstack gap-2">
+                  <h1 class="fw-bold" tabindex="-1">${this.TitleText}</h1>
+                  <span style=" max-width:412.5px; font-size: 21px; font-weight: lighter; font-family: inherit;">${this.DescriptionText}</span>
+                </div>
+                <div class="w-100 d-none d-md-block" style="max-width: 412.5px; text-align: center;">
+                  <img src="${this.ImageSrc}" style="width: 195px;" class="">
+                </div>
+              </div>
+              <hr class="border-secondary border mt-3">
+            </div>
+        </div>
+
+        <!-- MOBILE PORTRAIT ONLY -->
+        <div class="d-block d-md-none">
+            <div class="mt-3 col d-flex align-items-start">
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">${this.TitleText}</h3>
+                    <p>${this.DescriptionText}</p>
+                </div>
+                <img class="bi text-body-secondary flex-shrink-0 mt-3 ms-3" style="width: 141px;" src="${this.ImageSrc}" />
+            </div>        
+        </div>
+        
+
+     `;
+    }
+
+}

@@ -982,36 +982,36 @@ if (typeof jQuery == "undefined") {
     console.log("jQuery loaded");
 }
 
-// Create a hidden element with a Bootstrap-specific class
-var testElement = document.createElement("div");
-testElement.className = "hidden d-none"; // 'd-none' is a Bootstrap 4/5 class
-document?.body?.appendChild(testElement);
-// Check the computed style of the element
-var isBootstrapCSSLoaded =
-    window.getComputedStyle(testElement).display === "none";
-// Clean up the test element
-document?.body?.removeChild(testElement);
-if (!isBootstrapCSSLoaded) {
-    // Bootstrap CSS is not loaded, load it
-    var link = document.createElement("link");
-    link.href =
-        "https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css";
-    link.rel = "stylesheet";
-    document.getElementsByTagName("head")[0].appendChild(link);
-    console.log("Bootstrap CSS loaded");
-}
+//// Create a hidden element with a Bootstrap-specific class
+//var testElement = document.createElement("div");
+//testElement.className = "hidden d-none"; // 'd-none' is a Bootstrap 4/5 class
+//document?.body?.appendChild(testElement);
+//// Check the computed style of the element
+//var isBootstrapCSSLoaded =
+//    window.getComputedStyle(testElement).display === "none";
+//// Clean up the test element
+//document?.body?.removeChild(testElement);
+//if (!isBootstrapCSSLoaded) {
+//    // Bootstrap CSS is not loaded, load it
+//    var link = document.createElement("link");
+//    link.href =
+//        "https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css";
+//    link.rel = "stylesheet";
+//    document.getElementsByTagName("head")[0].appendChild(link);
+//    console.log("Bootstrap CSS loaded");
+//}
 
-// Check if Bootstrap's JavaScript is loaded
-var isBootstrapJSLoaded = typeof bootstrap !== "undefined";
-if (!isBootstrapJSLoaded) {
-    // Bootstrap JS is not loaded, load it
-    var script = document.createElement("script");
-    script.src =
-        "https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js";
-    script.type = "text/javascript";
-    document.getElementsByTagName("head")[0].appendChild(script);
-    console.log("Bootstrap JS loaded");
-}
+//// Check if Bootstrap's JavaScript is loaded
+//var isBootstrapJSLoaded = typeof bootstrap !== "undefined";
+//if (!isBootstrapJSLoaded) {
+//    // Bootstrap JS is not loaded, load it
+//    var script = document.createElement("script");
+//    script.src =
+//        "https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js";
+//    script.type = "text/javascript";
+//    document.getElementsByTagName("head")[0].appendChild(script);
+//    console.log("Bootstrap JS loaded");
+//}
 
 // Check if Iconify is loaded
 if (typeof Iconify == "undefined") {

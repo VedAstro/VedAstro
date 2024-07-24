@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" style="background-color: #f0f2f5">
 <head>
     <!--to stop caching during active development-->
@@ -102,13 +102,9 @@
             <div class="col-auto align-items-start d-none d-md-block hidden" id="desktopsidebar">
                 <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 100;">
                     <input type="text" class="form-control" placeholder="Search..." aria-expanded="false">
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
+                    
                     <button onclick="showSection('Home')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-                            class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_16="">
+                            class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn ">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
                              role="img" class="iconify iconify--ant-design" width="25" height="25"
                              preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024" data-icon="ant-design:home-twotone"
@@ -121,12 +117,7 @@
                             </path>
                         </svg>Home
                     </button>
-
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
+                    
                     <button onclick="showSection('MatchChecker')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                             class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_17="" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -138,11 +129,6 @@
                         </svg>Match Checker
                     </button>
 
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
                     <button onclick="showSection('AIChat')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                             class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_19="" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -155,11 +141,6 @@
                         </svg>AI Chat
                     </button>
 
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
                     <button onclick="showSection('LifePredictor')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                             class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_21="" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -174,11 +155,8 @@
                         </svg>Life Predictor
                     </button>
 
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
+                    <!-- 
+                    MARKED FOR VERSION 3 development                    
                     <button onclick="showSection('MatchFinder')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                             class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_23="" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -188,13 +166,8 @@
                                   d="M132.255 18.093c-32.842 0-59.592 33.923-59.592 75.935c0 21.274 7.079 40.468 18.092 54.284C22.623 158.879 7.903 253.733 24.1 339.874h23.563L46.63 234.53l18.688-.185l1.25 126.685l8.75 132.877h46.875v-172.29c-15.257-18.713-25.615-39.351-26.424-64.825l-.004-.1v-.1c-.154-15.988 6.478-35.643 19.219-52.566c12.741-16.922 32.481-30.98 57.783-31.29c17.252-.212 35.458 5.013 51.338 14.771c-12.131-20.214-29.245-34.177-51.26-38.32c11.507-13.88 18.971-33.345 18.971-55.157c.097-36.903-24.805-76.041-59.562-75.937zm247.841 0c-32.842 0-59.591 33.923-59.591 75.935c0 21.274 7.078 40.468 18.091 54.284c-25.296 3.923-43.223 19.473-54.945 41.875c16.803-11.476 36.697-17.682 55.465-17.452c25.302.311 45.042 14.369 57.783 31.291s19.373 36.578 19.219 52.567v.1l-.004.1c-.826 26.007-11.608 46.974-27.393 65.997v171.113h44.315l11.5-154.029h.03l1.062-105.531l18.687.185l-1.062 105.346h24.53c18.363-88.46-4.724-178.95-67.095-190.687c11.507-13.88 18.97-33.345 18.97-55.157c.098-36.903-24.805-76.041-59.562-75.937M172.99 190.733c-18.837.232-33.281 10.381-43.625 24.12c-10.326 13.715-15.675 31.13-15.594 41.506c1.226 36.63 26.557 61.833 61.219 92.044c26.758 23.322 58.19 48.519 80.617 83.38l.357-.637l.336.601c22.427-34.843 53.847-60.03 80.596-83.344c34.662-30.211 59.993-55.414 61.219-92.044c.081-10.376-5.268-27.791-15.594-41.506c-10.344-13.739-24.788-23.888-43.625-24.12c-28.453-.349-63.84 20.288-74.414 52.022l-8.539 25.625l-8.54-25.625c-10.573-31.734-45.96-52.37-74.413-52.021zm-32.11 150.989v152.181h44.315l7.893-105.714c-9.94-9.023-20.098-17.651-29.924-26.215c-7.726-6.734-15.242-13.43-22.283-20.252zm229.157.93c-6.762 6.5-13.94 12.894-21.315 19.322c-10.636 9.27-21.66 18.622-32.375 28.463l6.815 103.47h46.875z">
                             </path>
                         </svg>Match Finder
-                    </button>
+                    </button> -->
 
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
                     <button onclick="showSection('Horoscope')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                             class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_25="" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -206,11 +179,17 @@
                         </svg>Horoscope
                     </button>
 
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
+                    <button onclick="showSection('KPCharts')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                            class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_25="" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--fluent" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                             viewBox="0 0 20 20" data-icon="fluent:book-star-20-filled" data-width="25">
+                            <path fill="currentColor"
+                                  d="M4 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v11a1 1 0 0 1-1 1H5a1 1 0 0 0 1 1h9.5a.5.5 0 0 1 0 1H6a2 2 0 0 1-2-2zm6.454 1.29a.5.5 0 0 0-.907 0l-.822 1.77l-1.938.234a.5.5 0 0 0-.28.863l1.43 1.328L7.56 11.4a.5.5 0 0 0 .734.533L10 10.985l1.705.948a.5.5 0 0 0 .734-.533l-.375-1.915l1.43-1.328a.5.5 0 0 0-.281-.863l-1.937-.235zm-.94 2.443L10 6.687l.486 1.046a.5.5 0 0 0 .393.286l1.145.138l-.845.785a.5.5 0 0 0-.15.463l.222 1.131l-1.008-.56a.5.5 0 0 0-.486 0l-1.008.56l.222-1.131a.5.5 0 0 0-.15-.463l-.844-.785L9.12 8.02a.5.5 0 0 0 .393-.286">
+                            </path>
+                        </svg>KP Charts
+                    </button>
+
                     <button onclick="showSection('GoodTimeFinder')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                             class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_27="" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -229,11 +208,6 @@
                         </svg>Good Time Finder
                     </button>
 
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
                     <button onclick="showSection('APIBuilder')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                             class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_29="" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -245,11 +219,6 @@
                         </svg>API Builder
                     </button>
 
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
                     <button onclick="showSection('Numerology')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                             class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_31="">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -261,11 +230,6 @@
                         </svg>Numerology
                     </button>
 
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
                     <button onclick="showSection('StarsAboveMe')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                             class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_32="" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -280,11 +244,6 @@
                         </svg>Stars Above Me
                     </button>
 
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
                     <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
                         <button style="height: 37.1px; width: fit-content;"
                                 class="btn-sm w-100 dropdown-toggle hstack gap-2 iconButton btn-outline-primary btn " type="button"
@@ -305,13 +264,9 @@
                             <li><a class="dropdown-item" href="SunRiseSetTime">Sunrise/Sunset Time</a></li>
                         </ul>
                     </div>
-                    <style>
-                        .no-dropdown-arrow.dropdown-toggle::after {
-                            display: none !important;
-                        }
-                    </style>
-                    <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-                            class="btn-sm w-100 hstack gap-2 iconButton btn-warning btn " _bl_35="">
+
+                    <button onclick="showSection('Login')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                            class="btn-sm w-100 hstack gap-2 iconButton btn-warning btn ">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
                              role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet"
                              viewBox="0 0 24 24" data-icon="mdi:user-circle" data-width="25">
@@ -321,9 +276,11 @@
                         </svg>Log In
                     </button>
                 </div>
+
+
+                <!-- WEBSITE VERSION STAMP -->
                 <div class="sticky-bottom position-fixed mb-3 ms-5" style="color: #8f8f8f; font-size: 8px; z-index: 1;">
                     <div style="cursor: pointer;" class="hstack gap-1">
-
                         <svg xmlns="http://www.w3.org/2000/svg"
                              xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ion"
                              width="10" height="10" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512" data-icon="ion:earth"
@@ -347,7 +304,6 @@
                                 </path>
                             </g>
                         </svg>
-
                         <span>40763952-2665-stable</span>
                     </div>
 
@@ -360,7 +316,6 @@
                                   d="M10 16h4q.425 0 .713-.288T15 15v-2h-2v1h-2v-4h2v1h2V9q0-.425-.288-.712T14 8h-4q-.425 0-.712.288T9 9v6q0 .425.288.713T10 16m2 6q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8">
                             </path>
                         </svg>
-
                         <span>2014 - 2023 VedAstro</span>
                     </div>
                     <div style="cursor: pointer;" class="mt-1"><img src="images/ce-fcc-recycle.svg"></div>
@@ -521,23 +476,23 @@
 
                                 <div class="backgroudImg bg-white p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow">
                                     <div class="p-3 p-lg-5 pt-lg-3">
-                                        <!--!--><h1 class="display-4 fw-bold lh-1">VedAstro</h1>
-                                        <!--!--><p class="lh-base lead" style="font-weight: 400;">A non-profit, open source project to make<br class="d-none d-md-block"><span class="fw-bold">Vedic Astrology</span> easily available to all.</p>
+                                        <h1 class="display-4 fw-bold lh-1">VedAstro</h1>
+                                        <p class="lh-base lead" style="font-weight: 400;">A non-profit, open source project to make<br class="d-none d-md-block"><span class="fw-bold">Vedic Astrology</span> easily available to all.</p>
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                                            <!--!--><!--!--><style>
-                                                                .no-dropdown-arrow.dropdown-toggle::after {
-                                                                    display: none !important;
-                                                                }
-                                            </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="hstack gap-2 iconButton btn-primary btn " _bl_68=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="mdi:book-open-variant" data-width="25"><path fill="currentColor" d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5c-1.65 0-3.35.3-4.75 1.05c-.1.05-.15.05-.25.05c-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1c1.11-.35 2.33-.5 3.5-.5c1.95 0 4.05.4 5.5 1.5c1.45-1.1 3.55-1.5 5.5-1.5c1.17 0 2.39.15 3.5.5c.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5c-.1 0-.15 0-.25-.05c-1.4-.75-3.1-1.05-4.75-1.05c-1.7 0-4.15.65-5.5 1.5M12 8v11.5c1.35-.85 3.8-1.5 5.5-1.5c1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5c-1.7 0-4.15.65-5.5 1.5m1 3.5c1.11-.68 2.6-1 4.5-1c.91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23q-2.655 0-4.5.84zm4.5.17c-1.71 0-3.21.26-4.5.79v1.69c1.11-.65 2.6-.99 4.5-.99c1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23m2.5 2.9c-.87-.16-1.71-.24-2.5-.24c-1.83 0-3.33.27-4.5.8v1.69c1.11-.66 2.6-.99 4.5-.99c1.04 0 1.88.08 2.5.24z"></path></svg>Quick Guide</button><!--!-->
-                                            <!--!--><!--!--><style>
-                                                                .no-dropdown-arrow.dropdown-toggle::after {
-                                                                    display: none !important;
-                                                                }
-                                            </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="hstack gap-2 iconButton btn-primary btn " _bl_69=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--uil" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="uil:github" data-width="25"><path fill="currentColor" d="M12 2.247a10 10 0 0 0-3.162 19.487c.5.088.687-.212.687-.475c0-.237-.012-1.025-.012-1.862c-2.513.462-3.163-.613-3.363-1.175a3.636 3.636 0 0 0-1.025-1.413c-.35-.187-.85-.65-.013-.662a2.001 2.001 0 0 1 1.538 1.025a2.137 2.137 0 0 0 2.912.825a2.104 2.104 0 0 1 .638-1.338c-2.225-.25-4.55-1.112-4.55-4.937a3.892 3.892 0 0 1 1.025-2.688a3.594 3.594 0 0 1 .1-2.65s.837-.262 2.75 1.025a9.427 9.427 0 0 1 5 0c1.912-1.3 2.75-1.025 2.75-1.025a3.593 3.593 0 0 1 .1 2.65a3.869 3.869 0 0 1 1.025 2.688c0 3.837-2.338 4.687-4.562 4.937a2.368 2.368 0 0 1 .674 1.85c0 1.338-.012 2.413-.012 2.75c0 .263.187.575.687.475A10.005 10.005 0 0 0 12 2.247"></path></svg>Source Code</button><!--!-->
-                                            <!--!--><!--!--><style>
-                                                                .no-dropdown-arrow.dropdown-toggle::after {
-                                                                    display: none !important;
-                                                                }
+                                            <style>
+                                                .no-dropdown-arrow.dropdown-toggle::after {
+                                                    display: none !important;
+                                                }
+                                            </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="hstack gap-2 iconButton btn-primary btn " _bl_68=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="mdi:book-open-variant" data-width="25"><path fill="currentColor" d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5c-1.65 0-3.35.3-4.75 1.05c-.1.05-.15.05-.25.05c-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1c1.11-.35 2.33-.5 3.5-.5c1.95 0 4.05.4 5.5 1.5c1.45-1.1 3.55-1.5 5.5-1.5c1.17 0 2.39.15 3.5.5c.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5c-.1 0-.15 0-.25-.05c-1.4-.75-3.1-1.05-4.75-1.05c-1.7 0-4.15.65-5.5 1.5M12 8v11.5c1.35-.85 3.8-1.5 5.5-1.5c1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5c-1.7 0-4.15.65-5.5 1.5m1 3.5c1.11-.68 2.6-1 4.5-1c.91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23q-2.655 0-4.5.84zm4.5.17c-1.71 0-3.21.26-4.5.79v1.69c1.11-.65 2.6-.99 4.5-.99c1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23m2.5 2.9c-.87-.16-1.71-.24-2.5-.24c-1.83 0-3.33.27-4.5.8v1.69c1.11-.66 2.6-.99 4.5-.99c1.04 0 1.88.08 2.5.24z"></path></svg>Quick Guide</button>
+                                            <style>
+                                                .no-dropdown-arrow.dropdown-toggle::after {
+                                                    display: none !important;
+                                                }
+                                            </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="hstack gap-2 iconButton btn-primary btn " _bl_69=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--uil" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="uil:github" data-width="25"><path fill="currentColor" d="M12 2.247a10 10 0 0 0-3.162 19.487c.5.088.687-.212.687-.475c0-.237-.012-1.025-.012-1.862c-2.513.462-3.163-.613-3.363-1.175a3.636 3.636 0 0 0-1.025-1.413c-.35-.187-.85-.65-.013-.662a2.001 2.001 0 0 1 1.538 1.025a2.137 2.137 0 0 0 2.912.825a2.104 2.104 0 0 1 .638-1.338c-2.225-.25-4.55-1.112-4.55-4.937a3.892 3.892 0 0 1 1.025-2.688a3.594 3.594 0 0 1 .1-2.65s.837-.262 2.75 1.025a9.427 9.427 0 0 1 5 0c1.912-1.3 2.75-1.025 2.75-1.025a3.593 3.593 0 0 1 .1 2.65a3.869 3.869 0 0 1 1.025 2.688c0 3.837-2.338 4.687-4.562 4.937a2.368 2.368 0 0 1 .674 1.85c0 1.338-.012 2.413-.012 2.75c0 .263.187.575.687.475A10.005 10.005 0 0 0 12 2.247"></path></svg>Source Code</button>
+                                            <style>
+                                                .no-dropdown-arrow.dropdown-toggle::after {
+                                                    display: none !important;
+                                                }
                                             </style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="hstack gap-2 iconButton btn-primary btn " _bl_70=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--iconoir" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="iconoir:donate" data-width="25"><g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"><path d="M16 6.28a2.28 2.28 0 0 1-.662 1.606c-.976.984-1.923 2.01-2.936 2.958a.597.597 0 0 1-.822-.017l-2.918-2.94a2.28 2.28 0 0 1 0-3.214a2.277 2.277 0 0 1 3.232 0L12 4.78l.106-.107A2.276 2.276 0 0 1 16 6.28Z"></path><path stroke-linecap="round" d="m18 20l3.824-3.824a.6.6 0 0 0 .176-.424V10.5A1.5 1.5 0 0 0 20.5 9v0a1.5 1.5 0 0 0-1.5 1.5V15"></path><path stroke-linecap="round" d="m18 16l.858-.858a.48.48 0 0 0 .142-.343v0a.49.49 0 0 0-.268-.433l-.443-.221a2 2 0 0 0-2.308.374l-.895.895a2 2 0 0 0-.586 1.414V20M6 20l-3.824-3.824A.6.6 0 0 1 2 15.752V10.5A1.5 1.5 0 0 1 3.5 9v0A1.5 1.5 0 0 1 5 10.5V15"></path><path stroke-linecap="round" d="m6 16l-.858-.858A.5.5 0 0 1 5 14.799v0c0-.183.104-.35.268-.433l.443-.221a2 2 0 0 1 2.308.374l.895.895a2 2 0 0 1 .586 1.414V20"></path></g></svg>Donate</button>
                                         </div>
                                     </div>
@@ -2782,6 +2737,393 @@
                                 </div>
                             </div>
                         </section>
+                        <section id="KPCharts">
+                            <!-- BODY CONTENT -->
+                            <!-- INPUT HOLDER -->
+                            <div class="container pt-2 p-0">
+
+                                <div class="row">
+
+                                    <!-- INPUT -->
+                                    <div class="col" style="max-width: 449px;">
+                                        <div class="mb-3">
+                                            <!-- TAB HEADER -->
+                                            <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-bottom: -3px;">
+                                                <li class="nav-item dropdown">
+                                                    <a class="nav-link dropdown-toggle active" id="dropdownMenuLink" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                        <span class="iconify" data-icon="ph:clock-bold" data-width="25" data-height="25"></span>
+                                                        <span id="KundaliHoraryHeader" style="vertical-align: text-top;">Kundali</span>
+                                                    </a>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <a class="dropdown-item active" id="tab1-tab" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Kundali</a>
+                                                        <a class="dropdown-item" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Horary</a>
+                                                    </div>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <a class="nav-link" id="tab3-tab" data-bs-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">
+                                                        <span class="iconify" data-icon="flat-color-icons:filing-cabinet" data-width="25" data-height="25"></span>
+                                                        Saved
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <a class="nav-link" id="tab4-tab" data-bs-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false">
+                                                        <span class="iconify" data-icon="eva:options-outline" data-width="25" data-height="25"></span>
+                                                        Options
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                            <!-- TAB CONTENT -->
+                                            <div class="tab-content p-1 border rounded" id="myTabContent">
+
+                                                <!-- KUNDALI -->
+                                                <div class="tab-pane fade show active py-3 px-1" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+
+                                                    <!-- TIME INPUT -->
+                                                    <div class="mb-2">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text gap-2">
+                                                                <span class="iconify me-2" data-icon="noto-v1:timer-clock" data-width="25" data-height="25"></span> Birth Time
+                                                            </span>
+                                                            <!--!-->
+                                                            <div class="form-control">
+                                                                <div id="TimeInputHolder_Kundali" onclick="OnClickTimeInput('Kundali')" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
+                                                                    <div class="hstack">
+                                                                        <span class="border-0 inputPerfect" id="HourInput_Kundali" style="width: 33px;">11</span>
+                                                                        <!--!-->: <span class="border-0 inputPerfect" id="MinuteInput_Kundali" style="width: 33px;">00</span>
+                                                                        <!--!-->
+                                                                        <span class="border-0 inputPerfect" id="MeridianInput_Kundali" style="width: 37px;">AM</span>
+                                                                    </div>
+                                                                    <!--!-->
+                                                                    <div class="hstack">
+                                                                        <span class="border-0 inputPerfect" id="DateInput_Kundali" style="width: 33px;">25</span>
+                                                                        <!--!-->/ <span class="border-0 inputPerfect" id="MonthInput_Kundali" style="width: 33px;">07</span>
+                                                                        <!--!-->/ <span class="border-0 inputPerfect" id="YearInput_Kundali" style="width: 56px;">1984</span>
+                                                                    </div>
+                                                                </div>
+                                                                <!--!-->
+                                                                <div id="CalendarPickerHolder_Kundali" class="mt-2 vanilla-calendar visually-hidden border border-primary" style="position: absolute; z-index: 999;"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- LOCATION INPUT -->
+                                                    <div class="mb-2">
+                                                        <div class="hstack gap-1">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text gap-2">
+                                                                    <span class="iconify me-2" data-icon="streamline-emojis:globe-showing-americas" data-width="25" data-height="25"></span> Location
+                                                                </span>
+                                                                <input id="LocationNameInput_Kundali" onblur="OnClickSearchLocation('Kundali')" style="font-weight: 600; font-size: 17px;" type="text" class="form-control" value="Bengaluru">
+                                                            </div>
+                                                            <button onclick="OnClickSearchLocation('Kundali')" style="height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
+                                                                <span class="iconify" data-icon="bx:search-alt" data-width="25" data-height="25"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- GENERATE BUTTON -->
+                                                    <div class="mt-4">
+                                                        <button onclick="OnClickGenerate('Kundali')" type="button" class="btn btn-primary">
+                                                            <span class="iconify me-2" data-icon="fluent-mdl2:processing-run" data-width="25" data-height="25"></span>
+                                                            Generate
+                                                        </button>
+                                                        <!--TODO TEMP
+                                                               <button onclick="OnClickSavePerson_Kundali()" type="button" class="btn btn-success">
+                                                               <span class="iconify me-2" data-icon="ic:outline-save" data-width="25" data-height="25"></span>
+                                                               Save
+                                                           </button>
+                                -->
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- HORARY -->
+                                                <div class="tab-pane fade py-3 px-1" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+
+                                                    <!-- NUMBER INPUT -->
+                                                    <div class="input-group mb-2">
+                                                        <label style="width: 134.4px;" class="input-group-text">
+                                                            <span class="iconify me-2" data-icon="fluent:book-number-16-regular" data-width="25" data-height="25"></span>
+                                                            Number
+                                                        </label>
+                                                        <select id="HoraryNumberSelectElement" class="form-select">
+                                                            <option value="" selected="">Choose...</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- TIME INPUT -->
+                                                    <div class="mb-2">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text gap-2">
+                                                                <span class="iconify me-2" data-icon="noto-v1:timer-clock" data-width="25" data-height="25"></span>Analysis Time
+                                                            </span>
+
+                                                            <div class="form-control">
+                                                                <div id="TimeInputHolder_Horary" onclick="OnClickTimeInput('Horary')" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
+                                                                    <div class="hstack">
+                                                                        <span class="border-0 inputPerfect" id="HourInput_Horary" style="width: 33px;">11</span>
+                                                                        : <span class="border-0 inputPerfect" id="MinuteInput_Horary" style="width: 33px;">00</span>
+                                                                        <span class="border-0 inputPerfect" id="MeridianInput_Horary" style="width: 37px;">AM</span>
+                                                                    </div>
+                                                                    <div class="hstack">
+                                                                        <span class="border-0 inputPerfect" id="DateInput_Horary" style="width: 33px;">25</span>
+                                                                        / <span class="border-0 inputPerfect" id="MonthInput_Horary" style="width: 33px;">07</span>
+                                                                        / <span class="border-0 inputPerfect" id="YearInput_Horary" style="width: 56px;">1984</span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div id="CalendarPickerHolder_Horary" class="mt-2 vanilla-calendar visually-hidden border border-primary" style="position: absolute; z-index: 999;"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- LOCATION INPUT -->
+                                                    <div class="mb-2">
+                                                        <div class="hstack gap-1">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text gap-2">
+                                                                    <span class="iconify me-2" data-icon="streamline-emojis:globe-showing-americas" data-width="25" data-height="25"></span>
+                                                                    Analysis Location
+                                                                </span>
+                                                                <!--!-->
+                                                                <input id="LocationNameInput_Horary" onblur="OnClickSearchLocation('Horary')" style="font-weight: 600; font-size: 17px;" type="text" class="form-control" value="Bengaluru">
+                                                            </div>
+                                                            <!--!-->
+                                                            <!--!-->
+                                                            <button onclick="OnClickSearchLocation('Horary')" style="height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
+                                                                <span class="iconify" data-icon="bx:search-alt" data-width="25" data-height="25"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- GENERATE BUTTON -->
+                                                    <div class="mt-4">
+                                                        <button onclick="OnClickGenerate('Horary')" type="button" class="btn btn-primary">
+                                                            <span class="iconify me-2" data-icon="fluent-mdl2:processing-run" data-width="25" data-height="25"></span>
+                                                            Generate
+                                                        </button>
+                                                        <!--TODO TEMP
+                                                               <button onclick="OnClickSavePerson_Horary()" type="button" class="btn btn-success">
+                                                               <span class="iconify me-2" data-icon="ic:outline-save" data-width="25" data-height="25"></span>
+                                                               Save
+                                                           </button>
+                                -->
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- SAVED -->
+                                                <div class="tab-pane fade py-3 px-1" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text gap-2">
+                                                            <span class="iconify me-2" data-icon="flat-color-icons:list" data-width="25" data-height="25"></span> Saved
+                                                        </span>
+                                                        <!--!-->
+                                                        <select class="form-select" onchange="OnChangePersonSelection()" id="PersonListDropdown">
+                                                            <option selected value="">Choose...</option>
+                                                        </select>
+                                                        <button onclick="OnClickSavePerson()" style="height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
+                                                            <span class="iconify" data-icon="gg:add" data-width="25" data-height="25"></span>
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- keep hidden until person selected, for better non cultured UX -->
+                                                    <div id="SavedPersonListTimeInputPanel" style="display: none;">
+                                                        <div class="mb-2">
+                                                            <!-- TIME INPUT -->
+                                                            <div class="input-group">
+                                                                <span class="input-group-text gap-2">
+                                                                    <span class="iconify me-2" data-icon="noto-v1:timer-clock" data-width="25" data-height="25"></span> Birth Time
+                                                                </span>
+                                                                <!--!-->
+                                                                <div class="form-control">
+                                                                    <div id="TimeInputHolder_Saved" onclick="OnClickTimeInput('Saved')" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
+                                                                        <div class="hstack">
+                                                                            <span class="border-0 inputPerfect" id="HourInput_Saved" style="width: 33px;">11</span>
+                                                                            : <span class="border-0 inputPerfect" id="MinuteInput_Saved" style="width: 33px;">00</span>
+                                                                            <span class="border-0 inputPerfect" id="MeridianInput_Saved" style="width: 37px;">AM</span>
+                                                                        </div>
+                                                                        <!--DATE INPUT-->
+                                                                        <div class="hstack">
+                                                                            <span class="border-0 inputPerfect" id="DateInput_Saved" style="width: 33px;">25</span>
+                                                                            / <span class="border-0 inputPerfect" id="MonthInput_Saved" style="width: 33px;">07</span>
+                                                                            / <span class="border-0 inputPerfect" id="YearInput_Saved" style="width: 56px;">1984</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- CALENDAR PICKER ELEMENT-->
+                                                                    <div id="CalendarPickerHolder_Saved" class="mt-2 vanilla-calendar visually-hidden border border-primary" style="position: absolute; z-index: 999;"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <!-- LOCATION INPUT -->
+                                                            <div class="hstack gap-1">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text gap-2">
+                                                                        <span class="iconify me-2" data-icon="streamline-emojis:globe-showing-americas" data-width="25" data-height="25"></span> Location
+                                                                    </span>
+                                                                    <!--!-->
+                                                                    <input onblur="OnClickSearchLocation('Saved')" style="font-weight: 600; font-size: 17px;" type="text" id="LocationNameInput_Saved" class="form-control" value="Bengaluru">
+                                                                </div>
+                                                                <!--!-->
+                                                                <!-- SEARCH BUTTON-->
+                                                                <button onclick="OnClickSearchLocation('Saved')" style="height: 38px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ms-1" _bl_171="">
+                                                                    <span class="iconify" data-icon="bx:search-alt" data-width="25" data-height="25"></span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!-- GENERATE & SAVE BUTTON -->
+                                                    <div class="mt-4">
+                                                        <button onclick="OnClickGenerate('Saved')" type="button" class="btn btn-primary">
+                                                            <span class="iconify me-2" data-icon="fluent-mdl2:processing-run" data-width="25" data-height="25"></span>
+                                                            Generate
+                                                        </button>
+                                                        <button id="SavedPersonUpdateButton" onclick="OnClickUpdatePerson()" style="display: none;" type="button" class="btn btn-success">
+                                                            <span class="iconify me-2" data-icon="ic:outline-save" data-width="25" data-height="25"></span>
+                                                            Update
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- OPTIONS -->
+                                                <div class="tab-pane fade py-3 px-1" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+
+                                                    <div class="vstack gap-2">
+                                                        <div class="input-group">
+                                                            <label style="width: 134.4px;" class="input-group-text">
+                                                                <span class="iconify me-2" data-icon="solar:stars-line-broken" data-width="25" data-height="25"></span>
+                                                                Ayanamsa
+                                                            </label><!--!-->
+                                                            <select id="AyanamsaSelectElement" class="form-select">
+                                                                <optgroup label="Easy"><option value="LAHIRI">Lahiri Chitrapaksha</option><option selected value="KRISHNAMURTI">Krishnamurti KP</option><option value="RAMAN">Raman</option><option value="FAGAN_BRADLEY">Fagan Bradley</option><option value="J2000">J2000</option><option value="YUKTESHWAR">Yukteshwar</option></optgroup><!--!-->
+                                                                <optgroup label="Advanced"><option value="FAGAN_BRADLEY">FAGAN_BRADLEY</option><option value="LAHIRI">LAHIRI</option><option value="DELUCE">DELUCE</option><option value="RAMAN">RAMAN</option><option value="USHASHASHI">USHASHASHI</option><option value="KRISHNAMURTI">KRISHNAMURTI</option><option value="DJWHAL_KHUL">DJWHAL_KHUL</option><option value="YUKTESHWAR">YUKTESHWAR</option><option value="JN_BHASIN">JN_BHASIN</option><option value="BABYL_KUGLER1">BABYL_KUGLER1</option><option value="BABYL_KUGLER2">BABYL_KUGLER2</option><option value="BABYL_KUGLER3">BABYL_KUGLER3</option><option value="BABYL_HUBER">BABYL_HUBER</option><option value="BABYL_ETPSC">BABYL_ETPSC</option><option value="ALDEBARAN_15TAU">ALDEBARAN_15TAU</option><option value="HIPPARCHOS">HIPPARCHOS</option><option value="SASSANIAN">SASSANIAN</option><option value="GALCENT_0SAG">GALCENT_0SAG</option><option value="J1900">J1900</option><option value="B1950">B1950</option><option value="SURYASIDDHANTA">SURYASIDDHANTA</option><option value="SURYASIDDHANTA_MSUN">SURYASIDDHANTA_MSUN</option><option value="ARYABHATA">ARYABHATA</option><option value="ARYABHATA_MSUN">ARYABHATA_MSUN</option><option value="SS_REVATI">SS_REVATI</option><option value="SS_CITRA">SS_CITRA</option><option value="TRUE_CITRA">TRUE_CITRA</option><option value="TRUE_REVATI">TRUE_REVATI</option><option value="TRUE_PUSHYA">TRUE_PUSHYA</option><option value="GALCENT_RGBRAND">GALCENT_RGBRAND</option><option value="GALEQU_IAU1958">GALEQU_IAU1958</option><option value="GALEQU_TRUE">GALEQU_TRUE</option><option value="GALEQU_MULA">GALEQU_MULA</option><option value="GALALIGN_MARDYKS">GALALIGN_MARDYKS</option><option value="TRUE_MULA">TRUE_MULA</option><option value="GALCENT_MULA_WILHELM">GALCENT_MULA_WILHELM</option><option value="ARYABHATA_522">ARYABHATA_522</option><option value="BABYL_BRITTON">BABYL_BRITTON</option><option value="TRUE_SHEORAN">TRUE_SHEORAN</option><option value="GALCENT_COCHRANE">GALCENT_COCHRANE</option><option value="GALEQU_FIORENZA">GALEQU_FIORENZA</option><option value="VALENS_MOON">VALENS_MOON</option><option value="LAHIRI_1940">LAHIRI_1940</option><option value="LAHIRI_VP285">LAHIRI_VP285</option><option value="KRISHNAMURTI_VP291">KRISHNAMURTI_VP291</option><option value="LAHIRI_ICRC">LAHIRI_ICRC</option></optgroup>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="input-group">
+                                                            <label style="width: 134.4px;" class="input-group-text">
+                                                                <span class="iconify me-2" data-icon="gridicons:types" data-width="25" data-height="25"></span>
+                                                                Chart
+                                                            </label><!--!-->
+                                                            <select id="ChartStyleSelectElement" class="form-select">
+                                                                <option value="South" selected="">South Style</option><!--!-->
+                                                                <option value="North">North Style</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mt-4">
+                                                            <!--TODO TEMP
+                                                                       <button type="button" class="btn btn-primary">
+                                                                       <span class="iconify me-2" data-icon="fluent-mdl2:processing-run" data-width="25" data-height="25"></span>
+                                                                       Advanced
+                                                                   </button>
+                                    -->
+                                                            <button onclick="OnClickOptionsSave()" type="button" class="btn btn-success">
+                                                                <span class="iconify me-2" data-icon="ic:outline-save" data-width="25" data-height="25"></span>
+                                                                Save
+                                                            </button>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- EXTRA INFO -->
+                                    <div class="col" style="max-width: 449px;">
+                                        <div class="card" style="width: fit-content;">
+                                            <div class="card-header">
+                                                <span class="iconify me-2" data-icon="flat-color-icons:info" data-width="25" data-height="25"></span>
+                                                Extra Info
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item">Ayanamsa <strong><span id="AyanamasaElement" /> &deg;</strong></li>
+                                                <li class="list-group-item">Long. <strong><span id="LongitudeElement" /> &deg; N</strong> Lat. <strong><span id="LatitudeElement" /> &deg; E</strong></li>
+                                                <li class="list-group-item">Local Mean Time: <strong><span id="LMTElement" /></strong></li>
+                                                <li class="list-group-item">Local Standard Time: <strong><span id="STDElement" /></strong></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <hr />
+
+                            <!-- RESULTS -->
+                            <div id="MainResultsHolder">
+
+                                <div id="ResultsPlaceHolder" class="d-flex justify-content-center">
+                                    <span class="" style="color: #8f8f8f; font-size: 14px;">Chart will appear here after you click calculate</span>
+                                </div>
+
+                                <!-- KUNDALI -->
+                                <div id="ChartResultsHolder" style="display: none;" class="container">
+                                    <div class="row">
+
+                                        <!-- SOUTH/NORTH CHARTS -->
+                                        <div class="col-auto">
+                                            <div class="mb-4 vstack">
+                                                <img id="ChartImageElementKundali" style="width: 352px;" src="#" />
+                                                <div class="mt-3">
+                                                    <div class="hstack" style="align-items: baseline;">
+                                                        <label for="chartRotateInput" class="form-label">Rotate</label>
+                                                        <select onchange="OnChangeRotateHouseInputSelect()" class="ms-2 form-select" id="rotateHouseInputSelect" style="width: auto">
+                                                            <option selected>Choose...</option>
+                                                            <option value="1">House 1</option>
+                                                            <option value="2">House 2</option>
+                                                            <option value="3">House 3</option>
+                                                            <option value="4">House 4</option>
+                                                            <option value="5">House 5</option>
+                                                            <option value="6">House 6</option>
+                                                            <option value="7">House 7</option>
+                                                            <option value="8">House 8</option>
+                                                            <option value="9">House 9</option>
+                                                            <option value="10">House 10</option>
+                                                            <option value="11">House 11</option>
+                                                            <option value="12">House 12</option>
+                                                        </select>
+                                                        <span style=" font-size: 18px; font-weight: 700; ">
+                                                            <output class="ms-3" name="chartRotateOutput" id="chartRotateOutput" for="chartRotateInput">0</output>&deg;
+                                                        </span>
+                                                        <button onclick="" style="height: 38px; width: fit-content;" class="btn-sm iconOnlyButton btn btn-outline-primary ms-auto">
+                                                            <span class="iconify" data-icon="tabler:refresh" data-width="25" data-height="25"></span>
+                                                        </button>
+                                                    </div>
+                                                    <input type="range" min="0" max="360" class="form-range" id="chartRotateInput" oninput="chartRotateOutput.value = chartRotateInput.value">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- PLANETS TABLE -->
+                                        <div class="col-auto mb-3">
+                                            <div id="PlanetDataTable"></div>
+                                        </div>
+
+                                        <!-- HOUSE TABLE -->
+                                        <div class="col-auto">
+                                            <div id="HouseDataTable"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <!-- PAGE CODE -->
+                            <script>
+
+                            </script>
+
+                        </section>
                         <section id="Horoscope">
                             <!--Head of this section-->
                             <div class="mt-3 col d-flex align-items-start">
@@ -4661,6 +5003,97 @@
                                 </div>
                             </div>
                         </section>
+                        <section id="Login">
+                            <div>
+                                <div class="vstack gap-1 mb-4">
+                                    <h2 class="align-self-center">Login</h2>
+                                    <h5 class="align-self-center" style="color: #8f8f8f;">On your last visit, you used "Google"</h5>
+                                </div>
+
+                                <div class="vstack">
+                                    <div class="align-self-center vstack gap-3 mb-4" style="width: 291.9px;">
+                                        <style>
+
+                                            #GoogleSignInButton {
+                                                text-align: -webkit-center;
+                                                position: relative;
+                                            }
+
+                                            #FacebookSignInButton {
+                                                width: 170px;
+                                                align-self: center;
+                                                border-radius: 30px;
+                                                padding-left: 29px;
+                                            }
+
+                                            /*    .MakeBig {
+                                                                                                                                                                                                                                                                font-size: 31px;
+                                                                                                                                                                                                                                                                width: 183px;
+                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                        */
+                                        </style>
+
+                                        <div class="rounded p-4" style="background:#caecff;">
+                                            <div class="vstack gap-4">
+                                                <button id="FacebookSignInButton" class="MakeBig btn btn-primary hstack gap-2 iconButton">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--akar-icons" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="akar-icons:facebook-fill" data-width="25"><g fill="none"><g clip-path="url(#IconifyId190e16d936f77bba277)"><path fill="currentColor" fill-rule="evenodd" d="M0 12.067C0 18.034 4.333 22.994 10 24v-8.667H7V12h3V9.333c0-3 1.933-4.666 4.667-4.666c.866 0 1.8.133 2.666.266V8H15.8c-1.467 0-1.8.733-1.8 1.667V12h3.2l-.533 3.333H14V24c5.667-1.006 10-5.966 10-11.933C24 5.43 18.6 0 12 0S0 5.43 0 12.067" clip-rule="evenodd"></path></g><defs><clipPath id="IconifyId190e16d936f77bba277"><path fill="#fff" d="M0 0h24v24H0z"></path></clipPath></defs></g></svg> Sign In
+                                                </button>
+
+                                                <div>
+                                                    <div id="g_id_onload" data-client_id="19638836771-oflt5g9mnkft6chkl04vp4m5qpu5h569.apps.googleusercontent.com" data-context="signin" data-ux_mode="popup" data-callback="OnGoogleSignInSuccessHandler" data-auto_prompt="false"></div>
+
+                                                    <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin" data-size="large" data-logo_alignment="center" data-width="170" id="GoogleSignInButton"><div class="S9gUrf-YoZ4jf" style="position: relative;"><div></div><iframe src="https://accounts.google.com/gsi/button?type=standard&amp;shape=pill&amp;theme=outline&amp;text=signin&amp;size=large&amp;logo_alignment=center&amp;width=170&amp;client_id=19638836771-oflt5g9mnkft6chkl04vp4m5qpu5h569.apps.googleusercontent.com&amp;iframe_id=gsi_981995_599708&amp;as=wnRt5d5tzAi49%2BIlTuOz2g" allow="identity-credentials-get" id="gsi_981995_599708" title="Sign in with Google Button" style="display: block; position: relative; top: 0px; left: 0px; height: 44px; width: 190px; border: 0px; margin: -2px -10px;"></iframe></div></div>
+                                                </div>
+
+
+                                                <button id="" class="MakeBig btn btn-primary hstack gap-2 iconButton align-self-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:email-lock" data-width="25"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><path d="M44 24V9H24H4V24V39H24"></path><path d="M4 9L24 24L44 9"></path><rect width="12" height="8" x="31" y="33" fill="#2F88FF"></rect><path d="M40 33V30C40 28.3431 38.6569 27 37 27C35.3431 27 34 28.3431 34 30V33"></path></g></svg>Password Free
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_73=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:key" data-width="38" style="vertical-align: text-bottom;"><g fill="#FFA000"><path d="m30 41l-4 4h-4l-4-4V21h12v8l-2 2l2 2v2l-2 2l2 2z"></path><path d="M38 7.8c-.5-1.8-2-3.1-3.7-3.6C31.9 3.7 28.2 3 24 3s-7.9.7-10.3 1.2C12 4.7 10.5 6 10 7.8c-.5 1.7-1 4.1-1 6.7c0 2.6.5 5 1 6.7c.5 1.8 1.9 3.1 3.7 3.5c2.4.6 6.1 1.3 10.3 1.3s7.9-.7 10.3-1.2c1.8-.4 3.2-1.8 3.7-3.5s1-4.1 1-6.7c0-2.7-.5-5.1-1-6.8M29 13H19c-1.1 0-2-.9-2-2V9c0-.6 3.1-1 7-1s7 .4 7 1v2c0 1.1-.9 2-2 2"></path></g><path fill="#D68600" d="M23 26h2v19h-2z"></path></svg></div><h4 class="mt-2 me-auto">Why login? </h4></div>
+                                    <hr class="mt-1 mb-2">
+                                </div>
+                                <div class="hstack gap-3">
+                                    <div class="" style=" max-width:365px;">
+                                        <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color:  !important; ">
+                                            <div class="hstack mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:approval" data-width="50"><path fill="#8BC34A" d="m24 3l4.7 3.6l5.8-.8l2.2 5.5l5.5 2.2l-.8 5.8L45 24l-3.6 4.7l.8 5.8l-5.5 2.2l-2.2 5.5l-5.8-.8L24 45l-4.7-3.6l-5.8.8l-2.2-5.5l-5.5-2.2l.8-5.8L3 24l3.6-4.7l-.8-5.8l5.5-2.2l2.2-5.5l5.8.8z"></path><path fill="#CCFF90" d="M34.6 14.6L21 28.2l-5.6-5.6l-2.8 2.8l8.4 8.4l16.4-16.4z"></path></svg>
+                                                <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+                                                    <strong>Secure</strong><br>
+                                                    Safe &amp; fast with Google or Facebook authentication.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="" style=" max-width:365px;">
+                                        <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color:  !important; ">
+                                            <div class="hstack mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="ic:baseline-cloud-done" data-width="50"><path fill="currentColor" d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5c0-2.64-2.05-4.78-4.65-4.96M10 17l-3.5-3.5l1.41-1.41L10 14.17L15.18 9l1.41 1.41z"></path></svg>
+                                                <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+                                                    <strong>Storage</strong><br>
+                                                    Free cloud storage for charts, reports and horoscopes
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="" style=" max-width:365px;">
+                                        <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color:  !important; ">
+                                            <div class="hstack mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:privacy" data-width="50"><path fill="#424242" d="M24 4c-5.5 0-10 4.5-10 10v4h4v-4c0-3.3 2.7-6 6-6s6 2.7 6 6v4h4v-4c0-5.5-4.5-10-10-10"></path><path fill="#FB8C00" d="M36 44H12c-2.2 0-4-1.8-4-4V22c0-2.2 1.8-4 4-4h24c2.2 0 4 1.8 4 4v18c0 2.2-1.8 4-4 4"></path><circle cx="24" cy="31" r="6" fill="#EFEBE9"></circle><circle cx="24" cy="31" r="3" fill="#1E88E5"></circle><circle cx="26" cy="29" r="1" fill="#fff"></circle></svg>
+                                                <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+                                                    <strong>Privacy</strong><br>
+                                                    We don't collect data or connect to your Google or Facebook account.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                         <section id="PersonData">
                             <!-- HEADER -->
                             <br>
@@ -4907,6 +5340,7 @@
                                 </div>
                             </div>
                         </section>
+
                         <div id="DDScriptLoader"></div>
                         <footer id="LegalComplianceFooter" class="mb-2 pt-3 border-top"
                                 style="opacity: 0.65; margin-top: 231.7px; font-size: 11px !important;">

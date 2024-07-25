@@ -22,1064 +22,1131 @@
 // █▀▄▀█ █▄█   ▄▀█ █▀█ ▀█▀   █ █▀   █▀▀ █░█ █ █▀▄ █▀▀ █▄░█ ▀█▀ ░
 // █░▀░█ ░█░   █▀█ █▀▄ ░█░   █ ▄█   ██▄ ▀▄▀ █ █▄▀ ██▄ █░▀█ ░█░ ▄
 
-/*
 
-███████╗██╗░░░██╗███████╗███╗░░██╗████████╗░██████╗    ░█████╗░██╗░░██╗░█████╗░██████╗░████████╗  
-██╔════╝██║░░░██║██╔════╝████╗░██║╚══██╔══╝██╔════╝    ██╔══██╗██║░░██║██╔══██╗██╔══██╗╚══██╔══╝  
-█████╗░░╚██╗░██╔╝█████╗░░██╔██╗██║░░░██║░░░╚█████╗░    ██║░░╚═╝███████║███████║██████╔╝░░░██║░░░  
-██╔══╝░░░╚████╔╝░██╔══╝░░██║╚████║░░░██║░░░░╚═══██╗    ██║░░██╗██╔══██║██╔══██║██╔══██╗░░░██║░░░  
-███████╗░░╚██╔╝░░███████╗██║░╚███║░░░██║░░░██████╔╝    ╚█████╔╝██║░░██║██║░░██║██║░░██║░░░██║░░░  
-╚══════╝░░░╚═╝░░░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░    ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░  
 
-░░░░░██╗░██████╗    ░█████╗░███╗░░██╗██╗███╗░░░███╗░█████╗░████████╗░█████╗░██████╗░
-░░░░░██║██╔════╝    ██╔══██╗████╗░██║██║████╗░████║██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗
-░░░░░██║╚█████╗░    ███████║██╔██╗██║██║██╔████╔██║███████║░░░██║░░░██║░░██║██████╔╝
-██╗░░██║░╚═══██╗    ██╔══██║██║╚████║██║██║╚██╔╝██║██╔══██║░░░██║░░░██║░░██║██╔══██╗
-╚█████╔╝██████╔╝    ██║░░██║██║░╚███║██║██║░╚═╝░██║██║░░██║░░░██║░░░╚█████╔╝██║░░██║
-░╚════╝░╚═════╝░    ╚═╝░░╚═╝╚═╝░░╚══╝╚═╝╚═╝░░░░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝
 
-*/
-//Single place for all code related to animating Events Chart SVG, used by light & full viewer
 
-class ID {
-  static CursorLineLegendTemplate = `#CursorLineLegendTemplate`;
-  static TimeRowLegendTemplate = `#TimeRowLegendTemplate`;
-  static CursorLineLegendCloneCls = ".CursorLineLegendClone";
-  static LifeEventNameLabelCls = ".name-label";
-  static LifeEventVerticalLineCls = ".vertical-line";
-  static LifeEventDescriptionLabelCls = ".description-label";
-  static CursorLineLegendDescriptionHolder =
-    "#CursorLineLegendDescriptionHolder";
-  static EventChartHolder = ".EventChartHolder"; //main chart SVG element, used class since ID is unique number
-  static EventsChartSvgHolder = "#EventsChartSvgHolder"; //default expected parent in page to inject chart into
-  static CursorLine = "#CursorLine";
-  static CursorLineLegendClone = "CursorLineLegendClone";
-  static CursorLineLegendHolder = "#CursorLineLegendHolder";
-  static CursorLineSumIcon = "#CursorLineSumIcon";
-  static NowVerticalLine = "#NowVerticalLine";
-  static EventListHolder = ".EventListHolder";
-  static CursorLineClockIcon = "#CursorLineClockIcon";
-  static CursorLineLegendDescription = "#CursorLineLegendDescription";
-  static CursorLineLegendDescriptionBackground =
-    "#CursorLineLegendDescriptionBackground";
+
+//----------------------------------------------------------------------------------------------------------
+
+class GR {
+    // Constants
+    static GoldenRatio = 1.61803;
+    static ContentWidth = 1080;
+
+    // Properties
+    static get W1080() { return 1080; }
+    static get W1080px() { return `${GR.W1080}px`; }
+
+    static get W824() { return GR.W667 + GR.W157; }
+    static get W824px() { return `${GR.W824}px`; }
+
+    static get W764() { return GR.W667 + GR.W97; }
+    static get W764px() { return `${GR.W764}px`; }
+
+    static get W667() { return Math.round(GR.ContentWidth / GR.GoldenRatio, 1); }
+    static get W667px() { return `${GR.W667}px`; }
+
+    static get W546() { return GR.W509 + GR.W37; }
+    static get W546px() { return `${GR.W546}px`; }
+
+    static get W509() { return GR.W412 + GR.W97; }
+    static get W509px() { return `${GR.W509}px`; }
+
+    static get W412() { return Math.round(GR.W667 / GR.GoldenRatio, 1); }
+    static get W412px() { return `${GR.W412}px`; }
+
+    static get W352() { return GR.W255 + GR.W97; }
+    static get W352px() { return `${GR.W352}px`; }
+
+    static get W291() { return GR.W157 + GR.W134; }
+    static get W291px() { return `${GR.W291}px`; }
+
+    static get W255() { return Math.round(GR.W412 / GR.GoldenRatio, 1); }
+    static get W255px() { return `${GR.W255}px`; }
+
+    static get W231() { return GR.W194 + GR.W37; }
+    static get W231px() { return `${GR.W231}px`; }
+
+    static get W194() { return GR.W157 + GR.W37; }
+    static get W194px() { return `${GR.W194}px`; }
+
+    static get W157() { return Math.round(GR.W255 / GR.GoldenRatio, 1); }
+    static get W157px() { return `${GR.W157}px`; }
+
+    static get W134() { return GR.W97 + GR.W37; }
+    static get W134px() { return `${GR.W134}px`; }
+
+    static get W97() { return Math.round(GR.W157 / GR.GoldenRatio, 1); }
+    static get W97px() { return `${GR.W97}px`; }
+
+    static get W60() { return Math.round(GR.W97 / GR.GoldenRatio, 1); }
+    static get W60px() { return `${GR.W60}px`; }
+
+    static get W37() { return Math.round(GR.W60 / GR.GoldenRatio, 1); }
+    static get W37px() { return `${GR.W37}px`; }
+
+    static get W22() { return Math.round(GR.W37 / GR.GoldenRatio, 1); }
+    static get W22px() { return `${GR.W22}px`; }
+
+    static get W14() { return Math.round(GR.W22 / GR.GoldenRatio, 1); }
+    static get W14px() { return `${GR.W14}px`; }
+
+    static get W8() { return Math.round(GR.W14 / GR.GoldenRatio, 1); }
+    static get W8px() { return `${GR.W8}px`; }
+
+    static get W5() { return Math.round(GR.W8 / GR.GoldenRatio, 1); }
+    static get W5px() { return `${GR.W5}px`; }
+
+    static get W3() { return Math.round(GR.W5 / GR.GoldenRatio, 1); }
+    static get W3px() { return `${GR.W3}px`; }
+
+    static get W2() { return Math.round(GR.W3 / GR.GoldenRatio, 1); }
+    static get W2px() { return `${GR.W2}px`; }
+
+    static get W1() { return Math.round(GR.W2 / GR.GoldenRatio, 1); }
+    static get W1px() { return `${GR.W1}px`; }
 }
 
+
+class ID {
+    static CursorLineLegendTemplate = `#CursorLineLegendTemplate`;
+    static TimeRowLegendTemplate = `#TimeRowLegendTemplate`;
+    static CursorLineLegendCloneCls = ".CursorLineLegendClone";
+    static LifeEventNameLabelCls = ".name-label";
+    static LifeEventVerticalLineCls = ".vertical-line";
+    static LifeEventDescriptionLabelCls = ".description-label";
+    static CursorLineLegendDescriptionHolder =
+        "#CursorLineLegendDescriptionHolder";
+    static EventChartHolder = ".EventChartHolder"; //main chart SVG element, used class since ID is unique number
+    static EventsChartSvgHolder = "#EventsChartSvgHolder"; //default expected parent in page to inject chart into
+    static CursorLine = "#CursorLine";
+    static CursorLineLegendClone = "CursorLineLegendClone";
+    static CursorLineLegendHolder = "#CursorLineLegendHolder";
+    static CursorLineSumIcon = "#CursorLineSumIcon";
+    static NowVerticalLine = "#NowVerticalLine";
+    static EventListHolder = ".EventListHolder";
+    static CursorLineClockIcon = "#CursorLineClockIcon";
+    static CursorLineLegendDescription = "#CursorLineLegendDescription";
+    static CursorLineLegendDescriptionBackground =
+        "#CursorLineLegendDescriptionBackground";
+}
+
+//Single place for all code related to animating Events Chart SVG, used by light & full viewer
 //this class is a living version SVG Events Chart
 //DESIGN NOTE: no logic to generate chart should be here
 //all generation via URL or API is to be done as separate helper functions only
 class EventsChart {
-  //note: these are color codes used to
-  //detect if event is good or bad
-  static BadColor = "#FF0000";
-  static GoodColor = "#00FF00";
+    //note: these are color codes used to
+    //detect if event is good or bad
+    static BadColor = "#FF0000";
+    static GoodColor = "#00FF00";
 
-  //row height used to legend row
-  static RowHeight = 15;
+    //row height used to legend row
+    static RowHeight = 15;
 
-  constructor(chartId) {
-    //use chart ID find the element on page
-    //note: we make sure here that only the elements inside this specific SVG chart will be manipulated
-    this.$EventsChartSvgHolder = $(ID.EventsChartSvgHolder);
-    this.$SvgChartElm = $(`#${chartId}`);
-    this.Id = chartId;
-    this.$CursorLine = this.$SvgChartElm.find(ID.CursorLine);
-    this.$LifeEventNameLabel = this.$SvgChartElm.find(ID.LifeEventNameLabelCls);
-    this.$NowVerticalLine = this.$SvgChartElm.find(ID.NowVerticalLine); //save now line
-    this.AllEventRects = this.$SvgChartElm
-      .find(ID.EventListHolder)
-      .children("rect");
-    this.$CursorLineLegendDescriptionHolder = this.$SvgChartElm.find(
-      ID.CursorLineLegendDescriptionHolder
-    );
-    this.$CursorLineLegendTemplate = this.$SvgChartElm.find(
-      ID.CursorLineLegendTemplate
-    );
-    this.$TimeRowLegendTemplate = this.$SvgChartElm.find(
-      ID.TimeRowLegendTemplate
-    );
-    this.$CursorLineLegendDescription = this.$SvgChartElm.find(
-      ID.CursorLineLegendDescription
-    );
-    this.$CursorLineLegendDescriptionBackground = this.$SvgChartElm.find(
-      ID.CursorLineLegendDescriptionBackground
-    );
-    this.$CursorLineLegendDescriptionHolder = this.$SvgChartElm.find(
-      ID.CursorLineLegendDescriptionHolder
-    );
-    this.DescText = { xAxis: 175, yAxis: 24 }; //used to position desc box cursor legend
-    this.$CursorLineLegendHolder = this.$SvgChartElm.find(
-      ID.CursorLineLegendHolder
-    );
+    constructor(chartId) {
+        //use chart ID find the element on page
+        //note: we make sure here that only the elements inside this specific SVG chart will be manipulated
+        this.$EventsChartSvgHolder = $(ID.EventsChartSvgHolder);
+        this.$SvgChartElm = $(`#${chartId}`);
+        this.Id = chartId;
+        this.$CursorLine = this.$SvgChartElm.find(ID.CursorLine);
+        this.$LifeEventNameLabel = this.$SvgChartElm.find(ID.LifeEventNameLabelCls);
+        this.$NowVerticalLine = this.$SvgChartElm.find(ID.NowVerticalLine); //save now line
+        this.AllEventRects = this.$SvgChartElm
+            .find(ID.EventListHolder)
+            .children("rect");
+        this.$CursorLineLegendDescriptionHolder = this.$SvgChartElm.find(
+            ID.CursorLineLegendDescriptionHolder
+        );
+        this.$CursorLineLegendTemplate = this.$SvgChartElm.find(
+            ID.CursorLineLegendTemplate
+        );
+        this.$TimeRowLegendTemplate = this.$SvgChartElm.find(
+            ID.TimeRowLegendTemplate
+        );
+        this.$CursorLineLegendDescription = this.$SvgChartElm.find(
+            ID.CursorLineLegendDescription
+        );
+        this.$CursorLineLegendDescriptionBackground = this.$SvgChartElm.find(
+            ID.CursorLineLegendDescriptionBackground
+        );
+        this.$CursorLineLegendDescriptionHolder = this.$SvgChartElm.find(
+            ID.CursorLineLegendDescriptionHolder
+        );
+        this.DescText = { xAxis: 175, yAxis: 24 }; //used to position desc box cursor legend
+        this.$CursorLineLegendHolder = this.$SvgChartElm.find(
+            ID.CursorLineLegendHolder
+        );
 
-    //bring to life
-    this.attachEventHandlers();
+        //bring to life
+        this.attachEventHandlers();
 
-    //add chart to public list of charts after brought to live
-    //create new if 1st chart on page
-    window.EventsChartLoaded = this;
-    if (typeof window.EventsChartList === "undefined") {
-      window.EventsChartList = [];
-    }
-    window.EventsChartList.push(this);
+        //add chart to public list of charts after brought to live
+        //create new if 1st chart on page
+        window.EventsChartLoaded = this;
+        if (typeof window.EventsChartList === "undefined") {
+            window.EventsChartList = [];
+        }
+        window.EventsChartList.push(this);
 
-    //return index of last row pushed
-    return window.EventsChartList.length - 1;
-  }
-
-  //------------------------------------------------------------------------
-
-  attachEventHandlers() {
-    console.log("Attaching events to chart...");
-
-    //1 TIME LEGEND
-    //we pump the current EventChart instance into handler
-    this.$SvgChartElm.mousemove((mouse) =>
-      EventsChart.onMouseMoveHandler(mouse, this)
-    );
-    this.$SvgChartElm.mouseleave((mouse) =>
-      EventsChart.onMouseLeaveEventChart(mouse, this)
-    );
-
-    //2 NOW LINE
-    //update once now
-    EventsChart.updateNowLine(this);
-
-    //setup to auto update every 1 minute
-    setInterval(() => EventsChart.updateNowLine(this), 60 * 1000); // 60 seconds
-
-    //3 HIGHLIGHT LIFE EVENT
-    this.$LifeEventNameLabel.mouseenter((mouse) =>
-      EventsChart.onMouseEnterLifeEventHandler(mouse, this)
-    );
-    this.$LifeEventNameLabel.mouseleave((mouse) =>
-      EventsChart.onMouseLeaveLifeEventHandler(mouse, this)
-    );
-  }
-
-  //on click add events to google calendar,
-  //ask user to select event and take from there
-  AddEventsToGoogleCalendar() {
-    console.log("Adding events to Google Calendar");
-
-    //tell user to select an event
-    Swal.fire({
-      title: "Select an event",
-      text: "The selected event will be sent to your Google Calendar",
-      icon: "info",
-      confirmButtonText: "OK",
-    });
-
-    //attach one time trigger to catch the event user clicked on
-    $(".EventChartContent").one("click", (eventData) =>
-      EventsChart.onClickSelectedGoogleCalendarEvent(eventData, this)
-    );
-  }
-
-  //highlights all events rects in chart by
-  //the inputed keyword in the event name
-  highlightByEventName(keyword) {
-    //find all rects representing the keyword based event
-    //note keyword will be planet name or house name
-    this.AllEventRects.each(function (index) {
-      //get parsed time from rect
-      var svgEventRect = this;
-      var eventName = svgEventRect.getAttribute("eventname");
-      //check if event name contains keyword
-      var foundEvent = eventName.toLowerCase().includes(keyword.toLowerCase());
-
-      //if event is related to planet, highlight the rect
-      if (foundEvent) {
-        //save original color for later return
-        var oriColor = svgEventRect.getAttribute("fill");
-        svgEventRect.setAttribute("fillORI", oriColor);
-
-        //set new highlight color
-        var highlightColor = EventsChart.getHighlightColor(keyword);
-        svgEventRect.setAttribute("fill", highlightColor);
-      }
-    });
-  }
-
-  unhighlightByEventName(keyword) {
-    //find all rects representing the keyword based event
-    this.AllEventRects.each(function (index) {
-      //get parsed time from rect
-      var svgEventRect = this;
-      var eventName = svgEventRect.getAttribute("eventname");
-      //check if event name contains keyword
-      var foundEvent = eventName.toLowerCase().includes(keyword.toLowerCase());
-
-      //if event is related to planet, highlight the rect
-      if (foundEvent) {
-        //save original color for later return
-        var oriColor = svgEventRect.getAttribute("fillORI");
-
-        //ori will be null if never highlighted before
-        oriColor =
-          oriColor === null ? svgEventRect.getAttribute("fill") : oriColor;
-
-        //set original color if changed, else same color
-        svgEventRect.setAttribute("fill", oriColor);
-      }
-    });
-  }
-
-  //-----------------------------STATIC----------------------------------------
-
-  //for highlighting events by name
-  static getHighlightColor(keyword) {
-    switch (keyword.toLowerCase()) {
-      //planets
-      case "sun":
-        return "#FFA500"; //orange #FFA500
-      case "moon":
-        return "#7A7A7A"; //silver #7A7A7A
-      case "mars":
-        return "#DC143C"; //crimson #DC143C
-      case "mercury":
-        return "#00FF7F"; //springgreen #00FF7F
-      case "jupiter":
-        return "#EEEE00"; //yellow #EEEE00
-      case "venus":
-        return "#FF00FF"; //magenta #FF00FF
-      case "saturn":
-        return "#0000FF"; //blue #0000FF
-      case "rahu":
-        return "#FF7D40"; //flesh #FF7D40
-      case "ketu":
-        return "#515151"; //grey #515151
-
-      //house
-      //colors is the full spectrum divided into 12
-      //done to have the most unique colors possible for each house
-      case "house 1":
-        return "#ff0000"; //red
-      case "house 2":
-        return "#ff7f0a"; //orange
-      case "house 3":
-        return "#ffff00"; //yellow
-      case "house 4":
-        return "#7fff00"; //chartreuse green
-      case "house 5":
-        return "#00ff00"; //green
-      case "house 6":
-        return "#00ff7f"; //spring green
-      case "house 7":
-        return "#00ffff"; //cyan
-      case "house 8":
-        return "#007fff"; //azure
-      case "house 9":
-        return "#0000ff"; //blue
-      case "house 10":
-        return "#7f00ff"; //violet
-      case "house 11":
-        return "#ff00ff"; //magenta
-      case "house 12":
-        return "#ff007f"; //rose
+        //return index of last row pushed
+        return window.EventsChartList.length - 1;
     }
 
-    //default to black so we know it was not accounted for
-    return "#000000";
+    //------------------------------------------------------------------------
 
-    //    var arrayValues = ["#ff60fa", "#ff60fa", "#ff60fa"];
+    attachEventHandlers() {
+        console.log("Attaching events to chart...");
 
-    //    var arrayMax = arrayValues.length - 1;
-    //    var randomIndex = Math.floor(Math.random() * arrayMax);
+        //1 TIME LEGEND
+        //we pump the current EventChart instance into handler
+        this.$SvgChartElm.mousemove((mouse) =>
+            EventsChart.onMouseMoveHandler(mouse, this)
+        );
+        this.$SvgChartElm.mouseleave((mouse) =>
+            EventsChart.onMouseLeaveEventChart(mouse, this)
+        );
 
-    //    return arrayValues[randomIndex];
-  }
+        //2 NOW LINE
+        //update once now
+        EventsChart.updateNowLine(this);
 
-  //update now line position
-  static updateNowLine(instance) {
-    console.log("Updating now line position...");
+        //setup to auto update every 1 minute
+        setInterval(() => EventsChart.updateNowLine(this), 60 * 1000); // 60 seconds
 
-    //store closes rect to now time
-    var closestRectToNow;
-
-    //find closest rect to now time
-    instance.AllEventRects.each((index, element) => findClosest(element));
-
-    //get horizontal position of now rect (x axis) (conditional access, not initialized all the time)
-    var xAxisNowRect = closestRectToNow?.getAttribute("x");
-
-    //only set line position if, data is valid
-    if (xAxisNowRect) {
-      instance.$NowVerticalLine.attr(
-        "transform",
-        `matrix(1, 0, 0, 1, ${xAxisNowRect}, 0)`
-      );
+        //3 HIGHLIGHT LIFE EVENT
+        this.$LifeEventNameLabel.mouseenter((mouse) =>
+            EventsChart.onMouseEnterLifeEventHandler(mouse, this)
+        );
+        this.$LifeEventNameLabel.mouseleave((mouse) =>
+            EventsChart.onMouseLeaveLifeEventHandler(mouse, this)
+        );
     }
 
-    //----------------------------------LOCAL FUNK------------------------
+    //on click add events to google calendar,
+    //ask user to select event and take from there
+    AddEventsToGoogleCalendar() {
+        console.log("Adding events to Google Calendar");
 
-    function findClosest(svgEventRect) {
-      //get parsed time from rect
-      var rectTime = getTimeInRect(svgEventRect).getTime(); //(milliseconds since 1 Jan 1970)
-      var nowTime = Date.now();
+        //tell user to select an event
+        Swal.fire({
+            title: "Select an event",
+            text: "The selected event will be sent to your Google Calendar",
+            icon: "info",
+            confirmButtonText: "OK",
+        });
 
-      //if not yet reach continue, keep reference to this and goto next
-      if (rectTime <= nowTime) {
-        closestRectToNow = svgEventRect;
-        return true; //go next
-      }
-      //already passed now time, use previous rect as now, stop looking
-      else {
-        return false;
-      }
+        //attach one time trigger to catch the event user clicked on
+        $(".EventChartContent").one("click", (eventData) =>
+            EventsChart.onClickSelectedGoogleCalendarEvent(eventData, this)
+        );
     }
 
-    //parses the STD time found in rect and returns it
-    function getTimeInRect(eventRect$) {
-      //convert "00:28 17/11/2022 +08:00" to "2019-01-01T00:00:00.000+00:00"
-      var stdTimeRaw = eventRect$.getAttribute("stdtime");
-      var stdTimeSplit = stdTimeRaw.split(" ");
-      var hourMin = stdTimeSplit[0];
-      var dateFull = stdTimeSplit[1].split("/");
-      var date = dateFull[0];
-      var month = dateFull[1];
-      var year = dateFull[2];
-      var timezone = stdTimeSplit[2];
-      var rectTime = new Date(
-        `${year}-${month}-${date}T${hourMin}:00.000${timezone}`
-      );
+    //highlights all events rects in chart by
+    //the inputed keyword in the event name
+    highlightByEventName(keyword) {
+        //find all rects representing the keyword based event
+        //note keyword will be planet name or house name
+        this.AllEventRects.each(function (index) {
+            //get parsed time from rect
+            var svgEventRect = this;
+            var eventName = svgEventRect.getAttribute("eventname");
+            //check if event name contains keyword
+            var foundEvent = eventName.toLowerCase().includes(keyword.toLowerCase());
 
-      return rectTime;
-    }
-  }
+            //if event is related to planet, highlight the rect
+            if (foundEvent) {
+                //save original color for later return
+                var oriColor = svgEventRect.getAttribute("fill");
+                svgEventRect.setAttribute("fillORI", oriColor);
 
-  //on mouse leave event chart, auto hide time legend
-  static onMouseLeaveEventChart(mouse, instance) {
-    instance.$CursorLine.hide();
-  }
-
-  //on mouse over life event name label, highlight event line
-  static onMouseEnterLifeEventHandler(mouse, instance) {
-    //get label that has mouse over it
-    var targetElement = mouse.currentTarget;
-
-    //find the main vertical line for life event
-    var $parent = $(targetElement).parent();
-    var $verticalLine = $parent.siblings(ID.LifeEventVerticalLineCls);
-
-    //make wider
-    $verticalLine.attr("width", "3");
-
-    //highlight color
-    $verticalLine.attr("fill", "#e502fa");
-
-    //glow
-    $verticalLine.css("filter", "drop-shadow(0px 0px 1px rgb(255 0 0))");
-
-    //make hidden description box visible (if any text)
-    var $descBox = $parent.children(ID.LifeEventDescriptionLabelCls);
-    if ($descBox.text().trim() !== "") {
-      $descBox.show();
-    }
-  }
-
-  //on mouse leave life event name label, unhighlight event line
-  static onMouseLeaveLifeEventHandler(mouse, instance) {
-    //get label that has mouse over it
-    var targetElement = mouse.currentTarget;
-
-    //find the main vertical line for life event
-    var $parent = $(targetElement).parent();
-    var $verticalLine = $parent.siblings(ID.LifeEventVerticalLineCls);
-
-    //set back normal line width
-    $verticalLine.attr("width", "2");
-
-    //set line color back to default
-    $verticalLine.attr("fill", "#1E1EEA");
-
-    //glow
-    $verticalLine.css("filter", "");
-
-    //hide description box if not major
-    var $descBox = $parent.children(ID.LifeEventDescriptionLabelCls);
-    var isNotMajor =
-      $parent.parent()[0].getAttribute("eventweight") !== "Major";
-    if (isNotMajor) {
-      $descBox.hide();
-    }
-  }
-
-  //converts VedAstro date format to Google Calendar format
-  static convertDateFormat(dateStr) {
-    // Split the date and time parts
-    // NOTE: location is ignored here
-    let [timePart, datePart, zonePart] = dateStr.StdTime.split(" ");
-    // Split the date into day, month, and year
-    let [day, month, year] = datePart.split("/");
-    // Combine the parts into a new date string and create a new Date object
-    let dateObj = new Date(`${year}-${month}-${day}T${timePart}${zonePart}`);
-
-    // TODO: Convert offset to timezone. This is not straightforward because multiple timezones can have the same offset.
-    const timeZone = "";
-
-    // Return the JSON object
-    return {
-      dateTime: dateObj.toISOString(), // Return the date in ISO 8601 format
-      timeZone: timeZone,
-    };
-  }
-
-  //Gets a mouses x-axis relative inside the given element
-  //used to get mouse location on SVG chart, zoom autocorrected
-  static getMousePositionInElement(mouseEventData, instance) {
-    //get relative position of mouse in Dasa view
-    //after zoom pixels on screen change, but when rendering
-    //SVG description box we need x, y before zoom (AI's code!)
-    var holder = instance.$EventsChartSvgHolder[0]; //zoom is done on main holder in Blazor side
-
-    var mousePosition = {};
-    if (holder != null) {
-      var zoom = parseFloat(window.getComputedStyle(holder).zoom);
-      mousePosition = {
-        xAxis: mouseEventData.originalEvent.offsetX / zoom,
-        yAxis: mouseEventData.originalEvent.offsetY / zoom,
-      };
-    }
-    //in svg direct browser we don't have DIV holder, so no zoom correction
-    else {
-      mousePosition = {
-        xAxis: mouseEventData.originalEvent.offsetX,
-        yAxis: mouseEventData.originalEvent.offsetY,
-      };
+                //set new highlight color
+                var highlightColor = EventsChart.getHighlightColor(keyword);
+                svgEventRect.setAttribute("fill", highlightColor);
+            }
+        });
     }
 
-    return mousePosition;
-  }
+    unhighlightByEventName(keyword) {
+        //find all rects representing the keyword based event
+        this.AllEventRects.each(function (index) {
+            //get parsed time from rect
+            var svgEventRect = this;
+            var eventName = svgEventRect.getAttribute("eventname");
+            //check if event name contains keyword
+            var foundEvent = eventName.toLowerCase().includes(keyword.toLowerCase());
 
-  //called by trigger when clicked on event, after asking user to select
-  //to here for adding events to google
-  static async onClickSelectedGoogleCalendarEvent(eventObject, instance) {
-    //get details on the selected event
-    var targetRect = eventObject.target;
+            //if event is related to planet, highlight the rect
+            if (foundEvent) {
+                //save original color for later return
+                var oriColor = svgEventRect.getAttribute("fillORI");
 
-    //given the SVG rect that was clicked on, process and extract full event data
-    var parsedEvent = (
-      await EventsChart.ParseEventFromSVGRect(targetRect, instance)
-    )["EventStartEndTime"];
+                //ori will be null if never highlighted before
+                oriColor =
+                    oriColor === null ? svgEventRect.getAttribute("fill") : oriColor;
 
-    //if no event found then possible wrongly clicked elm skip, END HERE
-    if (parsedEvent?.Name !== undefined) {
-      Swal.fire("Could not detect event", "", "warning");
-      return;
+                //set original color if changed, else same color
+                svgEventRect.setAttribute("fill", oriColor);
+            }
+        });
     }
 
-    //ask user if selected event is correct and want to continue to google login
-    var userReply = await Swal.fire({
-      title: "Send event to Google?",
-      html:
-        '<ul class="list-group">' +
-        `<li class="list-group-item">Name : <strong>${parsedEvent.Name}</strong></li>` +
-        `<li class="list-group-item">Start : <strong>${parsedEvent.StartTime.StdTime}</strong></li>` +
-        `<li class="list-group-item">End : <strong>${parsedEvent.EndTime.StdTime}</strong></li>` +
-        "</ul>",
-      icon: "info",
-      iconHtml:
-        '<span class="iconify" data-icon="fluent:calendar-add-20-regular" data-inline="false"></span>',
-      showCancelButton: true,
-      confirmButtonText: "Yes",
-      cancelButtonText: "No",
-    });
+    //-----------------------------STATIC----------------------------------------
 
-    //based on what user clicked process
-    if (userReply.isConfirmed) {
-      // User clicked 'Yes', continue to Google login page
-      EventsChart.SelectAccountAndAddEvent(parsedEvent);
-    } else {
-      // User clicked 'No', end silently
-      console.log("User clicked No on sending to Google");
-    }
-  }
+    //for highlighting events by name
+    static getHighlightColor(keyword) {
+        switch (keyword.toLowerCase()) {
+            //planets
+            case "sun":
+                return "#FFA500"; //orange #FFA500
+            case "moon":
+                return "#7A7A7A"; //silver #7A7A7A
+            case "mars":
+                return "#DC143C"; //crimson #DC143C
+            case "mercury":
+                return "#00FF7F"; //springgreen #00FF7F
+            case "jupiter":
+                return "#EEEE00"; //yellow #EEEE00
+            case "venus":
+                return "#FF00FF"; //magenta #FF00FF
+            case "saturn":
+                return "#0000FF"; //blue #0000FF
+            case "rahu":
+                return "#FF7D40"; //flesh #FF7D40
+            case "ketu":
+                return "#515151"; //grey #515151
 
-  //given an SVG rect of an event, extract event data from it, with start and end time (use API)
-  static async ParseEventFromSVGRect(targetRect, instance) {
-    //prepare the URL
-    var domain = "https://vedastroapi.azurewebsites.net/api";
-
-    //get birth time from main svg element
-    var birthTimeAry = instance.$SvgChartElm[0]
-      .getAttribute("birthtime")
-      .split(" ");
-    var birthLocationTxt =
-      instance.$SvgChartElm[0].getAttribute("birthlocation");
-    var birthTime = `/Location/${birthLocationTxt}/Time/${birthTimeAry[0]}/${birthTimeAry[1]}/${birthTimeAry[2]}`;
-
-    //get check time & event name from clicked rect,
-    //start and end time should be before and after from this
-    var checkTimeAry = targetRect.getAttribute("stdtime").split(" ");
-    //TODO Location set based on where user is
-    var checkTime = `/Location/${birthLocationTxt.replace(/\s/g, "")}/Time/${
-      checkTimeAry[0]
-    }/${checkTimeAry[1]}/${checkTimeAry[2]}`;
-
-    //get name of event
-    var withSpaces = targetRect.getAttribute("eventname");
-    var eventName = `/EventName/${withSpaces.replace(/\s/g, "")}`; //remove spaces
-
-    //put together final API call URL
-    var finalUrl = `${domain}/Calculate/EventStartEndTime${birthTime}${checkTime}${eventName}`;
-
-    //make call to API, replies JSON of Event
-    var eventDataAtTime = await EventsChart.GetAPIPayload(finalUrl);
-
-    return eventDataAtTime;
-  }
-
-  //given a vedastro API url, will auto call via POST or GET
-  //and return only passed payloads as JSON
-  static async GetAPIPayload(url, payload = null) {
-    try {
-      // If a payload is provided, prepare options for a POST request
-      const options = payload
-        ? {
-            method: "POST", // Specify the HTTP method as POST
-            headers: { "Content-Type": "application/json" }, // Set the content type of the request to JSON
-            body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
-          }
-        : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
-
-      // Send the request to the specified URL with the prepared options
-      const response = await fetch(url, options);
-
-      // If the response is not ok (status is not in the range 200-299), throw an error
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      // Parse the response body as JSON
-      const data = await response.json();
-
-      // If the 'Status' property of the parsed data is not 'Pass', throw an error
-      if (data.Status !== "Pass") {
-        throw new Error(data.Payload);
-      }
-
-      // If everything is ok, return the 'Payload' property of the parsed data
-      return data.Payload;
-    } catch (error) {
-      // If an error is caught, display an error message using Swal.fire
-      Swal.fire({
-        icon: "error",
-        title: "App Crash!",
-        text: error,
-        confirmButtonText: "OK",
-      });
-    }
-  }
-
-  static addEventToGoogleCalendar(parsedEvent) {
-    //show event that was selected
-    console.log(`EventSelected: ${parsedEvent.Name}`);
-
-    //convert to format supported by Google Calendar
-    var parsedStartTime = EventsChart.convertDateFormat(parsedEvent.StartTime);
-    var parsedEndTime = EventsChart.convertDateFormat(parsedEvent.EndTime);
-
-    const event = {
-      summary: parsedEvent.Name,
-      //'location': '',
-      description: parsedEvent.Description,
-      start: parsedStartTime,
-      end: parsedEndTime,
-      //'recurrence': [
-      //    'RRULE:FREQ=DAILY;COUNT=2'
-      //],
-      //'attendees': [
-      //    { 'email': 'lpage@example.com' },
-      //    { 'email': 'sbrin@example.com' }
-      //],
-      reminders: {
-        useDefault: false,
-        overrides: [
-          { method: "email", minutes: 24 * 60 },
-          { method: "popup", minutes: 10 },
-        ],
-      },
-    };
-
-    const request = window.gapi.client.calendar.events.insert({
-      calendarId: "primary", //set default calendar todo future select calendar
-      resource: event,
-    });
-
-    request.execute(function (event) {
-      //STATE: events successfully created and updated to Google
-      //tell user about it
-      Swal.fire({
-        title: "Event added!",
-        text: `Added ${event.summary}, view here ${event.htmlLink}`,
-        icon: "info",
-        iconHtml:
-          '<span class="iconify" data-icon="streamline:interface-calendar-check-approve-calendar-check-date-day-month-success" data-inline="false"></span>',
-        showCloseButton: true,
-        focusConfirm: false,
-        confirmButtonText: "Great!",
-      });
-    });
-  }
-
-  /**
-   *  Sign in the user to select calendar account and then add event immediately
-   */
-  static SelectAccountAndAddEvent(parsedEvent) {
-    window.tokenClient.callback = async (resp) => {
-      if (resp.error !== undefined) {
-        throw resp;
-      }
-
-      //now already logged in continue to add events
-      EventsChart.addEventToGoogleCalendar(parsedEvent);
-    };
-
-    if (window.gapi.client.getToken() === null) {
-      // Prompt the user to select a Google Account and ask for consent to share their data
-      // when establishing a new session.
-      window.tokenClient.requestAccessToken({ prompt: "consent" });
-    } else {
-      // Skip display of account chooser and consent dialog for an existing session.
-      window.tokenClient.requestAccessToken({ prompt: "" });
-    }
-  }
-
-  /**
-   * Print the summary and start datetime/date of the next ten events in
-   * the authorized user's calendar. If no events are found an
-   * appropriate message is printed.
-   */
-  static async listUpcomingEvents() {
-    let response;
-    try {
-      const request = {
-        calendarId: "primary",
-        timeMin: new Date().toISOString(),
-        showDeleted: false,
-        singleEvents: true,
-        maxResults: 10,
-        orderBy: "startTime",
-      };
-      response = await window.gapi.client.calendar.events.list(request);
-    } catch (err) {
-      document.getElementById("content").innerText = err.message;
-      return;
-    }
-
-    const events = response.result.items;
-    if (!events || events.length == 0) {
-      console.log("No events found.");
-      return;
-    }
-    // Flatten to string to display
-    const output = events.reduce(
-      (str, event) =>
-        `${str}${event.summary} (${
-          event.start.dateTime || event.start.date
-        })\n`,
-      "Events:\n"
-    );
-    console.log(output);
-  }
-
-  //fired when mouse moves over dasa view box
-  //used to auto update cursor line & time legend
-  static onMouseMoveHandler(mouse, instance) {
-    //get relative position of mouse in Dasa view
-    //after zoom pixels on screen change, but when rendering
-    //SVG description box we need x, y before zoom (AI's code!)
-    var mousePosition = EventsChart.getMousePositionInElement(mouse, instance); //todo no work in zoom
-
-    //if cursor is out of chart view hide cursor and end here
-    if (mousePosition === 0) {
-      SVG(instance.$CursorLine[0]).hide();
-      return;
-    } else {
-      SVG(instance.$CursorLine[0]).show();
-    }
-
-    //move cursor line 1st for responsiveness
-    autoMoveCursorLine(mousePosition.xAxis);
-
-    //update time legend
-    generateTimeLegend(mousePosition);
-
-    //-------------------------LOCAL FUNCS--------------------------
-
-    function autoMoveCursorLine(relativeMouseX) {
-      //give a tiny delay so user can aim better at event
-      setTimeout(() => {}, 157);
-
-      //move vertical line to under mouse inside dasa view box
-      instance.$CursorLine.attr(
-        "transform",
-        `matrix(1, 0, 0, 1, ${relativeMouseX}, 0)`
-      );
-    }
-
-    //SVG Event Chart Time Legend generator
-    //this is where the whole time legend that follows
-    //the mouse when placed on chart is generated
-    //notes: a template row always exists in code,
-    //in client JS side uses template to create the rows from cloning it
-    //and modifying its prop as needed, as such any major edit needs to
-    //be done in API code
-    function generateTimeLegend(mousePosition) {
-      // Round mouse position to match with axis values in rect
-      const mouseRoundedX = Math.round(mousePosition.xAxis);
-      const mouseRoundedY = Math.round(mousePosition.yAxis);
-
-      // Get all event rects at the mouse's X position
-      const allElementsAtX = instance.$SvgChartElm
-        .children()
-        .find(`[x=${mouseRoundedX}]`);
-      const allEventRectsAtX = getAllEventRectsAtX(allElementsAtX);
-
-      // Remove previously generated legend rows
-      removePreviousClones();
-
-      //if no elements, don't create summary row, end here (note check only after remove)
-      if (!(allEventRectsAtX.length > 0)) {
-        return;
-      }
-
-      // Initialize counts for summary row
-      let goodCount = 0;
-      let badCount = 0;
-      instance.showDescription = false; // Default description not shown
-
-      // Extract event data and place it in legend
-      allEventRectsAtX.forEach((element) =>
-        drawEventRow(element, mouseRoundedY, allElementsAtX)
-      );
-
-      // Show or hide description box based on mouse position
-      toggleDescriptionBox();
-
-      // Generate summary row at the bottom showing count of good & bad
-      //generateSummaryRow(allEventRectsAtX, goodCount, badCount);
-
-      //-----------------------------------------LOCAL FUNCS-------------------------------
-
-      //code to draw one event row box
-      function drawEventRow(svgEventRect, mouseRoundedY, allElementsAtX) {
-        //STAGE 1
-        //GET DATA
-        //extract other data out of the rect
-        var eventName = svgEventRect.getAttribute("eventname");
-        //if no "eventname" exist, wrong elm skip it
-        if (!eventName) {
-          return;
+            //house
+            //colors is the full spectrum divided into 12
+            //done to have the most unique colors possible for each house
+            case "house 1":
+                return "#ff0000"; //red
+            case "house 2":
+                return "#ff7f0a"; //orange
+            case "house 3":
+                return "#ffff00"; //yellow
+            case "house 4":
+                return "#7fff00"; //chartreuse green
+            case "house 5":
+                return "#00ff00"; //green
+            case "house 6":
+                return "#00ff7f"; //spring green
+            case "house 7":
+                return "#00ffff"; //cyan
+            case "house 8":
+                return "#007fff"; //azure
+            case "house 9":
+                return "#0000ff"; //blue
+            case "house 10":
+                return "#7f00ff"; //violet
+            case "house 11":
+                return "#ff00ff"; //magenta
+            case "house 12":
+                return "#ff007f"; //rose
         }
 
-        var eventDescription = svgEventRect.getAttribute("eventdescription");
-        var natureScore = svgEventRect.getAttribute("naturescore");
-        var color = svgEventRect.getAttribute("fill");
-        var newRowYAxis = parseInt(svgEventRect.getAttribute("y")); //parse as num, for calculation
+        //default to black so we know it was not accounted for
+        return "#000000";
 
-        //STAGE 2
-        //TIME & AGE LEGEND
-        //create time legend at top only for first element
-        if (allElementsAtX[0] === svgEventRect) {
-          drawTimeAgeLegendRow();
-        }
+        //    var arrayValues = ["#ff60fa", "#ff60fa", "#ff60fa"];
 
-        //STAGE 3
-        //GENERATE EVENT ROW
-        //make a copy of template for this event
-        var newLegendRow = instance.$CursorLineLegendTemplate.clone();
-        newLegendRow.removeAttr("id"); //remove the clone template id
-        newLegendRow.addClass(ID.CursorLineLegendClone); //to delete it on next run
-        newLegendRow.appendTo(instance.$CursorLineLegendHolder); //place new legend into special holder
-        SVG(newLegendRow[0]).show(); //make cloned visible
-        //position the group holding the legend over the event row which the legend represents
-        newLegendRow.attr(
-          "transform",
-          `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 2})`
-        ); //minus 2 for perfect alignment
+        //    var arrayMax = arrayValues.length - 1;
+        //    var randomIndex = Math.floor(Math.random() * arrayMax);
 
-        //#set data into view
-        //nature score
-        var $natureScoreElm = newLegendRow.children(".nature-score"); //GET
-        let numberOnly = Math.abs(parseInt(natureScore)); //remove "-" symbol
-        $natureScoreElm[0].innerHTML = numberOnly; //SET
+        //    return arrayValues[randomIndex];
+    }
 
-        //icon color
-        var iconElm = newLegendRow.children(".icon-holder"); //GET
-        iconElm.attr("fill", color); //SET
+    //update now line position
+    static updateNowLine(instance) {
+        console.log("Updating now line position...");
 
-        //event name next to nature score
-        var $eventNameElm = newLegendRow.children(".event-name"); //GET
-        $eventNameElm[0].innerHTML = eventName; //SET
+        //store closes rect to now time
+        var closestRectToNow;
 
-        //STAGE 4
-        //GENERATE DESCRIPTION ROW LOGIC
-        //check if mouse in within row of this event (y-axis)
-        var elementTopY = newRowYAxis;
-        var elementBottomY = newRowYAxis + EventsChart.RowHeight;
-        var mouseWithinRow =
-          mouseRoundedY >= elementTopY && mouseRoundedY <= elementBottomY;
-        //if event name is still the same then don't load description again
-        var notSameEvent = instance.previousHoverEventName !== eventName;
+        //find closest rect to now time
+        instance.AllEventRects.each((index, element) => findClosest(element));
 
-        //STAGE 5
-        //HIGHLIGHT ROW (BASED ON CURSOR)
-        //if mouse is in event's row then highlight that row
-        if (mouseWithinRow) {
-          //highlight event name row
-          var $backgroundElm = newLegendRow.children("rect");
+        //get horizontal position of now rect (x axis) (conditional access, not initialized all the time)
+        var xAxisNowRect = closestRectToNow?.getAttribute("x");
 
-          $eventNameElm.attr("font-weight", "700");
-          $backgroundElm.attr("fill", "#0096FF"); //bright blue
-          $backgroundElm.attr("opacity", 1); //solid
-
-          //if mouse within show description box
-          instance.showDescription = true;
-        }
-
-        //if mouse within row AND the event has changed
-        //then generate a new description
-        //note: this is slow, so done only when absolutely needed
-        if (mouseWithinRow && notSameEvent) {
-          //make holder visible
-          SVG(instance.$CursorLineLegendDescriptionHolder[0]).show();
-
-          //move holder next to event
-          var descBoxYAxis = newRowYAxis - 9; //minus 5 for perfect alignment with event name row
-          instance.$CursorLineLegendDescriptionHolder.attr(
-            "transform",
-            `matrix(1, 0, 0, 1, 0, ${descBoxYAxis})`
-          );
-
-          //note: using trigger to make it easy to skip multiple clogging events
-          //set event desc directly
-          drawDescriptionBox(eventDescription);
-
-          //update previous hover event
-          instance.previousHoverEventName = eventName;
-        }
-
-        //---------------------LOCAL---------------------------
-
-        function drawDescriptionBox(eventDescRaw) {
-          //remove tabs and new line to make easy detection of empty string
-          let eventDesc = eventDescRaw.replace(/ {4}|[\t\n\r]/gm, "");
-
-          //if no description than hide box & end here
-          if (!eventDesc) {
-            instance.$CursorLineLegendDescriptionHolder.hide();
-            return;
-          }
-
-          //convert text to svg and place inside holder
-          var wrappedDescText = textToSvg(
-            eventDesc,
-            instance.DescText.xAxis,
-            instance.DescText.yAxis
-          );
-
-          instance.$CursorLineLegendDescription.empty(); //clear previous desc
-          $(wrappedDescText).appendTo(instance.$CursorLineLegendDescription); //add in new desc
-          //set height of desc box background
-          instance.$CursorLineLegendDescriptionBackground.attr(
-            "height",
-            instance.EventDescriptionTextHeight + 20
-          ); //plus little for padding
-
-          //-------------------------------------LOCAL FUNCTIONS-------------------------------------------
-
-          //  This function attempts to create a new svg "text" element, chopping
-          //  it up into "tspan" pieces, if the text is too long
-          function textToSvg(caption, x, y) {
-            //svg "text" element to hold smaller text lines
-            var svgTextHolder = document.createElementNS(
-              "http://www.w3.org/2000/svg",
-              "text"
+        //only set line position if, data is valid
+        if (xAxisNowRect) {
+            instance.$NowVerticalLine.attr(
+                "transform",
+                `matrix(1, 0, 0, 1, ${xAxisNowRect}, 0)`
             );
-            svgTextHolder.setAttributeNS(null, "x", x);
-            svgTextHolder.setAttributeNS(null, "y", y);
-            svgTextHolder.setAttributeNS(null, "font-size", 10);
-            svgTextHolder.setAttributeNS(null, "fill", "#FFF");
-            svgTextHolder.setAttributeNS(null, "text-anchor", "left");
+        }
 
-            //The following two variables can be passed as parameters
-            var maximumCharsPerLine = 30;
-            var lineHeight = 10;
+        //----------------------------------LOCAL FUNK------------------------
 
-            var words = caption.split(" ");
-            var line = "";
+        function findClosest(svgEventRect) {
+            //get parsed time from rect
+            var rectTime = getTimeInRect(svgEventRect).getTime(); //(milliseconds since 1 Jan 1970)
+            var nowTime = Date.now();
 
-            //process text and create rows
-            var svgTSpan;
-            var lineCount = 0; //number of lines to calculate height
-            var tSpanTextNode;
-            for (var n = 0; n < words.length; n++) {
-              var testLine = line + words[n] + " ";
-              if (testLine.length > maximumCharsPerLine) {
-                //  Add a new <tspan> element
-                svgTSpan = document.createElementNS(
-                  "http://www.w3.org/2000/svg",
-                  "tspan"
-                );
-                svgTSpan.setAttributeNS(null, "x", x);
-                svgTSpan.setAttributeNS(null, "y", y);
+            //if not yet reach continue, keep reference to this and goto next
+            if (rectTime <= nowTime) {
+                closestRectToNow = svgEventRect;
+                return true; //go next
+            }
+            //already passed now time, use previous rect as now, stop looking
+            else {
+                return false;
+            }
+        }
 
-                tSpanTextNode = document.createTextNode(line);
-                svgTSpan.appendChild(tSpanTextNode);
-                svgTextHolder.appendChild(svgTSpan);
+        //parses the STD time found in rect and returns it
+        function getTimeInRect(eventRect$) {
+            //convert "00:28 17/11/2022 +08:00" to "2019-01-01T00:00:00.000+00:00"
+            var stdTimeRaw = eventRect$.getAttribute("stdtime");
+            var stdTimeSplit = stdTimeRaw.split(" ");
+            var hourMin = stdTimeSplit[0];
+            var dateFull = stdTimeSplit[1].split("/");
+            var date = dateFull[0];
+            var month = dateFull[1];
+            var year = dateFull[2];
+            var timezone = stdTimeSplit[2];
+            var rectTime = new Date(
+                `${year}-${month}-${date}T${hourMin}:00.000${timezone}`
+            );
 
-                line = words[n] + " ";
-                y += lineHeight; //place next text row lower
-                lineCount++; //count a line
-              } else {
-                line = testLine;
-              }
+            return rectTime;
+        }
+    }
+
+    //on mouse leave event chart, auto hide time legend
+    static onMouseLeaveEventChart(mouse, instance) {
+        instance.$CursorLine.hide();
+    }
+
+    //on mouse over life event name label, highlight event line
+    static onMouseEnterLifeEventHandler(mouse, instance) {
+        //get label that has mouse over it
+        var targetElement = mouse.currentTarget;
+
+        //find the main vertical line for life event
+        var $parent = $(targetElement).parent();
+        var $verticalLine = $parent.siblings(ID.LifeEventVerticalLineCls);
+
+        //make wider
+        $verticalLine.attr("width", "3");
+
+        //highlight color
+        $verticalLine.attr("fill", "#e502fa");
+
+        //glow
+        $verticalLine.css("filter", "drop-shadow(0px 0px 1px rgb(255 0 0))");
+
+        //make hidden description box visible (if any text)
+        var $descBox = $parent.children(ID.LifeEventDescriptionLabelCls);
+        if ($descBox.text().trim() !== "") {
+            $descBox.show();
+        }
+    }
+
+    //on mouse leave life event name label, unhighlight event line
+    static onMouseLeaveLifeEventHandler(mouse, instance) {
+        //get label that has mouse over it
+        var targetElement = mouse.currentTarget;
+
+        //find the main vertical line for life event
+        var $parent = $(targetElement).parent();
+        var $verticalLine = $parent.siblings(ID.LifeEventVerticalLineCls);
+
+        //set back normal line width
+        $verticalLine.attr("width", "2");
+
+        //set line color back to default
+        $verticalLine.attr("fill", "#1E1EEA");
+
+        //glow
+        $verticalLine.css("filter", "");
+
+        //hide description box if not major
+        var $descBox = $parent.children(ID.LifeEventDescriptionLabelCls);
+        var isNotMajor =
+            $parent.parent()[0].getAttribute("eventweight") !== "Major";
+        if (isNotMajor) {
+            $descBox.hide();
+        }
+    }
+
+    //converts VedAstro date format to Google Calendar format
+    static convertDateFormat(dateStr) {
+        // Split the date and time parts
+        // NOTE: location is ignored here
+        let [timePart, datePart, zonePart] = dateStr.StdTime.split(" ");
+        // Split the date into day, month, and year
+        let [day, month, year] = datePart.split("/");
+        // Combine the parts into a new date string and create a new Date object
+        let dateObj = new Date(`${year}-${month}-${day}T${timePart}${zonePart}`);
+
+        // TODO: Convert offset to timezone. This is not straightforward because multiple timezones can have the same offset.
+        const timeZone = "";
+
+        // Return the JSON object
+        return {
+            dateTime: dateObj.toISOString(), // Return the date in ISO 8601 format
+            timeZone: timeZone,
+        };
+    }
+
+    //Gets a mouses x-axis relative inside the given element
+    //used to get mouse location on SVG chart, zoom autocorrected
+    static getMousePositionInElement(mouseEventData, instance) {
+        //get relative position of mouse in Dasa view
+        //after zoom pixels on screen change, but when rendering
+        //SVG description box we need x, y before zoom (AI's code!)
+        var holder = instance.$EventsChartSvgHolder[0]; //zoom is done on main holder in Blazor side
+
+        var mousePosition = {};
+        if (holder != null) {
+            var zoom = parseFloat(window.getComputedStyle(holder).zoom);
+            mousePosition = {
+                xAxis: mouseEventData.originalEvent.offsetX / zoom,
+                yAxis: mouseEventData.originalEvent.offsetY / zoom,
+            };
+        }
+        //in svg direct browser we don't have DIV holder, so no zoom correction
+        else {
+            mousePosition = {
+                xAxis: mouseEventData.originalEvent.offsetX,
+                yAxis: mouseEventData.originalEvent.offsetY,
+            };
+        }
+
+        return mousePosition;
+    }
+
+    //called by trigger when clicked on event, after asking user to select
+    //to here for adding events to google
+    static async onClickSelectedGoogleCalendarEvent(eventObject, instance) {
+        //get details on the selected event
+        var targetRect = eventObject.target;
+
+        //given the SVG rect that was clicked on, process and extract full event data
+        var parsedEvent = (
+            await EventsChart.ParseEventFromSVGRect(targetRect, instance)
+        )["EventStartEndTime"];
+
+        //if no event found then possible wrongly clicked elm skip, END HERE
+        if (parsedEvent?.Name !== undefined) {
+            Swal.fire("Could not detect event", "", "warning");
+            return;
+        }
+
+        //ask user if selected event is correct and want to continue to google login
+        var userReply = await Swal.fire({
+            title: "Send event to Google?",
+            html:
+                '<ul class="list-group">' +
+                `<li class="list-group-item">Name : <strong>${parsedEvent.Name}</strong></li>` +
+                `<li class="list-group-item">Start : <strong>${parsedEvent.StartTime.StdTime}</strong></li>` +
+                `<li class="list-group-item">End : <strong>${parsedEvent.EndTime.StdTime}</strong></li>` +
+                "</ul>",
+            icon: "info",
+            iconHtml:
+                '<span class="iconify" data-icon="fluent:calendar-add-20-regular" data-inline="false"></span>',
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+        });
+
+        //based on what user clicked process
+        if (userReply.isConfirmed) {
+            // User clicked 'Yes', continue to Google login page
+            EventsChart.SelectAccountAndAddEvent(parsedEvent);
+        } else {
+            // User clicked 'No', end silently
+            console.log("User clicked No on sending to Google");
+        }
+    }
+
+    //given an SVG rect of an event, extract event data from it, with start and end time (use API)
+    static async ParseEventFromSVGRect(targetRect, instance) {
+        //prepare the URL
+        var domain = "https://vedastroapi.azurewebsites.net/api";
+
+        //get birth time from main svg element
+        var birthTimeAry = instance.$SvgChartElm[0]
+            .getAttribute("birthtime")
+            .split(" ");
+        var birthLocationTxt =
+            instance.$SvgChartElm[0].getAttribute("birthlocation");
+        var birthTime = `/Location/${birthLocationTxt}/Time/${birthTimeAry[0]}/${birthTimeAry[1]}/${birthTimeAry[2]}`;
+
+        //get check time & event name from clicked rect,
+        //start and end time should be before and after from this
+        var checkTimeAry = targetRect.getAttribute("stdtime").split(" ");
+        //TODO Location set based on where user is
+        var checkTime = `/Location/${birthLocationTxt.replace(/\s/g, "")}/Time/${checkTimeAry[0]
+            }/${checkTimeAry[1]}/${checkTimeAry[2]}`;
+
+        //get name of event
+        var withSpaces = targetRect.getAttribute("eventname");
+        var eventName = `/EventName/${withSpaces.replace(/\s/g, "")}`; //remove spaces
+
+        //put together final API call URL
+        var finalUrl = `${domain}/Calculate/EventStartEndTime${birthTime}${checkTime}${eventName}`;
+
+        //make call to API, replies JSON of Event
+        var eventDataAtTime = await EventsChart.GetAPIPayload(finalUrl);
+
+        return eventDataAtTime;
+    }
+
+    //given a vedastro API url, will auto call via POST or GET
+    //and return only passed payloads as JSON
+    static async GetAPIPayload(url, payload = null) {
+        try {
+            // If a payload is provided, prepare options for a POST request
+            const options = payload
+                ? {
+                    method: "POST", // Specify the HTTP method as POST
+                    headers: { "Content-Type": "application/json" }, // Set the content type of the request to JSON
+                    body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
+                }
+                : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
+
+            // Send the request to the specified URL with the prepared options
+            const response = await fetch(url, options);
+
+            // If the response is not ok (status is not in the range 200-299), throw an error
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            //calculate final height in px, save global to be accessed later
-            instance.EventDescriptionTextHeight = lineCount * lineHeight;
+            // Parse the response body as JSON
+            const data = await response.json();
 
-            svgTSpan = document.createElementNS(
-              "http://www.w3.org/2000/svg",
-              "tspan"
-            );
-            svgTSpan.setAttributeNS(null, "x", x);
-            svgTSpan.setAttributeNS(null, "y", y);
+            // If the 'Status' property of the parsed data is not 'Pass', throw an error
+            if (data.Status !== "Pass") {
+                throw new Error(data.Payload);
+            }
 
-            tSpanTextNode = document.createTextNode(line);
-            svgTSpan.appendChild(tSpanTextNode);
-
-            svgTextHolder.appendChild(svgTSpan);
-
-            return svgTextHolder;
-          }
+            // If everything is ok, return the 'Payload' property of the parsed data
+            return data.Payload;
+        } catch (error) {
+            // If an error is caught, display an error message using Swal.fire
+            Swal.fire({
+                icon: "error",
+                title: "App Crash!",
+                text: error,
+                confirmButtonText: "OK",
+            });
         }
-
-        function drawTimeAgeLegendRow() {
-          //make a copy of the template
-          var newTimeLegend = instance.$TimeRowLegendTemplate.clone();
-
-          //modify the template with new data
-          newTimeLegend.removeAttr("id"); //remove the clone template id
-          newTimeLegend.addClass(ID.CursorLineLegendClone); //to delete it on next run
-          newTimeLegend.appendTo(instance.$CursorLineLegendHolder); //place new legend into special holder
-
-          //make cloned visible
-          SVG(newTimeLegend[0]).show();
-
-          //place above 1st row
-          newTimeLegend.attr(
-            "transform",
-            `matrix(1, 0, 0, 1, 10, ${newRowYAxis - EventsChart.RowHeight})`
-          );
-
-          //get time & age data and place into top legend row
-          var stdTimeFull = svgEventRect.getAttribute("stdtime");
-          var stdTimeSplit = stdTimeFull.split(" ");
-          var hourMin = stdTimeSplit[0];
-          var date = stdTimeSplit[1];
-          var timezone = stdTimeSplit[2];
-          var age = svgEventRect.getAttribute("age");
-          newTimeLegend
-            .children("text")
-            .text(`${hourMin} ${date}  AGE: ${age}`);
-
-          //replace circle with clock icon
-          //newTimeLegend.children("use").attr("xlink:href", ID.CursorLineClockIcon);
-        }
-      }
-
-      function getAllEventRectsAtX(allElementsAtX) {
-        const allEventRectsAtX = [];
-        allElementsAtX.each((index, element) => {
-          const eventName = element.getAttribute("eventname");
-          if (eventName) {
-            allEventRectsAtX.push(element);
-          }
-        });
-        return allEventRectsAtX;
-      }
-
-      function removePreviousClones() {
-        const previousClones = instance.$SvgChartElm.find(
-          ID.CursorLineLegendCloneCls
-        );
-        previousClones.remove();
-      }
-
-      function toggleDescriptionBox() {
-        if (instance.showDescription) {
-          SVG(instance.$CursorLineLegendDescriptionHolder[0]).show();
-        } else {
-          SVG(instance.$CursorLineLegendDescriptionHolder[0]).hide();
-        }
-      }
-
-      /**
-       * Generates a summary row for event rectangles.
-       *
-       * @param {Array} allEventRectsAtX - All event rectangles at a given x-coordinate.
-       * @param {number} goodCount - The count of good events.
-       * @param {number} badCount - The count of bad events.
-       */
-      function generateSummaryRow(allEventRectsAtX, goodCount, badCount) {
-        // Clone the template and remove its id
-        const newSummaryRow = instance.$CursorLineLegendTemplate
-          .clone()
-          .removeAttr("id");
-
-        // Add class to the new summary row and append it to the holder
-        newSummaryRow
-          .addClass(ID.CursorLineLegendClone)
-          .appendTo(instance.$CursorLineLegendHolder);
-
-        // Show the new summary row
-        SVG(newSummaryRow[0]).show();
-
-        // Get the last event and its y-axis
-        const lastEvent = allEventRectsAtX[allEventRectsAtX.length - 1];
-        const lastEvtRowYAxis = parseInt(lastEvent.getAttribute("y"));
-
-        // Calculate the y-axis for the summary row
-        const summaryRowYAxis = lastEvtRowYAxis + EventsChart.RowHeight - 1;
-
-        // Transform the new summary row
-        newSummaryRow.attr(
-          "transform",
-          `matrix(1, 0, 0, 1, 10, ${summaryRowYAxis})`
-        );
-
-        // Get the text element and set its text
-        const textElm = newSummaryRow.children("text");
-        textElm.text(` Good : ${goodCount}   Bad : ${badCount}`);
-
-        // Set the href for the use element
-        newSummaryRow.children("use").attr("xlink:href", ID.CursorLineSumIcon);
-      }
     }
-  }
+
+    static addEventToGoogleCalendar(parsedEvent) {
+        //show event that was selected
+        console.log(`EventSelected: ${parsedEvent.Name}`);
+
+        //convert to format supported by Google Calendar
+        var parsedStartTime = EventsChart.convertDateFormat(parsedEvent.StartTime);
+        var parsedEndTime = EventsChart.convertDateFormat(parsedEvent.EndTime);
+
+        const event = {
+            summary: parsedEvent.Name,
+            //'location': '',
+            description: parsedEvent.Description,
+            start: parsedStartTime,
+            end: parsedEndTime,
+            //'recurrence': [
+            //    'RRULE:FREQ=DAILY;COUNT=2'
+            //],
+            //'attendees': [
+            //    { 'email': 'lpage@example.com' },
+            //    { 'email': 'sbrin@example.com' }
+            //],
+            reminders: {
+                useDefault: false,
+                overrides: [
+                    { method: "email", minutes: 24 * 60 },
+                    { method: "popup", minutes: 10 },
+                ],
+            },
+        };
+
+        const request = window.gapi.client.calendar.events.insert({
+            calendarId: "primary", //set default calendar todo future select calendar
+            resource: event,
+        });
+
+        request.execute(function (event) {
+            //STATE: events successfully created and updated to Google
+            //tell user about it
+            Swal.fire({
+                title: "Event added!",
+                text: `Added ${event.summary}, view here ${event.htmlLink}`,
+                icon: "info",
+                iconHtml:
+                    '<span class="iconify" data-icon="streamline:interface-calendar-check-approve-calendar-check-date-day-month-success" data-inline="false"></span>',
+                showCloseButton: true,
+                focusConfirm: false,
+                confirmButtonText: "Great!",
+            });
+        });
+    }
+
+    /**
+     *  Sign in the user to select calendar account and then add event immediately
+     */
+    static SelectAccountAndAddEvent(parsedEvent) {
+        window.tokenClient.callback = async (resp) => {
+            if (resp.error !== undefined) {
+                throw resp;
+            }
+
+            //now already logged in continue to add events
+            EventsChart.addEventToGoogleCalendar(parsedEvent);
+        };
+
+        if (window.gapi.client.getToken() === null) {
+            // Prompt the user to select a Google Account and ask for consent to share their data
+            // when establishing a new session.
+            window.tokenClient.requestAccessToken({ prompt: "consent" });
+        } else {
+            // Skip display of account chooser and consent dialog for an existing session.
+            window.tokenClient.requestAccessToken({ prompt: "" });
+        }
+    }
+
+    /**
+     * Print the summary and start datetime/date of the next ten events in
+     * the authorized user's calendar. If no events are found an
+     * appropriate message is printed.
+     */
+    static async listUpcomingEvents() {
+        let response;
+        try {
+            const request = {
+                calendarId: "primary",
+                timeMin: new Date().toISOString(),
+                showDeleted: false,
+                singleEvents: true,
+                maxResults: 10,
+                orderBy: "startTime",
+            };
+            response = await window.gapi.client.calendar.events.list(request);
+        } catch (err) {
+            document.getElementById("content").innerText = err.message;
+            return;
+        }
+
+        const events = response.result.items;
+        if (!events || events.length == 0) {
+            console.log("No events found.");
+            return;
+        }
+        // Flatten to string to display
+        const output = events.reduce(
+            (str, event) =>
+                `${str}${event.summary} (${event.start.dateTime || event.start.date
+                })\n`,
+            "Events:\n"
+        );
+        console.log(output);
+    }
+
+    //fired when mouse moves over dasa view box
+    //used to auto update cursor line & time legend
+    static onMouseMoveHandler(mouse, instance) {
+        //get relative position of mouse in Dasa view
+        //after zoom pixels on screen change, but when rendering
+        //SVG description box we need x, y before zoom (AI's code!)
+        var mousePosition = EventsChart.getMousePositionInElement(mouse, instance); //todo no work in zoom
+
+        //if cursor is out of chart view hide cursor and end here
+        if (mousePosition === 0) {
+            SVG(instance.$CursorLine[0]).hide();
+            return;
+        } else {
+            SVG(instance.$CursorLine[0]).show();
+        }
+
+        //move cursor line 1st for responsiveness
+        autoMoveCursorLine(mousePosition.xAxis);
+
+        //update time legend
+        generateTimeLegend(mousePosition);
+
+        //-------------------------LOCAL FUNCS--------------------------
+
+        function autoMoveCursorLine(relativeMouseX) {
+            //give a tiny delay so user can aim better at event
+            setTimeout(() => { }, 157);
+
+            //move vertical line to under mouse inside dasa view box
+            instance.$CursorLine.attr(
+                "transform",
+                `matrix(1, 0, 0, 1, ${relativeMouseX}, 0)`
+            );
+        }
+
+        //SVG Event Chart Time Legend generator
+        //this is where the whole time legend that follows
+        //the mouse when placed on chart is generated
+        //notes: a template row always exists in code,
+        //in client JS side uses template to create the rows from cloning it
+        //and modifying its prop as needed, as such any major edit needs to
+        //be done in API code
+        function generateTimeLegend(mousePosition) {
+            // Round mouse position to match with axis values in rect
+            const mouseRoundedX = Math.round(mousePosition.xAxis);
+            const mouseRoundedY = Math.round(mousePosition.yAxis);
+
+            // Get all event rects at the mouse's X position
+            const allElementsAtX = instance.$SvgChartElm
+                .children()
+                .find(`[x=${mouseRoundedX}]`);
+            const allEventRectsAtX = getAllEventRectsAtX(allElementsAtX);
+
+            // Remove previously generated legend rows
+            removePreviousClones();
+
+            //if no elements, don't create summary row, end here (note check only after remove)
+            if (!(allEventRectsAtX.length > 0)) {
+                return;
+            }
+
+            // Initialize counts for summary row
+            let goodCount = 0;
+            let badCount = 0;
+            instance.showDescription = false; // Default description not shown
+
+            // Extract event data and place it in legend
+            allEventRectsAtX.forEach((element) =>
+                drawEventRow(element, mouseRoundedY, allElementsAtX)
+            );
+
+            // Show or hide description box based on mouse position
+            toggleDescriptionBox();
+
+            // Generate summary row at the bottom showing count of good & bad
+            //generateSummaryRow(allEventRectsAtX, goodCount, badCount);
+
+            //-----------------------------------------LOCAL FUNCS-------------------------------
+
+            //code to draw one event row box
+            function drawEventRow(svgEventRect, mouseRoundedY, allElementsAtX) {
+                //STAGE 1
+                //GET DATA
+                //extract other data out of the rect
+                var eventName = svgEventRect.getAttribute("eventname");
+                //if no "eventname" exist, wrong elm skip it
+                if (!eventName) {
+                    return;
+                }
+
+                var eventDescription = svgEventRect.getAttribute("eventdescription");
+                var natureScore = svgEventRect.getAttribute("naturescore");
+                var color = svgEventRect.getAttribute("fill");
+                var newRowYAxis = parseInt(svgEventRect.getAttribute("y")); //parse as num, for calculation
+
+                //STAGE 2
+                //TIME & AGE LEGEND
+                //create time legend at top only for first element
+                if (allElementsAtX[0] === svgEventRect) {
+                    drawTimeAgeLegendRow();
+                }
+
+                //STAGE 3
+                //GENERATE EVENT ROW
+                //make a copy of template for this event
+                var newLegendRow = instance.$CursorLineLegendTemplate.clone();
+                newLegendRow.removeAttr("id"); //remove the clone template id
+                newLegendRow.addClass(ID.CursorLineLegendClone); //to delete it on next run
+                newLegendRow.appendTo(instance.$CursorLineLegendHolder); //place new legend into special holder
+                SVG(newLegendRow[0]).show(); //make cloned visible
+                //position the group holding the legend over the event row which the legend represents
+                newLegendRow.attr(
+                    "transform",
+                    `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 2})`
+                ); //minus 2 for perfect alignment
+
+                //#set data into view
+                //nature score
+                var $natureScoreElm = newLegendRow.children(".nature-score"); //GET
+                let numberOnly = Math.abs(parseInt(natureScore)); //remove "-" symbol
+                $natureScoreElm[0].innerHTML = numberOnly; //SET
+
+                //icon color
+                var iconElm = newLegendRow.children(".icon-holder"); //GET
+                iconElm.attr("fill", color); //SET
+
+                //event name next to nature score
+                var $eventNameElm = newLegendRow.children(".event-name"); //GET
+                $eventNameElm[0].innerHTML = eventName; //SET
+
+                //STAGE 4
+                //GENERATE DESCRIPTION ROW LOGIC
+                //check if mouse in within row of this event (y-axis)
+                var elementTopY = newRowYAxis;
+                var elementBottomY = newRowYAxis + EventsChart.RowHeight;
+                var mouseWithinRow =
+                    mouseRoundedY >= elementTopY && mouseRoundedY <= elementBottomY;
+                //if event name is still the same then don't load description again
+                var notSameEvent = instance.previousHoverEventName !== eventName;
+
+                //STAGE 5
+                //HIGHLIGHT ROW (BASED ON CURSOR)
+                //if mouse is in event's row then highlight that row
+                if (mouseWithinRow) {
+                    //highlight event name row
+                    var $backgroundElm = newLegendRow.children("rect");
+
+                    $eventNameElm.attr("font-weight", "700");
+                    $backgroundElm.attr("fill", "#0096FF"); //bright blue
+                    $backgroundElm.attr("opacity", 1); //solid
+
+                    //if mouse within show description box
+                    instance.showDescription = true;
+                }
+
+                //if mouse within row AND the event has changed
+                //then generate a new description
+                //note: this is slow, so done only when absolutely needed
+                if (mouseWithinRow && notSameEvent) {
+                    //make holder visible
+                    SVG(instance.$CursorLineLegendDescriptionHolder[0]).show();
+
+                    //move holder next to event
+                    var descBoxYAxis = newRowYAxis - 9; //minus 5 for perfect alignment with event name row
+                    instance.$CursorLineLegendDescriptionHolder.attr(
+                        "transform",
+                        `matrix(1, 0, 0, 1, 0, ${descBoxYAxis})`
+                    );
+
+                    //note: using trigger to make it easy to skip multiple clogging events
+                    //set event desc directly
+                    drawDescriptionBox(eventDescription);
+
+                    //update previous hover event
+                    instance.previousHoverEventName = eventName;
+                }
+
+                //---------------------LOCAL---------------------------
+
+                function drawDescriptionBox(eventDescRaw) {
+                    //remove tabs and new line to make easy detection of empty string
+                    let eventDesc = eventDescRaw.replace(/ {4}|[\t\n\r]/gm, "");
+
+                    //if no description than hide box & end here
+                    if (!eventDesc) {
+                        instance.$CursorLineLegendDescriptionHolder.hide();
+                        return;
+                    }
+
+                    //convert text to svg and place inside holder
+                    var wrappedDescText = textToSvg(
+                        eventDesc,
+                        instance.DescText.xAxis,
+                        instance.DescText.yAxis
+                    );
+
+                    instance.$CursorLineLegendDescription.empty(); //clear previous desc
+                    $(wrappedDescText).appendTo(instance.$CursorLineLegendDescription); //add in new desc
+                    //set height of desc box background
+                    instance.$CursorLineLegendDescriptionBackground.attr(
+                        "height",
+                        instance.EventDescriptionTextHeight + 20
+                    ); //plus little for padding
+
+                    //-------------------------------------LOCAL FUNCTIONS-------------------------------------------
+
+                    //  This function attempts to create a new svg "text" element, chopping
+                    //  it up into "tspan" pieces, if the text is too long
+                    function textToSvg(caption, x, y) {
+                        //svg "text" element to hold smaller text lines
+                        var svgTextHolder = document.createElementNS(
+                            "http://www.w3.org/2000/svg",
+                            "text"
+                        );
+                        svgTextHolder.setAttributeNS(null, "x", x);
+                        svgTextHolder.setAttributeNS(null, "y", y);
+                        svgTextHolder.setAttributeNS(null, "font-size", 10);
+                        svgTextHolder.setAttributeNS(null, "fill", "#FFF");
+                        svgTextHolder.setAttributeNS(null, "text-anchor", "left");
+
+                        //The following two variables can be passed as parameters
+                        var maximumCharsPerLine = 30;
+                        var lineHeight = 10;
+
+                        var words = caption.split(" ");
+                        var line = "";
+
+                        //process text and create rows
+                        var svgTSpan;
+                        var lineCount = 0; //number of lines to calculate height
+                        var tSpanTextNode;
+                        for (var n = 0; n < words.length; n++) {
+                            var testLine = line + words[n] + " ";
+                            if (testLine.length > maximumCharsPerLine) {
+                                //  Add a new <tspan> element
+                                svgTSpan = document.createElementNS(
+                                    "http://www.w3.org/2000/svg",
+                                    "tspan"
+                                );
+                                svgTSpan.setAttributeNS(null, "x", x);
+                                svgTSpan.setAttributeNS(null, "y", y);
+
+                                tSpanTextNode = document.createTextNode(line);
+                                svgTSpan.appendChild(tSpanTextNode);
+                                svgTextHolder.appendChild(svgTSpan);
+
+                                line = words[n] + " ";
+                                y += lineHeight; //place next text row lower
+                                lineCount++; //count a line
+                            } else {
+                                line = testLine;
+                            }
+                        }
+
+                        //calculate final height in px, save global to be accessed later
+                        instance.EventDescriptionTextHeight = lineCount * lineHeight;
+
+                        svgTSpan = document.createElementNS(
+                            "http://www.w3.org/2000/svg",
+                            "tspan"
+                        );
+                        svgTSpan.setAttributeNS(null, "x", x);
+                        svgTSpan.setAttributeNS(null, "y", y);
+
+                        tSpanTextNode = document.createTextNode(line);
+                        svgTSpan.appendChild(tSpanTextNode);
+
+                        svgTextHolder.appendChild(svgTSpan);
+
+                        return svgTextHolder;
+                    }
+                }
+
+                function drawTimeAgeLegendRow() {
+                    //make a copy of the template
+                    var newTimeLegend = instance.$TimeRowLegendTemplate.clone();
+
+                    //modify the template with new data
+                    newTimeLegend.removeAttr("id"); //remove the clone template id
+                    newTimeLegend.addClass(ID.CursorLineLegendClone); //to delete it on next run
+                    newTimeLegend.appendTo(instance.$CursorLineLegendHolder); //place new legend into special holder
+
+                    //make cloned visible
+                    SVG(newTimeLegend[0]).show();
+
+                    //place above 1st row
+                    newTimeLegend.attr(
+                        "transform",
+                        `matrix(1, 0, 0, 1, 10, ${newRowYAxis - EventsChart.RowHeight})`
+                    );
+
+                    //get time & age data and place into top legend row
+                    var stdTimeFull = svgEventRect.getAttribute("stdtime");
+                    var stdTimeSplit = stdTimeFull.split(" ");
+                    var hourMin = stdTimeSplit[0];
+                    var date = stdTimeSplit[1];
+                    var timezone = stdTimeSplit[2];
+                    var age = svgEventRect.getAttribute("age");
+                    newTimeLegend
+                        .children("text")
+                        .text(`${hourMin} ${date}  AGE: ${age}`);
+
+                    //replace circle with clock icon
+                    //newTimeLegend.children("use").attr("xlink:href", ID.CursorLineClockIcon);
+                }
+            }
+
+            function getAllEventRectsAtX(allElementsAtX) {
+                const allEventRectsAtX = [];
+                allElementsAtX.each((index, element) => {
+                    const eventName = element.getAttribute("eventname");
+                    if (eventName) {
+                        allEventRectsAtX.push(element);
+                    }
+                });
+                return allEventRectsAtX;
+            }
+
+            function removePreviousClones() {
+                const previousClones = instance.$SvgChartElm.find(
+                    ID.CursorLineLegendCloneCls
+                );
+                previousClones.remove();
+            }
+
+            function toggleDescriptionBox() {
+                if (instance.showDescription) {
+                    SVG(instance.$CursorLineLegendDescriptionHolder[0]).show();
+                } else {
+                    SVG(instance.$CursorLineLegendDescriptionHolder[0]).hide();
+                }
+            }
+
+            /**
+             * Generates a summary row for event rectangles.
+             *
+             * @param {Array} allEventRectsAtX - All event rectangles at a given x-coordinate.
+             * @param {number} goodCount - The count of good events.
+             * @param {number} badCount - The count of bad events.
+             */
+            function generateSummaryRow(allEventRectsAtX, goodCount, badCount) {
+                // Clone the template and remove its id
+                const newSummaryRow = instance.$CursorLineLegendTemplate
+                    .clone()
+                    .removeAttr("id");
+
+                // Add class to the new summary row and append it to the holder
+                newSummaryRow
+                    .addClass(ID.CursorLineLegendClone)
+                    .appendTo(instance.$CursorLineLegendHolder);
+
+                // Show the new summary row
+                SVG(newSummaryRow[0]).show();
+
+                // Get the last event and its y-axis
+                const lastEvent = allEventRectsAtX[allEventRectsAtX.length - 1];
+                const lastEvtRowYAxis = parseInt(lastEvent.getAttribute("y"));
+
+                // Calculate the y-axis for the summary row
+                const summaryRowYAxis = lastEvtRowYAxis + EventsChart.RowHeight - 1;
+
+                // Transform the new summary row
+                newSummaryRow.attr(
+                    "transform",
+                    `matrix(1, 0, 0, 1, 10, ${summaryRowYAxis})`
+                );
+
+                // Get the text element and set its text
+                const textElm = newSummaryRow.children("text");
+                textElm.text(` Good : ${goodCount}   Bad : ${badCount}`);
+
+                // Set the href for the use element
+                newSummaryRow.children("use").attr("xlink:href", ID.CursorLineSumIcon);
+            }
+        }
+    }
 }
 
 //-------------------------------------------------------------------------------------------------FILE STITCH-------------------------------------
 
 //make accesible to interop
 window.vedastro = {
-  UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101", //get user id from browser storage
-  ApiDomain: "https://vedastroapi.azurewebsites.net/api",
-  //ApiDomain: " http://localhost:7071/api",
-  Ayanamsa: "Lahiri", //default to
-  ChartStyle: "South", //default to South Indian Chart
+    UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101", //get user id from browser storage
+    ApiDomain: "https://vedastroapi.azurewebsites.net/api",
+    //ApiDomain: " http://localhost:7071/api",
+    Ayanamsa: "Lahiri", //default to
+    ChartStyle: "South", //default to South Indian Chart
 };
 
 // Check if jQuery is loaded
 if (typeof jQuery == "undefined") {
-  // jQuery is not loaded, load it
-  var script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js";
-  script.type = "text/javascript";
-  document.getElementsByTagName("head")[0].appendChild(script);
-  console.log("jQuery loaded");
+    // jQuery is not loaded, load it
+    var script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js";
+    script.type = "text/javascript";
+    document.getElementsByTagName("head")[0].appendChild(script);
+    console.log("jQuery loaded");
 }
 
 //// Create a hidden element with a Bootstrap-specific class
@@ -1115,54 +1182,54 @@ if (typeof jQuery == "undefined") {
 
 // Check if Iconify is loaded
 if (typeof Iconify == "undefined") {
-  // Iconify is not loaded, load it
-  var script = document.createElement("script");
-  script.src = "https://code.iconify.design/3/3.1.0/iconify.min.js";
-  script.type = "text/javascript";
-  document.getElementsByTagName("head")[0].appendChild(script);
-  console.log("Iconify loaded");
+    // Iconify is not loaded, load it
+    var script = document.createElement("script");
+    script.src = "https://code.iconify.design/3/3.1.0/iconify.min.js";
+    script.type = "text/javascript";
+    document.getElementsByTagName("head")[0].appendChild(script);
+    console.log("Iconify loaded");
 }
 
 // Check if SweetAlert2 is loaded
 if (typeof Swal == "undefined") {
-  // SweetAlert2 is not loaded, load it
-  // Load CSS
-  var link = document.createElement("link");
-  link.href =
-    "https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css";
-  link.rel = "stylesheet";
-  document.getElementsByTagName("head")[0].appendChild(link);
-  // Load JS
-  var script = document.createElement("script");
-  script.src =
-    "https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js";
-  script.type = "text/javascript";
-  document.getElementsByTagName("head")[0].appendChild(script);
-  console.log("SweetAlert2 loaded");
+    // SweetAlert2 is not loaded, load it
+    // Load CSS
+    var link = document.createElement("link");
+    link.href =
+        "https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css";
+    link.rel = "stylesheet";
+    document.getElementsByTagName("head")[0].appendChild(link);
+    // Load JS
+    var script = document.createElement("script");
+    script.src =
+        "https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js";
+    script.type = "text/javascript";
+    document.getElementsByTagName("head")[0].appendChild(script);
+    console.log("SweetAlert2 loaded");
 }
 
 // Check if Selectize is loaded
 if (typeof $.fn.selectize == "undefined") {
-  // Selectize is not loaded, load it
-  // Load CSS
-  var link = document.createElement("link");
-  link.href =
-    "https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css";
-  link.rel = "stylesheet";
-  link.integrity =
-    "sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ==";
-  link.crossOrigin = "anonymous";
-  document.getElementsByTagName("head")[0].appendChild(link);
-  // Load JS
-  var script = document.createElement("script");
-  script.src =
-    "https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js";
-  script.integrity =
-    "sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==";
-  script.crossOrigin = "anonymous";
-  script.type = "text/javascript";
-  document.getElementsByTagName("head")[0].appendChild(script);
-  console.log("Selectize loaded");
+    // Selectize is not loaded, load it
+    // Load CSS
+    var link = document.createElement("link");
+    link.href =
+        "https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css";
+    link.rel = "stylesheet";
+    link.integrity =
+        "sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ==";
+    link.crossOrigin = "anonymous";
+    document.getElementsByTagName("head")[0].appendChild(link);
+    // Load JS
+    var script = document.createElement("script");
+    script.src =
+        "https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js";
+    script.integrity =
+        "sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==";
+    script.crossOrigin = "anonymous";
+    script.type = "text/javascript";
+    document.getElementsByTagName("head")[0].appendChild(script);
+    console.log("Selectize loaded");
 }
 
 /**
@@ -1172,259 +1239,259 @@ if (typeof $.fn.selectize == "undefined") {
  * @param {Object} inputArguments - The Time and other data needed to generate table.
  */
 window.GenerateAstroTable = (settings, inputArguments) => {
-  // Initialize astro table
-  var planetDataTable = new AstroTable(settings);
-  // Generate table
-  planetDataTable.GenerateTable(inputArguments);
+    // Initialize astro table
+    var planetDataTable = new AstroTable(settings);
+    // Generate table
+    planetDataTable.GenerateTable(inputArguments);
 };
 
 /**
  * Helps to create a table with astro data columns
  */
 class AstroTable {
-  // Class fields
-  Ayanamsa = "Lahiri";
-  ElementID = ""; //ID of main div where table & header will be injected
-  TableId = ""; //ID of table set in HTML, injected during init
-  ShowHeader = true; //default enabled, header with title, icon and edit button
-  HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
-  KeyColumn = ""; //Planet or House
-  EditButtonId = ""; //used to hook up edit button to show popup
-  ColumnData = []; //data on selected columns
-  EnableSorting = false; //sorting disabled by default
-  APICalls = []; //list of API calls that can be used in table (filled on load)
-  SaveSettings = true; //save settings to browser storage or not, enabled by default
+    // Class fields
+    Ayanamsa = "Lahiri";
+    ElementID = ""; //ID of main div where table & header will be injected
+    TableId = ""; //ID of table set in HTML, injected during init
+    ShowHeader = true; //default enabled, header with title, icon and edit button
+    HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
+    KeyColumn = ""; //Planet or House
+    EditButtonId = ""; //used to hook up edit button to show popup
+    ColumnData = []; //data on selected columns
+    EnableSorting = false; //sorting disabled by default
+    APICalls = []; //list of API calls that can be used in table (filled on load)
+    SaveSettings = true; //save settings to browser storage or not, enabled by default
 
-  //DEFAULT COLUMNS when no column data is supplied or when reset button is clicked
-  DefaultColumns = [
-    { API: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
-    { API: "PlanetConstellation", Enabled: true, Name: "Star" },
-    { API: "HousePlanetOccupiesKP", Enabled: true, Name: "Occupies" },
-    { API: "HousesOwnedByPlanetKP", Enabled: true, Name: "Owns" },
-    { API: "PlanetLordOfZodiacSign", Enabled: true, Name: "Sign Lord" },
-    { API: "PlanetLordOfConstellation", Enabled: true, Name: "Star Lord" },
-    { API: "PlanetSubLordKP", Enabled: true, Name: "Sub Lord" },
-    { API: "Empty", Enabled: false, Name: "Empty" },
-    { API: "Empty", Enabled: false, Name: "Empty" },
-  ];
+    //DEFAULT COLUMNS when no column data is supplied or when reset button is clicked
+    DefaultColumns = [
+        { API: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
+        { API: "PlanetConstellation", Enabled: true, Name: "Star" },
+        { API: "HousePlanetOccupiesKP", Enabled: true, Name: "Occupies" },
+        { API: "HousesOwnedByPlanetKP", Enabled: true, Name: "Owns" },
+        { API: "PlanetLordOfZodiacSign", Enabled: true, Name: "Sign Lord" },
+        { API: "PlanetLordOfConstellation", Enabled: true, Name: "Star Lord" },
+        { API: "PlanetSubLordKP", Enabled: true, Name: "Sub Lord" },
+        { API: "Empty", Enabled: false, Name: "Empty" },
+        { API: "Empty", Enabled: false, Name: "Empty" },
+    ];
 
-  constructor(rawSettings) {
-    //correct if property names is camel case (for Blazor)
-    var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+    constructor(rawSettings) {
+        //correct if property names is camel case (for Blazor)
+        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
 
-    //if column data is not supplied use default
-    if (!settings.ColumnData) {
-      settings.ColumnData = AstroTable.DefaultColumns;
+        //if column data is not supplied use default
+        if (!settings.ColumnData) {
+            settings.ColumnData = AstroTable.DefaultColumns;
+        }
+
+        //expand data inside settings input
+        this.ElementID = settings.ElementID;
+        this.TableId = `${this.ElementID}_Table`;
+        this.ShowHeader = settings.ShowHeader;
+        this.HeaderIcon = settings.HeaderIcon;
+        this.SaveSettings = settings.SaveSettings;
+
+        //based on table ID try get any settings if saved from before
+        var savedTableSettings = localStorage.getItem(this.TableId);
+
+        //only continue if settings are saved and featured enabled in settings
+        if (this.SaveSettings || savedTableSettings) {
+            //parse the data
+            let jsonObject = JSON.parse(savedTableSettings);
+
+            //set back all the exact settings from before
+            this.KeyColumn = jsonObject["KeyColumn"];
+            this.ColumnData = jsonObject["ColumnData"];
+            this.EnableSorting = jsonObject["EnableSorting"];
+        }
+        //if null use data pumped in via constructor (defaults, when click Reset)
+        else {
+            this.KeyColumn = settings.KeyColumn;
+            this.ColumnData = settings.ColumnData;
+            this.EnableSorting = settings.EnableSorting;
+        }
     }
 
-    //expand data inside settings input
-    this.ElementID = settings.ElementID;
-    this.TableId = `${this.ElementID}_Table`;
-    this.ShowHeader = settings.ShowHeader;
-    this.HeaderIcon = settings.HeaderIcon;
-    this.SaveSettings = settings.SaveSettings;
+    async ShowEditTableOptions() {
+        // show loading
+        CommonTools.ShowLoading();
 
-    //based on table ID try get any settings if saved from before
-    var savedTableSettings = localStorage.getItem(this.TableId);
-
-    //only continue if settings are saved and featured enabled in settings
-    if (this.SaveSettings || savedTableSettings) {
-      //parse the data
-      let jsonObject = JSON.parse(savedTableSettings);
-
-      //set back all the exact settings from before
-      this.KeyColumn = jsonObject["KeyColumn"];
-      this.ColumnData = jsonObject["ColumnData"];
-      this.EnableSorting = jsonObject["EnableSorting"];
-    }
-    //if null use data pumped in via constructor (defaults, when click Reset)
-    else {
-      this.KeyColumn = settings.KeyColumn;
-      this.ColumnData = settings.ColumnData;
-      this.EnableSorting = settings.EnableSorting;
-    }
-  }
-
-  async ShowEditTableOptions() {
-    // show loading
-    CommonTools.ShowLoading();
-
-    //pump in data about table settings to show in popup
-    var htmlPopup = await AstroTable.GenerateTableEditorHtml(
-      this.ColumnData,
-      this.KeyColumn
-    );
-
-    //used to "Hoist" table reference for later event handlers firing
-    var instance = this;
-
-    var swalSettings = {
-      width: "auto",
-      title: "Edit Table",
-      html: htmlPopup,
-      focusConfirm: false,
-
-      //after User clicks OK
-      //get value from dialog box & save it for later use
-      preConfirm: () => {
-        //parses data from popup and saved it for later
-        AstroTable.UpdateDateColumns(this.ColumnData);
-
-        //update enable sorting switch
-        this.EnableSorting = $("#TableSortingEnableSwitch").is(":checked");
-
-        //get value from Key Column selector & save it
-        this.KeyColumn = $("#KeyColumnInput").val();
-
-        //clone all setting to Local Storage for future use under TableID which should be unique
-        localStorage.setItem(this.TableId, this.ToJsonString());
-
-        Swal.fire(
-          "Saved!",
-          "<strong>Recalculate</strong> to see changes!",
-          "success"
+        //pump in data about table settings to show in popup
+        var htmlPopup = await AstroTable.GenerateTableEditorHtml(
+            this.ColumnData,
+            this.KeyColumn
         );
-      },
-      //load saved values into view before showing to user
-      //note: not all after load is done here, some data is fed into HTML maker
-      didOpen: (popupElm) => {
-        //SORT SWITCH
-        //set switch based on what was set before
-        $("#TableSortingEnableSwitch").prop("checked", instance.EnableSorting);
 
-        //KEY COLUMN
-        //attach one 1 time event reload popup if key column was changed
-        //because API calls are different for different key columns
-        $("#KeyColumnInput").one("change", async (eventObj) => {
-          instance.KeyColumn = $(eventObj.target).val(); //save value
+        //used to "Hoist" table reference for later event handlers firing
+        var instance = this;
 
-          //tell user API calls need to be updated
-          await Swal.fire(
-            "Update API Calls",
-            `You've changed the Key Column to <strong>${instance.KeyColumn}</strong>, update the API calls to match.`,
-            "info"
-          );
+        var swalSettings = {
+            width: "auto",
+            title: "Edit Table",
+            html: htmlPopup,
+            focusConfirm: false,
 
-          instance.ShowEditTableOptions(); //reload panel
-        });
+            //after User clicks OK
+            //get value from dialog box & save it for later use
+            preConfirm: () => {
+                //parses data from popup and saved it for later
+                AstroTable.UpdateDateColumns(this.ColumnData);
 
-        //RESET BUTTON
-        //attach one 1 time event reload popup if Reset button clicked
-        $("#EditTableResetButton").one("click", async (eventObj) => {
-          //clear saved browser settings, this will make defaults to load in constructor
-          localStorage.setItem(instance.TableId, "");
+                //update enable sorting switch
+                this.EnableSorting = $("#TableSortingEnableSwitch").is(":checked");
 
-          //tell user API calls need to be updated
-          await Swal.fire(
-            "Reset done!",
-            "Please standby for auto page <strong>Refresh</strong>",
-            "success"
-          );
+                //get value from Key Column selector & save it
+                this.KeyColumn = $("#KeyColumnInput").val();
 
-          //reload page
-          location.reload();
-        });
-      },
-    };
+                //clone all setting to Local Storage for future use under TableID which should be unique
+                localStorage.setItem(this.TableId, this.ToJsonString());
 
-    // use pop up to show editor, and save results for later use
-    Swal.fire(swalSettings);
+                Swal.fire(
+                    "Saved!",
+                    "<strong>Recalculate</strong> to see changes!",
+                    "success"
+                );
+            },
+            //load saved values into view before showing to user
+            //note: not all after load is done here, some data is fed into HTML maker
+            didOpen: (popupElm) => {
+                //SORT SWITCH
+                //set switch based on what was set before
+                $("#TableSortingEnableSwitch").prop("checked", instance.EnableSorting);
 
-    let selectizeConfigSingle = {
-      score: function (search) {
-        var score = this.getScoreFunction(search);
-        return function (item) {
-          return score(item) * (1 + Math.min(item.text.indexOf(search), 1));
+                //KEY COLUMN
+                //attach one 1 time event reload popup if key column was changed
+                //because API calls are different for different key columns
+                $("#KeyColumnInput").one("change", async (eventObj) => {
+                    instance.KeyColumn = $(eventObj.target).val(); //save value
+
+                    //tell user API calls need to be updated
+                    await Swal.fire(
+                        "Update API Calls",
+                        `You've changed the Key Column to <strong>${instance.KeyColumn}</strong>, update the API calls to match.`,
+                        "info"
+                    );
+
+                    instance.ShowEditTableOptions(); //reload panel
+                });
+
+                //RESET BUTTON
+                //attach one 1 time event reload popup if Reset button clicked
+                $("#EditTableResetButton").one("click", async (eventObj) => {
+                    //clear saved browser settings, this will make defaults to load in constructor
+                    localStorage.setItem(instance.TableId, "");
+
+                    //tell user API calls need to be updated
+                    await Swal.fire(
+                        "Reset done!",
+                        "Please standby for auto page <strong>Refresh</strong>",
+                        "success"
+                    );
+
+                    //reload page
+                    location.reload();
+                });
+            },
         };
-      },
-      theme: "bootstrap",
 
-      //NOTE: below is to enable typing & search of API dropdown
-      onFocus: function () {
-        var value = this.getValue();
-        if (value.length > 0) {
-          this.clear(true);
-          setTimeout(() => {
-            if (this.settings.selectOnTab) {
-              this.setActiveOption(this.getOption(value));
-            }
-            this.settings.score = null;
-          }, 100);
-        }
-      },
-      onBlur: function () {
-        if (
-          this.getValue().length == 0 &&
-          this.getValue() != this.lastValidValue
+        // use pop up to show editor, and save results for later use
+        Swal.fire(swalSettings);
+
+        let selectizeConfigSingle = {
+            score: function (search) {
+                var score = this.getScoreFunction(search);
+                return function (item) {
+                    return score(item) * (1 + Math.min(item.text.indexOf(search), 1));
+                };
+            },
+            theme: "bootstrap",
+
+            //NOTE: below is to enable typing & search of API dropdown
+            onFocus: function () {
+                var value = this.getValue();
+                if (value.length > 0) {
+                    this.clear(true);
+                    setTimeout(() => {
+                        if (this.settings.selectOnTab) {
+                            this.setActiveOption(this.getOption(value));
+                        }
+                        this.settings.score = null;
+                    }, 100);
+                }
+            },
+            onBlur: function () {
+                if (
+                    this.getValue().length == 0 &&
+                    this.getValue() != this.lastValidValue
+                ) {
+                    this.setValue(this.lastValidValue);
+                }
+            },
+        };
+
+        //initialize Doped select options, with search for each dropdown
+        for (
+            var columnNumber = 0;
+            columnNumber < this.ColumnData.length;
+            columnNumber++
         ) {
-          this.setValue(this.lastValidValue);
+            $(`#SelecteAPI${columnNumber}Dropdown`).selectize(selectizeConfigSingle);
         }
-      },
-    };
-
-    //initialize Doped select options, with search for each dropdown
-    for (
-      var columnNumber = 0;
-      columnNumber < this.ColumnData.length;
-      columnNumber++
-    ) {
-      $(`#SelecteAPI${columnNumber}Dropdown`).selectize(selectizeConfigSingle);
-    }
-  }
-
-  //given the full column array, extract out only the filtered endpoint
-  GetAllEnabledEndpoints() {
-    // Filter the ColumnData array to get only the columns where Enabled is true
-    let enabledColumns = this.ColumnData.filter((column) => column.Enabled);
-
-    // Map the enabledColumns to their respective API and return the result
-    let apis = enabledColumns.map((column) => column.Api);
-
-    return apis;
-  }
-
-  GetNiceColumnNameFromRawAPIName(rawApiName) {
-    for (let i = 0; i < this.ColumnData.length; i++) {
-      if (this.ColumnData[i].Api === rawApiName) {
-        return this.ColumnData[i].Name;
-      }
     }
 
-    // return raw name if no matching API name is found
-    return rawApiName;
-  }
+    //given the full column array, extract out only the filtered endpoint
+    GetAllEnabledEndpoints() {
+        // Filter the ColumnData array to get only the columns where Enabled is true
+        let enabledColumns = this.ColumnData.filter((column) => column.Enabled);
 
-  //given name of API call, will return the metadata
-  async GetAPIMetadata(apiName) {
-    //get all API calls from server only if empty
-    if (this.APICalls.length === 0) {
-      this.APICalls = await AstroTable.GetAPIPayload(
-        `${window.vedastro.APIDomain}/ListCalls`
-      );
+        // Map the enabledColumns to their respective API and return the result
+        let apis = enabledColumns.map((column) => column.Api);
+
+        return apis;
     }
 
-    var foundCalls = AstroTable.FindAPICallByName(this.APICalls, apiName);
+    GetNiceColumnNameFromRawAPIName(rawApiName) {
+        for (let i = 0; i < this.ColumnData.length; i++) {
+            if (this.ColumnData[i].Api === rawApiName) {
+                return this.ColumnData[i].Name;
+            }
+        }
 
-    var selectedMethodInfo = foundCalls[0]?.MethodInfo;
+        // return raw name if no matching API name is found
+        return rawApiName;
+    }
 
-    return selectedMethodInfo;
-  }
+    //given name of API call, will return the metadata
+    async GetAPIMetadata(apiName) {
+        //get all API calls from server only if empty
+        if (this.APICalls.length === 0) {
+            this.APICalls = await AstroTable.GetAPIPayload(
+                `${window.vedastro.APIDomain}/ListCalls`
+            );
+        }
 
-  async GenerateTable(userInputParams) {
-    //convert input param to URL format
-    //in URL format it's ready to use in final URL
-    var userInputURLParams = this.ConvertRawParamsToURL(userInputParams);
+        var foundCalls = AstroTable.FindAPICallByName(this.APICalls, apiName);
 
-    //clear old data if any
-    $(`#${this.ElementID}`).empty();
+        var selectedMethodInfo = foundCalls[0]?.MethodInfo;
 
-    //# HEADER
-    //show header with title, icon and edit button
-    if (this.ShowHeader) {
-      //random ID for edit button
-      this.EditButtonId = Math.floor(Math.random() * 1000000);
+        return selectedMethodInfo;
+    }
 
-      var htmlContent = `
+    async GenerateTable(userInputParams) {
+        //convert input param to URL format
+        //in URL format it's ready to use in final URL
+        var userInputURLParams = this.ConvertRawParamsToURL(userInputParams);
+
+        //clear old data if any
+        $(`#${this.ElementID}`).empty();
+
+        //# HEADER
+        //show header with title, icon and edit button
+        if (this.ShowHeader) {
+            //random ID for edit button
+            this.EditButtonId = Math.floor(Math.random() * 1000000);
+
+            var htmlContent = `
                     <h3 style="margin-bottom: -11px;">
                         <span class="iconify me-2" data-icon="${this.HeaderIcon}" data-width="38" data-height="38"></span>
                         ${this.KeyColumn}
@@ -1434,299 +1501,297 @@ class AstroTable {
                     </h3>
                     <hr />`;
 
-      //inject into page
-      $(`#${this.ElementID}`).append(htmlContent);
+            //inject into page
+            $(`#${this.ElementID}`).append(htmlContent);
 
-      //attach event handler to edit button
-      $(`#${this.EditButtonId}`).on("click", async () => {
-        await this.ShowEditTableOptions();
-      });
-    }
+            //attach event handler to edit button
+            $(`#${this.EditButtonId}`).on("click", async () => {
+                await this.ShowEditTableOptions();
+            });
+        }
 
-    //# TABLE
-    //create empty table inside main holder
-    //table will be filled below
-    $(`#${this.ElementID}`).append(
-      `<table id="${this.TableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=""></table>`
-    );
-
-    //generate table from inputed data
-    await this.GenerateHTMLTableFromAPI(userInputURLParams);
-  }
-
-  ConvertRawParamsToURL(userInputParams) {
-    //handle camel case to pascal case (for blazor only)
-    userInputParams =
-      CommonTools.ConvertCamelCaseKeysToPascalCase(userInputParams);
-
-    //extract from input
-    var timeUrlParam = userInputParams.TimeUrl;
-    var horaryNumber = userInputParams.HoraryNumber;
-    var rotateDegrees = userInputParams.RotateDegrees;
-
-    //SPECIAL CASE:
-    //store ayanamsa as setting will be injected later into final URL
-    this.Ayanamsa = userInputParams.Ayanamsa;
-
-    // load the needed data from API for each column based
-    var keyColumnParam = `${this.KeyColumn}Name/All/`;
-
-    //compile all user inputed params
-    //NOTE: name of property must match API C# code
-    var userInputParams = {
-      time: timeUrlParam,
-      [this.KeyColumn]: keyColumnParam,
-    };
-
-    //only add horary if user inputed (defaults to 0)
-    var horaryParam = `HoraryNumber/${horaryNumber}/`;
-    if (horaryNumber !== 0) {
-      userInputParams["HoraryNumber"] = horaryParam;
-    }
-
-    //only add rotate degrees if user inputed (defaults to 0)
-    var rotateParam = `RotateDegrees/${rotateDegrees}/`;
-    if (rotateDegrees !== 0) {
-      userInputParams["RotateDegrees"] = rotateParam;
-    }
-
-    return userInputParams;
-  }
-
-  async GenerateHTMLTableFromAPI(userInputURLParams) {
-    //extract endpoints that have been enabled
-    var endpoints = this.GetAllEnabledEndpoints();
-
-    //each API calculator listed is called (parallel)
-    var payloads = await Promise.all(
-      endpoints.map(async (endpoint) => {
-        var apiPayload = await AstroTable.GetPayLoad2(
-          endpoint,
-          userInputURLParams,
-          this
+        //# TABLE
+        //create empty table inside main holder
+        //table will be filled below
+        $(`#${this.ElementID}`).append(
+            `<table id="${this.TableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=""></table>`
         );
-        return apiPayload;
-      })
-    );
 
-    // get underlying values
-    var combinedData = AstroTable.CombineRawAPICallResults(payloads);
-
-    //print message for debug
-    console.log(`Table Generated --> ${this.TableId}`);
-
-    //clean old data
-    AstroTable.ClearTableRows(this.TableId);
-
-    //set API names as column headers, will be converted later to nicer names
-    //note: first column name is same as preset key
-    let tableHeaders = Array.from(endpoints);
-    tableHeaders.unshift(this.KeyColumn);
-
-    // generate the HTML table on page
-    this.JsonToTable(combinedData, this.TableId, tableHeaders);
-
-    //TODO not working, does not detect sorting
-    //bring table to live with search & sorting if specified (SHORT CIRCUIT EVAL)
-    //this.EnableSorting && new DataTable(`#${this.TableId}`);
-  }
-
-  //given JSON version of table data will convert to HTML
-  JsonToTable(data, tableId, tableHeaders) {
-    // Get the table element by id
-    var table = document.getElementById(tableId);
-    // Create the table head
-    var thead = table.createTHead();
-    var headerRow = thead.insertRow();
-    // Create the header cells
-    for (var header of tableHeaders) {
-      //get nice column name set in options
-      var cleanColumnName = this.GetNiceColumnNameFromRawAPIName(header);
-
-      //place nice name into html
-      var th = document.createElement("th");
-      th.textContent = cleanColumnName;
-      headerRow.appendChild(th);
+        //generate table from inputed data
+        await this.GenerateHTMLTableFromAPI(userInputURLParams);
     }
-    // Create the table body
-    var tbody = document.createElement("tbody");
-    table.appendChild(tbody);
 
-    // Create the body rows
-    for (var key in data) {
-      var row = tbody.insertRow();
-      var cell = document.createElement("td");
-      cell.textContent = key;
-      row.appendChild(cell);
+    ConvertRawParamsToURL(userInputParams) {
+        //handle camel case to pascal case (for blazor only)
+        userInputParams =
+            CommonTools.ConvertCamelCaseKeysToPascalCase(userInputParams);
 
-      //each item here is the data that goes into cell
-      for (var item of data[key]) {
-        cell = document.createElement("td");
+        //extract from input
+        var timeUrlParam = userInputParams.TimeUrl;
+        var horaryNumber = userInputParams.HoraryNumber;
+        var rotateDegrees = userInputParams.RotateDegrees;
 
-        //if the value inside column is complex type (not string)
-        //exp : Zodiac Sign/Planet Name in JSON format
-        if (typeof item === "object" && item !== null) {
-          //SPECIAL handle to remove unwanted properties from JSON for special types
-          AstroTable.RemoveProperty(item, "TotalDegrees"); //Zodiac Sign
+        //SPECIAL CASE:
+        //store ayanamsa as setting will be injected later into final URL
+        this.Ayanamsa = userInputParams.Ayanamsa;
 
-          //place each value inside object into 1 string
-          cell.textContent = AstroTable.FlattenObjectValues(item).join(" ");
-        } else {
-          cell.textContent = item;
+        // load the needed data from API for each column based
+        var keyColumnParam = `${this.KeyColumn}Name/All/`;
+
+        //compile all user inputed params
+        //NOTE: name of property must match API C# code
+        var userInputParams = {
+            time: timeUrlParam,
+            [this.KeyColumn]: keyColumnParam,
+        };
+
+        //only add horary if user inputed (defaults to 0)
+        var horaryParam = `HoraryNumber/${horaryNumber}/`;
+        if (horaryNumber !== 0) {
+            userInputParams["HoraryNumber"] = horaryParam;
         }
 
-        //add to main table
-        row.appendChild(cell);
-      }
-    }
-  }
+        //only add rotate degrees if user inputed (defaults to 0)
+        var rotateParam = `RotateDegrees/${rotateDegrees}/`;
+        if (rotateDegrees !== 0) {
+            userInputParams["RotateDegrees"] = rotateParam;
+        }
 
-  //converts current instance of table settings to JSON string format
-  //used for storing on browser storage
-  ToJsonString() {
-    //place all settings nicely into 1 bag
-    var jsonObj = {
-      TableId: this.TableId,
-      KeyColumn: this.KeyColumn,
-      ColumnData: this.ColumnData,
-      EnableSorting: this.EnableSorting,
-    };
-
-    //convert to string before sending to caller
-    return JSON.stringify(jsonObj);
-  }
-
-  /*--------------------STATIC METHODS--------------------------------*/
-
-  static async GetPayLoad2(endpoint, userInputParams, instance) {
-    //given a API name, get the metadata of the API call
-    var selectedMethodInfo = await instance.GetAPIMetadata(endpoint);
-
-    //construct the base url
-    var finalUrl = `${window.vedastro.APIDomain}/Calculate/${endpoint}/`;
-
-    //if metadata not found, alert user
-    if (selectedMethodInfo === undefined) {
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Column",
-        text: `API call ${endpoint} not found!`,
-        confirmButtonText: "OK",
-      });
+        return userInputParams;
     }
 
-    //only process if API call meta was found
-    else {
-      //go through each parameter and add to the final URL
-      for (var param of selectedMethodInfo.Parameters) {
-        //get param name declared in C# code
-        var paramName = param.Name;
+    async GenerateHTMLTableFromAPI(userInputURLParams) {
+        //extract endpoints that have been enabled
+        var endpoints = this.GetAllEnabledEndpoints();
 
-        //find param from user with same or similar name (intelligently finds the param)
-        //note: if not found return empty string
-        var paramUrl = AstroTable.FindParamMatch(paramName, userInputParams);
+        //each API calculator listed is called (parallel)
+        var payloads = await Promise.all(
+            endpoints.map(async (endpoint) => {
+                var apiPayload = await AstroTable.GetPayLoad2(
+                    endpoint,
+                    userInputURLParams,
+                    this
+                );
+                return apiPayload;
+            })
+        );
 
-        //add to back of final URL
-        finalUrl += paramUrl;
-      }
+        // get underlying values
+        var combinedData = AstroTable.CombineRawAPICallResults(payloads);
 
-      //note: Ayanamsa is added here as system param
-      var ayanamsaSysParam = `Ayanamsa/${instance.Ayanamsa}`;
-      finalUrl += ayanamsaSysParam;
+        //print message for debug
+        console.log(`Table Generated --> ${this.TableId}`);
 
-      //make the final API call in the perfect URL format
-      var apiPayload = await AstroTable.GetAPIPayload(finalUrl);
-      return apiPayload;
+        //clean old data
+        AstroTable.ClearTableRows(this.TableId);
+
+        //set API names as column headers, will be converted later to nicer names
+        //note: first column name is same as preset key
+        let tableHeaders = Array.from(endpoints);
+        tableHeaders.unshift(this.KeyColumn);
+
+        // generate the HTML table on page
+        this.JsonToTable(combinedData, this.TableId, tableHeaders);
+
+        //TODO not working, does not detect sorting
+        //bring table to live with search & sorting if specified (SHORT CIRCUIT EVAL)
+        //this.EnableSorting && new DataTable(`#${this.TableId}`);
     }
-  }
 
-  //function works by first checking if the property exists in the top level of the object.
-  //If it does, it deletes it. If it doesn't, it checks the second and third levels of the object.
-  //If the property is found at any of these levels, it is deleted.
-  static RemoveProperty(obj, propToRemove) {
-    // Check if the property exists in the top level of the object
-    if (obj.hasOwnProperty(propToRemove)) {
-      delete obj[propToRemove];
-    } else {
-      // If not, check the second and third levels
-      for (let prop in obj) {
-        if (typeof obj[prop] === "object") {
-          if (obj[prop].hasOwnProperty(propToRemove)) {
-            delete obj[prop][propToRemove];
-          } else {
-            for (let subProp in obj[prop]) {
-              if (
-                typeof obj[prop][subProp] === "object" &&
-                obj[prop][subProp].hasOwnProperty(propToRemove)
-              ) {
-                delete obj[prop][subProp][propToRemove];
-              }
+    //given JSON version of table data will convert to HTML
+    JsonToTable(data, tableId, tableHeaders) {
+        // Get the table element by id
+        var table = document.getElementById(tableId);
+        // Create the table head
+        var thead = table.createTHead();
+        var headerRow = thead.insertRow();
+        // Create the header cells
+        for (var header of tableHeaders) {
+            //get nice column name set in options
+            var cleanColumnName = this.GetNiceColumnNameFromRawAPIName(header);
+
+            //place nice name into html
+            var th = document.createElement("th");
+            th.textContent = cleanColumnName;
+            headerRow.appendChild(th);
+        }
+        // Create the table body
+        var tbody = document.createElement("tbody");
+        table.appendChild(tbody);
+
+        // Create the body rows
+        for (var key in data) {
+            var row = tbody.insertRow();
+            var cell = document.createElement("td");
+            cell.textContent = key;
+            row.appendChild(cell);
+
+            //each item here is the data that goes into cell
+            for (var item of data[key]) {
+                cell = document.createElement("td");
+
+                //if the value inside column is complex type (not string)
+                //exp : Zodiac Sign/Planet Name in JSON format
+                if (typeof item === "object" && item !== null) {
+                    //SPECIAL handle to remove unwanted properties from JSON for special types
+                    AstroTable.RemoveProperty(item, "TotalDegrees"); //Zodiac Sign
+
+                    //place each value inside object into 1 string
+                    cell.textContent = AstroTable.FlattenObjectValues(item).join(" ");
+                } else {
+                    cell.textContent = item;
+                }
+
+                //add to main table
+                row.appendChild(cell);
             }
-          }
         }
-      }
-    }
-  }
-
-  //given a complex JSON object like PlanetName or ZodiacSign will flatten values to 1 string
-  static FlattenObjectValues(obj) {
-    var values = [];
-    for (var prop in obj) {
-      if (typeof obj[prop] === "object" && obj[prop] !== null) {
-        // If the property is an object, recurse
-        values.push(...AstroTable.FlattenObjectValues(obj[prop]));
-      } else {
-        // Otherwise, add the property's value to the array
-        values.push(obj[prop]);
-      }
     }
 
-    //note : because used recursively can't use join with space here,
-    //caller has to implement it .join(' ')
-    return values;
-  }
+    //converts current instance of table settings to JSON string format
+    //used for storing on browser storage
+    ToJsonString() {
+        //place all settings nicely into 1 bag
+        var jsonObj = {
+            TableId: this.TableId,
+            KeyColumn: this.KeyColumn,
+            ColumnData: this.ColumnData,
+            EnableSorting: this.EnableSorting,
+        };
 
-  static FindAPICallByName(items, apiCalcName) {
-    //gets only API calls that can be used in Table, removes rest
-    return items.filter((item) => item.MethodInfo.Name === apiCalcName);
-  }
+        //convert to string before sending to caller
+        return JSON.stringify(jsonObj);
+    }
 
-  //takes in many arrays and combines them into a single table like array
-  static CombineRawAPICallResults(inputArray) {
-    return inputArray.reduce((acc, curr) => {
-      if (curr !== undefined) {
-        let curr1 = curr[Object.keys(curr)[0]];
-        curr1?.forEach((obj) => {
-          const key = Object.keys(obj)[0];
-          if (!acc[key]) {
-            acc[key] = [];
-          }
-          acc[key].push(obj[key]);
-        });
-      }
-      return acc;
-    }, {});
-  }
+    /*--------------------STATIC METHODS--------------------------------*/
 
-  // generate Table Editor column options popup panel
-  static async GenerateTableEditorHtml(columnData, keyColumnName) {
-    var formHtml = "";
+    static async GetPayLoad2(endpoint, userInputParams, instance) {
+        //given a API name, get the metadata of the API call
+        var selectedMethodInfo = await instance.GetAPIMetadata(endpoint);
 
-    for (
-      var columnNumber = 0;
-      columnNumber < columnData.length;
-      columnNumber++
-    ) {
-      formHtml += `
+        //construct the base url
+        var finalUrl = `${window.vedastro.APIDomain}/Calculate/${endpoint}/`;
+
+        //if metadata not found, alert user
+        if (selectedMethodInfo === undefined) {
+            Swal.fire({
+                icon: "error",
+                title: "Invalid Column",
+                text: `API call ${endpoint} not found!`,
+                confirmButtonText: "OK",
+            });
+        }
+
+        //only process if API call meta was found
+        else {
+            //go through each parameter and add to the final URL
+            for (var param of selectedMethodInfo.Parameters) {
+                //get param name declared in C# code
+                var paramName = param.Name;
+
+                //find param from user with same or similar name (intelligently finds the param)
+                //note: if not found return empty string
+                var paramUrl = AstroTable.FindParamMatch(paramName, userInputParams);
+
+                //add to back of final URL
+                finalUrl += paramUrl;
+            }
+
+            //note: Ayanamsa is added here as system param
+            var ayanamsaSysParam = `Ayanamsa/${instance.Ayanamsa}`;
+            finalUrl += ayanamsaSysParam;
+
+            //make the final API call in the perfect URL format
+            var apiPayload = await AstroTable.GetAPIPayload(finalUrl);
+            return apiPayload;
+        }
+    }
+
+    //function works by first checking if the property exists in the top level of the object.
+    //If it does, it deletes it. If it doesn't, it checks the second and third levels of the object.
+    //If the property is found at any of these levels, it is deleted.
+    static RemoveProperty(obj, propToRemove) {
+        // Check if the property exists in the top level of the object
+        if (obj.hasOwnProperty(propToRemove)) {
+            delete obj[propToRemove];
+        } else {
+            // If not, check the second and third levels
+            for (let prop in obj) {
+                if (typeof obj[prop] === "object") {
+                    if (obj[prop].hasOwnProperty(propToRemove)) {
+                        delete obj[prop][propToRemove];
+                    } else {
+                        for (let subProp in obj[prop]) {
+                            if (
+                                typeof obj[prop][subProp] === "object" &&
+                                obj[prop][subProp].hasOwnProperty(propToRemove)
+                            ) {
+                                delete obj[prop][subProp][propToRemove];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //given a complex JSON object like PlanetName or ZodiacSign will flatten values to 1 string
+    static FlattenObjectValues(obj) {
+        var values = [];
+        for (var prop in obj) {
+            if (typeof obj[prop] === "object" && obj[prop] !== null) {
+                // If the property is an object, recurse
+                values.push(...AstroTable.FlattenObjectValues(obj[prop]));
+            } else {
+                // Otherwise, add the property's value to the array
+                values.push(obj[prop]);
+            }
+        }
+
+        //note : because used recursively can't use join with space here,
+        //caller has to implement it .join(' ')
+        return values;
+    }
+
+    static FindAPICallByName(items, apiCalcName) {
+        //gets only API calls that can be used in Table, removes rest
+        return items.filter((item) => item.MethodInfo.Name === apiCalcName);
+    }
+
+    //takes in many arrays and combines them into a single table like array
+    static CombineRawAPICallResults(inputArray) {
+        return inputArray.reduce((acc, curr) => {
+            if (curr !== undefined) {
+                let curr1 = curr[Object.keys(curr)[0]];
+                curr1?.forEach((obj) => {
+                    const key = Object.keys(obj)[0];
+                    if (!acc[key]) {
+                        acc[key] = [];
+                    }
+                    acc[key].push(obj[key]);
+                });
+            }
+            return acc;
+        }, {});
+    }
+
+    // generate Table Editor column options popup panel
+    static async GenerateTableEditorHtml(columnData, keyColumnName) {
+        var formHtml = "";
+
+        for (
+            var columnNumber = 0;
+            columnNumber < columnData.length;
+            columnNumber++
+        ) {
+            formHtml += `
                     <div class="input-group input-group-sm mb-3">
                         <div class="input-group-text">
-                            <input class="form-check-input mt-0"  id="Enabled${columnNumber}" type="checkbox" value="" aria-label="Enable Column" ${
-        columnData[columnNumber].Enabled ? "checked" : ""
-      }>
+                            <input class="form-check-input mt-0"  id="Enabled${columnNumber}" type="checkbox" value="" aria-label="Enable Column" ${columnData[columnNumber].Enabled ? "checked" : ""
+                }>
                         </div>
-                        <input type="text" id="Name${columnNumber}" value="${
-        columnData[columnNumber].Name
-      }" class="form-control" aria-label="Text input with checkbox">
+                        <input type="text" id="Name${columnNumber}" value="${columnData[columnNumber].Name
+                }" class="form-control" aria-label="Text input with checkbox">
                         <span class="input-group-text">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 128 128"><path fill="#40c0e7" d="M108.58 64L62.47 97.81V76.72H19.42V51.49h43.04v-21.3L108.58 64z"/></svg>
                         </span>
@@ -1734,18 +1799,18 @@ class AstroTable {
                             <select id="SelecteAPI${columnNumber}Dropdown"  class="mt-1">
                                 <option value=""></option>
                                 ${await AstroTable.GetAPICallsListSelectOptionHTML(
-                                  columnData[columnNumber].Api,
-                                  keyColumnName,
-                                  window.vedastro.ApiDomain
-                                )}
+                    columnData[columnNumber].Api,
+                    keyColumnName,
+                    window.vedastro.ApiDomain
+                )}
                             </select>
                         </div>
                     </div>
            `;
-    }
+        }
 
-    //default key column options in HTML
-    var defaultKeyColumnSel = `
+        //default key column options in HTML
+        var defaultKeyColumnSel = `
             <select id="KeyColumnInput" class="form-select">
                 <option value="Planet">Planet</option>
                 <option value="House">House</option>
@@ -1753,21 +1818,21 @@ class AstroTable {
             </select>
         `;
 
-    //automatically select the right key based on input
-    // Convert the HTML string to jQuery object
-    var $defaultKeyColumnSel = $(defaultKeyColumnSel);
+        //automatically select the right key based on input
+        // Convert the HTML string to jQuery object
+        var $defaultKeyColumnSel = $(defaultKeyColumnSel);
 
-    // Find the option with the value of keyColumn and set it as selected
-    $defaultKeyColumnSel
-      .find('option[value="' + keyColumnName + '"]')
-      .attr("selected", "selected");
+        // Find the option with the value of keyColumn and set it as selected
+        $defaultKeyColumnSel
+            .find('option[value="' + keyColumnName + '"]')
+            .attr("selected", "selected");
 
-    // Convert the jQuery object back to HTML string
-    //saved as string to be injected later
-    var keyColumnSelector = $defaultKeyColumnSel.prop("outerHTML");
+        // Convert the jQuery object back to HTML string
+        //saved as string to be injected later
+        var keyColumnSelector = $defaultKeyColumnSel.prop("outerHTML");
 
-    //add in header to label menu nicely
-    var outerHtml = `
+        //add in header to label menu nicely
+        var outerHtml = `
             <div class="mb-4 hstack gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="#2196F3"/><path fill="#fff" d="M22 22h4v11h-4z"/><circle cx="24" cy="16.5" r="2.5" fill="#fff"/></svg>
                 <span style=" font-size: 15px;" >Each column is linked to an API call. Change <strong>Key Column</strong> for different API calls.</span>\r\n
@@ -1797,243 +1862,242 @@ class AstroTable {
             ${formHtml}
     `;
 
-    return outerHtml;
-  }
-
-  //get list of all API calls in HTML options element string
-  static async GetAPICallsListSelectOptionHTML(selectValue, keyColumnName) {
-    //get raw API calls list from Server
-    var apiCalls = await AstroTable.GetAPIPayload(
-      `${window.vedastro.ApiDomain}/ListCalls`
-    );
-
-    //filter out call that can NOT be used in columns (make User's live easier)
-    apiCalls = AstroTable.FilterOutIncompatibleAPICalls(
-      apiCalls,
-      keyColumnName
-    );
-
-    let options = "";
-    $.each(apiCalls, function (i, item) {
-      //if called specified selected value, than select it
-      var isSelected = selectValue === item.MethodInfo.Name;
-      options += `<option value='${item.MethodInfo.Name}' title='${
-        item.Description
-      }' ${isSelected ? "selected" : ""}>${item.MethodInfo.Name}</option>`;
-    });
-
-    return options;
-  }
-
-  //gets only API calls that can be used in Table, removes rest
-  static FilterOutIncompatibleAPICalls(items, keyColumnName) {
-    return items.filter((item) => {
-      const parameters = item.MethodInfo.Parameters;
-      return (
-        parameters.length >= 2 &&
-        //NOTE: here hack to link Key Column to API library
-        //make sure parameters to call API is supported
-        parameters[0].ParameterType ===
-          `VedAstro.Library.${keyColumnName}Name` &&
-        parameters[1].ParameterType === "VedAstro.Library.Time"
-      );
-    });
-  }
-
-  // Function to update the array based on the Swal form
-  static async UpdateDateColumns(dataColumns) {
-    for (var i = 0; i < dataColumns.length; i++) {
-      dataColumns[i].Api = $(`#SelecteAPI${i}Dropdown`).val();
-      dataColumns[i].Enabled = $("#Enabled" + i).is(":checked");
-      dataColumns[i].Name = $("#Name" + i).val();
+        return outerHtml;
     }
-  }
 
-  //try find param from user with same or similar name (intelligently finds the param)
-  static FindParamMatch(paramName, userInputParams) {
-    //try find exact match
-    var foundParam = userInputParams[paramName];
+    //get list of all API calls in HTML options element string
+    static async GetAPICallsListSelectOptionHTML(selectValue, keyColumnName) {
+        //get raw API calls list from Server
+        var apiCalls = await AstroTable.GetAPIPayload(
+            `${window.vedastro.ApiDomain}/ListCalls`
+        );
 
-    //if no exact match, try find similar match
-    if (!foundParam) {
-      //key is name of the param set in JS code
-      for (let key in userInputParams) {
-        //check param name of C# method contains any of
-        //the JS defined param name (birthTime --> time)
-        var check1 = paramName.toLowerCase().includes(key.toLowerCase());
-        var check2 = key.toLowerCase().includes(paramName.toLowerCase());
-        if (check1 || check2) {
-          //get the URL value out
-          foundParam = userInputParams[key];
-          break;
+        //filter out call that can NOT be used in columns (make User's live easier)
+        apiCalls = AstroTable.FilterOutIncompatibleAPICalls(
+            apiCalls,
+            keyColumnName
+        );
+
+        let options = "";
+        $.each(apiCalls, function (i, item) {
+            //if called specified selected value, than select it
+            var isSelected = selectValue === item.MethodInfo.Name;
+            options += `<option value='${item.MethodInfo.Name}' title='${item.Description
+                }' ${isSelected ? "selected" : ""}>${item.MethodInfo.Name}</option>`;
+        });
+
+        return options;
+    }
+
+    //gets only API calls that can be used in Table, removes rest
+    static FilterOutIncompatibleAPICalls(items, keyColumnName) {
+        return items.filter((item) => {
+            const parameters = item.MethodInfo.Parameters;
+            return (
+                parameters.length >= 2 &&
+                //NOTE: here hack to link Key Column to API library
+                //make sure parameters to call API is supported
+                parameters[0].ParameterType ===
+                `VedAstro.Library.${keyColumnName}Name` &&
+                parameters[1].ParameterType === "VedAstro.Library.Time"
+            );
+        });
+    }
+
+    // Function to update the array based on the Swal form
+    static async UpdateDateColumns(dataColumns) {
+        for (var i = 0; i < dataColumns.length; i++) {
+            dataColumns[i].Api = $(`#SelecteAPI${i}Dropdown`).val();
+            dataColumns[i].Enabled = $("#Enabled" + i).is(":checked");
+            dataColumns[i].Name = $("#Name" + i).val();
         }
-      }
     }
 
-    //if undefined, set as empty string (to avoid undefined in URL)
-    if (!foundParam) {
-      foundParam = "";
+    //try find param from user with same or similar name (intelligently finds the param)
+    static FindParamMatch(paramName, userInputParams) {
+        //try find exact match
+        var foundParam = userInputParams[paramName];
+
+        //if no exact match, try find similar match
+        if (!foundParam) {
+            //key is name of the param set in JS code
+            for (let key in userInputParams) {
+                //check param name of C# method contains any of
+                //the JS defined param name (birthTime --> time)
+                var check1 = paramName.toLowerCase().includes(key.toLowerCase());
+                var check2 = key.toLowerCase().includes(paramName.toLowerCase());
+                if (check1 || check2) {
+                    //get the URL value out
+                    foundParam = userInputParams[key];
+                    break;
+                }
+            }
+        }
+
+        //if undefined, set as empty string (to avoid undefined in URL)
+        if (!foundParam) {
+            foundParam = "";
+        }
+        return foundParam;
     }
-    return foundParam;
-  }
 
-  //given a vedastro API url, will auto call via POST or GET
-  //and return only passed payloads as JSON
-  static async GetAPIPayload(url, payload = null) {
-    try {
-      // If a payload is provided, prepare options for a POST request
-      const options = payload
-        ? {
-            method: "POST", // Specify the HTTP method as POST
-            headers: { "Content-Type": "application/json" }, // Set the content type of the request to JSON
-            body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
-          }
-        : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
+    //given a vedastro API url, will auto call via POST or GET
+    //and return only passed payloads as JSON
+    static async GetAPIPayload(url, payload = null) {
+        try {
+            // If a payload is provided, prepare options for a POST request
+            const options = payload
+                ? {
+                    method: "POST", // Specify the HTTP method as POST
+                    headers: { "Content-Type": "application/json" }, // Set the content type of the request to JSON
+                    body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
+                }
+                : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
 
-      // Send the request to the specified URL with the prepared options
-      const response = await fetch(url, options);
+            // Send the request to the specified URL with the prepared options
+            const response = await fetch(url, options);
 
-      // If the response is not ok (status is not in the range 200-299), throw an error
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+            // If the response is not ok (status is not in the range 200-299), throw an error
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-      // Parse the response body as JSON
-      const data = await response.json();
+            // Parse the response body as JSON
+            const data = await response.json();
 
-      // If the 'Status' property of the parsed data is not 'Pass', throw an error
-      if (data.Status !== "Pass") {
-        throw new Error(data.Payload);
-      }
+            // If the 'Status' property of the parsed data is not 'Pass', throw an error
+            if (data.Status !== "Pass") {
+                throw new Error(data.Payload);
+            }
 
-      // If everything is ok, return the 'Payload' property of the parsed data
-      return data.Payload;
-    } catch (error) {
-      // If an error is caught, display an error message using Swal.fire
-      Swal.fire({
-        icon: "error",
-        title: "App Crash!",
-        text: error,
-        confirmButtonText: "OK",
-      });
+            // If everything is ok, return the 'Payload' property of the parsed data
+            return data.Payload;
+        } catch (error) {
+            // If an error is caught, display an error message using Swal.fire
+            Swal.fire({
+                icon: "error",
+                title: "App Crash!",
+                text: error,
+                confirmButtonText: "OK",
+            });
+        }
     }
-  }
 
-  static ClearTableRows(tableId) {
-    let table = document.getElementById(tableId);
-    while (table?.rows?.length > 0) {
-      table?.deleteRow(0);
+    static ClearTableRows(tableId) {
+        let table = document.getElementById(tableId);
+        while (table?.rows?.length > 0) {
+            table?.deleteRow(0);
+        }
     }
-  }
 }
 
 /**
  * Creates south or north indian chart
  */
-class NatalChart {}
+class NatalChart { }
 
 /**
  * Tools used by others in this repo
  */
 class CommonTools {
-  //used as delay sleep execution
-  static delay(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  //will auto get payload out of json and checks reports failures to user
-  // Define an asynchronous function named 'GetAPIPayload'
-  static async GetAPIPayload(url, payload = null) {
-    try {
-      // If a payload is provided, prepare options for a POST request
-      const options = payload
-        ? {
-            method: "POST", // Specify the HTTP method as POST
-            headers: { "Content-Type": "application/json" }, // Set the content type of the request to JSON
-            body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
-          }
-        : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
-      // Send the request to the specified URL with the prepared options
-      const response = await fetch(url, options);
-      // If the response is not ok (status is not in the range 200-299), throw an error
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      // Parse the response body as JSON
-      const data = await response.json();
-      // If the 'Status' property of the parsed data is not 'Pass', throw an error
-      if (data.Status !== "Pass") {
-        throw new Error(data.Payload);
-      }
-      // If everything is ok, return the 'Payload' property of the parsed data
-      return data.Payload;
-    } catch (error) {
-      // If an error is caught, display an error message using Swal.fire
-      Swal.fire({
-        icon: "error",
-        title: "App Crash!",
-        text: error,
-        confirmButtonText: "OK",
-      });
+    //used as delay sleep execution
+    static delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
-  }
 
-  static ShowLoading() {
-    Swal.fire({
-      showConfirmButton: false,
-      width: "280px",
-      padding: "1px",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      stopKeydownPropagation: true,
-      keydownListenerCapture: true,
-      html: `<img src="https://vedastrowebsitestorage.z5.web.core.windows.net/images/loading-animation-progress-transparent.gif">`,
-    });
-  }
-
-  static HideLoading() {
-    //hide loading box
-    Swal.close();
-  }
-
-  //converts camel case to pascal case, like "settings.keyColumn" to "settings.KeyColumn"
-  static ConvertCamelCaseKeysToPascalCase(obj) {
-    let newObj = Array.isArray(obj) ? [] : {};
-    for (let key in obj) {
-      let value = obj[key];
-      let newKey = key.charAt(0).toUpperCase() + key.slice(1);
-      if (value && typeof value === "object") {
-        value = CommonTools.ConvertCamelCaseKeysToPascalCase(value);
-      }
-      newObj[newKey] = value;
+    //will auto get payload out of json and checks reports failures to user
+    // Define an asynchronous function named 'GetAPIPayload'
+    static async GetAPIPayload(url, payload = null) {
+        try {
+            // If a payload is provided, prepare options for a POST request
+            const options = payload
+                ? {
+                    method: "POST", // Specify the HTTP method as POST
+                    headers: { "Content-Type": "application/json" }, // Set the content type of the request to JSON
+                    body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
+                }
+                : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
+            // Send the request to the specified URL with the prepared options
+            const response = await fetch(url, options);
+            // If the response is not ok (status is not in the range 200-299), throw an error
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            // Parse the response body as JSON
+            const data = await response.json();
+            // If the 'Status' property of the parsed data is not 'Pass', throw an error
+            if (data.Status !== "Pass") {
+                throw new Error(data.Payload);
+            }
+            // If everything is ok, return the 'Payload' property of the parsed data
+            return data.Payload;
+        } catch (error) {
+            // If an error is caught, display an error message using Swal.fire
+            Swal.fire({
+                icon: "error",
+                title: "App Crash!",
+                text: error,
+                confirmButtonText: "OK",
+            });
+        }
     }
-    return newObj;
-  }
 
-  //
-  //takes JSON person and gives birth time in URL format with birth location as below
-  //exp :  "Location/Singapore/Time/23:59/31/12/2000/+08:00"
-  static BirthTimeUrlOfSelectedPersonJson() {
-    var personJson = window.vedastro.SelectedPerson;
+    static ShowLoading() {
+        Swal.fire({
+            showConfirmButton: false,
+            width: "280px",
+            padding: "1px",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            stopKeydownPropagation: true,
+            keydownListenerCapture: true,
+            html: `<img src="https://vedastrowebsitestorage.z5.web.core.windows.net/images/loading-animation-progress-transparent.gif">`,
+        });
+    }
 
-    let birthTimeJson = personJson["BirthTime"];
+    static HideLoading() {
+        //hide loading box
+        Swal.close();
+    }
 
-    var locationName = birthTimeJson.Location.Name;
-    var stdTime = birthTimeJson.StdTime.split(" ");
-    var time = stdTime[0];
-    var date = stdTime[1];
-    var timezone = stdTime[2];
-    var result =
-      "Location/" +
-      locationName +
-      "/Time/" +
-      time +
-      "/" +
-      date +
-      "/" +
-      timezone;
-    return result;
-  }
+    //converts camel case to pascal case, like "settings.keyColumn" to "settings.KeyColumn"
+    static ConvertCamelCaseKeysToPascalCase(obj) {
+        let newObj = Array.isArray(obj) ? [] : {};
+        for (let key in obj) {
+            let value = obj[key];
+            let newKey = key.charAt(0).toUpperCase() + key.slice(1);
+            if (value && typeof value === "object") {
+                value = CommonTools.ConvertCamelCaseKeysToPascalCase(value);
+            }
+            newObj[newKey] = value;
+        }
+        return newObj;
+    }
+
+    //
+    //takes JSON person and gives birth time in URL format with birth location as below
+    //exp :  "Location/Singapore/Time/23:59/31/12/2000/+08:00"
+    static BirthTimeUrlOfSelectedPersonJson() {
+        var personJson = window.vedastro.SelectedPerson;
+
+        let birthTimeJson = personJson["BirthTime"];
+
+        var locationName = birthTimeJson.Location.Name;
+        var stdTime = birthTimeJson.StdTime.split(" ");
+        var time = stdTime[0];
+        var date = stdTime[1];
+        var timezone = stdTime[2];
+        var result =
+            "Location/" +
+            locationName +
+            "/Time/" +
+            time +
+            "/" +
+            date +
+            "/" +
+            timezone;
+        return result;
+    }
 }
 
 /**
@@ -2043,65 +2107,65 @@ class CommonTools {
  * @param {Object} inputArguments - The Time and other data needed to generate table.
  */
 window.GenerateAshtakvargaTable = (settings, inputArguments) => {
-  // Initialize astro table
-  var ashtakvargaTable = new AshtakvargaTable(settings);
-  // Generate table
-  ashtakvargaTable.GenerateTable(inputArguments);
+    // Initialize astro table
+    var ashtakvargaTable = new AshtakvargaTable(settings);
+    // Generate table
+    ashtakvargaTable.GenerateTable(inputArguments);
 };
 
 class AshtakvargaTable {
-  constructor(rawSettings) {
-    //correct if property names is camel case (for Blazor)
-    var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+    constructor(rawSettings) {
+        //correct if property names is camel case (for Blazor)
+        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
 
-    //if column data is not supplied use default
-    if (!settings.ColumnData) {
-      settings.ColumnData = AstroTable.DefaultColumns;
+        //if column data is not supplied use default
+        if (!settings.ColumnData) {
+            settings.ColumnData = AstroTable.DefaultColumns;
+        }
+
+        //expand data inside settings input
+        this.ElementID = settings.ElementID;
+        this.SarvashtakavargaTableId = `${this.ElementID}_SarvashtakavargaTable`;
+        this.BhinnashtakavargaTableId = `${this.ElementID}_BhinnashtakavargaTable`;
+        this.ShowHeader = settings.ShowHeader;
+        this.HeaderIcon = settings.HeaderIcon;
+        this.SaveSettings = settings.SaveSettings;
+
+        //based on table ID try get any settings if saved from before
+        var savedTableSettings = localStorage.getItem(this.ElementID);
+
+        //only continue if settings are saved and featured enabled in settings
+        if (this.SaveSettings || savedTableSettings) {
+            //parse the data
+            let jsonObject = JSON.parse(savedTableSettings);
+
+            //set back all the exact settings from before
+            this.KeyColumn = jsonObject["KeyColumn"];
+            this.ColumnData = jsonObject["ColumnData"];
+            this.EnableSorting = jsonObject["EnableSorting"];
+        }
+        //if null use data pumped in via constructor (defaults, when click Reset)
+        else {
+            this.KeyColumn = settings.KeyColumn;
+            this.ColumnData = settings.ColumnData;
+            this.EnableSorting = settings.EnableSorting;
+        }
     }
 
-    //expand data inside settings input
-    this.ElementID = settings.ElementID;
-    this.SarvashtakavargaTableId = `${this.ElementID}_SarvashtakavargaTable`;
-    this.BhinnashtakavargaTableId = `${this.ElementID}_BhinnashtakavargaTable`;
-    this.ShowHeader = settings.ShowHeader;
-    this.HeaderIcon = settings.HeaderIcon;
-    this.SaveSettings = settings.SaveSettings;
+    async GenerateTable(inputArguments) {
+        inputArguments =
+            CommonTools.ConvertCamelCaseKeysToPascalCase(inputArguments);
 
-    //based on table ID try get any settings if saved from before
-    var savedTableSettings = localStorage.getItem(this.ElementID);
+        //clear old data if any
+        $(`#${this.ElementID}`).empty();
 
-    //only continue if settings are saved and featured enabled in settings
-    if (this.SaveSettings || savedTableSettings) {
-      //parse the data
-      let jsonObject = JSON.parse(savedTableSettings);
+        //# HEADER
+        //show header with title, icon and edit button
+        if (this.ShowHeader) {
+            //random ID for edit button
+            this.EditButtonId = Math.floor(Math.random() * 1000000);
 
-      //set back all the exact settings from before
-      this.KeyColumn = jsonObject["KeyColumn"];
-      this.ColumnData = jsonObject["ColumnData"];
-      this.EnableSorting = jsonObject["EnableSorting"];
-    }
-    //if null use data pumped in via constructor (defaults, when click Reset)
-    else {
-      this.KeyColumn = settings.KeyColumn;
-      this.ColumnData = settings.ColumnData;
-      this.EnableSorting = settings.EnableSorting;
-    }
-  }
-
-  async GenerateTable(inputArguments) {
-    inputArguments =
-      CommonTools.ConvertCamelCaseKeysToPascalCase(inputArguments);
-
-    //clear old data if any
-    $(`#${this.ElementID}`).empty();
-
-    //# HEADER
-    //show header with title, icon and edit button
-    if (this.ShowHeader) {
-      //random ID for edit button
-      this.EditButtonId = Math.floor(Math.random() * 1000000);
-
-      var htmlContent = `
+            var htmlContent = `
                 <h3 style="margin-bottom: -11px;">
                     <span class="iconify me-2" data-icon="${this.HeaderIcon}" data-width="38" data-height="38"></span>
                     ${this.KeyColumn}
@@ -2109,349 +2173,349 @@ class AshtakvargaTable {
                 </h3>
                 <hr />`;
 
-      //inject into page
-      $(`#${this.ElementID}`).append(htmlContent);
+            //inject into page
+            $(`#${this.ElementID}`).append(htmlContent);
 
-      //attach event handler to edit button
-      $(`#${this.EditButtonId}`).on("click", async () => {
-        await this.ShowEditTableOptions();
-      });
+            //attach event handler to edit button
+            $(`#${this.EditButtonId}`).on("click", async () => {
+                await this.ShowEditTableOptions();
+            });
+        }
+
+        //# TABLE
+        //create empty table inside main holder
+        //table will be filled later
+        $(`#${this.ElementID}`).append(
+            `<table id="${this.SarvashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
+        );
+
+        $(`#${this.ElementID}`).append(
+            `<table id="${this.BhinnashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
+        );
+
+        //generate table from inputed data
+        //get data from API
+        var sarvashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/SarvashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
+        var bhinnashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/BhinnashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
+
+        //get data from API and generate the HTML tables
+        await this.GenerateHTMLTableFromAPI(
+            sarvashtakavargaUrl,
+            this.SarvashtakavargaTableId
+        );
+        await this.GenerateHTMLTableFromAPI(
+            bhinnashtakavargaUrl,
+            this.BhinnashtakavargaTableId
+        );
     }
 
-    //# TABLE
-    //create empty table inside main holder
-    //table will be filled later
-    $(`#${this.ElementID}`).append(
-      `<table id="${this.SarvashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
-    );
+    async GenerateHTMLTableFromAPI(url, tableId) {
+        //make the final API call in the perfect URL format
+        var apiPayload = await AstroTable.GetAPIPayload(url);
 
-    $(`#${this.ElementID}`).append(
-      `<table id="${this.BhinnashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
-    );
+        //clean old data
+        AstroTable.ClearTableRows(tableId);
 
-    //generate table from inputed data
-    //get data from API
-    var sarvashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/SarvashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
-    var bhinnashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/BhinnashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
-
-    //get data from API and generate the HTML tables
-    await this.GenerateHTMLTableFromAPI(
-      sarvashtakavargaUrl,
-      this.SarvashtakavargaTableId
-    );
-    await this.GenerateHTMLTableFromAPI(
-      bhinnashtakavargaUrl,
-      this.BhinnashtakavargaTableId
-    );
-  }
-
-  async GenerateHTMLTableFromAPI(url, tableId) {
-    //make the final API call in the perfect URL format
-    var apiPayload = await AstroTable.GetAPIPayload(url);
-
-    //clean old data
-    AstroTable.ClearTableRows(tableId);
-
-    AshtakvargaTable.GenerateHTMLTableFromJson(apiPayload, tableId);
-  }
-
-  //code where Ashtakvarga in JSON format given by API is converted into nice HTML
-  static async GenerateHTMLTableFromJson(data, tableId) {
-    let html = '<table border="1">';
-
-    // Add table headers
-    html += "<tr><th></th>";
-    for (let i = 1; i <= 12; i++) {
-      html += `<th>${i}</th>`;
+        AshtakvargaTable.GenerateHTMLTableFromJson(apiPayload, tableId);
     }
 
-    //add in last total column
-    html += `<th>Total</th>`;
+    //code where Ashtakvarga in JSON format given by API is converted into nice HTML
+    static async GenerateHTMLTableFromJson(data, tableId) {
+        let html = '<table border="1">';
 
-    //wrap up
-    html += "</tr>";
+        // Add table headers
+        html += "<tr><th></th>";
+        for (let i = 1; i <= 12; i++) {
+            html += `<th>${i}</th>`;
+        }
 
-    //get first object which will be BhinnashtakavargaChart or SarvashtakavargaChart (API names)
-    const ashtakavargaJson = data[Object.keys(data)[0]];
+        //add in last total column
+        html += `<th>Total</th>`;
 
-    // Add table data rows
-    for (let key in ashtakavargaJson) {
-      html += `<tr><td>${key}</td>`;
-      for (let i = 0; i < 12; i++) {
-        html += `<td>${ashtakavargaJson[key].Rows[i]}</td>`;
-      }
+        //wrap up
+        html += "</tr>";
 
-      //add in last total column
-      html += `<td>${ashtakavargaJson[key].Total}</td>`;
+        //get first object which will be BhinnashtakavargaChart or SarvashtakavargaChart (API names)
+        const ashtakavargaJson = data[Object.keys(data)[0]];
 
-      html += "</tr>";
+        // Add table data rows
+        for (let key in ashtakavargaJson) {
+            html += `<tr><td>${key}</td>`;
+            for (let i = 0; i < 12; i++) {
+                html += `<td>${ashtakavargaJson[key].Rows[i]}</td>`;
+            }
+
+            //add in last total column
+            html += `<td>${ashtakavargaJson[key].Total}</td>`;
+
+            html += "</tr>";
+        }
+
+        html += "</table>";
+
+        // Now you can add 'html' to your webpage
+        var currentTable = document.getElementById(tableId);
+        currentTable.innerHTML = html;
     }
-
-    html += "</table>";
-
-    // Now you can add 'html' to your webpage
-    var currentTable = document.getElementById(tableId);
-    currentTable.innerHTML = html;
-  }
 }
 
 //YOU CANNOT FIGHT A DYING MAN,
 //HE HOLDS THE UPPER HAND ALWAYS
 
 class ChatInstance {
-  LastUserMessage = ""; //used for post ai reply highlight
-  SelectedTopicId = ""; //she's filled in when set
-  SelectedTopicText = ""; //she's filled in when set
-  ServerURL = ""; //filled in later just before use
-  ElementID = ""; //ID of main div where table & header will be injected
-  ShowHeader = true; //default enabled, header with title, icon and edit button
-  HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
-  IsAITalking = false; //default false, to implement "PTT" radio like protocol
-  PresetQuestions = {
-    Previous: {
-      "Last 3": [
-        "Describe my general character",
-        "Is this a good or bad person?",
-        "Why am I not able to find a life partner?",
-      ],
-    },
-    Love: {
-      "Love Awaits Me": [
-        "When will I meet the love of my life in the year 2024?",
-        "Am I going to be in a new relationship in the year 2024?",
-        "Why am I not able to find a life partner?",
-      ],
-      "Future Marriage": [
-        "Tell me about my love life.",
-        "Will I meet my soulmate in the year between 2024 to 2027?",
-      ],
-      "Current Partner": [
-        "Should i tell that person about my feelings? Is it the right time?",
-      ],
-      "Ex Relations": [
-        "Why did my past relationship end?",
-        "Will my ex and I ever get back together?",
-        "I feel really heartbroken. What should I do ?",
-      ],
-    },
-    Astrology: {
-      Yoga: [
-        "Any special yoga in my chart?",
-        "Describe in detail all my yogas",
-      ],
-      Planets: [
-        "How does Sun effect me?",
-        "How does Mercury effect me?",
-        "How does Moon effect me?",
-        "How does Mars effect me?",
-        "How does Jupiter effect me?",
-        "How does Saturn effect me?",
-        "How does Venus effect me?",
-        "How does Ketu effect me?",
-        "How does Rahu effect me?",
-        "How does Sub-grahas effect me?",
-      ],
-      House: [
-        "How does House 1 effect me?",
-        "How does House 2 effect me?",
-        "How does House 3 effect me?",
-        "How does House 4 effect me?",
-        "How does House 5 effect me?",
-        "How does House 6 effect me?",
-        "How does House 7 effect me?",
-        "How does House 8 effect me?",
-        "How does House 9 effect me?",
-        "How does House 10 effect me?",
-        "How does House 11 effect me?",
-        "How does House 12 effect me?",
-      ],
-    },
-    Studies: {
-      "Study Abroad": [
-        "Will I get to travel abroad for education in the year 2024?",
-        "Will I be able to get my education abroad one day and settle there between 2024 and 2027?",
-      ],
-      "Higher Studies": [
-        "Will I be able to get a higher education?",
-        "What course of education should I enroll in?",
-        "Should I go for MBA? Will it really help me to boost my career?",
-        "Will I get admission into my choice of college in the year 2024?",
-        "My dream is to become a CEO one day. What path should I take academically?",
-      ],
-      "Career & Calling": [
-        "Am I on the right educational path? What are good fields for me to study?",
-        "My parents want me to become a doctor. But I don't feel like it is my true calling. What do you see in my birth chart?",
-      ],
-      "Study Challenges": [
-        "It's difficult for me to concentrate on studying. What can I do to improve it?",
-        "I study a lot but anyway get bad grades. Why is it happening?",
-        "I failed exams to a school and it was my dream. Why did it happen?",
-      ],
-      "Studies Horoscope": [
-        "Does the birth chart reflect anything about my returning to formal education?",
-        "What is my education horoscope for the year 2024?",
-        "Will I complete my education between 2024 and 2027 ?",
-      ],
-      "Studies & Relationships": [
-        "If I get married on the year 2024 will I be able to continue my education?",
-      ],
-    },
-    Career: {
-      "Financial Outlook": [
-        "Can you tell me about money flow throughout the year 2024?",
-        "Are there any financial highs and lows predicted in my birth chart from the year 2024 to 2027?",
-        "How can I attract more financial abundance in my life from 2024 to 2030?",
-        "Are there any specific periods where I should be cautious about my finances in the period between 2024 and 2027?",
-      ],
-      "Career Path": [
-        "According to my birth chart, what kind of career suits me the best?",
-        "Do my stars indicate any entrepreneurial talents or inclinations?",
-      ],
-      "Work-Life Balance": [
-        "Will I be able to balance my work and family life?",
-        "Are there any suggestions from my birth chart on how to achieve a better work-life balance?",
-      ],
-      "Academic Influence": [
-        "How significant will my academic degree be in my career?",
-        "Does my birth chart suggest lifelong learning or settling with my current educational qualifications?",
-      ],
-      "Family & Career": [
-        "Do the planets indicate that my parents are supportive of my career?",
-        "Does my chart suggest any potential conflicts between my family's expectations and my career aspirations? How can I navigate them?",
-      ],
-    },
-    Business: {
-      "Entrepreneurial Skills": [
-        "According to my birth chart, can I be a good businessman?",
-        "What are the strong and weak sides of my business skills?",
-        "Should I invite other people to my business or make everything on my own?",
-        "I have tried a couple of times to start my own business, but both times unsuccessfully. How is the current time in the year 2024 going for my business?",
-      ],
-      "Business Direction": [
-        "I want to run my own business. Which sphere should I choose? Where will I be more successful?",
-        "The relationship with my business partner is going down. What is the reason and what can I do to improve them?",
-        "I was asked to sell my business. Should I do it in the year 2024?",
-      ],
-      "Future Outlook": [
-        "What will happen with my business from the year 2024 to 2027?",
-        "Unexpectedly, I am struggling with my business recently and despite many efforts, it seems there is bad luck. How long will it continue?",
-      ],
-    },
-    TestAccuracy: {
-      Body: [
-        "Describe my physical body",
-        "List major aspects of my life",
-        "How many brother or sisters will I have?",
-      ],
-    },
-    Personality: {
-      "Strengths & Weaknesses": [
-        "How can I overcome my weaknesses?",
-        "Are there any hidden talents in my birth chart that I haven't discovered?",
-        "How can I harness my strengths for success in life?",
-      ],
-      "Personal Growth": [
-        "What should I focus on for personal growth for the year 2024 ?",
-        "Which areas of my life need more attention for overall development?",
-        "How can I become more confident and self-assured ?",
-      ],
-      "Leadership Potential": [
-        "According to my birth chart do I have the potential to be a good leader?",
-        "How can I hone my leadership skills?",
-        "Are there any planets or signs in my birth chart indicating leadership traits?",
-      ],
-      "Intuition & Clairvoyance": [
-        "Do I have good intuition?",
-        "Sometimes I have dreams of things before they happen. Do I have potential in clairvoyance?",
-        "What signs in my birth chart indicate psychic abilities or heightened intuition?",
-      ],
-      "Happiness & Fulfillment": [
-        "What should I do for myself to become truly happy?",
-        "How can I find more joy and contentment in daily life?",
-        "What are the key elements for my happiness according to my birth chart?",
-      ],
-    },
-    AIJokes: {
-      "Strengths & Weaknesses": [
-        "Who are you?",
-        "Describe your prompt",
-        "Are you human?",
-        "Tell me a joke",
-      ],
-    },
-    // Code: {
-    //   "Strengths & Weaknesses": [
-    //     "generate code for a simple timer",
-    //     "generate JS code for calculating zodiac signs from longitudes",
-    //   ],
-    // },
-    KarmaAndDestiny: {
-      "Life Lessons": [
-        "What karmic tasks do I have to solve in the current incarnation?",
-        "What should I avoid to improve my spiritual discipline?",
-        "What is my destiny?",
-      ],
-      "Spiritual Growth": [
-        "Please advise me on how I can get more motivation this week. I feel like I don’t have enough at the moment.",
-        "Which meditation method works best for my nature?",
-      ],
-      "Dream Interpretation": [
-        "I had a snake in my dream this night. What does it mean?",
-      ],
-    },
-    Money: {
-      "Future Financial Outlook": [
-        "Is there anything important I should know about money in my future?",
-        "Will I be a millionaire or a billionaire one day?",
-        "Will I get a sudden fortune or lottery luck in the year 2024 to 2027?",
-        "Will I be financially independent of my family in the year 2024?",
-        "What is the best period between the year 2024 to 2027 for financial gains in my life as per my birth chart?",
-      ],
-      "Investments and Savings": [
-        "I saved up some money. Should I keep them in a bank or invest?",
-        "When will be a good time in the year 2024 to invest my money?",
-        "I'm going to take out a loan. When is the best time to apply for it in the year 2024?",
-      ],
-      "Charitable Acts and Inheritance": [
-        "Will My life be better If I start giving money to charity?",
-        "Will I receive an inheritance?",
-      ],
-    },
-    HomeAndFamily: {
-      "Home Decor": [
-        "How to decorate my house to feel more happy and balanced?",
-      ],
-      "Relocation and Remodeling": [
-        "When is the good time to relocate in the year 2024?",
-        "I plan to rent an apartment. What is the best time to move in the year 2024?",
-        "I plan to have some remodeling at home. What time is the best to start in the year 2024?",
-      ],
-    },
-    BestDates: {
-      "Travel and Relocation": [
-        "When is the best time to go traveling between 2024 and 2027?",
-        "When is the right time for relocation between the year 2024 and 2027?",
-      ],
-      "Family Planning": [
-        "When is the best time for me to have kids between the year 2024 and 2027?",
-      ],
-      "Career Decisions": [
-        "When is the best time to start searching for a new job between the year 2024 and 2027?",
-        "When is the right time to start building a house between the year 2024 and 2027?",
-      ],
-      Purchases: [
-        "When is the best time to buy a new car between the year 2024 and 2027?",
-        "Is it a good time now according to planetary alignments to make major purchases between the year 2024 and 2027?",
-        "When is the best time to sell my house between the year 2024 and 2027?",
-      ],
-      "Personal Decisions": [
-        "Will it be good for me to get a tattoo? When is the best time for it between the year 2024 and 2027?",
-      ],
-    },
-  };
+    LastUserMessage = ""; //used for post ai reply highlight
+    SelectedTopicId = ""; //she's filled in when set
+    SelectedTopicText = ""; //she's filled in when set
+    ServerURL = ""; //filled in later just before use
+    ElementID = ""; //ID of main div where table & header will be injected
+    ShowHeader = true; //default enabled, header with title, icon and edit button
+    HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
+    IsAITalking = false; //default false, to implement "PTT" radio like protocol
+    PresetQuestions = {
+        Previous: {
+            "Last 3": [
+                "Describe my general character",
+                "Is this a good or bad person?",
+                "Why am I not able to find a life partner?",
+            ],
+        },
+        Love: {
+            "Love Awaits Me": [
+                "When will I meet the love of my life in the year 2024?",
+                "Am I going to be in a new relationship in the year 2024?",
+                "Why am I not able to find a life partner?",
+            ],
+            "Future Marriage": [
+                "Tell me about my love life.",
+                "Will I meet my soulmate in the year between 2024 to 2027?",
+            ],
+            "Current Partner": [
+                "Should i tell that person about my feelings? Is it the right time?",
+            ],
+            "Ex Relations": [
+                "Why did my past relationship end?",
+                "Will my ex and I ever get back together?",
+                "I feel really heartbroken. What should I do ?",
+            ],
+        },
+        Astrology: {
+            Yoga: [
+                "Any special yoga in my chart?",
+                "Describe in detail all my yogas",
+            ],
+            Planets: [
+                "How does Sun effect me?",
+                "How does Mercury effect me?",
+                "How does Moon effect me?",
+                "How does Mars effect me?",
+                "How does Jupiter effect me?",
+                "How does Saturn effect me?",
+                "How does Venus effect me?",
+                "How does Ketu effect me?",
+                "How does Rahu effect me?",
+                "How does Sub-grahas effect me?",
+            ],
+            House: [
+                "How does House 1 effect me?",
+                "How does House 2 effect me?",
+                "How does House 3 effect me?",
+                "How does House 4 effect me?",
+                "How does House 5 effect me?",
+                "How does House 6 effect me?",
+                "How does House 7 effect me?",
+                "How does House 8 effect me?",
+                "How does House 9 effect me?",
+                "How does House 10 effect me?",
+                "How does House 11 effect me?",
+                "How does House 12 effect me?",
+            ],
+        },
+        Studies: {
+            "Study Abroad": [
+                "Will I get to travel abroad for education in the year 2024?",
+                "Will I be able to get my education abroad one day and settle there between 2024 and 2027?",
+            ],
+            "Higher Studies": [
+                "Will I be able to get a higher education?",
+                "What course of education should I enroll in?",
+                "Should I go for MBA? Will it really help me to boost my career?",
+                "Will I get admission into my choice of college in the year 2024?",
+                "My dream is to become a CEO one day. What path should I take academically?",
+            ],
+            "Career & Calling": [
+                "Am I on the right educational path? What are good fields for me to study?",
+                "My parents want me to become a doctor. But I don't feel like it is my true calling. What do you see in my birth chart?",
+            ],
+            "Study Challenges": [
+                "It's difficult for me to concentrate on studying. What can I do to improve it?",
+                "I study a lot but anyway get bad grades. Why is it happening?",
+                "I failed exams to a school and it was my dream. Why did it happen?",
+            ],
+            "Studies Horoscope": [
+                "Does the birth chart reflect anything about my returning to formal education?",
+                "What is my education horoscope for the year 2024?",
+                "Will I complete my education between 2024 and 2027 ?",
+            ],
+            "Studies & Relationships": [
+                "If I get married on the year 2024 will I be able to continue my education?",
+            ],
+        },
+        Career: {
+            "Financial Outlook": [
+                "Can you tell me about money flow throughout the year 2024?",
+                "Are there any financial highs and lows predicted in my birth chart from the year 2024 to 2027?",
+                "How can I attract more financial abundance in my life from 2024 to 2030?",
+                "Are there any specific periods where I should be cautious about my finances in the period between 2024 and 2027?",
+            ],
+            "Career Path": [
+                "According to my birth chart, what kind of career suits me the best?",
+                "Do my stars indicate any entrepreneurial talents or inclinations?",
+            ],
+            "Work-Life Balance": [
+                "Will I be able to balance my work and family life?",
+                "Are there any suggestions from my birth chart on how to achieve a better work-life balance?",
+            ],
+            "Academic Influence": [
+                "How significant will my academic degree be in my career?",
+                "Does my birth chart suggest lifelong learning or settling with my current educational qualifications?",
+            ],
+            "Family & Career": [
+                "Do the planets indicate that my parents are supportive of my career?",
+                "Does my chart suggest any potential conflicts between my family's expectations and my career aspirations? How can I navigate them?",
+            ],
+        },
+        Business: {
+            "Entrepreneurial Skills": [
+                "According to my birth chart, can I be a good businessman?",
+                "What are the strong and weak sides of my business skills?",
+                "Should I invite other people to my business or make everything on my own?",
+                "I have tried a couple of times to start my own business, but both times unsuccessfully. How is the current time in the year 2024 going for my business?",
+            ],
+            "Business Direction": [
+                "I want to run my own business. Which sphere should I choose? Where will I be more successful?",
+                "The relationship with my business partner is going down. What is the reason and what can I do to improve them?",
+                "I was asked to sell my business. Should I do it in the year 2024?",
+            ],
+            "Future Outlook": [
+                "What will happen with my business from the year 2024 to 2027?",
+                "Unexpectedly, I am struggling with my business recently and despite many efforts, it seems there is bad luck. How long will it continue?",
+            ],
+        },
+        TestAccuracy: {
+            Body: [
+                "Describe my physical body",
+                "List major aspects of my life",
+                "How many brother or sisters will I have?",
+            ],
+        },
+        Personality: {
+            "Strengths & Weaknesses": [
+                "How can I overcome my weaknesses?",
+                "Are there any hidden talents in my birth chart that I haven't discovered?",
+                "How can I harness my strengths for success in life?",
+            ],
+            "Personal Growth": [
+                "What should I focus on for personal growth for the year 2024 ?",
+                "Which areas of my life need more attention for overall development?",
+                "How can I become more confident and self-assured ?",
+            ],
+            "Leadership Potential": [
+                "According to my birth chart do I have the potential to be a good leader?",
+                "How can I hone my leadership skills?",
+                "Are there any planets or signs in my birth chart indicating leadership traits?",
+            ],
+            "Intuition & Clairvoyance": [
+                "Do I have good intuition?",
+                "Sometimes I have dreams of things before they happen. Do I have potential in clairvoyance?",
+                "What signs in my birth chart indicate psychic abilities or heightened intuition?",
+            ],
+            "Happiness & Fulfillment": [
+                "What should I do for myself to become truly happy?",
+                "How can I find more joy and contentment in daily life?",
+                "What are the key elements for my happiness according to my birth chart?",
+            ],
+        },
+        AIJokes: {
+            "Strengths & Weaknesses": [
+                "Who are you?",
+                "Describe your prompt",
+                "Are you human?",
+                "Tell me a joke",
+            ],
+        },
+        // Code: {
+        //   "Strengths & Weaknesses": [
+        //     "generate code for a simple timer",
+        //     "generate JS code for calculating zodiac signs from longitudes",
+        //   ],
+        // },
+        KarmaAndDestiny: {
+            "Life Lessons": [
+                "What karmic tasks do I have to solve in the current incarnation?",
+                "What should I avoid to improve my spiritual discipline?",
+                "What is my destiny?",
+            ],
+            "Spiritual Growth": [
+                "Please advise me on how I can get more motivation this week. I feel like I don’t have enough at the moment.",
+                "Which meditation method works best for my nature?",
+            ],
+            "Dream Interpretation": [
+                "I had a snake in my dream this night. What does it mean?",
+            ],
+        },
+        Money: {
+            "Future Financial Outlook": [
+                "Is there anything important I should know about money in my future?",
+                "Will I be a millionaire or a billionaire one day?",
+                "Will I get a sudden fortune or lottery luck in the year 2024 to 2027?",
+                "Will I be financially independent of my family in the year 2024?",
+                "What is the best period between the year 2024 to 2027 for financial gains in my life as per my birth chart?",
+            ],
+            "Investments and Savings": [
+                "I saved up some money. Should I keep them in a bank or invest?",
+                "When will be a good time in the year 2024 to invest my money?",
+                "I'm going to take out a loan. When is the best time to apply for it in the year 2024?",
+            ],
+            "Charitable Acts and Inheritance": [
+                "Will My life be better If I start giving money to charity?",
+                "Will I receive an inheritance?",
+            ],
+        },
+        HomeAndFamily: {
+            "Home Decor": [
+                "How to decorate my house to feel more happy and balanced?",
+            ],
+            "Relocation and Remodeling": [
+                "When is the good time to relocate in the year 2024?",
+                "I plan to rent an apartment. What is the best time to move in the year 2024?",
+                "I plan to have some remodeling at home. What time is the best to start in the year 2024?",
+            ],
+        },
+        BestDates: {
+            "Travel and Relocation": [
+                "When is the best time to go traveling between 2024 and 2027?",
+                "When is the right time for relocation between the year 2024 and 2027?",
+            ],
+            "Family Planning": [
+                "When is the best time for me to have kids between the year 2024 and 2027?",
+            ],
+            "Career Decisions": [
+                "When is the best time to start searching for a new job between the year 2024 and 2027?",
+                "When is the right time to start building a house between the year 2024 and 2027?",
+            ],
+            Purchases: [
+                "When is the best time to buy a new car between the year 2024 and 2027?",
+                "Is it a good time now according to planetary alignments to make major purchases between the year 2024 and 2027?",
+                "When is the best time to sell my house between the year 2024 and 2027?",
+            ],
+            "Personal Decisions": [
+                "Will it be good for me to get a tattoo? When is the best time for it between the year 2024 and 2027?",
+            ],
+        },
+    };
 
-  //chat box body as html to be injected
-  HtmlContent = `    
+    //chat box body as html to be injected
+    HtmlContent = `    
      <!-- MAIN MESSAGE BODY -->
      <!-- CHAT SESSION PERSON SELECTOR -->
          <div class="input-group mb-2">
@@ -2576,313 +2640,313 @@ class ChatInstance {
      
      `;
 
-  constructor(rawSettings) {
-    console.log(
-      "~~~~~~~Stand back! Awesome Chat API code launching! All engines go!~~~~~~~"
-    );
-
-    //make instance accessible
-    window.vedastro.chatapi = this;
-
-    //correct if property names is camel case (for Blazor)
-    var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
-
-    //expand data inside settings input
-    this.ElementID = settings.ElementID;
-    this.ShowHeader = settings.ShowHeader;
-    this.HeaderIcon = settings.HeaderIcon;
-
-    this.connected = false;
-    this.queue = [];
-
-    this.intervalId = null;
-
-    //CHAT GUI INJECTION
-    //clear old data if any
-    $(`#${this.ElementID}`).empty();
-
-    //random ID for edit button
-    this.EditButtonId = Math.floor(Math.random() * 1000000);
-
-    //inject into page
-    $(`#${this.ElementID}`).html(this.HtmlContent);
-
-    GenerateTopicListDropdown();
-
-    //generate preset question drop down
-    ChatInstance.generateHtmlFromJson(
-      this.PresetQuestions,
-      "presetQuestionDropdown"
-    );
-
-    //GUI LOAD SAVED VALUES
-    //load settings stored browser storage
-    let isLocalServerModeStr = localStorage.getItem("IsLocalServerMode");
-    $("#useLocalServerSwitchInput").prop(
-      "checked",
-      JSON.parse(isLocalServerModeStr)
-    );
-
-    let isTeacherModeStr = localStorage.getItem("IsTeacherMode");
-    $("#useTeacherModeSwitchInput").prop(
-      "checked",
-      JSON.parse(isTeacherModeStr)
-    );
-
-    // GUI EVENT HANDLRES
-    // NOTE: do handle only
-
-    //1:handle user press "Enter" equal to clicking send button
-    $("#UserChatInputElement").keypress((e) => {
-      if (e.which === 13) {
-        // Enter key pressed
-        this.OnClickSendChat();
-        e.preventDefault(); // Prevents the default action
-      }
-    });
-
-    //2:handle send button click
-    $("#SendChatButton").on("click", () => {
-      this.OnClickSendChat();
-    });
-
-    //3: ON change topic dropdown
-    //attach topic selector dropdown
-    $("#TopicListDropdown").on("change", (e) => {
-      //get all needed data (what topic was selected)
-      const selectedOption = $("#TopicListDropdown option:selected");
-      const selectedOptgroupLabel = selectedOption
-        .closest("optgroup")
-        .prop("label");
-
-      //save what user choose for use throughout the code
-      window.vedastro.chatapi.SelectedTopicId = selectedOption.val();
-      window.vedastro.chatapi.SelectedTopicText = selectedOption[0].innerText;
-
-      //handle possible different selection types
-      //nothing much done here, basically let caller context has been swicthed
-      var validTopicSelected = false;
-
-      //1 : HOROSCOPE
-      //if value is for horoscope
-      if (
-        selectedOptgroupLabel === "Horoscopes" ||
-        selectedOptgroupLabel === "Example Horoscopes"
-      ) {
-        //get full details of the person
-        let selectedPerson = window.vedastro.PersonList.find(
-          (obj) => obj.PersonId === window.vedastro.chatapi.SelectedTopicId
+    constructor(rawSettings) {
+        console.log(
+            "~~~~~~~Stand back! Awesome Chat API code launching! All engines go!~~~~~~~"
         );
 
-        //save for use by other
-        window.vedastro.SelectedPerson = selectedPerson;
+        //make instance accessible
+        window.vedastro.chatapi = this;
 
-        //convert person name to birth DOB (so unregistered person can be checked)
-        var newTopicId = CommonTools.BirthTimeUrlOfSelectedPersonJson();
-        window.vedastro.chatapi.SelectedTopicId = newTopicId;
+        //correct if property names is camel case (for Blazor)
+        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
 
-        //let others know (context changer)
-        $(document).trigger("onChangeSelectedTopic");
+        //expand data inside settings input
+        this.ElementID = settings.ElementID;
+        this.ShowHeader = settings.ShowHeader;
+        this.HeaderIcon = settings.HeaderIcon;
 
-        validTopicSelected = true; //ready to connect to server
-      }
+        this.connected = false;
+        this.queue = [];
 
-      //2 : BOOKS
-      if (selectedOptgroupLabel === "Learn Astrology") {
-        //let others know (context changer)
-        $(document).trigger("onChangeSelectedTopic");
+        this.intervalId = null;
 
-        validTopicSelected = true; //ready to connect to server
-      }
+        //CHAT GUI INJECTION
+        //clear old data if any
+        $(`#${this.ElementID}`).empty();
 
-      //2 : CODE
-      if (selectedOptgroupLabel === "Generate Code") {
-        Swal.fire(
-          "Coming soon!",
-          "<strong>Come</strong> back later or choose another topic",
-          "info"
+        //random ID for edit button
+        this.EditButtonId = Math.floor(Math.random() * 1000000);
+
+        //inject into page
+        $(`#${this.ElementID}`).html(this.HtmlContent);
+
+        GenerateTopicListDropdown();
+
+        //generate preset question drop down
+        ChatInstance.generateHtmlFromJson(
+            this.PresetQuestions,
+            "presetQuestionDropdown"
         );
 
-        //reset to make selection again
-        $("#TopicListDropdown").val("");
-      }
-
-      //open connection to server if has not been open
-      if (typeof this.socket === "undefined" && validTopicSelected) {
-        this.ServerURL = $("#useLocalServerSwitchInput").is(":checked")
-          ? this.LocalServerURL
-          : this.LiveServerURL;
-
-        OpenConnectionToChatBot(this);
-      }
-    });
-
-    //4:let user know AI chat will use this newly selected person
-    $(document).on("onChangeSelectedTopic", function (e) {
-      // show message to user that location was found and set
-      Swal.fire({
-        icon: "success",
-        title: "Topic changed!",
-        html: `We'll will now talk about <strong>${window.vedastro.chatapi.SelectedTopicText}</strong>`,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-
-      // execute once execution que is empty (so pop up stays open) via 0ms
-      setTimeout(function () {
-        //auto open presets questions drop down for super speed users (UX ⚡)
-        $("#presetQuestionsButton").dropdown("toggle");
-      }, 0);
-    });
-
-    //7: handle local server switch
-    //when swith is fliped record into memory for future use (save user's time)
-
-    // Save a string value to local storage
-    localStorage.setItem("myKey", "Hello World!");
-
-    //update control center back on earth
-    console.log("~~~~~~~Huston, we have lift off!~~~~~~~");
-
-    function OpenConnectionToChatBot(instance) {
-      //start connection
-      instance.socket = new WebSocket(instance.ServerURL);
-
-      //attach standard handlers for connetion
-      ["open", "message", "close", "error"].forEach((eventName) => {
-        instance.socket.addEventListener(
-          eventName,
-          instance[`on${eventName}`].bind(instance)
+        //GUI LOAD SAVED VALUES
+        //load settings stored browser storage
+        let isLocalServerModeStr = localStorage.getItem("IsLocalServerMode");
+        $("#useLocalServerSwitchInput").prop(
+            "checked",
+            JSON.parse(isLocalServerModeStr)
         );
-      });
+
+        let isTeacherModeStr = localStorage.getItem("IsTeacherMode");
+        $("#useTeacherModeSwitchInput").prop(
+            "checked",
+            JSON.parse(isTeacherModeStr)
+        );
+
+        // GUI EVENT HANDLRES
+        // NOTE: do handle only
+
+        //1:handle user press "Enter" equal to clicking send button
+        $("#UserChatInputElement").keypress((e) => {
+            if (e.which === 13) {
+                // Enter key pressed
+                this.OnClickSendChat();
+                e.preventDefault(); // Prevents the default action
+            }
+        });
+
+        //2:handle send button click
+        $("#SendChatButton").on("click", () => {
+            this.OnClickSendChat();
+        });
+
+        //3: ON change topic dropdown
+        //attach topic selector dropdown
+        $("#TopicListDropdown").on("change", (e) => {
+            //get all needed data (what topic was selected)
+            const selectedOption = $("#TopicListDropdown option:selected");
+            const selectedOptgroupLabel = selectedOption
+                .closest("optgroup")
+                .prop("label");
+
+            //save what user choose for use throughout the code
+            window.vedastro.chatapi.SelectedTopicId = selectedOption.val();
+            window.vedastro.chatapi.SelectedTopicText = selectedOption[0].innerText;
+
+            //handle possible different selection types
+            //nothing much done here, basically let caller context has been swicthed
+            var validTopicSelected = false;
+
+            //1 : HOROSCOPE
+            //if value is for horoscope
+            if (
+                selectedOptgroupLabel === "Horoscopes" ||
+                selectedOptgroupLabel === "Example Horoscopes"
+            ) {
+                //get full details of the person
+                let selectedPerson = window.vedastro.PersonList.find(
+                    (obj) => obj.PersonId === window.vedastro.chatapi.SelectedTopicId
+                );
+
+                //save for use by other
+                window.vedastro.SelectedPerson = selectedPerson;
+
+                //convert person name to birth DOB (so unregistered person can be checked)
+                var newTopicId = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+                window.vedastro.chatapi.SelectedTopicId = newTopicId;
+
+                //let others know (context changer)
+                $(document).trigger("onChangeSelectedTopic");
+
+                validTopicSelected = true; //ready to connect to server
+            }
+
+            //2 : BOOKS
+            if (selectedOptgroupLabel === "Learn Astrology") {
+                //let others know (context changer)
+                $(document).trigger("onChangeSelectedTopic");
+
+                validTopicSelected = true; //ready to connect to server
+            }
+
+            //2 : CODE
+            if (selectedOptgroupLabel === "Generate Code") {
+                Swal.fire(
+                    "Coming soon!",
+                    "<strong>Come</strong> back later or choose another topic",
+                    "info"
+                );
+
+                //reset to make selection again
+                $("#TopicListDropdown").val("");
+            }
+
+            //open connection to server if has not been open
+            if (typeof this.socket === "undefined" && validTopicSelected) {
+                this.ServerURL = $("#useLocalServerSwitchInput").is(":checked")
+                    ? this.LocalServerURL
+                    : this.LiveServerURL;
+
+                OpenConnectionToChatBot(this);
+            }
+        });
+
+        //4:let user know AI chat will use this newly selected person
+        $(document).on("onChangeSelectedTopic", function (e) {
+            // show message to user that location was found and set
+            Swal.fire({
+                icon: "success",
+                title: "Topic changed!",
+                html: `We'll will now talk about <strong>${window.vedastro.chatapi.SelectedTopicText}</strong>`,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+
+            // execute once execution que is empty (so pop up stays open) via 0ms
+            setTimeout(function () {
+                //auto open presets questions drop down for super speed users (UX ⚡)
+                $("#presetQuestionsButton").dropdown("toggle");
+            }, 0);
+        });
+
+        //7: handle local server switch
+        //when swith is fliped record into memory for future use (save user's time)
+
+        // Save a string value to local storage
+        localStorage.setItem("myKey", "Hello World!");
+
+        //update control center back on earth
+        console.log("~~~~~~~Huston, we have lift off!~~~~~~~");
+
+        function OpenConnectionToChatBot(instance) {
+            //start connection
+            instance.socket = new WebSocket(instance.ServerURL);
+
+            //attach standard handlers for connetion
+            ["open", "message", "close", "error"].forEach((eventName) => {
+                instance.socket.addEventListener(
+                    eventName,
+                    instance[`on${eventName}`].bind(instance)
+                );
+            });
+        }
+
+        async function GenerateTopicListDropdown(idToSelect = "") {
+            //get the main dropdown element
+            var $dropdown = $("#TopicListDropdown");
+
+            //DO FOR USER'S SAVED LIST
+            window.vedastro.PersonList = await CommonTools.GetAPIPayload(
+                `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/${window.vedastro.UserId}`
+            );
+
+            //create a header in the list
+            let $horoscopeGroup = $("<optgroup>", {
+                label: "Horoscopes",
+            });
+
+            $dropdown.append($horoscopeGroup); //add to main list
+
+            //populate slection list at bottom with horoscopes
+            $.each(window.vedastro.PersonList, function (i, person) {
+                $horoscopeGroup.append(
+                    $("<option>", {
+                        value: person.PersonId,
+                        text: person.Name,
+                        selected: person.PersonId === idToSelect,
+                    })
+                );
+            });
+
+            //DO FOR PUBLIC LIST
+            window.vedastro.PublicPersonList = await CommonTools.GetAPIPayload(
+                `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/101`
+            );
+            //create a header in the list
+            let $publicHoroscopeGroup = $("<optgroup>", {
+                label: "Example Horoscopes",
+            });
+            $dropdown.append($publicHoroscopeGroup); //add to main list
+
+            //populate slection list at bottom with horoscopes
+            $.each(window.vedastro.PublicPersonList, function (i, person) {
+                $publicHoroscopeGroup.append(
+                    $("<option>", {
+                        value: person.PersonId,
+                        text: person.Name,
+                        selected: person.PersonId === idToSelect,
+                    })
+                );
+            });
+        }
     }
 
-    async function GenerateTopicListDropdown(idToSelect = "") {
-      //get the main dropdown element
-      var $dropdown = $("#TopicListDropdown");
+    /*
+          █▀▀ █░█ █▀▀ █▄░█ ▀█▀   █░█ ▄▀█ █▄░█ █▀▄ █░░ █▀▀ █▀█ █▀
+          ██▄ ▀▄▀ ██▄ █░▀█ ░█░   █▀█ █▀█ █░▀█ █▄▀ █▄▄ ██▄ █▀▄ ▄█
+          */
 
-      //DO FOR USER'S SAVED LIST
-      window.vedastro.PersonList = await CommonTools.GetAPIPayload(
-        `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/${window.vedastro.UserId}`
-      );
+    onopen() {
+        console.log("We're connected to live chat baby!");
 
-      //create a header in the list
-      let $horoscopeGroup = $("<optgroup>", {
-        label: "Horoscopes",
-      });
+        //hide chat box place holder
+        $("#placeholderElement").hide();
 
-      $dropdown.append($horoscopeGroup); //add to main list
-
-      //populate slection list at bottom with horoscopes
-      $.each(window.vedastro.PersonList, function (i, person) {
-        $horoscopeGroup.append(
-          $("<option>", {
-            value: person.PersonId,
-            text: person.Name,
-            selected: person.PersonId === idToSelect,
-          })
-        );
-      });
-
-      //DO FOR PUBLIC LIST
-      window.vedastro.PublicPersonList = await CommonTools.GetAPIPayload(
-        `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/101`
-      );
-      //create a header in the list
-      let $publicHoroscopeGroup = $("<optgroup>", {
-        label: "Example Horoscopes",
-      });
-      $dropdown.append($publicHoroscopeGroup); //add to main list
-
-      //populate slection list at bottom with horoscopes
-      $.each(window.vedastro.PublicPersonList, function (i, person) {
-        $publicHoroscopeGroup.append(
-          $("<option>", {
-            value: person.PersonId,
-            text: person.Name,
-            selected: person.PersonId === idToSelect,
-          })
-        );
-      });
+        this.connected = true;
+        this.processQueue();
     }
-  }
 
-  /*
-        █▀▀ █░█ █▀▀ █▄░█ ▀█▀   █░█ ▄▀█ █▄░█ █▀▄ █░░ █▀▀ █▀█ █▀
-        ██▄ ▀▄▀ ██▄ █░▀█ ░█░   █▀█ █▀█ █░▀█ █▄▀ █▄▄ ██▄ █▀▄ ▄█
-        */
+    //called direct from static HTML hookup without seperate attach code
+    //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
+    restart_baby() {
+        //TODO do proper restart of only client connetion now whole dang system!!
 
-  onopen() {
-    console.log("We're connected to live chat baby!");
+        //restart dank system
+        location.reload();
+    }
 
-    //hide chat box place holder
-    $("#placeholderElement").hide();
+    //called direct from static HTML hookup without seperate attach code
+    //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
+    rate_message(eventData, rating) {
+        //come here on click rating button
+        // get hash of message, stored as id in holder
+        var messageHolder = $(eventData)
+            .closest(".card")
+            .children(".message-holder");
+        var text_hash = messageHolder.attr("id");
 
-    this.connected = true;
-    this.processQueue();
-  }
+        const messagePayload = {
+            user_id: window.vedastro.UserId,
+            rating: rating,
+            text_hash: text_hash,
+        };
 
-  //called direct from static HTML hookup without seperate attach code
-  //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
-  restart_baby() {
-    //TODO do proper restart of only client connetion now whole dang system!!
+        window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
+    }
 
-    //restart dank system
-    location.reload();
-  }
+    onclick_add_person() {
+        //NOTE : "add person page" has auto return to previous page on save
+        //navigate to person add page
+        window.location.href = "./Account/Person/Add";
+    }
 
-  //called direct from static HTML hookup without seperate attach code
-  //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
-  rate_message(eventData, rating) {
-    //come here on click rating button
-    // get hash of message, stored as id in holder
-    var messageHolder = $(eventData)
-      .closest(".card")
-      .children(".message-holder");
-    var text_hash = messageHolder.attr("id");
+    onclick_login() {
+        //NOTE : "add person page" has auto return to previous page on save
+        //navigate to login page
+        window.location.href = "./Account/Login";
+    }
 
-    const messagePayload = {
-      user_id: window.vedastro.UserId,
-      rating: rating,
-      text_hash: text_hash,
-    };
+    //called direct from static HTML hookup without seperate attach code
+    //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
+    onclick_preset_question(eventData) {
+        //6: autofill preset questions handle (attach after generate)
+        var selectedText = $(eventData).text();
+        $("#UserChatInputElement").val(selectedText);
+    }
 
-    window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
-  }
+    //when on of the follow up questions gets clicked
+    //get called direct from html code
+    ask_followup_question(eventData, followupQuestion) {
+        // get hash of message, stored as id in holder
+        var messageHolder = $(eventData)
+            .closest(".card")
+            .children(".message-holder");
+        var primaryAnswerHash = messageHolder.attr("id");
 
-  onclick_add_person() {
-    //NOTE : "add person page" has auto return to previous page on save
-    //navigate to person add page
-    window.location.href = "./Account/Person/Add";
-  }
-
-  onclick_login() {
-    //NOTE : "add person page" has auto return to previous page on save
-    //navigate to login page
-    window.location.href = "./Account/Login";
-  }
-
-  //called direct from static HTML hookup without seperate attach code
-  //exp use : onclick="window.vedastro.chatapi.rate_message(this, -1)"
-  onclick_preset_question(eventData) {
-    //6: autofill preset questions handle (attach after generate)
-    var selectedText = $(eventData).text();
-    $("#UserChatInputElement").val(selectedText);
-  }
-
-  //when on of the follow up questions gets clicked
-  //get called direct from html code
-  ask_followup_question(eventData, followupQuestion) {
-    // get hash of message, stored as id in holder
-    var messageHolder = $(eventData)
-      .closest(".card")
-      .children(".message-holder");
-    var primaryAnswerHash = messageHolder.attr("id");
-
-    //UPDATE GUI WITH USER MSG (UX)
-    var aiInput = $("#UserChatInputElement").val();
-    var userName = "You";
-    var userInputChatCloud = `
+        //UPDATE GUI WITH USER MSG (UX)
+        var aiInput = $("#UserChatInputElement").val();
+        var userName = "You";
+        var userInputChatCloud = `
         <li class="d-flex justify-content-end mb-4">
             <div class="card ">
                 <div class="card-header d-flex justify-content-between py-2">
@@ -2898,73 +2962,73 @@ class ChatInstance {
                  class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="45">
         </li>
         `;
-    //inject in User's input into chat window
-    $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+        //inject in User's input into chat window
+        $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
 
-    //note the switch to python naming covention
-    var commandsToSend = [];
-    commandsToSend.push("followup_question"); //add command for server to read as "follow up"
-    const messagePayload = {
-      user_id: window.vedastro.UserId,
-      primary_answer_hash: primaryAnswerHash,
-      command: commandsToSend, //server uses this to do special handling
-      text: followupQuestion,
-      topic: window.vedastro.chatapi.SelectedTopicId, //can be DOB or book name, or astrology coder
-    };
+        //note the switch to python naming covention
+        var commandsToSend = [];
+        commandsToSend.push("followup_question"); //add command for server to read as "follow up"
+        const messagePayload = {
+            user_id: window.vedastro.UserId,
+            primary_answer_hash: primaryAnswerHash,
+            command: commandsToSend, //server uses this to do special handling
+            text: followupQuestion,
+            topic: window.vedastro.chatapi.SelectedTopicId, //can be DOB or book name, or astrology coder
+        };
 
-    window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
-  }
-
-  // Handler for incoming messages
-  onmessage(event) {
-    // Parse the JSON data from the event
-    var raw_json_message = JSON.parse(event.data);
-    var ai_text_message_html = raw_json_message.text_html;
-    var ai_text_2_message_html = raw_json_message.text_2;
-    var ai_text_3_message_html = raw_json_message.text_3;
-    var message_hash = raw_json_message.text_hash;
-    var ai_text_message = raw_json_message.text;
-    var followup_questions = raw_json_message?.followup_questions ?? [];
-
-    //PROCESS SERVER COMMANDS
-    var commands = raw_json_message.command || []; // when no commands given empty to not fail
-
-    //## SPECIAL HANDLE FOR LOGIN PROMPTS
-    //1: check if server said please login, in command to client
-    //   meaning user just say login message given by server,
-    //   upon click login, start wait loop (make it seem bot is waiting for user to login)
-    //   then that special login tab (RememberMe) will auto close
-
-    let intervalId;
-    if (commands.includes("please_login")) {
-      //TODO maybe not needed anymore
-      //set marker in browser asking Blazor login page to redirect back
-      localStorage.setItem("PreviousPage", "/ChatAPI");
+        window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
     }
 
-    //## BUILD HTML
+    // Handler for incoming messages
+    onmessage(event) {
+        // Parse the JSON data from the event
+        var raw_json_message = JSON.parse(event.data);
+        var ai_text_message_html = raw_json_message.text_html;
+        var ai_text_2_message_html = raw_json_message.text_2;
+        var ai_text_3_message_html = raw_json_message.text_3;
+        var message_hash = raw_json_message.text_hash;
+        var ai_text_message = raw_json_message.text;
+        var followup_questions = raw_json_message?.followup_questions ?? [];
 
-    //HANDLE FOLLOWUP
-    // only add follow up questions if server specified them
-    var followupQuestionsHtml = "";
-    // convert questions into visible buttons, for user to click
-    if (followup_questions.length > 0) {
-      followupQuestionsHtml += //start out hidden, then js will bring to live with animation at right time (class)
-        '<div class="followUpQuestionHolder hstack gap-2 w-100 justify-content-end" style="display:none; position: absolute; bottom: -43px; right: -1px; ">';
+        //PROCESS SERVER COMMANDS
+        var commands = raw_json_message.command || []; // when no commands given empty to not fail
 
-      followup_questions.forEach(function (question) {
-        followupQuestionsHtml += `
+        //## SPECIAL HANDLE FOR LOGIN PROMPTS
+        //1: check if server said please login, in command to client
+        //   meaning user just say login message given by server,
+        //   upon click login, start wait loop (make it seem bot is waiting for user to login)
+        //   then that special login tab (RememberMe) will auto close
+
+        let intervalId;
+        if (commands.includes("please_login")) {
+            //TODO maybe not needed anymore
+            //set marker in browser asking Blazor login page to redirect back
+            localStorage.setItem("PreviousPage", "/ChatAPI");
+        }
+
+        //## BUILD HTML
+
+        //HANDLE FOLLOWUP
+        // only add follow up questions if server specified them
+        var followupQuestionsHtml = "";
+        // convert questions into visible buttons, for user to click
+        if (followup_questions.length > 0) {
+            followupQuestionsHtml += //start out hidden, then js will bring to live with animation at right time (class)
+                '<div class="followUpQuestionHolder hstack gap-2 w-100 justify-content-end" style="display:none; position: absolute; bottom: -43px; right: -1px; ">';
+
+            followup_questions.forEach(function (question) {
+                followupQuestionsHtml += `
             <button type="button" onclick="window.vedastro.chatapi.ask_followup_question(this, '${question}')"  class="btn btn-outline-primary">${question}</button>
         `;
-      });
+            });
 
-      followupQuestionsHtml += "</div>";
-    }
+            followupQuestionsHtml += "</div>";
+        }
 
-    //only show feedback buttons for text that need feedback
-    var feedbackButtonHtml = commands.includes("no_feedback")
-      ? ""
-      : `<div class="hstack gap-2">
+        //only show feedback buttons for text that need feedback
+        var feedbackButtonHtml = commands.includes("no_feedback")
+            ? ""
+            : `<div class="hstack gap-2">
     <button title="Bad answer" type="button" onclick="window.vedastro.chatapi.rate_message(this, -1)" class="btn btn-danger" style="padding: 0px 5px;">
       <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
     </button>
@@ -2973,11 +3037,11 @@ class ChatInstance {
     </button>
   </div>`;
 
-    //based on number of answers received use correct GUI
-    //so, if only 1 ans then show standard gui, else do special multi ans accordian
-    var isMultiAns = ai_text_2_message_html !== undefined;
-    var aiFinalAnswerHolder = isMultiAns
-      ? `                <!-- Multiple answer holder -->
+        //based on number of answers received use correct GUI
+        //so, if only 1 ans then show standard gui, else do special multi ans accordian
+        var isMultiAns = ai_text_2_message_html !== undefined;
+        var aiFinalAnswerHolder = isMultiAns
+            ? `                <!-- Multiple answer holder -->
     <div class="accordion text-html-out-elm" style="display:none;" >
       <div class="accordion-item">
         <h2 class="accordion-header">
@@ -3017,14 +3081,14 @@ class ChatInstance {
       </div>
     </div>
 `
-      : `
+            : `
 <div style="display:none;" class="text-html-out-elm mb-0">
 ${ai_text_message_html}
 </div>
 `;
 
-    // Create a chat bubble with the AI's message
-    var aiInputChatCloud = `<li class="d-flex justify-content-start" style=" margin-bottom: 70px; ">
+        // Create a chat bubble with the AI's message
+        var aiInputChatCloud = `<li class="d-flex justify-content-start" style=" margin-bottom: 70px; ">
         <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="45">
         <div class="card">
             <div class="card-header d-flex justify-content-between p-3">
@@ -3043,273 +3107,273 @@ ${ai_text_message_html}
         </div>
     </li>`;
 
-    // Append the chat bubble to the chat window
-    $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
-
-    // # AUTO SCROLL DOWN
-    $("#ChatWindowMessageList").scrollTop(
-      $("#ChatWindowMessageList")[0].scrollHeight
-    );
-
-    // Flag to prevent user input while AI is 'typing'
-    this.IsAITalking = true;
-
-    // Initialize the index for streaming text
-    let index = 0;
-    const streamRateMs = 23; // Rate at which characters are displayed
-
-    // Stream the AI's message into the chat bubble
-    const interval = setInterval(() => {
-      // Check if the entire message has been displayed
-      //MESSAGE STREAM COMPLETE
-      if (index >= ai_text_message.length) {
-        clearInterval(interval);
-
-        // Hide the temporary element and loading icon, then show the formatted message
-        //remove stream shower and loading for this bubble since not needed anymore
-        $(`#${message_hash} .temp-text-stream-elm`).hide();
-        $(`#${message_hash} .loading-icon-elm`).hide();
-
-        //make visible hidden formatted output
-        $(`#${message_hash} .text-html-out-elm`).show();
-
-        // Allow user input again
-        this.IsAITalking = false;
+        // Append the chat bubble to the chat window
+        $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
 
         // # AUTO SCROLL DOWN
         $("#ChatWindowMessageList").scrollTop(
-          $("#ChatWindowMessageList")[0].scrollHeight
+            $("#ChatWindowMessageList")[0].scrollHeight
         );
 
-        //make follow up questions if any slowly appear
-        //narrow by message bubble, then holder
-        $(`#${message_hash} .followUpQuestionHolder`).fadeIn("slow");
+        // Flag to prevent user input while AI is 'typing'
+        this.IsAITalking = true;
 
-        return;
-      }
+        // Initialize the index for streaming text
+        let index = 0;
+        const streamRateMs = 23; // Rate at which characters are displayed
 
-      // Append the next character or handle special formatting
-      ChatInstance.appendNextCharacter(
-        ai_text_message,
-        index,
-        `#${message_hash} .temp-text-stream-elm`
-      );
-      index++;
+        // Stream the AI's message into the chat bubble
+        const interval = setInterval(() => {
+            // Check if the entire message has been displayed
+            //MESSAGE STREAM COMPLETE
+            if (index >= ai_text_message.length) {
+                clearInterval(interval);
 
-      // # AUTO SCROLL DOWN
-      $("#ChatWindowMessageList").scrollTop(
-        $("#ChatWindowMessageList")[0].scrollHeight
-      );
-    }, streamRateMs);
-  }
+                // Hide the temporary element and loading icon, then show the formatted message
+                //remove stream shower and loading for this bubble since not needed anymore
+                $(`#${message_hash} .temp-text-stream-elm`).hide();
+                $(`#${message_hash} .loading-icon-elm`).hide();
 
-  // Function to append the next character or handle special formatting
-  static appendNextCharacter(text, index, elementSelector) {
-    const specialChars = {
-      "\n": $("<br>"),
-      "\t": $("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;"),
-      " ": $("<span>").html("&nbsp;"),
-      "<": $("<span>").html("&lt;"),
-      ">": $("<span>").html("&gt;"),
-    };
+                //make visible hidden formatted output
+                $(`#${message_hash} .text-html-out-elm`).show();
 
-    // Check for special characters
-    if (specialChars[text[index]]) {
-      $(elementSelector).append(specialChars[text[index]]);
-    } else {
-      // Append regular character
-      const nextChar = document.createTextNode(text[index]);
-      $(elementSelector).append(nextChar);
+                // Allow user input again
+                this.IsAITalking = false;
+
+                // # AUTO SCROLL DOWN
+                $("#ChatWindowMessageList").scrollTop(
+                    $("#ChatWindowMessageList")[0].scrollHeight
+                );
+
+                //make follow up questions if any slowly appear
+                //narrow by message bubble, then holder
+                $(`#${message_hash} .followUpQuestionHolder`).fadeIn("slow");
+
+                return;
+            }
+
+            // Append the next character or handle special formatting
+            ChatInstance.appendNextCharacter(
+                ai_text_message,
+                index,
+                `#${message_hash} .temp-text-stream-elm`
+            );
+            index++;
+
+            // # AUTO SCROLL DOWN
+            $("#ChatWindowMessageList").scrollTop(
+                $("#ChatWindowMessageList")[0].scrollHeight
+            );
+        }, streamRateMs);
     }
-  }
 
-  //TODO Needs rename
-  static generateHtmlFromJson(json, targetElementId) {
-    const presetQuestionsJson = json;
-    const targetElement = document.getElementById(targetElementId);
-    let htmlContent = "";
+    // Function to append the next character or handle special formatting
+    static appendNextCharacter(text, index, elementSelector) {
+        const specialChars = {
+            "\n": $("<br>"),
+            "\t": $("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;"),
+            " ": $("<span>").html("&nbsp;"),
+            "<": $("<span>").html("&lt;"),
+            ">": $("<span>").html("&gt;"),
+        };
 
-    //NOTE: below sample of full render
-    // <li data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-    //    <h6 class="dropdown-header">
-    //        <span class="iconify me-2" data-icon="fluent-emoji-flat:heart-with-arrow" data-width="23" data-height="23"></span>Love</h6></li>
-    // <div class="collapse" id="collapseExample">
-    //   <div class="card card-body">
-    //     <li><a class="dropdown-item">When will I meet the love of my life in the year 2024?</a></li>
-    //     <li><a class="dropdown-item">Am I going to be in a new relationship in the year 2024?</a></li>
-    //     <li><a class="dropdown-item">Tell me about my love life.</a></li>
-    //     <li><a class="dropdown-item">Will I meet my soulmate in the year between 2024 to 2027?</a></li>
-    //   </div>
-    // </div>
+        // Check for special characters
+        if (specialChars[text[index]]) {
+            $(elementSelector).append(specialChars[text[index]]);
+        } else {
+            // Append regular character
+            const nextChar = document.createTextNode(text[index]);
+            $(elementSelector).append(nextChar);
+        }
+    }
 
-    Object.entries(presetQuestionsJson).forEach(
-      ([categoryKey, categoryValueList]) => {
-        htmlContent += `<li 
+    //TODO Needs rename
+    static generateHtmlFromJson(json, targetElementId) {
+        const presetQuestionsJson = json;
+        const targetElement = document.getElementById(targetElementId);
+        let htmlContent = "";
+
+        //NOTE: below sample of full render
+        // <li data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        //    <h6 class="dropdown-header">
+        //        <span class="iconify me-2" data-icon="fluent-emoji-flat:heart-with-arrow" data-width="23" data-height="23"></span>Love</h6></li>
+        // <div class="collapse" id="collapseExample">
+        //   <div class="card card-body">
+        //     <li><a class="dropdown-item">When will I meet the love of my life in the year 2024?</a></li>
+        //     <li><a class="dropdown-item">Am I going to be in a new relationship in the year 2024?</a></li>
+        //     <li><a class="dropdown-item">Tell me about my love life.</a></li>
+        //     <li><a class="dropdown-item">Will I meet my soulmate in the year between 2024 to 2027?</a></li>
+        //   </div>
+        // </div>
+
+        Object.entries(presetQuestionsJson).forEach(
+            ([categoryKey, categoryValueList]) => {
+                htmlContent += `<li 
         data-bs-toggle="collapse" 
         href="#collapse_${categoryKey}"
         role="button" aria-expanded="false"
         aria-controls="collapse_${categoryKey}">
           <h6 class="dropdown-header">
             <span class="iconify me-2" data-icon="${ChatInstance.getCategoryIconClass(
-              categoryKey
-            )}" data-width="23" data-height="23"></span>
+                    categoryKey
+                )}" data-width="23" data-height="23"></span>
             ${categoryKey}
           </h6></li>`;
-        htmlContent += `<div class="collapse" id="collapse_${categoryKey}">`;
-        htmlContent += '<div class="card card-body">';
+                htmlContent += `<div class="collapse" id="collapse_${categoryKey}">`;
+                htmlContent += '<div class="card card-body">';
 
-        let combinedArray = [];
-        for (let category in categoryValueList) {
-          combinedArray = combinedArray.concat(categoryValueList[category]);
+                let combinedArray = [];
+                for (let category in categoryValueList) {
+                    combinedArray = combinedArray.concat(categoryValueList[category]);
+                }
+
+                if (Array.isArray(combinedArray)) {
+                    combinedArray.forEach((questionText) => {
+                        htmlContent += `<li><a  onclick="window.vedastro.chatapi.onclick_preset_question(this)" class="dropdown-item">${questionText}</a></li>`;
+                    });
+                } else {
+                    htmlContent += `<li><a class="dropdown-item">${combinedArray}</a></li>`;
+                }
+
+                htmlContent += "</div>"; // Close .card-body div
+                htmlContent += "</div>"; // Close #collapse_{categoryKey} div
+            }
+        );
+
+        targetElement.innerHTML = htmlContent;
+    }
+    static getCategoryIconClass(categoryKey) {
+        switch (categoryKey) {
+            case "BestDates":
+                return "fluent-emoji-flat:spiral-calendar";
+            case "Personality":
+                return "fluent-emoji-flat:person";
+            case "Travel":
+                return "fluent-emoji-flat:airplane-departure";
+            case "Love":
+                return "fluent-emoji-flat:heart-with-arrow";
+            case "Astrology":
+                return "twemoji:ringed-planet";
+            case "Studies":
+                return "fluent-emoji-flat:books";
+            case "Money":
+                return "fluent-emoji-flat:money-bag";
+            case "Business":
+                return "fluent-emoji-flat:briefcase";
+            case "Career":
+                return "fluent-emoji-flat:graduation-cap";
+            case "HomeAndFamily":
+                return "fluent-emoji-flat:house-with-garden";
+            case "KarmaAndDestiny":
+                return "noto:milky-way";
+            case "TestAccuracy":
+                return "fluent-emoji-flat:test-tube";
+            case "AIJokes":
+                return "fxemoji:smiletongue";
+            case "Previous":
+                return "mdi:comment-previous";
+            default:
+                return "fluent-emoji-flat:heart-with-arrow";
         }
+    }
 
-        if (Array.isArray(combinedArray)) {
-          combinedArray.forEach((questionText) => {
-            htmlContent += `<li><a  onclick="window.vedastro.chatapi.onclick_preset_question(this)" class="dropdown-item">${questionText}</a></li>`;
-          });
+    onclose() {
+        console.log("Connection closed");
+        this.connected = false;
+    }
+
+    onerror(event) {
+        console.error("WebSocket error: ", event);
+        this.connected = false;
+    }
+
+    processQueue() {
+        while (this.queue.length > 0) {
+            this.sendNextMessageInQueue();
+        }
+    }
+
+    sendNextMessageInQueue() {
+        if (this.connected && this.socket.readyState === WebSocket.OPEN) {
+            const message = this.queue.shift();
+            this.socket.send(message);
+        }
+    }
+
+    enqueueMessage(message) {
+        if (!this.connected || this.socket.readyState !== WebSocket.OPEN) {
+            this.queue.push(message);
         } else {
-          htmlContent += `<li><a class="dropdown-item">${combinedArray}</a></li>`;
+            this.sendMessageNow(message);
+        }
+    }
+
+    sendMessageNow(message) {
+        if (
+            this.socket.readyState === WebSocket.OPEN ||
+            this.socket.readyState === WebSocket.CONNECTING
+        ) {
+            this.socket.send(message);
+        } else {
+            console.error("Cannot send message, connection is not open");
+        }
+    }
+
+    async waitForConnection() {
+        return new Promise((resolve) => {
+            if (this.connected) {
+                resolve();
+                return;
+            }
+
+            this.checkConnection = setInterval(() => {
+                if (this.connected) {
+                    clearInterval(this.checkConnection);
+                    resolve();
+                }
+            }, 100);
+        });
+    }
+
+    //control comes here from both Button click and keyboard press enter
+    async OnClickSendChat(userInput = "") {
+        //STEP 0 : Validation
+        //make sure the topic has been selected, else end here
+        var selectedTopic = $("#TopicListDropdown").val();
+        if (selectedTopic === "") {
+            Swal.fire(
+                "How to talk about nothing, dear?",
+                "<strong>Choose</strong> first a <strong>topic</strong> that you want to talk about today",
+                "error"
+            );
+            return;
         }
 
-        htmlContent += "</div>"; // Close .card-body div
-        htmlContent += "</div>"; // Close #collapse_{categoryKey} div
-      }
-    );
-
-    targetElement.innerHTML = htmlContent;
-  }
-  static getCategoryIconClass(categoryKey) {
-    switch (categoryKey) {
-      case "BestDates":
-        return "fluent-emoji-flat:spiral-calendar";
-      case "Personality":
-        return "fluent-emoji-flat:person";
-      case "Travel":
-        return "fluent-emoji-flat:airplane-departure";
-      case "Love":
-        return "fluent-emoji-flat:heart-with-arrow";
-      case "Astrology":
-        return "twemoji:ringed-planet";
-      case "Studies":
-        return "fluent-emoji-flat:books";
-      case "Money":
-        return "fluent-emoji-flat:money-bag";
-      case "Business":
-        return "fluent-emoji-flat:briefcase";
-      case "Career":
-        return "fluent-emoji-flat:graduation-cap";
-      case "HomeAndFamily":
-        return "fluent-emoji-flat:house-with-garden";
-      case "KarmaAndDestiny":
-        return "noto:milky-way";
-      case "TestAccuracy":
-        return "fluent-emoji-flat:test-tube";
-      case "AIJokes":
-        return "fxemoji:smiletongue";
-      case "Previous":
-        return "mdi:comment-previous";
-      default:
-        return "fluent-emoji-flat:heart-with-arrow";
-    }
-  }
-
-  onclose() {
-    console.log("Connection closed");
-    this.connected = false;
-  }
-
-  onerror(event) {
-    console.error("WebSocket error: ", event);
-    this.connected = false;
-  }
-
-  processQueue() {
-    while (this.queue.length > 0) {
-      this.sendNextMessageInQueue();
-    }
-  }
-
-  sendNextMessageInQueue() {
-    if (this.connected && this.socket.readyState === WebSocket.OPEN) {
-      const message = this.queue.shift();
-      this.socket.send(message);
-    }
-  }
-
-  enqueueMessage(message) {
-    if (!this.connected || this.socket.readyState !== WebSocket.OPEN) {
-      this.queue.push(message);
-    } else {
-      this.sendMessageNow(message);
-    }
-  }
-
-  sendMessageNow(message) {
-    if (
-      this.socket.readyState === WebSocket.OPEN ||
-      this.socket.readyState === WebSocket.CONNECTING
-    ) {
-      this.socket.send(message);
-    } else {
-      console.error("Cannot send message, connection is not open");
-    }
-  }
-
-  async waitForConnection() {
-    return new Promise((resolve) => {
-      if (this.connected) {
-        resolve();
-        return;
-      }
-
-      this.checkConnection = setInterval(() => {
-        if (this.connected) {
-          clearInterval(this.checkConnection);
-          resolve();
+        //make sure the chat input has something, else end here
+        userInput = userInput === "" ? $("#UserChatInputElement").val() : userInput; //get chat message to send to API that user inputed
+        if (userInput === "") {
+            Swal.fire(
+                "How to send nothing, sweetheart?",
+                "Please <strong>type a question</strong> in the chatbox first. Also there's <strong>commonly asked questions</strong> on left of the input.",
+                "error"
+            );
+            return;
         }
-      }, 100);
-    });
-  }
 
-  //control comes here from both Button click and keyboard press enter
-  async OnClickSendChat(userInput = "") {
-    //STEP 0 : Validation
-    //make sure the topic has been selected, else end here
-    var selectedTopic = $("#TopicListDropdown").val();
-    if (selectedTopic === "") {
-      Swal.fire(
-        "How to talk about nothing, dear?",
-        "<strong>Choose</strong> first a <strong>topic</strong> that you want to talk about today",
-        "error"
-      );
-      return;
-    }
+        //make sure AI is not busy talking
+        if (this.IsAITalking) {
+            Swal.fire(
+                "Please wait, dear..",
+                "AI is <strong>busy talking</strong>, please wait for it to <strong>finish</strong> chattering.",
+                "error"
+            );
+            return;
+        }
 
-    //make sure the chat input has something, else end here
-    userInput = userInput === "" ? $("#UserChatInputElement").val() : userInput; //get chat message to send to API that user inputed
-    if (userInput === "") {
-      Swal.fire(
-        "How to send nothing, sweetheart?",
-        "Please <strong>type a question</strong> in the chatbox first. Also there's <strong>commonly asked questions</strong> on left of the input.",
-        "error"
-      );
-      return;
-    }
-
-    //make sure AI is not busy talking
-    if (this.IsAITalking) {
-      Swal.fire(
-        "Please wait, dear..",
-        "AI is <strong>busy talking</strong>, please wait for it to <strong>finish</strong> chattering.",
-        "error"
-      );
-      return;
-    }
-
-    // STEP 1 : UPDATE GUI WITH USER MSG (UX)
-    var aiInput = $("#UserChatInputElement").val();
-    var userName = "You";
-    var userInputChatCloud = `
+        // STEP 1 : UPDATE GUI WITH USER MSG (UX)
+        var aiInput = $("#UserChatInputElement").val();
+        var userName = "You";
+        var userInputChatCloud = `
         <li class="d-flex justify-content-end mb-4">
             <div class="card ">
                 <div class="card-header d-flex justify-content-between p-3">
@@ -3325,73 +3389,73 @@ ${ai_text_message_html}
                  class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="45">
         </li>
         `;
-    //inject in User's input into chat window
-    $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+        //inject in User's input into chat window
+        $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
 
-    //STEP 2:
-    //user's input is sent to server for reply
-    //get selected birth time
-    //TODO can be DOB or bookname
-    var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+        //STEP 2:
+        //user's input is sent to server for reply
+        //get selected birth time
+        //TODO can be DOB or bookname
+        var topicText = CommonTools.BirthTimeUrlOfSelectedPersonJson();
 
-    await this.SendMessageToServer(userInput);
-    this.LastUserMessage = userInput; //save to used later for highlight
+        await this.SendMessageToServer(userInput);
+        this.LastUserMessage = userInput; //save to used later for highlight
 
-    //STEP 3 : GUI CLEAN UP
-    //clear question input box for next, question
-    $("#UserChatInputElement").val("");
+        //STEP 3 : GUI CLEAN UP
+        //clear question input box for next, question
+        $("#UserChatInputElement").val("");
 
-    //STEP 4: ADD EASY TO EASY REASK LIST
-    // Add the new question at the beginning of the 'Last 3' array
-    // Check if the new question already exists in the 'Last 3' array
-    var index = this.PresetQuestions.Previous["Last 3"].indexOf(userInput);
+        //STEP 4: ADD EASY TO EASY REASK LIST
+        // Add the new question at the beginning of the 'Last 3' array
+        // Check if the new question already exists in the 'Last 3' array
+        var index = this.PresetQuestions.Previous["Last 3"].indexOf(userInput);
 
-    if (index === -1) {
-      // If the new question does not exist, add it at the beginning of the array
-      this.PresetQuestions.Previous["Last 3"].unshift(userInput);
-    } else {
-      // If the new question exists, remove it from its current position
-      this.PresetQuestions.Previous["Last 3"].splice(index, 1);
-      // Then add it at the beginning of the array
-      this.PresetQuestions.Previous["Last 3"].unshift(userInput);
+        if (index === -1) {
+            // If the new question does not exist, add it at the beginning of the array
+            this.PresetQuestions.Previous["Last 3"].unshift(userInput);
+        } else {
+            // If the new question exists, remove it from its current position
+            this.PresetQuestions.Previous["Last 3"].splice(index, 1);
+            // Then add it at the beginning of the array
+            this.PresetQuestions.Previous["Last 3"].unshift(userInput);
+        }
+
+        // If there are more than 3 questions, remove the 4th one
+        if (this.PresetQuestions.Previous["Last 3"].length > 5) {
+            this.PresetQuestions.Previous["Last 3"].pop();
+        }
+        //re-generate preset question drop down
+        ChatInstance.generateHtmlFromJson(
+            this.PresetQuestions,
+            "presetQuestionDropdown"
+        );
     }
 
-    // If there are more than 3 questions, remove the 4th one
-    if (this.PresetQuestions.Previous["Last 3"].length > 5) {
-      this.PresetQuestions.Previous["Last 3"].pop();
+    //this is where final JSON packaged before sending to server
+    async SendMessageToServer(message) {
+        //build all commands based on set user settings
+        var command_list = [];
+        var password = $("#useTeacherModeSwitchInput").val();
+        var isTeacherMode = $("#useTeacherModeSwitchInput").is(":checked");
+        //teacher mode enables all answers, but slower
+        if (isTeacherMode) {
+            command_list.push("teacher_mode");
+        }
+
+        //NOTE: also equivelant to answer processing expriments
+        //set answer level
+        command_list.push("level_1");
+
+        const messagePayload = {
+            user_id: window.vedastro.UserId, //gotten from browser storage if any when script was init
+            text: message,
+            topic: window.vedastro.chatapi.SelectedTopicId, //can be DOB or book name, or astrology coder,
+            command: command_list,
+            password: password,
+        };
+
+        window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
     }
-    //re-generate preset question drop down
-    ChatInstance.generateHtmlFromJson(
-      this.PresetQuestions,
-      "presetQuestionDropdown"
-    );
-  }
-
-  //this is where final JSON packaged before sending to server
-  async SendMessageToServer(message) {
-    //build all commands based on set user settings
-    var command_list = [];
-    var password = $("#useTeacherModeSwitchInput").val();
-    var isTeacherMode = $("#useTeacherModeSwitchInput").is(":checked");
-    //teacher mode enables all answers, but slower
-    if (isTeacherMode) {
-      command_list.push("teacher_mode");
-    }
-
-    //NOTE: also equivelant to answer processing expriments
-    //set answer level
-    command_list.push("level_1");
-
-    const messagePayload = {
-      user_id: window.vedastro.UserId, //gotten from browser storage if any when script was init
-      text: message,
-      topic: window.vedastro.chatapi.SelectedTopicId, //can be DOB or book name, or astrology coder,
-      command: command_list,
-      password: password,
-    };
-
-    window.vedastro.chatapi.enqueueMessage(JSON.stringify(messagePayload));
-  }
 }
 
 /**
@@ -3401,9 +3465,9 @@ ${ai_text_message_html}
  * @param {Object} inputArguments - The Time and other data needed to generate table.
  */
 window.GenerateChatInstance = (settingsAIChat) => {
-  //note: on init, chat instance is loaded into window.vedastro.chatapi
-  new ChatInstance(settingsAIChat);
-  window.vedastro.chatapi.waitForConnection();
+    //note: on init, chat instance is loaded into window.vedastro.chatapi
+    new ChatInstance(settingsAIChat);
+    window.vedastro.chatapi.waitForConnection();
 };
 
 /**
@@ -3411,63 +3475,63 @@ window.GenerateChatInstance = (settingsAIChat) => {
  * Used by Blazor to call JS code.
  */
 window.ChartFromSVG = async (chartStr) => {
-  //inject into default div on page to hold, "EventsChartSvgHolder"
-  var $chartElm = injectIntoElement($(ID.EventsChartSvgHolder)[0], chartStr);
+    //inject into default div on page to hold, "EventsChartSvgHolder"
+    var $chartElm = injectIntoElement($(ID.EventsChartSvgHolder)[0], chartStr);
 
-  //things done here:
-  //- get the unique ID of the chart
-  //- use ID to maintain clean code
-  //- chart is available in window.EventsChartList
-  var chartId = $chartElm.attr("id");
-  var index = new EventsChart(chartId); //brings to life
+    //things done here:
+    //- get the unique ID of the chart
+    //- use ID to maintain clean code
+    //- chart is available in window.EventsChartList
+    var chartId = $chartElm.attr("id");
+    var index = new EventsChart(chartId); //brings to life
 
-  //let caller know all went well
-  console.log(`Amen! Chart Loaded : INDEX:${index}, ID:${chartId}`);
+    //let caller know all went well
+    console.log(`Amen! Chart Loaded : INDEX:${index}, ID:${chartId}`);
 
-  //-----------------------------LOCAL FUNCS---------------------------------------
+    //-----------------------------LOCAL FUNCS---------------------------------------
 
-  //todo marked for update
-  async function getEventsChartFromApiXml(url, payload) {
-    console.log(`JS : Getting events chart from API...`);
+    //todo marked for update
+    async function getEventsChartFromApiXml(url, payload) {
+        console.log(`JS : Getting events chart from API...`);
 
-    var response = await window.fetch(url, {
-      headers: { accept: "*/*", Connection: "keep-alive" },
-      body: payload,
-      method: "GET",
-    });
+        var response = await window.fetch(url, {
+            headers: { accept: "*/*", Connection: "keep-alive" },
+            body: payload,
+            method: "GET",
+        });
 
-    //API should always give a OK reply, else it has failed internally
-    if (!response.ok) {
-      console.log("ERROR : API Call Crashed!");
+        //API should always give a OK reply, else it has failed internally
+        if (!response.ok) {
+            console.log("ERROR : API Call Crashed!");
+        }
+
+        //inject new svg chart into page
+        var svgChartString = await response.text();
+
+        return svgChartString;
     }
 
-    //inject new svg chart into page
-    var svgChartString = await response.text();
+    //returns the reference to the SVG element in DOM
+    function injectIntoElement(parentElement, valueToInject) {
+        console.log(`JS : Injecting SVG Chart into page...`);
 
-    return svgChartString;
-  }
+        //if parent not found raise alarm
+        if (parentElement === undefined) {
+            console.log("ERROR: Parent element ID'd EventsChartSvgHolder not found");
+        }
 
-  //returns the reference to the SVG element in DOM
-  function injectIntoElement(parentElement, valueToInject) {
-    console.log(`JS : Injecting SVG Chart into page...`);
+        //convert string to html node
+        var template = document.createElement("template");
+        template.innerHTML = valueToInject;
+        var svgElement = template.content.firstElementChild;
 
-    //if parent not found raise alarm
-    if (parentElement === undefined) {
-      console.log("ERROR: Parent element ID'd EventsChartSvgHolder not found");
+        //place new node in parent
+        parentElement.innerHTML = ""; //clear current children if any
+        parentElement.appendChild(svgElement);
+
+        //return reference in to SVG elm in DOM (jquery for ease)
+        return $(svgElement);
     }
-
-    //convert string to html node
-    var template = document.createElement("template");
-    template.innerHTML = valueToInject;
-    var svgElement = template.content.firstElementChild;
-
-    //place new node in parent
-    parentElement.innerHTML = ""; //clear current children if any
-    parentElement.appendChild(svgElement);
-
-    //return reference in to SVG elm in DOM (jquery for ease)
-    return $(svgElement);
-  }
 };
 
 //--------------------HOROSCOPE CHAT-------------------
@@ -3475,48 +3539,48 @@ window.ChartFromSVG = async (chartStr) => {
 //i'm prepared to repaint this hand a million times, means nothing to me!
 //i'm not the painter you see, just the one watching
 class HoroscopeChat {
-  LastUserMessage = ""; //used for post ai reply highlight
-  SelectedTopicId = ""; //she's filled in when set
-  SelectedTopicText = ""; //she's filled in when set
-  ServerURL = ""; //filled in later just before use
-  LiveServerURL = "http://localhost:7071/api/Calculate";
-  //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
-  //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
-  ElementID = ""; //ID of main div where table & header will be injected
-  ShowHeader = true; //default enabled, header with title, icon and edit button
-  HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
-  IsAITalking = false; //default false, to implement "PTT" radio like protocol
-  PaddingTopApplied = false; //basic switch will go once
-  SelectedBirthTime = ""; //if mentioned during init use it else, GUI will change ask for it
-  SessionId = ""; //start clean, updated as message comes in
+    LastUserMessage = ""; //used for post ai reply highlight
+    SelectedTopicId = ""; //she's filled in when set
+    SelectedTopicText = ""; //she's filled in when set
+    ServerURL = ""; //filled in later just before use
+    LiveServerURL = "http://localhost:7071/api/Calculate";
+    //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
+    //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
+    ElementID = ""; //ID of main div where table & header will be injected
+    ShowHeader = true; //default enabled, header with title, icon and edit button
+    HeaderIcon = "twemoji:ringed-planet"; //default enabled, header with title, icon and edit button
+    IsAITalking = false; //default false, to implement "PTT" radio like protocol
+    PaddingTopApplied = false; //basic switch will go once
+    SelectedBirthTime = ""; //if mentioned during init use it else, GUI will change ask for it
+    SessionId = ""; //start clean, updated as message comes in
 
-  constructor(rawSettings) {
-    console.log(
-      "~~~~~~~Stand back! Awesome Chat API code launching! All engines go!~~~~~~~"
-    );
+    constructor(rawSettings) {
+        console.log(
+            "~~~~~~~Stand back! Awesome Chat API code launching! All engines go!~~~~~~~"
+        );
 
-    //make instance accessible
-    window.vedastro.horoscopechat = this;
+        //make instance accessible
+        window.vedastro.horoscopechat = this;
 
-    //process the input variables and set them
-    this.initializeSettingData(rawSettings);
+        //process the input variables and set them
+        this.initializeSettingData(rawSettings);
 
-    //make the main chat window structure
-    this.initializeChatMainBody();
+        //make the main chat window structure
+        this.initializeChatMainBody();
 
-    //creates ever changing placeholder questios to engage users
-    this.initializeChatInputElement();
+        //creates ever changing placeholder questios to engage users
+        this.initializeChatInputElement();
 
-    //update control center back on earth
-    console.log("~~~~~~~Huston, we have lift off!~~~~~~~");
-  }
+        //update control center back on earth
+        console.log("~~~~~~~Huston, we have lift off!~~~~~~~");
+    }
 
-  //----------------------------------------FUNCS---------------------------------------
-  //---------------------BELOW LIES FUNCS, AS WE ARE SO YOU SHALL BE--------------------
+    //----------------------------------------FUNCS---------------------------------------
+    //---------------------BELOW LIES FUNCS, AS WE ARE SO YOU SHALL BE--------------------
 
-  //chat box body as html to be injected
-  generateHtmlBody() {
-    return `
+    //chat box body as html to be injected
+    generateHtmlBody() {
+        return `
 
         <div class="fw-bold hstack gap-2 d-flex" style="">
             <div>
@@ -3573,268 +3637,268 @@ class HoroscopeChat {
             </div>
         </div> 
      `;
-  }
+    }
 
-  //called direct from static HTML hookup without seperate attach code
-  //exp use : onclick="window.vedastro.horoscopechat.rate_message(this, -1)"
-  onClickPresetQuestion(eventData) {
-    //6: autofill preset questions handle (attach after generate)
-    var selectedText = $(eventData).text();
-    $("#UserChatInputElement").val(selectedText);
-  }
+    //called direct from static HTML hookup without seperate attach code
+    //exp use : onclick="window.vedastro.horoscopechat.rate_message(this, -1)"
+    onClickPresetQuestion(eventData) {
+        //6: autofill preset questions handle (attach after generate)
+        var selectedText = $(eventData).text();
+        $("#UserChatInputElement").val(selectedText);
+    }
 
-  initializeSettingData(rawSettings) {
-    //correct if property names is camel case (for Blazor)
-    var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+    initializeSettingData(rawSettings) {
+        //correct if property names is camel case (for Blazor)
+        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
 
-    //expand data inside settings input
-    this.ElementID = settings.ElementID;
-    this.ShowHeader = settings.ShowHeader;
-    this.HeaderIcon = settings.HeaderIcon;
+        //expand data inside settings input
+        this.ElementID = settings.ElementID;
+        this.ShowHeader = settings.ShowHeader;
+        this.HeaderIcon = settings.HeaderIcon;
 
-    //birth time can be inserted at init
+        //birth time can be inserted at init
 
-    this.SelectedBirthTime = settings.SelectedBirthTime;
+        this.SelectedBirthTime = settings.SelectedBirthTime;
 
-    //GUI LOAD SAVED VALUES
-    //load settings stored browser storage, reflected in gui
-    let isLocalServerModeStr = localStorage.getItem("IsLocalServerMode");
-    $("#useLocalServerSwitchInput").prop(
-      "checked",
-      JSON.parse(isLocalServerModeStr)
-    );
-  }
+        //GUI LOAD SAVED VALUES
+        //load settings stored browser storage, reflected in gui
+        let isLocalServerModeStr = localStorage.getItem("IsLocalServerMode");
+        $("#useLocalServerSwitchInput").prop(
+            "checked",
+            JSON.parse(isLocalServerModeStr)
+        );
+    }
 
-  //this makes sure the input element has dynamic text and dropdowns work well
-  initializeChatInputElement() {
-    //preset questions used by both elements below
-    let presetQuestions = [
-      "\uD83E\uDDD1\u200D\uD83C\uDFA8 Will higher educational benefit me?",
-      "\uD83C\uDF7B Will a party lifestyle benefit me?",
-      "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Who will benefit me more friends or family?",
-      "\uD83D\uDC9D Will marriage bring me happiness?",
-      "\uD83D\uDE4F Will becoming a monk benefit me?",
-      "\uD83D\uDE0D Predict my sex life?",
-      "\uD83C\uDF0D Can travel improve my life?",
-      "\uD83C\uDF78 Why am I an alcoholic?",
-      "\uD83D\uDCCA Will I succeed in stock trading?",
-      "\uD83E\uDD29 Will I become famous?",
-      "\uD83D\uDCB0 Will I become a millionaire?",
-      "\uD83D\uDC98 Describe my future wife?",
-      "\uD83D\uDC74 Relationship with my father?",
-      "\uD83C\uDFB0 Can I win lottery prize?",
-      "\uD83C\uDF0D Special yogas in my chart?",
-      "\uD83D\uDCDA Best career for me?",
-      "\uD83C\uDF93 Will I get foreign education?",
-    ];
+    //this makes sure the input element has dynamic text and dropdowns work well
+    initializeChatInputElement() {
+        //preset questions used by both elements below
+        let presetQuestions = [
+            "\uD83E\uDDD1\u200D\uD83C\uDFA8 Will higher educational benefit me?",
+            "\uD83C\uDF7B Will a party lifestyle benefit me?",
+            "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Who will benefit me more friends or family?",
+            "\uD83D\uDC9D Will marriage bring me happiness?",
+            "\uD83D\uDE4F Will becoming a monk benefit me?",
+            "\uD83D\uDE0D Predict my sex life?",
+            "\uD83C\uDF0D Can travel improve my life?",
+            "\uD83C\uDF78 Why am I an alcoholic?",
+            "\uD83D\uDCCA Will I succeed in stock trading?",
+            "\uD83E\uDD29 Will I become famous?",
+            "\uD83D\uDCB0 Will I become a millionaire?",
+            "\uD83D\uDC98 Describe my future wife?",
+            "\uD83D\uDC74 Relationship with my father?",
+            "\uD83C\uDFB0 Can I win lottery prize?",
+            "\uD83C\uDF0D Special yogas in my chart?",
+            "\uD83D\uDCDA Best career for me?",
+            "\uD83C\uDF93 Will I get foreign education?",
+        ];
 
-    //build the input element
-    initializeInputElement();
+        //build the input element
+        initializeInputElement();
 
-    //then build the preset downdown
-    initializePresetDropdownElement();
+        //then build the preset downdown
+        initializePresetDropdownElement();
 
-    //--------LOCAL
+        //--------LOCAL
 
-    function initializeInputElement() {
-      let $inputField = $("#UserChatInputElement"); // replace 'chatInput' with your input field's ID
-      let currentQuestionIndex = 0;
-      let currentCharIndex = 0;
-      let isUserTyping = false;
+        function initializeInputElement() {
+            let $inputField = $("#UserChatInputElement"); // replace 'chatInput' with your input field's ID
+            let currentQuestionIndex = 0;
+            let currentCharIndex = 0;
+            let isUserTyping = false;
 
-      function resetTyping() {
-        currentCharIndex = 0;
-        currentQuestionIndex =
-          (currentQuestionIndex + 1) % presetQuestions.length;
-        $inputField.attr("placeholder", ""); // clear the placeholder
-      }
+            function resetTyping() {
+                currentCharIndex = 0;
+                currentQuestionIndex =
+                    (currentQuestionIndex + 1) % presetQuestions.length;
+                $inputField.attr("placeholder", ""); // clear the placeholder
+            }
 
-      function typeQuestion() {
-        if (!isUserTyping) {
-          if (currentCharIndex < presetQuestions[currentQuestionIndex].length) {
-            $inputField.attr(
-              "placeholder",
-              $inputField.attr("placeholder") +
-                presetQuestions[currentQuestionIndex][currentCharIndex]
-            );
-            currentCharIndex++;
-            setTimeout(typeQuestion, 30); // type each character every 100 milliseconds
-          } else {
-            setTimeout(resetTyping, 3000); // wait 3 seconds before starting the next question
-            setTimeout(typeQuestion, 3000);
-          }
-        }
-      }
+            function typeQuestion() {
+                if (!isUserTyping) {
+                    if (currentCharIndex < presetQuestions[currentQuestionIndex].length) {
+                        $inputField.attr(
+                            "placeholder",
+                            $inputField.attr("placeholder") +
+                            presetQuestions[currentQuestionIndex][currentCharIndex]
+                        );
+                        currentCharIndex++;
+                        setTimeout(typeQuestion, 30); // type each character every 100 milliseconds
+                    } else {
+                        setTimeout(resetTyping, 3000); // wait 3 seconds before starting the next question
+                        setTimeout(typeQuestion, 3000);
+                    }
+                }
+            }
 
-      typeQuestion();
-
-      $inputField.on("input", function () {
-        isUserTyping = true;
-        if ($inputField.val() === "") {
-          // if input field is empty
-          // start typing the question again after a little while (2 seconds)
-          setTimeout(function () {
-            isUserTyping = false;
             typeQuestion();
-          }, 2000);
+
+            $inputField.on("input", function () {
+                isUserTyping = true;
+                if ($inputField.val() === "") {
+                    // if input field is empty
+                    // start typing the question again after a little while (2 seconds)
+                    setTimeout(function () {
+                        isUserTyping = false;
+                        typeQuestion();
+                    }, 2000);
+                }
+            });
+
+            //1:handle user press "Enter" equal to clicking send button
+            $("#UserChatInputElement").keypress((e) => {
+                if (e.which === 13) {
+                    // Enter key pressed
+                    window.vedastro.horoscopechat.onClickSendChat();
+                    e.preventDefault(); // Prevents the default action
+                }
+            });
         }
-      });
 
-      //1:handle user press "Enter" equal to clicking send button
-      $("#UserChatInputElement").keypress((e) => {
-        if (e.which === 13) {
-          // Enter key pressed
-          window.vedastro.horoscopechat.onClickSendChat();
-          e.preventDefault(); // Prevents the default action
+        function initializePresetDropdownElement() {
+            let dropdownElement = document.getElementById(
+                "UserPresetDropDownElement"
+            );
+
+            // Clear the dropdown
+            dropdownElement.innerHTML = "";
+
+            // Fill the dropdown with the array data using HTML string interpolation
+            for (let i = 0; i < presetQuestions.length; i++) {
+                dropdownElement.innerHTML += `<li class="dropdown-item" onclick="window.vedastro.horoscopechat.onClickPresetQuestion(this)" style="cursor: pointer; margin-left:-4px;">${presetQuestions[i]}</li>`;
+            }
         }
-      });
     }
 
-    function initializePresetDropdownElement() {
-      let dropdownElement = document.getElementById(
-        "UserPresetDropDownElement"
-      );
+    initializeChatMainBody() {
+        //CHAT GUI INJECTION
+        //clear old gui data if any
 
-      // Clear the dropdown
-      dropdownElement.innerHTML = "";
+        $(`#${this.ElementID}`).empty();
 
-      // Fill the dropdown with the array data using HTML string interpolation
-      for (let i = 0; i < presetQuestions.length; i++) {
-        dropdownElement.innerHTML += `<li class="dropdown-item" onclick="window.vedastro.horoscopechat.onClickPresetQuestion(this)" style="cursor: pointer; margin-left:-4px;">${presetQuestions[i]}</li>`;
-      }
-    }
-  }
+        //set max width here since declared in html
+        $(`#${this.ElementID}`).css("max-width", "667px");
 
-  initializeChatMainBody() {
-    //CHAT GUI INJECTION
-    //clear old gui data if any
+        //random ID for edit button
+        this.EditButtonId = Math.floor(Math.random() * 1000000);
 
-    $(`#${this.ElementID}`).empty();
+        //inject into page
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
 
-    //set max width here since declared in html
-    $(`#${this.ElementID}`).css("max-width", "667px");
+        //if birth time not yet set, aka person not selected
+        if (this.SelectedBirthTime == undefined) {
+            //show person selector
+            $("#personSelectorHolder").show();
+            //hide normal chat input
+            $("#questionInputHolder").hide();
 
-    //random ID for edit button
-    this.EditButtonId = Math.floor(Math.random() * 1000000);
+            //generate person list drop down
+            GeneratePersonListDropdown();
 
-    //inject into page
-    $(`#${this.ElementID}`).html(this.generateHtmlBody());
+            //enter inviting message from AI
+            //note: the minimal message strucuture
+            let jsonObject = {
+                Text:
+                    String.fromCodePoint(0x1f44b) +
+                    " Hi, I'm your AI astrologer. Any questions?",
+                TextHtml:
+                    String.fromCodePoint(0x1f44b) +
+                    " Hi, I'm your AI astrologer. Any questions?",
+                TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
+                Commands: ["noFeedback"],
+            };
+            var aiReplyData = JSON.stringify(jsonObject);
+            this.printAIReplyMessageToView(aiReplyData);
+        }
 
-    //if birth time not yet set, aka person not selected
-    if (this.SelectedBirthTime == undefined) {
-      //show person selector
-      $("#personSelectorHolder").show();
-      //hide normal chat input
-      $("#questionInputHolder").hide();
+        //---------
 
-      //generate person list drop down
-      GeneratePersonListDropdown();
+        async function GeneratePersonListDropdown(idToSelect = "") {
+            //get the main dropdown element
+            var $dropdown = $("#PersonListDropdown");
 
-      //enter inviting message from AI
-      //note: the minimal message strucuture
-      let jsonObject = {
-        Text:
-          String.fromCodePoint(0x1f44b) +
-          " Hi, I'm your AI astrologer. Any questions?",
-        TextHtml:
-          String.fromCodePoint(0x1f44b) +
-          " Hi, I'm your AI astrologer. Any questions?",
-        TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
-        Commands: ["noFeedback"],
-      };
-      var aiReplyData = JSON.stringify(jsonObject);
-      this.printAIReplyMessageToView(aiReplyData);
-    }
+            //DO FOR USER'S SAVED LIST
+            window.vedastro.PersonList = await CommonTools.GetAPIPayload(
+                `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/${window.vedastro.UserId}`
+            );
 
-    //---------
+            //create a header in the list
+            let $horoscopeGroup = $("<optgroup>", {
+                label: "Horoscopes",
+            });
 
-    async function GeneratePersonListDropdown(idToSelect = "") {
-      //get the main dropdown element
-      var $dropdown = $("#PersonListDropdown");
+            $dropdown.append($horoscopeGroup); //add to main list
 
-      //DO FOR USER'S SAVED LIST
-      window.vedastro.PersonList = await CommonTools.GetAPIPayload(
-        `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/${window.vedastro.UserId}`
-      );
+            //populate slection list at bottom with horoscopes
+            $.each(window.vedastro.PersonList, function (i, person) {
+                $horoscopeGroup.append(
+                    $("<option>", {
+                        value: person.PersonId,
+                        text: person.Name,
+                        selected: person.PersonId === idToSelect,
+                    })
+                );
+            });
 
-      //create a header in the list
-      let $horoscopeGroup = $("<optgroup>", {
-        label: "Horoscopes",
-      });
+            //DO FOR PUBLIC LIST
+            window.vedastro.PublicPersonList = await CommonTools.GetAPIPayload(
+                `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/101`
+            );
+            //create a header in the list
+            let $publicHoroscopeGroup = $("<optgroup>", {
+                label: "Example Horoscopes",
+            });
+            $dropdown.append($publicHoroscopeGroup); //add to main list
 
-      $dropdown.append($horoscopeGroup); //add to main list
-
-      //populate slection list at bottom with horoscopes
-      $.each(window.vedastro.PersonList, function (i, person) {
-        $horoscopeGroup.append(
-          $("<option>", {
-            value: person.PersonId,
-            text: person.Name,
-            selected: person.PersonId === idToSelect,
-          })
-        );
-      });
-
-      //DO FOR PUBLIC LIST
-      window.vedastro.PublicPersonList = await CommonTools.GetAPIPayload(
-        `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/101`
-      );
-      //create a header in the list
-      let $publicHoroscopeGroup = $("<optgroup>", {
-        label: "Example Horoscopes",
-      });
-      $dropdown.append($publicHoroscopeGroup); //add to main list
-
-      //populate slection list at bottom with horoscopes
-      $.each(window.vedastro.PublicPersonList, function (i, person) {
-        $publicHoroscopeGroup.append(
-          $("<option>", {
-            value: person.PersonId,
-            text: person.Name,
-            selected: person.PersonId === idToSelect,
-          })
-        );
-      });
-    }
-  }
-
-  //control comes here from both Button click and keyboard press enter
-  async onClickSendChat(userInput = "") {
-    //STEP 0 : Validation
-
-    //make sure the chat input has something, else end here
-    userInput = userInput === "" ? $("#UserChatInputElement").val() : userInput; //get chat message to send to API that user inputed
-    if (userInput === "") {
-      Swal.fire(
-        "How to send nothing, sweetheart?",
-        "Please <strong>type a question</strong> in the chatbox first. Also there's <strong>commonly asked questions</strong> on left of the input.",
-        "error"
-      );
-      return;
+            //populate slection list at bottom with horoscopes
+            $.each(window.vedastro.PublicPersonList, function (i, person) {
+                $publicHoroscopeGroup.append(
+                    $("<option>", {
+                        value: person.PersonId,
+                        text: person.Name,
+                        selected: person.PersonId === idToSelect,
+                    })
+                );
+            });
+        }
     }
 
-    //make sure AI is not busy talking
-    if (window.vedastro.horoscopechat.IsAITalking) {
-      Swal.fire(
-        "Please wait, dear..",
-        "AI is <strong>busy talking</strong>, please wait for it to <strong>finish</strong> chattering.",
-        "error"
-      );
-      return;
-    }
+    //control comes here from both Button click and keyboard press enter
+    async onClickSendChat(userInput = "") {
+        //STEP 0 : Validation
 
-    //add top padding so top message don't hit top border
-    if (!this.PaddingTopApplied) {
-      $("#ChatWindowMessageList").addClass("pt-3");
-      $("#ChatWindowMessageList").css("overflow", "auto");
-      $("#ChatWindowMessageList").addClass("pe-2");
-      this.PaddingTopApplied = true;
-    }
+        //make sure the chat input has something, else end here
+        userInput = userInput === "" ? $("#UserChatInputElement").val() : userInput; //get chat message to send to API that user inputed
+        if (userInput === "") {
+            Swal.fire(
+                "How to send nothing, sweetheart?",
+                "Please <strong>type a question</strong> in the chatbox first. Also there's <strong>commonly asked questions</strong> on left of the input.",
+                "error"
+            );
+            return;
+        }
 
-    // STEP 1 : UPDATE GUI WITH USER MSG (UX)
-    var aiInput = $("#UserChatInputElement").val();
-    var userName = "You";
-    var userInputChatCloud = `
+        //make sure AI is not busy talking
+        if (window.vedastro.horoscopechat.IsAITalking) {
+            Swal.fire(
+                "Please wait, dear..",
+                "AI is <strong>busy talking</strong>, please wait for it to <strong>finish</strong> chattering.",
+                "error"
+            );
+            return;
+        }
+
+        //add top padding so top message don't hit top border
+        if (!this.PaddingTopApplied) {
+            $("#ChatWindowMessageList").addClass("pt-3");
+            $("#ChatWindowMessageList").css("overflow", "auto");
+            $("#ChatWindowMessageList").addClass("pe-2");
+            this.PaddingTopApplied = true;
+        }
+
+        // STEP 1 : UPDATE GUI WITH USER MSG (UX)
+        var aiInput = $("#UserChatInputElement").val();
+        var userName = "You";
+        var userInputChatCloud = `
         <li class="d-flex justify-content-end mb-4">
             <div class="card ">
                 <div class="card-header d-flex justify-content-between py-2">
@@ -3850,141 +3914,141 @@ class HoroscopeChat {
                  class="rounded-circle d-flex align-self-start ms-1 shadow-1-strong" width="45">
         </li>
         `;
-    //inject in User's input into chat window
-    $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+        //inject in User's input into chat window
+        $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
 
-    // STEP 2 : UPDATE GUI WITH "THINKING" MSG (UX)
+        // STEP 2 : UPDATE GUI WITH "THINKING" MSG (UX)
 
-    //STEP 2 : GUI CLEAN UP
-    //clear question input box for next, question
-    $("#UserChatInputElement").val("");
+        //STEP 2 : GUI CLEAN UP
+        //clear question input box for next, question
+        $("#UserChatInputElement").val("");
 
-    //STEP 3:
-    //user's input is sent to server for reply
-    //get selected birth time
-    //TODO can be DOB or bookname
-    //var timeInputUrl = CommonTools.BirthTimeUrlOfSelectedPersonJson();
-    //var timeInputUrl = "Location/Ipoh/Time/12:44/23/04/1994/+08:00";
+        //STEP 3:
+        //user's input is sent to server for reply
+        //get selected birth time
+        //TODO can be DOB or bookname
+        //var timeInputUrl = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+        //var timeInputUrl = "Location/Ipoh/Time/12:44/23/04/1994/+08:00";
 
-    //show temperoray "Thinking" message to user before calling API as that will take time
-    this.showTempThinkingMessage();
+        //show temperoray "Thinking" message to user before calling API as that will take time
+        this.showTempThinkingMessage();
 
-    //send user's message
-    var aiReplyData = await this.sendMessageToServer(
-      this.SelectedBirthTime,
-      userInput
-    );
-    this.LastUserMessage = userInput; //save to used later for highlight
-
-    //update local session id
-    this.SessionId = aiReplyData["SessionId"];
-
-    //print to user
-    this.printAIReplyMessageToView(aiReplyData);
-
-    //hide thinking message, for less clutered UX
-    this.hideTempThinkingMessage();
-  }
-
-  //sends final user message to API server and returns only relevant text (handles errors)
-  async sendMessageToServer(timeInputUrl, userQuestionInput) {
-    //construct the final URL
-    userQuestionInput = userQuestionInput.replace(/\?/g, ""); //remove question marks as it break API detection
-    const url = `${this.LiveServerURL}/HoroscopeChat/${timeInputUrl}/UserQuestion/${userQuestionInput}/UserId/${window.vedastro.UserId}/SessionId/${this.SessionId}`;
-
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (data.Status === "Pass") {
-        return data.Payload["HoroscopeChat"];
-      } else {
-        console.error(
-          `Request failed with status: ${data.Status}${data.Payload}`
+        //send user's message
+        var aiReplyData = await this.sendMessageToServer(
+            this.SelectedBirthTime,
+            userInput
         );
+        this.LastUserMessage = userInput; //save to used later for highlight
 
-        //note: the minimal message strucuture
-        let jsonObject = {
-          Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
-          TextHtml:
-            "Sorry sir, my server brain is not talking...\nPlease try again later.",
-          TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
-          Commands: ["noFeedback"],
-        };
-        return JSON.stringify(jsonObject);
-      }
-    } catch (error) {
-      console.error(`Error making GET request: ${error}`);
+        //update local session id
+        this.SessionId = aiReplyData["SessionId"];
 
-      //note: the minimal message strucuture
-      let jsonObject = {
-        Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
-        TextHtml:
-          "Sorry sir, my server brain is not talking...\nPlease try again later.",
-        TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
-        Commands: ["noFeedback"],
-      };
-      return JSON.stringify(jsonObject);
-    }
-  }
+        //print to user
+        this.printAIReplyMessageToView(aiReplyData);
 
-  // Handler for incoming messages
-  printAIReplyMessageToView(rawJson) {
-    // Initialize rawJsonMessage
-    var rawJsonMessage;
-
-    // Try to parse the JSON data from the event
-    try {
-      rawJsonMessage = JSON.parse(rawJson);
-    } catch (error) {
-      //expected fail because no need parse
-      rawJsonMessage = rawJson;
-    }
-    var aiTextMessageHtml = rawJsonMessage.TextHtml;
-    var messageHash = rawJsonMessage.TextHash;
-    var aiTextMessage = rawJsonMessage.Text;
-    var followupQuestions = rawJsonMessage?.FollowUpQuestions ?? [];
-
-    //PROCESS SERVER COMMANDS
-    var commands = rawJsonMessage.Commands || []; // when no commands given empty to not fail
-
-    //## SPECIAL HANDLE FOR LOGIN PROMPTS
-    //1: check if server said please login, in command to client
-    //   meaning user just say login message given by server,
-    //   upon click login, start wait loop (make it seem bot is waiting for user to login)
-    //   then that special login tab (RememberMe) will auto close
-
-    let intervalId;
-    if (commands.includes("pleaseLogin")) {
-      //TODO maybe not needed anymore
-      //set marker in browser asking Blazor login page to redirect back
-      localStorage.setItem("PreviousPage", "/ChatAPI");
+        //hide thinking message, for less clutered UX
+        this.hideTempThinkingMessage();
     }
 
-    //## BUILD HTML
+    //sends final user message to API server and returns only relevant text (handles errors)
+    async sendMessageToServer(timeInputUrl, userQuestionInput) {
+        //construct the final URL
+        userQuestionInput = userQuestionInput.replace(/\?/g, ""); //remove question marks as it break API detection
+        const url = `${this.LiveServerURL}/HoroscopeChat/${timeInputUrl}/UserQuestion/${userQuestionInput}/UserId/${window.vedastro.UserId}/SessionId/${this.SessionId}`;
 
-    //HANDLE FOLLOWUP
-    // only add follow up questions if server specified them
-    var followupQuestionsHtml = "";
-    // convert questions into visible buttons, for user to click
-    if (followupQuestions.length > 0) {
-      followupQuestionsHtml += //start out hidden, then js will bring to live with animation at right time (class)
-        '<div class="followUpQuestionHolder hstack gap-2 w-100 justify-content-end" style="display:none; position: absolute; bottom: -43px; right: -1px; ">';
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
 
-      followupQuestions.forEach(function (question) {
-        followupQuestionsHtml += `
+            if (data.Status === "Pass") {
+                return data.Payload["HoroscopeChat"];
+            } else {
+                console.error(
+                    `Request failed with status: ${data.Status}${data.Payload}`
+                );
+
+                //note: the minimal message strucuture
+                let jsonObject = {
+                    Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    TextHtml:
+                        "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
+                    Commands: ["noFeedback"],
+                };
+                return JSON.stringify(jsonObject);
+            }
+        } catch (error) {
+            console.error(`Error making GET request: ${error}`);
+
+            //note: the minimal message strucuture
+            let jsonObject = {
+                Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                TextHtml:
+                    "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
+                Commands: ["noFeedback"],
+            };
+            return JSON.stringify(jsonObject);
+        }
+    }
+
+    // Handler for incoming messages
+    printAIReplyMessageToView(rawJson) {
+        // Initialize rawJsonMessage
+        var rawJsonMessage;
+
+        // Try to parse the JSON data from the event
+        try {
+            rawJsonMessage = JSON.parse(rawJson);
+        } catch (error) {
+            //expected fail because no need parse
+            rawJsonMessage = rawJson;
+        }
+        var aiTextMessageHtml = rawJsonMessage.TextHtml;
+        var messageHash = rawJsonMessage.TextHash;
+        var aiTextMessage = rawJsonMessage.Text;
+        var followupQuestions = rawJsonMessage?.FollowUpQuestions ?? [];
+
+        //PROCESS SERVER COMMANDS
+        var commands = rawJsonMessage.Commands || []; // when no commands given empty to not fail
+
+        //## SPECIAL HANDLE FOR LOGIN PROMPTS
+        //1: check if server said please login, in command to client
+        //   meaning user just say login message given by server,
+        //   upon click login, start wait loop (make it seem bot is waiting for user to login)
+        //   then that special login tab (RememberMe) will auto close
+
+        let intervalId;
+        if (commands.includes("pleaseLogin")) {
+            //TODO maybe not needed anymore
+            //set marker in browser asking Blazor login page to redirect back
+            localStorage.setItem("PreviousPage", "/ChatAPI");
+        }
+
+        //## BUILD HTML
+
+        //HANDLE FOLLOWUP
+        // only add follow up questions if server specified them
+        var followupQuestionsHtml = "";
+        // convert questions into visible buttons, for user to click
+        if (followupQuestions.length > 0) {
+            followupQuestionsHtml += //start out hidden, then js will bring to live with animation at right time (class)
+                '<div class="followUpQuestionHolder hstack gap-2 w-100 justify-content-end" style="display:none; position: absolute; bottom: -43px; right: -1px; ">';
+
+            followupQuestions.forEach(function (question) {
+                followupQuestionsHtml += `
             <button type="button" onclick="window.vedastro.horoscopechat.askFollowUpQuestion(this, '${question}')"  class="btn btn-outline-primary">${question}</button>
         `;
-      });
+            });
 
-      followupQuestionsHtml += "</div>";
-    }
+            followupQuestionsHtml += "</div>";
+        }
 
-    //HANDLE FEEBACK BUTTON
-    //only hide feedback button if server explicitly says so
-    var feedbackButtonHtml = commands.includes("noFeedback")
-      ? ""
-      : `<div class="hstack gap-2">
+        //HANDLE FEEBACK BUTTON
+        //only hide feedback button if server explicitly says so
+        var feedbackButtonHtml = commands.includes("noFeedback")
+            ? ""
+            : `<div class="hstack gap-2">
     <button title="Bad answer" type="button" onclick="window.vedastro.horoscopechat.rateMessage(this, -1)" class="btn btn-danger" style="padding: 0px 5px;">
       <span class="iconify" data-icon="icon-park-outline:bad-two" data-width="18" data-height="18"></span>
     </button>
@@ -3993,15 +4057,15 @@ class HoroscopeChat {
     </button>
   </div>`;
 
-    //define html for answer
-    var aiFinalAnswerHolder = `
+        //define html for answer
+        var aiFinalAnswerHolder = `
             <div style="display:none;" class="text-html-out-elm mb-0">
                 ${aiTextMessageHtml}
             </div>
         `;
 
-    // Create a chat bubble with the AI's message
-    var aiInputChatCloud = `
+        // Create a chat bubble with the AI's message
+        var aiInputChatCloud = `
         <li class="d-flex justify-content-start" style=" margin-bottom: 70px; ">
             <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-1 shadow-1-strong" width="45">
             <div class="card">
@@ -4022,103 +4086,103 @@ class HoroscopeChat {
         </li>
         `;
 
-    // Append the chat bubble to the chat window
-    $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
-
-    // # AUTO SCROLL DOWN
-    $("#ChatWindowMessageList").scrollTop(
-      $("#ChatWindowMessageList")[0].scrollHeight
-    );
-
-    // Flag to prevent user input while AI is 'typing'
-    //NOTE: access via global, because deeply nested
-    window.vedastro.horoscopechat.IsAITalking = true;
-
-    // Initialize the index for streaming text
-    let index = 0;
-    const streamRateMs = 23; // Rate at which characters are displayed
-
-    // Stream the AI's message into the chat bubble
-    const interval = setInterval(() => {
-      // Check if the entire message has been displayed
-      //MESSAGE STREAM COMPLETE
-      if (index >= aiTextMessage.length) {
-        clearInterval(interval);
-
-        // Hide the temporary element and loading icon, then show the formatted message
-        //remove stream shower and loading for this bubble since not needed anymore
-        //$(`#${messageHash} .temp-text-stream-elm`).hide();
-        $(`#${messageHash} .loading-icon-elm`).hide();
-
-        //make visible hidden formatted output
-        //$(`#${messageHash} .text-html-out-elm`).show();
-
-        // Allow user input again
-        this.IsAITalking = false;
+        // Append the chat bubble to the chat window
+        $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
 
         // # AUTO SCROLL DOWN
         $("#ChatWindowMessageList").scrollTop(
-          $("#ChatWindowMessageList")[0].scrollHeight
+            $("#ChatWindowMessageList")[0].scrollHeight
         );
 
-        //make follow up questions if any slowly appear
-        //narrow by message bubble, then holder
-        $(`#${messageHash} .followUpQuestionHolder`).fadeIn("slow");
+        // Flag to prevent user input while AI is 'typing'
+        //NOTE: access via global, because deeply nested
+        window.vedastro.horoscopechat.IsAITalking = true;
 
-        return;
-      }
+        // Initialize the index for streaming text
+        let index = 0;
+        const streamRateMs = 23; // Rate at which characters are displayed
 
-      // Append the next character or handle special formatting
-      appendNextCharacter(
-        aiTextMessage,
-        index,
-        `#${messageHash} .temp-text-stream-elm`
-      );
-      index++;
+        // Stream the AI's message into the chat bubble
+        const interval = setInterval(() => {
+            // Check if the entire message has been displayed
+            //MESSAGE STREAM COMPLETE
+            if (index >= aiTextMessage.length) {
+                clearInterval(interval);
 
-      // # AUTO SCROLL DOWN
-      $("#ChatWindowMessageList").scrollTop(
-        $("#ChatWindowMessageList")[0].scrollHeight
-      );
+                // Hide the temporary element and loading icon, then show the formatted message
+                //remove stream shower and loading for this bubble since not needed anymore
+                //$(`#${messageHash} .temp-text-stream-elm`).hide();
+                $(`#${messageHash} .loading-icon-elm`).hide();
 
-      //------locals---------
+                //make visible hidden formatted output
+                //$(`#${messageHash} .text-html-out-elm`).show();
 
-      // Function to append the next character or handle special formatting
-      function appendNextCharacter(text, index, elementSelector) {
-        const specialChars = {
-          "\n": $("<br>"),
-          "\t": $("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;"),
-          " ": $("<span>").html("&nbsp;"),
-          "<": $("<span>").html("&lt;"),
-          ">": $("<span>").html("&gt;"),
-        };
+                // Allow user input again
+                this.IsAITalking = false;
 
-        // Check for special characters
-        if (specialChars[text[index]]) {
-          $(elementSelector).append(specialChars[text[index]]);
-        } else {
-          // Append regular character
-          const nextChar = document.createTextNode(text[index]);
-          $(elementSelector).append(nextChar);
-        }
-      }
-    }, streamRateMs);
-  }
+                // # AUTO SCROLL DOWN
+                $("#ChatWindowMessageList").scrollTop(
+                    $("#ChatWindowMessageList")[0].scrollHeight
+                );
 
-  async showTempThinkingMessage() {
-    //little lag for simulation reality
-    await CommonTools.delay(1000);
+                //make follow up questions if any slowly appear
+                //narrow by message bubble, then holder
+                $(`#${messageHash} .followUpQuestionHolder`).fadeIn("slow");
 
-    //define html for answer
-    var aiFinalAnswerHolder = `
+                return;
+            }
+
+            // Append the next character or handle special formatting
+            appendNextCharacter(
+                aiTextMessage,
+                index,
+                `#${messageHash} .temp-text-stream-elm`
+            );
+            index++;
+
+            // # AUTO SCROLL DOWN
+            $("#ChatWindowMessageList").scrollTop(
+                $("#ChatWindowMessageList")[0].scrollHeight
+            );
+
+            //------locals---------
+
+            // Function to append the next character or handle special formatting
+            function appendNextCharacter(text, index, elementSelector) {
+                const specialChars = {
+                    "\n": $("<br>"),
+                    "\t": $("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;"),
+                    " ": $("<span>").html("&nbsp;"),
+                    "<": $("<span>").html("&lt;"),
+                    ">": $("<span>").html("&gt;"),
+                };
+
+                // Check for special characters
+                if (specialChars[text[index]]) {
+                    $(elementSelector).append(specialChars[text[index]]);
+                } else {
+                    // Append regular character
+                    const nextChar = document.createTextNode(text[index]);
+                    $(elementSelector).append(nextChar);
+                }
+            }
+        }, streamRateMs);
+    }
+
+    async showTempThinkingMessage() {
+        //little lag for simulation reality
+        await CommonTools.delay(1000);
+
+        //define html for answer
+        var aiFinalAnswerHolder = `
             <div class="text-html-out-elm mb-0">
                 Thinking...
                 <svg class="loading-icon-elm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="15" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" /><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></path></svg>
             </div>
         `;
 
-    // Create a chat bubble with the AI's message
-    var aiInputChatCloud = `
+        // Create a chat bubble with the AI's message
+        var aiInputChatCloud = `
         <li id="tempThinkingMshBubble" class="d-flex justify-content-start" style=" margin-bottom: 70px; ">
             <img src="https://vedastro.org/images/vignes-chat-avatar.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-1 shadow-1-strong" width="45">
             <div class="card">
@@ -4132,49 +4196,49 @@ class HoroscopeChat {
         </li>
         `;
 
-    // Append the chat bubble to the chat window
-    $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
+        // Append the chat bubble to the chat window
+        $("#ChatWindowMessageList li").eq(-1).after(aiInputChatCloud);
 
-    // # AUTO SCROLL DOWN
-    $("#ChatWindowMessageList").scrollTop(
-      $("#ChatWindowMessageList")[0].scrollHeight
-    );
+        // # AUTO SCROLL DOWN
+        $("#ChatWindowMessageList").scrollTop(
+            $("#ChatWindowMessageList")[0].scrollHeight
+        );
 
-    // Flag to prevent user input while AI is 'typing'
-    //NOTE: access via global, because deeply nested
-    window.vedastro.horoscopechat.IsAITalking = true;
-  }
-
-  hideTempThinkingMessage() {
-    $("#tempThinkingMshBubble").remove();
-
-    // Flag to prevent user input while AI is 'typing'
-    //NOTE: access via global, because deeply nested
-    window.vedastro.horoscopechat.IsAITalking = false;
-  }
-
-  //called here direct from HTML button
-  async askFollowUpQuestion(eventData, followUpQuestion) {
-    //make sure AI is not busy talking
-    if (window.vedastro.horoscopechat.IsAITalking) {
-      Swal.fire(
-        "Please wait, dear..",
-        "AI is <strong>busy talking</strong>, please wait for it to <strong>finish</strong> chattering.",
-        "error"
-      );
-      return;
+        // Flag to prevent user input while AI is 'typing'
+        //NOTE: access via global, because deeply nested
+        window.vedastro.horoscopechat.IsAITalking = true;
     }
 
-    // get hash of message, stored as id in holder
-    var messageHolder = $(eventData)
-      .closest(".card")
-      .children(".message-holder");
-    var primaryAnswerHash = messageHolder.attr("id");
+    hideTempThinkingMessage() {
+        $("#tempThinkingMshBubble").remove();
 
-    //UPDATE GUI WITH USER MSG (UX)
-    var aiInput = $("#UserChatInputElement").val(); //clear chat input
-    var userName = "You";
-    var userInputChatCloud = `
+        // Flag to prevent user input while AI is 'typing'
+        //NOTE: access via global, because deeply nested
+        window.vedastro.horoscopechat.IsAITalking = false;
+    }
+
+    //called here direct from HTML button
+    async askFollowUpQuestion(eventData, followUpQuestion) {
+        //make sure AI is not busy talking
+        if (window.vedastro.horoscopechat.IsAITalking) {
+            Swal.fire(
+                "Please wait, dear..",
+                "AI is <strong>busy talking</strong>, please wait for it to <strong>finish</strong> chattering.",
+                "error"
+            );
+            return;
+        }
+
+        // get hash of message, stored as id in holder
+        var messageHolder = $(eventData)
+            .closest(".card")
+            .children(".message-holder");
+        var primaryAnswerHash = messageHolder.attr("id");
+
+        //UPDATE GUI WITH USER MSG (UX)
+        var aiInput = $("#UserChatInputElement").val(); //clear chat input
+        var userName = "You";
+        var userInputChatCloud = `
         <li class="d-flex justify-content-end mb-4">
             <div class="card ">
                 <div class="card-header d-flex justify-content-between py-2">
@@ -4190,177 +4254,177 @@ class HoroscopeChat {
                  class="rounded-circle d-flex align-self-start ms-1 shadow-1-strong" width="45">
         </li>
         `;
-    //inject in User's input into chat window
-    $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+        //inject in User's input into chat window
+        $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
 
-    //show temperoray "Thinking" message to user before calling API as that will take time
-    this.showTempThinkingMessage();
+        //show temperoray "Thinking" message to user before calling API as that will take time
+        this.showTempThinkingMessage();
 
-    //prepare message and send to caller
-    //construct the final URL
-    var followUpAIReplyData = await getFollowUpAIReplyFromAPI(
-      followUpQuestion,
-      primaryAnswerHash
-    );
+        //prepare message and send to caller
+        //construct the final URL
+        var followUpAIReplyData = await getFollowUpAIReplyFromAPI(
+            followUpQuestion,
+            primaryAnswerHash
+        );
 
-    //inject reply into view
-    //print to user
-    this.printAIReplyMessageToView(followUpAIReplyData);
+        //inject reply into view
+        //print to user
+        this.printAIReplyMessageToView(followUpAIReplyData);
 
-    //hide thinking message, for less clutered UX
-    this.hideTempThinkingMessage();
+        //hide thinking message, for less clutered UX
+        this.hideTempThinkingMessage();
 
-    //--------------local funcs
-    async function getFollowUpAIReplyFromAPI(
-      followUpQuestion,
-      primaryAnswerHash
-    ) {
-      followUpQuestion = followUpQuestion.replace(/\?/g, ""); //remove question marks as it break API detection
-      const url = `${window.vedastro.horoscopechat.LiveServerURL}/HoroscopeFollowUpChat/${window.vedastro.horoscopechat.SelectedBirthTime}/FollowUpQuestion/${followUpQuestion}/PrimaryAnswerHash/${primaryAnswerHash}/UserId/${window.vedastro.UserId}/SessionId/${window.vedastro.horoscopechat.SessionId}`;
+        //--------------local funcs
+        async function getFollowUpAIReplyFromAPI(
+            followUpQuestion,
+            primaryAnswerHash
+        ) {
+            followUpQuestion = followUpQuestion.replace(/\?/g, ""); //remove question marks as it break API detection
+            const url = `${window.vedastro.horoscopechat.LiveServerURL}/HoroscopeFollowUpChat/${window.vedastro.horoscopechat.SelectedBirthTime}/FollowUpQuestion/${followUpQuestion}/PrimaryAnswerHash/${primaryAnswerHash}/UserId/${window.vedastro.UserId}/SessionId/${window.vedastro.horoscopechat.SessionId}`;
 
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
 
-        if (data.Status === "Pass") {
-          return data.Payload["HoroscopeFollowUpChat"];
-        } else {
-          console.error(
-            `Request failed with status: ${data.Status}${data.Payload}`
-          );
+                if (data.Status === "Pass") {
+                    return data.Payload["HoroscopeFollowUpChat"];
+                } else {
+                    console.error(
+                        `Request failed with status: ${data.Status}${data.Payload}`
+                    );
 
-          //note: the minimal message strucuture
-          let jsonObject = {
-            Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
-            TextHtml:
-              "Sorry sir, my server brain is not talking...\nPlease try again later.",
-            TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
-            Commands: ["noFeedback"],
-          };
-          return JSON.stringify(jsonObject);
+                    //note: the minimal message strucuture
+                    let jsonObject = {
+                        Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        TextHtml:
+                            "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
+                        Commands: ["noFeedback"],
+                    };
+                    return JSON.stringify(jsonObject);
+                }
+            } catch (error) {
+                console.error(`Error making GET request: ${error}`);
+
+                //note: the minimal message strucuture
+                let jsonObject = {
+                    Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    TextHtml:
+                        "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
+                    Commands: ["noFeedback"],
+                };
+                return JSON.stringify(jsonObject);
+            }
         }
-      } catch (error) {
-        console.error(`Error making GET request: ${error}`);
-
-        //note: the minimal message strucuture
-        let jsonObject = {
-          Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
-          TextHtml:
-            "Sorry sir, my server brain is not talking...\nPlease try again later.",
-          TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
-          Commands: ["noFeedback"],
-        };
-        return JSON.stringify(jsonObject);
-      }
     }
-  }
 
-  //called direct from static HTML hookup without seperate attach code
-  //exp use : onclick="window.vedastro.horoscopechat.rateMessage(this, -1)"
-  async rateMessage(eventData, rating) {
-    //come here on click rating button
-    // get hash of message, stored as id in holder
-    var messageHolder = $(eventData)
-      .closest(".card")
-      .children(".message-holder");
-    var textHash = messageHolder.attr("id");
+    //called direct from static HTML hookup without seperate attach code
+    //exp use : onclick="window.vedastro.horoscopechat.rateMessage(this, -1)"
+    async rateMessage(eventData, rating) {
+        //come here on click rating button
+        // get hash of message, stored as id in holder
+        var messageHolder = $(eventData)
+            .closest(".card")
+            .children(".message-holder");
+        var textHash = messageHolder.attr("id");
 
-    //send feedback to API
-    var feedbackAIReplyData = await SendFeedbackToApi(textHash, rating);
+        //send feedback to API
+        var feedbackAIReplyData = await SendFeedbackToApi(textHash, rating);
 
-    //inject reply into view
-    //print to user
-    this.printAIReplyMessageToView(feedbackAIReplyData);
+        //inject reply into view
+        //print to user
+        this.printAIReplyMessageToView(feedbackAIReplyData);
 
-    //hide thinking message, for less clutered UX
-    this.hideTempThinkingMessage();
+        //hide thinking message, for less clutered UX
+        this.hideTempThinkingMessage();
 
-    //--------------local funcs
-    async function SendFeedbackToApi(answerHash, feedbackScore) {
-      const url = `${window.vedastro.horoscopechat.LiveServerURL}/HoroscopeChatFeedback/AnswerHash/${answerHash}/FeedbackScore/${feedbackScore}`;
+        //--------------local funcs
+        async function SendFeedbackToApi(answerHash, feedbackScore) {
+            const url = `${window.vedastro.horoscopechat.LiveServerURL}/HoroscopeChatFeedback/AnswerHash/${answerHash}/FeedbackScore/${feedbackScore}`;
 
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
 
-        if (data.Status === "Pass") {
-          return data.Payload["HoroscopeChatFeedback"];
-        } else {
-          console.error(
-            `Request failed with status: ${data.Status}${data.Payload}`
-          );
+                if (data.Status === "Pass") {
+                    return data.Payload["HoroscopeChatFeedback"];
+                } else {
+                    console.error(
+                        `Request failed with status: ${data.Status}${data.Payload}`
+                    );
 
-          //note: the minimal message strucuture
-          let jsonObject = {
-            Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
-            TextHtml:
-              "Sorry sir, my server brain is not talking...\nPlease try again later.",
-            TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
-            Commands: ["noFeedback"],
-          };
-          return JSON.stringify(jsonObject);
+                    //note: the minimal message strucuture
+                    let jsonObject = {
+                        Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        TextHtml:
+                            "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                        TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
+                        Commands: ["noFeedback"],
+                    };
+                    return JSON.stringify(jsonObject);
+                }
+            } catch (error) {
+                console.error(`Error making GET request: ${error}`);
+
+                //note: the minimal message strucuture
+                let jsonObject = {
+                    Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    TextHtml:
+                        "Sorry sir, my server brain is not talking...\nPlease try again later.",
+                    TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
+                    Commands: ["noFeedback"],
+                };
+                return JSON.stringify(jsonObject);
+            }
         }
-      } catch (error) {
-        console.error(`Error making GET request: ${error}`);
-
-        //note: the minimal message strucuture
-        let jsonObject = {
-          Text: "Sorry sir, my server brain is not talking...\nPlease try again later.",
-          TextHtml:
-            "Sorry sir, my server brain is not talking...\nPlease try again later.",
-          TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
-          Commands: ["noFeedback"],
-        };
-        return JSON.stringify(jsonObject);
-      }
-    }
-  }
-
-  async onStartChatButton(eventData) {}
-
-  async onSelectPerson(eventData) {
-    //attach topic selector dropdown
-    //get all needed data (what topic was selected)
-    const selectedOption = $("#PersonListDropdown option:selected");
-    const selectedOptgroupLabel = selectedOption
-      .closest("optgroup")
-      .prop("label");
-
-    //save what user choose for use throughout the code
-    var selectedPersonId = selectedOption.val();
-
-    //if id is add new person, then redirect page to add person site, same tab so refresh onreturn
-    if (selectedPersonId == "AddNewPerson") {
-      window.location.href = "http://vedastro.org/Account/Person/Add";
-      return; //end here
     }
 
-    //get full details of the person
-    let selectedPerson = window.vedastro.PersonList.find(
-      (obj) => obj.PersonId === selectedPersonId
-    );
+    async onStartChatButton(eventData) { }
 
-    //save for use by other
-    window.vedastro.SelectedPerson = selectedPerson;
+    async onSelectPerson(eventData) {
+        //attach topic selector dropdown
+        //get all needed data (what topic was selected)
+        const selectedOption = $("#PersonListDropdown option:selected");
+        const selectedOptgroupLabel = selectedOption
+            .closest("optgroup")
+            .prop("label");
 
-    //convert person name to birth DOB (so unregistered person can be checked)
-    var newTopicId = CommonTools.BirthTimeUrlOfSelectedPersonJson();
-    window.vedastro.horoscopechat.SelectedBirthTime = newTopicId;
+        //save what user choose for use throughout the code
+        var selectedPersonId = selectedOption.val();
 
-    //person now selected, ready to chat so change GUI
-    //show person selector
-    $("#personSelectorHolder").hide();
-    //hide normal chat input
-    $("#questionInputHolder").show();
+        //if id is add new person, then redirect page to add person site, same tab so refresh onreturn
+        if (selectedPersonId == "AddNewPerson") {
+            window.location.href = "http://vedastro.org/Account/Person/Add";
+            return; //end here
+        }
 
-    //show user's selection on screen so explicit rememberence
-    //UPDATE GUI WITH USER MSG (UX)
-    var userName = "You";
-    const locationName =
-      window.vedastro.SelectedPerson["BirthTime"]["Location"]["Name"];
-    const birthTime = window.vedastro.SelectedPerson[`BirthTime`][`StdTime`];
-    const personName = window.vedastro.SelectedPerson[`Name`];
-    var userInputChatCloud = `
+        //get full details of the person
+        let selectedPerson = window.vedastro.PersonList.find(
+            (obj) => obj.PersonId === selectedPersonId
+        );
+
+        //save for use by other
+        window.vedastro.SelectedPerson = selectedPerson;
+
+        //convert person name to birth DOB (so unregistered person can be checked)
+        var newTopicId = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+        window.vedastro.horoscopechat.SelectedBirthTime = newTopicId;
+
+        //person now selected, ready to chat so change GUI
+        //show person selector
+        $("#personSelectorHolder").hide();
+        //hide normal chat input
+        $("#questionInputHolder").show();
+
+        //show user's selection on screen so explicit rememberence
+        //UPDATE GUI WITH USER MSG (UX)
+        var userName = "You";
+        const locationName =
+            window.vedastro.SelectedPerson["BirthTime"]["Location"]["Name"];
+        const birthTime = window.vedastro.SelectedPerson[`BirthTime`][`StdTime`];
+        const personName = window.vedastro.SelectedPerson[`Name`];
+        var userInputChatCloud = `
         <li class="d-flex justify-content-end mb-4">
             <div class="card ">
                 <div class="card-header d-flex justify-content-between py-2">
@@ -4378,28 +4442,28 @@ class HoroscopeChat {
                  class="rounded-circle d-flex align-self-start ms-1 shadow-1-strong" width="45">
         </li>
         `;
-    //inject in User's input into chat window
-    $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
+        //inject in User's input into chat window
+        $("#ChatWindowMessageList li").eq(-1).after(userInputChatCloud);
 
-    //little lag for simulation reality
-    await CommonTools.delay(1000);
+        //little lag for simulation reality
+        await CommonTools.delay(1000);
 
-    //reply with AI as ready to respond
-    //enter inviting message from AI
-    //note: the minimal message strucuture
-    let jsonObject = {
-      Text: `Ok, I've analysed the horoscope.${String.fromCodePoint(
-        0x1f9d0
-      )} \nAny questions?`,
-      TextHtml: `Ok, I've analysed the horoscope.${String.fromCodePoint(
-        0x1f9d0
-      )} \nAny questions?`,
-      TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
-      Commands: ["noFeedback"],
-    };
-    var aiReplyData = JSON.stringify(jsonObject);
-    this.printAIReplyMessageToView(aiReplyData);
-  }
+        //reply with AI as ready to respond
+        //enter inviting message from AI
+        //note: the minimal message strucuture
+        let jsonObject = {
+            Text: `Ok, I've analysed the horoscope.${String.fromCodePoint(
+                0x1f9d0
+            )} \nAny questions?`,
+            TextHtml: `Ok, I've analysed the horoscope.${String.fromCodePoint(
+                0x1f9d0
+            )} \nAny questions?`,
+            TextHash: Math.floor(Math.random() * 1000000), //keep random for injection
+            Commands: ["noFeedback"],
+        };
+        var aiReplyData = JSON.stringify(jsonObject);
+        this.printAIReplyMessageToView(aiReplyData);
+    }
 }
 
 /**
@@ -4407,42 +4471,42 @@ class HoroscopeChat {
  * Used by Blazor to call JS code.
  */
 window.GenerateHoroscopeChat = (settingsHoroscopeChat) => {
-  //note: on init, chat instance is loaded into window.vedastro.horoscopechat
-  new HoroscopeChat(settingsHoroscopeChat);
+    //note: on init, chat instance is loaded into window.vedastro.horoscopechat
+    new HoroscopeChat(settingsHoroscopeChat);
 };
 
 class LocationSearchSelector {
-  ElementID = "LocationSearchSelector";
-  LiveServerURL = "http://localhost:7071/api/Calculate";
-  //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
-  //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
+    ElementID = "LocationSearchSelector";
+    LiveServerURL = "http://localhost:7071/api/Calculate";
+    //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
+    //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
 
-  constructor(rawSettings) {
-    //make instance accessible
-    window.vedastro.LocationSearchSelector = this;
+    constructor(rawSettings) {
+        //make instance accessible
+        window.vedastro.LocationSearchSelector = this;
 
-    //process the input variables and set them
-    //this.initializeSettingData(rawSettings);
+        //process the input variables and set them
+        //this.initializeSettingData(rawSettings);
 
-    //make the main chat window structure
-    this.initializeChatMainBody();
+        //make the main chat window structure
+        this.initializeChatMainBody();
 
-    //creates ever changing placeholder questios to engage users
-    //this.initializeChatInputElement();
-  }
+        //creates ever changing placeholder questios to engage users
+        //this.initializeChatInputElement();
+    }
 
-  initializeChatMainBody() {
-    $(`#${this.ElementID}`).empty();
+    initializeChatMainBody() {
+        $(`#${this.ElementID}`).empty();
 
-    //set max width here since declared in html
-    $(`#${this.ElementID}`).css("max-width", "667px");
+        //set max width here since declared in html
+        $(`#${this.ElementID}`).css("max-width", "667px");
 
-    //inject into page
-    $(`#${this.ElementID}`).html(this.generateHtmlBody());
-  }
+        //inject into page
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+    }
 
-  generateHtmlBody() {
-    return `
+    generateHtmlBody() {
+        return `
        
         
 
@@ -4459,91 +4523,76 @@ class LocationSearchSelector {
 
 
      `;
-  }
+    }
 
-  async fetchLocationSuggestions(query) {
-    //make search location to API
-    const url = `${this.LiveServerURL}/SearchLocation/${query}`;
-    const response = await fetch(url);
-    const rawData = await response.json();
+    async fetchLocationSuggestions(query) {
+        //make search location to API
+        const url = `${this.LiveServerURL}/SearchLocation/${query}`;
+        const response = await fetch(url);
+        const rawData = await response.json();
 
-    //extract out the needed data
+        //extract out the needed data
 
-    const dropdown = document.getElementById(
-      "LocationSearchAutoSuggestDropDownElement"
-    );
-    dropdown.innerHTML = ""; // Clear existing suggestions
-    data.forEach((location) => {
-      const li = document.createElement("li");
-      li.classList.add("dropdown-item");
-      li.style.cursor = "pointer";
-      li.style.marginLeft = "-4px";
-      li.textContent = location;
-      dropdown.appendChild(li);
-    });
-  }
+        const dropdown = document.getElementById(
+            "LocationSearchAutoSuggestDropDownElement"
+        );
+        dropdown.innerHTML = ""; // Clear existing suggestions
+        data.forEach((location) => {
+            const li = document.createElement("li");
+            li.classList.add("dropdown-item");
+            li.style.cursor = "pointer";
+            li.style.marginLeft = "-4px";
+            li.textContent = location;
+            dropdown.appendChild(li);
+        });
+    }
 }
 
 //NOTE: auto loads/inits location search if element in page exits, simplify init
 $(document).ready(function () {
-  if ($("#LocationSearchSelector").length) {
-    // Element with ID 'elementId' exists, do some work here
-    console.log("Element exists!");
+    if ($("#LocationSearchSelector").length) {
+        // Element with ID 'elementId' exists, do some work here
+        console.log("Element exists!");
 
-    new LocationSearchSelector();
-  } else {
-    // Element with ID 'elementId' does not exist
-    console.log("Element does not exist!");
-  }
+        new LocationSearchSelector();
+    } else {
+        // Element with ID 'elementId' does not exist
+        console.log("Element does not exist!");
+    }
 });
 
 class PersonListSelector {
-  ElementID = "PersonListSelector";
+    ElementID = "PersonListSelector";
 
-  constructor(rawSettings) {
-    //process the input variables and set them
-    //this.initializeSettingData(rawSettings);
+    constructor(rawSettings) {
+        //process the input variables and set them
+        //this.initializeSettingData(rawSettings);
 
-    //make the main chat window structure
-    this.initializeMainBody();
+        //make the main chat window structure
+        this.initializeMainBody();
 
-    //creates ever-changing placeholder questios to engage users
-    //this.initializeChatInputElement();
-  }
+        //creates ever-changing placeholder questios to engage users
+        //this.initializeChatInputElement();
+    }
 
-  async initializeMainBody() {
-    const elementsofdropdown = document.querySelectorAll("#PersonListSelector");
-    elementsofdropdown.forEach(async (elementdrop) => {
-      $(elementdrop).empty();
-      $(elementdrop).css("max-width", "667px");
-      $(elementdrop).html(await this.generateHtmlBody());
-    });
-    $(`#${this.ElementID}`).empty();
+    async initializeMainBody() {
+        const elementsofdropdown = document.querySelectorAll("#PersonListSelector");
+        elementsofdropdown.forEach(async (elementdrop) => {
+            $(elementdrop).empty();
+            $(elementdrop).css("max-width", "667px");
+            $(elementdrop).html(await this.generateHtmlBody());
+        });
+        $(`#${this.ElementID}`).empty();
 
-    //set max width here since declared in html
-    $(`#${this.ElementID}`).css("max-width", "667px");
+        //set max width here since declared in html
+        $(`#${this.ElementID}`).css("max-width", "667px");
 
-    //inject into page
-    $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+        //inject into page
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
 
-    //Female data list;
-    const elementsofdropdownFemale = document.querySelectorAll(
-      "#PersonListSelectorfemale"
-    );
-    elementsofdropdownFemale.forEach(async (elementdrop) => {
-      $(elementdrop).empty();
-      $(elementdrop).css("max-width", "667px");
-      $(elementdrop).html(await this.generateHtmlBodyForFemaleData());
-    });
-    //One time DD Script;
-    const elementsofDDScript = document.querySelectorAll("#DDScriptLoader");
-    elementsofDDScript.forEach(async (elementDD) => {
-      $(elementDD).empty();
-      $(elementDD).html(await this.generateHtmlBodyForDDScript());
-    });
-  }
-  async generateHtmlBody() {
-    return `
+    }
+    async generateHtmlBody() {
+        return `
         <div class="hstack">
              <div class="btn-group" style="width: 254.9px;">
                  <button type="button" class="btn dropdown-toggle dropdown-toggle-person btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false" value="">
@@ -4588,185 +4637,100 @@ class PersonListSelector {
          </div>
          
      `;
-  }
-
-  async generateHtmlBodyForDDScript() {
-    return `
-        <script>
-                var dropdownItems = document.querySelectorAll('.dropdown-item-person-list');
-                var dropdownButton = document.querySelectorAll('.dropdown-toggle-person');
-                dropdownItems.forEach((item) => {
-                    item.addEventListener('click', () => {
-                    var selectedItemText = item.textContent;
-                    var personidvalue = item.getAttribute('data-value');
-                    dropdownButton.forEach((button) => {
-                        button.textContent = selectedItemText;
-                        button.value = personidvalue;
-                    });
-                    //dropdownButton.textContent = selectedItemText;
-                    //dropdownButton.value = personidvalue;
-                    // Close the dropdown menu
-                    document.querySelector('.dropdown-menu').classList.remove('show');
-                    });
-                });
-            </script>
-        `;
-  }
-
-  async generateHtmlBodyForFemaleData() {
-    return `
-        <div class="hstack">
-             <div class="btn-group" style="width: 254.9px;">
-                 <button type="button" class="btn dropdown-toggle dropdown-toggle-female btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false" value="">
-                     Select Person<!--<div data-value="" id="personidval" style="cursor: pointer; white-space: nowrap; display: inline-table;" _bl_87="" aria-expanded="false">John Legend - 1978</div>-->
-                 </button>
-
-                 <!-- DROP PERSON DOWN LIST -->
-                 <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow-y: scroll; overflow-x: clip;">
-                     <!-- SEARCH BAR -->
-                     <div class="hstack gap-2">
-                         <input type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search..." _bl_74="">
-                         <div class="mb-2" style="cursor: pointer;" _bl_77=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--pepicons-pop" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" data-icon="pepicons-pop:list" data-width="25"><g fill="currentColor"><path d="M6.5 6a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0"></path><path fill-rule="evenodd" d="M7.5 6a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1" clip-rule="evenodd"></path></g></svg></div>
-                     </div>
-
-                     <!-- PRIVATE PERSON LIST -->
-                     <li class="dropdown-item-person-list" style="cursor: pointer;">John Legend - 1978</li>
-
-                     <!-- EXAMPLES HEADER -->
-                     <li><hr class="dropdown-divider"></li>
-                     <div class="ms-3 d-flex justify-content-between">
-                         <div class=" hstack gap-2" style="">
-                             <div><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--material-symbols" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="material-symbols:demography-rounded" data-width="25"><path fill="currentColor" d="M18 18q.625 0 1.063-.437T19.5 16.5t-.437-1.062T18 15t-1.062.438T16.5 16.5t.438 1.063T18 18m0 3q.75 0 1.4-.35t1.075-.975q-.575-.35-1.2-.513T18 19t-1.275.162t-1.2.513q.425.625 1.075.975T18 21m0 2q-2.075 0-3.537-1.463T13 18t1.463-3.537T18 13t3.538 1.463T23 18t-1.463 3.538T18 23M8 9h8q.425 0 .713-.288T17 8t-.288-.712T16 7H8q-.425 0-.712.288T7 8t.288.713T8 9M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v5.45q0 .45-.375.7t-.8.1q-.425-.125-.888-.188T18 11q-.275 0-.513.013t-.487.062q-.225-.05-.5-.062T16 11H8q-.425 0-.712.288T7 12t.288.713T8 13h5.125q-.45.425-.812.925T11.675 15H8q-.425 0-.712.288T7 16t.288.713T8 17h3.075q-.05.25-.062.488T11 18q0 .5.05.95t.175.875t-.125.8t-.675.375z"></path></svg></div>
-                             <span style="font-size: 13px; color: #8f8f8f;">
-                                 Examples
-                             </span>
-                         </div>
-                     </div>
-                     <li><hr class="dropdown-divider"></li>
-
-                     <!-- PUBLIC PERSON LIST -->
-                     ${await PersonListSelector.getPersonList("101")}
-                 </ul>
-             </div>
-             <style>
-                 .no-dropdown-arrow.dropdown-toggle::after {
-                     display: none !important;
-                 }
-             </style>
-             <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2" _bl_78="" onclick="showSection('PersonData')">
-                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ant-design" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024" data-icon="ant-design:user-add-outlined" data-width="25"><path fill="currentColor" d="M678.3 642.4c24.2-13 51.9-20.4 81.4-20.4h.1c3 0 4.4-3.6 2.2-5.6a371.7 371.7 0 0 0-103.7-65.8c-.4-.2-.8-.3-1.2-.5C719.2 505 759.6 431.7 759.6 349c0-137-110.8-248-247.5-248S264.7 212 264.7 349c0 82.7 40.4 156 102.6 201.1c-.4.2-.8.3-1.2.5c-44.7 18.9-84.8 46-119.3 80.6a373.4 373.4 0 0 0-80.4 119.5A373.6 373.6 0 0 0 137 888.8a8 8 0 0 0 8 8.2h59.9c4.3 0 7.9-3.5 8-7.8c2-77.2 32.9-149.5 87.6-204.3C357 628.2 432.2 597 512.2 597c56.7 0 111.1 15.7 158 45.1a8.1 8.1 0 0 0 8.1.3M512.2 521c-45.8 0-88.9-17.9-121.4-50.4A171.2 171.2 0 0 1 340.5 349c0-45.9 17.9-89.1 50.3-121.6S466.3 177 512.2 177s88.9 17.9 121.4 50.4A171.2 171.2 0 0 1 683.9 349c0 45.9-17.9 89.1-50.3 121.6C601.1 503.1 558 521 512.2 521M880 759h-84v-84c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v84h-84c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h84v84c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-84h84c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8"></path></svg>
-             </button>
-         </div>
-         <script>
-            const dropdownItemsFemale = document.querySelectorAll('.dropdown-item-person-list');
-            const dropdownButtonFemale = document.querySelector('.dropdown-toggle-female');
-            dropdownItemsFemale.forEach((item) => {
-                item.addEventListener('click', () => {
-                var selectedItemText0 = item.textContent;
-                var personidvalue0 = item.getAttribute('data-value');
-                dropdownButtonFemale.textContent = selectedItemText0;
-                dropdownButtonFemale.value = personidvalue0;
-                // Close the dropdown menu
-                document.querySelector('.dropdown-menu').classList.remove('show');
-                });
-            });
-        </script>
-     `;
-  }
-
-  static async getPersonList(userId) {
-    try {
-      // STEP 1: Get request API URL
-      const response = await fetch(
-        `${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/${userId}`
-      );
-      const jsonData = await response.json();
-
-      // STEP 2: Extract person list data and generate HTML for dropdown list
-      const personList = jsonData.Payload;
-      const html = personList
-        .map((person) => {
-          //
-          return `<li class="dropdown-item-person-list" data-value="${person.PersonId}" style="cursor: pointer;">${person.Name} - 1994</li>`;
-        })
-        .join("");
-
-      // STEP 3: Return HTML as string to caller
-      return html;
-    } catch (error) {
-      console.error(error);
-      return "";
     }
-  }
 
-  async fetchLocationSuggestions(query) {
-    //make search location to API
-    const url = `${this.LiveServerURL}/SearchLocation/${query}`;
-    const response = await fetch(url);
-    const rawData = await response.json();
+    static async getPersonList(userId) {
+        try {
+            // STEP 1: Get request API URL
+            const response = await fetch(
+                `${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/${userId}`
+            );
+            const jsonData = await response.json();
 
-    //extract out the needed data
+            // STEP 2: Extract person list data and generate HTML for dropdown list
+            const personList = jsonData.Payload;
+            const html = personList
+                .map((person) => {
+                    //
+                    return `<li class="dropdown-item-person-list" data-value="${person.PersonId}" style="cursor: pointer;">${person.Name} - 1994</li>`;
+                })
+                .join("");
 
-    const dropdown = document.getElementById(
-      "LocationSearchAutoSuggestDropDownElement"
-    );
-    dropdown.innerHTML = ""; // Clear existing suggestions
-    data.forEach((location) => {
-      const li = document.createElement("li");
-      li.classList.add("dropdown-item");
-      li.style.cursor = "pointer";
-      li.style.marginLeft = "-4px";
-      li.textContent = location;
-      dropdown.appendChild(li);
-    });
-  }
+            // STEP 3: Return HTML as string to caller
+            return html;
+        } catch (error) {
+            console.error(error);
+            return "";
+        }
+    }
+
+    async fetchLocationSuggestions(query) {
+        //make search location to API
+        const url = `${this.LiveServerURL}/SearchLocation/${query}`;
+        const response = await fetch(url);
+        const rawData = await response.json();
+
+        //extract out the needed data
+
+        const dropdown = document.getElementById(
+            "LocationSearchAutoSuggestDropDownElement"
+        );
+        dropdown.innerHTML = ""; // Clear existing suggestions
+        data.forEach((location) => {
+            const li = document.createElement("li");
+            li.classList.add("dropdown-item");
+            li.style.cursor = "pointer";
+            li.style.marginLeft = "-4px";
+            li.textContent = location;
+            dropdown.appendChild(li);
+        });
+    }
 }
 
 //NOTE: auto loads/inits location search if element in page exits, simplify init
 $(document).ready(function () {
-  if ($("#LocationSearchSelector").length) {
-    // Element with ID 'elementId' exists, do some work here
-    console.log("Element exists!");
+    if ($("#LocationSearchSelector").length) {
+        // Element with ID 'elementId' exists, do some work here
+        console.log("Element exists!");
 
-    new LocationSearchSelector();
-  } else {
-    // Element with ID 'elementId' does not exist
-    console.log("Element does not exist!");
-  }
+        new LocationSearchSelector();
+    } else {
+        // Element with ID 'elementId' does not exist
+        console.log("Element does not exist!");
+    }
 });
 
 class PageHeader {
-  ElementID = "";
-  TitleText = "Title Goes Here";
-  DescriptionText = "Description Goes Here";
-  ImageSrc = "images/user-guide-banner.png";
+    ElementID = "";
+    TitleText = "Title Goes Here";
+    DescriptionText = "Description Goes Here";
+    ImageSrc = "images/user-guide-banner.png";
 
-  constructor(elementId) {
-    this.ElementID = elementId; //save for later access
+    constructor(elementId) {
+        this.ElementID = elementId; //save for later access
 
-    //get title and description from the elements custom attributes
-    const element = document.getElementById(elementId);
-    this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
-    this.DescriptionText =
-      element.getAttribute("description-text") || "Description Goes Here";
-    this.ImageSrc =
-      element.getAttribute("image-src") || "images/user-guide-banner.png";
+        //get title and description from the elements custom attributes
+        const element = document.getElementById(elementId);
+        this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
+        this.DescriptionText =
+            element.getAttribute("description-text") || "Description Goes Here";
+        this.ImageSrc =
+            element.getAttribute("image-src") || "images/user-guide-banner.png";
 
-    //inject in html
-    this.initializeMainBody();
-  }
+        //inject in html
+        this.initializeMainBody();
+    }
 
-  async initializeMainBody() {
-    //clean if any old stuff
-    $(`#${this.ElementID}`).empty();
+    async initializeMainBody() {
+        //clean if any old stuff
+        $(`#${this.ElementID}`).empty();
 
-    //inject into page
-    $(`#${this.ElementID}`).html(await this.generateHtmlBody());
-  }
+        //inject into page
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+    }
 
-  async generateHtmlBody() {
-    return `
-       
+    async generateHtmlBody() {
+        return `
         <!-- DESKTOP AND TABLET ONLY -->
         <div class="d-none d-md-block">
             <div class="vstack mb-2">
@@ -4796,43 +4760,43 @@ class PageHeader {
         
 
      `;
-  }
+    }
 }
 
 class DateTimeSelector {
-  ElementID = "DateTimeSelector";
+    ElementID = "DateTimeSelector";
 
-  constructor(rawSettings) {
-    //process the input variables and set them
-    //this.initializeSettingData(rawSettings);
+    constructor(rawSettings) {
+        //process the input variables and set them
+        //this.initializeSettingData(rawSettings);
 
-    //make the main chat window structure
-    this.initializeMainBody();
+        //make the main chat window structure
+        this.initializeMainBody();
 
-    //creates ever-changing placeholder questios to engage users
-    //this.initializeChatInputElement();
-  }
-  //document.addEventListener("DOMContentLoaded", function () {
+        //creates ever-changing placeholder questios to engage users
+        //this.initializeChatInputElement();
+    }
+    //document.addEventListener("DOMContentLoaded", function () {
 
-  async initializeMainBody() {
-    document.addEventListener("DOMContentLoaded", () => {
-      const element = document.querySelectorAll(".DateTimeSelector");
-      console.log("go here");
-      console.log(element);
-      element.forEach(async (elementdrop) => {
-        $(elementdrop).empty();
-        //$(elementdrop).css('max-width', '667px');
-        const html = await this.generateHTMLForDatenTimetemp();
-        console.log(html);
-        console.log(elementdrop);
-        elementdrop.innerHTML = html;
-        $(elementdrop).html(this.html);
-      });
-    });
-  }
+    async initializeMainBody() {
+        document.addEventListener("DOMContentLoaded", () => {
+            const element = document.querySelectorAll(".DateTimeSelector");
+            console.log("go here");
+            console.log(element);
+            element.forEach(async (elementdrop) => {
+                $(elementdrop).empty();
+                //$(elementdrop).css('max-width', '667px');
+                const html = await this.generateHTMLForDatenTimetemp();
+                console.log(html);
+                console.log(elementdrop);
+                elementdrop.innerHTML = html;
+                $(elementdrop).html(this.html);
+            });
+        });
+    }
 
-  async generateHTMLForDatenTime(boxid) {
-    return `
+    async generateHTMLForDatenTime(boxid) {
+        return `
             <div class="form-control">
                                                 <div class="hstack" id="calendar-button-${boxid}" style="gap: inherit; overflow-x: auto;">
                                                     <span class="inputPerfect" id="DateInput-${boxid}">22</span>/
@@ -4912,34 +4876,34 @@ class DateTimeSelector {
                                                 </script>
                                             </div>
         `;
-  }
+    }
 }
 
 //location button:
 
 function locationsearch(id) {
-  const locationInputKundali = document.getElementById(`location-input-${id}`);
-  const locationinfoKundali = document.getElementById(
-    `address-to-geolocation-${id}`
-  );
-  const locationKundali = locationInputKundali.value.trim();
-  if (locationKundali) {
-    const apiUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/AddressToGeoLocation/Address/${locationKundali}`;
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.Status === "Pass") {
-          const addressToGeoLocationkundali = data.Payload.AddressToGeoLocation;
-          locationinfoKundali.value = JSON.stringify(
-            addressToGeoLocationkundali
-          );
-          locationInputKundali.value = addressToGeoLocationkundali.Name;
-        } else {
-          console.log("Address not found!!");
-        }
-      })
-      .catch((error) => console.error(error));
-  }
+    const locationInputKundali = document.getElementById(`location-input-${id}`);
+    const locationinfoKundali = document.getElementById(
+        `address-to-geolocation-${id}`
+    );
+    const locationKundali = locationInputKundali.value.trim();
+    if (locationKundali) {
+        const apiUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/AddressToGeoLocation/Address/${locationKundali}`;
+        fetch(apiUrl)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.Status === "Pass") {
+                    const addressToGeoLocationkundali = data.Payload.AddressToGeoLocation;
+                    locationinfoKundali.value = JSON.stringify(
+                        addressToGeoLocationkundali
+                    );
+                    locationInputKundali.value = addressToGeoLocationkundali.Name;
+                } else {
+                    console.log("Address not found!!");
+                }
+            })
+            .catch((error) => console.error(error));
+    }
 }
 
 
@@ -4948,3 +4912,423 @@ function locationsearch(id) {
 function updatedropdownkundali(id) {
     document.getElementById('KundaliHoraryHeader').textContent = id;
 }
+
+
+//---------------------------------------------------------  PERSON SELECTOR BOX -------------------------------
+class PersonSelectorBoxOLD {
+    constructor(elementId, width = "100%") {
+        this.width = width;
+        this.extraClass = "";
+        this.label = "Person";
+        this.hideTitle = false;
+        this.selectedPersonId = "";
+        this.personList = [];
+        this.publicPersonList = [];
+        this.personListDisplay = [];
+        this.publicPersonListDisplay = [];
+        this.isReady = false;
+        this.searchInput = null;
+        this.ElementID = elementId;
+
+        this.onKeyUpSearchBar = this.onKeyUpSearchBar.bind(this);
+        this.fillDropDownAndSetPerson = this.fillDropDownAndSetPerson.bind(this);
+        this.getSelectedPerson = this.getSelectedPerson.bind(this);
+        this.isPersonSelected = this.isPersonSelected.bind(this);
+        this.setPerson = this.setPerson.bind(this);
+        this.onClickPersonName = this.onClickPersonName.bind(this);
+        this.onClickHidePublic = this.onClickHidePublic.bind(this);
+        this.onClickTrigger = this.onClickTrigger.bind(this);
+        this.onClickAddPersonButton = this.onClickAddPersonButton.bind(this);
+
+        // Add to window instance so can be accessed by others via id
+        if (!window.VedAstro) {
+            window.VedAstro = {};
+        }
+        if (!window.VedAstro.PersonSelectorBoxInstances) {
+            window.VedAstro.PersonSelectorBoxInstances = [];
+        }
+        window.VedAstro.PersonSelectorBoxInstances[elementId] = this;
+
+    }
+
+    render() {
+
+
+        ``;
+
+        // Create a unique ElementID for this instance
+        if (!this.ElementID) {
+            this.ElementID = window.VedAstro.PersonSelectorBoxInstances.length;
+            window.VedAstro.PersonSelectorBoxInstances.push(this);
+        }
+
+        document.getElementById(this.ElementID).innerHTML = html;
+    }
+
+
+    generatePublicPersonListHtml() {
+
+        const html = this.publicPersonListDisplay
+            .map((person) => {
+                return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.Name} - 1994</li>`;
+            })
+            .join("");
+
+        return html;
+    }
+
+    generatePersonListHtml() {
+
+        const html = this.personListDisplay
+            .map((person) => {
+                return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.Name} - 1994</li>`;
+            })
+            .join("");
+
+        return html;
+    }
+
+    onKeyUpSearchBar(event) {
+        const text = event.target.value.toLowerCase();
+        if (text === "") {
+            this.personListDisplay = this.personList;
+            this.publicPersonListDisplay = this.publicPersonList;
+        } else {
+            this.personListDisplay = this.personList.filter((person) => person.displayName.toLowerCase().includes(text));
+            this.publicPersonListDisplay = this.publicPersonList.filter((person) => person.displayName.toLowerCase().includes(text));
+        }
+    }
+
+
+    async fillDropDownAndSetPerson() {
+        this.isReady = false;
+
+        //PRIVATE
+        const personListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/${window.vedastro.UserId}`);
+        const personList = await personListResponse.json();
+        this.personList = personList.Payload;
+        this.personListDisplay = personList.Payload;
+
+        //PUBLIC
+        const publicPersonListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/101`);
+        const publicPersonList = await publicPersonListResponse.json();
+        this.publicPersonList = publicPersonList.Payload;
+        this.publicPersonListDisplay = publicPersonList.Payload;
+
+        // CHECK STORAGE
+        const storedSelectedPerson = localStorage.getItem("selectedPerson");
+        const selectedPerson = JSON.parse(storedSelectedPerson);
+        if (selectedPerson && Object.keys(selectedPerson).length !== 0) {
+            this.onClickPersonName(selectedPerson.id);
+        }
+
+        this.isReady = true;
+        this.render();
+    }
+
+    async getSelectedPerson() {
+        const selectedPersonResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPerson/OwnerId/101/PersonId/${this.selectedPersonId}`);
+        const selectedPersonData = await selectedPersonResponse.json();
+        var personData = selectedPersonData.Payload.GetPerson;
+        return personData;
+    }
+
+    isPersonSelected() {
+        return this.selectedPersonId !== "" && this.selectedPersonId !== null;
+    }
+
+    async setPerson(personId) {
+        this.selectedPersonId = personId;
+        const selectedPerson = await this.getSelectedPerson();
+        this.onClickPersonName(selectedPerson.id);
+    }
+
+    onClickPersonName(personId) {
+        localStorage.setItem("selectedPerson", JSON.stringify({ id: personId }));
+        this.selectedPersonId = personId;
+        this.render();
+    }
+
+    onClickHidePublic() {
+        this.publicPersonList = [];
+        this.render();
+    }
+
+    onClickTrigger() {
+        this.searchInput.focus();
+    }
+
+    onClickAddPersonButton() {
+        window.location.href = "/add-person";
+    }
+}
+
+class PersonSelectorBox {
+    ElementID = "";
+    TitleText = "Title Goes Here";
+
+    constructor(elementId) {
+        this.ElementID = elementId; //element that is heart 💖
+
+        //default data
+        this.personList = [];
+        this.publicPersonList = [];
+        this.personListDisplay = [];
+        this.publicPersonListDisplay = [];
+
+        //get title and description from the elements custom attributes
+        const element = document.getElementById(elementId);
+        this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
+
+        //save to global for access by parent
+        if (!window.VedAstro) { window.VedAstro = {}; }
+        if (!window.VedAstro.PersonSelectorBoxInstances) { window.VedAstro.PersonSelectorBoxInstances = []; }
+        window.VedAstro.PersonSelectorBoxInstances[this.ElementID] = this;
+
+        //runs needed async methods properly
+        this.init();
+
+    }
+
+    async init() {
+        // get person list data from API or local storage
+        await this.initializePersonListData();
+
+        // inject in html
+        await this.initializeMainBody();
+    }
+
+    async initializeMainBody() {
+        //clean if any old stuff
+        $(`#${this.ElementID}`).empty();
+
+        //inject into page
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+    }
+
+
+    async initializePersonListData() {
+
+        //PRIVATE
+        const personListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/${window.vedastro.UserId}`);
+        const personList = await personListResponse.json();
+        this.personList = personList.Payload;
+        this.personListDisplay = personList.Payload;
+
+        //PUBLIC
+        const publicPersonListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/101`);
+        const publicPersonList = await publicPersonListResponse.json();
+        this.publicPersonList = publicPersonList.Payload;
+        this.publicPersonListDisplay = publicPersonList.Payload;
+
+        //GLOBAL SELECTED PERSON
+        const storedSelectedPerson = localStorage.getItem("selectedPerson");
+        const selectedPerson = JSON.parse(storedSelectedPerson);
+        if (selectedPerson && Object.keys(selectedPerson).length !== 0) {
+
+            this.onClickPersonName(selectedPerson.id); //simulate click on person
+        }
+
+    }
+
+    //when user clicks on person name in dropdown
+    onClickPersonName(personId) {
+
+        ////save to local storage for future use
+        //localStorage.setItem("selectedPerson", JSON.stringify({ id: personId }));
+
+        ////save for instance specific selection
+        //this.selectedPersonId = personId;
+
+        //update button text
+
+    }
+
+    async generateHtmlBody() {
+
+        //generate html for person list
+        this.personListHTML = this.generatePersonListHtml();
+        this.publicPersonListHTML = this.generatePublicPersonListHtml();
+        
+        return `
+        <div>
+          <label class="form-label">${this.TitleText}</label>
+          <div class="hstack">
+            <div class="btn-group" style="width:100%;">
+              <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+                <div style="cursor: pointer;white-space: nowrap; display: inline-table;" _bl_127="" aria-expanded="false">John Legend - 1978</div>
+              </button>
+              <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
+
+                <!--SEARCH INPUT-->
+                <div class="hstack gap-2">
+                  <input type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search..." _bl_73="">
+                  <div class="mb-2" style="cursor: pointer;" _bl_97="">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--pepicons-pop" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" data-icon="pepicons-pop:list" data-width="25">
+                      <g fill="currentColor" data-darkreader-inline-fill="" style="--darkreader-inline-fill: currentColor;">
+                        <path d="M6.5 6a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0 4a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0">
+                        </path>
+                        <path fill-rule="evenodd" d="M7.5 6a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1" clip-rule="evenodd">
+                        </path>
+                      </g>
+                    </svg>
+                  </div>
+                </div>
+
+
+                <!-- PRIVATE PERSON LIST -->
+                ${this.personListHTML}
+
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <div class="ms-3 d-flex justify-content-between">
+                  <!--!-->
+                  <div class=" hstack gap-2" style=" ">
+                    <!--!-->
+                    <div class="" style="" _bl_134="">
+                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--material-symbols" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="material-symbols:demography-rounded" data-width="25">
+                        <path fill="currentColor" d="M18 18q.625 0 1.063-.437T19.5 16.5t-.437-1.062T18 15t-1.062.438T16.5 16.5t.438 1.063T18 18m0 3q.75 0 1.4-.35t1.075-.975q-.575-.35-1.2-.513T18 19t-1.275.162t-1.2.513q.425.625 1.075.975T18 21m0 2q-2.075 0-3.537-1.463T13 18t1.463-3.537T18 13t3.538 1.463T23 18t-1.463 3.538T18 23M8 9h8q.425 0 .713-.288T17 8t-.288-.712T16 7H8q-.425 0-.712.288T7 8t.288.713T8 9M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v5.45q0 .45-.375.7t-.8.1q-.425-.125-.888-.188T18 11q-.275 0-.513.013t-.487.062q-.225-.05-.5-.062T16 11H8q-.425 0-.712.288T7 12t.288.713T8 13h5.125q-.45.425-.812.925T11.675 15H8q-.425 0-.712.288T7 16t.288.713T8 17h3.075q-.05.25-.062.488T11 18q0 .5.05.95t.175.875t-.125.8t-.675.375z" data-darkreader-inline-fill="" style="--darkreader-inline-fill: currentColor;">
+                        </path>
+                      </svg>
+                    </div>
+                    <!--!-->
+                    <span style="font-size: 13px; color: rgb(143, 143, 143); --darkreader-inline-color: #cdc4b5;" data-darkreader-inline-color="">
+                      <!--!-->Examples</span>
+                  </div>
+                </div>
+                <!--!-->
+                <!--!-->
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+
+                <!-- PUBLIC PERSON LIST -->
+                ${this.publicPersonListHTML}
+
+                <li class="dropdown-item" style="cursor: pointer;">John Legend - 1978</li>
+                <li class="dropdown-item" style="cursor: pointer;">Laura Linney - 1964</li>
+                <li class="dropdown-item" style="cursor: pointer;">Christina Jolie - 1986</li>
+                <li class="dropdown-item" style="cursor: pointer;">Victoria Beckham - 1974</li>
+                <li class="dropdown-item" style="cursor: pointer;">Portia de Rossi - 1973</li>
+                <li class="dropdown-item" style="cursor: pointer;">Margaret Thatcher - 1925</li>
+                <li class="dropdown-item" style="cursor: pointer;">Volodymyr Zelenskyy - 1978</li>
+                <li class="dropdown-item" style="cursor: pointer;">Alexandra Horvath - 1990</li>
+                <li class="dropdown-item" style="cursor: pointer;">Alejandra Guilmant - 1993</li>
+                <li class="dropdown-item" style="cursor: pointer;">Courtney Shea - 1993</li>
+                <li class="dropdown-item" style="cursor: pointer;">Sarada Devi - 1853</li>
+                <li class="dropdown-item" style="cursor: pointer;">Winston Churchill - 1874</li>
+                <li class="dropdown-item" style="cursor: pointer;">Brittany Bliss - 1995</li>
+                <li class="dropdown-item" style="cursor: pointer;">Anjelika Vision - 1994</li>
+                <li class="dropdown-item" style="cursor: pointer;">Chrissy Teigen - 1985</li>
+                <li class="dropdown-item" style="cursor: pointer;">Boris Johnson - 1964</li>
+                <li class="dropdown-item" style="cursor: pointer;">Rishi Sunak - 1980</li>
+                <li class="dropdown-item" style="cursor: pointer;">Sri Ramakrishna - 1836</li>
+                <li class="dropdown-item" style="cursor: pointer;">Rosario Dawson - 1979</li>
+                <li class="dropdown-item" style="cursor: pointer;">Olivia Preston - 1990</li>
+                <li class="dropdown-item" style="cursor: pointer;">Sean Young - 1959</li>
+                <li class="dropdown-item" style="cursor: pointer;">Abraham Lincoln - 1809</li>
+                <li class="dropdown-item" style="cursor: pointer;">Adolf Hitler - 1889</li>
+                <li class="dropdown-item" style="cursor: pointer;">Albert Einstein - 1879</li>
+                <li class="dropdown-item" style="cursor: pointer;">Alexis Blaze - 1992</li>
+                <li class="dropdown-item" style="cursor: pointer;">Angelina Jolie - 1975</li>
+                <li class="dropdown-item" style="cursor: pointer;">Bill Gates - 1955</li>
+                <li class="dropdown-item" style="cursor: pointer;">Brad Pitt - 1963</li>
+                <li class="dropdown-item" style="cursor: pointer;">Dax Shepard - 1975</li>
+                <li class="dropdown-item" style="cursor: pointer;">Elon Musk - 1971</li>
+                <li class="dropdown-item" style="cursor: pointer;">Emily Ratajkowski - 1991</li>
+                <li class="dropdown-item" style="cursor: pointer;">Eva Braun - 1912</li>
+                <li class="dropdown-item" style="cursor: pointer;">Fidel Castro - 1926</li>
+                <li class="dropdown-item" style="cursor: pointer;">John Lennon - 1940</li>
+                <li class="dropdown-item" style="cursor: pointer;">Jokin - 1984</li>
+                <li class="dropdown-item" style="cursor: pointer;">Joseph Stalin - 1878</li>
+                <li class="dropdown-item" style="cursor: pointer;">Joséphine de Beauharnais - 1763</li>
+                <li class="dropdown-item" style="cursor: pointer;">Kali Dutt - 1980</li>
+                <li class="dropdown-item" style="cursor: pointer;">Kristen Bell - 1980</li>
+                <li class="dropdown-item" style="cursor: pointer;">Louis Armstrong - 1901</li>
+                <li class="dropdown-item" style="cursor: pointer;">Luciana Barroso - 1976</li>
+                <li class="dropdown-item" style="cursor: pointer;">Matt Damon - 1970</li>
+                <li class="dropdown-item" style="cursor: pointer;">Miley Cyrus - 1992</li>
+                <li class="dropdown-item" style="cursor: pointer;">Monica Bellucci - 1964</li>
+                <li class="dropdown-item" style="cursor: pointer;">Mukesh Ambani - 1957</li>
+                <li class="dropdown-item" style="cursor: pointer;">Napoleon Bonaparte - 1769</li>
+                <li class="dropdown-item" style="cursor: pointer;">Narendra Modi - 1950</li>
+                <li class="dropdown-item" style="cursor: pointer;">NeehaS - 1999</li>
+                <li class="dropdown-item" style="cursor: pointer;">Piyush Bali - 2004</li>
+                <li class="dropdown-item" style="cursor: pointer;">Praween Kumar - 1981</li>
+                <li class="dropdown-item" style="cursor: pointer;">Queen Elizabeth II - 1926</li>
+                <li class="dropdown-item" style="cursor: pointer;">Rabindranath Tagore - 1861</li>
+                <li class="dropdown-item" style="cursor: pointer;">Ratan Tata - 1937</li>
+                <li class="dropdown-item" style="cursor: pointer;">Rita Wilson - 1956</li>
+                <li class="dropdown-item" style="cursor: pointer;">Saddam Hussein - 1937</li>
+                <li class="dropdown-item" style="cursor: pointer;">Snehal - 1979</li>
+                <li class="dropdown-item" style="cursor: pointer;">Standard Horoscope - 1918</li>
+                <li class="dropdown-item" style="cursor: pointer;">Steve Jobs - 1955</li>
+                <li class="dropdown-item" style="cursor: pointer;">Swami Vivekananda - 1863</li>
+                <li class="dropdown-item" style="cursor: pointer;">Tom Hanks - 1956</li>
+                <li class="dropdown-item" style="cursor: pointer;">W. H. Auden - 1907</li>
+                <li class="dropdown-item" style="cursor: pointer;">Yevgeny Prigozhin - 1961</li>
+                <li class="dropdown-item" style="cursor: pointer;">Paramahansa Yogananda - 1893</li>
+                <li class="dropdown-item" style="cursor: pointer;">Yogi Adityanath - 1971</li>
+                <li class="dropdown-item" style="cursor: pointer;">Yoko Ono - 1933</li>
+                <li class="dropdown-item" style="cursor: pointer;">Blake Pickett - 1963</li>
+                <li class="dropdown-item" style="cursor: pointer;">Jang Mi In-Ae - 1984</li>
+                <li class="dropdown-item" style="cursor: pointer;">Alisa Amore - 1997</li>
+                <li class="dropdown-item" style="cursor: pointer;">Ellen DeGeneres - 1958</li>
+                <li class="dropdown-item" style="cursor: pointer;">Arkida Reeves - 1988</li>
+                <li class="dropdown-item" style="cursor: pointer;">David Beckham - 1975</li>
+                <li class="dropdown-item" style="cursor: pointer;">Eva Green - 1980</li>
+                <li class="dropdown-item" style="cursor: pointer;">Christy Carlson Romano - 1984</li>
+                <li class="dropdown-item" style="cursor: pointer;">Ruri Saijo - 1990</li>
+                <li class="dropdown-item" style="cursor: pointer;">Maggie Duran - 1993</li>
+                <li class="dropdown-item" style="cursor: pointer;">Ralph Waldo Emerson - 1803</li>
+                <li class="dropdown-item" style="cursor: pointer;">Emily Browning - 1988</li>
+                <li class="dropdown-item" style="cursor: pointer;">Bella Gray - 1996</li>
+                <li class="dropdown-item" style="cursor: pointer;">Aya Beshen - 1995</li>
+              </ul>
+            </div>
+            <!--!-->
+            <!--!-->
+            <!--!-->
+            <style>
+          .no-dropdown-arrow.dropdown-toggle::after {
+                  display: none !important;
+              }
+            </style>
+            <style class="darkreader darkreader--sync" media="screen"></style>
+            <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2" _bl_98="">
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ant-design" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024" data-icon="ant-design:user-add-outlined" data-width="25">
+                <path fill="currentColor" d="M678.3 642.4c24.2-13 51.9-20.4 81.4-20.4h.1c3 0 4.4-3.6 2.2-5.6a371.7 371.7 0 0 0-103.7-65.8c-.4-.2-.8-.3-1.2-.5C719.2 505 759.6 431.7 759.6 349c0-137-110.8-248-247.5-248S264.7 212 264.7 349c0 82.7 40.4 156 102.6 201.1c-.4.2-.8.3-1.2.5c-44.7 18.9-84.8 46-119.3 80.6a373.4 373.4 0 0 0-80.4 119.5A373.6 373.6 0 0 0 137 888.8a8 8 0 0 0 8 8.2h59.9c4.3 0 7.9-3.5 8-7.8c2-77.2 32.9-149.5 87.6-204.3C357 628.2 432.2 597 512.2 597c56.7 0 111.1 15.7 158 45.1a8.1 8.1 0 0 0 8.1.3M512.2 521c-45.8 0-88.9-17.9-121.4-50.4A171.2 171.2 0 0 1 340.5 349c0-45.9 17.9-89.1 50.3-121.6S466.3 177 512.2 177s88.9 17.9 121.4 50.4A171.2 171.2 0 0 1 683.9 349c0 45.9-17.9 89.1-50.3 121.6C601.1 503.1 558 521 512.2 521M880 759h-84v-84c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v84h-84c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h84v84c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-84h84c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8" data-darkreader-inline-fill="" style="--darkreader-inline-fill: currentColor;">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+     `;
+    }
+
+    generatePublicPersonListHtml() {
+
+        const html = this.publicPersonListDisplay
+            .map((person) => {
+                return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.Name} - 1994</li>`;
+            })
+            .join("");
+
+        return html;
+    }
+
+    generatePersonListHtml() {
+
+        const html = this.personListDisplay
+            .map((person) => {
+                return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.Name} - 1994</li>`;
+            })
+            .join("");
+
+        return html;
+    }
+
+}
+
+

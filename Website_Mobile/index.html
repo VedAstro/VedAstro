@@ -60,9 +60,10 @@
         .hidden {
             display: none;
         }
+
         @media only screen and (max-width: 768px) {
             .calendar-container {
-                 margin-left: -100px;
+                margin-left: -100px;
             }
         }
         /* Hide desktop navigation bar and sidebar on small screens */
@@ -236,19 +237,19 @@
                     </button>
 
                     <!-- TODO FUTURE <button onclick="showSection('StarsAboveMe')" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-                            class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_32="" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
-                             role="img" class="iconify iconify--solar" width="25" height="25" preserveAspectRatio="xMidYMid meet"
-                             viewBox="0 0 24 24" data-icon="solar:moon-stars-bold" data-width="25">
-                            <path fill="currentColor"
-                                  d="M19.9 2.307a.483.483 0 0 0-.9 0l-.43 1.095a.484.484 0 0 1-.272.274l-1.091.432a.486.486 0 0 0 0 .903l1.091.432a.48.48 0 0 1 .272.273L19 6.81c.162.41.74.41.9 0l.43-1.095a.484.484 0 0 1 .273-.273l1.091-.432a.486.486 0 0 0 0-.903l-1.091-.432a.484.484 0 0 1-.273-.274zM16.033 8.13a.483.483 0 0 0-.9 0l-.157.399a.484.484 0 0 1-.272.273l-.398.158a.486.486 0 0 0 0 .903l.398.157c.125.05.223.148.272.274l.157.399c.161.41.739.41.9 0l.157-.4a.484.484 0 0 1 .272-.273l.398-.157a.486.486 0 0 0 0-.903l-.398-.158a.484.484 0 0 1-.272-.273z">
-                            </path>
-                            <path fill="currentColor"
-                                  d="M12 22c5.523 0 10-4.477 10-10c0-.463-.694-.54-.933-.143a6.5 6.5 0 1 1-8.924-8.924C12.54 2.693 12.463 2 12 2C6.477 2 2 6.477 2 12s4.477 10 10 10">
-                            </path>
-                        </svg>Stars Above Me
-                    </button>
- -->
+                                               class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_32="" aria-expanded="false">
+                                           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                                                role="img" class="iconify iconify--solar" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                                                viewBox="0 0 24 24" data-icon="solar:moon-stars-bold" data-width="25">
+                                               <path fill="currentColor"
+                                                     d="M19.9 2.307a.483.483 0 0 0-.9 0l-.43 1.095a.484.484 0 0 1-.272.274l-1.091.432a.486.486 0 0 0 0 .903l1.091.432a.48.48 0 0 1 .272.273L19 6.81c.162.41.74.41.9 0l.43-1.095a.484.484 0 0 1 .273-.273l1.091-.432a.486.486 0 0 0 0-.903l-1.091-.432a.484.484 0 0 1-.273-.274zM16.033 8.13a.483.483 0 0 0-.9 0l-.157.399a.484.484 0 0 1-.272.273l-.398.158a.486.486 0 0 0 0 .903l.398.157c.125.05.223.148.272.274l.157.399c.161.41.739.41.9 0l.157-.4a.484.484 0 0 1 .272-.273l.398-.157a.486.486 0 0 0 0-.903l-.398-.158a.484.484 0 0 1-.272-.273z">
+                                               </path>
+                                               <path fill="currentColor"
+                                                     d="M12 22c5.523 0 10-4.477 10-10c0-.463-.694-.54-.933-.143a6.5 6.5 0 1 1-8.924-8.924C12.54 2.693 12.463 2 12 2C6.477 2 2 6.477 2 12s4.477 10 10 10">
+                                               </path>
+                                           </svg>Stars Above Me
+                                       </button>
+                    -->
                     <!--TODO FUTURE <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
                         <button style="height: 37.1px; width: fit-content;"
                                 class="btn-sm w-100 dropdown-toggle hstack gap-2 iconButton btn-outline-primary btn " type="button"
@@ -331,7 +332,6 @@
 
                 <!-- DESKTOP TOP NAV BAR  -->
                 <div id="desktopnavbar" style="min-width: 954px;" class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white">
-
 
                     <button id="sidebartoggle" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_62=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--lucide" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="lucide:panel-left-close" data-width="25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18m7-6l-3-3l3-3"></path></g></svg></button>
 
@@ -853,7 +853,11 @@
 
                             <!-- PAGE CODE -->
                             <script>
-                                new PageHeader("QuickGuidePageHeader")
+                                new PageHeader("QuickGuidePageHeader");
+
+                                //note: on init, chat instance is loaded into window.vedastro.horoscopechat
+                                new PersonListSelector("PersonListSelector");
+
                             </script>
                         </section>
                         <section id="MatchChecker">
@@ -2799,7 +2803,7 @@
                                                                     <span class="inputPerfect" id="HourInput-kundali">00</span>:
                                                                     <span class="inputPerfect" id="MinuteInput-kundali">00</span>:
                                                                     <span class="inputPerfect" id="MeridianInput-kundali">AM</span>
-                                                            
+
                                                                 </div>
                                                                 <div class="calendar-container" id="calendar-container-kundali" style="display: none; position: absolute; z-index: 1;"></div>
                                                                 <!--Adding calender picker-->
@@ -2811,7 +2815,7 @@
                                                                     }
                                                                 </style>
                                                                 <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro@2.9.6/build/vanilla-calendar.min.js"></script>
-                                                            
+
                                                                 <script>
                                                                     document.addEventListener('DOMContentLoaded',
                                                                         function () {
@@ -2858,7 +2862,7 @@
                                                                                             calendarContainer.style.display = 'none';
                                                                                             showCalendar = false;
                                                                                         }
-                                                            
+
                                                                                     }
                                                                                 });
                                                                             calendar.init();
@@ -2915,7 +2919,256 @@
                                                         </label>
                                                         <select id="HoraryNumberSelectElement" class="form-select">
                                                             <option value="" selected="">Choose...</option>
-                                                        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option><option value="60">60</option><option value="61">61</option><option value="62">62</option><option value="63">63</option><option value="64">64</option><option value="65">65</option><option value="66">66</option><option value="67">67</option><option value="68">68</option><option value="69">69</option><option value="70">70</option><option value="71">71</option><option value="72">72</option><option value="73">73</option><option value="74">74</option><option value="75">75</option><option value="76">76</option><option value="77">77</option><option value="78">78</option><option value="79">79</option><option value="80">80</option><option value="81">81</option><option value="82">82</option><option value="83">83</option><option value="84">84</option><option value="85">85</option><option value="86">86</option><option value="87">87</option><option value="88">88</option><option value="89">89</option><option value="90">90</option><option value="91">91</option><option value="92">92</option><option value="93">93</option><option value="94">94</option><option value="95">95</option><option value="96">96</option><option value="97">97</option><option value="98">98</option><option value="99">99</option><option value="100">100</option><option value="101">101</option><option value="102">102</option><option value="103">103</option><option value="104">104</option><option value="105">105</option><option value="106">106</option><option value="107">107</option><option value="108">108</option><option value="109">109</option><option value="110">110</option><option value="111">111</option><option value="112">112</option><option value="113">113</option><option value="114">114</option><option value="115">115</option><option value="116">116</option><option value="117">117</option><option value="118">118</option><option value="119">119</option><option value="120">120</option><option value="121">121</option><option value="122">122</option><option value="123">123</option><option value="124">124</option><option value="125">125</option><option value="126">126</option><option value="127">127</option><option value="128">128</option><option value="129">129</option><option value="130">130</option><option value="131">131</option><option value="132">132</option><option value="133">133</option><option value="134">134</option><option value="135">135</option><option value="136">136</option><option value="137">137</option><option value="138">138</option><option value="139">139</option><option value="140">140</option><option value="141">141</option><option value="142">142</option><option value="143">143</option><option value="144">144</option><option value="145">145</option><option value="146">146</option><option value="147">147</option><option value="148">148</option><option value="149">149</option><option value="150">150</option><option value="151">151</option><option value="152">152</option><option value="153">153</option><option value="154">154</option><option value="155">155</option><option value="156">156</option><option value="157">157</option><option value="158">158</option><option value="159">159</option><option value="160">160</option><option value="161">161</option><option value="162">162</option><option value="163">163</option><option value="164">164</option><option value="165">165</option><option value="166">166</option><option value="167">167</option><option value="168">168</option><option value="169">169</option><option value="170">170</option><option value="171">171</option><option value="172">172</option><option value="173">173</option><option value="174">174</option><option value="175">175</option><option value="176">176</option><option value="177">177</option><option value="178">178</option><option value="179">179</option><option value="180">180</option><option value="181">181</option><option value="182">182</option><option value="183">183</option><option value="184">184</option><option value="185">185</option><option value="186">186</option><option value="187">187</option><option value="188">188</option><option value="189">189</option><option value="190">190</option><option value="191">191</option><option value="192">192</option><option value="193">193</option><option value="194">194</option><option value="195">195</option><option value="196">196</option><option value="197">197</option><option value="198">198</option><option value="199">199</option><option value="200">200</option><option value="201">201</option><option value="202">202</option><option value="203">203</option><option value="204">204</option><option value="205">205</option><option value="206">206</option><option value="207">207</option><option value="208">208</option><option value="209">209</option><option value="210">210</option><option value="211">211</option><option value="212">212</option><option value="213">213</option><option value="214">214</option><option value="215">215</option><option value="216">216</option><option value="217">217</option><option value="218">218</option><option value="219">219</option><option value="220">220</option><option value="221">221</option><option value="222">222</option><option value="223">223</option><option value="224">224</option><option value="225">225</option><option value="226">226</option><option value="227">227</option><option value="228">228</option><option value="229">229</option><option value="230">230</option><option value="231">231</option><option value="232">232</option><option value="233">233</option><option value="234">234</option><option value="235">235</option><option value="236">236</option><option value="237">237</option><option value="238">238</option><option value="239">239</option><option value="240">240</option><option value="241">241</option><option value="242">242</option><option value="243">243</option><option value="244">244</option><option value="245">245</option><option value="246">246</option><option value="247">247</option><option value="248">248</option><option value="249">249</option></select>
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                            <option value="7">7</option>
+                                                            <option value="8">8</option>
+                                                            <option value="9">9</option>
+                                                            <option value="10">10</option>
+                                                            <option value="11">11</option>
+                                                            <option value="12">12</option>
+                                                            <option value="13">13</option>
+                                                            <option value="14">14</option>
+                                                            <option value="15">15</option>
+                                                            <option value="16">16</option>
+                                                            <option value="17">17</option>
+                                                            <option value="18">18</option>
+                                                            <option value="19">19</option>
+                                                            <option value="20">20</option>
+                                                            <option value="21">21</option>
+                                                            <option value="22">22</option>
+                                                            <option value="23">23</option>
+                                                            <option value="24">24</option>
+                                                            <option value="25">25</option>
+                                                            <option value="26">26</option>
+                                                            <option value="27">27</option>
+                                                            <option value="28">28</option>
+                                                            <option value="29">29</option>
+                                                            <option value="30">30</option>
+                                                            <option value="31">31</option>
+                                                            <option value="32">32</option>
+                                                            <option value="33">33</option>
+                                                            <option value="34">34</option>
+                                                            <option value="35">35</option>
+                                                            <option value="36">36</option>
+                                                            <option value="37">37</option>
+                                                            <option value="38">38</option>
+                                                            <option value="39">39</option>
+                                                            <option value="40">40</option>
+                                                            <option value="41">41</option>
+                                                            <option value="42">42</option>
+                                                            <option value="43">43</option>
+                                                            <option value="44">44</option>
+                                                            <option value="45">45</option>
+                                                            <option value="46">46</option>
+                                                            <option value="47">47</option>
+                                                            <option value="48">48</option>
+                                                            <option value="49">49</option>
+                                                            <option value="50">50</option>
+                                                            <option value="51">51</option>
+                                                            <option value="52">52</option>
+                                                            <option value="53">53</option>
+                                                            <option value="54">54</option>
+                                                            <option value="55">55</option>
+                                                            <option value="56">56</option>
+                                                            <option value="57">57</option>
+                                                            <option value="58">58</option>
+                                                            <option value="59">59</option>
+                                                            <option value="60">60</option>
+                                                            <option value="61">61</option>
+                                                            <option value="62">62</option>
+                                                            <option value="63">63</option>
+                                                            <option value="64">64</option>
+                                                            <option value="65">65</option>
+                                                            <option value="66">66</option>
+                                                            <option value="67">67</option>
+                                                            <option value="68">68</option>
+                                                            <option value="69">69</option>
+                                                            <option value="70">70</option>
+                                                            <option value="71">71</option>
+                                                            <option value="72">72</option>
+                                                            <option value="73">73</option>
+                                                            <option value="74">74</option>
+                                                            <option value="75">75</option>
+                                                            <option value="76">76</option>
+                                                            <option value="77">77</option>
+                                                            <option value="78">78</option>
+                                                            <option value="79">79</option>
+                                                            <option value="80">80</option>
+                                                            <option value="81">81</option>
+                                                            <option value="82">82</option>
+                                                            <option value="83">83</option>
+                                                            <option value="84">84</option>
+                                                            <option value="85">85</option>
+                                                            <option value="86">86</option>
+                                                            <option value="87">87</option>
+                                                            <option value="88">88</option>
+                                                            <option value="89">89</option>
+                                                            <option value="90">90</option>
+                                                            <option value="91">91</option>
+                                                            <option value="92">92</option>
+                                                            <option value="93">93</option>
+                                                            <option value="94">94</option>
+                                                            <option value="95">95</option>
+                                                            <option value="96">96</option>
+                                                            <option value="97">97</option>
+                                                            <option value="98">98</option>
+                                                            <option value="99">99</option>
+                                                            <option value="100">100</option>
+                                                            <option value="101">101</option>
+                                                            <option value="102">102</option>
+                                                            <option value="103">103</option>
+                                                            <option value="104">104</option>
+                                                            <option value="105">105</option>
+                                                            <option value="106">106</option>
+                                                            <option value="107">107</option>
+                                                            <option value="108">108</option>
+                                                            <option value="109">109</option>
+                                                            <option value="110">110</option>
+                                                            <option value="111">111</option>
+                                                            <option value="112">112</option>
+                                                            <option value="113">113</option>
+                                                            <option value="114">114</option>
+                                                            <option value="115">115</option>
+                                                            <option value="116">116</option>
+                                                            <option value="117">117</option>
+                                                            <option value="118">118</option>
+                                                            <option value="119">119</option>
+                                                            <option value="120">120</option>
+                                                            <option value="121">121</option>
+                                                            <option value="122">122</option>
+                                                            <option value="123">123</option>
+                                                            <option value="124">124</option>
+                                                            <option value="125">125</option>
+                                                            <option value="126">126</option>
+                                                            <option value="127">127</option>
+                                                            <option value="128">128</option>
+                                                            <option value="129">129</option>
+                                                            <option value="130">130</option>
+                                                            <option value="131">131</option>
+                                                            <option value="132">132</option>
+                                                            <option value="133">133</option>
+                                                            <option value="134">134</option>
+                                                            <option value="135">135</option>
+                                                            <option value="136">136</option>
+                                                            <option value="137">137</option>
+                                                            <option value="138">138</option>
+                                                            <option value="139">139</option>
+                                                            <option value="140">140</option>
+                                                            <option value="141">141</option>
+                                                            <option value="142">142</option>
+                                                            <option value="143">143</option>
+                                                            <option value="144">144</option>
+                                                            <option value="145">145</option>
+                                                            <option value="146">146</option>
+                                                            <option value="147">147</option>
+                                                            <option value="148">148</option>
+                                                            <option value="149">149</option>
+                                                            <option value="150">150</option>
+                                                            <option value="151">151</option>
+                                                            <option value="152">152</option>
+                                                            <option value="153">153</option>
+                                                            <option value="154">154</option>
+                                                            <option value="155">155</option>
+                                                            <option value="156">156</option>
+                                                            <option value="157">157</option>
+                                                            <option value="158">158</option>
+                                                            <option value="159">159</option>
+                                                            <option value="160">160</option>
+                                                            <option value="161">161</option>
+                                                            <option value="162">162</option>
+                                                            <option value="163">163</option>
+                                                            <option value="164">164</option>
+                                                            <option value="165">165</option>
+                                                            <option value="166">166</option>
+                                                            <option value="167">167</option>
+                                                            <option value="168">168</option>
+                                                            <option value="169">169</option>
+                                                            <option value="170">170</option>
+                                                            <option value="171">171</option>
+                                                            <option value="172">172</option>
+                                                            <option value="173">173</option>
+                                                            <option value="174">174</option>
+                                                            <option value="175">175</option>
+                                                            <option value="176">176</option>
+                                                            <option value="177">177</option>
+                                                            <option value="178">178</option>
+                                                            <option value="179">179</option>
+                                                            <option value="180">180</option>
+                                                            <option value="181">181</option>
+                                                            <option value="182">182</option>
+                                                            <option value="183">183</option>
+                                                            <option value="184">184</option>
+                                                            <option value="185">185</option>
+                                                            <option value="186">186</option>
+                                                            <option value="187">187</option>
+                                                            <option value="188">188</option>
+                                                            <option value="189">189</option>
+                                                            <option value="190">190</option>
+                                                            <option value="191">191</option>
+                                                            <option value="192">192</option>
+                                                            <option value="193">193</option>
+                                                            <option value="194">194</option>
+                                                            <option value="195">195</option>
+                                                            <option value="196">196</option>
+                                                            <option value="197">197</option>
+                                                            <option value="198">198</option>
+                                                            <option value="199">199</option>
+                                                            <option value="200">200</option>
+                                                            <option value="201">201</option>
+                                                            <option value="202">202</option>
+                                                            <option value="203">203</option>
+                                                            <option value="204">204</option>
+                                                            <option value="205">205</option>
+                                                            <option value="206">206</option>
+                                                            <option value="207">207</option>
+                                                            <option value="208">208</option>
+                                                            <option value="209">209</option>
+                                                            <option value="210">210</option>
+                                                            <option value="211">211</option>
+                                                            <option value="212">212</option>
+                                                            <option value="213">213</option>
+                                                            <option value="214">214</option>
+                                                            <option value="215">215</option>
+                                                            <option value="216">216</option>
+                                                            <option value="217">217</option>
+                                                            <option value="218">218</option>
+                                                            <option value="219">219</option>
+                                                            <option value="220">220</option>
+                                                            <option value="221">221</option>
+                                                            <option value="222">222</option>
+                                                            <option value="223">223</option>
+                                                            <option value="224">224</option>
+                                                            <option value="225">225</option>
+                                                            <option value="226">226</option>
+                                                            <option value="227">227</option>
+                                                            <option value="228">228</option>
+                                                            <option value="229">229</option>
+                                                            <option value="230">230</option>
+                                                            <option value="231">231</option>
+                                                            <option value="232">232</option>
+                                                            <option value="233">233</option>
+                                                            <option value="234">234</option>
+                                                            <option value="235">235</option>
+                                                            <option value="236">236</option>
+                                                            <option value="237">237</option>
+                                                            <option value="238">238</option>
+                                                            <option value="239">239</option>
+                                                            <option value="240">240</option>
+                                                            <option value="241">241</option>
+                                                            <option value="242">242</option>
+                                                            <option value="243">243</option>
+                                                            <option value="244">244</option>
+                                                            <option value="245">245</option>
+                                                            <option value="246">246</option>
+                                                            <option value="247">247</option>
+                                                            <option value="248">248</option>
+                                                            <option value="249">249</option>
+                                                        </select>
                                                     </div>
 
                                                     <!-- TIME INPUT -->
@@ -2933,7 +3186,7 @@
                                                                     <span class="inputPerfect" id="HourInput-HORARY">00</span>:
                                                                     <span class="inputPerfect" id="MinuteInput-HORARY">00</span>:
                                                                     <span class="inputPerfect" id="MeridianInput-HORARY">AM</span>
-                                                            
+
                                                                 </div>
                                                                 <div class="calendar-container" id="calendar-container-HORARY" style="display: none; position: absolute; z-index: 1;"></div>
                                                                 <!--Adding calender picker-->
@@ -2944,7 +3197,7 @@
                                                                         }
                                                                     }
                                                                 </style>
-                    
+
                                                                 <script>
                                                                     document.addEventListener('DOMContentLoaded',
                                                                         function () {
@@ -2991,7 +3244,7 @@
                                                                                             calendarContainer.style.display = 'none';
                                                                                             showCalendar = false;
                                                                                         }
-                                                            
+
                                                                                     }
                                                                                 });
                                                                             calendar.init();
@@ -3047,7 +3300,7 @@
                                                         </span>
                                                         <div id="PersonListSelector" class="horoscope" style="max-width: 667px;"></div>
                                                     </div>
-                                                    
+
                                                     <!-- keep hidden until person selected, for better non cultured UX -->
                                                     <div id="SavedPersonListTimeInputPanel" style="display: none;">
                                                         <div class="mb-2">
@@ -3244,218 +3497,196 @@
 
                         </section>
                         <section id="Horoscope">
-                            <!--Head of this section-->
-                            <div class="mt-3 col d-flex align-items-start">
-                                <div class="vstack gap-2">
-                                    <h1 class="fw-bold" tabindex="-1">Horoscope</h1>
-                                    <span style="max-width: 412.5px; font-size: 21px; font-weight: lighter; font-family: inherit;">
-                                        Insight into a peron's
-                                        character, nature and general future. Over +370 planetary combinations are used.
-                                    </span>
-                                </div>
-                                <div class="w-100 d-none d-md-block" style="max-width: 412.5px; text-align: center;">
-                                    <img src="images/horoscope-banner.png" style="width: 352.2px;" class="">
-                                </div>
-                            </div>
-                            <hr class="border-secondary border mt-3">
-                            <!-- Body of this section-->
-                            <div class="d-md-flex justify-content-between">
-                                <div class="me-5">
-                                    <div class="d-flex flex-wrap mb-5" style="max-width: 352.2px;">
-                                        <div id="HoroscopeMainInputHolder" class="vstack gap-3">
+                            <!-- HEADER -->
+                            <div id="HoroscopePageHeader" title-text="Horoscope" description-text="Insight into a peron's
+                                    character, nature and general future. Over +370 planetary combinations are used." image-src="images/horoscope-banner.png"></div>
 
-                                            <div>
-                                                <label class="form-label">Person</label>
-                                                <div class="hstack">
-                                                    <div id="PersonListSelector" class="horoscope"></div>
-                                                    <div class="person-list-selector"></div>
-                                                </div>
+                            <!-- BODY CONTENT -->
+                            <div>
+                                <div class="d-md-flex justify-content-between">
+                                    <!--  @*SELECTOR*@ -->
+                                    <div class="me-5">
+                                        <!-- @*INPUT*@ -->
+                                        <div class="d-flex flex-wrap mb-5" style="max-width: GR.W352px;">
+                                            <div id="HoroscopeMainInputHolder" class="vstack gap-3">
 
+                                                <div id="PersonSelectorBox_Horoscope" title-text="Person2"></div>
+
+                                                <!-- @* ADVANCED PANEL DROP *@ -->
                                                 <div id="HoroscopeAdvancedInputHolder" class="vstack gap-1 mt-2 pt-2 border-top" style="display: none">
+                                                    <!-- @* HEADER TEXT *@ -->
+                                                    <span style="font-size: 11.5px; margin-left: 0px; color: grey; margin-top: -20px; position: absolute; background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
 
-                                                    <span style="font-size: 11.5px; margin-left: 0px; color: grey; margin-top: -20px; position: absolute; background-color: rgb(240, 242, 245);"
-                                                          class="px-1">Advanced Options</span>
-
+                                                    <!-- @* AYANAMSA *@ -->
                                                     <div class="input-group mb-2">
-                                                        <label style="width: 134.4px;" class="input-group-text">
-
-                                                            <div class="me-2" style="" _bl_143="">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                     xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
-                                                                     class="iconify iconify--solar" width="25" height="25"
-                                                                     preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
-                                                                     data-icon="solar:stars-line-broken" data-width="25">
-                                                                    <g fill="none" stroke="currentColor">
-                                                                        <path stroke-width="1.5"
-                                                                              d="M12.55 3.44c-.432-.931-.648-1.396-1.029-1.435c-.38-.04-.674.373-1.262 1.198l-.152.214c-.166.234-.25.351-.37.422c-.12.07-.263.087-.55.119l-.26.03c-1.01.112-1.514.168-1.664.52c-.15.351.154.765.761 1.592l.158.214c.172.235.258.352.29.49c.031.138.004.28-.05.564l-.05.259c-.192 1-.288 1.5 0 1.757c.289.256.77.099 1.733-.215l.249-.081c.274-.09.41-.134.55-.12c.14.015.266.086.519.23l.23.13c.89.506 1.335.759 1.663.566c.328-.193.322-.704.31-1.725l-.004-.264c-.003-.29-.005-.436.05-.564c.055-.129.16-.227.371-.422l.192-.178c.742-.688 1.113-1.032 1.027-1.408c-.085-.375-.57-.534-1.54-.851L13.47 4.4c-.276-.09-.414-.135-.52-.23c-.105-.093-.166-.225-.289-.49z">
-                                                                        </path>
-                                                                        <path stroke-linecap="round" stroke-width="1.5"
-                                                                              d="M11 22c-.334-2.167-.8-7.2 0-10m3.5 10c0-1.125.17-2.516.628-4M22 9.5c-2.2 1.283-3.794 2.857-4.931 4.5">
-                                                                        </path>
-                                                                        <path stroke-linejoin="round"
-                                                                              d="M5 13.268s.65.747 1.223.9c.573.155 1.51-.168 1.51-.168s-.749.65-.902 1.222c-.154.573.17 1.51.17 1.51s-.65-.748-1.223-.902c-.573-.153-1.51.17-1.51.17s.748-.65.901-1.223c.154-.573-.169-1.51-.169-1.51Z">
-                                                                        </path>
-                                                                    </g>
-                                                                </svg>
-                                                            </div> Ayanamsa
+                                                        <label style="width: GR.W134px;" class="input-group-text">
+                                                            <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
                                                         </label>
-                                                        <select class="form-select">
+                                                        <select @bind="SelectedAyanamsa" class="form-select">
+
                                                             <optgroup label="Easy">
-                                                                <option value="LahiriChitrapaksha">Lahiri Chitrapaksha</option>
-                                                                <option value="KrishnamurtiKP">Krishnamurti KP</option>
-                                                                <option value="Raman">Raman</option>
-                                                                <option value="FaganBradley">Fagan Bradley</option>
-                                                                <option value="J2000">J2000</option>
-                                                                <option value="Yukteshwar">Yukteshwar</option>
+                                                                @foreach (var ayanamsa in @AppData.SimpleAyanamsaAll)
+                                                                {
+                                                                <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
+                                                                }
                                                             </optgroup>
                                                             <optgroup label="Advanced">
-                                                                <option value="FAGAN_BRADLEY">FAGAN_BRADLEY</option>
-                                                                <option value="LAHIRI">LAHIRI</option>
-                                                                <option value="DELUCE">DELUCE</option>
-                                                                <option value="RAMAN">RAMAN</option>
-                                                                <option value="USHASHASHI">USHASHASHI</option>
-                                                                <option value="KRISHNAMURTI">KRISHNAMURTI</option>
-                                                                <option value="DJWHAL_KHUL">DJWHAL_KHUL</option>
-                                                                <option value="YUKTESHWAR">YUKTESHWAR</option>
-                                                                <option value="JN_BHASIN">JN_BHASIN</option>
-                                                                <option value="BABYL_KUGLER1">BABYL_KUGLER1</option>
-                                                                <option value="BABYL_KUGLER2">BABYL_KUGLER2</option>
-                                                                <option value="BABYL_KUGLER3">BABYL_KUGLER3</option>
-                                                                <option value="BABYL_HUBER">BABYL_HUBER</option>
-                                                                <option value="BABYL_ETPSC">BABYL_ETPSC</option>
-                                                                <option value="ALDEBARAN_15TAU">ALDEBARAN_15TAU</option>
-                                                                <option value="HIPPARCHOS">HIPPARCHOS</option>
-                                                                <option value="SASSANIAN">SASSANIAN</option>
-                                                                <option value="GALCENT_0SAG">GALCENT_0SAG</option>
-                                                                <option value="J1900">J1900</option>
-                                                                <option value="B1950">B1950</option>
-                                                                <option value="SURYASIDDHANTA">SURYASIDDHANTA</option>
-                                                                <option value="SURYASIDDHANTA_MSUN">SURYASIDDHANTA_MSUN</option>
-                                                                <option value="ARYABHATA">ARYABHATA</option>
-                                                                <option value="ARYABHATA_MSUN">ARYABHATA_MSUN</option>
-                                                                <option value="SS_REVATI">SS_REVATI</option>
-                                                                <option value="SS_CITRA">SS_CITRA</option>
-                                                                <option value="TRUE_CITRA">TRUE_CITRA</option>
-                                                                <option value="TRUE_REVATI">TRUE_REVATI</option>
-                                                                <option value="TRUE_PUSHYA">TRUE_PUSHYA</option>
-                                                                <option value="GALCENT_RGBRAND">GALCENT_RGBRAND</option>
-                                                                <option value="GALEQU_IAU1958">GALEQU_IAU1958</option>
-                                                                <option value="GALEQU_TRUE">GALEQU_TRUE</option>
-                                                                <option value="GALEQU_MULA">GALEQU_MULA</option>
-                                                                <option value="GALALIGN_MARDYKS">GALALIGN_MARDYKS</option>
-                                                                <option value="TRUE_MULA">TRUE_MULA</option>
-                                                                <option value="GALCENT_MULA_WILHELM">GALCENT_MULA_WILHELM</option>
-                                                                <option value="ARYABHATA_522">ARYABHATA_522</option>
-                                                                <option value="BABYL_BRITTON">BABYL_BRITTON</option>
-                                                                <option value="TRUE_SHEORAN">TRUE_SHEORAN</option>
-                                                                <option value="GALCENT_COCHRANE">GALCENT_COCHRANE</option>
-                                                                <option value="GALEQU_FIORENZA">GALEQU_FIORENZA</option>
-                                                                <option value="VALENS_MOON">VALENS_MOON</option>
-                                                                <option value="LAHIRI_1940">LAHIRI_1940</option>
-                                                                <option value="LAHIRI_VP285">LAHIRI_VP285</option>
-                                                                <option value="KRISHNAMURTI_VP291">KRISHNAMURTI_VP291</option>
-                                                                <option value="LAHIRI_ICRC">LAHIRI_ICRC</option>
+                                                                @foreach (var ayanamsa in @AppData.AdvancedAyanamsaAll)
+                                                                {
+                                                                <option value="@ayanamsa">@ayanamsa</option>
+                                                                }
                                                             </optgroup>
                                                         </select>
                                                     </div>
 
+                                                    <!-- @* CHART STYLE *@ -->
                                                     <div class="input-group">
-
                                                         <label style="width: 134.4px;" class="input-group-text">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                 aria-hidden="true" role="img" class="iconify iconify--gridicons me-2" width="25"
-                                                                 height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
-                                                                 data-icon="gridicons:types" data-width="25" data-height="25">
-                                                                <path fill="currentColor"
-                                                                      d="M22 17a5 5 0 1 1-10.001-.001A5 5 0 0 1 22 17M6.5 6.5h3.8L7 1L1 11h5.5zm9.5 4.085V8H8v8h2.585A6.505 6.505 0 0 1 16 10.585">
-                                                                </path>
-                                                            </svg>
+                                                            <span class="iconify me-2" data-icon="gridicons:types" data-width="25" data-height="25"></span>
                                                             Chart
                                                         </label>
-                                                        <select id="ChartStyleSelectElement" class="form-select">
+                                                        <select @bind="SelectedChartStyle" id="ChartStyleSelectElement" class="form-select">
                                                             <option value="South" selected="">South Style</option>
                                                             <option value="North">North Style</option>
                                                         </select>
                                                     </div>
 
-                                                    <div class="input-group" style="display: none">
-                                                        <span class="input-group-text">
-                                                            Year of Zero
-                                                            Coincidence
+                                                    <!-- @* HORARY NUMBER *@ -->
+                                                    <!--  @*                 <div class="input-group">
+                                                        <span class="input-group-text" style="font-weight: 600; color: red;" id="2defe66d-ab03-4275-ba36-1c35a008063b">
+                                                            Horary Number
+                                                            <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" _bl_2596="" aria-expanded="false">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
+                                                            </div>
                                                         </span>
+                                                        <input type="number" class="form-control" placeholder="0">
+                                                    </div>
+                                                    *@ -->
+                                                    <!-- @* YEAR OF ZERO COINCIDENCE *@ -->
+                                                    <div class="input-group" style="display: none">
+                                                        <span class="input-group-text">Year of Zero Coincidence</span>
                                                         <input type="text" class="form-control" placeholder="397">
                                                     </div>
                                                 </div>
 
+                                                <!-- @* BUTTONS *@ -->
                                                 <div class="mt-2 d-flex justify-content-between">
-
-                                                    <style>
-                                                        .no-dropdown-arrow.dropdown-toggle::after {
-                                                            display: none !important;
-                                                        }
-                                                    </style>
-                                                    <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-                                                            class="btn-sm iconOnlyButton btn-primary btn " _bl_144="" id="advancedhoroscopebutton">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                             aria-hidden="true" role="img" class="iconify iconify--gala" width="25" height="25"
-                                                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256" data-icon="gala:settings"
-                                                             data-width="25">
-                                                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                               stroke-width="16">
-                                                                <path d="M 48.000002,16 H 208 c 17.728,0 32,14.272 32,32 v 160 c 0,17.728 -14.272,32 -32,32 H 48.000002 c -17.728,0 -32,-14.272 -32,-32 V 48 c 0,-17.728 14.272,-32 32,-32 z">
-                                                                </path>
-                                                                <path d="M 64.000006,64.000001 H 79.999993"></path>
-                                                                <path d="m 79.999996,-96.000015 a 16,16 0 0 1 -16,16 16,16 0 0 1 -16,-16 16,16 0 0 1 16,-16.000005 16,16 0 0 1 16,16.000005 z"
-                                                                      transform="rotate(90)"></path>
-                                                                <path d="m 112.00001,64.000353 79.99997,-3.52e-4"></path>
-                                                                <path d="M 191.99998,128 H 176"></path>
-                                                                <path d="m 144,159.99997 a 16,16 0 0 1 -16,16 16,16 0 0 1 -16,-16 16,16 0 0 1 16,-16 16,16 0 0 1 16,16 z"
-                                                                      transform="matrix(0 1 1 0 0 0)"></path>
-                                                                <path d="M 143.99998,128.00035 64.000006,128"></path>
-                                                                <path d="M 64.000006,192.00001 H 79.999993"></path>
-                                                                <path d="m 208,-96.000015 a 16,16 0 0 1 -16,16 16,16 0 0 1 -16,-16 16,16 0 0 1 16,-16.000005 16,16 0 0 1 16,16.000005 z"
-                                                                      transform="rotate(90)"></path>
-                                                                <path d="m 112.00001,192.00036 79.99997,-3.5e-4"></path>
-                                                            </g>
-                                                        </svg>
-                                                    </button>
-                                                    <script>
-                                                        const advancedhoroscopebutton = document.getElementById('advancedhoroscopebutton');
-                                                        const divadvanced = document.getElementById('HoroscopeAdvancedInputHolder');
-                                                        advancedhoroscopebutton.addEventListener('click',
-                                                            () => {
-                                                                divadvanced.classList.toggle('d-block');
-                                                            });
-                                                    </script>
-
-                                                    <style>
-                                                        .no-dropdown-arrow.dropdown-toggle::after {
-                                                            display: none !important;
-                                                        }
-                                                    </style>
-                                                    <button id="HoroscopeCalculateButton"
-                                                            style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-                                                            class="hstack gap-2 iconButton btn-success btn " _bl_145="">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                             aria-hidden="true" role="img" class="iconify iconify--uim" width="25" height="25"
-                                                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="uim:process"
-                                                             data-width="25">
-                                                            <path fill="currentColor"
-                                                                  d="M8.625 8.5h-4.5a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v3.5h3.5a1 1 0 0 1 0 2"></path>
-                                                            <path fill="currentColor"
-                                                                  d="M21 13a1 1 0 0 1-1-1A7.995 7.995 0 0 0 5.08 8.001a1 1 0 0 1-1.731-1.002A9.995 9.995 0 0 1 22 12a1 1 0 0 1-1 1m-1.125 9a1 1 0 0 1-1-1v-3.5h-3.5a1 1 0 0 1 0-2h4.5a1 1 0 0 1 1 1V21a1 1 0 0 1-1 1">
-                                                            </path>
-                                                            <path fill="currentColor"
-                                                                  d="M12 22A10.012 10.012 0 0 1 2 12a1 1 0 0 1 2 0a7.995 7.995 0 0 0 14.92 3.999a1 1 0 0 1 1.731 1.002A10.032 10.032 0 0 1 12 22">
-                                                            </path>
-                                                        </svg>Calculate
-                                                    </button>
+                                                    <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle(" HoroscopeAdvancedInputHolder"))" SmallSize="true" />
+                                                    <IconButton @ref="_calculateButton" Id="HoroscopeCalculateButton" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" />
                                                 </div>
+
                                             </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- @*SIDEBAR*@ -->
+                                    <div class="mt-md-0 mt-4 me-md-5">
+                                        <!--when small give at top-->
+                                        <div class="vstack gap-0 gap-md-2">
+                                            <InfoBox MaxWidth="365" Title="Ask AI Chat" Description="Ask AI astrologer about your life aspects and horoscope" IconName="fluent-emoji:robot" IsNewTabOpen="true" ClickUrl="@PageRoute.ChatAPI" />
+                                            <InfoBox MaxWidth="365" Title="Easy Import" Description="Birth data from Jagannatha Hora, Light of KP (LOKPA) or Parashara's Light 9" IconName="fluent-emoji-flat:outbox-tray" ClickUrl="@PageRoute.Import" />
+                                            <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="noto:alarm-clock" IsNewTabOpen="true" ClickUrl="@PageRoute.BirthTimeFinder" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- @*SIDEBAR*@ -->
+                                <hr>
+
+                                <div class="gap-3" style="max-width: GR.W824px;">
+
+                                    <!-- @* IN PAGE NAV BAR *@ -->
+                                    <div id="inPageNavBar" style="z-index: 100; display: none !important; position: fixed;right: 69px;font-family: 'Lexend Deca';font-weight: bold;font-size: 14px; width: fit-content;" class="vstack gap-1 mt-2 pt-2 border-top d-none d-lg-block">
+                                        <!-- @* HEADER TEXT *@ -->
+                                        <span @onclick="@(() => _jsRuntime.ScrollToDivById(" HoroscopeMainInputHolder"))" style="cursor: pointer; font-size: 11.5px;margin-left: 44px;color: grey;margin-top: -19px;position: absolute;background-color: rgb(240, 242, 245);" class="px-1">INDEX</span>
+
+                                        <!--  @* NAV LINKS *@
+                                         @* js function will set active by ID *@ -->
+                                        <div class="list-group">
+                                            <a id="HoroscopeChat-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#HoroscopeChat">AI Chat</a>
+                                            <a id="Strength-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Strength">Strength</a>
+                                            <a id="SkyChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#SkyChart">Sky Chart</a>
+                                            <a id="IndianChart-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#IndianChart">Birth Chart</a>
+                                            <a id="PlanetDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#PlanetDataTable2">Planet Table</a>
+                                            <a id="HouseDataTable2-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#HouseDataTable2">House Table</a>
+                                            <a id="Ashtakvarga-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Ashtakvarga">Ashtakvarga</a>
+                                            <a id="Prediction-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Prediction">Prediction</a>
+                                            <a id="Reference-Link" class="list-group-item list-group-item-action" href="@_navigation.Uri#Reference">Reference</a>
                                         </div>
                                     </div>
 
+
+                                    <!-- @* OUTPUT *@ -->
+                                    <div id="outputHoroscope" class="vstack gap-4" style="display: none;">
+
+                                        <!-- @* Chat API *@ -->
+                                        <div id="HoroscopeChat" class="scrollspy mb-5"></div>
+
+
+                                        <!--  @* Strength *@ -->
+                                        <div id="Strength" class="scrollspy">
+                                            <IconTitle Title="Strength" IconName="twemoji:antenna-bars" TitleHolder="h4" />
+                                            @*only show when all is loaded*@
+                                            <StrengthChart @ref="_strengthChart" />
+                                        </div>
+
+                                        <!--                                         @* Sky Chart *@
+                                                                                @*         <IconTitle Title="Sky Chart" IconName="solar:moon-stars-bold-duotone" TitleHolder="h4" />
+                                                                                *@        <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
+                                         -->
+                                        <!-- @* TODO convert to JS code *@ -->
+                                        <IndianChart Id="IndianChart" ExtraClass="scrollspy" @ref="indianChartViewer" />
+
+                                        <!--  @* below made by vedastro.JS code *@ -->
+                                        <div id="PlanetDataTable2" class="scrollspy"></div>
+
+                                        <div id="HouseDataTable2" class="scrollspy"></div>
+
+                                        <div id="Ashtakvarga" class="scrollspy"></div>
+
+                                        <!-- @* Predictions *@ -->
+                                        <div id="Prediction" class="scrollspy">
+                                            <IconTitle Title="Basic Predictions" IconName="noto:scroll" TitleHolder="h4" />
+                                            <AIPrediction @ref="_aiPrediction" />
+                                        </div>
+
+                                        <!-- @* Reference *@ -->
+                                        <div id="Reference" class="scrollspy">
+                                            <IconTitle Title="Reference" IconName="twemoji:books" TitleHolder="h4" />
+                                            <HoroscopeReferenceList @ref="_horoscopeReferenceList" />
+                                        </div>
+
+                                        <PlanetChart @ref="planetChart" />
+
+                                    </div>
+
+
                                 </div>
+
+
+
+                            </div>
+
+                            <!-- PAGE CODE -->
+                            <script>
+                                new PageHeader("HoroscopePageHeader");
+
+
+                                new PersonSelectorBox("PersonSelectorBox_Horoscope");
+                                
+
+                                // //note: on init, chat instance is loaded into window.vedastro.horoscopechat
+                                // new PersonListSelector("PersonListSelector");
+
+                                // const advancedhoroscopebutton = document.getElementById('advancedhoroscopebutton');
+                                // const divadvanced = document.getElementById('HoroscopeAdvancedInputHolder');
+                                // advancedhoroscopebutton.addEventListener('click',
+                                //     () => {
+                                //         divadvanced.classList.toggle('d-block');
+                                //     });
+
+                            </script>
                         </section>
                         <section id="GoodTimeFinder">
                             <!--Head of this section-->
@@ -5146,10 +5377,10 @@
                                             }
 
                                             /*    .MakeBig {
-                                                                                                                                                                                                                                                                                                                                                        font-size: 31px;
-                                                                                                                                                                                                                                                                                                                                                        width: 183px;
-                                                                                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                                                                                */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 31px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: 183px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
                                         </style>
 
                                         <div class="rounded p-4" style="background:#caecff;">
@@ -5460,7 +5691,6 @@
                             </div>
                         </section>
 
-                        <div id="DDScriptLoader"></div>
                         <footer id="LegalComplianceFooter" class="mb-2 pt-3 border-top"
                                 style="opacity: 0.65; margin-top: 231.7px; font-size: 11px !important;">
                             <div class="d-flex justify-content-between">
@@ -6466,17 +6696,6 @@
                 console.log(prev);
             }
         }
-
-        //-----------------------------> QUICK GUIDE PAGE
-        var settingsPersonListSelector = {
-            ElementID: "PersonListSelector",
-            ShowHeader: true,
-            HeaderIcon: "fluent:table-28-filled",
-            SelectedBirthTime: "Location/Ipoh/Time/12:44/23/04/1994/+08:00"
-        };
-
-        //note: on init, chat instance is loaded into window.vedastro.horoscopechat
-        let locationSearchSelector = new PersonListSelector(settingsPersonListSelector);
 
 
         //-----------------------------> CONTACT PAGE

@@ -4630,6 +4630,7 @@ class PageHeader {
 class PersonSelectorBox {
     ElementID = "";
     TitleText = "Title Goes Here";
+    SelectedPersonNameHolderElementID = "selectedPersonNameHolder";
 
     constructor(elementId) {
         this.ElementID = elementId; //element that is heart 💖
@@ -4695,11 +4696,15 @@ class PersonSelectorBox {
     }
 
     //when user clicks on person name in dropdown
-    onClickPersonName(personId) {
+    async onClickPersonName(personId) {
+
+        //get full person details for given name
+        var personData = this.getPersonDataById(personId);
+        var displayName = this.getPersonDisplayName(personData);
 
         //update visible select button text
-
-
+        var x = $(`#${this.ElementID}`).find(`.${this.SelectedPersonNameHolderElementID}`);
+        x.html(displayName);
         ////save to local storage for future use
         //localStorage.setItem("selectedPerson", JSON.stringify({ id: personId }));
 
@@ -4710,6 +4715,24 @@ class PersonSelectorBox {
 
     }
 
+    //given person json will return birth year
+    getPersonBirthYear(person) {
+        const birthTime = person.BirthTime.StdTime; // 13:54 25/10/1992 +08:00
+        const [time, date] = birthTime.split(' ');
+        const [hours, minutes] = time.split(':');
+        const [day, month, year] = date.split('/');
+        const birthDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00.000Z`);
+        return birthDate.getFullYear();
+    };
+
+    //name with birth year
+    getPersonDisplayName(person){
+        const name = person.Name;
+        const birthYear = this.getPersonBirthYear(person); // reuse the previous function
+        return `${name} - ${birthYear}`;
+    };
+
+  
     async generateHtmlBody() {
 
         //generate html for person list
@@ -4722,7 +4745,7 @@ class PersonSelectorBox {
           <div class="hstack">
             <div class="btn-group" style="width:100%;">
               <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
-                <div style="cursor: pointer;white-space: nowrap; display: inline-table;" _bl_127="" aria-expanded="false">John Legend - 1978</div>
+                <div class="${this.SelectedPersonNameHolderElementID}" style="cursor: pointer;white-space: nowrap; display: inline-table;" >Select Person</div>
               </button>
               <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
 
@@ -4749,22 +4772,21 @@ class PersonSelectorBox {
                   <hr class="dropdown-divider">
                 </li>
                 <div class="ms-3 d-flex justify-content-between">
-                  <!--!-->
+                  
                   <div class=" hstack gap-2" style=" ">
-                    <!--!-->
+                    
                     <div class="" style="" _bl_134="">
                       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--material-symbols" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="material-symbols:demography-rounded" data-width="25">
                         <path fill="currentColor" d="M18 18q.625 0 1.063-.437T19.5 16.5t-.437-1.062T18 15t-1.062.438T16.5 16.5t.438 1.063T18 18m0 3q.75 0 1.4-.35t1.075-.975q-.575-.35-1.2-.513T18 19t-1.275.162t-1.2.513q.425.625 1.075.975T18 21m0 2q-2.075 0-3.537-1.463T13 18t1.463-3.537T18 13t3.538 1.463T23 18t-1.463 3.538T18 23M8 9h8q.425 0 .713-.288T17 8t-.288-.712T16 7H8q-.425 0-.712.288T7 8t.288.713T8 9M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v5.45q0 .45-.375.7t-.8.1q-.425-.125-.888-.188T18 11q-.275 0-.513.013t-.487.062q-.225-.05-.5-.062T16 11H8q-.425 0-.712.288T7 12t.288.713T8 13h5.125q-.45.425-.812.925T11.675 15H8q-.425 0-.712.288T7 16t.288.713T8 17h3.075q-.05.25-.062.488T11 18q0 .5.05.95t.175.875t-.125.8t-.675.375z" data-darkreader-inline-fill="" style="--darkreader-inline-fill: currentColor;">
                         </path>
                       </svg>
                     </div>
-                    <!--!-->
+                    
                     <span style="font-size: 13px; color: rgb(143, 143, 143); --darkreader-inline-color: #cdc4b5;" data-darkreader-inline-color="">
-                      <!--!-->Examples</span>
+                      Examples</span>
                   </div>
                 </div>
-                <!--!-->
-                <!--!-->
+
                 <li>
                   <hr class="dropdown-divider">
                 </li>
@@ -4772,96 +4794,8 @@ class PersonSelectorBox {
                 <!-- PUBLIC PERSON LIST -->
                 ${this.publicPersonListHTML}
 
-                <li class="dropdown-item" style="cursor: pointer;">John Legend - 1978</li>
-                <li class="dropdown-item" style="cursor: pointer;">Laura Linney - 1964</li>
-                <li class="dropdown-item" style="cursor: pointer;">Christina Jolie - 1986</li>
-                <li class="dropdown-item" style="cursor: pointer;">Victoria Beckham - 1974</li>
-                <li class="dropdown-item" style="cursor: pointer;">Portia de Rossi - 1973</li>
-                <li class="dropdown-item" style="cursor: pointer;">Margaret Thatcher - 1925</li>
-                <li class="dropdown-item" style="cursor: pointer;">Volodymyr Zelenskyy - 1978</li>
-                <li class="dropdown-item" style="cursor: pointer;">Alexandra Horvath - 1990</li>
-                <li class="dropdown-item" style="cursor: pointer;">Alejandra Guilmant - 1993</li>
-                <li class="dropdown-item" style="cursor: pointer;">Courtney Shea - 1993</li>
-                <li class="dropdown-item" style="cursor: pointer;">Sarada Devi - 1853</li>
-                <li class="dropdown-item" style="cursor: pointer;">Winston Churchill - 1874</li>
-                <li class="dropdown-item" style="cursor: pointer;">Brittany Bliss - 1995</li>
-                <li class="dropdown-item" style="cursor: pointer;">Anjelika Vision - 1994</li>
-                <li class="dropdown-item" style="cursor: pointer;">Chrissy Teigen - 1985</li>
-                <li class="dropdown-item" style="cursor: pointer;">Boris Johnson - 1964</li>
-                <li class="dropdown-item" style="cursor: pointer;">Rishi Sunak - 1980</li>
-                <li class="dropdown-item" style="cursor: pointer;">Sri Ramakrishna - 1836</li>
-                <li class="dropdown-item" style="cursor: pointer;">Rosario Dawson - 1979</li>
-                <li class="dropdown-item" style="cursor: pointer;">Olivia Preston - 1990</li>
-                <li class="dropdown-item" style="cursor: pointer;">Sean Young - 1959</li>
-                <li class="dropdown-item" style="cursor: pointer;">Abraham Lincoln - 1809</li>
-                <li class="dropdown-item" style="cursor: pointer;">Adolf Hitler - 1889</li>
-                <li class="dropdown-item" style="cursor: pointer;">Albert Einstein - 1879</li>
-                <li class="dropdown-item" style="cursor: pointer;">Alexis Blaze - 1992</li>
-                <li class="dropdown-item" style="cursor: pointer;">Angelina Jolie - 1975</li>
-                <li class="dropdown-item" style="cursor: pointer;">Bill Gates - 1955</li>
-                <li class="dropdown-item" style="cursor: pointer;">Brad Pitt - 1963</li>
-                <li class="dropdown-item" style="cursor: pointer;">Dax Shepard - 1975</li>
-                <li class="dropdown-item" style="cursor: pointer;">Elon Musk - 1971</li>
-                <li class="dropdown-item" style="cursor: pointer;">Emily Ratajkowski - 1991</li>
-                <li class="dropdown-item" style="cursor: pointer;">Eva Braun - 1912</li>
-                <li class="dropdown-item" style="cursor: pointer;">Fidel Castro - 1926</li>
-                <li class="dropdown-item" style="cursor: pointer;">John Lennon - 1940</li>
-                <li class="dropdown-item" style="cursor: pointer;">Jokin - 1984</li>
-                <li class="dropdown-item" style="cursor: pointer;">Joseph Stalin - 1878</li>
-                <li class="dropdown-item" style="cursor: pointer;">Joséphine de Beauharnais - 1763</li>
-                <li class="dropdown-item" style="cursor: pointer;">Kali Dutt - 1980</li>
-                <li class="dropdown-item" style="cursor: pointer;">Kristen Bell - 1980</li>
-                <li class="dropdown-item" style="cursor: pointer;">Louis Armstrong - 1901</li>
-                <li class="dropdown-item" style="cursor: pointer;">Luciana Barroso - 1976</li>
-                <li class="dropdown-item" style="cursor: pointer;">Matt Damon - 1970</li>
-                <li class="dropdown-item" style="cursor: pointer;">Miley Cyrus - 1992</li>
-                <li class="dropdown-item" style="cursor: pointer;">Monica Bellucci - 1964</li>
-                <li class="dropdown-item" style="cursor: pointer;">Mukesh Ambani - 1957</li>
-                <li class="dropdown-item" style="cursor: pointer;">Napoleon Bonaparte - 1769</li>
-                <li class="dropdown-item" style="cursor: pointer;">Narendra Modi - 1950</li>
-                <li class="dropdown-item" style="cursor: pointer;">NeehaS - 1999</li>
-                <li class="dropdown-item" style="cursor: pointer;">Piyush Bali - 2004</li>
-                <li class="dropdown-item" style="cursor: pointer;">Praween Kumar - 1981</li>
-                <li class="dropdown-item" style="cursor: pointer;">Queen Elizabeth II - 1926</li>
-                <li class="dropdown-item" style="cursor: pointer;">Rabindranath Tagore - 1861</li>
-                <li class="dropdown-item" style="cursor: pointer;">Ratan Tata - 1937</li>
-                <li class="dropdown-item" style="cursor: pointer;">Rita Wilson - 1956</li>
-                <li class="dropdown-item" style="cursor: pointer;">Saddam Hussein - 1937</li>
-                <li class="dropdown-item" style="cursor: pointer;">Snehal - 1979</li>
-                <li class="dropdown-item" style="cursor: pointer;">Standard Horoscope - 1918</li>
-                <li class="dropdown-item" style="cursor: pointer;">Steve Jobs - 1955</li>
-                <li class="dropdown-item" style="cursor: pointer;">Swami Vivekananda - 1863</li>
-                <li class="dropdown-item" style="cursor: pointer;">Tom Hanks - 1956</li>
-                <li class="dropdown-item" style="cursor: pointer;">W. H. Auden - 1907</li>
-                <li class="dropdown-item" style="cursor: pointer;">Yevgeny Prigozhin - 1961</li>
-                <li class="dropdown-item" style="cursor: pointer;">Paramahansa Yogananda - 1893</li>
-                <li class="dropdown-item" style="cursor: pointer;">Yogi Adityanath - 1971</li>
-                <li class="dropdown-item" style="cursor: pointer;">Yoko Ono - 1933</li>
-                <li class="dropdown-item" style="cursor: pointer;">Blake Pickett - 1963</li>
-                <li class="dropdown-item" style="cursor: pointer;">Jang Mi In-Ae - 1984</li>
-                <li class="dropdown-item" style="cursor: pointer;">Alisa Amore - 1997</li>
-                <li class="dropdown-item" style="cursor: pointer;">Ellen DeGeneres - 1958</li>
-                <li class="dropdown-item" style="cursor: pointer;">Arkida Reeves - 1988</li>
-                <li class="dropdown-item" style="cursor: pointer;">David Beckham - 1975</li>
-                <li class="dropdown-item" style="cursor: pointer;">Eva Green - 1980</li>
-                <li class="dropdown-item" style="cursor: pointer;">Christy Carlson Romano - 1984</li>
-                <li class="dropdown-item" style="cursor: pointer;">Ruri Saijo - 1990</li>
-                <li class="dropdown-item" style="cursor: pointer;">Maggie Duran - 1993</li>
-                <li class="dropdown-item" style="cursor: pointer;">Ralph Waldo Emerson - 1803</li>
-                <li class="dropdown-item" style="cursor: pointer;">Emily Browning - 1988</li>
-                <li class="dropdown-item" style="cursor: pointer;">Bella Gray - 1996</li>
-                <li class="dropdown-item" style="cursor: pointer;">Aya Beshen - 1995</li>
               </ul>
             </div>
-            <!--!-->
-            <!--!-->
-            <!--!-->
-            <style>
-          .no-dropdown-arrow.dropdown-toggle::after {
-                  display: none !important;
-              }
-            </style>
-            <style class="darkreader darkreader--sync" media="screen"></style>
             <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2" _bl_98="">
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ant-design" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024" data-icon="ant-design:user-add-outlined" data-width="25">
                 <path fill="currentColor" d="M678.3 642.4c24.2-13 51.9-20.4 81.4-20.4h.1c3 0 4.4-3.6 2.2-5.6a371.7 371.7 0 0 0-103.7-65.8c-.4-.2-.8-.3-1.2-.5C719.2 505 759.6 431.7 759.6 349c0-137-110.8-248-247.5-248S264.7 212 264.7 349c0 82.7 40.4 156 102.6 201.1c-.4.2-.8.3-1.2.5c-44.7 18.9-84.8 46-119.3 80.6a373.4 373.4 0 0 0-80.4 119.5A373.6 373.6 0 0 0 137 888.8a8 8 0 0 0 8 8.2h59.9c4.3 0 7.9-3.5 8-7.8c2-77.2 32.9-149.5 87.6-204.3C357 628.2 432.2 597 512.2 597c56.7 0 111.1 15.7 158 45.1a8.1 8.1 0 0 0 8.1.3M512.2 521c-45.8 0-88.9-17.9-121.4-50.4A171.2 171.2 0 0 1 340.5 349c0-45.9 17.9-89.1 50.3-121.6S466.3 177 512.2 177s88.9 17.9 121.4 50.4A171.2 171.2 0 0 1 683.9 349c0 45.9-17.9 89.1-50.3 121.6C601.1 503.1 558 521 512.2 521M880 759h-84v-84c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v84h-84c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h84v84c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-84h84c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8" data-darkreader-inline-fill="" style="--darkreader-inline-fill: currentColor;">
@@ -4873,11 +4807,25 @@ class PersonSelectorBox {
      `;
     }
 
+    //gets full person data from given list
+    getPersonDataById(personId) {
+        // Search public list
+        const person = this.publicPersonListDisplay.find((person) => person.PersonId === personId);
+
+        // If not found, search private list
+        if (!person) {
+            const privatePerson = this.personListDisplay.find((person) => person.PersonId === personId);
+            return privatePerson;
+        }
+
+        return person;
+    }
+
     generatePublicPersonListHtml() {
 
         const html = this.publicPersonListDisplay
             .map((person) => {
-                return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.Name} - 1994</li>`;
+                return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${this.getPersonDisplayName(person)}</li>`;
             })
             .join("");
 
@@ -4888,7 +4836,7 @@ class PersonSelectorBox {
 
         const html = this.personListDisplay
             .map((person) => {
-                return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.Name} - 1994</li>`;
+                return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${this.getPersonDisplayName(person)}</li>`;
             })
             .join("");
 

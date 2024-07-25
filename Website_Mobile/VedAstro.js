@@ -4670,7 +4670,6 @@ class PersonSelectorBox {
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
     }
 
-
     async initializePersonListData() {
 
         //PRIVATE

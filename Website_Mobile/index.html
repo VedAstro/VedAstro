@@ -677,7 +677,7 @@
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="col p-0">
-                                                    <div class="person-list-selector" id="PersonListSelector"></div>
+                                                    <div id="PersonSelectorBox_QuickGuide"></div>
                                                 </div>
                                             </div>
 
@@ -707,24 +707,15 @@
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="col p-0">
-                                                    <style>
-                                                        .no-dropdown-arrow.dropdown-toggle::after {
-                                                            display: none !important;
-                                                        }
-                                                    </style>
-                                                    <button id="gotocalculator" style="place-content: center !important; height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-primary btn " _bl_75="">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--gg" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="gg:calendar-next" data-width="25"><g fill="currentColor"><path d="m11.725 16.546l4.5-2.598l-4.5-2.598v1.598h-3.95v2h3.95zM8 7a1 1 0 0 0 0 2h8a1 1 0 1 0 0-2z"></path><path fill-rule="evenodd" d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3zm12 2H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1" clip-rule="evenodd"></path></g></svg>
-                                                        Goto Calculator
-                                                    </button>
-                                                    <script>
-                                                        document.getElementById("gotocalculator").addEventListener('click',
-                                                            () => {
+                                                    <button onclick="() => {
                                                                 const selectedCalculator = document.getElementById('QuickGuideForm').value;
                                                                 const dropdownButton = document.querySelector('.dropdown-toggle');
                                                                 const personidvalue = dropdownButton.value;
                                                                 showSection(selectedCalculator);
-                                                            })
-                                                    </script>
+                                                            }" style="place-content: center !important; height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-primary btn " _bl_75="">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--gg" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="gg:calendar-next" data-width="25"><g fill="currentColor"><path d="m11.725 16.546l4.5-2.598l-4.5-2.598v1.598h-3.95v2h3.95zM8 7a1 1 0 0 0 0 2h8a1 1 0 1 0 0-2z"></path><path fill-rule="evenodd" d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3zm12 2H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1" clip-rule="evenodd"></path></g></svg>
+                                                        Goto Calculator
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -742,11 +733,7 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:calculator" data-width="38" style="vertical-align: text-bottom;"><g fill="none" stroke-linejoin="round" stroke-width="4"><path fill="#2F88FF" stroke="#000" d="M40 4H8.0002C6.89565 4 6.00022 4.89541 6.0002 5.99996L5.99955 42C5.99953 43.1045 6.89497 44 7.99955 44H40C41.1046 44 42 43.1046 42 42V6C42 4.89543 41.1046 4 40 4Z"></path><path fill="#43CCF8" stroke="#fff" d="M35 10H13V19H35V10Z"></path><path stroke="#fff" stroke-linecap="round" d="M12 28L19 35"></path><path stroke="#fff" stroke-linecap="round" d="M19 28L12 35"></path><path stroke="#fff" stroke-linecap="round" d="M28 35H36"></path><path stroke="#fff" stroke-linecap="round" d="M28 29H36"></path></g></svg>
                                             </div>
                                             <h4 class="mt-2 me-auto">What is a calculator? </h4>
-                                            <style>
-                                                .no-dropdown-arrow.dropdown-toggle::after {
-                                                    display: none !important;
-                                                }
-                                            </style>
+
                                             <!-- YOUTUBE BUTTON -->
                                             <a href="https://www.youtube.com/@vedastro" target="_blank" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="mt-auto mb-2 btn-sm hstack gap-2 iconButton btn-primary btn " _bl_80="">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="25" height="17.58" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 180" data-icon="logos:youtube-icon" data-width="25"><path fill="red" d="M250.346 28.075A32.18 32.18 0 0 0 227.69 5.418C207.824 0 127.87 0 127.87 0S47.912.164 28.046 5.582A32.18 32.18 0 0 0 5.39 28.24c-6.009 35.298-8.34 89.084.165 122.97a32.18 32.18 0 0 0 22.656 22.657c19.866 5.418 99.822 5.418 99.822 5.418s79.955 0 99.82-5.418a32.18 32.18 0 0 0 22.657-22.657c6.338-35.348 8.291-89.1-.164-123.134"></path><path fill="#FFF" d="m102.421 128.06l66.328-38.418l-66.328-38.418z"></path></svg>Tutorials
@@ -766,7 +753,7 @@
                                     </p>
                                 </div>
 
-                                <div class="py-2" _bl_70="">
+                                <div class="py-2">
                                     <div class="">
                                         <div class="fw-bold hstack gap-2 d-flex" style="">
                                             <div class="" style="" _bl_82=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:broken-link" data-width="38" style="vertical-align: text-bottom;"><path fill="#1976D2" d="M17.5 27c-1.1 1.2-2.7 2-4.5 2h-3c-3.3 0-6-2.7-6-6s2.7-6 6-6h3c1.8 0 3.4.8 4.5 2h4.7c-1.5-3.5-5.1-6-9.2-6h-3C4.5 13 0 17.5 0 23s4.5 10 10 10h3c4.1 0 7.6-2.5 9.2-6zM38 13h-3c-4.1 0-7.6 2.5-9.2 6h4.7c1.1-1.2 2.7-2 4.5-2h3c3.3 0 6 2.7 6 6s-2.7 6-6 6h-3c-1.8 0-3.4-.8-4.5-2h-4.7c1.5 3.5 5.1 6 9.2 6h3c5.5 0 10-4.5 10-10s-4.5-10-10-10"></path><path fill="#00BCD4" d="M19.5 4L16 6l6.1 8.1l1.3-.8zm9 0L32 6l-6.1 8.1l-1.3-.8zm0 40l3.5-2l-6.1-8.1l-1.3.8zm-9 0L16 42l6.1-8.1l1.3.8z"></path></svg></div><h4 class="mt-2 me-auto">Unexpected errors? </h4>
@@ -785,7 +772,7 @@
                                         For <strong>Mac OSX</strong> users, try <kbd>COMMAND + SHIFT + R</kbd> in Chrome.
                                     </p></p>
                                 </div>
-                                <div class="py-2" _bl_71="">
+                                <div class="py-2">
                                     <div class="">
                                         <div class="fw-bold hstack gap-2 d-flex" style="">
                                             <div class="" style="" _bl_83=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:conference-call" data-width="38" style="vertical-align: text-bottom;"><circle cx="12" cy="21" r="5" fill="#FFA726"></circle><path fill="#455A64" d="M2 34.7s2.8-6.3 10-6.3s10 6.3 10 6.3V38H2zm44 0s-2.8-6.3-10-6.3s-10 6.3-10 6.3V38h20z"></path><circle cx="24" cy="17" r="6" fill="#FFB74D"></circle><path fill="#607D8B" d="M36 34.1s-3.3-7.5-12-7.5s-12 7.5-12 7.5V38h24z"></path><circle cx="36" cy="21" r="5" fill="#FFA726"></circle><circle cx="12" cy="21" r="5" fill="#FFA726"></circle><circle cx="36" cy="21" r="5" fill="#FFA726"></circle></svg></div><h4 class="mt-2 me-auto">Who is this for? </h4>
@@ -804,7 +791,7 @@
                                         just leave a note and it might be better the next time you visit.
                                     </p></p>
                                 </div>
-                                <div class="py-2" _bl_72="">
+                                <div class="py-2">
                                     <div class="">
                                         <div class="fw-bold hstack gap-2 d-flex" style="">
                                             <div class="" style="" _bl_84=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:neutral-decision" data-width="38" style="vertical-align: text-bottom;"><g fill="#FFCC80"><circle cx="38" cy="26" r="4"></circle><circle cx="10" cy="26" r="4"></circle><path d="M39 19c0-12.7-30-8.3-30 0v10c0 8.3 6.7 15 15 15s15-6.7 15-15z"></path><path d="M24 4C15.2 4 8 11.2 8 20v3.5l2.1.6V19l19.5-6.3l8.2 6.3v5.1l2.1-.6V20C40 12.5 34.6 4 24 4"></path></g><g fill="#37474F"><circle cx="24" cy="25" r="2"></circle><circle cx="32" cy="25" r="2"></circle><circle cx="16" cy="25" r="2"></circle></g></svg></div><h4 class="mt-2 me-auto">Must I login to use? </h4>
@@ -828,10 +815,10 @@
                                         this in the open source code.
                                     </p></p>
                                 </div>
-                                <div class="py-2" _bl_73="">
+                                <div class="py-2">
                                     <div class="">
                                         <div class="fw-bold hstack gap-2 d-flex" style="">
-                                            <div class="" style="" _bl_85=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:engineering" data-width="38" style="vertical-align: text-bottom;"><path fill="#EF6C00" d="m37.4 24.6l-11.6-2.2l-3.9-11.2l-3.8 1.3L22 23.6l-7.8 9l3 2.6l7.8-9l11.6 2.2z"></path><g fill="#FF9800"><path d="M24 19c-2.8 0-5 2.2-5 5s2.2 5 5 5s5-2.2 5-5s-2.2-5-5-5m0 7c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2"></path><path d="M40.7 27c.2-1 .3-2 .3-3s-.1-2-.3-3l3.3-2.4c.4-.3.6-.9.3-1.4L40 9.8c-.3-.5-.8-.7-1.3-.4L35 11c-1.5-1.3-3.3-2.3-5.2-3l-.4-4.1c-.1-.5-.5-.9-1-.9h-8.6c-.5 0-1 .4-1 .9L18.2 8c-1.9.7-3.7 1.7-5.2 3L9.3 9.3c-.5-.2-1.1 0-1.3.5l-4.3 7.4c-.3.5-.1 1.1.3 1.4L7.3 21c-.2 1-.3 2-.3 3s.1 2 .3 3L4 29.4c-.4.3-.6.9-.3 1.4L8 38.2c.3.5.8.7 1.3.4L13 37c1.5 1.3 3.3 2.3 5.2 3l.4 4.1c.1.5.5.9 1 .9h8.6c.5 0 1-.4 1-.9l.4-4.1c1.9-.7 3.7-1.7 5.2-3l3.7 1.7c.5.2 1.1 0 1.3-.4l4.3-7.4c.3-.5.1-1.1-.3-1.4zM24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11s11 4.9 11 11s-4.9 11-11 11"></path></g></svg></div><h4 class="mt-2 me-auto">Info For Coders </h4>
+                                            <div class="" style=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:engineering" data-width="38" style="vertical-align: text-bottom;"><path fill="#EF6C00" d="m37.4 24.6l-11.6-2.2l-3.9-11.2l-3.8 1.3L22 23.6l-7.8 9l3 2.6l7.8-9l11.6 2.2z"></path><g fill="#FF9800"><path d="M24 19c-2.8 0-5 2.2-5 5s2.2 5 5 5s5-2.2 5-5s-2.2-5-5-5m0 7c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2"></path><path d="M40.7 27c.2-1 .3-2 .3-3s-.1-2-.3-3l3.3-2.4c.4-.3.6-.9.3-1.4L40 9.8c-.3-.5-.8-.7-1.3-.4L35 11c-1.5-1.3-3.3-2.3-5.2-3l-.4-4.1c-.1-.5-.5-.9-1-.9h-8.6c-.5 0-1 .4-1 .9L18.2 8c-1.9.7-3.7 1.7-5.2 3L9.3 9.3c-.5-.2-1.1 0-1.3.5l-4.3 7.4c-.3.5-.1 1.1.3 1.4L7.3 21c-.2 1-.3 2-.3 3s.1 2 .3 3L4 29.4c-.4.3-.6.9-.3 1.4L8 38.2c.3.5.8.7 1.3.4L13 37c1.5 1.3 3.3 2.3 5.2 3l.4 4.1c.1.5.5.9 1 .9h8.6c.5 0 1-.4 1-.9l.4-4.1c1.9-.7 3.7-1.7 5.2-3l3.7 1.7c.5.2 1.1 0 1.3-.4l4.3-7.4c.3-.5.1-1.1-.3-1.4zM24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11s11 4.9 11 11s-4.9 11-11 11"></path></g></svg></div><h4 class="mt-2 me-auto">Info For Coders </h4>
                                         </div>
                                         <hr class="mt-1 mb-2">
                                     </div>
@@ -855,8 +842,7 @@
                             <script>
                                 new PageHeader("QuickGuidePageHeader");
 
-                                //note: on init, chat instance is loaded into window.vedastro.horoscopechat
-                                new PersonListSelector("PersonListSelector");
+                                //new PersonSelectorBox("PersonSelectorBox_QuickGuide");
 
                             </script>
                         </section>
@@ -3510,7 +3496,7 @@
                                         <div class="d-flex flex-wrap mb-5" style="max-width: GR.W352px;">
                                             <div id="HoroscopeMainInputHolder" class="vstack gap-3">
 
-                                                <div id="PersonSelectorBox_Horoscope" title-text="Person2"></div>
+                                                <div id="PersonSelectorBox_Horoscope" title-text="Person 123"></div>
 
                                                 <!-- @* ADVANCED PANEL DROP *@ -->
                                                 <div id="HoroscopeAdvancedInputHolder" class="vstack gap-1 mt-2 pt-2 border-top" style="display: none">
@@ -3572,7 +3558,7 @@
                                                 <!-- @* BUTTONS *@ -->
                                                 <div class="mt-2 d-flex justify-content-between">
                                                     <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle(" HoroscopeAdvancedInputHolder"))" SmallSize="true" />
-                                                    <IconButton @ref="_calculateButton" Id="HoroscopeCalculateButton" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" />
+                                                    <IconButton Id="HoroscopeCalculateButton" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" />
                                                 </div>
 
                                             </div>
@@ -3674,17 +3660,7 @@
 
 
                                 new PersonSelectorBox("PersonSelectorBox_Horoscope");
-                                
 
-                                // //note: on init, chat instance is loaded into window.vedastro.horoscopechat
-                                // new PersonListSelector("PersonListSelector");
-
-                                // const advancedhoroscopebutton = document.getElementById('advancedhoroscopebutton');
-                                // const divadvanced = document.getElementById('HoroscopeAdvancedInputHolder');
-                                // advancedhoroscopebutton.addEventListener('click',
-                                //     () => {
-                                //         divadvanced.classList.toggle('d-block');
-                                //     });
 
                             </script>
                         </section>
@@ -5377,10 +5353,10 @@
                                             }
 
                                             /*    .MakeBig {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 31px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: 183px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            font-size: 31px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            width: 183px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    */
                                         </style>
 
                                         <div class="rounded p-4" style="background:#caecff;">

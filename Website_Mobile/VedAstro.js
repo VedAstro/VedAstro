@@ -3387,13 +3387,7 @@ class PersonSelectorBox {
         this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
 
         // Save a reference to this instance for global access
-        if (!window.VedAstro) {
-            window.VedAstro = {};
-        }
-        if (!window.VedAstro.PersonSelectorBoxInstances) {
-            window.VedAstro.PersonSelectorBoxInstances = [];
-        }
-        window.VedAstro.PersonSelectorBoxInstances[this.ElementID] = this;
+        this.saveInstanceReference();
 
         // Initialize the component
         this.init();
@@ -3405,6 +3399,17 @@ class PersonSelectorBox {
 
         // Inject the component's HTML into the page
         await this.initializeMainBody();
+    }
+
+    // Save a reference to this instance for global access
+    saveInstanceReference() {
+        if (!window.VedAstro) {
+            window.VedAstro = {};
+        }
+        if (!window.VedAstro.PersonSelectorBoxInstances) {
+            window.VedAstro.PersonSelectorBoxInstances = [];
+        }
+        window.VedAstro.PersonSelectorBoxInstances[this.ElementID] = this;
     }
 
     async initializeMainBody() {

@@ -3366,124 +3366,116 @@ class PageHeader {
 }
 
 class PersonSelectorBox {
+    // Class properties
     ElementID = "";
     TitleText = "Title Goes Here";
     SelectedPersonNameHolderElementID = "selectedPersonNameHolder";
     SearchInputElementClass = "searchInputElementClass";
 
     constructor(elementId) {
-        this.ElementID = elementId; //element that is heart 💖
+        // Initialize class properties
+        this.ElementID = elementId;
 
-        //default data
+        // Default data
         this.personList = [];
         this.publicPersonList = [];
         this.personListDisplay = [];
         this.publicPersonListDisplay = [];
 
-        //get title and description from the elements custom attributes
+        // Get title and description from the element's custom attributes
         const element = document.getElementById(elementId);
         this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
 
-        //save to global for access by parent
-        if (!window.VedAstro) { window.VedAstro = {}; }
-        if (!window.VedAstro.PersonSelectorBoxInstances) { window.VedAstro.PersonSelectorBoxInstances = []; }
+        // Save a reference to this instance for global access
+        if (!window.VedAstro) {
+            window.VedAstro = {};
+        }
+        if (!window.VedAstro.PersonSelectorBoxInstances) {
+            window.VedAstro.PersonSelectorBoxInstances = [];
+        }
         window.VedAstro.PersonSelectorBoxInstances[this.ElementID] = this;
 
-        //runs needed async methods properly
+        // Initialize the component
         this.init();
-
     }
 
     async init() {
-        // get person list data from API or local storage
+        // Fetch person list data from API or local storage
         await this.initializePersonListData();
 
-        // inject in html
+        // Inject the component's HTML into the page
         await this.initializeMainBody();
     }
 
     async initializeMainBody() {
-        //clean if any old stuff
+        // Clean any existing content
         $(`#${this.ElementID}`).empty();
 
-        //inject into page
+        // Generate and inject the HTML into the page
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
     }
 
     async initializePersonListData() {
-
-        //PRIVATE
+        // Fetch private person list from the API
         const personListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/${window.vedastro.UserId}`);
         const personList = await personListResponse.json();
         this.personList = personList.Payload;
         this.personListDisplay = personList.Payload;
 
-        //PUBLIC
+        // Fetch public person list from the API
         const publicPersonListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/101`);
         const publicPersonList = await publicPersonListResponse.json();
         this.publicPersonList = publicPersonList.Payload;
         this.publicPersonListDisplay = publicPersonList.Payload;
 
-        //GLOBAL SELECTED PERSON
+        // Get the previously selected person from local storage
         const storedSelectedPerson = localStorage.getItem("selectedPerson");
         const selectedPerson = JSON.parse(storedSelectedPerson);
+
+        // If a selected person exists, simulate a click on their name
         if (selectedPerson && Object.keys(selectedPerson).length !== 0) {
-
-            this.onClickPersonName(selectedPerson.id); //simulate click on person
+            this.onClickPersonName(selectedPerson.id);
         }
-
     }
 
-    //when user clicks on person name in dropdown
+    // Handle click on a person's name in the dropdown
     async onClickPersonName(personId) {
-
-        //get full person details for given name
+        // Get the full person details based on the ID
         var personData = this.getPersonDataById(personId);
         var displayName = this.getPersonDisplayName(personData);
 
-        //update visible select button text
+        // Update the visible select button text
         var buttonTextHolder = $(`#${this.ElementID}`).find(`.${this.SelectedPersonNameHolderElementID}`);
         buttonTextHolder.html(displayName);
 
-        //save to local storage for future use
+        // Save the selected person to local storage
         localStorage.setItem("selectedPerson", JSON.stringify({ id: personId }));
 
-        //save for instance specific selection
+        // Save the selected person ID for instance-specific selection
         this.selectedPersonId = personId;
     }
 
-    //given person json will return birth year
+    // Get the birth year from the person's birth time
     getPersonBirthYear(person) {
-        const birthTime = person.BirthTime.StdTime; // 13:54 25/10/1992 +08:00
+        const birthTime = person.BirthTime.StdTime; // e.g. "13:54 25/10/1992 +08:00"
         const [time, date] = birthTime.split(' ');
         const [hours, minutes] = time.split(':');
         const [day, month, year] = date.split('/');
         const birthDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00.000Z`);
         return birthDate.getFullYear();
-    };
+    }
 
-    //name with birth year
+    // Get the display name with birth year for a person
     getPersonDisplayName(person) {
         const name = person.Name;
-        const birthYear = this.getPersonBirthYear(person); // reuse the previous function
+        const birthYear = this.getPersonBirthYear(person);
         return `${name} - ${birthYear}`;
-    };
+    }
 
-    /**
-    * Handles the keyup event on the search input field.
-    * Filters the person lists based on the search text.
-    *
-    * @param {Event} event The keyup event object.
-    */
+    // Handle keyup event on the search input field
     onKeyUpSearchBar = (event) => {
-
         // Ignore certain keys to prevent unnecessary filtering
-        if ($.inArray(event.code, [
-            'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
-            'Space', 'ControlLeft', 'ControlRight', 'AltLeft',
-            'AltRight', 'ShiftLeft', 'ShiftRight', 'Enter',
-            'Tab', 'Escape'
-        ]) !== -1) {
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space", "ControlLeft", "ControlRight", "AltLeft", "AltRight", "ShiftLeft", "ShiftRight", "Enter", "Tab", "Escape"].includes(event.code)) {
             return;
         }
 
@@ -3503,14 +3495,14 @@ class PersonSelectorBox {
     }
 
     async generateHtmlBody() {
-
-        //generate html for person list
+        // Generate HTML for private and public person lists
         this.personListHTML = this.generatePersonListHtml();
         this.publicPersonListHTML = this.generatePublicPersonListHtml();
 
+        // Get a reference to the search input element
         this.searchInput = document.getElementById('searchInput');
 
-
+        // Return the generated HTML for the component
         return `
     <div>
       <label class="form-label">${this.TitleText}</label>
@@ -3521,7 +3513,7 @@ class PersonSelectorBox {
           </button>
           <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
 
-            <!--SEARCH INPUT-->
+            <!-- SEARCH INPUT -->
             <div class="hstack gap-2">
               <input onkeyup="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onKeyUpSearchBar(event)" type="text" class="${this.SearchInputElementClass} form-control ms-0 mb-2 ps-3" placeholder="Search...">
               <div class="mb-2" style="cursor: pointer;">
@@ -3536,13 +3528,13 @@ class PersonSelectorBox {
               <hr class="dropdown-divider">
             </li>
             <div class="ms-3 d-flex justify-content-between">
-              
+
               <div class=" hstack gap-2" style=" ">
-                
+
                 <div class="" style="" _bl_134="">
                   <i class="iconify" data-icon="material-symbols:demography-rounded" data-width="25"></i>
                 </div>
-                
+
                 <span style="font-size: 13px; color: rgb(143, 143, 143); --darkreader-inline-color: #cdc4b5;" data-darkreader-inline-color="">
                   Examples</span>
               </div>
@@ -3565,12 +3557,12 @@ class PersonSelectorBox {
   `;
     }
 
-    //gets full person data from given list
+    // Get full person data from the given list based on ID
     getPersonDataById(personId) {
-        // Search public list
+        // Search in public list first
         const person = this.publicPersonListDisplay.find((person) => person.PersonId === personId);
 
-        // If not found, search private list
+        // If not found, search in private list
         if (!person) {
             const privatePerson = this.personListDisplay.find((person) => person.PersonId === personId);
             return privatePerson;
@@ -3579,8 +3571,8 @@ class PersonSelectorBox {
         return person;
     }
 
+    // Generate HTML for the public person list
     generatePublicPersonListHtml() {
-
         const html = this.publicPersonListDisplay
             .map((person) => {
                 return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${this.getPersonDisplayName(person)}</li>`;
@@ -3590,8 +3582,8 @@ class PersonSelectorBox {
         return html;
     }
 
+    // Generate HTML for the private person list
     generatePersonListHtml() {
-
         const html = this.personListDisplay
             .map((person) => {
                 return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${this.getPersonDisplayName(person)}</li>`;
@@ -3601,13 +3593,9 @@ class PersonSelectorBox {
         return html;
     }
 
-    //when user clicks on dropdown button (not items)
+    // Handle click on the dropdown button
     onClickDropDown(event) {
-
-        //set curosor to search text box, so can input instantly
-        //NOTE: UX feature so can search faster
+        // Set focus to the search text box for instant input
         $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
-
     }
 }
-

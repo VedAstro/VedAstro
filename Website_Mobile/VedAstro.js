@@ -3369,6 +3369,7 @@ class PersonSelectorBox {
     ElementID = "";
     TitleText = "Title Goes Here";
     SelectedPersonNameHolderElementID = "selectedPersonNameHolder";
+    SearchInputElementClass = "searchInputElementClass";
 
     constructor(elementId) {
         this.ElementID = elementId; //element that is heart 💖
@@ -3514,14 +3515,14 @@ class PersonSelectorBox {
           <label class="form-label">${this.TitleText}</label>
           <div class="hstack">
             <div class="btn-group" style="width:100%;">
-              <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+              <button onclick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="${this.SelectedPersonNameHolderElementID}" style="cursor: pointer;white-space: nowrap; display: inline-table;" >Select Person</div>
               </button>
               <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
 
                 <!--SEARCH INPUT-->
                 <div class="hstack gap-2">
-                  <input onkeyup="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onKeyUpSearchBar(event)" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                  <input onkeyup="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onKeyUpSearchBar(event)" type="text" class="${this.SearchInputElementClass} form-control ms-0 mb-2 ps-3" placeholder="Search...">
                   <div class="mb-2" style="cursor: pointer;">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--pepicons-pop" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" data-icon="pepicons-pop:list" data-width="25">
                       <g fill="currentColor" data-darkreader-inline-fill="" style="--darkreader-inline-fill: currentColor;">
@@ -3613,6 +3614,14 @@ class PersonSelectorBox {
         return html;
     }
 
+    //when user clicks on dropdown button (not items)
+    onClickDropDown(event) {
+
+        //set curosor to search text box, so can input instantly
+        //NOTE: UX feature so can search faster
+        $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
+
+    }
 }
 
 

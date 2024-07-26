@@ -1624,9 +1624,8 @@ class LocationSearchSelector {
 //YOU CANNOT FIGHT A DYING MAN,
 //HE HOLDS THE UPPER HAND ALWAYS
 
-/**
- * Helps to create a table with astro data columns
- */
+
+//Helps to create a table with astro data columns
 class AstroTable {
     // Class fields
     Ayanamsa = "Lahiri";
@@ -3302,69 +3301,75 @@ class HoroscopeChat {
     }
 }
 
+// Define a class called PageHeader that encapsulates the behavior and properties of a page header
 class PageHeader {
+    // Class properties
     ElementID = "";
     TitleText = "Title Goes Here";
     DescriptionText = "Description Goes Here";
     ImageSrc = "images/user-guide-banner.png";
 
+    // Constructor to initialize the PageHeader object
     constructor(elementId) {
-        this.ElementID = elementId; //save for later access
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
 
-        //get title and description from the elements custom attributes
+        // Get the DOM element with the given ID
         const element = document.getElementById(elementId);
-        this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
-        this.DescriptionText =
-            element.getAttribute("description-text") || "Description Goes Here";
-        this.ImageSrc =
-            element.getAttribute("image-src") || "images/user-guide-banner.png";
 
-        //inject in html
+        // Get the custom attributes from the element and assign default values if not present
+        this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
+        this.DescriptionText = element.getAttribute("description-text") || "Description Goes Here";
+        this.ImageSrc = element.getAttribute("image-src") || "images/user-guide-banner.png";
+
+        // Call the method to initialize the main body of the page header
         this.initializeMainBody();
     }
 
+    // Method to initialize the main body of the page header
     async initializeMainBody() {
-        //clean if any old stuff
+        // Empty the content of the element with the given ID
         $(`#${this.ElementID}`).empty();
 
-        //inject into page
+        // Generate the HTML for the page header and inject it into the element
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
     }
 
+    // Method to generate the HTML for the page header
     async generateHtmlBody() {
+        // Return the HTML for the page header, including conditional blocks for different screen sizes
         return `
-        <!-- DESKTOP AND TABLET ONLY -->
-        <div class="d-none d-md-block">
-            <div class="vstack mb-2">
-              <div class="hstack">
-                <div class="vstack gap-2">
-                  <h1 class="fw-bold" tabindex="-1">${this.TitleText}</h1>
-                  <span style=" max-width:412.5px; font-size: 21px; font-weight: lighter; font-family: inherit;">${this.DescriptionText}</span>
-                </div>
-                <div class="w-100 d-none d-md-block" style="max-width: 412.5px; text-align: center;">
-                  <img src="${this.ImageSrc}" style="width: 195px;" class="">
-                </div>
-              </div>
-              <hr class="border-secondary border mt-3">
+      <!-- DESKTOP AND TABLET ONLY -->
+      <div class="d-none d-md-block">
+        <div class="vstack mb-2">
+          <div class="hstack">
+            <div class="vstack gap-2">
+              <h1 class="fw-bold" tabindex="-1">${this.TitleText}</h1>
+              <span style="max-width: 412.5px; font-size: 21px; font-weight: lighter; font-family: inherit;">${this.DescriptionText}</span>
             </div>
+            <div class="w-100 d-none d-md-block" style="max-width: 412.5px; text-align: center;">
+              <img src="${this.ImageSrc}" style="width: 195px;" class="">
+            </div>
+          </div>
+          <hr class="border-secondary border mt-3">
         </div>
+      </div>
 
-        <!-- MOBILE PORTRAIT ONLY -->
-        <div class="d-block d-md-none">
-            <div class="mt-3 col d-flex align-items-start">
-                <div>
-                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">${this.TitleText}</h3>
-                    <p>${this.DescriptionText}</p>
-                </div>
-                <img class="bi text-body-secondary flex-shrink-0 mt-3 ms-3" style="width: 141px;" src="${this.ImageSrc}" />
-            </div>        
+      <!-- MOBILE PORTRAIT ONLY -->
+      <div class="d-block d-md-none">
+        <div class="mt-3 col d-flex align-items-start">
+          <div>
+            <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">${this.TitleText}</h3>
+            <p>${this.DescriptionText}</p>
+          </div>
+          <img class="bi text-body-secondary flex-shrink-0 mt-3 ms-3" style="width: 141px;" src="${this.ImageSrc}" />
         </div>
-        
-
-     `;
+      </div>
+    `;
     }
 }
 
+// PersonSelectorBox class represents a component for selecting a person from a list
 class PersonSelectorBox {
     // Class properties
     ElementID = "";

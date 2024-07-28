@@ -3609,3 +3609,63 @@ class PersonSelectorBox {
         $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
     }
 }
+
+
+class InfoBox {
+    // Class properties
+    ElementID = "";
+    Title = "Title Goes Here";
+    IconName = "fluent-emoji:robot";
+    Description = "Description Goes Here";
+
+    // Constructor to initialize the PageHeader object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Get the DOM element with the given ID
+        const element = document.getElementById(elementId);
+
+        // Get the custom attributes from the element and assign default values if not present
+        this.Title = element.getAttribute("title") || "Title Goes Here";
+        this.Description = element.getAttribute("description") || "Description Goes Here";
+        this.IconName = element.getAttribute("iconname") || "fluent-emoji:robot";
+
+        // Call the method to initialize the main body of the page header
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body of the page header
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML for the page header and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+    }
+
+    // Handle keyup event on the search input field
+    static onClick(event){
+        console.log(event);
+    }
+
+    // Method to generate the HTML for the page header
+    async generateHtmlBody() {
+        // Return the HTML for the page header, including conditional blocks for different screen sizes
+        return `
+      
+<div onClick="window.VedAstro.InfoBox.onClick(event)" class="" style="cursor: pointer; max-width:365px;">
+    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="">
+        <div class="hstack mb-2">
+            <span class="iconify bi flex-shrink-0 me-2" data-icon="${this.IconName}" data-width="50"></span>
+            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+                <strong>${this.Title}</strong><br />
+                ${this.Description}
+            </div>
+        </div>
+    </div>
+</div>
+
+    `;
+    }
+}

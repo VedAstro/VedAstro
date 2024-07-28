@@ -3425,21 +3425,59 @@ class PersonSelectorBox {
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
     }
 
+    // we first check if the person lists are already 
+    // cached in the browser's local storage using `localStorage.getItem()`. 
+    // If the cached data exists, we parse it and assign it to the respective variables. 
+    // If the cache is empty, we proceed to fetch the data from the API as before.After fetching the data from the API, 
+    // we cache it in local storage using `localStorage.setItem()` to avoid making 
+    // unnecessary API calls on subsequent page loads.
     async initializePersonListData() {
-        // Fetch private person list from the API
-        const personListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/${window.vedastro.UserId}`);
-        const personList = await personListResponse.json();
-        this.personList = personList.Payload;
-        this.personListDisplay = personList.Payload;
+        // Check if person lists are already cached in local storage
+        const cachedPersonList = localStorage.getItem('personList');
+        const cachedPublicPersonList = localStorage.getItem('publicPersonList');
 
-        // Fetch public person list from the API
-        const publicPersonListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/101`);
-        const publicPersonList = await publicPersonListResponse.json();
-        this.publicPersonList = publicPersonList.Payload;
-        this.publicPersonListDisplay = publicPersonList.Payload;
+        if (cachedPersonList && cachedPublicPersonList) {
+            // Parse the cached data
+            this.personList = JSON.parse(cachedPersonList);
+            this.personListDisplay = this.personList;
+            this.publicPersonList = JSON.parse(cachedPublicPersonList);
+            this.publicPersonListDisplay = this.publicPersonList;
+
+            console.log('Loaded person lists from cache.');
+        } else {
+            // Fetch private person list from the API
+            try {
+                const personListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/${window.vedastro.UserId}`);
+                const personListData = await personListResponse.json();
+                this.personList = personListData.Payload;
+                this.personListDisplay = this.personList;
+
+                // Cache the private person list
+                localStorage.setItem('personList', JSON.stringify(this.personList));
+
+                console.log('Loaded private person list from API.');
+            } catch (error) {
+                console.error('Error fetching private person list:', error);
+            }
+
+            // Fetch public person list from the API
+            try {
+                const publicPersonListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/101`);
+                const publicPersonListData = await publicPersonListResponse.json();
+                this.publicPersonList = publicPersonListData.Payload;
+                this.publicPersonListDisplay = this.publicPersonList;
+
+                // Cache the public person list
+                localStorage.setItem('publicPersonList', JSON.stringify(this.publicPersonList));
+
+                console.log('Loaded public person list from API.');
+            } catch (error) {
+                console.error('Error fetching public person list:', error);
+            }
+        }
 
         // Get the previously selected person from local storage
-        const storedSelectedPerson = localStorage.getItem("selectedPerson");
+        const storedSelectedPerson = localStorage.getItem('selectedPerson');
         const selectedPerson = JSON.parse(storedSelectedPerson);
 
         // If a selected person exists, simulate a click on their name
@@ -3609,7 +3647,6 @@ class PersonSelectorBox {
         $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
     }
 }
-
 
 class InfoBox {
     // Class properties

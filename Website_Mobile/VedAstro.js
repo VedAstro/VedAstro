@@ -3486,6 +3486,29 @@ class PersonSelectorBox {
         }
     }
 
+    // call `PersonSelectorBox.ClearPersonListCache('private')` to clear only the private person list cache,
+    // `PersonSelectorBox.ClearPersonListCache('public')` to clear only the public person list cache,
+    // or`PersonSelectorBox.ClearPersonListCache('all')` to clear both caches.If an invalid type is provided,
+    // a warning will be logged to the console and the cache will not be cleared.
+    static ClearPersonListCache(type) {
+        switch (type) {
+            case 'private':
+                localStorage.removeItem('personList');
+                break;
+            case 'public':
+                localStorage.removeItem('publicPersonList');
+                break;
+            case 'all':
+                localStorage.removeItem('personList');
+                localStorage.removeItem('publicPersonList');
+                break;
+            default:
+                console.warn('Invalid cache type provided. Cache not cleared.');
+        }
+
+        console.log('Person list cache cleared.');
+    }
+
     // Handle click on a person's name in the dropdown
     async onClickPersonName(personId) {
         // Get the full person details based on the ID

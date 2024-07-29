@@ -20,6 +20,9 @@ namespace LLMCallExperimenter
         static string MistralNemo128kEndpoint = config["MistralNemo128kEndpoint"];
         static string MistralNemo128kApiKey = config["MistralNemo128kApiKey"];
 
+        static string MetaLlama31405BEndpoint = config["MetaLlama31405BEndpoint"];
+        static string MetaLlama31405BApiKey = config["MetaLlama31405BApiKey"];
+
         static string CohereCommandRPlusEndpoint = config["CohereCommandRPlusEndpoint"];
         static string CohereCommandRPlusApiKey = config["CohereCommandRPlusApiKey"];
 
@@ -31,11 +34,11 @@ namespace LLMCallExperimenter
 
         static async Task Main(string[] args)
         {
-            string apiKey = CohereCommandRPlusApiKey;
+            string apiKey = MetaLlama31405BApiKey;
             client = new HttpClient();
             client.Timeout = Timeout.InfiniteTimeSpan;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-            client.BaseAddress = new Uri(CohereCommandRPlusEndpoint);
+            client.BaseAddress = new Uri(MetaLlama31405BEndpoint);
 
             // Initialize the chat history file
             await InitializeChatHistoryFile();
@@ -102,7 +105,17 @@ DYNAMIC CODE
             var content = new StringContent(requestBody);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
+            //make call to API
             var response = await client.PostAsync("", content);
+
+            //if fail, scream the error back!
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Response Status Code: {response.StatusCode}");
+                Console.WriteLine($"Response Headers: \n{string.Join("\r\n", response.Headers.Concat(response.Content.Headers))}");
+                Console.WriteLine($"Response Body: {await response.Content.ReadAsStringAsync()}");
+                //throw new Exception($"Request to API failed with status code: {response.StatusCode}");
+            }
 
             var fullReplyRaw = await response.Content.ReadAsStringAsync();// Read response content as string
             var fullReply = new Phi3ReplyJson(fullReplyRaw);

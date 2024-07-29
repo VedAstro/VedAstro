@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using VedAstro.Library;
@@ -155,8 +155,8 @@ DYNAMIC CODE
                     using (StreamWriter writer = new StreamWriter(fs))
                     {
                         // Write the log entry to the file
-                        var xxx = JObject.FromObject(logEntry);
-                        await writer.WriteAsync(xxx.ToString());
+                        var parsedFromFile = JObject.FromObject(logEntry);
+                        await writer.WriteAsync(parsedFromFile.ToString());
                         await writer.WriteAsync(Environment.NewLine);
                     }
                 }

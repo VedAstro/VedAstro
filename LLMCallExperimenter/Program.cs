@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using VedAstro.Library;
 using Newtonsoft.Json.Linq;
+using static System.Console;
+
 
 namespace LLMCallExperimenter
 {
@@ -34,11 +36,11 @@ namespace LLMCallExperimenter
 
         static async Task Main(string[] args)
         {
-            string apiKey = MetaLlama31405BApiKey;
+            string apiKey = CohereCommandRPlusApiKey;
             client = new HttpClient();
             client.Timeout = Timeout.InfiniteTimeSpan;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-            client.BaseAddress = new Uri(MetaLlama31405BEndpoint);
+            client.BaseAddress = new Uri(CohereCommandRPlusEndpoint);
 
             // Initialize the chat history file
             await InitializeChatHistoryFile();
@@ -108,13 +110,12 @@ DYNAMIC CODE
             //make call to API
             var response = await client.PostAsync("", content);
 
-            //if fail, scream the error back!
+            //if failed, scream the error back!
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine($"Response Status Code: {response.StatusCode}");
                 Console.WriteLine($"Response Headers: \n{string.Join("\r\n", response.Headers.Concat(response.Content.Headers))}");
                 Console.WriteLine($"Response Body: {await response.Content.ReadAsStringAsync()}");
-                //throw new Exception($"Request to API failed with status code: {response.StatusCode}");
             }
 
             var fullReplyRaw = await response.Content.ReadAsStringAsync();// Read response content as string
@@ -133,16 +134,25 @@ DYNAMIC CODE
         {
             try
             {
+                // Create a default chat history array
+                JArray chatHistoryArray = new JArray();
+
                 // Check if the chat history file already exists
-                if (!File.Exists(chatHistoryFilePath))
+                if (File.Exists(chatHistoryFilePath))
                 {
-                    // Create a new file stream to create the file
-                    using (FileStream fs = new FileStream(chatHistoryFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                    // Read the existing chat history from the file
+                    string existingChatHistory = File.ReadAllText(chatHistoryFilePath);
+
+                    // Parse the existing chat history and add it to the array
+                    chatHistoryArray.Merge(JArray.Parse(existingChatHistory), new JsonMergeSettings
                     {
-                        // Dispose of the file stream to ensure proper cleanup
-                        await fs.DisposeAsync();
-                    }
+                        MergeArrayHandling = MergeArrayHandling.Union
+                    });
                 }
+
+                // Write the chat history array to the file
+                string chatHistoryJson = chatHistoryArray.ToString();
+                File.WriteAllText(chatHistoryFilePath, chatHistoryJson);
             }
             catch (Exception ex)
             {
@@ -163,22 +173,23 @@ DYNAMIC CODE
                     Message = message // Message content
                 };
 
-                using (FileStream fs = new FileStream(chatHistoryFilePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
-                {
-                    using (StreamWriter writer = new StreamWriter(fs))
-                    {
-                        // Write the log entry to the file
-                        var parsedFromFile = JObject.FromObject(logEntry);
-                        await writer.WriteAsync(parsedFromFile.ToString());
-                        await writer.WriteAsync(Environment.NewLine);
-                    }
-                }
+                // Read the existing chat history from the file
+                string existingChatHistory = File.ReadAllText(chatHistoryFilePath);
+                JArray chatHistoryArray = JArray.Parse(existingChatHistory);
+
+                // Add the new log entry to the array
+                chatHistoryArray.Add(JObject.FromObject(logEntry));
+
+                // Write the updated chat history back to the file
+                string updatedChatHistory = chatHistoryArray.ToString();
+                File.WriteAllText(chatHistoryFilePath, updatedChatHistory);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error logging chat message: {ex.Message}"); // Handle logging error
             }
         }
+
     }
 
     // Class to represent a conversation message

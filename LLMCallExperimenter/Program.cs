@@ -36,11 +36,11 @@ namespace LLMCallExperimenter
 
         static async Task Main(string[] args)
         {
-            string apiKey = CohereCommandRPlusApiKey;
+            string apiKey = MetaLlama31405BApiKey;
             client = new HttpClient();
             client.Timeout = Timeout.InfiniteTimeSpan;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-            client.BaseAddress = new Uri(CohereCommandRPlusEndpoint);
+            client.BaseAddress = new Uri(MetaLlama31405BEndpoint);
 
             // Initialize the chat history file
             await InitializeChatHistoryFile();
@@ -95,7 +95,8 @@ DYNAMIC CODE
             var requestBodyObject = new
             {
                 messages, // List of messages
-                max_tokens = 32000, // Maximum number of tokens for the response
+                //max_tokens = 32000, // Maximum number of tokens for the response
+                max_tokens = 4096, // Maximum number of tokens for the response
                 temperature = 0.7, // Temperature for sampling
                 top_p = 1, // Nucleus sampling parameter
                 //presence_penalty = 0,
@@ -160,6 +161,7 @@ DYNAMIC CODE
                 Console.WriteLine($"Error initializing chat history file: {ex.Message}");
             }
         }
+
 
         // Log a chat message to the history file
         static async Task LogChatMessageToFile(string message, string role)

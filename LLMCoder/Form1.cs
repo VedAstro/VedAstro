@@ -93,8 +93,7 @@ namespace LLMCoder
         private async void sendUserMsgButton_Click(object sender, EventArgs e)
         {
             progressBar1.Visible = true;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 25;
+            progressBar1.Value = 50;
 
             string userInput = userInputTextBox.Text; //get text from input box 
             chatMessageOutputBox.Text += $"You: {userInput}\n";

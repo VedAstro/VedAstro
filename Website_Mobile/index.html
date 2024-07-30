@@ -437,7 +437,7 @@
                     </div>
                 </nav>
 
-                <!-- STRUCTURE -->
+                <!-- WEB APP PAGES -->
                 <div class="container" style="background: #F0F2F5;">
 
                     <!-- ALL WEB PAGES -->
@@ -3650,8 +3650,6 @@
 
                                 </div>
 
-
-
                             </div>
 
                             <!-- PAGE CODE -->
@@ -5355,10 +5353,10 @@
                                             }
 
                                             /*    .MakeBig {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            font-size: 31px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            width: 183px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    font-size: 31px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    width: 183px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
                                         </style>
 
                                         <div class="rounded p-4" style="background:#caecff;">
@@ -6637,7 +6635,6 @@
     </div>
 
 
-
     <!--##############################################################
     DEPENDENCIES JS & CSS : placed here after html above is already in DOM
     ##############################################################-->
@@ -6654,33 +6651,34 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mattboldt/typed.js@2.0.11/lib/typed.min.js"></script>
-
+    
 
     <!-- JS APP CODE -->
     <script>
         //-----------------------------> MAIN APP CODE
+        debugger;
 
-        function showSection(sectionId, prev = '') {
+        //navigate to page artificially
+        function showSection(sectionId) {
+            // Selection of all section HTML elements
             const sections = document.querySelectorAll('section');
-            sections.forEach(section => {
+
+            // Looping through every selected section node.
+            sections.forEach((section) => {
+                // Removing 'active' class from each section node.
                 section.classList.remove('active');
+
+                // Addition of 'active' class to match the specific sectionID being displayed.
                 if (section.id === sectionId) {
                     section.classList.add('active');
                 }
             });
-            if (sectionId == 'PersonData' && prev != '') {
-                const backbutton = document.getElementById("BackButtonPersonData");
-                backbutton.setAttribute('onClick', `showSection('${prev}')`);
-                console.log(prev);
-            }
         }
-
 
         //-----------------------------> CONTACT PAGE
         function sendMessage() {
 
         }
-
 
         //-----------------------------> NUMEROLOGY PAGE
         async function getNameNumber(fullName) {

@@ -117,7 +117,7 @@ namespace LLMCoder
             var requestBodyObject = new
             {
                 messages, // List of messages
-                max_tokens = 32000, // Maximum number of tokens for the response
+                //max_tokens = 32000, // Maximum number of tokens for the response
                 //max_tokens = 4096, // Maximum number of tokens for the response
                 temperature = 0.7, // Temperature for sampling
                 top_p = 1, // Nucleus sampling parameter

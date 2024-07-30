@@ -406,3 +406,4 @@ ChatAPI/src/vector_store/birth_time_predictions/
 /Desktop/Windows/InnoSetupOutput/VedAstroSetup.exe
 
 MatchMLPipeline/secrets.json
+/LLMCoder/secrets.json

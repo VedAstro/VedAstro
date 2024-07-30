@@ -77,7 +77,7 @@
             userInputTextBox.ForeColor = SystemColors.MenuHighlight;
             userInputTextBox.Location = new Point(0, 0);
             userInputTextBox.Name = "userInputTextBox";
-            userInputTextBox.Size = new Size(846, 295);
+            userInputTextBox.Size = new Size(846, 93);
             userInputTextBox.TabIndex = 0;
             userInputTextBox.Text = "";
             // 
@@ -136,7 +136,7 @@
             splitContainer2.Panel2.Controls.Add(userInputTextBox);
             splitContainer2.Panel2.Controls.Add(flowLayoutPanel2);
             splitContainer2.Size = new Size(846, 657);
-            splitContainer2.SplitterDistance = 327;
+            splitContainer2.SplitterDistance = 529;
             splitContainer2.TabIndex = 2;
             // 
             // chatMessageOutputBox
@@ -147,7 +147,7 @@
             chatMessageOutputBox.ForeColor = Color.LimeGreen;
             chatMessageOutputBox.Location = new Point(0, 0);
             chatMessageOutputBox.Name = "chatMessageOutputBox";
-            chatMessageOutputBox.Size = new Size(846, 327);
+            chatMessageOutputBox.Size = new Size(846, 529);
             chatMessageOutputBox.TabIndex = 1;
             chatMessageOutputBox.Text = "";
             // 
@@ -159,7 +159,7 @@
             flowLayoutPanel2.Controls.Add(sendUserMsgButton);
             flowLayoutPanel2.Controls.Add(progressBar1);
             flowLayoutPanel2.Dock = DockStyle.Bottom;
-            flowLayoutPanel2.Location = new Point(0, 295);
+            flowLayoutPanel2.Location = new Point(0, 93);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
             flowLayoutPanel2.Size = new Size(846, 31);
             flowLayoutPanel2.TabIndex = 3;

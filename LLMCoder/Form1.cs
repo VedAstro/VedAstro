@@ -8,13 +8,12 @@ using System.Windows.Forms;
 
 namespace LLMCoder
 {
-    public record ApiEndpoint(string Name, string Endpoint, string ApiKey);
-
     public partial class Form1 : Form
     {
 
         static IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("secrets.json", optional: true, reloadOnChange: true).Build();
 
+        //init all LLM choices here
         static List<ApiEndpoint> ApiEndpoints = new()
         {
             new ApiEndpoint("GPT4o", config["GPT4oEndpoint"], config["GPT4oApiKey"]),
@@ -23,7 +22,6 @@ namespace LLMCoder
             new ApiEndpoint("MetaLlama31405B", config["MetaLlama31405BEndpoint"], config["MetaLlama31405BApiKey"]),
             new ApiEndpoint("CohereCommandRPlus", config["CohereCommandRPlusEndpoint"], config["CohereCommandRPlusApiKey"])
         };
-
 
         static HttpClient client;
 
@@ -36,14 +34,14 @@ namespace LLMCoder
         {
             InitializeComponent();
 
-            //update selected LLM dropdown
+            // Update the dropdown with available LLM choices
             UpdateSelectedLLMDropdownView();
 
-            //SET DEFAULT LLM CHOICE
-            UpdateSelectedLLM("MetaLlama31405B");
+            // Set the default LLM choice
+            UpdateSelectedLLM("CohereCommandRPlus");
 
+            // Load and display past user prompts as templates
             UpdatePastPromptsView();
-
         }
 
         private void UpdateSelectedLLMDropdownView()
@@ -69,11 +67,22 @@ namespace LLMCoder
 
         private void UpdatePastPromptsView()
         {
-            //load previous commands list and put them in view
-            var allUserMessages = GetChatHistoryFromFile().Where(cH => cH.Role == "user").Select(ch => ch.Message);
-            foreach (var item in allUserMessages)
+            // Load previous chat history from file
+            var chatHistory = GetChatHistoryFromFile();
+
+            // Filter messages to include only those from the user
+            var userMessages = chatHistory.Where(entry => entry.Role == "user").Select(entry => entry.Message);
+
+            // Remove duplicate messages
+            var uniqueUserMessages = userMessages.Distinct();
+
+            // Clear the existing items in the pastUserPrompts combo box
+            pastUserPrompts.Items.Clear();
+
+            // Add unique user messages to the combo box
+            foreach (var message in uniqueUserMessages)
             {
-                pastUserPrompts.Items.Add(item.ToString());
+                pastUserPrompts.Items.Add(message);
             }
         }
 
@@ -88,34 +97,6 @@ namespace LLMCoder
             }
 
             throw new ArgumentException($"API endpoint with name '{name}' not found.");
-        }
-
-        private async void sendUserMsgButton_Click(object sender, EventArgs e)
-        {
-            progressBar1.Visible = true;
-            progressBar1.Value = 50;
-
-            string userInput = userInputTextBox.Text; //get text from input box 
-            chatMessageOutputBox.Text += $"You: {userInput}\n";
-
-            // Save the user's message for the next turn
-            conversationHistory.Add(new ConversationMessage { Role = "user", Content = userInput });
-
-            // Log the user's message to the chat history file
-            await LogChatMessageToFile(userInput, "user");
-
-            string response = await SendMessageToLLM(client, conversationHistory);
-            chatMessageOutputBox.Text += $"LLM: {response}\n"; // Display LLM response
-
-            // Log the LLM's response to the chat history file
-            await LogChatMessageToFile(response, "assistant");
-
-            //clear text for next input
-            userInputTextBox.Text = "";
-
-            progressBar1.Value = 100;
-            progressBar1.Visible = false;
-
         }
 
         // Send a message to the LLM and return its response
@@ -172,7 +153,6 @@ namespace LLMCoder
             return replyMessage;
         }
 
-
         // Log a chat message to the history file
         static async Task LogChatMessageToFile(string message, string role)
         {
@@ -202,28 +182,38 @@ namespace LLMCoder
             }
         }
 
+        // Load chat history from file and return as a list of ChatLogEntry objects
         static List<ChatLogEntry> GetChatHistoryFromFile()
         {
-            // Read the existing chat history from the file
-            string existingChatHistory = File.ReadAllText(chatHistoryFilePath);
-            JArray chatHistoryArray = JArray.Parse(existingChatHistory);
-
-            var returnList = new List<ChatLogEntry>();
-
-            foreach (var chatLog in chatHistoryArray)
+            try
             {
-                //add new to list
-                var chatLogEntry = new ChatLogEntry()
+                // Read the chat history file content
+                string chatHistoryFileContent = File.ReadAllText(chatHistoryFilePath);
+
+                // Parse the JSON content into a JArray
+                JArray chatHistoryArray = JArray.Parse(chatHistoryFileContent);
+
+                // Convert each JObject in the array to a ChatLogEntry object
+                var chatHistoryList = chatHistoryArray.Select(entry => new ChatLogEntry
                 {
-                    Message = chatLog["Message"].ToString(),
-                    Role = chatLog["Role"].ToString(),
-                    Timestamp = chatLog["Timestamp"].ToString(),
-                };
-                returnList.Add(chatLogEntry);
+                    Timestamp = entry["Timestamp"].ToString(),
+                    Role = entry["Role"].ToString(),
+                    Message = entry["Message"].ToString()
+                }).ToList();
+
+                return chatHistoryList;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading chat history file: {ex.Message}");
+                return new List<ChatLogEntry>();
             }
 
-            return returnList;
         }
+
+
+
+        //------------------- EVENT HANDLERS ---------------------
 
         private void pastUserPrompts_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -231,7 +221,7 @@ namespace LLMCoder
             {
                 string selectedItem = pastUserPrompts.SelectedItem.ToString();
                 // Perform actions or display information based on the selected item
-                userInputTextBox.Text += $" {selectedItem}";
+                userInputTextBox.Text += $"{selectedItem}";
             }
         }
 
@@ -254,13 +244,59 @@ namespace LLMCoder
 
         private void resetChatHistoryButton_Click(object sender, EventArgs e)
         {
-            //clear view
+            // Clear the chat output box text
             chatMessageOutputBox.Text = string.Empty;
 
-            //clear chat history aswell
+            // Clear the conversation history list
             conversationHistory.Clear();
         }
+
+        private async void sendUserMsgButton_Click(object sender, EventArgs e)
+        {
+            // Update the progress bar visibility and value
+            progressBar1.Visible = true;
+            progressBar1.Value = 25;
+
+            // Get the user input from the input text box
+            string userInput = userInputTextBox.Text;
+
+            // Display the user's message in the chat output box
+            chatMessageOutputBox.Text += $"You: {userInput}\n";
+
+            // Add the user's message to the conversation history list
+            conversationHistory.Add(new ConversationMessage { Role = "user", Content = userInput });
+
+            // Log the user's message to the chat history file
+            await LogChatMessageToFile(userInput, "user");
+
+            progressBar1.Value = 50;
+
+            // Send a message to the LLM and get its response
+            string response = await SendMessageToLLM(client, conversationHistory);
+
+            progressBar1.Value = 75;
+
+            // Display the LLM's response in the chat output box
+            chatMessageOutputBox.Text += $"LLM: {response}\n";
+
+            // Log the LLM's response to the chat history file
+            await LogChatMessageToFile(response, "assistant");
+
+            // Clear the user input text box for the next input
+            userInputTextBox.Text = "";
+
+            // Load and display past user prompts as templates
+            UpdatePastPromptsView();
+
+            // Update the progress bar value and hide it
+            progressBar1.Value = 100;
+            progressBar1.Visible = false;
+
+        }
+
     }
+
+    public record ApiEndpoint(string Name, string Endpoint, string ApiKey);
 
     // Class to represent a conversation message
     public class ConversationMessage

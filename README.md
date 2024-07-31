@@ -24,7 +24,7 @@
 </span>
 
 
-# 😎 How VedAstro can help you...
+# 🙏 How VedAstro can help you...
 
 - [Website](https://vedastro.org/Docs/QuickGuide) --> easy & fast astrology data for **normal users**
 - [Chat API](https://vedastro.org/ChatAPI) --> world's 1st open source **Vedic AI Chat** bot

@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="app.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="image\ai-chat-card.jpg" />
     <None Remove="image\dasa-card.jpg" />
     <None Remove="image\header-logo.png" />
@@ -33,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PublishFile Remove="app.js" />
     <PublishFile Remove="favicon.ico" />
     <PublishFile Remove="image\ai-chat-card.jpg" />
     <PublishFile Remove="image\dasa-card.jpg" />

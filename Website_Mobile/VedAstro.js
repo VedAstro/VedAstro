@@ -3620,7 +3620,7 @@ class PersonSelectorBox {
 
           </ul>
         </div>
-        <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2" _bl_98="">
+        <button onClick="showSection('AddPerson')" style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2" _bl_98="">
           <i class="iconify" data-icon="ant-design:user-add-outlined" data-width="25"></i>
         </button>
       </div>
@@ -3726,6 +3726,56 @@ class InfoBox {
     </div>
 </div>
 
+    `;
+    }
+}
+
+
+class IconButton {
+    // Class properties
+    ElementID = "";
+    SmallSize = false;
+    Color = "";
+    IconName = "";
+    ButtonText = "";
+    OnClickCallback = null;
+
+    // Constructor to initialize the IconButton object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Get the DOM element with the given ID
+        const element = document.getElementById(elementId);
+
+        // Get the custom attributes from the element and assign default values if not present
+        this.SmallSize = element.getAttribute("SmallSize") === "true";
+        this.Color = element.getAttribute("Color") || "";
+        this.IconName = element.getAttribute("IconName") || "";
+        this.ButtonText = element.getAttribute("ButtonText") || "";
+        this.OnClickCallback = element.getAttribute("OnClickCallback") || null;
+
+        // Call the method to initialize the button
+        this.initializeButton();
+    }
+
+    // Method to initialize the button
+    async initializeButton() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML for the button and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlButton());
+    }
+
+    // Method to generate the HTML for the button
+    async generateHtmlButton() {
+        // Return the HTML for the button
+        return `
+      <button onclick="${this.OnClickCallback}" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-${this.Color} btn">
+        <i class="iconify" data-icon="${this.IconName}" data-width="25"></i>
+        ${this.ButtonText}
+      </button>
     `;
     }
 }

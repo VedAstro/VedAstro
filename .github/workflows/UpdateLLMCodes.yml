@@ -7,31 +7,32 @@ jobs:
   copy_folder:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout VedAstro repo
+      - name: Checkout current repo
         uses: actions/checkout@v2
         with:
-          repository: VedAstro/VedAstro
-          path: vedastro
+          path: current-repo
 
-      - name: Copy LLMCoder folder
+      - name: Commit to another repo
         run: |
-          cp -r vedastro/LLMCoder vedastro-llmcoder
-
-      - name: Checkout LLMCodes repo
-        uses: actions/checkout@v2
-        with:
-          repository: VedAstro/LLMCodes
-          path: llmcodes
-
-      - name: Paste LLMCoder folder
-        run: |
-          cp -r vedastro-llmcoder/* llmcodes/
-
-      - name: Commit and push changes
-        run: |
-          cd llmcodes
+          echo "--------SETTING NAME--------------"
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
+
+          # Clones the other repository where you want to commit the changes.
+          echo "--------CLONING LLMCodes REPO--"
+          git clone https://github.com/VedAstro/LLMCodes.git
+
+          # Change directory into the cloned repository.
+          cd LLMCodes
+
+          # Copy the LLMCoder folder from the current repository into the cloned repository.
+          echo "--------COPYING LLMCoder FOLDER INTO LLMCodes--"
+          cp -r ../current-repo/LLMCoder/* .
+
+          # Add, commit, and push the changes to the other repository using the PAT.
+          echo "--------MAKING A COMMIT AND PUSH--"
           git add .
           git commit -m "Update LLMCoder folder"
-          git push
+          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/LLMCodes.git main
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}

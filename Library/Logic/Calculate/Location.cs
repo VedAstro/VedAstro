@@ -56,8 +56,7 @@ namespace VedAstro.Library
         /// </summary>
         public Location()
         {
-            string accountName = "centralapistorage"; //indic heritage 
-            //string accountName = "vedastroapistorage"; //vedastro 
+            string accountName = Secrets.Get("CentralStorageAccountName");
 
             //#SEARCH ADDRESS
             //------------------------------------
@@ -66,7 +65,7 @@ namespace VedAstro.Library
 
             var storageUriSearchAddress = $"https://{accountName}.table.core.windows.net/{tableNameSearchAddress}";
             //save reference for late use
-            searchAddressServiceClient = new TableServiceClient(new Uri(storageUriSearchAddress), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            searchAddressServiceClient = new TableServiceClient(new Uri(storageUriSearchAddress), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             searchAddressTableClient = searchAddressServiceClient.GetTableClient(tableNameSearchAddress);
 
             //# ADDRESS
@@ -76,7 +75,7 @@ namespace VedAstro.Library
 
             var storageUriAddress = $"https://{accountName}.table.core.windows.net/{tableNameAddress}";
             //save reference for late use
-            addressServiceClient = new TableServiceClient(new Uri(storageUriAddress), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            addressServiceClient = new TableServiceClient(new Uri(storageUriAddress), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             addressTableClient = addressServiceClient.GetTableClient(tableNameAddress);
 
             //Initialize address metadata table 
@@ -84,7 +83,7 @@ namespace VedAstro.Library
             var storageUriAddressMetadata = $"https://{accountName}.table.core.windows.net/{tableNameAddressMetadata}";
 
             //save reference for late use
-            addressMetadataServiceClient = new TableServiceClient(new Uri(storageUriAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            addressMetadataServiceClient = new TableServiceClient(new Uri(storageUriAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             addressMetadataTableClient = addressMetadataServiceClient.GetTableClient(tableNameAddressMetadata);
 
 
@@ -95,7 +94,7 @@ namespace VedAstro.Library
 
             var storageUriCoordinates = $"https://{accountName}.table.core.windows.net/{tableNameCoordinates}";
             //save reference for late use
-            coordinatesServiceClient = new TableServiceClient(new Uri(storageUriCoordinates), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            coordinatesServiceClient = new TableServiceClient(new Uri(storageUriCoordinates), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             coordinatesTableClient = coordinatesServiceClient.GetTableClient(tableNameCoordinates);
 
             //Initialize coordinates metadata table 
@@ -103,7 +102,7 @@ namespace VedAstro.Library
             var storageUriCoordinatesMetadata = $"https://{accountName}.table.core.windows.net/{tableNameCoordinatesMetadata}";
 
             //save reference for late use
-            coordinatesMetadataServiceClient = new TableServiceClient(new Uri(storageUriCoordinatesMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            coordinatesMetadataServiceClient = new TableServiceClient(new Uri(storageUriCoordinatesMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             coordinatesMetadataTableClient = coordinatesMetadataServiceClient.GetTableClient(tableNameCoordinatesMetadata);
 
 
@@ -113,7 +112,7 @@ namespace VedAstro.Library
             string tableNameIpAddress = "IpAddressGeoLocation";
             var storageUriIpAddress = $"https://{accountName}.table.core.windows.net/{tableNameIpAddress}";
             //save reference for late use
-            ipAddressServiceClient = new TableServiceClient(new Uri(storageUriIpAddress), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            ipAddressServiceClient = new TableServiceClient(new Uri(storageUriIpAddress), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             ipAddressTableClient = ipAddressServiceClient.GetTableClient(tableNameIpAddress);
 
             //Initialize address metadata table 
@@ -121,7 +120,7 @@ namespace VedAstro.Library
             var storageUriIpAddressMetadata = $"https://{accountName}.table.core.windows.net/{tableNameIpAddressMetadata}";
 
             //save reference for late use
-            ipAddressMetadataServiceClient = new TableServiceClient(new Uri(storageUriIpAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            ipAddressMetadataServiceClient = new TableServiceClient(new Uri(storageUriIpAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             ipAddressMetadataTableClient = ipAddressMetadataServiceClient.GetTableClient(tableNameIpAddressMetadata);
 
 
@@ -132,7 +131,7 @@ namespace VedAstro.Library
             var storageUriTimezone = $"https://{accountName}.table.core.windows.net/{tableNameTimezone}";
 
             //save reference for late use
-            timezoneServiceClient = new TableServiceClient(new Uri(storageUriTimezone), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            timezoneServiceClient = new TableServiceClient(new Uri(storageUriTimezone), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             timezoneTableClient = timezoneServiceClient.GetTableClient(tableNameTimezone);
 
             //Initialize timezone table 
@@ -140,7 +139,7 @@ namespace VedAstro.Library
             var storageUriTimezoneMetadata = $"https://{accountName}.table.core.windows.net/{tableNameTimezoneMetadata}";
 
             //save reference for late use
-            timezoneMetadataServiceClient = new TableServiceClient(new Uri(storageUriTimezoneMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            timezoneMetadataServiceClient = new TableServiceClient(new Uri(storageUriTimezoneMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             timezoneMetadataTableClient = timezoneMetadataServiceClient.GetTableClient(tableNameTimezoneMetadata);
 
 

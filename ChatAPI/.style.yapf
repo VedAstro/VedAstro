@@ -1,7 +1,0 @@
-[style]
-based_on_style = pep8
-
-COLUMN_LIMIT=999
-FORCE_MULTILINE_DICT=false
-SPACES_BEFORE_COMMENT=2
-USE_TABS=true

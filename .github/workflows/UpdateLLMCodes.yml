@@ -17,22 +17,23 @@ jobs:
           echo "--------SETTING NAME--------------"
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
-
+      
           # Clones the other repository where you want to commit the changes.
           echo "--------CLONING LLMCodes REPO--"
           git clone https://github.com/VedAstro/LLMCodes.git
-
+      
           # Change directory into the cloned repository.
           cd LLMCodes
-
+      
           # Copy the LLMCoder folder from the current repository into the cloned repository.
           echo "--------COPYING LLMCoder FOLDER INTO LLMCodes--"
           cp -r ../current-repo/LLMCoder/* .
-
+      
           # Add, commit, and push the changes to the other repository using the PAT.
           echo "--------MAKING A COMMIT AND PUSH--"
           git add .
           git commit -m "Update LLMCoder folder"
-          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/LLMCodes.git main
+          git push --set-upstream https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/LLMCodes.git main
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        

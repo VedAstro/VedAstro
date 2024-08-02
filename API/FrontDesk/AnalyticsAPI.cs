@@ -228,7 +228,7 @@ namespace API
 		/// </summary>
 		public static List<string> GetAllTableNames()
 		{
-			string connectionString = Secrets.Get("API_STORAGE"); // Replace with your storage account's connection string
+			string connectionString = Secrets.Get("API_STORAGE"); 
 			var serviceClient = new TableServiceClient(connectionString);
 			var tableResponses = serviceClient.Query();
 			var tableNames = new List<string>();

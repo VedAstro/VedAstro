@@ -84,6 +84,4 @@ public static class CallTracker
         tableClient.UpsertEntity(customerEntity);
     }
 
-
-
 }

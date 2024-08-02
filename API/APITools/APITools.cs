@@ -86,8 +86,8 @@ namespace API
             }
             catch (Exception e)
             {
-                APILogger.Error("ERROR NO DATA FROM CALLER"); //log it
-                APILogger.Error(e); //log it
+                //APILogger.Error("ERROR NO DATA FROM CALLER"); //log it
+                //APILogger.Error(e); //log it
                 return new JObject(); //null to be detected by caller
             }
         }
@@ -707,7 +707,7 @@ namespace API
             var lastCallsCount = APILogger.GetAllCallsWithinLastTimeperiod(ipAddress, minute1);
 
             //rate set in runtime settings is multipliedfull 
-            var msDelayRate = int.Parse(Secrets.Get("OpenAPICallDelayMs"));
+            var msDelayRate = 800;
             var freeCallRate = 50;//allowed high speed calls per minute //int.Parse(Secrets.OpenAPICallDelayMs); TODO add to Secrets
 
             //if more than 1 abuse count in the last 10 minutes than end the call here with no reply
@@ -759,13 +759,13 @@ namespace API
         public static TableClient GetTableClientFromTableName(string tableName)
         {
             //prepare call stuff
-            var tableUlr = $"https://vedastroapistorage.table.core.windows.net/{tableName}";
-            string accountName = "vedastroapistorage";
-            string storageAccountKey = Secrets.Get("VedAstroApiStorageKey");
-
+            string storageAccountKey = Secrets.Get("CentralStorageKey");
+            string accountName = Secrets.Get("CentralStorageAccountName");
+            var tableUlr = $"https://{accountName}.table.core.windows.net/{tableName}";
+            
             //get connection
-            var _tableServiceClient = new TableServiceClient(new Uri(tableUlr), new TableSharedKeyCredential(accountName, storageAccountKey));
-            var client = _tableServiceClient.GetTableClient(tableName);
+            var tableServiceClient = new TableServiceClient(new Uri(tableUlr), new TableSharedKeyCredential(accountName, storageAccountKey));
+            var client = tableServiceClient.GetTableClient(tableName);
 
             return client;
         }

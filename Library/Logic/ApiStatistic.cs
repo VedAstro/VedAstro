@@ -39,8 +39,7 @@ namespace VedAstro.Library
         /// </summary>
         static ApiStatistic()
         {
-            string accountName = "centralapistorage"; //indic heritage 
-                                                      //string accountName = "vedastroapistorage"; //vedastro 
+            string accountName = Secrets.Get("CentralStorageAccountName");
 
 
             //# RAW REQUEST : (use only when needed, costly🤑)
@@ -49,7 +48,7 @@ namespace VedAstro.Library
             string tableNameRawRequestStatistic = "RawRequestStatistic";
             var storageUriRawRequestStatistic = $"https://{accountName}.table.core.windows.net/{tableNameRawRequestStatistic}";
             //save reference for late use
-            rawRequestStatisticServiceClient = new TableServiceClient(new Uri(storageUriRawRequestStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            rawRequestStatisticServiceClient = new TableServiceClient(new Uri(storageUriRawRequestStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             rawRequestStatisticTableClient = rawRequestStatisticServiceClient.GetTableClient(tableNameRawRequestStatistic);
 
 
@@ -59,7 +58,7 @@ namespace VedAstro.Library
             string tableNameRequestUrlStatistic = "RequestUrlStatistic";
             var storageUriRequestUrlStatistic = $"https://{accountName}.table.core.windows.net/{tableNameRequestUrlStatistic}";
             //save reference for late use
-            requestUrlStatisticServiceClient = new TableServiceClient(new Uri(storageUriRequestUrlStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            requestUrlStatisticServiceClient = new TableServiceClient(new Uri(storageUriRequestUrlStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             requestUrlStatisticTableClient = requestUrlStatisticServiceClient.GetTableClient(tableNameRequestUrlStatistic);
 
             //# SUBSCRIBER
@@ -68,7 +67,7 @@ namespace VedAstro.Library
             string tableNameSubscriberStatistic = "SubscriberStatistic";
             var storageUriSubscriberStatistic = $"https://{accountName}.table.core.windows.net/{tableNameSubscriberStatistic}";
             //save reference for late use
-            subscriberStatisticServiceClient = new TableServiceClient(new Uri(storageUriSubscriberStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            subscriberStatisticServiceClient = new TableServiceClient(new Uri(storageUriSubscriberStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             subscriberStatisticTableClient = subscriberStatisticServiceClient.GetTableClient(tableNameSubscriberStatistic);
 
             //# USER AGENT
@@ -77,7 +76,7 @@ namespace VedAstro.Library
             string tableNameUserAgentStatistic = "UserAgentStatistic";
             var storageUriUserAgentStatistic = $"https://{accountName}.table.core.windows.net/{tableNameUserAgentStatistic}";
             //save reference for late use
-            userAgentStatisticServiceClient = new TableServiceClient(new Uri(storageUriUserAgentStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            userAgentStatisticServiceClient = new TableServiceClient(new Uri(storageUriUserAgentStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             userAgentStatisticTableClient = userAgentStatisticServiceClient.GetTableClient(tableNameUserAgentStatistic);
 
 
@@ -87,7 +86,7 @@ namespace VedAstro.Library
             string tableNameIpAddressStatistic = "IpAddressStatistic";
             var storageUriIpAddressStatistic = $"https://{accountName}.table.core.windows.net/{tableNameIpAddressStatistic}";
             //save reference for late use
-            ipAddressServiceClient = new TableServiceClient(new Uri(storageUriIpAddressStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            ipAddressServiceClient = new TableServiceClient(new Uri(storageUriIpAddressStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             ipAddressStatisticTableClient = ipAddressServiceClient.GetTableClient(tableNameIpAddressStatistic);
 
 
@@ -97,7 +96,7 @@ namespace VedAstro.Library
             string tableNameWebPageStatistic = "WebPageStatistic";
             var storageUriWebPageStatistic = $"https://{accountName}.table.core.windows.net/{tableNameWebPageStatistic}";
             //save reference for late use
-            webPageServiceClient = new TableServiceClient(new Uri(storageUriWebPageStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
+            webPageServiceClient = new TableServiceClient(new Uri(storageUriWebPageStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
             webPageStatisticTableClient = webPageServiceClient.GetTableClient(tableNameWebPageStatistic);
 
 

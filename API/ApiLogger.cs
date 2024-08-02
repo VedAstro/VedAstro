@@ -38,17 +38,17 @@ public static class APILogger
 
     static APILogger()
     {
-        var logBookUri = $"https://vedastroapistorage.table.core.windows.net/{OpenApiLogBook}";
-        var errorBookUri = $"https://vedastroapistorage.table.core.windows.net/{OpenApiErrorBook}";
-        string accountName = "vedastroapistorage";
-        string storageAccountKey = Secrets.Get("VedAstroApiStorageKey");
+        string accountName = Secrets.Get("CentralStorageAccountName");
+        string storageAccountKey = Secrets.Get("CentralStorageKey");
+        var logBookUri = $"https://{accountName}.table.core.windows.net/{OpenApiLogBook}";
+        var errorBookUri = $"https://{accountName}.table.core.windows.net/{OpenApiErrorBook}";
 
         //get connection & load tables
-        var _tableServiceClient = new TableServiceClient(new Uri(logBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
-        LogBookClient = _tableServiceClient.GetTableClient(OpenApiLogBook);
+        var tableServiceClient = new TableServiceClient(new Uri(logBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
+        LogBookClient = tableServiceClient.GetTableClient(OpenApiLogBook);
 
-        _tableServiceClient = new TableServiceClient(new Uri(errorBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
-        ErrorBookClient = _tableServiceClient.GetTableClient(errorBookUri);
+        tableServiceClient = new TableServiceClient(new Uri(errorBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
+        ErrorBookClient = tableServiceClient.GetTableClient(errorBookUri);
 
     }
 
@@ -58,20 +58,32 @@ public static class APILogger
     /// </summary>
     public static void Error(Exception exception, HttpRequestData req = null)
     {
-        //summarize exception data
-        var exceptionData = Tools.ExceptionToJSON(exception).ToString(); //JSON string
-
-        var errorLog = new OpenAPIErrorBookEntity()
+        try
         {
-            PartitionKey = IpAddress,
-            RowKey = DateTimeOffset.UtcNow.Ticks.ToString(),
-            Branch = ThisAssembly.Version,
-            URL = URL,
-            Message = exceptionData
-        };
+            //summarize exception data
+            var exceptionData = Tools.ExceptionToJSON(exception).ToString(); //JSON string
 
-        //creates record if no exist, update if already there
-        openApiErrorBookClient.UpsertEntity(errorLog);
+            var errorLog = new OpenAPIErrorBookEntity()
+            {
+                PartitionKey = IpAddress,
+                RowKey = DateTimeOffset.UtcNow.Ticks.ToString(),
+                Branch = ThisAssembly.Version,
+                URL = URL,
+                Message = exceptionData
+            };
+
+            //creates record if no exist, update if already there
+            openApiErrorBookClient.UpsertEntity(errorLog);
+        }
+        catch (Exception deeperException)
+        {
+            //NOTE: to error on error loop, we quietly console
+            //out here without stopping execution
+            Console.WriteLine(exception.Message);
+            Console.WriteLine(deeperException.Message);
+        }
+
+        
     }
 
 

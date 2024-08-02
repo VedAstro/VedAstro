@@ -20,7 +20,7 @@ jobs:
       
           # Clones the other repository where you want to commit the changes.
           echo "--------CLONING LLMCodes REPO--"
-          git clone https://github.com/VedAstro/LLMCodes.git
+          git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/LLMCodes.git
       
           # Change directory into the cloned repository.
           cd LLMCodes
@@ -29,11 +29,15 @@ jobs:
           echo "--------COPYING LLMCoder FOLDER INTO LLMCodes--"
           cp -r ../current-repo/LLMCoder/* .
       
+
           # Add, commit, and push the changes to the other repository using the PAT.
-          echo "--------MAKING A COMMIT AND PUSH--"
+          echo "--------MAKING A COMMIT--"
           git add .
-          git commit -m "Update LLMCoder folder"
-          git push --set-upstream https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/VedAstro/LLMCodes.git main
+          git commit -m "GITHUB ROBOT : Latest LLMCodes source injected"
+          
+          
+          echo "--------MAKING A PUSH FOR IT!--"
+          git push
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         

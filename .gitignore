@@ -373,37 +373,27 @@ Website/SyncFiles.ps1
 API/ThisAssembly.cs
 Website/ThisAssembly.cs
 
-API/local.settings.json
 /API/local.settings.latest.json
 .DS_Store
 
 Library/Logic/Calculate/CalculateKP.cs
 
-API/Properties/serviceDependencies.karagan - Zip Deploy.json
+API/Properties/
 
-API/Properties/ServiceDependencies/karagan - Zip Deploy/storage1.arm.json
+API/Properties/ServiceDependencies/
 
-API/Properties/ServiceDependencies/karagan - Zip Deploy/
+API/Properties/ServiceDependencies/
 
 API/Properties/
 
 Desktop/dotnet/windowsdesktop-runtime-8.0.1-win-x64.exe
-
-Desktop/InnoSetupOutput/VedAstroSetup.exe
-
-ChatAPI/.env
-
-ChatAPI/src/env/
-
-ChatAPI/venv/
-
-ChatAPI/src/vector_store/birth_time_predictions/
-/LLMCallExperimenter/secrets.txt
-/LLMCallExperimenter/secrets.json
-/Library/Secrets-hidden.cs
-/Library/Secrets-HideMe.cs
 /Desktop/Windows/dotnet/windowsdesktop-runtime-8.0.6-win-x64.exe
 /Desktop/Windows/InnoSetupOutput/VedAstroSetup.exe
+Desktop/InnoSetupOutput/VedAstroSetup.exe
+
+/LLMCallExperimenter/secrets.json
+
+/Library/Secrets-HideMe.cs
 
 MatchMLPipeline/secrets.json
 /LLMCoder/secrets.json

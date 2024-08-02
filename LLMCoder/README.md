@@ -11,6 +11,10 @@ providing a versatile coding assistant experience.
 - **Past Prompts**: Load and reuse previous prompts from your chat history.
 - **Simple User Interface**: A straightforward and user-friendly interface for a smooth experience.
 
+![image](https://github.com/user-attachments/assets/0678763d-5a82-4130-a7bd-7517ed68d329)
+![image](https://github.com/user-attachments/assets/b268c97c-5f8e-403b-a935-cd02ae5af204)
+![image](https://github.com/user-attachments/assets/fd0e6286-53a4-428a-a03b-46cacced2f41)
+
 ## Installation
 
 1. **Clone the Repository**:

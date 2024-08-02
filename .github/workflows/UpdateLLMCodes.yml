@@ -25,6 +25,12 @@ jobs:
           # Change directory into the cloned repository.
           cd LLMCodes
       
+          # Clear all files in the target repository
+          echo "--------CLEARING FILES IN LLMCodes REPO--"
+          git rm -rf .
+          git commit -m "🤖 Robot : Cleaning repo for rocket launch 🚀"
+          git push
+
           # Copy the LLMCoder folder from the current repository into the cloned repository.
           echo "--------COPYING LLMCoder FOLDER INTO LLMCodes--"
           cp -r ../current-repo/LLMCoder/* .
@@ -40,4 +46,3 @@ jobs:
           git push
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        

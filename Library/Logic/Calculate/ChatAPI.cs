@@ -37,31 +37,29 @@ namespace VedAstro.Library
         static AzureKeyCredential azureOpenAIApiKey = new(Secrets.Get("AzureOpenAIAPIKey"));
         static OpenAIClient client = new(azureOpenAIResourceUri, azureOpenAIApiKey);
 
-        private static string chatTableconnectionString = Secrets.Get("CENTRAL_API_STORAGE_CONNECTION_STRING");
         private static List<string> followupQuestions = new List<string> { "Why?", "How?", "Tell me more..." };
-        private static TableClient chatTableClient = new TableClient(chatTableconnectionString, "ChatMessage");
 
-        private static TableServiceClient presetQuestionEmbeddingsServiceClient;
-        private static TableClient presetQuestionEmbeddingsTableClient;
+        static string accountName = "vedastroapistorage";
+        private static string tableName = "ChatMessage";
 
+        static string storageUri = $"https://{accountName}.table.core.windows.net/{tableName}";
+        static string storageAccountKey = Secrets.Get("VedAstroApiStorageKey");
 
-        public static void InitChatAPI()
-        {
-            string accountName = "centralapistorage"; //indic heritage 
-            //string accountName = "vedastroapistorage"; //vedastro 
-
-            //#SEARCH ADDRESS
-            //------------------------------------
-            //Initialize address table 
-            string tableNamePresetQuestionEmbeddings = "PresetQuestionEmbeddings";
-
-            var storageUriPresetQuestionEmbeddings = $"https://{accountName}.table.core.windows.net/{tableNamePresetQuestionEmbeddings}";
-            //save reference for late use
-            presetQuestionEmbeddingsServiceClient = new TableServiceClient(new Uri(storageUriPresetQuestionEmbeddings), new TableSharedKeyCredential(accountName, Secrets.Get("AzureGeoLocationStorageKey")));
-            presetQuestionEmbeddingsTableClient = presetQuestionEmbeddingsServiceClient.GetTableClient(tableNamePresetQuestionEmbeddings);
+        //save reference for late use
+        private static TableServiceClient tableServiceClient = new TableServiceClient(new Uri(storageUri), new TableSharedKeyCredential(accountName, storageAccountKey));
+        private static TableClient chatTableClient = tableServiceClient.GetTableClient(tableName);
 
 
-        }
+        //------------------------------------
+        //Initialize address table 
+        static string tableNamePresetQuestionEmbeddings = "PresetQuestionEmbeddings";
+
+        static string storageUriPresetQuestionEmbeddings = $"https://{accountName}.table.core.windows.net/{tableNamePresetQuestionEmbeddings}";
+        //save reference for late use
+        private static TableServiceClient presetQuestionEmbeddingsServiceClient = new TableServiceClient(new Uri(storageUriPresetQuestionEmbeddings), new TableSharedKeyCredential(accountName, storageAccountKey));
+        private static TableClient presetQuestionEmbeddingsTableClient = presetQuestionEmbeddingsServiceClient.GetTableClient(tableNamePresetQuestionEmbeddings);
+
+
 
         //#             +> FOLLOW-UP --> specialized lite llm call
         //#             |
@@ -344,7 +342,6 @@ namespace VedAstro.Library
 
             string finalFilter = filter.ToString();
 
-            InitChatAPI();
             var recordFound = presetQuestionEmbeddingsTableClient.Query<PresetQuestionEmbeddingsEntity>(finalFilter)?.ToList();
 
 
@@ -364,7 +361,6 @@ namespace VedAstro.Library
             //#2 GET EMBED API DOCS
 
             var finalFilter = $"PartitionKey eq 'APICall'"; //get all
-            InitChatAPI();
             var allDocsEmbeddings = presetQuestionEmbeddingsTableClient.Query<PresetQuestionEmbeddingsEntity>(finalFilter)?.ToList();
 
 
@@ -463,7 +459,6 @@ namespace VedAstro.Library
 
 
             //STAGE 2 : SAVE TO DB
-            InitChatAPI();
             foreach (var embedRow in dbReadyRecords)
             {
                 presetQuestionEmbeddingsTableClient.UpsertEntity(embedRow);

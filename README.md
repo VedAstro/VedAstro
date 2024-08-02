@@ -274,7 +274,7 @@ We discuss & share ideas on astrology and computation. And ways you can integrat
 The main part of the program is the prediction/event generator.
 It works by combining **logic** on how to calculate a prediction with **data** about that prediction.
 This is done everytime a "Calculate" button is clicked. Below you will see a brief explanation of this process.
-This method was choosen to easily accommodate the thousands of astrological calculation possibilities.
+This method was chosen to easily accommodate the thousands of astrological calculation possibilities.
 
 ## event prediction = (data + logic) * time
 
@@ -483,7 +483,7 @@ degrees of a sign, Mars and the Sun produce results."
               - easy touch screen implimentation
               - very fast
 
-Thus Option 3 was choosen.
+Thus Option 3 was chosen.
 
 ## Astrology Library: Use of Struct vs Class
 -   Structs are used to reduce overhead from large collections, exp. List<>

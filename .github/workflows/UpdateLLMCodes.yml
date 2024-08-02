@@ -33,7 +33,7 @@ jobs:
           # Add, commit, and push the changes to the other repository using the PAT.
           echo "--------MAKING A COMMIT--"
           git add .
-          git commit -m "GITHUB ROBOT : Latest LLMCodes source injected"
+          git commit -m "🤖 Robot : Latest LLMCodes source injected from main repo with 💖"
           
           
           echo "--------MAKING A PUSH FOR IT!--"

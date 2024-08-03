@@ -1589,5 +1589,14 @@ namespace VedAstro.Library.Tests
             Assert.AreEqual("xx", xx);
 
         }
+
+        [TestMethod()]
+        public void ClassTreeStructureForLLMTest()
+        {
+
+            var xxx = Calculate.ClassTreeStructureForLLM();
+
+            Assert.Fail();
+        }
     }
 }

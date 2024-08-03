@@ -276,7 +276,11 @@ namespace VedAstro.Library
         /// </summary>
         public static string BouncBackInputTime(Time time) => time.ToString();
 
-        public static string ClassTreeStructureForLLM()
+        /// <summary>
+        /// Returns list of all API calls for fun, why not
+        /// </summary>
+        /// <returns></returns>
+        public static string List()
         {
             var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
 

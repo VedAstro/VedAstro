@@ -102,10 +102,10 @@ namespace API
             var allCallKeywords = new[] { "PlanetName/All/", "PlanetName/All9WithUpagrahas/", "HouseName/All/" };
 
             // Check if any keyword is present in the fullParamString
-            var isAllCall = allCallKeywords.Any(call => fullParamString.Contains(call));
+            var isAllCall = allCallKeywords.Any(call => fullParamString?.Contains(call) ?? false); //default to false
 
             // Find the keyword that was used
-            var usedKeyword = allCallKeywords.FirstOrDefault(call => fullParamString.Contains(call));
+            var usedKeyword = allCallKeywords.FirstOrDefault(call => fullParamString?.Contains(call) ?? false); //default to false
 
             dynamic rawPlanetData;
 
@@ -291,14 +291,14 @@ namespace API
         /// takes out Ayanamsa from URL and returns remainder of URL
         /// allows /Ayanamsa/Raman to be used anywhere in URL
         /// </summary>
-        public static string ParseAndSetAyanamsa(string fullParamString)
+        public static string ParseAndSetAyanamsa(string? fullParamString)
         {
             //if url contains word "ayanamsa" than process it
-            var isCustomAyanamsa = fullParamString.Contains(nameof(Ayanamsa));
+            var isCustomAyanamsa = fullParamString?.Contains(nameof(Ayanamsa)) ?? false;  //default to false
             if (isCustomAyanamsa)
             {
                 //scan URL and take out ayanamsa and set it
-                var splitParamString = fullParamString.Split('/');
+                var splitParamString = fullParamString?.Split('/') ?? Array.Empty<string>();
                 var ayanamsaLocation = Array.IndexOf(splitParamString, nameof(Ayanamsa));
                 var ayanamsaUrl = $"/{splitParamString[ayanamsaLocation]}/{splitParamString[ayanamsaLocation + 1]}";
 
@@ -306,15 +306,15 @@ namespace API
                 VedAstro.Library.Calculate.Ayanamsa = (int)Tools.EnumFromUrl(ayanamsaUrl);
 
                 //remove ayanamsa from URL
-                fullParamString = fullParamString.Replace(ayanamsaUrl, "");
+                fullParamString = fullParamString?.Replace(ayanamsaUrl, "");
 
-                return fullParamString;
+                return fullParamString ?? "";
             }
 
             //if no ayanamsa, then return as is
             else
             {
-                return fullParamString;
+                return fullParamString ?? "";
             }
         }
 

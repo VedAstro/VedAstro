@@ -33,15 +33,14 @@
             userInputTextBox = new RichTextBox();
             splitContainer1 = new SplitContainer();
             tabControl1 = new TabControl();
-            tabPage1 = new TabPage();
+            llmPage = new TabPage();
             tableLayoutPanel3 = new TableLayoutPanel();
             chatMessageOutputBox = new RichTextBox();
-            flowLayoutPanel2 = new FlowLayoutPanel();
             clearUserMsgButton = new Button();
             resetChatHistoryButton = new Button();
             progressBar1 = new ProgressBar();
             sendUserMsgButton = new Button();
-            tabPage2 = new TabPage();
+            codePage = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
             label2 = new Label();
             codeInjectPretextTextBox = new TextBox();
@@ -51,22 +50,33 @@
             largeCodeSnippetTextBox = new RichTextBox();
             label4 = new Label();
             injectAssitantPretextTextBox = new TextBox();
+            settingsPage = new TabPage();
+            tableLayoutPanel4 = new TableLayoutPanel();
+            topPTextBox = new TextBox();
+            topPLabel = new Label();
+            temperatureTextBox = new TextBox();
+            label3 = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
             llmSelector = new ComboBox();
             pastUserPrompts = new ListBox();
+            tabPage3 = new TabPage();
+            tabPage4 = new TabPage();
+            tableLayoutPanel5 = new TableLayoutPanel();
             label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             tabControl1.SuspendLayout();
-            tabPage1.SuspendLayout();
+            llmPage.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
-            flowLayoutPanel2.SuspendLayout();
-            tabPage2.SuspendLayout();
+            codePage.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
+            settingsPage.SuspendLayout();
+            tableLayoutPanel4.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -110,8 +120,9 @@
             // 
             // tabControl1
             // 
-            tabControl1.Controls.Add(tabPage1);
-            tabControl1.Controls.Add(tabPage2);
+            tabControl1.Controls.Add(llmPage);
+            tabControl1.Controls.Add(codePage);
+            tabControl1.Controls.Add(settingsPage);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
@@ -119,16 +130,16 @@
             tabControl1.Size = new Size(860, 691);
             tabControl1.TabIndex = 4;
             // 
-            // tabPage1
+            // llmPage
             // 
-            tabPage1.Controls.Add(tableLayoutPanel3);
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(852, 663);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "LLM";
-            tabPage1.UseVisualStyleBackColor = true;
+            llmPage.Controls.Add(tableLayoutPanel3);
+            llmPage.Location = new Point(4, 24);
+            llmPage.Name = "llmPage";
+            llmPage.Padding = new Padding(3);
+            llmPage.Size = new Size(852, 663);
+            llmPage.TabIndex = 0;
+            llmPage.Text = "LLM";
+            llmPage.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel3
             // 
@@ -136,14 +147,15 @@
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.Controls.Add(chatMessageOutputBox, 0, 0);
             tableLayoutPanel3.Controls.Add(userInputTextBox, 0, 1);
-            tableLayoutPanel3.Controls.Add(flowLayoutPanel2, 0, 2);
+            tableLayoutPanel3.Controls.Add(tableLayoutPanel5, 0, 2);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 3);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 2;
+            tableLayoutPanel3.RowCount = 3;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 72.63923F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 27.360775F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.Size = new Size(846, 657);
             tableLayoutPanel3.TabIndex = 4;
             // 
@@ -159,19 +171,6 @@
             chatMessageOutputBox.TabIndex = 1;
             chatMessageOutputBox.Text = "";
             // 
-            // flowLayoutPanel2
-            // 
-            flowLayoutPanel2.AutoSize = true;
-            flowLayoutPanel2.Controls.Add(clearUserMsgButton);
-            flowLayoutPanel2.Controls.Add(resetChatHistoryButton);
-            flowLayoutPanel2.Controls.Add(progressBar1);
-            flowLayoutPanel2.Controls.Add(sendUserMsgButton);
-            flowLayoutPanel2.Dock = DockStyle.Bottom;
-            flowLayoutPanel2.Location = new Point(3, 623);
-            flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(840, 31);
-            flowLayoutPanel2.TabIndex = 3;
-            // 
             // clearUserMsgButton
             // 
             clearUserMsgButton.AutoSize = true;
@@ -180,7 +179,7 @@
             clearUserMsgButton.ForeColor = SystemColors.ButtonFace;
             clearUserMsgButton.Location = new Point(3, 3);
             clearUserMsgButton.Name = "clearUserMsgButton";
-            clearUserMsgButton.Size = new Size(141, 25);
+            clearUserMsgButton.Size = new Size(74, 25);
             clearUserMsgButton.TabIndex = 3;
             clearUserMsgButton.Text = "Clear 🗑️";
             clearUserMsgButton.UseVisualStyleBackColor = false;
@@ -192,9 +191,9 @@
             resetChatHistoryButton.BackColor = Color.DeepPink;
             resetChatHistoryButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             resetChatHistoryButton.ForeColor = SystemColors.ButtonFace;
-            resetChatHistoryButton.Location = new Point(150, 3);
+            resetChatHistoryButton.Location = new Point(83, 3);
             resetChatHistoryButton.Name = "resetChatHistoryButton";
-            resetChatHistoryButton.Size = new Size(141, 25);
+            resetChatHistoryButton.Size = new Size(74, 25);
             resetChatHistoryButton.TabIndex = 4;
             resetChatHistoryButton.Text = "Reset 🔄️";
             resetChatHistoryButton.UseVisualStyleBackColor = false;
@@ -202,37 +201,37 @@
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(297, 3);
+            progressBar1.Location = new Point(163, 3);
             progressBar1.Name = "progressBar1";
             progressBar1.Size = new Size(100, 23);
             progressBar1.Style = ProgressBarStyle.Continuous;
             progressBar1.TabIndex = 5;
-            progressBar1.Visible = false;
             // 
             // sendUserMsgButton
             // 
             sendUserMsgButton.AutoSize = true;
             sendUserMsgButton.BackColor = SystemColors.Highlight;
+            sendUserMsgButton.Dock = DockStyle.Fill;
             sendUserMsgButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             sendUserMsgButton.ForeColor = SystemColors.ButtonFace;
-            sendUserMsgButton.Location = new Point(403, 3);
+            sendUserMsgButton.Location = new Point(269, 3);
             sendUserMsgButton.Name = "sendUserMsgButton";
-            sendUserMsgButton.Size = new Size(421, 25);
+            sendUserMsgButton.Size = new Size(568, 25);
             sendUserMsgButton.TabIndex = 1;
             sendUserMsgButton.Text = "Send 🚀";
             sendUserMsgButton.UseVisualStyleBackColor = false;
             sendUserMsgButton.Click += sendUserMsgButton_Click;
             // 
-            // tabPage2
+            // codePage
             // 
-            tabPage2.Controls.Add(tableLayoutPanel1);
-            tabPage2.Location = new Point(4, 24);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(852, 663);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "Code Inject";
-            tabPage2.UseVisualStyleBackColor = true;
+            codePage.Controls.Add(tableLayoutPanel1);
+            codePage.Location = new Point(4, 24);
+            codePage.Name = "codePage";
+            codePage.Padding = new Padding(3);
+            codePage.Size = new Size(852, 663);
+            codePage.TabIndex = 3;
+            codePage.Text = "Code Inject";
+            codePage.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
             // 
@@ -321,7 +320,6 @@
             largeCodeSnippetTextBox.Size = new Size(739, 593);
             largeCodeSnippetTextBox.TabIndex = 1;
             largeCodeSnippetTextBox.Text = "";
-            largeCodeSnippetTextBox.TextChanged += largeCodeSnippetTextBox_TextChanged;
             // 
             // label4
             // 
@@ -341,6 +339,71 @@
             injectAssitantPretextTextBox.Name = "injectAssitantPretextTextBox";
             injectAssitantPretextTextBox.Size = new Size(739, 23);
             injectAssitantPretextTextBox.TabIndex = 8;
+            // 
+            // settingsPage
+            // 
+            settingsPage.Controls.Add(tableLayoutPanel4);
+            settingsPage.Location = new Point(4, 24);
+            settingsPage.Name = "settingsPage";
+            settingsPage.Padding = new Padding(3);
+            settingsPage.Size = new Size(852, 663);
+            settingsPage.TabIndex = 2;
+            settingsPage.Text = "Settings";
+            settingsPage.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.AutoSize = true;
+            tableLayoutPanel4.ColumnCount = 2;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel4.Controls.Add(topPTextBox, 1, 1);
+            tableLayoutPanel4.Controls.Add(topPLabel, 0, 1);
+            tableLayoutPanel4.Controls.Add(temperatureTextBox, 1, 0);
+            tableLayoutPanel4.Controls.Add(label3, 0, 0);
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel4.Location = new Point(3, 3);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.Padding = new Padding(3);
+            tableLayoutPanel4.RowCount = 2;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle());
+            tableLayoutPanel4.RowStyles.Add(new RowStyle());
+            tableLayoutPanel4.Size = new Size(846, 657);
+            tableLayoutPanel4.TabIndex = 1;
+            // 
+            // topPTextBox
+            // 
+            topPTextBox.Location = new Point(85, 35);
+            topPTextBox.Name = "topPTextBox";
+            topPTextBox.Size = new Size(100, 23);
+            topPTextBox.TabIndex = 7;
+            // 
+            // topPLabel
+            // 
+            topPLabel.AutoSize = true;
+            topPLabel.Location = new Point(6, 39);
+            topPLabel.Margin = new Padding(3, 7, 3, 0);
+            topPLabel.Name = "topPLabel";
+            topPLabel.Size = new Size(36, 15);
+            topPLabel.TabIndex = 5;
+            topPLabel.Text = "Top P";
+            // 
+            // temperatureTextBox
+            // 
+            temperatureTextBox.Location = new Point(85, 6);
+            temperatureTextBox.Name = "temperatureTextBox";
+            temperatureTextBox.Size = new Size(100, 23);
+            temperatureTextBox.TabIndex = 3;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(6, 10);
+            label3.Margin = new Padding(3, 7, 3, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(73, 15);
+            label3.TabIndex = 1;
+            label3.Text = "Temperature";
             // 
             // tableLayoutPanel2
             // 
@@ -380,6 +443,47 @@
             pastUserPrompts.TabIndex = 1;
             pastUserPrompts.SelectedIndexChanged += pastUserPrompts_SelectedIndexChanged;
             // 
+            // tabPage3
+            // 
+            tabPage3.Location = new Point(0, 0);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Padding = new Padding(3);
+            tabPage3.Size = new Size(200, 100);
+            tabPage3.TabIndex = 0;
+            tabPage3.Text = "tabPage3";
+            tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            tabPage4.Location = new Point(0, 0);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Padding = new Padding(3);
+            tabPage4.Size = new Size(200, 100);
+            tabPage4.TabIndex = 1;
+            tabPage4.Text = "tabPage4";
+            tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.AutoSize = true;
+            tableLayoutPanel5.ColumnCount = 4;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel5.Controls.Add(sendUserMsgButton, 3, 0);
+            tableLayoutPanel5.Controls.Add(progressBar1, 2, 0);
+            tableLayoutPanel5.Controls.Add(resetChatHistoryButton, 1, 0);
+            tableLayoutPanel5.Controls.Add(clearUserMsgButton, 0, 0);
+            tableLayoutPanel5.Dock = DockStyle.Bottom;
+            tableLayoutPanel5.Location = new Point(3, 623);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 1;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel5.Size = new Size(840, 31);
+            tableLayoutPanel5.TabIndex = 5;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -394,19 +498,23 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             tabControl1.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
+            llmPage.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
-            flowLayoutPanel2.ResumeLayout(false);
-            flowLayoutPanel2.PerformLayout();
-            tabPage2.ResumeLayout(false);
-            tabPage2.PerformLayout();
+            codePage.ResumeLayout(false);
+            codePage.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
+            settingsPage.ResumeLayout(false);
+            settingsPage.PerformLayout();
+            tableLayoutPanel4.ResumeLayout(false);
+            tableLayoutPanel4.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
+            tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -418,23 +526,31 @@
         private ListBox pastUserPrompts;
         private ComboBox llmSelector;
         private RichTextBox chatMessageOutputBox;
-        private FlowLayoutPanel flowLayoutPanel2;
         private Button clearUserMsgButton;
         private TabControl tabControl1;
-        private TabPage tabPage1;
-        private TabPage tabPage2;
-        private RichTextBox largeCodeSnippetTextBox;
+        private TabPage llmPage;
         private Button resetChatHistoryButton;
         private ProgressBar progressBar1;
-        private TextBox codeInjectPretextTextBox;
-        private Label label2;
-        private Label codeInjectLabel;
-        private Label label4;
-        private TextBox injectAssitantPretextTextBox;
-        private Label tokenCountLabel;
-        private TableLayoutPanel tableLayoutPanel1;
-        private FlowLayoutPanel flowLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
         private TableLayoutPanel tableLayoutPanel3;
+        private TabPage settingsPage;
+        private TabPage tabPage3;
+        private TabPage tabPage4;
+        private TableLayoutPanel tableLayoutPanel4;
+        private TabPage codePage;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Label label2;
+        private TextBox codeInjectPretextTextBox;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Label codeInjectLabel;
+        private Label tokenCountLabel;
+        private RichTextBox largeCodeSnippetTextBox;
+        private Label label4;
+        private TextBox injectAssitantPretextTextBox;
+        private TextBox topPTextBox;
+        private Label topPLabel;
+        private TextBox temperatureTextBox;
+        private Label label3;
+        private TableLayoutPanel tableLayoutPanel5;
     }
 }

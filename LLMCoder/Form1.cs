@@ -49,6 +49,10 @@ namespace LLMCoder
 
             //auto load ai pretext for quick use
             codeInjectPretextTextBox.Text = "analyse and parse code";
+
+            //set default settings
+            temperatureTextBox.Text = "0.7";
+            topPTextBox.Text = "1.0";
         }
 
         private void UpdateSelectedLLMDropdownView()
@@ -139,8 +143,8 @@ namespace LLMCoder
                 messages, // List of messages
                 //max_tokens = 32000, // Maximum number of tokens for the response
                 //max_tokens = 4096, // Maximum number of tokens for the response
-                temperature = 0.7, // Temperature for sampling
-                top_p = 1, // Nucleus sampling parameter
+                temperature = double.Parse(temperatureTextBox.Text), // Temperature for sampling
+                top_p = double.Parse(topPTextBox.Text), // Nucleus sampling parameter
                 //presence_penalty = 0,
                 //frequency_penalty = 0
             };
@@ -274,7 +278,6 @@ namespace LLMCoder
         private async void sendUserMsgButton_Click(object sender, EventArgs e)
         {
             // Update the progress bar visibility and value
-            progressBar1.Visible = true;
             progressBar1.Value = 25;
 
             // Get the user input from the input text box
@@ -310,8 +313,8 @@ namespace LLMCoder
 
             // Update the progress bar value and hide it
             progressBar1.Value = 100;
-            progressBar1.Visible = false;
-
+            await Task.Delay(300); //short delay
+            progressBar1.Value = 0;
         }
 
         private void largeCodeSnippetTextBox_TextChanged(object sender, EventArgs e)

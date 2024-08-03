@@ -41,10 +41,18 @@
             sendUserMsgButton = new Button();
             progressBar1 = new ProgressBar();
             tabPage2 = new TabPage();
-            largeCodeSnippetTextBox = new RichTextBox();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            label2 = new Label();
+            codeInjectPretextTextBox = new TextBox();
             flowLayoutPanel1 = new FlowLayoutPanel();
+            codeInjectLabel = new Label();
+            tokenCountLabel = new Label();
+            largeCodeSnippetTextBox = new RichTextBox();
+            label4 = new Label();
+            injectAssitantPretextTextBox = new TextBox();
             llmSelector = new ComboBox();
             pastUserPrompts = new ListBox();
+            tableLayoutPanel2 = new TableLayoutPanel();
             label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -58,15 +66,18 @@
             splitContainer2.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             tabPage2.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
+            label1.Dock = DockStyle.Fill;
             label1.Location = new Point(3, 29);
             label1.Name = "label1";
-            label1.Size = new Size(92, 15);
+            label1.Size = new Size(210, 15);
             label1.TabIndex = 2;
             label1.Text = "📜 Past Prompts";
             // 
@@ -74,6 +85,7 @@
             // 
             userInputTextBox.BackColor = SystemColors.InfoText;
             userInputTextBox.Dock = DockStyle.Fill;
+            userInputTextBox.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             userInputTextBox.ForeColor = SystemColors.MenuHighlight;
             userInputTextBox.Location = new Point(0, 0);
             userInputTextBox.Name = "userInputTextBox";
@@ -93,7 +105,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(flowLayoutPanel1);
+            splitContainer1.Panel2.Controls.Add(tableLayoutPanel2);
             splitContainer1.Size = new Size(1080, 691);
             splitContainer1.SplitterDistance = 860;
             splitContainer1.TabIndex = 1;
@@ -217,7 +229,7 @@
             // 
             // tabPage2
             // 
-            tabPage2.Controls.Add(largeCodeSnippetTextBox);
+            tabPage2.Controls.Add(tableLayoutPanel1);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -226,33 +238,117 @@
             tabPage2.Text = "Code Inject";
             tabPage2.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.AutoSize = true;
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(label2, 0, 0);
+            tableLayoutPanel1.Controls.Add(codeInjectPretextTextBox, 1, 0);
+            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 0, 1);
+            tableLayoutPanel1.Controls.Add(largeCodeSnippetTextBox, 1, 1);
+            tableLayoutPanel1.Controls.Add(label4, 0, 2);
+            tableLayoutPanel1.Controls.Add(injectAssitantPretextTextBox, 1, 2);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+            tableLayoutPanel1.Location = new Point(3, 3);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.Size = new Size(846, 657);
+            tableLayoutPanel1.TabIndex = 11;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Dock = DockStyle.Left;
+            label2.Location = new Point(3, 3);
+            label2.Margin = new Padding(3);
+            label2.Name = "label2";
+            label2.Padding = new Padding(3);
+            label2.Size = new Size(81, 23);
+            label2.TabIndex = 5;
+            label2.Text = "Code Pretext";
+            // 
+            // codeInjectPretextTextBox
+            // 
+            codeInjectPretextTextBox.Dock = DockStyle.Fill;
+            codeInjectPretextTextBox.Location = new Point(104, 3);
+            codeInjectPretextTextBox.Name = "codeInjectPretextTextBox";
+            codeInjectPretextTextBox.Size = new Size(739, 23);
+            codeInjectPretextTextBox.TabIndex = 3;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.AutoSize = true;
+            flowLayoutPanel1.Controls.Add(codeInjectLabel);
+            flowLayoutPanel1.Controls.Add(tokenCountLabel);
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(3, 32);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(95, 54);
+            flowLayoutPanel1.TabIndex = 13;
+            // 
+            // codeInjectLabel
+            // 
+            codeInjectLabel.AutoSize = true;
+            codeInjectLabel.Location = new Point(3, 3);
+            codeInjectLabel.Margin = new Padding(3);
+            codeInjectLabel.Name = "codeInjectLabel";
+            codeInjectLabel.Padding = new Padding(3);
+            codeInjectLabel.Size = new Size(56, 21);
+            codeInjectLabel.TabIndex = 6;
+            codeInjectLabel.Text = "📜 Code";
+            // 
+            // tokenCountLabel
+            // 
+            tokenCountLabel.AutoSize = true;
+            tokenCountLabel.Location = new Point(3, 30);
+            tokenCountLabel.Margin = new Padding(3);
+            tokenCountLabel.Name = "tokenCountLabel";
+            tokenCountLabel.Padding = new Padding(3);
+            tokenCountLabel.Size = new Size(89, 21);
+            tokenCountLabel.TabIndex = 9;
+            tokenCountLabel.Text = "Token Count 0";
+            // 
             // largeCodeSnippetTextBox
             // 
             largeCodeSnippetTextBox.BackColor = SystemColors.InfoText;
             largeCodeSnippetTextBox.Dock = DockStyle.Fill;
             largeCodeSnippetTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             largeCodeSnippetTextBox.ForeColor = SystemColors.MenuHighlight;
-            largeCodeSnippetTextBox.Location = new Point(3, 3);
+            largeCodeSnippetTextBox.Location = new Point(104, 32);
             largeCodeSnippetTextBox.Name = "largeCodeSnippetTextBox";
-            largeCodeSnippetTextBox.Size = new Size(846, 657);
+            largeCodeSnippetTextBox.Size = new Size(739, 593);
             largeCodeSnippetTextBox.TabIndex = 1;
             largeCodeSnippetTextBox.Text = "";
+            largeCodeSnippetTextBox.TextChanged += largeCodeSnippetTextBox_TextChanged;
             // 
-            // flowLayoutPanel1
+            // label4
             // 
-            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            flowLayoutPanel1.AutoSize = true;
-            flowLayoutPanel1.Controls.Add(llmSelector);
-            flowLayoutPanel1.Controls.Add(label1);
-            flowLayoutPanel1.Controls.Add(pastUserPrompts);
-            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel1.Location = new Point(0, 0);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(216, 688);
-            flowLayoutPanel1.TabIndex = 4;
+            label4.AutoSize = true;
+            label4.Location = new Point(3, 631);
+            label4.Margin = new Padding(3);
+            label4.Name = "label4";
+            label4.Padding = new Padding(3);
+            label4.Size = new Size(64, 21);
+            label4.TabIndex = 7;
+            label4.Text = "AI Pretext";
+            // 
+            // injectAssitantPretextTextBox
+            // 
+            injectAssitantPretextTextBox.Dock = DockStyle.Fill;
+            injectAssitantPretextTextBox.Location = new Point(104, 631);
+            injectAssitantPretextTextBox.Name = "injectAssitantPretextTextBox";
+            injectAssitantPretextTextBox.Size = new Size(739, 23);
+            injectAssitantPretextTextBox.TabIndex = 8;
             // 
             // llmSelector
             // 
+            llmSelector.Dock = DockStyle.Fill;
             llmSelector.FormattingEnabled = true;
             llmSelector.Location = new Point(3, 3);
             llmSelector.Name = "llmSelector";
@@ -262,13 +358,31 @@
             // 
             // pastUserPrompts
             // 
+            pastUserPrompts.Dock = DockStyle.Fill;
             pastUserPrompts.FormattingEnabled = true;
             pastUserPrompts.ItemHeight = 15;
             pastUserPrompts.Location = new Point(3, 47);
             pastUserPrompts.Name = "pastUserPrompts";
-            pastUserPrompts.Size = new Size(210, 634);
+            pastUserPrompts.Size = new Size(210, 641);
             pastUserPrompts.TabIndex = 1;
             pastUserPrompts.SelectedIndexChanged += pastUserPrompts_SelectedIndexChanged;
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 1;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.Controls.Add(llmSelector, 0, 0);
+            tableLayoutPanel2.Controls.Add(label1, 0, 1);
+            tableLayoutPanel2.Controls.Add(pastUserPrompts, 0, 2);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(0, 0);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 2;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.Size = new Size(216, 691);
+            tableLayoutPanel2.TabIndex = 4;
             // 
             // Form1
             // 
@@ -280,7 +394,6 @@
             Text = "🤖 LLMCoder";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
-            splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             tabControl1.ResumeLayout(false);
@@ -293,8 +406,13 @@
             flowLayoutPanel2.ResumeLayout(false);
             flowLayoutPanel2.PerformLayout();
             tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -307,7 +425,6 @@
         private ListBox pastUserPrompts;
         private ComboBox llmSelector;
         private RichTextBox chatMessageOutputBox;
-        private FlowLayoutPanel flowLayoutPanel1;
         private FlowLayoutPanel flowLayoutPanel2;
         private Button clearUserMsgButton;
         private TabControl tabControl1;
@@ -316,5 +433,14 @@
         private RichTextBox largeCodeSnippetTextBox;
         private Button resetChatHistoryButton;
         private ProgressBar progressBar1;
+        private TextBox codeInjectPretextTextBox;
+        private Label label2;
+        private Label codeInjectLabel;
+        private Label label4;
+        private TextBox injectAssitantPretextTextBox;
+        private Label tokenCountLabel;
+        private TableLayoutPanel tableLayoutPanel1;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private TableLayoutPanel tableLayoutPanel2;
     }
 }

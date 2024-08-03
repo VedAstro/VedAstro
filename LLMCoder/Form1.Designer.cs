@@ -33,7 +33,7 @@
             splitContainer1 = new SplitContainer();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
-            splitContainer2 = new SplitContainer();
+            tableLayoutPanel3 = new TableLayoutPanel();
             chatMessageOutputBox = new RichTextBox();
             flowLayoutPanel2 = new FlowLayoutPanel();
             clearUserMsgButton = new Button();
@@ -50,9 +50,9 @@
             largeCodeSnippetTextBox = new RichTextBox();
             label4 = new Label();
             injectAssitantPretextTextBox = new TextBox();
+            tableLayoutPanel2 = new TableLayoutPanel();
             llmSelector = new ComboBox();
             pastUserPrompts = new ListBox();
-            tableLayoutPanel2 = new TableLayoutPanel();
             label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -60,10 +60,7 @@
             splitContainer1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
-            splitContainer2.Panel1.SuspendLayout();
-            splitContainer2.Panel2.SuspendLayout();
-            splitContainer2.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             tabPage2.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -87,9 +84,9 @@
             userInputTextBox.Dock = DockStyle.Fill;
             userInputTextBox.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             userInputTextBox.ForeColor = SystemColors.MenuHighlight;
-            userInputTextBox.Location = new Point(0, 0);
+            userInputTextBox.Location = new Point(3, 453);
             userInputTextBox.Name = "userInputTextBox";
-            userInputTextBox.Size = new Size(846, 93);
+            userInputTextBox.Size = new Size(840, 163);
             userInputTextBox.TabIndex = 0;
             userInputTextBox.Text = "";
             // 
@@ -123,7 +120,7 @@
             // 
             // tabPage1
             // 
-            tabPage1.Controls.Add(splitContainer2);
+            tabPage1.Controls.Add(tableLayoutPanel3);
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
@@ -132,24 +129,22 @@
             tabPage1.Text = "LLM";
             tabPage1.UseVisualStyleBackColor = true;
             // 
-            // splitContainer2
+            // tableLayoutPanel3
             // 
-            splitContainer2.Dock = DockStyle.Fill;
-            splitContainer2.Location = new Point(3, 3);
-            splitContainer2.Name = "splitContainer2";
-            splitContainer2.Orientation = Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            splitContainer2.Panel1.Controls.Add(chatMessageOutputBox);
-            // 
-            // splitContainer2.Panel2
-            // 
-            splitContainer2.Panel2.Controls.Add(userInputTextBox);
-            splitContainer2.Panel2.Controls.Add(flowLayoutPanel2);
-            splitContainer2.Size = new Size(846, 657);
-            splitContainer2.SplitterDistance = 529;
-            splitContainer2.TabIndex = 2;
+            tableLayoutPanel3.ColumnCount = 1;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.Controls.Add(chatMessageOutputBox, 0, 0);
+            tableLayoutPanel3.Controls.Add(userInputTextBox, 0, 1);
+            tableLayoutPanel3.Controls.Add(flowLayoutPanel2, 0, 2);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(3, 3);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 2;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 72.63923F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 27.360775F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.Size = new Size(846, 657);
+            tableLayoutPanel3.TabIndex = 4;
             // 
             // chatMessageOutputBox
             // 
@@ -157,9 +152,9 @@
             chatMessageOutputBox.Dock = DockStyle.Fill;
             chatMessageOutputBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             chatMessageOutputBox.ForeColor = Color.LimeGreen;
-            chatMessageOutputBox.Location = new Point(0, 0);
+            chatMessageOutputBox.Location = new Point(3, 3);
             chatMessageOutputBox.Name = "chatMessageOutputBox";
-            chatMessageOutputBox.Size = new Size(846, 529);
+            chatMessageOutputBox.Size = new Size(840, 444);
             chatMessageOutputBox.TabIndex = 1;
             chatMessageOutputBox.Text = "";
             // 
@@ -168,12 +163,12 @@
             flowLayoutPanel2.AutoSize = true;
             flowLayoutPanel2.Controls.Add(clearUserMsgButton);
             flowLayoutPanel2.Controls.Add(resetChatHistoryButton);
-            flowLayoutPanel2.Controls.Add(sendUserMsgButton);
             flowLayoutPanel2.Controls.Add(progressBar1);
+            flowLayoutPanel2.Controls.Add(sendUserMsgButton);
             flowLayoutPanel2.Dock = DockStyle.Bottom;
-            flowLayoutPanel2.Location = new Point(0, 93);
+            flowLayoutPanel2.Location = new Point(3, 623);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(846, 31);
+            flowLayoutPanel2.Size = new Size(840, 31);
             flowLayoutPanel2.TabIndex = 3;
             // 
             // clearUserMsgButton
@@ -210,7 +205,7 @@
             sendUserMsgButton.BackColor = SystemColors.Highlight;
             sendUserMsgButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             sendUserMsgButton.ForeColor = SystemColors.ButtonFace;
-            sendUserMsgButton.Location = new Point(297, 3);
+            sendUserMsgButton.Location = new Point(403, 3);
             sendUserMsgButton.Name = "sendUserMsgButton";
             sendUserMsgButton.Size = new Size(421, 25);
             sendUserMsgButton.TabIndex = 1;
@@ -220,7 +215,7 @@
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(724, 3);
+            progressBar1.Location = new Point(297, 3);
             progressBar1.Name = "progressBar1";
             progressBar1.Size = new Size(100, 23);
             progressBar1.Style = ProgressBarStyle.Continuous;
@@ -346,6 +341,23 @@
             injectAssitantPretextTextBox.Size = new Size(739, 23);
             injectAssitantPretextTextBox.TabIndex = 8;
             // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 1;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.Controls.Add(llmSelector, 0, 0);
+            tableLayoutPanel2.Controls.Add(label1, 0, 1);
+            tableLayoutPanel2.Controls.Add(pastUserPrompts, 0, 2);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(0, 0);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 2;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.Size = new Size(216, 691);
+            tableLayoutPanel2.TabIndex = 4;
+            // 
             // llmSelector
             // 
             llmSelector.Dock = DockStyle.Fill;
@@ -367,23 +379,6 @@
             pastUserPrompts.TabIndex = 1;
             pastUserPrompts.SelectedIndexChanged += pastUserPrompts_SelectedIndexChanged;
             // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 1;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Controls.Add(llmSelector, 0, 0);
-            tableLayoutPanel2.Controls.Add(label1, 0, 1);
-            tableLayoutPanel2.Controls.Add(pastUserPrompts, 0, 2);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(0, 0);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 2;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(216, 691);
-            tableLayoutPanel2.TabIndex = 4;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -398,11 +393,8 @@
             splitContainer1.ResumeLayout(false);
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
-            splitContainer2.Panel1.ResumeLayout(false);
-            splitContainer2.Panel2.ResumeLayout(false);
-            splitContainer2.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
-            splitContainer2.ResumeLayout(false);
+            tableLayoutPanel3.ResumeLayout(false);
+            tableLayoutPanel3.PerformLayout();
             flowLayoutPanel2.ResumeLayout(false);
             flowLayoutPanel2.PerformLayout();
             tabPage2.ResumeLayout(false);
@@ -421,7 +413,6 @@
         private RichTextBox userInputTextBox;
         private SplitContainer splitContainer1;
         private Button sendUserMsgButton;
-        private SplitContainer splitContainer2;
         private ListBox pastUserPrompts;
         private ComboBox llmSelector;
         private RichTextBox chatMessageOutputBox;
@@ -442,5 +433,6 @@
         private TableLayoutPanel tableLayoutPanel1;
         private FlowLayoutPanel flowLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel tableLayoutPanel3;
     }
 }

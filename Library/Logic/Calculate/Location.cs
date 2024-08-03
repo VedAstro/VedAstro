@@ -47,7 +47,7 @@ namespace VedAstro.Library
 
         public enum APIProvider
         {
-            VedAstro, Azure, Google, IpData
+            VedAstro, Azure, Google, IpData, CPU
         }
 
 
@@ -183,8 +183,16 @@ namespace VedAstro.Library
                 var isNotVedAstro = apiProvider != APIProvider.VedAstro;
                 if (isNotEmpty && isNotVedAstro)
                 {
-                    //add new data to cache, for future speed up
-                    AddToAddressTable(fullGeoRowData.MainRow);
+                    //NOTE: to support local development, since saving to azure db will be unavailable
+                    try
+                    {
+                        //add new data to cache, for future speed up
+                        AddToAddressTable(fullGeoRowData.MainRow);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignored
+                    }
                 }
 
                 //once found, stop searching for location with APIs
@@ -227,8 +235,17 @@ namespace VedAstro.Library
                 var isNotVedAstro = apiProvider != APIProvider.VedAstro;
                 if (isNotEmpty && isNotVedAstro)
                 {
-                    //add new data to cache, for future speed up
-                    AddToSearchAddressTable(fullGeoRowData.MainRow);
+                    //NOTE: to support local development, since saving to azure db will be unavailable
+                    try
+                    {
+                        //add new data to cache, for future speed up
+                        AddToSearchAddressTable(fullGeoRowData.MainRow);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignored
+                    }
+
                 }
 
                 //once found, stop searching for location with APIs
@@ -276,9 +293,17 @@ namespace VedAstro.Library
                 var isNotVedAstro = apiProvider != APIProvider.VedAstro;
                 if (isNotEmpty && isNotVedAstro)
                 {
-                    //add new data to cache, for future speed up
-                    AddToIpAddressTable(fullGeoRowData.MainRow);
-                    AddToIpAddressMetadataTable(fullGeoRowData.MetadataRow);
+                    //NOTE: to support local development, since saving to azure db will be unavailable
+                    try
+                    {
+                        //add new data to cache, for future speed up
+                        AddToIpAddressTable(fullGeoRowData.MainRow);
+                        AddToIpAddressMetadataTable(fullGeoRowData.MetadataRow);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignored
+                    }
                 }
 
                 //once found, stop searching for location with APIs
@@ -327,8 +352,16 @@ namespace VedAstro.Library
                 var isNotVedAstro = apiProvider != APIProvider.VedAstro;
                 if (isNotEmpty && isNotVedAstro)
                 {
-                    //add new data to cache, for future speed up
-                    AddToCoordinatesTable(fullGeoRowData.MainRow);
+                    //NOTE: to support local development, since saving to azure db will be unavailable
+                    try
+                    {
+                        //add new data to cache, for future speed up
+                        AddToCoordinatesTable(fullGeoRowData.MainRow);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignored
+                    }
                 }
 
                 //once found, stop searching for location with APIs
@@ -352,6 +385,7 @@ namespace VedAstro.Library
                 {APIProvider.VedAstro, GeoLocationToTimezone_Vedastro},
                 {APIProvider.Azure, GeoLocationToTimezone_Azure},
                 {APIProvider.Google, GeoLocationToTimezone_Google},
+                {APIProvider.CPU, GeoLocationToTimezone_CPU}, //NOTE: last resort option for testing locally (not accurate)
             };
 
             //start with empty as default if fail
@@ -360,19 +394,36 @@ namespace VedAstro.Library
             // Iterate over the list of functions
             foreach (var row in geoLocationProviders)
             {
-                var provider = row.Value;
-                var fullGeoRowData = (await provider(geoLocation, stdTimeAtLocation));
-                timezoneStr = fullGeoRowData.MainRow.TimezoneText; //exp, +08:00
+                GeoLocationRawAPI fullGeoRowData = null;
+                try
+                {
+                    var provider = row.Value;
+                    fullGeoRowData = (await provider(geoLocation, stdTimeAtLocation));
+                    timezoneStr = fullGeoRowData.MainRow.TimezoneText; //exp, +08:00
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e); //continue silently todo log to error book
+                }
 
                 // when new location not is cache, we add it
                 // only add to cache if not empty and not VedAstro
                 var isNotEmpty = !(string.IsNullOrEmpty(timezoneStr));
                 var apiProvider = row.Key;
                 var isNotVedAstro = apiProvider != APIProvider.VedAstro;
-                if (isNotEmpty && isNotVedAstro)
+                var isNotCPU = apiProvider != APIProvider.CPU;
+                if (isNotEmpty && isNotVedAstro && isNotCPU)
                 {
-                    AddToTimezoneTable(fullGeoRowData.MainRow);
-                    AddToTimezoneMetadataTable(fullGeoRowData.MetadataRow);
+                    //NOTE: to support local development, since saving to azure db will be unavailable
+                    try
+                    {
+                        AddToTimezoneTable(fullGeoRowData.MainRow);
+                        AddToTimezoneMetadataTable(fullGeoRowData.MetadataRow);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignored
+                    }
                 }
 
                 //once found, stop searching for location with APIs
@@ -634,6 +685,31 @@ namespace VedAstro.Library
             //we don't supply metadata cause not needed, as separate query
             return new GeoLocationRawAPI(foundRaw, null);
 
+        }
+
+        private async Task<GeoLocationRawAPI> GeoLocationToTimezone_CPU(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
+        {
+            //based on coordinates calculate possible timezone
+            var timezoneText = Tools.GetTimezoneOffsetLocal(geoLocation, timeAtLocation.UtcDateTime);
+
+            //get time in standard format without timezone
+            var rawString = timeAtLocation.ToString(Time.DateTimeFormat);
+
+            //time at place date time format no timezone
+            var timeAtLocationString = rawString.Replace('/', '-');
+
+            //round to stop overcrowding db (maybe not relevant here)
+            var roundedLong1DeciPlaces11Km = Math.Round(geoLocation.Longitude(), 1).ToString();
+            var roundedLat1DeciPlaces11Km = Math.Round(geoLocation.Latitude(), 1).ToString();
+
+            //latitude & longitude in google search friendly format
+            var latLongAsId = $"{roundedLat1DeciPlaces11Km},{roundedLong1DeciPlaces11Km}";
+
+            //get timezone data out
+            var foundRaw = new GeoLocationTimezoneEntity() { PartitionKey = latLongAsId, RowKey = timeAtLocationString, TimezoneText = timezoneText, MetadataHash = "" };
+
+            //we don't supply metadata cause not needed, as separate query
+            return new GeoLocationRawAPI(foundRaw, null);
         }
 
         /// <summary>
@@ -1086,6 +1162,7 @@ namespace VedAstro.Library
         private static dynamic TryParseGoogleTimeZoneResponse(DateTimeOffset timeAtLocation, GeoLocation geoLocation, XElement apiResultPayload)
         {
 
+
             try
             {
                 //STEP 1: data out
@@ -1146,7 +1223,14 @@ namespace VedAstro.Library
 
                 //extract out the data from google's reply timezone offset
                 var status = apiResultPayload?.Element("status")?.Value ?? "";
-                var failed = status.Contains("INVALID_REQUEST");
+                var failed = status.Contains("INVALID_REQUEST") || status.Contains("REQUEST_DENIED");
+
+                //raise alarm if failed
+                if (failed)
+                {
+                    //todo add logger
+                    throw new Exception($"Google API said : \n{apiResultPayload.ToString()}");
+                }
 
                 //try process data if did NOT fail so far
                 string standardName = "";
@@ -1183,7 +1267,7 @@ namespace VedAstro.Library
 
                 }
 
-                return new
+                var offsetMinFromGoogleXml = new
                 {
                     StandardOffset = stdOffsetMinutes,
                     DaylightSavings = dstOffsetMinutes,
@@ -1191,6 +1275,7 @@ namespace VedAstro.Library
                     DaylightName = standardName, //use back same name
                     ISOName = isoName,
                 };
+                return offsetMinFromGoogleXml;
             }
         }
 

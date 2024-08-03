@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             Label label1;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             userInputTextBox = new RichTextBox();
             splitContainer1 = new SplitContainer();
             tabControl1 = new TabControl();
@@ -38,8 +39,8 @@
             flowLayoutPanel2 = new FlowLayoutPanel();
             clearUserMsgButton = new Button();
             resetChatHistoryButton = new Button();
-            sendUserMsgButton = new Button();
             progressBar1 = new ProgressBar();
+            sendUserMsgButton = new Button();
             tabPage2 = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
             label2 = new Label();
@@ -199,6 +200,15 @@
             resetChatHistoryButton.UseVisualStyleBackColor = false;
             resetChatHistoryButton.Click += resetChatHistoryButton_Click;
             // 
+            // progressBar1
+            // 
+            progressBar1.Location = new Point(297, 3);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(100, 23);
+            progressBar1.Style = ProgressBarStyle.Continuous;
+            progressBar1.TabIndex = 5;
+            progressBar1.Visible = false;
+            // 
             // sendUserMsgButton
             // 
             sendUserMsgButton.AutoSize = true;
@@ -212,15 +222,6 @@
             sendUserMsgButton.Text = "Send 🚀";
             sendUserMsgButton.UseVisualStyleBackColor = false;
             sendUserMsgButton.Click += sendUserMsgButton_Click;
-            // 
-            // progressBar1
-            // 
-            progressBar1.Location = new Point(297, 3);
-            progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(100, 23);
-            progressBar1.Style = ProgressBarStyle.Continuous;
-            progressBar1.TabIndex = 5;
-            progressBar1.Visible = false;
             // 
             // tabPage2
             // 
@@ -385,8 +386,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1080, 691);
             Controls.Add(splitContainer1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
-            Text = "🤖 LLMCoder";
+            Text = "LLMCodes";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();

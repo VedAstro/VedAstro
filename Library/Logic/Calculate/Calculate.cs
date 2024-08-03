@@ -280,16 +280,16 @@ namespace VedAstro.Library
         /// Returns list of all API calls for fun, why not
         /// </summary>
         /// <returns></returns>
-        public static string List()
+        public static JArray List()
         {
             var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
 
-            var returnList = "";
+            var returnList = new JArray();
             foreach (var openApiCalc in allApiCalculatorsMethodInfo)
             {
                 //get special signature to find the correct description from list
                 var signature = openApiCalc.GetMethodSignature();
-                returnList += signature + "\n";
+                returnList.Add(signature);
             }
 
             return returnList;

@@ -1793,30 +1793,29 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {
-            //get location data from VedAstro API
-            var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
-            //exp : .../Calculate/AddressToGeoLocation/London
-            var url = allUrls.AddressToGeoLocationAPI + $"/Address/{address}";
-            var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
 
-            //if fail to make call, end here
-            if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+            //CACHE MECHANISM
+            return await CacheManager.GetCache(new CacheKey("Tools.AddressToGeoLocation", address), addressToGeoLocation);
 
-            //if success, get the reply data out
-            var rootJson = webResult.Payload;
-            var parsed = GeoLocation.FromJson(rootJson);
+            async Task<WebResult<GeoLocation>> addressToGeoLocation()
+            {
+                //get location data from VedAstro API
+                var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
+                //exp : .../Calculate/AddressToGeoLocation/London
+                var url = allUrls.AddressToGeoLocationAPI + $"/Address/{address}";
+                var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
 
-            //return to caller pass
-            return new WebResult<GeoLocation>(true, parsed);
+                //if fail to make call, end here
+                if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
 
+                //if success, get the reply data out
+                var rootJson = webResult.Payload;
+                var parsed = GeoLocation.FromJson(rootJson);
 
-            ////CACHE MECHANISM
-            //return await CacheManager.GetCache(new CacheKey("Tools.AddressToGeoLocation", address), addressToGeoLocation);
+                //return to caller pass
+                return new WebResult<GeoLocation>(true, parsed);
 
-            //async Task<WebResult<GeoLocation>> addressToGeoLocation()
-            //{
-            //}
-
+            }
 
         }
 

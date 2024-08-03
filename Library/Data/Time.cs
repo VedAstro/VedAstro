@@ -571,64 +571,38 @@ namespace VedAstro.Library
         public static Task<dynamic> FromUrl(string url)
         {
 
-            try
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey("Time.FromUrl", url), fromUrl);
+
+            Task<dynamic> fromUrl()
             {
-                // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/"
-                string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                try
+                {
+                    // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/"
+                    string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-                //parse time range from caller (possible to fail)
-                var parsedTime = Tools.ParseTime(
-                    locationName: parts[1], //note skip "Location"
-                    hhmmStr: parts[3], //note skip "Time"
-                    dateStr: parts[4],
-                    monthStr: parts[5],
-                    yearStr: parts[6]).Result;
+                    //parse time range from caller (possible to fail)
+                    var parsedTime = Tools.ParseTime(
+                        locationName: parts[1], //note skip "Location"
+                        hhmmStr: parts[3], //note skip "Time"
+                        dateStr: parts[4],
+                        monthStr: parts[5],
+                        yearStr: parts[6]).Result;
 
-                return Task.FromResult<dynamic>(parsedTime);
+                    return Task.FromResult<dynamic>(parsedTime);
+
+                }
+                catch (Exception e)
+                {
+                    //TODO log to server
+                    Console.WriteLine(e);
+                    return Task.FromResult<dynamic>(Time.Empty);
+                }
 
             }
-            catch (Exception e)
-            {
-                //TODO log to server
-                Console.WriteLine(e);
-                return Task.FromResult<dynamic>(Time.Empty);
-            }
-
-
-            ////CACHE MECHANISM
-            //return CacheManager.GetCache(new CacheKey("Time.FromUrl", url), fromUrl);
-
-            //Task<dynamic> fromUrl()
-            //{
-
-            //}
         }
 
-        /// <summary>
-        /// Parses from URL with location already parsed
-        /// /23:59/31/12/2000/+08:00
-        /// </summary>
-        //public static Time FromUrl(string url, GeoLocation location)
-        //{
-        //    // INPUT -> ".../23:59/31/12/2000/+08:00/"
-        //    string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-        //    //name the pieces of time data extracted
-        //    var raw = new
-        //    {
-        //        hhmmStr = parts[0],
-        //        dateStr = parts[1],
-        //        monthStr = parts[2],
-        //        yearStr = parts[3],
-        //        offsetStr = parts[4]
-        //    };
-
-        //    //place all data together
-        //    var timeStr = $"{raw.hhmmStr} {raw.dateStr}/{raw.monthStr}/{raw.yearStr} {raw.offsetStr}";
-        //    var parsedTime = new Time(timeStr, location);
-
-        //    return parsedTime;
-        //}
+       
 
         /// <summary>
         /// Output TIME only for URL format

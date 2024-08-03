@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using VedAstro.Library;
 using System.Text.Json.Nodes;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace LLMCoder
 {
@@ -42,6 +43,12 @@ namespace LLMCoder
 
             // Load and display past user prompts as templates
             UpdatePastPromptsView();
+
+            //auto load ai pretext for quick use
+            injectAssitantPretextTextBox.Text = "ok, I've parsed the code, how may I help with it?";
+
+            //auto load ai pretext for quick use
+            codeInjectPretextTextBox.Text = "analyse and parse code";
         }
 
         private void UpdateSelectedLLMDropdownView()
@@ -99,16 +106,29 @@ namespace LLMCoder
             throw new ArgumentException($"API endpoint with name '{name}' not found.");
         }
 
+        public static int CountTokens(string input)
+        {
+            // Simple tokenization using whitespace and punctuation as boundaries
+            string[] tokens = Regex.Split(input, @"\s+|[,;.!?]+");
+
+            // Filter out empty tokens
+            tokens = Array.FindAll(tokens, token => !string.IsNullOrEmpty(token));
+
+            return tokens.Length;
+        }
+
+
         // Send a message to the LLM and return its response
         async Task<string> SendMessageToLLM(HttpClient client, List<ConversationMessage> conversationHistory)
         {
             var messages = new List<object>
             {
                 //new { role = "system", content = "expert programmer helper" },
-                 new { role = "user", content = $@"analyse code ```{largeCodeSnippetTextBox.Text}```"},
-                new { role = "assistant", content = "ok, I've parsed the code, how may I help with it?" }
+                new { role = "user", content = $"{codeInjectPretextTextBox.Text}\n```\n{largeCodeSnippetTextBox.Text}\n```"},
+                new { role = "assistant", content = $"{injectAssitantPretextTextBox.Text}" }
             };
 
+            //add in 
             foreach (var message in conversationHistory)
             {
                 messages.Add(new { role = message.Role, content = message.Content });
@@ -294,6 +314,11 @@ namespace LLMCoder
 
         }
 
+        private void largeCodeSnippetTextBox_TextChanged(object sender, EventArgs e)
+        {
+            //update token counter
+            tokenCountLabel.Text = $"Token Count : {CountTokens(largeCodeSnippetTextBox.Text)}";
+        }
     }
 
     public record ApiEndpoint(string Name, string Endpoint, string ApiKey);

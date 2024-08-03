@@ -264,14 +264,31 @@ namespace VedAstro.Library
         /// <summary>
         /// Special debug function
         /// </summary>
-        public static string BouncBackInputAsString(PlanetName planetName, Time time) => planetName.ToString();
+        public static string BouncBackInputPlanet(PlanetName planetName, Time time) => planetName.ToString();
 
         /// <summary>
         /// Basic bounce back data to confirm validity or ML table needs
         /// </summary>
-        public static GeoLocation CurrentGeoLocation(Time time)
+        public static GeoLocation BouncBackInputGeoLocation(Time time) => time.GetGeoLocation();
+
+        /// <summary>
+        /// Basic bounce back data to confirm validity or ML table needs
+        /// </summary>
+        public static string BouncBackInputTime(Time time) => time.ToString();
+
+        public static string ClassTreeStructureForLLM()
         {
-            return time.GetGeoLocation();
+            var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
+
+            var returnList = "";
+            foreach (var openApiCalc in allApiCalculatorsMethodInfo)
+            {
+                //get special signature to find the correct description from list
+                var signature = openApiCalc.GetMethodSignature();
+                returnList += signature + "\n";
+            }
+
+            return returnList;
         }
 
         #endregion
@@ -3153,7 +3170,7 @@ namespace VedAstro.Library
 
         }
 
-       
+
 
         /// <summary>
         /// Gets all houses owned by a planet at a given time 
@@ -3320,7 +3337,7 @@ namespace VedAstro.Library
 
         }
 
-       
+
 
         /// <summary>
         /// Calculate Fortuna Point for a given birth time & place. Returns Sign Number from Lagna
@@ -4540,7 +4557,7 @@ namespace VedAstro.Library
             return listOfPlanetInHouse;
         }
 
-        
+
 
         /// <summary>
         /// Gets list of all planets that's in a house at a given time
@@ -4700,7 +4717,7 @@ namespace VedAstro.Library
 
         }
 
-        
+
 
         /// <summary>
         /// List of all planets and the houses they are located in at a given time based on zodiac sign.
@@ -4758,7 +4775,7 @@ namespace VedAstro.Library
             return lordOfHouseSign;
         }
 
-       
+
 
         /// <summary>
         /// Gets the lord of zodiac sign planet is in, aka "Planet Sign Lord"
@@ -4846,7 +4863,7 @@ namespace VedAstro.Library
             return houseSign;
         }
 
-       
+
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
@@ -4888,7 +4905,7 @@ namespace VedAstro.Library
             return allHouses;
         }
 
-       
+
 
         /// <summary>
         /// Gets the constellation at middle longitude of the house.
@@ -5059,7 +5076,7 @@ namespace VedAstro.Library
 
         }
 
-        
+
         /// <summary>
         /// Checks if a given planet is in a given sign at a given time
         /// </summary>
@@ -5384,9 +5401,7 @@ namespace VedAstro.Library
             throw new Exception("Saptamsa not found, error!");
         }
 
-
         public static ZodiacSign PlanetPanchamsaSign(PlanetName planetName, Time time) => Calculate.PanchamsaSignName(Calculate.PlanetZodiacSign(planetName, time));
-
 
         public static ZodiacSign PanchamsaSignName(ZodiacSign zodiacSign)
         {

@@ -465,17 +465,71 @@ namespace VedAstro.Library
         }
 
 
+
+        /// <summary>
+        /// Definition:  Lords of the fourth and ninth houses
+        /// should be in Kendras from each other and the lord
+        /// of Lagna should be strongly disposed.
+        /// </summary>
+        [HoroscopeCalculator(HoroscopeName.KahalaYoga)]
+        public static CalculatorResult KahalaYoga_AI(Time birthTime)
+        {
+            // Calculate the lord of the fourth house
+            var fourthLord = Calculate.LordOfHouse(HouseName.House4, birthTime);
+
+            // Calculate the lord of the ninth house
+            var ninthLord = Calculate.LordOfHouse(HouseName.House9, birthTime);
+
+            // Calculate the lord of the Lagna (ascendant)
+            var lagnaLord = Calculate.LordOfHouse(HouseName.House1, birthTime);
+
+            // Check if the fourth lord is in kendra from the ninth lord
+            var fourthLordInKendra = Calculate.IsPlanetInKendraFromPlanet(fourthLord, ninthLord, birthTime);
+
+            // Check if the ninth lord is in kendra from the fourth lord
+            var ninthLordInKendra = Calculate.IsPlanetInKendraFromPlanet(ninthLord, fourthLord, birthTime);
+
+            // Check if the yoga is occurring (both lords are in kendra and the Lagna lord is strong)
+            var isOccuring = fourthLordInKendra && ninthLordInKendra && Calculate.IsPlanetStrongInShadbala(lagnaLord, birthTime);
+
+            // Return a CalculatorResult indicating whether the yoga is occurring
+            return CalculatorResult.New(isOccuring);
+        }
+
+
+
+        /// <summary>
+        /// If planets other than the Moon
+        /// occupy the 2nd from the Sun, Vesi Yoga is formed.
+        /// </summary>
         [HoroscopeCalculator(HoroscopeName.VesiYoga)]
         public static CalculatorResult VesiYoga(Time birthTime)
         {
-            return CalculatorResult.New(false);
+            // If planets other than the Moon
+            // occupy the 2nd from the Sun, Vesi Yoga is formed.
+
+            // Get the 2nd house from the Sun
+            var secondHouseFromSun = Calculate.SignCountedFromPlanetSign(2, PlanetName.Sun, birthTime);
+
+            // Check if planets other than the Moon occupy the 2nd house from the Sun
+            var planetsIn2ndHouse = Calculate.PlanetsInSign(secondHouseFromSun, birthTime);
+            //var moonSign = Calculate.SignCountedFromPlanetSign(0, PlanetName.Moon, birthTime);
+
+            // Check if any planet except Moon is in 2nd house
+            var isOccuring = planetsIn2ndHouse.Any(p => p != PlanetName.Moon);
+
+            return CalculatorResult.New(isOccuring);
         }
 
+        /// <summary>
+        /// Planets other than the Moon occupying the 12th from the Sun gives rise to Vasi Yoga.
+        /// </summary>
         [HoroscopeCalculator(HoroscopeName.VasiYoga)]
         public static CalculatorResult VasiYoga(Time birthTime)
         {
             return CalculatorResult.New(false);
         }
+
 
         [HoroscopeCalculator(HoroscopeName.ObhayachariYoga)]
         public static CalculatorResult ObhayachariYoga(Time birthTime)
@@ -1072,7 +1126,7 @@ namespace VedAstro.Library
 
         [HoroscopeCalculator(HoroscopeName.House2LordInHouse4)]
         public static CalculatorResult House2LordInHouse4Occuring(Time time) => CalculatorResult.New(Calculate.IsHouseLordInHouse(HouseName.House2, HouseName.House4, time), new[] { HouseName.House2, HouseName.House4 }, time);
-        
+
         [HoroscopeCalculator(HoroscopeName.House2LordInHouse4Afflicted)]
         public static CalculatorResult House2LordInHouse4Afflicted(Time time) => CalculatorResult.New(Calculate.IsHouseLordInHouse(HouseName.House2, HouseName.House4, time), new[] { HouseName.House2, HouseName.House4 }, time);
 

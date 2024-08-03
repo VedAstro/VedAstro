@@ -564,8 +564,8 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Given Time instance in URL form will convert to instance
-        /// Location/Singapore/Time/23:59/31/12/2000/+08:00/
-        /// TODO Offset no longer used can be removed on call by parent
+        /// EXP 1 :-> Location/Singapore/Time/23:59/31/12/2000/
+        /// EXP 2 :-> Location/8.716,77.55/Time/07:30/20/07/1978/
         /// Offset auto set based on location & time
         /// </summary>
         public static Task<dynamic> FromUrl(string url)
@@ -573,7 +573,7 @@ namespace VedAstro.Library
 
             try
             {
-                // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/+08:00/"
+                // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/"
                 string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
                 //parse time range from caller (possible to fail)

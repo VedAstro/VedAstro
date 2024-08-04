@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="coming-soon.html" />
     <Content Include="index.html" />
     <Content Include="**\*.js" />
     <Content Include="**\*.css" />
@@ -23,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="coming-soon.html" />
     <None Remove="image\ai-chat-card.jpg" />
     <None Remove="image\dasa-card.jpg" />
     <None Remove="image\header-logo.png" />
@@ -38,6 +40,7 @@
 
   <ItemGroup>
     <PublishFile Remove="app.js" />
+    <PublishFile Remove="coming-soon.html" />
     <PublishFile Remove="favicon.ico" />
     <PublishFile Remove="image\ai-chat-card.jpg" />
     <PublishFile Remove="image\dasa-card.jpg" />
@@ -49,6 +52,7 @@
     <PublishFile Remove="image\table-generator-card.jpg" />
     <PublishFile Remove="image\vedastro-api-logo.png" />
     <PublishFile Remove="image\zodiac-wheel-3-white.png" />
+    <PublishFile Remove="index.html" />
     <PublishFile Remove="VedAstro.js" />
   </ItemGroup>
 

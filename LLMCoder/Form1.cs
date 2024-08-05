@@ -39,7 +39,7 @@ namespace LLMCoder
             UpdateSelectedLLMDropdownView();
 
             // Set the default LLM choice
-            UpdateSelectedLLM("CohereCommandRPlus");
+            UpdateSelectedLLM("MetaLlama31405B");
 
             // Load and display past user prompts as templates
             UpdatePastPromptsView();

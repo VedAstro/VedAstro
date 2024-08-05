@@ -27,7 +27,7 @@ namespace LLMCoder
         static HttpClient client;
 
         static List<ConversationMessage> conversationHistory = new List<ConversationMessage>();
-        static string chatHistoryFilePath = "C:\\Users\\ASUS\\Desktop\\Projects\\VedAstroMK2\\LLMCoder\\chat-history.json"; // path to save the chat history
+        static string chatHistoryFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "chat-history.json");
 
 
 
@@ -54,6 +54,7 @@ namespace LLMCoder
             temperatureTextBox.Text = "0.7";
             topPTextBox.Text = "1.0";
         }
+
 
         private void UpdateSelectedLLMDropdownView()
         {
@@ -206,11 +207,17 @@ namespace LLMCoder
             }
         }
 
+
         // Load chat history from file and return as a list of ChatLogEntry objects
         static List<ChatLogEntry> GetChatHistoryFromFile()
         {
             try
             {
+                if (!File.Exists(chatHistoryFilePath))
+                {
+                    File.WriteAllText(chatHistoryFilePath, "[]");
+                }
+
                 // Read the chat history file content
                 string chatHistoryFileContent = File.ReadAllText(chatHistoryFilePath);
 
@@ -232,7 +239,6 @@ namespace LLMCoder
                 Console.WriteLine($"Error reading chat history file: {ex.Message}");
                 return new List<ChatLogEntry>();
             }
-
         }
 
 

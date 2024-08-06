@@ -356,7 +356,23 @@ namespace LLMCoder
 
         }
 
+        // New method to update a message in the conversation history
+        private void UpdateMessageText(string messageId, string newMessageText)
+        {
+            // Find the message in the conversation history
+            var messageToUpdate = conversationHistory.FirstOrDefault(m => m.Id == messageId);
 
+            // Update the message text if the message is found
+            if (messageToUpdate != null)
+            {
+                messageToUpdate.Content = newMessageText;
+            }
+
+            // Log the updated message to the chat history file
+            LogChatMessageToFile(messageToUpdate);
+        }
+
+        // New method to add a message to the chat message panel
         // New method to add a message to the chat message panel
         private void AddMessageToPanel(string message, string role, Color color)
         {
@@ -396,12 +412,16 @@ namespace LLMCoder
             richTextBox.Dock = DockStyle.Fill;
             richTextBox.ForeColor = color;
             richTextBox.Text = message;
-            richTextBox.ReadOnly = false; 
-            //richTextBox.ScrollBars = RichTextBoxScrollBars.None; // Remove scrollbars
+            richTextBox.ReadOnly = false;
             richTextBox.Multiline = true; // Allow multiple lines
             richTextBox.WordWrap = true; // Wrap text to the next line
             richTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             richTextBox.MinimumSize = new Size(richTextBox.Width, 28);
+            richTextBox.TextChanged += (sender, e) =>
+            {
+                string msgId = (string)chatMsgHolderTable.Tag;
+                UpdateMessageText(msgId, richTextBox.Text);
+            };
 
             // Create a new delete button
             Button deleteButton = new Button();

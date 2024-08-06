@@ -359,6 +359,7 @@
             largeCodeSnippetTextBox.Size = new Size(739, 593);
             largeCodeSnippetTextBox.TabIndex = 1;
             largeCodeSnippetTextBox.Text = "";
+            largeCodeSnippetTextBox.TextChanged += largeCodeSnippetTextBox_TextChanged;
             // 
             // label4
             // 

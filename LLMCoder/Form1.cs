@@ -378,11 +378,9 @@ namespace LLMCoder
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
             tableLayoutPanel.AutoSize = true;
             tableLayoutPanel.ColumnCount = 2;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel.RowCount = 2;
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel.RowCount = 1;
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel.Dock = DockStyle.Fill;
 
             // Create a new richTextBox
@@ -390,13 +388,13 @@ namespace LLMCoder
             richTextBox.BackColor = SystemColors.ActiveCaptionText;
             richTextBox.Dock = DockStyle.Fill;
             richTextBox.ForeColor = color;
-            richTextBox.Text = $"{message}";
-            richTextBox.ReadOnly = true; // Make it read-only to prevent editing
+            richTextBox.Text = message;
+            richTextBox.ReadOnly = false; 
             richTextBox.ScrollBars = RichTextBoxScrollBars.None; // Remove scrollbars
             richTextBox.Multiline = true; // Allow multiple lines
             richTextBox.WordWrap = true; // Wrap text to the next line
             richTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            richTextBox.MinimumSize = new Size(richTextBox.Width, 25);
+            richTextBox.MinimumSize = new Size(richTextBox.Width, 28);
 
             // Create a new delete button
             Button deleteButton = new Button();
@@ -417,8 +415,8 @@ namespace LLMCoder
                 RichTextBox rtb = (RichTextBox)((Button)sender).Tag;
                 if (((Button)sender).Text == "Collapse")
                 {
-                    rtb.MinimumSize = new Size(rtb.Width, 25);
-                    rtb.MaximumSize = new Size(rtb.Width, 25);
+                    rtb.MinimumSize = new Size(rtb.Width, 28);
+                    rtb.MaximumSize = new Size(rtb.Width, 28);
                     ((Button)sender).Text = "Expand";
                 }
                 else
@@ -432,8 +430,21 @@ namespace LLMCoder
 
             // Add the richTextBox and buttons to the tableLayoutPanel
             tableLayoutPanel.Controls.Add(richTextBox, 0, 0);
-            tableLayoutPanel.Controls.Add(deleteButton, 1, 0);
-            tableLayoutPanel.Controls.Add(expandButton, 1, 1);
+
+            //table to hold buttons
+            TableLayoutPanel buttonHolderTable = new TableLayoutPanel();
+            buttonHolderTable.AutoSize = true;
+            buttonHolderTable.ColumnCount = 1;
+            buttonHolderTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            buttonHolderTable.RowCount = 2;
+            buttonHolderTable.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            buttonHolderTable.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            buttonHolderTable.Dock = DockStyle.Fill;
+
+            buttonHolderTable.Controls.Add(deleteButton, 0, 0);
+            buttonHolderTable.Controls.Add(expandButton, 0, 1);
+
+            tableLayoutPanel.Controls.Add(buttonHolderTable, 1, 0);
 
             // Store the message ID in the Tag property of the TableLayoutPanel
             tableLayoutPanel.Tag = messageId;

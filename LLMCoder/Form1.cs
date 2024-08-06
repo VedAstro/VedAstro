@@ -26,7 +26,10 @@ namespace LLMCoder
 
         static HttpClient client;
 
-        static List<ConversationMessage> conversationHistory = new List<ConversationMessage>();
+        // Create a global instance of conversationHistory
+        private static List<ConversationMessage> _conversationHistory = new List<ConversationMessage>();
+        public static List<ConversationMessage> conversationHistory { get { return _conversationHistory; } }
+
         static string chatHistoryFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "chat-history.json");
 
         // Dictionary to store message IDs and their corresponding tableLayoutPanels
@@ -129,7 +132,7 @@ namespace LLMCoder
 
 
         // Send a message to the LLM and return its response
-        async Task<string> SendMessageToLLM(HttpClient client, List<ConversationMessage> conversationHistory)
+        async Task<string> SendMessageToLLM(HttpClient client)
         {
             //inject code pretext ONLY if specified
             var messages = includeCodeInjectCheckBox.Checked ? new List<object>
@@ -167,9 +170,10 @@ namespace LLMCoder
             //if failed, scream the error back!
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine(($"Response Status Code: {response.StatusCode}"));
-                Console.WriteLine(($"Response Headers: \n{string.Join("\r\n", response.Headers.Concat(response.Content.Headers))}"));
-                Console.WriteLine(($"Response Body: {await response.Content.ReadAsStringAsync()}"));
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                AddMessageToPanel($"Error: {response.StatusCode} - {errorResponse}", "assistant", Color.Red);
+                return "Error occurred. Please check the error message above.";
+
             }
 
             var fullReplyRaw = await response.Content.ReadAsStringAsync();// Read response content as string
@@ -178,21 +182,24 @@ namespace LLMCoder
             var replyMessage = fullReply?.Choices?.FirstOrDefault()?.Message.Content ?? "No response!!";
 
             //save in LLM's reply for next chat round
-            conversationHistory.Add(new ConversationMessage { Role = "assistant", Content = replyMessage });
+            //conversationHistory.Add(new ConversationMessage { Role = "assistant", Content = replyMessage });
+            //conversationHistory.Add(new ConversationMessage { Role = "user", Content = userInput });
 
             return replyMessage;
         }
 
         // Log a chat message to the history file
-        static async Task LogChatMessageToFile(string message, string role)
+        // New method to log a chat message to the history file
+        private async void LogChatMessageToFile(ConversationMessage conversationMessage)
         {
             try
             {
                 ChatLogEntry logEntry = new ChatLogEntry
                 {
                     Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), // Current timestamp
-                    Role = role, // Role of the message sender
-                    Message = message // Message content
+                    Id = conversationMessage.Id, // Message ID
+                    Role = conversationMessage.Role, // Role of the message sender
+                    Message = conversationMessage.Content // Message content
                 };
 
                 // Read the existing chat history from the file
@@ -288,6 +295,7 @@ namespace LLMCoder
         }
 
 
+        // Event handler for the send user message button click
         private async void sendUserMsgButton_Click(object sender, EventArgs e)
         {
             // Update the progress bar visibility and value
@@ -297,30 +305,29 @@ namespace LLMCoder
             string userInput = userInputTextBox.Text;
 
             // Display the user's message in the chat output box
-            // Add the user's message to the chat message panel
-            AddMessageToPanel(userInput, "You", Color.Aqua);
-
-
-            // Add the user's message to the conversation history list
-            conversationHistory.Add(new ConversationMessage { Role = "user", Content = userInput });
+            AddMessageToPanel(userInput, "user", Color.Aqua);
 
             // Log the user's message to the chat history file
-            await LogChatMessageToFile(userInput, "user");
+            // Note: This is now handled in the AddMessageToPanel method
+
+            // Add the user's message to the conversation history list
+            // Note: This is now handled in the AddMessageToPanel method
 
             progressBar1.Value = 50;
 
             // Send a message to the LLM and get its response
-            string response = await SendMessageToLLM(client, conversationHistory);
+            string response = await SendMessageToLLM(client);
 
             progressBar1.Value = 75;
 
             // Display the LLM's response in the chat output box
-            // Add the LLM's response to the chat message panel
-            AddMessageToPanel(response, "LLM", Color.LimeGreen);
-
+            AddMessageToPanel(response, "assistant", Color.LimeGreen);
 
             // Log the LLM's response to the chat history file
-            await LogChatMessageToFile(response, "assistant");
+            // Note: This is now handled in the AddMessageToPanel method
+
+            // Add the LLM's response to the conversation history list
+            // Note: This is now handled in the AddMessageToPanel method
 
             // Clear the user input text box for the next input
             userInputTextBox.Text = "";
@@ -346,9 +353,31 @@ namespace LLMCoder
 
         }
 
+
         // New method to add a message to the chat message panel
         private void AddMessageToPanel(string message, string role, Color color)
         {
+            //support empty calls for user to resend existing msg history
+            //so do nothing here
+            if (string.IsNullOrEmpty(message)) { return; }
+
+            // Generate a random unique ID for the message
+            string messageId = Guid.NewGuid().ToString();
+
+            // Create a new ConversationMessage
+            ConversationMessage conversationMessage = new ConversationMessage
+            {
+                Id = messageId,
+                Role = role,
+                Content = message
+            };
+
+            // Add the message to the conversation history
+            conversationHistory.Add(conversationMessage);
+
+            // Log the message to the chat history file
+            LogChatMessageToFile(conversationMessage);
+
             // Create a new tableLayoutPanel
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
             tableLayoutPanel.AutoSize = true;
@@ -367,9 +396,6 @@ namespace LLMCoder
             richTextBox.ScrollBars = RichTextBoxScrollBars.Vertical; // Add vertical scrollbar
             richTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
 
-            // Generate a random unique ID for the message
-            string messageId = Guid.NewGuid().ToString();
-
             // Create a new button
             Button button = new Button();
             button.BackColor = Color.IndianRed;
@@ -383,6 +409,9 @@ namespace LLMCoder
             tableLayoutPanel.Controls.Add(richTextBox, 0, 0);
             tableLayoutPanel.Controls.Add(button, 1, 0);
 
+            // Store the message ID in the Tag property of the TableLayoutPanel
+            tableLayoutPanel.Tag = messageId;
+
             // Add the tableLayoutPanel to the chatMessagePanel
             chatMessagePanel.Controls.Add(tableLayoutPanel);
 
@@ -390,9 +419,13 @@ namespace LLMCoder
             messageTableLayouts[messageId] = tableLayoutPanel;
         }
 
+
         // New method to delete a message from the chat message panel
         private void DeleteMessage(TableLayoutPanel tableLayoutPanel, string messageId)
         {
+            // Remove the message from the conversation history
+            conversationHistory.RemoveAll(m => m.Id == messageId);
+
             // Remove the tableLayoutPanel from the chatMessagePanel
             chatMessagePanel.Controls.Remove(tableLayoutPanel);
 
@@ -412,6 +445,7 @@ namespace LLMCoder
     // Class to represent a conversation message
     public class ConversationMessage
     {
+        public string Id { get; set; }
         public string Role { get; set; }
         public string Content { get; set; }
     }
@@ -420,6 +454,7 @@ namespace LLMCoder
     public class ChatLogEntry
     {
         public string Timestamp { get; set; }
+        public string Id { get; set; }
         public string Role { get; set; }
         public string Message { get; set; }
     }

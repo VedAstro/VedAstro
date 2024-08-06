@@ -181,10 +181,6 @@ namespace LLMCoder
 
             var replyMessage = fullReply?.Choices?.FirstOrDefault()?.Message.Content ?? "No response!!";
 
-            //save in LLM's reply for next chat round
-            //conversationHistory.Add(new ConversationMessage { Role = "assistant", Content = replyMessage });
-            //conversationHistory.Add(new ConversationMessage { Role = "user", Content = userInput });
-
             return replyMessage;
         }
 
@@ -382,8 +378,11 @@ namespace LLMCoder
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
             tableLayoutPanel.AutoSize = true;
             tableLayoutPanel.ColumnCount = 2;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel.RowCount = 2;
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             tableLayoutPanel.Dock = DockStyle.Fill;
 
             // Create a new richTextBox
@@ -391,23 +390,50 @@ namespace LLMCoder
             richTextBox.BackColor = SystemColors.ActiveCaptionText;
             richTextBox.Dock = DockStyle.Fill;
             richTextBox.ForeColor = color;
-            richTextBox.Text = $"{role}: {message}";
+            richTextBox.Text = $"{message}";
             richTextBox.ReadOnly = true; // Make it read-only to prevent editing
-            richTextBox.ScrollBars = RichTextBoxScrollBars.Vertical; // Add vertical scrollbar
+            richTextBox.ScrollBars = RichTextBoxScrollBars.None; // Remove scrollbars
+            richTextBox.Multiline = true; // Allow multiple lines
+            richTextBox.WordWrap = true; // Wrap text to the next line
             richTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            richTextBox.MinimumSize = new Size(richTextBox.Width, 25);
 
-            // Create a new button
-            Button button = new Button();
-            button.BackColor = Color.IndianRed;
-            button.Dock = DockStyle.Fill;
-            button.ForeColor = SystemColors.ButtonFace;
-            button.Text = "Delete";
-            button.Tag = messageId; // Store the message ID in the button's Tag property
-            button.Click += (sender, e) => DeleteMessage(tableLayoutPanel, (string)((Button)sender).Tag);
+            // Create a new delete button
+            Button deleteButton = new Button();
+            deleteButton.BackColor = Color.IndianRed;
+            deleteButton.ForeColor = SystemColors.ButtonFace;
+            deleteButton.Text = "Delete";
+            deleteButton.Tag = messageId; // Store the message ID in the button's Tag property
+            deleteButton.Click += (sender, e) => DeleteMessage(tableLayoutPanel, (string)((Button)sender).Tag);
 
-            // Add controls to the tableLayoutPanel
+            // Create a new expand/collapse button
+            Button expandButton = new Button();
+            expandButton.BackColor = Color.DodgerBlue;
+            expandButton.ForeColor = SystemColors.ButtonFace;
+            expandButton.Text = "Collapse";
+            expandButton.Tag = richTextBox; // Store the richTextBox in the button's Tag property
+            expandButton.Click += (sender, e) =>
+            {
+                RichTextBox rtb = (RichTextBox)((Button)sender).Tag;
+                if (((Button)sender).Text == "Collapse")
+                {
+                    rtb.MinimumSize = new Size(rtb.Width, 25);
+                    rtb.MaximumSize = new Size(rtb.Width, 25);
+                    ((Button)sender).Text = "Expand";
+                }
+                else
+                {
+                    rtb.MinimumSize = new Size(rtb.Width, 0);
+                    rtb.MaximumSize = new Size(rtb.Width, int.MaxValue);
+                    rtb.Height = rtb.GetPreferredSize(new Size(rtb.Width, int.MaxValue)).Height;
+                    ((Button)sender).Text = "Collapse";
+                }
+            };
+
+            // Add the richTextBox and buttons to the tableLayoutPanel
             tableLayoutPanel.Controls.Add(richTextBox, 0, 0);
-            tableLayoutPanel.Controls.Add(button, 1, 0);
+            tableLayoutPanel.Controls.Add(deleteButton, 1, 0);
+            tableLayoutPanel.Controls.Add(expandButton, 1, 1);
 
             // Store the message ID in the Tag property of the TableLayoutPanel
             tableLayoutPanel.Tag = messageId;

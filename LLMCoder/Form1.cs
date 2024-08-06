@@ -64,7 +64,6 @@ namespace LLMCoder
             includeCodeInjectCheckBox.Checked = true;
         }
 
-
         private void UpdateSelectedLLMDropdownView()
         {
             foreach (var llmChoice in ApiEndpoints)
@@ -122,15 +121,14 @@ namespace LLMCoder
 
         public static int CountTokens(string input)
         {
-            // Simple tokenization using whitespace and punctuation as boundaries
-            string[] tokens = Regex.Split(input, @"\s+|[,;.!?]+");
+            // Use a regular expression to split the input string into tokens
+            string[] tokens = Regex.Split(input, @"[^\w\s]+|\s+");
 
             // Filter out empty tokens
             tokens = Array.FindAll(tokens, token => !string.IsNullOrEmpty(token));
 
             return tokens.Length;
         }
-
 
         // Send a message to the LLM and return its response
         async Task<string> SendMessageToLLM(HttpClient client)
@@ -215,7 +213,6 @@ namespace LLMCoder
                 Console.WriteLine($"Error logging chat message: {ex.Message}"); // Handle logging error
             }
         }
-
 
         // Load chat history from file and return as a list of ChatLogEntry objects
         static List<ChatLogEntry> GetChatHistoryFromFile()
@@ -385,13 +382,13 @@ namespace LLMCoder
             LogChatMessageToFile(conversationMessage);
 
             // Create a new tableLayoutPanel
-            TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
-            tableLayoutPanel.AutoSize = true;
-            tableLayoutPanel.ColumnCount = 2;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel.RowCount = 1;
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel.Dock = DockStyle.Fill;
+            TableLayoutPanel chatMsgHolderTable = new TableLayoutPanel();
+            chatMsgHolderTable.AutoSize = true;
+            chatMsgHolderTable.ColumnCount = 2;
+            chatMsgHolderTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            chatMsgHolderTable.RowCount = 1;
+            chatMsgHolderTable.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            chatMsgHolderTable.Dock = DockStyle.Fill;
 
             // Create a new richTextBox
             RichTextBox richTextBox = new RichTextBox();
@@ -400,7 +397,7 @@ namespace LLMCoder
             richTextBox.ForeColor = color;
             richTextBox.Text = message;
             richTextBox.ReadOnly = false; 
-            richTextBox.ScrollBars = RichTextBoxScrollBars.None; // Remove scrollbars
+            //richTextBox.ScrollBars = RichTextBoxScrollBars.None; // Remove scrollbars
             richTextBox.Multiline = true; // Allow multiple lines
             richTextBox.WordWrap = true; // Wrap text to the next line
             richTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -412,7 +409,7 @@ namespace LLMCoder
             deleteButton.ForeColor = SystemColors.ButtonFace;
             deleteButton.Text = "Delete";
             deleteButton.Tag = messageId; // Store the message ID in the button's Tag property
-            deleteButton.Click += (sender, e) => DeleteMessage(tableLayoutPanel, (string)((Button)sender).Tag);
+            deleteButton.Click += (sender, e) => DeleteMessage(chatMsgHolderTable, (string)((Button)sender).Tag);
 
             // Create a new expand/collapse button
             Button expandButton = new Button();
@@ -439,7 +436,7 @@ namespace LLMCoder
             };
 
             // Add the richTextBox and buttons to the tableLayoutPanel
-            tableLayoutPanel.Controls.Add(richTextBox, 0, 0);
+            chatMsgHolderTable.Controls.Add(richTextBox, 0, 0);
 
             //table to hold buttons
             TableLayoutPanel buttonHolderTable = new TableLayoutPanel();
@@ -454,16 +451,16 @@ namespace LLMCoder
             buttonHolderTable.Controls.Add(deleteButton, 0, 0);
             buttonHolderTable.Controls.Add(expandButton, 0, 1);
 
-            tableLayoutPanel.Controls.Add(buttonHolderTable, 1, 0);
+            chatMsgHolderTable.Controls.Add(buttonHolderTable, 1, 0);
 
             // Store the message ID in the Tag property of the TableLayoutPanel
-            tableLayoutPanel.Tag = messageId;
+            chatMsgHolderTable.Tag = messageId;
 
             // Add the tableLayoutPanel to the chatMessagePanel
-            chatMessagePanel.Controls.Add(tableLayoutPanel);
+            chatMessagePanel.Controls.Add(chatMsgHolderTable);
 
             // Store the message ID and tableLayoutPanel in a dictionary
-            messageTableLayouts[messageId] = tableLayoutPanel;
+            messageTableLayouts[messageId] = chatMsgHolderTable;
         }
 
 

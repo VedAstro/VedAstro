@@ -29,6 +29,8 @@ namespace LLMCoder
         static List<ConversationMessage> conversationHistory = new List<ConversationMessage>();
         static string chatHistoryFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "chat-history.json");
 
+        // Dictionary to store message IDs and their corresponding tableLayoutPanels
+        private Dictionary<string, TableLayoutPanel> messageTableLayouts = new Dictionary<string, TableLayoutPanel>();
 
 
         public Form1()
@@ -53,6 +55,9 @@ namespace LLMCoder
             //set default settings
             temperatureTextBox.Text = "0.7";
             topPTextBox.Text = "1.0";
+
+            //default inject code
+            includeCodeInjectCheckBox.Checked = true;
         }
 
 
@@ -126,12 +131,13 @@ namespace LLMCoder
         // Send a message to the LLM and return its response
         async Task<string> SendMessageToLLM(HttpClient client, List<ConversationMessage> conversationHistory)
         {
-            var messages = new List<object>
+            //inject code pretext ONLY if specified
+            var messages = includeCodeInjectCheckBox.Checked ? new List<object>
             {
                 //new { role = "system", content = "expert programmer helper" },
                 new { role = "user", content = $"{codeInjectPretextTextBox.Text}\n```\n{largeCodeSnippetTextBox.Text}\n```"},
                 new { role = "assistant", content = $"{injectAssitantPretextTextBox.Text}" }
-            };
+            } : new List<object>();
 
             //add in 
             foreach (var message in conversationHistory)
@@ -161,10 +167,9 @@ namespace LLMCoder
             //if failed, scream the error back!
             if (!response.IsSuccessStatusCode)
             {
-
-                chatMessageOutputBox.Text += ($"Response Status Code: {response.StatusCode}");
-                chatMessageOutputBox.Text += ($"Response Headers: \n{string.Join("\r\n", response.Headers.Concat(response.Content.Headers))}");
-                chatMessageOutputBox.Text += ($"Response Body: {await response.Content.ReadAsStringAsync()}");
+                Console.WriteLine(($"Response Status Code: {response.StatusCode}"));
+                Console.WriteLine(($"Response Headers: \n{string.Join("\r\n", response.Headers.Concat(response.Content.Headers))}"));
+                Console.WriteLine(($"Response Body: {await response.Content.ReadAsStringAsync()}"));
             }
 
             var fullReplyRaw = await response.Content.ReadAsStringAsync();// Read response content as string
@@ -272,14 +277,16 @@ namespace LLMCoder
 
         }
 
+
         private void resetChatHistoryButton_Click(object sender, EventArgs e)
         {
             // Clear the chat output box text
-            chatMessageOutputBox.Text = string.Empty;
+            chatMessagePanel.Controls.Clear();
 
             // Clear the conversation history list
             conversationHistory.Clear();
         }
+
 
         private async void sendUserMsgButton_Click(object sender, EventArgs e)
         {
@@ -290,7 +297,9 @@ namespace LLMCoder
             string userInput = userInputTextBox.Text;
 
             // Display the user's message in the chat output box
-            chatMessageOutputBox.Text += $"You: {userInput}\n";
+            // Add the user's message to the chat message panel
+            AddMessageToPanel(userInput, "You", Color.Aqua);
+
 
             // Add the user's message to the conversation history list
             conversationHistory.Add(new ConversationMessage { Role = "user", Content = userInput });
@@ -306,7 +315,9 @@ namespace LLMCoder
             progressBar1.Value = 75;
 
             // Display the LLM's response in the chat output box
-            chatMessageOutputBox.Text += $"LLM: {response}\n";
+            // Add the LLM's response to the chat message panel
+            AddMessageToPanel(response, "LLM", Color.LimeGreen);
+
 
             // Log the LLM's response to the chat history file
             await LogChatMessageToFile(response, "assistant");
@@ -328,6 +339,72 @@ namespace LLMCoder
             //update token counter
             tokenCountLabel.Text = $"Token Count : {CountTokens(largeCodeSnippetTextBox.Text)}";
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+
+        }
+
+        // New method to add a message to the chat message panel
+        private void AddMessageToPanel(string message, string role, Color color)
+        {
+            // Create a new tableLayoutPanel
+            TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
+            tableLayoutPanel.AutoSize = true;
+            tableLayoutPanel.ColumnCount = 2;
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel.Dock = DockStyle.Fill;
+
+            // Create a new richTextBox
+            RichTextBox richTextBox = new RichTextBox();
+            richTextBox.BackColor = SystemColors.ActiveCaptionText;
+            richTextBox.Dock = DockStyle.Fill;
+            richTextBox.ForeColor = color;
+            richTextBox.Text = $"{role}: {message}";
+            richTextBox.ReadOnly = true; // Make it read-only to prevent editing
+            richTextBox.ScrollBars = RichTextBoxScrollBars.Vertical; // Add vertical scrollbar
+            richTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+
+            // Generate a random unique ID for the message
+            string messageId = Guid.NewGuid().ToString();
+
+            // Create a new button
+            Button button = new Button();
+            button.BackColor = Color.IndianRed;
+            button.Dock = DockStyle.Fill;
+            button.ForeColor = SystemColors.ButtonFace;
+            button.Text = "Delete";
+            button.Tag = messageId; // Store the message ID in the button's Tag property
+            button.Click += (sender, e) => DeleteMessage(tableLayoutPanel, (string)((Button)sender).Tag);
+
+            // Add controls to the tableLayoutPanel
+            tableLayoutPanel.Controls.Add(richTextBox, 0, 0);
+            tableLayoutPanel.Controls.Add(button, 1, 0);
+
+            // Add the tableLayoutPanel to the chatMessagePanel
+            chatMessagePanel.Controls.Add(tableLayoutPanel);
+
+            // Store the message ID and tableLayoutPanel in a dictionary
+            messageTableLayouts[messageId] = tableLayoutPanel;
+        }
+
+        // New method to delete a message from the chat message panel
+        private void DeleteMessage(TableLayoutPanel tableLayoutPanel, string messageId)
+        {
+            // Remove the tableLayoutPanel from the chatMessagePanel
+            chatMessagePanel.Controls.Remove(tableLayoutPanel);
+
+            // Dispose of the tableLayoutPanel
+            tableLayoutPanel.Dispose();
+
+            // Remove the message ID from the dictionary
+            messageTableLayouts.Remove(messageId);
+        }
+
+
+
     }
 
     public record ApiEndpoint(string Name, string Endpoint, string ApiKey);

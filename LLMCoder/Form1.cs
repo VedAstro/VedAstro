@@ -6,6 +6,7 @@ using VedAstro.Library;
 using System.Text.Json.Nodes;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace LLMCoder
 {
@@ -294,6 +295,22 @@ namespace LLMCoder
         // Event handler for the send user message button click
         private async void sendUserMsgButton_Click(object sender, EventArgs e)
         {
+
+            // Start the timer
+            var stopwatch = Stopwatch.StartNew();
+            var timerTask = Task.Run(async () =>
+            {
+                while (stopwatch.IsRunning)
+                {
+                    await Task.Delay(200); // Update every second
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        llmRunningTimerLabel.Text = $"{Math.Round(stopwatch.Elapsed.TotalSeconds,2)} s";
+                    });
+                }
+            });
+
+
             // Update the progress bar visibility and value
             progressBar1.Value = 25;
 
@@ -302,12 +319,6 @@ namespace LLMCoder
 
             // Display the user's message in the chat output box
             AddMessageToPanel(userInput, "user", Color.Aqua);
-
-            // Log the user's message to the chat history file
-            // Note: This is now handled in the AddMessageToPanel method
-
-            // Add the user's message to the conversation history list
-            // Note: This is now handled in the AddMessageToPanel method
 
             progressBar1.Value = 50;
 
@@ -319,12 +330,6 @@ namespace LLMCoder
             // Display the LLM's response in the chat output box
             AddMessageToPanel(response, "assistant", Color.LimeGreen);
 
-            // Log the LLM's response to the chat history file
-            // Note: This is now handled in the AddMessageToPanel method
-
-            // Add the LLM's response to the conversation history list
-            // Note: This is now handled in the AddMessageToPanel method
-
             // Clear the user input text box for the next input
             userInputTextBox.Text = "";
 
@@ -335,6 +340,11 @@ namespace LLMCoder
             progressBar1.Value = 100;
             await Task.Delay(300); //short delay
             progressBar1.Value = 0;
+
+            // Stop the timer
+            stopwatch.Stop();
+            await timerTask;
+
         }
 
         private void largeCodeSnippetTextBox_TextChanged(object sender, EventArgs e)

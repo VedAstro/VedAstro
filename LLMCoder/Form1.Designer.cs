@@ -36,7 +36,8 @@
             llmPage = new TabPage();
             tableLayoutPanel3 = new TableLayoutPanel();
             chatMessagePanel = new TableLayoutPanel();
-            tableLayoutPanel5 = new TableLayoutPanel();
+            llmButtonRowHolderTable = new TableLayoutPanel();
+            llmRunningTimerLabel = new Label();
             sendUserMsgButton = new Button();
             progressBar1 = new ProgressBar();
             resetChatHistoryButton = new Button();
@@ -53,6 +54,8 @@
             injectAssitantPretextTextBox = new TextBox();
             settingsPage = new TabPage();
             tableLayoutPanel4 = new TableLayoutPanel();
+            includeCodeInjectCheckBox = new CheckBox();
+            label5 = new Label();
             topPTextBox = new TextBox();
             topPLabel = new Label();
             temperatureTextBox = new TextBox();
@@ -62,8 +65,6 @@
             pastUserPrompts = new ListBox();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
-            label5 = new Label();
-            includeCodeInjectCheckBox = new CheckBox();
             label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -72,7 +73,7 @@
             tabControl1.SuspendLayout();
             llmPage.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
-            tableLayoutPanel5.SuspendLayout();
+            llmButtonRowHolderTable.SuspendLayout();
             codePage.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
@@ -149,7 +150,7 @@
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.Controls.Add(chatMessagePanel, 0, 0);
             tableLayoutPanel3.Controls.Add(userInputTextBox, 0, 1);
-            tableLayoutPanel3.Controls.Add(tableLayoutPanel5, 0, 2);
+            tableLayoutPanel3.Controls.Add(llmButtonRowHolderTable, 0, 2);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 3);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -177,26 +178,37 @@
             chatMessagePanel.Size = new Size(840, 498);
             chatMessagePanel.TabIndex = 7;
             // 
-            // tableLayoutPanel5
+            // llmButtonRowHolderTable
             // 
-            tableLayoutPanel5.AutoSize = true;
-            tableLayoutPanel5.ColumnCount = 4;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.Controls.Add(sendUserMsgButton, 3, 0);
-            tableLayoutPanel5.Controls.Add(progressBar1, 2, 0);
-            tableLayoutPanel5.Controls.Add(resetChatHistoryButton, 1, 0);
-            tableLayoutPanel5.Controls.Add(clearUserMsgButton, 0, 0);
-            tableLayoutPanel5.Dock = DockStyle.Bottom;
-            tableLayoutPanel5.Location = new Point(3, 623);
-            tableLayoutPanel5.Name = "tableLayoutPanel5";
-            tableLayoutPanel5.RowCount = 1;
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel5.Size = new Size(840, 31);
-            tableLayoutPanel5.TabIndex = 5;
+            llmButtonRowHolderTable.AutoSize = true;
+            llmButtonRowHolderTable.ColumnCount = 5;
+            llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
+            llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
+            llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
+            llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
+            llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            llmButtonRowHolderTable.Controls.Add(llmRunningTimerLabel, 1, 0);
+            llmButtonRowHolderTable.Controls.Add(sendUserMsgButton, 4, 0);
+            llmButtonRowHolderTable.Controls.Add(progressBar1, 3, 0);
+            llmButtonRowHolderTable.Controls.Add(resetChatHistoryButton, 2, 0);
+            llmButtonRowHolderTable.Controls.Add(clearUserMsgButton, 0, 0);
+            llmButtonRowHolderTable.Dock = DockStyle.Bottom;
+            llmButtonRowHolderTable.Location = new Point(3, 623);
+            llmButtonRowHolderTable.Name = "llmButtonRowHolderTable";
+            llmButtonRowHolderTable.RowCount = 1;
+            llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            llmButtonRowHolderTable.Size = new Size(840, 31);
+            llmButtonRowHolderTable.TabIndex = 5;
+            // 
+            // llmRunningTimerLabel
+            // 
+            llmRunningTimerLabel.AutoSize = true;
+            llmRunningTimerLabel.Location = new Point(83, 7);
+            llmRunningTimerLabel.Margin = new Padding(3, 7, 3, 0);
+            llmRunningTimerLabel.Name = "llmRunningTimerLabel";
+            llmRunningTimerLabel.Size = new Size(21, 15);
+            llmRunningTimerLabel.TabIndex = 7;
+            llmRunningTimerLabel.Text = "0 s";
             // 
             // sendUserMsgButton
             // 
@@ -205,9 +217,9 @@
             sendUserMsgButton.Dock = DockStyle.Fill;
             sendUserMsgButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             sendUserMsgButton.ForeColor = SystemColors.ButtonFace;
-            sendUserMsgButton.Location = new Point(269, 3);
+            sendUserMsgButton.Location = new Point(296, 3);
             sendUserMsgButton.Name = "sendUserMsgButton";
-            sendUserMsgButton.Size = new Size(568, 25);
+            sendUserMsgButton.Size = new Size(541, 25);
             sendUserMsgButton.TabIndex = 1;
             sendUserMsgButton.Text = "Send 🚀";
             sendUserMsgButton.UseVisualStyleBackColor = false;
@@ -215,7 +227,7 @@
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(163, 3);
+            progressBar1.Location = new Point(190, 3);
             progressBar1.Name = "progressBar1";
             progressBar1.Size = new Size(100, 23);
             progressBar1.Style = ProgressBarStyle.Continuous;
@@ -227,7 +239,7 @@
             resetChatHistoryButton.BackColor = Color.DeepPink;
             resetChatHistoryButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             resetChatHistoryButton.ForeColor = SystemColors.ButtonFace;
-            resetChatHistoryButton.Location = new Point(83, 3);
+            resetChatHistoryButton.Location = new Point(110, 3);
             resetChatHistoryButton.Name = "resetChatHistoryButton";
             resetChatHistoryButton.Size = new Size(74, 25);
             resetChatHistoryButton.TabIndex = 4;
@@ -401,6 +413,27 @@
             tableLayoutPanel4.Size = new Size(846, 657);
             tableLayoutPanel4.TabIndex = 1;
             // 
+            // includeCodeInjectCheckBox
+            // 
+            includeCodeInjectCheckBox.AutoSize = true;
+            includeCodeInjectCheckBox.Location = new Point(85, 68);
+            includeCodeInjectCheckBox.Margin = new Padding(3, 7, 3, 3);
+            includeCodeInjectCheckBox.Name = "includeCodeInjectCheckBox";
+            includeCodeInjectCheckBox.Size = new Size(65, 19);
+            includeCodeInjectCheckBox.TabIndex = 11;
+            includeCodeInjectCheckBox.Text = "Include";
+            includeCodeInjectCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(6, 68);
+            label5.Margin = new Padding(3, 7, 3, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(67, 15);
+            label5.TabIndex = 9;
+            label5.Text = "Code Inject";
+            // 
             // topPTextBox
             // 
             topPTextBox.Location = new Point(85, 35);
@@ -493,27 +526,6 @@
             tabPage4.Text = "tabPage4";
             tabPage4.UseVisualStyleBackColor = true;
             // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(6, 68);
-            label5.Margin = new Padding(3, 7, 3, 0);
-            label5.Name = "label5";
-            label5.Size = new Size(67, 15);
-            label5.TabIndex = 9;
-            label5.Text = "Code Inject";
-            // 
-            // includeCodeInjectCheckBox
-            // 
-            includeCodeInjectCheckBox.AutoSize = true;
-            includeCodeInjectCheckBox.Location = new Point(85, 68);
-            includeCodeInjectCheckBox.Margin = new Padding(3, 7, 3, 3);
-            includeCodeInjectCheckBox.Name = "includeCodeInjectCheckBox";
-            includeCodeInjectCheckBox.Size = new Size(65, 19);
-            includeCodeInjectCheckBox.TabIndex = 11;
-            includeCodeInjectCheckBox.Text = "Include";
-            includeCodeInjectCheckBox.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -532,8 +544,8 @@
             llmPage.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
-            tableLayoutPanel5.ResumeLayout(false);
-            tableLayoutPanel5.PerformLayout();
+            llmButtonRowHolderTable.ResumeLayout(false);
+            llmButtonRowHolderTable.PerformLayout();
             codePage.ResumeLayout(false);
             codePage.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
@@ -581,9 +593,10 @@
         private Label topPLabel;
         private TextBox temperatureTextBox;
         private Label label3;
-        private TableLayoutPanel tableLayoutPanel5;
+        private TableLayoutPanel llmButtonRowHolderTable;
         private TableLayoutPanel chatMessagePanel;
         private CheckBox includeCodeInjectCheckBox;
         private Label label5;
+        private Label llmRunningTimerLabel;
     }
 }

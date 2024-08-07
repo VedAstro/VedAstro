@@ -373,7 +373,6 @@ namespace LLMCoder
         }
 
         // New method to add a message to the chat message panel
-        // New method to add a message to the chat message panel
         private void AddMessageToPanel(string message, string role, Color color)
         {
             //support empty calls for user to resend existing msg history
@@ -446,6 +445,7 @@ namespace LLMCoder
                     rtb.MaximumSize = new Size(rtb.Width, 28);
                     ((Button)sender).Text = "Expand";
                 }
+                //expand button click logic
                 else
                 {
                     rtb.MinimumSize = new Size(rtb.Width, 0);

@@ -3797,6 +3797,15 @@ class TimeLocationInput {
     MonthInputID = "";
     YearInputID = "";
 
+    // Default values
+    hour = new Date().getHours().toString().padStart(2, '0');
+    minute = new Date().getMinutes().toString().padStart(2, '0');
+    meridian = new Date().getHours() < 12 ? "AM" : "PM";
+    date = new Date().getDate().toString().padStart(2, '0');
+    month = (new Date().getMonth() + 1).toString().padStart(2, '0');
+    year = new Date().getFullYear().toString();
+
+
     // Constructor to initialize the TimeLocationInput object
     constructor(elementId) {
         // Assign the provided elementId to the ElementID property
@@ -3814,6 +3823,12 @@ class TimeLocationInput {
         this.MonthInputID = `${elementId}_MonthInput`;
         this.YearInputID = `${elementId}_YearInput`;
 
+        // Initialize the TimeLocationInputInstances object
+        TimeLocationInput.initInstances();
+
+        // Save a reference to this instance for global access
+        this.saveInstanceReference();
+
         // Call the method to initialize the time location input
         this.initializeTimeLocationInput();
     }
@@ -3829,142 +3844,187 @@ class TimeLocationInput {
         // Generate the HTML for the time location input and inject it into the element
         element.innerHTML = await this.generateTimeLocationInputHtml(labelText);
 
-        // Call the method to initialize the calendar
-        this.initCalendar();
     }
 
     // Method to generate the HTML for the time location input
+    // Method to generate the HTML for the time location input
     async generateTimeLocationInputHtml(labelText) {
-        // Return the HTML for the time location input
-        return `
-      <div class="input-group">
-        <span class="input-group-text gap-2">
-          <div class="" style=""><i class="iconify" data-icon="noto-v1:timer-clock" data-width="30"></i></div>${labelText}
-        </span>
-        <div class="form-control">
-          <div id="${this.TimeInputHolderID}" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
-            <div class="hstack">
-              <span class="border-0 inputPerfect" id="${this.HourInputID}" style="width: 33px;">00</span> :
-              <span class="border-0 inputPerfect" id="${this.MinuteInputID}" style="width: 33px;">00</span>
-              <span class="border-0 inputPerfect" id="${this.MeridianInputID}" style="width: 37px;">am</span>
-            </div>
-            <div class="hstack">
-              <span class="border-0 inputPerfect" id="${this.DateInputID}" style="width: 33px;">30</span> /
-              <span class="border-0 inputPerfect" id="${this.MonthInputID}" style="width: 33px;">07</span> /
-              <span class="border-0 inputPerfect" id="${this.YearInputID}" style="width: 56px;">2024</span>
-            </div>
+        //language=html
+        var outputHtml = `
+    <style>
+      /*to fix time input style in JS date picker*/
+      #${this.CalendarPickerHolderID} input {
+        border: 0;
+        background-color: #f7f7f7;
+      }
+
+      /*to fix time input style in JS date picker*/
+      .vanilla-calendar-time__content button {
+        margin-top: -2px;
+        font-size: 19px;
+        border: 0;
+        color: black;
+      }
+
+      #${this.TimeInputHolderID} {
+        text-align-last: center;
+        cursor: pointer;
+        font-size: 18px;
+      }
+
+      .inputPerfect {
+        cursor: pointer;
+        font-weight: 600;
+        background: transparent;
+        font-size: 18px;
+      }
+    </style>
+
+    <div class="input-group">
+
+      <span class="input-group-text gap-2"><i class="iconify" data-icon="noto-v1:timer-clock" data-width="30"></i>${labelText}</span>
+      <div class="form-control" >
+        <!-- note : on click will toggle picker, so picker cannot be inside TimeInputHolder -->
+        <div id="${this.TimeInputHolderID}" onclick="window.VedAstro.TimeLocationInputInstances['${this.ElementID}'].onClickDateTimeInput()" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
+          <div class="hstack">
+            <span class="border-0 inputPerfect" id="${this.HourInputID}" style="width: 33px;" >${this.hour}</span>:
+            <span class="border-0 inputPerfect" id="${this.MinuteInputID}" style="width: 33px;" >${this.minute}</span>
+            <span class="border-0 inputPerfect" id="${this.MeridianInputID}" style="width: 37px;" >${this.meridian}</span>
           </div>
-          <div class="mt-2 vanilla-calendar visually-hidden border border-primary" style="position: absolute; z-index: 999; background: #f7f7f7;" id="${this.CalendarPickerHolderID}"></div>
+          <div class="hstack">
+            <span class="border-0 inputPerfect" id="${this.DateInputID}" style="width: 33px;" >${this.date}</span>/
+            <span class="border-0 inputPerfect" id="${this.MonthInputID}" style="width: 33px;" >${this.month}</span>/
+            <span class="border-0 inputPerfect" id="${this.YearInputID}" style="width: 56px;" >${this.year}</span>
+          </div>
         </div>
+        <!-- this is where js date picker will be created -->
+        <div class="mt-2 vanilla-calendar visually-hidden border border-primary"
+             style="position: absolute; z-index: 999; background: #f7f7f7;"
+             id="${this.CalendarPickerHolderID}" />
       </div>
-    `;
+    </div>
+  `;
+
+        return outputHtml;
     }
 
+
+    // Method to handle click on date time input
+    onClickDateTimeInput() {
+        // Get the latest values using JS
+        const hour = document.getElementById(this.HourInputID).innerText;
+        const minute = document.getElementById(this.MinuteInputID).innerText;
+        const meridian = document.getElementById(this.MeridianInputID).innerText;
+        const date = document.getElementById(this.DateInputID).innerText;
+        const month = document.getElementById(this.MonthInputID).innerText;
+        const year = document.getElementById(this.YearInputID).innerText;
+
+        // Initialize picker with needed values
+        this.initCalendar(hour, minute, meridian, date, month, year);
+
+        // Toggle picker
+        const calendarPickerHolder = document.getElementById(this.CalendarPickerHolderID);
+        calendarPickerHolder.classList.toggle('visually-hidden');
+    }
+
+    // Initialize the TimeLocationInputInstances object
+    static initInstances() {
+        if (!window.VedAstro) {
+            window.VedAstro = {};
+        }
+        if (!window.VedAstro.TimeLocationInputInstances) {
+            window.VedAstro.TimeLocationInputInstances = {};
+        }
+    }
+
+    // Save a reference to this instance for global access
+    saveInstanceReference() {
+        window.VedAstro.TimeLocationInputInstances[this.ElementID] = this;
+    }
+
+
     // Method to initialize the calendar
-    // Method to initialize the calendar
-    initCalendar() {
+    initCalendar(hour, minute, meridian, date, month, year) {
         // Get the calendar picker holder element
         const calendarPickerHolder = document.getElementById(this.CalendarPickerHolderID);
 
-        // Check if the calendar picker holder element exists
-        if (calendarPickerHolder) {
-            // Create a new VanillaCalendar instance
-            this.calendar = new VanillaCalendar(this.CalendarPickerHolderID, {
-                // Options
-                date: {
-                    today: new Date(),
+        // Create a new VanillaCalendar instance
+        this.calendar = new VanillaCalendar(`#${this.CalendarPickerHolderID}`, {
+            // Options
+            date: {
+                //set the date to show when calendar opens
+                today: new Date(`${year}-${month}-${date}`),
+            },
+            settings: {
+                range: {
+                    min: '0001-01-01',
+                    max: '9999-01-01'
                 },
-                settings: {
-                    range: {
-                        min: '0001-01-01',
-                        max: '9999-01-01'
-                    },
-                    selection: {
-                        time: 12, // AM/PM format
-                    },
+                selection: {
+                    time: 12, //AM/PM format
                 },
-                actions: {
-                    changeTime: (e, time, hours, minutes, keeping) => {
-                        this.updateTime(hours, minutes, keeping);
-                    },
-                    clickDay: (e, dates) => {
-                        this.updateDate(dates);
-                    },
-                    clickMonth: (e, month) => {
-                        this.updateMonth(month);
-                    },
-                    clickYear: (e, year) => {
-                        this.updateYear(year);
-                    },
+                selected: {
+                    //set the time to show when calendar opens
+                    time: `${hour}:${minute} ${meridian}`,
                 },
-            });
+            },
+            //this is where time is sent back to blazor, by setting straight to dom
+            actions: {
+                changeTime: (e, time, hours, minutes, keeping) => {
+                    document.getElementById(this.HourInputID).innerText = hours;
+                    document.getElementById(this.MinuteInputID).innerText = minutes;
+                    document.getElementById(this.MeridianInputID).innerText = keeping;
+                },
+                clickDay: (e, dates) => {
+                    //if date selected, hide date picker
+                    if (dates[0]) {
+                        calendarPickerHolder.classList.add('visually-hidden');
+                    }
 
-            // Initialize the calendar
-            this.calendar.init();
+                    //check needed because random clicks get through
+                    if (dates[0] !== undefined) {
+                        //format the selected date for blazor
+                        const choppedTimeData = dates[0].split("-");
+                        var year = choppedTimeData[0];
+                        var month = choppedTimeData[1];
+                        var day = choppedTimeData[2];
 
-            // Add event listener to hide the calendar when clicking outside
-            document.addEventListener('click', (e) => {
-                this.autoHidePicker(e);
-            }, { capture: true });
-        } else {
-            // If the calendar picker holder element does not exist, try again after a short delay
-            setTimeout(() => {
-                this.initCalendar();
-            }, 100);
-        }
+                        //inject the values into the text input
+                        document.getElementById(this.DateInputID).innerText = day;
+                        document.getElementById(this.MonthInputID).innerText = month;
+                        document.getElementById(this.YearInputID).innerText = year;
+                    }
+
+                },
+                //update year & month immediately even though not yet click date
+                //allows user to change only month or year
+                clickMonth: (e, month) => {
+                    month = month + 1; //correction for JS lib bug
+                    var with0 = ('0' + month).slice(-2);//change 9 to 09
+                    document.getElementById(this.MonthInputID).innerText = with0;
+                },
+                clickYear: (e, year) => {
+                    document.getElementById(this.YearInputID).innerText = year;
+                }
+            },
+        });
+
+        // Initialize the calendar
+        this.calendar.init();
+
+        document.addEventListener('click', (e) => this.autoHidePicker(e), { capture: true });
     }
 
-    // Method to update the time
-    updateTime(hours, minutes, keeping) {
-        const hourInput = document.getElementById(this.HourInputID);
-        const minuteInput = document.getElementById(this.MinuteInputID);
-        const meridianInput = document.getElementById(this.MeridianInputID);
-
-        hourInput.innerText = hours;
-        minuteInput.innerText = minutes;
-        meridianInput.innerText = keeping;
-    }
-
-    // Method to update the date
-    updateDate(dates) {
-        const dateInput = document.getElementById(this.DateInputID);
-        const monthInput = document.getElementById(this.MonthInputID);
-        const yearInput = document.getElementById(this.YearInputID);
-
-        const choppedTimeData = dates[0].split("-");
-        const year = choppedTimeData[0];
-        const month = choppedTimeData[1];
-        const day = choppedTimeData[2];
-
-        dateInput.innerText = day;
-        monthInput.innerText = month;
-        yearInput.innerText = year;
-    }
-
-    // Method to update the month
-    updateMonth(month) {
-        const monthInput = document.getElementById(this.MonthInputID);
-
-        month = month + 1; // Correction for JS lib bug
-        const with0 = ('0' + month).slice(-2); // Change 9 to 09
-        monthInput.innerText = with0;
-    }
-
-    // Method to update the year
-    updateYear(year) {
-        const yearInput = document.getElementById(this.YearInputID);
-
-        yearInput.innerText = year;
-    }
-
-    // Method to hide the calendar when clicking outside
+    //if click is outside picker & input then hide it
     autoHidePicker(e) {
-        const pickerHolder = e.target.closest(this.CalendarPickerHolderID);
-        const timeInput = e.target.closest(this.TimeInputHolderID);
+        //check if click was outside input
+        const pickerHolder = e.target.closest(`#${this.CalendarPickerHolderID}`);
+        const timeInput = e.target.closest(`#${this.TimeInputHolderID}`);
 
+        //if click is not on either inputs then hide picker
         if (!(timeInput || pickerHolder)) {
-            const calendarPickerHolder = document.getElementById(this.CalendarPickerHolderID);
-            calendarPickerHolder.classList.add('visually-hidden');
+            document.getElementById(this.CalendarPickerHolderID).classList.add('visually-hidden');
         }
     }
+
 }

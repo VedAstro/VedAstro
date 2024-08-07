@@ -19,9 +19,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varta"> <!-- link, button, nav etc -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gowun Dodum"> <!--  article text -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Homemade Apple"> <!--  cursive for quotes -->
-    <!--Vanilla Calender-->
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro@2.9.6/build/vanilla-calendar.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro@2.9.6/build/vanilla-calendar.min.css" rel="stylesheet">
+    
+    <!-- DATE PICKER  (Vanilla Calendar) -->
+    <!-- NOTE : current JS code is dependent on version 2.4.0 so maintain, unless you got balls to go update VedAstro.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@2.4.0/build/vanilla-calendar.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@2.4.0/build/vanilla-calendar.min.js"></script>
+
 
     <!--JQuery-->
     <!--Note: JQuery needs to be loaded before bootstrap & vedastro.js-->
@@ -4259,20 +4262,9 @@
                                             <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 17px;">
                                         </div>
 
-                                        
-                                        
-                                        
-                                        
-                                        
-
-                                        
-
-
                                         <!-- @* TIME *@ -->
                                         <div id="TimeLocationInput_AddPerson" LabelText="Birth Time"></div>
                                         
-                                        
-
                                         <!-- @* GENDER *@ -->
                                         <div class="input-group">
                                             <label class="input-group-text gap-2" for="genderSelectInput" style="width: 165px;">

@@ -88,9 +88,13 @@ new IconButton("IconButton_Back_AddPerson");
 new IconButton("IconButton_Save_AddPerson");
 new TimeLocationInput("TimeLocationInput_AddPerson");
 
-function OnClickBack_AddPerson(parameters) {
-    alert(parameters);
+
+function OnClickBack_AddPerson() {
+    navigateToPreviousPage();
 }
+
+
+
 function OnClickSave_AddPerson(parameters) {
     alert(parameters);
 }

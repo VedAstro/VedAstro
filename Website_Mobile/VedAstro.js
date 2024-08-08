@@ -3657,7 +3657,6 @@ class InfoBox {
     }
 }
 
-
 class IconButton {
     // Class properties
     ElementID = "";
@@ -3708,9 +3707,7 @@ class IconButton {
 }
 
 
-
 // The `TimeInputSimple` class generates an HTML component for selecting time and location, with a calendar picker and input fields, and handles user interactions and updates the component's state.
-
 class TimeInputSimple {
     // Class properties
     ElementID = "";
@@ -3954,4 +3951,102 @@ class TimeInputSimple {
     }
 }
 
+
+//wrapper for time input simple
+class TimeLocationInput {
+    // Class properties
+    ElementID;
+    LabelText;
+    TimeInputSimpleID;
+    GeoLocationInputID;
+    TimeInputSimpleInstance;
+    GeoLocationInputInstance;
+
+    // Constructor to initialize the object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Get the DOM element with the given ID
+        const element = document.getElementById(elementId);
+
+        // Get the custom attributes from the element and assign default values if not present
+        this.LabelText = element.getAttribute("LabelText") || "Label Goes Here";
+
+        // Generate a random ID for TimeInputSimple
+        var randoTron = Math.random().toString(36).substr(2, 9);
+        this.TimeInputSimpleID = `TimeInputSimpleID-${randoTron}`;
+        this.GeoLocationInputID = `GeoLocationInputID-${randoTron}`;
+
+        // Call the method to initialize the main body of the page header
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body of the page header
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML for the page header and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+
+        // render subview components via code now that sub view base HTML is in DOM
+        this.TimeInputSimpleInstance = new TimeInputSimple(this.TimeInputSimpleID);
+        this.GeoLocationInputInstance = new GeoLocationInput(this.GeoLocationInputID);
+    }
+
+    // Method to generate the HTML for the page header
+    async generateHtmlBody() {
+        return `
+      <div id="${this.TimeInputSimpleID}" LabelText="${this.LabelText}"></div>
+      <div id="${this.GeoLocationInputID}" class="mt-3" LabelText="${this.LabelText}"></div>
+    `;
+    }
+}
+
+
+class GeoLocationInput {
+    // Class properties
+    ElementID = "";
+    LabelText = "Title Goes Here";
+
+    // Constructor to initialize the PageHeader object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Get the DOM element with the given ID
+        const element = document.getElementById(elementId);
+
+        // Get the custom attributes from the element and assign default values if not present
+        this.LabelText = element.getAttribute("LabelText") || "Title Goes Here";
+
+        // Call the method to initialize the main body of the page header
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body of the page header
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML for the page header and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+    }
+
+    // Method to generate the HTML for the page header
+    async generateHtmlBody() {
+        return `
+    <div class="hstack gap-1">
+        <div class="input-group">
+            <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
+            <input type="text" class="form-control" placeholder="New York" style="font-weight: 600; font-size: 17px;">
+        </div>
+        <button class="iconOnlyButton btn-primary btn ms-1" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;">
+            <i class="iconify" data-icon="bx:search-alt" data-width="25"></i>
+        </button>
+    </div>
+    `;
+    }
+}
 

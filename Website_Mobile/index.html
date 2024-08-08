@@ -4256,10 +4256,8 @@
 
                                         <!-- @* NAME *@ -->
                                         <div class="input-group">
-                                            <span class="input-group-text gap-2" style="width: 136px;">
-                                                <i class="iconify" data-icon="flat-color-icons:butting-in" data-width="35"></i>Name
-                                            </span>
-                                            <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 17px;">
+                                            <span class="input-group-text gap-2" style="width: 136px;"><i class="iconify" data-icon="flat-color-icons:butting-in" data-width="35"></i>Name</span>
+                                            <input id="NameInput_AddPerson" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 17px;">
                                         </div>
 
                                         <!-- @* TIME *@ -->
@@ -4270,7 +4268,7 @@
                                             <label class="input-group-text gap-2" for="genderSelectInput" style="width: 165px;">
                                                 <i class="iconify" data-icon="mdi:human-male-female" data-width="34"></i>Gender
                                             </label>
-                                            <select @bind="_genderInput" class="form-select" id="genderSelectInput" style="font-weight: 600; font-size: 17px;">
+                                            <select id="GenderInput_AddPerson" class="form-select" id="genderSelectInput" style="font-weight: 600; font-size: 17px;">
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
                                             </select>

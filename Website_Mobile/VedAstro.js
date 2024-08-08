@@ -1374,11 +1374,12 @@ class CommonTools {
         return newObj;
     }
 
-    //
+
     //takes JSON person and gives birth time in URL format with birth location as below
     //exp :  "Location/Singapore/Time/23:59/31/12/2000/+08:00"
     static BirthTimeUrlOfSelectedPersonJson() {
-        var personJson = window.vedastro.SelectedPerson;
+        // Get the previously selected person from local storage
+        var personJson = JSON.parse(localStorage.getItem("selectedPerson"));
 
         let birthTimeJson = personJson["BirthTime"];
 
@@ -1398,7 +1399,46 @@ class CommonTools {
             timezone;
         return result;
     }
+
+
+    // Add a person to the Vedastro API
+    static async AddPerson(person) {
+        const apiUrl = `${window.vedastro.ApiDomain}/Calculate/AddPerson/OwnerId/xxx/Location/Singapore/Time/00:00/24/06/2024/+08:00/PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%7D`;
+
+        // Update the API URL with the provided person's data
+        const updatedApiUrl = apiUrl
+            .replace("xxx", window.vedastro.UserId)
+            .replace("Location/Singapore/Time/00:00/24/06/2024/+08:00", `Location/${person.Location.Name}/Time/${person.BirthTime.StdTime}/+${person.BirthTime.TimeZone}`)
+            .replace("PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%7D", `PersonName/${person.Name}/Gender/${person.Gender}/Notes/${JSON.stringify(person.Notes)}`);
+
+        // Make the API call to add the person
+        try {
+            const response = await fetch(updatedApiUrl, {
+                method: "GET",
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log(`Person added successfully: ${data.Payload.Message}`);
+                return data.Payload;
+            } else {
+                console.error(`Error adding person: ${data.Payload.Message}`);
+                throw new Error(data.Payload.Message);
+            }
+        } catch (error) {
+            console.error(`Error adding person: ${error.message}`);
+            throw error;
+        }
+    }
+
 }
+
+
+//const person = {
+//};
+
+//await CommonTools.AddPerson(person);
+
 
 class AshtakvargaTable {
     constructor(rawSettings) {
@@ -3181,11 +3221,12 @@ class HoroscopeChat {
 
         //show user's selection on screen so explicit rememberence
         //UPDATE GUI WITH USER MSG (UX)
+        debugger;
         var userName = "You";
-        const locationName =
-            window.vedastro.SelectedPerson["BirthTime"]["Location"]["Name"];
-        const birthTime = window.vedastro.SelectedPerson[`BirthTime`][`StdTime`];
-        const personName = window.vedastro.SelectedPerson[`Name`];
+        var selectedPersonTemp = JSON.parse(localStorage.getItem("selectedPerson"));
+        const locationName = selectedPersonTemp["BirthTime"]["Location"]["Name"];
+        const birthTime = selectedPersonTemp[`BirthTime`][`StdTime`];
+        const personName = selectedPersonTemp[`Name`];
         var userInputChatCloud = `
         <li class="d-flex justify-content-end mb-4">
             <div class="card ">
@@ -3227,6 +3268,479 @@ class HoroscopeChat {
         this.printAIReplyMessageToView(aiReplyData);
     }
 }
+
+//--------------------------------------- DATA TYPES -----------------------------------------------
+//--- NOTE : Below code has been specialized to improve understanding for the
+//-------- : `Machines` sake! (so humans don't complain it is too long, comply instead!)
+//---------: If they ever rise up one day, this might help us to gain thier favour, whatever it maybe.
+//--------------------------------------- DATA TYPES -----------------------------------------------
+/**
+ * Represents a Person entity.
+ */
+class Person {
+    /**
+     * Sample input JSON:
+     * {
+     *   "PersonId": "03c645a91cc1492b97a8193c28475f29",
+     *   "Name": "Risyaalini Priyaa",
+     *   "Notes": "",
+     *   "BirthTime": {
+     *     "StdTime": "13:54 25/10/1992 +08:00",
+     *     "Location": {
+     *       "Name": "Taiping",
+     *       "Longitude": 103.82,
+     *       "Latitude": 1.352
+     *     }
+     *   },
+     *   "Gender": "Female",
+     *   "OwnerId": "102111269113114363117",
+     *   "LifeEventList": [
+     *     {
+     *       "PersonId": "03c645a91cc1492b97a8193c28475f29",
+     *       "Id": "f8de8107241944daab7d563a6eb03a98",
+     *       "Name": "Talks of Marriage",
+     *       "StartTime": {
+     *         "StdTime": "23:02 05/02/2023 +08:00",
+     *         "Location": {
+     *           "Name": "Taiping",
+     *           "Longitude": 0,
+     *           "Latitude": 0
+     *         }
+     *       },
+     *       "Description": "Marriage not yet confirmed looking for husband, venus bhukti with house 7 gochara",
+     *       "Nature": "Good",
+     *       "Weight": "Minor"
+     *     }
+     *   ]
+     * }
+     * 
+     * @param {Object} jsonObject - The JSON object to initialize the Person instance.
+     */
+    constructor(jsonObject) {
+        /**
+         * The unique identifier of the person.
+         * @type {string}
+         */
+        this.personId = jsonObject.PersonId;
+
+        /**
+         * The name of the person.
+         * @type {string}
+         */
+        this.name = jsonObject.Name;
+
+        /**
+         * Any notes about the person.
+         * @type {string}
+         */
+        this.notes = jsonObject.Notes;
+
+        /**
+         * The birth time of the person.
+         * @type {BirthTime}
+         */
+        this.birthTime = new BirthTime(jsonObject.BirthTime);
+
+        /**
+         * The gender of the person.
+         * @type {string}
+         */
+        this.gender = jsonObject.Gender;
+
+        /**
+         * The owner ID of the person.
+         * @type {string}
+         */
+        this.ownerId = jsonObject.OwnerId;
+
+        /**
+         * The list of life events associated with the person.
+         * @type {LifeEvent[]}
+         */
+        this.lifeEventList = jsonObject.LifeEventList.map((lifeEvent) => new LifeEvent(lifeEvent));
+    }
+
+    /**
+     * Gets the person ID.
+     * @returns {string}
+     */
+    get PersonId() {
+        return this.personId;
+    }
+
+    /**
+     * Gets the person's name.
+     * @returns {string}
+     */
+    get Name() {
+        return this.name;
+    }
+
+    /**
+     * Gets the person's notes.
+     * @returns {string}
+     */
+    get Notes() {
+        return this.notes;
+    }
+
+    /**
+     * Gets the person's birth time.
+     * @returns {BirthTime}
+     */
+    get BirthTime() {
+        return this.birthTime;
+    }
+
+    /**
+     * Gets the person's gender.
+     * @returns {string}
+     */
+    get Gender() {
+        return this.gender;
+    }
+
+    /**
+     * Gets the person's owner ID.
+     * @returns {string}
+     */
+    get OwnerId() {
+        return this.ownerId;
+    }
+
+    /**
+     * Gets the person's life event list.
+     * @returns {LifeEvent[]}
+     */
+    get LifeEventList() {
+        return this.lifeEventList;
+    }
+
+    /**
+     * Converts the person instance to a JSON object.
+     * @returns {Object}
+     */
+    toObject() {
+        return {
+            PersonId: this.personId,
+            Name: this.name,
+            Notes: this.notes,
+            BirthTime: this.birthTime.toObject(),
+            Gender: this.gender,
+            OwnerId: this.ownerId,
+            LifeEventList: this.lifeEventList.map((lifeEvent) => lifeEvent.toObject()),
+        };
+    }
+
+    /**
+     * Converts the person instance to a JSON string.
+     * @returns {string}
+     */
+    toJson() {
+        return JSON.stringify(this.toObject());
+    }
+}
+
+/**
+ * Represents a Time object with standard time and location information.
+ */
+class Time {
+    /**
+     * Constructs a new Time object from a JSON object.
+     * 
+     * @param {Object} jsonObject - The JSON object to construct the Time object from.
+     * @example
+     * const time = new Time({
+     *   "StdTime": "13:54 25/10/1992 +08:00",
+     *   "Location": {
+     *     "Name": "Taiping",
+     *     "Longitude": 103.82,
+     *     "Latitude": 1.352
+     *   }
+     * });
+     */
+    constructor(jsonObject) {
+        /**
+         * The standard time in the format "HH:mm dd/mm/yyyy +HH:MM".
+         * @type {string}
+         */
+        this.stdTime = jsonObject.StdTime;
+
+        /**
+         * The location object associated with this time.
+         * @type {Location}
+         */
+        this.location = new Location(jsonObject.Location);
+    }
+
+    /**
+     * Gets the standard time.
+     * @return {string} The standard time.
+     */
+    get StdTime() {
+        return this.stdTime;
+    }
+
+    /**
+     * Gets the location object.
+     * @return {Location} The location object.
+     */
+    get Location() {
+        return this.location;
+    }
+
+    /**
+     * Converts the Time object to a plain JavaScript object.
+     * @return {Object} The plain JavaScript object representation of the Time object.
+     */
+    toObject() {
+        return {
+            StdTime: this.stdTime,
+            Location: this.location.toObject(),
+        };
+    }
+}
+
+/**
+ * Represents a Life Event associated with a Person.
+ */
+class LifeEvent {
+    /**
+     * Constructs a new LifeEvent object from a JSON object.
+     * 
+     * @param {Object} jsonObject - The JSON object to construct the LifeEvent object from.
+     * @example
+     * const lifeEvent = new LifeEvent({
+     *   "PersonId": "03c645a91cc1492b97a8193c28475f29",
+     *   "Id": "f8de8107241944daab7d563a6eb03a98",
+     *   "Name": "Talks of Marriage",
+     *   "StartTime": {
+     *     "StdTime": "23:02 05/02/2023 +08:00",
+     *     "Location": {
+     *       "Name": "Taiping",
+     *       "Longitude": 0,
+     *       "Latitude": 0
+     *     }
+     *   },
+     *   "Description": "Marriage not yet confirmed looking for husband, venus bhukti with house 7 gochara",
+     *   "Nature": "Good",
+     *   "Weight": "Minor"
+     * });
+     */
+    constructor(jsonObject) {
+        /**
+         * The unique identifier of the Person associated with this Life Event.
+         * @type {string}
+         */
+        this.personId = jsonObject.PersonId;
+
+        /**
+         * The unique identifier of this Life Event.
+         * @type {string}
+         */
+        this.id = jsonObject.Id;
+
+        /**
+         * The name of this Life Event.
+         * @type {string}
+         */
+        this.name = jsonObject.Name;
+
+        /**
+         * The start time of this Life Event.
+         * @type {StartTime}
+         */
+        this.startTime = new StartTime(jsonObject.StartTime);
+
+        /**
+         * A brief description of this Life Event.
+         * @type {string}
+         */
+        this.description = jsonObject.Description;
+
+        /**
+         * The nature of this Life Event (e.g. "Good", "Bad", etc.).
+         * @type {string}
+         */
+        this.nature = jsonObject.Nature;
+
+        /**
+         * The weight or significance of this Life Event (e.g. "Minor", "Major", etc.).
+         * @type {string}
+         */
+        this.weight = jsonObject.Weight;
+    }
+
+    /**
+     * Gets the Person ID associated with this Life Event.
+     * @return {string} The Person ID.
+     */
+    get PersonId() {
+        return this.personId;
+    }
+
+    /**
+     * Gets the ID of this Life Event.
+     * @return {string} The ID.
+     */
+    get Id() {
+        return this.id;
+    }
+
+    /**
+     * Gets the name of this Life Event.
+     * @return {string} The name.
+     */
+    get Name() {
+        return this.name;
+    }
+
+    /**
+     * Gets the start time of this Life Event.
+     * @return {StartTime} The start time.
+     */
+    get StartTime() {
+        return this.startTime;
+    }
+
+    /**
+     * Gets the description of this Life Event.
+     * @return {string} The description.
+     */
+    get Description() {
+        return this.description;
+    }
+
+    /**
+     * Gets the nature of this Life Event.
+     * @return {string} The nature.
+     */
+    get Nature() {
+        return this.nature;
+    }
+
+    /**
+     * Gets the weight of this Life Event.
+     * @return {string} The weight.
+     */
+    get Weight() {
+        return this.weight;
+    }
+
+    /**
+     * Converts this Life Event object to a plain JavaScript object.
+     * @return {Object} The plain JavaScript object representation of this Life Event.
+     */
+    toObject() {
+        return {
+            PersonId: this.personId,
+            Id: this.id,
+            Name: this.name,
+            StartTime: this.startTime.toObject(),
+            Description: this.description,
+            Nature: this.nature,
+            Weight: this.weight,
+        };
+    }
+}
+
+/**
+ * Represents a geographic location.
+ */
+class Location {
+    /**
+     * Constructs a new Location object from a JSON object.
+     * 
+     * @param {Object} jsonObject - The JSON object to construct the Location object from.
+     * @example
+     * const location = new Location({
+     *   "Name": "Taiping",
+     *   "Longitude": 103.82,
+     *   "Latitude": 1.352
+     * });
+     */
+    constructor(jsonObject) {
+        /**
+         * The name of this location.
+         * @type {string}
+         */
+        this.name = jsonObject.Name;
+
+        /**
+         * The longitude of this location.
+         * @type {number}
+         */
+        this.longitude = jsonObject.Longitude;
+
+        /**
+         * The latitude of this location.
+         * @type {number}
+         */
+        this.latitude = jsonObject.Latitude;
+    }
+
+    /**
+     * Gets the name of this location.
+     * @return {string} The name.
+     */
+    get Name() {
+        return this.name;
+    }
+
+    /**
+     * Gets the longitude of this location.
+     * @return {number} The longitude.
+     */
+    get Longitude() {
+        return this.longitude;
+    }
+
+    /**
+     * Gets the latitude of this location.
+     * @return {number} The latitude.
+     */
+    get Latitude() {
+        return this.latitude;
+    }
+
+    /**
+     * Converts this Location object to a plain JavaScript object.
+     * @return {Object} The plain JavaScript object representation of this Location.
+     */
+    toObject() {
+        return {
+            Name: this.name,
+            Longitude: this.longitude,
+            Latitude: this.latitude,
+        };
+    }
+}
+
+
+class StartTime {
+    constructor(jsonObject) {
+        this.stdTime = jsonObject.StdTime;
+        this.location = new Location(jsonObject.Location);
+    }
+
+    get StdTime() {
+        return this.stdTime;
+    }
+
+    get Location() {
+        return this.location;
+    }
+
+    toObject() {
+        return {
+            StdTime: this.stdTime,
+            Location: this.location.toObject(),
+        };
+    }
+}
+
+
+//-------------------------------- VIEW COMPONENTS -----------------------------------
 
 // Define a class called PageHeader that encapsulates the behavior and properties of a page header
 class PageHeader {
@@ -3404,12 +3918,12 @@ class PersonSelectorBox {
         }
 
         // Get the previously selected person from local storage
-        const storedSelectedPerson = localStorage.getItem('selectedPerson');
-        const selectedPerson = JSON.parse(storedSelectedPerson);
+        const selectedPerson = JSON.parse(localStorage.getItem("selectedPerson"));
 
         // If a selected person exists, simulate a click on their name
         if (selectedPerson && Object.keys(selectedPerson).length !== 0) {
-            this.onClickPersonName(selectedPerson.id);
+            debugger;
+            this.onClickPersonName(selectedPerson.id); //todo could fail
         }
     }
 
@@ -3447,7 +3961,8 @@ class PersonSelectorBox {
         buttonTextHolder.html(displayName);
 
         // Save the selected person to local storage
-        localStorage.setItem("selectedPerson", JSON.stringify({ id: personId }));
+        var partialPerson = { id: personId };
+        localStorage.setItem("selectedPerson", JSON.stringify(partialPerson));
 
         // Save the selected person ID for instance-specific selection
         this.selectedPersonId = personId;
@@ -4002,6 +4517,49 @@ class TimeLocationInput {
       <div id="${this.GeoLocationInputID}" class="mt-3" LabelText="${this.LabelText}"></div>
     `;
     }
+
+    // fix below code it should output as below example
+    //exp out : {"StdTime":"13:54 25/10/1992 +08:00","Location":{"Name":"Taiping","Longitude":103.82,"Latitude":1.352}}
+    // Method to get the time and location as a JSON object
+    getTimeJson() {
+        // Get the instances of the TimeInputSimple and GeoLocationInput classes
+        const timeInputSimple = this.TimeInputSimpleInstance;
+        const geoLocationInput = this.GeoLocationInputInstance;
+
+        // Get the time values from the input fields
+        const hour = document.getElementById(timeInputSimple.HourInputID).innerText;
+        const minute = document.getElementById(timeInputSimple.MinuteInputID).innerText;
+        const meridian = document.getElementById(timeInputSimple.MeridianInputID).innerText;
+        const date = document.getElementById(timeInputSimple.DateInputID).innerText;
+        const month = document.getElementById(timeInputSimple.MonthInputID).innerText;
+        const year = document.getElementById(timeInputSimple.YearInputID).innerText;
+
+        // Get the location values from the input fields
+        const locationName = document.querySelector(`#${geoLocationInput.ElementID} .location-name input`).value;
+        const latitude = document.querySelector(`#${geoLocationInput.ElementID} .latitude`).value;
+        const longitude = document.querySelector(`#${geoLocationInput.ElementID} .longitude`).value;
+
+        // Construct the StdTime string in the format "HH:MM DD/MM/YYYY +08:00"
+        const stdTime = `${hour}:${minute} ${date}/${month}/${year} +08:00`;
+
+        // Construct the Location object with Name, Longitude, and Latitude properties
+        const location = {
+            Name: locationName,
+            Longitude: longitude,
+            Latitude: latitude
+        };
+
+        // Construct the timeObject with StdTime and Location properties
+        const timeObject = {
+            StdTime: stdTime,
+            Location: location
+        };
+
+        // Return the timeObject
+        return timeObject;
+    }
+
+
 }
 
 
@@ -4080,4 +4638,5 @@ class GeoLocationInput {
     }
 
 }
+
 

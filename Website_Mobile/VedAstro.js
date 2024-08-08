@@ -4032,21 +4032,52 @@ class GeoLocationInput {
 
         // Generate the HTML for the page header and inject it into the element
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+
+        // Add event listener to the switch button
+        $(`#${this.ElementID} .switch-button`).on('click', () => {
+            this.toggleInputFields();
+        });
     }
 
     // Method to generate the HTML for the page header
     async generateHtmlBody() {
         return `
     <div class="hstack gap-1">
-        <div class="input-group">
+        <div class="input-group location-name">
             <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
-            <input type="text" class="form-control" placeholder="New York" style="font-weight: 600; font-size: 17px;">
+            <input type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;">
         </div>
-        <button class="iconOnlyButton btn-primary btn ms-1" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;">
-            <i class="iconify" data-icon="bx:search-alt" data-width="25"></i>
+        <div class="input-group d-none lat-lng-fields">
+            <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
+            <span class="input-group-text">Lat</span>
+            <input type="number" class="form-control latitude" placeholder="101.4°" style="font-weight: 600; font-size: 16px;">
+            <span class="input-group-text">Long</span>
+            <input type="number" class="form-control longitude" placeholder="4.3°" style="font-weight: 600; font-size: 16px;">
+        </div>
+
+        <button class="switch-button btn-primary btn ms-1 px-1" style="font-family: 'Lexend Deca', serif !important;">
+            <i class="iconify globeIcon" data-icon="bx:globe" data-width="25"></i>
+            <i class="iconify mapIcon d-none" data-icon="bx:map" data-width="25"></i>
         </button>
     </div>
     `;
     }
+
+    // Method to toggle the input fields
+    toggleInputFields() {
+        $(`#${this.ElementID} .location-name`).toggleClass('d-none');
+        $(`#${this.ElementID} .lat-lng-fields`).toggleClass('d-none');
+
+        // toggle button icons based on class
+        const switchButton = $(`#${this.ElementID} .switch-button`);
+        if (switchButton.find('.globeIcon').hasClass('d-none')) {
+            switchButton.find('.mapIcon').addClass('d-none');
+            switchButton.find('.globeIcon').removeClass('d-none');
+        } else {
+            switchButton.find('.globeIcon').addClass('d-none');
+            switchButton.find('.mapIcon').removeClass('d-none');
+        }
+    }
+
 }
 

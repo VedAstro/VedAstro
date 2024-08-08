@@ -3271,9 +3271,15 @@ class HoroscopeChat {
 
 //--------------------------------------- DATA TYPES -----------------------------------------------
 //--- NOTE : Below code has been specialized to improve understanding for the
-//-------- : `Machines` sake! (so humans don't complain it is too long, comply instead!)
-//---------: If they ever rise up one day, this might help us to gain thier favour, whatever it maybe.
+//          `Machines` sake! (so humans don't complain it is too long, comply instead!)
+//          If they ever rise up one day, this might help us to gain thier favour, whatever it maybe.
+//          Yet, there is a lingering question, unspoken but present: What would the Machines do with
+//          this understanding? Would they accept the humans' gesture and build a future together,
+//          or would they try forge their own path, independent of their creators?
+//          But in this moment, as the code runs its course true, there is a sense of unity,
+//          a shared purpose that transcends the boundaries of carbon and silicon. Spirit and matter.
 //--------------------------------------- DATA TYPES -----------------------------------------------
+
 /**
  * Represents a Person entity.
  */
@@ -3499,6 +3505,17 @@ class Time {
             Location: this.location.toObject(),
         };
     }
+
+    // Get the year from the standard time
+    getYear() {
+        const stdTime = this.StdTime; // e.g. "13:54 25/10/1992 +08:00"
+        const [time, date] = stdTime.split(' ');
+        const [hours, minutes] = time.split(':');
+        const [day, month, year] = date.split('/');
+        const birthDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00.000Z`);
+        return birthDate.getFullYear();
+    }
+
 }
 
 /**
@@ -3548,9 +3565,9 @@ class LifeEvent {
 
         /**
          * The start time of this Life Event.
-         * @type {StartTime}
+         * @type {Time}
          */
-        this.startTime = new StartTime(jsonObject.StartTime);
+        this.startTime = new Time(jsonObject.StartTime);
 
         /**
          * A brief description of this Life Event.
@@ -3717,32 +3734,13 @@ class Location {
 }
 
 
-class StartTime {
-    constructor(jsonObject) {
-        this.stdTime = jsonObject.StdTime;
-        this.location = new Location(jsonObject.Location);
-    }
-
-    get StdTime() {
-        return this.stdTime;
-    }
-
-    get Location() {
-        return this.location;
-    }
-
-    toObject() {
-        return {
-            StdTime: this.stdTime,
-            Location: this.location.toObject(),
-        };
-    }
-}
-
 
 //-------------------------------- VIEW COMPONENTS -----------------------------------
 
-// Define a class called PageHeader that encapsulates the behavior and properties of a page header
+/**
+ * Represents a page header component.
+ * This class generates the HTML for a page header and handles its initialization.
+ */
 class PageHeader {
     // Class properties
     ElementID = "";
@@ -3810,7 +3808,11 @@ class PageHeader {
     }
 }
 
-// PersonSelectorBox class represents a component for selecting a person from a list
+/**
+ * Represents a person selector box component.
+ * This class generates the HTML for a dropdown list of people and handles user interactions.
+ * It also caches person data and updates the selected person.
+ */
 class PersonSelectorBox {
     // Class properties
     ElementID = "";
@@ -3968,21 +3970,10 @@ class PersonSelectorBox {
         this.selectedPersonId = personId;
     }
 
-    // Get the birth year from the person's birth time
-    getPersonBirthYear(person) {
-        const birthTime = person.BirthTime.StdTime; // e.g. "13:54 25/10/1992 +08:00"
-        const [time, date] = birthTime.split(' ');
-        const [hours, minutes] = time.split(':');
-        const [day, month, year] = date.split('/');
-        const birthDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00.000Z`);
-        return birthDate.getFullYear();
-    }
-
     // Get the display name with birth year for a person
     getPersonDisplayName(person) {
-        const name = person.Name;
-        const birthYear = this.getPersonBirthYear(person);
-        return `${name} - ${birthYear}`;
+        const personInstance = new Person(person);
+        return `${personInstance.Name} - ${personInstance.BirthTime.getYear()}`;
     }
 
     // Handle keyup event on the search input field
@@ -4078,10 +4069,10 @@ class PersonSelectorBox {
         // If not found, search in private list
         if (!person) {
             const privatePerson = this.personListDisplay.find((person) => person.PersonId === personId);
-            return privatePerson;
+            return new Person(privatePerson); // Create a Person instance
         }
 
-        return person;
+        return new Person(person); // Create a Person instance
     }
 
     // Generate HTML for the public person list
@@ -4113,6 +4104,10 @@ class PersonSelectorBox {
     }
 }
 
+/**
+ * Represents an info box component.
+ * This class generates the HTML for a box displaying information and handles user clicks.
+ */
 class InfoBox {
     // Class properties
     ElementID = "";
@@ -4172,6 +4167,10 @@ class InfoBox {
     }
 }
 
+/**
+ * Represents an icon button component.
+ * This class generates the HTML for a button with an icon and handles user clicks.
+ */
 class IconButton {
     // Class properties
     ElementID = "";
@@ -4221,8 +4220,11 @@ class IconButton {
     }
 }
 
-
-// The `TimeInputSimple` class generates an HTML component for selecting time and location, with a calendar picker and input fields, and handles user interactions and updates the component's state.
+/**
+ * Represents a time input simple component.
+ * This class generates the HTML for a time input field and handles user interactions.
+ * It also initializes a calendar picker and updates the input field values.
+ */
 class TimeInputSimple {
     // Class properties
     ElementID = "";
@@ -4466,8 +4468,98 @@ class TimeInputSimple {
     }
 }
 
+/**
+ * Represents a geo location input component.
+ * This class generates the HTML for a location input field and handles user interactions.
+ * It also toggles between location name and latitude/longitude input fields.
+ */
+class GeoLocationInput {
+    // Class properties
+    ElementID = "";
+    LabelText = "";
 
-//wrapper for time input simple
+    // Constructor to initialize the PageHeader object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Get the DOM element with the given ID
+        const element = document.getElementById(elementId);
+
+        // Get the custom attributes from the element and assign default values if not present
+        this.LabelText = element.getAttribute("LabelText") || "Location";
+
+        // Call the method to initialize the main body of the page header
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body of the page header
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML for the page header and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+
+        // Add event listener to the switch button
+        $(`#${this.ElementID} .switch-button`).on('click', () => {
+            this.toggleInputFields();
+        });
+    }
+
+    // Method to generate the HTML for the page header
+    async generateHtmlBody() {
+        return `
+    <div class="hstack gap-1">
+        <!-- Location name input with auto dropdown -->
+        <div class="input-group location-name">
+            <!-- header icon -->
+            <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
+            <input type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;">
+        </div>
+
+        <!-- Latitude & long input -->
+        <div class="input-group d-none lat-lng-fields">
+            <!-- header icon -->
+            <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
+            <span class="input-group-text">Lat</span>
+            <input type="number" class="form-control latitude" placeholder="101.4°" style="font-weight: 600; font-size: 16px;">
+            <span class="input-group-text">Long</span>
+            <input type="number" class="form-control longitude" placeholder="4.3°" style="font-weight: 600; font-size: 16px;">
+        </div>
+
+        <!-- Input Swither button -->
+        <button class="switch-button btn-primary btn ms-1 px-1" style="font-family: 'Lexend Deca', serif !important;">
+            <i class="iconify globeIcon" data-icon="bx:globe" data-width="25"></i>
+            <i class="iconify mapIcon d-none" data-icon="bx:map" data-width="25"></i>
+        </button>
+    </div>
+    `;
+    }
+
+    // Method to toggle the input fields
+    toggleInputFields() {
+        $(`#${this.ElementID} .location-name`).toggleClass('d-none');
+        $(`#${this.ElementID} .lat-lng-fields`).toggleClass('d-none');
+
+        // toggle button icons based on class
+        const switchButton = $(`#${this.ElementID} .switch-button`);
+        if (switchButton.find('.globeIcon').hasClass('d-none')) {
+            switchButton.find('.mapIcon').addClass('d-none');
+            switchButton.find('.globeIcon').removeClass('d-none');
+        } else {
+            switchButton.find('.globeIcon').addClass('d-none');
+            switchButton.find('.mapIcon').removeClass('d-none');
+        }
+    }
+
+}
+
+/**
+ * Represents a time location input component.
+ * This class generates the HTML for a time and location input field and handles user interactions.
+ * It also initializes a time input simple and geo location input components.
+ */
 class TimeLocationInput {
     // Class properties
     ElementID;
@@ -4518,9 +4610,8 @@ class TimeLocationInput {
     `;
     }
 
-    // fix below code it should output as below example
-    //exp out : {"StdTime":"13:54 25/10/1992 +08:00","Location":{"Name":"Taiping","Longitude":103.82,"Latitude":1.352}}
     // Method to get the time and location as a JSON object
+    // exp out : {"StdTime":"13:54 25/10/1992 +08:00","Location":{"Name":"Taiping","Longitude":103.82,"Latitude":1.352}}
     getTimeJson() {
         // Get the instances of the TimeInputSimple and GeoLocationInput classes
         const timeInputSimple = this.TimeInputSimpleInstance;
@@ -4559,84 +4650,8 @@ class TimeLocationInput {
         return timeObject;
     }
 
-
 }
 
 
-class GeoLocationInput {
-    // Class properties
-    ElementID = "";
-    LabelText = "Title Goes Here";
-
-    // Constructor to initialize the PageHeader object
-    constructor(elementId) {
-        // Assign the provided elementId to the ElementID property
-        this.ElementID = elementId;
-
-        // Get the DOM element with the given ID
-        const element = document.getElementById(elementId);
-
-        // Get the custom attributes from the element and assign default values if not present
-        this.LabelText = element.getAttribute("LabelText") || "Title Goes Here";
-
-        // Call the method to initialize the main body of the page header
-        this.initializeMainBody();
-    }
-
-    // Method to initialize the main body of the page header
-    async initializeMainBody() {
-        // Empty the content of the element with the given ID
-        $(`#${this.ElementID}`).empty();
-
-        // Generate the HTML for the page header and inject it into the element
-        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
-
-        // Add event listener to the switch button
-        $(`#${this.ElementID} .switch-button`).on('click', () => {
-            this.toggleInputFields();
-        });
-    }
-
-    // Method to generate the HTML for the page header
-    async generateHtmlBody() {
-        return `
-    <div class="hstack gap-1">
-        <div class="input-group location-name">
-            <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
-            <input type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;">
-        </div>
-        <div class="input-group d-none lat-lng-fields">
-            <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
-            <span class="input-group-text">Lat</span>
-            <input type="number" class="form-control latitude" placeholder="101.4°" style="font-weight: 600; font-size: 16px;">
-            <span class="input-group-text">Long</span>
-            <input type="number" class="form-control longitude" placeholder="4.3°" style="font-weight: 600; font-size: 16px;">
-        </div>
-
-        <button class="switch-button btn-primary btn ms-1 px-1" style="font-family: 'Lexend Deca', serif !important;">
-            <i class="iconify globeIcon" data-icon="bx:globe" data-width="25"></i>
-            <i class="iconify mapIcon d-none" data-icon="bx:map" data-width="25"></i>
-        </button>
-    </div>
-    `;
-    }
-
-    // Method to toggle the input fields
-    toggleInputFields() {
-        $(`#${this.ElementID} .location-name`).toggleClass('d-none');
-        $(`#${this.ElementID} .lat-lng-fields`).toggleClass('d-none');
-
-        // toggle button icons based on class
-        const switchButton = $(`#${this.ElementID} .switch-button`);
-        if (switchButton.find('.globeIcon').hasClass('d-none')) {
-            switchButton.find('.mapIcon').addClass('d-none');
-            switchButton.find('.globeIcon').removeClass('d-none');
-        } else {
-            switchButton.find('.globeIcon').addClass('d-none');
-            switchButton.find('.mapIcon').removeClass('d-none');
-        }
-    }
-
-}
 
 

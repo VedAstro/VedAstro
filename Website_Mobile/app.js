@@ -92,12 +92,195 @@ new TimeLocationInput("TimeLocationInput_AddPerson");
 function OnClickBack_AddPerson() {
     navigateToPreviousPage();
 }
+async function OnClickSave_AddPerson() {
+    // if not logged in tell user what the f he is doing
+    if (AppData.IsGuestUser) {
+        const loginLink = `<a target="_blank" style="text-decoration-line: none;" href="${AppData.URL.Login}" class="link-primary fw-bold">logged in</a>`;
+        const result = await Swal.fire({
+            icon: 'info',
+            title: 'Remember!',
+            html: `You have not ${loginLink}, continue as <strong>Guest</strong>?`,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, continue!'
+        });
+        if (!result.isConfirmed) return;
+    }
 
+    // show loading
+    CommonTools.ShowLoading();
 
+    // only continue if passed input field validation
+    if (!(await isValidationPassed_AddPerson())) {
+        Swal.close();
+        return;
+    }
 
-function OnClickSave_AddPerson(parameters) {
-    alert(parameters);
+    // make a new person from the details in the input
+    const person = await getPersonInstanceFromInput();
+
+    // send newly created person to API server
+    const newPersonId = await CommonTools.AddPerson(person);
+
+    // update new id, before saving into browser storage
+    person.Id = newPersonId;
+
+    // after adding new person set person, as selected to make life easier for user (UX)
+    localStorage.setItem('selectedPerson', JSON.stringify(person));
+
+    // hide loading
+    Swal.close();
+
+    // show done message
+    Swal.fire({
+        icon: 'success',
+        title: 'Done!',
+        text: 'Person added successfully!',
+        timer: 1500
+    });
+
+    // wait a little and send user back to previous page
+    setTimeout(() => {
+        navigateToPreviousPage();
+    }, 1500);
 }
+
+//brings together all the individual data for making person profile from page into 1 object that looks like
+//{"PersonId":"03c645a91cc1492b97a8193c28475f29","Name":"Risyaalini Priyaa","Notes":"","BirthTime":{"StdTime":"13:54 25/10/1992 +08:00","Location":{"Name":"Taiping","Longitude":103.82,"Latitude":1.352}},"Gender":"Female","OwnerId":"102111269113114363117","LifeEventList":[{"PersonId":"03c645a91cc1492b97a8193c28475f29","Id":"f8de8107241944daab7d563a6eb03a98","Name":"Talks of Marriage","StartTime":{"StdTime":"23:02 05/02/2023 +08:00","Location":{"Name":"Taiping","Longitude":0,"Latitude":0}},"Description":"Marriage not yet confirmed looking for husband, venus bhukti with house 7 gochara","Nature":"Good","Weight":"Minor"}]}
+function getPersonInstanceFromInput() {
+    const nameInput = document.getElementById("NameInput_AddPerson");
+    const genderInput = document.getElementById("GenderInput_AddPerson");
+    const timeLocationInput = window.VedAstro.TimeLocationInputInstances["TimeLocationInput_AddPerson"];
+
+
+    const person = new Person({
+        PersonId: "",
+        Name: nameInput.value,
+        Notes: "",
+        BirthTime: timeLocationInput.getTimeJson(),
+        Gender: genderInput.value,
+        OwnerId: "",
+        LifeEventList: []
+    });
+
+    return person;
+}
+
+async function isValidationPassed_AddPerson() {
+
+    //prepare view components for checking
+    var timeInput = window.VedAstro.TimeLocationInputInstances["TimeLocationInput_AddPerson"];
+    const nameInput = document.getElementById("NameInput_AddPerson");
+    const genderInput = document.getElementById("GenderInput_AddPerson");
+
+    
+    // TEST 1: Name
+    if (String.IsNullOrWhiteSpace(nameInput)) {
+        await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Please enter a name'
+        });
+        return false;
+    }
+
+    // TEST 2: Gender
+    if (String.IsNullOrWhiteSpace(genderInput)) {
+        await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Please select a gender'
+        });
+        return false;
+    }
+
+    // TEST 3: Time & Location
+    const isValidTime = await timeInput.isValid();
+    if (!isValidTime) {
+        return false;
+    }
+
+    // TEST 4: check if user is sleeping by letting time be set as current year and date and month
+    const tempTime = await timeInput.getDateTimeOffset();
+    const thisYear = tempTime.year === new Date().getFullYear();
+    const thisMonth = tempTime.month === new Date().getMonth();
+    const thisDate = tempTime.date === new Date().getDate();
+    const month = !(thisYear && thisMonth);
+    const today = !(thisYear && thisMonth && thisDate);
+    const isValidDate = month || today;
+    if (!isValidDate) {
+        const tempText = thisMonth ? 'this month' : 'today';
+        const result = await Swal.fire({
+            icon: 'question',
+            title: 'Are you sure?',
+            text: `You inputted ${tempText} as your birth date, is this correct?`,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, correct!'
+        });
+        if (!result.isConfirmed) {
+            return false;
+        }
+    }
+
+    // TEST 5: Possible missing TIME 00:00
+    const inputedTimeString = await timeInput.getFullTimeString();
+    const isTime0 = inputedTimeString.includes('00:00'); // possible user left it out
+    if (isTime0) {
+        const result = await Swal.fire({
+            icon: 'question',
+            title: 'Born exactly at 00:00 AM?',
+            text: 'Looks like you did not fill birth time. Are you sure this is correct?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, correct!'
+        });
+        if (!result.isConfirmed) {
+            return false;
+        }
+    }
+
+    // TEST 6: no single alphabet names please
+    const tooShort = nameInput.length <= 3;
+    if (tooShort) {
+        const result = await Swal.fire({
+            icon: 'question',
+            title: 'Such a short name? Suspicious',
+            text: `Only machines use short names like ${nameInput}, are you a machine?`,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'No, I\'m human!'
+        });
+        if (!result.isConfirmed) {
+            return false;
+        }
+    }
+
+    // TEST 7: no numbers please
+    const isDigitPresent = /\d/.test(nameInput);
+    if (isDigitPresent) {
+        const result = await Swal.fire({
+            icon: 'question',
+            title: 'Are you a machine?',
+            text: `Only machines have names with numbers like ${nameInput}, are you a machine?`,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'No, I\'m human!'
+        });
+        if (!result.isConfirmed) {
+            return false;
+        }
+    }
+
+    // if control reaches here than, it's valid
+    return true;
+}
+
 
 
 

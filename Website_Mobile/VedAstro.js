@@ -3708,11 +3708,10 @@ class IconButton {
 }
 
 
-//The `TimeLocationInput` class generates an HTML component for
-//selecting time and location, with a calendar picker and input fields,
-//and handles user interactions and updates the component's state.
 
-class TimeLocationInput {
+// The `TimeInputSimple` class generates an HTML component for selecting time and location, with a calendar picker and input fields, and handles user interactions and updates the component's state.
+
+class TimeInputSimple {
     // Class properties
     ElementID = "";
     TimeInputHolderID = "";
@@ -3732,8 +3731,7 @@ class TimeLocationInput {
     month = (new Date().getMonth() + 1).toString().padStart(2, '0');
     year = new Date().getFullYear().toString();
 
-
-    // Constructor to initialize the TimeLocationInput object
+    // Constructor to initialize the TimeInputSimple object
     constructor(elementId) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
@@ -3751,7 +3749,7 @@ class TimeLocationInput {
         this.YearInputID = `${elementId}_YearInput`;
 
         // Initialize the TimeLocationInputInstances object
-        TimeLocationInput.initInstances();
+        TimeInputSimple.initInstances();
 
         // Save a reference to this instance for global access
         this.saveInstanceReference();
@@ -3770,10 +3768,8 @@ class TimeLocationInput {
 
         // Generate the HTML for the time location input and inject it into the element
         element.innerHTML = await this.generateTimeLocationInputHtml(labelText);
-
     }
 
-    // Method to generate the HTML for the time location input
     // Method to generate the HTML for the time location input
     async generateTimeLocationInputHtml(labelText) {
         //language=html
@@ -3812,7 +3808,7 @@ class TimeLocationInput {
       <span class="input-group-text gap-2"><i class="iconify" data-icon="noto-v1:timer-clock" data-width="30"></i>${labelText}</span>
       <div class="form-control" >
         <!-- note : on click will toggle picker, so picker cannot be inside TimeInputHolder -->
-        <div id="${this.TimeInputHolderID}" onclick="window.VedAstro.TimeLocationInputInstances['${this.ElementID}'].onClickDateTimeInput()" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
+        <div id="${this.TimeInputHolderID}" onclick="window.VedAstro.TimeInputSimpleInstances['${this.ElementID}'].onClickDateTimeInput()" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
           <div class="hstack">
             <span class="border-0 inputPerfect" id="${this.HourInputID}" style="width: 33px;" >${this.hour}</span>:
             <span class="border-0 inputPerfect" id="${this.MinuteInputID}" style="width: 33px;" >${this.minute}</span>
@@ -3835,7 +3831,6 @@ class TimeLocationInput {
         return outputHtml;
     }
 
-
     // Method to handle click on date time input
     onClickDateTimeInput() {
         // Get the latest values using JS
@@ -3854,21 +3849,20 @@ class TimeLocationInput {
         calendarPickerHolder.classList.toggle('visually-hidden');
     }
 
-    // Initialize the TimeLocationInputInstances object
+    // Initialize the TimeInputSimpleInstances object
     static initInstances() {
         if (!window.VedAstro) {
             window.VedAstro = {};
         }
-        if (!window.VedAstro.TimeLocationInputInstances) {
-            window.VedAstro.TimeLocationInputInstances = {};
+        if (!window.VedAstro.TimeInputSimpleInstances) {
+            window.VedAstro.TimeInputSimpleInstances = {};
         }
     }
 
     // Save a reference to this instance for global access
     saveInstanceReference() {
-        window.VedAstro.TimeLocationInputInstances[this.ElementID] = this;
+        window.VedAstro.TimeInputSimpleInstances[this.ElementID] = this;
     }
-
 
     // Method to initialize the calendar
     initCalendar(hour, minute, meridian, date, month, year) {
@@ -3954,4 +3948,10 @@ class TimeLocationInput {
         }
     }
 
+    isValid() {
+        //check if all fields have been filled
+        return true;
+    }
 }
+
+

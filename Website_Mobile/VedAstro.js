@@ -4565,10 +4565,10 @@ class GeoLocationInput {
                 <div class="input-group d-none lat-lng-fields">
                     <!-- HEADER ICON -->
                     <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
-                    <span class="input-group-text">Lat</span>
-                    <input type="number" class="form-control latitude" placeholder="101.4°" style="font-weight: 600; font-size: 16px;">
-                    <span class="input-group-text">Long</span>
-                    <input type="number" class="form-control longitude" placeholder="4.3°" style="font-weight: 600; font-size: 16px;">
+                    <span class="input-group-text px-2">Lat</span>
+                    <input type="number" class="form-control px-2 latitude" placeholder="4.3°" style="font-weight: 600; font-size: 16px;">
+                    <span class="input-group-text px-2">Long</span>
+                    <input type="number" class="form-control px-2 longitude" placeholder="101.4°" style="font-weight: 600; font-size: 16px;">
                 </div>
 
                 <!-- Input Swither button -->
@@ -4595,8 +4595,8 @@ class GeoLocationInput {
 
                     // Fill location name, longitude and latitude values into HTML
                     document.querySelector(`#${this.ElementID} .location-name input`).value = location.Name;
-                    document.querySelector(`#${this.ElementID} .latitude`).value = location.Latitude;
-                    document.querySelector(`#${this.ElementID} .longitude`).value = location.Longitude;
+                    document.querySelector(`#${this.ElementID} .latitude`).value = location.Latitude.toFixed(1); //round for nice fit GUI
+                    document.querySelector(`#${this.ElementID} .longitude`).value = location.Longitude.toFixed(1); //round for nice fit GUI
                 }
             });
     }
@@ -4680,7 +4680,7 @@ class GeoLocationInput {
             const locations = [
                 new GeoLocation({
                     Name: "New York",
-                    Longitude: 74.0060,
+                    Longitude: 74.006,
                     Latitude: 1.352
                 }),
                 new GeoLocation({

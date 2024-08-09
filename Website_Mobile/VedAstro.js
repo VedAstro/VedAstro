@@ -4580,6 +4580,27 @@ class GeoLocationInput {
         `;
     }
 
+    onClickPresetLocationName(event) {
+        // Get the location name from the clicked element
+        const locationName = event.target.textContent;
+
+        // Get the corresponding location object from the locations array
+        const location = GeoLocationInput.locationNameSearchWithAPI(locationName)
+            .then(locations => {
+                if (locations.length > 0) {
+                    const location = locations[0];
+
+                    // Save the selected location JSON for this instance
+                    this.selectedLocation = location;
+
+                    // Fill location name, longitude and latitude values into HTML
+                    document.querySelector(`#${this.ElementID} .location-name input`).value = location.Name;
+                    document.querySelector(`#${this.ElementID} .latitude`).value = location.Latitude;
+                    document.querySelector(`#${this.ElementID} .longitude`).value = location.Longitude;
+                }
+            });
+    }
+
     /**
      * Method to update the location name text.
      * @param {Event} eventObject - The event object triggered by the input field.
@@ -4621,7 +4642,7 @@ class GeoLocationInput {
                 } else {
                     // Generate HTML for the locations
                     const locationsHtml = locations.map(location => `
-                    <li><a class="dropdown-item" href="#">${location.Name}</a></li>
+                    <li><a class="dropdown-item" onClick="window.VedAstro.GeoLocationInputInstances['${this.ElementID}'].onClickPresetLocationName(event)">${location.Name}</a></li>
                 `).join("");
                     dropdownMenu.innerHTML = locationsHtml;
                 }

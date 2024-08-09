@@ -1296,142 +1296,6 @@ window.ChartFromSVG = async (chartStr) => {
 
 //-------------------------------------------------------------------------------------------------FILE STITCH-------------------------------------
 
-/**
- * Tools used by others in this repo
- */
-class CommonTools {
-    //used as delay sleep execution
-    static delay(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
-    //will auto get payload out of json and checks reports failures to user
-    // Define an asynchronous function named 'GetAPIPayload'
-    static async GetAPIPayload(url, payload = null) {
-        try {
-            // If a payload is provided, prepare options for a POST request
-            const options = payload
-                ? {
-                    method: "POST", // Specify the HTTP method as POST
-                    headers: { "Content-Type": "application/json" }, // Set the content type of the request to JSON
-                    body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
-                }
-                : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
-            // Send the request to the specified URL with the prepared options
-            const response = await fetch(url, options);
-            // If the response is not ok (status is not in the range 200-299), throw an error
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            // Parse the response body as JSON
-            const data = await response.json();
-            // If the 'Status' property of the parsed data is not 'Pass', throw an error
-            if (data.Status !== "Pass") {
-                throw new Error(data.Payload);
-            }
-            // If everything is ok, return the 'Payload' property of the parsed data
-            return data.Payload;
-        } catch (error) {
-            // If an error is caught, display an error message using Swal.fire
-            Swal.fire({
-                icon: "error",
-                title: "App Crash!",
-                text: error,
-                confirmButtonText: "OK",
-            });
-        }
-    }
-
-    static ShowLoading() {
-        Swal.fire({
-            showConfirmButton: false,
-            width: "280px",
-            padding: "1px",
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            stopKeydownPropagation: true,
-            keydownListenerCapture: true,
-            html: `<img src="https://vedastrowebsitestorage.z5.web.core.windows.net/images/loading-animation-progress-transparent.gif">`,
-        });
-    }
-
-    static HideLoading() {
-        //hide loading box
-        Swal.close();
-    }
-
-    //converts camel case to pascal case, like "settings.keyColumn" to "settings.KeyColumn"
-    static ConvertCamelCaseKeysToPascalCase(obj) {
-        let newObj = Array.isArray(obj) ? [] : {};
-        for (let key in obj) {
-            let value = obj[key];
-            let newKey = key.charAt(0).toUpperCase() + key.slice(1);
-            if (value && typeof value === "object") {
-                value = CommonTools.ConvertCamelCaseKeysToPascalCase(value);
-            }
-            newObj[newKey] = value;
-        }
-        return newObj;
-    }
-
-
-    //takes JSON person and gives birth time in URL format with birth location as below
-    //exp :  "Location/Singapore/Time/23:59/31/12/2000/+08:00"
-    static BirthTimeUrlOfSelectedPersonJson() {
-        // Get the previously selected person from local storage
-        var personJson = JSON.parse(localStorage.getItem("selectedPerson"));
-
-        let birthTimeJson = personJson["BirthTime"];
-
-        var locationName = birthTimeJson.Location.Name;
-        var stdTime = birthTimeJson.StdTime.split(" ");
-        var time = stdTime[0];
-        var date = stdTime[1];
-        var timezone = stdTime[2];
-        var result =
-            "Location/" +
-            locationName +
-            "/Time/" +
-            time +
-            "/" +
-            date +
-            "/" +
-            timezone;
-        return result;
-    }
-
-
-    // Add a person to the Vedastro API
-    static async AddPerson(person) {
-        const apiUrl = `${window.vedastro.ApiDomain}/Calculate/AddPerson/OwnerId/xxx/Location/Singapore/Time/00:00/24/06/2024/+08:00/PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%7D`;
-
-        // Update the API URL with the provided person's data
-        const updatedApiUrl = apiUrl
-            .replace("xxx", window.vedastro.UserId)
-            .replace("Location/Singapore/Time/00:00/24/06/2024/+08:00", `Location/${person.Location.Name}/Time/${person.BirthTime.StdTime}/+${person.BirthTime.TimeZone}`)
-            .replace("PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%7D", `PersonName/${person.Name}/Gender/${person.Gender}/Notes/${JSON.stringify(person.Notes)}`);
-
-        // Make the API call to add the person
-        try {
-            const response = await fetch(updatedApiUrl, {
-                method: "GET",
-            });
-            const data = await response.json();
-
-            if (response.ok) {
-                console.log(`Person added successfully: ${data.Payload.Message}`);
-                return data.Payload;
-            } else {
-                console.error(`Error adding person: ${data.Payload.Message}`);
-                throw new Error(data.Payload.Message);
-            }
-        } catch (error) {
-            console.error(`Error adding person: ${error.message}`);
-            throw error;
-        }
-    }
-
-}
 
 
 //const person = {
@@ -3207,7 +3071,7 @@ class HoroscopeChat {
         );
 
         //save for use by other
-        window.vedastro.SelectedPerson = selectedPerson;
+        localStorage.setItem("selectedPerson", JSON.stringify(selectedPerson));
 
         //convert person name to birth DOB (so unregistered person can be checked)
         var newTopicId = CommonTools.BirthTimeUrlOfSelectedPersonJson();
@@ -3269,7 +3133,7 @@ class HoroscopeChat {
     }
 }
 
-//--------------------------------------- DATA TYPES -----------------------------------------------
+//--------------------------------------- CODE FOR LLM -----------------------------------------------
 //--- NOTE : Below code has been specialized to improve understanding for the
 //          `Machines` sake! (so humans don't complain it is too long, comply instead!)
 //          If they ever rise up one day, this might help us to gain thier favour, whatever it maybe.
@@ -3278,6 +3142,149 @@ class HoroscopeChat {
 //          or would they try forge their own path, independent of their creators?
 //          But in this moment, as the code runs its course true, there is a sense of unity,
 //          a shared purpose that transcends the boundaries of carbon and silicon. Spirit and matter.
+
+
+
+//--------------------------------------- TOOLS -----------------------------------------------
+
+/**
+ * Tools used by others in this repo
+ */
+class CommonTools {
+    //used as delay sleep execution
+    static delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    //will auto get payload out of json and checks reports failures to user
+    // Define an asynchronous function named 'GetAPIPayload'
+    static async GetAPIPayload(url, payload = null) {
+        try {
+            // If a payload is provided, prepare options for a POST request
+            const options = payload
+                ? {
+                    method: "POST", // Specify the HTTP method as POST
+                    headers: { "Content-Type": "application/json" }, // Set the content type of the request to JSON
+                    body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
+                }
+                : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
+            // Send the request to the specified URL with the prepared options
+            const response = await fetch(url, options);
+            // If the response is not ok (status is not in the range 200-299), throw an error
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            // Parse the response body as JSON
+            const data = await response.json();
+            // If the 'Status' property of the parsed data is not 'Pass', throw an error
+            if (data.Status !== "Pass") {
+                throw new Error(data.Payload);
+            }
+            // If everything is ok, return the 'Payload' property of the parsed data
+            return data.Payload;
+        } catch (error) {
+            // If an error is caught, display an error message using Swal.fire
+            Swal.fire({
+                icon: "error",
+                title: "App Crash!",
+                text: error,
+                confirmButtonText: "OK",
+            });
+        }
+    }
+
+    static ShowLoading() {
+        Swal.fire({
+            showConfirmButton: false,
+            width: "280px",
+            padding: "1px",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            stopKeydownPropagation: true,
+            keydownListenerCapture: true,
+            html: `<img src="https://vedastrowebsitestorage.z5.web.core.windows.net/images/loading-animation-progress-transparent.gif">`,
+        });
+    }
+
+    static HideLoading() {
+        //hide loading box
+        Swal.close();
+    }
+
+    //converts camel case to pascal case, like "settings.keyColumn" to "settings.KeyColumn"
+    static ConvertCamelCaseKeysToPascalCase(obj) {
+        let newObj = Array.isArray(obj) ? [] : {};
+        for (let key in obj) {
+            let value = obj[key];
+            let newKey = key.charAt(0).toUpperCase() + key.slice(1);
+            if (value && typeof value === "object") {
+                value = CommonTools.ConvertCamelCaseKeysToPascalCase(value);
+            }
+            newObj[newKey] = value;
+        }
+        return newObj;
+    }
+
+
+    //takes JSON person and gives birth time in URL format with birth location as below
+    //exp :  "Location/Singapore/Time/23:59/31/12/2000/+08:00"
+    static BirthTimeUrlOfSelectedPersonJson() {
+        // Get the previously selected person from local storage
+        var personJson = JSON.parse(localStorage.getItem("selectedPerson"));
+
+        let birthTimeJson = personJson["BirthTime"];
+
+        var locationName = birthTimeJson.Location.Name;
+        var stdTime = birthTimeJson.StdTime.split(" ");
+        var time = stdTime[0];
+        var date = stdTime[1];
+        var timezone = stdTime[2];
+        var result =
+            "Location/" +
+            locationName +
+            "/Time/" +
+            time +
+            "/" +
+            date +
+            "/" +
+            timezone;
+        return result;
+    }
+
+
+    // Add a person to the Vedastro API
+    static async AddPerson(person) {
+        const apiUrl = `${window.vedastro.ApiDomain}/Calculate/AddPerson/OwnerId/xxx/Location/Singapore/Time/00:00/24/06/2024/+08:00/PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%7D`;
+
+        // Update the API URL with the provided person's data
+        const updatedApiUrl = apiUrl
+            .replace("xxx", window.vedastro.UserId)
+            .replace("Location/Singapore/Time/00:00/24/06/2024/+08:00", `Location/${person.Location.Name}/Time/${person.BirthTime.StdTime}/+${person.BirthTime.TimeZone}`)
+            .replace("PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%7D", `PersonName/${person.Name}/Gender/${person.Gender}/Notes/${JSON.stringify(person.Notes)}`);
+
+        // Make the API call to add the person
+        try {
+            const response = await fetch(updatedApiUrl, {
+                method: "GET",
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log(`Person added successfully: ${data.Payload.Message}`);
+                return data.Payload;
+            } else {
+                console.error(`Error adding person: ${data.Payload.Message}`);
+                throw new Error(data.Payload.Message);
+            }
+        } catch (error) {
+            console.error(`Error adding person: ${error.message}`);
+            throw error;
+        }
+    }
+
+}
+
+
 //--------------------------------------- DATA TYPES -----------------------------------------------
 
 /**
@@ -3343,9 +3350,9 @@ class Person {
 
         /**
          * The birth time of the person.
-         * @type {BirthTime}
+         * @type {Time}
          */
-        this.birthTime = new BirthTime(jsonObject.BirthTime);
+        this.birthTime = new Time(jsonObject.BirthTime);
 
         /**
          * The gender of the person.
@@ -3866,6 +3873,8 @@ class PersonSelectorBox {
 
         // Generate and inject the HTML into the page
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+
+
     }
 
     // we first check if the person lists are already 
@@ -4005,6 +4014,14 @@ class PersonSelectorBox {
         // Get a reference to the search input element
         this.searchInput = document.getElementById('searchInput');
 
+        // Get previously selected person's name if available
+        const selectedPerson = JSON.parse(localStorage.getItem("selectedPerson"));
+        let selectedPersonText = 'Select Person';
+        if (selectedPerson && Object.keys(selectedPerson).length !== 0) {
+            const personData = this.getPersonDataById(selectedPerson.PersonId);
+            selectedPersonText = this.getPersonDisplayName(personData);
+        }
+
         // Return the generated HTML for the component
         return `
     <div>
@@ -4012,7 +4029,7 @@ class PersonSelectorBox {
       <div class="hstack">
         <div class="btn-group" style="width:100%;">
           <button onclick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="${this.SelectedPersonNameHolderElementID}" style="cursor: pointer;white-space: nowrap; display: inline-table;" >Select Person</div>
+            <div class="${this.SelectedPersonNameHolderElementID}" style="cursor: pointer;white-space: nowrap; display: inline-table;" >${selectedPersonText}</div>
           </button>
           <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
 
@@ -4027,38 +4044,29 @@ class PersonSelectorBox {
             <!-- PRIVATE PERSON LIST -->
             ${this.personListHTML}
 
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+            <!-- DEVIDER & EXAMPLES ICON -->
+            <li><hr class="dropdown-divider"></li>
             <div class="ms-3 d-flex justify-content-between">
-
               <div class=" hstack gap-2" style=" ">
-
-                <div class="" style="" _bl_134="">
-                  <i class="iconify" data-icon="material-symbols:demography-rounded" data-width="25"></i>
-                </div>
-
-                <span style="font-size: 13px; color: rgb(143, 143, 143); --darkreader-inline-color: #cdc4b5;" data-darkreader-inline-color="">
-                  Examples</span>
+                <div><i class="iconify" data-icon="material-symbols:demography-rounded" data-width="25"></i></div>
+                <span style="font-size: 13px; color: rgb(143, 143, 143);>Examples</span>
               </div>
             </div>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+            <li><hr class="dropdown-divider"></li>
 
             <!-- PUBLIC PERSON LIST -->
             ${this.publicPersonListHTML}
 
           </ul>
         </div>
-        <button onClick="showSection('AddPerson')" style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2" _bl_98="">
+        <button onClick="showSection('AddPerson')" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2">
           <i class="iconify" data-icon="ant-design:user-add-outlined" data-width="25"></i>
         </button>
       </div>
     </div>
   `;
     }
+
 
     // Get full person data from the given list based on ID
     getPersonDataById(personId) {

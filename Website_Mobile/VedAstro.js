@@ -4326,8 +4326,8 @@ class TimeInputSimple {
 
     <div class="input-group">
 
-      <span class="input-group-text gap-2"><i class="iconify" data-icon="noto-v1:timer-clock" data-width="30"></i>${labelText}</span>
-      <div class="form-control" >
+      <span class="input-group-text gap-2 py-1"><i class="iconify" data-icon="noto-v1:timer-clock" data-width="30"></i>${labelText}</span>
+      <div class="form-control py-2" >
         <!-- note : on click will toggle picker, so picker cannot be inside TimeInputHolder -->
         <div id="${this.TimeInputHolderID}" onclick="window.VedAstro.TimeInputSimpleInstances['${this.ElementID}'].onClickDateTimeInput()" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
           <div class="hstack">
@@ -4550,7 +4550,7 @@ class GeoLocationInput {
                 <!-- Location name input with auto dropdown -->
                 <div class="input-group location-name">
                     <!-- HEADER ICON -->
-                    <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
+                    <span class="input-group-text gap-2 py-1"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
                     <input id="${this.locationNameInputId}" onkeyup="window.VedAstro.GeoLocationInputInstances['${this.ElementID}'].onUpdateLocationNameText(event)" type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;" data-bs-toggle="dropdown">
                     <ul id="${this.dropdownMenuId}" class="dropdown-menu" aria-labelledby="${this.locationNameInputId}">
                         <li><a class="dropdown-item text-muted" href="#">
@@ -4564,7 +4564,7 @@ class GeoLocationInput {
                 <!-- Latitude & long input -->
                 <div class="input-group d-none lat-lng-fields">
                     <!-- HEADER ICON -->
-                    <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
+                    <span class="input-group-text gap-2 py-1"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
                     <span class="input-group-text px-2">Lat</span>
                     <input type="number" class="form-control px-2 latitude" placeholder="4.3°" style="font-weight: 600; font-size: 16px;">
                     <span class="input-group-text px-2">Long</span>
@@ -4572,7 +4572,7 @@ class GeoLocationInput {
                 </div>
 
                 <!-- Input Swither button -->
-                <button class="switch-button btn-primary btn ms-1 px-1" style="font-family: 'Lexend Deca', serif !important;">
+                <button class="switch-button btn-primary btn p-2" style="font-family: 'Lexend Deca', serif !important;">
                     <i class="iconify globeIcon" data-icon="bx:globe" data-width="25"></i>
                     <i class="iconify mapIcon d-none" data-icon="bx:map" data-width="25"></i>
                 </button>

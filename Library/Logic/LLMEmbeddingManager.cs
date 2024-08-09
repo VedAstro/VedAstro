@@ -87,8 +87,7 @@ namespace VedAstro.Library
 
         public static async Task<string> GetEmbeddingsForText_Ada002(string textToEmbed)
         {
-            
-            const string endpoint = "https://openaimodelserver.openai.azure.com/openai/deployments/text-embedding-ada-002/embeddings?api-version=2023-05-15";
+            const string endpoint = "https://openaimodelserver.openai.azure.com/openai/deployments/text-embedder/embeddings?api-version=2023-05-15";
 
             using var client = new HttpClient();
 

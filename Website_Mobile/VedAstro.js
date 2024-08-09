@@ -3294,7 +3294,7 @@ class Person {
     /**
      * Sample input JSON:
      * {
-     *   "PersonId": "03c645a91cc1492b97a8193c28475f29",
+     *   "PersonId": "03c645a234234234193c28475f29",
      *   "Name": "Risyaalini Priyaa",
      *   "Notes": "",
      *   "BirthTime": {
@@ -3306,10 +3306,10 @@ class Person {
      *     }
      *   },
      *   "Gender": "Female",
-     *   "OwnerId": "102111269113114363117",
+     *   "OwnerId": "1342342334234234363117",
      *   "LifeEventList": [
      *     {
-     *       "PersonId": "03c645a91cc1492b97a8193c28475f29",
+     *       "PersonId": "0334234234234193c28475f29",
      *       "Id": "f8de8107241944daab7d563a6eb03a98",
      *       "Name": "Talks of Marriage",
      *       "StartTime": {
@@ -4676,44 +4676,27 @@ class GeoLocationInput {
      */
     static locationNameSearchWithAPI(locationName) {
         return new Promise(resolve => {
-            // Sample data for demonstration
-            const locations = [
-                new GeoLocation({
-                    Name: "New York",
-                    Longitude: 74.006,
-                    Latitude: 1.352
-                }),
-                new GeoLocation({
-                    Name: "Los Angeles",
-                    Longitude: 118.2437,
-                    Latitude: 34.0522
-                }),
-                new GeoLocation({
-                    Name: "Chicago",
-                    Longitude: 87.6298,
-                    Latitude: 41.8781
-                }),
-                new GeoLocation({
-                    Name: "Houston",
-                    Longitude: 95.3632,
-                    Latitude: 29.7633
-                }),
-                new GeoLocation({
-                    Name: "Phoenix",
-                    Longitude: 112.0739,
-                    Latitude: 33.4484
+            fetch(`${window.vedastro.ApiDomain}/Calculate/SearchLocation/Address/${locationName}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.Status === 'Pass' && data.Payload.SearchLocation) {
+                        const locations = data.Payload.SearchLocation.map(location => new GeoLocation(location));
+
+                        //save to instance, for later retrieval when clicked
+
+                        resolve(locations);
+                    } else {
+                        resolve([]); // Return an empty array if no results or error
+                    }
                 })
-            ];
-
-            // Filter locations based on the input location name
-            const filteredLocations = locations.filter(location =>
-                location.Name.toLowerCase().includes(locationName.toLowerCase())
-            );
-
-            // Resolve the promise with the filtered locations
-            resolve(filteredLocations);
+                .catch(error => {
+                    console.error('Error searching for location:', error);
+                    resolve([]); // Return an empty array if an error occurred
+                });
         });
     }
+
+
 }
 
 

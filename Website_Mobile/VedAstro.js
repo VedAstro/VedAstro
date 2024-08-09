@@ -3481,9 +3481,9 @@ class Time {
 
         /**
          * The location object associated with this time.
-         * @type {Location}
+         * @type {GeoLocation}
          */
-        this.location = new Location(jsonObject.Location);
+        this.location = new GeoLocation(jsonObject.Location);
     }
 
     /**
@@ -3671,13 +3671,13 @@ class LifeEvent {
 /**
  * Represents a geographic location.
  */
-class Location {
+class GeoLocation {
     /**
-     * Constructs a new Location object from a JSON object.
+     * Constructs a new GeoLocation object from a JSON object.
      * 
      * @param {Object} jsonObject - The JSON object to construct the Location object from.
      * @example
-     * const location = new Location({
+     * const location = new GeoLocation({
      *   "Name": "Taiping",
      *   "Longitude": 103.82,
      *   "Latitude": 1.352
@@ -4484,8 +4484,13 @@ class GeoLocationInput {
     // Class properties
     ElementID = "";
     LabelText = "";
+    dropdownMenuId = "";
+    locationNameInputId = "";
 
-    // Constructor to initialize the PageHeader object
+    /**
+     * Constructor to initialize the GeoLocationInput object.
+     * @param {string} elementId - The ID of the HTML element to render the component in.
+     */
     constructor(elementId) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
@@ -4496,11 +4501,33 @@ class GeoLocationInput {
         // Get the custom attributes from the element and assign default values if not present
         this.LabelText = element.getAttribute("LabelText") || "Location";
 
+        // Generate a random ID for the dropdown menu
+        this.dropdownMenuId = `dropdown-menu-${Math.random().toString(36).substr(2, 9)}`;
+        this.locationNameInputId = `location-name-input-${Math.random().toString(36).substr(2, 9)}`;
+
         // Call the method to initialize the main body of the page header
         this.initializeMainBody();
+
+        // Save a reference to this instance for global access
+        GeoLocationInput.initInstances();
+        window.VedAstro.GeoLocationInputInstances[elementId] = this;
     }
 
-    // Method to initialize the main body of the page header
+    /**
+     * Initialize the GeoLocationInput instances object.
+     */
+    static initInstances() {
+        if (!window.VedAstro) {
+            window.VedAstro = {};
+        }
+        if (!window.VedAstro.GeoLocationInputInstances) {
+            window.VedAstro.GeoLocationInputInstances = {};
+        }
+    }
+
+    /**
+     * Method to initialize the main body of the page header.
+     */
     async initializeMainBody() {
         // Empty the content of the element with the given ID
         $(`#${this.ElementID}`).empty();
@@ -4514,37 +4541,99 @@ class GeoLocationInput {
         });
     }
 
-    // Method to generate the HTML for the page header
+    /**
+     * Method to generate Bootstrap 5 HTML that shows base GUI
+     */
     async generateHtmlBody() {
         return `
-    <div class="hstack gap-1">
-        <!-- Location name input with auto dropdown -->
-        <div class="input-group location-name">
-            <!-- header icon -->
-            <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
-            <input type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;">
-        </div>
+            <div class="hstack gap-1">
+                <!-- Location name input with auto dropdown -->
+                <div class="input-group location-name">
+                    <!-- HEADER ICON -->
+                    <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
+                    <input id="${this.locationNameInputId}" onkeyup="window.VedAstro.GeoLocationInputInstances['${this.ElementID}'].onUpdateLocationNameText(event)" type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;" data-bs-toggle="dropdown">
+                    <ul id="${this.dropdownMenuId}" class="dropdown-menu" aria-labelledby="${this.locationNameInputId}">
+                        <li><a class="dropdown-item text-muted" href="#">
+                            <i class="iconify" data-icon="grommet-icons:map" data-width="18"></i>
+                            Search city, town, state</a>
+                        </li>
+                        <!-- DYNAMICLY GENERATED -->
+                    </ul>
+                </div>
 
-        <!-- Latitude & long input -->
-        <div class="input-group d-none lat-lng-fields">
-            <!-- header icon -->
-            <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
-            <span class="input-group-text">Lat</span>
-            <input type="number" class="form-control latitude" placeholder="101.4°" style="font-weight: 600; font-size: 16px;">
-            <span class="input-group-text">Long</span>
-            <input type="number" class="form-control longitude" placeholder="4.3°" style="font-weight: 600; font-size: 16px;">
-        </div>
+                <!-- Latitude & long input -->
+                <div class="input-group d-none lat-lng-fields">
+                    <!-- HEADER ICON -->
+                    <span class="input-group-text gap-2"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
+                    <span class="input-group-text">Lat</span>
+                    <input type="number" class="form-control latitude" placeholder="101.4°" style="font-weight: 600; font-size: 16px;">
+                    <span class="input-group-text">Long</span>
+                    <input type="number" class="form-control longitude" placeholder="4.3°" style="font-weight: 600; font-size: 16px;">
+                </div>
 
-        <!-- Input Swither button -->
-        <button class="switch-button btn-primary btn ms-1 px-1" style="font-family: 'Lexend Deca', serif !important;">
-            <i class="iconify globeIcon" data-icon="bx:globe" data-width="25"></i>
-            <i class="iconify mapIcon d-none" data-icon="bx:map" data-width="25"></i>
-        </button>
-    </div>
-    `;
+                <!-- Input Swither button -->
+                <button class="switch-button btn-primary btn ms-1 px-1" style="font-family: 'Lexend Deca', serif !important;">
+                    <i class="iconify globeIcon" data-icon="bx:globe" data-width="25"></i>
+                    <i class="iconify mapIcon d-none" data-icon="bx:map" data-width="25"></i>
+                </button>
+            </div>
+        `;
     }
 
-    // Method to toggle the input fields
+    /**
+     * Method to update the location name text.
+     * @param {Event} eventObject - The event object triggered by the input field.
+     */
+    onUpdateLocationNameText(eventObject) {
+        // Get the user input from the event target
+        const userTextInput = eventObject.target.value;
+
+        // Call the API to search for location names based on the user input
+        GeoLocationInput.locationNameSearchWithAPI(userTextInput)
+            .then(locations => {
+                // Get the parent element of the input field
+                const inputParent = eventObject.target.closest(`#${this.ElementID}`);
+
+                // Get the dropdown menu element within the parent element
+                const dropdownMenu = inputParent.querySelector(`#${this.dropdownMenuId}`);
+
+                // Clear any existing content in the dropdown menu
+                dropdownMenu.innerHTML = "";
+
+                if (locations.length === 0) {
+                    // if no locations are found then only insert below html to notify user no location with that name,
+                    // but input must have text, else show `search message` instead
+                    if (userTextInput.trim() !== "") {
+                        dropdownMenu.innerHTML = `
+                        <li><a class="dropdown-item text-muted" href="#">
+                            <i class="iconify" data-icon="tdesign:map-cancel" data-width="18"></i>
+                            Not found, try input coordinates</a>
+                        </li>
+                    `;
+                    } else {
+                        dropdownMenu.innerHTML = `
+                        <li><a class="dropdown-item text-muted" href="#">
+                            <i class="iconify" data-icon="grommet-icons:map" data-width="18"></i>
+                            Search city, town, state</a>
+                        </li>
+                    `;
+                    }
+                } else {
+                    // Generate HTML for the locations
+                    const locationsHtml = locations.map(location => `
+                    <li><a class="dropdown-item" href="#">${location.Name}</a></li>
+                `).join("");
+                    dropdownMenu.innerHTML = locationsHtml;
+                }
+
+                // Show the dropdown menu
+                dropdownMenu.classList.remove("d-none");
+            });
+    }
+
+    /**
+     * Method to toggle the input fields.
+     */
     toggleInputFields() {
         $(`#${this.ElementID} .location-name`).toggleClass('d-none');
         $(`#${this.ElementID} .lat-lng-fields`).toggleClass('d-none');
@@ -4560,7 +4649,52 @@ class GeoLocationInput {
         }
     }
 
+    /**
+     * Method to search for location names using an API.
+     * @param {string} locationName - The location name to search for.
+     */
+    static locationNameSearchWithAPI(locationName) {
+        return new Promise(resolve => {
+            // Sample data for demonstration
+            const locations = [
+                new GeoLocation({
+                    Name: "New York",
+                    Longitude: 74.0060,
+                    Latitude: 1.352
+                }),
+                new GeoLocation({
+                    Name: "Los Angeles",
+                    Longitude: 118.2437,
+                    Latitude: 34.0522
+                }),
+                new GeoLocation({
+                    Name: "Chicago",
+                    Longitude: 87.6298,
+                    Latitude: 41.8781
+                }),
+                new GeoLocation({
+                    Name: "Houston",
+                    Longitude: 95.3632,
+                    Latitude: 29.7633
+                }),
+                new GeoLocation({
+                    Name: "Phoenix",
+                    Longitude: 112.0739,
+                    Latitude: 33.4484
+                })
+            ];
+
+            // Filter locations based on the input location name
+            const filteredLocations = locations.filter(location =>
+                location.Name.toLowerCase().includes(locationName.toLowerCase())
+            );
+
+            // Resolve the promise with the filtered locations
+            resolve(filteredLocations);
+        });
+    }
 }
+
 
 /**
  * Represents a time location input component.

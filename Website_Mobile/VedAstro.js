@@ -3924,8 +3924,7 @@ class PersonSelectorBox {
 
         // If a selected person exists, simulate a click on their name
         if (selectedPerson && Object.keys(selectedPerson).length !== 0) {
-            debugger;
-            this.onClickPersonName(selectedPerson.id); //todo could fail
+            this.onClickPersonName(selectedPerson.PersonId); //todo could fail
         }
     }
 
@@ -3963,7 +3962,7 @@ class PersonSelectorBox {
         buttonTextHolder.html(displayName);
 
         // Save the selected person to local storage
-        var partialPerson = { id: personId };
+        var partialPerson = { PersonId: personId };
         localStorage.setItem("selectedPerson", JSON.stringify(partialPerson));
 
         // Save the selected person ID for instance-specific selection

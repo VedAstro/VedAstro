@@ -124,8 +124,8 @@ if (typeof $.fn.selectize == "undefined") {
 //make accesible to interop
 window.vedastro = {
     UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101", //get user id from browser storage
-    ApiDomain: "https://vedastroapi.azurewebsites.net/api",
-    //ApiDomain: " http://localhost:7071/api",
+    //ApiDomain: "https://vedastroapi.azurewebsites.net/api",
+    ApiDomain: " http://localhost:7071/api",
     Ayanamsa: "Lahiri", //default to
     ChartStyle: "South", //default to South Indian Chart
 };
@@ -4581,25 +4581,26 @@ class GeoLocationInput {
         `;
     }
 
-    onClickPresetLocationName(event) {
+    /**
+     * Method to handle click on preset location name.
+     * @param {Event} eventObject - The event object triggered by the click.
+     */
+    onClickPresetLocationName(eventObject) {
         // Get the location name from the clicked element
-        const locationName = event.target.textContent;
+        const locationName = eventObject.target.textContent;
 
-        // Get the corresponding location object from the locations array
-        const location = GeoLocationInput.locationNameSearchWithAPI(locationName)
-            .then(locations => {
-                if (locations.length > 0) {
-                    const location = locations[0];
+        // Find the corresponding location object from the saved instance
+        const location = this.locations.find(location => location.Name === locationName);
 
-                    // Save the selected location JSON for this instance
-                    this.selectedLocation = location;
+        if (location) {
+            // Save the selected location JSON for this instance
+            this.selectedLocation = location;
 
-                    // Fill location name, longitude and latitude values into HTML
-                    document.querySelector(`#${this.ElementID} .location-name input`).value = location.Name;
-                    document.querySelector(`#${this.ElementID} .latitude`).value = location.Latitude.toFixed(1); //round for nice fit GUI
-                    document.querySelector(`#${this.ElementID} .longitude`).value = location.Longitude.toFixed(1); //round for nice fit GUI
-                }
-            });
+            // Fill location name, longitude and latitude values into HTML
+            document.querySelector(`#${this.ElementID} .location-name input`).value = location.Name;
+            document.querySelector(`#${this.ElementID} .latitude`).value = location.Latitude.toFixed(1); //round for nice fit GUI
+            document.querySelector(`#${this.ElementID} .longitude`).value = location.Longitude.toFixed(1); //round for nice fit GUI
+        }
     }
 
     /**
@@ -4611,7 +4612,7 @@ class GeoLocationInput {
         const userTextInput = eventObject.target.value;
 
         // Call the API to search for location names based on the user input
-        GeoLocationInput.locationNameSearchWithAPI(userTextInput)
+        this.locationNameSearchWithAPI(userTextInput)
             .then(locations => {
                 // Get the parent element of the input field
                 const inputParent = eventObject.target.closest(`#${this.ElementID}`);
@@ -4675,31 +4676,27 @@ class GeoLocationInput {
      * Method to search for location names using an API.
      * @param {string} locationName - The location name to search for.
      */
-    static locationNameSearchWithAPI(locationName) {
+    locationNameSearchWithAPI(locationName) {
         return new Promise(resolve => {
             fetch(`${window.vedastro.ApiDomain}/Calculate/SearchLocation/Address/${locationName}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.Status === 'Pass' && data.Payload.SearchLocation) {
-                        const locations = data.Payload.SearchLocation.map(location => new GeoLocation(location));
-
-                        //save to instance, for later retrieval when clicked
-
-                        resolve(locations);
+                        this.locations = data.Payload.SearchLocation.map(location => new GeoLocation(location));
+                        resolve(this.locations);
                     } else {
+                        this.locations = [];
                         resolve([]); // Return an empty array if no results or error
                     }
                 })
                 .catch(error => {
                     console.error('Error searching for location:', error);
+                    this.locations = [];
                     resolve([]); // Return an empty array if an error occurred
                 });
         });
     }
-
-
 }
-
 
 /**
  * Represents a time location input component.

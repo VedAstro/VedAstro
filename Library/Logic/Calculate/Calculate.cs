@@ -181,14 +181,11 @@ namespace VedAstro.Library
 
         public static async Task<Person> GetPerson(string ownerId, string personId)
         {
-
             //get person from database matching user & owner ID (also checks shared list)
             var foundPerson = Tools.GetPersonById(personId, ownerId);
 
             //send person to caller
             return foundPerson;
-
-
         }
 
         /// <summary>
@@ -324,14 +321,17 @@ namespace VedAstro.Library
             }
         }
 
-        public static async Task<dynamic> SearchLocation(string address)
+        public static async Task<List<GeoLocation>> SearchLocation(string address)
         {
             //CACHE MECHANISM
             return await CacheManager.GetCache(new CacheKey(nameof(SearchLocation), address), async () => await _SearchLocation(address));
 
             //UNDERLYING FUNCTION
-            async Task<dynamic> _SearchLocation(string address)
+            async Task<List<GeoLocation>> _SearchLocation(string address)
             {
+
+                //return all searches with less than 4 chars as pre name typing search
+                if (address.Length < 4) { return new List<GeoLocation>(); }
 
                 //inject api key from parent
                 var locationProvider = new Location();

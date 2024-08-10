@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net.Http;
@@ -509,5 +510,19 @@ namespace VedAstro.Library
 
             return $"{roundedLat1DeciPlaces11Km},{roundedLong1DeciPlaces11Km}";
         }
+
+        public static JArray ToJsonList(List<GeoLocation> geolocationList)
+        {
+            var jsonList = new JArray();
+
+            foreach (var eventInstance in geolocationList)
+            {
+                jsonList.Add(eventInstance.ToJson());
+            }
+
+            return jsonList;
+        }
+
+
     }
 }

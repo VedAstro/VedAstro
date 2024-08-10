@@ -4486,6 +4486,7 @@ class GeoLocationInput {
     LabelText = "";
     dropdownMenuId = "";
     locationNameInputId = "";
+    locations = []; // Save the parsed geolocation array in the class instance
 
     /**
      * Constructor to initialize the GeoLocationInput object.

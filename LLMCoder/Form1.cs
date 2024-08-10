@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -7,6 +7,7 @@ using System.Text.Json.Nodes;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Text;
 
 namespace LLMCoder
 {
@@ -62,6 +63,421 @@ namespace LLMCoder
 
             //default inject code
             includeCodeInjectCheckBox.Checked = true;
+        }
+
+
+
+        private void TextBox_MouseEnter(TextBox textBox, EventArgs e)
+        {
+            // Capture mouse wheel events when the mouse is over textBox
+            textBox.Focus();
+            this.MouseWheel += (sender, mouseEventArgs) => Form1_MouseWheel(textBox, mouseEventArgs);
+        }
+
+        private void TextBox_MouseLeave(TextBox textBox, EventArgs e)
+        {
+            // Stop capturing mouse wheel events when the mouse leaves textBox
+            this.MouseWheel -= (sender, mouseEventArgs) => Form1_MouseWheel(textBox, mouseEventArgs);
+        }
+
+        private void Form1_MouseWheel(TextBox textBox, MouseEventArgs e)
+        {
+            try
+            {
+                int value = int.Parse(textBox.Text);
+
+                if (e.Delta > 0)
+                {
+                    // Increment by 5 on scroll up
+                    textBox.Text = (value + 5).ToString();
+                }
+                else
+                {
+                    // Decrement by 5 on scroll down
+                    textBox.Text = (value - 5).ToString();
+                }
+            }
+            catch (FormatException)
+            {
+                // Handle non-integer value in textBox
+                MessageBox.Show("Please enter a valid number.");
+                textBox.Text = "0";
+            }
+        }
+
+
+
+        private void InitializeCodeFileInjectTablePanel()
+        {
+            // Declare and initialize variable types
+            TableLayoutPanel codeFileInjectTablePanel = new TableLayoutPanel();
+            TextBox codeFileInjectPathTextBox = new TextBox();
+            Label fileInjectPathLabel = new Label();
+            TableLayoutPanel lineNumRangeInputTable = new TableLayoutPanel();
+            TextBox startLineNumberTextBox = new TextBox();
+            Label startLabel = new Label();
+            Label endLabel = new Label();
+            TextBox endLineNumberTextBox = new TextBox();
+            Label lineNumberRangeLabel = new Label();
+            Label fetchCodeStatusMessageLabel = new Label();
+            Label preCodePromptLabel = new Label();
+            TextBox preCodePromptTextBox = new TextBox();
+            Label codeFileInjectLabel = new Label();
+            RichTextBox codeFileInjectTextBox = new RichTextBox();
+            Label postCodePromptLabel = new Label();
+            TextBox postCodePromptTextBox = new TextBox();
+            Button deleteCodeInjectButton = new Button();
+            Button fetchLatestInjectedCodeButton = new Button();
+            Button expandCodeFileButton = new Button();
+
+            // Initialize codeFileInjectTablePanel
+            codeFileInjectTablePanel.AutoSize = true;
+            codeFileInjectTablePanel.ColumnCount = 3;
+            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle());
+            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle());
+            codeFileInjectTablePanel.Controls.Add(fetchLatestInjectedCodeButton, 2, 1);
+            codeFileInjectTablePanel.Controls.Add(deleteCodeInjectButton, 2, 0);
+            codeFileInjectTablePanel.Controls.Add(postCodePromptTextBox, 1, 4);
+            codeFileInjectTablePanel.Controls.Add(postCodePromptLabel, 0, 4);
+            codeFileInjectTablePanel.Controls.Add(codeFileInjectTextBox, 1, 3);
+            codeFileInjectTablePanel.Controls.Add(codeFileInjectLabel, 0, 3);
+            codeFileInjectTablePanel.Controls.Add(preCodePromptTextBox, 1, 2);
+            codeFileInjectTablePanel.Controls.Add(preCodePromptLabel, 0, 2);
+            codeFileInjectTablePanel.Controls.Add(lineNumRangeInputTable, 1, 1);
+            codeFileInjectTablePanel.Controls.Add(lineNumberRangeLabel, 0, 1);
+            codeFileInjectTablePanel.Controls.Add(codeFileInjectPathTextBox, 1, 0);
+            codeFileInjectTablePanel.Controls.Add(fileInjectPathLabel, 0, 0);
+            codeFileInjectTablePanel.Controls.Add(expandCodeFileButton, 2, 3);
+            codeFileInjectTablePanel.Dock = DockStyle.Fill;
+            codeFileInjectTablePanel.Location = new Point(0, 0);
+            codeFileInjectTablePanel.Name = "codeFileInjectTablePanel";
+            codeFileInjectTablePanel.RowCount = 6;
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.Size = new Size(852, 663);
+            codeFileInjectTablePanel.TabIndex = 1;
+            codeFileInjectTablePanel.BackColor = Color.Black;
+
+            // Initialize lineNumRangeInputTable
+            lineNumRangeInputTable.AutoSize = true;
+            lineNumRangeInputTable.ColumnCount = 5;
+            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+            lineNumRangeInputTable.Controls.Add(fetchCodeStatusMessageLabel, 5, 0);
+            lineNumRangeInputTable.Controls.Add(endLineNumberTextBox, 3, 0);
+            lineNumRangeInputTable.Controls.Add(endLabel, 2, 0);
+            lineNumRangeInputTable.Controls.Add(startLineNumberTextBox, 1, 0);
+            lineNumRangeInputTable.Controls.Add(startLabel, 0, 0);
+            lineNumRangeInputTable.Dock = DockStyle.Fill;
+            lineNumRangeInputTable.Location = new Point(96, 32);
+            lineNumRangeInputTable.Name = "lineNumRangeInputTable";
+            lineNumRangeInputTable.RowCount = 1;
+            lineNumRangeInputTable.RowStyles.Add(new RowStyle());
+            lineNumRangeInputTable.Size = new Size(672, 29);
+            lineNumRangeInputTable.TabIndex = 6;
+
+            // Initialize other controls
+            fileInjectPathLabel.AutoSize = true;
+            fileInjectPathLabel.Location = new Point(3, 7);
+            fileInjectPathLabel.Margin = new Padding(3, 7, 3, 0);
+            fileInjectPathLabel.Name = "fileInjectPathLabel";
+            fileInjectPathLabel.Size = new Size(52, 15);
+            fileInjectPathLabel.TabIndex = 1;
+            fileInjectPathLabel.Text = "File Path";
+            fileInjectPathLabel.ForeColor = Color.Azure;
+
+            codeFileInjectPathTextBox.Dock = DockStyle.Fill;
+            codeFileInjectPathTextBox.Location = new Point(96, 3);
+            codeFileInjectPathTextBox.Name = "codeFileInjectPathTextBox";
+            codeFileInjectPathTextBox.Size = new Size(672, 23);
+            codeFileInjectPathTextBox.TabIndex = 3;
+
+            lineNumberRangeLabel.AutoSize = true;
+            lineNumberRangeLabel.Location = new Point(3, 36);
+            lineNumberRangeLabel.Margin = new Padding(3, 7, 3, 0);
+            lineNumberRangeLabel.Name = "lineNumberRangeLabel";
+            lineNumberRangeLabel.Size = new Size(87, 15);
+            lineNumberRangeLabel.TabIndex = 4;
+            lineNumberRangeLabel.Text = "Line No. Range";
+            lineNumberRangeLabel.ForeColor = Color.Azure;
+
+            startLabel.AutoSize = true;
+            startLabel.Location = new Point(3, 7);
+            startLabel.Margin = new Padding(3, 7, 3, 0);
+            startLabel.Name = "startLabel";
+            startLabel.Size = new Size(31, 15);
+            startLabel.TabIndex = 5;
+            startLabel.Text = "Start";
+            startLabel.ForeColor = Color.Azure;
+
+            startLineNumberTextBox.Dock = DockStyle.Fill;
+            startLineNumberTextBox.Location = new Point(40, 3);
+            startLineNumberTextBox.MaximumSize = new Size(90, 0);
+            startLineNumberTextBox.Name = "startLineNumberTextBox";
+            startLineNumberTextBox.Size = new Size(90, 23);
+            startLineNumberTextBox.TabIndex = 6;
+            startLineNumberTextBox.Text = "1"; //default to 1 as start
+            // Attach event handlers
+            startLineNumberTextBox.MouseEnter += (sender, e) => TextBox_MouseEnter(startLineNumberTextBox, e);
+            startLineNumberTextBox.MouseLeave += (sender, e) => TextBox_MouseLeave(startLineNumberTextBox, e);
+
+
+            endLabel.AutoSize = true;
+            endLabel.Location = new Point(136, 7);
+            endLabel.Margin = new Padding(3, 7, 3, 0);
+            endLabel.Name = "endLabel";
+            endLabel.Size = new Size(27, 15);
+            endLabel.TabIndex = 7;
+            endLabel.Text = "End";
+            endLabel.ForeColor = Color.Azure;
+
+            endLineNumberTextBox.Dock = DockStyle.Fill;
+            endLineNumberTextBox.Location = new Point(169, 3);
+            endLineNumberTextBox.MaximumSize = new Size(90, 0);
+            endLineNumberTextBox.Name = "endLineNumberTextBox";
+            endLineNumberTextBox.Size = new Size(90, 23);
+            endLineNumberTextBox.TabIndex = 8;
+            endLineNumberTextBox.Text = "0"; //set 0 so that can be detected and autofilled later
+
+            fetchCodeStatusMessageLabel.AutoSize = true;
+            fetchCodeStatusMessageLabel.Location = new Point(265, 7);
+            fetchCodeStatusMessageLabel.Margin = new Padding(3, 7, 3, 0);
+            fetchCodeStatusMessageLabel.Name = "fetchCodeStatusMessageLabel";
+            fetchCodeStatusMessageLabel.Size = new Size(98, 15);
+            fetchCodeStatusMessageLabel.TabIndex = 12;
+            fetchCodeStatusMessageLabel.Text = "Ready Captain \U0001fae1";
+            fetchCodeStatusMessageLabel.ForeColor = Color.Azure;
+
+            preCodePromptLabel.AutoSize = true;
+            preCodePromptLabel.Location = new Point(3, 71);
+            preCodePromptLabel.Margin = new Padding(3, 7, 3, 0);
+            preCodePromptLabel.Name = "preCodePromptLabel";
+            preCodePromptLabel.Size = new Size(67, 15);
+            preCodePromptLabel.TabIndex = 7;
+            preCodePromptLabel.Text = "Pre Prompt";
+            preCodePromptLabel.ForeColor = Color.Azure;
+
+            preCodePromptTextBox.Dock = DockStyle.Fill;
+            preCodePromptTextBox.Location = new Point(96, 67);
+            preCodePromptTextBox.Name = "preCodePromptTextBox";
+            preCodePromptTextBox.Size = new Size(672, 23);
+            preCodePromptTextBox.TabIndex = 8;
+
+            codeFileInjectLabel.AutoSize = true;
+            codeFileInjectLabel.Location = new Point(3, 100);
+            codeFileInjectLabel.Margin = new Padding(3, 7, 3, 0);
+            codeFileInjectLabel.Name = "codeFileInjectLabel";
+            codeFileInjectLabel.Size = new Size(56, 15);
+            codeFileInjectLabel.TabIndex = 9;
+            codeFileInjectLabel.Text = "Code File";
+            codeFileInjectLabel.ForeColor = Color.Azure;
+
+
+            // Create a new richTextBox
+            codeFileInjectTextBox.BackColor = SystemColors.ActiveCaptionText;
+            codeFileInjectTextBox.Dock = DockStyle.Fill;
+            codeFileInjectTextBox.ForeColor = Color.Azure;
+            codeFileInjectTextBox.Text = "";
+            codeFileInjectTextBox.ReadOnly = false;
+            codeFileInjectTextBox.Multiline = true; // Allow multiple lines
+            codeFileInjectTextBox.WordWrap = true; // Wrap text to the next line
+            codeFileInjectTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 28);
+
+
+            postCodePromptLabel.AutoSize = true;
+            postCodePromptLabel.Location = new Point(3, 129);
+            postCodePromptLabel.Margin = new Padding(3, 7, 3, 0);
+            postCodePromptLabel.Name = "postCodePromptLabel";
+            postCodePromptLabel.Size = new Size(73, 15);
+            postCodePromptLabel.TabIndex = 11;
+            postCodePromptLabel.Text = "Post Prompt";
+            postCodePromptLabel.ForeColor = Color.Azure;
+
+            postCodePromptTextBox.Dock = DockStyle.Fill;
+            postCodePromptTextBox.Location = new Point(96, 125);
+            postCodePromptTextBox.Name = "postCodePromptTextBox";
+            postCodePromptTextBox.Size = new Size(672, 23);
+            postCodePromptTextBox.TabIndex = 12;
+
+            deleteCodeInjectButton.BackColor = Color.IndianRed;
+            deleteCodeInjectButton.ForeColor = SystemColors.ButtonFace;
+            deleteCodeInjectButton.Location = new Point(774, 3);
+            deleteCodeInjectButton.Name = "deleteCodeInjectButton";
+            deleteCodeInjectButton.Size = new Size(75, 23);
+            deleteCodeInjectButton.TabIndex = 14;
+            deleteCodeInjectButton.Text = "➖ Remove";
+            deleteCodeInjectButton.UseVisualStyleBackColor = false;
+
+            fetchLatestInjectedCodeButton.BackColor = Color.Fuchsia;
+            fetchLatestInjectedCodeButton.ForeColor = SystemColors.ButtonFace;
+            fetchLatestInjectedCodeButton.Location = new Point(774, 32);
+            fetchLatestInjectedCodeButton.Name = "fetchLatestInjectedCodeButton";
+            fetchLatestInjectedCodeButton.Size = new Size(75, 23);
+            fetchLatestInjectedCodeButton.TabIndex = 16;
+            fetchLatestInjectedCodeButton.Text = "⚡ Update";
+            fetchLatestInjectedCodeButton.UseVisualStyleBackColor = false;
+            fetchLatestInjectedCodeButton.Click += (sender, e) =>
+            {
+
+                //get needed data to fetch file
+                var filePath = codeFileInjectPathTextBox.Text;
+
+                //if user has not set end line number then help user by auto filling
+                if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(filePath).ToString(); }
+                var startLineNum = int.Parse(startLineNumberTextBox.Text);
+                var endLineNum = int.Parse(endLineNumberTextBox.Text);
+
+                //cut out piece of select code from file
+                var extractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
+
+                //put into view
+                codeFileInjectTextBox.Text = extractedCode;
+
+                //auto set probable pre and post prompt for file
+                var codeFileName = GetCodeFileFullName(filePath);
+                preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
+                postCodePromptTextBox.Text = $"Ok, I've parsed the code";
+
+                //give user some stats to user about the fetched code
+                var textSizeKB = GetBinarySizeOfTextInKB(extractedCode);
+                fetchCodeStatusMessageLabel.Text = $"Parsed ✅ : Size : {textSizeKB:F2} KB";
+
+                //update total token limit temperature bar
+                //NOTE: These are just guidelines. Different types of language and different languages are tokenized in different ways.
+                var maxTokenLimitInKb = EstimateTokenCountSizeKB(4096);
+                var percentageUsed = (textSizeKB / maxTokenLimitInKb) * 100; //128K tokens = 512KB
+                percentageUsed = percentageUsed <= 100 ? percentageUsed : 100; //reset to 100% max
+                tokenLimitProgressBar.Value = (int)percentageUsed;
+                tokenLimitProgressBar.DisplayText = $"{textSizeKB:F2}/{maxTokenLimitInKb} KB";
+                UpdateTokenLimitProgressBarColor();
+
+            };
+
+            expandCodeFileButton.BackColor = SystemColors.MenuHighlight;
+            expandCodeFileButton.ForeColor = SystemColors.ButtonFace;
+            expandCodeFileButton.Location = new Point(774, 96);
+            expandCodeFileButton.Name = "expandCodeFileButton";
+            expandCodeFileButton.Size = new Size(75, 23);
+            expandCodeFileButton.TabIndex = 18;
+            expandCodeFileButton.Text = "Expand";
+            expandCodeFileButton.UseVisualStyleBackColor = false;
+
+            // Add codeFileInjectTablePanel to the stack with others
+            codeFileInjectTabMainTablePanel.Controls.Add(codeFileInjectTablePanel, 0, 1);
+
+        }
+
+        /// <summary>
+        /// on average, a token is about 4 characters
+        /// on average, 100 tokens is about 75 words
+        /// These are just guidelines.  Different types of language and
+        /// different languages are tokenized in different ways.
+        /// </summary>
+        private double EstimateTokenCountSizeKB(int tokenCount)
+        {
+            // Given input token count, convert to size in kilobytes
+            // 1 token = 4 bytes
+            double sizeInBytes = tokenCount * 4;  // Each token occupies 4 bytes
+            double sizeInKB = sizeInBytes / 1024;  // Convert bytes to kilobytes
+            return sizeInKB;
+        }
+
+        private void UpdateTokenLimitProgressBarColor()
+        {
+            if (tokenLimitProgressBar.Value < 50)
+            {
+                tokenLimitProgressBar.ProgressBarColor = Color.Green;
+            }
+            else if (tokenLimitProgressBar.Value < 75)
+            {
+                // Linearly interpolate between green and yellow for values between 50 and 75
+                float ratio = (tokenLimitProgressBar.Value - 50) / 25f;
+                Color interpolatedColor = Interpolate(Color.Green, Color.Yellow, ratio);
+                tokenLimitProgressBar.ProgressBarColor = interpolatedColor;
+            }
+            else if (tokenLimitProgressBar.Value < 100)
+            {
+                // Linearly interpolate between yellow and red for values between 75 and 100
+                float ratio = (tokenLimitProgressBar.Value - 75) / 25f;
+                Color interpolatedColor = Interpolate(Color.Yellow, Color.Red, ratio);
+                tokenLimitProgressBar.ProgressBarColor = interpolatedColor;
+            }
+            else
+            {
+                tokenLimitProgressBar.ProgressBarColor = Color.Red;
+            }
+        }
+
+        private Color Interpolate(Color startColor, Color endColor, float ratio)
+        {
+            int r = (int)(startColor.R + ratio * (endColor.R - startColor.R));
+            int g = (int)(startColor.G + ratio * (endColor.G - startColor.G));
+            int b = (int)(startColor.B + ratio * (endColor.B - startColor.B));
+            return Color.FromArgb(r, g, b);
+        }
+
+        private void SetTokenLimitProgressBarColor(Color color)
+        {
+            tokenLimitProgressBar.ForeColor = Color.Red;
+            tokenLimitProgressBar.ForeColor = Color.Red;;
+        }
+
+        /// <summary>
+        /// given a large string text return its size in KB (kilobytes)
+        /// </summary>
+        private double GetBinarySizeOfTextInKB(string largeText)
+        {
+            // Calculate the byte size of the string using Encoding.UTF8.GetBytes
+            byte[] bytes = Encoding.UTF8.GetBytes(largeText);
+            long byteSize = bytes.Length;
+
+            // Convert byte size to kilobytes (KB)
+            double kilobytes = byteSize / 1024.0;
+
+            // Format the result as a string with two decimal places
+            return kilobytes;
+        }
+
+        /// <summary>
+        /// given a path to a code file like .js, .cs, .html, .py, etc...
+        /// return full name of the file example out, javascript, csharp, html, python, etc...
+        /// returns empty string if can't detect
+        /// </summary>
+        public string GetCodeFileFullName(string filePath)
+        {
+            // Get the file extension from the file path
+            string fileExtension = Path.GetExtension(filePath);
+
+            // Create a dictionary to map file extensions to their corresponding full names
+            var fileExtensionMap = new Dictionary<string, string>
+            {
+                { ".js", "JavaScript" },
+                { ".cs", "C#" },
+                { ".html", "HTML" },
+                { ".py", "Python" },
+                { ".java", "Java" },
+                { ".cpp", "C++" },
+                { ".c", "C" },
+                { ".php", "PHP" },
+                { ".rb", "Ruby" },
+                { ".swift", "Swift" },
+                { ".go", "Go" },
+                { ".ts", "TypeScript" },
+                { ".vb", "Visual Basic" },
+                { ".sql", "SQL" },
+            };
+
+            // Return the full name of the file based on its extension
+            return fileExtensionMap.TryGetValue(fileExtension.ToLower(), out string fullName) ? fullName : "";
         }
 
         private void UpdateSelectedLLMDropdownView()
@@ -247,7 +663,66 @@ namespace LLMCoder
             }
         }
 
+        /// <summary>
+        /// Given a path to a code file, extract only from input line number range
+        /// </summary>
+        static string ExtractOutSectionFromCodeFile(string filePath, int startLineNum, int endLineNum)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                throw new ArgumentException("File path cannot be null or empty", nameof(filePath));
+            }
 
+            if (startLineNum < 1 || endLineNum < 1)
+            {
+                throw new ArgumentException("Line numbers must be positive integers", nameof(startLineNum));
+            }
+
+            if (startLineNum > endLineNum)
+            {
+                throw new ArgumentException("Start line number must be less than or equal to end line number", nameof(startLineNum));
+            }
+
+            try
+            {
+                var lines = File.ReadAllLines(filePath);
+                var extractedLines = lines.Skip(startLineNum - 1).Take(endLineNum - startLineNum + 1);
+                return string.Join(Environment.NewLine, extractedLines);
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw new FileNotFoundException($"File not found: {filePath}", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error reading file: {filePath}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Given a path to a code file, return the maximum number of lines in the file
+        /// </summary>
+        static int GetMaxLinesInFile(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return 0;
+            }
+
+            try
+            {
+                var lines = File.ReadAllLines(filePath);
+                return lines.Length;
+            }
+            catch (FileNotFoundException)
+            {
+                return 0;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
 
         //------------------- EVENT HANDLERS ---------------------
 
@@ -278,7 +753,6 @@ namespace LLMCoder
 
         }
 
-
         private void resetChatHistoryButton_Click(object sender, EventArgs e)
         {
             // Clear the chat output box text
@@ -287,7 +761,6 @@ namespace LLMCoder
             // Clear the conversation history list
             conversationHistory.Clear();
         }
-
 
         // Event handler for the send user message button click
         private async void sendUserMsgButton_Click(object sender, EventArgs e)
@@ -302,7 +775,7 @@ namespace LLMCoder
                     await Task.Delay(200); // Update every second
                     this.Invoke((MethodInvoker)delegate
                     {
-                        llmRunningTimerLabel.Text = $"{Math.Round(stopwatch.Elapsed.TotalSeconds,2)} s";
+                        llmRunningTimerLabel.Text = $"{Math.Round(stopwatch.Elapsed.TotalSeconds, 2)} s";
                     });
                 }
             });
@@ -483,7 +956,6 @@ namespace LLMCoder
             messageTableLayouts[messageId] = chatMsgHolderTable;
         }
 
-
         // New method to delete a message from the chat message panel
         private void DeleteMessage(TableLayoutPanel tableLayoutPanel, string messageId)
         {
@@ -500,8 +972,10 @@ namespace LLMCoder
             messageTableLayouts.Remove(messageId);
         }
 
-
-
+        private void addNewCodeFileInjectButton_Click(object sender, EventArgs e)
+        {
+            InitializeCodeFileInjectTablePanel();
+        }
     }
 
     public record ApiEndpoint(string Name, string Endpoint, string ApiKey);
@@ -522,4 +996,55 @@ namespace LLMCoder
         public string Role { get; set; }
         public string Message { get; set; }
     }
+
+    public class CustomProgressBar : ProgressBar
+    {
+        private Color _progressBarColor = Color.LightGreen;
+        private string _displayText = string.Empty;
+
+        public Color ProgressBarColor
+        {
+            get { return _progressBarColor; }
+            set { _progressBarColor = value; this.Invalidate(); }
+        }
+
+        public string DisplayText
+        {
+            get { return _displayText; }
+            set { _displayText = value; this.Invalidate(); }
+        }
+
+        public CustomProgressBar()
+        {
+            this.SetStyle(ControlStyles.UserPaint, true);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            Rectangle rect = this.ClientRectangle;
+            Graphics g = e.Graphics;
+
+            float percent = (this.Value / (float)this.Maximum);
+
+            // Draw the background of the progress bar
+            g.FillRectangle(new SolidBrush(Color.White), rect);
+
+            // Draw the progress bar
+            g.FillRectangle(new SolidBrush(_progressBarColor), new Rectangle(rect.X, rect.Y, (int)(rect.Width * percent), rect.Height));
+
+            // Draw the border of the progress bar
+            g.DrawRectangle(new Pen(Color.Black), rect);
+
+            // Draw the display text
+            if (!string.IsNullOrEmpty(_displayText))
+            {
+                StringFormat sf = new StringFormat(StringFormatFlags.MeasureTrailingSpaces);
+                sf.Alignment = StringAlignment.Center;
+                sf.LineAlignment = StringAlignment.Center;
+                g.DrawString(_displayText, this.Font, new SolidBrush(Color.White), rect, sf);
+            }
+        }
+    }
+
+
 }

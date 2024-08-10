@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             userInputTextBox = new RichTextBox();
             splitContainer1 = new SplitContainer();
-            tabControl1 = new TabControl();
+            mainTabControl = new TabControl();
             llmPage = new TabPage();
             tableLayoutPanel3 = new TableLayoutPanel();
             chatMessagePanel = new TableLayoutPanel();
@@ -52,6 +52,12 @@
             largeCodeSnippetTextBox = new RichTextBox();
             label4 = new Label();
             injectAssitantPretextTextBox = new TextBox();
+            codeFilePage = new TabPage();
+            codeFileInjectTabMainTablePanel = new TableLayoutPanel();
+            tableLayoutPanel5 = new TableLayoutPanel();
+            tokenLimitProgressBar = new CustomProgressBar();
+            llmTokenLimitLabel = new Label();
+            addNewCodeFileInjectButton = new Button();
             settingsPage = new TabPage();
             tableLayoutPanel4 = new TableLayoutPanel();
             includeCodeInjectCheckBox = new CheckBox();
@@ -60,6 +66,7 @@
             topPLabel = new Label();
             temperatureTextBox = new TextBox();
             label3 = new Label();
+            nerdStatsPage = new TabPage();
             tableLayoutPanel2 = new TableLayoutPanel();
             llmSelector = new ComboBox();
             pastUserPrompts = new ListBox();
@@ -70,13 +77,16 @@
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            tabControl1.SuspendLayout();
+            mainTabControl.SuspendLayout();
             llmPage.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             llmButtonRowHolderTable.SuspendLayout();
             codePage.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
+            codeFilePage.SuspendLayout();
+            codeFileInjectTabMainTablePanel.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
             settingsPage.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -112,7 +122,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(tabControl1);
+            splitContainer1.Panel1.Controls.Add(mainTabControl);
             // 
             // splitContainer1.Panel2
             // 
@@ -121,17 +131,19 @@
             splitContainer1.SplitterDistance = 860;
             splitContainer1.TabIndex = 1;
             // 
-            // tabControl1
+            // mainTabControl
             // 
-            tabControl1.Controls.Add(llmPage);
-            tabControl1.Controls.Add(codePage);
-            tabControl1.Controls.Add(settingsPage);
-            tabControl1.Dock = DockStyle.Fill;
-            tabControl1.Location = new Point(0, 0);
-            tabControl1.Name = "tabControl1";
-            tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(860, 691);
-            tabControl1.TabIndex = 4;
+            mainTabControl.Controls.Add(llmPage);
+            mainTabControl.Controls.Add(codePage);
+            mainTabControl.Controls.Add(codeFilePage);
+            mainTabControl.Controls.Add(settingsPage);
+            mainTabControl.Controls.Add(nerdStatsPage);
+            mainTabControl.Dock = DockStyle.Fill;
+            mainTabControl.Location = new Point(0, 0);
+            mainTabControl.Name = "mainTabControl";
+            mainTabControl.SelectedIndex = 0;
+            mainTabControl.Size = new Size(860, 691);
+            mainTabControl.TabIndex = 4;
             // 
             // llmPage
             // 
@@ -141,7 +153,7 @@
             llmPage.Padding = new Padding(3);
             llmPage.Size = new Size(852, 663);
             llmPage.TabIndex = 0;
-            llmPage.Text = "LLM";
+            llmPage.Text = "🗨️ LLM";
             llmPage.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel3
@@ -269,7 +281,7 @@
             codePage.Padding = new Padding(3);
             codePage.Size = new Size(852, 663);
             codePage.TabIndex = 3;
-            codePage.Text = "Code Inject";
+            codePage.Text = "🎞️ Code Inject";
             codePage.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
@@ -380,6 +392,87 @@
             injectAssitantPretextTextBox.Size = new Size(739, 23);
             injectAssitantPretextTextBox.TabIndex = 8;
             // 
+            // codeFilePage
+            // 
+            codeFilePage.Controls.Add(codeFileInjectTabMainTablePanel);
+            codeFilePage.Location = new Point(4, 24);
+            codeFilePage.Name = "codeFilePage";
+            codeFilePage.Size = new Size(852, 663);
+            codeFilePage.TabIndex = 4;
+            codeFilePage.Text = "📜 Code File Inject";
+            codeFilePage.UseVisualStyleBackColor = true;
+            // 
+            // codeFileInjectTabMainTablePanel
+            // 
+            codeFileInjectTabMainTablePanel.AutoSize = true;
+            codeFileInjectTabMainTablePanel.BackColor = Color.DarkGray;
+            codeFileInjectTabMainTablePanel.ColumnCount = 1;
+            codeFileInjectTabMainTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            codeFileInjectTabMainTablePanel.Controls.Add(tableLayoutPanel5, 0, 0);
+            codeFileInjectTabMainTablePanel.Dock = DockStyle.Fill;
+            codeFileInjectTabMainTablePanel.Location = new Point(0, 0);
+            codeFileInjectTabMainTablePanel.Name = "codeFileInjectTabMainTablePanel";
+            codeFileInjectTabMainTablePanel.RowCount = 2;
+            codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTabMainTablePanel.Size = new Size(852, 663);
+            codeFileInjectTabMainTablePanel.TabIndex = 1;
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.AutoSize = true;
+            tableLayoutPanel5.BackColor = Color.DarkGray;
+            tableLayoutPanel5.ColumnCount = 3;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel5.Controls.Add(tokenLimitProgressBar, 2, 0);
+            tableLayoutPanel5.Controls.Add(llmTokenLimitLabel, 1, 0);
+            tableLayoutPanel5.Controls.Add(addNewCodeFileInjectButton, 0, 0);
+            tableLayoutPanel5.Dock = DockStyle.Fill;
+            tableLayoutPanel5.Location = new Point(3, 3);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 1;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle());
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel5.Size = new Size(846, 29);
+            tableLayoutPanel5.TabIndex = 2;
+            // 
+            // tokenLimitProgressBar
+            // 
+            tokenLimitProgressBar.DisplayText = "";
+            tokenLimitProgressBar.Location = new Point(184, 3);
+            tokenLimitProgressBar.MarqueeAnimationSpeed = 0;
+            tokenLimitProgressBar.Name = "tokenLimitProgressBar";
+            tokenLimitProgressBar.ProgressBarColor = Color.Green;
+            tokenLimitProgressBar.Size = new Size(120, 23);
+            tokenLimitProgressBar.Style = ProgressBarStyle.Continuous;
+            tokenLimitProgressBar.TabIndex = 12;
+            // 
+            // llmTokenLimitLabel
+            // 
+            llmTokenLimitLabel.AutoSize = true;
+            llmTokenLimitLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            llmTokenLimitLabel.ForeColor = SystemColors.ButtonFace;
+            llmTokenLimitLabel.Location = new Point(84, 7);
+            llmTokenLimitLabel.Margin = new Padding(3, 7, 3, 0);
+            llmTokenLimitLabel.Name = "llmTokenLimitLabel";
+            llmTokenLimitLabel.Size = new Size(94, 15);
+            llmTokenLimitLabel.TabIndex = 10;
+            llmTokenLimitLabel.Text = "🌡️ Token Usage";
+            // 
+            // addNewCodeFileInjectButton
+            // 
+            addNewCodeFileInjectButton.BackColor = Color.YellowGreen;
+            addNewCodeFileInjectButton.ForeColor = SystemColors.ButtonFace;
+            addNewCodeFileInjectButton.Location = new Point(3, 3);
+            addNewCodeFileInjectButton.Name = "addNewCodeFileInjectButton";
+            addNewCodeFileInjectButton.Size = new Size(75, 23);
+            addNewCodeFileInjectButton.TabIndex = 1;
+            addNewCodeFileInjectButton.Text = "➕ Add";
+            addNewCodeFileInjectButton.UseVisualStyleBackColor = false;
+            addNewCodeFileInjectButton.Click += addNewCodeFileInjectButton_Click;
+            // 
             // settingsPage
             // 
             settingsPage.Controls.Add(tableLayoutPanel4);
@@ -388,7 +481,7 @@
             settingsPage.Padding = new Padding(3);
             settingsPage.Size = new Size(852, 663);
             settingsPage.TabIndex = 2;
-            settingsPage.Text = "Settings";
+            settingsPage.Text = "⚙️ Settings";
             settingsPage.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel4
@@ -407,10 +500,11 @@
             tableLayoutPanel4.Location = new Point(3, 3);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.Padding = new Padding(3);
-            tableLayoutPanel4.RowCount = 3;
+            tableLayoutPanel4.RowCount = 4;
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle());
+            tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.Size = new Size(846, 657);
             tableLayoutPanel4.TabIndex = 1;
             // 
@@ -468,6 +562,15 @@
             label3.Size = new Size(73, 15);
             label3.TabIndex = 1;
             label3.Text = "Temperature";
+            // 
+            // nerdStatsPage
+            // 
+            nerdStatsPage.Location = new Point(4, 24);
+            nerdStatsPage.Name = "nerdStatsPage";
+            nerdStatsPage.Size = new Size(852, 663);
+            nerdStatsPage.TabIndex = 5;
+            nerdStatsPage.Text = "\U0001f9e0 Nerd Stats";
+            nerdStatsPage.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel2
             // 
@@ -541,7 +644,7 @@
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            tabControl1.ResumeLayout(false);
+            mainTabControl.ResumeLayout(false);
             llmPage.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
@@ -553,6 +656,12 @@
             tableLayoutPanel1.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
+            codeFilePage.ResumeLayout(false);
+            codeFilePage.PerformLayout();
+            codeFileInjectTabMainTablePanel.ResumeLayout(false);
+            codeFileInjectTabMainTablePanel.PerformLayout();
+            tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
             settingsPage.ResumeLayout(false);
             settingsPage.PerformLayout();
             tableLayoutPanel4.ResumeLayout(false);
@@ -570,7 +679,7 @@
         private ListBox pastUserPrompts;
         private ComboBox llmSelector;
         private Button clearUserMsgButton;
-        private TabControl tabControl1;
+        private TabControl mainTabControl;
         private TabPage llmPage;
         private Button resetChatHistoryButton;
         private ProgressBar progressBar1;
@@ -599,5 +708,12 @@
         private CheckBox includeCodeInjectCheckBox;
         private Label label5;
         private Label llmRunningTimerLabel;
+        private TabPage codeFilePage;
+        private TableLayoutPanel codeFileInjectTabMainTablePanel;
+        private Button addNewCodeFileInjectButton;
+        private TableLayoutPanel tableLayoutPanel5;
+        private CustomProgressBar tokenLimitProgressBar;
+        private Label llmTokenLimitLabel;
+        private TabPage nerdStatsPage;
     }
 }

@@ -1051,7 +1051,7 @@ namespace VedAstro.Library
             {
                 // Parse Azure API's payload
                 var outData = TryParseAzureSearchAddressResponse(apiResult.Payload, userInputAddress); // out list of parsed geolocation
-                bool isParsed = outData.IsParsed;
+                bool isParsed = outData?.IsParsed ?? false;
                 if (isParsed)
                 {
                     // Convert to string (example: +08:00)
@@ -1279,7 +1279,6 @@ namespace VedAstro.Library
             }
         }
 
-
         private static dynamic TryParseAzureTimeZoneResponse(DateTimeOffset timeAtLocation, GeoLocation geoLocation, JToken timeZoneResponseJson)
         {
             try
@@ -1391,7 +1390,6 @@ namespace VedAstro.Library
             }
         }
 
-
         private static dynamic TryParseAzureSearchAddressResponse(JToken geocodeResponseJson, string userInputAddress)
         {
             try
@@ -1401,22 +1399,20 @@ namespace VedAstro.Library
                 var parsedList = new List<GeoLocation>();
                 foreach (var rawAzureReply in rawAzureReplyMultiple)
                 {
-                    //check the data, if location was NOT found by Azure Maps API, end here
-                    if (rawAzureReply == null || rawAzureReply["type"].Value<string>() != "Geography") { return null; }
+                    //check the data, if location was NOT found by Azure Maps API, goto next
+                    if (rawAzureReply == null) { continue; }
 
                     //if success, extract out the longitude & latitude
                     var locationElement = rawAzureReply["position"];
-                    var lat = double.Parse(locationElement["lat"].Value<string>() ?? "0");
-                    var lng = double.Parse(locationElement["lon"].Value<string>() ?? "0");
+                    var lat = double.Parse(locationElement?["lat"]?.Value<string>() ?? "0");
+                    var lng = double.Parse(locationElement?["lon"]?.Value<string>() ?? "0");
 
                     //round coordinates to 3 decimal places
                     lat = Math.Round(lat, 3);
                     lng = Math.Round(lng, 3);
 
                     //get full name with country & state
-                    var freeformAddress = rawAzureReply["address"]["freeformAddress"].Value<string>();
-                    var country = rawAzureReply["address"]["country"].Value<string>();
-                    var fullName = $"{freeformAddress}, {country}";
+                    var fullName = GetShortestDescriptiveLocationName(rawAzureReply);
 
                     var mainRow = new GeoLocation(fullName, lng, lat);
 
@@ -1426,23 +1422,56 @@ namespace VedAstro.Library
 
                 //package such that it look like it came from VedAstro db for easy interop
                 var jsonListString = Tools.ListToJson(parsedList).ToString(Formatting.None);
-                var finalPack = new SearchAddressGeoLocationEntity()
-                { PartitionKey = userInputAddress, RowKey = "", Results = jsonListString };
-
-                return new { IsParsed = true, MainRow = finalPack };
+                var finalPack = new SearchAddressGeoLocationEntity { PartitionKey = userInputAddress, RowKey = "", Results = jsonListString };
+                var returnValue = new { IsParsed = true, MainRow = finalPack };
+                return returnValue;
 
             }
             catch
             {
                 //if fail return empty and fail
-                return new
-                {
-                    IsParsed = false,
-                    MainRow = new List<GeoLocation>()
-                };
+                return new { IsParsed = false, MainRow = SearchAddressGeoLocationEntity.Empty };
             }
         }
 
+        /// <summary>
+        /// Given a json object containing name info for a location,
+        /// extract & create final location name which is shortest but still descriptive 
+        /// </summary>
+        /// <param name="rawAzureReply"></param>
+        public static string GetShortestDescriptiveLocationName(JToken rawAzureReply)
+        {
+            //sample json
+            //"address": {
+            //    "municipality": "Ipoh",
+            //    "countrySecondarySubdivision": "Kinta",
+            //    "countrySubdivision": "Perak",
+            //    "countrySubdivisionName": "Perak",
+            //    "countrySubdivisionCode": "8",
+            //    "countryCode": "MY",
+            //    "country": "Malaysia",
+            //    "countryCodeISO3": "MYS",
+            //    "freeformAddress": "Ipoh, Perak"
+            //},
+
+            // Extract the address info from the JSON object
+            var addressNameInfoJson = rawAzureReply?["address"] ?? new JObject();
+
+            // Extract relevant fields from the address info
+            var country = addressNameInfoJson?["country"]?.Value<string>() ?? "";
+            var countryCodeISO3 = addressNameInfoJson?["countryCodeISO3"]?.Value<string>() ?? "";
+            var freeformAddress = addressNameInfoJson?["freeformAddress"]?.Value<string>() ?? "";
+
+            // use the full country name only when there is text space,
+            //NOTE: to make nice in GUI dropdown, auto choose iso name when street name is too long
+            var fullCountryName = $"{freeformAddress}, {country}";
+            var isoCountryName = $"{freeformAddress}, {countryCodeISO3}";
+            var locationName = fullCountryName.Length < 50 ? fullCountryName : isoCountryName;
+
+            // Trim the resulting location name to remove any unnecessary whitespace
+            return locationName?.Trim();
+
+        }
 
         private static dynamic TryParseGoogleAddressResponse(JToken geocodeResponseJson, string userInputAddress)
         {

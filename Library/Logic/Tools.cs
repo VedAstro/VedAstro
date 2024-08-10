@@ -2476,17 +2476,30 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Converts any String from URL epx : ../Text/Juliet
+        /// Converts any String
         /// </summary>
 
+        /// <summary>
+        /// Extracts the string value from a given URL.
+        /// from URL exp : ../PersonName/Juliet 
+        /// </summary>
+        /// <param name="url">The input URL from which to extract the string value.</param>
+        /// <returns>The extracted string value from the URL, or null if the URL is null or malformed.</returns>
         public static string StringFromUrl(string url)
         {
+            // Return null if the input URL is null or empty
+            if (string.IsNullOrEmpty(url)) { return null; }
+
+            // Split the URL into parts based on the '/' character, ignoring empty entries
             string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-            //string has simple structure ../Text/Juliet
+            //must be minimum two elements in string, data & value
+            if (parts.Length < 2) { return ""; }
+
+            // Get the second part of the URL as the string value
             var stringValue = parts[1];
 
-            return stringValue;
+            return stringValue; // Return the extracted string value
         }
 
         /// <summary>
@@ -3444,7 +3457,13 @@ namespace VedAstro.Library
 
                         return rootPayloadJson;
                     }
+                case List<GeoLocation> geolocationList:
+                    {
+                        var parsed = GeoLocation.ToJsonList(geolocationList);
+                        rootPayloadJson = new JProperty(dataName, parsed);
 
+                        return rootPayloadJson;
+                    }
                 case IList iList:
                     {
                         //convert list to comma separated string

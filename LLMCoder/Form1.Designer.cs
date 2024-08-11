@@ -48,11 +48,11 @@
             llmButtonRowHolderTable = new TableLayoutPanel();
             llmRunningTimerLabel = new Label();
             sendUserMsgButton = new Button();
-            progressBar1 = new ProgressBar();
+            llmThinkingProgressBar = new ProgressBar();
             resetChatHistoryButton = new Button();
             clearUserMsgButton = new Button();
             codePage = new TabPage();
-            tableLayoutPanel1 = new TableLayoutPanel();
+            codeSnippetInjectMainTablePanel = new TableLayoutPanel();
             label2 = new Label();
             codeInjectPretextTextBox = new TextBox();
             flowLayoutPanel1 = new FlowLayoutPanel();
@@ -64,7 +64,7 @@
             codeFilePage = new TabPage();
             codeFileInjectTabMainTablePanel = new TableLayoutPanel();
             tableLayoutPanel5 = new TableLayoutPanel();
-            tokenLimitProgressBar = new CustomProgressBar();
+            codeFileInjectTokenUsageMeter = new CustomProgressBar();
             llmTokenLimitLabel = new Label();
             addNewCodeFileInjectButton = new Button();
             settingsPage = new TabPage();
@@ -79,10 +79,11 @@
             llmSelector = new ComboBox();
             totalTokenUsageTable = new TableLayoutPanel();
             finalChatTokenLimitLabel = new Label();
-            finalChatTokenUsageProgressBar = new ProgressBar();
+            finalChatTokenUsageProgressBar = new CustomProgressBar();
             pastUserPrompts = new ListBox();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
+            chatInputHolderTable = new TableLayoutPanel();
             pastPromptsLabel = new Label();
             label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -95,7 +96,7 @@
             mainChatHeaderRow.SuspendLayout();
             llmButtonRowHolderTable.SuspendLayout();
             codePage.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
+            codeSnippetInjectMainTablePanel.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             codeFilePage.SuspendLayout();
             codeFileInjectTabMainTablePanel.SuspendLayout();
@@ -105,6 +106,7 @@
             sidePanelTable.SuspendLayout();
             llmSelectorTable.SuspendLayout();
             totalTokenUsageTable.SuspendLayout();
+            chatInputHolderTable.SuspendLayout();
             SuspendLayout();
             // 
             // pastPromptsLabel
@@ -187,18 +189,19 @@
             // 
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.Controls.Add(chatInputHolderTable, 0, 2);
             tableLayoutPanel3.Controls.Add(mainChatHeaderRow, 0, 0);
             tableLayoutPanel3.Controls.Add(chatMessagePanel, 0, 1);
-            tableLayoutPanel3.Controls.Add(userInputTextBox, 0, 2);
             tableLayoutPanel3.Controls.Add(llmButtonRowHolderTable, 0, 3);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 3);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 4;
+            tableLayoutPanel3.RowCount = 5;
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.Size = new Size(846, 657);
             tableLayoutPanel3.TabIndex = 4;
             // 
@@ -308,7 +311,7 @@
             chatMessagePanel.RowCount = 2;
             chatMessagePanel.RowStyles.Add(new RowStyle());
             chatMessagePanel.RowStyles.Add(new RowStyle());
-            chatMessagePanel.Size = new Size(840, 462);
+            chatMessagePanel.Size = new Size(840, 446);
             chatMessagePanel.TabIndex = 7;
             // 
             // userInputTextBox
@@ -317,9 +320,9 @@
             userInputTextBox.Dock = DockStyle.Fill;
             userInputTextBox.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             userInputTextBox.ForeColor = SystemColors.MenuHighlight;
-            userInputTextBox.Location = new Point(3, 506);
+            userInputTextBox.Location = new Point(3, 3);
             userInputTextBox.Name = "userInputTextBox";
-            userInputTextBox.Size = new Size(840, 111);
+            userInputTextBox.Size = new Size(767, 101);
             userInputTextBox.TabIndex = 0;
             userInputTextBox.Text = "";
             // 
@@ -333,12 +336,11 @@
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             llmButtonRowHolderTable.Controls.Add(llmRunningTimerLabel, 1, 0);
-            llmButtonRowHolderTable.Controls.Add(sendUserMsgButton, 4, 0);
-            llmButtonRowHolderTable.Controls.Add(progressBar1, 3, 0);
+            llmButtonRowHolderTable.Controls.Add(llmThinkingProgressBar, 3, 0);
             llmButtonRowHolderTable.Controls.Add(resetChatHistoryButton, 2, 0);
             llmButtonRowHolderTable.Controls.Add(clearUserMsgButton, 0, 0);
             llmButtonRowHolderTable.Dock = DockStyle.Bottom;
-            llmButtonRowHolderTable.Location = new Point(3, 623);
+            llmButtonRowHolderTable.Location = new Point(3, 603);
             llmButtonRowHolderTable.Name = "llmButtonRowHolderTable";
             llmButtonRowHolderTable.RowCount = 1;
             llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
@@ -358,25 +360,26 @@
             // sendUserMsgButton
             // 
             sendUserMsgButton.AutoSize = true;
+            sendUserMsgButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             sendUserMsgButton.BackColor = SystemColors.Highlight;
             sendUserMsgButton.Dock = DockStyle.Fill;
             sendUserMsgButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             sendUserMsgButton.ForeColor = SystemColors.ButtonFace;
-            sendUserMsgButton.Location = new Point(296, 3);
+            sendUserMsgButton.Location = new Point(776, 3);
             sendUserMsgButton.Name = "sendUserMsgButton";
-            sendUserMsgButton.Size = new Size(541, 25);
+            sendUserMsgButton.Size = new Size(61, 101);
             sendUserMsgButton.TabIndex = 1;
             sendUserMsgButton.Text = "Send 🚀";
             sendUserMsgButton.UseVisualStyleBackColor = false;
             sendUserMsgButton.Click += sendUserMsgButton_Click;
             // 
-            // progressBar1
+            // llmThinkingProgressBar
             // 
-            progressBar1.Location = new Point(190, 3);
-            progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(100, 23);
-            progressBar1.Style = ProgressBarStyle.Continuous;
-            progressBar1.TabIndex = 5;
+            llmThinkingProgressBar.Location = new Point(190, 3);
+            llmThinkingProgressBar.Name = "llmThinkingProgressBar";
+            llmThinkingProgressBar.Size = new Size(100, 23);
+            llmThinkingProgressBar.Style = ProgressBarStyle.Continuous;
+            llmThinkingProgressBar.TabIndex = 5;
             // 
             // resetChatHistoryButton
             // 
@@ -408,7 +411,7 @@
             // 
             // codePage
             // 
-            codePage.Controls.Add(tableLayoutPanel1);
+            codePage.Controls.Add(codeSnippetInjectMainTablePanel);
             codePage.Location = new Point(4, 24);
             codePage.Name = "codePage";
             codePage.Padding = new Padding(3);
@@ -417,28 +420,28 @@
             codePage.Text = "🎞️ Snippet";
             codePage.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel1
+            // codeSnippetInjectMainTablePanel
             // 
-            tableLayoutPanel1.AutoSize = true;
-            tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(label2, 0, 0);
-            tableLayoutPanel1.Controls.Add(codeInjectPretextTextBox, 1, 0);
-            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 0, 1);
-            tableLayoutPanel1.Controls.Add(largeCodeSnippetTextBox, 1, 1);
-            tableLayoutPanel1.Controls.Add(label4, 0, 2);
-            tableLayoutPanel1.Controls.Add(injectAssitantPretextTextBox, 1, 2);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
-            tableLayoutPanel1.Location = new Point(3, 3);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(846, 657);
-            tableLayoutPanel1.TabIndex = 11;
+            codeSnippetInjectMainTablePanel.AutoSize = true;
+            codeSnippetInjectMainTablePanel.ColumnCount = 2;
+            codeSnippetInjectMainTablePanel.ColumnStyles.Add(new ColumnStyle());
+            codeSnippetInjectMainTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            codeSnippetInjectMainTablePanel.Controls.Add(label2, 0, 0);
+            codeSnippetInjectMainTablePanel.Controls.Add(codeInjectPretextTextBox, 1, 0);
+            codeSnippetInjectMainTablePanel.Controls.Add(flowLayoutPanel1, 0, 1);
+            codeSnippetInjectMainTablePanel.Controls.Add(largeCodeSnippetTextBox, 1, 1);
+            codeSnippetInjectMainTablePanel.Controls.Add(label4, 0, 2);
+            codeSnippetInjectMainTablePanel.Controls.Add(injectAssitantPretextTextBox, 1, 2);
+            codeSnippetInjectMainTablePanel.Dock = DockStyle.Fill;
+            codeSnippetInjectMainTablePanel.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+            codeSnippetInjectMainTablePanel.Location = new Point(3, 3);
+            codeSnippetInjectMainTablePanel.Name = "codeSnippetInjectMainTablePanel";
+            codeSnippetInjectMainTablePanel.RowCount = 3;
+            codeSnippetInjectMainTablePanel.RowStyles.Add(new RowStyle());
+            codeSnippetInjectMainTablePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            codeSnippetInjectMainTablePanel.RowStyles.Add(new RowStyle());
+            codeSnippetInjectMainTablePanel.Size = new Size(846, 657);
+            codeSnippetInjectMainTablePanel.TabIndex = 11;
             // 
             // label2
             // 
@@ -561,7 +564,7 @@
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel5.Controls.Add(tokenLimitProgressBar, 3, 0);
+            tableLayoutPanel5.Controls.Add(codeFileInjectTokenUsageMeter, 3, 0);
             tableLayoutPanel5.Controls.Add(llmTokenLimitLabel, 2, 0);
             tableLayoutPanel5.Controls.Add(addNewCodeFileInjectButton, 0, 0);
             tableLayoutPanel5.Dock = DockStyle.Fill;
@@ -572,16 +575,16 @@
             tableLayoutPanel5.Size = new Size(846, 29);
             tableLayoutPanel5.TabIndex = 2;
             // 
-            // tokenLimitProgressBar
+            // codeFileInjectTokenUsageMeter
             // 
-            tokenLimitProgressBar.DisplayText = "";
-            tokenLimitProgressBar.Location = new Point(723, 3);
-            tokenLimitProgressBar.MarqueeAnimationSpeed = 0;
-            tokenLimitProgressBar.Name = "tokenLimitProgressBar";
-            tokenLimitProgressBar.ProgressBarColor = Color.Green;
-            tokenLimitProgressBar.Size = new Size(120, 23);
-            tokenLimitProgressBar.Style = ProgressBarStyle.Continuous;
-            tokenLimitProgressBar.TabIndex = 12;
+            codeFileInjectTokenUsageMeter.DisplayText = "";
+            codeFileInjectTokenUsageMeter.Location = new Point(723, 3);
+            codeFileInjectTokenUsageMeter.MarqueeAnimationSpeed = 0;
+            codeFileInjectTokenUsageMeter.Name = "codeFileInjectTokenUsageMeter";
+            codeFileInjectTokenUsageMeter.ProgressBarColor = Color.Green;
+            codeFileInjectTokenUsageMeter.Size = new Size(120, 23);
+            codeFileInjectTokenUsageMeter.Style = ProgressBarStyle.Continuous;
+            codeFileInjectTokenUsageMeter.TabIndex = 12;
             // 
             // llmTokenLimitLabel
             // 
@@ -729,6 +732,7 @@
             llmSelector.Name = "llmSelector";
             llmSelector.Size = new Size(142, 23);
             llmSelector.TabIndex = 1;
+            llmSelector.SelectedIndexChanged += llmSelector_SelectedIndexChanged;
             // 
             // totalTokenUsageTable
             // 
@@ -757,16 +761,18 @@
             finalChatTokenLimitLabel.Margin = new Padding(3);
             finalChatTokenLimitLabel.Name = "finalChatTokenLimitLabel";
             finalChatTokenLimitLabel.Padding = new Padding(3);
-            finalChatTokenLimitLabel.Size = new Size(100, 23);
+            finalChatTokenLimitLabel.Size = new Size(74, 23);
             finalChatTokenLimitLabel.TabIndex = 18;
-            finalChatTokenLimitLabel.Text = "🌡️ Token Usage";
+            finalChatTokenLimitLabel.Text = "🌡️ Context";
             // 
             // finalChatTokenUsageProgressBar
             // 
+            finalChatTokenUsageProgressBar.DisplayText = "";
             finalChatTokenUsageProgressBar.Dock = DockStyle.Fill;
-            finalChatTokenUsageProgressBar.Location = new Point(109, 3);
+            finalChatTokenUsageProgressBar.Location = new Point(83, 3);
             finalChatTokenUsageProgressBar.Name = "finalChatTokenUsageProgressBar";
-            finalChatTokenUsageProgressBar.Size = new Size(98, 23);
+            finalChatTokenUsageProgressBar.ProgressBarColor = Color.LightGreen;
+            finalChatTokenUsageProgressBar.Size = new Size(124, 23);
             finalChatTokenUsageProgressBar.TabIndex = 17;
             // 
             // pastUserPrompts
@@ -800,6 +806,22 @@
             tabPage4.Text = "tabPage4";
             tabPage4.UseVisualStyleBackColor = true;
             // 
+            // chatInputHolderTable
+            // 
+            chatInputHolderTable.AutoSize = true;
+            chatInputHolderTable.ColumnCount = 2;
+            chatInputHolderTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            chatInputHolderTable.ColumnStyles.Add(new ColumnStyle());
+            chatInputHolderTable.Controls.Add(sendUserMsgButton, 1, 0);
+            chatInputHolderTable.Controls.Add(userInputTextBox, 0, 0);
+            chatInputHolderTable.Dock = DockStyle.Fill;
+            chatInputHolderTable.Location = new Point(3, 490);
+            chatInputHolderTable.Name = "chatInputHolderTable";
+            chatInputHolderTable.RowCount = 1;
+            chatInputHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            chatInputHolderTable.Size = new Size(840, 107);
+            chatInputHolderTable.TabIndex = 11;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -824,8 +846,8 @@
             llmButtonRowHolderTable.PerformLayout();
             codePage.ResumeLayout(false);
             codePage.PerformLayout();
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
+            codeSnippetInjectMainTablePanel.ResumeLayout(false);
+            codeSnippetInjectMainTablePanel.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             codeFilePage.ResumeLayout(false);
@@ -844,6 +866,8 @@
             llmSelectorTable.PerformLayout();
             totalTokenUsageTable.ResumeLayout(false);
             totalTokenUsageTable.PerformLayout();
+            chatInputHolderTable.ResumeLayout(false);
+            chatInputHolderTable.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -855,7 +879,7 @@
         private TabControl mainTabControl;
         private TabPage llmPage;
         private Button resetChatHistoryButton;
-        private ProgressBar progressBar1;
+        private ProgressBar llmThinkingProgressBar;
         private TableLayoutPanel sidePanelTable;
         private TableLayoutPanel tableLayoutPanel3;
         private TabPage settingsPage;
@@ -863,7 +887,7 @@
         private TabPage tabPage4;
         private TableLayoutPanel tableLayoutPanel4;
         private TabPage codePage;
-        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel codeSnippetInjectMainTablePanel;
         private Label label2;
         private TextBox codeInjectPretextTextBox;
         private FlowLayoutPanel flowLayoutPanel1;
@@ -892,13 +916,14 @@
         private RichTextBox userInputTextBox;
         private TableLayoutPanel totalTokenUsageTable;
         private Label finalChatTokenLimitLabel;
-        private ProgressBar finalChatTokenUsageProgressBar;
+        private CustomProgressBar finalChatTokenUsageProgressBar;
         private TableLayoutPanel llmSelectorTable;
         private ComboBox llmSelector;
         private TableLayoutPanel tableLayoutPanel5;
-        private CustomProgressBar tokenLimitProgressBar;
+        private CustomProgressBar codeFileInjectTokenUsageMeter;
         private Label llmTokenLimitLabel;
         private Button addNewCodeFileInjectButton;
         private Label totalByteUsageMeterTextLabel;
+        private TableLayoutPanel chatInputHolderTable;
     }
 }

@@ -337,21 +337,61 @@ namespace LLMCoder
             fetchLatestInjectedCodeButton.TabIndex = 16;
             fetchLatestInjectedCodeButton.Text = "⚡ Update";
             fetchLatestInjectedCodeButton.UseVisualStyleBackColor = false;
-            
+
             fetchLatestInjectedCodeButton.Click += (sender, e) =>
             {
 
-                FetchLatestInjectedCodeButton_Click(
-                    codeFileInjectPathTextBox,
-                    endLineNumberTextBox,
-                    startLineNumberTextBox,
-                    codeFileInjectTextBox,
-                    preCodePromptTextBox,
-                    postCodePromptTextBox,
-                    fetchCodeStatusMessageLabel,
-                    tokenLimitProgressBar, 
-                    this.SelectedLLMConfig.MaxContextWindowTokens, this.totalByteUsageMeterTextLabel);
-            }; 
+                // get needed data to fetch file
+                var filePath = codeFileInjectPathTextBox.Text;
+
+                // if user has not set end line number then help user by auto filling
+                if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(filePath).ToString(); }
+                var startLineNum = int.Parse(startLineNumberTextBox.Text);
+                var endLineNum = int.Parse(endLineNumberTextBox.Text);
+
+                // cut out piece of select code from file
+                var extractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
+
+                // put into view
+                codeFileInjectTextBox.Text = extractedCode;
+
+                // auto set probable pre and post prompt for file
+                var codeFileName = GetCodeFileFullName(filePath);
+                preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
+                postCodePromptTextBox.Text = $"Ok, I've parsed the code";
+
+
+                // # Update Stats
+
+                // give user some stats to user about the fetched code
+                var textSizeKb = GetBinarySizeOfTextInKB(extractedCode);
+                var textSizeToken = ConvertKBToTokenCount(textSizeKb);
+                fetchCodeStatusMessageLabel.Text = $"Size : {textSizeKb:F2} KB";
+
+                // total context window File inject only (Tokens)
+                //PERCENTAGE
+                var maxTokenLimitInKb = ConvertTokenCountToKB(this.SelectedLLMConfig.MaxContextWindowTokens);
+                var percentageUsed = (textSizeKb / maxTokenLimitInKb) * 100; 
+                percentageUsed = percentageUsed <= 100 ? percentageUsed : 100; // reset to 100% max if exceed
+                codeFileInjectTokenUsageMeter.Value = (int)percentageUsed;
+                UpdateTokenLimitProgressBarColor(codeFileInjectTokenUsageMeter); //update meter color
+
+                //TEXT
+                var tokenUsageMeterText = $"{FormatNumberWithKAbbreviation(textSizeToken)} / {FormatNumberWithKAbbreviation(this.SelectedLLMConfig.MaxContextWindowTokens)} Tokens";
+                codeFileInjectTokenUsageMeter.DisplayText = tokenUsageMeterText;
+
+                // total context window by all (KB)
+                var byteUsageMeterText = $"{textSizeKb:F2}/{maxTokenLimitInKb} KB";
+                totalByteUsageMeterTextLabel.Text = byteUsageMeterText;
+
+                // total context window by all (Tokens)
+                var maxLlmContextWindowTokens = FormatNumberWithKAbbreviation(SelectedLLMConfig.MaxContextWindowTokens);
+                var usedContextTokens = FormatNumberWithKAbbreviation(GetTotalChatMessageSizeInTokens());
+                var totalTokenUsageMeterText = $"{usedContextTokens} / {maxLlmContextWindowTokens} Tokens";
+                finalChatTokenUsageProgressBar.DisplayText = totalTokenUsageMeterText;
+                UpdateTokenLimitProgressBarColor(finalChatTokenUsageProgressBar); //update meter color
+
+            };
 
             expandCodeFileButton.BackColor = SystemColors.MenuHighlight;
             expandCodeFileButton.ForeColor = SystemColors.ButtonFace;
@@ -367,56 +407,21 @@ namespace LLMCoder
 
         }
 
-        private static void FetchLatestInjectedCodeButton_Click(
-            TextBox codeFileInjectPathTextBox,
-            TextBox endLineNumberTextBox,
-            TextBox startLineNumberTextBox,
-            RichTextBox codeFileInjectTextBox,
-            TextBox preCodePromptTextBox,
-            TextBox postCodePromptTextBox,
-            Label fetchCodeStatusMessageLabel,
-            CustomProgressBar tokenLimitProgressBar,
-            int maxContextWindowTokens,
-            Label byteUsageMeterTextLabel)
-        {
+        //private static void FetchLatestInjectedCodeButton_Click(
+        //    TextBox codeFileInjectPathTextBox,
+        //    TextBox endLineNumberTextBox,
+        //    TextBox startLineNumberTextBox,
+        //    RichTextBox codeFileInjectTextBox,
+        //    TextBox preCodePromptTextBox,
+        //    TextBox postCodePromptTextBox,
+        //    Label fetchCodeStatusMessageLabel,
+        //    CustomProgressBar tokenLimitProgressBar,
+        //    int maxContextWindowTokens,
+        //    Label byteUsageMeterTextLabel)
+        //{
 
-            // get needed data to fetch file
-            var filePath = codeFileInjectPathTextBox.Text;
 
-            // if user has not set end line number then help user by auto filling
-            if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(filePath).ToString(); }
-            var startLineNum = int.Parse(startLineNumberTextBox.Text);
-            var endLineNum = int.Parse(endLineNumberTextBox.Text);
-
-            // cut out piece of select code from file
-            var extractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
-
-            // put into view
-            codeFileInjectTextBox.Text = extractedCode;
-
-            // auto set probable pre and post prompt for file
-            var codeFileName = GetCodeFileFullName(filePath);
-            preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
-            postCodePromptTextBox.Text = $"Ok, I've parsed the code";
-
-            // give user some stats to user about the fetched code
-            var textSizeKB = GetBinarySizeOfTextInKB(extractedCode);
-            var textSizeToken = ConvertKBToTokenCount(textSizeKB);
-            fetchCodeStatusMessageLabel.Text = $"Parsed : Size : {textSizeKB:F2} KB";
-
-            // update total token limit temperature bar
-            // NOTE: These are just guidelines. Different types of language and different languages are tokenized in different ways.
-            var maxTokenLimitInKb = ConvertTokenCountToKB(maxContextWindowTokens);
-            var percentageUsed = (textSizeKB / maxTokenLimitInKb) * 100; // 128K tokens = 512KB
-            percentageUsed = percentageUsed <= 100 ? percentageUsed : 100; // reset to 100% max
-            tokenLimitProgressBar.Value = (int)percentageUsed;
-            var byteUsageMeterText = $"{textSizeKB:F2}/{maxTokenLimitInKb} KB";
-            byteUsageMeterTextLabel.Text = byteUsageMeterText;
-            var tokenUsageMeterText = $"{textSizeToken}/{FormatNumberWithKAbbreviation(maxContextWindowTokens)}";
-            tokenLimitProgressBar.DisplayText = tokenUsageMeterText;
-            UpdateTokenLimitProgressBarColor(tokenLimitProgressBar);
-
-        }
+        //}
 
         /// <summary>
         /// given a number like 32000, return text version with K abbreviation
@@ -496,8 +501,8 @@ namespace LLMCoder
 
         private void SetTokenLimitProgressBarColor(Color color)
         {
-            tokenLimitProgressBar.ForeColor = Color.Red;
-            tokenLimitProgressBar.ForeColor = Color.Red; ;
+            codeFileInjectTokenUsageMeter.ForeColor = Color.Red;
+            codeFileInjectTokenUsageMeter.ForeColor = Color.Red; ;
         }
 
         /// <summary>
@@ -558,20 +563,50 @@ namespace LLMCoder
         }
 
         /// <summary>
-        /// when user selects an LLM modal to use
+        /// when user selects/changes an LLM modal to use during runtime
         /// </summary>
         private void UpdateSelectedLLM(string selectedLLM)
         {
             //save end point to global instance for later use 
             this.SelectedLLMConfig = GetApiConfigByName(selectedLLM);
 
+            //update llm HTTP caller
             client = new HttpClient();
             client.Timeout = Timeout.InfiniteTimeSpan;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.SelectedLLMConfig.ApiKey);
             client.BaseAddress = new Uri(this.SelectedLLMConfig.Endpoint);
+            this.llmThinkingProgressBar.Value = 0; //NOTE: reset since previous Call would be dropped if done mid-way of stuck llm
 
-            // Make visible to user
+            //update drop down
             llmSelector.SelectedIndex = llmSelector.Items.IndexOf(selectedLLM);
+
+
+            // Update the usage counter text
+            var currentRawText = totalByteUsageMeterTextLabel.Text; // sample: "230 / 500 KB"
+            var parts = currentRawText.Split('/');
+            double divisor1 = double.Parse(parts[0].Trim()); // should be 230
+            //update KB meter
+            var maxLlmContextWindowKiloBytes = ConvertTokenCountToKB(this.SelectedLLMConfig.MaxContextWindowTokens);
+            totalByteUsageMeterTextLabel.Text = $"{divisor1} / {maxLlmContextWindowKiloBytes} KB";
+            
+            //update Token meter
+            var maxLlmContextWindowTokens = FormatNumberWithKAbbreviation(SelectedLLMConfig.MaxContextWindowTokens);
+            var tokenUsageMeterText = $"{GetTotalChatMessageSizeInTokens()} / {maxLlmContextWindowTokens} Tokens";
+            finalChatTokenUsageProgressBar.DisplayText = tokenUsageMeterText;
+            UpdateTokenLimitProgressBarColor(finalChatTokenUsageProgressBar); //update meter color
+
+        }
+
+        private int GetTotalChatMessageSizeInTokens()
+        {
+            //create final message history going to LLM
+            var finalMessageText = JsonConvert.SerializeObject(GenerateFinalChatMessageStack());
+
+            //calculate token count of total text
+            var textSizeKB = GetBinarySizeOfTextInKB(finalMessageText);
+            var textSizeToken = ConvertKBToTokenCount(textSizeKB);
+
+            return textSizeToken;
         }
 
         private void UpdatePastPromptsView()
@@ -622,8 +657,42 @@ namespace LLMCoder
         // Send a message to the LLM and return its response
         async Task<string> SendMessageToLLM(HttpClient client)
         {
-            //STEP 1 : Inject selected sources Snippet/File/Web
+            //STEP 1 : get all messages to send to LLM stacked properly
+            var finalChatMessageStack = GenerateFinalChatMessageStack();
+
+            //prepare for boarding 🛫
+            var requestBody = JsonConvert.SerializeObject(finalChatMessageStack);
+            var content = new StringContent(requestBody);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            //make call to API
+            var response = await client.PostAsync("", content);
+
+            //if failed, scream the error back!
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                AddMessageToPanel($"Error: {response.StatusCode} - {errorResponse}", "assistant", Color.Red);
+                return "Error occurred. Please check the error message above.";
+
+            }
+
+            var fullReplyRaw = await response.Content.ReadAsStringAsync();// Read response content as string
+            var fullReply = new Phi3ReplyJson(fullReplyRaw);
+
+            var replyMessage = fullReply?.Choices?.FirstOrDefault()?.Message.Content ?? "No response!!";
+
+            return replyMessage;
+        }
+
+        /// <summary>
+        /// Puts together all chat messages and LLM settings for final POST data sent to LLM
+        /// </summary>
+        private object? GenerateFinalChatMessageStack()
+        {
             List<object> messages = new List<object>();
+
+            //STEP 1 : Inject selected sources Snippet/File/Web
 
             //inject snippet
             if (snippetInjectCheckBox.Checked)
@@ -649,7 +718,7 @@ namespace LLMCoder
                     {
                         // Recursively search for the TextBox and RichTextBox controls
                         TextBox preCodePromptTextBox = FindControl<TextBox>(fileInfoTable, "preCodePromptTextBox");
-                        RichTextBox codeFileInjectTextBox =FindControl<RichTextBox>(fileInfoTable, "codeFileInjectTextBox");
+                        RichTextBox codeFileInjectTextBox = FindControl<RichTextBox>(fileInfoTable, "codeFileInjectTextBox");
                         TextBox postCodePromptTextBox = FindControl<TextBox>(fileInfoTable, "postCodePromptTextBox");
 
                         //make sure all fields are filled for using
@@ -681,40 +750,20 @@ namespace LLMCoder
 
             //STEP 2: 
             //package message with llm control options
+            var tempValue = string.IsNullOrEmpty(temperatureTextBox.Text) ? "0" : temperatureTextBox.Text; //auto set 0 for startup
+            var topPValue = string.IsNullOrEmpty(topPTextBox.Text) ? "0" : topPTextBox.Text;
             var requestBodyObject = new
             {
                 messages, // List of messages
                 //max_tokens = 32000, // Maximum number of tokens for the response
                 //max_tokens = 4096, // Maximum number of tokens for the response
-                temperature = double.Parse(temperatureTextBox.Text), // Temperature for sampling
-                top_p = double.Parse(topPTextBox.Text), // Nucleus sampling parameter
+                temperature = double.Parse(tempValue), // Temperature for sampling
+                top_p = double.Parse(topPValue), // Nucleus sampling parameter
                 //presence_penalty = 0,
                 //frequency_penalty = 0
             };
 
-            //prepare for boarding 🛫
-            var requestBody = JsonConvert.SerializeObject(requestBodyObject);
-            var content = new StringContent(requestBody);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            //make call to API
-            var response = await client.PostAsync("", content);
-
-            //if failed, scream the error back!
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorResponse = await response.Content.ReadAsStringAsync();
-                AddMessageToPanel($"Error: {response.StatusCode} - {errorResponse}", "assistant", Color.Red);
-                return "Error occurred. Please check the error message above.";
-
-            }
-
-            var fullReplyRaw = await response.Content.ReadAsStringAsync();// Read response content as string
-            var fullReply = new Phi3ReplyJson(fullReplyRaw);
-
-            var replyMessage = fullReply?.Choices?.FirstOrDefault()?.Message.Content ?? "No response!!";
-
-            return replyMessage;
+            return requestBodyObject;
         }
 
         private T FindControl<T>(Control control, string name) where T : Control
@@ -865,18 +914,6 @@ namespace LLMCoder
             userInputTextBox.Text = "";
         }
 
-        private void llmSelector_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Cast the sender as a ComboBox
-            ComboBox comboBox = (ComboBox)sender;
-
-            // Get the selected item's text
-            string selectedLLMName = comboBox.SelectedItem.ToString();
-
-            UpdateSelectedLLM(selectedLLMName);
-
-        }
-
         private void resetChatHistoryButton_Click(object sender, EventArgs e)
         {
             // Clear the chat output box text
@@ -906,7 +943,7 @@ namespace LLMCoder
 
 
             // Update the progress bar visibility and value
-            progressBar1.Value = 25;
+            llmThinkingProgressBar.Value = 25;
 
             // Get the user input from the input text box
             string userInput = userInputTextBox.Text;
@@ -914,12 +951,12 @@ namespace LLMCoder
             // Display the user's message in the chat output box
             AddMessageToPanel(userInput, "user", Color.Aqua);
 
-            progressBar1.Value = 50;
+            llmThinkingProgressBar.Value = 50;
 
             // Send a message to the LLM and get its response
             string response = await SendMessageToLLM(client);
 
-            progressBar1.Value = 75;
+            llmThinkingProgressBar.Value = 75;
 
             // Display the LLM's response in the chat output box
             AddMessageToPanel(response, "assistant", Color.LimeGreen);
@@ -931,9 +968,9 @@ namespace LLMCoder
             UpdatePastPromptsView();
 
             // Update the progress bar value and hide it
-            progressBar1.Value = 100;
+            llmThinkingProgressBar.Value = 100;
             await Task.Delay(300); //short delay
-            progressBar1.Value = 0;
+            llmThinkingProgressBar.Value = 0;
 
             // Stop the timer
             stopwatch.Stop();
@@ -1115,6 +1152,17 @@ namespace LLMCoder
             }
         }
 
+        private void llmSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Cast the sender as a ComboBox
+            ComboBox comboBox = (ComboBox)sender;
+
+            // Get the selected item's text
+            string selectedLLMName = comboBox.SelectedItem.ToString();
+
+            UpdateSelectedLLM(selectedLLMName);
+
+        }
     }
 
     public record ApiConfig(string Name, string Endpoint, string ApiKey, int MaxContextWindowTokens);

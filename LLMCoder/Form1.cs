@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace LLMCoder
 {
@@ -17,14 +18,16 @@ namespace LLMCoder
         static IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("secrets.json", optional: true, reloadOnChange: true).Build();
 
         //init all LLM choices here
-        static List<ApiConfig> ApiConfigs = new()
-        {
-            new ApiConfig("GPT4o", config["GPT4oEndpoint"], config["GPT4oApiKey"]),
-            new ApiConfig("Phi3medium128kinstruct", config["Phi3medium128kinstructEndpoint"], config["Phi3medium128kinstructApiKey"]),
-            new ApiConfig("MistralNemo128k", config["MistralNemo128kEndpoint"], config["MistralNemo128kApiKey"]),
-            new ApiConfig("MetaLlama31405B", config["MetaLlama31405BEndpoint"], config["MetaLlama31405BApiKey"]),
-            new ApiConfig("CohereCommandRPlus", config["CohereCommandRPlusEndpoint"], config["CohereCommandRPlusApiKey"])
-        };
+        //static List<ApiConfig> ApiConfigs = new()
+        //{
+        //    new ApiConfig("GPT4o", config["GPT4o_Endpoint"], config["GPT4o_ApiKey"], int.Parse(config["GPT4o_MaxContextWindowTokens"])),
+        //    new ApiConfig("Phi3medium128kinstruct", config["Phi3medium128kinstructEndpoint"], config["Phi3medium128kinstruct_ApiKey"], int.Parse(config["Phi3medium128kinstruct_MaxContextWindowTokens"])),
+        //    new ApiConfig("MistralNemo128k", config["MistralNemo128k_Endpoint"], config["MistralNemo128k_ApiKey"], int.Parse(config["MistralNemo128k_MaxContextWindowTokens"])),
+        //    new ApiConfig("MetaLlama31405B", config["MetaLlama31405B_Endpoint"], config["MetaLlama31405B_ApiKey"], int.Parse(config["MetaLlama31405B_MaxContextWindowTokens"])),
+        //    new ApiConfig("CohereCommandRPlus", config["CohereCommandRPlus_Endpoint"], config["CohereCommandRPlus_ApiKey"], int.Parse(config["CohereCommandRPlus_MaxContextWindowTokens"]))
+        //};
+
+        public static List<ApiConfig> ApiConfigs { get; set; }
 
         static HttpClient client;
 
@@ -44,6 +47,9 @@ namespace LLMCoder
 
         public Form1()
         {
+            // Load ApiConfigs from config.json file
+            LoadApiConfigsFromConfigFile();
+
             InitializeComponent();
 
             // Update the dropdown with available LLM choices
@@ -66,7 +72,8 @@ namespace LLMCoder
             topPTextBox.Text = "1.0";
 
             //default inject code
-            includeCodeInjectCheckBox.Checked = true;
+            snippetInjectCheckBox.Checked = true;
+
         }
 
 
@@ -208,7 +215,7 @@ namespace LLMCoder
             lineNumberRangeLabel.Name = "lineNumberRangeLabel";
             lineNumberRangeLabel.Size = new Size(87, 15);
             lineNumberRangeLabel.TabIndex = 4;
-            lineNumberRangeLabel.Text = "Line No. Range";
+            lineNumberRangeLabel.Text = "Select Range";
             lineNumberRangeLabel.ForeColor = Color.Azure;
 
             startLabel.AutoSize = true;
@@ -287,6 +294,7 @@ namespace LLMCoder
 
 
             // Create a new richTextBox
+            codeFileInjectTextBox.Name = "codeFileInjectTextBox";
             codeFileInjectTextBox.BackColor = SystemColors.ActiveCaptionText;
             codeFileInjectTextBox.Dock = DockStyle.Fill;
             codeFileInjectTextBox.ForeColor = Color.Azure;
@@ -340,7 +348,7 @@ namespace LLMCoder
                     preCodePromptTextBox,
                     postCodePromptTextBox,
                     fetchCodeStatusMessageLabel,
-                    tokenLimitProgressBar);
+                    tokenLimitProgressBar, this.SelectedLLMConfig.MaxContextWindowTokens);
             };
 
             expandCodeFileButton.BackColor = SystemColors.MenuHighlight;
@@ -365,7 +373,7 @@ namespace LLMCoder
             TextBox preCodePromptTextBox,
             TextBox postCodePromptTextBox,
             Label fetchCodeStatusMessageLabel,
-            CustomProgressBar tokenLimitProgressBar)
+            CustomProgressBar tokenLimitProgressBar, int maxContextWindowTokens)
         {
 
             // get needed data to fetch file
@@ -393,7 +401,7 @@ namespace LLMCoder
 
             // update total token limit temperature bar
             // NOTE: These are just guidelines. Different types of language and different languages are tokenized in different ways.
-            var maxTokenLimitInKb = EstimateTokenCountSizeKB(4096);
+            var maxTokenLimitInKb = EstimateTokenCountSizeKB(maxContextWindowTokens);
             var percentageUsed = (textSizeKB / maxTokenLimitInKb) * 100; // 128K tokens = 512KB
             percentageUsed = percentageUsed <= 100 ? percentageUsed : 100; // reset to 100% max
             tokenLimitProgressBar.Value = (int)percentageUsed;
@@ -515,6 +523,9 @@ namespace LLMCoder
             }
         }
 
+        /// <summary>
+        /// when user selects an LLM modal to use
+        /// </summary>
         private void UpdateSelectedLLM(string selectedLLM)
         {
             //save end point to global instance for later use 
@@ -577,20 +588,65 @@ namespace LLMCoder
         // Send a message to the LLM and return its response
         async Task<string> SendMessageToLLM(HttpClient client)
         {
-            //inject code pretext ONLY if specified
-            var messages = includeCodeInjectCheckBox.Checked ? new List<object>
-            {
-                //new { role = "system", content = "expert programmer helper" },
-                new { role = "user", content = $"{codeInjectPretextTextBox.Text}\n```\n{largeCodeSnippetTextBox.Text}\n```"},
-                new { role = "assistant", content = $"{injectAssitantPretextTextBox.Text}" }
-            } : new List<object>();
+            //STEP 1 : Inject selected sources Snippet/File/Web
+            List<object> messages = new List<object>();
 
-            //add in 
+            //inject snippet
+            if (snippetInjectCheckBox.Checked)
+            {
+                messages.AddRange(new List<object>
+                {
+                    new
+                    {
+                        role = "user",
+                        content = $"{codeInjectPretextTextBox.Text}\n```\n{largeCodeSnippetTextBox.Text}\n```"
+                    },
+                    new { role = "assistant", content = $"{injectAssitantPretextTextBox.Text}" }
+                });
+            }
+
+            //inject each code file properly
+            if (fileInjectCheckBox.Checked)
+            {
+                //get all the files added as view component table
+                foreach (Control control in codeFileInjectTabMainTablePanel.Controls)
+                {
+                    if (control is TableLayoutPanel fileInfoTable)
+                    {
+                        // Recursively search for the TextBox and RichTextBox controls
+                        TextBox preCodePromptTextBox = FindControl<TextBox>(fileInfoTable, "preCodePromptTextBox");
+                        RichTextBox codeFileInjectTextBox =FindControl<RichTextBox>(fileInfoTable, "codeFileInjectTextBox");
+                        TextBox postCodePromptTextBox = FindControl<TextBox>(fileInfoTable, "postCodePromptTextBox");
+
+                        //make sure all fields are filled for using
+                        if (preCodePromptTextBox != null && codeFileInjectTextBox != null && postCodePromptTextBox != null)
+                        {
+                            string codePretext = preCodePromptTextBox.Text;
+                            string extractedCodeText = codeFileInjectTextBox.Text;
+                            string codePosttext = postCodePromptTextBox.Text;
+
+                            messages.AddRange(new List<object>
+                            {
+                                new
+                                {
+                                    role = "user",
+                                    content = $"{codePretext}\n```\n{extractedCodeText}\n```"
+                                },
+                                new { role = "assistant", content = $"{codePosttext}" }
+                            });
+                        }
+                    }
+                }
+            }
+
+            //add in current ongoing conversation at end of chat history  
             foreach (var message in conversationHistory)
             {
                 messages.Add(new { role = message.Role, content = message.Content });
             }
 
+            //STEP 2: 
+            //package message with llm control options
             var requestBodyObject = new
             {
                 messages, // List of messages
@@ -602,8 +658,8 @@ namespace LLMCoder
                 //frequency_penalty = 0
             };
 
+            //prepare for boarding 🛫
             var requestBody = JsonConvert.SerializeObject(requestBodyObject);
-
             var content = new StringContent(requestBody);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
@@ -626,6 +682,12 @@ namespace LLMCoder
 
             return replyMessage;
         }
+
+        private T FindControl<T>(Control control, string name) where T : Control
+        {
+            return control.Controls.OfType<T>().FirstOrDefault(c => c.Name == name);
+        }
+
 
         // Log a chat message to the history file
         // New method to log a chat message to the history file
@@ -1004,9 +1066,24 @@ namespace LLMCoder
         {
             InitializeCodeFileInjectTablePanel();
         }
+
+        private void LoadApiConfigsFromConfigFile()
+        {
+            try
+            {
+                string configFileContent = File.ReadAllText("secrets.json");
+                ConfigFile configFile = JsonConvert.DeserializeObject<ConfigFile>(configFileContent);
+                ApiConfigs = configFile.ApiConfigs;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading config file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 
-    public record ApiConfig(string Name, string Endpoint, string ApiKey);
+    public record ApiConfig(string Name, string Endpoint, string ApiKey, int MaxContextWindowTokens);
 
     // Class to represent a conversation message
     public class ConversationMessage
@@ -1075,5 +1152,10 @@ namespace LLMCoder
         }
     }
 
+    public class ConfigFile
+    {
+        [JsonPropertyName("ApiConfigs")]
+        public List<ApiConfig> ApiConfigs { get; set; }
+    }
 
 }

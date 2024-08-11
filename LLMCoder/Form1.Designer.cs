@@ -34,7 +34,17 @@
             mainTabControl = new TabControl();
             llmPage = new TabPage();
             tableLayoutPanel3 = new TableLayoutPanel();
+            mainChatHeaderRow = new TableLayoutPanel();
+            finalChatTokenUsageProgressBar = new ProgressBar();
+            finalChatTokenLimitLabel = new Label();
+            webInjectCheckBox = new CheckBox();
+            fileInjectCheckBox = new CheckBox();
+            snippetInjectCheckBox = new CheckBox();
+            injectSourceLabel = new Label();
+            llmChatHistorySelectComboBox = new ComboBox();
+            llmChatHistoryLabel = new Label();
             chatMessagePanel = new TableLayoutPanel();
+            userInputTextBox = new RichTextBox();
             llmButtonRowHolderTable = new TableLayoutPanel();
             llmRunningTimerLabel = new Label();
             sendUserMsgButton = new Button();
@@ -54,13 +64,12 @@
             codeFilePage = new TabPage();
             codeFileInjectTabMainTablePanel = new TableLayoutPanel();
             tableLayoutPanel5 = new TableLayoutPanel();
+            modalTokenLimitLabel = new Label();
             tokenLimitProgressBar = new CustomProgressBar();
             llmTokenLimitLabel = new Label();
             addNewCodeFileInjectButton = new Button();
             settingsPage = new TabPage();
             tableLayoutPanel4 = new TableLayoutPanel();
-            includeCodeInjectCheckBox = new CheckBox();
-            label5 = new Label();
             topPTextBox = new TextBox();
             topPLabel = new Label();
             temperatureTextBox = new TextBox();
@@ -71,17 +80,6 @@
             pastUserPrompts = new ListBox();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
-            modalTokenLimitLabel = new Label();
-            mainChatHeaderRow = new TableLayoutPanel();
-            llmChatHistoryLabel = new Label();
-            llmChatHistorySelectComboBox = new ComboBox();
-            injectSourceLabel = new Label();
-            snippetInjectCheckBox = new CheckBox();
-            fileInjectCheckBox = new CheckBox();
-            webInjectCheckBox = new CheckBox();
-            finalChatTokenLimitLabel = new Label();
-            finalChatTokenUsageProgressBar = new ProgressBar();
-            userInputTextBox = new RichTextBox();
             label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -90,6 +88,7 @@
             mainTabControl.SuspendLayout();
             llmPage.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
+            mainChatHeaderRow.SuspendLayout();
             llmButtonRowHolderTable.SuspendLayout();
             codePage.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -100,7 +99,6 @@
             settingsPage.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
-            mainChatHeaderRow.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -152,7 +150,7 @@
             llmPage.Padding = new Padding(3);
             llmPage.Size = new Size(852, 663);
             llmPage.TabIndex = 0;
-            llmPage.Text = "🗨️ LLM";
+            llmPage.Text = "🗨️ Chat";
             llmPage.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel3
@@ -174,6 +172,121 @@
             tableLayoutPanel3.Size = new Size(846, 657);
             tableLayoutPanel3.TabIndex = 4;
             // 
+            // mainChatHeaderRow
+            // 
+            mainChatHeaderRow.AutoSize = true;
+            mainChatHeaderRow.ColumnCount = 9;
+            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
+            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
+            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
+            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
+            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
+            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
+            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
+            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
+            mainChatHeaderRow.Controls.Add(finalChatTokenUsageProgressBar, 8, 0);
+            mainChatHeaderRow.Controls.Add(finalChatTokenLimitLabel, 7, 0);
+            mainChatHeaderRow.Controls.Add(webInjectCheckBox, 5, 0);
+            mainChatHeaderRow.Controls.Add(fileInjectCheckBox, 4, 0);
+            mainChatHeaderRow.Controls.Add(snippetInjectCheckBox, 3, 0);
+            mainChatHeaderRow.Controls.Add(injectSourceLabel, 2, 0);
+            mainChatHeaderRow.Controls.Add(llmChatHistorySelectComboBox, 1, 0);
+            mainChatHeaderRow.Controls.Add(llmChatHistoryLabel, 0, 0);
+            mainChatHeaderRow.Dock = DockStyle.Fill;
+            mainChatHeaderRow.Location = new Point(3, 3);
+            mainChatHeaderRow.Name = "mainChatHeaderRow";
+            mainChatHeaderRow.RowCount = 1;
+            mainChatHeaderRow.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            mainChatHeaderRow.Size = new Size(840, 29);
+            mainChatHeaderRow.TabIndex = 9;
+            // 
+            // finalChatTokenUsageProgressBar
+            // 
+            finalChatTokenUsageProgressBar.Location = new Point(737, 3);
+            finalChatTokenUsageProgressBar.Name = "finalChatTokenUsageProgressBar";
+            finalChatTokenUsageProgressBar.Size = new Size(100, 23);
+            finalChatTokenUsageProgressBar.TabIndex = 16;
+            // 
+            // finalChatTokenLimitLabel
+            // 
+            finalChatTokenLimitLabel.AutoSize = true;
+            finalChatTokenLimitLabel.Dock = DockStyle.Fill;
+            finalChatTokenLimitLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            finalChatTokenLimitLabel.Location = new Point(631, 3);
+            finalChatTokenLimitLabel.Margin = new Padding(3);
+            finalChatTokenLimitLabel.Name = "finalChatTokenLimitLabel";
+            finalChatTokenLimitLabel.Padding = new Padding(3);
+            finalChatTokenLimitLabel.Size = new Size(100, 23);
+            finalChatTokenLimitLabel.TabIndex = 14;
+            finalChatTokenLimitLabel.Text = "🌡️ Token Usage";
+            // 
+            // webInjectCheckBox
+            // 
+            webInjectCheckBox.AutoSize = true;
+            webInjectCheckBox.Location = new Point(463, 6);
+            webInjectCheckBox.Margin = new Padding(3, 6, 3, 3);
+            webInjectCheckBox.Name = "webInjectCheckBox";
+            webInjectCheckBox.Size = new Size(50, 19);
+            webInjectCheckBox.TabIndex = 13;
+            webInjectCheckBox.Text = "Web";
+            webInjectCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // fileInjectCheckBox
+            // 
+            fileInjectCheckBox.AutoSize = true;
+            fileInjectCheckBox.Location = new Point(413, 6);
+            fileInjectCheckBox.Margin = new Padding(3, 6, 3, 3);
+            fileInjectCheckBox.Name = "fileInjectCheckBox";
+            fileInjectCheckBox.Size = new Size(44, 19);
+            fileInjectCheckBox.TabIndex = 12;
+            fileInjectCheckBox.Text = "File";
+            fileInjectCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // snippetInjectCheckBox
+            // 
+            snippetInjectCheckBox.AutoSize = true;
+            snippetInjectCheckBox.Location = new Point(341, 6);
+            snippetInjectCheckBox.Margin = new Padding(3, 6, 3, 3);
+            snippetInjectCheckBox.Name = "snippetInjectCheckBox";
+            snippetInjectCheckBox.Size = new Size(66, 19);
+            snippetInjectCheckBox.TabIndex = 11;
+            snippetInjectCheckBox.Text = "Snippet";
+            snippetInjectCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // injectSourceLabel
+            // 
+            injectSourceLabel.AutoSize = true;
+            injectSourceLabel.Dock = DockStyle.Fill;
+            injectSourceLabel.Location = new Point(281, 3);
+            injectSourceLabel.Margin = new Padding(3);
+            injectSourceLabel.Name = "injectSourceLabel";
+            injectSourceLabel.Padding = new Padding(3);
+            injectSourceLabel.Size = new Size(54, 23);
+            injectSourceLabel.TabIndex = 9;
+            injectSourceLabel.Text = "💉Inject";
+            // 
+            // llmChatHistorySelectComboBox
+            // 
+            llmChatHistorySelectComboBox.Dock = DockStyle.Fill;
+            llmChatHistorySelectComboBox.FormattingEnabled = true;
+            llmChatHistorySelectComboBox.Location = new Point(75, 3);
+            llmChatHistorySelectComboBox.Name = "llmChatHistorySelectComboBox";
+            llmChatHistorySelectComboBox.Size = new Size(200, 23);
+            llmChatHistorySelectComboBox.TabIndex = 8;
+            // 
+            // llmChatHistoryLabel
+            // 
+            llmChatHistoryLabel.AutoSize = true;
+            llmChatHistoryLabel.Dock = DockStyle.Fill;
+            llmChatHistoryLabel.Location = new Point(3, 3);
+            llmChatHistoryLabel.Margin = new Padding(3);
+            llmChatHistoryLabel.Name = "llmChatHistoryLabel";
+            llmChatHistoryLabel.Padding = new Padding(3);
+            llmChatHistoryLabel.Size = new Size(66, 23);
+            llmChatHistoryLabel.TabIndex = 6;
+            llmChatHistoryLabel.Text = "📒 History";
+            // 
             // chatMessagePanel
             // 
             chatMessagePanel.AutoScroll = true;
@@ -189,6 +302,18 @@
             chatMessagePanel.RowStyles.Add(new RowStyle());
             chatMessagePanel.Size = new Size(840, 462);
             chatMessagePanel.TabIndex = 7;
+            // 
+            // userInputTextBox
+            // 
+            userInputTextBox.BackColor = SystemColors.InfoText;
+            userInputTextBox.Dock = DockStyle.Fill;
+            userInputTextBox.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            userInputTextBox.ForeColor = SystemColors.MenuHighlight;
+            userInputTextBox.Location = new Point(3, 506);
+            userInputTextBox.Name = "userInputTextBox";
+            userInputTextBox.Size = new Size(840, 111);
+            userInputTextBox.TabIndex = 0;
+            userInputTextBox.Text = "";
             // 
             // llmButtonRowHolderTable
             // 
@@ -281,7 +406,7 @@
             codePage.Padding = new Padding(3);
             codePage.Size = new Size(852, 663);
             codePage.TabIndex = 3;
-            codePage.Text = "🎞️ Code Inject";
+            codePage.Text = "🎞️ Snippet";
             codePage.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
@@ -315,7 +440,7 @@
             label2.Margin = new Padding(3);
             label2.Name = "label2";
             label2.Padding = new Padding(3);
-            label2.Size = new Size(81, 23);
+            label2.Size = new Size(50, 23);
             label2.TabIndex = 5;
             label2.Text = "Pretext";
             // 
@@ -399,7 +524,7 @@
             codeFilePage.Name = "codeFilePage";
             codeFilePage.Size = new Size(852, 663);
             codeFilePage.TabIndex = 4;
-            codeFilePage.Text = "📜 Code File Inject";
+            codeFilePage.Text = "📜 Code File";
             codeFilePage.UseVisualStyleBackColor = true;
             // 
             // codeFileInjectTabMainTablePanel
@@ -439,6 +564,18 @@
             tableLayoutPanel5.RowStyles.Add(new RowStyle());
             tableLayoutPanel5.Size = new Size(846, 29);
             tableLayoutPanel5.TabIndex = 2;
+            // 
+            // modalTokenLimitLabel
+            // 
+            modalTokenLimitLabel.AutoSize = true;
+            modalTokenLimitLabel.Font = new Font("Segoe UI Light", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            modalTokenLimitLabel.ForeColor = SystemColors.ControlLight;
+            modalTokenLimitLabel.Location = new Point(762, 7);
+            modalTokenLimitLabel.Margin = new Padding(3, 7, 3, 0);
+            modalTokenLimitLabel.Name = "modalTokenLimitLabel";
+            modalTokenLimitLabel.Size = new Size(81, 15);
+            modalTokenLimitLabel.TabIndex = 13;
+            modalTokenLimitLabel.Text = "@ 4096 Tokens";
             // 
             // tokenLimitProgressBar
             // 
@@ -492,8 +629,6 @@
             tableLayoutPanel4.ColumnCount = 2;
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel4.Controls.Add(includeCodeInjectCheckBox, 1, 2);
-            tableLayoutPanel4.Controls.Add(label5, 0, 2);
             tableLayoutPanel4.Controls.Add(topPTextBox, 1, 1);
             tableLayoutPanel4.Controls.Add(topPLabel, 0, 1);
             tableLayoutPanel4.Controls.Add(temperatureTextBox, 1, 0);
@@ -509,27 +644,6 @@
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.Size = new Size(846, 657);
             tableLayoutPanel4.TabIndex = 1;
-            // 
-            // includeCodeInjectCheckBox
-            // 
-            includeCodeInjectCheckBox.AutoSize = true;
-            includeCodeInjectCheckBox.Location = new Point(85, 68);
-            includeCodeInjectCheckBox.Margin = new Padding(3, 7, 3, 3);
-            includeCodeInjectCheckBox.Name = "includeCodeInjectCheckBox";
-            includeCodeInjectCheckBox.Size = new Size(65, 19);
-            includeCodeInjectCheckBox.TabIndex = 11;
-            includeCodeInjectCheckBox.Text = "Include";
-            includeCodeInjectCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(6, 68);
-            label5.Margin = new Padding(3, 7, 3, 0);
-            label5.Name = "label5";
-            label5.Size = new Size(67, 15);
-            label5.TabIndex = 9;
-            label5.Text = "Code Inject";
             // 
             // topPTextBox
             // 
@@ -632,145 +746,6 @@
             tabPage4.Text = "tabPage4";
             tabPage4.UseVisualStyleBackColor = true;
             // 
-            // modalTokenLimitLabel
-            // 
-            modalTokenLimitLabel.AutoSize = true;
-            modalTokenLimitLabel.Font = new Font("Segoe UI Light", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            modalTokenLimitLabel.ForeColor = SystemColors.ControlLight;
-            modalTokenLimitLabel.Location = new Point(762, 7);
-            modalTokenLimitLabel.Margin = new Padding(3, 7, 3, 0);
-            modalTokenLimitLabel.Name = "modalTokenLimitLabel";
-            modalTokenLimitLabel.Size = new Size(81, 15);
-            modalTokenLimitLabel.TabIndex = 13;
-            modalTokenLimitLabel.Text = "@ 4096 Tokens";
-            // 
-            // mainChatHeaderRow
-            // 
-            mainChatHeaderRow.AutoSize = true;
-            mainChatHeaderRow.ColumnCount = 9;
-            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
-            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
-            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
-            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
-            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
-            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
-            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
-            mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
-            mainChatHeaderRow.Controls.Add(finalChatTokenUsageProgressBar, 8, 0);
-            mainChatHeaderRow.Controls.Add(finalChatTokenLimitLabel, 7, 0);
-            mainChatHeaderRow.Controls.Add(webInjectCheckBox, 5, 0);
-            mainChatHeaderRow.Controls.Add(fileInjectCheckBox, 4, 0);
-            mainChatHeaderRow.Controls.Add(snippetInjectCheckBox, 3, 0);
-            mainChatHeaderRow.Controls.Add(injectSourceLabel, 2, 0);
-            mainChatHeaderRow.Controls.Add(llmChatHistorySelectComboBox, 1, 0);
-            mainChatHeaderRow.Controls.Add(llmChatHistoryLabel, 0, 0);
-            mainChatHeaderRow.Dock = DockStyle.Fill;
-            mainChatHeaderRow.Location = new Point(3, 3);
-            mainChatHeaderRow.Name = "mainChatHeaderRow";
-            mainChatHeaderRow.RowCount = 1;
-            mainChatHeaderRow.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            mainChatHeaderRow.Size = new Size(840, 29);
-            mainChatHeaderRow.TabIndex = 9;
-            // 
-            // llmChatHistoryLabel
-            // 
-            llmChatHistoryLabel.AutoSize = true;
-            llmChatHistoryLabel.Dock = DockStyle.Fill;
-            llmChatHistoryLabel.Location = new Point(3, 3);
-            llmChatHistoryLabel.Margin = new Padding(3);
-            llmChatHistoryLabel.Name = "llmChatHistoryLabel";
-            llmChatHistoryLabel.Padding = new Padding(3);
-            llmChatHistoryLabel.Size = new Size(66, 23);
-            llmChatHistoryLabel.TabIndex = 6;
-            llmChatHistoryLabel.Text = "📒 History";
-            // 
-            // llmChatHistorySelectComboBox
-            // 
-            llmChatHistorySelectComboBox.Dock = DockStyle.Fill;
-            llmChatHistorySelectComboBox.FormattingEnabled = true;
-            llmChatHistorySelectComboBox.Location = new Point(75, 3);
-            llmChatHistorySelectComboBox.Name = "llmChatHistorySelectComboBox";
-            llmChatHistorySelectComboBox.Size = new Size(200, 23);
-            llmChatHistorySelectComboBox.TabIndex = 8;
-            // 
-            // injectSourceLabel
-            // 
-            injectSourceLabel.AutoSize = true;
-            injectSourceLabel.Dock = DockStyle.Fill;
-            injectSourceLabel.Location = new Point(281, 3);
-            injectSourceLabel.Margin = new Padding(3);
-            injectSourceLabel.Name = "injectSourceLabel";
-            injectSourceLabel.Padding = new Padding(3);
-            injectSourceLabel.Size = new Size(83, 23);
-            injectSourceLabel.TabIndex = 9;
-            injectSourceLabel.Text = "💉Inject from";
-            // 
-            // snippetInjectCheckBox
-            // 
-            snippetInjectCheckBox.AutoSize = true;
-            snippetInjectCheckBox.Location = new Point(370, 6);
-            snippetInjectCheckBox.Margin = new Padding(3, 6, 3, 3);
-            snippetInjectCheckBox.Name = "snippetInjectCheckBox";
-            snippetInjectCheckBox.Size = new Size(66, 19);
-            snippetInjectCheckBox.TabIndex = 11;
-            snippetInjectCheckBox.Text = "Snippet";
-            snippetInjectCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // fileInjectCheckBox
-            // 
-            fileInjectCheckBox.AutoSize = true;
-            fileInjectCheckBox.Location = new Point(442, 6);
-            fileInjectCheckBox.Margin = new Padding(3, 6, 3, 3);
-            fileInjectCheckBox.Name = "fileInjectCheckBox";
-            fileInjectCheckBox.Size = new Size(44, 19);
-            fileInjectCheckBox.TabIndex = 12;
-            fileInjectCheckBox.Text = "File";
-            fileInjectCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // webInjectCheckBox
-            // 
-            webInjectCheckBox.AutoSize = true;
-            webInjectCheckBox.Location = new Point(492, 6);
-            webInjectCheckBox.Margin = new Padding(3, 6, 3, 3);
-            webInjectCheckBox.Name = "webInjectCheckBox";
-            webInjectCheckBox.Size = new Size(50, 19);
-            webInjectCheckBox.TabIndex = 13;
-            webInjectCheckBox.Text = "Web";
-            webInjectCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // finalChatTokenLimitLabel
-            // 
-            finalChatTokenLimitLabel.AutoSize = true;
-            finalChatTokenLimitLabel.Dock = DockStyle.Fill;
-            finalChatTokenLimitLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            finalChatTokenLimitLabel.Location = new Point(631, 3);
-            finalChatTokenLimitLabel.Margin = new Padding(3);
-            finalChatTokenLimitLabel.Name = "finalChatTokenLimitLabel";
-            finalChatTokenLimitLabel.Padding = new Padding(3);
-            finalChatTokenLimitLabel.Size = new Size(100, 23);
-            finalChatTokenLimitLabel.TabIndex = 14;
-            finalChatTokenLimitLabel.Text = "🌡️ Token Usage";
-            // 
-            // finalChatTokenUsageProgressBar
-            // 
-            finalChatTokenUsageProgressBar.Location = new Point(737, 3);
-            finalChatTokenUsageProgressBar.Name = "finalChatTokenUsageProgressBar";
-            finalChatTokenUsageProgressBar.Size = new Size(100, 23);
-            finalChatTokenUsageProgressBar.TabIndex = 16;
-            // 
-            // userInputTextBox
-            // 
-            userInputTextBox.BackColor = SystemColors.InfoText;
-            userInputTextBox.Dock = DockStyle.Fill;
-            userInputTextBox.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            userInputTextBox.ForeColor = SystemColors.MenuHighlight;
-            userInputTextBox.Location = new Point(3, 506);
-            userInputTextBox.Name = "userInputTextBox";
-            userInputTextBox.Size = new Size(840, 111);
-            userInputTextBox.TabIndex = 0;
-            userInputTextBox.Text = "";
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -789,6 +764,8 @@
             llmPage.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
+            mainChatHeaderRow.ResumeLayout(false);
+            mainChatHeaderRow.PerformLayout();
             llmButtonRowHolderTable.ResumeLayout(false);
             llmButtonRowHolderTable.PerformLayout();
             codePage.ResumeLayout(false);
@@ -809,8 +786,6 @@
             tableLayoutPanel4.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
-            mainChatHeaderRow.ResumeLayout(false);
-            mainChatHeaderRow.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -846,8 +821,6 @@
         private Label label3;
         private TableLayoutPanel llmButtonRowHolderTable;
         private TableLayoutPanel chatMessagePanel;
-        private CheckBox includeCodeInjectCheckBox;
-        private Label label5;
         private Label llmRunningTimerLabel;
         private TabPage codeFilePage;
         private TableLayoutPanel codeFileInjectTabMainTablePanel;

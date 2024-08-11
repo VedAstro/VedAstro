@@ -77,7 +77,6 @@ namespace LLMCoder
         }
 
 
-
         private void TextBox_MouseEnter(TextBox textBox, EventArgs e)
         {
             // Capture mouse wheel events when the mouse is over textBox
@@ -338,8 +337,10 @@ namespace LLMCoder
             fetchLatestInjectedCodeButton.TabIndex = 16;
             fetchLatestInjectedCodeButton.Text = "⚡ Update";
             fetchLatestInjectedCodeButton.UseVisualStyleBackColor = false;
+            
             fetchLatestInjectedCodeButton.Click += (sender, e) =>
             {
+
                 FetchLatestInjectedCodeButton_Click(
                     codeFileInjectPathTextBox,
                     endLineNumberTextBox,
@@ -348,8 +349,9 @@ namespace LLMCoder
                     preCodePromptTextBox,
                     postCodePromptTextBox,
                     fetchCodeStatusMessageLabel,
-                    tokenLimitProgressBar, this.SelectedLLMConfig.MaxContextWindowTokens);
-            };
+                    tokenLimitProgressBar, 
+                    this.SelectedLLMConfig.MaxContextWindowTokens, this.totalByteUsageMeterTextLabel);
+            }; 
 
             expandCodeFileButton.BackColor = SystemColors.MenuHighlight;
             expandCodeFileButton.ForeColor = SystemColors.ButtonFace;
@@ -373,7 +375,9 @@ namespace LLMCoder
             TextBox preCodePromptTextBox,
             TextBox postCodePromptTextBox,
             Label fetchCodeStatusMessageLabel,
-            CustomProgressBar tokenLimitProgressBar, int maxContextWindowTokens)
+            CustomProgressBar tokenLimitProgressBar,
+            int maxContextWindowTokens,
+            Label byteUsageMeterTextLabel)
         {
 
             // get needed data to fetch file
@@ -397,17 +401,35 @@ namespace LLMCoder
 
             // give user some stats to user about the fetched code
             var textSizeKB = GetBinarySizeOfTextInKB(extractedCode);
+            var textSizeToken = ConvertKBToTokenCount(textSizeKB);
             fetchCodeStatusMessageLabel.Text = $"Parsed : Size : {textSizeKB:F2} KB";
 
             // update total token limit temperature bar
             // NOTE: These are just guidelines. Different types of language and different languages are tokenized in different ways.
-            var maxTokenLimitInKb = EstimateTokenCountSizeKB(maxContextWindowTokens);
+            var maxTokenLimitInKb = ConvertTokenCountToKB(maxContextWindowTokens);
             var percentageUsed = (textSizeKB / maxTokenLimitInKb) * 100; // 128K tokens = 512KB
             percentageUsed = percentageUsed <= 100 ? percentageUsed : 100; // reset to 100% max
             tokenLimitProgressBar.Value = (int)percentageUsed;
-            tokenLimitProgressBar.DisplayText = $"{textSizeKB:F2}/{maxTokenLimitInKb} KB";
+            var byteUsageMeterText = $"{textSizeKB:F2}/{maxTokenLimitInKb} KB";
+            byteUsageMeterTextLabel.Text = byteUsageMeterText;
+            var tokenUsageMeterText = $"{textSizeToken}/{FormatNumberWithKAbbreviation(maxContextWindowTokens)}";
+            tokenLimitProgressBar.DisplayText = tokenUsageMeterText;
             UpdateTokenLimitProgressBarColor(tokenLimitProgressBar);
 
+        }
+
+        /// <summary>
+        /// given a number like 32000, return text version with K abbreviation
+        /// example : 32000 = "32K"
+        /// example : 128000 = "128K"
+        /// example : 4096 = "4K"
+        /// </summary>
+        private static string FormatNumberWithKAbbreviation(int maxContextWindowTokens)
+        {
+            if (maxContextWindowTokens < 1000) return maxContextWindowTokens.ToString();
+
+            int thousands = maxContextWindowTokens / 1000;
+            return $"{thousands}K";
         }
 
 
@@ -417,7 +439,7 @@ namespace LLMCoder
         /// These are just guidelines.  Different types of language and
         /// different languages are tokenized in different ways.
         /// </summary>
-        private static double EstimateTokenCountSizeKB(int tokenCount)
+        private static double ConvertTokenCountToKB(int tokenCount)
         {
             // Given input token count, convert to size in kilobytes
             // 1 token = 4 bytes
@@ -425,6 +447,18 @@ namespace LLMCoder
             double sizeInKB = sizeInBytes / 1024;  // Convert bytes to kilobytes
             return sizeInKB;
         }
+
+        private static int ConvertKBToTokenCount(double inputKb)
+        {
+            // Convert kilobytes to bytes
+            double sizeInBytes = inputKb * 1024;
+
+            // 1 token = 4 bytes, so divide total bytes by 4 to get token count
+            double tokenCount = sizeInBytes / 4;
+
+            return (int)tokenCount;
+        }
+
 
         private static void UpdateTokenLimitProgressBarColor(CustomProgressBar tokenLimitProgressBar)
         {

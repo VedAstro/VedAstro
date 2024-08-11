@@ -17,13 +17,13 @@ namespace LLMCoder
         static IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("secrets.json", optional: true, reloadOnChange: true).Build();
 
         //init all LLM choices here
-        static List<ApiEndpoint> ApiEndpoints = new()
+        static List<ApiConfig> ApiConfigs = new()
         {
-            new ApiEndpoint("GPT4o", config["GPT4oEndpoint"], config["GPT4oApiKey"]),
-            new ApiEndpoint("Phi3medium128kinstruct", config["Phi3medium128kinstructEndpoint"], config["Phi3medium128kinstructApiKey"]),
-            new ApiEndpoint("MistralNemo128k", config["MistralNemo128kEndpoint"], config["MistralNemo128kApiKey"]),
-            new ApiEndpoint("MetaLlama31405B", config["MetaLlama31405BEndpoint"], config["MetaLlama31405BApiKey"]),
-            new ApiEndpoint("CohereCommandRPlus", config["CohereCommandRPlusEndpoint"], config["CohereCommandRPlusApiKey"])
+            new ApiConfig("GPT4o", config["GPT4oEndpoint"], config["GPT4oApiKey"]),
+            new ApiConfig("Phi3medium128kinstruct", config["Phi3medium128kinstructEndpoint"], config["Phi3medium128kinstructApiKey"]),
+            new ApiConfig("MistralNemo128k", config["MistralNemo128kEndpoint"], config["MistralNemo128kApiKey"]),
+            new ApiConfig("MetaLlama31405B", config["MetaLlama31405BEndpoint"], config["MetaLlama31405BApiKey"]),
+            new ApiConfig("CohereCommandRPlus", config["CohereCommandRPlusEndpoint"], config["CohereCommandRPlusApiKey"])
         };
 
         static HttpClient client;
@@ -37,6 +37,10 @@ namespace LLMCoder
         // Dictionary to store message IDs and their corresponding tableLayoutPanels
         private Dictionary<string, TableLayoutPanel> messageTableLayouts = new Dictionary<string, TableLayoutPanel>();
 
+        /// <summary>
+        /// currently selected or main llm for chat
+        /// </summary>
+        public ApiConfig SelectedLLMConfig { get; set; }
 
         public Form1()
         {
@@ -104,8 +108,6 @@ namespace LLMCoder
                 textBox.Text = "0";
             }
         }
-
-
 
         private void InitializeCodeFileInjectTablePanel()
         {
@@ -225,7 +227,7 @@ namespace LLMCoder
             startLineNumberTextBox.Size = new Size(90, 23);
             startLineNumberTextBox.TabIndex = 6;
             startLineNumberTextBox.Text = "1"; //default to 1 as start
-            // Attach event handlers
+            // easy GUI scroll to adjust line numbers
             startLineNumberTextBox.MouseEnter += (sender, e) => TextBox_MouseEnter(startLineNumberTextBox, e);
             startLineNumberTextBox.MouseLeave += (sender, e) => TextBox_MouseLeave(startLineNumberTextBox, e);
 
@@ -246,6 +248,9 @@ namespace LLMCoder
             endLineNumberTextBox.Size = new Size(90, 23);
             endLineNumberTextBox.TabIndex = 8;
             endLineNumberTextBox.Text = "0"; //set 0 so that can be detected and autofilled later
+            // easy GUI scroll to adjust line numbers
+            endLineNumberTextBox.MouseEnter += (sender, e) => TextBox_MouseEnter(endLineNumberTextBox, e);
+            endLineNumberTextBox.MouseLeave += (sender, e) => TextBox_MouseLeave(endLineNumberTextBox, e);
 
             fetchCodeStatusMessageLabel.AutoSize = true;
             fetchCodeStatusMessageLabel.Location = new Point(265, 7);
@@ -327,39 +332,15 @@ namespace LLMCoder
             fetchLatestInjectedCodeButton.UseVisualStyleBackColor = false;
             fetchLatestInjectedCodeButton.Click += (sender, e) =>
             {
-
-                //get needed data to fetch file
-                var filePath = codeFileInjectPathTextBox.Text;
-
-                //if user has not set end line number then help user by auto filling
-                if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(filePath).ToString(); }
-                var startLineNum = int.Parse(startLineNumberTextBox.Text);
-                var endLineNum = int.Parse(endLineNumberTextBox.Text);
-
-                //cut out piece of select code from file
-                var extractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
-
-                //put into view
-                codeFileInjectTextBox.Text = extractedCode;
-
-                //auto set probable pre and post prompt for file
-                var codeFileName = GetCodeFileFullName(filePath);
-                preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
-                postCodePromptTextBox.Text = $"Ok, I've parsed the code";
-
-                //give user some stats to user about the fetched code
-                var textSizeKB = GetBinarySizeOfTextInKB(extractedCode);
-                fetchCodeStatusMessageLabel.Text = $"Parsed ✅ : Size : {textSizeKB:F2} KB";
-
-                //update total token limit temperature bar
-                //NOTE: These are just guidelines. Different types of language and different languages are tokenized in different ways.
-                var maxTokenLimitInKb = EstimateTokenCountSizeKB(4096);
-                var percentageUsed = (textSizeKB / maxTokenLimitInKb) * 100; //128K tokens = 512KB
-                percentageUsed = percentageUsed <= 100 ? percentageUsed : 100; //reset to 100% max
-                tokenLimitProgressBar.Value = (int)percentageUsed;
-                tokenLimitProgressBar.DisplayText = $"{textSizeKB:F2}/{maxTokenLimitInKb} KB";
-                UpdateTokenLimitProgressBarColor();
-
+                FetchLatestInjectedCodeButton_Click(
+                    codeFileInjectPathTextBox,
+                    endLineNumberTextBox,
+                    startLineNumberTextBox,
+                    codeFileInjectTextBox,
+                    preCodePromptTextBox,
+                    postCodePromptTextBox,
+                    fetchCodeStatusMessageLabel,
+                    tokenLimitProgressBar);
             };
 
             expandCodeFileButton.BackColor = SystemColors.MenuHighlight;
@@ -376,13 +357,59 @@ namespace LLMCoder
 
         }
 
+        private static void FetchLatestInjectedCodeButton_Click(
+            TextBox codeFileInjectPathTextBox,
+            TextBox endLineNumberTextBox,
+            TextBox startLineNumberTextBox,
+            RichTextBox codeFileInjectTextBox,
+            TextBox preCodePromptTextBox,
+            TextBox postCodePromptTextBox,
+            Label fetchCodeStatusMessageLabel,
+            CustomProgressBar tokenLimitProgressBar)
+        {
+
+            // get needed data to fetch file
+            var filePath = codeFileInjectPathTextBox.Text;
+
+            // if user has not set end line number then help user by auto filling
+            if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(filePath).ToString(); }
+            var startLineNum = int.Parse(startLineNumberTextBox.Text);
+            var endLineNum = int.Parse(endLineNumberTextBox.Text);
+
+            // cut out piece of select code from file
+            var extractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
+
+            // put into view
+            codeFileInjectTextBox.Text = extractedCode;
+
+            // auto set probable pre and post prompt for file
+            var codeFileName = GetCodeFileFullName(filePath);
+            preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
+            postCodePromptTextBox.Text = $"Ok, I've parsed the code";
+
+            // give user some stats to user about the fetched code
+            var textSizeKB = GetBinarySizeOfTextInKB(extractedCode);
+            fetchCodeStatusMessageLabel.Text = $"Parsed : Size : {textSizeKB:F2} KB";
+
+            // update total token limit temperature bar
+            // NOTE: These are just guidelines. Different types of language and different languages are tokenized in different ways.
+            var maxTokenLimitInKb = EstimateTokenCountSizeKB(4096);
+            var percentageUsed = (textSizeKB / maxTokenLimitInKb) * 100; // 128K tokens = 512KB
+            percentageUsed = percentageUsed <= 100 ? percentageUsed : 100; // reset to 100% max
+            tokenLimitProgressBar.Value = (int)percentageUsed;
+            tokenLimitProgressBar.DisplayText = $"{textSizeKB:F2}/{maxTokenLimitInKb} KB";
+            UpdateTokenLimitProgressBarColor(tokenLimitProgressBar);
+
+        }
+
+
         /// <summary>
         /// on average, a token is about 4 characters
         /// on average, 100 tokens is about 75 words
         /// These are just guidelines.  Different types of language and
         /// different languages are tokenized in different ways.
         /// </summary>
-        private double EstimateTokenCountSizeKB(int tokenCount)
+        private static double EstimateTokenCountSizeKB(int tokenCount)
         {
             // Given input token count, convert to size in kilobytes
             // 1 token = 4 bytes
@@ -391,7 +418,7 @@ namespace LLMCoder
             return sizeInKB;
         }
 
-        private void UpdateTokenLimitProgressBarColor()
+        private static void UpdateTokenLimitProgressBarColor(CustomProgressBar tokenLimitProgressBar)
         {
             if (tokenLimitProgressBar.Value < 50)
             {
@@ -417,7 +444,7 @@ namespace LLMCoder
             }
         }
 
-        private Color Interpolate(Color startColor, Color endColor, float ratio)
+        private static Color Interpolate(Color startColor, Color endColor, float ratio)
         {
             int r = (int)(startColor.R + ratio * (endColor.R - startColor.R));
             int g = (int)(startColor.G + ratio * (endColor.G - startColor.G));
@@ -428,13 +455,13 @@ namespace LLMCoder
         private void SetTokenLimitProgressBarColor(Color color)
         {
             tokenLimitProgressBar.ForeColor = Color.Red;
-            tokenLimitProgressBar.ForeColor = Color.Red;;
+            tokenLimitProgressBar.ForeColor = Color.Red; ;
         }
 
         /// <summary>
         /// given a large string text return its size in KB (kilobytes)
         /// </summary>
-        private double GetBinarySizeOfTextInKB(string largeText)
+        private static double GetBinarySizeOfTextInKB(string largeText)
         {
             // Calculate the byte size of the string using Encoding.UTF8.GetBytes
             byte[] bytes = Encoding.UTF8.GetBytes(largeText);
@@ -452,7 +479,7 @@ namespace LLMCoder
         /// return full name of the file example out, javascript, csharp, html, python, etc...
         /// returns empty string if can't detect
         /// </summary>
-        public string GetCodeFileFullName(string filePath)
+        public static string GetCodeFileFullName(string filePath)
         {
             // Get the file extension from the file path
             string fileExtension = Path.GetExtension(filePath);
@@ -482,7 +509,7 @@ namespace LLMCoder
 
         private void UpdateSelectedLLMDropdownView()
         {
-            foreach (var llmChoice in ApiEndpoints)
+            foreach (var llmChoice in ApiConfigs)
             {
                 llmSelector.Items.Add(llmChoice.Name);
             }
@@ -490,12 +517,13 @@ namespace LLMCoder
 
         private void UpdateSelectedLLM(string selectedLLM)
         {
-            var apiEndpointByName = GetApiEndpointByName(selectedLLM);
+            //save end point to global instance for later use 
+            this.SelectedLLMConfig = GetApiConfigByName(selectedLLM);
 
             client = new HttpClient();
             client.Timeout = Timeout.InfiniteTimeSpan;
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiEndpointByName.ApiKey);
-            client.BaseAddress = new Uri(apiEndpointByName.Endpoint);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.SelectedLLMConfig.ApiKey);
+            client.BaseAddress = new Uri(this.SelectedLLMConfig.Endpoint);
 
             // Make visible to user
             llmSelector.SelectedIndex = llmSelector.Items.IndexOf(selectedLLM);
@@ -522,9 +550,9 @@ namespace LLMCoder
             }
         }
 
-        public static ApiEndpoint GetApiEndpointByName(string name)
+        public static ApiConfig GetApiConfigByName(string name)
         {
-            foreach (var endpoint in ApiEndpoints)
+            foreach (var endpoint in ApiConfigs)
             {
                 if (endpoint.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
@@ -978,7 +1006,7 @@ namespace LLMCoder
         }
     }
 
-    public record ApiEndpoint(string Name, string Endpoint, string ApiKey);
+    public record ApiConfig(string Name, string Endpoint, string ApiKey);
 
     // Class to represent a conversation message
     public class ConversationMessage
@@ -1041,7 +1069,8 @@ namespace LLMCoder
                 StringFormat sf = new StringFormat(StringFormatFlags.MeasureTrailingSpaces);
                 sf.Alignment = StringAlignment.Center;
                 sf.LineAlignment = StringAlignment.Center;
-                g.DrawString(_displayText, this.Font, new SolidBrush(Color.White), rect, sf);
+                var font = new Font("Segoe UI", 9F, FontStyle.Bold);
+                g.DrawString(_displayText, font, new SolidBrush(Color.DarkBlue), rect, sf);
             }
         }
     }

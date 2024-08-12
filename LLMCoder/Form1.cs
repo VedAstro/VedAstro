@@ -53,7 +53,7 @@ namespace LLMCoder
             InitializeComponent();
 
             // Update the dropdown with available LLM choices
-            UpdateSelectedLLMDropdownView();
+            InitializeSelectedLLMDropdownView();
 
             // Set the default LLM choice
             UpdateSelectedLLM("MetaLlama31405B");
@@ -350,10 +350,10 @@ namespace LLMCoder
                 var endLineNum = int.Parse(endLineNumberTextBox.Text);
 
                 // cut out piece of select code from file
-                var extractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
+                var currentExtractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
 
                 // put into view
-                codeFileInjectTextBox.Text = extractedCode;
+                codeFileInjectTextBox.Text = currentExtractedCode;
 
                 // auto set probable pre and post prompt for file
                 var codeFileName = GetCodeFileFullName(filePath);
@@ -361,34 +361,31 @@ namespace LLMCoder
                 postCodePromptTextBox.Text = $"Ok, I've parsed the code";
 
 
-                // # Update Stats
+                // # Update Token Stats
 
                 // give user some stats to user about the fetched code
-                var textSizeKb = GetBinarySizeOfTextInKB(extractedCode);
+                var textSizeKb = GetBinarySizeOfTextInKB(currentExtractedCode);
                 var textSizeToken = ConvertKBToTokenCount(textSizeKb);
-                fetchCodeStatusMessageLabel.Text = $"Size : {textSizeKb:F2} KB";
+                fetchCodeStatusMessageLabel.Text = $"Size : {textSizeKb:F2} KB ~ {textSizeToken} Tokens";
 
-                // total context window File inject only (Tokens)
+
+                //#2 total context window by all (KB)
                 //PERCENTAGE
                 var maxTokenLimitInKb = ConvertTokenCountToKB(this.SelectedLLMConfig.MaxContextWindowTokens);
-                var percentageUsed = (textSizeKb / maxTokenLimitInKb) * 100; 
-                percentageUsed = percentageUsed <= 100 ? percentageUsed : 100; // reset to 100% max if exceed
-                codeFileInjectTokenUsageMeter.Value = (int)percentageUsed;
-                UpdateTokenLimitProgressBarColor(codeFileInjectTokenUsageMeter); //update meter color
-
-                //TEXT
-                var tokenUsageMeterText = $"{FormatNumberWithKAbbreviation(textSizeToken)} / {FormatNumberWithKAbbreviation(this.SelectedLLMConfig.MaxContextWindowTokens)} Tokens";
-                codeFileInjectTokenUsageMeter.DisplayText = tokenUsageMeterText;
-
-                // total context window by all (KB)
                 var byteUsageMeterText = $"{textSizeKb:F2}/{maxTokenLimitInKb} KB";
                 totalByteUsageMeterTextLabel.Text = byteUsageMeterText;
 
-                // total context window by all (Tokens)
+                //#3 total context window by all (Tokens)
+                //TEXT
                 var maxLlmContextWindowTokens = FormatNumberWithKAbbreviation(SelectedLLMConfig.MaxContextWindowTokens);
-                var usedContextTokens = FormatNumberWithKAbbreviation(GetTotalChatMessageSizeInTokens());
+                var totalChatMessageSizeInTokens = GetTotalChatMessageSizeInTokens();
+                var usedContextTokens = FormatNumberWithKAbbreviation(totalChatMessageSizeInTokens);
                 var totalTokenUsageMeterText = $"{usedContextTokens} / {maxLlmContextWindowTokens} Tokens";
                 finalChatTokenUsageProgressBar.DisplayText = totalTokenUsageMeterText;
+                //PERCENTAGE
+                double percentageTotalUsed = ((double)totalChatMessageSizeInTokens / (double)SelectedLLMConfig.MaxContextWindowTokens) * 100;
+                percentageTotalUsed = percentageTotalUsed <= 100 ? percentageTotalUsed : 100; // reset to 100% max if exceed
+                finalChatTokenUsageProgressBar.Value = (int)percentageTotalUsed;
                 UpdateTokenLimitProgressBarColor(finalChatTokenUsageProgressBar); //update meter color
 
             };
@@ -407,22 +404,6 @@ namespace LLMCoder
 
         }
 
-        //private static void FetchLatestInjectedCodeButton_Click(
-        //    TextBox codeFileInjectPathTextBox,
-        //    TextBox endLineNumberTextBox,
-        //    TextBox startLineNumberTextBox,
-        //    RichTextBox codeFileInjectTextBox,
-        //    TextBox preCodePromptTextBox,
-        //    TextBox postCodePromptTextBox,
-        //    Label fetchCodeStatusMessageLabel,
-        //    CustomProgressBar tokenLimitProgressBar,
-        //    int maxContextWindowTokens,
-        //    Label byteUsageMeterTextLabel)
-        //{
-
-
-        //}
-
         /// <summary>
         /// given a number like 32000, return text version with K abbreviation
         /// example : 32000 = "32K"
@@ -436,7 +417,6 @@ namespace LLMCoder
             int thousands = maxContextWindowTokens / 1000;
             return $"{thousands}K";
         }
-
 
         /// <summary>
         /// on average, a token is about 4 characters
@@ -499,11 +479,6 @@ namespace LLMCoder
             return Color.FromArgb(r, g, b);
         }
 
-        private void SetTokenLimitProgressBarColor(Color color)
-        {
-            codeFileInjectTokenUsageMeter.ForeColor = Color.Red;
-            codeFileInjectTokenUsageMeter.ForeColor = Color.Red; ;
-        }
 
         /// <summary>
         /// given a large string text return its size in KB (kilobytes)
@@ -554,7 +529,7 @@ namespace LLMCoder
             return fileExtensionMap.TryGetValue(fileExtension.ToLower(), out string fullName) ? fullName : "";
         }
 
-        private void UpdateSelectedLLMDropdownView()
+        private void InitializeSelectedLLMDropdownView()
         {
             foreach (var llmChoice in ApiConfigs)
             {
@@ -577,7 +552,7 @@ namespace LLMCoder
             client.BaseAddress = new Uri(this.SelectedLLMConfig.Endpoint);
             this.llmThinkingProgressBar.Value = 0; //NOTE: reset since previous Call would be dropped if done mid-way of stuck llm
 
-            //update drop down
+            //update drop down selection
             llmSelector.SelectedIndex = llmSelector.Items.IndexOf(selectedLLM);
 
 
@@ -585,22 +560,31 @@ namespace LLMCoder
             var currentRawText = totalByteUsageMeterTextLabel.Text; // sample: "230 / 500 KB"
             var parts = currentRawText.Split('/');
             double divisor1 = double.Parse(parts[0].Trim()); // should be 230
-            //update KB meter
+
+            //update main KB meter
             var maxLlmContextWindowKiloBytes = ConvertTokenCountToKB(this.SelectedLLMConfig.MaxContextWindowTokens);
             totalByteUsageMeterTextLabel.Text = $"{divisor1} / {maxLlmContextWindowKiloBytes} KB";
             
-            //update Token meter
+            //update main Token meter
+            //text
             var maxLlmContextWindowTokens = FormatNumberWithKAbbreviation(SelectedLLMConfig.MaxContextWindowTokens);
-            var tokenUsageMeterText = $"{GetTotalChatMessageSizeInTokens()} / {maxLlmContextWindowTokens} Tokens";
+            var chatMessageSizeInTokens = GetTotalChatMessageSizeInTokens();
+            var tokenUsageMeterText = $"{FormatNumberWithKAbbreviation(chatMessageSizeInTokens)} / {maxLlmContextWindowTokens} Tokens";
             finalChatTokenUsageProgressBar.DisplayText = tokenUsageMeterText;
+            //percentage
+            double percentageTotalUsed = ((double)chatMessageSizeInTokens / (double)SelectedLLMConfig.MaxContextWindowTokens) * 100;
+            percentageTotalUsed = percentageTotalUsed <= 100 ? percentageTotalUsed : 100; // reset to 100% max if exceed
+            finalChatTokenUsageProgressBar.Value = (int)percentageTotalUsed;
             UpdateTokenLimitProgressBarColor(finalChatTokenUsageProgressBar); //update meter color
 
+            //update
         }
 
         private int GetTotalChatMessageSizeInTokens()
         {
             //create final message history going to LLM
-            var finalMessageText = JsonConvert.SerializeObject(GenerateFinalChatMessageStack());
+            var generateFinalChatMessageStack = GenerateFinalChatMessageStack();
+            var finalMessageText = JsonConvert.SerializeObject(generateFinalChatMessageStack);
 
             //calculate token count of total text
             var textSizeKB = GetBinarySizeOfTextInKB(finalMessageText);
@@ -917,7 +901,7 @@ namespace LLMCoder
         private void resetChatHistoryButton_Click(object sender, EventArgs e)
         {
             // Clear the chat output box text
-            chatMessagePanel.Controls.Clear();
+            outputChatMessagePanel.Controls.Clear();
 
             // Clear the conversation history list
             conversationHistory.Clear();
@@ -936,7 +920,7 @@ namespace LLMCoder
                     await Task.Delay(200); // Update every second
                     this.Invoke((MethodInvoker)delegate
                     {
-                        llmRunningTimerLabel.Text = $"{Math.Round(stopwatch.Elapsed.TotalSeconds, 2)} s";
+                        llmThinkingTimerLabel.Text = $"{Math.Round(stopwatch.Elapsed.TotalSeconds, 2)} s";
                     });
                 }
             });
@@ -1111,7 +1095,7 @@ namespace LLMCoder
             chatMsgHolderTable.Tag = messageId;
 
             // Add the tableLayoutPanel to the chatMessagePanel
-            chatMessagePanel.Controls.Add(chatMsgHolderTable);
+            outputChatMessagePanel.Controls.Add(chatMsgHolderTable);
 
             // Store the message ID and tableLayoutPanel in a dictionary
             messageTableLayouts[messageId] = chatMsgHolderTable;
@@ -1124,7 +1108,7 @@ namespace LLMCoder
             conversationHistory.RemoveAll(m => m.Id == messageId);
 
             // Remove the tableLayoutPanel from the chatMessagePanel
-            chatMessagePanel.Controls.Remove(tableLayoutPanel);
+            outputChatMessagePanel.Controls.Remove(tableLayoutPanel);
 
             // Dispose of the tableLayoutPanel
             tableLayoutPanel.Dispose();

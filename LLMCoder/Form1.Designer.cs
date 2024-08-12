@@ -448,6 +448,7 @@ namespace LLMCoder
             // llmThinkingProgressBar
             // 
             llmThinkingProgressBar.Location = new Point(125, 3);
+            llmThinkingProgressBar.MarqueeAnimationSpeed = 2000;
             llmThinkingProgressBar.Name = "llmThinkingProgressBar";
             llmThinkingProgressBar.Size = new Size(100, 23);
             llmThinkingProgressBar.Style = ProgressBarStyle.Continuous;
@@ -561,13 +562,13 @@ namespace LLMCoder
             // 
             largeCodeSnippetTextBox.BackColor = SystemColors.InfoText;
             largeCodeSnippetTextBox.Dock = DockStyle.Fill;
-            largeCodeSnippetTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            largeCodeSnippetTextBox.Font = new Font("Cascadia Code", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 2);
             largeCodeSnippetTextBox.ForeColor = SystemColors.MenuHighlight;
             largeCodeSnippetTextBox.Location = new Point(104, 32);
             largeCodeSnippetTextBox.Name = "largeCodeSnippetTextBox";
             largeCodeSnippetTextBox.Size = new Size(739, 593);
             largeCodeSnippetTextBox.TabIndex = 1;
-            largeCodeSnippetTextBox.Text = "";
+            largeCodeSnippetTextBox.Text = resources.GetString("largeCodeSnippetTextBox.Text");
             largeCodeSnippetTextBox.TextChanged += largeCodeSnippetTextBox_TextChanged;
             // 
             // label4
@@ -601,6 +602,7 @@ namespace LLMCoder
             // 
             // codeFileInjectTabMainTablePanel
             // 
+            codeFileInjectTabMainTablePanel.AutoScroll = true;
             codeFileInjectTabMainTablePanel.AutoSize = true;
             codeFileInjectTabMainTablePanel.BackColor = Color.DarkGray;
             codeFileInjectTabMainTablePanel.ColumnCount = 1;

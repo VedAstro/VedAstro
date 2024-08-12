@@ -14,6 +14,11 @@ namespace LLMCoder
 {
     public partial class Form1 : Form
     {
+        /// <summary>
+        /// keeps all files added to file injection list in current runtime
+        /// </summary>
+        private List<CodeFile> CurrentCodeFiles = new List<CodeFile>();
+
         private CancellationTokenSource cts;
 
         public static List<ApiConfig> ApiConfigs { get; set; }
@@ -286,12 +291,12 @@ namespace LLMCoder
             codeFileInjectTextBox.Name = "codeFileInjectTextBox";
             codeFileInjectTextBox.BackColor = SystemColors.ActiveCaptionText;
             codeFileInjectTextBox.Dock = DockStyle.Fill;
-            codeFileInjectTextBox.ForeColor = Color.Green;
+            codeFileInjectTextBox.ForeColor = Color.LightGreen;
             codeFileInjectTextBox.Text = "";
             codeFileInjectTextBox.ReadOnly = false;
             codeFileInjectTextBox.Multiline = true; // Allow multiple lines
             codeFileInjectTextBox.WordWrap = true; // Wrap text to the next line
-            codeFileInjectTextBox.Font = new Font("Segoe UI Semibold", 7F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            codeFileInjectTextBox.Font = new Font("Cascadia Code", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 28);
 
 
@@ -318,6 +323,21 @@ namespace LLMCoder
             deleteCodeInjectButton.TabIndex = 14;
             deleteCodeInjectButton.Text = "➖ Remove";
             deleteCodeInjectButton.UseVisualStyleBackColor = false;
+            deleteCodeInjectButton.Click += (sender, e) =>
+            {
+                // Get the parent table layout panel
+                TableLayoutPanel codeFileInjectTablePanel = (TableLayoutPanel)((Button)sender).Parent;
+
+                // Remove the table layout panel from the main table layout panel
+                codeFileInjectTabMainTablePanel.Controls.Remove(codeFileInjectTablePanel);
+
+                // Dispose of the table layout panel
+                codeFileInjectTablePanel.Dispose();
+
+
+                // # Update Token Stats
+                UpdateTokenStats();
+            };
 
             fetchLatestInjectedCodeButton.BackColor = Color.Fuchsia;
             fetchLatestInjectedCodeButton.ForeColor = SystemColors.ButtonFace;
@@ -341,7 +361,7 @@ namespace LLMCoder
                 // cut out piece of select code from file
                 var currentExtractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
 
-                // put into view
+                // put extracted code into view
                 codeFileInjectTextBox.Text = currentExtractedCode;
 
                 // auto set probable pre and post prompt for file
@@ -353,29 +373,11 @@ namespace LLMCoder
                 // # Update Token Stats
 
                 // give user some stats to user about the fetched code
-                var textSizeKb = GetBinarySizeOfTextInKB(currentExtractedCode);
-                var textSizeToken = ConvertKBToTokenCount(textSizeKb);
-                fetchCodeStatusMessageLabel.Text = $"Size : {textSizeKb:F2} KB ~ {textSizeToken} Tokens";
+                var textSizeKbCurrent = GetBinarySizeOfTextInKB(currentExtractedCode);
+                var textSizeToken = ConvertKBToTokenCount(textSizeKbCurrent);
+                fetchCodeStatusMessageLabel.Text = $"Size : {textSizeKbCurrent:F2} KB ~ {textSizeToken} Tokens";
 
-
-                //#2 total context window by all (KB)
-                //PERCENTAGE
-                var maxTokenLimitInKb = ConvertTokenCountToKB(this.SelectedLLMConfig.MaxContextWindowTokens);
-                var byteUsageMeterText = $"{textSizeKb:F2}/{maxTokenLimitInKb} KB";
-                totalByteUsageMeterTextLabel.Text = byteUsageMeterText;
-
-                //#3 total context window by all (Tokens)
-                //TEXT
-                var maxLlmContextWindowTokens = FormatNumberWithKAbbreviation(SelectedLLMConfig.MaxContextWindowTokens);
-                var totalChatMessageSizeInTokens = GetTotalChatMessageSizeInTokens();
-                var usedContextTokens = FormatNumberWithKAbbreviation(totalChatMessageSizeInTokens);
-                var totalTokenUsageMeterText = $"{usedContextTokens} / {maxLlmContextWindowTokens} Tokens";
-                finalChatTokenUsageProgressBar.DisplayText = totalTokenUsageMeterText;
-                //PERCENTAGE
-                double percentageTotalUsed = ((double)totalChatMessageSizeInTokens / (double)SelectedLLMConfig.MaxContextWindowTokens) * 100;
-                percentageTotalUsed = percentageTotalUsed <= 100 ? percentageTotalUsed : 100; // reset to 100% max if exceed
-                finalChatTokenUsageProgressBar.Value = (int)percentageTotalUsed;
-                UpdateTokenLimitProgressBarColor(finalChatTokenUsageProgressBar); //update meter color
+                UpdateTokenStats();
 
             };
 
@@ -400,7 +402,7 @@ namespace LLMCoder
                     codeFileInjectTextBox.MaximumSize = new Size(codeFileInjectTextBox.Width, int.MaxValue);
 
                     // Calculate the preferred height of the text box based on its width and content
-                    codeFileInjectTextBox.Height = codeFileInjectTextBox.GetPreferredSize(new Size(codeFileInjectTextBox.Width, int.MaxValue)).Height;
+                    codeFileInjectTextBox.Height = 300;
 
                     // Update the button text to "Collapse" to reflect the new state
                     expandCodeFileButton.Text = "Collapse";
@@ -423,6 +425,32 @@ namespace LLMCoder
 
         }
 
+        private void UpdateTokenStats()
+        {
+            //#2 total context window by all (KB)
+            //PERCENTAGE
+            // Calculate the total size of all extracted codes
+            double totalTextSizeKb = GetTotalChatMessageSizeInKiloBytes();
+            // Update the usage counter text
+            var maxTokenLimitInKb = ConvertTokenCountToKB(this.SelectedLLMConfig.MaxContextWindowTokens);
+            var byteUsageMeterText = $"{totalTextSizeKb:F2}/{maxTokenLimitInKb} KB";
+            totalByteUsageMeterTextLabel.Text = byteUsageMeterText;
+
+            //#3 total context window by all (Tokens)
+            //TEXT
+            var maxLlmContextWindowTokens = FormatNumberWithKAbbreviation(SelectedLLMConfig.MaxContextWindowTokens);
+            var totalChatMessageSizeInTokens = GetTotalChatMessageSizeInTokens();
+            var usedContextTokens = FormatNumberWithKAbbreviation(totalChatMessageSizeInTokens);
+            var totalTokenUsageMeterText = $"{usedContextTokens} / {maxLlmContextWindowTokens} Tokens";
+            finalChatTokenUsageProgressBar.DisplayText = totalTokenUsageMeterText;
+            //PERCENTAGE
+            double percentageTotalUsed = ((double)totalChatMessageSizeInTokens / (double)SelectedLLMConfig.MaxContextWindowTokens) * 100;
+            percentageTotalUsed = percentageTotalUsed <= 100 ? percentageTotalUsed : 100; // reset to 100% max if exceed
+            finalChatTokenUsageProgressBar.Value = (int)percentageTotalUsed;
+            UpdateTokenLimitProgressBarColor(finalChatTokenUsageProgressBar); //update meter color
+        }
+
+
         /// <summary>
         /// given a number like 32000, return text version with K abbreviation
         /// example : 32000 = "32K"
@@ -431,10 +459,21 @@ namespace LLMCoder
         /// </summary>
         private static string FormatNumberWithKAbbreviation(int maxContextWindowTokens)
         {
-            if (maxContextWindowTokens < 1000) return maxContextWindowTokens.ToString();
+            if (maxContextWindowTokens < 1000)
+            {
+                return maxContextWindowTokens.ToString();
+            }
 
             int thousands = maxContextWindowTokens / 1000;
+
+            // Format the number with one decimal place if the fractional part is not zero
+            if (maxContextWindowTokens % 1000 != 0)
+            {
+                return $"{thousands:F1}K";
+            }
+
             return $"{thousands}K";
+
         }
 
         /// <summary>
@@ -609,6 +648,18 @@ namespace LLMCoder
             var textSizeToken = ConvertKBToTokenCount(textSizeKB);
 
             return textSizeToken;
+        }
+
+        private double GetTotalChatMessageSizeInKiloBytes()
+        {
+            //create final message history going to LLM
+            var generateFinalChatMessageStack = GenerateFinalChatMessageStack();
+            var finalMessageText = JsonConvert.SerializeObject(generateFinalChatMessageStack);
+
+            //calculate token count of total text
+            var textSizeKB = GetBinarySizeOfTextInKB(finalMessageText);
+
+            return textSizeKB;
         }
 
         private void UpdatePastPromptsView()
@@ -1150,6 +1201,9 @@ namespace LLMCoder
 
             // Store the message ID and tableLayoutPanel in a dictionary
             messageTableLayouts[messageId] = chatMsgHolderTable;
+
+            //update counter
+            UpdateTokenStats();
         }
 
         // New method to delete a message from the chat message panel
@@ -1170,7 +1224,105 @@ namespace LLMCoder
 
         private void addNewCodeFileInjectButton_Click(object sender, EventArgs e)
         {
-            InitializeCodeFileInjectTablePanel();
+            // Get the main panel
+            TableLayoutPanel mainPanel = codeFileInjectTabMainTablePanel;
+
+            // Create a new code file inject table
+            TableLayoutPanel codeFileInjectTablePanel = new TableLayoutPanel();
+            codeFileInjectTablePanel.AutoSize = false;
+            codeFileInjectTablePanel.Dock = DockStyle.Fill;
+            codeFileInjectTablePanel.ColumnCount = 3;
+            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            codeFileInjectTablePanel.Controls.Add(fetchCodeStatusMessageLabel, 1, 2);
+            codeFileInjectTablePanel.Controls.Add(fetchLatestInjectedCodeButton, 2, 2);
+            codeFileInjectTablePanel.Controls.Add(deleteCodeInjectButton, 2, 0);
+            codeFileInjectTablePanel.Controls.Add(postCodePromptTextBox, 1, 3);
+            codeFileInjectTablePanel.Controls.Add(codeFileInjectTextBox, 0, 3);
+            codeFileInjectTablePanel.Controls.Add(codeFileInjectLabel, 0, 5);
+            codeFileInjectTablePanel.Controls.Add(preCodePromptTextBox, 0, 4);
+            codeFileInjectTablePanel.Controls.Add(codeFileInjectTableLayoutPanel, 0, 1);
+            codeFileInjectTablePanel.Controls.Add(codeFileInjectTextBox, 1, 1);
+            codeFileInjectTablePanel.Controls.Add(lineNumRangeInputTable, 1, 0);
+            codeFileInjectTablePanel.Controls.Add(startLineNumberTextBox, 0, 0);
+            codeFileInjectTablePanel.Controls.Add(endLineNumberTextBox, 1, 2);
+            codeFileInjectTablePanel.Name = "codeFileInjectTablePanel";
+            codeFileInjectTablePanel.RowCount = 6;
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+
+            // Add to the main panel
+            mainPanel.Controls.Add(codeFileInjectTablePanel, 0, CurrentCodeFiles.Count);
+
+            // Add a new code file to the list
+            CodeFile codeFile = new CodeFile(
+                filePath: "",
+                startLineNumber: 0,
+                endLineNumber: 0,
+                prePrompt: "",
+                extractedCode: "",
+                postPrompt: ""
+            );
+            CurrentCodeFiles.Add(codeFile);
+
+            // Focus on the codeFileInjectTextBox
+            codeFileInjectTextBox.Focus();
+
+            // Call fetchLatestInjectedCodeButton_Click to simulate a click on the button
+            fetchLatestInjectedCodeButton_Click(fetchLatestInjectedCodeButton, EventArgs.Empty);
+        }
+
+        // Other methods remain the same
+        private void fetchLatestInjectedCodeButton_Click(object sender, EventArgs e)
+        {
+            var codeFile = CurrentCodeFiles[CurrentCodeFiles.Count - 1];
+
+            // get needed data to fetch file
+            var filePath = codeFileInjectPathTextBox.Text;
+
+            // if user has not set end line number then help user by auto filling
+            if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(filePath).ToString(); }
+            var startLineNum = int.Parse(startLineNumberTextBox.Text);
+            var endLineNum = int.Parse(endLineNumberTextBox.Text);
+
+            // cut out piece of select code from file
+            var currentExtractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
+
+            // put into view
+            codeFileInjectTextBox.Text = currentExtractedCode;
+
+            // auto set probable pre and post prompt for file
+            var codeFileName = GetCodeFileFullName(filePath);
+            preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
+            postCodePromptTextBox.Text = $"Ok, I've parsed the code";
+
+            // update codeFile
+            codeFile.FilePath = filePath;
+            codeFile.StartLineNumber = startLineNum;
+            codeFile.EndLineNumber = endLineNum;
+            codeFile.PrePrompt = preCodePromptTextBox.Text;
+            codeFile.ExtractedCode = currentExtractedCode;
+            codeFile.PostPrompt = postCodePromptTextBox.Text;
+        }
+
+        private void deleteCodeInjectButton_Click(object sender, EventArgs e)
+        {
+            if (CurrentCodeFiles.Count == 0) return;
+
+            // Get the parent table layout panel
+            var panel = ((Button)sender).Parent;
+
+            // Remove the table layout panel from the main panel
+            codeFileInjectTabMainTablePanel.Controls.Remove(panel);
+
+            // Dispose of the table layout panel
+            panel.Dispose();
+
+            // Remove the last code file from the list
+            CurrentCodeFiles.RemoveAt(CurrentCodeFiles.Count - 1);
         }
 
         private void LoadApiConfigsFromConfigFile()
@@ -1294,6 +1446,26 @@ namespace LLMCoder
     {
         [JsonPropertyName("ApiConfigs")]
         public List<ApiConfig> ApiConfigs { get; set; }
+    }
+
+    public class CodeFile
+    {
+        public string FilePath { get; set; }
+        public int StartLineNumber { get; set; }
+        public int EndLineNumber { get; set; }
+        public string PrePrompt { get; set; }
+        public string ExtractedCode { get; set; }
+        public string PostPrompt { get; set; }
+
+        public CodeFile(string filePath, int startLineNumber, int endLineNumber, string prePrompt, string extractedCode, string postPrompt)
+        {
+            FilePath = filePath;
+            StartLineNumber = startLineNumber;
+            EndLineNumber = endLineNumber;
+            PrePrompt = prePrompt;
+            ExtractedCode = extractedCode;
+            PostPrompt = postPrompt;
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-﻿namespace LLMCoder
+namespace LLMCoder
 {
     partial class Form1
     {
@@ -49,6 +49,8 @@
             snippetInjectCheckBox = new CheckBox();
             outputChatMessagePanel = new TableLayoutPanel();
             llmButtonRowHolderTable = new TableLayoutPanel();
+            terminateOngoingLLMCallButton = new Button();
+            llmThinkingLabel = new Label();
             llmThinkingTimerLabel = new Label();
             llmThinkingProgressBar = new ProgressBar();
             clearUserMsgButton = new Button();
@@ -212,11 +214,11 @@
             chatInputHolderTable.Controls.Add(sendUserMsgButton, 1, 0);
             chatInputHolderTable.Controls.Add(userInputTextBox, 0, 0);
             chatInputHolderTable.Dock = DockStyle.Fill;
-            chatInputHolderTable.Location = new Point(3, 506);
+            chatInputHolderTable.Location = new Point(3, 507);
             chatInputHolderTable.Name = "chatInputHolderTable";
             chatInputHolderTable.RowCount = 1;
             chatInputHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            chatInputHolderTable.Size = new Size(840, 110);
+            chatInputHolderTable.Size = new Size(840, 111);
             chatInputHolderTable.TabIndex = 11;
             // 
             // sendUserMsgButton
@@ -224,15 +226,16 @@
             sendUserMsgButton.AutoSize = true;
             sendUserMsgButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             sendUserMsgButton.BackColor = SystemColors.Highlight;
+            sendUserMsgButton.Cursor = Cursors.Hand;
             sendUserMsgButton.Dock = DockStyle.Fill;
             sendUserMsgButton.FlatStyle = FlatStyle.Flat;
             sendUserMsgButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             sendUserMsgButton.ForeColor = SystemColors.ButtonFace;
             sendUserMsgButton.Location = new Point(774, 3);
             sendUserMsgButton.Name = "sendUserMsgButton";
-            sendUserMsgButton.Size = new Size(63, 104);
+            sendUserMsgButton.Size = new Size(63, 105);
             sendUserMsgButton.TabIndex = 1;
-            sendUserMsgButton.Text = "Send 🚀";
+            sendUserMsgButton.Text = "Send \U0001f98b";
             sendUserMsgButton.UseVisualStyleBackColor = false;
             sendUserMsgButton.Click += sendUserMsgButton_Click;
             // 
@@ -244,7 +247,7 @@
             userInputTextBox.ForeColor = SystemColors.MenuHighlight;
             userInputTextBox.Location = new Point(3, 3);
             userInputTextBox.Name = "userInputTextBox";
-            userInputTextBox.Size = new Size(765, 104);
+            userInputTextBox.Size = new Size(765, 105);
             userInputTextBox.TabIndex = 0;
             userInputTextBox.Text = "";
             // 
@@ -275,18 +278,20 @@
             mainChatHeaderRow.Name = "mainChatHeaderRow";
             mainChatHeaderRow.RowCount = 1;
             mainChatHeaderRow.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            mainChatHeaderRow.Size = new Size(840, 31);
+            mainChatHeaderRow.Size = new Size(840, 29);
             mainChatHeaderRow.TabIndex = 9;
             // 
             // resetChatHistoryButton
             // 
             resetChatHistoryButton.AutoSize = true;
             resetChatHistoryButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            resetChatHistoryButton.BackColor = Color.DeepPink;
+            resetChatHistoryButton.BackColor = Color.Tomato;
+            resetChatHistoryButton.Cursor = Cursors.Hand;
             resetChatHistoryButton.FlatStyle = FlatStyle.Flat;
             resetChatHistoryButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             resetChatHistoryButton.ForeColor = SystemColors.ButtonFace;
-            resetChatHistoryButton.Location = new Point(281, 3);
+            resetChatHistoryButton.Location = new Point(278, 2);
+            resetChatHistoryButton.Margin = new Padding(0, 2, 0, 0);
             resetChatHistoryButton.Name = "resetChatHistoryButton";
             resetChatHistoryButton.Size = new Size(63, 25);
             resetChatHistoryButton.TabIndex = 4;
@@ -302,7 +307,7 @@
             injectSourceLabel.Margin = new Padding(3);
             injectSourceLabel.Name = "injectSourceLabel";
             injectSourceLabel.Padding = new Padding(3);
-            injectSourceLabel.Size = new Size(54, 25);
+            injectSourceLabel.Size = new Size(54, 23);
             injectSourceLabel.TabIndex = 9;
             injectSourceLabel.Text = "💉Inject";
             // 
@@ -323,7 +328,7 @@
             llmChatHistoryLabel.Margin = new Padding(3);
             llmChatHistoryLabel.Name = "llmChatHistoryLabel";
             llmChatHistoryLabel.Padding = new Padding(3);
-            llmChatHistoryLabel.Size = new Size(66, 25);
+            llmChatHistoryLabel.Size = new Size(66, 23);
             llmChatHistoryLabel.TabIndex = 6;
             llmChatHistoryLabel.Text = "📒 History";
             // 
@@ -368,46 +373,81 @@
             outputChatMessagePanel.ColumnCount = 1;
             outputChatMessagePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             outputChatMessagePanel.Dock = DockStyle.Fill;
-            outputChatMessagePanel.Location = new Point(3, 40);
+            outputChatMessagePanel.Location = new Point(3, 38);
             outputChatMessagePanel.Name = "outputChatMessagePanel";
             outputChatMessagePanel.RowCount = 1;
             outputChatMessagePanel.RowStyles.Add(new RowStyle());
-            outputChatMessagePanel.Size = new Size(840, 460);
+            outputChatMessagePanel.Size = new Size(840, 463);
             outputChatMessagePanel.TabIndex = 7;
             // 
             // llmButtonRowHolderTable
             // 
             llmButtonRowHolderTable.AutoSize = true;
-            llmButtonRowHolderTable.ColumnCount = 5;
+            llmButtonRowHolderTable.ColumnCount = 6;
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
+            llmButtonRowHolderTable.Controls.Add(terminateOngoingLLMCallButton, 3, 0);
+            llmButtonRowHolderTable.Controls.Add(llmThinkingLabel, 0, 0);
             llmButtonRowHolderTable.Controls.Add(llmThinkingTimerLabel, 1, 0);
-            llmButtonRowHolderTable.Controls.Add(llmThinkingProgressBar, 3, 0);
-            llmButtonRowHolderTable.Controls.Add(clearUserMsgButton, 0, 0);
+            llmButtonRowHolderTable.Controls.Add(llmThinkingProgressBar, 2, 0);
+            llmButtonRowHolderTable.Controls.Add(clearUserMsgButton, 5, 0);
             llmButtonRowHolderTable.Dock = DockStyle.Bottom;
-            llmButtonRowHolderTable.Location = new Point(3, 623);
+            llmButtonRowHolderTable.Location = new Point(3, 625);
             llmButtonRowHolderTable.Name = "llmButtonRowHolderTable";
             llmButtonRowHolderTable.RowCount = 1;
             llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            llmButtonRowHolderTable.Size = new Size(840, 31);
+            llmButtonRowHolderTable.Size = new Size(840, 29);
             llmButtonRowHolderTable.TabIndex = 5;
+            // 
+            // terminateOngoingLLMCallButton
+            // 
+            terminateOngoingLLMCallButton.AutoSize = true;
+            terminateOngoingLLMCallButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            terminateOngoingLLMCallButton.BackColor = Color.Red;
+            terminateOngoingLLMCallButton.Cursor = Cursors.Hand;
+            terminateOngoingLLMCallButton.FlatStyle = FlatStyle.Flat;
+            terminateOngoingLLMCallButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            terminateOngoingLLMCallButton.ForeColor = SystemColors.ButtonFace;
+            terminateOngoingLLMCallButton.Location = new Point(228, 2);
+            terminateOngoingLLMCallButton.Margin = new Padding(0, 2, 0, 0);
+            terminateOngoingLLMCallButton.Name = "terminateOngoingLLMCallButton";
+            terminateOngoingLLMCallButton.Size = new Size(69, 25);
+            terminateOngoingLLMCallButton.TabIndex = 10;
+            terminateOngoingLLMCallButton.Text = "✂️ Cancel";
+            terminateOngoingLLMCallButton.UseVisualStyleBackColor = false;
+            terminateOngoingLLMCallButton.Visible = false;
+            terminateOngoingLLMCallButton.Click += terminateOngoingLLMCallButton_Click;
+            // 
+            // llmThinkingLabel
+            // 
+            llmThinkingLabel.AutoSize = true;
+            llmThinkingLabel.Location = new Point(0, 7);
+            llmThinkingLabel.Margin = new Padding(0, 7, 0, 0);
+            llmThinkingLabel.Name = "llmThinkingLabel";
+            llmThinkingLabel.Size = new Size(97, 15);
+            llmThinkingLabel.TabIndex = 9;
+            llmThinkingLabel.Text = "🤔 LLM Thinking ";
+            llmThinkingLabel.Visible = false;
             // 
             // llmThinkingTimerLabel
             // 
             llmThinkingTimerLabel.AutoSize = true;
-            llmThinkingTimerLabel.Location = new Point(83, 7);
-            llmThinkingTimerLabel.Margin = new Padding(3, 7, 3, 0);
+            llmThinkingTimerLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            llmThinkingTimerLabel.ForeColor = Color.DarkGreen;
+            llmThinkingTimerLabel.Location = new Point(97, 6);
+            llmThinkingTimerLabel.Margin = new Padding(0, 6, 0, 0);
             llmThinkingTimerLabel.Name = "llmThinkingTimerLabel";
-            llmThinkingTimerLabel.Size = new Size(21, 15);
+            llmThinkingTimerLabel.Size = new Size(25, 17);
             llmThinkingTimerLabel.TabIndex = 7;
             llmThinkingTimerLabel.Text = "0 s";
             // 
             // llmThinkingProgressBar
             // 
-            llmThinkingProgressBar.Location = new Point(110, 3);
+            llmThinkingProgressBar.Location = new Point(125, 3);
             llmThinkingProgressBar.Name = "llmThinkingProgressBar";
             llmThinkingProgressBar.Size = new Size(100, 23);
             llmThinkingProgressBar.Style = ProgressBarStyle.Continuous;
@@ -416,12 +456,15 @@
             // clearUserMsgButton
             // 
             clearUserMsgButton.AutoSize = true;
-            clearUserMsgButton.BackColor = Color.IndianRed;
+            clearUserMsgButton.BackColor = Color.Tomato;
+            clearUserMsgButton.Cursor = Cursors.Hand;
+            clearUserMsgButton.FlatStyle = FlatStyle.Flat;
             clearUserMsgButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             clearUserMsgButton.ForeColor = SystemColors.ButtonFace;
-            clearUserMsgButton.Location = new Point(3, 3);
+            clearUserMsgButton.Location = new Point(774, 0);
+            clearUserMsgButton.Margin = new Padding(0, 0, 3, 0);
             clearUserMsgButton.Name = "clearUserMsgButton";
-            clearUserMsgButton.Size = new Size(74, 25);
+            clearUserMsgButton.Size = new Size(63, 27);
             clearUserMsgButton.TabIndex = 3;
             clearUserMsgButton.Text = "Clear 🗑️";
             clearUserMsgButton.UseVisualStyleBackColor = false;
@@ -760,12 +803,15 @@
             // 
             // finalChatTokenUsageProgressBar
             // 
+            finalChatTokenUsageProgressBar.BackColor = SystemColors.ButtonFace;
             finalChatTokenUsageProgressBar.DisplayText = "";
             finalChatTokenUsageProgressBar.Dock = DockStyle.Fill;
             finalChatTokenUsageProgressBar.Location = new Point(83, 3);
+            finalChatTokenUsageProgressBar.MarqueeAnimationSpeed = 1000;
             finalChatTokenUsageProgressBar.Name = "finalChatTokenUsageProgressBar";
             finalChatTokenUsageProgressBar.ProgressBarColor = Color.LightGreen;
             finalChatTokenUsageProgressBar.Size = new Size(124, 23);
+            finalChatTokenUsageProgressBar.Style = ProgressBarStyle.Continuous;
             finalChatTokenUsageProgressBar.TabIndex = 17;
             // 
             // pastUserPrompts
@@ -899,5 +945,7 @@
         private Button addNewCodeFileInjectButton;
         private Label totalByteUsageMeterTextLabel;
         private TableLayoutPanel chatInputHolderTable;
+        private Label llmThinkingLabel;
+        private Button terminateOngoingLLMCallButton;
     }
 }

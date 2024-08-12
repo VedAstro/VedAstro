@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -55,9 +55,6 @@ namespace LLMCoder
             // Update the dropdown with available LLM choices
             InitializeSelectedLLMDropdownView();
 
-            // Set the default LLM choice
-            UpdateSelectedLLM("MetaLlama31405B");
-
             // Load and display past user prompts as templates
             UpdatePastPromptsView();
 
@@ -72,7 +69,11 @@ namespace LLMCoder
             topPTextBox.Text = "1.0";
 
             //default inject code
-            snippetInjectCheckBox.Checked = true;
+            snippetInjectCheckBox.Checked = false;
+            fileInjectCheckBox.Checked = true;
+
+            // Set the default LLM choice
+            UpdateSelectedLLM("MetaLlama31405B");
 
         }
 
@@ -564,7 +565,7 @@ namespace LLMCoder
             //update main KB meter
             var maxLlmContextWindowKiloBytes = ConvertTokenCountToKB(this.SelectedLLMConfig.MaxContextWindowTokens);
             totalByteUsageMeterTextLabel.Text = $"{divisor1} / {maxLlmContextWindowKiloBytes} KB";
-            
+
             //update main Token meter
             //text
             var maxLlmContextWindowTokens = FormatNumberWithKAbbreviation(SelectedLLMConfig.MaxContextWindowTokens);
@@ -910,6 +911,12 @@ namespace LLMCoder
         // Event handler for the send user message button click
         private async void sendUserMsgButton_Click(object sender, EventArgs e)
         {
+            //let user know status
+            llmThinkingLabel.Visible = true;
+            llmThinkingLabel.Text = "LLM Thinking...";
+
+            //make cancel button visible
+            terminateOngoingLLMCallButton.Visible = true;
 
             // Start the timer
             var stopwatch = Stopwatch.StartNew();
@@ -924,7 +931,6 @@ namespace LLMCoder
                     });
                 }
             });
-
 
             // Update the progress bar visibility and value
             llmThinkingProgressBar.Value = 25;
@@ -960,6 +966,11 @@ namespace LLMCoder
             stopwatch.Stop();
             await timerTask;
 
+            //update message
+            llmThinkingLabel.Text = "✅ Done";
+
+            //make cancel button disappear, since not needed anymore
+            terminateOngoingLLMCallButton.Visible = false;
         }
 
         private void largeCodeSnippetTextBox_TextChanged(object sender, EventArgs e)
@@ -1146,6 +1157,11 @@ namespace LLMCoder
 
             UpdateSelectedLLM(selectedLLMName);
 
+        }
+
+        private void terminateOngoingLLMCallButton_Click(object sender, EventArgs e)
+        {
+            //implement
         }
     }
 

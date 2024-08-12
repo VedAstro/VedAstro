@@ -14,18 +14,7 @@ namespace LLMCoder
 {
     public partial class Form1 : Form
     {
-
-        static IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("secrets.json", optional: true, reloadOnChange: true).Build();
-
-        //init all LLM choices here
-        //static List<ApiConfig> ApiConfigs = new()
-        //{
-        //    new ApiConfig("GPT4o", config["GPT4o_Endpoint"], config["GPT4o_ApiKey"], int.Parse(config["GPT4o_MaxContextWindowTokens"])),
-        //    new ApiConfig("Phi3medium128kinstruct", config["Phi3medium128kinstructEndpoint"], config["Phi3medium128kinstruct_ApiKey"], int.Parse(config["Phi3medium128kinstruct_MaxContextWindowTokens"])),
-        //    new ApiConfig("MistralNemo128k", config["MistralNemo128k_Endpoint"], config["MistralNemo128k_ApiKey"], int.Parse(config["MistralNemo128k_MaxContextWindowTokens"])),
-        //    new ApiConfig("MetaLlama31405B", config["MetaLlama31405B_Endpoint"], config["MetaLlama31405B_ApiKey"], int.Parse(config["MetaLlama31405B_MaxContextWindowTokens"])),
-        //    new ApiConfig("CohereCommandRPlus", config["CohereCommandRPlus_Endpoint"], config["CohereCommandRPlus_ApiKey"], int.Parse(config["CohereCommandRPlus_MaxContextWindowTokens"]))
-        //};
+        private CancellationTokenSource cts;
 
         public static List<ApiConfig> ApiConfigs { get; set; }
 
@@ -297,12 +286,12 @@ namespace LLMCoder
             codeFileInjectTextBox.Name = "codeFileInjectTextBox";
             codeFileInjectTextBox.BackColor = SystemColors.ActiveCaptionText;
             codeFileInjectTextBox.Dock = DockStyle.Fill;
-            codeFileInjectTextBox.ForeColor = Color.Azure;
+            codeFileInjectTextBox.ForeColor = Color.Green;
             codeFileInjectTextBox.Text = "";
             codeFileInjectTextBox.ReadOnly = false;
             codeFileInjectTextBox.Multiline = true; // Allow multiple lines
             codeFileInjectTextBox.WordWrap = true; // Wrap text to the next line
-            codeFileInjectTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            codeFileInjectTextBox.Font = new Font("Segoe UI Semibold", 7F, FontStyle.Regular, GraphicsUnit.Point, 0);
             codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 28);
 
 
@@ -338,7 +327,6 @@ namespace LLMCoder
             fetchLatestInjectedCodeButton.TabIndex = 16;
             fetchLatestInjectedCodeButton.Text = "⚡ Update";
             fetchLatestInjectedCodeButton.UseVisualStyleBackColor = false;
-
             fetchLatestInjectedCodeButton.Click += (sender, e) =>
             {
 
@@ -399,7 +387,37 @@ namespace LLMCoder
             expandCodeFileButton.TabIndex = 18;
             expandCodeFileButton.Text = "Expand";
             expandCodeFileButton.UseVisualStyleBackColor = false;
+            expandCodeFileButton.Click += (sender, e) =>
+            {
 
+                // Check if the button is currently in the "Expand" state
+                if (expandCodeFileButton.Text == "Expand")
+                {
+                    // Remove the minimum height constraint to allow the text box to expand
+                    codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 0);
+
+                    // Set the maximum height to infinity to allow the text box to expand as much as needed
+                    codeFileInjectTextBox.MaximumSize = new Size(codeFileInjectTextBox.Width, int.MaxValue);
+
+                    // Calculate the preferred height of the text box based on its width and content
+                    codeFileInjectTextBox.Height = codeFileInjectTextBox.GetPreferredSize(new Size(codeFileInjectTextBox.Width, int.MaxValue)).Height;
+
+                    // Update the button text to "Collapse" to reflect the new state
+                    expandCodeFileButton.Text = "Collapse";
+                }
+                else
+                {
+                    // Set the minimum height to 28 pixels to collapse the text box
+                    codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 28);
+
+                    // Set the maximum height to 28 pixels to prevent the text box from expanding
+                    codeFileInjectTextBox.MaximumSize = new Size(codeFileInjectTextBox.Width, 28);
+
+                    // Update the button text to "Expand" to reflect the new state
+                    expandCodeFileButton.Text = "Expand";
+                }
+
+            };
             // Add codeFileInjectTablePanel to the stack with others
             codeFileInjectTabMainTablePanel.Controls.Add(codeFileInjectTablePanel, 0, 1);
 
@@ -578,7 +596,6 @@ namespace LLMCoder
             finalChatTokenUsageProgressBar.Value = (int)percentageTotalUsed;
             UpdateTokenLimitProgressBarColor(finalChatTokenUsageProgressBar); //update meter color
 
-            //update
         }
 
         private int GetTotalChatMessageSizeInTokens()
@@ -642,32 +659,55 @@ namespace LLMCoder
         // Send a message to the LLM and return its response
         async Task<string> SendMessageToLLM(HttpClient client)
         {
-            //STEP 1 : get all messages to send to LLM stacked properly
-            var finalChatMessageStack = GenerateFinalChatMessageStack();
+            // Create a new CancellationTokenSource
+            cts = new CancellationTokenSource();
 
-            //prepare for boarding 🛫
-            var requestBody = JsonConvert.SerializeObject(finalChatMessageStack);
-            var content = new StringContent(requestBody);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            //make call to API
-            var response = await client.PostAsync("", content);
-
-            //if failed, scream the error back!
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                var errorResponse = await response.Content.ReadAsStringAsync();
-                AddMessageToPanel($"Error: {response.StatusCode} - {errorResponse}", "assistant", Color.Red);
-                return "Error occurred. Please check the error message above.";
+                // STEP 1 : get all messages to send to LLM stacked properly
+                var finalChatMessageStack = GenerateFinalChatMessageStack();
 
+                // prepare for boarding 
+                var requestBody = JsonConvert.SerializeObject(finalChatMessageStack);
+                var content = new StringContent(requestBody);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                //make call to API with cancellation support
+                var response = await client.PostAsync("", content, cts.Token);
+
+                //if failed, scream the error back!
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    AddMessageToPanel($"Error: {response.StatusCode} - {errorResponse}", "assistant", Color.Red);
+                    return "Error occurred. Please check the error message above.";
+                }
+
+                var fullReplyRaw = await response.Content.ReadAsStringAsync();// Read response content as string
+                var fullReply = new Phi3ReplyJson(fullReplyRaw);
+
+                var replyMessage = fullReply?.Choices?.FirstOrDefault()?.Message.Content ?? "No response!!";
+
+                return replyMessage;
+            }
+            catch (OperationCanceledException)
+            {
+                // Handle cancellation
+                AddMessageToPanel("LLM call cancelled.", "assistant", Color.Red);
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                AddMessageToPanel($"Error: {ex.Message}", "assistant", Color.Red);
+                return string.Empty;
+            }
+            finally
+            {
+                // Dispose of the CancellationTokenSource
+                cts.Dispose();
             }
 
-            var fullReplyRaw = await response.Content.ReadAsStringAsync();// Read response content as string
-            var fullReply = new Phi3ReplyJson(fullReplyRaw);
-
-            var replyMessage = fullReply?.Choices?.FirstOrDefault()?.Message.Content ?? "No response!!";
-
-            return replyMessage;
         }
 
         /// <summary>
@@ -1161,7 +1201,23 @@ namespace LLMCoder
 
         private void terminateOngoingLLMCallButton_Click(object sender, EventArgs e)
         {
-            //implement
+            try
+            {
+                // Cancel the ongoing HTTP request to the LLM
+                client.CancelPendingRequests();
+
+                // Update the UI to reflect the cancellation
+                llmThinkingLabel.Text = "LLM Call Cancelled";
+                llmThinkingProgressBar.Value = 0;
+
+                // Hide the terminate button
+                terminateOngoingLLMCallButton.Visible = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error cancelling LLM call: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
     }
 

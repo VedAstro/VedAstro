@@ -68,6 +68,7 @@ namespace LLMCoder
             codeFilePage = new TabPage();
             codeFileInjectTabMainTablePanel = new TableLayoutPanel();
             codeFileInjectHeaderTable = new TableLayoutPanel();
+            loadSelectedFileInjectPresetButton = new Button();
             presetLabel = new Label();
             addNewCodeFileInjectButton = new Button();
             presetSelectComboBox = new ComboBox();
@@ -88,6 +89,7 @@ namespace LLMCoder
             pastUserPrompts = new ListBox();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
+            selectedCodeFileViewTable = new TableLayoutPanel();
             pastPromptsLabel = new Label();
             modalSelectorLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -646,6 +648,7 @@ namespace LLMCoder
             codeFileInjectTabMainTablePanel.BackColor = Color.DarkGray;
             codeFileInjectTabMainTablePanel.ColumnCount = 1;
             codeFileInjectTabMainTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            codeFileInjectTabMainTablePanel.Controls.Add(selectedCodeFileViewTable, 0, 1);
             codeFileInjectTabMainTablePanel.Controls.Add(codeFileInjectHeaderTable, 0, 0);
             codeFileInjectTabMainTablePanel.Dock = DockStyle.Fill;
             codeFileInjectTabMainTablePanel.Location = new Point(0, 0);
@@ -653,7 +656,7 @@ namespace LLMCoder
             codeFileInjectTabMainTablePanel.Padding = new Padding(0, 0, 8, 0);
             codeFileInjectTabMainTablePanel.RowCount = 2;
             codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle());
-            codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             codeFileInjectTabMainTablePanel.Size = new Size(852, 663);
             codeFileInjectTabMainTablePanel.TabIndex = 1;
             // 
@@ -667,6 +670,7 @@ namespace LLMCoder
             codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
             codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
             codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
+            codeFileInjectHeaderTable.Controls.Add(loadSelectedFileInjectPresetButton, 4, 0);
             codeFileInjectHeaderTable.Controls.Add(presetLabel, 1, 0);
             codeFileInjectHeaderTable.Controls.Add(addNewCodeFileInjectButton, 0, 0);
             codeFileInjectHeaderTable.Controls.Add(presetSelectComboBox, 2, 0);
@@ -678,6 +682,23 @@ namespace LLMCoder
             codeFileInjectHeaderTable.RowStyles.Add(new RowStyle());
             codeFileInjectHeaderTable.Size = new Size(838, 29);
             codeFileInjectHeaderTable.TabIndex = 2;
+            // 
+            // loadSelectedFileInjectPresetButton
+            // 
+            loadSelectedFileInjectPresetButton.BackColor = SystemColors.MenuHighlight;
+            loadSelectedFileInjectPresetButton.Cursor = Cursors.Hand;
+            loadSelectedFileInjectPresetButton.FlatStyle = FlatStyle.Flat;
+            loadSelectedFileInjectPresetButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            loadSelectedFileInjectPresetButton.ForeColor = Color.White;
+            loadSelectedFileInjectPresetButton.Location = new Point(376, 3);
+            loadSelectedFileInjectPresetButton.Margin = new Padding(5, 3, 0, 0);
+            loadSelectedFileInjectPresetButton.Name = "loadSelectedFileInjectPresetButton";
+            loadSelectedFileInjectPresetButton.Size = new Size(75, 23);
+            loadSelectedFileInjectPresetButton.TabIndex = 6;
+            loadSelectedFileInjectPresetButton.Text = "✈️ Load";
+            loadSelectedFileInjectPresetButton.UseVisualStyleBackColor = false;
+            loadSelectedFileInjectPresetButton.Visible = false;
+            loadSelectedFileInjectPresetButton.Click += loadSelectedFileInjectPresetButton_Click;
             // 
             // presetLabel
             // 
@@ -928,6 +949,23 @@ namespace LLMCoder
             tabPage4.Text = "tabPage4";
             tabPage4.UseVisualStyleBackColor = true;
             // 
+            // selectedCodeFileViewTable
+            // 
+            selectedCodeFileViewTable.AutoScroll = true;
+            selectedCodeFileViewTable.AutoSize = true;
+            selectedCodeFileViewTable.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            selectedCodeFileViewTable.ColumnCount = 1;
+            selectedCodeFileViewTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            selectedCodeFileViewTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            selectedCodeFileViewTable.Dock = DockStyle.Fill;
+            selectedCodeFileViewTable.Location = new Point(3, 38);
+            selectedCodeFileViewTable.Name = "selectedCodeFileViewTable";
+            selectedCodeFileViewTable.RowCount = 1;
+            selectedCodeFileViewTable.RowStyles.Add(new RowStyle());
+            selectedCodeFileViewTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            selectedCodeFileViewTable.Size = new Size(838, 622);
+            selectedCodeFileViewTable.TabIndex = 4;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -938,7 +976,6 @@ namespace LLMCoder
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "LLMCodes";
-            Load += Form1_Load;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
@@ -1035,5 +1072,7 @@ namespace LLMCoder
         private Label presetLabel;
         private ComboBox presetSelectComboBox;
         private Button saveCodeFileInjectPresetButton;
+        private Button loadSelectedFileInjectPresetButton;
+        private TableLayoutPanel selectedCodeFileViewTable;
     }
 }

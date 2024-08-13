@@ -85,30 +85,36 @@ namespace LLMCoder
             this.MouseWheel -= (sender, mouseEventArgs) => Form1_MouseWheel(textBox, mouseEventArgs);
         }
 
-        private void Form1_MouseWheel(TextBox textBox, MouseEventArgs e)
+        private void Form1_MouseWheel(object sender, MouseEventArgs e)
         {
             try
             {
-                int value = int.Parse(textBox.Text);
+                // Check if the focused control is a TextBox
+                if (this.ActiveControl is TextBox textBox)
+                {
+                    string utf8Text = textBox.Text;
+                    int value = int.Parse(utf8Text);
 
-                if (e.Delta > 0)
-                {
-                    // Increment by 5 on scroll up
-                    textBox.Text = (value + 5).ToString();
-                }
-                else
-                {
-                    // Decrement by 5 on scroll down
-                    textBox.Text = (value - 5).ToString();
+                    if (e.Delta > 0)
+                    {
+                        // Increment by 5 on scroll up
+                        textBox.Text = (value + 5).ToString();
+                    }
+                    else
+                    {
+                        // Decrement by 5 on scroll down
+                        textBox.Text = (value - 5).ToString();
+                    }
                 }
             }
             catch (FormatException)
             {
                 // Handle non-integer value in textBox
                 MessageBox.Show("Please enter a valid number.");
-                textBox.Text = "0";
+               
             }
         }
+
 
         private void InitializeCodeFileInjectTablePanel()
         {
@@ -228,9 +234,6 @@ namespace LLMCoder
             startLineNumberTextBox.Size = new Size(90, 23);
             startLineNumberTextBox.TabIndex = 6;
             startLineNumberTextBox.Text = "1"; //default to 1 as start
-            // easy GUI scroll to adjust line numbers
-            startLineNumberTextBox.MouseEnter += (sender, e) => TextBox_MouseEnter(startLineNumberTextBox, e);
-            startLineNumberTextBox.MouseLeave += (sender, e) => TextBox_MouseLeave(startLineNumberTextBox, e);
 
 
             endLabel.AutoSize = true;
@@ -249,9 +252,6 @@ namespace LLMCoder
             endLineNumberTextBox.Size = new Size(90, 23);
             endLineNumberTextBox.TabIndex = 8;
             endLineNumberTextBox.Text = "0"; //set 0 so that can be detected and autofilled later
-            // easy GUI scroll to adjust line numbers
-            endLineNumberTextBox.MouseEnter += (sender, e) => TextBox_MouseEnter(endLineNumberTextBox, e);
-            endLineNumberTextBox.MouseLeave += (sender, e) => TextBox_MouseLeave(endLineNumberTextBox, e);
 
             fetchCodeStatusMessageLabel.AutoSize = true;
             fetchCodeStatusMessageLabel.Location = new Point(265, 7);
@@ -335,8 +335,26 @@ namespace LLMCoder
                 codeFileInjectTablePanel.Dispose();
 
 
-                // # Update Token Stats
+                // Find the CodeFile instance to remove
+                string filePath = null;
+                foreach (Control control in codeFileInjectTablePanel.Controls)
+                {
+                    if (control is TextBox textBox && textBox.Name == "codeFileInjectPathTextBox")
+                    {
+                        filePath = textBox.Text;
+                        break;
+                    }
+                }
+
+                // Remove the CodeFile instance from the CurrentCodeFiles list
+                if (filePath != null)
+                {
+                    this.CurrentCodeFiles.RemoveAll(cf => cf.FilePath == filePath);
+                }
+
+                // Update Token Stats
                 UpdateTokenStats();
+
             };
 
             fetchLatestInjectedCodeButton.BackColor = Color.Fuchsia;
@@ -353,7 +371,7 @@ namespace LLMCoder
                 // get needed data to fetch file
                 var filePath = codeFileInjectPathTextBox.Text;
 
-                // if user has not set end line number then help user by auto filling
+                // if user has not set end line number then help user by auto-filling
                 if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(filePath).ToString(); }
                 var startLineNum = int.Parse(startLineNumberTextBox.Text);
                 var endLineNum = int.Parse(endLineNumberTextBox.Text);
@@ -369,15 +387,53 @@ namespace LLMCoder
                 preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
                 postCodePromptTextBox.Text = $"Ok, I've parsed the code";
 
-
-                // # Update Token Stats
-
-                // give user some stats to user about the fetched code
+                // update token stats for current file only
                 var textSizeKbCurrent = GetBinarySizeOfTextInKB(currentExtractedCode);
                 var textSizeToken = ConvertKBToTokenCount(textSizeKbCurrent);
                 fetchCodeStatusMessageLabel.Text = $"Size : {textSizeKbCurrent:F2} KB ~ {textSizeToken} Tokens";
 
+                // update global token stats
                 UpdateTokenStats();
+
+                // Create a new CodeFile object with the current values from the text boxes
+                var updatedCodeFile = new CodeFile(
+                    codeFileInjectPathTextBox.Text, // File path
+                    int.Parse(startLineNumberTextBox.Text), // Start line number
+                    int.Parse(endLineNumberTextBox.Text), // End line number
+                    preCodePromptTextBox.Text, // Pre-prompt text
+                    codeFileInjectTextBox.Text, // Extracted code text
+                    postCodePromptTextBox.Text // Post-prompt text
+                );
+
+                // Check if a CodeFile with the same file path already exists in the CurrentCodeFiles list
+                var existingCodeFile = this.CurrentCodeFiles.FirstOrDefault(
+                    cf => cf.FilePath == updatedCodeFile.FilePath // Compare file paths
+                );
+
+                // If a CodeFile with the same file path already exists
+                if (existingCodeFile != null)
+                {
+                    // Update the existing CodeFile's start line number
+                    existingCodeFile.StartLineNumber = updatedCodeFile.StartLineNumber;
+
+                    // Update the existing CodeFile's end line number
+                    existingCodeFile.EndLineNumber = updatedCodeFile.EndLineNumber;
+
+                    // Update the existing CodeFile's pre-prompt text
+                    existingCodeFile.PrePrompt = updatedCodeFile.PrePrompt;
+
+                    // Update the existing CodeFile's extracted code text
+                    existingCodeFile.ExtractedCode = updatedCodeFile.ExtractedCode;
+
+                    // Update the existing CodeFile's post-prompt text
+                    existingCodeFile.PostPrompt = updatedCodeFile.PostPrompt;
+                }
+                // If a CodeFile with the same file path does not exist
+                else
+                {
+                    // Add the new CodeFile to the CurrentCodeFiles list
+                    this.CurrentCodeFiles.Add(updatedCodeFile);
+                }
 
             };
 
@@ -420,6 +476,7 @@ namespace LLMCoder
                 }
 
             };
+
             // Add codeFileInjectTablePanel to the stack with others
             codeFileInjectTabMainTablePanel.Controls.Add(codeFileInjectTablePanel, 0, 1);
 
@@ -464,7 +521,7 @@ namespace LLMCoder
                 return maxContextWindowTokens.ToString();
             }
 
-            int thousands = maxContextWindowTokens / 1000;
+            double thousands = (double)maxContextWindowTokens / 1000.0;
 
             // Format the number with one decimal place if the fractional part is not zero
             if (maxContextWindowTokens % 1000 != 0)
@@ -1224,105 +1281,7 @@ namespace LLMCoder
 
         private void addNewCodeFileInjectButton_Click(object sender, EventArgs e)
         {
-            // Get the main panel
-            TableLayoutPanel mainPanel = codeFileInjectTabMainTablePanel;
-
-            // Create a new code file inject table
-            TableLayoutPanel codeFileInjectTablePanel = new TableLayoutPanel();
-            codeFileInjectTablePanel.AutoSize = false;
-            codeFileInjectTablePanel.Dock = DockStyle.Fill;
-            codeFileInjectTablePanel.ColumnCount = 3;
-            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            codeFileInjectTablePanel.Controls.Add(fetchCodeStatusMessageLabel, 1, 2);
-            codeFileInjectTablePanel.Controls.Add(fetchLatestInjectedCodeButton, 2, 2);
-            codeFileInjectTablePanel.Controls.Add(deleteCodeInjectButton, 2, 0);
-            codeFileInjectTablePanel.Controls.Add(postCodePromptTextBox, 1, 3);
-            codeFileInjectTablePanel.Controls.Add(codeFileInjectTextBox, 0, 3);
-            codeFileInjectTablePanel.Controls.Add(codeFileInjectLabel, 0, 5);
-            codeFileInjectTablePanel.Controls.Add(preCodePromptTextBox, 0, 4);
-            codeFileInjectTablePanel.Controls.Add(codeFileInjectTableLayoutPanel, 0, 1);
-            codeFileInjectTablePanel.Controls.Add(codeFileInjectTextBox, 1, 1);
-            codeFileInjectTablePanel.Controls.Add(lineNumRangeInputTable, 1, 0);
-            codeFileInjectTablePanel.Controls.Add(startLineNumberTextBox, 0, 0);
-            codeFileInjectTablePanel.Controls.Add(endLineNumberTextBox, 1, 2);
-            codeFileInjectTablePanel.Name = "codeFileInjectTablePanel";
-            codeFileInjectTablePanel.RowCount = 6;
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-
-            // Add to the main panel
-            mainPanel.Controls.Add(codeFileInjectTablePanel, 0, CurrentCodeFiles.Count);
-
-            // Add a new code file to the list
-            CodeFile codeFile = new CodeFile(
-                filePath: "",
-                startLineNumber: 0,
-                endLineNumber: 0,
-                prePrompt: "",
-                extractedCode: "",
-                postPrompt: ""
-            );
-            CurrentCodeFiles.Add(codeFile);
-
-            // Focus on the codeFileInjectTextBox
-            codeFileInjectTextBox.Focus();
-
-            // Call fetchLatestInjectedCodeButton_Click to simulate a click on the button
-            fetchLatestInjectedCodeButton_Click(fetchLatestInjectedCodeButton, EventArgs.Empty);
-        }
-
-        // Other methods remain the same
-        private void fetchLatestInjectedCodeButton_Click(object sender, EventArgs e)
-        {
-            var codeFile = CurrentCodeFiles[CurrentCodeFiles.Count - 1];
-
-            // get needed data to fetch file
-            var filePath = codeFileInjectPathTextBox.Text;
-
-            // if user has not set end line number then help user by auto filling
-            if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(filePath).ToString(); }
-            var startLineNum = int.Parse(startLineNumberTextBox.Text);
-            var endLineNum = int.Parse(endLineNumberTextBox.Text);
-
-            // cut out piece of select code from file
-            var currentExtractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
-
-            // put into view
-            codeFileInjectTextBox.Text = currentExtractedCode;
-
-            // auto set probable pre and post prompt for file
-            var codeFileName = GetCodeFileFullName(filePath);
-            preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
-            postCodePromptTextBox.Text = $"Ok, I've parsed the code";
-
-            // update codeFile
-            codeFile.FilePath = filePath;
-            codeFile.StartLineNumber = startLineNum;
-            codeFile.EndLineNumber = endLineNum;
-            codeFile.PrePrompt = preCodePromptTextBox.Text;
-            codeFile.ExtractedCode = currentExtractedCode;
-            codeFile.PostPrompt = postCodePromptTextBox.Text;
-        }
-
-        private void deleteCodeInjectButton_Click(object sender, EventArgs e)
-        {
-            if (CurrentCodeFiles.Count == 0) return;
-
-            // Get the parent table layout panel
-            var panel = ((Button)sender).Parent;
-
-            // Remove the table layout panel from the main panel
-            codeFileInjectTabMainTablePanel.Controls.Remove(panel);
-
-            // Dispose of the table layout panel
-            panel.Dispose();
-
-            // Remove the last code file from the list
-            CurrentCodeFiles.RemoveAt(CurrentCodeFiles.Count - 1);
+            InitializeCodeFileInjectTablePanel();
         }
 
         private void LoadApiConfigsFromConfigFile()

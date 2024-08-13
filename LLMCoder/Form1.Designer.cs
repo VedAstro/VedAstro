@@ -29,7 +29,7 @@ namespace LLMCoder
         private void InitializeComponent()
         {
             Label pastPromptsLabel;
-            Label label1;
+            Label modalSelectorLabel;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             totalByteUsageMeterTextLabel = new Label();
             splitContainer1 = new SplitContainer();
@@ -84,8 +84,9 @@ namespace LLMCoder
             pastUserPrompts = new ListBox();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
+            duplicateCurrentChatHistoryButton = new Button();
             pastPromptsLabel = new Label();
-            label1 = new Label();
+            modalSelectorLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -113,28 +114,31 @@ namespace LLMCoder
             // 
             pastPromptsLabel.AutoSize = true;
             pastPromptsLabel.Dock = DockStyle.Fill;
+            pastPromptsLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pastPromptsLabel.ForeColor = Color.White;
             pastPromptsLabel.Location = new Point(3, 85);
             pastPromptsLabel.Name = "pastPromptsLabel";
             pastPromptsLabel.Size = new Size(210, 15);
             pastPromptsLabel.TabIndex = 2;
             pastPromptsLabel.Text = "📜 Past Prompts";
             // 
-            // label1
+            // modalSelectorLabel
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Fill;
-            label1.Location = new Point(3, 7);
-            label1.Margin = new Padding(3, 7, 3, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(56, 22);
-            label1.TabIndex = 3;
-            label1.Text = "✨ Modal";
+            modalSelectorLabel.Dock = DockStyle.Fill;
+            modalSelectorLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            modalSelectorLabel.ForeColor = Color.White;
+            modalSelectorLabel.Location = new Point(3, 7);
+            modalSelectorLabel.Margin = new Padding(3, 7, 3, 0);
+            modalSelectorLabel.Name = "modalSelectorLabel";
+            modalSelectorLabel.Size = new Size(74, 22);
+            modalSelectorLabel.TabIndex = 3;
+            modalSelectorLabel.Text = "✨ Modal";
             // 
             // totalByteUsageMeterTextLabel
             // 
             totalByteUsageMeterTextLabel.AutoSize = true;
             totalByteUsageMeterTextLabel.Dock = DockStyle.Fill;
-            totalByteUsageMeterTextLabel.ForeColor = SystemColors.ControlDark;
+            totalByteUsageMeterTextLabel.ForeColor = Color.Coral;
             totalByteUsageMeterTextLabel.ImageAlign = ContentAlignment.MiddleRight;
             totalByteUsageMeterTextLabel.Location = new Point(3, 70);
             totalByteUsageMeterTextLabel.Name = "totalByteUsageMeterTextLabel";
@@ -176,6 +180,7 @@ namespace LLMCoder
             // 
             // llmPage
             // 
+            llmPage.BackColor = SystemColors.ButtonShadow;
             llmPage.Controls.Add(mainChatPageHolderTable);
             llmPage.Location = new Point(4, 24);
             llmPage.Name = "llmPage";
@@ -183,7 +188,6 @@ namespace LLMCoder
             llmPage.Size = new Size(852, 663);
             llmPage.TabIndex = 0;
             llmPage.Text = "🗨️ Chat";
-            llmPage.UseVisualStyleBackColor = true;
             // 
             // mainChatPageHolderTable
             // 
@@ -243,8 +247,8 @@ namespace LLMCoder
             // 
             userInputTextBox.BackColor = SystemColors.InfoText;
             userInputTextBox.Dock = DockStyle.Fill;
-            userInputTextBox.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            userInputTextBox.ForeColor = SystemColors.MenuHighlight;
+            userInputTextBox.Font = new Font("Cascadia Code", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            userInputTextBox.ForeColor = Color.Aqua;
             userInputTextBox.Location = new Point(3, 3);
             userInputTextBox.Name = "userInputTextBox";
             userInputTextBox.Size = new Size(765, 105);
@@ -266,6 +270,7 @@ namespace LLMCoder
             mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
             mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
             mainChatHeaderRow.ColumnStyles.Add(new ColumnStyle());
+            mainChatHeaderRow.Controls.Add(duplicateCurrentChatHistoryButton, 3, 0);
             mainChatHeaderRow.Controls.Add(resetChatHistoryButton, 2, 0);
             mainChatHeaderRow.Controls.Add(injectSourceLabel, 4, 0);
             mainChatHeaderRow.Controls.Add(llmChatHistorySelectComboBox, 1, 0);
@@ -290,7 +295,7 @@ namespace LLMCoder
             resetChatHistoryButton.FlatStyle = FlatStyle.Flat;
             resetChatHistoryButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             resetChatHistoryButton.ForeColor = SystemColors.ButtonFace;
-            resetChatHistoryButton.Location = new Point(278, 2);
+            resetChatHistoryButton.Location = new Point(295, 2);
             resetChatHistoryButton.Margin = new Padding(0, 2, 0, 0);
             resetChatHistoryButton.Name = "resetChatHistoryButton";
             resetChatHistoryButton.Size = new Size(63, 25);
@@ -303,11 +308,13 @@ namespace LLMCoder
             // 
             injectSourceLabel.AutoSize = true;
             injectSourceLabel.Dock = DockStyle.Fill;
-            injectSourceLabel.Location = new Point(605, 3);
+            injectSourceLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            injectSourceLabel.ForeColor = Color.White;
+            injectSourceLabel.Location = new Point(592, 3);
             injectSourceLabel.Margin = new Padding(3);
             injectSourceLabel.Name = "injectSourceLabel";
             injectSourceLabel.Padding = new Padding(3);
-            injectSourceLabel.Size = new Size(54, 23);
+            injectSourceLabel.Size = new Size(67, 23);
             injectSourceLabel.TabIndex = 9;
             injectSourceLabel.Text = "💉Inject";
             // 
@@ -315,7 +322,7 @@ namespace LLMCoder
             // 
             llmChatHistorySelectComboBox.Dock = DockStyle.Fill;
             llmChatHistorySelectComboBox.FormattingEnabled = true;
-            llmChatHistorySelectComboBox.Location = new Point(75, 3);
+            llmChatHistorySelectComboBox.Location = new Point(92, 3);
             llmChatHistorySelectComboBox.Name = "llmChatHistorySelectComboBox";
             llmChatHistorySelectComboBox.Size = new Size(200, 23);
             llmChatHistorySelectComboBox.TabIndex = 8;
@@ -324,17 +331,20 @@ namespace LLMCoder
             // 
             llmChatHistoryLabel.AutoSize = true;
             llmChatHistoryLabel.Dock = DockStyle.Fill;
+            llmChatHistoryLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            llmChatHistoryLabel.ForeColor = Color.White;
             llmChatHistoryLabel.Location = new Point(3, 3);
             llmChatHistoryLabel.Margin = new Padding(3);
             llmChatHistoryLabel.Name = "llmChatHistoryLabel";
             llmChatHistoryLabel.Padding = new Padding(3);
-            llmChatHistoryLabel.Size = new Size(66, 23);
+            llmChatHistoryLabel.Size = new Size(83, 23);
             llmChatHistoryLabel.TabIndex = 6;
             llmChatHistoryLabel.Text = "📒 History";
             // 
             // webInjectCheckBox
             // 
             webInjectCheckBox.AutoSize = true;
+            webInjectCheckBox.ForeColor = Color.White;
             webInjectCheckBox.Location = new Point(787, 6);
             webInjectCheckBox.Margin = new Padding(3, 6, 3, 3);
             webInjectCheckBox.Name = "webInjectCheckBox";
@@ -346,6 +356,7 @@ namespace LLMCoder
             // fileInjectCheckBox
             // 
             fileInjectCheckBox.AutoSize = true;
+            fileInjectCheckBox.ForeColor = Color.White;
             fileInjectCheckBox.Location = new Point(737, 6);
             fileInjectCheckBox.Margin = new Padding(3, 6, 3, 3);
             fileInjectCheckBox.Name = "fileInjectCheckBox";
@@ -357,6 +368,7 @@ namespace LLMCoder
             // snippetInjectCheckBox
             // 
             snippetInjectCheckBox.AutoSize = true;
+            snippetInjectCheckBox.ForeColor = Color.White;
             snippetInjectCheckBox.Location = new Point(665, 6);
             snippetInjectCheckBox.Margin = new Padding(3, 6, 3, 3);
             snippetInjectCheckBox.Name = "snippetInjectCheckBox";
@@ -390,16 +402,19 @@ namespace LLMCoder
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
-            llmButtonRowHolderTable.Controls.Add(terminateOngoingLLMCallButton, 3, 0);
-            llmButtonRowHolderTable.Controls.Add(llmThinkingLabel, 0, 0);
-            llmButtonRowHolderTable.Controls.Add(llmThinkingTimerLabel, 1, 0);
-            llmButtonRowHolderTable.Controls.Add(llmThinkingProgressBar, 2, 0);
+            llmButtonRowHolderTable.Controls.Add(terminateOngoingLLMCallButton, 2, 0);
+            llmButtonRowHolderTable.Controls.Add(llmThinkingLabel, 3, 0);
+            llmButtonRowHolderTable.Controls.Add(llmThinkingTimerLabel, 0, 0);
+            llmButtonRowHolderTable.Controls.Add(llmThinkingProgressBar, 1, 0);
             llmButtonRowHolderTable.Controls.Add(clearUserMsgButton, 5, 0);
             llmButtonRowHolderTable.Dock = DockStyle.Bottom;
             llmButtonRowHolderTable.Location = new Point(3, 625);
             llmButtonRowHolderTable.Name = "llmButtonRowHolderTable";
             llmButtonRowHolderTable.RowCount = 1;
             llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             llmButtonRowHolderTable.Size = new Size(840, 29);
             llmButtonRowHolderTable.TabIndex = 5;
             // 
@@ -412,7 +427,7 @@ namespace LLMCoder
             terminateOngoingLLMCallButton.FlatStyle = FlatStyle.Flat;
             terminateOngoingLLMCallButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             terminateOngoingLLMCallButton.ForeColor = SystemColors.ButtonFace;
-            terminateOngoingLLMCallButton.Location = new Point(228, 2);
+            terminateOngoingLLMCallButton.Location = new Point(132, 2);
             terminateOngoingLLMCallButton.Margin = new Padding(0, 2, 0, 0);
             terminateOngoingLLMCallButton.Name = "terminateOngoingLLMCallButton";
             terminateOngoingLLMCallButton.Size = new Size(69, 25);
@@ -425,29 +440,31 @@ namespace LLMCoder
             // llmThinkingLabel
             // 
             llmThinkingLabel.AutoSize = true;
-            llmThinkingLabel.Location = new Point(0, 7);
+            llmThinkingLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            llmThinkingLabel.ForeColor = Color.White;
+            llmThinkingLabel.Location = new Point(201, 7);
             llmThinkingLabel.Margin = new Padding(0, 7, 0, 0);
             llmThinkingLabel.Name = "llmThinkingLabel";
-            llmThinkingLabel.Size = new Size(97, 15);
+            llmThinkingLabel.Size = new Size(105, 15);
             llmThinkingLabel.TabIndex = 9;
-            llmThinkingLabel.Text = "🤔 LLM Thinking ";
+            llmThinkingLabel.Text = "💖 LLM Thinking...";
             llmThinkingLabel.Visible = false;
             // 
             // llmThinkingTimerLabel
             // 
             llmThinkingTimerLabel.AutoSize = true;
-            llmThinkingTimerLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            llmThinkingTimerLabel.ForeColor = Color.DarkGreen;
-            llmThinkingTimerLabel.Location = new Point(97, 6);
+            llmThinkingTimerLabel.Font = new Font("Segoe UI Black", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            llmThinkingTimerLabel.ForeColor = Color.LawnGreen;
+            llmThinkingTimerLabel.Location = new Point(0, 6);
             llmThinkingTimerLabel.Margin = new Padding(0, 6, 0, 0);
             llmThinkingTimerLabel.Name = "llmThinkingTimerLabel";
-            llmThinkingTimerLabel.Size = new Size(25, 17);
+            llmThinkingTimerLabel.Size = new Size(26, 17);
             llmThinkingTimerLabel.TabIndex = 7;
             llmThinkingTimerLabel.Text = "0 s";
             // 
             // llmThinkingProgressBar
             // 
-            llmThinkingProgressBar.Location = new Point(125, 3);
+            llmThinkingProgressBar.Location = new Point(29, 3);
             llmThinkingProgressBar.MarqueeAnimationSpeed = 2000;
             llmThinkingProgressBar.Name = "llmThinkingProgressBar";
             llmThinkingProgressBar.Size = new Size(100, 23);
@@ -752,8 +769,9 @@ namespace LLMCoder
             llmSelectorTable.ColumnCount = 2;
             llmSelectorTable.ColumnStyles.Add(new ColumnStyle());
             llmSelectorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            llmSelectorTable.Controls.Add(label1, 0, 0);
+            llmSelectorTable.Controls.Add(modalSelectorLabel, 0, 0);
             llmSelectorTable.Controls.Add(llmSelector, 1, 0);
+            llmSelectorTable.Dock = DockStyle.Fill;
             llmSelectorTable.Location = new Point(3, 3);
             llmSelectorTable.Name = "llmSelectorTable";
             llmSelectorTable.RowCount = 1;
@@ -766,9 +784,9 @@ namespace LLMCoder
             // 
             llmSelector.Dock = DockStyle.Fill;
             llmSelector.FormattingEnabled = true;
-            llmSelector.Location = new Point(65, 3);
+            llmSelector.Location = new Point(83, 3);
             llmSelector.Name = "llmSelector";
-            llmSelector.Size = new Size(142, 23);
+            llmSelector.Size = new Size(124, 23);
             llmSelector.TabIndex = 1;
             llmSelector.SelectedIndexChanged += llmSelector_SelectedIndexChanged;
             // 
@@ -795,6 +813,7 @@ namespace LLMCoder
             finalChatTokenLimitLabel.AutoSize = true;
             finalChatTokenLimitLabel.Dock = DockStyle.Fill;
             finalChatTokenLimitLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            finalChatTokenLimitLabel.ForeColor = Color.White;
             finalChatTokenLimitLabel.Location = new Point(3, 3);
             finalChatTokenLimitLabel.Margin = new Padding(3);
             finalChatTokenLimitLabel.Name = "finalChatTokenLimitLabel";
@@ -805,8 +824,8 @@ namespace LLMCoder
             // 
             // finalChatTokenUsageProgressBar
             // 
-            finalChatTokenUsageProgressBar.BackColor = SystemColors.ButtonFace;
-            finalChatTokenUsageProgressBar.DisplayText = "";
+            finalChatTokenUsageProgressBar.BackColor = Color.White;
+            finalChatTokenUsageProgressBar.DisplayText = "10K / 32K Tokens";
             finalChatTokenUsageProgressBar.Dock = DockStyle.Fill;
             finalChatTokenUsageProgressBar.Location = new Point(83, 3);
             finalChatTokenUsageProgressBar.MarqueeAnimationSpeed = 1000;
@@ -818,6 +837,7 @@ namespace LLMCoder
             // 
             // pastUserPrompts
             // 
+            pastUserPrompts.BackColor = Color.Gainsboro;
             pastUserPrompts.Dock = DockStyle.Fill;
             pastUserPrompts.FormattingEnabled = true;
             pastUserPrompts.ItemHeight = 15;
@@ -847,10 +867,28 @@ namespace LLMCoder
             tabPage4.Text = "tabPage4";
             tabPage4.UseVisualStyleBackColor = true;
             // 
+            // duplicateCurrentChatHistoryButton
+            // 
+            duplicateCurrentChatHistoryButton.AutoSize = true;
+            duplicateCurrentChatHistoryButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            duplicateCurrentChatHistoryButton.BackColor = Color.YellowGreen;
+            duplicateCurrentChatHistoryButton.Cursor = Cursors.Hand;
+            duplicateCurrentChatHistoryButton.FlatStyle = FlatStyle.Flat;
+            duplicateCurrentChatHistoryButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            duplicateCurrentChatHistoryButton.ForeColor = SystemColors.ButtonFace;
+            duplicateCurrentChatHistoryButton.Location = new Point(363, 2);
+            duplicateCurrentChatHistoryButton.Margin = new Padding(5, 2, 0, 0);
+            duplicateCurrentChatHistoryButton.Name = "duplicateCurrentChatHistoryButton";
+            duplicateCurrentChatHistoryButton.Size = new Size(84, 25);
+            duplicateCurrentChatHistoryButton.TabIndex = 14;
+            duplicateCurrentChatHistoryButton.Text = "Duplicate ❇️";
+            duplicateCurrentChatHistoryButton.UseVisualStyleBackColor = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.DimGray;
             ClientSize = new Size(1080, 691);
             Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -889,7 +927,6 @@ namespace LLMCoder
             sidePanelTable.ResumeLayout(false);
             sidePanelTable.PerformLayout();
             llmSelectorTable.ResumeLayout(false);
-            llmSelectorTable.PerformLayout();
             totalTokenUsageTable.ResumeLayout(false);
             totalTokenUsageTable.PerformLayout();
             ResumeLayout(false);
@@ -941,13 +978,14 @@ namespace LLMCoder
         private TableLayoutPanel totalTokenUsageTable;
         private Label finalChatTokenLimitLabel;
         private CustomProgressBar finalChatTokenUsageProgressBar;
-        private TableLayoutPanel llmSelectorTable;
-        private ComboBox llmSelector;
         private TableLayoutPanel tableLayoutPanel5;
         private Button addNewCodeFileInjectButton;
         private Label totalByteUsageMeterTextLabel;
         private TableLayoutPanel chatInputHolderTable;
         private Label llmThinkingLabel;
         private Button terminateOngoingLLMCallButton;
+        private TableLayoutPanel llmSelectorTable;
+        private ComboBox llmSelector;
+        private Button duplicateCurrentChatHistoryButton;
     }
 }

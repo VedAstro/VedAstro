@@ -67,6 +67,7 @@ namespace LLMCoder
             injectAssitantPretextTextBox = new TextBox();
             codeFilePage = new TabPage();
             codeFileInjectTabMainTablePanel = new TableLayoutPanel();
+            selectedCodeFileViewTable = new TableLayoutPanel();
             codeFileInjectHeaderTable = new TableLayoutPanel();
             loadSelectedFileInjectPresetButton = new Button();
             presetLabel = new Label();
@@ -89,7 +90,6 @@ namespace LLMCoder
             pastUserPrompts = new ListBox();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
-            selectedCodeFileViewTable = new TableLayoutPanel();
             pastPromptsLabel = new Label();
             modalSelectorLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -660,6 +660,23 @@ namespace LLMCoder
             codeFileInjectTabMainTablePanel.Size = new Size(852, 663);
             codeFileInjectTabMainTablePanel.TabIndex = 1;
             // 
+            // selectedCodeFileViewTable
+            // 
+            selectedCodeFileViewTable.AutoScroll = true;
+            selectedCodeFileViewTable.AutoSize = true;
+            selectedCodeFileViewTable.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            selectedCodeFileViewTable.ColumnCount = 1;
+            selectedCodeFileViewTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            selectedCodeFileViewTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            selectedCodeFileViewTable.Dock = DockStyle.Fill;
+            selectedCodeFileViewTable.Location = new Point(3, 38);
+            selectedCodeFileViewTable.Name = "selectedCodeFileViewTable";
+            selectedCodeFileViewTable.RowCount = 1;
+            selectedCodeFileViewTable.RowStyles.Add(new RowStyle());
+            selectedCodeFileViewTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            selectedCodeFileViewTable.Size = new Size(838, 622);
+            selectedCodeFileViewTable.TabIndex = 4;
+            // 
             // codeFileInjectHeaderTable
             // 
             codeFileInjectHeaderTable.AutoSize = true;
@@ -697,7 +714,6 @@ namespace LLMCoder
             loadSelectedFileInjectPresetButton.TabIndex = 6;
             loadSelectedFileInjectPresetButton.Text = "✈️ Load";
             loadSelectedFileInjectPresetButton.UseVisualStyleBackColor = false;
-            loadSelectedFileInjectPresetButton.Visible = false;
             loadSelectedFileInjectPresetButton.Click += loadSelectedFileInjectPresetButton_Click;
             // 
             // presetLabel
@@ -948,23 +964,6 @@ namespace LLMCoder
             tabPage4.TabIndex = 1;
             tabPage4.Text = "tabPage4";
             tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // selectedCodeFileViewTable
-            // 
-            selectedCodeFileViewTable.AutoScroll = true;
-            selectedCodeFileViewTable.AutoSize = true;
-            selectedCodeFileViewTable.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            selectedCodeFileViewTable.ColumnCount = 1;
-            selectedCodeFileViewTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            selectedCodeFileViewTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            selectedCodeFileViewTable.Dock = DockStyle.Fill;
-            selectedCodeFileViewTable.Location = new Point(3, 38);
-            selectedCodeFileViewTable.Name = "selectedCodeFileViewTable";
-            selectedCodeFileViewTable.RowCount = 1;
-            selectedCodeFileViewTable.RowStyles.Add(new RowStyle());
-            selectedCodeFileViewTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            selectedCodeFileViewTable.Size = new Size(838, 622);
-            selectedCodeFileViewTable.TabIndex = 4;
             // 
             // Form1
             // 

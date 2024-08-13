@@ -52,7 +52,7 @@ namespace LLMCoder
             // Load ApiConfigs from config.json file
             LoadApiConfigsFromConfigFile();
 
-
+            //windows forms loading of designer.cs
             InitializeComponent();
 
             // Call the LoadPresetsFromFile method to load presets from the presets.json file.
@@ -83,52 +83,7 @@ namespace LLMCoder
 
         }
 
-
-        private void TextBox_MouseEnter(TextBox textBox, EventArgs e)
-        {
-            // Capture mouse wheel events when the mouse is over textBox
-            textBox.Focus();
-            this.MouseWheel += (sender, mouseEventArgs) => Form1_MouseWheel(textBox, mouseEventArgs);
-        }
-
-        private void TextBox_MouseLeave(TextBox textBox, EventArgs e)
-        {
-            // Stop capturing mouse wheel events when the mouse leaves textBox
-            this.MouseWheel -= (sender, mouseEventArgs) => Form1_MouseWheel(textBox, mouseEventArgs);
-        }
-
-        private void Form1_MouseWheel(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                // Check if the focused control is a TextBox
-                if (this.ActiveControl is TextBox textBox)
-                {
-                    string utf8Text = textBox.Text;
-                    int value = int.Parse(utf8Text);
-
-                    if (e.Delta > 0)
-                    {
-                        // Increment by 5 on scroll up
-                        textBox.Text = (value + 5).ToString();
-                    }
-                    else
-                    {
-                        // Decrement by 5 on scroll down
-                        textBox.Text = (value - 5).ToString();
-                    }
-                }
-            }
-            catch (FormatException)
-            {
-                // Handle non-integer value in textBox
-                MessageBox.Show("Please enter a valid number.");
-
-            }
-        }
-
-
-        private void InitializeCodeFileInjectTablePanel()
+        private void InitializeCodeFileInjectTablePanel(CodeFile codeFile = null)
         {
             // Declare and initialize variable types
             TableLayoutPanel codeFileInjectTablePanel = new TableLayoutPanel();
@@ -310,7 +265,6 @@ namespace LLMCoder
             codeFileInjectTextBox.Font = new Font("Cascadia Code", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 28);
 
-
             postCodePromptLabel.AutoSize = true;
             postCodePromptLabel.Location = new Point(3, 129);
             postCodePromptLabel.Margin = new Padding(3, 7, 3, 0);
@@ -345,7 +299,6 @@ namespace LLMCoder
                 // Dispose of the table layout panel
                 codeFileInjectTablePanel.Dispose();
 
-
                 // Find the CodeFile instance to remove
                 string filePath = null;
                 foreach (Control control in codeFileInjectTablePanel.Controls)
@@ -365,7 +318,6 @@ namespace LLMCoder
 
                 // Update Token Stats
                 UpdateTokenStats();
-
             };
 
             fetchLatestInjectedCodeButton.BackColor = Color.Fuchsia;
@@ -378,7 +330,6 @@ namespace LLMCoder
             fetchLatestInjectedCodeButton.UseVisualStyleBackColor = false;
             fetchLatestInjectedCodeButton.Click += (sender, e) =>
             {
-
                 // get needed data to fetch file
                 var filePath = codeFileInjectPathTextBox.Text;
 
@@ -406,45 +357,9 @@ namespace LLMCoder
                 // update global token stats
                 UpdateTokenStats();
 
-                // Create a new CodeFile object with the current values from the text boxes
-                var updatedCodeFile = new CodeFile(
-                    codeFileInjectPathTextBox.Text, // File path
-                    int.Parse(startLineNumberTextBox.Text), // Start line number
-                    int.Parse(endLineNumberTextBox.Text), // End line number
-                    preCodePromptTextBox.Text, // Pre-prompt text
-                    codeFileInjectTextBox.Text, // Extracted code text
-                    postCodePromptTextBox.Text // Post-prompt text
-                );
-
-                // Check if a CodeFile with the same file path already exists in the CurrentCodeFiles list
-                var existingCodeFile = this.CurrentCodeFiles.FirstOrDefault(
-                    cf => cf.FilePath == updatedCodeFile.FilePath // Compare file paths
-                );
-
-                // If a CodeFile with the same file path already exists
-                if (existingCodeFile != null)
-                {
-                    // Update the existing CodeFile's start line number
-                    existingCodeFile.StartLineNumber = updatedCodeFile.StartLineNumber;
-
-                    // Update the existing CodeFile's end line number
-                    existingCodeFile.EndLineNumber = updatedCodeFile.EndLineNumber;
-
-                    // Update the existing CodeFile's pre-prompt text
-                    existingCodeFile.PrePrompt = updatedCodeFile.PrePrompt;
-
-                    // Update the existing CodeFile's extracted code text
-                    existingCodeFile.ExtractedCode = updatedCodeFile.ExtractedCode;
-
-                    // Update the existing CodeFile's post-prompt text
-                    existingCodeFile.PostPrompt = updatedCodeFile.PostPrompt;
-                }
-                // If a CodeFile with the same file path does not exist
-                else
-                {
-                    // Add the new CodeFile to the CurrentCodeFiles list
-                    this.CurrentCodeFiles.Add(updatedCodeFile);
-                }
+                // update global selected code file data list
+                UpdateCodeFileInjectTablePanel(codeFile, codeFileInjectPathTextBox, startLineNumberTextBox, endLineNumberTextBox,
+                    preCodePromptTextBox, codeFileInjectTextBox, postCodePromptTextBox);
 
             };
 
@@ -458,7 +373,6 @@ namespace LLMCoder
             expandCodeFileButton.UseVisualStyleBackColor = false;
             expandCodeFileButton.Click += (sender, e) =>
             {
-
                 // Check if the button is currently in the "Expand" state
                 if (expandCodeFileButton.Text == "Expand")
                 {
@@ -474,6 +388,7 @@ namespace LLMCoder
                     // Update the button text to "Collapse" to reflect the new state
                     expandCodeFileButton.Text = "Collapse";
                 }
+                //expand button click logic
                 else
                 {
                     // Set the minimum height to 28 pixels to collapse the text box
@@ -485,7 +400,6 @@ namespace LLMCoder
                     // Update the button text to "Expand" to reflect the new state
                     expandCodeFileButton.Text = "Expand";
                 }
-
             };
 
             // Add codeFileInjectTablePanel as last new row in table selectedCodeFileViewTable
@@ -493,7 +407,62 @@ namespace LLMCoder
             selectedCodeFileViewTable.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             selectedCodeFileViewTable.Controls.Add(codeFileInjectTablePanel, 0, selectedCodeFileViewTable.RowCount - 1);
 
+            //if codeFile is passed in, initialize the values
+            if (codeFile != null)
+            {
+                codeFileInjectPathTextBox.Text = codeFile.FilePath;
+                startLineNumberTextBox.Text = codeFile.StartLineNumber.ToString();
+                endLineNumberTextBox.Text = codeFile.EndLineNumber.ToString();
+                preCodePromptTextBox.Text = codeFile.PrePrompt;
+                codeFileInjectTextBox.Text = codeFile.ExtractedCode;
+                postCodePromptTextBox.Text = codeFile.PostPrompt;
+            }
         }
+
+        private void UpdateCodeFileInjectTablePanel(CodeFile codeFile, TextBox codeFileInjectPathTextBox, TextBox startLineNumberTextBox, TextBox endLineNumberTextBox,
+            TextBox preCodePromptTextBox, RichTextBox codeFileInjectTextBox, TextBox postCodePromptTextBox)
+        {
+            // Create a new CodeFile object with the current values from the text boxes
+            var updatedCodeFile = new CodeFile(
+                codeFileInjectPathTextBox.Text, // File path
+                int.Parse(startLineNumberTextBox.Text), // Start line number
+                int.Parse(endLineNumberTextBox.Text), // End line number
+                preCodePromptTextBox.Text, // Pre-prompt text
+                codeFileInjectTextBox.Text, // Extracted code text
+                postCodePromptTextBox.Text // Post-prompt text
+            );
+
+            // Check if a CodeFile with the same file path already exists in the CurrentCodeFiles list
+            var existingCodeFile = this.CurrentCodeFiles.FirstOrDefault(
+                cf => cf.FilePath == updatedCodeFile.FilePath // Compare file paths
+            );
+
+            // If a CodeFile with the same file path already exists
+            if (existingCodeFile != null)
+            {
+                // Update the existing CodeFile's start line number
+                existingCodeFile.StartLineNumber = updatedCodeFile.StartLineNumber;
+
+                // Update the existing CodeFile's end line number
+                existingCodeFile.EndLineNumber = updatedCodeFile.EndLineNumber;
+
+                // Update the existing CodeFile's pre-prompt text
+                existingCodeFile.PrePrompt = updatedCodeFile.PrePrompt;
+
+                // Update the existing CodeFile's extracted code text
+                existingCodeFile.ExtractedCode = updatedCodeFile.ExtractedCode;
+
+                // Update the existing CodeFile's post-prompt text
+                existingCodeFile.PostPrompt = updatedCodeFile.PostPrompt;
+            }
+            // If a CodeFile with the same file path does not exist
+            else
+            {
+                // Add the new CodeFile to the CurrentCodeFiles list
+                this.CurrentCodeFiles.Add(updatedCodeFile);
+            }
+        }
+
 
         private void UpdateTokenStats()
         {
@@ -520,12 +489,8 @@ namespace LLMCoder
             UpdateTokenLimitProgressBarColor(finalChatTokenUsageProgressBar); //update meter color
         }
 
-
         /// <summary>
-        /// given a number like 32000, return text version with K abbreviation
-        /// example : 32000 = "32K"
-        /// example : 128000 = "128K"
-        /// example : 4096 = "4K"
+        /// given a number like 32000, return text version with K abbreviation example : 32000 = "32K"
         /// </summary>
         private static string FormatNumberWithKAbbreviation(int maxContextWindowTokens)
         {
@@ -606,7 +571,6 @@ namespace LLMCoder
             int b = (int)(startColor.B + ratio * (endColor.B - startColor.B));
             return Color.FromArgb(r, g, b);
         }
-
 
         /// <summary>
         /// given a large string text return its size in KB (kilobytes)
@@ -1042,103 +1006,6 @@ namespace LLMCoder
             }
         }
 
-        //------------------- EVENT HANDLERS ---------------------
-
-        private void pastUserPrompts_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (pastUserPrompts.SelectedItem != null)
-            {
-                string selectedItem = pastUserPrompts.SelectedItem.ToString();
-                // Perform actions or display information based on the selected item
-                userInputTextBox.Text += $"{selectedItem}";
-            }
-        }
-
-        private void clearUserMsgButton_Click(object sender, EventArgs e)
-        {
-            userInputTextBox.Text = "";
-        }
-
-        private void resetChatHistoryButton_Click(object sender, EventArgs e)
-        {
-            // Clear the chat output box text
-            outputChatMessagePanel.Controls.Clear();
-
-            // Clear the conversation history list
-            conversationHistory.Clear();
-        }
-
-        // Event handler for the send user message button click
-        private async void sendUserMsgButton_Click(object sender, EventArgs e)
-        {
-            //let user know status
-            llmThinkingLabel.Visible = true;
-            llmThinkingLabel.Text = "LLM Thinking...";
-
-            //make cancel button visible
-            terminateOngoingLLMCallButton.Visible = true;
-
-            // Start the timer
-            var stopwatch = Stopwatch.StartNew();
-            var timerTask = Task.Run(async () =>
-            {
-                while (stopwatch.IsRunning)
-                {
-                    await Task.Delay(200); // Update every second
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        llmThinkingTimerLabel.Text = $"{Math.Round(stopwatch.Elapsed.TotalSeconds, 2)} s";
-                    });
-                }
-            });
-
-            // Update the progress bar visibility and value
-            llmThinkingProgressBar.Value = 25;
-
-            // Get the user input from the input text box
-            string userInput = userInputTextBox.Text;
-
-            // Display the user's message in the chat output box
-            AddMessageToPanel(userInput, "user", Color.Aqua);
-
-            llmThinkingProgressBar.Value = 50;
-
-            // Send a message to the LLM and get its response
-            string response = await SendMessageToLLM(client);
-
-            llmThinkingProgressBar.Value = 75;
-
-            // Display the LLM's response in the chat output box
-            AddMessageToPanel(response, "assistant", Color.LimeGreen);
-
-            // Clear the user input text box for the next input
-            userInputTextBox.Text = "";
-
-            // Load and display past user prompts as templates
-            UpdatePastPromptsView();
-
-            // Update the progress bar value and hide it
-            llmThinkingProgressBar.Value = 100;
-            await Task.Delay(300); //short delay
-            llmThinkingProgressBar.Value = 0;
-
-            // Stop the timer
-            stopwatch.Stop();
-            await timerTask;
-
-            //update message
-            llmThinkingLabel.Text = "✅ Done";
-
-            //make cancel button disappear, since not needed anymore
-            terminateOngoingLLMCallButton.Visible = false;
-        }
-
-        private void largeCodeSnippetTextBox_TextChanged(object sender, EventArgs e)
-        {
-            //update token counter
-            tokenCountLabel.Text = $"Token Count : {CountTokens(largeCodeSnippetTextBox.Text)}";
-        }
-
         // This method loads presets from the presets.json file into the CurrentFileInjectPresets variable.
         private void LoadPresetsFromFile()
         {
@@ -1151,13 +1018,16 @@ namespace LLMCoder
                     // Read the contents of the presets.json file into a string.
                     string presetsJson = File.ReadAllText("presets.json");
 
+                    //add in default unselected state
+                    CurrentFileInjectPresets = new List<FileInjectPreset>() { new() { Name = "Select...", InjectedFilesData = new List<CodeFile>() } };
+
                     // Deserialize the JSON data into a list of FileInjectPreset objects and assign it to the CurrentFileInjectPresets variable.
-                    CurrentFileInjectPresets = JsonConvert.DeserializeObject<List<FileInjectPreset>>(presetsJson);
+                    var parsedFromFile = JsonConvert.DeserializeObject<List<FileInjectPreset>>(presetsJson);
+                    CurrentFileInjectPresets.AddRange(parsedFromFile);
 
                     // Update the presetSelectComboBox with the loaded presets
                     presetSelectComboBox.DataSource = CurrentFileInjectPresets;
                     presetSelectComboBox.DisplayMember = "Name";
-
                 }
             }
             // Catch any exceptions that occur during the loading process.
@@ -1314,6 +1184,122 @@ namespace LLMCoder
             messageTableLayouts.Remove(messageId);
         }
 
+        private string GetPresetNameFromUser()
+        {
+            // Open a dialog window to get the preset name from the user
+            InputDialog dialog = new InputDialog("Enter preset name:", "Save Preset");
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                return dialog.InputText;
+            }
+            return string.Empty;
+        }
+
+        private void SavePresetsToFile()
+        {
+            // Save the updated preset list to a file (optional)
+            string presetsJson = JsonConvert.SerializeObject(CurrentFileInjectPresets);
+            File.WriteAllText("presets.json", presetsJson);
+        }
+
+
+        //------------------- EVENT HANDLERS ---------------------
+
+        private void pastUserPrompts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (pastUserPrompts.SelectedItem != null)
+            {
+                string selectedItem = pastUserPrompts.SelectedItem.ToString();
+                // Perform actions or display information based on the selected item
+                userInputTextBox.Text += $"{selectedItem}";
+            }
+        }
+
+        private void clearUserMsgButton_Click(object sender, EventArgs e)
+        {
+            userInputTextBox.Text = "";
+        }
+
+        private void resetChatHistoryButton_Click(object sender, EventArgs e)
+        {
+            // Clear the chat output box text
+            outputChatMessagePanel.Controls.Clear();
+
+            // Clear the conversation history list
+            conversationHistory.Clear();
+        }
+
+        // Event handler for the send user message button click
+        private async void sendUserMsgButton_Click(object sender, EventArgs e)
+        {
+            //let user know status
+            llmThinkingLabel.Visible = true;
+            llmThinkingLabel.Text = "LLM Thinking...";
+
+            //make cancel button visible
+            terminateOngoingLLMCallButton.Visible = true;
+
+            // Start the timer
+            var stopwatch = Stopwatch.StartNew();
+            var timerTask = Task.Run(async () =>
+            {
+                while (stopwatch.IsRunning)
+                {
+                    await Task.Delay(200); // Update every second
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        llmThinkingTimerLabel.Text = $"{Math.Round(stopwatch.Elapsed.TotalSeconds, 2)} s";
+                    });
+                }
+            });
+
+            // Update the progress bar visibility and value
+            llmThinkingProgressBar.Value = 25;
+
+            // Get the user input from the input text box
+            string userInput = userInputTextBox.Text;
+
+            // Display the user's message in the chat output box
+            AddMessageToPanel(userInput, "user", Color.Aqua);
+
+            llmThinkingProgressBar.Value = 50;
+
+            // Send a message to the LLM and get its response
+            string response = await SendMessageToLLM(client);
+
+            llmThinkingProgressBar.Value = 75;
+
+            // Display the LLM's response in the chat output box
+            AddMessageToPanel(response, "assistant", Color.LimeGreen);
+
+            // Clear the user input text box for the next input
+            userInputTextBox.Text = "";
+
+            // Load and display past user prompts as templates
+            UpdatePastPromptsView();
+
+            // Update the progress bar value and hide it
+            llmThinkingProgressBar.Value = 100;
+            await Task.Delay(300); //short delay
+            llmThinkingProgressBar.Value = 0;
+
+            // Stop the timer
+            stopwatch.Stop();
+            await timerTask;
+
+            //update message
+            llmThinkingLabel.Text = "✅ Done";
+
+            //make cancel button disappear, since not needed anymore
+            terminateOngoingLLMCallButton.Visible = false;
+        }
+
+        private void largeCodeSnippetTextBox_TextChanged(object sender, EventArgs e)
+        {
+            //update token counter
+            tokenCountLabel.Text = $"Token Count : {CountTokens(largeCodeSnippetTextBox.Text)}";
+        }
+
         private void addNewCodeFileInjectButton_Click(object sender, EventArgs e)
         {
             InitializeCodeFileInjectTablePanel();
@@ -1366,49 +1352,32 @@ namespace LLMCoder
 
         }
 
-
         private void saveCodeFileInjectPresetButton_Click(object sender, EventArgs e)
         {
             // Open a dialog window to get the preset name from the user
             string presetName = GetPresetNameFromUser();
 
-            if (!string.IsNullOrEmpty(presetName))
+            //if not selected don't continue
+            if (string.IsNullOrEmpty(presetName) || presetName == "Select...") return;
+
+            // Create a new FileInjectPreset object
+            FileInjectPreset newPresetData = new FileInjectPreset
             {
-                // Create a new FileInjectPreset object
-                FileInjectPreset preset = new FileInjectPreset
-                {
-                    Name = presetName,
-                    InjectedFilesData = this.CurrentCodeFiles
-                };
+                Name = presetName,
+                InjectedFilesData = this.CurrentCodeFiles
+            };
 
-                // Add the preset to the current global preset list
-                CurrentFileInjectPresets.Add(preset);
+            // Add the preset to the current global preset list
+            CurrentFileInjectPresets.Add(newPresetData);
 
-                // Save the updated preset list to a file (optional)
-                SavePresetsToFile();
-
-                // Display a success message to the user
-                MessageBox.Show("Preset saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private string GetPresetNameFromUser()
-        {
-            // Open a dialog window to get the preset name from the user
-            InputDialog dialog = new InputDialog("Enter preset name:", "Save Preset");
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                return dialog.InputText;
-            }
-            return string.Empty;
-        }
-
-
-        private void SavePresetsToFile()
-        {
             // Save the updated preset list to a file (optional)
-            string presetsJson = JsonConvert.SerializeObject(CurrentFileInjectPresets);
-            File.WriteAllText("presets.json", presetsJson);
+            SavePresetsToFile();
+
+            // Display a success message to the user
+            MessageBox.Show("Preset saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            //update dropdown selection to show as though now the newly saved is selected
+            presetSelectComboBox.SelectedItem = newPresetData;
         }
 
         private void loadSelectedFileInjectPresetButton_Click(object sender, EventArgs e)
@@ -1422,9 +1391,12 @@ namespace LLMCoder
             //add each file in preset into the view, similar to clicking `addNewCodeFileInjectButton_Click`
             foreach (var codeFile in selectedPreset.InjectedFilesData)
             {
+                InitializeCodeFileInjectTablePanel(codeFile);
                 //...implement code
             }
 
+            //update main counters of KB and Tokens
+            UpdateTokenStats();
 
         }
     }
@@ -1587,10 +1559,6 @@ namespace LLMCoder
         {
         }
     }
-
-
-    //█░░ ▄▀█ █▄█ █▀█ █░█ ▀█▀   █▀ █ ▀█ █▀▀
-    //█▄▄ █▀█ ░█░ █▄█ █▄█ ░█░   ▄█ █ █▄ ██▄
 
     /// <summary>
     /// Special class to give Golden Ration nicely

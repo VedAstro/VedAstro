@@ -40,6 +40,7 @@ namespace LLMCoder
             sendUserMsgButton = new Button();
             userInputTextBox = new RichTextBox();
             mainChatHeaderRow = new TableLayoutPanel();
+            duplicateCurrentChatHistoryButton = new Button();
             resetChatHistoryButton = new Button();
             injectSourceLabel = new Label();
             llmChatHistorySelectComboBox = new ComboBox();
@@ -66,8 +67,11 @@ namespace LLMCoder
             injectAssitantPretextTextBox = new TextBox();
             codeFilePage = new TabPage();
             codeFileInjectTabMainTablePanel = new TableLayoutPanel();
-            tableLayoutPanel5 = new TableLayoutPanel();
+            codeFileInjectHeaderTable = new TableLayoutPanel();
+            presetLabel = new Label();
             addNewCodeFileInjectButton = new Button();
+            presetSelectComboBox = new ComboBox();
+            saveCodeFileInjectPresetButton = new Button();
             settingsPage = new TabPage();
             tableLayoutPanel4 = new TableLayoutPanel();
             topPTextBox = new TextBox();
@@ -84,7 +88,6 @@ namespace LLMCoder
             pastUserPrompts = new ListBox();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
-            duplicateCurrentChatHistoryButton = new Button();
             pastPromptsLabel = new Label();
             modalSelectorLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -102,7 +105,7 @@ namespace LLMCoder
             flowLayoutPanel1.SuspendLayout();
             codeFilePage.SuspendLayout();
             codeFileInjectTabMainTablePanel.SuspendLayout();
-            tableLayoutPanel5.SuspendLayout();
+            codeFileInjectHeaderTable.SuspendLayout();
             settingsPage.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             sidePanelTable.SuspendLayout();
@@ -285,6 +288,23 @@ namespace LLMCoder
             mainChatHeaderRow.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             mainChatHeaderRow.Size = new Size(840, 29);
             mainChatHeaderRow.TabIndex = 9;
+            // 
+            // duplicateCurrentChatHistoryButton
+            // 
+            duplicateCurrentChatHistoryButton.AutoSize = true;
+            duplicateCurrentChatHistoryButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            duplicateCurrentChatHistoryButton.BackColor = Color.YellowGreen;
+            duplicateCurrentChatHistoryButton.Cursor = Cursors.Hand;
+            duplicateCurrentChatHistoryButton.FlatStyle = FlatStyle.Flat;
+            duplicateCurrentChatHistoryButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            duplicateCurrentChatHistoryButton.ForeColor = SystemColors.ButtonFace;
+            duplicateCurrentChatHistoryButton.Location = new Point(363, 2);
+            duplicateCurrentChatHistoryButton.Margin = new Padding(5, 2, 0, 0);
+            duplicateCurrentChatHistoryButton.Name = "duplicateCurrentChatHistoryButton";
+            duplicateCurrentChatHistoryButton.Size = new Size(84, 25);
+            duplicateCurrentChatHistoryButton.TabIndex = 14;
+            duplicateCurrentChatHistoryButton.Text = "Duplicate ❇️";
+            duplicateCurrentChatHistoryButton.UseVisualStyleBackColor = false;
             // 
             // resetChatHistoryButton
             // 
@@ -621,37 +641,54 @@ namespace LLMCoder
             // 
             codeFileInjectTabMainTablePanel.AutoScroll = true;
             codeFileInjectTabMainTablePanel.AutoSize = true;
+            codeFileInjectTabMainTablePanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             codeFileInjectTabMainTablePanel.BackColor = Color.DarkGray;
             codeFileInjectTabMainTablePanel.ColumnCount = 1;
             codeFileInjectTabMainTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            codeFileInjectTabMainTablePanel.Controls.Add(tableLayoutPanel5, 0, 0);
+            codeFileInjectTabMainTablePanel.Controls.Add(codeFileInjectHeaderTable, 0, 0);
             codeFileInjectTabMainTablePanel.Dock = DockStyle.Fill;
             codeFileInjectTabMainTablePanel.Location = new Point(0, 0);
             codeFileInjectTabMainTablePanel.Name = "codeFileInjectTabMainTablePanel";
+            codeFileInjectTabMainTablePanel.Padding = new Padding(0, 0, 8, 0);
             codeFileInjectTabMainTablePanel.RowCount = 2;
             codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle());
             codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle());
             codeFileInjectTabMainTablePanel.Size = new Size(852, 663);
             codeFileInjectTabMainTablePanel.TabIndex = 1;
             // 
-            // tableLayoutPanel5
+            // codeFileInjectHeaderTable
             // 
-            tableLayoutPanel5.AutoSize = true;
-            tableLayoutPanel5.BackColor = Color.DarkGray;
-            tableLayoutPanel5.ColumnCount = 5;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel5.Controls.Add(addNewCodeFileInjectButton, 0, 0);
-            tableLayoutPanel5.Dock = DockStyle.Fill;
-            tableLayoutPanel5.Location = new Point(3, 3);
-            tableLayoutPanel5.Name = "tableLayoutPanel5";
-            tableLayoutPanel5.RowCount = 1;
-            tableLayoutPanel5.RowStyles.Add(new RowStyle());
-            tableLayoutPanel5.Size = new Size(846, 29);
-            tableLayoutPanel5.TabIndex = 2;
+            codeFileInjectHeaderTable.AutoSize = true;
+            codeFileInjectHeaderTable.BackColor = Color.DarkGray;
+            codeFileInjectHeaderTable.ColumnCount = 5;
+            codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
+            codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
+            codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
+            codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
+            codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
+            codeFileInjectHeaderTable.Controls.Add(presetLabel, 1, 0);
+            codeFileInjectHeaderTable.Controls.Add(addNewCodeFileInjectButton, 0, 0);
+            codeFileInjectHeaderTable.Controls.Add(presetSelectComboBox, 2, 0);
+            codeFileInjectHeaderTable.Controls.Add(saveCodeFileInjectPresetButton, 3, 0);
+            codeFileInjectHeaderTable.Dock = DockStyle.Fill;
+            codeFileInjectHeaderTable.Location = new Point(3, 3);
+            codeFileInjectHeaderTable.Name = "codeFileInjectHeaderTable";
+            codeFileInjectHeaderTable.RowCount = 1;
+            codeFileInjectHeaderTable.RowStyles.Add(new RowStyle());
+            codeFileInjectHeaderTable.Size = new Size(838, 29);
+            codeFileInjectHeaderTable.TabIndex = 2;
+            // 
+            // presetLabel
+            // 
+            presetLabel.AutoSize = true;
+            presetLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            presetLabel.ForeColor = Color.White;
+            presetLabel.Location = new Point(91, 5);
+            presetLabel.Margin = new Padding(10, 5, 3, 0);
+            presetLabel.Name = "presetLabel";
+            presetLabel.Size = new Size(75, 17);
+            presetLabel.TabIndex = 4;
+            presetLabel.Text = "❄️ Presets";
             // 
             // addNewCodeFileInjectButton
             // 
@@ -664,6 +701,28 @@ namespace LLMCoder
             addNewCodeFileInjectButton.Text = "➕ Add File";
             addNewCodeFileInjectButton.UseVisualStyleBackColor = false;
             addNewCodeFileInjectButton.Click += addNewCodeFileInjectButton_Click;
+            // 
+            // presetSelectComboBox
+            // 
+            presetSelectComboBox.FormattingEnabled = true;
+            presetSelectComboBox.Location = new Point(172, 3);
+            presetSelectComboBox.Name = "presetSelectComboBox";
+            presetSelectComboBox.Size = new Size(121, 23);
+            presetSelectComboBox.TabIndex = 2;
+            // 
+            // saveCodeFileInjectPresetButton
+            // 
+            saveCodeFileInjectPresetButton.BackColor = Color.LimeGreen;
+            saveCodeFileInjectPresetButton.FlatStyle = FlatStyle.Flat;
+            saveCodeFileInjectPresetButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            saveCodeFileInjectPresetButton.ForeColor = Color.White;
+            saveCodeFileInjectPresetButton.Location = new Point(296, 3);
+            saveCodeFileInjectPresetButton.Margin = new Padding(0, 3, 0, 0);
+            saveCodeFileInjectPresetButton.Name = "saveCodeFileInjectPresetButton";
+            saveCodeFileInjectPresetButton.Size = new Size(75, 23);
+            saveCodeFileInjectPresetButton.TabIndex = 5;
+            saveCodeFileInjectPresetButton.Text = "💾 Save";
+            saveCodeFileInjectPresetButton.UseVisualStyleBackColor = false;
             // 
             // settingsPage
             // 
@@ -867,23 +926,6 @@ namespace LLMCoder
             tabPage4.Text = "tabPage4";
             tabPage4.UseVisualStyleBackColor = true;
             // 
-            // duplicateCurrentChatHistoryButton
-            // 
-            duplicateCurrentChatHistoryButton.AutoSize = true;
-            duplicateCurrentChatHistoryButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            duplicateCurrentChatHistoryButton.BackColor = Color.YellowGreen;
-            duplicateCurrentChatHistoryButton.Cursor = Cursors.Hand;
-            duplicateCurrentChatHistoryButton.FlatStyle = FlatStyle.Flat;
-            duplicateCurrentChatHistoryButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            duplicateCurrentChatHistoryButton.ForeColor = SystemColors.ButtonFace;
-            duplicateCurrentChatHistoryButton.Location = new Point(363, 2);
-            duplicateCurrentChatHistoryButton.Margin = new Padding(5, 2, 0, 0);
-            duplicateCurrentChatHistoryButton.Name = "duplicateCurrentChatHistoryButton";
-            duplicateCurrentChatHistoryButton.Size = new Size(84, 25);
-            duplicateCurrentChatHistoryButton.TabIndex = 14;
-            duplicateCurrentChatHistoryButton.Text = "Duplicate ❇️";
-            duplicateCurrentChatHistoryButton.UseVisualStyleBackColor = false;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -919,7 +961,8 @@ namespace LLMCoder
             codeFilePage.PerformLayout();
             codeFileInjectTabMainTablePanel.ResumeLayout(false);
             codeFileInjectTabMainTablePanel.PerformLayout();
-            tableLayoutPanel5.ResumeLayout(false);
+            codeFileInjectHeaderTable.ResumeLayout(false);
+            codeFileInjectHeaderTable.PerformLayout();
             settingsPage.ResumeLayout(false);
             settingsPage.PerformLayout();
             tableLayoutPanel4.ResumeLayout(false);
@@ -978,7 +1021,7 @@ namespace LLMCoder
         private TableLayoutPanel totalTokenUsageTable;
         private Label finalChatTokenLimitLabel;
         private CustomProgressBar finalChatTokenUsageProgressBar;
-        private TableLayoutPanel tableLayoutPanel5;
+        private TableLayoutPanel codeFileInjectHeaderTable;
         private Button addNewCodeFileInjectButton;
         private Label totalByteUsageMeterTextLabel;
         private TableLayoutPanel chatInputHolderTable;
@@ -987,5 +1030,8 @@ namespace LLMCoder
         private TableLayoutPanel llmSelectorTable;
         private ComboBox llmSelector;
         private Button duplicateCurrentChatHistoryButton;
+        private Label presetLabel;
+        private ComboBox presetSelectComboBox;
+        private Button saveCodeFileInjectPresetButton;
     }
 }

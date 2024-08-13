@@ -168,7 +168,6 @@ namespace LLMCoder
             codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
             codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
             codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
-            codeFileInjectTablePanel.Size = new Size(852, 663);
             codeFileInjectTablePanel.TabIndex = 1;
             codeFileInjectTablePanel.BackColor = Color.Black;
 
@@ -477,8 +476,10 @@ namespace LLMCoder
 
             };
 
-            // Add codeFileInjectTablePanel to the stack with others
-            codeFileInjectTabMainTablePanel.Controls.Add(codeFileInjectTablePanel, 0, 1);
+            // Add codeFileInjectTablePanel as last new row in table codeFileInjectTabMainTablePanel
+            codeFileInjectTabMainTablePanel.RowCount++;
+            codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            codeFileInjectTabMainTablePanel.Controls.Add(codeFileInjectTablePanel, 0, codeFileInjectTabMainTablePanel.RowCount - 1);
 
         }
 

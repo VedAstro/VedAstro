@@ -183,8 +183,9 @@ namespace LLMCoder
             // 
             // llmPage
             // 
-            llmPage.BackColor = SystemColors.ButtonShadow;
+            llmPage.BackColor = Color.FromArgb(39, 42, 49);
             llmPage.Controls.Add(mainChatPageHolderTable);
+            llmPage.ForeColor = Color.FromArgb(28, 30, 35);
             llmPage.Location = new Point(4, 24);
             llmPage.Name = "llmPage";
             llmPage.Padding = new Padding(3);
@@ -248,7 +249,7 @@ namespace LLMCoder
             // 
             // userInputTextBox
             // 
-            userInputTextBox.BackColor = SystemColors.InfoText;
+            userInputTextBox.BackColor = Color.FromArgb(28, 30, 35);
             userInputTextBox.Dock = DockStyle.Fill;
             userInputTextBox.Font = new Font("Cascadia Code", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             userInputTextBox.ForeColor = Color.Aqua;
@@ -461,7 +462,7 @@ namespace LLMCoder
             // 
             llmThinkingLabel.AutoSize = true;
             llmThinkingLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            llmThinkingLabel.ForeColor = Color.White;
+            llmThinkingLabel.ForeColor = Color.Yellow;
             llmThinkingLabel.Location = new Point(201, 7);
             llmThinkingLabel.Margin = new Padding(0, 7, 0, 0);
             llmThinkingLabel.Name = "llmThinkingLabel";
@@ -723,6 +724,7 @@ namespace LLMCoder
             saveCodeFileInjectPresetButton.TabIndex = 5;
             saveCodeFileInjectPresetButton.Text = "💾 Save";
             saveCodeFileInjectPresetButton.UseVisualStyleBackColor = false;
+            saveCodeFileInjectPresetButton.Click += saveCodeFileInjectPresetButton_Click;
             // 
             // settingsPage
             // 

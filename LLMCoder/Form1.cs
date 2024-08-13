@@ -19,7 +19,15 @@ namespace LLMCoder
         /// </summary>
         private List<CodeFile> CurrentCodeFiles = new List<CodeFile>();
 
-        private CancellationTokenSource cts;
+        /// <summary>
+        /// current global preset list
+        /// </summary>
+        private List<FileInjectPreset> CurrentFileInjectPresets = new List<FileInjectPreset>();
+
+        /// <summary>
+        /// so that can kill an ongoing http call
+        /// </summary>
+        private CancellationTokenSource _cts;
 
         public static List<ApiConfig> ApiConfigs { get; set; }
 
@@ -111,7 +119,7 @@ namespace LLMCoder
             {
                 // Handle non-integer value in textBox
                 MessageBox.Show("Please enter a valid number.");
-               
+
             }
         }
 
@@ -769,7 +777,7 @@ namespace LLMCoder
         async Task<string> SendMessageToLLM(HttpClient client)
         {
             // Create a new CancellationTokenSource
-            cts = new CancellationTokenSource();
+            _cts = new CancellationTokenSource();
 
             try
             {
@@ -782,7 +790,7 @@ namespace LLMCoder
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                 //make call to API with cancellation support
-                var response = await client.PostAsync("", content, cts.Token);
+                var response = await client.PostAsync("", content, _cts.Token);
 
                 //if failed, scream the error back!
                 if (!response.IsSuccessStatusCode)
@@ -814,7 +822,7 @@ namespace LLMCoder
             finally
             {
                 // Dispose of the CancellationTokenSource
-                cts.Dispose();
+                _cts.Dispose();
             }
 
         }
@@ -1331,9 +1339,115 @@ namespace LLMCoder
             }
 
         }
+
+
+        private void saveCodeFileInjectPresetButton_Click(object sender, EventArgs e)
+        {
+            // Open a dialog window to get the preset name from the user
+            string presetName = GetPresetNameFromUser();
+
+            if (!string.IsNullOrEmpty(presetName))
+            {
+                // Create a new FileInjectPreset object
+                FileInjectPreset preset = new FileInjectPreset
+                {
+                    Name = presetName,
+                    InjectedFilesData = this.CurrentCodeFiles
+                };
+
+                // Add the preset to the current global preset list
+                CurrentFileInjectPresets.Add(preset);
+
+                // Save the updated preset list to a file (optional)
+                SavePresetsToFile();
+
+                // Display a success message to the user
+                MessageBox.Show("Preset saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private string GetPresetNameFromUser()
+        {
+            // Open a dialog window to get the preset name from the user
+            InputDialog dialog = new InputDialog("Enter preset name:", "Save Preset");
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                return dialog.InputText;
+            }
+            return string.Empty;
+        }
+
+
+        private void SavePresetsToFile()
+        {
+            // Save the updated preset list to a file (optional)
+            string presetsJson = JsonConvert.SerializeObject(CurrentFileInjectPresets);
+            File.WriteAllText("presets.json", presetsJson);
+        }
+
+
+    }
+
+    public class FileInjectPreset
+    {
+        public string Name { get; set; }
+        public List<CodeFile> InjectedFilesData { get; set; }
+
     }
 
     public record ApiConfig(string Name, string Endpoint, string ApiKey, int MaxContextWindowTokens);
+    public class InputDialog : Form
+    {
+        private Label label;
+        private TextBox textBox;
+        private Button okButton;
+        private Button cancelButton;
+
+        public InputDialog(string prompt, string title)
+        {
+            this.Text = title;
+            this.Size = new Size(300, 150);
+            this.MinimumSize = new Size(300, 150);
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+
+            label = new Label();
+            label.Text = prompt;
+            label.AutoSize = true;
+            label.Location = new Point(10, 10);
+            label.Size = new Size(280, 20);
+            this.Controls.Add(label);
+
+            textBox = new TextBox();
+            textBox.Location = new Point(10, 40);
+            textBox.Size = new Size(280, 20);
+            this.Controls.Add(textBox);
+
+            okButton = new Button();
+            okButton.Text = "OK";
+            okButton.DialogResult = DialogResult.OK;
+            okButton.Location = new Point(120, 70);
+            this.Controls.Add(okButton);
+
+            cancelButton = new Button();
+            cancelButton.Text = "Cancel";
+            cancelButton.DialogResult = DialogResult.Cancel;
+            cancelButton.Location = new Point(200, 70);
+            this.Controls.Add(cancelButton);
+        }
+
+        public string InputText
+        {
+            get { return textBox.Text; }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            textBox.Focus();
+        }
+    }
 
     // Class to represent a conversation message
     public class ConversationMessage
@@ -1426,6 +1540,11 @@ namespace LLMCoder
             ExtractedCode = extractedCode;
             PostPrompt = postPrompt;
         }
+
+        public CodeFile()
+        {
+        }
     }
+
 
 }

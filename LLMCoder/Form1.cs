@@ -52,7 +52,11 @@ namespace LLMCoder
             // Load ApiConfigs from config.json file
             LoadApiConfigsFromConfigFile();
 
+
             InitializeComponent();
+
+            // Call the LoadPresetsFromFile method to load presets from the presets.json file.
+            LoadPresetsFromFile();
 
             // Update the dropdown with available LLM choices
             InitializeSelectedLLMDropdownView();
@@ -336,7 +340,7 @@ namespace LLMCoder
                 TableLayoutPanel codeFileInjectTablePanel = (TableLayoutPanel)((Button)sender).Parent;
 
                 // Remove the table layout panel from the main table layout panel
-                codeFileInjectTabMainTablePanel.Controls.Remove(codeFileInjectTablePanel);
+                selectedCodeFileViewTable.Controls.Remove(codeFileInjectTablePanel);
 
                 // Dispose of the table layout panel
                 codeFileInjectTablePanel.Dispose();
@@ -484,10 +488,10 @@ namespace LLMCoder
 
             };
 
-            // Add codeFileInjectTablePanel as last new row in table codeFileInjectTabMainTablePanel
-            codeFileInjectTabMainTablePanel.RowCount++;
-            codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            codeFileInjectTabMainTablePanel.Controls.Add(codeFileInjectTablePanel, 0, codeFileInjectTabMainTablePanel.RowCount - 1);
+            // Add codeFileInjectTablePanel as last new row in table selectedCodeFileViewTable
+            selectedCodeFileViewTable.RowCount++;
+            selectedCodeFileViewTable.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            selectedCodeFileViewTable.Controls.Add(codeFileInjectTablePanel, 0, selectedCodeFileViewTable.RowCount - 1);
 
         }
 
@@ -854,7 +858,7 @@ namespace LLMCoder
             if (fileInjectCheckBox.Checked)
             {
                 //get all the files added as view component table
-                foreach (Control control in codeFileInjectTabMainTablePanel.Controls)
+                foreach (Control control in selectedCodeFileViewTable.Controls)
                 {
                     if (control is TableLayoutPanel fileInfoTable)
                     {
@@ -912,7 +916,6 @@ namespace LLMCoder
         {
             return control.Controls.OfType<T>().FirstOrDefault(c => c.Name == name);
         }
-
 
         // Log a chat message to the history file
         // New method to log a chat message to the history file
@@ -1136,10 +1139,33 @@ namespace LLMCoder
             tokenCountLabel.Text = $"Token Count : {CountTokens(largeCodeSnippetTextBox.Text)}";
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        // This method loads presets from the presets.json file into the CurrentFileInjectPresets variable.
+        private void LoadPresetsFromFile()
         {
+            // Try to load the presets from the file. If any errors occur, catch the exception and display an error message.
+            try
+            {
+                // Check if the presets.json file exists in the current directory.
+                if (File.Exists("presets.json"))
+                {
+                    // Read the contents of the presets.json file into a string.
+                    string presetsJson = File.ReadAllText("presets.json");
 
+                    // Deserialize the JSON data into a list of FileInjectPreset objects and assign it to the CurrentFileInjectPresets variable.
+                    CurrentFileInjectPresets = JsonConvert.DeserializeObject<List<FileInjectPreset>>(presetsJson);
 
+                    // Update the presetSelectComboBox with the loaded presets
+                    presetSelectComboBox.DataSource = CurrentFileInjectPresets;
+                    presetSelectComboBox.DisplayMember = "Name";
+
+                }
+            }
+            // Catch any exceptions that occur during the loading process.
+            catch (Exception ex)
+            {
+                // Display an error message to the user if an exception occurs.
+                MessageBox.Show($"Error loading presets from file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // New method to update a message in the conversation history
@@ -1200,8 +1226,8 @@ namespace LLMCoder
             richTextBox.ReadOnly = false;
             richTextBox.Multiline = true; // Allow multiple lines
             richTextBox.WordWrap = true; // Wrap text to the next line
-            richTextBox.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            richTextBox.MinimumSize = new Size(richTextBox.Width, 28);
+            richTextBox.Font = new Font("Cascadia Code", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            richTextBox.AutoSize = true;
             richTextBox.TextChanged += (sender, e) =>
             {
                 string msgId = (string)chatMsgHolderTable.Tag;
@@ -1385,7 +1411,22 @@ namespace LLMCoder
             File.WriteAllText("presets.json", presetsJson);
         }
 
+        private void loadSelectedFileInjectPresetButton_Click(object sender, EventArgs e)
+        {
+            // Get the selected preset data from the presetSelectComboBox
+            var selectedPreset = (FileInjectPreset)presetSelectComboBox.SelectedItem;
 
+            // Clear existing code file inject table panels
+            selectedCodeFileViewTable.Controls.Clear();
+
+            //add each file in preset into the view, similar to clicking `addNewCodeFileInjectButton_Click`
+            foreach (var codeFile in selectedPreset.InjectedFilesData)
+            {
+                //...implement code
+            }
+
+
+        }
     }
 
     public class FileInjectPreset
@@ -1396,6 +1437,7 @@ namespace LLMCoder
     }
 
     public record ApiConfig(string Name, string Endpoint, string ApiKey, int MaxContextWindowTokens);
+    
     public class InputDialog : Form
     {
         private Label label;
@@ -1546,5 +1588,97 @@ namespace LLMCoder
         }
     }
 
+
+    //█░░ ▄▀█ █▄█ █▀█ █░█ ▀█▀   █▀ █ ▀█ █▀▀
+    //█▄▄ █▀█ ░█░ █▄█ █▄█ ░█░   ▄█ █ █▄ ██▄
+
+    /// <summary>
+    /// Special class to give Golden Ration nicely
+    /// Theory: human brain symmetrical distances, where each distance is relative to the one before
+    /// </summary>
+    public static class GR
+    {
+        /// <summary>
+        /// used for dynamic design layout
+        /// </summary>
+        public const double GoldenRatio = 1.61803;
+        public const double ContentWidth = 1080; //page content 
+
+        public static double W1080 => 1080;
+        public static string W1080px => $"{W1080}px";
+
+        public static double W824 => GR.W667 + GR.W157;
+        public static string W824px => $"{W824}px";
+
+        public static double W764 => GR.W667 + GR.W97;
+        public static string W764px => $"{W764}px";
+
+        public static double W667 => Math.Round(W1080 / GoldenRatio, 1);
+        public static string W667px => $"{W667}px";
+
+        public static double W546 => W509 + W37;
+        public static string W546px => $"{W546}px";
+
+        public static double W509 => W412 + W97;
+        public static string W509px => $"{W509}px";
+
+        public static double W412 => Math.Round(W667 / GoldenRatio, 1);
+        public static string W412px => $"{W412}px";
+
+        public static double W352 => W255 + W97;
+        public static string W352px => $"{W352}px";
+
+        public static double W291 => W157 + W134;
+        public static string W291px => $"{W291}px";
+
+        public static double W255 => Math.Round(W412 / GoldenRatio, 1);
+        public static string W255px => $"{W255}px";
+
+        public static double W231 => GR.W194 + GR.W37;
+        public static string W231px => $"{W231}px";
+
+        public static double W194 => GR.W157 + GR.W37;
+        public static string W194px => $"{W194}px";
+
+        public static double W157 => Math.Round(W255 / GoldenRatio, 1);
+        public static string W157px => $"{W157}px";
+
+        public static double W134 => GR.W97 + GR.W37;
+        public static string W134px => $"{W134}px";
+
+        public static double W97 => Math.Round(W157 / GoldenRatio, 1);
+        public static string W97px => $"{W97}px";
+
+        public static double W60 => Math.Round(W97 / GoldenRatio, 1);
+        public static string W60px => $"{W60}px";
+
+        public static double W37 => Math.Round(W60 / GoldenRatio, 1);
+        public static string W37px => $"{W37}px";
+
+        public static double W22 => Math.Round(W37 / GoldenRatio, 1);
+        public static string W22px => $"{W22}px";
+
+        public static double W14 => Math.Round(W22 / GoldenRatio, 1);
+        public static string W14px => $"{W14}px";
+
+        public static double W8 => Math.Round(W14 / GoldenRatio, 1);
+        public static string W8px => $"{W8}px";
+
+        public static double W5 => Math.Round(W8 / GoldenRatio, 1);
+        public static string W5px => $"{W5}px";
+
+        public static double W3 => Math.Round(W5 / GoldenRatio, 1);
+        public static string W3px => $"{W3}px";
+
+        public static double W2 => Math.Round(W3 / GoldenRatio, 1);
+        public static string W2px => $"{W2}px";
+
+        public static double W1 => Math.Round(W2 / GoldenRatio, 1);
+        public static string W1px => $"{W1}px";
+
+
+
+
+    }
 
 }

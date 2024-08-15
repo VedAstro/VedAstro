@@ -1034,7 +1034,10 @@ namespace LLMCoder
             try
             {
                 //add in default unselected state
-                CurrentFileInjectPresets = new List<FileInjectPreset>() { new() { Name = "Select...", InjectedFilesData = new List<CodeFile>() } };
+                CurrentFileInjectPresets = new List<FileInjectPreset>();
+
+                // Add a default "Select..." preset to the list
+                CurrentFileInjectPresets.Add(new FileInjectPreset { Name = "Select...", InjectedFilesData = new List<CodeFile>() });
 
                 // Check if the presets.json file exists in the current directory.
                 if (File.Exists("presets.json"))
@@ -1049,7 +1052,6 @@ namespace LLMCoder
 
                 // Update the presetSelectComboBox with the loaded presets
                 presetSelectComboBox.DataSource = CurrentFileInjectPresets;
-
             }
             // Catch any exceptions that occur during the loading process.
             catch (Exception ex)
@@ -1219,9 +1221,13 @@ namespace LLMCoder
         //saves all preset from current runtime to local file, overwrites file
         private void SavePresetsToFile()
         {
+            // Create a new list of FileInjectPreset objects that excludes the default "Select..." preset
+            var presetsToSave = CurrentFileInjectPresets.Where(p => p.Name != "Select...").ToList();
+
             // Save the updated preset list to a file (optional)
-            string presetsJson = JsonConvert.SerializeObject(CurrentFileInjectPresets);
+            string presetsJson = JsonConvert.SerializeObject(presetsToSave);
             File.WriteAllText("presets.json", presetsJson);
+
         }
 
         private void LoadApiConfigsFromConfigFile()

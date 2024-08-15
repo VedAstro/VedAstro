@@ -31,6 +31,22 @@ namespace LLMCoder
             Label pastPromptsLabel;
             Label modalSelectorLabel;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            codeFileInjectTablePanel = new TableLayoutPanel();
+            postCodePromptTextBox = new TextBox();
+            postCodePromptLabel = new Label();
+            codeFileInjectTextBox = new RichTextBox();
+            codeFileInjectLabel = new Label();
+            preCodePromptTextBox = new TextBox();
+            preCodePromptLabel = new Label();
+            lineNumRangeInputTable = new TableLayoutPanel();
+            fetchCodeStatusMessageLabel = new Label();
+            endLineNumberTextBox = new TextBox();
+            endLabel = new Label();
+            startLineNumberTextBox = new TextBox();
+            startLabel = new Label();
+            lineNumberRangeLabel = new Label();
+            codeFileInjectPathTextBox = new TextBox();
+            fileInjectPathLabel = new Label();
             totalByteUsageMeterTextLabel = new Label();
             splitContainer1 = new SplitContainer();
             mainTabControl = new TabControl();
@@ -67,11 +83,11 @@ namespace LLMCoder
             injectAssitantPretextTextBox = new TextBox();
             codeFilePage = new TabPage();
             codeFileInjectTabMainTablePanel = new TableLayoutPanel();
+            newFileInjectHolderTable = new TableLayoutPanel();
+            addNewCodeFileInjectButton = new Button();
             selectedCodeFileViewTable = new TableLayoutPanel();
             codeFileInjectHeaderTable = new TableLayoutPanel();
-            loadSelectedFileInjectPresetButton = new Button();
             presetLabel = new Label();
-            addNewCodeFileInjectButton = new Button();
             presetSelectComboBox = new ComboBox();
             saveCodeFileInjectPresetButton = new Button();
             settingsPage = new TabPage();
@@ -92,6 +108,8 @@ namespace LLMCoder
             tabPage4 = new TabPage();
             pastPromptsLabel = new Label();
             modalSelectorLabel = new Label();
+            codeFileInjectTablePanel.SuspendLayout();
+            lineNumRangeInputTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -107,6 +125,7 @@ namespace LLMCoder
             flowLayoutPanel1.SuspendLayout();
             codeFilePage.SuspendLayout();
             codeFileInjectTabMainTablePanel.SuspendLayout();
+            newFileInjectHolderTable.SuspendLayout();
             codeFileInjectHeaderTable.SuspendLayout();
             settingsPage.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
@@ -138,6 +157,205 @@ namespace LLMCoder
             modalSelectorLabel.Size = new Size(74, 22);
             modalSelectorLabel.TabIndex = 3;
             modalSelectorLabel.Text = "✨ Modal";
+            // 
+            // codeFileInjectTablePanel
+            // 
+            codeFileInjectTablePanel.AutoSize = true;
+            codeFileInjectTablePanel.BackColor = Color.Black;
+            codeFileInjectTablePanel.ColumnCount = 3;
+            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle());
+            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle());
+            codeFileInjectTablePanel.Controls.Add(postCodePromptTextBox, 1, 4);
+            codeFileInjectTablePanel.Controls.Add(postCodePromptLabel, 0, 4);
+            codeFileInjectTablePanel.Controls.Add(codeFileInjectTextBox, 1, 3);
+            codeFileInjectTablePanel.Controls.Add(codeFileInjectLabel, 0, 3);
+            codeFileInjectTablePanel.Controls.Add(preCodePromptTextBox, 1, 2);
+            codeFileInjectTablePanel.Controls.Add(preCodePromptLabel, 0, 2);
+            codeFileInjectTablePanel.Controls.Add(lineNumRangeInputTable, 1, 1);
+            codeFileInjectTablePanel.Controls.Add(lineNumberRangeLabel, 0, 1);
+            codeFileInjectTablePanel.Controls.Add(codeFileInjectPathTextBox, 1, 0);
+            codeFileInjectTablePanel.Controls.Add(fileInjectPathLabel, 0, 0);
+            codeFileInjectTablePanel.Dock = DockStyle.Fill;
+            codeFileInjectTablePanel.Location = new Point(3, 3);
+            codeFileInjectTablePanel.Name = "codeFileInjectTablePanel";
+            codeFileInjectTablePanel.RowCount = 6;
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+            codeFileInjectTablePanel.Size = new Size(749, 224);
+            codeFileInjectTablePanel.TabIndex = 1;
+            // 
+            // postCodePromptTextBox
+            // 
+            postCodePromptTextBox.Dock = DockStyle.Fill;
+            postCodePromptTextBox.Location = new Point(83, 198);
+            postCodePromptTextBox.Name = "postCodePromptTextBox";
+            postCodePromptTextBox.Size = new Size(663, 23);
+            postCodePromptTextBox.TabIndex = 12;
+            // 
+            // postCodePromptLabel
+            // 
+            postCodePromptLabel.AutoSize = true;
+            postCodePromptLabel.ForeColor = Color.Azure;
+            postCodePromptLabel.Location = new Point(3, 202);
+            postCodePromptLabel.Margin = new Padding(3, 7, 3, 0);
+            postCodePromptLabel.Name = "postCodePromptLabel";
+            postCodePromptLabel.Size = new Size(73, 15);
+            postCodePromptLabel.TabIndex = 11;
+            postCodePromptLabel.Text = "Post Prompt";
+            // 
+            // codeFileInjectTextBox
+            // 
+            codeFileInjectTextBox.BackColor = SystemColors.ActiveCaptionText;
+            codeFileInjectTextBox.Dock = DockStyle.Fill;
+            codeFileInjectTextBox.Font = new Font("Cascadia Code", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            codeFileInjectTextBox.ForeColor = Color.LightGreen;
+            codeFileInjectTextBox.Location = new Point(83, 96);
+            codeFileInjectTextBox.MinimumSize = new Size(100, 28);
+            codeFileInjectTextBox.Name = "codeFileInjectTextBox";
+            codeFileInjectTextBox.Size = new Size(663, 96);
+            codeFileInjectTextBox.TabIndex = 13;
+            codeFileInjectTextBox.Text = "";
+            // 
+            // codeFileInjectLabel
+            // 
+            codeFileInjectLabel.AutoSize = true;
+            codeFileInjectLabel.ForeColor = Color.Azure;
+            codeFileInjectLabel.Location = new Point(3, 100);
+            codeFileInjectLabel.Margin = new Padding(3, 7, 3, 0);
+            codeFileInjectLabel.Name = "codeFileInjectLabel";
+            codeFileInjectLabel.Size = new Size(56, 15);
+            codeFileInjectLabel.TabIndex = 9;
+            codeFileInjectLabel.Text = "Code File";
+            // 
+            // preCodePromptTextBox
+            // 
+            preCodePromptTextBox.Dock = DockStyle.Fill;
+            preCodePromptTextBox.Location = new Point(83, 67);
+            preCodePromptTextBox.Name = "preCodePromptTextBox";
+            preCodePromptTextBox.Size = new Size(663, 23);
+            preCodePromptTextBox.TabIndex = 8;
+            // 
+            // preCodePromptLabel
+            // 
+            preCodePromptLabel.AutoSize = true;
+            preCodePromptLabel.ForeColor = Color.Azure;
+            preCodePromptLabel.Location = new Point(3, 71);
+            preCodePromptLabel.Margin = new Padding(3, 7, 3, 0);
+            preCodePromptLabel.Name = "preCodePromptLabel";
+            preCodePromptLabel.Size = new Size(67, 15);
+            preCodePromptLabel.TabIndex = 7;
+            preCodePromptLabel.Text = "Pre Prompt";
+            // 
+            // lineNumRangeInputTable
+            // 
+            lineNumRangeInputTable.AutoSize = true;
+            lineNumRangeInputTable.ColumnCount = 5;
+            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+            lineNumRangeInputTable.Controls.Add(fetchCodeStatusMessageLabel, 5, 0);
+            lineNumRangeInputTable.Controls.Add(endLineNumberTextBox, 3, 0);
+            lineNumRangeInputTable.Controls.Add(endLabel, 2, 0);
+            lineNumRangeInputTable.Controls.Add(startLineNumberTextBox, 1, 0);
+            lineNumRangeInputTable.Controls.Add(startLabel, 0, 0);
+            lineNumRangeInputTable.Dock = DockStyle.Fill;
+            lineNumRangeInputTable.Location = new Point(83, 32);
+            lineNumRangeInputTable.Name = "lineNumRangeInputTable";
+            lineNumRangeInputTable.RowCount = 1;
+            lineNumRangeInputTable.RowStyles.Add(new RowStyle());
+            lineNumRangeInputTable.Size = new Size(663, 29);
+            lineNumRangeInputTable.TabIndex = 6;
+            // 
+            // fetchCodeStatusMessageLabel
+            // 
+            fetchCodeStatusMessageLabel.AutoSize = true;
+            fetchCodeStatusMessageLabel.ForeColor = Color.Azure;
+            fetchCodeStatusMessageLabel.Location = new Point(265, 7);
+            fetchCodeStatusMessageLabel.Margin = new Padding(3, 7, 3, 0);
+            fetchCodeStatusMessageLabel.Name = "fetchCodeStatusMessageLabel";
+            fetchCodeStatusMessageLabel.Size = new Size(98, 15);
+            fetchCodeStatusMessageLabel.TabIndex = 12;
+            fetchCodeStatusMessageLabel.Text = "Ready Captain \U0001fae1";
+            // 
+            // endLineNumberTextBox
+            // 
+            endLineNumberTextBox.Dock = DockStyle.Fill;
+            endLineNumberTextBox.Location = new Point(169, 3);
+            endLineNumberTextBox.MaximumSize = new Size(90, 0);
+            endLineNumberTextBox.Name = "endLineNumberTextBox";
+            endLineNumberTextBox.Size = new Size(90, 23);
+            endLineNumberTextBox.TabIndex = 8;
+            endLineNumberTextBox.Text = "0";
+            // 
+            // endLabel
+            // 
+            endLabel.AutoSize = true;
+            endLabel.ForeColor = Color.Azure;
+            endLabel.Location = new Point(136, 7);
+            endLabel.Margin = new Padding(3, 7, 3, 0);
+            endLabel.Name = "endLabel";
+            endLabel.Size = new Size(27, 15);
+            endLabel.TabIndex = 7;
+            endLabel.Text = "End";
+            // 
+            // startLineNumberTextBox
+            // 
+            startLineNumberTextBox.Dock = DockStyle.Fill;
+            startLineNumberTextBox.Location = new Point(40, 3);
+            startLineNumberTextBox.MaximumSize = new Size(90, 0);
+            startLineNumberTextBox.Name = "startLineNumberTextBox";
+            startLineNumberTextBox.Size = new Size(90, 23);
+            startLineNumberTextBox.TabIndex = 6;
+            startLineNumberTextBox.Text = "1";
+            // 
+            // startLabel
+            // 
+            startLabel.AutoSize = true;
+            startLabel.ForeColor = Color.Azure;
+            startLabel.Location = new Point(3, 7);
+            startLabel.Margin = new Padding(3, 7, 3, 0);
+            startLabel.Name = "startLabel";
+            startLabel.Size = new Size(31, 15);
+            startLabel.TabIndex = 5;
+            startLabel.Text = "Start";
+            // 
+            // lineNumberRangeLabel
+            // 
+            lineNumberRangeLabel.AutoSize = true;
+            lineNumberRangeLabel.ForeColor = Color.Azure;
+            lineNumberRangeLabel.Location = new Point(3, 36);
+            lineNumberRangeLabel.Margin = new Padding(3, 7, 3, 0);
+            lineNumberRangeLabel.Name = "lineNumberRangeLabel";
+            lineNumberRangeLabel.Size = new Size(74, 15);
+            lineNumberRangeLabel.TabIndex = 4;
+            lineNumberRangeLabel.Text = "Select Range";
+            // 
+            // codeFileInjectPathTextBox
+            // 
+            codeFileInjectPathTextBox.Dock = DockStyle.Fill;
+            codeFileInjectPathTextBox.Location = new Point(83, 3);
+            codeFileInjectPathTextBox.Name = "codeFileInjectPathTextBox";
+            codeFileInjectPathTextBox.Size = new Size(663, 23);
+            codeFileInjectPathTextBox.TabIndex = 3;
+            codeFileInjectPathTextBox.TextChanged += codeFileInjectPathTextBox_TextChanged;
+            // 
+            // fileInjectPathLabel
+            // 
+            fileInjectPathLabel.AutoSize = true;
+            fileInjectPathLabel.ForeColor = Color.Azure;
+            fileInjectPathLabel.Location = new Point(3, 7);
+            fileInjectPathLabel.Margin = new Padding(3, 7, 3, 0);
+            fileInjectPathLabel.Name = "fileInjectPathLabel";
+            fileInjectPathLabel.Size = new Size(52, 15);
+            fileInjectPathLabel.TabIndex = 1;
+            fileInjectPathLabel.Text = "File Path";
             // 
             // totalByteUsageMeterTextLabel
             // 
@@ -648,17 +866,50 @@ namespace LLMCoder
             codeFileInjectTabMainTablePanel.BackColor = Color.DarkGray;
             codeFileInjectTabMainTablePanel.ColumnCount = 1;
             codeFileInjectTabMainTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            codeFileInjectTabMainTablePanel.Controls.Add(newFileInjectHolderTable, 0, 2);
             codeFileInjectTabMainTablePanel.Controls.Add(selectedCodeFileViewTable, 0, 1);
             codeFileInjectTabMainTablePanel.Controls.Add(codeFileInjectHeaderTable, 0, 0);
             codeFileInjectTabMainTablePanel.Dock = DockStyle.Fill;
             codeFileInjectTabMainTablePanel.Location = new Point(0, 0);
             codeFileInjectTabMainTablePanel.Name = "codeFileInjectTabMainTablePanel";
             codeFileInjectTabMainTablePanel.Padding = new Padding(0, 0, 8, 0);
-            codeFileInjectTabMainTablePanel.RowCount = 2;
+            codeFileInjectTabMainTablePanel.RowCount = 3;
             codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle());
             codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle());
             codeFileInjectTabMainTablePanel.Size = new Size(852, 663);
             codeFileInjectTabMainTablePanel.TabIndex = 1;
+            // 
+            // newFileInjectHolderTable
+            // 
+            newFileInjectHolderTable.AutoSize = true;
+            newFileInjectHolderTable.ColumnCount = 2;
+            newFileInjectHolderTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            newFileInjectHolderTable.ColumnStyles.Add(new ColumnStyle());
+            newFileInjectHolderTable.Controls.Add(addNewCodeFileInjectButton, 1, 0);
+            newFileInjectHolderTable.Controls.Add(codeFileInjectTablePanel, 0, 0);
+            newFileInjectHolderTable.Dock = DockStyle.Fill;
+            newFileInjectHolderTable.Location = new Point(3, 430);
+            newFileInjectHolderTable.Name = "newFileInjectHolderTable";
+            newFileInjectHolderTable.RowCount = 1;
+            newFileInjectHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            newFileInjectHolderTable.Size = new Size(838, 230);
+            newFileInjectHolderTable.TabIndex = 6;
+            // 
+            // addNewCodeFileInjectButton
+            // 
+            addNewCodeFileInjectButton.AutoSize = true;
+            addNewCodeFileInjectButton.BackColor = Color.YellowGreen;
+            addNewCodeFileInjectButton.Dock = DockStyle.Fill;
+            addNewCodeFileInjectButton.FlatStyle = FlatStyle.Flat;
+            addNewCodeFileInjectButton.ForeColor = SystemColors.ButtonFace;
+            addNewCodeFileInjectButton.Location = new Point(758, 3);
+            addNewCodeFileInjectButton.Name = "addNewCodeFileInjectButton";
+            addNewCodeFileInjectButton.Size = new Size(77, 224);
+            addNewCodeFileInjectButton.TabIndex = 1;
+            addNewCodeFileInjectButton.Text = "➕ Add File";
+            addNewCodeFileInjectButton.UseVisualStyleBackColor = false;
+            addNewCodeFileInjectButton.Click += addNewCodeFileInjectButton_Click;
             // 
             // selectedCodeFileViewTable
             // 
@@ -674,7 +925,7 @@ namespace LLMCoder
             selectedCodeFileViewTable.RowCount = 1;
             selectedCodeFileViewTable.RowStyles.Add(new RowStyle());
             selectedCodeFileViewTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            selectedCodeFileViewTable.Size = new Size(838, 622);
+            selectedCodeFileViewTable.Size = new Size(838, 386);
             selectedCodeFileViewTable.TabIndex = 4;
             // 
             // codeFileInjectHeaderTable
@@ -687,9 +938,7 @@ namespace LLMCoder
             codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
             codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
             codeFileInjectHeaderTable.ColumnStyles.Add(new ColumnStyle());
-            codeFileInjectHeaderTable.Controls.Add(loadSelectedFileInjectPresetButton, 4, 0);
             codeFileInjectHeaderTable.Controls.Add(presetLabel, 1, 0);
-            codeFileInjectHeaderTable.Controls.Add(addNewCodeFileInjectButton, 0, 0);
             codeFileInjectHeaderTable.Controls.Add(presetSelectComboBox, 2, 0);
             codeFileInjectHeaderTable.Controls.Add(saveCodeFileInjectPresetButton, 3, 0);
             codeFileInjectHeaderTable.Dock = DockStyle.Fill;
@@ -700,67 +949,43 @@ namespace LLMCoder
             codeFileInjectHeaderTable.Size = new Size(838, 29);
             codeFileInjectHeaderTable.TabIndex = 2;
             // 
-            // loadSelectedFileInjectPresetButton
-            // 
-            loadSelectedFileInjectPresetButton.BackColor = SystemColors.MenuHighlight;
-            loadSelectedFileInjectPresetButton.Cursor = Cursors.Hand;
-            loadSelectedFileInjectPresetButton.FlatStyle = FlatStyle.Flat;
-            loadSelectedFileInjectPresetButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            loadSelectedFileInjectPresetButton.ForeColor = Color.White;
-            loadSelectedFileInjectPresetButton.Location = new Point(376, 3);
-            loadSelectedFileInjectPresetButton.Margin = new Padding(5, 3, 0, 0);
-            loadSelectedFileInjectPresetButton.Name = "loadSelectedFileInjectPresetButton";
-            loadSelectedFileInjectPresetButton.Size = new Size(75, 23);
-            loadSelectedFileInjectPresetButton.TabIndex = 6;
-            loadSelectedFileInjectPresetButton.Text = "✈️ Load";
-            loadSelectedFileInjectPresetButton.UseVisualStyleBackColor = false;
-            loadSelectedFileInjectPresetButton.Click += loadSelectedFileInjectPresetButton_Click;
-            // 
             // presetLabel
             // 
             presetLabel.AutoSize = true;
             presetLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             presetLabel.ForeColor = Color.White;
-            presetLabel.Location = new Point(91, 5);
+            presetLabel.Location = new Point(10, 5);
             presetLabel.Margin = new Padding(10, 5, 3, 0);
             presetLabel.Name = "presetLabel";
             presetLabel.Size = new Size(75, 17);
             presetLabel.TabIndex = 4;
             presetLabel.Text = "❄️ Presets";
             // 
-            // addNewCodeFileInjectButton
-            // 
-            addNewCodeFileInjectButton.BackColor = Color.YellowGreen;
-            addNewCodeFileInjectButton.ForeColor = SystemColors.ButtonFace;
-            addNewCodeFileInjectButton.Location = new Point(3, 3);
-            addNewCodeFileInjectButton.Name = "addNewCodeFileInjectButton";
-            addNewCodeFileInjectButton.Size = new Size(75, 23);
-            addNewCodeFileInjectButton.TabIndex = 1;
-            addNewCodeFileInjectButton.Text = "➕ Add File";
-            addNewCodeFileInjectButton.UseVisualStyleBackColor = false;
-            addNewCodeFileInjectButton.Click += addNewCodeFileInjectButton_Click;
-            // 
             // presetSelectComboBox
             // 
+            presetSelectComboBox.DisplayMember = "Name";
             presetSelectComboBox.FormattingEnabled = true;
-            presetSelectComboBox.Location = new Point(172, 3);
+            presetSelectComboBox.Location = new Point(91, 3);
             presetSelectComboBox.Name = "presetSelectComboBox";
             presetSelectComboBox.Size = new Size(121, 23);
             presetSelectComboBox.TabIndex = 2;
+            presetSelectComboBox.SelectedIndexChanged += presetSelectComboBox_SelectedIndexChanged;
             // 
             // saveCodeFileInjectPresetButton
             // 
             saveCodeFileInjectPresetButton.BackColor = Color.LimeGreen;
+            saveCodeFileInjectPresetButton.Cursor = Cursors.Hand;
             saveCodeFileInjectPresetButton.FlatStyle = FlatStyle.Flat;
             saveCodeFileInjectPresetButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             saveCodeFileInjectPresetButton.ForeColor = Color.White;
-            saveCodeFileInjectPresetButton.Location = new Point(296, 3);
+            saveCodeFileInjectPresetButton.Location = new Point(215, 3);
             saveCodeFileInjectPresetButton.Margin = new Padding(0, 3, 0, 0);
             saveCodeFileInjectPresetButton.Name = "saveCodeFileInjectPresetButton";
             saveCodeFileInjectPresetButton.Size = new Size(75, 23);
             saveCodeFileInjectPresetButton.TabIndex = 5;
             saveCodeFileInjectPresetButton.Text = "💾 Save";
             saveCodeFileInjectPresetButton.UseVisualStyleBackColor = false;
+            saveCodeFileInjectPresetButton.Visible = false;
             saveCodeFileInjectPresetButton.Click += saveCodeFileInjectPresetButton_Click;
             // 
             // settingsPage
@@ -975,6 +1200,10 @@ namespace LLMCoder
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "LLMCodes";
+            codeFileInjectTablePanel.ResumeLayout(false);
+            codeFileInjectTablePanel.PerformLayout();
+            lineNumRangeInputTable.ResumeLayout(false);
+            lineNumRangeInputTable.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
@@ -999,6 +1228,8 @@ namespace LLMCoder
             codeFilePage.PerformLayout();
             codeFileInjectTabMainTablePanel.ResumeLayout(false);
             codeFileInjectTabMainTablePanel.PerformLayout();
+            newFileInjectHolderTable.ResumeLayout(false);
+            newFileInjectHolderTable.PerformLayout();
             codeFileInjectHeaderTable.ResumeLayout(false);
             codeFileInjectHeaderTable.PerformLayout();
             settingsPage.ResumeLayout(false);
@@ -1071,7 +1302,24 @@ namespace LLMCoder
         private Label presetLabel;
         private ComboBox presetSelectComboBox;
         private Button saveCodeFileInjectPresetButton;
-        private Button loadSelectedFileInjectPresetButton;
         private TableLayoutPanel selectedCodeFileViewTable;
+        private TableLayoutPanel newFileInjectHolderTable;
+        private TableLayoutPanel codeFileInjectTablePanel;
+        private TextBox codeFileInjectPathTextBox;
+        private Label fileInjectPathLabel;
+        private TableLayoutPanel lineNumRangeInputTable;
+        private TextBox startLineNumberTextBox = new TextBox();
+        private Label startLabel;
+        private Label endLabel;
+        private TextBox endLineNumberTextBox;
+        private Label lineNumberRangeLabel;
+        private Label fetchCodeStatusMessageLabel;
+        private Label preCodePromptLabel;
+        private TextBox preCodePromptTextBox;
+        private Label codeFileInjectLabel;
+        private RichTextBox codeFileInjectTextBox;
+        private Label postCodePromptLabel;
+        private TextBox postCodePromptTextBox;
+
     }
 }

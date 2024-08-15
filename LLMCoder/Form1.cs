@@ -151,7 +151,7 @@ namespace LLMCoder
                 codeFileInjectTablePanel.Location = new Point(0, 0);
                 codeFileInjectTablePanel.Name = "codeFileInjectTablePanel";
                 codeFileInjectTablePanel.RowCount = 6;
-                codeFileInjectTablePanel.RowStyles.Add(new RowStyle(){ SizeType = SizeType.AutoSize });
+                codeFileInjectTablePanel.RowStyles.Add(new RowStyle() { SizeType = SizeType.AutoSize });
                 codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
                 codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
                 codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
@@ -345,6 +345,9 @@ namespace LLMCoder
 
                     // Update Token Stats
                     UpdateGlobalTokenStats();
+
+                    //make save button visible since changes made
+                    saveCodeFileInjectPresetButton.Visible = true;
                 };
 
                 fetchLatestInjectedCodeButton.BackColor = Color.Fuchsia;
@@ -398,6 +401,8 @@ namespace LLMCoder
                     // update global selected code file data list
                     UpdateCurrentCodeFilesGlobalList(updatedCodeFile);
 
+                    //make save button visible since changes made
+                    saveCodeFileInjectPresetButton.Visible = true;
                 };
 
                 expandCodeFileButton.BackColor = SystemColors.MenuHighlight;
@@ -551,7 +556,6 @@ namespace LLMCoder
 
             return (int)tokenCount;
         }
-
 
         private static void UpdateTokenLimitProgressBarColor(CustomProgressBar tokenLimitProgressBar)
         {
@@ -1212,6 +1216,7 @@ namespace LLMCoder
             return string.Empty;
         }
 
+        //saves all preset from current runtime to local file, overwrites file
         private void SavePresetsToFile()
         {
             // Save the updated preset list to a file (optional)
@@ -1364,8 +1369,6 @@ namespace LLMCoder
             postCodePromptTextBox.Text = ""; // Post-prompt text
             fetchCodeStatusMessageLabel.Text = ""; //stats
 
-            //reset preset dropdown to select since technically new
-            presetSelectComboBox.SelectedIndex = 0;
         }
 
         private void llmSelector_SelectedIndexChanged(object sender, EventArgs e)
@@ -1403,30 +1406,51 @@ namespace LLMCoder
 
         private void saveCodeFileInjectPresetButton_Click(object sender, EventArgs e)
         {
-            // Open a dialog window to get the preset name from the user
-            string presetName = GetPresetNameFromUser();
-
-            //if not selected don't continue
-            if (string.IsNullOrEmpty(presetName) || presetName == "Select...") return;
-
-            // Create a new FileInjectPreset object
-            FileInjectPreset newPresetData = new FileInjectPreset
+            //if already selected existing preset, then overwrite that one
+            if (presetSelectComboBox.SelectedIndex == 0) //first in list is always default "Select..."
             {
-                Name = presetName,
-                InjectedFilesData = this.CurrentCodeFiles
-            };
+                // Open a dialog window to get the preset name from the user
+                string presetName = GetPresetNameFromUser();
 
-            // Add the preset to the current global preset list
-            CurrentFileInjectPresets.Add(newPresetData);
+                //if not filled by user don't continue
+                if (string.IsNullOrEmpty(presetName)) return;
 
-            // Save the updated preset list to a file (optional)
-            SavePresetsToFile();
+                // Create a new FileInjectPreset object
+                FileInjectPreset newPresetData = new FileInjectPreset
+                {
+                    Name = presetName,
+                    InjectedFilesData = this.CurrentCodeFiles
+                };
 
-            // Display a success message to the user
-            MessageBox.Show("Preset saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Add the preset to the current global preset list
+                CurrentFileInjectPresets.Add(newPresetData);
 
-            //update dropdown selection to show as though now the newly saved is selected
-            presetSelectComboBox.SelectedItem = newPresetData;
+                // Save the updated preset list to a file (optional)
+                SavePresetsToFile();
+
+                // Display a success message to the user
+                MessageBox.Show("Preset saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                //update dropdown selection to show as though now the newly saved is selected
+                presetSelectComboBox.SelectedItem = newPresetData;
+            }
+            else //overwrite existing preset
+            {
+                // Get the selected preset data from the presetSelectComboBox
+                FileInjectPreset selectedPreset = (FileInjectPreset)presetSelectComboBox.SelectedItem;
+
+                // Update the preset's InjectedFilesData
+                selectedPreset.InjectedFilesData = this.CurrentCodeFiles;
+
+                // Save the updated preset list to a file (optional)
+                SavePresetsToFile();
+
+                // Display a success message to the user
+                MessageBox.Show("Preset updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            //make save button invisible since saved
+            saveCodeFileInjectPresetButton.Visible = false;
         }
 
         private void codeFileInjectPathTextBox_TextChanged(object sender, EventArgs e)
@@ -1498,6 +1522,13 @@ namespace LLMCoder
             foreach (var codeFile in selectedPreset.InjectedFilesData)
             {
                 AddNewFileInjectToVisibleList(codeFile);
+
+                //add to global data list
+                UpdateCurrentCodeFilesGlobalList(codeFile);
+
+                //update global token stats (last to get data)
+                UpdateGlobalTokenStats();
+
             }
 
             //update main counters of KB and Tokens

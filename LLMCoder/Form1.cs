@@ -83,7 +83,7 @@ namespace LLMCoder
 
         }
 
-        private void InitializeCodeFileInjectTablePanel(CodeFile codeFile = null)
+        private void AddNewFileInjectToVisibleList(CodeFile codeFile = null)
         {
             // Declare and initialize variable types
             TableLayoutPanel codeFileInjectTablePanel = new TableLayoutPanel();
@@ -106,308 +106,15 @@ namespace LLMCoder
             Button fetchLatestInjectedCodeButton = new Button();
             Button expandCodeFileButton = new Button();
 
-            // Initialize codeFileInjectTablePanel
-            codeFileInjectTablePanel.AutoSize = true;
-            codeFileInjectTablePanel.ColumnCount = 3;
-            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle());
-            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle());
-            codeFileInjectTablePanel.Controls.Add(fetchLatestInjectedCodeButton, 2, 1);
-            codeFileInjectTablePanel.Controls.Add(deleteCodeInjectButton, 2, 0);
-            codeFileInjectTablePanel.Controls.Add(postCodePromptTextBox, 1, 4);
-            codeFileInjectTablePanel.Controls.Add(postCodePromptLabel, 0, 4);
-            codeFileInjectTablePanel.Controls.Add(codeFileInjectTextBox, 1, 3);
-            codeFileInjectTablePanel.Controls.Add(codeFileInjectLabel, 0, 3);
-            codeFileInjectTablePanel.Controls.Add(preCodePromptTextBox, 1, 2);
-            codeFileInjectTablePanel.Controls.Add(preCodePromptLabel, 0, 2);
-            codeFileInjectTablePanel.Controls.Add(lineNumRangeInputTable, 1, 1);
-            codeFileInjectTablePanel.Controls.Add(lineNumberRangeLabel, 0, 1);
-            codeFileInjectTablePanel.Controls.Add(codeFileInjectPathTextBox, 1, 0);
-            codeFileInjectTablePanel.Controls.Add(fileInjectPathLabel, 0, 0);
-            codeFileInjectTablePanel.Controls.Add(expandCodeFileButton, 2, 3);
-            codeFileInjectTablePanel.Dock = DockStyle.Fill;
-            codeFileInjectTablePanel.Location = new Point(0, 0);
-            codeFileInjectTablePanel.Name = "codeFileInjectTablePanel";
-            codeFileInjectTablePanel.RowCount = 6;
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
-            codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
-            codeFileInjectTablePanel.TabIndex = 1;
-            codeFileInjectTablePanel.BackColor = Color.Black;
-
-            // Initialize lineNumRangeInputTable
-            lineNumRangeInputTable.AutoSize = true;
-            lineNumRangeInputTable.ColumnCount = 5;
-            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
-            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
-            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
-            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
-            lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
-            lineNumRangeInputTable.Controls.Add(fetchCodeStatusMessageLabel, 5, 0);
-            lineNumRangeInputTable.Controls.Add(endLineNumberTextBox, 3, 0);
-            lineNumRangeInputTable.Controls.Add(endLabel, 2, 0);
-            lineNumRangeInputTable.Controls.Add(startLineNumberTextBox, 1, 0);
-            lineNumRangeInputTable.Controls.Add(startLabel, 0, 0);
-            lineNumRangeInputTable.Dock = DockStyle.Fill;
-            lineNumRangeInputTable.Location = new Point(96, 32);
-            lineNumRangeInputTable.Name = "lineNumRangeInputTable";
-            lineNumRangeInputTable.RowCount = 1;
-            lineNumRangeInputTable.RowStyles.Add(new RowStyle());
-            lineNumRangeInputTable.Size = new Size(672, 29);
-            lineNumRangeInputTable.TabIndex = 6;
-
-            // Initialize other controls
-            fileInjectPathLabel.AutoSize = true;
-            fileInjectPathLabel.Location = new Point(3, 7);
-            fileInjectPathLabel.Margin = new Padding(3, 7, 3, 0);
-            fileInjectPathLabel.Name = "fileInjectPathLabel";
-            fileInjectPathLabel.Size = new Size(52, 15);
-            fileInjectPathLabel.TabIndex = 1;
-            fileInjectPathLabel.Text = "File Path";
-            fileInjectPathLabel.ForeColor = Color.Azure;
-
-            codeFileInjectPathTextBox.Dock = DockStyle.Fill;
-            codeFileInjectPathTextBox.Location = new Point(96, 3);
-            codeFileInjectPathTextBox.Name = "codeFileInjectPathTextBox";
-            codeFileInjectPathTextBox.Size = new Size(672, 23);
-            codeFileInjectPathTextBox.TabIndex = 3;
-
-            lineNumberRangeLabel.AutoSize = true;
-            lineNumberRangeLabel.Location = new Point(3, 36);
-            lineNumberRangeLabel.Margin = new Padding(3, 7, 3, 0);
-            lineNumberRangeLabel.Name = "lineNumberRangeLabel";
-            lineNumberRangeLabel.Size = new Size(87, 15);
-            lineNumberRangeLabel.TabIndex = 4;
-            lineNumberRangeLabel.Text = "Select Range";
-            lineNumberRangeLabel.ForeColor = Color.Azure;
-
-            startLabel.AutoSize = true;
-            startLabel.Location = new Point(3, 7);
-            startLabel.Margin = new Padding(3, 7, 3, 0);
-            startLabel.Name = "startLabel";
-            startLabel.Size = new Size(31, 15);
-            startLabel.TabIndex = 5;
-            startLabel.Text = "Start";
-            startLabel.ForeColor = Color.Azure;
-
-            startLineNumberTextBox.Dock = DockStyle.Fill;
-            startLineNumberTextBox.Location = new Point(40, 3);
-            startLineNumberTextBox.MaximumSize = new Size(90, 0);
-            startLineNumberTextBox.Name = "startLineNumberTextBox";
-            startLineNumberTextBox.Size = new Size(90, 23);
-            startLineNumberTextBox.TabIndex = 6;
-            startLineNumberTextBox.Text = "1"; //default to 1 as start
-
-
-            endLabel.AutoSize = true;
-            endLabel.Location = new Point(136, 7);
-            endLabel.Margin = new Padding(3, 7, 3, 0);
-            endLabel.Name = "endLabel";
-            endLabel.Size = new Size(27, 15);
-            endLabel.TabIndex = 7;
-            endLabel.Text = "End";
-            endLabel.ForeColor = Color.Azure;
-
-            endLineNumberTextBox.Dock = DockStyle.Fill;
-            endLineNumberTextBox.Location = new Point(169, 3);
-            endLineNumberTextBox.MaximumSize = new Size(90, 0);
-            endLineNumberTextBox.Name = "endLineNumberTextBox";
-            endLineNumberTextBox.Size = new Size(90, 23);
-            endLineNumberTextBox.TabIndex = 8;
-            endLineNumberTextBox.Text = "0"; //set 0 so that can be detected and autofilled later
-
-            fetchCodeStatusMessageLabel.AutoSize = true;
-            fetchCodeStatusMessageLabel.Location = new Point(265, 7);
-            fetchCodeStatusMessageLabel.Margin = new Padding(3, 7, 3, 0);
-            fetchCodeStatusMessageLabel.Name = "fetchCodeStatusMessageLabel";
-            fetchCodeStatusMessageLabel.Size = new Size(98, 15);
-            fetchCodeStatusMessageLabel.TabIndex = 12;
-            fetchCodeStatusMessageLabel.Text = "Ready Captain \U0001fae1";
-            fetchCodeStatusMessageLabel.ForeColor = Color.Azure;
-
-            preCodePromptLabel.AutoSize = true;
-            preCodePromptLabel.Location = new Point(3, 71);
-            preCodePromptLabel.Margin = new Padding(3, 7, 3, 0);
-            preCodePromptLabel.Name = "preCodePromptLabel";
-            preCodePromptLabel.Size = new Size(67, 15);
-            preCodePromptLabel.TabIndex = 7;
-            preCodePromptLabel.Text = "Pre Prompt";
-            preCodePromptLabel.ForeColor = Color.Azure;
-
-            preCodePromptTextBox.Dock = DockStyle.Fill;
-            preCodePromptTextBox.Location = new Point(96, 67);
-            preCodePromptTextBox.Name = "preCodePromptTextBox";
-            preCodePromptTextBox.Size = new Size(672, 23);
-            preCodePromptTextBox.TabIndex = 8;
-
-            codeFileInjectLabel.AutoSize = true;
-            codeFileInjectLabel.Location = new Point(3, 100);
-            codeFileInjectLabel.Margin = new Padding(3, 7, 3, 0);
-            codeFileInjectLabel.Name = "codeFileInjectLabel";
-            codeFileInjectLabel.Size = new Size(56, 15);
-            codeFileInjectLabel.TabIndex = 9;
-            codeFileInjectLabel.Text = "Code File";
-            codeFileInjectLabel.ForeColor = Color.Azure;
-
-
-            // Create a new richTextBox
-            codeFileInjectTextBox.Name = "codeFileInjectTextBox";
-            codeFileInjectTextBox.BackColor = SystemColors.ActiveCaptionText;
-            codeFileInjectTextBox.Dock = DockStyle.Fill;
-            codeFileInjectTextBox.ForeColor = Color.LightGreen;
-            codeFileInjectTextBox.Text = "";
-            codeFileInjectTextBox.ReadOnly = false;
-            codeFileInjectTextBox.Multiline = true; // Allow multiple lines
-            codeFileInjectTextBox.WordWrap = true; // Wrap text to the next line
-            codeFileInjectTextBox.Font = new Font("Cascadia Code", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 28);
-
-            postCodePromptLabel.AutoSize = true;
-            postCodePromptLabel.Location = new Point(3, 129);
-            postCodePromptLabel.Margin = new Padding(3, 7, 3, 0);
-            postCodePromptLabel.Name = "postCodePromptLabel";
-            postCodePromptLabel.Size = new Size(73, 15);
-            postCodePromptLabel.TabIndex = 11;
-            postCodePromptLabel.Text = "Post Prompt";
-            postCodePromptLabel.ForeColor = Color.Azure;
-
-            postCodePromptTextBox.Dock = DockStyle.Fill;
-            postCodePromptTextBox.Location = new Point(96, 125);
-            postCodePromptTextBox.Name = "postCodePromptTextBox";
-            postCodePromptTextBox.Size = new Size(672, 23);
-            postCodePromptTextBox.TabIndex = 12;
-
-            deleteCodeInjectButton.BackColor = Color.IndianRed;
-            deleteCodeInjectButton.ForeColor = SystemColors.ButtonFace;
-            deleteCodeInjectButton.Location = new Point(774, 3);
-            deleteCodeInjectButton.Name = "deleteCodeInjectButton";
-            deleteCodeInjectButton.Size = new Size(75, 23);
-            deleteCodeInjectButton.TabIndex = 14;
-            deleteCodeInjectButton.Text = "➖ Remove";
-            deleteCodeInjectButton.UseVisualStyleBackColor = false;
-            deleteCodeInjectButton.Click += (sender, e) =>
-            {
-                // Get the parent table layout panel
-                TableLayoutPanel codeFileInjectTablePanel = (TableLayoutPanel)((Button)sender).Parent;
-
-                // Remove the table layout panel from the main table layout panel
-                selectedCodeFileViewTable.Controls.Remove(codeFileInjectTablePanel);
-
-                // Dispose of the table layout panel
-                codeFileInjectTablePanel.Dispose();
-
-                // Find the CodeFile instance to remove
-                string filePath = null;
-                foreach (Control control in codeFileInjectTablePanel.Controls)
-                {
-                    if (control is TextBox textBox && textBox.Name == "codeFileInjectPathTextBox")
-                    {
-                        filePath = textBox.Text;
-                        break;
-                    }
-                }
-
-                // Remove the CodeFile instance from the CurrentCodeFiles list
-                if (filePath != null)
-                {
-                    this.CurrentCodeFiles.RemoveAll(cf => cf.FilePath == filePath);
-                }
-
-                // Update Token Stats
-                UpdateTokenStats();
-            };
-
-            fetchLatestInjectedCodeButton.BackColor = Color.Fuchsia;
-            fetchLatestInjectedCodeButton.ForeColor = SystemColors.ButtonFace;
-            fetchLatestInjectedCodeButton.Location = new Point(774, 32);
-            fetchLatestInjectedCodeButton.Name = "fetchLatestInjectedCodeButton";
-            fetchLatestInjectedCodeButton.Size = new Size(75, 23);
-            fetchLatestInjectedCodeButton.TabIndex = 16;
-            fetchLatestInjectedCodeButton.Text = "⚡ Update";
-            fetchLatestInjectedCodeButton.UseVisualStyleBackColor = false;
-            fetchLatestInjectedCodeButton.Click += (sender, e) =>
-            {
-                // get needed data to fetch file
-                var filePath = codeFileInjectPathTextBox.Text;
-
-                // if user has not set end line number then help user by auto-filling
-                if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(filePath).ToString(); }
-                var startLineNum = int.Parse(startLineNumberTextBox.Text);
-                var endLineNum = int.Parse(endLineNumberTextBox.Text);
-
-                // cut out piece of select code from file
-                var currentExtractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
-
-                // put extracted code into view
-                codeFileInjectTextBox.Text = currentExtractedCode;
-
-                // auto set probable pre and post prompt for file
-                var codeFileName = GetCodeFileFullName(filePath);
-                preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
-                postCodePromptTextBox.Text = $"Ok, I've parsed the code";
-
-                // update token stats for current file only
-                var textSizeKbCurrent = GetBinarySizeOfTextInKB(currentExtractedCode);
-                var textSizeToken = ConvertKBToTokenCount(textSizeKbCurrent);
-                fetchCodeStatusMessageLabel.Text = $"Size : {textSizeKbCurrent:F2} KB ~ {textSizeToken} Tokens";
-
-                // update global token stats
-                UpdateTokenStats();
-
-                // update global selected code file data list
-                UpdateCodeFileInjectTablePanel(codeFile, codeFileInjectPathTextBox, startLineNumberTextBox, endLineNumberTextBox,
-                    preCodePromptTextBox, codeFileInjectTextBox, postCodePromptTextBox);
-
-            };
-
-            expandCodeFileButton.BackColor = SystemColors.MenuHighlight;
-            expandCodeFileButton.ForeColor = SystemColors.ButtonFace;
-            expandCodeFileButton.Location = new Point(774, 96);
-            expandCodeFileButton.Name = "expandCodeFileButton";
-            expandCodeFileButton.Size = new Size(75, 23);
-            expandCodeFileButton.TabIndex = 18;
-            expandCodeFileButton.Text = "Expand";
-            expandCodeFileButton.UseVisualStyleBackColor = false;
-            expandCodeFileButton.Click += (sender, e) =>
-            {
-                // Check if the button is currently in the "Expand" state
-                if (expandCodeFileButton.Text == "Expand")
-                {
-                    // Remove the minimum height constraint to allow the text box to expand
-                    codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 0);
-
-                    // Set the maximum height to infinity to allow the text box to expand as much as needed
-                    codeFileInjectTextBox.MaximumSize = new Size(codeFileInjectTextBox.Width, int.MaxValue);
-
-                    // Calculate the preferred height of the text box based on its width and content
-                    codeFileInjectTextBox.Height = 300;
-
-                    // Update the button text to "Collapse" to reflect the new state
-                    expandCodeFileButton.Text = "Collapse";
-                }
-                //expand button click logic
-                else
-                {
-                    // Set the minimum height to 28 pixels to collapse the text box
-                    codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 28);
-
-                    // Set the maximum height to 28 pixels to prevent the text box from expanding
-                    codeFileInjectTextBox.MaximumSize = new Size(codeFileInjectTextBox.Width, 28);
-
-                    // Update the button text to "Expand" to reflect the new state
-                    expandCodeFileButton.Text = "Expand";
-                }
-            };
+            //generates GUI
+            var newFileInjectDataHolder = GenerateNewCodeFileInjectTable();
 
             // Add codeFileInjectTablePanel as last new row in table selectedCodeFileViewTable
             selectedCodeFileViewTable.RowCount++;
             selectedCodeFileViewTable.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            selectedCodeFileViewTable.Controls.Add(codeFileInjectTablePanel, 0, selectedCodeFileViewTable.RowCount - 1);
+            selectedCodeFileViewTable.Controls.Add(newFileInjectDataHolder, 0, selectedCodeFileViewTable.RowCount - 1);
 
-            //if codeFile is passed in, initialize the values
+            //if codeFile is passed in, fill the textbox values with data from presets
             if (codeFile != null)
             {
                 codeFileInjectPathTextBox.Text = codeFile.FilePath;
@@ -417,21 +124,330 @@ namespace LLMCoder
                 codeFileInjectTextBox.Text = codeFile.ExtractedCode;
                 postCodePromptTextBox.Text = codeFile.PostPrompt;
             }
+
+            Control GenerateNewCodeFileInjectTable()
+            {
+
+                // Initialize codeFileInjectTablePanel
+                codeFileInjectTablePanel.AutoSize = true;
+                codeFileInjectTablePanel.ColumnCount = 3;
+                codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle());
+                codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+                codeFileInjectTablePanel.ColumnStyles.Add(new ColumnStyle());
+                codeFileInjectTablePanel.Controls.Add(fetchLatestInjectedCodeButton, 2, 1);
+                codeFileInjectTablePanel.Controls.Add(deleteCodeInjectButton, 2, 0);
+                codeFileInjectTablePanel.Controls.Add(postCodePromptTextBox, 1, 4);
+                codeFileInjectTablePanel.Controls.Add(postCodePromptLabel, 0, 4);
+                codeFileInjectTablePanel.Controls.Add(codeFileInjectTextBox, 1, 3);
+                codeFileInjectTablePanel.Controls.Add(codeFileInjectLabel, 0, 3);
+                codeFileInjectTablePanel.Controls.Add(preCodePromptTextBox, 1, 2);
+                codeFileInjectTablePanel.Controls.Add(preCodePromptLabel, 0, 2);
+                codeFileInjectTablePanel.Controls.Add(lineNumRangeInputTable, 1, 1);
+                codeFileInjectTablePanel.Controls.Add(lineNumberRangeLabel, 0, 1);
+                codeFileInjectTablePanel.Controls.Add(codeFileInjectPathTextBox, 1, 0);
+                codeFileInjectTablePanel.Controls.Add(fileInjectPathLabel, 0, 0);
+                codeFileInjectTablePanel.Controls.Add(expandCodeFileButton, 2, 3);
+                codeFileInjectTablePanel.Dock = DockStyle.None;
+                codeFileInjectTablePanel.Location = new Point(0, 0);
+                codeFileInjectTablePanel.Name = "codeFileInjectTablePanel";
+                codeFileInjectTablePanel.RowCount = 6;
+                codeFileInjectTablePanel.RowStyles.Add(new RowStyle(){ SizeType = SizeType.AutoSize });
+                codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+                codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+                codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+                codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+                codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
+                codeFileInjectTablePanel.TabIndex = 1;
+                codeFileInjectTablePanel.BackColor = Color.Black;
+
+                // Initialize lineNumRangeInputTable
+                lineNumRangeInputTable.AutoSize = true;
+                lineNumRangeInputTable.ColumnCount = 5;
+                lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+                lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+                lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+                lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+                lineNumRangeInputTable.ColumnStyles.Add(new ColumnStyle());
+                lineNumRangeInputTable.Controls.Add(fetchCodeStatusMessageLabel, 5, 0);
+                lineNumRangeInputTable.Controls.Add(endLineNumberTextBox, 3, 0);
+                lineNumRangeInputTable.Controls.Add(endLabel, 2, 0);
+                lineNumRangeInputTable.Controls.Add(startLineNumberTextBox, 1, 0);
+                lineNumRangeInputTable.Controls.Add(startLabel, 0, 0);
+                lineNumRangeInputTable.Dock = DockStyle.Fill;
+                lineNumRangeInputTable.Location = new Point(96, 32);
+                lineNumRangeInputTable.Name = "lineNumRangeInputTable";
+                lineNumRangeInputTable.RowCount = 1;
+                lineNumRangeInputTable.RowStyles.Add(new RowStyle());
+                lineNumRangeInputTable.Size = new Size(672, 29);
+                lineNumRangeInputTable.TabIndex = 6;
+
+                // Initialize other controls
+                fileInjectPathLabel.AutoSize = true;
+                fileInjectPathLabel.Location = new Point(3, 7);
+                fileInjectPathLabel.Margin = new Padding(3, 7, 3, 0);
+                fileInjectPathLabel.Name = "fileInjectPathLabel";
+                fileInjectPathLabel.Size = new Size(52, 15);
+                fileInjectPathLabel.TabIndex = 1;
+                fileInjectPathLabel.Text = "File Path";
+                fileInjectPathLabel.ForeColor = Color.Azure;
+
+                codeFileInjectPathTextBox.Dock = DockStyle.Fill;
+                codeFileInjectPathTextBox.Location = new Point(96, 3);
+                codeFileInjectPathTextBox.Name = "codeFileInjectPathTextBox";
+                codeFileInjectPathTextBox.Size = new Size(672, 23);
+                codeFileInjectPathTextBox.TabIndex = 3;
+
+                lineNumberRangeLabel.AutoSize = true;
+                lineNumberRangeLabel.Location = new Point(3, 36);
+                lineNumberRangeLabel.Margin = new Padding(3, 7, 3, 0);
+                lineNumberRangeLabel.Name = "lineNumberRangeLabel";
+                lineNumberRangeLabel.Size = new Size(87, 15);
+                lineNumberRangeLabel.TabIndex = 4;
+                lineNumberRangeLabel.Text = "Select Range";
+                lineNumberRangeLabel.ForeColor = Color.Azure;
+
+                startLabel.AutoSize = true;
+                startLabel.Location = new Point(3, 7);
+                startLabel.Margin = new Padding(3, 7, 3, 0);
+                startLabel.Name = "startLabel";
+                startLabel.Size = new Size(31, 15);
+                startLabel.TabIndex = 5;
+                startLabel.Text = "Start";
+                startLabel.ForeColor = Color.Azure;
+
+                startLineNumberTextBox.Dock = DockStyle.Fill;
+                startLineNumberTextBox.Location = new Point(40, 3);
+                startLineNumberTextBox.MaximumSize = new Size(90, 0);
+                startLineNumberTextBox.Name = "startLineNumberTextBox";
+                startLineNumberTextBox.Size = new Size(90, 23);
+                startLineNumberTextBox.TabIndex = 6;
+                startLineNumberTextBox.Text = "1"; //default to 1 as start
+
+
+                endLabel.AutoSize = true;
+                endLabel.Location = new Point(136, 7);
+                endLabel.Margin = new Padding(3, 7, 3, 0);
+                endLabel.Name = "endLabel";
+                endLabel.Size = new Size(27, 15);
+                endLabel.TabIndex = 7;
+                endLabel.Text = "End";
+                endLabel.ForeColor = Color.Azure;
+
+                endLineNumberTextBox.Dock = DockStyle.Fill;
+                endLineNumberTextBox.Location = new Point(169, 3);
+                endLineNumberTextBox.MaximumSize = new Size(90, 0);
+                endLineNumberTextBox.Name = "endLineNumberTextBox";
+                endLineNumberTextBox.Size = new Size(90, 23);
+                endLineNumberTextBox.TabIndex = 8;
+                endLineNumberTextBox.Text = "0"; //set 0 so that can be detected and autofilled later
+
+                fetchCodeStatusMessageLabel.AutoSize = true;
+                fetchCodeStatusMessageLabel.Location = new Point(265, 7);
+                fetchCodeStatusMessageLabel.Margin = new Padding(3, 7, 3, 0);
+                fetchCodeStatusMessageLabel.Name = "fetchCodeStatusMessageLabel";
+                fetchCodeStatusMessageLabel.Size = new Size(98, 15);
+                fetchCodeStatusMessageLabel.TabIndex = 12;
+                fetchCodeStatusMessageLabel.ForeColor = Color.Azure;
+
+                // update token stats for current file only
+                var textSizeKbCurrent = GetBinarySizeOfTextInKB(codeFile?.ExtractedCode ?? "");
+                var textSizeToken = ConvertKBToTokenCount(textSizeKbCurrent);
+                fetchCodeStatusMessageLabel.Text = $"Size : {textSizeKbCurrent:F2} KB ~ {textSizeToken} Tokens";
+
+
+                preCodePromptLabel.AutoSize = true;
+                preCodePromptLabel.Location = new Point(3, 71);
+                preCodePromptLabel.Margin = new Padding(3, 7, 3, 0);
+                preCodePromptLabel.Name = "preCodePromptLabel";
+                preCodePromptLabel.Size = new Size(67, 15);
+                preCodePromptLabel.TabIndex = 7;
+                preCodePromptLabel.Text = "Pre Prompt";
+                preCodePromptLabel.ForeColor = Color.Azure;
+
+                preCodePromptTextBox.Dock = DockStyle.Fill;
+                preCodePromptTextBox.Location = new Point(96, 67);
+                preCodePromptTextBox.Name = "preCodePromptTextBox";
+                preCodePromptTextBox.Size = new Size(672, 23);
+                preCodePromptTextBox.TabIndex = 8;
+
+                codeFileInjectLabel.AutoSize = true;
+                codeFileInjectLabel.Location = new Point(3, 100);
+                codeFileInjectLabel.Margin = new Padding(3, 7, 3, 0);
+                codeFileInjectLabel.Name = "codeFileInjectLabel";
+                codeFileInjectLabel.Size = new Size(56, 15);
+                codeFileInjectLabel.TabIndex = 9;
+                codeFileInjectLabel.Text = "Code File";
+                codeFileInjectLabel.ForeColor = Color.Azure;
+
+
+                // Create a new richTextBox
+                codeFileInjectTextBox.Name = "codeFileInjectTextBox";
+                codeFileInjectTextBox.BackColor = SystemColors.ActiveCaptionText;
+                codeFileInjectTextBox.Dock = DockStyle.Fill;
+                codeFileInjectTextBox.ForeColor = Color.LightGreen;
+                codeFileInjectTextBox.Text = "";
+                codeFileInjectTextBox.ReadOnly = false;
+                codeFileInjectTextBox.Multiline = true; // Allow multiple lines
+                codeFileInjectTextBox.WordWrap = true; // Wrap text to the next line
+                codeFileInjectTextBox.Font = new Font("Cascadia Code", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+                codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 28);
+
+                postCodePromptLabel.AutoSize = true;
+                postCodePromptLabel.Location = new Point(3, 129);
+                postCodePromptLabel.Margin = new Padding(3, 7, 3, 0);
+                postCodePromptLabel.Name = "postCodePromptLabel";
+                postCodePromptLabel.Size = new Size(73, 15);
+                postCodePromptLabel.TabIndex = 11;
+                postCodePromptLabel.Text = "Post Prompt";
+                postCodePromptLabel.ForeColor = Color.Azure;
+
+                postCodePromptTextBox.Dock = DockStyle.Fill;
+                postCodePromptTextBox.Location = new Point(96, 125);
+                postCodePromptTextBox.Name = "postCodePromptTextBox";
+                postCodePromptTextBox.Size = new Size(672, 23);
+                postCodePromptTextBox.TabIndex = 12;
+
+                deleteCodeInjectButton.BackColor = Color.IndianRed;
+                deleteCodeInjectButton.ForeColor = SystemColors.ButtonFace;
+                deleteCodeInjectButton.Location = new Point(774, 3);
+                deleteCodeInjectButton.Name = "deleteCodeInjectButton";
+                deleteCodeInjectButton.Size = new Size(75, 23);
+                deleteCodeInjectButton.TabIndex = 14;
+                deleteCodeInjectButton.Text = "➖ Remove";
+                deleteCodeInjectButton.UseVisualStyleBackColor = false;
+                deleteCodeInjectButton.Click += (sender, e) =>
+                {
+                    // Get the parent table layout panel
+                    TableLayoutPanel codeFileInjectTablePanel = (TableLayoutPanel)((Button)sender).Parent;
+
+                    // Remove the table layout panel from the main table layout panel
+                    selectedCodeFileViewTable.Controls.Remove(codeFileInjectTablePanel);
+
+                    // Dispose of the table layout panel
+                    codeFileInjectTablePanel.Dispose();
+
+                    // Find the CodeFile instance to remove
+                    string filePath = null;
+                    foreach (Control control in codeFileInjectTablePanel.Controls)
+                    {
+                        if (control is TextBox textBox && textBox.Name == "codeFileInjectPathTextBox")
+                        {
+                            filePath = textBox.Text;
+                            break;
+                        }
+                    }
+
+                    // Remove the CodeFile instance from the CurrentCodeFiles list
+                    if (filePath != null)
+                    {
+                        this.CurrentCodeFiles.RemoveAll(cf => cf.FilePath == filePath);
+                    }
+
+                    // Update Token Stats
+                    UpdateGlobalTokenStats();
+                };
+
+                fetchLatestInjectedCodeButton.BackColor = Color.Fuchsia;
+                fetchLatestInjectedCodeButton.ForeColor = SystemColors.ButtonFace;
+                fetchLatestInjectedCodeButton.Location = new Point(774, 32);
+                fetchLatestInjectedCodeButton.Name = "fetchLatestInjectedCodeButton";
+                fetchLatestInjectedCodeButton.Size = new Size(75, 23);
+                fetchLatestInjectedCodeButton.TabIndex = 16;
+                fetchLatestInjectedCodeButton.Text = "⚡ Update";
+                fetchLatestInjectedCodeButton.UseVisualStyleBackColor = false;
+                fetchLatestInjectedCodeButton.Click += (sender, e) =>
+                {
+                    // get needed data to fetch file
+                    var filePath = codeFileInjectPathTextBox.Text;
+
+                    // if user has not set end line number then help user by auto-filling
+                    if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(filePath).ToString(); }
+                    var startLineNum = int.Parse(startLineNumberTextBox.Text);
+                    var endLineNum = int.Parse(endLineNumberTextBox.Text);
+
+                    // cut out piece of select code from file
+                    var currentExtractedCode = ExtractOutSectionFromCodeFile(filePath, startLineNum, endLineNum);
+
+                    // put extracted code into view
+                    codeFileInjectTextBox.Text = currentExtractedCode;
+
+                    // auto set probable pre and post prompt for file
+                    var codeFileName = GetCodeFileFullName(filePath);
+                    preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
+                    postCodePromptTextBox.Text = $"Ok, I've parsed the code";
+
+                    // update token stats for current file only
+                    var textSizeKbCurrent = GetBinarySizeOfTextInKB(currentExtractedCode);
+                    var textSizeToken = ConvertKBToTokenCount(textSizeKbCurrent);
+                    fetchCodeStatusMessageLabel.Text = $"Size : {textSizeKbCurrent:F2} KB ~ {textSizeToken} Tokens";
+
+                    // update global token stats
+                    UpdateGlobalTokenStats();
+
+                    //package data for storing
+                    // Create a new CodeFile object with the current values from the text boxes
+                    var updatedCodeFile = new CodeFile(
+                        codeFileInjectPathTextBox.Text, // File path
+                        int.Parse(startLineNumberTextBox.Text), // Start line number
+                        int.Parse(endLineNumberTextBox.Text), // End line number
+                        preCodePromptTextBox.Text, // Pre-prompt text
+                        codeFileInjectTextBox.Text, // Extracted code text
+                        postCodePromptTextBox.Text // Post-prompt text
+                    );
+
+                    // update global selected code file data list
+                    UpdateCurrentCodeFilesGlobalList(updatedCodeFile);
+
+                };
+
+                expandCodeFileButton.BackColor = SystemColors.MenuHighlight;
+                expandCodeFileButton.ForeColor = SystemColors.ButtonFace;
+                expandCodeFileButton.Location = new Point(774, 96);
+                expandCodeFileButton.Name = "expandCodeFileButton";
+                expandCodeFileButton.Size = new Size(75, 23);
+                expandCodeFileButton.TabIndex = 18;
+                expandCodeFileButton.Text = "Expand";
+                expandCodeFileButton.UseVisualStyleBackColor = false;
+                expandCodeFileButton.Click += (sender, e) =>
+                {
+                    // Check if the button is currently in the "Expand" state
+                    if (expandCodeFileButton.Text == "Expand")
+                    {
+                        // Remove the minimum height constraint to allow the text box to expand
+                        codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 0);
+
+                        // Set the maximum height to infinity to allow the text box to expand as much as needed
+                        codeFileInjectTextBox.MaximumSize = new Size(codeFileInjectTextBox.Width, int.MaxValue);
+
+                        // Calculate the preferred height of the text box based on its width and content
+                        codeFileInjectTextBox.Height = 300;
+
+                        // Update the button text to "Collapse" to reflect the new state
+                        expandCodeFileButton.Text = "Collapse";
+                    }
+                    //expand button click logic
+                    else
+                    {
+                        // Set the minimum height to 28 pixels to collapse the text box
+                        codeFileInjectTextBox.MinimumSize = new Size(codeFileInjectTextBox.Width, 28);
+
+                        // Set the maximum height to 28 pixels to prevent the text box from expanding
+                        codeFileInjectTextBox.MaximumSize = new Size(codeFileInjectTextBox.Width, 28);
+
+                        // Update the button text to "Expand" to reflect the new state
+                        expandCodeFileButton.Text = "Expand";
+                    }
+                };
+
+                return codeFileInjectTablePanel;
+            }
         }
 
-        private void UpdateCodeFileInjectTablePanel(CodeFile codeFile, TextBox codeFileInjectPathTextBox, TextBox startLineNumberTextBox, TextBox endLineNumberTextBox,
-            TextBox preCodePromptTextBox, RichTextBox codeFileInjectTextBox, TextBox postCodePromptTextBox)
+        /// <summary>
+        /// add given code file to main list if new else updates existing, uses file path as id 
+        /// </summary>
+        private void UpdateCurrentCodeFilesGlobalList(CodeFile updatedCodeFile)
         {
-            // Create a new CodeFile object with the current values from the text boxes
-            var updatedCodeFile = new CodeFile(
-                codeFileInjectPathTextBox.Text, // File path
-                int.Parse(startLineNumberTextBox.Text), // Start line number
-                int.Parse(endLineNumberTextBox.Text), // End line number
-                preCodePromptTextBox.Text, // Pre-prompt text
-                codeFileInjectTextBox.Text, // Extracted code text
-                postCodePromptTextBox.Text // Post-prompt text
-            );
-
             // Check if a CodeFile with the same file path already exists in the CurrentCodeFiles list
             var existingCodeFile = this.CurrentCodeFiles.FirstOrDefault(
                 cf => cf.FilePath == updatedCodeFile.FilePath // Compare file paths
@@ -463,8 +479,7 @@ namespace LLMCoder
             }
         }
 
-
-        private void UpdateTokenStats()
+        private void UpdateGlobalTokenStats()
         {
             //#2 total context window by all (KB)
             //PERCENTAGE
@@ -577,6 +592,8 @@ namespace LLMCoder
         /// </summary>
         private static double GetBinarySizeOfTextInKB(string largeText)
         {
+            if (string.IsNullOrEmpty(largeText)) { return 0; } //if empty end as 0
+
             // Calculate the byte size of the string using Encoding.UTF8.GetBytes
             byte[] bytes = Encoding.UTF8.GetBytes(largeText);
             long byteSize = bytes.Length;
@@ -1006,29 +1023,29 @@ namespace LLMCoder
             }
         }
 
-        // This method loads presets from the presets.json file into the CurrentFileInjectPresets variable.
+        // This method loads presets from the presets.json file into the global data for this instance.
         private void LoadPresetsFromFile()
         {
             // Try to load the presets from the file. If any errors occur, catch the exception and display an error message.
             try
             {
+                //add in default unselected state
+                CurrentFileInjectPresets = new List<FileInjectPreset>() { new() { Name = "Select...", InjectedFilesData = new List<CodeFile>() } };
+
                 // Check if the presets.json file exists in the current directory.
                 if (File.Exists("presets.json"))
                 {
                     // Read the contents of the presets.json file into a string.
                     string presetsJson = File.ReadAllText("presets.json");
 
-                    //add in default unselected state
-                    CurrentFileInjectPresets = new List<FileInjectPreset>() { new() { Name = "Select...", InjectedFilesData = new List<CodeFile>() } };
-
                     // Deserialize the JSON data into a list of FileInjectPreset objects and assign it to the CurrentFileInjectPresets variable.
                     var parsedFromFile = JsonConvert.DeserializeObject<List<FileInjectPreset>>(presetsJson);
                     CurrentFileInjectPresets.AddRange(parsedFromFile);
-
-                    // Update the presetSelectComboBox with the loaded presets
-                    presetSelectComboBox.DataSource = CurrentFileInjectPresets;
-                    presetSelectComboBox.DisplayMember = "Name";
                 }
+
+                // Update the presetSelectComboBox with the loaded presets
+                presetSelectComboBox.DataSource = CurrentFileInjectPresets;
+
             }
             // Catch any exceptions that occur during the loading process.
             catch (Exception ex)
@@ -1165,7 +1182,7 @@ namespace LLMCoder
             messageTableLayouts[messageId] = chatMsgHolderTable;
 
             //update counter
-            UpdateTokenStats();
+            UpdateGlobalTokenStats();
         }
 
         // New method to delete a message from the chat message panel
@@ -1200,6 +1217,20 @@ namespace LLMCoder
             // Save the updated preset list to a file (optional)
             string presetsJson = JsonConvert.SerializeObject(CurrentFileInjectPresets);
             File.WriteAllText("presets.json", presetsJson);
+        }
+
+        private void LoadApiConfigsFromConfigFile()
+        {
+            try
+            {
+                string configFileContent = File.ReadAllText("secrets.json");
+                ConfigFile configFile = JsonConvert.DeserializeObject<ConfigFile>(configFileContent);
+                ApiConfigs = configFile.ApiConfigs;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading config file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -1302,21 +1333,39 @@ namespace LLMCoder
 
         private void addNewCodeFileInjectButton_Click(object sender, EventArgs e)
         {
-            InitializeCodeFileInjectTablePanel();
-        }
+            //make save button visible since edited
+            saveCodeFileInjectPresetButton.Visible = true;
 
-        private void LoadApiConfigsFromConfigFile()
-        {
-            try
-            {
-                string configFileContent = File.ReadAllText("secrets.json");
-                ConfigFile configFile = JsonConvert.DeserializeObject<ConfigFile>(configFileContent);
-                ApiConfigs = configFile.ApiConfigs;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading config file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //get values from on page new form and to main list
+            var newCodeFile = new CodeFile(
+                codeFileInjectPathTextBox.Text, // File path
+                int.Parse(startLineNumberTextBox.Text), // Start line number
+                int.Parse(endLineNumberTextBox.Text), // End line number
+                preCodePromptTextBox.Text, // Pre-prompt text
+                codeFileInjectTextBox.Text, // Extracted code text
+                postCodePromptTextBox.Text // Post-prompt text
+            );
+
+            //add to main list
+            AddNewFileInjectToVisibleList(newCodeFile);
+
+            //add to global data list
+            UpdateCurrentCodeFilesGlobalList(newCodeFile);
+
+            //update global token stats (last to get data)
+            UpdateGlobalTokenStats();
+
+            //clear data from entry form
+            codeFileInjectPathTextBox.Text = ""; // File path
+            startLineNumberTextBox.Text = "1"; // Start line number
+            endLineNumberTextBox.Text = "0";// End line number
+            preCodePromptTextBox.Text = ""; // Pre-prompt text
+            codeFileInjectTextBox.Text = ""; // Extracted code text
+            postCodePromptTextBox.Text = ""; // Post-prompt text
+            fetchCodeStatusMessageLabel.Text = ""; //stats
+
+            //reset preset dropdown to select since technically new
+            presetSelectComboBox.SelectedIndex = 0;
         }
 
         private void llmSelector_SelectedIndexChanged(object sender, EventArgs e)
@@ -1380,23 +1429,79 @@ namespace LLMCoder
             presetSelectComboBox.SelectedItem = newPresetData;
         }
 
-        private void loadSelectedFileInjectPresetButton_Click(object sender, EventArgs e)
+        private void codeFileInjectPathTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+            //package data for storing
+            // Create a new CodeFile object with the current values from the text boxes
+            var updatedCodeFile = new CodeFile(
+                codeFileInjectPathTextBox.Text, // File path
+                int.Parse(startLineNumberTextBox.Text), // Start line number
+                int.Parse(endLineNumberTextBox.Text), // End line number
+                preCodePromptTextBox.Text, // Pre-prompt text
+                codeFileInjectTextBox.Text, // Extracted code text
+                postCodePromptTextBox.Text // Post-prompt text
+            );
+
+            //every time text is changed try to auto get the file and read for easy user UX
+            try
+            {
+                //get path to query
+                var possibleFilePath = codeFileInjectPathTextBox.Text;
+
+                // if user has not set end line number then help user by auto-filling
+                if (endLineNumberTextBox.Text == "0") { endLineNumberTextBox.Text = GetMaxLinesInFile(possibleFilePath).ToString(); }
+                var startLineNum = int.Parse(startLineNumberTextBox.Text);
+                var endLineNum = int.Parse(endLineNumberTextBox.Text);
+
+                // cut out piece of select code from file
+                var currentExtractedCode = ExtractOutSectionFromCodeFile(possibleFilePath, startLineNum, endLineNum);
+
+                // put extracted code into view
+                codeFileInjectTextBox.Text = currentExtractedCode;
+
+                // auto set probable pre and post prompt for file
+                var codeFileName = GetCodeFileFullName(possibleFilePath);
+                preCodePromptTextBox.Text = $"Analyse and parse below {codeFileName} code";
+                postCodePromptTextBox.Text = $"Ok, I've parsed the code";
+
+                // update token stats for current file only
+                var textSizeKbCurrent = GetBinarySizeOfTextInKB(currentExtractedCode);
+                var textSizeToken = ConvertKBToTokenCount(textSizeKbCurrent);
+                fetchCodeStatusMessageLabel.Text = $"Size : {textSizeKbCurrent:F2} KB ~ {textSizeToken} Tokens";
+
+
+            }
+            catch (Exception exception)
+            {
+                //let user know file failed to retrieve
+                codeFileInjectTextBox.Text = "!! Error : File could not be read or does not exist. !!";
+            }
+        }
+
+        private void presetSelectComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Get the selected preset data from the presetSelectComboBox
             var selectedPreset = (FileInjectPreset)presetSelectComboBox.SelectedItem;
 
+            //skip if selection is empty/default
+            if (selectedPreset.Name == "Select...") { return; }
+
             // Clear existing code file inject table panels
             selectedCodeFileViewTable.Controls.Clear();
+
+            //clear all rows too
+            selectedCodeFileViewTable.RowCount = 0;
+            selectedCodeFileViewTable.RowStyles.Clear();
 
             //add each file in preset into the view, similar to clicking `addNewCodeFileInjectButton_Click`
             foreach (var codeFile in selectedPreset.InjectedFilesData)
             {
-                InitializeCodeFileInjectTablePanel(codeFile);
-                //...implement code
+                AddNewFileInjectToVisibleList(codeFile);
             }
 
             //update main counters of KB and Tokens
-            UpdateTokenStats();
+            UpdateGlobalTokenStats();
 
         }
     }
@@ -1409,7 +1514,7 @@ namespace LLMCoder
     }
 
     public record ApiConfig(string Name, string Endpoint, string ApiKey, int MaxContextWindowTokens);
-    
+
     public class InputDialog : Form
     {
         private Label label;

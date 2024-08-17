@@ -3261,7 +3261,7 @@ class CommonTools {
 
         // Update the API URL with the provided person's data
         const updatedApiUrl = apiUrl
-            .replace("xxx", window.vedastro.UserId)
+            .replace("xxx", VedAstro.ApiDomain)
             .replace("Location/Singapore/Time/00:00/24/06/2024/+08:00", `Location/${person.Location.Name}/Time/${person.BirthTime.StdTime}/+${person.BirthTime.TimeZone}`)
             .replace("PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%7D", `PersonName/${person.Name}/Gender/${person.Gender}/Notes/${JSON.stringify(person.Notes)}`);
 
@@ -3861,13 +3861,13 @@ class PersonSelectorBox {
 
     // Save a reference to this instance for global access
     saveInstanceReference() {
-        if (!window.VedAstro) {
-            window.VedAstro = {};
+        if (!window.vedastro) {
+            window.vedastro = {};
         }
-        if (!window.VedAstro.PersonSelectorBoxInstances) {
-            window.VedAstro.PersonSelectorBoxInstances = [];
+        if (!window.vedastro.PersonSelectorBoxInstances) {
+            window.vedastro.PersonSelectorBoxInstances = [];
         }
-        window.VedAstro.PersonSelectorBoxInstances[this.ElementID] = this;
+        window.vedastro.PersonSelectorBoxInstances[this.ElementID] = this;
     }
 
     async initializeMainBody() {
@@ -4031,14 +4031,14 @@ class PersonSelectorBox {
       <label class="form-label">${this.TitleText}</label>
       <div class="hstack">
         <div class="btn-group" style="width:100%;">
-          <button onclick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+          <button onclick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="${this.SelectedPersonNameHolderElementID}" style="cursor: pointer;white-space: nowrap; display: inline-table;" >${selectedPersonText}</div>
           </button>
           <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
 
             <!-- SEARCH INPUT -->
             <div class="hstack gap-2">
-              <input onkeyup="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onKeyUpSearchBar(event)" type="text" class="${this.SearchInputElementClass} form-control ms-0 mb-2 ps-3" placeholder="Search...">
+              <input onkeyup="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onKeyUpSearchBar(event)" type="text" class="${this.SearchInputElementClass} form-control ms-0 mb-2 ps-3" placeholder="Search...">
               <div class="mb-2" style="cursor: pointer;">
                 <i class="iconify" data-icon="pepicons-pop:list" data-width="25"></i>
               </div>
@@ -4089,7 +4089,7 @@ class PersonSelectorBox {
     generatePublicPersonListHtml() {
         const html = this.publicPersonListDisplay
             .map((person) => {
-                return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${this.getPersonDisplayName(person)}</li>`;
+                return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${this.getPersonDisplayName(person)}</li>`;
             })
             .join("");
 
@@ -4100,7 +4100,7 @@ class PersonSelectorBox {
     generatePersonListHtml() {
         const html = this.personListDisplay
             .map((person) => {
-                return `<li onClick="window.VedAstro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${this.getPersonDisplayName(person)}</li>`;
+                return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${this.getPersonDisplayName(person)}</li>`;
             })
             .join("");
 
@@ -4161,7 +4161,7 @@ class InfoBox {
         // Return the HTML for the page header, including conditional blocks for different screen sizes
         return `
       
-<div onClick="window.VedAstro.InfoBox.onClick(event)" class="" style="cursor: pointer; max-width:365px;">
+<div onClick="window.vedastro.InfoBox.onClick(event)" class="" style="cursor: pointer; max-width:365px;">
     <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="">
         <div class="hstack mb-2">
             <span class="iconify bi flex-shrink-0 me-2" data-icon="${this.IconName}" data-width="50"></span>
@@ -4332,7 +4332,7 @@ class TimeInputSimple {
       <span class="input-group-text gap-2 py-1"><i class="iconify" data-icon="noto-v1:timer-clock" data-width="30"></i>${labelText}</span>
       <div class="form-control py-2" >
         <!-- note : on click will toggle picker, so picker cannot be inside TimeInputHolder -->
-        <div id="${this.TimeInputHolderID}" onclick="window.VedAstro.TimeInputSimpleInstances['${this.ElementID}'].onClickDateTimeInput()" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
+        <div id="${this.TimeInputHolderID}" onclick="window.vedastro.TimeInputSimpleInstances['${this.ElementID}'].onClickDateTimeInput()" class="d-flex justify-content-between" style="text-wrap: nowrap; overflow: hidden;">
           <div class="hstack">
             <span class="border-0 inputPerfect" id="${this.HourInputID}" style="width: 33px;" >${this.hour}</span>:
             <span class="border-0 inputPerfect" id="${this.MinuteInputID}" style="width: 33px;" >${this.minute}</span>
@@ -4375,17 +4375,17 @@ class TimeInputSimple {
 
     // Initialize the TimeInputSimpleInstances object
     static initInstances() {
-        if (!window.VedAstro) {
-            window.VedAstro = {};
+        if (!window.vedastro) {
+            window.vedastro = {};
         }
-        if (!window.VedAstro.TimeInputSimpleInstances) {
-            window.VedAstro.TimeInputSimpleInstances = {};
+        if (!window.vedastro.TimeInputSimpleInstances) {
+            window.vedastro.TimeInputSimpleInstances = {};
         }
     }
 
     // Save a reference to this instance for global access
     saveInstanceReference() {
-        window.VedAstro.TimeInputSimpleInstances[this.ElementID] = this;
+        window.vedastro.TimeInputSimpleInstances[this.ElementID] = this;
     }
 
     // Method to initialize the calendar
@@ -4473,8 +4473,8 @@ class TimeInputSimple {
     }
 
     isValid() {
-        //check if all fields have been filled
-        return true;
+        // Check if all fields have been filled
+        return this.hour !== "" && this.minute !== "" && this.meridian !== "" && this.date !== "" && this.month !== "" && this.year !== "";
     }
 }
 
@@ -4514,18 +4514,18 @@ class GeoLocationInput {
 
         // Save a reference to this instance for global access
         GeoLocationInput.initInstances();
-        window.VedAstro.GeoLocationInputInstances[elementId] = this;
+        window.vedastro.GeoLocationInputInstances[elementId] = this;
     }
 
     /**
      * Initialize the GeoLocationInput instances object.
      */
     static initInstances() {
-        if (!window.VedAstro) {
-            window.VedAstro = {};
+        if (!window.vedastro) {
+            window.vedastro = {};
         }
-        if (!window.VedAstro.GeoLocationInputInstances) {
-            window.VedAstro.GeoLocationInputInstances = {};
+        if (!window.vedastro.GeoLocationInputInstances) {
+            window.vedastro.GeoLocationInputInstances = {};
         }
     }
 
@@ -4555,7 +4555,7 @@ class GeoLocationInput {
                 <div class="input-group location-name">
                     <!-- HEADER ICON -->
                     <span class="input-group-text gap-2 py-1"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
-                    <input id="${this.locationNameInputId}" onkeyup="window.VedAstro.GeoLocationInputInstances['${this.ElementID}'].onUpdateLocationNameText(event)" type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;" data-bs-toggle="dropdown">
+                    <input id="${this.locationNameInputId}" onkeyup="window.vedastro.GeoLocationInputInstances['${this.ElementID}'].onUpdateLocationNameText(event)" type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;" data-bs-toggle="dropdown">
                     <ul id="${this.dropdownMenuId}" class="dropdown-menu" aria-labelledby="${this.locationNameInputId}">
                         <li><a class="dropdown-item text-muted" href="#">
                             <i class="iconify" data-icon="grommet-icons:map" data-width="18"></i>
@@ -4647,7 +4647,7 @@ class GeoLocationInput {
                 } else {
                     // Generate HTML for the locations
                     const locationsHtml = locations.map(location => `
-                    <li><a class="dropdown-item" onClick="window.VedAstro.GeoLocationInputInstances['${this.ElementID}'].onClickPresetLocationName(event)">${location.Name}</a></li>
+                    <li><a class="dropdown-item" onClick="window.vedastro.GeoLocationInputInstances['${this.ElementID}'].onClickPresetLocationName(event)">${location.Name}</a></li>
                 `).join("");
                     dropdownMenu.innerHTML = locationsHtml;
                 }
@@ -4699,6 +4699,11 @@ class GeoLocationInput {
                 });
         });
     }
+
+    isValid() {
+        // Check if all fields have been filled
+        return this.locationName !== "" && this.latitude !== "" && this.longitude !== "";
+    }
 }
 
 /**
@@ -4714,6 +4719,15 @@ class TimeLocationInput {
     GeoLocationInputID;
     TimeInputSimpleInstance;
     GeoLocationInputInstance;
+
+    static initInstances() {
+        if (!window.vedastro) {
+            window.vedastro = {};
+        }
+        if (!window.vedastro.TimeLocationInputInstances) {
+            window.vedastro.TimeLocationInputInstances = {};
+        }
+    }
 
     // Constructor to initialize the object
     constructor(elementId) {
@@ -4733,6 +4747,11 @@ class TimeLocationInput {
 
         // Call the method to initialize the main body of the page header
         this.initializeMainBody();
+
+        // Save a reference to this instance for global access
+        TimeLocationInput.initInstances();
+        window.vedastro.TimeLocationInputInstances[elementId] = this;
+
     }
 
     // Method to initialize the main body of the page header
@@ -4796,6 +4815,71 @@ class TimeLocationInput {
         return timeObject;
     }
 
+    static getSystemTimezone() {
+        const date = new Date();
+        const timezoneOffset = date.getTimezoneOffset();
+        const hours = Math.floor(Math.abs(timezoneOffset) / 60);
+        const minutes = Math.abs(timezoneOffset) % 60;
+        return (timezoneOffset <= 0 ? '+' : '-') + String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0');
+    }
+
+
+    async getFullTimeString() {
+        try {
+            const timeInputSimple = this.TimeInputSimpleInstance;
+            const hour = document.getElementById(timeInputSimple.HourInputID).innerText;
+            const minute = document.getElementById(timeInputSimple.MinuteInputID).innerText;
+            const meridian = document.getElementById(timeInputSimple.MeridianInputID).innerText;
+            const date = document.getElementById(timeInputSimple.DateInputID).innerText;
+            const month = document.getElementById(timeInputSimple.MonthInputID).innerText;
+            const year = document.getElementById(timeInputSimple.YearInputID).innerText;
+
+            const dt = new Date(`${year}-${month}-${date}T${hour}:${minute}:00.000Z`);
+            const hour24 = dt.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }).split(" ")[0];
+
+            const timeZone = TimeLocationInput.getSystemTimezone(); // use system time as hard default
+            return `${hour24} ${date}/${month}/${year} ${timeZone}`;
+        } catch (error) {
+            //log, print and return empty data
+            console.error(error);
+            return `00:00 01/01/2000 +00:00`;
+        }
+    }
+
+    getDateTimeOffset() {
+        // Get the time input values
+        const hour = document.getElementById(this.TimeInputSimpleInstance.HourInputID).innerText;
+        const minute = document.getElementById(this.TimeInputSimpleInstance.MinuteInputID).innerText;
+        const meridian = document.getElementById(this.TimeInputSimpleInstance.MeridianInputID).innerText;
+        const date = document.getElementById(this.TimeInputSimpleInstance.DateInputID).innerText;
+        const month = document.getElementById(this.TimeInputSimpleInstance.MonthInputID).innerText;
+        const year = document.getElementById(this.TimeInputSimpleInstance.YearInputID).innerText;
+
+        // Create a Date object from the input values
+        const dateTime = new Date(`${year}-${month}-${date}T${hour}:${minute} ${meridian}`);
+
+        // Return an object with year, month, and date properties
+        return {
+            year: dateTime.getFullYear(),
+            month: dateTime.getMonth(),
+            date: dateTime.getDate(),
+        };
+    }
+
+
+    isValid() {
+        // Get the time and location input fields
+        const timeInputSimple = this.TimeInputSimpleInstance;
+        const geoLocationInput = this.GeoLocationInputInstance;
+
+        // Check if all fields have been filled
+        if (timeInputSimple.isValid() && geoLocationInput.isValid()) {
+            return true;
+        }
+        return false;
+    }
+
+   
 }
 
 

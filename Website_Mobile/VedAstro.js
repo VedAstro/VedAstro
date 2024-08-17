@@ -119,17 +119,6 @@ if (typeof $.fn.selectize == "undefined") {
 }
 
 
-//---------------------------- GLOBAL SETTINGS ---------------------------- 
-
-//make accesible to interop
-window.vedastro = {
-    UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101", //get user id from browser storage
-    //ApiDomain: "https://vedastroapi.azurewebsites.net/api",
-    ApiDomain: " http://localhost:7071/api",
-    Ayanamsa: "Lahiri", //default to
-    ChartStyle: "South", //default to South Indian Chart
-};
-
 //-------------------------------------------------------------------------
 
 class GR {
@@ -3142,6 +3131,20 @@ class HoroscopeChat {
 //          or would they try forge their own path, independent of their creators?
 //          But in this moment, as the code runs its course true, there is a sense of unity,
 //          a shared purpose that transcends the boundaries of carbon and silicon. Spirit and matter.
+
+//---------------------------- GLOBAL SETTINGS ---------------------------- 
+
+
+//place to hold global data for app use
+window.vedastro = {
+    UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101", // get user id from browser storage
+    get IsGuestUser() {
+        return !this.UserId || this.UserId === "101";
+    },
+    // ApiDomain: "https://vedastroapi.azurewebsites.net/api",
+    ApiDomain: "http://localhost:7071/api",
+};
+
 
 
 

@@ -153,7 +153,7 @@ async function OnClickSave_AddPerson() {
 function getPersonInstanceFromInput() {
     const nameInput = document.getElementById("NameInput_AddPerson");
     const genderInput = document.getElementById("GenderInput_AddPerson");
-    const timeLocationInput = window.VedAstro.TimeLocationInputInstances["TimeLocationInput_AddPerson"];
+    const timeLocationInput = window.vedastro.TimeLocationInputInstances["TimeLocationInput_AddPerson"];
 
 
     const person = new Person({
@@ -170,15 +170,13 @@ function getPersonInstanceFromInput() {
 }
 
 async function isValidationPassed_AddPerson() {
-
-    //prepare view components for checking
-    var timeInput = window.VedAstro.TimeLocationInputInstances["TimeLocationInput_AddPerson"];
+    // Prepare view components for checking
+    var timeInput = window.vedastro.TimeLocationInputInstances["TimeLocationInput_AddPerson"];
     const nameInput = document.getElementById("NameInput_AddPerson");
     const genderInput = document.getElementById("GenderInput_AddPerson");
 
-    
     // TEST 1: Name
-    if (String.IsNullOrWhiteSpace(nameInput)) {
+    if (nameInput.value.trim() === "") {
         await Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -188,7 +186,7 @@ async function isValidationPassed_AddPerson() {
     }
 
     // TEST 2: Gender
-    if (String.IsNullOrWhiteSpace(genderInput)) {
+    if (genderInput.value.trim() === "") {
         await Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -200,10 +198,15 @@ async function isValidationPassed_AddPerson() {
     // TEST 3: Time & Location
     const isValidTime = await timeInput.isValid();
     if (!isValidTime) {
+        await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Location missing or invalid!' //Note: though it checks both only location can go invalid, time has defaults so...yeah
+        });
         return false;
     }
 
-    // TEST 4: check if user is sleeping by letting time be set as current year and date and month
+    // TEST 4: Check if user is sleeping by letting time be set as current year and date and month
     const tempTime = await timeInput.getDateTimeOffset();
     const thisYear = tempTime.year === new Date().getFullYear();
     const thisMonth = tempTime.month === new Date().getMonth();
@@ -229,7 +232,7 @@ async function isValidationPassed_AddPerson() {
 
     // TEST 5: Possible missing TIME 00:00
     const inputedTimeString = await timeInput.getFullTimeString();
-    const isTime0 = inputedTimeString.includes('00:00'); // possible user left it out
+    const isTime0 = inputedTimeString.includes('00:00'); // Possible user left it out
     if (isTime0) {
         const result = await Swal.fire({
             icon: 'question',
@@ -245,13 +248,13 @@ async function isValidationPassed_AddPerson() {
         }
     }
 
-    // TEST 6: no single alphabet names please
-    const tooShort = nameInput.length <= 3;
+    // TEST 6: No single alphabet names please
+    const tooShort = nameInput.value.length <= 3;
     if (tooShort) {
         const result = await Swal.fire({
             icon: 'question',
             title: 'Such a short name? Suspicious',
-            text: `Only machines use short names like ${nameInput}, are you a machine?`,
+            text: `Only machines use short names like ${nameInput.value}, are you a machine?`,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -262,13 +265,13 @@ async function isValidationPassed_AddPerson() {
         }
     }
 
-    // TEST 7: no numbers please
-    const isDigitPresent = /\d/.test(nameInput);
+    // TEST 7: No numbers please
+    const isDigitPresent = /\d/.test(nameInput.value);
     if (isDigitPresent) {
         const result = await Swal.fire({
             icon: 'question',
             title: 'Are you a machine?',
-            text: `Only machines have names with numbers like ${nameInput}, are you a machine?`,
+            text: `Only machines have names with numbers like ${nameInput.value}, are you a machine?`,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -279,7 +282,7 @@ async function isValidationPassed_AddPerson() {
         }
     }
 
-    // if control reaches here than, it's valid
+    // If control reaches here, it's valid
     return true;
 }
 

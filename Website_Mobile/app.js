@@ -22,7 +22,7 @@ function updateHistory(newPage) {
     localStorage.setItem('history', JSON.stringify(history));
 }
 
-//navigate to page artificially
+//navigate to page artificially exp :  onclick="showSection('Home')"
 function showSection(sectionId) {
 
     // update the navigation history
@@ -93,9 +93,11 @@ function OnClickBack_AddPerson() {
     navigateToPreviousPage();
 }
 async function OnClickSave_AddPerson() {
+    debugger;
+
     // if not logged in tell user what the f he is doing
-    if (AppData.IsGuestUser) {
-        const loginLink = `<a target="_blank" style="text-decoration-line: none;" href="${AppData.URL.Login}" class="link-primary fw-bold">logged in</a>`;
+    if (window.vedastro.IsGuestUser) {
+        const loginLink = `<a target="_blank" style="text-decoration-line: none;" onclick="showSection('Login')" class="link-primary fw-bold">logged in</a>`;
         const result = await Swal.fire({
             icon: 'info',
             title: 'Remember!',
@@ -147,7 +149,7 @@ async function OnClickSave_AddPerson() {
 }
 
 //brings together all the individual data for making person profile from page into 1 object that looks like
-//{"PersonId":"03c645a91cc1492b97a8193c28475f29","Name":"Risyaalini Priyaa","Notes":"","BirthTime":{"StdTime":"13:54 25/10/1992 +08:00","Location":{"Name":"Taiping","Longitude":103.82,"Latitude":1.352}},"Gender":"Female","OwnerId":"102111269113114363117","LifeEventList":[{"PersonId":"03c645a91cc1492b97a8193c28475f29","Id":"f8de8107241944daab7d563a6eb03a98","Name":"Talks of Marriage","StartTime":{"StdTime":"23:02 05/02/2023 +08:00","Location":{"Name":"Taiping","Longitude":0,"Latitude":0}},"Description":"Marriage not yet confirmed looking for husband, venus bhukti with house 7 gochara","Nature":"Good","Weight":"Minor"}]}
+//Sample JSON : {"PersonId":"xxxxx","Name":"Risyaalini Priyaa","Notes":"","BirthTime":{"StdTime":"13:54 25/10/1992 +08:00","Location":{"Name":"Taiping","Longitude":103.82,"Latitude":1.352}},"Gender":"Female","OwnerId":"xxxxxx","LifeEventList":[{"PersonId":"xxxxx","Id":"xxxxxx","Name":"Talks of Marriage","StartTime":{"StdTime":"23:02 05/02/2023 +08:00","Location":{"Name":"Taiping","Longitude":0,"Latitude":0}},"Description":"Marriage not yet confirmed looking for husband, venus bhukti with house 7 gochara","Nature":"Good","Weight":"Minor"}]}
 function getPersonInstanceFromInput() {
     const nameInput = document.getElementById("NameInput_AddPerson");
     const genderInput = document.getElementById("GenderInput_AddPerson");

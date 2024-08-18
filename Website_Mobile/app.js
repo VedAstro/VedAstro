@@ -93,7 +93,6 @@ function OnClickBack_AddPerson() {
     navigateToPreviousPage();
 }
 async function OnClickSave_AddPerson() {
-    debugger;
 
     // if not logged in tell user what the f he is doing
     if (window.vedastro.IsGuestUser) {
@@ -179,8 +178,8 @@ async function isValidationPassed_AddPerson() {
     if (nameInput.value.trim() === "") {
         await Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: 'Please enter a name'
+            title: 'Name is Required',
+            text: 'Please enter a valid name. This will help you identify the correct person later.'
         });
         return false;
     }
@@ -189,11 +188,12 @@ async function isValidationPassed_AddPerson() {
     if (genderInput.value.trim() === "") {
         await Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: 'Please select a gender'
+            title: 'Gender is Required',
+            text: 'Please select a valid gender. Necessary for accurate calculations and predictions.'
         });
         return false;
     }
+
 
     // TEST 3: Time & Location
     const isValidTime = await timeInput.isValid();
@@ -211,15 +211,15 @@ async function isValidationPassed_AddPerson() {
     const thisYear = tempTime.year === new Date().getFullYear();
     const thisMonth = tempTime.month === new Date().getMonth();
     const thisDate = tempTime.date === new Date().getDate();
-    const month = !(thisYear && thisMonth);
-    const today = !(thisYear && thisMonth && thisDate);
-    const isValidDate = month || today;
-    if (!isValidDate) {
-        const tempText = thisMonth ? 'this month' : 'today';
+    const isSameYear = thisYear;
+    const isSameMonth = thisYear && thisMonth;
+    const isSameDate = thisYear && thisMonth && thisDate;
+    if (isSameYear || isSameMonth || isSameDate) {
+        const tempText = isSameDate ? 'today' : isSameMonth ? 'this month' : 'this year';
         const result = await Swal.fire({
             icon: 'question',
             title: 'Are you sure?',
-            text: `You inputted ${tempText} as your birth date, is this correct?`,
+            html: `You set <strong>${tempText}</strong> as your birth date, is this correct?`,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -230,9 +230,9 @@ async function isValidationPassed_AddPerson() {
         }
     }
 
+
     // TEST 5: Possible missing TIME 00:00
-    const inputedTimeString = await timeInput.getFullTimeString();
-    const isTime0 = inputedTimeString.includes('00:00'); // Possible user left it out
+    const isTime0 = tempTime.minute === 0 && tempTime.hour === 0; // Possible user left it out
     if (isTime0) {
         const result = await Swal.fire({
             icon: 'question',

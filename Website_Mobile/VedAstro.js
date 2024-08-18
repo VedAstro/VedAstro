@@ -4248,8 +4248,8 @@ class TimeInputSimple {
     YearInputID = "";
 
     // Default values
-    hour = new Date().getHours().toString().padStart(2, '0');
-    minute = new Date().getMinutes().toString().padStart(2, '0');
+    hour = "00";
+    minute = "00";
     meridian = new Date().getHours() < 12 ? "AM" : "PM";
     date = new Date().getDate().toString().padStart(2, '0');
     month = (new Date().getMonth() + 1).toString().padStart(2, '0');
@@ -4824,46 +4824,41 @@ class TimeLocationInput {
     }
 
 
-    async getFullTimeString() {
-        try {
-            const timeInputSimple = this.TimeInputSimpleInstance;
-            const hour = document.getElementById(timeInputSimple.HourInputID).innerText;
-            const minute = document.getElementById(timeInputSimple.MinuteInputID).innerText;
-            const meridian = document.getElementById(timeInputSimple.MeridianInputID).innerText;
-            const date = document.getElementById(timeInputSimple.DateInputID).innerText;
-            const month = document.getElementById(timeInputSimple.MonthInputID).innerText;
-            const year = document.getElementById(timeInputSimple.YearInputID).innerText;
-
-            const dt = new Date(`${year}-${month}-${date}T${hour}:${minute}:00.000Z`);
-            const hour24 = dt.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }).split(" ")[0];
-
-            const timeZone = TimeLocationInput.getSystemTimezone(); // use system time as hard default
-            return `${hour24} ${date}/${month}/${year} ${timeZone}`;
-        } catch (error) {
-            //log, print and return empty data
-            console.error(error);
-            return `00:00 01/01/2000 +00:00`;
-        }
-    }
-
     getDateTimeOffset() {
-        // Get the time input values
-        const hour = document.getElementById(this.TimeInputSimpleInstance.HourInputID).innerText;
-        const minute = document.getElementById(this.TimeInputSimpleInstance.MinuteInputID).innerText;
-        const meridian = document.getElementById(this.TimeInputSimpleInstance.MeridianInputID).innerText;
-        const date = document.getElementById(this.TimeInputSimpleInstance.DateInputID).innerText;
-        const month = document.getElementById(this.TimeInputSimpleInstance.MonthInputID).innerText;
-        const year = document.getElementById(this.TimeInputSimpleInstance.YearInputID).innerText;
+        // Get the instances of the TimeInputSimple and GeoLocationInput classes
+        const timeInputSimple = this.TimeInputSimpleInstance;
+        const geoLocationInput = this.GeoLocationInputInstance;
 
-        // Create a Date object from the input values
-        const dateTime = new Date(`${year}-${month}-${date}T${hour}:${minute} ${meridian}`);
+        // Get the time values from the input fields
+        const hour = document.getElementById(timeInputSimple.HourInputID).innerText;
+        const minute = document.getElementById(timeInputSimple.MinuteInputID).innerText;
+        const meridian = document.getElementById(timeInputSimple.MeridianInputID).innerText;
+        const date = document.getElementById(timeInputSimple.DateInputID).innerText;
+        const month = document.getElementById(timeInputSimple.MonthInputID).innerText;
+        const year = document.getElementById(timeInputSimple.YearInputID).innerText;
 
-        // Return an object with year, month, and date properties
-        return {
-            year: dateTime.getFullYear(),
-            month: dateTime.getMonth(),
-            date: dateTime.getDate(),
+        // Get the location values from the input fields
+        const locationName = document.querySelector(`#${geoLocationInput.ElementID} .location-name input`).value;
+        const latitude = document.querySelector(`#${geoLocationInput.ElementID} .latitude`).value;
+        const longitude = document.querySelector(`#${geoLocationInput.ElementID} .longitude`).value;
+
+        // Construct the DateTime object
+        const dateTime = {
+            year: parseInt(year),
+            month: parseInt(month) - 1, // Month is zero-based, so subtract 1
+            date: parseInt(date),
+            hour: parseInt(hour),
+            minute: parseInt(minute),
+            meridian: meridian,
+            location: {
+                name: locationName,
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
+            },
         };
+
+        // Return the DateTime object
+        return dateTime;
     }
 
 

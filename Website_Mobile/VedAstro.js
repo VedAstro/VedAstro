@@ -1664,7 +1664,7 @@ class AstroTable {
         //get all API calls from server only if empty
         if (this.APICalls.length === 0) {
             this.APICalls = await AstroTable.GetAPIPayload(
-                `${window.vedastro.APIDomain}/ListCalls`
+                `${VedAstro.APIDomain}/ListCalls`
             );
         }
 
@@ -1868,7 +1868,7 @@ class AstroTable {
         var selectedMethodInfo = await instance.GetAPIMetadata(endpoint);
 
         //construct the base url
-        var finalUrl = `${window.vedastro.APIDomain}/Calculate/${endpoint}/`;
+        var finalUrl = `${VedAstro.APIDomain}/Calculate/${endpoint}/`;
 
         //if metadata not found, alert user
         if (selectedMethodInfo === undefined) {
@@ -1999,7 +1999,7 @@ class AstroTable {
                                 ${await AstroTable.GetAPICallsListSelectOptionHTML(
                     columnData[columnNumber].Api,
                     keyColumnName,
-                    window.vedastro.ApiDomain
+                    VedAstro.ApiDomain
                 )}
                             </select>
                         </div>
@@ -2067,7 +2067,7 @@ class AstroTable {
     static async GetAPICallsListSelectOptionHTML(selectValue, keyColumnName) {
         //get raw API calls list from Server
         var apiCalls = await AstroTable.GetAPIPayload(
-            `${window.vedastro.ApiDomain}/ListCalls`
+            `${VedAstro.ApiDomain}/ListCalls`
         );
 
         //filter out call that can NOT be used in columns (make User's live easier)
@@ -2472,8 +2472,8 @@ class HoroscopeChat {
             var $dropdown = $("#PersonListDropdown");
 
             //DO FOR USER'S SAVED LIST
-            window.vedastro.PersonList = await CommonTools.GetAPIPayload(
-                `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/${window.vedastro.UserId}`
+            VedAstro.PersonList = await CommonTools.GetAPIPayload(
+                `${VedAstro.ApiDomain}/GetPersonList/OwnerId/${VedAstro.UserId}`
             );
 
             //create a header in the list
@@ -2484,7 +2484,7 @@ class HoroscopeChat {
             $dropdown.append($horoscopeGroup); //add to main list
 
             //populate slection list at bottom with horoscopes
-            $.each(window.vedastro.PersonList, function (i, person) {
+            $.each(VedAstro.PersonList, function (i, person) {
                 $horoscopeGroup.append(
                     $("<option>", {
                         value: person.PersonId,
@@ -2495,8 +2495,8 @@ class HoroscopeChat {
             });
 
             //DO FOR PUBLIC LIST
-            window.vedastro.PublicPersonList = await CommonTools.GetAPIPayload(
-                `${window.vedastro.ApiDomain}/GetPersonList/OwnerId/101`
+            VedAstro.PublicPersonList = await CommonTools.GetAPIPayload(
+                `${VedAstro.ApiDomain}/GetPersonList/OwnerId/101`
             );
             //create a header in the list
             let $publicHoroscopeGroup = $("<optgroup>", {
@@ -2505,7 +2505,7 @@ class HoroscopeChat {
             $dropdown.append($publicHoroscopeGroup); //add to main list
 
             //populate slection list at bottom with horoscopes
-            $.each(window.vedastro.PublicPersonList, function (i, person) {
+            $.each(VedAstro.PublicPersonList, function (i, person) {
                 $publicHoroscopeGroup.append(
                     $("<option>", {
                         value: person.PersonId,
@@ -2582,7 +2582,7 @@ class HoroscopeChat {
         //user's input is sent to server for reply
         //get selected birth time
         //TODO can be DOB or bookname
-        //var timeInputUrl = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+        //var timeInputUrl = VedAstro.SelectedPerson.BirthTime;
         //var timeInputUrl = "Location/Ipoh/Time/12:44/23/04/1994/+08:00";
 
         //show temperoray "Thinking" message to user before calling API as that will take time
@@ -2609,7 +2609,7 @@ class HoroscopeChat {
     async sendMessageToServer(timeInputUrl, userQuestionInput) {
         //construct the final URL
         userQuestionInput = userQuestionInput.replace(/\?/g, ""); //remove question marks as it break API detection
-        const url = `${this.LiveServerURL}/HoroscopeChat/${timeInputUrl}/UserQuestion/${userQuestionInput}/UserId/${window.vedastro.UserId}/SessionId/${this.SessionId}`;
+        const url = `${this.LiveServerURL}/HoroscopeChat/${timeInputUrl}/UserQuestion/${userQuestionInput}/UserId/${VedAstro.UserId}/SessionId/${this.SessionId}`;
 
         try {
             const response = await fetch(url);
@@ -2935,7 +2935,7 @@ class HoroscopeChat {
             primaryAnswerHash
         ) {
             followUpQuestion = followUpQuestion.replace(/\?/g, ""); //remove question marks as it break API detection
-            const url = `${window.vedastro.horoscopechat.LiveServerURL}/HoroscopeFollowUpChat/${window.vedastro.horoscopechat.SelectedBirthTime}/FollowUpQuestion/${followUpQuestion}/PrimaryAnswerHash/${primaryAnswerHash}/UserId/${window.vedastro.UserId}/SessionId/${window.vedastro.horoscopechat.SessionId}`;
+            const url = `${window.vedastro.horoscopechat.LiveServerURL}/HoroscopeFollowUpChat/${window.vedastro.horoscopechat.SelectedBirthTime}/FollowUpQuestion/${followUpQuestion}/PrimaryAnswerHash/${primaryAnswerHash}/UserId/${VedAstro.UserId}/SessionId/${window.vedastro.horoscopechat.SessionId}`;
 
             try {
                 const response = await fetch(url);
@@ -3055,7 +3055,7 @@ class HoroscopeChat {
         }
 
         //get full details of the person
-        let selectedPerson = window.vedastro.PersonList.find(
+        let selectedPerson = VedAstro.PersonList.find(
             (obj) => obj.PersonId === selectedPersonId
         );
 
@@ -3063,7 +3063,7 @@ class HoroscopeChat {
         localStorage.setItem("selectedPerson", JSON.stringify(selectedPerson));
 
         //convert person name to birth DOB (so unregistered person can be checked)
-        var newTopicId = CommonTools.BirthTimeUrlOfSelectedPersonJson();
+        var newTopicId = VedAstro.SelectedPerson.BirthTime.toURL();
         window.vedastro.horoscopechat.SelectedBirthTime = newTopicId;
 
         //person now selected, ready to chat so change GUI
@@ -3402,10 +3402,15 @@ class Person {
 
     /**
      * Gets the person's birth time.
-     * @returns {BirthTime}
+     * @returns {Time}
      */
     get BirthTime() {
         return this.birthTime;
+    }
+
+    // Get the display name with birth year for a person
+    get DisplayName() {
+        return `${this.Name} - ${this.BirthTime.getYear()}`;
     }
 
     /**
@@ -3526,6 +3531,17 @@ class Time {
         return birthDate.getFullYear();
     }
 
+    // Output TIME only for URL format
+    // time converted to the format used in OPEN API url
+    // Sample out : /Location/London/Time/00:00/01/01/2011/+00:00
+    toURL() {
+        // this will be called on instance of Time class
+        const stdTime = this.StdTime.replace(/\s+/g, "/"); // convert all spaces to slashes
+        const locationName = this.Location.Name.replace(/\s+/g, ""); // remove all spaces from location name
+
+        const finalUrl = `/Location/${locationName}/Time/${stdTime}`;
+        return finalUrl;
+    }
 }
 
 /**
@@ -3981,12 +3997,6 @@ class PersonSelectorBox {
         this.selectedPersonId = personId;
     }
 
-    // Get the display name with birth year for a person
-    getPersonDisplayName(person) {
-        const personInstance = new Person(person);
-        return `${personInstance.Name} - ${personInstance.BirthTime.getYear()}`;
-    }
-
     // Handle keyup event on the search input field
     onKeyUpSearchBar = (event) => {
         // Ignore certain keys to prevent unnecessary filtering
@@ -4019,11 +4029,13 @@ class PersonSelectorBox {
 
         // Get previously selected person's name if available
         const selectedPerson = JSON.parse(localStorage.getItem("selectedPerson"));
-        let selectedPersonText = 'Select Person';
         if (selectedPerson && Object.keys(selectedPerson).length !== 0) {
             const personData = this.getPersonDataById(selectedPerson.PersonId);
             selectedPersonText = this.getPersonDisplayName(personData);
         }
+        var preSelected = VedAstro.GetSelectedPerson();
+        let selectedPersonText = preSelected?.DisplayName || 'Select Person';
+
 
         // Return the generated HTML for the component
         return `
@@ -4089,7 +4101,7 @@ class PersonSelectorBox {
     generatePublicPersonListHtml() {
         const html = this.publicPersonListDisplay
             .map((person) => {
-                return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${this.getPersonDisplayName(person)}</li>`;
+                return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.DisplayName}</li>`;
             })
             .join("");
 
@@ -4100,7 +4112,7 @@ class PersonSelectorBox {
     generatePersonListHtml() {
         const html = this.personListDisplay
             .map((person) => {
-                return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${this.getPersonDisplayName(person)}</li>`;
+                return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.DisplayName}</li>`;
             })
             .join("");
 
@@ -4701,8 +4713,11 @@ class GeoLocationInput {
     }
 
     isValid() {
-        // Check if all fields have been filled
-        return this.locationName !== "" && this.latitude !== "" && this.longitude !== "";
+        const locationName = document.querySelector(`#${this.ElementID} .location-name input`).value;
+        const latitude = document.querySelector(`#${this.ElementID} .latitude`).value;
+        const longitude = document.querySelector(`#${this.ElementID} .longitude`).value;
+
+        return locationName !== "" && latitude !== "" && longitude !== "";
     }
 }
 
@@ -4874,7 +4889,7 @@ class TimeLocationInput {
         return false;
     }
 
-   
+
 }
 
 

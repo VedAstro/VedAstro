@@ -109,14 +109,14 @@ async function OnClickSave_AddPerson() {
         if (!result.isConfirmed) return;
     }
 
-    // show loading
-    CommonTools.ShowLoading();
-
     // only continue if passed input field validation
     if (!(await isValidationPassed_AddPerson())) {
         Swal.close();
         return;
     }
+
+    // show loading
+    CommonTools.ShowLoading();
 
     // make a new person from the details in the input
     const person = await getPersonInstanceFromInput();
@@ -129,6 +129,8 @@ async function OnClickSave_AddPerson() {
 
     // after adding new person set person, as selected to make life easier for user (UX)
     localStorage.setItem('selectedPerson', JSON.stringify(person));
+
+    //trigger 
 
     // hide loading
     Swal.close();
@@ -200,8 +202,8 @@ async function isValidationPassed_AddPerson() {
     if (!isValidTime) {
         await Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: 'Location missing or invalid!' //Note: though it checks both only location can go invalid, time has defaults so...yeah
+            title: 'Check Location',
+            text: 'Location name is missing or invalid!' //Note: though it checks both only location can go invalid, time has defaults so...yeah
         });
         return false;
     }

@@ -3206,34 +3206,70 @@ class VedAstro {
         return !VedAstro.UserId || VedAstro.UserId === "101";
     }
 
-    static FetchPersonListFromAPI(cacheType) {
-        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101';
-        return fetch(`${VedAstro.ApiDomain}/Calculate/GetPersonList/UserId/${ownerId}`)
-            .then(response => response.json())
-            .then(data => data.Payload);
-    }
-
     static CachePersonList(cacheType, personList) {
         const cacheKey = cacheType === 'private' ? 'personList' : 'publicPersonList';
         localStorage.setItem(cacheKey, JSON.stringify(personList));
     }
 
-    static GetPersonList(cacheType) {
+    /**
+     * Gets the person list from local storage or API.
+     * 
+     * @param {string} cacheType - Type of cache, either 'private' or 'public'.
+     * @returns {Promise<Array<Person>>} - Promise that resolves to an array of Person objects.
+     */
+    static async GetPersonList(cacheType) {
+        // Determine the owner ID based on the cache type
+        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101';
+        // Determine the cache key based on the cache type
         const cacheKey = cacheType === 'private' ? 'personList' : 'publicPersonList';
-        const cachedPersonList = localStorage.getItem(cacheKey);
 
-        if (cachedPersonList) {
-            // If cached data exists, parse and return it
-            return JSON.parse(cachedPersonList);
-        } else {
-            // If no cached data, fetch from API, cache, and return
-            return VedAstro.FetchPersonListFromAPI(cacheType)
-                .then(personList => {
-                    VedAstro.CachePersonList(cacheType, personList);
-                    return personList;
-                });
+        try {
+            // Check if the person list is cached in local storage
+            const cachedPersonList = localStorage.getItem(cacheKey);
+            if (cachedPersonList) {
+                // If cached, parse the JSON and create Person objects
+                return JSON.parse(cachedPersonList).map((person) => new Person(person));
+            }
+
+            // If no cached data, fetch the person list from the API
+            const personList = await VedAstro.FetchPersonListFromAPI(cacheType);
+            // Cache the person list
+            VedAstro.CachePersonList(cacheType, personList);
+            // Return the person list
+            return personList;
+        } catch (error) {
+            // Handle any errors that occur during JSON parsing or object parsing
+            console.error('Error getting person list:', error);
+            // Return null quietly
+            return null;
         }
     }
+
+    /**
+     * Fetches the person list from the API.
+     * 
+     * @param {string} cacheType - Type of cache, either 'private' or 'public'.
+     * @returns {Promise<Array<Person>>} - Promise that resolves to an array of Person objects.
+     */
+    static async FetchPersonListFromAPI(cacheType) {
+        // Determine the owner ID based on the cache type
+        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101';
+
+        try {
+            // Fetch the person list from the API
+            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetPersonList/UserId/${ownerId}`);
+            // Parse the JSON response
+            const data = await response.json();
+            // Create Person objects from the response data
+            return data.Payload.map((person) => new Person(person));
+        } catch (error) {
+            // Handle any errors that occur during the API fetch or JSON parsing
+            console.error('Error fetching person list from API:', error);
+            // Return null quietly
+            return null;
+        }
+    }
+
 
 
 }
@@ -3949,64 +3985,19 @@ class PersonSelectorBox {
 
     }
 
-    // we first check if the person lists are already 
-    // cached in the browser's local storage using `localStorage.getItem()`. 
-    // If the cached data exists, we parse it and assign it to the respective variables. 
-    // If the cache is empty, we proceed to fetch the data from the API as before.After fetching the data from the API, 
-    // we cache it in local storage using `localStorage.setItem()` to avoid making 
-    // unnecessary API calls on subsequent page loads.
+    //fetch list for use in this specific instance
     async initializePersonListData() {
-        // Check if person lists are already cached in local storage
-        const cachedPersonList = localStorage.getItem('personList');
-        const cachedPublicPersonList = localStorage.getItem('publicPersonList');
-
-        if (cachedPersonList && cachedPublicPersonList) {
-            // Parse the cached data
-            this.personList = JSON.parse(cachedPersonList);
-            this.personListDisplay = this.personList;
-            this.publicPersonList = JSON.parse(cachedPublicPersonList);
-            this.publicPersonListDisplay = this.publicPersonList;
-
-            console.log('Loaded person lists from cache.');
-        } else {
-            // Fetch private person list from the API
-            try {
-                const personListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/${window.vedastro.UserId}`);
-                const personListData = await personListResponse.json();
-                this.personList = personListData.Payload;
-                this.personListDisplay = this.personList;
-
-                // Cache the private person list
-                localStorage.setItem('personList', JSON.stringify(this.personList));
-
-                console.log('Loaded private person list from API.');
-            } catch (error) {
-                console.error('Error fetching private person list:', error);
-            }
-
-            // Fetch public person list from the API
-            try {
-                const publicPersonListResponse = await fetch(`${window.vedastro.ApiDomain}/Calculate/GetPersonList/UserId/101`);
-                const publicPersonListData = await publicPersonListResponse.json();
-                this.publicPersonList = publicPersonListData.Payload;
-                this.publicPersonListDisplay = this.publicPersonList;
-
-                // Cache the public person list
-                localStorage.setItem('publicPersonList', JSON.stringify(this.publicPersonList));
-
-                console.log('Loaded public person list from API.');
-            } catch (error) {
-                console.error('Error fetching public person list:', error);
-            }
-        }
+        // get person list from API or cache automatic
+        this.personList = await VedAstro.GetPersonList('private');
+        this.personListDisplay = this.personList;
+        this.publicPersonList = await VedAstro.GetPersonList('public');
+        this.publicPersonListDisplay = this.publicPersonList;
 
         // Get the previously selected person from local storage
         const selectedPerson = VedAstro.GetSelectedPerson();
 
         // If a selected person exists, simulate a click on their name
         selectedPerson && this.onClickPersonName(selectedPerson.PersonId);
-            this.onClickPersonName(selectedPerson.PersonId); //todo could fail
-        }
     }
 
     // call `PersonSelectorBox.ClearPersonListCache('private')` to clear only the private person list cache,
@@ -4036,15 +4027,14 @@ class PersonSelectorBox {
     async onClickPersonName(personId) {
         // Get the full person details based on the ID
         var personData = this.getPersonDataById(personId);
-        var displayName = this.getPersonDisplayName(personData);
+        var displayName = personData.DisplayName;
 
         // Update the visible select button text
         var buttonTextHolder = $(`#${this.ElementID}`).find(`.${this.SelectedPersonNameHolderElementID}`);
         buttonTextHolder.html(displayName);
 
         // Save the selected person to local storage
-        var partialPerson = { PersonId: personId };
-        localStorage.setItem("selectedPerson", JSON.stringify(partialPerson));
+        VedAstro.SetSelectedPerson(personData);
 
         // Save the selected person ID for instance-specific selection
         this.selectedPersonId = personId;
@@ -4882,13 +4872,22 @@ class TimeLocationInput {
         const month = document.getElementById(timeInputSimple.MonthInputID).innerText;
         const year = document.getElementById(timeInputSimple.YearInputID).innerText;
 
+        //convert hour and minute from 12H to 24H
+        let hour24 = hour;
+        if (meridian === 'PM' && hour !== '12') {
+            hour24 = parseInt(hour) + 12;
+        } else if (meridian === 'AM' && hour === '12') {
+            hour24 = '00';
+        }
+
         // Get the location values from the input fields
         const locationName = document.querySelector(`#${geoLocationInput.ElementID} .location-name input`).value;
         const latitude = document.querySelector(`#${geoLocationInput.ElementID} .latitude`).value;
         const longitude = document.querySelector(`#${geoLocationInput.ElementID} .longitude`).value;
 
-        // Construct the StdTime string in the format "HH:MM DD/MM/YYYY +08:00"
-        const stdTime = `${hour}:${minute} ${date}/${month}/${year} +08:00`;
+        // Construct the StdTime string in the format "HH:MM DD/MM/YYYY tmz"
+        var timeZone = TimeLocationInput.getSystemTimezone(); // Format: +08:00
+        const stdTime = `${hour24.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} ${date.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year} ${timeZone}`;
 
         // Construct the Location object with Name, Longitude, and Latitude properties
         const location = {

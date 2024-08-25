@@ -3135,16 +3135,108 @@ class HoroscopeChat {
 //---------------------------- GLOBAL SETTINGS ---------------------------- 
 
 
-//place to hold global data for app use
-window.vedastro = {
-    UserId: "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101", // get user id from browser storage
-    get IsGuestUser() {
-        return !this.UserId || this.UserId === "101";
-    },
-    // ApiDomain: "https://vedastroapi.azurewebsites.net/api",
-    ApiDomain: "http://localhost:7071/api",
-};
 
+/**
+ * VedAstro class representing the global app data and settings.
+ */
+class VedAstro {
+    /**
+     * The default API domain.
+     */
+    static ApiDomain = "http://localhost:7071/api";
+    //static ApiDomain = "https://vedastroapi.azurewebsites.net/api";
+
+    /**
+     * get user ID stored in memory else return guest/default user id
+     */
+    static UserId = "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101"; // get user id from browser storage
+
+
+    /**
+     * Gets the selected person.
+     */
+    static GetSelectedPerson() {
+        try {
+            // Get the selected person from local storage
+            const selectedPersonJson = localStorage.getItem("selectedPerson");
+
+            if (!selectedPersonJson) {
+                return null;
+            }
+
+            // Parse the selected person JSON into a Person object
+            const selectedPersonData = JSON.parse(selectedPersonJson);
+            const selectedPerson = new Person(selectedPersonData);
+
+            // Return the selected person object
+            return selectedPerson;
+        } catch (error) {
+            // If JSON parsing or object parsing fails, return null quietly
+            return null;
+        }
+    }
+
+    /**
+     * Sets the selected person.
+     */
+    static SetSelectedPerson(person) {
+        // Save the selected person ID to local storage
+        localStorage.setItem("selectedPerson", JSON.stringify(person));
+    }
+
+    /**
+     * Sets the selected person by ID rest of data fetched by API
+     */
+    static SetSelectedPersonById(personId) {
+        // Fetch the person data from the API
+        fetch(`${VedAstro.ApiDomain}/Calculate/GetPerson/UserId/${VedAstro.UserId}/PersonId/${personId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Save the selected person to local storage
+                localStorage.setItem("selectedPerson", JSON.stringify(data.Payload));
+            });
+    }
+
+
+    /**
+     * Checks if the user is a guest.
+     * True if the user is a guest, false otherwise.
+     */
+    static IsGuestUser() {
+        return !VedAstro.UserId || VedAstro.UserId === "101";
+    }
+
+    static FetchPersonListFromAPI(cacheType) {
+        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101';
+        return fetch(`${VedAstro.ApiDomain}/Calculate/GetPersonList/UserId/${ownerId}`)
+            .then(response => response.json())
+            .then(data => data.Payload);
+    }
+
+    static CachePersonList(cacheType, personList) {
+        const cacheKey = cacheType === 'private' ? 'personList' : 'publicPersonList';
+        localStorage.setItem(cacheKey, JSON.stringify(personList));
+    }
+
+    static GetPersonList(cacheType) {
+        const cacheKey = cacheType === 'private' ? 'personList' : 'publicPersonList';
+        const cachedPersonList = localStorage.getItem(cacheKey);
+
+        if (cachedPersonList) {
+            // If cached data exists, parse and return it
+            return JSON.parse(cachedPersonList);
+        } else {
+            // If no cached data, fetch from API, cache, and return
+            return VedAstro.FetchPersonListFromAPI(cacheType)
+                .then(personList => {
+                    VedAstro.CachePersonList(cacheType, personList);
+                    return personList;
+                });
+        }
+    }
+
+
+}
 
 
 
@@ -3228,61 +3320,22 @@ class CommonTools {
         return newObj;
     }
 
-
-    //takes JSON person and gives birth time in URL format with birth location as below
-    //exp :  "Location/Singapore/Time/23:59/31/12/2000/+08:00"
-    static BirthTimeUrlOfSelectedPersonJson() {
-        // Get the previously selected person from local storage
-        var personJson = JSON.parse(localStorage.getItem("selectedPerson"));
-
-        let birthTimeJson = personJson["BirthTime"];
-
-        var locationName = birthTimeJson.Location.Name;
-        var stdTime = birthTimeJson.StdTime.split(" ");
-        var time = stdTime[0];
-        var date = stdTime[1];
-        var timezone = stdTime[2];
-        var result =
-            "Location/" +
-            locationName +
-            "/Time/" +
-            time +
-            "/" +
-            date +
-            "/" +
-            timezone;
-        return result;
-    }
-
-
     // Add a person to the Vedastro API
+    // returns newly created ID for person
     static async AddPerson(person) {
-        const apiUrl = `${window.vedastro.ApiDomain}/Calculate/AddPerson/OwnerId/xxx/Location/Singapore/Time/00:00/24/06/2024/+08:00/PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%7D`;
 
         // Update the API URL with the provided person's data
-        const updatedApiUrl = apiUrl
-            .replace("xxx", VedAstro.ApiDomain)
-            .replace("Location/Singapore/Time/00:00/24/06/2024/+08:00", `Location/${person.Location.Name}/Time/${person.BirthTime.StdTime}/+${person.BirthTime.TimeZone}`)
-            .replace("PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%7D", `PersonName/${person.Name}/Gender/${person.Gender}/Notes/${JSON.stringify(person.Notes)}`);
+        var timeUrl = person.BirthTime.toURL() // Location/Singapore/Time/00:00/24/06/2024
+        const apiUrl = `${VedAstro.ApiDomain}/Calculate/AddPerson/OwnerId/${VedAstro.UserId}${timeUrl}/PersonName/${person.Name}/Gender/${person.Gender}/Notes/${JSON.stringify(person.Notes)}`;
 
         // Make the API call to add the person
-        try {
-            const response = await fetch(updatedApiUrl, {
-                method: "GET",
-            });
-            const data = await response.json();
+        // NOTE: server generates unique id based on existing db
+        var jsonReply = await CommonTools.GetAPIPayload(apiUrl);
 
-            if (response.ok) {
-                console.log(`Person added successfully: ${data.Payload.Message}`);
-                return data.Payload;
-            } else {
-                console.error(`Error adding person: ${data.Payload.Message}`);
-                throw new Error(data.Payload.Message);
-            }
-        } catch (error) {
-            console.error(`Error adding person: ${error.message}`);
-            throw error;
-        }
+        //get first object (API call name)
+        var newPersonId = jsonReply[Object.keys(jsonReply)[0]];
+
+        return newPersonId;
     }
 
 }
@@ -3948,10 +4001,10 @@ class PersonSelectorBox {
         }
 
         // Get the previously selected person from local storage
-        const selectedPerson = JSON.parse(localStorage.getItem("selectedPerson"));
+        const selectedPerson = VedAstro.GetSelectedPerson();
 
         // If a selected person exists, simulate a click on their name
-        if (selectedPerson && Object.keys(selectedPerson).length !== 0) {
+        selectedPerson && this.onClickPersonName(selectedPerson.PersonId);
             this.onClickPersonName(selectedPerson.PersonId); //todo could fail
         }
     }
@@ -4142,6 +4195,10 @@ class InfoBox {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
 
+        // Save a reference to this instance for global access
+        InfoBox.initInstances();
+        window.vedastro.InfoBoxInstances[elementId] = this;
+
         // Get the DOM element with the given ID
         const element = document.getElementById(elementId);
 
@@ -4152,6 +4209,7 @@ class InfoBox {
 
         // Call the method to initialize the main body of the page header
         this.initializeMainBody();
+
     }
 
     // Method to initialize the main body of the page header
@@ -4164,7 +4222,7 @@ class InfoBox {
     }
 
     // Handle keyup event on the search input field
-    static onClick(event) {
+    onClick(event) {
         console.log(event);
     }
 
@@ -4173,7 +4231,7 @@ class InfoBox {
         // Return the HTML for the page header, including conditional blocks for different screen sizes
         return `
       
-<div onClick="window.vedastro.InfoBox.onClick(event)" class="" style="cursor: pointer; max-width:365px;">
+<div onClick="window.vedastro.InfoBoxInstances['${this.ElementID}'].onClick(event)" class="" style="cursor: pointer; max-width:365px;">
     <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="">
         <div class="hstack mb-2">
             <span class="iconify bi flex-shrink-0 me-2" data-icon="${this.IconName}" data-width="50"></span>
@@ -4187,6 +4245,16 @@ class InfoBox {
 
     `;
     }
+
+    static initInstances() {
+        if (!window.vedastro) {
+            window.vedastro = {};
+        }
+        if (!window.vedastro.InfoBoxInstances) {
+            window.vedastro.InfoBoxInstances = {};
+        }
+    }
+
 }
 
 /**
@@ -4567,15 +4635,16 @@ class GeoLocationInput {
                 <div class="input-group location-name">
                     <!-- HEADER ICON -->
                     <span class="input-group-text gap-2 py-1"><i class="iconify" data-icon="streamline-emojis:globe-showing-americas" data-width="34"></i>${this.LabelText}</span>
-                    <input id="${this.locationNameInputId}" onkeyup="window.vedastro.GeoLocationInputInstances['${this.ElementID}'].onUpdateLocationNameText(event)" type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;" data-bs-toggle="dropdown">
+                    <input id="${this.locationNameInputId}" onkeyup="window.vedastro.GeoLocationInputInstances['${this.ElementID}'].onUpdateLocationNameText(event)" type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;" data-bs-toggle="dropdown" onfocus="window.vedastro.GeoLocationInputInstances['${this.ElementID}'].onInputFocus(event)">
                     <ul id="${this.dropdownMenuId}" class="dropdown-menu" aria-labelledby="${this.locationNameInputId}">
                         <li><a class="dropdown-item text-muted" href="#">
-                            <i class="iconify" data-icon="grommet-icons:map" data-width="18"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="18" height="18" viewBox="0 0 24 24" data-icon="grommet-icons:map" data-width="18" class="iconify iconify--grommet-icons"><path fill="none" stroke="currentColor" stroke-width="2" d="M15 15h4l3 7H2l3-7h4m4-7a1 1 0 1 1-2 0a1 1 0 0 1 2 0M6 8c0 5 6 10 6 10s6-5 6-10c0-3.417-2.686-6-6-6S6 4.583 6 8Z"></path></svg>
                             Search city, town, state</a>
                         </li>
                         <!-- DYNAMICLY GENERATED -->
                     </ul>
                 </div>
+
 
                 <!-- Latitude & long input -->
                 <div class="input-group d-none lat-lng-fields">
@@ -4667,6 +4736,14 @@ class GeoLocationInput {
                 // Show the dropdown menu
                 dropdownMenu.classList.remove("d-none");
             });
+    }
+
+    onInputFocus(event) {
+        // Get the dropdown menu element that is associated with the input field that received focus
+        const dropdownMenu = event.target.closest(`#${this.ElementID}`).querySelector(`#${this.dropdownMenuId}`);
+
+        // Remove the 'd-none' class from the dropdown menu, which makes it visible
+        dropdownMenu.classList.remove("d-none");
     }
 
     /**

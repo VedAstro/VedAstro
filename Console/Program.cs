@@ -15,11 +15,21 @@ namespace VedAstro.Console
 
             var xxxx = HoroscopeDataListStatic.Rows;
 
-             
 
-            //Time timeSample1 = new("17:10 15/10/2023 +05:30", new GeoLocation("", 77.583, 12.983));
-            //Time timeSample2 = new("00:00 15/11/2023 +05:30", GeoLocation.Bangalore);
-            //Time timeSample = new("11:00 25/07/1984 +05:30", new GeoLocation("", 77.2, 28.6));
+
+            Time timeSample1 = new("17:10 15/10/2023 +05:30", new GeoLocation("", 77.583, 12.983));
+            Time timeSample2 = new("00:00 15/11/2023 +05:30", GeoLocation.Bangalore);
+            Time timeSample = new("11:00 25/07/1984 +05:30", new GeoLocation("", 77.2, 28.6));
+
+
+            // TEMP hack to place time in Person (wrapped) 
+            var johnDoe = new Person("", timeSample, Gender.Empty);
+
+            var xx = EventManager.CalculateEvents(1, timeSample1, timeSample2, johnDoe, new List<EventTag>()
+                {
+                    EventTag.Personal
+                });
+
 
             //var xx = await Time.FromUrl("Location/Japan/11:11/10/10/2020/+08:00");
 

@@ -11,4 +11,8 @@
     <PackageReference Include="iTextSharp" Version="5.5.13.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Library\Library.csproj" />
+  </ItemGroup>
+
 </Project>

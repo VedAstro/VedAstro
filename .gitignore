@@ -399,3 +399,6 @@ MatchMLPipeline/secrets.json
 /LLMCoder/secrets.json
 
 .idea/
+HuggingFace/PersonNameEmbeddings-15k.csv
+
+HuggingFace/RawRequestStatistic.csv

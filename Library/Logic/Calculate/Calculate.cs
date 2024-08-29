@@ -256,6 +256,8 @@ namespace VedAstro.Library
 
         #endregion
 
+
+
         #region MAINTAINANCE
 
         /// <summary>
@@ -293,6 +295,8 @@ namespace VedAstro.Library
         }
 
         #endregion
+
+       
 
         #region GEO LOCATION
 
@@ -4562,7 +4566,6 @@ namespace VedAstro.Library
         }
 
 
-
         /// <summary>
         /// Gets list of all planets that's in a house at a given time
         /// based on sign the house and planet is in and not house longitudes
@@ -4597,9 +4600,6 @@ namespace VedAstro.Library
 
             return returnList;
         }
-
-
-
 
         /// <summary>
         /// Gets the Nirayana longitude of all 9 planets
@@ -4721,8 +4721,6 @@ namespace VedAstro.Library
 
         }
 
-
-
         /// <summary>
         /// List of all planets and the houses they are located in at a given time based on zodiac sign.
         /// </summary>
@@ -4778,8 +4776,6 @@ namespace VedAstro.Library
 
             return lordOfHouseSign;
         }
-
-
 
         /// <summary>
         /// Gets the lord of zodiac sign planet is in, aka "Planet Sign Lord"
@@ -4867,7 +4863,6 @@ namespace VedAstro.Library
             return houseSign;
         }
 
-
         /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
@@ -4908,8 +4903,6 @@ namespace VedAstro.Library
 
             return allHouses;
         }
-
-
 
         /// <summary>
         /// Gets the constellation at middle longitude of the house.
@@ -5079,7 +5072,6 @@ namespace VedAstro.Library
             return houseCountedTo;
 
         }
-
 
         /// <summary>
         /// Checks if a given planet is in a given sign at a given time

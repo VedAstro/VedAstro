@@ -14,18 +14,13 @@ namespace VedAstro.Library
     {
         /** FIELDS **/
 
-
         /// <summary>
         /// Placed here to reduce overhead when being accessed by different methods in this class
         /// </summary>
         private static List<Event> EventList { get; set; } = new List<Event>();
 
-
         //we use direct storage URL for fast access & solid
         private const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
-
-        //used in muhurtha, dasa, etc... events
-        //public const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
 
 
 
@@ -115,7 +110,6 @@ namespace VedAstro.Library
 
             return returnList;
         }
-
 
         /// <summary>
         /// Does the heavy computation to know if event is occuring.
@@ -507,7 +501,6 @@ namespace VedAstro.Library
             return sortedEventList;
         }
 
-
         /// <summary>
         /// takes an array of booleans and returns a list of tuples,
         /// where each tuple represents the start and end indices of a range of true values
@@ -534,20 +527,3 @@ namespace VedAstro.Library
 
     }
 }
-
-
-//ARCHIVE CODE
-//public static MuhurthaTimePeriod GetNewMuhurthaTimePeriod(DateTimeOffset startStdTime, DateTimeOffset endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
-//{
-
-
-
-//    //get list of events
-//    var eventList = GetEventsInTimePeriod(startTime, endTime, person, precisionInHours, eventDataList);
-
-//    //initialize new muhurtha time period
-//    var muhurthaTimePeriod = new MuhurthaTimePeriod(startTime, endTime, person, eventList);
-
-//    //return 
-//    return muhurthaTimePeriod;
-//}

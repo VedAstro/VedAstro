@@ -24,8 +24,7 @@ namespace VedAstro.Library
         static AzureCache()
         {
             //get the connection string stored separately (for security reasons)
-            //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Secrets.Get("API_STORAGE");
+            var storageConnectionString = Secrets.Get("CentralStorageConnectionString");
 
             //get image from storage
             blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
@@ -34,17 +33,7 @@ namespace VedAstro.Library
 
         public static List<BlobItem> ListBlobs(string searchKeyword)
         {
-            var blobNames = new List<BlobItem>();
-
             var blobItems = blobContainerClient.GetBlobs(prefix: searchKeyword).ToList();
-
-            //foreach (var blobItem in blobItems)
-            //{
-            //    if (blobItem.Name.Contains(searchKeyword))
-            //    {
-            //        blobNames.Add(blobItem);
-            //    }
-            //}
 
             return blobItems;
         }
@@ -64,13 +53,6 @@ namespace VedAstro.Library
             return isExists;
         }
 
-        //public static async Task<string> GetLarge(string callerId)
-        //{
-        //    BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
-
-        //    var data = await APITools.BlobClientToString(blobClient);
-        //    return data;
-        //}
         public static async Task<dynamic> GetData<T>(string callerId)
         {
 
@@ -110,7 +92,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Given a any data type, will add to Cache container, with specified name, mimetype is optional
+        /// Given any data type, will add to Cache container, with specified name, mimetype is optional
         /// </summary>
         public static async Task<BlobClient?> Add<T>(string fileName, T value, string mimeType = "", Dictionary<string, string> metadata = null)
         {
@@ -157,7 +139,7 @@ namespace VedAstro.Library
             //if specified
             if (!(string.IsNullOrEmpty(mimeType)))
             {
-                //auto correct content type from wrongly set "octet/stream"
+                //autocorrect content type from wrongly set "octet/stream"
                 var blobHttpHeaders = new BlobHttpHeaders { ContentType = mimeType };
                 await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
             }

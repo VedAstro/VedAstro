@@ -174,7 +174,7 @@ This project is an effort to change that. [Read More](https://vedastro.org/About
 # 🎂 9 Years Old 
 The first line of code for this project was written in **late 2014** at **Itä-Pasila**.
 Started as a simple desktop software, with no UI and only text display.
-With continued support from users, this project has steadily grown to what it is today. Helping people from all over the world.
+With continued support from users, this project has steadily grown to what it is today. Helping people from all over the world. 🌍
     
 # 📚 Credits &amp; Reference 
 ![credits](https://vedastro.org/images/bv-raman-rao.png)
@@ -193,13 +193,14 @@ Inspired by the concept of "**Gonzo Journalism**", pioneered by [Hunter S. Thomp
 We favour this pattern for the development of VedAstro simply due to the volatile nature of this project.
 Other development styles like "Waterfall" and "Scrum" are equally good when the need is.
 
-We want to :
-- try out novel ideas at a heartbeat
-- we want the latest platform 
-- we want it cheap
+✅ We want to :
+- 💓 try out novel ideas at a heartbeat
+- 📬 we want the latest platform 
+- 💰 we want it cheap
 
 Hence the "**gonzo development**" pattern is best suited for this needs.
 
+<!--
 ### Beta & Stable
 The negative side effect is that there will be bugs forever. Because it's near impossible to constantly
 change an ever-growing code base without having to constantly fix breaking changes.
@@ -209,9 +210,9 @@ To deal with this, we split the Web App into Beta and Stable.
 
 Stable version will contain an old version of the App, while beta will always contain latest buildable code.
 But the database will be shared between these. Meaning data changes in Beta will seen in Stable as well.
+-->
 
-
- # 👶 Drunk Proof UX 
+ # 👶 Drunk Proof UI 
  We would like to introduce in this project a novel UX concept called "**Drunk Proofing**".
  The idea is simple. All UI is designed to be operated by an alcoholically intoxicated person aka drunk.
 

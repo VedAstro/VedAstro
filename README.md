@@ -74,6 +74,7 @@ Your work shines with brilliance, come what may.<br>
 Below is sample API call result for data related to "**Sun**" on "**30/06/2023**" at "**Singapore**"
 --> [Watch Video Guide](https://www.youtube.com/watch?v=y110RAgIorY)
 --> [JS Demo Files](https://github.com/VedAstro/VedAstro/tree/master/Demo/JavaScript)
+--> [Demo API Call](https://vedastroapi.azurewebsites.net/api/Calculate/AllPlanetData/PlanetName/Sun/Location/Singapore/Time/00:00/24/04/2024/+08:00)
 ```json
  "Payload": {
     "SwissEphemeris": "{ Longitude = 97.672406549912, Latitude = 2.2248025536827577E-05, DistanceAU = 1.0165940297895264, SpeedLongitude = 0, SpeedLatitude = 0, SpeedDistance = 0 }",
@@ -178,7 +179,7 @@ With continued support from users, this project has steadily grown to what it is
 # 📚 Credits &amp; Reference 
 ![credits](https://vedastro.org/images/bv-raman-rao.png)
 
-Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao for pioneering easy to read astrology books. Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle) for proving the **efficacy of free and open work** for the benefit all...[Read More](https://vedastro.org/About).
+Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao for pioneering easy to read astrology books. Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle) for proving the **efficacy of free and open work** for the benefit of all men...[Read More](https://vedastro.org/About).
 
 
 # 💌 Support

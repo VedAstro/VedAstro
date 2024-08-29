@@ -109,7 +109,7 @@ namespace VedAstro.Library
                     {svgTail}
                 ";
 
-
+            //ACT IV : take a bow & exit the stage.
             return final;
 
 

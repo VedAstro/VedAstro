@@ -39,6 +39,7 @@ namespace VedAstro.Library
         /// Represents permanent identity to this record, generated only once during creation
         /// made of human readable ID made of person name and birth year
         /// should be camel case, would look nicer
+        /// TODO change to PersonId since as client js is using that
         /// </summary>
         public string Id { get; set; }
 

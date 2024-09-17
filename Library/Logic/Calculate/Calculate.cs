@@ -167,10 +167,10 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<JArray> GetPersonList(string ownerId)
         {
-
+            //get raw person data from main person list (partial without life events)
             var foundCalls = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == ownerId);
 
-            //add each to return list
+            //convert partial Person data to full Person with life events
             var personJsonList = new JArray();
             foreach (var call in foundCalls) { personJsonList.Add(Person.FromAzureRow(call).ToJson()); }
 
@@ -256,8 +256,6 @@ namespace VedAstro.Library
 
         #endregion
 
-
-
         #region MAINTAINANCE
 
         /// <summary>
@@ -295,8 +293,6 @@ namespace VedAstro.Library
         }
 
         #endregion
-
-       
 
         #region GEO LOCATION
 
@@ -4532,7 +4528,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Gets list of all planets that's in a house/bhava at a given time
-        /// based on house longitudes and not sign
+        /// based on house longitudes and not sign. Method 1.
         /// </summary>
         public static List<PlanetName> PlanetsInHouse(HouseName houseNumber, Time time)
         {
@@ -4567,8 +4563,8 @@ namespace VedAstro.Library
 
 
         /// <summary>
-        /// Gets list of all planets that's in a house at a given time
-        /// based on sign the house and planet is in and not house longitudes
+        /// Gets list of all planets that's in a house at a given time based on sign the
+        /// house and planet is in and not house longitudes. Method 2.
         /// </summary>
         public static List<PlanetName> PlanetsInHouseBasedOnSign(HouseName houseNumber, Time time)
         {
@@ -14244,7 +14240,6 @@ namespace VedAstro.Library
         #endregion
 
         //--------------------------------------------------------------------------------------------
-
 
 
         /// <summary>

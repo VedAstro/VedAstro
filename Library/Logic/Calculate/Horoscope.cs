@@ -229,7 +229,6 @@ namespace VedAstro.Library
             return CalculatorResult.New(planetOnBothSides, new[] { Moon }, birthTime);
         }
 
-
         /// <summary>
         /// Definition: If Mars conjoins the Moon this
         /// yoga is formed.
@@ -464,40 +463,6 @@ namespace VedAstro.Library
             return CalculatorResult.New(isOccuring);
         }
 
-
-
-        /// <summary>
-        /// Definition:  Lords of the fourth and ninth houses
-        /// should be in Kendras from each other and the lord
-        /// of Lagna should be strongly disposed.
-        /// </summary>
-        [HoroscopeCalculator(HoroscopeName.KahalaYoga)]
-        public static CalculatorResult KahalaYoga_AI(Time birthTime)
-        {
-            // Calculate the lord of the fourth house
-            var fourthLord = Calculate.LordOfHouse(HouseName.House4, birthTime);
-
-            // Calculate the lord of the ninth house
-            var ninthLord = Calculate.LordOfHouse(HouseName.House9, birthTime);
-
-            // Calculate the lord of the Lagna (ascendant)
-            var lagnaLord = Calculate.LordOfHouse(HouseName.House1, birthTime);
-
-            // Check if the fourth lord is in kendra from the ninth lord
-            var fourthLordInKendra = Calculate.IsPlanetInKendraFromPlanet(fourthLord, ninthLord, birthTime);
-
-            // Check if the ninth lord is in kendra from the fourth lord
-            var ninthLordInKendra = Calculate.IsPlanetInKendraFromPlanet(ninthLord, fourthLord, birthTime);
-
-            // Check if the yoga is occurring (both lords are in kendra and the Lagna lord is strong)
-            var isOccuring = fourthLordInKendra && ninthLordInKendra && Calculate.IsPlanetStrongInShadbala(lagnaLord, birthTime);
-
-            // Return a CalculatorResult indicating whether the yoga is occurring
-            return CalculatorResult.New(isOccuring);
-        }
-
-
-
         /// <summary>
         /// If planets other than the Moon
         /// occupy the 2nd from the Sun, Vesi Yoga is formed.
@@ -529,7 +494,6 @@ namespace VedAstro.Library
         {
             return CalculatorResult.New(false);
         }
-
 
         [HoroscopeCalculator(HoroscopeName.ObhayachariYoga)]
         public static CalculatorResult ObhayachariYoga(Time birthTime)

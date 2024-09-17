@@ -413,26 +413,34 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Brings back Owner ID from Primary key & 
+        /// Given a partial person list row, will get full Person data with life events
         /// </summary>
         public static Person FromAzureRow(PersonListEntity rowData)
         {
-            //parse the person only
-            var birthTime = Time.FromJson(JToken.Parse(rowData.BirthTime));
-            var rowDataGender = Enum.Parse<Gender>(rowData.Gender);
-            var personId = rowData.RowKey;
-            var newPerson = new Person(rowData.PartitionKey, personId, rowData.Name, birthTime, rowDataGender);
+            try
+            {
+                //parse the person only
+                var birthTime = Time.FromJson(JToken.Parse(rowData.BirthTime));
+                var rowDataGender = Enum.Parse<Gender>(rowData.Gender);
+                var personId = rowData.RowKey;
+                var newPerson = new Person(rowData.PartitionKey, personId, rowData.Name, birthTime, rowDataGender);
 
-            //get person life event list (partition key = person id)
-            var lifeEvents = AzureTable.LifeEventList.Query<LifeEventRow>(call => call.PartitionKey == personId);
+                //get person life event list (partition key = person id)
+                var lifeEvents = AzureTable.LifeEventList?.Query<LifeEventRow>(call => call.PartitionKey == personId);
 
-            //convert to list
-            var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();
+                //convert to list
+                var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();
 
-            //add to person data
-            newPerson.LifeEventList = personJsonList;
+                //add to person data
+                newPerson.LifeEventList = personJsonList;
 
-            return newPerson;
+                return newPerson;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         #region JSON SUPPORT

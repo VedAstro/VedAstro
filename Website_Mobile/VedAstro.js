@@ -3151,7 +3151,6 @@ class VedAstro {
      */
     static UserId = "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101"; // get user id from browser storage
 
-
     /**
      * Gets the selected person.
      */
@@ -3197,7 +3196,6 @@ class VedAstro {
             });
     }
 
-
     /**
      * Checks if the user is a guest.
      * True if the user is a guest, false otherwise.
@@ -3226,7 +3224,7 @@ class VedAstro {
         try {
             // Check if the person list is cached in local storage
             const cachedPersonList = localStorage.getItem(cacheKey);
-            if (cachedPersonList) {
+            if (cachedPersonList !== null && cachedPersonList !== undefined) {
                 // If cached, parse the JSON and create Person objects
                 return JSON.parse(cachedPersonList).map((person) => new Person(person));
             }
@@ -3269,8 +3267,6 @@ class VedAstro {
             return null;
         }
     }
-
-
 
 }
 

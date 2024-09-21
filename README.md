@@ -245,9 +245,14 @@ Then you know your code is right, and **has a place for it in this universe**.
 
 
 # 🙏 Special Thanks
-Built with Software Sponsored by **[JetBrains](https://www.jetbrains.com/)** 
+<img src="https://pics.paypal.com/00/p/ZjU4ZjZiMjEtNDE0Ny00MGExLTg2ZTMtNzkxOTQ1MTI4Mzc0/image_34.PNG" width="100"/>
 
-<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="200"/>
+**Leslie Choi** : Sponsored & believed in the project even when work was only half done.
+
+
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="100"/>
+
+**JetBrains** : Gave free "ReSharper License" that made coding life easier.
 
 
 # ❤️ Social

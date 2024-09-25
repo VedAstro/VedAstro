@@ -19,7 +19,7 @@ namespace VedAstro.Library
         public const string PersonShareListName = "PersonShareList";
         public const string PersonListRecycleBinName = "PersonListRecycleBin";
         public const string LifeEventListName = "LifeEventList";
-        
+
         //URL
         public static readonly string APIAbuseListUri = $"https://{AccountName}.table.core.windows.net/{APIAbuseListName}";
         public static readonly string PersonListUri = $"https://{AccountName}.table.core.windows.net/{PersonListName}";

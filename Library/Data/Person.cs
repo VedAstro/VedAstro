@@ -417,30 +417,22 @@ namespace VedAstro.Library
         /// </summary>
         public static Person FromAzureRow(PersonListEntity rowData)
         {
-            try
-            {
-                //parse the person only
-                var birthTime = Time.FromJson(JToken.Parse(rowData.BirthTime));
-                var rowDataGender = Enum.Parse<Gender>(rowData.Gender);
-                var personId = rowData.RowKey;
-                var newPerson = new Person(rowData.PartitionKey, personId, rowData.Name, birthTime, rowDataGender);
+            //parse the person only
+            var birthTime = Time.FromJson(JToken.Parse(rowData.BirthTime));
+            var rowDataGender = Enum.Parse<Gender>(rowData.Gender);
+            var personId = rowData.RowKey;
+            var newPerson = new Person(rowData.PartitionKey, personId, rowData.Name, birthTime, rowDataGender);
 
-                //get person life event list (partition key = person id)
-                var lifeEvents = AzureTable.LifeEventList?.Query<LifeEventRow>(call => call.PartitionKey == personId);
+            //get person life event list (partition key = person id)
+            var lifeEvents = AzureTable.LifeEventList?.Query<LifeEventRow>(call => call.PartitionKey == personId);
 
-                //convert to list
-                var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();
+            //convert to list
+            var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();
 
-                //add to person data
-                newPerson.LifeEventList = personJsonList;
+            //add to person data
+            newPerson.LifeEventList = personJsonList;
 
-                return newPerson;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            return newPerson;
         }
 
         #region JSON SUPPORT

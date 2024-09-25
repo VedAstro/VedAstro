@@ -408,7 +408,6 @@ namespace API
                 returnList.Add(Person.FromAzureRow(call));
             }
 
-
             return returnList;
         }
 

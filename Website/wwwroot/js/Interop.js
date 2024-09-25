@@ -360,8 +360,9 @@ export function FunFeaturePopUp() {
 //--------------------------CALENDAR INPUT SELECTOR CODE
 //DESCRIPTION
 //This file stores all code fo js date picker (VanillaCalendar)
-//To use: first load file via blazor
-//then call LoadCalendar
+//To use:
+//#1. first load html file via blazor / js
+//#2. then call LoadCalendar
 //make sure empty calendar div exists
 
 export function InitCalendarPicker(tableId) {

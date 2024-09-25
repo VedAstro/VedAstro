@@ -523,10 +523,19 @@
 		<Name>LagnaMalikaYoga</Name>
 		<Nature>Good</Nature>
 		<ConditionDescription>
+			House 1
 			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
+			
+			Twelve types of Malika Yogas, one
+			for each Bhava, are caused. Thus the Yoga beginning
+			from the first is Lagna Malika, the one beginning
+			from the fifth, Putra Malika and so on. The seven
+			planets (excluding of course Rahu and Kethu) should
+			occupy the seven houses contiguously from a Bhava
+			in question.
 		</ConditionDescription>
 		<Description>
 			King, ruler or commander, wealthy.
@@ -537,10 +546,19 @@
 		<Name>DhanaMalikaYoga</Name>
 		<Nature>Good</Nature>
 		<ConditionDescription>
+			House 2
 			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
+			
+			Twelve types of Malika Yogas, one
+			for each Bhava, are caused. Thus the Yoga beginning
+			from the first is Lagna Malika, the one beginning
+			from the fifth, Putra Malika and so on. The seven
+			planets (excluding of course Rahu and Kethu) should
+			occupy the seven houses contiguously from a Bhava
+			in question.
 		</ConditionDescription>
 		<Description>
 			very wealthy, dutiful, resolute and unsympathetic
@@ -551,6 +569,7 @@
 		<Name>VikramaMalikaYoga</Name>
 		<Nature>Good</Nature>
 		<ConditionDescription>
+			House 2
 			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
@@ -565,6 +584,7 @@
 		<Name>SukhaMalikaYoga</Name>
 		<Nature>Good</Nature>
 		<ConditionDescription>
+			House 2
 			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
@@ -579,6 +599,7 @@
 		<Name>PutraMalikaYoga</Name>
 		<Nature>Good</Nature>
 		<ConditionDescription>
+			House 2
 			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
@@ -593,6 +614,7 @@
 		<Name>SatruMalikaYoga</Name>
 		<Nature>Bad</Nature>
 		<ConditionDescription>
+			House 2
 			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
@@ -607,6 +629,7 @@
 		<Name>KalatraMalikaYoga</Name>
 		<Nature>Good</Nature>
 		<ConditionDescription>
+			House 2
 			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
@@ -621,6 +644,7 @@
 		<Name>RandhraMalikaYoga</Name>
 		<Nature>Good</Nature>
 		<ConditionDescription>
+			House 2
 			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
@@ -635,6 +659,7 @@
 		<Name>BhagyaMalikaYoga</Name>
 		<Nature>Good</Nature>
 		<ConditionDescription>
+			House 2
 			If all the seven planets occupy the
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
@@ -650,6 +675,7 @@
 		<Nature>Good</Nature>
 		<ConditionDescription></ConditionDescription>
 		<Description>
+			House 2
 			Definition:
 
 			Results:

@@ -1,16 +1,10 @@
 ﻿//-----------------------------> MAIN APP CODE
-//code handles a single-page app with sections 
-//and a navigation menu that allows users to switch between them.The navigation history is
 //stored in an array(up to 10 pages deep) in local storage, and the `updateHistory` function is used to update the history array 
-//whenever the user navigates to a new page.The`showSection` function is used to show the specified section(page) and hide all others
-
-// get all sections (pages)
-const sections = document.querySelectorAll('section');
 
 // create an array to store the navigation history (up to 10 pages deep)
 const history = JSON.parse(localStorage.getItem('history')) || [];
 
-// function to update the navigation history
+// function to update the navigation history, input page name
 function updateHistory(newPage) {
     // add the new page to the history array
     history.push(newPage);
@@ -22,26 +16,19 @@ function updateHistory(newPage) {
     localStorage.setItem('history', JSON.stringify(history));
 }
 
-//navigate to page artificially exp :  onclick="showSection('Home')"
-function showSection(sectionId) {
+//TODO MARKED FOR OBLIVION
+//navigate to page href set in clicked element
+//function navigateToPage(clickedLink) {
 
-    // update the navigation history
-    updateHistory(sectionId);
+//    // update the navigation history
+//    updateHistory(clickedLink);
 
-    // Selection of all section HTML elements
-    const sections = document.querySelectorAll('section');
+//    // get the href attribute from the clicked element
+//    const href = clickedLink.getAttribute('href');
 
-    // Looping through every selected section node.
-    sections.forEach((section) => {
-        // Removing 'active' class from each section node.
-        section.classList.remove('active');
-
-        // Addition of 'active' class to match the specific sectionID being displayed.
-        if (section.id === sectionId) {
-            section.classList.add('active');
-        }
-    });
-}
+//    // navigate to the href
+//    window.location.href = href;
+//}
 
 function navigateToPreviousPage() {
     // check if there is a previous page in the history array
@@ -51,42 +38,30 @@ function navigateToPreviousPage() {
         // get the previous page from the history array
         const previousPage = history[history.length - 1];
         // show the previous page
-        showSection(previousPage);
+        navigateToPage(previousPage);
         // update the navigation history in local storage
         localStorage.setItem('history', JSON.stringify(history));
     }
 }
 
-// show the first section (page) by default
-showSection('Home');
 
 
 
+////-----------------------------> CONTACT PAGE
+//function sendMessage() {
+
+//}
 
 
-//-----------------------------> HOROSCOPE PAGE
-new PageHeader("HoroscopePageHeader");
-new PersonSelectorBox("PersonSelectorBox_Horoscope");
-new InfoBox("InfoBox_AskAI_Horoscope");
-new InfoBox("InfoBox_EasyImport_Horoscope");
-new InfoBox("InfoBox_ForgotenTime_Horoscope");
-
-
-//-----------------------------> CONTACT PAGE
-function sendMessage() {
-
-}
-
-
-//-----------------------------> ADD PERSON PAGE
-new PageHeader("AddPersonPageHeader");
-new PersonSelectorBox("PersonSelectorBox_Horoscope");
-new InfoBox("InfoBox_EasyImport_AddPerson");
-new InfoBox("InfoBox_Private_AddPerson");
-new InfoBox("InfoBox_ForgotenTime_AddPerson");
-new IconButton("IconButton_Back_AddPerson");
-new IconButton("IconButton_Save_AddPerson");
-new TimeLocationInput("TimeLocationInput_AddPerson");
+////-----------------------------> ADD PERSON PAGE
+//new PageHeader("AddPersonPageHeader");
+//new PersonSelectorBox("PersonSelectorBox_Horoscope");
+//new InfoBox("InfoBox_EasyImport_AddPerson");
+//new InfoBox("InfoBox_Private_AddPerson");
+//new InfoBox("InfoBox_ForgotenTime_AddPerson");
+//new IconButton("IconButton_Back_AddPerson");
+//new IconButton("IconButton_Save_AddPerson");
+//new TimeLocationInput("TimeLocationInput_AddPerson");
 
 
 function OnClickBack_AddPerson() {
@@ -96,7 +71,7 @@ async function OnClickSave_AddPerson() {
 
     // if not logged in tell user what the f he is doing
     if (window.vedastro.IsGuestUser) {
-        const loginLink = `<a target="_blank" style="text-decoration-line: none;" onclick="showSection('Login')" class="link-primary fw-bold">logged in</a>`;
+        const loginLink = `<a target="_blank" style="text-decoration-line: none;" onclick="navigateToPage(this)" class="link-primary fw-bold">logged in</a>`;
         const result = await Swal.fire({
             icon: 'info',
             title: 'Remember!',
@@ -289,8 +264,6 @@ async function isValidationPassed_AddPerson() {
 }
 
 
-
-
 //-----------------------------> NUMEROLOGY PAGE
 async function getNameNumber(fullName) {
     try {
@@ -318,3 +291,13 @@ function updateNumerologyPrediction(number, text) {
     //make visible, since default start hidden
     document.getElementById('NumerologyPredictionOutputHolder').style.display = 'block';
 }
+
+
+//RUN CODE
+// sidebar show/hide
+const buttontoggle = document.getElementById('sidebartoggle');
+const desktopSidebar = document.getElementById('desktopsidebar');
+buttontoggle.addEventListener('click',
+    () => {
+        desktopSidebar.classList.toggle('d-md-block');
+    });

@@ -1292,7 +1292,6 @@ window.ChartFromSVG = async (chartStr) => {
 
 //await CommonTools.AddPerson(person);
 
-
 class AshtakvargaTable {
     constructor(rawSettings) {
         //correct if property names is camel case (for Blazor)
@@ -1438,7 +1437,6 @@ class AshtakvargaTable {
         currentTable.innerHTML = html;
     }
 }
-
 
 //-------------------------------- AWESOME CODE  -------------------------------
 //YOU CANNOT FIGHT A DYING MAN,
@@ -1678,7 +1676,7 @@ class AstroTable {
     async GenerateTable(userInputParams) {
         //convert input param to URL format
         //in URL format it's ready to use in final URL
-        var userInputURLParams = this.ConvertRawParamsToURL(userInputParams);
+        var userInputURLParams = this.ConvertRawParamsToUrl(userInputParams);
 
         //clear old data if any
         $(`#${this.ElementID}`).empty();
@@ -1719,7 +1717,7 @@ class AstroTable {
         await this.GenerateHTMLTableFromAPI(userInputURLParams);
     }
 
-    ConvertRawParamsToURL(userInputParams) {
+    ConvertRawParamsToUrl(userInputParams) {
         //handle camel case to pascal case (for blazor only)
         userInputParams =
             CommonTools.ConvertCamelCaseKeysToPascalCase(userInputParams);
@@ -3063,7 +3061,7 @@ class HoroscopeChat {
         localStorage.setItem("selectedPerson", JSON.stringify(selectedPerson));
 
         //convert person name to birth DOB (so unregistered person can be checked)
-        var newTopicId = VedAstro.SelectedPerson.BirthTime.toURL();
+        var newTopicId = VedAstro.SelectedPerson.BirthTime.ToUrl();
         window.vedastro.horoscopechat.SelectedBirthTime = newTopicId;
 
         //person now selected, ready to chat so change GUI
@@ -3135,7 +3133,6 @@ class HoroscopeChat {
 //---------------------------- GLOBAL SETTINGS ---------------------------- 
 
 
-
 /**
  * VedAstro class representing the global app data and settings.
  */
@@ -3143,8 +3140,9 @@ class VedAstro {
     /**
      * The default API domain.
      */
-    static ApiDomain = "http://localhost:7071/api";
+    //static ApiDomain = "http://localhost:7071/api";
     //static ApiDomain = "https://vedastroapi.azurewebsites.net/api";
+    //static ApiDomain = "https://vedastroapibeta.azurewebsites.net/api";
 
     /**
      * get user ID stored in memory else return guest/default user id
@@ -3224,7 +3222,7 @@ class VedAstro {
         try {
             // Check if the person list is cached in local storage
             const cachedPersonList = localStorage.getItem(cacheKey);
-            if (cachedPersonList !== null && cachedPersonList !== undefined) {
+            if (cachedPersonList !== null && cachedPersonList !== undefined && cachedPersonList !== "null") {
                 // If cached, parse the JSON and create Person objects
                 return JSON.parse(cachedPersonList).map((person) => new Person(person));
             }
@@ -3252,7 +3250,7 @@ class VedAstro {
     static async FetchPersonListFromAPI(cacheType) {
         // Determine the owner ID based on the cache type
         const ownerId = cacheType === 'private' ? VedAstro.UserId : '101';
-
+        
         try {
             // Fetch the person list from the API
             const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetPersonList/UserId/${ownerId}`);
@@ -3357,7 +3355,7 @@ class CommonTools {
     static async AddPerson(person) {
 
         // Update the API URL with the provided person's data
-        var timeUrl = person.BirthTime.toURL() // Location/Singapore/Time/00:00/24/06/2024
+        var timeUrl = person.BirthTime.ToUrl() // Location/Singapore/Time/00:00/24/06/2024
         const apiUrl = `${VedAstro.ApiDomain}/Calculate/AddPerson/OwnerId/${VedAstro.UserId}${timeUrl}/PersonName/${person.Name}/Gender/${person.Gender}/Notes/${JSON.stringify(person.Notes)}`;
 
         // Make the API call to add the person
@@ -3422,119 +3420,63 @@ class Person {
          * The unique identifier of the person.
          * @type {string}
          */
-        this.personId = jsonObject.PersonId;
+        this.PersonId = jsonObject.PersonId;
 
         /**
          * The name of the person.
          * @type {string}
          */
-        this.name = jsonObject.Name;
+        this.Name = jsonObject.Name;
 
         /**
          * Any notes about the person.
          * @type {string}
          */
-        this.notes = jsonObject.Notes;
+        this.Notes = jsonObject.Notes;
 
         /**
          * The birth time of the person.
          * @type {Time}
          */
-        this.birthTime = new Time(jsonObject.BirthTime);
+        this.BirthTime = new Time(jsonObject.BirthTime);
 
         /**
          * The gender of the person.
          * @type {string}
          */
-        this.gender = jsonObject.Gender;
+        this.Gender = jsonObject.Gender;
 
         /**
          * The owner ID of the person.
          * @type {string}
          */
-        this.ownerId = jsonObject.OwnerId;
+        this.OwnerId = jsonObject.OwnerId;
 
         /**
          * The list of life events associated with the person.
          * @type {LifeEvent[]}
          */
-        this.lifeEventList = jsonObject.LifeEventList.map((lifeEvent) => new LifeEvent(lifeEvent));
-    }
-
-    /**
-     * Gets the person ID.
-     * @returns {string}
-     */
-    get PersonId() {
-        return this.personId;
-    }
-
-    /**
-     * Gets the person's name.
-     * @returns {string}
-     */
-    get Name() {
-        return this.name;
-    }
-
-    /**
-     * Gets the person's notes.
-     * @returns {string}
-     */
-    get Notes() {
-        return this.notes;
-    }
-
-    /**
-     * Gets the person's birth time.
-     * @returns {Time}
-     */
-    get BirthTime() {
-        return this.birthTime;
+        this.LifeEventList = jsonObject.LifeEventList.map((lifeEvent) => new LifeEvent(lifeEvent));
     }
 
     // Get the display name with birth year for a person
     get DisplayName() {
-        return `${this.Name} - ${this.BirthTime.getYear()}`;
-    }
-
-    /**
-     * Gets the person's gender.
-     * @returns {string}
-     */
-    get Gender() {
-        return this.gender;
-    }
-
-    /**
-     * Gets the person's owner ID.
-     * @returns {string}
-     */
-    get OwnerId() {
-        return this.ownerId;
-    }
-
-    /**
-     * Gets the person's life event list.
-     * @returns {LifeEvent[]}
-     */
-    get LifeEventList() {
-        return this.lifeEventList;
+        return `${this.Name} - ${this.BirthTime.GetYear()}`;
     }
 
     /**
      * Converts the person instance to a JSON object.
      * @returns {Object}
      */
-    toObject() {
+    ToObject() {
         return {
-            PersonId: this.personId,
-            Name: this.name,
-            Notes: this.notes,
-            BirthTime: this.birthTime.toObject(),
-            Gender: this.gender,
-            OwnerId: this.ownerId,
-            LifeEventList: this.lifeEventList.map((lifeEvent) => lifeEvent.toObject()),
+            PersonId: this.PersonId,
+            Name: this.Name,
+            Notes: this.Notes,
+            BirthTime: this.BirthTime.ToObject(),
+            Gender: this.Gender,
+            OwnerId: this.OwnerId,
+            LifeEventList: this.lifeEventList.map((lifeEvent) => lifeEvent.ToObject()),
         };
     }
 
@@ -3542,8 +3484,8 @@ class Person {
      * Converts the person instance to a JSON string.
      * @returns {string}
      */
-    toJson() {
-        return JSON.stringify(this.toObject());
+    ToJson() {
+        return JSON.stringify(this.ToObject());
     }
 }
 
@@ -3570,44 +3512,28 @@ class Time {
          * The standard time in the format "HH:mm dd/mm/yyyy +HH:MM".
          * @type {string}
          */
-        this.stdTime = jsonObject.StdTime;
+        this.StdTime = jsonObject.StdTime;
 
         /**
          * The location object associated with this time.
          * @type {GeoLocation}
          */
-        this.location = new GeoLocation(jsonObject.Location);
+        this.Location = new GeoLocation(jsonObject.Location);
     }
-
-    /**
-     * Gets the standard time.
-     * @return {string} The standard time.
-     */
-    get StdTime() {
-        return this.stdTime;
-    }
-
-    /**
-     * Gets the location object.
-     * @return {Location} The location object.
-     */
-    get Location() {
-        return this.location;
-    }
-
+    
     /**
      * Converts the Time object to a plain JavaScript object.
      * @return {Object} The plain JavaScript object representation of the Time object.
      */
-    toObject() {
+    ToObject() {
         return {
             StdTime: this.stdTime,
-            Location: this.location.toObject(),
+            Location: this.location.ToObject(),
         };
     }
 
     // Get the year from the standard time
-    getYear() {
+    GetYear() {
         const stdTime = this.StdTime; // e.g. "13:54 25/10/1992 +08:00"
         const [time, date] = stdTime.split(' ');
         const [hours, minutes] = time.split(':');
@@ -3619,7 +3545,7 @@ class Time {
     // Output TIME only for URL format
     // time converted to the format used in OPEN API url
     // Sample out : /Location/London/Time/00:00/01/01/2011/+00:00
-    toURL() {
+    ToUrl() {
         // this will be called on instance of Time class
         const stdTime = this.StdTime.replace(/\s+/g, "/"); // convert all spaces to slashes
         const locationName = this.Location.Name.replace(/\s+/g, ""); // remove all spaces from location name
@@ -3660,114 +3586,58 @@ class LifeEvent {
          * The unique identifier of the Person associated with this Life Event.
          * @type {string}
          */
-        this.personId = jsonObject.PersonId;
+        this.PersonId = jsonObject.PersonId;
 
         /**
          * The unique identifier of this Life Event.
          * @type {string}
          */
-        this.id = jsonObject.Id;
+        this.Id = jsonObject.Id;
 
         /**
          * The name of this Life Event.
          * @type {string}
          */
-        this.name = jsonObject.Name;
+        this.Name = jsonObject.Name;
 
         /**
          * The start time of this Life Event.
          * @type {Time}
          */
-        this.startTime = new Time(jsonObject.StartTime);
+        this.StartTime = new Time(jsonObject.StartTime);
 
         /**
          * A brief description of this Life Event.
          * @type {string}
          */
-        this.description = jsonObject.Description;
+        this.Description = jsonObject.Description;
 
         /**
          * The nature of this Life Event (e.g. "Good", "Bad", etc.).
          * @type {string}
          */
-        this.nature = jsonObject.Nature;
+        this.Nature = jsonObject.Nature;
 
         /**
          * The weight or significance of this Life Event (e.g. "Minor", "Major", etc.).
          * @type {string}
          */
-        this.weight = jsonObject.Weight;
-    }
-
-    /**
-     * Gets the Person ID associated with this Life Event.
-     * @return {string} The Person ID.
-     */
-    get PersonId() {
-        return this.personId;
-    }
-
-    /**
-     * Gets the ID of this Life Event.
-     * @return {string} The ID.
-     */
-    get Id() {
-        return this.id;
-    }
-
-    /**
-     * Gets the name of this Life Event.
-     * @return {string} The name.
-     */
-    get Name() {
-        return this.name;
-    }
-
-    /**
-     * Gets the start time of this Life Event.
-     * @return {StartTime} The start time.
-     */
-    get StartTime() {
-        return this.startTime;
-    }
-
-    /**
-     * Gets the description of this Life Event.
-     * @return {string} The description.
-     */
-    get Description() {
-        return this.description;
-    }
-
-    /**
-     * Gets the nature of this Life Event.
-     * @return {string} The nature.
-     */
-    get Nature() {
-        return this.nature;
-    }
-
-    /**
-     * Gets the weight of this Life Event.
-     * @return {string} The weight.
-     */
-    get Weight() {
-        return this.weight;
+        this.Weight = jsonObject.Weight;
     }
 
     /**
      * Converts this Life Event object to a plain JavaScript object.
      * @return {Object} The plain JavaScript object representation of this Life Event.
      */
-    toObject() {
+    ToObject() {
         return {
-            PersonId: this.personId,
-            Id: this.id,
-            Name: this.name,
-            StartTime: this.startTime.toObject(),
-            Description: this.description,
-            Nature: this.nature,
-            Weight: this.weight,
+            PersonId: this.PersonId,
+            Id: this.Id,
+            Name: this.Name,
+            StartTime: this.StartTime.ToObject(),
+            Description: this.Description,
+            Nature: this.Nature,
+            Weight: this.Weight,
         };
     }
 }
@@ -3792,58 +3662,33 @@ class GeoLocation {
          * The name of this location.
          * @type {string}
          */
-        this.name = jsonObject.Name;
+        this.Name = jsonObject.Name;
 
         /**
          * The longitude of this location.
          * @type {number}
          */
-        this.longitude = jsonObject.Longitude;
+        this.Longitude = jsonObject.Longitude;
 
         /**
          * The latitude of this location.
          * @type {number}
          */
-        this.latitude = jsonObject.Latitude;
-    }
-
-    /**
-     * Gets the name of this location.
-     * @return {string} The name.
-     */
-    get Name() {
-        return this.name;
-    }
-
-    /**
-     * Gets the longitude of this location.
-     * @return {number} The longitude.
-     */
-    get Longitude() {
-        return this.longitude;
-    }
-
-    /**
-     * Gets the latitude of this location.
-     * @return {number} The latitude.
-     */
-    get Latitude() {
-        return this.latitude;
+        this.Latitude = jsonObject.Latitude;
     }
 
     /**
      * Converts this Location object to a plain JavaScript object.
      * @return {Object} The plain JavaScript object representation of this Location.
      */
-    toObject() {
+    ToObject() {
         return {
-            Name: this.name,
-            Longitude: this.longitude,
-            Latitude: this.latitude,
+            Name: this.Name,
+            Longitude: this.Longitude,
+            Latitude: this.Latitude,
         };
     }
 }
-
 
 
 //-------------------------------- VIEW COMPONENTS -----------------------------------
@@ -3978,7 +3823,6 @@ class PersonSelectorBox {
         // Generate and inject the HTML into the page
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
 
-
     }
 
     //fetch list for use in this specific instance
@@ -4030,6 +3874,7 @@ class PersonSelectorBox {
         buttonTextHolder.html(displayName);
 
         // Save the selected person to local storage
+        //TODO can be left unupdated when selected person is edited
         VedAstro.SetSelectedPerson(personData);
 
         // Save the selected person ID for instance-specific selection
@@ -4067,13 +3912,12 @@ class PersonSelectorBox {
         this.searchInput = document.getElementById('searchInput');
 
         // Get previously selected person's name if available
+        var selectedPersonText = 'Select Person'; //default
         const selectedPerson = JSON.parse(localStorage.getItem("selectedPerson"));
         if (selectedPerson && Object.keys(selectedPerson).length !== 0) {
-            const personData = this.getPersonDataById(selectedPerson.PersonId);
-            selectedPersonText = this.getPersonDisplayName(personData);
+            const parsedPerson = new Person(selectedPerson);
+            selectedPersonText = parsedPerson.DisplayName;
         }
-        var preSelected = VedAstro.GetSelectedPerson();
-        let selectedPersonText = preSelected?.DisplayName || 'Select Person';
 
 
         // Return the generated HTML for the component
@@ -4098,7 +3942,7 @@ class PersonSelectorBox {
             <!-- PRIVATE PERSON LIST -->
             ${this.personListHTML}
 
-            <!-- DEVIDER & EXAMPLES ICON -->
+            <!-- DIVIDER & EXAMPLES ICON -->
             <li><hr class="dropdown-divider"></li>
             <div class="ms-3 d-flex justify-content-between">
               <div class=" hstack gap-2" style=" ">
@@ -4113,14 +3957,13 @@ class PersonSelectorBox {
 
           </ul>
         </div>
-        <button onClick="showSection('AddPerson')" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2">
+        <button onClick="navigateToPage(this)" href="/AddPerson" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2">
           <i class="iconify" data-icon="ant-design:user-add-outlined" data-width="25"></i>
         </button>
       </div>
     </div>
   `;
     }
-
 
     // Get full person data from the given list based on ID
     getPersonDataById(personId) {

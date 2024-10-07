@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #f0f2f5">
+<head>
+    <!--to stop caching during active development-->
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>VedAstro</title>
+
+    <!--LOAD FONTS-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lexend Deca"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varta"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gowun Dodum"> <!--  article text -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Homemade Apple"> <!--  cursive for quotes -->
+    <!-- DATE PICKER  (Vanilla Calendar) -->
+    <!-- NOTE : current JS code is dependent on version 2.4.0 so maintain, unless you got balls to go update VedAstro.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@2.4.0/build/vanilla-calendar.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@2.4.0/build/vanilla-calendar.min.js"></script>
+
+
+    <!--JQuery-->
+    <!--Note: JQuery needs to be loaded before bootstrap & vedastro.js-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="./js/VedAstro.js"></script>
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            display: flex;
+            justify-content: space-around;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+            }
+
+        section {
+            display: none;
+        }
+
+            section.active {
+                display: block;
+            }
+
+        .hidden {
+            display: none;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .calendar-container {
+                margin-left: -100px;
+            }
+        }
+        /* Hide desktop navigation bar and sidebar on small screens */
+        @media only screen and (max-width: 768px) {
+            #desktopnavbar {
+                display: none;
+            }
+
+            #desktopsidebar {
+                display: none;
+            }
+
+            #mobilenavbar {
+                display: block;
+            }
+        }
+
+        /* Show desktop navigation bar and sidebar on large screens */
+        @media only screen and (min-width: 769px) {
+            #desktopnavbar {
+                display: block;
+            }
+
+            #desktopsidebar {
+                display: block;
+            }
+
+            #mobilenavbar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body style="background: #F0F2F5;">
+    <!-- TO PLAY BAKING DONE SOUND -->
+    <audio autoplay="">Your browser does not support the html audio tag.</audio>
+
+    <div id="app" class="min-vh-100 container-lg pt-4" style="background: #F0F2F5;">
+        <div class="row flex-md-nowrap">
+
+            <!-- DESKTOP SIDE BAR ---------------->
+            <div class="col-auto align-items-start d-none d-md-block hidden" id="desktopsidebar">
+                <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 100;">
+                    <input type="text" class="form-control" placeholder="Search..." aria-expanded="false">
+
+                    <a href="./Home.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                       class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn ">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--ant-design" width="25" height="25"
+                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024" data-icon="ant-design:home-twotone"
+                             data-width="25">
+                            <path fill="currentColor" fill-opacity=".15"
+                                  d="m512.1 172.6l-370 369.7h96V868H392V640c0-22.1 17.9-40 40-40h160c22.1 0 40 17.9 40 40v228h153.9V542.3H882L535.2 195.7zm434.5 422.9c-6 6-13.1 10.8-20.8 13.9c7.7-3.2 14.8-7.9 20.8-13.9m-887-34.7c5 30.3 31.4 53.5 63.1 53.5h.9c-31.9 0-58.9-23-64-53.5m-.9-10.5v-1.9zm.1-2.6c.1-3.1.5-6.1 1-9.1c-.6 2.9-.9 6-1 9.1">
+                            </path>
+                            <path fill="currentColor"
+                                  d="M951 510c0-.1-.1-.1-.1-.2l-1.8-2.1c-.1-.1-.2-.3-.4-.4c-.7-.8-1.5-1.6-2.2-2.4L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.6 63.6 0 0 0-16 26.6l-.6 2.1l-.3 1.1l-.3 1.2c-.2.7-.3 1.4-.4 2.1c0 .1 0 .3-.1.4c-.6 3-.9 6-1 9.1v3.3c0 .5 0 1 .1 1.5c0 .5 0 .9.1 1.4c0 .5.1 1 .1 1.5c0 .6.1 1.2.2 1.8c0 .3.1.6.1.9l.3 2.5v.1c5.1 30.5 32.2 53.5 64 53.5h42.5V940h691.7V614.3h43.4c8.6 0 16.9-1.7 24.5-4.9s14.7-7.9 20.8-13.9a63.6 63.6 0 0 0 18.7-45.3c0-14.7-5-28.8-14.3-40.2M568 868H456V664h112zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7l23.1 23.1L882 542.3z">
+                            </path>
+                        </svg>Home
+                    </a>
+
+                    <a href="./MatchChecker.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                       class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_17="" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--bi" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                             viewBox="0 0 16 16" data-icon="bi:arrow-through-heart-fill" data-width="25">
+                            <path fill="currentColor" fill-rule="evenodd"
+                                  d="M2.854 15.854A.5.5 0 0 1 2 15.5V14H.5a.5.5 0 0 1-.354-.854l1.5-1.5A.5.5 0 0 1 2 11.5h1.793l3.103-3.104a.5.5 0 1 1 .708.708L4.5 12.207V14a.5.5 0 0 1-.146.354zM16 3.5a.5.5 0 0 1-.854.354L14 2.707l-1.006 1.006c.236.248.44.531.6.845c.562 1.096.585 2.517-.213 4.092c-.793 1.563-2.395 3.288-5.105 5.08L8 13.912l-.276-.182A24 24 0 0 1 5.8 12.323L8.31 9.81a1.5 1.5 0 0 0-2.122-2.122L3.657 10.22a9 9 0 0 1-1.039-1.57c-.798-1.576-.775-2.997-.213-4.093C3.426 2.565 6.18 1.809 8 3.233c1.25-.98 2.944-.928 4.212-.152L13.292 2L12.147.854A.5.5 0 0 1 12.5 0h3a.5.5 0 0 1 .5.5z">
+                            </path>
+                        </svg>Match Checker
+                    </a>
+
+                    <a href="./AIChat.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                       class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_19="" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--fluent-mdl2" width="25" height="25"
+                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 2048 2048" data-icon="fluent-mdl2:chat-bot"
+                             data-width="25">
+                            <path fill="currentColor"
+                                  d="M768 1024H640V896h128zm512 0h-128V896h128zm512-128v256h-128v320q0 40-15 75t-41 61t-61 41t-75 15h-264l-440 376v-376H448q-40 0-75-15t-61-41t-41-61t-15-75v-320H128V896h128V704q0-40 15-75t41-61t61-41t75-15h448V303q-29-17-46-47t-18-64q0-27 10-50t27-40t41-28t50-10q27 0 50 10t40 27t28 41t10 50q0 34-17 64t-47 47v209h448q40 0 75 15t61 41t41 61t15 75v192zm-256-192q0-26-19-45t-45-19H448q-26 0-45 19t-19 45v768q0 26 19 45t45 19h448v226l264-226h312q26 0 45-19t19-45zm-851 462q55 55 126 84t149 30q78 0 149-29t126-85l90 91q-73 73-167 112t-198 39q-103 0-197-39t-168-112z">
+                            </path>
+                        </svg>AI Chat
+                    </a>
+
+                    <a href="./LifePredictor.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                       class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_21="" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--gis" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                             viewBox="0 0 100 100" data-icon="gis:map-time" data-width="25">
+                            <path fill="currentColor"
+                                  d="M33.523 34.986a20 20 0 0 0-20 20a20 20 0 0 0 20 20a20 20 0 0 0 20-20a20 20 0 0 0-20-20m6.204 4.088a2.5 2.5 0 0 1 2.127 3.781l-6.9 11.952l7.247 4.672a2.5 2.5 0 1 1-2.709 4.203l-9.25-5.961a2.5 2.5 0 0 1-.81-3.352l8.091-14.014a2.5 2.5 0 0 1 2.204-1.28">
+                            </path>
+                            <path fill="currentColor" fill-rule="evenodd"
+                                  d="M2.523 5A2.5 2.5 0 0 0 0 7.5v70.29a2.5 2.5 0 0 0 1.447 2.267l31.666 14.71A2.5 2.5 0 0 0 34.19 95a2.5 2.5 0 0 0 1.032-.232l30.613-14.221l30.613 14.22A2.5 2.5 0 0 0 100 92.5V22.21a2.5 2.5 0 0 0-1.447-2.267L66.887 5.233A2.5 2.5 0 0 0 65.809 5a2.5 2.5 0 0 0-1.03.232L34.166 19.453L3.553 5.233A2.5 2.5 0 0 0 2.523 5m64.428 5.775L95 23.805v64.777L67.322 75.725Zm-2.998.354l.37 64.605l-28.677 13.323l-.062-10.871c-.998.078-2 .09-3 .033l.062 10.818L5 76.193V11.418l27.275 12.67l.045 7.908a22.242 22.242 0 0 1 3.002.182l-.045-7.727z"
+                                  color="currentColor"></path>
+                        </svg>Life Predictor
+                    </a>
+
+                    <a href="./MatchFinder.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                       class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_23="" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--game-icons" width="25" height="25"
+                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512" data-icon="game-icons:lovers" data-width="25">
+                            <path fill="currentColor"
+                                  d="M132.255 18.093c-32.842 0-59.592 33.923-59.592 75.935c0 21.274 7.079 40.468 18.092 54.284C22.623 158.879 7.903 253.733 24.1 339.874h23.563L46.63 234.53l18.688-.185l1.25 126.685l8.75 132.877h46.875v-172.29c-15.257-18.713-25.615-39.351-26.424-64.825l-.004-.1v-.1c-.154-15.988 6.478-35.643 19.219-52.566c12.741-16.922 32.481-30.98 57.783-31.29c17.252-.212 35.458 5.013 51.338 14.771c-12.131-20.214-29.245-34.177-51.26-38.32c11.507-13.88 18.971-33.345 18.971-55.157c.097-36.903-24.805-76.041-59.562-75.937zm247.841 0c-32.842 0-59.591 33.923-59.591 75.935c0 21.274 7.078 40.468 18.091 54.284c-25.296 3.923-43.223 19.473-54.945 41.875c16.803-11.476 36.697-17.682 55.465-17.452c25.302.311 45.042 14.369 57.783 31.291s19.373 36.578 19.219 52.567v.1l-.004.1c-.826 26.007-11.608 46.974-27.393 65.997v171.113h44.315l11.5-154.029h.03l1.062-105.531l18.687.185l-1.062 105.346h24.53c18.363-88.46-4.724-178.95-67.095-190.687c11.507-13.88 18.97-33.345 18.97-55.157c.098-36.903-24.805-76.041-59.562-75.937M172.99 190.733c-18.837.232-33.281 10.381-43.625 24.12c-10.326 13.715-15.675 31.13-15.594 41.506c1.226 36.63 26.557 61.833 61.219 92.044c26.758 23.322 58.19 48.519 80.617 83.38l.357-.637l.336.601c22.427-34.843 53.847-60.03 80.596-83.344c34.662-30.211 59.993-55.414 61.219-92.044c.081-10.376-5.268-27.791-15.594-41.506c-10.344-13.739-24.788-23.888-43.625-24.12c-28.453-.349-63.84 20.288-74.414 52.022l-8.539 25.625l-8.54-25.625c-10.573-31.734-45.96-52.37-74.413-52.021zm-32.11 150.989v152.181h44.315l7.893-105.714c-9.94-9.023-20.098-17.651-29.924-26.215c-7.726-6.734-15.242-13.43-22.283-20.252zm229.157.93c-6.762 6.5-13.94 12.894-21.315 19.322c-10.636 9.27-21.66 18.622-32.375 28.463l6.815 103.47h46.875z">
+                            </path>
+                        </svg>Match Finder
+                    </a>
+
+                    <a href="./Horoscope.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                       class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_25="" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--fluent" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                             viewBox="0 0 20 20" data-icon="fluent:book-star-20-filled" data-width="25">
+                            <path fill="currentColor"
+                                  d="M4 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v11a1 1 0 0 1-1 1H5a1 1 0 0 0 1 1h9.5a.5.5 0 0 1 0 1H6a2 2 0 0 1-2-2zm6.454 1.29a.5.5 0 0 0-.907 0l-.822 1.77l-1.938.234a.5.5 0 0 0-.28.863l1.43 1.328L7.56 11.4a.5.5 0 0 0 .734.533L10 10.985l1.705.948a.5.5 0 0 0 .734-.533l-.375-1.915l1.43-1.328a.5.5 0 0 0-.281-.863l-1.937-.235zm-.94 2.443L10 6.687l.486 1.046a.5.5 0 0 0 .393.286l1.145.138l-.845.785a.5.5 0 0 0-.15.463l.222 1.131l-1.008-.56a.5.5 0 0 0-.486 0l-1.008.56l.222-1.131a.5.5 0 0 0-.15-.463l-.844-.785L9.12 8.02a.5.5 0 0 0 .393-.286">
+                            </path>
+                        </svg>Horoscope
+                    </a>
+
+                    <a href="./GoodTimeFinder.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                       class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_27="" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--svg-spinners" width="25" height="25"
+                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="svg-spinners:clock" data-width="25">
+                            <path fill="currentColor"
+                                  d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9,9,0,0,1,12,21Z"></path>
+                            <rect width="2" height="7" x="11" y="6" fill="currentColor" rx="1">
+                                <animateTransform attributeName="transform" dur="9s" repeatCount="indefinite" type="rotate"
+                                                  values="0 12 12;360 12 12"></animateTransform>
+                            </rect>
+                            <rect width="2" height="9" x="11" y="11" fill="currentColor" rx="1">
+                                <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate"
+                                                  values="0 12 12;360 12 12"></animateTransform>
+                            </rect>
+                        </svg>Good Time Finder
+                    </a>
+
+                    <a href="./APIBuilder.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                       class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_29="" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                             viewBox="0 0 24 24" data-icon="mdi:cloud-tags" data-width="25">
+                            <path fill="currentColor"
+                                  d="M21.86 12.5A4.3 4.3 0 0 0 19 11c0-1.95-.68-3.6-2.04-4.96S13.95 4 12 4c-1.58 0-3 .47-4.25 1.43s-2.08 2.19-2.5 3.72c-1.25.28-2.29.93-3.08 1.95S1 13.28 1 14.58c0 1.51.54 2.8 1.61 3.85C3.69 19.5 5 20 6.5 20h12c1.25 0 2.31-.44 3.19-1.31c.87-.88 1.31-1.94 1.31-3.19q0-1.725-1.14-3M10.5 16.18L9.09 17.6L4.5 13l4.59-4.6l1.41 1.42L7.32 13zm4.41 1.42l-1.41-1.42L16.68 13L13.5 9.82l1.41-1.42L19.5 13z">
+                            </path>
+                        </svg>API Builder
+                    </a>
+
+                    <a href="./Numerology.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                       class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_31="">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--fluent" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                             viewBox="0 0 20 20" data-icon="fluent:text-number-format-20-filled" data-width="25">
+                            <path fill="currentColor"
+                                  d="M16.965 2.977c.523.258.917.738 1.179 1.468a.75.75 0 0 1-1.412.506c-.168-.468-.345-.587-.43-.628c-.124-.062-.272-.073-.583-.073c-.244 0-.389.075-.494.17c-.12.107-.226.275-.307.494a2.8 2.8 0 0 0-.167.882v.01c0 .406.007.89.163 1.289q.107.277.29.427c.117.097.297.19.598.223c.092.01.29.01.483-.062a.8.8 0 0 0 .469-.454a.75.75 0 0 1 1.367.616c-.635 1.411-2.034 1.441-2.485 1.391c-.559-.062-1.022-.256-1.389-.559a2.5 2.5 0 0 1-.73-1.037c-.267-.683-.267-1.425-.267-1.807v-.074l.005-.094a4.3 4.3 0 0 1 .258-1.275c.133-.357.35-.765.713-1.09a2.2 2.2 0 0 1 1.493-.55h.035c.273 0 .748-.001 1.211.227M4.696 2.75a.75.75 0 0 1 .697.5l1.774 5a.75.75 0 0 1-1.414.5l-.089-.25h-2.11l-.104.27a.75.75 0 1 1-1.4-.54l1.936-5a.75.75 0 0 1 .71-.48m-.04 2.907L4.135 7h.996zm.644 5.095a.75.75 0 0 1 .694.748v5a.75.75 0 0 1-1.5 0v-2.7q-.097.075-.198.141a.75.75 0 1 1-.832-1.248c.56-.373.961-.963 1.047-1.354a.75.75 0 0 1 .79-.588m4.535 1.498c-.309 0-.585.29-.585.614a.75.75 0 1 1-1.5 0c0-1.04.84-2.114 2.085-2.114c.71 0 1.406.332 1.8.938c.417.64.417 1.46-.04 2.237c-.235.4-.552.694-.846.926c-.148.117-.298.224-.436.322l-.06.042q-.175.123-.328.236a3 3 0 0 0-.351.299h1.62a.75.75 0 0 1 0 1.5H8.5a.75.75 0 0 1-.75-.75c0-1.158.688-1.807 1.273-2.247c.123-.093.251-.183.368-.265l.056-.04c.137-.097.259-.184.372-.274c.228-.18.383-.34.482-.508c.211-.36.14-.562.077-.66c-.087-.133-.281-.256-.543-.256m4.887.365a.5.5 0 0 1 .14-.223c.066-.057.2-.142.485-.142c.492 0 .596.31.596.386c0 .17-.038.314-.109.403c-.045.056-.194.211-.712.211a.75.75 0 0 0 0 1.5c.202 0 .463.028.646.114a.34.34 0 0 1 .135.098c.012.017.04.06.04.174c0 .335-.102.448-.155.493c-.075.063-.218.121-.441.121c-.261 0-.382-.046-.44-.082c-.045-.028-.123-.094-.194-.311a.75.75 0 0 0-1.425.468c.153.464.411.854.816 1.11c.39.247.83.315 1.243.315c.45 0 .98-.113 1.409-.475c.452-.382.687-.95.687-1.639a1.77 1.77 0 0 0-.424-1.177c.362-.464.424-.996.424-1.323c0-.923-.794-1.886-2.096-1.886c-.629 0-1.121.203-1.477.517a2 2 0 0 0-.59.936a.75.75 0 1 0 1.442.412M8 3.5v5a.75.75 0 0 0 .872.74v.01H10.5c.238 0 .733-.037 1.195-.305c.52-.303.923-.86.923-1.704c0-.42-.092-.794-.283-1.107a1.7 1.7 0 0 0-.283-.35c.152-.279.242-.62.242-1.025c0-.409-.081-.772-.25-1.08a1.7 1.7 0 0 0-.66-.669c-.463-.26-.958-.26-1.126-.26H8.75A.75.75 0 0 0 8 3.5m2.5 4.25h-1v-1h.936c.191 0 .38.01.517.077c.052.026.08.053.101.087c.022.035.064.127.064.327a.6.6 0 0 1-.06.297a.3.3 0 0 1-.117.11a.96.96 0 0 1-.44.102m-.878-2.5H9.5v-1h.75c.157 0 .301.013.398.068a.2.2 0 0 1 .08.08c.024.044.066.149.066.36a.63.63 0 0 1-.06.31a.25.25 0 0 1-.095.096a.76.76 0 0 1-.357.086z">
+                            </path>
+                        </svg>Numerology
+                    </a>
+
+                    <!-- TODO FUTURE <button href="/StarsAboveMe.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                                               class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " _bl_32="" aria-expanded="false">
+                                           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                                                role="img" class="iconify iconify--solar" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                                                viewBox="0 0 24 24" data-icon="solar:moon-stars-bold" data-width="25">
+                                               <path fill="currentColor"
+                                                     d="M19.9 2.307a.483.483 0 0 0-.9 0l-.43 1.095a.484.484 0 0 1-.272.274l-1.091.432a.486.486 0 0 0 0 .903l1.091.432a.48.48 0 0 1 .272.273L19 6.81c.162.41.74.41.9 0l.43-1.095a.484.484 0 0 1 .273-.273l1.091-.432a.486.486 0 0 0 0-.903l-1.091-.432a.484.484 0 0 1-.273-.274zM16.033 8.13a.483.483 0 0 0-.9 0l-.157.399a.484.484 0 0 1-.272.273l-.398.158a.486.486 0 0 0 0 .903l.398.157c.125.05.223.148.272.274l.157.399c.161.41.739.41.9 0l.157-.4a.484.484 0 0 1 .272-.273l.398-.157a.486.486 0 0 0 0-.903l-.398-.158a.484.484 0 0 1-.272-.273z">
+                                               </path>
+                                               <path fill="currentColor"
+                                                     d="M12 22c5.523 0 10-4.477 10-10c0-.463-.694-.54-.933-.143a6.5 6.5 0 1 1-8.924-8.924C12.54 2.693 12.463 2 12 2C6.477 2 2 6.477 2 12s4.477 10 10 10">
+                                               </path>
+                                           </svg>Stars Above Me
+                                       </button>
+                    -->
+                    <!--TODO FUTURE <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
+                        <button style="height: 37.1px; width: fit-content;"
+                                class="btn-sm w-100 dropdown-toggle hstack gap-2 iconButton btn-outline-primary btn " type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false" _bl_34="">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                 class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                                 viewBox="0 0 24 24" data-icon="mdi:treasure-chest" data-width="25">
+                                <path fill="currentColor"
+                                      d="M5 4h14a3 3 0 0 1 3 3v4h-7v-1H9v1H2V7a3 3 0 0 1 3-3m6 7h2v2h-2zm-9 1h7v1l2 2h2l2-2v-1h7v8H2z">
+                                </path>
+                            </svg>Top Secret
+                        </button>
+                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
+                            <li><a class="dropdown-item" href="Journal">Journal</a></li>
+                            <li><a class="dropdown-item" href="BirthTimeFinder">Birth Time Finder</a></li>
+                            <li><a class="dropdown-item" href="LocalMeanTime">Local Mean Time</a></li>
+                            <li><a class="dropdown-item" href="SunRiseSetTime">Sunrise/Sunset Time</a></li>
+                        </ul>
+                    </div> -->
+
+                    <a href="./Login.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+                       class="btn-sm w-100 hstack gap-2 iconButton btn-warning btn ">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                             role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet"
+                             viewBox="0 0 24 24" data-icon="mdi:user-circle" data-width="25">
+                            <path fill="currentColor"
+                                  d="M12 19.2c-2.5 0-4.71-1.28-6-3.2c.03-2 4-3.1 6-3.1s5.97 1.1 6 3.1a7.23 7.23 0 0 1-6 3.2M12 5a3 3 0 0 1 3 3a3 3 0 0 1-3 3a3 3 0 0 1-3-3a3 3 0 0 1 3-3m0-3A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10c0-5.53-4.5-10-10-10">
+                            </path>
+                        </svg>Log In
+                    </a>
+                </div>
+
+                <!-- WEBSITE VERSION STAMP -->
+                <div class="sticky-bottom position-fixed mb-3 ms-5" style="color: #8f8f8f; font-size: 8px; z-index: 1;">
+                    <div style="cursor: pointer;" class="hstack gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ion"
+                             width="10" height="10" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512" data-icon="ion:earth"
+                             data-width="10">
+                            <path fill="currentColor"
+                                  d="M414.39 97.74A224 224 0 1 0 97.61 414.52A224 224 0 1 0 414.39 97.74M64 256.13a191.6 191.6 0 0 1 6.7-50.31c7.34 15.8 18 29.45 25.25 45.66c9.37 20.84 34.53 15.06 45.64 33.32c9.86 16.21-.67 36.71 6.71 53.67c5.36 12.31 18 15 26.72 24c8.91 9.08 8.72 21.52 10.08 33.36a305 305 0 0 0 7.45 41.27c0 .1 0 .21.08.31C117.8 411.13 64 339.8 64 256.13m192 192a193 193 0 0 1-32-2.68c.11-2.71.16-5.24.43-7c2.43-15.9 10.39-31.45 21.13-43.35c10.61-11.74 25.15-19.68 34.11-33c8.78-13 11.41-30.5 7.79-45.69c-5.33-22.44-35.82-29.93-52.26-42.1c-9.45-7-17.86-17.82-30.27-18.7c-5.72-.4-10.51.83-16.18-.63c-5.2-1.35-9.28-4.15-14.82-3.42c-10.35 1.36-16.88 12.42-28 10.92c-10.55-1.41-21.42-13.76-23.82-23.81c-3.08-12.92 7.14-17.11 18.09-18.26c4.57-.48 9.7-1 14.09.68c5.78 2.14 8.51 7.8 13.7 10.66c9.73 5.34 11.7-3.19 10.21-11.83c-2.23-12.94-4.83-18.21 6.71-27.12c8-6.14 14.84-10.58 13.56-21.61c-.76-6.48-4.31-9.41-1-15.86c2.51-4.91 9.4-9.34 13.89-12.27c11.59-7.56 49.65-7 34.1-28.16c-4.57-6.21-13-17.31-21-18.83c-10-1.89-14.44 9.27-21.41 14.19c-7.2 5.09-21.22 10.87-28.43 3c-9.7-10.59 6.43-14.06 10-21.46c1.65-3.45 0-8.24-2.78-12.75q5.41-2.28 11-4.23a15.6 15.6 0 0 0 8 3c6.69.44 13-3.18 18.84 1.38c6.48 5 11.15 11.32 19.75 12.88c8.32 1.51 17.13-3.34 19.19-11.86c1.25-5.18 0-10.65-1.2-16a190.83 190.83 0 0 1 105 32.21c-2-.76-4.39-.67-7.34.7c-6.07 2.82-14.67 10-15.38 17.12c-.81 8.08 11.11 9.22 16.77 9.22c8.5 0 17.11-3.8 14.37-13.62c-1.19-4.26-2.81-8.69-5.42-11.37a193 193 0 0 1 18 14.14c-.09.09-.18.17-.27.27c-5.76 6-12.45 10.75-16.39 18.05c-2.78 5.14-5.91 7.58-11.54 8.91c-3.1.73-6.64 1-9.24 3.08c-7.24 5.7-3.12 19.4 3.74 23.51c8.67 5.19 21.53 2.75 28.07-4.66c5.11-5.8 8.12-15.87 17.31-15.86a15.4 15.4 0 0 1 10.82 4.41c3.8 3.94 3.05 7.62 3.86 12.54c1.43 8.74 9.14 4 13.83-.41a192 192 0 0 1 9.24 18.77c-5.16 7.43-9.26 15.53-21.67 6.87c-7.43-5.19-12-12.72-21.33-15.06c-8.15-2-16.5.08-24.55 1.47c-9.15 1.59-20 2.29-26.94 9.22c-6.71 6.68-10.26 15.62-17.4 22.33c-13.81 13-19.64 27.19-10.7 45.57c8.6 17.67 26.59 27.26 46 26c19.07-1.27 38.88-12.33 38.33 15.38c-.2 9.81 1.85 16.6 4.86 25.71c2.79 8.4 2.6 16.54 3.24 25.21a158 158 0 0 0 4.74 30.07A191.75 191.75 0 0 1 256 448.13">
+                            </path>
+                        </svg>
+                        <span>Made on Earth</span>
+                    </div>
+                    <div class="hstack gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bi"
+                             width="10" height="10" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16"
+                             data-icon="bi:rocket-fill" data-width="10">
+                            <g fill="currentColor">
+                                <path d="M10.175 1.991c.81 1.312 1.583 3.43 1.778 6.819l1.5 1.83A2.5 2.5 0 0 1 14 12.202V15.5a.5.5 0 0 1-.9.3l-1.125-1.5c-.166-.222-.42-.4-.752-.57c-.214-.108-.414-.192-.627-.282l-.196-.083C9.7 13.793 8.85 14 8 14s-1.7-.207-2.4-.635q-.101.044-.198.084c-.211.089-.411.173-.625.281c-.332.17-.586.348-.752.57L2.9 15.8a.5.5 0 0 1-.9-.3v-3.298a2.5 2.5 0 0 1 .548-1.562l.004-.005L4.049 8.81c.197-3.323.969-5.434 1.774-6.756c.466-.767.94-1.262 1.31-1.57a3.7 3.7 0 0 1 .601-.41A.55.55 0 0 1 8 0c.101 0 .17.027.25.064q.056.025.145.075c.118.066.277.167.463.315c.373.297.85.779 1.317 1.537M9.5 6c0-1.105-.672-2-1.5-2s-1.5.895-1.5 2S7.172 8 8 8s1.5-.895 1.5-2">
+                                </path>
+                                <path d="M8 14.5c.5 0 .999-.046 1.479-.139L8.4 15.8a.5.5 0 0 1-.8 0l-1.079-1.439c.48.093.98.139 1.479.139">
+                                </path>
+                            </g>
+                        </svg>
+                        <span>40763952-2665-stable</span>
+                    </div>
+                    <div class="hstack gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                             aria-hidden="true" role="img" class="iconify iconify--material-symbols" width="11" height="11"
+                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="material-symbols:copyright-outline"
+                             data-width="11">
+                            <path fill="currentColor"
+                                  d="M10 16h4q.425 0 .713-.288T15 15v-2h-2v1h-2v-4h2v1h2V9q0-.425-.288-.712T14 8h-4q-.425 0-.712.288T9 9v6q0 .425.288.713T10 16m2 6q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8">
+                            </path>
+                        </svg>
+                        <span>2014 - 2023 VedAstro</span>
+                    </div>
+                    <div style="cursor: pointer;" class="mt-1"><img src="./images/ce-fcc-recycle.svg"></div>
+                </div>
+            </div>
+
+            <div class="col mt-0 mt-md-0">
+
+                <!-- DESKTOP TOP NAV BAR  -->
+                <div id="desktopnavbar" style="min-width: 954px;" class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white">
+
+                    <button id="sidebartoggle" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_62=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--lucide" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="lucide:panel-left-close" data-width="25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18m7-6l-3-3l3-3"></path></g></svg></button>
+
+                    <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_63=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="mdi:theme-light-dark" data-width="25"><path fill="currentColor" d="M7.5 2c-1.79 1.15-3 3.18-3 5.5s1.21 4.35 3.03 5.5C4.46 13 2 10.54 2 7.5A5.5 5.5 0 0 1 7.5 2m11.57 1.5l1.43 1.43L4.93 20.5L3.5 19.07zm-6.18 2.43L11.41 5L9.97 6l.42-1.7L9 3.24l1.75-.12l.58-1.65L12 3.1l1.73.03l-1.35 1.13zm-3.3 3.61l-1.16-.73l-1.12.78l.34-1.32l-1.09-.83l1.36-.09l.45-1.29l.51 1.27l1.36.03l-1.05.87zM19 13.5a5.5 5.5 0 0 1-5.5 5.5c-1.22 0-2.35-.4-3.26-1.07l7.69-7.69c.67.91 1.07 2.04 1.07 3.26m-4.4 6.58l2.77-1.15l-.24 3.35zm4.33-2.7l1.15-2.77l2.2 2.54zm1.15-4.96l-1.14-2.78l3.34.24zM9.63 18.93l2.77 1.15l-2.53 2.19z"></path></svg></button>
+
+                    <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-outline-primary btn ms-md-auto" _bl_64=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="mdi:book-open-page-variant-outline" data-width="25"><path fill="currentColor" d="m19 1l-5 5v11l5-4.5zm2 4v13.5c-1.1-.35-2.3-.5-3.5-.5c-1.7 0-4.15.65-5.5 1.5V6c-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5c.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5c1.35-.85 3.8-1.5 5.5-1.5c1.65 0 3.35.3 4.75 1.05c.1.05.15.05.25.05c.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1M10 18.41C8.75 18.09 7.5 18 6.5 18c-1.06 0-2.32.19-3.5.5V7.13c.91-.4 2.14-.63 3.5-.63s2.59.23 3.5.63z"></path></svg>
+                        Guide</button>
+
+                    <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-outline-primary btn " _bl_65=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--carbon" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32" data-icon="carbon:gateway-api" data-width="25"><path fill="currentColor" d="M17 18.184v-4.368a3 3 0 1 0-2 0v4.369a3 3 0 1 0 2 0ZM16 10a1 1 0 1 1-1 1a1 1 0 0 1 1-1m0 12a1 1 0 1 1 1-1a1 1 0 0 1-1 1"></path><path fill="currentColor" d="M30.414 17.414a2 2 0 0 0 0-2.828l-5.787-5.787l2.9-2.862a2.002 2.002 0 1 0-1.44-1.388l-2.874 2.836l-5.799-5.8a2 2 0 0 0-2.828 0L8.799 7.374L5.937 4.472A2.002 2.002 0 1 0 4.55 5.914l2.835 2.873l-5.8 5.799a2 2 0 0 0 0 2.828l5.8 5.799l-2.835 2.873a1.998 1.998 0 1 0 1.387 1.442l2.862-2.9l5.787 5.786a2 2 0 0 0 2.828 0l5.8-5.799l2.872 2.836a1.998 1.998 0 1 0 1.442-1.387l-2.9-2.863ZM16 29L3 16L16 3l13 13Z"></path></svg>
+                        Open API</button>
+
+                    <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-warning btn " _bl_66=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--openmoji" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 72 72" data-icon="openmoji:love-letter" data-width="25"><path fill="#FFF" d="M65.086 55.5H6.878A2.877 2.877 0 0 1 4 52.623V17.248A2.25 2.25 0 0 1 6.248 15h59.446A2.306 2.306 0 0 1 68 17.306v35.28a2.914 2.914 0 0 1-2.914 2.914"></path><path fill="#EA5A47" d="M47.064 33.552A5.885 5.885 0 0 0 36 30.755a5.885 5.885 0 0 0-11.064 2.797c0 1.398.49 2.68 1.304 3.69l-.002.002L36 49.342l9.762-12.098l-.003-.002a5.86 5.86 0 0 0 1.305-3.69"></path><g fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M65.086 55.5H6.878A2.877 2.877 0 0 1 4 52.623V17.248A2.25 2.25 0 0 1 6.248 15h59.446A2.306 2.306 0 0 1 68 17.306v35.28a2.914 2.914 0 0 1-2.914 2.914"></path><path stroke-linecap="round" d="m5 16l15 16m47-16L52 32"></path><path stroke-linejoin="round" d="M47.064 33.552A5.885 5.885 0 0 0 36 30.755a5.885 5.885 0 0 0-11.064 2.797c0 1.398.49 2.68 1.304 3.69l-.002.002L36 49.342l9.762-12.098l-.003-.002a5.86 5.86 0 0 0 1.305-3.69z"></path></g></svg>
+                        Donate</button>
+
+                    <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
+                        <button style="height: 37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-outline-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_67=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ep" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024" data-icon="ep:guide" data-width="25"><path fill="currentColor" d="M640 608h-64V416h64zm0 160v160a32 32 0 0 1-32 32H416a32 32 0 0 1-32-32V768h64v128h128V768zM384 608V416h64v192zm256-352h-64V128H448v128h-64V96a32 32 0 0 1 32-32h192a32 32 0 0 1 32 32z"></path><path fill="currentColor" d="m220.8 256l-71.232 80l71.168 80H768V256zm-14.4-64H800a32 32 0 0 1 32 32v224a32 32 0 0 1-32 32H206.4a32 32 0 0 1-23.936-10.752l-99.584-112a32 32 0 0 1 0-42.496l99.584-112A32 32 0 0 1 206.4 192m678.784 496l-71.104 80H266.816V608h547.2zm-56.768-144H234.88a32 32 0 0 0-32 32v224a32 32 0 0 0 32 32h593.6a32 32 0 0 0 23.936-10.752l99.584-112a32 32 0 0 0 0-42.496l-99.584-112A32 32 0 0 0 828.48 544z"></path></svg></button>
+                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu">
+                            <li><a class="dropdown-item" href="./Contact.html">Contact Us</a></li>
+                            <li><a class="dropdown-item" href="./About.html">About</a></li>
+                            <li><a class="dropdown-item" href="https://www.youtube.com/@vedastro/videos" target="_blank">Video Guides</a></li>
+                            <li><a class="dropdown-item" href="./JoinOurFamily.html">Join Us</a></li>
+                            <li><a class="dropdown-item" href="./Calculator.html">Calculators</a></li>
+                            <li><a class="dropdown-item" href="./PersonList.html">Person List</a></li>
+                            <li><a class="dropdown-item" href="./TrainAIAstrologer.html">Train AI</a></li>
+                            <li><a class="dropdown-item" href="./Remedy.html">Remedy</a></li>
+                            <li><a class="dropdown-item" href="./Download.html">Download</a></li>
+                            <li><a class="dropdown-item" href="https://vedastroapi.azurewebsites.net/api">API Live Status</a></li>
+                            <li><a class="dropdown-item" href="./TableGenerator.html">Table Generator</a></li>
+                            <li><a class="dropdown-item" href="./BodyTypes.html">Body Types</a></li>
+                            <li><a class="dropdown-item" href="./ImportPerson.html">Import Person</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- MOBILE TOP NAV BAR -->
+                <nav class="p-1 navbar rounded-bottom-4" data-bs-theme="dark" style="background-color: #1877f2 !important; margin-top: -1.5rem !important; margin-left: -0.73rem !important; margin-right: -0.73rem !important;" id="mobilenavbar">
+                    <div class="container-fluid">
+                        <a class="navbar-brand active" href="/">
+                            <img src="./image/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
+                            <span class="ms-1 align-middle">VedAstro</span>
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="navbar-nav border-opacity-10 border-2 border-top border-white navbar-collapse collapse" id="navbarTogglerDemo02">
+                            <ul class="nav nav-fill">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="/Home.html">
+                                        <iconify-icon class="align-bottom" icon="mdi:home" width="28" height="28"></iconify-icon>
+                                        <span class="ms-1 align-middle" style="">Home</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="./AIChat.html">
+                                        <iconify-icon class="align-bottom" icon="mage:we-chat" width="28" height="28"></iconify-icon>
+                                        <span class="ms-1 align-middle" style="">AI Chat</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="./Horoscope.html">
+                                        <iconify-icon class="align-bottom" icon="fluent:book-star-20-filled" width="28" height="28"></iconify-icon>
+                                        <span class="ms-1 align-middle" style="">Horoscope</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="./MatchChecker.html">
+                                        <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
+                                        <span class="ms-1 align-middle" style="">Match</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="./Numerology.html">
+                                        <iconify-icon class="align-bottom" icon="mdi:numbers" width="28" height="28"></iconify-icon>
+                                        <span class="ms-1 align-middle" style="">Numerology</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="./MatchFinder.html">
+                                        <iconify-icon class="align-bottom" icon="game-icons:lovers" width="28" height="28"></iconify-icon>
+                                        <span class="ms-1 align-middle" style="">Find Match</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="./LifePredictor.html">
+                                        <iconify-icon class="align-bottom" icon="gis:map-time" width="28" height="28"></iconify-icon>
+                                        <span class="ms-1 align-middle" style="">Life Predictor</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="./GoodTimeFinder.html">
+                                        <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
+                                        <span class="ms-1 align-middle" style="">Good Time Finder</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- PAGE CONTENT -->
+                <div class="container" style="background: #F0F2F5;">
+                    <div>
+                        <!-- MAIN TITLE-->
+                        <!-- MOBILE PORTRAIT ONLY -->
+                        <div class="d-block d-md-none">
+                            <div class="px-4 py-1 my-2 text-center">
+                                <img class="d-block mx-auto" src="./image/vedastro-api-logo.png" style="-webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%); mask-image: linear-gradient(to bottom, black 0%, transparent 100%); margin-bottom: -75px;" alt="">
+                                <div class="col-lg-6 mx-auto">
+                                    <p class="lead mb-4">
+                                        A non-profit, open source project to make
+                                        Vedic Astrology easily available to all.
+                                    </p>
+                                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                        <!-- BUTTONS -->
+                                        <a href="./QuickGuide.html" type="button" class="btn btn-primary btn-lg px-4 gap-3">
+                                            <iconify-icon class="align-bottom" icon="mdi:book-open-variant" width="28" height="28"></iconify-icon>
+                                            Quick Guide
+                                        </a>
+                                        <a href="https://github.com/VedAstro/VedAstro" target="_blank" class="btn btn-outline-secondary btn-lg px-4">
+                                            <iconify-icon class="align-bottom" icon="uil:github" width="28" height="28"></iconify-icon>
+                                            Source Code
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- DESKTOP AND TABLET ONLY -->
+                        <div class="d-none d-md-block">
+                            <style>
+                                .backgroudImg {
+                                    background-image: url("images/zodiac-wheel-faded-2.png");
+                                    background-repeat: no-repeat;
+                                }
+                            </style>
+
+                            <div class="backgroudImg bg-white p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow">
+                                <div class="p-3 p-lg-5 pt-lg-3">
+                                    <h1 class="display-4 fw-bold lh-1">VedAstro</h1>
+                                    <p class="lh-base lead" style="font-weight: 400;">A non-profit, open source project to make<br class="d-none d-md-block"><span class="fw-bold">Vedic Astrology</span> easily available to all.</p>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                                        <style>
+                                            .no-dropdown-arrow.dropdown-toggle::after {
+                                                display: none !important;
+                                            }
+                                        </style>
+                                        <a href="./QuickGuide.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="hstack gap-2 iconButton btn-primary btn ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="mdi:book-open-variant" data-width="25"><path fill="currentColor" d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5c-1.65 0-3.35.3-4.75 1.05c-.1.05-.15.05-.25.05c-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1c1.11-.35 2.33-.5 3.5-.5c1.95 0 4.05.4 5.5 1.5c1.45-1.1 3.55-1.5 5.5-1.5c1.17 0 2.39.15 3.5.5c.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5c-.1 0-.15 0-.25-.05c-1.4-.75-3.1-1.05-4.75-1.05c-1.7 0-4.15.65-5.5 1.5M12 8v11.5c1.35-.85 3.8-1.5 5.5-1.5c1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5c-1.7 0-4.15.65-5.5 1.5m1 3.5c1.11-.68 2.6-1 4.5-1c.91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23q-2.655 0-4.5.84zm4.5.17c-1.71 0-3.21.26-4.5.79v1.69c1.11-.65 2.6-.99 4.5-.99c1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23m2.5 2.9c-.87-.16-1.71-.24-2.5-.24c-1.83 0-3.33.27-4.5.8v1.69c1.11-.66 2.6-.99 4.5-.99c1.04 0 1.88.08 2.5.24z"></path></svg>
+                                            Quick Guide
+                                        </a>
+                                        <style>
+                                            .no-dropdown-arrow.dropdown-toggle::after {
+                                                display: none !important;
+                                            }
+                                        </style>
+                                        <a href="https://github.com/VedAstro/VedAstro" target="_blank" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="hstack gap-2 iconButton btn-primary btn ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--uil" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="uil:github" data-width="25"><path fill="currentColor" d="M12 2.247a10 10 0 0 0-3.162 19.487c.5.088.687-.212.687-.475c0-.237-.012-1.025-.012-1.862c-2.513.462-3.163-.613-3.363-1.175a3.636 3.636 0 0 0-1.025-1.413c-.35-.187-.85-.65-.013-.662a2.001 2.001 0 0 1 1.538 1.025a2.137 2.137 0 0 0 2.912.825a2.104 2.104 0 0 1 .638-1.338c-2.225-.25-4.55-1.112-4.55-4.937a3.892 3.892 0 0 1 1.025-2.688a3.594 3.594 0 0 1 .1-2.65s.837-.262 2.75 1.025a9.427 9.427 0 0 1 5 0c1.912-1.3 2.75-1.025 2.75-1.025a3.593 3.593 0 0 1 .1 2.65a3.869 3.869 0 0 1 1.025 2.688c0 3.837-2.338 4.687-4.562 4.937a2.368 2.368 0 0 1 .674 1.85c0 1.338-.012 2.413-.012 2.75c0 .263.187.575.687.475A10.005 10.005 0 0 0 12 2.247"></path></svg>
+                                            Source Code
+                                        </a>
+                                        <style>
+                                            .no-dropdown-arrow.dropdown-toggle::after {
+                                                display: none !important;
+                                            }
+                                        </style>
+                                        <a href="./Donate.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="hstack gap-2 iconButton btn-primary btn ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--iconoir" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="iconoir:donate" data-width="25"><g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"><path d="M16 6.28a2.28 2.28 0 0 1-.662 1.606c-.976.984-1.923 2.01-2.936 2.958a.597.597 0 0 1-.822-.017l-2.918-2.94a2.28 2.28 0 0 1 0-3.214a2.277 2.277 0 0 1 3.232 0L12 4.78l.106-.107A2.276 2.276 0 0 1 16 6.28Z"></path><path stroke-linecap="round" d="m18 20l3.824-3.824a.6.6 0 0 0 .176-.424V10.5A1.5 1.5 0 0 0 20.5 9v0a1.5 1.5 0 0 0-1.5 1.5V15"></path><path stroke-linecap="round" d="m18 16l.858-.858a.48.48 0 0 0 .142-.343v0a.49.49 0 0 0-.268-.433l-.443-.221a2 2 0 0 0-2.308.374l-.895.895a2 2 0 0 0-.586 1.414V20M6 20l-3.824-3.824A.6.6 0 0 1 2 15.752V10.5A1.5 1.5 0 0 1 3.5 9v0A1.5 1.5 0 0 1 5 10.5V15"></path><path stroke-linecap="round" d="m6 16l-.858-.858A.5.5 0 0 1 5 14.799v0c0-.183.104-.35.268-.433l.443-.221a2 2 0 0 1 2.308.374l.895.895a2 2 0 0 1 .586 1.414V20"></path></g></svg>
+                                            Donate
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QUICK LINKS -->
+                        <style>
+                            /*to make card look clickable*/
+                            .card:hover {
+                                border: 2px solid #3E7DC0 !important;
+                            }
+                        </style>
+                        <div class="py-4" id="icon-grid">
+                            <!-- HEADER -->
+                            <div class="">
+                                <div class="fw-bold hstack gap-2 d-flex" style="">
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:mind-map" data-width="38" style="vertical-align: text-bottom;"><path fill="#CFD8DC" d="m39.4 23l-.8-4L26 21.6V8h-4v12.3l-13.9-9l-2.2 3.4l15.2 9.8L9.4 39.8l3.2 2.4l11.3-14.8l8.4 12.7l3.4-2.2l-8.4-12.5z"></path><circle cx="24" cy="24" r="7" fill="#3F51B5"></circle><g fill="#00BCD4"><circle cx="24" cy="8" r="5"></circle><circle cx="39" cy="21" r="5"></circle><circle cx="7" cy="13" r="5"></circle><circle cx="11" cy="41" r="5"></circle><circle cx="34" cy="39" r="5"></circle></g></svg>
+                                    </div>
+                                    <h4 class="mt-2 me-auto">Quick Links </h4>
+                                </div>
+                                <hr class="mt-1 mb-2">
+                            </div>
+
+                            <!-- PAGE LINKS -->
+                            <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
+                                <a href="./GoodTimeFinder.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/muhurtha-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Muhurtha</h5>
+                                                <p class="card-text">Find a good time for buying car, travel, studies, building..</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./LifePredictor.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/dasa-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Life Predictor</h5>
+                                                <p class="card-text">Know good and bad periods of your life years ahead</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./MatchFinder.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/match-finder-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Find Soulmate</h5>
+                                                <p class="card-text">Free search astrological database for perfect match</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./APIBuilder.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/open-api-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Open API</h5>
+                                                <p class="card-text">Access powerful astrological tools via a HTTP request</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./Horoscope.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/horoscope-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Horoscope</h5>
+                                                <p class="card-text">Predict a person's character, speech, body &amp; general life</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./MatchFinder.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/match-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Match</h5>
+                                                <p class="card-text">Check astro chemistry for romance &amp; relationship</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./SunriseTime.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/sunrise-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Sunrise Time</h5>
+                                                <p class="card-text">Time when Sun's disc center meets the horizon</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./TableGenerator.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/table-generator-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">ML Data Generator</h5>
+                                                <p class="card-text">Easily create large ML &amp; AI data tables</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./BirthTimeFinder.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/birth-time-finder-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Birth Time Finder</h5>
+                                                <p class="card-text">Find forgotten or lost birth time using astrological</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./TalkToDeveloper.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/live-coding-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Talk to Coder</h5>
+                                                <p class="card-text">Chat &amp; talk with the developer</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./AIChat.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/ai-chat-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">AI Astrologer</h5>
+                                                <p class="card-text">Talk &amp; learn with AI powered astrologer for any queries</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./AddLifeEvent.html">
+                                    <div style="cursor: pointer;" class="col">
+                                        <div class="card">
+                                            <img src="./images/add-life-event-card.jpg" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Journal</h5>
+                                                <p class="card-text">Astrological journal to help understand your life events</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+
+                        <footer id="LegalComplianceFooter" class="mb-2 pt-3 border-top"
+                                style="opacity: 0.65; margin-top: 231.7px; font-size: 11px !important;">
+                            <div class="d-flex justify-content-between">
+                                <div class="">
+                                    <div class="hstack gap-3">
+                                        <a href="./TermsOfService.html" class="nav-link p-0 text-body-secondary">
+                                            Terms &amp;
+                                            Conditions
+                                        </a>
+                                        <a href="./PrivacyPolicy.html" class="nav-link p-0 text-body-secondary">Privacy Policy</a>
+                                    </div>
+                                </div>
+
+                                <div class="me-5">
+                                    <ul class="list-unstyled d-flex">
+                                        <li class="ms-3">
+                                            <a target="_blank" class="link-body-emphasis"
+                                               href="https://ko-fi.com/vedastro">
+
+                                                <div class="" style="" _bl_6="">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                                         class="iconify iconify--line-md" width="24" height="24"
+                                                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
+                                                         data-icon="line-md:coffee-half-empty-twotone-loop" data-width="24">
+                                                        <path fill="currentColor" fill-opacity="0"
+                                                              d="M17 14V17a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V14z">
+                                                            <animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.15s"
+                                                                     values="0;0.3"></animate>
+                                                        </path>
+                                                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                           stroke-width="2">
+                                                            <path stroke-dasharray="48" stroke-dashoffset="48"
+                                                                  d="M17 9v9a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V9z">
+                                                                <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s"
+                                                                         values="48;0"></animate>
+                                                            </path>
+                                                            <path stroke-dasharray="14" stroke-dashoffset="14"
+                                                                  d="M17 14H20C20.55 14 21 13.55 21 13V10C21 9.45 20.55 9 20 9H17">
+                                                                <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s"
+                                                                         values="14;28"></animate>
+                                                            </path>
+                                                        </g>
+                                                        <mask id="IconifyId190de6c7427c1815d0">
+                                                            <path fill="none" stroke="#fff" stroke-width="2"
+                                                                  d="M8 0c0 2-2 2-2 4s2 2 2 4-2 2-2 4 2 2 2 4M12 0c0 2-2 2-2 4s2 2 2 4-2 2-2 4 2 2 2 4M16 0c0 2-2 2-2 4s2 2 2 4-2 2-2 4 2 2 2 4">
+                                                                <animateMotion calcMode="linear" dur="3s" path="M0 0v-8"
+                                                                               repeatCount="indefinite"></animateMotion>
+                                                            </path>
+                                                        </mask>
+                                                        <rect width="24" height="0" y="7" fill="currentColor"
+                                                              mask="url(#IconifyId190de6c7427c1815d0)">
+                                                            <animate fill="freeze" attributeName="y" begin="0.8s" dur="0.6s" values="7;2">
+                                                            </animate>
+                                                            <animate fill="freeze" attributeName="height" begin="0.8s" dur="0.6s" values="0;5">
+                                                            </animate>
+                                                        </rect>
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="ms-3">
+                                            <a target="_blank" class="link-body-emphasis"
+                                               href="https://ko-fi.com/vedastro">
+
+                                                <div class="" style="" _bl_7="">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                                         class="iconify iconify--fluent-emoji" width="24" height="24"
+                                                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32" data-icon="fluent-emoji:cupcake"
+                                                         data-width="24">
+                                                        <g fill="none">
+                                                            <path fill="url(#IconifyId190de6c7427c1815d31)"
+                                                                  d="M24.52 13.01H7.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5h17.02c1.93 0 3.5-1.57 3.5-3.5s-1.57-3.5-3.5-3.5">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d32)"
+                                                                  d="M24.52 13.01H7.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5h17.02c1.93 0 3.5-1.57 3.5-3.5s-1.57-3.5-3.5-3.5">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d1)"
+                                                                  d="M24.52 13.01H7.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5h17.02c1.93 0 3.5-1.57 3.5-3.5s-1.57-3.5-3.5-3.5">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d2)"
+                                                                  d="M24.52 13.01H7.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5h17.02c1.93 0 3.5-1.57 3.5-3.5s-1.57-3.5-3.5-3.5">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d3)"
+                                                                  d="M24.52 13.01H7.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5h17.02c1.93 0 3.5-1.57 3.5-3.5s-1.57-3.5-3.5-3.5">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d4)"
+                                                                  d="M24.52 13.01H7.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5h17.02c1.93 0 3.5-1.57 3.5-3.5s-1.57-3.5-3.5-3.5">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d58)">
+                                                                <path fill="url(#IconifyId190de6c7427c1815d33)"
+                                                                      d="M21.52 9.281H10.51c-4.5 0-3.557 5.89-.01 5.89h5.469c1.625 0 5.427.194 5.427.194c3.943 0 4.64-6.084.124-6.084">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d34)"
+                                                                  d="M21.52 8.01H10.51a3.5 3.5 0 1 0-.01 7h11.01c1.93 0 3.5-1.57 3.5-3.5c.01-1.94-1.56-3.5-3.49-3.5">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d5)"
+                                                                  d="M21.52 8.01H10.51a3.5 3.5 0 1 0-.01 7h11.01c1.93 0 3.5-1.57 3.5-3.5c.01-1.94-1.56-3.5-3.49-3.5">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d6)"
+                                                                  d="M21.52 8.01H10.51a3.5 3.5 0 1 0-.01 7h11.01c1.93 0 3.5-1.57 3.5-3.5c.01-1.94-1.56-3.5-3.49-3.5">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d59)">
+                                                                <path fill="#D73A7E"
+                                                                      d="M11.203 7.148c0 2.447 2.8 2.686 4.76 2.54c1.877-.14 4.646-.126 4.646-2.54c-2.506-2.382-7.425-1.945-9.406 0">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="#F252B5"
+                                                                  d="M20.25 5.15c-.06-.06-.12-.11-.19-.17l-2.93-2.56c-.64-.56-1.6-.56-2.24 0l-3.03 2.64c-.52.46-.85 1.13-.85 1.89c0 2.41 3.066 2.5 5 2.5c1.878 0 5-.216 5-2.5c.01-.71-.29-1.35-.76-1.8">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d7)"
+                                                                  d="M20.25 5.15c-.06-.06-.12-.11-.19-.17l-2.93-2.56c-.64-.56-1.6-.56-2.24 0l-3.03 2.64c-.52.46-.85 1.13-.85 1.89c0 2.41 3.066 2.5 5 2.5c1.878 0 5-.216 5-2.5c.01-.71-.29-1.35-.76-1.8">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d8)"
+                                                                  d="M20.25 5.15c-.06-.06-.12-.11-.19-.17l-2.93-2.56c-.64-.56-1.6-.56-2.24 0l-3.03 2.64c-.52.46-.85 1.13-.85 1.89c0 2.41 3.066 2.5 5 2.5c1.878 0 5-.216 5-2.5c.01-.71-.29-1.35-.76-1.8">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d9)"
+                                                                  d="M20.25 5.15c-.06-.06-.12-.11-.19-.17l-2.93-2.56c-.64-.56-1.6-.56-2.24 0l-3.03 2.64c-.52.46-.85 1.13-.85 1.89c0 2.41 3.066 2.5 5 2.5c1.878 0 5-.216 5-2.5c.01-.71-.29-1.35-.76-1.8">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d35)"
+                                                                  d="M25.24 20.01H6.78a1.772 1.772 0 0 0-1.7 2.282l2.11 7.067c.12.38.48.641.89.641h15.87c.4 0 .76-.26.89-.64l2.11-7.068a1.783 1.783 0 0 0-1.71-2.282">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d10)"
+                                                                  d="M25.24 20.01H6.78a1.772 1.772 0 0 0-1.7 2.282l2.11 7.067c.12.38.48.641.89.641h15.87c.4 0 .76-.26.89-.64l2.11-7.068a1.783 1.783 0 0 0-1.71-2.282">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d11)"
+                                                                  d="M25.24 20.01H6.78a1.772 1.772 0 0 0-1.7 2.282l2.11 7.067c.12.38.48.641.89.641h15.87c.4 0 .76-.26.89-.64l2.11-7.068a1.783 1.783 0 0 0-1.71-2.282">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d60)">
+                                                                <path fill="#C8397E"
+                                                                      d="M12.423 10.524c-.2-.2-.2-.51 0-.71l.74-.74c.2-.2.51-.2.71 0c.2.2.2.51 0 .71l-.75.74c-.19.2-.51.2-.7 0">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d36)"
+                                                                  d="M12.423 10.295c-.2-.2-.2-.51 0-.71l.74-.74c.2-.2.51-.2.71 0c.2.2.2.51 0 .71l-.75.74c-.19.2-.51.2-.7 0">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d61)">
+                                                                <path fill="#DC41B7"
+                                                                      d="M11.77 18.34a.526.526 0 0 1 0-.754l.786-.786a.526.526 0 0 1 .755 0a.526.526 0 0 1 0 .754l-.787.787a.526.526 0 0 1-.754 0">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d37)"
+                                                                  d="M11.86 18.11c-.2-.2-.2-.51 0-.71l.74-.74c.2-.2.51-.2.71 0c.2.2.2.51 0 .71l-.74.74c-.19.2-.51.2-.71 0">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d62)">
+                                                                <path fill="#D53275"
+                                                                      d="M7.506 16.819c-.2-.2-.2-.51 0-.71l.74-.74c.2-.2.51-.2.71 0c.2.2.2.51 0 .71l-.74.74c-.2.19-.51.19-.71 0">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d38)"
+                                                                  d="M7.303 16.819c-.2-.2-.2-.51 0-.71l.74-.74c.2-.2.51-.2.71 0c.2.2.2.51 0 .71l-.74.74c-.2.19-.51.19-.71 0">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d63)">
+                                                                <path fill="#C840AF"
+                                                                      d="M23.376 17.112a.495.495 0 0 1-.072-.706l.662-.811a.495.495 0 0 1 .706-.072c.22.18.25.488.072.707l-.662.81a.513.513 0 0 1-.706.072">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d39)"
+                                                                  d="M23.299 16.819c-.2-.2-.2-.51 0-.71l.74-.74c.2-.2.51-.2.71 0c.2.2.2.51 0 .71l-.74.74c-.2.19-.52.19-.71 0">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d12)"
+                                                                  d="M23.299 16.819c-.2-.2-.2-.51 0-.71l.74-.74c.2-.2.51-.2.71 0c.2.2.2.51 0 .71l-.74.74c-.2.19-.52.19-.71 0">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d64)">
+                                                                <path fill="url(#IconifyId190de6c7427c1815d40)"
+                                                                      d="M20.474 12.033c.2-.2.51-.2.71 0l.74.74c.2.2.2.51 0 .71c-.2.2-.51.2-.71 0l-.74-.74c-.2-.19-.2-.51 0-.71">
+                                                                </path>
+                                                                <path fill="#DA41D6"
+                                                                      d="M20.474 12.033c.2-.2.51-.2.71 0l.74.74c.2.2.2.51 0 .71c-.2.2-.51.2-.71 0l-.74-.74c-.2-.19-.2-.51 0-.71">
+                                                                </path>
+                                                            </g>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d65)">
+                                                                <path fill="#B03F95"
+                                                                      d="M9.247 13.258c0-.28.22-.5.5-.5h1.05c.28 0 .5.22.5.5s-.22.5-.5.5h-1.05c-.28 0-.5-.22-.5-.5">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d41)"
+                                                                  d="M9.2 13.43c0-.28.22-.5.5-.5h1.05c.28 0 .5.22.5.5s-.22.5-.5.5H9.7c-.28 0-.5-.22-.5-.5">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d13)"
+                                                                  d="M9.2 13.43c0-.28.22-.5.5-.5h1.05c.28 0 .5.22.5.5s-.22.5-.5.5H9.7c-.28 0-.5-.22-.5-.5">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d42)"
+                                                                  d="M20.646 11.83c.2-.2.51-.2.71 0l.74.74c.2.2.2.51 0 .71c-.2.2-.51.2-.71 0l-.74-.74c-.2-.19-.2-.51 0-.71">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d14)"
+                                                                  d="M20.646 11.83c.2-.2.51-.2.71 0l.74.74c.2.2.2.51 0 .71c-.2.2-.51.2-.71 0l-.74-.74c-.2-.19-.2-.51 0-.71">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d66)">
+                                                                <path fill="url(#IconifyId190de6c7427c1815d43)"
+                                                                      d="M8.203 29.897h15.709c1.02 0 1.365-.637 1.472-.987c0 0 1.9-5.991 1.783-6.477c-.072-.257-.387-.288-.48-.09l-.15.346l-.105-.256c-.07-.16-.419-.366-.765 0l-.734.859c-.065.076-.18.099-.225 0l-.338-.782c-.172-.38-.882-.472-1.438.034l-.788.748c-.145.15-.369.18-.51 0l-.69-.86c-.348-.423-1.167-.239-1.694.152l-.84.708c-.203.145-.454.168-.644 0l-.784-.782c-.441-.357-1.346-.484-1.884.034l-.78.748c-.142.11-.44.127-.615 0l-1.022-.86c-.44-.377-1.283-.308-1.655.152l-.562.708c-.09.104-.257.15-.465 0l-.96-.86c-.378-.32-1.1-.325-1.334.152l-.27.602s-.074.256-.21.106l-.704-.86c-.5-.544-.884 0-.96.257l-.15-.347c-.123-.27-.633 0-.45.649l1.77 5.919c.075.229.495.987 1.472.987">
+                                                                </path>
+                                                                <path fill="url(#IconifyId190de6c7427c1815d15)"
+                                                                      d="M8.203 29.897h15.709c1.02 0 1.365-.637 1.472-.987c0 0 1.9-5.991 1.783-6.477c-.072-.257-.387-.288-.48-.09l-.15.346l-.105-.256c-.07-.16-.419-.366-.765 0l-.734.859c-.065.076-.18.099-.225 0l-.338-.782c-.172-.38-.882-.472-1.438.034l-.788.748c-.145.15-.369.18-.51 0l-.69-.86c-.348-.423-1.167-.239-1.694.152l-.84.708c-.203.145-.454.168-.644 0l-.784-.782c-.441-.357-1.346-.484-1.884.034l-.78.748c-.142.11-.44.127-.615 0l-1.022-.86c-.44-.377-1.283-.308-1.655.152l-.562.708c-.09.104-.257.15-.465 0l-.96-.86c-.378-.32-1.1-.325-1.334.152l-.27.602s-.074.256-.21.106l-.704-.86c-.5-.544-.884 0-.96.257l-.15-.347c-.123-.27-.633 0-.45.649l1.77 5.919c.075.229.495.987 1.472.987">
+                                                                </path>
+                                                                <path fill="url(#IconifyId190de6c7427c1815d16)"
+                                                                      d="M8.203 29.897h15.709c1.02 0 1.365-.637 1.472-.987c0 0 1.9-5.991 1.783-6.477c-.072-.257-.387-.288-.48-.09l-.15.346l-.105-.256c-.07-.16-.419-.366-.765 0l-.734.859c-.065.076-.18.099-.225 0l-.338-.782c-.172-.38-.882-.472-1.438.034l-.788.748c-.145.15-.369.18-.51 0l-.69-.86c-.348-.423-1.167-.239-1.694.152l-.84.708c-.203.145-.454.168-.644 0l-.784-.782c-.441-.357-1.346-.484-1.884.034l-.78.748c-.142.11-.44.127-.615 0l-1.022-.86c-.44-.377-1.283-.308-1.655.152l-.562.708c-.09.104-.257.15-.465 0l-.96-.86c-.378-.32-1.1-.325-1.334.152l-.27.602s-.074.256-.21.106l-.704-.86c-.5-.544-.884 0-.96.257l-.15-.347c-.123-.27-.633 0-.45.649l1.77 5.919c.075.229.495.987 1.472.987">
+                                                                </path>
+                                                                <path fill="url(#IconifyId190de6c7427c1815d17)"
+                                                                      d="M8.203 29.897h15.709c1.02 0 1.365-.637 1.472-.987c0 0 1.9-5.991 1.783-6.477c-.072-.257-.387-.288-.48-.09l-.15.346l-.105-.256c-.07-.16-.419-.366-.765 0l-.734.859c-.065.076-.18.099-.225 0l-.338-.782c-.172-.38-.882-.472-1.438.034l-.788.748c-.145.15-.369.18-.51 0l-.69-.86c-.348-.423-1.167-.239-1.694.152l-.84.708c-.203.145-.454.168-.644 0l-.784-.782c-.441-.357-1.346-.484-1.884.034l-.78.748c-.142.11-.44.127-.615 0l-1.022-.86c-.44-.377-1.283-.308-1.655.152l-.562.708c-.09.104-.257.15-.465 0l-.96-.86c-.378-.32-1.1-.325-1.334.152l-.27.602s-.074.256-.21.106l-.704-.86c-.5-.544-.884 0-.96.257l-.15-.347c-.123-.27-.633 0-.45.649l1.77 5.919c.075.229.495.987 1.472.987">
+                                                                </path>
+                                                                <path fill="url(#IconifyId190de6c7427c1815d44)"
+                                                                      d="M8.203 29.897h15.709c1.02 0 1.365-.637 1.472-.987c0 0 1.9-5.991 1.783-6.477c-.072-.257-.387-.288-.48-.09l-.15.346l-.105-.256c-.07-.16-.419-.366-.765 0l-.734.859c-.065.076-.18.099-.225 0l-.338-.782c-.172-.38-.882-.472-1.438.034l-.788.748c-.145.15-.369.18-.51 0l-.69-.86c-.348-.423-1.167-.239-1.694.152l-.84.708c-.203.145-.454.168-.644 0l-.784-.782c-.441-.357-1.346-.484-1.884.034l-.78.748c-.142.11-.44.127-.615 0l-1.022-.86c-.44-.377-1.283-.308-1.655.152l-.562.708c-.09.104-.257.15-.465 0l-.96-.86c-.378-.32-1.1-.325-1.334.152l-.27.602s-.074.256-.21.106l-.704-.86c-.5-.544-.884 0-.96.257l-.15-.347c-.123-.27-.633 0-.45.649l1.77 5.919c.075.229.495.987 1.472.987">
+                                                                </path>
+                                                                <path fill="#856E5F"
+                                                                      d="M8.203 29.897h15.709c1.02 0 1.365-.637 1.472-.987c0 0 1.9-5.991 1.783-6.477c-.072-.257-.387-.288-.48-.09l-.15.346l-.105-.256c-.07-.16-.419-.366-.765 0l-.734.859c-.065.076-.18.099-.225 0l-.338-.782c-.172-.38-.882-.472-1.438.034l-.788.748c-.145.15-.369.18-.51 0l-.69-.86c-.348-.423-1.167-.239-1.694.152l-.84.708c-.203.145-.454.168-.644 0l-.784-.782c-.441-.357-1.346-.484-1.884.034l-.78.748c-.142.11-.44.127-.615 0l-1.022-.86c-.44-.377-1.283-.308-1.655.152l-.562.708c-.09.104-.257.15-.465 0l-.96-.86c-.378-.32-1.1-.325-1.334.152l-.27.602s-.074.256-.21.106l-.704-.86c-.5-.544-.884 0-.96.257l-.15-.347c-.123-.27-.633 0-.45.649l1.77 5.919c.075.229.495.987 1.472.987">
+                                                                </path>
+                                                            </g>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d67)">
+                                                                <path fill="#954093"
+                                                                      d="M18.212 10.295c-.2-.2-.2-.51 0-.71l.74-.74c.2-.2.51-.2.71 0c.2.2.2.51 0 .71l-.74.74c-.2.2-.52.2-.71 0">
+                                                                </path>
+                                                            </g>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d68)">
+                                                                <path fill="#954093"
+                                                                      d="m18.203 9.32l.715-.668c.2-.2.707-.164.871.14c-.344.321-1.187.427-1.586.528">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d45)"
+                                                                  d="M18.29 10.17c-.2-.2-.2-.51 0-.71l.74-.74c.2-.2.51-.2.71 0c.2.2.2.51 0 .71l-.74.74c-.2.2-.52.2-.71 0">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d18)"
+                                                                  d="M18.29 10.17c-.2-.2-.2-.51 0-.71l.74-.74c.2-.2.51-.2.71 0c.2.2.2.51 0 .71l-.74.74c-.2.2-.52.2-.71 0">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d69)">
+                                                                <path fill="#C53DD2"
+                                                                      d="M20.86 18.444c.2-.2.2-.51 0-.71l-.74-.74c-.2-.2-.51-.2-.71 0c-.2.2-.2.51 0 .71l.74.74c.2.2.52.2.71 0">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d46)"
+                                                                  d="M20.87 18.11c.2-.2.2-.51 0-.71l-.74-.74c-.2-.2-.51-.2-.71 0c-.2.2-.2.51 0 .71l.74.74c.2.2.52.2.71 0">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d19)"
+                                                                  d="M20.87 18.11c.2-.2.2-.51 0-.71l-.74-.74c-.2-.2-.51-.2-.71 0c-.2.2-.2.51 0 .71l.74.74c.2.2.52.2.71 0">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d47)"
+                                                                  d="M8 30h16c1.04 0 1.391-.646 1.5-1c0 0 1.936-6.072 1.816-6.564c-.074-.26-.394-.291-.49-.091l-.152.35l-.107-.259c-.07-.16-.426-.37-.779 0l-.748.87c-.066.077-.182.1-.229 0l-.344-.792c-.175-.385-.899-.478-1.464.035l-.803.758c-.148.152-.376.181-.52 0l-.702-.87c-.355-.43-1.19-.244-1.726.152l-.855.718c-.207.146-.464.17-.657 0l-.798-.793c-.45-.361-1.371-.49-1.92.035l-.794.758c-.144.111-.448.129-.626 0l-1.041-.87c-.45-.384-1.307-.314-1.686.152l-.572.718c-.093.106-.262.152-.473 0l-.978-.87c-.386-.325-1.121-.331-1.359.152l-.275.61s-.076.26-.214.108l-.717-.87c-.51-.553-.901 0-.978.259l-.152-.352c-.127-.273-.646 0-.459.657L6.5 29c.077.232.504 1 1.5 1">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d20)"
+                                                                  d="M8 30h16c1.04 0 1.391-.646 1.5-1c0 0 1.936-6.072 1.816-6.564c-.074-.26-.394-.291-.49-.091l-.152.35l-.107-.259c-.07-.16-.426-.37-.779 0l-.748.87c-.066.077-.182.1-.229 0l-.344-.792c-.175-.385-.899-.478-1.464.035l-.803.758c-.148.152-.376.181-.52 0l-.702-.87c-.355-.43-1.19-.244-1.726.152l-.855.718c-.207.146-.464.17-.657 0l-.798-.793c-.45-.361-1.371-.49-1.92.035l-.794.758c-.144.111-.448.129-.626 0l-1.041-.87c-.45-.384-1.307-.314-1.686.152l-.572.718c-.093.106-.262.152-.473 0l-.978-.87c-.386-.325-1.121-.331-1.359.152l-.275.61s-.076.26-.214.108l-.717-.87c-.51-.553-.901 0-.978.259l-.152-.352c-.127-.273-.646 0-.459.657L6.5 29c.077.232.504 1 1.5 1">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d21)"
+                                                                  d="M8 30h16c1.04 0 1.391-.646 1.5-1c0 0 1.936-6.072 1.816-6.564c-.074-.26-.394-.291-.49-.091l-.152.35l-.107-.259c-.07-.16-.426-.37-.779 0l-.748.87c-.066.077-.182.1-.229 0l-.344-.792c-.175-.385-.899-.478-1.464.035l-.803.758c-.148.152-.376.181-.52 0l-.702-.87c-.355-.43-1.19-.244-1.726.152l-.855.718c-.207.146-.464.17-.657 0l-.798-.793c-.45-.361-1.371-.49-1.92.035l-.794.758c-.144.111-.448.129-.626 0l-1.041-.87c-.45-.384-1.307-.314-1.686.152l-.572.718c-.093.106-.262.152-.473 0l-.978-.87c-.386-.325-1.121-.331-1.359.152l-.275.61s-.076.26-.214.108l-.717-.87c-.51-.553-.901 0-.978.259l-.152-.352c-.127-.273-.646 0-.459.657L6.5 29c.077.232.504 1 1.5 1">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d22)"
+                                                                  d="M8 30h16c1.04 0 1.391-.646 1.5-1c0 0 1.936-6.072 1.816-6.564c-.074-.26-.394-.291-.49-.091l-.152.35l-.107-.259c-.07-.16-.426-.37-.779 0l-.748.87c-.066.077-.182.1-.229 0l-.344-.792c-.175-.385-.899-.478-1.464.035l-.803.758c-.148.152-.376.181-.52 0l-.702-.87c-.355-.43-1.19-.244-1.726.152l-.855.718c-.207.146-.464.17-.657 0l-.798-.793c-.45-.361-1.371-.49-1.92.035l-.794.758c-.144.111-.448.129-.626 0l-1.041-.87c-.45-.384-1.307-.314-1.686.152l-.572.718c-.093.106-.262.152-.473 0l-.978-.87c-.386-.325-1.121-.331-1.359.152l-.275.61s-.076.26-.214.108l-.717-.87c-.51-.553-.901 0-.978.259l-.152-.352c-.127-.273-.646 0-.459.657L6.5 29c.077.232.504 1 1.5 1">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d48)"
+                                                                  d="M8 30h16c1.04 0 1.391-.646 1.5-1c0 0 1.936-6.072 1.816-6.564c-.074-.26-.394-.291-.49-.091l-.152.35l-.107-.259c-.07-.16-.426-.37-.779 0l-.748.87c-.066.077-.182.1-.229 0l-.344-.792c-.175-.385-.899-.478-1.464.035l-.803.758c-.148.152-.376.181-.52 0l-.702-.87c-.355-.43-1.19-.244-1.726.152l-.855.718c-.207.146-.464.17-.657 0l-.798-.793c-.45-.361-1.371-.49-1.92.035l-.794.758c-.144.111-.448.129-.626 0l-1.041-.87c-.45-.384-1.307-.314-1.686.152l-.572.718c-.093.106-.262.152-.473 0l-.978-.87c-.386-.325-1.121-.331-1.359.152l-.275.61s-.076.26-.214.108l-.717-.87c-.51-.553-.901 0-.978.259l-.152-.352c-.127-.273-.646 0-.459.657L6.5 29c.077.232.504 1 1.5 1">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d49)"
+                                                                  d="M8 30h16c1.04 0 1.391-.646 1.5-1c0 0 1.936-6.072 1.816-6.564c-.074-.26-.394-.291-.49-.091l-.152.35l-.107-.259c-.07-.16-.426-.37-.779 0l-.748.87c-.066.077-.182.1-.229 0l-.344-.792c-.175-.385-.899-.478-1.464.035l-.803.758c-.148.152-.376.181-.52 0l-.702-.87c-.355-.43-1.19-.244-1.726.152l-.855.718c-.207.146-.464.17-.657 0l-.798-.793c-.45-.361-1.371-.49-1.92.035l-.794.758c-.144.111-.448.129-.626 0l-1.041-.87c-.45-.384-1.307-.314-1.686.152l-.572.718c-.093.106-.262.152-.473 0l-.978-.87c-.386-.325-1.121-.331-1.359.152l-.275.61s-.076.26-.214.108l-.717-.87c-.51-.553-.901 0-.978.259l-.152-.352c-.127-.273-.646 0-.459.657L6.5 29c.077.232.504 1 1.5 1">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d50)"
+                                                                  d="M8 30h16c1.04 0 1.391-.646 1.5-1c0 0 1.936-6.072 1.816-6.564c-.074-.26-.394-.291-.49-.091l-.152.35l-.107-.259c-.07-.16-.426-.37-.779 0l-.748.87c-.066.077-.182.1-.229 0l-.344-.792c-.175-.385-.899-.478-1.464.035l-.803.758c-.148.152-.376.181-.52 0l-.702-.87c-.355-.43-1.19-.244-1.726.152l-.855.718c-.207.146-.464.17-.657 0l-.798-.793c-.45-.361-1.371-.49-1.92.035l-.794.758c-.144.111-.448.129-.626 0l-1.041-.87c-.45-.384-1.307-.314-1.686.152l-.572.718c-.093.106-.262.152-.473 0l-.978-.87c-.386-.325-1.121-.331-1.359.152l-.275.61s-.076.26-.214.108l-.717-.87c-.51-.553-.901 0-.978.259l-.152-.352c-.127-.273-.646 0-.459.657L6.5 29c.077.232.504 1 1.5 1">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d70)">
+                                                                <path fill="url(#IconifyId190de6c7427c1815d51)"
+                                                                      d="M8.21 29.897h15.578c1.013 0 1.355-.546 1.46-.846c0 0 .534-1.688 1.041-3.207c.377-1.129.722-2.165.672-2.342l-.001-.003c-.07-.218-.079-.243-.17-.075l-.15.297l-.104-.22c-.068-.136-.458-.313-.802 0l-.672.737c-.14.176-.304.218-.406 0c0 0-.195-.42-.351-.736c-.157-.316-.79-.43-1.227 0l-.742.736c-.148.204-.563.268-.806 0l-.684-.736c-.346-.363-1.162-.25-1.612.129c-.449.378-.789.607-.789.607c-.226.162-.547.204-.751 0l-.897-.814c-.437-.306-1.013-.444-1.547 0l-.976.814c-.196.169-.54.176-.758 0l-1.024-.814c-.437-.323-.998-.393-1.367 0l-.672.814c-.14.169-.508.154-.672 0l-.93-.814c-.328-.316-.9-.408-1.132 0c0 0-.282.555-.36.723c-.078.168-.28.196-.437.013l-.485-.736c-.496-.467-.867.078-.941.297l-.149-.297c-.123-.231-.31-.089-.128.467l.593 1.968l.939 3.192c.074.197.49.846 1.46.846">
+                                                                </path>
+                                                                <path fill="url(#IconifyId190de6c7427c1815d23)"
+                                                                      d="M8.21 29.897h15.578c1.013 0 1.355-.546 1.46-.846c0 0 .534-1.688 1.041-3.207c.377-1.129.722-2.165.672-2.342l-.001-.003c-.07-.218-.079-.243-.17-.075l-.15.297l-.104-.22c-.068-.136-.458-.313-.802 0l-.672.737c-.14.176-.304.218-.406 0c0 0-.195-.42-.351-.736c-.157-.316-.79-.43-1.227 0l-.742.736c-.148.204-.563.268-.806 0l-.684-.736c-.346-.363-1.162-.25-1.612.129c-.449.378-.789.607-.789.607c-.226.162-.547.204-.751 0l-.897-.814c-.437-.306-1.013-.444-1.547 0l-.976.814c-.196.169-.54.176-.758 0l-1.024-.814c-.437-.323-.998-.393-1.367 0l-.672.814c-.14.169-.508.154-.672 0l-.93-.814c-.328-.316-.9-.408-1.132 0c0 0-.282.555-.36.723c-.078.168-.28.196-.437.013l-.485-.736c-.496-.467-.867.078-.941.297l-.149-.297c-.123-.231-.31-.089-.128.467l.593 1.968l.939 3.192c.074.197.49.846 1.46.846">
+                                                                </path>
+                                                                <path fill="url(#IconifyId190de6c7427c1815d24)"
+                                                                      d="M8.21 29.897h15.578c1.013 0 1.355-.546 1.46-.846c0 0 .534-1.688 1.041-3.207c.377-1.129.722-2.165.672-2.342l-.001-.003c-.07-.218-.079-.243-.17-.075l-.15.297l-.104-.22c-.068-.136-.458-.313-.802 0l-.672.737c-.14.176-.304.218-.406 0c0 0-.195-.42-.351-.736c-.157-.316-.79-.43-1.227 0l-.742.736c-.148.204-.563.268-.806 0l-.684-.736c-.346-.363-1.162-.25-1.612.129c-.449.378-.789.607-.789.607c-.226.162-.547.204-.751 0l-.897-.814c-.437-.306-1.013-.444-1.547 0l-.976.814c-.196.169-.54.176-.758 0l-1.024-.814c-.437-.323-.998-.393-1.367 0l-.672.814c-.14.169-.508.154-.672 0l-.93-.814c-.328-.316-.9-.408-1.132 0c0 0-.282.555-.36.723c-.078.168-.28.196-.437.013l-.485-.736c-.496-.467-.867.078-.941.297l-.149-.297c-.123-.231-.31-.089-.128.467l.593 1.968l.939 3.192c.074.197.49.846 1.46.846">
+                                                                </path>
+                                                                <path fill="url(#IconifyId190de6c7427c1815d25)"
+                                                                      d="M8.21 29.897h15.578c1.013 0 1.355-.546 1.46-.846c0 0 .534-1.688 1.041-3.207c.377-1.129.722-2.165.672-2.342l-.001-.003c-.07-.218-.079-.243-.17-.075l-.15.297l-.104-.22c-.068-.136-.458-.313-.802 0l-.672.737c-.14.176-.304.218-.406 0c0 0-.195-.42-.351-.736c-.157-.316-.79-.43-1.227 0l-.742.736c-.148.204-.563.268-.806 0l-.684-.736c-.346-.363-1.162-.25-1.612.129c-.449.378-.789.607-.789.607c-.226.162-.547.204-.751 0l-.897-.814c-.437-.306-1.013-.444-1.547 0l-.976.814c-.196.169-.54.176-.758 0l-1.024-.814c-.437-.323-.998-.393-1.367 0l-.672.814c-.14.169-.508.154-.672 0l-.93-.814c-.328-.316-.9-.408-1.132 0c0 0-.282.555-.36.723c-.078.168-.28.196-.437.013l-.485-.736c-.496-.467-.867.078-.941.297l-.149-.297c-.123-.231-.31-.089-.128.467l.593 1.968l.939 3.192c.074.197.49.846 1.46.846">
+                                                                </path>
+                                                            </g>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d71)">
+                                                                <path fill="url(#IconifyId190de6c7427c1815d52)"
+                                                                      d="M5.133 22.77c-.123-.255-.319 0-.137.611l.624 1.986c6.903 3.636 20.716.047 20.716.047c.368-1.217.797-2.438.867-2.68c.07-.241-.134-.272-.226-.086l-.329.782l-.054-.696c0-.187-.492-.328-.86.121l-.672.81c-.14.194-.117.241-.218 0c0 0-.196-.462-.352-.81c-.156-.348-.976-.472-1.414 0l-.742.81c-.148.226-.264.296-.508 0l-.684-.81c-.346-.4-1.46-.274-1.91.142c-.449.417-.789.668-.789.668c-.226.179-.547.226-.751 0l-.897-.895c-.437-.337-1.138-.49-1.672 0l-.976.895c-.196.187-.415.194-.633 0l-1.024-.895c-.437-.357-1.24-.434-1.61 0l-.671.895c-.14.187-.266.17-.43 0l-.93-.895c-.328-.348-.9-.45-1.132 0c0 0-.282.611-.36.796c-.078.185-.28.215-.437.014l-.699-.81c-.496-.514-.867.085-.942.327z">
+                                                                </path>
+                                                                <path fill="url(#IconifyId190de6c7427c1815d26)"
+                                                                      d="M5.133 22.77c-.123-.255-.319 0-.137.611l.624 1.986c6.903 3.636 20.716.047 20.716.047c.368-1.217.797-2.438.867-2.68c.07-.241-.134-.272-.226-.086l-.329.782l-.054-.696c0-.187-.492-.328-.86.121l-.672.81c-.14.194-.117.241-.218 0c0 0-.196-.462-.352-.81c-.156-.348-.976-.472-1.414 0l-.742.81c-.148.226-.264.296-.508 0l-.684-.81c-.346-.4-1.46-.274-1.91.142c-.449.417-.789.668-.789.668c-.226.179-.547.226-.751 0l-.897-.895c-.437-.337-1.138-.49-1.672 0l-.976.895c-.196.187-.415.194-.633 0l-1.024-.895c-.437-.357-1.24-.434-1.61 0l-.671.895c-.14.187-.266.17-.43 0l-.93-.895c-.328-.348-.9-.45-1.132 0c0 0-.282.611-.36.796c-.078.185-.28.215-.437.014l-.699-.81c-.496-.514-.867.085-.942.327z">
+                                                                </path>
+                                                                <path fill="url(#IconifyId190de6c7427c1815d27)"
+                                                                      d="M5.133 22.77c-.123-.255-.319 0-.137.611l.624 1.986c6.903 3.636 20.716.047 20.716.047c.368-1.217.797-2.438.867-2.68c.07-.241-.134-.272-.226-.086l-.329.782l-.054-.696c0-.187-.492-.328-.86.121l-.672.81c-.14.194-.117.241-.218 0c0 0-.196-.462-.352-.81c-.156-.348-.976-.472-1.414 0l-.742.81c-.148.226-.264.296-.508 0l-.684-.81c-.346-.4-1.46-.274-1.91.142c-.449.417-.789.668-.789.668c-.226.179-.547.226-.751 0l-.897-.895c-.437-.337-1.138-.49-1.672 0l-.976.895c-.196.187-.415.194-.633 0l-1.024-.895c-.437-.357-1.24-.434-1.61 0l-.671.895c-.14.187-.266.17-.43 0l-.93-.895c-.328-.348-.9-.45-1.132 0c0 0-.282.611-.36.796c-.078.185-.28.215-.437.014l-.699-.81c-.496-.514-.867.085-.942.327z">
+                                                                </path>
+                                                                <path fill="url(#IconifyId190de6c7427c1815d28)"
+                                                                      d="M5.133 22.77c-.123-.255-.319 0-.137.611l.624 1.986c6.903 3.636 20.716.047 20.716.047c.368-1.217.797-2.438.867-2.68c.07-.241-.134-.272-.226-.086l-.329.782l-.054-.696c0-.187-.492-.328-.86.121l-.672.81c-.14.194-.117.241-.218 0c0 0-.196-.462-.352-.81c-.156-.348-.976-.472-1.414 0l-.742.81c-.148.226-.264.296-.508 0l-.684-.81c-.346-.4-1.46-.274-1.91.142c-.449.417-.789.668-.789.668c-.226.179-.547.226-.751 0l-.897-.895c-.437-.337-1.138-.49-1.672 0l-.976.895c-.196.187-.415.194-.633 0l-1.024-.895c-.437-.357-1.24-.434-1.61 0l-.671.895c-.14.187-.266.17-.43 0l-.93-.895c-.328-.348-.9-.45-1.132 0c0 0-.282.611-.36.796c-.078.185-.28.215-.437.014l-.699-.81c-.496-.514-.867.085-.942.327z">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d53)" fill-rule="evenodd"
+                                                                  d="M16.013 25.125a.5.5 0 0 1 .5.5V30h-1v-4.375a.5.5 0 0 1 .5-.5"
+                                                                  clip-rule="evenodd"></path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d54)" fill-rule="evenodd"
+                                                                  d="M10.463 25.01a.5.5 0 0 1 .59.39l.916 4.59h-1.006l-.89-4.39a.5.5 0 0 1 .39-.59"
+                                                                  clip-rule="evenodd"></path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d72)">
+                                                                <path fill="#C5419E"
+                                                                      d="M16.552 7.121c-.2.2-.51.2-.71 0l-.74-.74c-.2-.2-.2-.51 0-.71c.2-.2.51-.2.71 0l.74.75c.2.19.2.51 0 .7">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d55)"
+                                                                  d="M16.725 6.84c-.2.2-.51.2-.71 0l-.74-.74c-.2-.2-.2-.51 0-.71c.2-.2.51-.2.71 0l.74.75c.2.19.2.51 0 .7">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d29)"
+                                                                  d="M16.725 6.84c-.2.2-.51.2-.71 0l-.74-.74c-.2-.2-.2-.51 0-.71c.2-.2.51-.2.71 0l.74.75c.2.19.2.51 0 .7">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d56)" fill-rule="evenodd"
+                                                                  d="M21.591 25.008a.5.5 0 0 1 .4.583L21.149 30h-1.007l.867-4.591a.5.5 0 0 1 .583-.4"
+                                                                  clip-rule="evenodd"></path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d73)">
+                                                                <path fill="#D939B9"
+                                                                      d="M16.725 13.923c-.2.2-.51.2-.71 0l-.74-.74c-.2-.2-.2-.51 0-.71c.2-.2.51-.2.71 0l.74.74c.2.2.2.51 0 .71">
+                                                                </path>
+                                                            </g>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d57)"
+                                                                  d="M16.73 13.735c-.2.2-.51.2-.71 0l-.74-.74c-.2-.2-.2-.51 0-.71c.2-.2.51-.2.71 0l.74.74c.2.2.2.51 0 .71">
+                                                            </path>
+                                                            <path fill="url(#IconifyId190de6c7427c1815d30)"
+                                                                  d="M16.73 13.735c-.2.2-.51.2-.71 0l-.74-.74c-.2-.2-.2-.51 0-.71c.2-.2.51-.2.71 0l.74.74c.2.2.2.51 0 .71">
+                                                            </path>
+                                                            <g filter="url(#IconifyId190de6c7427c1815d74)">
+                                                                <path stroke="#64AFFF" stroke-width=".25" d="m5.89 22.469l.907 1.062"></path>
+                                                            </g>
+                                                            <defs>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d1" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(-9.8025 -.12507 .04705 -3.6877 25.813 15)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#FF85DE"></stop>
+                                                                    <stop offset="1" stop-color="#FF86DD" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d2" cx="0" cy="0" r="1"
+                                                                                gradientTransform="rotate(-103.764 9.952 .522)scale(19.1757 25.0741)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".682" stop-color="#B74CAB" stop-opacity="0"></stop>
+                                                                    <stop offset=".913" stop-color="#B44AAC"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d3" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(11.31249 7.8125 -10.51221 15.22166 1.75 11.063)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".348" stop-color="#D64984"></stop>
+                                                                    <stop offset="1" stop-color="#EA56A7" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d4" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(.875 8.125 -15.22218 1.6393 17.5 17.625)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".794" stop-color="#E34E93" stop-opacity="0"></stop>
+                                                                    <stop offset=".968" stop-color="#D74887"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d5" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(0 2.75 -4.9375 0 22.063 9.875)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#FF8DE6"></stop>
+                                                                    <stop offset="1" stop-color="#FF90E9" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d6" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(0 4.5 -10 0 9.188 10)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#F543A3"></stop>
+                                                                    <stop offset="1" stop-color="#F54BAE" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d7" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(0 4.75 -10.2422 0 19.063 3.5)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".171" stop-color="#FF8AE0"></stop>
+                                                                    <stop offset="1" stop-color="#FF8AE0" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d8" cx="0" cy="0" r="1"
+                                                                                gradientTransform="rotate(66.318 2.536 19.158)scale(.97252 1.74234)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".173" stop-color="#A941A3"></stop>
+                                                                    <stop offset="1" stop-color="#CD46C2" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d9" cx="0" cy="0" r="1"
+                                                                                gradientTransform="rotate(6.782 -71.812 118.975)scale(1.1644 1.10692)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".359" stop-color="#E0417F"></stop>
+                                                                    <stop offset="1" stop-color="#E33E92" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d10" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(0 1.0625 -9.84375 0 19.875 21.188)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#FAB188"></stop>
+                                                                    <stop offset="1" stop-color="#FBB188" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d11" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(0 7.8125 -17.2182 0 16.563 23.125)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".632" stop-color="#BE674C" stop-opacity="0"></stop>
+                                                                    <stop offset=".784" stop-color="#C0674C"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d12" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(.8125 .77344 -.45063 .47338 23.344 16.828)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#EF6F45"></stop>
+                                                                    <stop offset="1" stop-color="#EE6E46" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d13" cx="0" cy="0" r="1"
+                                                                                gradientTransform="rotate(111.037 .9 10.368)scale(.43526 .48151)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#40AAFF"></stop>
+                                                                    <stop offset="1" stop-color="#43ACFF" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d14" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(-.54687 .42188 -.30723 -.39826 22.06 13.346)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#C187F1"></stop>
+                                                                    <stop offset="1" stop-color="#C595F1" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d15" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(0 8.32465 -8.16098 0 16.364 22.189)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".195" stop-color="#508EFF"></stop>
+                                                                    <stop offset="1" stop-color="#508FFF" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d16" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(1.84082 0 0 5.36829 5.503 26.043)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".112" stop-color="#4686D7"></stop>
+                                                                    <stop offset="1" stop-color="#4992F5" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d17" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(-2.8226 -.46328 1.35068 -8.2292 26.796 26.043)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".112" stop-color="#4686D7"></stop>
+                                                                    <stop offset="1" stop-color="#4992F5" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d18" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(.45313 .46875 -.30932 .299 18.47 10.125)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#3673FF"></stop>
+                                                                    <stop offset="1" stop-color="#3673FF" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d19" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(-.45313 .46875 -.30932 -.299 20.69 18.064)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#3673FF"></stop>
+                                                                    <stop offset="1" stop-color="#3673FF" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d20" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(0 8.43604 -8.3125 0 16.313 22.189)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".195" stop-color="#508EFF"></stop>
+                                                                    <stop offset="1" stop-color="#508FFF" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d21" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(1.875 0 0 5.44012 5.25 26.095)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".112" stop-color="#4686D7"></stop>
+                                                                    <stop offset="1" stop-color="#4992F5" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d22" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(-2.875 -.46946 1.3621 -8.34153 26.938 26.095)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".112" stop-color="#4686D7"></stop>
+                                                                    <stop offset="1" stop-color="#4992F5" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d23" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(0 7.13262 -8.09304 0 16.304 23.293)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".195" stop-color="#508EFF"></stop>
+                                                                    <stop offset="1" stop-color="#508FFF" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d24" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(1.8255 0 0 4.5996 5.534 26.595)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".112" stop-color="#4686D7"></stop>
+                                                                    <stop offset="1" stop-color="#4992F5" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d25" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(-2.7991 -.39693 1.00654 -7.09804 26.648 26.595)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".112" stop-color="#4686D7"></stop>
+                                                                    <stop offset="1" stop-color="#4992F5" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d26" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(0 7.85379 -8.09304 0 16.304 22.625)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".195" stop-color="#508EFF"></stop>
+                                                                    <stop offset="1" stop-color="#508FFF" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d27" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(1.8255 0 0 5.06465 5.534 26.26)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".112" stop-color="#4686D7"></stop>
+                                                                    <stop offset="1" stop-color="#4992F5" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d28" cx="0" cy="0" r="1"
+                                                                                gradientTransform="rotate(-171.125 14.343 12.096)scale(2.83301 7.87742)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".112" stop-color="#4686D7"></stop>
+                                                                    <stop offset="1" stop-color="#4992F5" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d29" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(-.54687 .42188 -.30723 -.39826 16.688 6.905)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#C187F1"></stop>
+                                                                    <stop offset="1" stop-color="#C595F1" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d30" cx="0" cy="0" r="1"
+                                                                                gradientTransform="rotate(52.786 -4.814 22.205)scale(1.60179)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".77" stop-color="#DB644C" stop-opacity="0"></stop>
+                                                                    <stop offset=".924" stop-color="#DB644C"></stop>
+                                                                </radialGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d31" x1="16.01" x2="16.01"
+                                                                                y1="13.01" y2="20.01" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".418" stop-color="#FE5FD3"></stop>
+                                                                    <stop offset=".856" stop-color="#EE49CD"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d32" x1="16.01" x2="16.01"
+                                                                                y1="13.01" y2="20.01" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".887" stop-color="#DF499E" stop-opacity="0"></stop>
+                                                                    <stop offset="1" stop-color="#D14276"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d33" x1="22.438" x2="8.688"
+                                                                                y1="13.75" y2="13.75" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#CA3AAB"></stop>
+                                                                    <stop offset="1" stop-color="#D3358D"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d34" x1="16.005" x2="16.005"
+                                                                                y1="8.01" y2="15.01" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#FF85DE"></stop>
+                                                                    <stop offset=".525" stop-color="#FC59CC"></stop>
+                                                                    <stop offset="1" stop-color="#E542CD"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d35" x1="16.013" x2="16.013"
+                                                                                y1="20.01" y2="30" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#E8885E"></stop>
+                                                                    <stop offset=".035" stop-color="#EF976C"></stop>
+                                                                    <stop offset=".091" stop-color="#ECA079"></stop>
+                                                                    <stop offset=".262" stop-color="#F0979B"></stop>
+                                                                    <stop offset="1" stop-color="#E8885E" stop-opacity="0"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d36" x1="12.703" x2="13.438"
+                                                                                y1="9.359" y2="10.047" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#FCAC40"></stop>
+                                                                    <stop offset=".403" stop-color="#FFA43C"></stop>
+                                                                    <stop offset=".89" stop-color="#F37E41"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d37" x1="12.188" x2="13"
+                                                                                y1="17.078" y2="17.844" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#D4B3D6"></stop>
+                                                                    <stop offset=".393" stop-color="#D8B6F8"></stop>
+                                                                    <stop offset=".961" stop-color="#C887ED"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d38" x1="7.582" x2="8.314"
+                                                                                y1="15.88" y2="16.568" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#E89C43"></stop>
+                                                                    <stop offset=".403" stop-color="#F3913F"></stop>
+                                                                    <stop offset=".89" stop-color="#EA6542"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d39" x1="23.579" x2="24.535"
+                                                                                y1="15.88" y2="16.777" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#FFA83E"></stop>
+                                                                    <stop offset=".292" stop-color="#FFB84C"></stop>
+                                                                    <stop offset=".55" stop-color="#FFA83A"></stop>
+                                                                    <stop offset=".81" stop-color="#CC6E53"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d40" x1="21.606" x2="20.809"
+                                                                                y1="12.393" y2="13.205" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".264" stop-color="#EFEBF7"></stop>
+                                                                    <stop offset=".488" stop-color="#DBC8F4"></stop>
+                                                                    <stop offset=".931" stop-color="#CA95EB"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d41" x1="10.225" x2="10.225"
+                                                                                y1="12.93" y2="13.93" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#35A6FF"></stop>
+                                                                    <stop offset=".461" stop-color="#299DFF"></stop>
+                                                                    <stop offset="1" stop-color="#396BFF"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d42" x1="21.777" x2="20.981"
+                                                                                y1="12.19" y2="13.002" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".264" stop-color="#EFEBF7"></stop>
+                                                                    <stop offset=".488" stop-color="#DBC8F4"></stop>
+                                                                    <stop offset=".931" stop-color="#CA95EB"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d43" x1="16.047" x2="16.274"
+                                                                                y1="22.189" y2="30.421" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".823" stop-color="#58A0FF"></stop>
+                                                                    <stop offset=".915" stop-color="#5473FF"></stop>
+                                                                    <stop offset=".953" stop-color="#7163FF"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d44" x1="26.949" x2="5.442"
+                                                                                y1="23.976" y2="23.976" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".09" stop-color="#5FB6FF"></stop>
+                                                                    <stop offset=".107" stop-color="#4394F4"></stop>
+                                                                    <stop offset=".171" stop-color="#60B4FF"></stop>
+                                                                    <stop offset=".25" stop-color="#59F"></stop>
+                                                                    <stop offset=".327" stop-color="#65AFFF"></stop>
+                                                                    <stop offset=".629" stop-color="#61AEFF"></stop>
+                                                                    <stop offset=".806" stop-color="#62AFFF"></stop>
+                                                                    <stop offset=".919" stop-color="#469DF3"></stop>
+                                                                    <stop offset="1" stop-color="#4F9BE5"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d45" x1="18.625" x2="19.422"
+                                                                                y1="9.141" y2="9.945" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#388EF1"></stop>
+                                                                    <stop offset=".356" stop-color="#3AA5FF"></stop>
+                                                                    <stop offset=".917" stop-color="#4571FD"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d46" x1="20.535" x2="19.738"
+                                                                                y1="17.081" y2="17.885" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#39A1FF"></stop>
+                                                                    <stop offset=".356" stop-color="#40A1FF"></stop>
+                                                                    <stop offset=".917" stop-color="#3876FF"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d47" x1="15.989" x2="16.219"
+                                                                                y1="22.189" y2="30.531" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".823" stop-color="#58A0FF"></stop>
+                                                                    <stop offset=".915" stop-color="#5473FF"></stop>
+                                                                    <stop offset=".953" stop-color="#7163FF"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d48" x1="27.094" x2="5.188" y1="24"
+                                                                                y2="24" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".011" stop-color="#59B9FF"></stop>
+                                                                    <stop offset=".021" stop-color="#5FB6FF"></stop>
+                                                                    <stop offset=".09" stop-color="#5FB6FF"></stop>
+                                                                    <stop offset=".107" stop-color="#4394F4"></stop>
+                                                                    <stop offset=".171" stop-color="#60B4FF"></stop>
+                                                                    <stop offset=".25" stop-color="#59F"></stop>
+                                                                    <stop offset=".327" stop-color="#65AFFF"></stop>
+                                                                    <stop offset=".629" stop-color="#61AEFF"></stop>
+                                                                    <stop offset=".806" stop-color="#62AFFF"></stop>
+                                                                    <stop offset=".919" stop-color="#469DF3"></stop>
+                                                                    <stop offset="1" stop-color="#4F9BE5"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d49" x1="26.531" x2="25.5"
+                                                                                y1="25.781" y2="25.469" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#477CC5"></stop>
+                                                                    <stop offset="1" stop-color="#4881CB" stop-opacity="0"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d50" x1="15.989" x2="15.989"
+                                                                                y1="22.189" y2="30" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".852" stop-color="#5676F9" stop-opacity="0"></stop>
+                                                                    <stop offset="1" stop-color="#5477F7"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d51" x1="15.989" x2="16.158"
+                                                                                y1="23.293" y2="30.347" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".823" stop-color="#58A0FF"></stop>
+                                                                    <stop offset=".915" stop-color="#5473FF"></stop>
+                                                                    <stop offset=".953" stop-color="#7163FF"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d52" x1="15.989" x2="16.194"
+                                                                                y1="22.625" y2="30.392" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".823" stop-color="#58A0FF"></stop>
+                                                                    <stop offset=".915" stop-color="#5473FF"></stop>
+                                                                    <stop offset=".953" stop-color="#7163FF"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d53" x1="16.013" x2="16.013"
+                                                                                y1="25.125" y2="30" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#2B8BFF"></stop>
+                                                                    <stop offset=".839" stop-color="#2C8AFF"></stop>
+                                                                    <stop offset="1" stop-color="#4063FF"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d54" x1="11.016" x2="11.016"
+                                                                                y1="25" y2="29.99" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#2B8BFF"></stop>
+                                                                    <stop offset=".839" stop-color="#2C8AFF"></stop>
+                                                                    <stop offset="1" stop-color="#4063FF"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d55" x1="16.406" x2="15.609"
+                                                                                y1="5.75" y2="6.563" gradientUnits="userSpaceOnUse">
+                                                                    <stop offset=".264" stop-color="#EFEBF7"></stop>
+                                                                    <stop offset=".488" stop-color="#DBC8F4"></stop>
+                                                                    <stop offset=".931" stop-color="#CA95EB"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d56" x1="21.07" x2="21.07" y1="25"
+                                                                                y2="30" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#2B8BFF"></stop>
+                                                                    <stop offset=".839" stop-color="#2C8AFF"></stop>
+                                                                    <stop offset="1" stop-color="#4063FF"></stop>
+                                                                </linearGradient>
+                                                                <linearGradient id="IconifyId190de6c7427c1815d57" x1="16.328" x2="15.633"
+                                                                                y1="12.617" y2="13.352" gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#FFB248"></stop>
+                                                                    <stop offset=".397" stop-color="#FFA43E"></stop>
+                                                                    <stop offset=".847" stop-color="#F17F4D"></stop>
+                                                                </linearGradient>
+                                                                <filter id="IconifyId190de6c7427c1815d58" width="18.16" height="7.083" x="6.978"
+                                                                        y="8.781" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451" stdDeviation=".25">
+                                                                    </feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d59" width="10.406" height="5.2" x="10.703"
+                                                                        y="5.021" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451" stdDeviation=".25">
+                                                                    </feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d60" width="2.25" height="2.25" x="12.023"
+                                                                        y="8.674" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".125"></feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d61" width="2.859" height="2.859"
+                                                                        x="11.111" y="16.141" color-interpolation-filters="sRGB"
+                                                                        filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451" stdDeviation=".25">
+                                                                    </feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d62" width="2.25" height="2.243" x="7.106"
+                                                                        y="14.969" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".125"></feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d63" width="2.171" height="2.314"
+                                                                        x="22.938" y="15.157" color-interpolation-filters="sRGB"
+                                                                        filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".125"></feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d64" width="2.25" height="2.25" x="20.074"
+                                                                        y="11.633" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".125"></feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d65" width="2.55" height="1.5" x="8.997"
+                                                                        y="12.508" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".125"></feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d66" width="22.45" height="7.908" x="4.822"
+                                                                        y="22.089" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451" stdDeviation=".05">
+                                                                    </feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d67" width="2.25" height="2.25" x="17.812"
+                                                                        y="8.445" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".125"></feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d68" width="2.086" height="1.293"
+                                                                        x="17.953" y="8.278" color-interpolation-filters="sRGB"
+                                                                        filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".125"></feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d69" width="2.25" height="2.25" x="19.01"
+                                                                        y="16.594" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".125"></feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d70" width="22.323" height="7.256"
+                                                                        x="4.893" y="22.891" color-interpolation-filters="sRGB"
+                                                                        filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".125"></feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d71" width="22.645" height="4.888"
+                                                                        x="4.747" y="22.282" color-interpolation-filters="sRGB"
+                                                                        filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".087"></feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d72" width="2.75" height="2.75" x="14.452"
+                                                                        y="5.021" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451" stdDeviation=".25">
+                                                                    </feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d73" width="2.75" height="2.75" x="14.625"
+                                                                        y="11.823" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451" stdDeviation=".25">
+                                                                    </feGaussianBlur>
+                                                                </filter>
+                                                                <filter id="IconifyId190de6c7427c1815d74" width="1.596" height="1.725" x="5.546"
+                                                                        y="22.138" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                    <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                                                    </feBlend>
+                                                                    <feGaussianBlur result="effect1_foregroundBlur_18_31451"
+                                                                                    stdDeviation=".125"></feGaussianBlur>
+                                                                </filter>
+                                                            </defs>
+                                                        </g>
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="ms-3">
+                                            <a target="_blank" class="link-body-emphasis"
+                                               href="https://twitter.com/_VedAstro">
+
+                                                <div class="" style="" _bl_8="">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                                         class="iconify iconify--skill-icons" width="22" height="22"
+                                                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"
+                                                         data-icon="skill-icons:twitter" data-width="22">
+                                                        <g fill="none">
+                                                            <rect width="256" height="256" fill="#fff" rx="60"></rect>
+                                                            <rect width="256" height="256" fill="#1D9BF0" rx="60"></rect>
+                                                            <path fill="#fff"
+                                                                  d="M199.572 91.411c.11 1.587.11 3.174.11 4.776c0 48.797-37.148 105.075-105.075 105.075v-.03A104.54 104.54 0 0 1 38 184.677q4.379.525 8.79.533a74.15 74.15 0 0 0 45.865-15.839a36.98 36.98 0 0 1-34.501-25.645a36.8 36.8 0 0 0 16.672-.636c-17.228-3.481-29.623-18.618-29.623-36.198v-.468a36.7 36.7 0 0 0 16.76 4.622c-16.226-10.845-21.228-32.432-11.43-49.31a104.8 104.8 0 0 0 76.111 38.582a36.95 36.95 0 0 1 10.683-35.283c14.874-13.982 38.267-13.265 52.249 1.601a74.1 74.1 0 0 0 23.451-8.965a37.06 37.06 0 0 1-16.234 20.424A73.5 73.5 0 0 0 218 72.282a75 75 0 0 1-18.428 19.13">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="ms-3">
+                                            <a target="_blank" class="link-body-emphasis"
+                                               href="https://patreon.com/vedastro">
+
+                                                <div class="" style="" _bl_9="">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                                         class="iconify iconify--logos" width="22" height="21.23"
+                                                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 247" data-icon="logos:patreon"
+                                                         data-width="22">
+                                                        <path fill="#FF424D"
+                                                              d="M45.136 0v246.35H0V0zm118.521 0C214.657 0 256 41.343 256 92.343s-41.343 92.343-92.343 92.343s-92.343-41.344-92.343-92.343S112.658 0 163.657 0">
+                                                        </path>
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="ms-3">
+                                            <a target="_blank" class="link-body-emphasis"
+                                               href="https://github.com/VedAstro/VedAstro">
+
+                                                <div class="" style="" _bl_10="">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                                         class="iconify iconify--skill-icons" width="22" height="22"
+                                                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"
+                                                         data-icon="skill-icons:github-dark" data-width="22">
+                                                        <g fill="none">
+                                                            <rect width="256" height="256" fill="#242938" rx="60"></rect>
+                                                            <path fill="#fff"
+                                                                  d="M128.001 30C72.779 30 28 74.77 28 130.001c0 44.183 28.653 81.667 68.387 94.89c4.997.926 6.832-2.169 6.832-4.81c0-2.385-.093-10.262-.136-18.618c-27.82 6.049-33.69-11.799-33.69-11.799c-4.55-11.559-11.104-14.632-11.104-14.632c-9.073-6.207.684-6.079.684-6.079c10.042.705 15.33 10.305 15.33 10.305c8.919 15.288 23.394 10.868 29.1 8.313c.898-6.464 3.489-10.875 6.349-13.372c-22.211-2.529-45.56-11.104-45.56-49.421c0-10.918 3.906-19.839 10.303-26.842c-1.039-2.519-4.462-12.69.968-26.464c0 0 8.398-2.687 27.508 10.25c7.977-2.215 16.531-3.326 25.03-3.364c8.498.038 17.06 1.149 25.051 3.365c19.087-12.939 27.473-10.25 27.473-10.25c5.443 13.773 2.019 23.945.98 26.463c6.412 7.003 10.292 15.924 10.292 26.842c0 38.409-23.394 46.866-45.662 49.341c3.587 3.104 6.783 9.189 6.783 18.519c0 13.38-.116 24.149-.116 27.443c0 2.661 1.8 5.779 6.869 4.797C199.383 211.64 228 174.169 228 130.001C228 74.771 183.227 30 128.001 30M65.454 172.453c-.22.497-1.002.646-1.714.305c-.726-.326-1.133-1.004-.898-1.502c.215-.512.999-.654 1.722-.311c.727.326 1.141 1.01.89 1.508m4.919 4.389c-.477.443-1.41.237-2.042-.462c-.654-.697-.777-1.629-.293-2.078c.491-.442 1.396-.235 2.051.462c.654.706.782 1.631.284 2.078m3.374 5.616c-.613.426-1.615.027-2.234-.863c-.613-.889-.613-1.955.013-2.383c.621-.427 1.608-.043 2.236.84c.611.904.611 1.971-.015 2.406m5.707 6.504c-.548.604-1.715.442-2.57-.383c-.874-.806-1.118-1.95-.568-2.555c.555-.606 1.729-.435 2.59.383c.868.804 1.133 1.957.548 2.555m7.376 2.195c-.242.784-1.366 1.14-2.499.807c-1.13-.343-1.871-1.26-1.642-2.052c.235-.788 1.364-1.159 2.505-.803c1.13.341 1.871 1.252 1.636 2.048m8.394.932c.028.824-.932 1.508-2.121 1.523c-1.196.027-2.163-.641-2.176-1.452c0-.833.939-1.51 2.134-1.53c1.19-.023 2.163.639 2.163 1.459m8.246-.316c.143.804-.683 1.631-1.864 1.851c-1.161.212-2.236-.285-2.383-1.083c-.144-.825.697-1.651 1.856-1.865c1.183-.205 2.241.279 2.391 1.097">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="ms-3">
+                                            <a target="_blank" class="link-body-emphasis"
+                                               href="https://www.instagram.com/_vedastro/">
+
+                                                <div class="" style="" _bl_11="">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                                         class="iconify iconify--skill-icons" width="22" height="22"
+                                                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"
+                                                         data-icon="skill-icons:instagram" data-width="22">
+                                                        <g fill="none">
+                                                            <rect width="256" height="256" fill="url(#IconifyId190de6c7427c1815d75)" rx="60">
+                                                            </rect>
+                                                            <rect width="256" height="256" fill="url(#IconifyId190de6c7427c1815d76)" rx="60">
+                                                            </rect>
+                                                            <path fill="#fff"
+                                                                  d="M128.009 28c-27.158 0-30.567.119-41.233.604c-10.646.488-17.913 2.173-24.271 4.646c-6.578 2.554-12.157 5.971-17.715 11.531c-5.563 5.559-8.98 11.138-11.542 17.713c-2.48 6.36-4.167 13.63-4.646 24.271c-.477 10.667-.602 14.077-.602 41.236s.12 30.557.604 41.223c.49 10.646 2.175 17.913 4.646 24.271c2.556 6.578 5.973 12.157 11.533 17.715c5.557 5.563 11.136 8.988 17.709 11.542c6.363 2.473 13.631 4.158 24.275 4.646c10.667.485 14.073.604 41.23.604c27.161 0 30.559-.119 41.225-.604c10.646-.488 17.921-2.173 24.284-4.646c6.575-2.554 12.146-5.979 17.702-11.542c5.563-5.558 8.979-11.137 11.542-17.712c2.458-6.361 4.146-13.63 4.646-24.272c.479-10.666.604-14.066.604-41.225s-.125-30.567-.604-41.234c-.5-10.646-2.188-17.912-4.646-24.27c-2.563-6.578-5.979-12.157-11.542-17.716c-5.562-5.562-11.125-8.979-17.708-11.53c-6.375-2.474-13.646-4.16-24.292-4.647c-10.667-.485-14.063-.604-41.23-.604zm-8.971 18.021c2.663-.004 5.634 0 8.971 0c26.701 0 29.865.096 40.409.575c9.75.446 15.042 2.075 18.567 3.444c4.667 1.812 7.994 3.979 11.492 7.48c3.5 3.5 5.666 6.833 7.483 11.5c1.369 3.52 3 8.812 3.444 18.562c.479 10.542.583 13.708.583 40.396s-.104 29.855-.583 40.396c-.446 9.75-2.075 15.042-3.444 18.563c-1.812 4.667-3.983 7.99-7.483 11.488c-3.5 3.5-6.823 5.666-11.492 7.479c-3.521 1.375-8.817 3-18.567 3.446c-10.542.479-13.708.583-40.409.583c-26.702 0-29.867-.104-40.408-.583c-9.75-.45-15.042-2.079-18.57-3.448c-4.666-1.813-8-3.979-11.5-7.479s-5.666-6.825-7.483-11.494c-1.369-3.521-3-8.813-3.444-18.563c-.479-10.542-.575-13.708-.575-40.413s.096-29.854.575-40.396c.446-9.75 2.075-15.042 3.444-18.567c1.813-4.667 3.983-8 7.484-11.5s6.833-5.667 11.5-7.483c3.525-1.375 8.819-3 18.569-3.448c9.225-.417 12.8-.542 31.437-.563zm62.351 16.604c-6.625 0-12 5.37-12 11.996c0 6.625 5.375 12 12 12s12-5.375 12-12s-5.375-12-12-12zm-53.38 14.021c-28.36 0-51.354 22.994-51.354 51.355s22.994 51.344 51.354 51.344c28.361 0 51.347-22.983 51.347-51.344c0-28.36-22.988-51.355-51.349-51.355zm0 18.021c18.409 0 33.334 14.923 33.334 33.334c0 18.409-14.925 33.334-33.334 33.334s-33.333-14.925-33.333-33.334c0-18.411 14.923-33.334 33.333-33.334">
+                                                            </path>
+                                                            <defs>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d75" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(0 -253.715 235.975 0 68 275.717)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#FD5"></stop>
+                                                                    <stop offset=".1" stop-color="#FD5"></stop>
+                                                                    <stop offset=".5" stop-color="#FF543E"></stop>
+                                                                    <stop offset="1" stop-color="#C837AB"></stop>
+                                                                </radialGradient>
+                                                                <radialGradient id="IconifyId190de6c7427c1815d76" cx="0" cy="0" r="1"
+                                                                                gradientTransform="matrix(22.25952 111.2061 -458.39518 91.75449 -42.881 18.441)"
+                                                                                gradientUnits="userSpaceOnUse">
+                                                                    <stop stop-color="#3771C8"></stop>
+                                                                    <stop offset=".128" stop-color="#3771C8"></stop>
+                                                                    <stop offset="1" stop-color="#60F" stop-opacity="0"></stop>
+                                                                </radialGradient>
+                                                            </defs>
+                                                        </g>
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="ms-3">
+                                            <a target="_blank" class="link-body-emphasis"
+                                               href="https://www.youtube.com/@vedastro/videos">
+
+                                                <div class="" style="" _bl_12="">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                                         class="iconify iconify--logos" width="22" height="15.47"
+                                                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 180" data-icon="logos:youtube-icon"
+                                                         data-width="22">
+                                                        <path fill="red"
+                                                              d="M250.346 28.075A32.18 32.18 0 0 0 227.69 5.418C207.824 0 127.87 0 127.87 0S47.912.164 28.046 5.582A32.18 32.18 0 0 0 5.39 28.24c-6.009 35.298-8.34 89.084.165 122.97a32.18 32.18 0 0 0 22.656 22.657c19.866 5.418 99.822 5.418 99.822 5.418s79.955 0 99.82-5.418a32.18 32.18 0 0 0 22.657-22.657c6.338-35.348 8.291-89.1-.164-123.134">
+                                                        </path>
+                                                        <path fill="#FFF" d="m102.421 128.06l66.328-38.418l-66.328-38.418z"></path>
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="ms-3">
+                                            <a target="_blank" class="link-body-emphasis"
+                                               href="https://www.facebook.com/vedastro.org">
+
+                                                <div class="" style="" _bl_13="">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                                         class="iconify iconify--devicon" width="22" height="22"
+                                                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="devicon:facebook"
+                                                         data-width="22">
+                                                        <rect width="118.35" height="118.35" x="4.83" y="4.83" fill="#3d5a98" rx="6.53"
+                                                              ry="6.53"></rect>
+                                                        <path fill="#fff"
+                                                              d="M86.48 123.17V77.34h15.38l2.3-17.86H86.48v-11.4c0-5.17 1.44-8.7 8.85-8.7h9.46v-16A127 127 0 0 0 91 22.7c-13.62 0-23 8.3-23 23.61v13.17H52.62v17.86H68v45.83z">
+                                                        </path>
+                                                    </svg>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--##############################################################
+    DEPENDENCIES JS & CSS : placed here after html above is already in DOM
+    ##############################################################-->
+    <!-- Bootstrap CSS : Used for styling everything-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- Bootstrap  JS : Used to animate some components like Accordion, dropdown, BUNDLE because popper.js-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js">                </script>
+
+    <!--Icon Generator Lib -->
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+
+    <!--Sweet Alert Lib -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mattboldt/typed.js@2.0.11/lib/typed.min.js"></script>
+
+    <!-- JS APP CODE -->
+    <script src="./js/app.js"></script>
+    <script src="./js/Home.js" defer></script>
+
+</body>
+</html>

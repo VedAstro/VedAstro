@@ -367,7 +367,9 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// ...../api/Calculate/GeoLocationToTimezone/Location/Chennai,TamilNadu,India/Time/23:37/07/08/1990/+01:00
+        /// Gets all timezone given a location, accounts for Daylight savings & historical changes
+        /// Note : location name is not mandatory, it is there because location names can change, but coordinates are essential 
+        /// ...../api/Calculate/GeoLocationToTimezone/Location/Tokyo, Japan/Coordinates/35.65,139.83/Time/14:02/09/11/1977/+00:00
         /// </summary>
         public static async Task<string> GeoLocationToTimezone(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
@@ -551,6 +553,7 @@ namespace VedAstro.Library
             return possibleEndTime;
 
         }
+
 
 
         #endregion

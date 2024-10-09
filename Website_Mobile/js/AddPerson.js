@@ -1,4 +1,6 @@
 ﻿//-----------------------------> ADD PERSON PAGE
+updateHistory();
+
 new PageHeader("AddPersonPageHeader");
 new InfoBox("InfoBox_EasyImport_AddPerson");
 new InfoBox("InfoBox_Private_AddPerson");
@@ -59,13 +61,13 @@ async function OnClickSave_AddPerson() {
         icon: 'success',
         title: 'Done!',
         text: 'Person added successfully!',
-        timer: 1500
+        timer: 1500,
+        showConfirmButton: false
     });
 
     // wait a little and send user back to previous page (reloaded & not via "Back" functionality to avoid caching)
     setTimeout(() => {
-        window.history.go(-1);
-        window.location.reload();
+        navigateToPreviousPage();
     }, 1500);
 }
 

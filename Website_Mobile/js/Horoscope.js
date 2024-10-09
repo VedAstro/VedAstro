@@ -1,4 +1,6 @@
 ﻿//-----------------------------> HOROSCOPE PAGE
+updateHistory();
+
 new PageHeader("HoroscopePageHeader");
 new PersonSelectorBox("PersonSelectorBox_Horoscope");
 new InfoBox("InfoBox_AskAI_Horoscope");

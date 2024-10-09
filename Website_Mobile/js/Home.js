@@ -1,1 +1,1 @@
-﻿
+﻿updateHistory();

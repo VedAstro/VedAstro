@@ -4,14 +4,19 @@
 // create an array to store the navigation history (up to 10 pages deep)
 const history = JSON.parse(localStorage.getItem('history')) || [];
 
-// function to update the navigation history, input page name
-function updateHistory(newPage) {
+// function to update the navigation history, with current url
+function updateHistory() {
+    // Get the current URL
+    let currentUrl = window.location.href;
+
     // add the new page to the history array
-    history.push(newPage);
+    history.push(currentUrl);
+
     // limit the history array to 10 pages deep
     if (history.length > 10) {
         history.shift();
     }
+
     // save the history array to local storage
     localStorage.setItem('history', JSON.stringify(history));
 }
@@ -30,15 +35,19 @@ function updateHistory(newPage) {
 //    window.location.href = href;
 //}
 
+//goes to previous page that saved to history, without using browsers' "back" feature
 function navigateToPreviousPage() {
     // check if there is a previous page in the history array
     if (history.length > 1) {
         // remove the current page from the history array
         history.pop();
+
         // get the previous page from the history array
-        const previousPage = history[history.length - 1];
-        // show the previous page
-        navigateToPage(previousPage);
+        let previousPage = history[history.length - 1];
+
+        // navigate to the href
+        window.location.href = previousPage;
+
         // update the navigation history in local storage
         localStorage.setItem('history', JSON.stringify(history));
     }

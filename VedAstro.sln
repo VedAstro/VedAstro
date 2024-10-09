@@ -98,11 +98,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APILauncher", "Desktop\APIL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Website_Mobile", "Website_Mobile\Website_Mobile.csproj", "{F6159303-A9D3-42EF-B04F-308B5F510FA6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureTableToCSV", "AzureTableToCSV\AzureTableToCSV.csproj", "{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LLMCoder", "LLMCoder\LLMCoder.csproj", "{05DA9F12-FADD-4BD9-B707-E20DC86A8F2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocToEmbeddings", "DocToEmbeddings\DocToEmbeddings.csproj", "{A97B97DC-5431-4A20-8F24-00724E85C0C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocToEmbeddings", "DocToEmbeddings\DocToEmbeddings.csproj", "{A97B97DC-5431-4A20-8F24-00724E85C0C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -321,18 +319,6 @@ Global
 		{F6159303-A9D3-42EF-B04F-308B5F510FA6}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
 		{F6159303-A9D3-42EF-B04F-308B5F510FA6}.ReleaseTest|x64.ActiveCfg = Release|Any CPU
 		{F6159303-A9D3-42EF-B04F-308B5F510FA6}.ReleaseTest|x64.Build.0 = Release|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.Debug|x64.Build.0 = Debug|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.Release|x64.ActiveCfg = Release|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.Release|x64.Build.0 = Release|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.ReleaseTest|x64.ActiveCfg = Release|Any CPU
-		{EBD3AC3A-003E-4DC2-AEDC-F6571118DB89}.ReleaseTest|x64.Build.0 = Release|Any CPU
 		{05DA9F12-FADD-4BD9-B707-E20DC86A8F2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{05DA9F12-FADD-4BD9-B707-E20DC86A8F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05DA9F12-FADD-4BD9-B707-E20DC86A8F2C}.Debug|x64.ActiveCfg = Debug|Any CPU

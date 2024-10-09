@@ -3141,7 +3141,7 @@ class VedAstro {
      * The default API domain.
      */
     //static ApiDomain = "http://localhost:7071/api";
-    //static ApiDomain = "https://vedastroapi.azurewebsites.net/api";
+    static ApiDomain = "https://vedastroapi.azurewebsites.net/api";
     //static ApiDomain = "https://vedastroapibeta.azurewebsites.net/api";
 
     /**
@@ -3250,7 +3250,7 @@ class VedAstro {
     static async FetchPersonListFromAPI(cacheType) {
         // Determine the owner ID based on the cache type
         const ownerId = cacheType === 'private' ? VedAstro.UserId : '101';
-        
+
         try {
             // Fetch the person list from the API
             const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetPersonList/UserId/${ownerId}`);
@@ -3520,7 +3520,7 @@ class Time {
          */
         this.Location = new GeoLocation(jsonObject.Location);
     }
-    
+
     /**
      * Converts the Time object to a plain JavaScript object.
      * @return {Object} The plain JavaScript object representation of the Time object.
@@ -3783,8 +3783,8 @@ class PersonSelectorBox {
         // Default data
         this.personList = [];
         this.publicPersonList = [];
-        this.personListDisplay = [];
-        this.publicPersonListDisplay = [];
+        this._personListDisplay = [];
+        this._publicPersonListDisplay = [];
 
         // Get title and description from the element's custom attributes
         const element = document.getElementById(elementId);
@@ -3825,19 +3825,51 @@ class PersonSelectorBox {
 
     }
 
+    //gets list of person to display (checks if underlying cache has been removed)
+    async getPersonListDisplay() {
+        //check if cache exist
+        let isExist = localStorage.getItem('personList') !== null;
+
+        //if cache exist, then no need to reinitialize, use in memory
+        if (isExist) { return this._personListDisplay; }
+
+        //else get new data from API and fill from that (as though 1st time load)
+        else {
+            this.personList = await VedAstro.GetPersonList('private');
+            this._personListDisplay = this.personList;
+            return this._personListDisplay;
+        }
+    }
+
+    //gets public list of person to display (checks if underlying cache has been removed)
+    async getPublicPersonListDisplay() {
+        //check if cache exist
+        let isExist = localStorage.getItem('publicPersonList') !== null;
+
+        //if cache exist, then no need to reinitialize, use in memory
+        if (isExist) { return this._publicPersonListDisplay; }
+
+        //else get new data from API and fill from that (as though 1st time load)
+        else {
+            this.publicPersonList = await VedAstro.GetPersonList('public');
+            this._publicPersonListDisplay = this.publicPersonList;
+            return this._publicPersonListDisplay;
+        }
+    }
+
     //fetch list for use in this specific instance
     async initializePersonListData() {
         // get person list from API or cache automatic
         this.personList = await VedAstro.GetPersonList('private');
-        this.personListDisplay = this.personList;
+        this._personListDisplay = this.personList;
         this.publicPersonList = await VedAstro.GetPersonList('public');
-        this.publicPersonListDisplay = this.publicPersonList;
+        this._publicPersonListDisplay = this.publicPersonList;
 
         // Get the previously selected person from local storage
         const selectedPerson = VedAstro.GetSelectedPerson();
 
         // If a selected person exists, simulate a click on their name
-        selectedPerson && this.onClickPersonName(selectedPerson.PersonId);
+        selectedPerson && this.updatePersonNameGui(selectedPerson);
     }
 
     // call `PersonSelectorBox.ClearPersonListCache('private')` to clear only the private person list cache,
@@ -3863,10 +3895,17 @@ class PersonSelectorBox {
         console.log('Person list cache cleared.');
     }
 
-    // Handle click on a person's name in the dropdown
+    // Handle click on a person's name in the dropdown (called from html dropdown)
     async onClickPersonName(personId) {
         // Get the full person details based on the ID
-        var personData = this.getPersonDataById(personId);
+        var personData = await this.getPersonDataById(personId);
+
+        //update into view
+        this.updatePersonNameGui(personData);
+    }
+
+    //given full person data will update into selected view
+    updatePersonNameGui(personData) {
         var displayName = personData.DisplayName;
 
         // Update the visible select button text
@@ -3878,7 +3917,7 @@ class PersonSelectorBox {
         VedAstro.SetSelectedPerson(personData);
 
         // Save the selected person ID for instance-specific selection
-        this.selectedPersonId = personId;
+        this.selectedPersonId = personData.PersonId;
     }
 
     // Handle keyup event on the search input field
@@ -3905,8 +3944,8 @@ class PersonSelectorBox {
 
     async generateHtmlBody() {
         // Generate HTML for private and public person lists
-        this.personListHTML = this.generatePersonListHtml();
-        this.publicPersonListHTML = this.generatePublicPersonListHtml();
+        this.personListHTML = await this.generatePersonListHtml();
+        this.publicPersonListHTML = await this.generatePublicPersonListHtml();
 
         // Get a reference to the search input element
         this.searchInput = document.getElementById('searchInput');
@@ -3918,7 +3957,6 @@ class PersonSelectorBox {
             const parsedPerson = new Person(selectedPerson);
             selectedPersonText = parsedPerson.DisplayName;
         }
-
 
         // Return the generated HTML for the component
         return `
@@ -3943,36 +3981,36 @@ class PersonSelectorBox {
             ${this.personListHTML}
 
             <!-- DIVIDER & EXAMPLES ICON -->
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider"/></li>
             <div class="ms-3 d-flex justify-content-between">
-              <div class=" hstack gap-2" style=" ">
+              <div class="hstack gap-2">
                 <div><i class="iconify" data-icon="material-symbols:demography-rounded" data-width="25"></i></div>
-                <span style="font-size: 13px; color: rgb(143, 143, 143);>Examples</span>
+                <span style="font-size: 13px; color: rgb(143, 143, 143);">Examples</span>
               </div>
             </div>
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider"/></li>
 
             <!-- PUBLIC PERSON LIST -->
             ${this.publicPersonListHTML}
 
           </ul>
         </div>
-        <button onClick="navigateToPage(this)" href="/AddPerson" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2">
+        <a href="./AddPerson.html" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2">
           <i class="iconify" data-icon="ant-design:user-add-outlined" data-width="25"></i>
-        </button>
+        </a>
       </div>
     </div>
   `;
     }
 
     // Get full person data from the given list based on ID
-    getPersonDataById(personId) {
+    async getPersonDataById(personId) {
         // Search in public list first
-        const person = this.publicPersonListDisplay.find((person) => person.PersonId === personId);
+        const person = (await this.getPublicPersonListDisplay()).find((person) => person.PersonId === personId);
 
         // If not found, search in private list
         if (!person) {
-            const privatePerson = this.personListDisplay.find((person) => person.PersonId === personId);
+            const privatePerson = (await this.getPersonListDisplay()).find((person) => person.PersonId === personId);
             return new Person(privatePerson); // Create a Person instance
         }
 
@@ -3980,8 +4018,8 @@ class PersonSelectorBox {
     }
 
     // Generate HTML for the public person list
-    generatePublicPersonListHtml() {
-        const html = this.publicPersonListDisplay
+    async generatePublicPersonListHtml() {
+        const html = (await this.getPublicPersonListDisplay())
             .map((person) => {
                 return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.DisplayName}</li>`;
             })
@@ -3991,8 +4029,8 @@ class PersonSelectorBox {
     }
 
     // Generate HTML for the private person list
-    generatePersonListHtml() {
-        const html = this.personListDisplay
+    async generatePersonListHtml() {
+        const html = (await this.getPersonListDisplay())
             .map((person) => {
                 return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.DisplayName}</li>`;
             })
@@ -4599,7 +4637,7 @@ class GeoLocationInput {
      */
     locationNameSearchWithAPI(locationName) {
         return new Promise(resolve => {
-            fetch(`${window.vedastro.ApiDomain}/Calculate/SearchLocation/Address/${locationName}`)
+            fetch(`${VedAstro.ApiDomain}/Calculate/SearchLocation/Address/${locationName}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.Status === 'Pass' && data.Payload.SearchLocation) {

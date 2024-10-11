@@ -41,6 +41,7 @@ async function OnClickCalculate_Horoscope() {
 
     //show planet data table
     await initPlanetDataTable(timeUrl);
+    await initHouseDataTable(timeUrl);
 
     //hide loading
     Swal.close();
@@ -50,11 +51,11 @@ async function initPlanetDataTable(birthTimeUrl) {
     //----------------------PLANET DATA----------------------------
     var planetColumns = [
         { Api: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
-        { Api: "PlanetConstellation", Enabled: true, Name: "Star" },
+        { Api: "PlanetConstellation", Enabled: true, Name: "Constellation" },
         { Api: "HousePlanetOccupies", Enabled: true, Name: "Occupies" },
         { Api: "HousesOwnedByPlanet", Enabled: true, Name: "Owns" },
         { Api: "PlanetLordOfZodiacSign", Enabled: true, Name: "Sign Lord" },
-        { Api: "PlanetLordOfConstellation", Enabled: true, Name: "Star Lord" },
+        { Api: "PlanetLordOfConstellation", Enabled: true, Name: "Const. Lord" },
         { Api: "Empty", Enabled: false, Name: "Empty" },
         { Api: "Empty", Enabled: false, Name: "Empty" },
     ];
@@ -86,3 +87,46 @@ async function initPlanetDataTable(birthTimeUrl) {
     await planetDataTable.GenerateTable(inputArguments);
 
 }
+
+async function initHouseDataTable(birthTimeUrl) {
+    //----------------------HOUSE DATA----------------------------
+    var houseColumns = [
+        { Api: "HouseZodiacSign", Enabled: true, Name: "Sign" },
+        { Api: "HouseConstellation", Enabled: true, Name: "Constellation" },
+        { Api: "PlanetsInHouse", Enabled: true, Name: "Planets In" },
+        { Api: "LordOfHouse", Enabled: true, Name: "House Lord" },
+        { Api: "HouseConstellationLord", Enabled: true, Name: "Const. Lord" },
+        { Api: "PlanetsAspectingHouse", Enabled: true, Name: "Aspects" },
+        { Api: "Empty", Enabled: false, Name: "Empty" },
+        { Api: "Empty", Enabled: false, Name: "Empty" },
+    ];
+
+
+    //initialize astro table
+    var settings = {
+        ElementID: "HouseDataTable",
+        KeyColumn: "House",
+        ShowHeader: true,
+        HeaderIcon: "fluent-emoji-flat:house",
+        ColumnData: houseColumns, //columns names to create table
+        EnableSorting: false,
+        SaveSettings: false,
+    };
+
+    //make new astro table
+    var houseDataTable = new AstroTable(settings);
+
+    //data used to generate table
+    var inputArguments = {
+        TimeUrl: birthTimeUrl, 
+        HoraryNumber: 0,
+        RotateDegrees: 0,
+        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
+    };
+
+    //generate table
+    await houseDataTable.GenerateTable(inputArguments);
+
+}
+
+

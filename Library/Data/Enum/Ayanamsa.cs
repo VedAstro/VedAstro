@@ -49,6 +49,8 @@
         [AdvancedOption]
         GALCENT_0SAG = 17,
         [AdvancedOption]
+        J2000 = 18,
+        [AdvancedOption]
         J1900 = 19,
         [AdvancedOption]
         B1950 = 20,

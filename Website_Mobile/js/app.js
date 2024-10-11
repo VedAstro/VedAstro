@@ -96,9 +96,9 @@ function updateNumerologyPrediction(number, text) {
 
 //RUN CODE
 // sidebar show/hide
-const buttontoggle = document.getElementById('sidebartoggle');
-const desktopSidebar = document.getElementById('desktopsidebar');
-buttontoggle.addEventListener('click',
-    () => {
-        desktopSidebar.classList.toggle('d-md-block');
-    });
+//const buttontoggle = document.getElementById('sidebartoggle');
+//const desktopSidebar = document.getElementById('desktopsidebar');
+//buttontoggle.addEventListener('click',
+//    () => {
+//        desktopSidebar.classList.toggle('d-md-block');
+//    });

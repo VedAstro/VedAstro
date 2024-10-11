@@ -3023,6 +3023,73 @@ class PageHeader {
 }
 
 /**
+ * Represents a dropdown box for ayanamsa.
+ * Generates the HTML & handles auto saving/reading from local storage
+ */
+class AyanamsaSelectorBox {
+    // Class properties
+    ElementID = "";
+
+    // Constructor to initialize the PageHeader object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Call the method to initialize the main body of the page header
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body of the page header
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML for the page header and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+
+        // Check local storage if any previously selected ayanamsa values exist, if so select that in html
+        this.checkLocalStorage();
+
+        // Attach event handler such that if selection is changed it is also saved into local storage for future use
+        this.attachEventHandler();
+    }
+
+    get SelectedAyanamsa() {
+        // Get selected ayanamsa value from select element
+        return $(`#${this.ElementID} select`).val();
+    }
+
+    checkLocalStorage() {
+        const selectedAyanamsa = localStorage.getItem('selectedAyanamsa');
+        if (selectedAyanamsa) {
+            $(`#${this.ElementID} select`).val(selectedAyanamsa);
+        }
+    }
+
+    attachEventHandler() {
+        $(`#${this.ElementID} select`).on('change', () => {
+            const selectedAyanamsa = $(`#${this.ElementID} select`).val();
+            localStorage.setItem('selectedAyanamsa', selectedAyanamsa);
+        });
+    }
+
+
+    // Method to generate the HTML for the page header
+    async generateHtmlBody() {
+        // Return the HTML for the page header, including conditional blocks for different screen sizes
+        return `
+     <label style="width: 134px;" class="input-group-text">
+         <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
+     </label>
+     <select id="SelectedAyanamsa" class="form-select">
+         <optgroup label="Easy"><option value="LAHIRI">Lahiri Chitrapaksha</option><option value="KRISHNAMURTI">Krishnamurti KP</option><option value="RAMAN">Raman</option><option value="FAGAN_BRADLEY">Fagan Bradley (Western)</option><option value="J2000">J2000</option><option value="YUKTESHWAR">Yukteshwar</option></optgroup>
+         <optgroup label="Advanced"><option value="FAGAN_BRADLEY">FAGAN_BRADLEY</option><option value="LAHIRI">LAHIRI</option><option value="DELUCE">DELUCE</option><option value="RAMAN">RAMAN</option><option value="USHASHASHI">USHASHASHI</option><option value="KRISHNAMURTI">KRISHNAMURTI</option><option value="DJWHAL_KHUL">DJWHAL_KHUL</option><option value="YUKTESHWAR">YUKTESHWAR</option><option value="JN_BHASIN">JN_BHASIN</option><option value="BABYL_KUGLER1">BABYL_KUGLER1</option><option value="BABYL_KUGLER2">BABYL_KUGLER2</option><option value="BABYL_KUGLER3">BABYL_KUGLER3</option><option value="BABYL_HUBER">BABYL_HUBER</option><option value="BABYL_ETPSC">BABYL_ETPSC</option><option value="ALDEBARAN_15TAU">ALDEBARAN_15TAU</option><option value="HIPPARCHOS">HIPPARCHOS</option><option value="SASSANIAN">SASSANIAN</option><option value="GALCENT_0SAG">GALCENT_0SAG</option><option value="J1900">J1900</option><option value="B1950">B1950</option><option value="SURYASIDDHANTA">SURYASIDDHANTA</option><option value="SURYASIDDHANTA_MSUN">SURYASIDDHANTA_MSUN</option><option value="ARYABHATA">ARYABHATA</option><option value="ARYABHATA_MSUN">ARYABHATA_MSUN</option><option value="SS_REVATI">SS_REVATI</option><option value="SS_CITRA">SS_CITRA</option><option value="TRUE_CITRA">TRUE_CITRA</option><option value="TRUE_REVATI">TRUE_REVATI</option><option value="TRUE_PUSHYA">TRUE_PUSHYA</option><option value="GALCENT_RGBRAND">GALCENT_RGBRAND</option><option value="GALEQU_IAU1958">GALEQU_IAU1958</option><option value="GALEQU_TRUE">GALEQU_TRUE</option><option value="GALEQU_MULA">GALEQU_MULA</option><option value="GALALIGN_MARDYKS">GALALIGN_MARDYKS</option><option value="TRUE_MULA">TRUE_MULA</option><option value="GALCENT_MULA_WILHELM">GALCENT_MULA_WILHELM</option><option value="ARYABHATA_522">ARYABHATA_522</option><option value="BABYL_BRITTON">BABYL_BRITTON</option><option value="TRUE_SHEORAN">TRUE_SHEORAN</option><option value="GALCENT_COCHRANE">GALCENT_COCHRANE</option><option value="GALEQU_FIORENZA">GALEQU_FIORENZA</option><option value="VALENS_MOON">VALENS_MOON</option><option value="LAHIRI_1940">LAHIRI_1940</option><option value="LAHIRI_VP285">LAHIRI_VP285</option><option value="KRISHNAMURTI_VP291">KRISHNAMURTI_VP291</option><option value="LAHIRI_ICRC">LAHIRI_ICRC</option></optgroup>
+     </select>
+    `;
+    }
+}
+
+/**
  * Represents desktop sidebar component.
  * This class generates the HTML for desktop sidebar and handles its initialization.
  */

@@ -21,21 +21,70 @@ function updateHistory() {
     localStorage.setItem('history', JSON.stringify(history));
 }
 
-//TODO MARKED FOR OBLIVION
-//navigate to page href set in clicked element
-//function navigateToPage(clickedLink) {
+//similar to JQuery's .slideToggle("slow")
+// note that this function uses CSS transitions for the
+//sliding effect, which are smoother than jQuery’s animations but might not be supported in all browsers
+function smoothSlideToggle(elementSelector, speed = 1000) {
 
-//    // update the navigation history
-//    updateHistory(clickedLink);
+    // Select the element
+    let el = document.querySelector(elementSelector);
 
-//    // get the href attribute from the clicked element
-//    const href = clickedLink.getAttribute('href');
+    // Check if the element is currently not displayed
+    //SHOW
+    if (window.getComputedStyle(el).display === 'none') {
+        // Set the initial display to block
+        el.style.display = 'block';
 
-//    // navigate to the href
-//    window.location.href = href;
-//}
+        // Capture the height of the element
+        let height = el.offsetHeight;
 
-//goes to previous page that saved to history, without using browsers' "back" feature
+        // Set the initial height to 0 and overflow to hidden
+        el.style.height = 0;
+        el.style.overflow = 'hidden';
+
+        // Set the transition property for smooth animation
+        el.style.transition = 'height 1s ease-in-out';
+
+        // After a short delay, set the height to the element's original height
+        setTimeout(() => {
+            return el.style.height = height + 'px';
+        }, 0);
+
+        //once animation complete, make "help text" not cut when exceed div width
+        //this is done by removing overflow property, which needs to be "hidden" during animation 
+        el.addEventListener('transitionend', function transitionEnd(event) {
+            // Remove the event listener
+            event.target.removeEventListener('transitionend', transitionEnd);
+
+            // Set the overflow to visible
+            el.style.removeProperty('overflow');
+        });
+    }
+
+    //HIDE
+    else {
+
+        //before animation starts, set overflow back to "hidden", for beautiful UX animation
+        el.style.overflow = 'hidden';
+
+        // If the element is currently displayed, set the transition property
+        el.style.transition = 'height 1s ease-in-out';
+
+        // Animate the height to 0
+        el.style.height = 0;
+
+        // After the transition is complete, set the display to none and remove the added styles
+        setTimeout(() => {
+            el.style.display = 'none';
+            el.style.removeProperty('height');
+            el.style.removeProperty('overflow');
+            el.style.removeProperty('transition');
+        }, speed);
+    }
+}
+
+
+//goes to previous page URL that's saved to history, without using browsers' "back" feature
 function navigateToPreviousPage() {
     // check if there is a previous page in the history array
     if (history.length > 1) {

@@ -57,7 +57,6 @@
                 margin-left: -100px;
             }
         }
-        
     </style>
 </head>
 <body style="background: #F0F2F5;">
@@ -100,26 +99,7 @@
                                                 <span style="font-size: 11.5px; margin-left: 0px; color: grey; margin-top: -20px; position: absolute; background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
 
                                                 <!-- @* AYANAMSA *@ -->
-                                                <div class="input-group mb-2">
-                                                    <label style="width: 134px;" class="input-group-text">
-                                                        <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
-                                                    </label>
-                                                    <select @bind="SelectedAyanamsa" class="form-select">
-
-                                                        <optgroup label="Easy">
-                                                            @foreach (var ayanamsa in @AppData.SimpleAyanamsaAll)
-                                                            {
-                                                            <option value="@ayanamsa">@Format.FormatName(ayanamsa)</option>
-                                                            }
-                                                        </optgroup>
-                                                        <optgroup label="Advanced">
-                                                            @foreach (var ayanamsa in @AppData.AdvancedAyanamsaAll)
-                                                            {
-                                                            <option value="@ayanamsa">@ayanamsa</option>
-                                                            }
-                                                        </optgroup>
-                                                    </select>
-                                                </div>
+                                                <div id="AyanamsaSelectorBox" class="input-group mb-2"></div>
 
                                                 <!-- @* CHART STYLE *@ -->
                                                 <div class="input-group">
@@ -153,8 +133,8 @@
 
                                             <!-- @* BUTTONS *@ -->
                                             <div class="mt-2 d-flex justify-content-between">
-                                                <IconButton TooltipPosition="bottom" TooltipText="Advanced (optional)" IconName="gala:settings" OnClickCallback="@(() => _jsRuntime.SmoothSlideToggle('HoroscopeAdvancedInputHolder'))" SmallSize="true" />
-                                                <IconButton Id="IconButton_Calculate_Horoscope" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="OnClickCalculate_Horoscope(this)" />
+                                                <IconButton Id="IconButton_Advanced_Horoscope" IconName="gala:settings" Color="primary" SmallSize="true" TooltipPosition="bottom" TooltipText="Advanced (optional)" OnClickCallback="OnClickAdvanced_Horoscope(this)"></IconButton>
+                                                <IconButton Id="IconButton_Calculate_Horoscope" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="OnClickCalculate_Horoscope(this)"></IconButton>
                                             </div>
 
                                         </div>

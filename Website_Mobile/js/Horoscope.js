@@ -5,12 +5,18 @@ new PageTopNavbar("PageTopNavbar");
 new DesktopSidebar("DesktopSidebarHolder");
 new PageHeader("HoroscopePageHeader");
 var horoscopePersonSelector = new PersonSelectorBox("PersonSelectorBox_Horoscope");
+var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox");
 new IconButton("IconButton_Calculate_Horoscope");
+new IconButton("IconButton_Advanced_Horoscope");
 
 new InfoBox("InfoBox_AskAI_Horoscope");
 new InfoBox("InfoBox_EasyImport_Horoscope");
 new InfoBox("InfoBox_ForgotenTime_Horoscope");
 
+
+function OnClickAdvanced_Horoscope() {
+    smoothSlideToggle('#HoroscopeAdvancedInputHolder');
+}
 
 async function OnClickCalculate_Horoscope() {
 
@@ -23,9 +29,13 @@ async function OnClickCalculate_Horoscope() {
     //hide sidebar links for nice clean fit (UX improvement)
     $("#SidebarInfoBoxHolder").slideUp(500);
 
-    //get birth time of selected person (URL format)
+    //get full data of selected person
     let selectedPerson = await horoscopePersonSelector.getSelectedPerson();
-    //get time in url format
+
+    //update page title with person name to for easy multi tab use (UX ease)
+    document.title = `${selectedPerson.DisplayName} | Horoscope`;
+
+    //get birth time of selected person (URL format)
     var timeUrl = selectedPerson.BirthTime.ToUrl();
     timeUrl = timeUrl.substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
 
@@ -36,8 +46,7 @@ async function OnClickCalculate_Horoscope() {
     Swal.close();
 }
 
-async function initPlanetDataTable(birthTimeUrl)
-{
+async function initPlanetDataTable(birthTimeUrl) {
     //----------------------PLANET DATA----------------------------
     var planetColumns = [
         { Api: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
@@ -67,11 +76,10 @@ async function initPlanetDataTable(birthTimeUrl)
 
     //data used to generate table
     var inputArguments = {
-        //TimeUrl: "Location/Bengaluru/Time/11:00/25/07/1984/+00:00/",
-        TimeUrl: birthTimeUrl,
+        TimeUrl: birthTimeUrl, //note
         HoraryNumber: 0,
         RotateDegrees: 0,
-        Ayanamsa: "KRISHNAMURTI", //default is Lahiri
+        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
     };
 
     //generate table

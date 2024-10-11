@@ -51,52 +51,13 @@
                 text-decoration: none;
             }
 
-        section {
-            display: none;
-        }
-
-            section.active {
-                display: block;
-            }
-
-        .hidden {
-            display: none;
-        }
 
         @media only screen and (max-width: 768px) {
             .calendar-container {
                 margin-left: -100px;
             }
         }
-        /* Hide desktop navigation bar and sidebar on small screens */
-        @media only screen and (max-width: 768px) {
-            #desktopnavbar {
-                display: none;
-            }
-
-            #desktopsidebar {
-                display: none;
-            }
-
-            #mobilenavbar {
-                display: block;
-            }
-        }
-
-        /* Show desktop navigation bar and sidebar on large screens */
-        @media only screen and (min-width: 769px) {
-            #desktopnavbar {
-                display: block;
-            }
-
-            #desktopsidebar {
-                display: block;
-            }
-
-            #mobilenavbar {
-                display: none;
-            }
-        }
+        
     </style>
 </head>
 <body style="background: #F0F2F5;">
@@ -106,117 +67,13 @@
     <div id="app" class="min-vh-100 container-lg pt-4" style="background: #F0F2F5;">
         <div class="row flex-md-nowrap">
 
-        <!-- DESKTOP SIDE BAR ---------------->
+            <!-- DESKTOP SIDE BAR ---------------->
             <div id="DesktopSidebarHolder" active-link-name="Horoscope"></div>
 
             <div class="col mt-0 mt-md-0">
 
-                <!-- DESKTOP TOP NAV BAR  -->
-                <div style="min-width: 954px;" class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white">
-
-                    <button onclick="$('#DesktopSidebarHolder').toggleClass('d-md-block');" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn "><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--lucide" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="lucide:panel-left-close" data-width="25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18m7-6l-3-3l3-3"></path></g></svg></button>
-
-                    <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_63=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="mdi:theme-light-dark" data-width="25"><path fill="currentColor" d="M7.5 2c-1.79 1.15-3 3.18-3 5.5s1.21 4.35 3.03 5.5C4.46 13 2 10.54 2 7.5A5.5 5.5 0 0 1 7.5 2m11.57 1.5l1.43 1.43L4.93 20.5L3.5 19.07zm-6.18 2.43L11.41 5L9.97 6l.42-1.7L9 3.24l1.75-.12l.58-1.65L12 3.1l1.73.03l-1.35 1.13zm-3.3 3.61l-1.16-.73l-1.12.78l.34-1.32l-1.09-.83l1.36-.09l.45-1.29l.51 1.27l1.36.03l-1.05.87zM19 13.5a5.5 5.5 0 0 1-5.5 5.5c-1.22 0-2.35-.4-3.26-1.07l7.69-7.69c.67.91 1.07 2.04 1.07 3.26m-4.4 6.58l2.77-1.15l-.24 3.35zm4.33-2.7l1.15-2.77l2.2 2.54zm1.15-4.96l-1.14-2.78l3.34.24zM9.63 18.93l2.77 1.15l-2.53 2.19z"></path></svg></button>
-
-                    <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-outline-primary btn ms-md-auto" _bl_64="">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="mdi:book-open-page-variant-outline" data-width="25"><path fill="currentColor" d="m19 1l-5 5v11l5-4.5zm2 4v13.5c-1.1-.35-2.3-.5-3.5-.5c-1.7 0-4.15.65-5.5 1.5V6c-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5c.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5c1.35-.85 3.8-1.5 5.5-1.5c1.65 0 3.35.3 4.75 1.05c.1.05.15.05.25.05c.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1M10 18.41C8.75 18.09 7.5 18 6.5 18c-1.06 0-2.32.19-3.5.5V7.13c.91-.4 2.14-.63 3.5-.63s2.59.23 3.5.63z"></path></svg>
-                        Guide
-                    </button>
-
-                    <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-outline-primary btn " _bl_65="">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--carbon" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32" data-icon="carbon:gateway-api" data-width="25"><path fill="currentColor" d="M17 18.184v-4.368a3 3 0 1 0-2 0v4.369a3 3 0 1 0 2 0ZM16 10a1 1 0 1 1-1 1a1 1 0 0 1 1-1m0 12a1 1 0 1 1 1-1a1 1 0 0 1-1 1"></path><path fill="currentColor" d="M30.414 17.414a2 2 0 0 0 0-2.828l-5.787-5.787l2.9-2.862a2.002 2.002 0 1 0-1.44-1.388l-2.874 2.836l-5.799-5.8a2 2 0 0 0-2.828 0L8.799 7.374L5.937 4.472A2.002 2.002 0 1 0 4.55 5.914l2.835 2.873l-5.8 5.799a2 2 0 0 0 0 2.828l5.8 5.799l-2.835 2.873a1.998 1.998 0 1 0 1.387 1.442l2.862-2.9l5.787 5.786a2 2 0 0 0 2.828 0l5.8-5.799l2.872 2.836a1.998 1.998 0 1 0 1.442-1.387l-2.9-2.863ZM16 29L3 16L16 3l13 13Z"></path></svg>
-                        Open API
-                    </button>
-
-                    <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-warning btn " _bl_66="">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--openmoji" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 72 72" data-icon="openmoji:love-letter" data-width="25"><path fill="#FFF" d="M65.086 55.5H6.878A2.877 2.877 0 0 1 4 52.623V17.248A2.25 2.25 0 0 1 6.248 15h59.446A2.306 2.306 0 0 1 68 17.306v35.28a2.914 2.914 0 0 1-2.914 2.914"></path><path fill="#EA5A47" d="M47.064 33.552A5.885 5.885 0 0 0 36 30.755a5.885 5.885 0 0 0-11.064 2.797c0 1.398.49 2.68 1.304 3.69l-.002.002L36 49.342l9.762-12.098l-.003-.002a5.86 5.86 0 0 0 1.305-3.69"></path><g fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M65.086 55.5H6.878A2.877 2.877 0 0 1 4 52.623V17.248A2.25 2.25 0 0 1 6.248 15h59.446A2.306 2.306 0 0 1 68 17.306v35.28a2.914 2.914 0 0 1-2.914 2.914"></path><path stroke-linecap="round" d="m5 16l15 16m47-16L52 32"></path><path stroke-linejoin="round" d="M47.064 33.552A5.885 5.885 0 0 0 36 30.755a5.885 5.885 0 0 0-11.064 2.797c0 1.398.49 2.68 1.304 3.69l-.002.002L36 49.342l9.762-12.098l-.003-.002a5.86 5.86 0 0 0 1.305-3.69z"></path></g></svg>
-                        Donate
-                    </button>
-
-                    <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
-                        <button style="height: 37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-outline-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_67=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ep" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024" data-icon="ep:guide" data-width="25"><path fill="currentColor" d="M640 608h-64V416h64zm0 160v160a32 32 0 0 1-32 32H416a32 32 0 0 1-32-32V768h64v128h128V768zM384 608V416h64v192zm256-352h-64V128H448v128h-64V96a32 32 0 0 1 32-32h192a32 32 0 0 1 32 32z"></path><path fill="currentColor" d="m220.8 256l-71.232 80l71.168 80H768V256zm-14.4-64H800a32 32 0 0 1 32 32v224a32 32 0 0 1-32 32H206.4a32 32 0 0 1-23.936-10.752l-99.584-112a32 32 0 0 1 0-42.496l99.584-112A32 32 0 0 1 206.4 192m678.784 496l-71.104 80H266.816V608h547.2zm-56.768-144H234.88a32 32 0 0 0-32 32v224a32 32 0 0 0 32 32h593.6a32 32 0 0 0 23.936-10.752l99.584-112a32 32 0 0 0 0-42.496l-99.584-112A32 32 0 0 0 828.48 544z"></path></svg></button>
-                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu">
-                            <li><a class="dropdown-item" href="./Contact.html">Contact Us</a></li>
-                            <li><a class="dropdown-item" href="./About.html">About</a></li>
-                            <li><a class="dropdown-item" href="https://www.youtube.com/@vedastro/videos" target="_blank">Video Guides</a></li>
-                            <li><a class="dropdown-item" href="./JoinOurFamily.html">Join Us</a></li>
-                            <li><a class="dropdown-item" href="./Calculator.html">Calculators</a></li>
-                            <li><a class="dropdown-item" href="./PersonList.html">Person List</a></li>
-                            <li><a class="dropdown-item" href="./TrainAIAstrologer.html">Train AI</a></li>
-                            <li><a class="dropdown-item" href="./Remedy.html">Remedy</a></li>
-                            <li><a class="dropdown-item" href="./Download.html">Download</a></li>
-                            <li><a class="dropdown-item" href="https://vedastroapi.azurewebsites.net/api">API Live Status</a></li>
-                            <li><a class="dropdown-item" href="./TableGenerator.html">Table Generator</a></li>
-                            <li><a class="dropdown-item" href="./BodyTypes.html">Body Types</a></li>
-                            <li><a class="dropdown-item" href="./ImportPerson.html">Import Person</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- MOBILE TOP NAV BAR -->
-                <nav class="p-1 navbar rounded-bottom-4" data-bs-theme="dark" style="background-color: #1877f2 !important; margin-top: -1.5rem !important; margin-left: -0.73rem !important; margin-right: -0.73rem !important;" id="mobilenavbar">
-                    <div class="container-fluid">
-                        <a class="navbar-brand active" href="/">
-                            <img src="./image/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
-                            <span class="ms-1 align-middle">VedAstro</span>
-                        </a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="navbar-nav border-opacity-10 border-2 border-top border-white navbar-collapse collapse" id="navbarTogglerDemo02">
-                            <ul class="nav nav-fill">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="/Home.html">
-                                        <iconify-icon class="align-bottom" icon="mdi:home" width="28" height="28"></iconify-icon>
-                                        <span class="ms-1 align-middle" style="">Home</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="./AIChat.html">
-                                        <iconify-icon class="align-bottom" icon="mage:we-chat" width="28" height="28"></iconify-icon>
-                                        <span class="ms-1 align-middle" style="">AI Chat</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="./Horoscope.html">
-                                        <iconify-icon class="align-bottom" icon="fluent:book-star-20-filled" width="28" height="28"></iconify-icon>
-                                        <span class="ms-1 align-middle" style="">Horoscope</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="./MatchChecker.html">
-                                        <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
-                                        <span class="ms-1 align-middle" style="">Match</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="./Numerology.html">
-                                        <iconify-icon class="align-bottom" icon="mdi:numbers" width="28" height="28"></iconify-icon>
-                                        <span class="ms-1 align-middle" style="">Numerology</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="./MatchFinder.html">
-                                        <iconify-icon class="align-bottom" icon="game-icons:lovers" width="28" height="28"></iconify-icon>
-                                        <span class="ms-1 align-middle" style="">Find Match</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="./LifePredictor.html">
-                                        <iconify-icon class="align-bottom" icon="gis:map-time" width="28" height="28"></iconify-icon>
-                                        <span class="ms-1 align-middle" style="">Life Predictor</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="./GoodTimeFinder.html">
-                                        <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
-                                        <span class="ms-1 align-middle" style="">Good Time Finder</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
+                <!-- DESKTOP/MOBILE TOP NAVBAR -->
+                <div id="PageTopNavbar"></div>
 
                 <!-- PAGE CONTENT -->
                 <div class="container" style="background: #F0F2F5;">
@@ -352,7 +209,7 @@
                                     <!--  @* Strength *@ -->
                                     <div id="Strength" class="scrollspy">
                                         <IconTitle Title="Strength" IconName="twemoji:antenna-bars" TitleHolder="h4" />
-                                       
+
                                         <StrengthChart @ref="_strengthChart" />
                                     </div>
 

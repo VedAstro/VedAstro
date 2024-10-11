@@ -1,6 +1,7 @@
 ﻿//-----------------------------> HOROSCOPE PAGE
 updateHistory();
 
+new DesktopSidebar("DesktopSidebarHolder");
 new PageHeader("HoroscopePageHeader");
 var horoscopePersonSelector = new PersonSelectorBox("PersonSelectorBox_Horoscope");
 new IconButton("IconButton_Calculate_Horoscope");

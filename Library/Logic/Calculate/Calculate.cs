@@ -29,6 +29,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Azure.Storage.Blobs;
 using System.Net.Mime;
+using Microsoft.Extensions.Hosting;
 
 namespace VedAstro.Library
 {
@@ -4881,8 +4882,9 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// For all houses.
+        /// For all houses. 
         /// Calculate Lord of Star (Constellation) given Constellation. Returns Star Lord Name
+        /// TODO MARKED FOR OBLIVION CHECK WITH CP JOIS
         /// </summary>
         public static Dictionary<HouseName, PlanetName> AllHouseConstellationLord(Time time)
         {
@@ -4901,6 +4903,20 @@ namespace VedAstro.Library
             }
 
             return allHouses;
+        }
+
+        /// <summary>
+        /// Gets the constellation lord of a house at middle longitude of the house.
+        /// </summary>
+        public static PlanetName HouseConstellationLord(HouseName houseNumber, Time time)
+        {
+            // get constellation house is in middle longitude
+            var houseConste = Calculate.HouseConstellation(houseNumber, time);
+
+            //gets lord based on constellation
+            var calcResult = Calculate.LordOfConstellation(houseConste.GetConstellationName());
+
+            return calcResult;
         }
 
         /// <summary>

@@ -5012,6 +5012,9 @@ class AstroTable {
                 text: `API call ${endpoint} not found!`,
                 confirmButtonText: "OK",
             });
+
+            //print error in console as well, because message box might be missed
+            console.error(`Invalid Column : API call ${endpoint} not found!`);
         }
 
         //only process if API call meta was found
@@ -5313,6 +5316,9 @@ class AstroTable {
                 text: error,
                 confirmButtonText: "OK",
             });
+
+            //print error in console as well, because message box might be missed
+            console.error(`API CALL FAILED : ${url} >> ${error}`);
         }
     }
 

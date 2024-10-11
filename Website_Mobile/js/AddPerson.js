@@ -1,6 +1,7 @@
 ﻿//-----------------------------> ADD PERSON PAGE
 updateHistory();
 
+new DesktopSidebar("DesktopSidebarHolder");
 new PageHeader("AddPersonPageHeader");
 new InfoBox("InfoBox_EasyImport_AddPerson");
 new InfoBox("InfoBox_Private_AddPerson");

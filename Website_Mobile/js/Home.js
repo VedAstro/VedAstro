@@ -1,1 +1,3 @@
 ﻿updateHistory();
+
+new DesktopSidebar("DesktopSidebarHolder");

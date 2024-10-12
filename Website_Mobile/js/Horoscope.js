@@ -6,6 +6,7 @@ new DesktopSidebar("DesktopSidebarHolder");
 new PageHeader("HoroscopePageHeader");
 var horoscopePersonSelector = new PersonSelectorBox("PersonSelectorBox_Horoscope");
 var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox");
+var strengthChart = new StrengthChart("StrengthChartHolder");
 new IconButton("IconButton_Calculate_Horoscope");
 new IconButton("IconButton_Advanced_Horoscope");
 
@@ -39,7 +40,8 @@ async function OnClickCalculate_Horoscope() {
     var timeUrl = selectedPerson.BirthTime.ToUrl();
     timeUrl = timeUrl.substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
 
-    //show planet data table
+    //generate tables and charts
+    await initStrengthChart(timeUrl);
     await initPlanetDataTable(timeUrl);
     await initHouseDataTable(timeUrl);
     await initAshtakvargaTable(timeUrl);
@@ -48,7 +50,19 @@ async function OnClickCalculate_Horoscope() {
     Swal.close();
 }
 
+async function initStrengthChart(birthTimeUrl) {
+
+    //data used to generate table
+    var inputArguments = {
+        TimeUrl: birthTimeUrl,
+        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
+    };
+
+    strengthChart.GenerateChart(inputArguments);
+}
+
 async function initPlanetDataTable(birthTimeUrl) {
+
     //----------------------PLANET DATA----------------------------
     var planetColumns = [
         { Api: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
@@ -78,7 +92,7 @@ async function initPlanetDataTable(birthTimeUrl) {
 
     //data used to generate table
     var inputArguments = {
-        TimeUrl: birthTimeUrl, //note
+        TimeUrl: birthTimeUrl,
         HoraryNumber: 0,
         RotateDegrees: 0,
         Ayanamsa: ayanamsaSelector.SelectedAyanamsa

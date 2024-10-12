@@ -187,11 +187,7 @@
 
 
                                     <!--  @* Strength *@ -->
-                                    <div id="Strength" class="scrollspy">
-                                        <IconTitle Title="Strength" IconName="twemoji:antenna-bars" TitleHolder="h4" />
-
-                                        <StrengthChart @ref="_strengthChart" />
-                                    </div>
+                                    <div id="StrengthChartHolder" class="scrollspy"></div>
 
                                     <!--                                         @* Sky Chart *@
                                                                            @*         <IconTitle Title="Sky Chart" IconName="solar:moon-stars-bold-duotone" TitleHolder="h4" />
@@ -1208,6 +1204,9 @@
 
     <!--Icon Generator Lib -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+    
+    <!--Chart JS  : used in planet strength chart-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
 
     <!--Sweet Alert Lib -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">

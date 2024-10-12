@@ -5181,7 +5181,6 @@ class AstroTable {
     }
 }
 
-
 class AshtakvargaTable {
     constructor(rawSettings) {
         //correct if property names is camel case (for Blazor)
@@ -5264,8 +5263,8 @@ class AshtakvargaTable {
 
         //generate table from inputed data
         //get data from API
-        var sarvashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/SarvashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
-        var bhinnashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/BhinnashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
+        var sarvashtakavargaUrl = `${VedAstro.ApiDomain}/Calculate/SarvashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
+        var bhinnashtakavargaUrl = `${VedAstro.ApiDomain}/Calculate/BhinnashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
 
         //get data from API and generate the HTML tables
         await this.GenerateHTMLTableFromAPI(
@@ -5328,4 +5327,237 @@ class AshtakvargaTable {
     }
 }
 
+//Planet & house shadbala strength table 
+class StrengthChart {
+    // Class properties
+    ElementID = "";
 
+    // Constructor to initialize the PageHeader object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+    }
+
+    //makes the chart with data, input time and ayanamsa
+    async GenerateChart(inputArguments) {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML for the page header and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+
+        // get All planet & house strengths from API
+        let planetBalas = await this.fetchPlanetStrength(inputArguments);
+        let houseBalas = await this.fetchHouseStrength(inputArguments);
+
+        //with data, draw chart on screen with Chart.js library (planet/house order is explicitly stated)
+        this.DrawPlanetStrengthChart(planetBalas['Sun'], planetBalas['Moon'], planetBalas['Mercury'], planetBalas['Mars'], planetBalas['Jupiter'], planetBalas['Saturn'], planetBalas['Venus'], planetBalas['Rahu'], planetBalas['Ketu']);
+        this.DrawHouseStrengthChart(houseBalas['House1'], houseBalas['House2'], houseBalas['House3'], houseBalas['House4'], houseBalas['House5'], houseBalas['House6'], houseBalas['House7'], houseBalas['House8'], houseBalas['House9'], houseBalas['House10'], houseBalas['House11'], houseBalas['House12']);
+
+        //debug message
+        console.log("Strength Chart Done ✅");
+    }
+
+    async fetchPlanetStrength(inputArguments) {
+        try {
+            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/PlanetShadbalaPinda/PlanetName/All/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data.Status !== 'Pass') {
+                throw new Error('Failed to retrieve data. Status is not "Pass".');
+            }
+
+            // arrange planets and their strengths for easy access by name
+            const shadbalaPindaData = {};
+            data.Payload.PlanetShadbalaPinda.forEach(item => {
+                const planetName = Object.keys(item)[0];
+                const shadbalaPinda = Object.values(item)[0];
+                shadbalaPindaData[planetName] = shadbalaPinda;
+            });
+
+            return shadbalaPindaData;
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return []; // Return an empty array if there's an error
+        }
+    }
+
+    async fetchHouseStrength(inputArguments) {
+        try {
+            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/HouseStrength/HouseName/All/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data.Status !== 'Pass') {
+                throw new Error('Failed to retrieve data. Status is not "Pass".');
+            }
+
+            // arrange houses and their strengths for easy access by name
+            const houseStrengthData = {};
+            data.Payload.HouseStrength.forEach(item => {
+                const houseName = Object.keys(item)[0];
+                const houseStrength = Object.values(item)[0];
+                houseStrengthData[houseName] = houseStrength;
+            });
+
+            return houseStrengthData;
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return []; // Return an empty array if there's an error
+        }
+    }
+
+    // Method to generate the HTML for the page header
+    async generateHtmlBody() {
+        // Return the HTML for the page header, including conditional blocks for different screen sizes
+        return `
+        <h3 style="margin-bottom: -11px;">
+            <span class="iconify me-2" data-icon="twemoji:antenna-bars" data-width="38" data-height="38"></span>
+            Strength
+        </h3>
+        <hr />
+        <div class="g-4 row row-cols-1 row-cols-md-2">
+            <div>
+                <canvas class="rounded border" id="PlanetChart" style="max-width: 400px; max-height: 247px; background: #f5f5f9;"></canvas>
+            </div>
+            <div>
+                <canvas class="rounded border" id="HouseChart" style="max-width: 400px; max-height: 247px; background: #f5f5f9;"></canvas>
+            </div>
+        </div>
+    `;
+    }
+
+    DrawPlanetStrengthChart(sun, moon, mercury, mars, jupiter, saturn, venus, rahu, ketu) {
+        //delete previous chart if any
+        if (window.PlanetStrengthChart != null) { window.PlanetStrengthChart.destroy(); }
+
+        var xValues = ["Sun", "Moon", "Mercury", "Mars", "Jupiter", "Saturn", "Venus", "Rahu", "Ketu"];
+        var yValues = [sun, moon, mercury, mars, jupiter, saturn, venus, rahu, ketu];
+
+        //this chart elm ID is hard coded in HTML above
+        //note: stored in window so that can delete it on redraw
+        window.PlanetStrengthChart = new Chart("PlanetChart",
+            {
+                type: "bar",
+                data: {
+                    xAxisID: "Planets",
+                    yAxisID: "Strength",
+                    labels: xValues,
+                    datasets: [
+                        {
+                            data: yValues,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(255, 159, 64, 0.7)',
+                                'rgba(255, 205, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(153, 102, 255, 0.7)',
+                                'rgba(201, 203, 207, 0.7)',
+                                'rgba(201, 162, 207, 0.7)',
+                                'rgba(162, 203, 207, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)',
+                                'rgb(54, 162, 235)',
+                                'rgb(153, 102, 255)',
+                                'rgb(201, 203, 207)',
+                                'rgb(201, 162, 207)',
+                                'rgb(162, 203, 207)'
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    animation: false,// disables all animations
+                    scales: {
+                        y: {
+                            min: round(Math.min.apply(this, yValues) - 50),
+                            max: round(Math.max.apply(this, yValues) + 50)
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    }
+                }
+            });
+
+        //make the chart more beautiful if your stepSize is 5
+        function round(x) {
+            return Math.ceil(x / 5) * 5;
+        }
+    }
+
+    DrawHouseStrengthChart(house1, house2, house3, house4, house5, house6, house7, house8, house9, house10, house11, house12) {
+        //delete previous chart if any
+        if (window.HouseStrengthChart != null) { window.HouseStrengthChart.destroy(); }
+
+        var xValues = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+        var yValues = [house1, house2, house3, house4, house5, house6, house7, house8, house9, house10, house11, house12];
+
+        //this chart elm ID is hard coded in HTML above
+        //note: stored in window so that can delete it on redraw
+        window.HouseStrengthChart = new Chart("HouseChart",
+            {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [
+                        {
+                            data: yValues,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(255, 159, 64, 0.7)',
+                                'rgba(255, 205, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(153, 102, 255, 0.7)',
+                                'rgba(201, 203, 207, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)',
+                                'rgb(54, 162, 235)',
+                                'rgb(153, 102, 255)',
+                                'rgb(201, 203, 207)'
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    animation: false,// disables all animations
+                    scales: {
+                        y: {
+                            min: round(Math.min.apply(this, yValues) - 50),
+                            max: round(Math.max.apply(this, yValues) + 50)
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    }
+                }
+            });
+
+        //make the chart more beautiful if your stepSize is 5
+        function round(x) {
+            return Math.ceil(x / 5) * 5;
+        }
+    }
+
+}

@@ -42,6 +42,7 @@ async function OnClickCalculate_Horoscope() {
     //show planet data table
     await initPlanetDataTable(timeUrl);
     await initHouseDataTable(timeUrl);
+    await initAshtakvargaTable(timeUrl);
 
     //hide loading
     Swal.close();
@@ -129,4 +130,26 @@ async function initHouseDataTable(birthTimeUrl) {
 
 }
 
+async function initAshtakvargaTable(birthTimeUrl) {
 
+    //initialize astro table
+    var settings = {
+        ElementID: "AshtakvargaTable",
+        KeyColumn: "Ashtakvarga",
+        ShowHeader: true,
+        HeaderIcon: "fluent:table-28-filled"
+    };
+
+    // Initialize astro table
+    var ashtakvargaTable = new AshtakvargaTable(settings);
+
+    //data used to generate table
+    var inputArguments = {
+        TimeUrl: birthTimeUrl,
+        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
+    };
+
+    // Generate table
+    await ashtakvargaTable.GenerateTable(inputArguments);
+
+}

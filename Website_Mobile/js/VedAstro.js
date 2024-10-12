@@ -1287,156 +1287,7 @@ window.ChartFromSVG = async (chartStr) => {
 
 
 
-//const person = {
-//};
 
-//await CommonTools.AddPerson(person);
-
-class AshtakvargaTable {
-    constructor(rawSettings) {
-        //correct if property names is camel case (for Blazor)
-        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
-
-        //if column data is not supplied use default
-        if (!settings.ColumnData) {
-            settings.ColumnData = AstroTable.DefaultColumns;
-        }
-
-        //expand data inside settings input
-        this.ElementID = settings.ElementID;
-        this.SarvashtakavargaTableId = `${this.ElementID}_SarvashtakavargaTable`;
-        this.BhinnashtakavargaTableId = `${this.ElementID}_BhinnashtakavargaTable`;
-        this.ShowHeader = settings.ShowHeader;
-        this.HeaderIcon = settings.HeaderIcon;
-        this.SaveSettings = settings.SaveSettings;
-
-        //based on table ID try get any settings if saved from before
-        var savedTableSettings = localStorage.getItem(this.ElementID);
-
-        //only continue if settings are saved and featured enabled in settings
-        if (this.SaveSettings || savedTableSettings) {
-            //parse the data
-            let jsonObject = JSON.parse(savedTableSettings);
-
-            //set back all the exact settings from before
-            this.KeyColumn = jsonObject["KeyColumn"];
-            this.ColumnData = jsonObject["ColumnData"];
-            this.EnableSorting = jsonObject["EnableSorting"];
-        }
-        //if null use data pumped in via constructor (defaults, when click Reset)
-        else {
-            this.KeyColumn = settings.KeyColumn;
-            this.ColumnData = settings.ColumnData;
-            this.EnableSorting = settings.EnableSorting;
-        }
-    }
-
-    async GenerateTable(inputArguments) {
-        inputArguments =
-            CommonTools.ConvertCamelCaseKeysToPascalCase(inputArguments);
-
-        //clear old data if any
-        $(`#${this.ElementID}`).empty();
-
-        //# HEADER
-        //show header with title, icon and edit button
-        if (this.ShowHeader) {
-            //random ID for edit button
-            this.EditButtonId = Math.floor(Math.random() * 1000000);
-
-            var htmlContent = `
-                <h3 style="margin-bottom: -11px;">
-                    <span class="iconify me-2" data-icon="${this.HeaderIcon}" data-width="38" data-height="38"></span>
-                    ${this.KeyColumn}
-                    
-                </h3>
-                <hr />`;
-
-            //inject into page
-            $(`#${this.ElementID}`).append(htmlContent);
-
-            //attach event handler to edit button
-            $(`#${this.EditButtonId}`).on("click", async () => {
-                await this.ShowEditTableOptions();
-            });
-        }
-
-        //# TABLE
-        //create empty table inside main holder
-        //table will be filled later
-        $(`#${this.ElementID}`).append(
-            `<table id="${this.SarvashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
-        );
-
-        $(`#${this.ElementID}`).append(
-            `<table id="${this.BhinnashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
-        );
-
-        //generate table from inputed data
-        //get data from API
-        var sarvashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/SarvashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
-        var bhinnashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/BhinnashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
-
-        //get data from API and generate the HTML tables
-        await this.GenerateHTMLTableFromAPI(
-            sarvashtakavargaUrl,
-            this.SarvashtakavargaTableId
-        );
-        await this.GenerateHTMLTableFromAPI(
-            bhinnashtakavargaUrl,
-            this.BhinnashtakavargaTableId
-        );
-    }
-
-    async GenerateHTMLTableFromAPI(url, tableId) {
-        //make the final API call in the perfect URL format
-        var apiPayload = await AstroTable.GetAPIPayload(url);
-
-        //clean old data
-        AstroTable.ClearTableRows(tableId);
-
-        AshtakvargaTable.GenerateHTMLTableFromJson(apiPayload, tableId);
-    }
-
-    //code where Ashtakvarga in JSON format given by API is converted into nice HTML
-    static async GenerateHTMLTableFromJson(data, tableId) {
-        let html = '<table border="1">';
-
-        // Add table headers
-        html += "<tr><th></th>";
-        for (let i = 1; i <= 12; i++) {
-            html += `<th>${i}</th>`;
-        }
-
-        //add in last total column
-        html += `<th>Total</th>`;
-
-        //wrap up
-        html += "</tr>";
-
-        //get first object which will be BhinnashtakavargaChart or SarvashtakavargaChart (API names)
-        const ashtakavargaJson = data[Object.keys(data)[0]];
-
-        // Add table data rows
-        for (let key in ashtakavargaJson) {
-            html += `<tr><td>${key}</td>`;
-            for (let i = 0; i < 12; i++) {
-                html += `<td>${ashtakavargaJson[key].Rows[i]}</td>`;
-            }
-
-            //add in last total column
-            html += `<td>${ashtakavargaJson[key].Total}</td>`;
-
-            html += "</tr>";
-        }
-
-        html += "</table>";
-
-        // Now you can add 'html' to your webpage
-        var currentTable = document.getElementById(tableId);
-        currentTable.innerHTML = html;
-    }
-}
 
 //-------------------------------- AWESOME CODE  -------------------------------
 //YOU CANNOT FIGHT A DYING MAN,
@@ -5327,6 +5178,153 @@ class AstroTable {
         while (table?.rows?.length > 0) {
             table?.deleteRow(0);
         }
+    }
+}
+
+
+class AshtakvargaTable {
+    constructor(rawSettings) {
+        //correct if property names is camel case (for Blazor)
+        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+
+        //if column data is not supplied use default
+        if (!settings.ColumnData) {
+            settings.ColumnData = AstroTable.DefaultColumns;
+        }
+
+        //expand data inside settings input
+        this.ElementID = settings.ElementID;
+        this.SarvashtakavargaTableId = `${this.ElementID}_SarvashtakavargaTable`;
+        this.BhinnashtakavargaTableId = `${this.ElementID}_BhinnashtakavargaTable`;
+        this.ShowHeader = settings.ShowHeader;
+        this.HeaderIcon = settings.HeaderIcon;
+        this.SaveSettings = settings.SaveSettings;
+
+        //based on table ID try get any settings if saved from before
+        var savedTableSettings = localStorage.getItem(this.ElementID);
+
+        //only continue if settings are saved and featured enabled in settings
+        if (this.SaveSettings || savedTableSettings) {
+            //parse the data
+            let jsonObject = JSON.parse(savedTableSettings);
+
+            //set back all the exact settings from before
+            this.KeyColumn = jsonObject["KeyColumn"];
+            this.ColumnData = jsonObject["ColumnData"];
+            this.EnableSorting = jsonObject["EnableSorting"];
+        }
+        //if null use data pumped in via constructor (defaults, when click Reset)
+        else {
+            this.KeyColumn = settings.KeyColumn;
+            this.ColumnData = settings.ColumnData;
+            this.EnableSorting = settings.EnableSorting;
+        }
+    }
+
+    async GenerateTable(inputArguments) {
+        inputArguments =
+            CommonTools.ConvertCamelCaseKeysToPascalCase(inputArguments);
+
+        //clear old data if any
+        $(`#${this.ElementID}`).empty();
+
+        //# HEADER
+        //show header with title, icon and edit button
+        if (this.ShowHeader) {
+            //random ID for edit button
+            this.EditButtonId = Math.floor(Math.random() * 1000000);
+
+            var htmlContent = `
+                <h3 style="margin-bottom: -11px;">
+                    <span class="iconify me-2" data-icon="${this.HeaderIcon}" data-width="38" data-height="38"></span>
+                    ${this.KeyColumn}
+                    
+                </h3>
+                <hr />`;
+
+            //inject into page
+            $(`#${this.ElementID}`).append(htmlContent);
+
+            //attach event handler to edit button
+            $(`#${this.EditButtonId}`).on("click", async () => {
+                await this.ShowEditTableOptions();
+            });
+        }
+
+        //# TABLE
+        //create empty table inside main holder
+        //table will be filled later
+        $(`#${this.ElementID}`).append(
+            `<table id="${this.SarvashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
+        );
+
+        $(`#${this.ElementID}`).append(
+            `<table id="${this.BhinnashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
+        );
+
+        //generate table from inputed data
+        //get data from API
+        var sarvashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/SarvashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
+        var bhinnashtakavargaUrl = `https://vedastroapi.azurewebsites.net/api/Calculate/BhinnashtakavargaChart/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`;
+
+        //get data from API and generate the HTML tables
+        await this.GenerateHTMLTableFromAPI(
+            sarvashtakavargaUrl,
+            this.SarvashtakavargaTableId
+        );
+        await this.GenerateHTMLTableFromAPI(
+            bhinnashtakavargaUrl,
+            this.BhinnashtakavargaTableId
+        );
+    }
+
+    async GenerateHTMLTableFromAPI(url, tableId) {
+        //make the final API call in the perfect URL format
+        var apiPayload = await AstroTable.GetAPIPayload(url);
+
+        //clean old data
+        AstroTable.ClearTableRows(tableId);
+
+        AshtakvargaTable.GenerateHTMLTableFromJson(apiPayload, tableId);
+    }
+
+    //code where Ashtakvarga in JSON format given by API is converted into nice HTML
+    static async GenerateHTMLTableFromJson(data, tableId) {
+        let html = '<table border="1">';
+
+        // Add table headers
+        html += "<tr><th></th>";
+        for (let i = 1; i <= 12; i++) {
+            html += `<th>${i}</th>`;
+        }
+
+        //add in last total column
+        html += `<th>Total</th>`;
+
+        //wrap up
+        html += "</tr>";
+
+        //get first object which will be BhinnashtakavargaChart or SarvashtakavargaChart (API names)
+        const ashtakavargaJson = data[Object.keys(data)[0]];
+
+        // Add table data rows
+        for (let key in ashtakavargaJson) {
+            html += `<tr><td>${key}</td>`;
+            for (let i = 0; i < 12; i++) {
+                html += `<td>${ashtakavargaJson[key].Rows[i]}</td>`;
+            }
+
+            //add in last total column
+            html += `<td>${ashtakavargaJson[key].Total}</td>`;
+
+            html += "</tr>";
+        }
+
+        html += "</table>";
+
+        // Now you can add 'html' to your webpage
+        var currentTable = document.getElementById(tableId);
+        currentTable.innerHTML = html;
     }
 }
 

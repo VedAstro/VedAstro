@@ -796,7 +796,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Ask questions to AI astrologer about life horoscope predictions
         /// </summary>
-        /// <param name="birthTime">time of person hprtson horoscope to check</param>
+        /// <param name="birthTime">time of person persons horoscope to check</param>
         /// <param name="userQuestion">question related horoscope</param>
         /// <param name="chatSession"></param>
         /// <returns></returns>
@@ -10791,16 +10791,13 @@ namespace VedAstro.Library
         /// You can also set how many levels of dasa you want to calculate, default is 4
         /// 7 Levels : Dasa > Bhukti > Antaram > Sukshma > Prana > Avi Prana > Viprana
         /// </summary>
-        /// <param name="levels">range 1 to 7,coresponds to bhukti, antaram, etc..., lower is faster</param>
+        /// <param name="levels">range 1 to 7, coresponds to Dasa, Bhukti, Antaram, Sukshma etc..., lower is faster</param>
         /// <param name="scanYears">time span to calculate, defaults 100 years, average life</param>
-        /// <param name="precisionHours"> defaults to 21 days, higher is faster
-        /// set how accurately the start & end time of each event is calculated
-        /// exp: setting 1 hour, means given in a time range of 100 years, it will be checked 876600 times 
-        /// </param>
-        public static JObject DasaForLife(Time birthTime, int levels = 3, int precisionHours = 100, int scanYears = 100)
+        /// <param name="precisionHours">defaults to 24 hours, since any number above that causes dasa end & start time to not allign</param>
+        public static JObject DasaForLife(Time birthTime, int levels = 3, int precisionHours = 24, int scanYears = 100)
         {
             //TODO NOTE:
-            //precisionHours limits the levels that can be calculated (because of 0 filtering)
+            //precisionHours limits the levels that can be calculated (because of 0 duration filtering)
 
             //based on scan years, set start & end time
             Time startTime = birthTime;

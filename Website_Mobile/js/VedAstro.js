@@ -2574,15 +2574,8 @@ class PersonSelectorBox {
         // Get a reference to the search input element
         this.searchInput = document.getElementById('searchInput');
 
-        //# Auto set selected person if URL or LocalStorage is available
+        // Auto set selected person from previous selection
         let selectedPersonText = 'Select Person'; //default
-        // check if URL contains Person to select
-        let personIdFromUrl = new URL(window.location.href).searchParams.get('Person');
-        if (personIdFromUrl) {
-            //using ID get person data via API (if user has access via shared list or is owner)
-            //will also pump person data into selected local storage (NOTE: it will be picked up below and handled below as preselected)
-            PersonSelectorBox.SetSelectedPersonById(personIdFromUrl);
-        }
 
         //check if any person has been selected before (LocalStorage)
         let personFromStorage = JSON.parse(localStorage.getItem("selectedPerson"));

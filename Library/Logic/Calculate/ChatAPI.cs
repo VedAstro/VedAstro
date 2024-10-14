@@ -240,7 +240,6 @@ namespace VedAstro.Library
 
         public static async Task<JObject> SendMessageHoroscope(Time birthTime, string userQuestion, string sessionId, string userId)
         {
-
             // If session id is empty, generate a new one
             if (string.IsNullOrEmpty(sessionId)) { sessionId = Tools.GenerateId(); }
 
@@ -397,8 +396,6 @@ namespace VedAstro.Library
 
             //throw new NotImplementedException();
         }
-
-
 
         public static Dictionary<double, PresetQuestionEmbeddingsEntity> GetSimilarity(double[] target, List<PresetQuestionEmbeddingsEntity> candidatesList)
         {
@@ -1813,7 +1810,6 @@ namespace VedAstro.Library
             }
         }
 
-
         private static string CreateRequestBody(object[] sysMessage, double maxTokens, double temperature, double topP)
         {
             var requestBodyObject = new
@@ -2239,7 +2235,6 @@ namespace VedAstro.Library
             }
 
         }
-
 
         private static async Task<string> AnswerQuestionDirectly(string relevantPredictions, string userQuestion)
         {

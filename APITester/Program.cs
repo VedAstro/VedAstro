@@ -1,4 +1,4 @@
-﻿namespace APITester
+namespace APITester
 {
     internal class Program
     {

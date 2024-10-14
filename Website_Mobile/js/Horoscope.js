@@ -36,11 +36,18 @@ async function OnClickCalculate_Horoscope() {
     //update page title with person name to for easy multi tab use (UX ease)
     document.title = `${selectedPerson.DisplayName} | Horoscope`;
 
+    //add person id to URL, for link sharing
+    //note:this improves UX, as links can lead faster to data
+    const url = new URL(window.location.href);
+    url.searchParams.set('Person', selectedPerson.PersonId);
+    window.history.pushState({}, '', url.href);
+
     //get birth time of selected person (URL format)
     var timeUrl = selectedPerson.BirthTime.ToUrl();
     timeUrl = timeUrl.substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
 
     //generate tables and charts
+    await initHoroscopeChart(timeUrl);
     await initStrengthChart(timeUrl);
     await initPlanetDataTable(timeUrl);
     await initHouseDataTable(timeUrl);
@@ -50,6 +57,19 @@ async function OnClickCalculate_Horoscope() {
     Swal.close();
 }
 
+async function initHoroscopeChart(birthTimeUrl) {
+
+    var settingsHoroscopeChat = {
+        ElementID: "HoroscopeChat",
+        ShowHeader: true,
+        HeaderIcon: "fluent:table-28-filled",
+        SelectedBirthTime: birthTimeUrl,
+        //Ayanamsa: ayanamsaSelector.SelectedAyanamsa //NOTE: hard set to Raman in Server since all predictions are from Raman 
+    };
+
+    //note: on init, chat instance is loaded into window.vedastro.horoscopechat
+    new HoroscopeChat(settingsHoroscopeChat);
+}
 async function initStrengthChart(birthTimeUrl) {
 
     //data used to generate table

@@ -4,6 +4,29 @@
 // create an array to store the navigation history (up to 10 pages deep)
 const history = JSON.parse(localStorage.getItem('history')) || [];
 
+//when errors occur allow user to reset all memory and restart
+const handleError = () => {
+    Swal.fire({
+        title: 'App Crashed 🤕',
+        text: 'Do you want to reset the app?',
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Reset App',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.value) {
+            localStorage.clear();
+            window.location.reload();
+        }
+    });
+};
+
+//handle all types of errors
+window.onerror = handleError;
+window.onunhandledrejection = handleError;
+
 // function to update the navigation history, with current url
 function updateHistory() {
     // Get the current URL
@@ -83,7 +106,6 @@ function smoothSlideToggle(elementSelector, speed = 1000) {
     }
 }
 
-
 //goes to previous page URL that's saved to history, without using browsers' "back" feature
 function navigateToPreviousPage() {
     // check if there is a previous page in the history array
@@ -101,8 +123,6 @@ function navigateToPreviousPage() {
         localStorage.setItem('history', JSON.stringify(history));
     }
 }
-
-
 
 
 //-----------------------------> NUMEROLOGY PAGE

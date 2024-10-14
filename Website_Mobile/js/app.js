@@ -105,15 +105,6 @@ function navigateToPreviousPage() {
 
 
 
-////-----------------------------> CONTACT PAGE
-//function sendMessage() {
-
-//}
-
-
-
-
-
 //-----------------------------> NUMEROLOGY PAGE
 async function getNameNumber(fullName) {
     try {

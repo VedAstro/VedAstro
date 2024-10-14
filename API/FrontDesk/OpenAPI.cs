@@ -369,7 +369,7 @@ namespace API
                                                             //process 1 parameter at a time from start
             foreach (var parameterType in allNeededParams)
             {
-                var parsedParam = await ParseUrlParameterByType(parameterType);
+                var parsedParam = await ParseUrlParameterByType(parameterType); //NOTE : fullParamString is modified inside!
 
                 //add to main list
                 parsedInputParamList.Add(parsedParam);

@@ -4162,16 +4162,16 @@ namespace VedAstro.Library
 
 
         /// <summary>
-        /// Given a id will return parsed person from main list
+        /// Given a person id will return parsed person from main list
         /// Returns empty person if, no person found
-        /// NOTE: use owner id if provided else skip it
+        /// NOTE: use owner id if provided else skip it (allows 3rd party access)
         /// </summary>
         public static Person GetPersonById(string personId, string ownerId = "")
         {
             // Initialize foundCalls to null
             Pageable<PersonListEntity> foundCalls = null;
 
-            // Query the database based on ownerId
+            // if owner id is not provided, get person directly
             if (string.IsNullOrEmpty(ownerId))
             {
                 // Query without person Id, possible to return multiple values
@@ -4193,6 +4193,7 @@ namespace VedAstro.Library
                     foundCalls = AzureTable.PersonList.Query<PersonListEntity>(row => row.RowKey == personId);
                 }
             }
+
             // Log error if more than 1 person found
             if (foundCalls.Count() > 1)
             {

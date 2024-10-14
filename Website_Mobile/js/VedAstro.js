@@ -1354,19 +1354,6 @@ class VedAstro {
     }
 
     /**
-     * Sets the selected person by ID rest of data fetched by API
-     */
-    static SetSelectedPersonById(personId) {
-        // Fetch the person data from the API
-        fetch(`${VedAstro.ApiDomain}/Calculate/GetPerson/UserId/${VedAstro.UserId}/PersonId/${personId}`)
-            .then(response => response.json())
-            .then(data => {
-                // Save the selected person to local storage
-                localStorage.setItem("selectedPerson", JSON.stringify(data.Payload));
-            });
-    }
-
-    /**
      * Checks if the user is a guest.
      * True if the user is a guest, false otherwise.
      */
@@ -2587,11 +2574,20 @@ class PersonSelectorBox {
         // Get a reference to the search input element
         this.searchInput = document.getElementById('searchInput');
 
-        // Get previously selected person's name if available
-        var selectedPersonText = 'Select Person'; //default
-        const selectedPerson = JSON.parse(localStorage.getItem("selectedPerson"));
-        if (selectedPerson && Object.keys(selectedPerson).length !== 0) {
-            const parsedPerson = new Person(selectedPerson);
+        //# Auto set selected person if URL or LocalStorage is available
+        let selectedPersonText = 'Select Person'; //default
+        // check if URL contains Person to select
+        let personIdFromUrl = new URL(window.location.href).searchParams.get('Person');
+        if (personIdFromUrl) {
+            //using ID get person data via API (if user has access via shared list or is owner)
+            //will also pump person data into selected local storage (NOTE: it will be picked up below and handled below as preselected)
+            PersonSelectorBox.SetSelectedPersonById(personIdFromUrl);
+        }
+
+        //check if any person has been selected before (LocalStorage)
+        let personFromStorage = JSON.parse(localStorage.getItem("selectedPerson"));
+        if (personFromStorage && Object.keys(personFromStorage).length !== 0) {
+            let parsedPerson = new Person(personFromStorage);
             selectedPersonText = parsedPerson.DisplayName;
         }
 
@@ -2690,6 +2686,19 @@ class PersonSelectorBox {
     onClickDropDown(event) {
         // Set focus to the search text box for instant input
         $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
+    }
+
+    /**
+    * Sets the selected person by ID rest of data fetched by API
+    */
+    static SetSelectedPersonById(personId) {
+        // Fetch the person data from the API
+        fetch(`${VedAstro.ApiDomain}/Calculate/GetPerson/UserId/${VedAstro.UserId}/PersonId/${personId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Save the selected person to local storage
+                localStorage.setItem("selectedPerson", JSON.stringify(data.Payload));
+            });
     }
 }
 

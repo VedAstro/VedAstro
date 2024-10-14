@@ -1330,7 +1330,7 @@ class VedAstro {
     //generates new visitor id & saves it to local storage
     static generateAndSaveVisitorId() {
         //random id with pretext "guest" for easy identification
-        const newVisitorId = `guest-${Math.random().toString(36).substr(2, 9)}`;
+        const newVisitorId = `guest-${Math.random().toString(36).substr(2, 15)}`;
         //save the new random id in local storage 
         localStorage.setItem("VisitorId", JSON.stringify(newVisitorId));
         //return new random id
@@ -1391,8 +1391,6 @@ class VedAstro {
      * @returns {Promise<Array<Person>>} - Promise that resolves to an array of Person objects.
      */
     static async GetPersonList(cacheType) {
-        // Determine the owner ID based on the cache type
-        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101';
         // Determine the cache key based on the cache type
         const cacheKey = cacheType === 'private' ? 'personList' : 'publicPersonList';
 
@@ -1425,8 +1423,9 @@ class VedAstro {
      * @returns {Promise<Array<Person>>} - Promise that resolves to an array of Person objects.
      */
     static async FetchPersonListFromAPI(cacheType) {
-        // Determine the owner ID based on the cache type
-        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101';
+        // Determine the user ID based on the cache type
+        // Note: use visitor ID if not logged in and asking for private list
+        const ownerId = cacheType === 'private' ? (VedAstro.IsGuestUser() ? VedAstro.VisitorId : VedAstro.UserId) : '101';
 
         try {
             // Fetch the person list from the API
@@ -2684,14 +2683,17 @@ class PersonSelectorBox {
     /**
     * Sets the selected person by ID rest of data fetched by API
     */
-    static SetSelectedPersonById(personId) {
-        // Fetch the person data from the API
-        fetch(`${VedAstro.ApiDomain}/Calculate/GetPerson/UserId/${VedAstro.UserId}/PersonId/${personId}`)
-            .then(response => response.json())
-            .then(data => {
-                // Save the selected person to local storage
-                localStorage.setItem("selectedPerson", JSON.stringify(data.Payload));
-            });
+    static async SetSelectedPersonById(personId) {
+        try {
+            // Fetch the person data from the API
+            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetPerson/UserId/${VedAstro.IsGuestUser ? VedAstro.VisitorId : VedAstro.UserId}/PersonId/${personId}`);
+            const data = await response.json();
+
+            // Save the selected person to local storage
+            localStorage.setItem("selectedPerson", JSON.stringify(data.Payload.GetPerson));
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
 
@@ -3507,8 +3509,19 @@ class AstroTable {
     EditButtonId = ""; //used to hook up edit button to show popup
     ColumnData = []; //data on selected columns
     EnableSorting = false; //sorting disabled by default
-    APICalls = []; //list of API calls that can be used in table (filled on load)
     SaveSettings = true; //save settings to browser storage or not, enabled by default
+
+    //list of API calls that can be used in table (filled on load)
+    //NOTE : data in localStorage is subject to "Update Purge"
+    get APICalls() {
+        let apiCalls = localStorage.getItem('APICalls');
+        return apiCalls ? JSON.parse(apiCalls) : [];
+    }
+
+    set APICalls(value) {
+        localStorage.setItem('APICalls', JSON.stringify(value));
+    }
+
 
     //DEFAULT COLUMNS when no column data is supplied or when reset button is clicked
     DefaultColumns = [
@@ -3565,7 +3578,7 @@ class AstroTable {
         CommonTools.ShowLoading();
 
         //pump in data about table settings to show in popup
-        var htmlPopup = await AstroTable.GenerateTableEditorHtml(
+        var htmlPopup = await this.GenerateTableEditorHtml(
             this.ColumnData,
             this.KeyColumn
         );
@@ -3711,11 +3724,10 @@ class AstroTable {
 
     //given name of API call, will return the metadata
     async GetAPIMetadata(apiName) {
-        //get all API calls from server only if empty
+        // get all API calls from local storage
         if (this.APICalls.length === 0) {
-            this.APICalls = await AstroTable.GetAPIPayload(
-                `${VedAstro.ApiDomain}/ListCalls`
-            );
+            const apiCalls = await AstroTable.GetAPIPayload(`${VedAstro.ApiDomain}/ListCalls`);
+            this.APICalls = apiCalls; // save to local storage
         }
 
         var foundCalls = AstroTable.FindAPICallByName(this.APICalls, apiName);
@@ -4027,7 +4039,7 @@ class AstroTable {
     }
 
     // generate Table Editor column options popup panel
-    static async GenerateTableEditorHtml(columnData, keyColumnName) {
+    async GenerateTableEditorHtml(columnData, keyColumnName) {
         var formHtml = "";
 
         for (
@@ -4049,7 +4061,7 @@ class AstroTable {
                         <div class="w-50">
                             <select id="SelecteAPI${columnNumber}Dropdown"  class="mt-1">
                                 <option value=""></option>
-                                ${await AstroTable.GetAPICallsListSelectOptionHTML(
+                                ${await this.GetAPICallsListSelectOptionHTML(
                     columnData[columnNumber].Api,
                     keyColumnName,
                     VedAstro.ApiDomain
@@ -4117,17 +4129,16 @@ class AstroTable {
     }
 
     //get list of all API calls in HTML options element string
-    static async GetAPICallsListSelectOptionHTML(selectValue, keyColumnName) {
-        //get raw API calls list from Server
-        var apiCalls = await AstroTable.GetAPIPayload(
-            `${VedAstro.ApiDomain}/ListCalls`
-        );
+    async GetAPICallsListSelectOptionHTML(selectValue, keyColumnName) {
+        // get raw API calls list from local storage or API
+        let apiCalls = this.APICalls;
+        if (apiCalls.length === 0) {
+            apiCalls = await AstroTable.GetAPIPayload(`${VedAstro.ApiDomain}/ListCalls`);
+            this.APICalls = apiCalls; // save to local storage
+        }
 
         //filter out call that can NOT be used in columns (make User's live easier)
-        apiCalls = AstroTable.FilterOutIncompatibleAPICalls(
-            apiCalls,
-            keyColumnName
-        );
+        apiCalls = AstroTable.FilterOutIncompatibleAPICalls(apiCalls, keyColumnName);
 
         let options = "";
         $.each(apiCalls, function (i, item) {
@@ -4194,7 +4205,6 @@ class AstroTable {
 
     //given a vedastro API url, will auto call via POST or GET
     //and return only passed payloads as JSON
-    //TODO OBLIVION? exists version 2
     static async GetAPIPayload(url, payload = null) {
         try {
             // If a payload is provided, prepare options for a POST request

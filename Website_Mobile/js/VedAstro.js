@@ -1316,9 +1316,27 @@ class VedAstro {
     //static ApiDomain = "https://vedastroapibeta.azurewebsites.net/api";
 
     /**
-     * get user ID stored in memory else return guest/default user id
+     * get user ID from storage else give "101" guest id
      */
-    static UserId = "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101"; // get user id from browser storage
+    static UserId = "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101";
+
+    /**
+     * get visitor ID from storage else auto generate new visitor id
+     * for use in place of user id when not logged in (manually by caller)
+     */
+    static VisitorId = "VisitorId" in localStorage ? JSON.parse(localStorage["VisitorId"]) : VedAstro.generateAndSaveVisitorId();
+
+
+    //generates new visitor id & saves it to local storage
+    static generateAndSaveVisitorId() {
+        //random id with pretext "guest" for easy identification
+        const newVisitorId = `guest-${Math.random().toString(36).substr(2, 9)}`;
+        //save the new random id in local storage 
+        localStorage.setItem("VisitorId", JSON.stringify(newVisitorId));
+        //return new random id
+        return newVisitorId;
+    }
+
 
     /**
      * Gets the selected person. 
@@ -1507,24 +1525,6 @@ class CommonTools {
             newObj[newKey] = value;
         }
         return newObj;
-    }
-
-    // Add a person to the Vedastro API
-    // returns newly created ID for person
-    static async AddPerson(person) {
-
-        // Update the API URL with the provided person's data
-        var timeUrl = person.BirthTime.ToUrl() // Location/Singapore/Time/00:00/24/06/2024
-        const apiUrl = `${VedAstro.ApiDomain}/Calculate/AddPerson/OwnerId/${VedAstro.UserId}${timeUrl}/PersonName/${person.Name}/Gender/${person.Gender}/Notes/${JSON.stringify(person.Notes)}`;
-
-        // Make the API call to add the person
-        // NOTE: server generates unique id based on existing db
-        var jsonReply = await CommonTools.GetAPIPayload(apiUrl);
-
-        //get first object (API call name)
-        var newPersonId = jsonReply[Object.keys(jsonReply)[0]];
-
-        return newPersonId;
     }
 
 }

@@ -9,8 +9,9 @@ namespace VedAstro.Library
     public static class PersonManagerTools
     {
         /// <summary>
-        /// Uses name and birth year to generate human readable ID for a new person record
+        /// Uses name and birth year to generate human-readable ID for a new person record
         /// created so that user can type ID direct into URL based on only memory of name and birth year
+        /// NOTE: ID unique in whole DB not just by owner id (for easy single folder photo & cache linking)  
         /// </summary>
         public static async Task<string> GeneratePersonId(string ownerId, string personName, string birthYear, bool failIfDuplicate = false)
         {
@@ -25,7 +26,7 @@ namespace VedAstro.Library
             //jamesbrown and JamesBrown, both should by common sense work
             var idIsSafe = IsUniquePersonId(humanId);
 
-            //if duplicate not allowed by called, then END here!
+            //if duplicate not allowed by caller, then END here!
             if (failIfDuplicate && !idIsSafe) { throw new Exception("Person ID already Exist!"); }
 
             //if id NOT safe, add nonce and try again, possible nonce has been used
@@ -59,9 +60,8 @@ namespace VedAstro.Library
             bool IsUniquePersonId(string personId)
             {
                 var findPersonXmlById = AzureTable.PersonList?.Query<PersonListEntity>(row => row.RowKey == personId);
-                var x = !findPersonXmlById.Any();
-
-                return x;
+                var isUnique = !findPersonXmlById.Any();
+                return isUnique;
             }
 
 

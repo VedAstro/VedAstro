@@ -101,7 +101,7 @@ namespace VedAstro.Library
         /// </summary>
         public static async Task<string> AddPerson(string ownerId, Time birthTime, string personName, Gender gender, string notes = "", bool failIfDuplicate = false)
         {
-            //special ID made for human brains 🧠
+            //special ID made for human brains 🧠 (unique in whole DB)
             var brandNewHumanReadyId = await PersonManagerTools.GeneratePersonId(ownerId, personName, birthTime.StdYearText, failIfDuplicate);
 
             //make new person
@@ -180,6 +180,9 @@ namespace VedAstro.Library
 
         }
 
+        /// <summary>
+        /// Given a person id will get person's data, owner id is needed for privacy protection
+        /// </summary>
         public static async Task<Person> GetPerson(string ownerId, string personId)
         {
             //get person from database matching user & owner ID (also checks shared list)

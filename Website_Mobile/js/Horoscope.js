@@ -36,12 +36,6 @@ async function OnClickCalculate_Horoscope() {
     //update page title with person name to for easy multi tab use (UX ease)
     document.title = `${selectedPerson.DisplayName} | Horoscope`;
 
-    //add person id to URL, for link sharing
-    //note:this improves UX, as links can lead faster to data
-    const url = new URL(window.location.href);
-    url.searchParams.set('Person', selectedPerson.PersonId);
-    window.history.pushState({}, '', url.href);
-
     //get birth time of selected person (URL format)
     var timeUrl = selectedPerson.BirthTime.ToUrl();
     timeUrl = timeUrl.substring(1) + "/"; //remove leading / and add trailing / (minor format correction)

@@ -261,6 +261,7 @@ namespace API
         /// Reads data stamped build version, if "beta" is found in that name, return true
         /// </summary>
         public static bool GetIsBetaRuntime() => ThisAssembly.BranchName.Contains("beta");
+        
         public static async Task<JsonElement> ExtractDataFromRequestJsonNET(HttpRequestData request)
         {
             string jsonString = "";
@@ -283,98 +284,6 @@ namespace API
             }
         }
 
-        
-
-
-        ///// <summary>
-        ///// If there is binary file in request it will take it out,
-        ///// not support multipart form
-        ///// </summary>
-        //public static async Task<byte[]> ExtractFileFromRequest(HttpRequestData request)
-        //{
-        //    request.Body.Position = 0; //need to set to 0 else will get 0 bytes
-        //    var x = request.Body.ToByteArray();
-        //    return x;
-        //}
-
-
-        /// <summary>
-        /// Get all charts belonging to owner ID
-        /// </summary>
-
-        /// <summary>
-        /// Gets user data, if user does
-        /// not exist makes a new one & returns that
-        /// Note :
-        /// - email is used to find user, not hash or id (unique)
-        /// - Uses UserDataList.xml
-        /// </summary>
-        public static async Task<UserData> GetUserData(string id, string name, string email)
-        {
-            //get user data list file (UserDataList.xml) Azure storage
-            var userDataListXml = await Tools.GetXmlFileFromAzureStorage(UserDataListXml, Tools.BlobContainerName);
-
-            //look for user with matching email
-            var foundUserXml = userDataListXml.Root?.Elements()
-                .Where(userDataXml => userDataXml.Element("Email")?.Value == email)?
-                .FirstOrDefault();
-
-            //if user found, initialize xml and send that
-            if (foundUserXml != null)
-            {
-                return UserData.FromXml(foundUserXml);
-            }
-
-            //if no user found, make new user and send that
-            else
-            {
-                //create new user from google's data
-                var newUser = new UserData(id, name, email);
-
-                //add new user xml to main list
-                await Tools.AddXElementToXDocumentAzure(newUser.ToXml(), UserDataListXml, Tools.BlobContainerName);
-
-                //return newly created user to caller
-                return newUser;
-            }
-        }
-
-        /// <summary>
-        /// Given a user data it will find matching user email and replace the existing UserData with inputed
-        /// Note :
-        /// - Uses UserDataList.xml
-        /// </summary>
-        public static async Task<UserData> UpdateUserData(string id, string name, string email)
-        {
-            //get user data list file (UserDataList.xml) Azure storage
-            var userDataListXml = await Tools.GetXmlFileFromAzureStorage(UserDataListXml, Tools.BlobContainerName);
-
-            //look for user with matching email
-            var foundUserXml = userDataListXml.Root?.Elements()
-                .Where(userDataXml => userDataXml.Element("Email")?.Value == email)?
-                .FirstOrDefault();
-
-            //if user found, initialize xml and send that
-            if (foundUserXml != null)
-            {
-                return UserData.FromXml(foundUserXml);
-            }
-
-            //if no user found, make new user and send that
-            else
-            {
-                //create new user from google's data
-                var newUser = new UserData(id, name, email);
-
-                //add new user xml to main list
-                await Tools.AddXElementToXDocumentAzure(newUser.ToXml(), UserDataListXml, Tools.BlobContainerName);
-
-                //return newly created user to caller
-                return newUser;
-            }
-        }
-
-
         /// <summary>
         /// Makes a HTTP GET request and return the data as HTTP response message
         /// </summary>
@@ -395,7 +304,6 @@ namespace API
             //return the raw reply to caller
             return response;
         }
-
 
         public static List<Person> GetAllPersonList()
         {
@@ -495,36 +403,6 @@ namespace API
                 //sign in to email
                 return new EmailClient(connectionString);
             }
-        }
-
-        public static async Task SwapUserId(string ownerId, string visitorId)
-        {
-            //if both same no swap needed
-            if (ownerId == visitorId) { return; }
-
-            //if not yet logged in then skip
-            if (ownerId == "101") { return; }
-
-            //get all person's under visitor id
-            var visitorIdPersons = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == visitorId);
-
-            //if no records, then end here
-            if (!visitorIdPersons.Any()) { return; }
-
-            //transfer each person one by one
-            foreach (var personOriRecord in visitorIdPersons)
-            {
-                //1: make duplicate record with new owner id
-                //overwrite visitor id with user id
-                var modifiedPerson = personOriRecord.Clone();
-                modifiedPerson.PartitionKey = ownerId;
-                AzureTable.PersonList.AddEntity(modifiedPerson);
-
-                //2: delete original "visitor" record 
-                await AzureTable.PersonList.DeleteEntityAsync(personOriRecord.PartitionKey, personOriRecord.RowKey);
-            }
-
-
         }
 
 

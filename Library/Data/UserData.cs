@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using Azure.Data.Tables;
 
 namespace VedAstro.Library
 {
@@ -13,20 +15,16 @@ namespace VedAstro.Library
         /// Guest users default account
         /// Empty instance of User with id 101
         /// </summary>
-        public static UserData Guest = new UserData("101", "Guest", "guest@example.com", "", "", "");
+        public static UserData Guest = new UserData("101", "Guest", "guest@example.com");
 
         private string _name;
 
 
-        public UserData(string id = "", string name = "", string email = "", string familyName = "", string locale = "", string picture = "")
+        public UserData(string id = "", string name = "", string email = "")
         {
             Id = id;
             Name = name;
             Email = email;
-            FamilyName = familyName;
-            Locale = locale;
-            Picture = picture;
-            LocationList = new List<GeoLocation>();
         }
 
         public string Id { get; set; }
@@ -37,11 +35,7 @@ namespace VedAstro.Library
             set => _name = value == "Vignes" ? "James Brown" : value;
         }
 
-        public List<GeoLocation> LocationList { get; set; }
         public string Email { get; set; }
-        public string Locale { get; set; }
-        public string FamilyName { get; set; }
-        public string Picture { get; set; }
 
         /// <summary>
         /// Split the given name by space, and take the first name as first name
@@ -49,41 +43,14 @@ namespace VedAstro.Library
         public string FirstName => this.Name.Split(" ")[0];
 
 
-        /// <summary>
-        /// Converts XML to instance, root element is UserData
-        /// </summary>
-        public static UserData? FromXml(XElement userDataXml)
+        public JToken ToJson()
         {
-            var userData = new UserData(
-                id: userDataXml.Element("Id")?.Value,
-                name: userDataXml.Element("Name")?.Value,
-                email: userDataXml.Element("Email")?.Value,
-                familyName: userDataXml.Element("FamilyName")?.Value,
-                locale: userDataXml.Element("Locale")?.Value,
-                picture: userDataXml.Element("Picture")?.Value);
-
-            return userData;
+            var temp = new JObject();
+            temp["Name"] = this.Name;
+            temp["Id"] = this.Id;
+            temp["Email"] = this.Email;
+            return temp;
         }
-
-        /// <summary>
-        /// Converts to XML, root element is UserData
-        /// </summary>
-        public XElement ToXml()
-        {
-
-            var userDataXml = new XElement("UserData");
-            var nameXml = new XElement("Name", this.Name);
-            var idXml = new XElement("Id", this.Id);
-            var emailXml = new XElement("Email", this.Email);
-            var familyNameXml = new XElement("FamilyName", this.FamilyName);
-            var localeXml = new XElement("Locale", this.Locale);
-            var pictureXml = new XElement("Picture", this.Picture);
-
-            userDataXml.Add(idXml, nameXml, emailXml, familyNameXml, pictureXml, localeXml);
-
-            return userDataXml;
-        }
-
 
 
         //OVERRIDES METHODS
@@ -130,7 +97,23 @@ namespace VedAstro.Library
             return Math.Abs(hash1 + hash2);
         }
 
+        /// <summary>
+        /// This makes email as primary key
+        /// </summary>
+        public UserDataListEntity ToAzureRow()
+        {
+            //make the cache row to be added
+            var newRow = new UserDataListEntity()
+            {
+                //make email as partition key
+                PartitionKey = this.Email,
+                RowKey = "",
+                Name = this.Name,
+                Id = this.Id,
+            };
 
+            return newRow;
+        }
 
     }
 }

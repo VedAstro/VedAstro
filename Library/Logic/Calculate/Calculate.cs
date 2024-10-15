@@ -164,10 +164,14 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets person list
+        /// Gets person list, with auto swap persons from visitor to logged in account if user id is not 101
+        /// if user id is 101 (guest), then visitor id can be ommited on call
         /// </summary>
-        public static async Task<JArray> GetPersonList(string ownerId)
+        public static async Task<JArray> GetPersonList(string ownerId, string visitorId = "")
         {
+            //STAGE 1 : swap visitor ID with user ID if any (data follows user when log in)
+            await SwapUserId(ownerId, visitorId);
+
             //get raw person data from main person list (partial without life events)
             var foundCalls = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == ownerId);
 
@@ -177,6 +181,36 @@ namespace VedAstro.Library
 
             //send to caller
             return personJsonList;
+
+
+            async Task SwapUserId(string ownerId, string visitorId)
+            {
+                //if both same no swap needed
+                if (ownerId == visitorId) { return; }
+
+                //if not yet logged in then skip
+                if (ownerId == "101") { return; }
+
+                //get all person's under visitor id
+                var visitorIdPersons = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == visitorId);
+
+                //if no records, then end here
+                if (!visitorIdPersons.Any()) { return; }
+
+                //transfer each person one by one
+                foreach (var personOriRecord in visitorIdPersons)
+                {
+                    //1: make duplicate record with new owner id
+                    //overwrite visitor id with user id
+                    var modifiedPerson = personOriRecord.Clone();
+                    modifiedPerson.PartitionKey = ownerId;
+                    AzureTable.PersonList.AddEntity(modifiedPerson);
+
+                    //2: delete original "visitor" record 
+                    await AzureTable.PersonList.DeleteEntityAsync(personOriRecord.PartitionKey, personOriRecord.RowKey);
+                }
+
+            }
 
         }
 

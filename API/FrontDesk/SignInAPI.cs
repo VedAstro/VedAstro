@@ -2,6 +2,7 @@
 using Google.Apis.Auth;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 
 namespace API
@@ -10,53 +11,41 @@ namespace API
     {
 
         [Function(nameof(SignInGoogle))]
-        public static async Task<HttpResponseData> SignInGoogle([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        public static async Task<HttpResponseData> SignInGoogle([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "SignInGoogle/Token/{token}")] HttpRequestData incomingRequest, string token)
         {
-
-            //get ID Token/JWT from received request
-            var tokenXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
-            var jwtToken = tokenXml.Value;
-
             try
             {
                 //validate the the token & get data to id the user
-                var validPayload = await GoogleJsonWebSignature.ValidateAsync(jwtToken);
+                var validPayload = await GoogleJsonWebSignature.ValidateAsync(token);
                 var userId = validPayload.Subject; //Unique Google User ID
                 var userName = validPayload.Name;
                 var userEmail = validPayload.Email;
 
-                //use the email to get the user's record (or make new one if don't exist)
-                var userData = await APITools.GetUserData(userId, userName, userEmail);
+                //using email update or add (if it doesn't exist) NOTE: only updates name and ID
+                await AddOrUpdateUserData(userId, userName, userEmail);
 
-                //todo add login to users log (browser, location, time)
-                //todo maybe better in client
-                //userData.AddLoginLog();
-                //save updated user data
+                //send back to caller only name and id
+                var userDataForWebClient = new JObject();
+                userDataForWebClient["Name"] = userName;
+                userDataForWebClient["Id"] = userId;
 
-                //send user data as xml in with pass status
-                //so that client can generate hash and use it
-                return APITools.PassMessage(userData.ToXml(), incomingRequest);
+                return APITools.PassMessageJson(userDataForWebClient, incomingRequest);
             }
             //if any failure, reply as in valid login & log the event
             catch (Exception e)
             {
                 APILogger.Error(e, incomingRequest);
-                return APITools.FailMessage("Login Failed", incomingRequest);
+                return APITools.FailMessageJson("Login Failed", incomingRequest);
             }
         }
 
         [Function(nameof(SignInFacebook))]
-        public static async Task<HttpResponseData> SignInFacebook([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        public static async Task<HttpResponseData> SignInFacebook([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "SignInFacebook/Token/{token}")] HttpRequestData incomingRequest, string token)
         {
-
             try
             {
-                //get accessToken from received request
-                var tokenXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
-                var accessToken = tokenXml.Value;
-
                 //validate the the token & get user data
-                var url = $"https://graph.facebook.com/me/?fields=id,name,email&access_token={accessToken}";
+                var url = $"https://graph.facebook.com/me/?fields=id,name,email&access_token={token}";
                 var reply = await APITools.GetRequest(url);
                 var jsonText = await reply.Content.ReadAsStringAsync();
                 var json = JsonNode.Parse(jsonText);
@@ -64,18 +53,21 @@ namespace API
                 var userName = json["name"].ToString();
                 var userEmail = json["email"].ToString();
 
-                //use the email to get the user's record (or make new one if don't exist)
-                var userData = await APITools.GetUserData(userId, userName, userEmail);
+                //using email update or add (if it doesn't exist) NOTE: only updates name and ID
+                await AddOrUpdateUserData(userId, userName, userEmail);
 
-                //send user data as xml in with pass status
-                //so that client can generate hash and use it
-                return APITools.PassMessage(userData.ToXml(), incomingRequest);
+                //send back to caller only name and id
+                var userDataForWebClient = new JObject();
+                userDataForWebClient["Name"] = userName;
+                userDataForWebClient["Id"] = userId;
+
+                return APITools.PassMessageJson(userDataForWebClient, incomingRequest);
             }
             //if any failure, reply as in valid login & log the event
             catch (Exception e)
             {
                 APILogger.Error(e, incomingRequest);
-                return APITools.FailMessage("Login Failed", incomingRequest);
+                return APITools.FailMessageJson("Login Failed", incomingRequest);
             }
         }
 
@@ -89,6 +81,22 @@ namespace API
             ApiStatistic.Log(incomingRequest); //logger
 
             return APITools.PassMessage(incomingRequest);
+        }
+
+
+
+        //--------------------PRIVATE FUNC---------------------------------
+
+        /// <summary>
+        /// add or update new user data to DB
+        /// </summary>
+        private static async Task AddOrUpdateUserData(string userId, string userName, string userEmail)
+        {
+            //package data
+            var userData = new UserData(userId, userName, userEmail);
+
+            //add/update user data based on Email which is immutable & uniquer
+            await AzureTable.PersonList?.UpsertEntityAsync(userData.ToAzureRow());
         }
 
     }

@@ -9,6 +9,7 @@
   <ItemGroup>
     <Content Include="coming-soon.html" />
     <Content Include="AddPerson.html" />
+    <Content Include="Login.html" />
     <Content Include="Horoscope.html" />
     <Content Include="Home.html" />
     <Content Include="**\*.js" />
@@ -26,6 +27,7 @@
     <Content Remove="js\AddPerson.js" />
     <Content Remove="js\Home.js" />
     <Content Remove="js\Horoscope.js" />
+    <Content Remove="js\Login.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +44,7 @@
     <None Remove="image\table-generator-card.jpg" />
     <None Remove="image\vedastro-api-logo.png" />
     <None Remove="image\zodiac-wheel-3-white.png" />
+    <None Remove="Login.html" />
     <None Remove="VedAstro.js" />
   </ItemGroup>
 
@@ -65,6 +68,8 @@
     <PublishFile Remove="js\AddPerson.js" />
     <PublishFile Remove="js\Home.js" />
     <PublishFile Remove="js\Horoscope.js" />
+    <PublishFile Remove="js\Login.js" />
+    <PublishFile Remove="Login.html" />
     <PublishFile Remove="VedAstro.js" />
   </ItemGroup>
 

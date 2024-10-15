@@ -1316,9 +1316,16 @@ class VedAstro {
     //static ApiDomain = "https://vedastroapibeta.azurewebsites.net/api";
 
     /**
-     * get user ID from storage else give "101" guest id
-     */
-    static UserId = "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101";
+       * get user ID from storage else give "101" guest id
+       */
+    static get UserId() { return "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101"; }
+
+    static set UserId(value) { localStorage["UserId"] = JSON.stringify(value); }
+
+    static get UserName() { return "UserName" in localStorage ? JSON.parse(localStorage["UserName"]) : ""; }
+
+    //set by login.js
+    static set UserName(value) { localStorage["UserName"] = JSON.stringify(value); }
 
     /**
      * get visitor ID from storage else auto generate new visitor id
@@ -1336,7 +1343,6 @@ class VedAstro {
         //return new random id
         return newVisitorId;
     }
-
 
     /**
      * Gets the selected person. 
@@ -1429,7 +1435,7 @@ class VedAstro {
 
         try {
             // Fetch the person list from the API
-            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetPersonList/UserId/${ownerId}`);
+            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetPersonList/UserId/${ownerId}/VisitorId/${VedAstro.VisitorId}`);
             // Parse the JSON response
             const data = await response.json();
             // Create Person objects from the response data
@@ -2323,7 +2329,7 @@ class PageTopNavbar {
         <nav class="p-1 navbar rounded-bottom-4 d-block d-md-none" data-bs-theme="dark" style="background-color: #1877f2 !important; margin-top: -1.5rem !important; margin-left: -0.73rem !important; margin-right: -0.73rem !important;">
             <div class="container-fluid">
                 <a class="navbar-brand active" href="/">
-                    <img src="./image/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
+                    <img src="./images/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
                     <span class="ms-1 align-middle">VedAstro</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -4918,7 +4924,7 @@ class HoroscopeChat {
 
             //DO FOR USER'S SAVED LIST
             VedAstro.PersonList = await CommonTools.GetAPIPayload(
-                `${VedAstro.ApiDomain}/GetPersonList/OwnerId/${VedAstro.UserId}`
+                `${VedAstro.ApiDomain}/GetPersonList/OwnerId/${VedAstro.UserId}/VisitorId/${VedAstro.VisitorId}`
             );
 
             //create a header in the list

@@ -68,9 +68,7 @@ async function OnClickSave_AddPerson() {
     });
 
     // wait a little and send user back to previous page (reloaded & not via "Back" functionality to avoid caching)
-    setTimeout(() => {
-        navigateToPreviousPage();
-    }, 1500);
+    setTimeout(() => { navigateToPreviousPage(); }, 1500);
 }
 
 // Add a person to the Vedastro API

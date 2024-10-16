@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" style="background-color: #f0f2f5">
 <head>
     <!--to stop caching during active development-->
@@ -132,7 +132,7 @@
                         <div>
                             <div class="vstack gap-1 mb-4">
                                 <h2 class="align-self-center">Login</h2>
-                                <h5 class="align-self-center" style="color: #8f8f8f;">To authenticate yourself as a biological entity</h5>
+                                <h5 id="LoginHelperTextHolder" class="align-self-center" style="color: #8f8f8f;"></h5>
                             </div>
 
                             <div class="vstack">
@@ -178,7 +178,8 @@
                                                      data-size="large"
                                                      data-logo_alignment="center"
                                                      data-width="170"
-                                                     id="GoogleSignInButton"> <!-- for css modification -->
+                                                     id="GoogleSignInButton">
+                                                    <!-- for css modification -->
                                                 </div>
                                             </div>
                                         </div>
@@ -1220,10 +1221,10 @@
 
     <!-- JS APP CODE -->
     <script src="./js/app.js"></script>
-    <script src="./js/Login.js" defer></script>
-    
-    <!-- GOOGLE SIGN IN : NOTE : Must be placed after login.js because handler is there -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="./js/Login.js"></script> <!-- login.js must NOT contain "defer" to guarantee load before GSI files-->
 
-    </body>
+    <!-- GOOGLE SIGN IN : NOTE : Must be placed after login.js because handler is there & has "defer" -->
+    <script src="https://accounts.google.com/gsi/client" defer></script>
+
+</body>
 </html>

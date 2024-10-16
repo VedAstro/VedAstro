@@ -1,11 +1,40 @@
 ﻿
-
 new PageTopNavbar("PageTopNavbar");
 new DesktopSidebar("DesktopSidebarHolder");
 
+//fill login helper text, to make user remember previous login method
+fillLoginHelperText();
 
-//send JWT token to API server for validation
+
+
+//based on previous login method, remind user, else show message to encourage users to login
+//name of element holding message is "LoginHelperTextHolder"
+function fillLoginHelperText() {
+    //see if previous login method exist
+    const previousLoginMethod = localStorage.getItem('PreviousLoginMethod');
+
+    if (previousLoginMethod) {
+        // Display a message reminding the user of their previous login method
+        $('#LoginHelperTextHolder').text(`On your last visit, you used <strong>"${previousLoginMethod}"</strong>`);
+    } else {
+        // Display a random funny text encouraging the user to log in
+        const funnyTexts = [
+            'To prove you\'re a human from Earth 🌍',
+            'Don\'t be shy, log in and join the party! 🥳',
+            'To prove you\'re not a robot 🤖',
+            'To prove you\'re not from the Machine World 🤖',
+            'To authenticate yourself as a biological entity 🧬'
+        ];
+        const randomIndex = Math.floor(Math.random() * funnyTexts.length);
+        $('#LoginHelperTextHolder').text(funnyTexts[randomIndex]);
+
+    }
+}
+
+
+//sends JWT token to API server for validation
 //will return user id and name only
+//will only be called on successful login by Google
 async function OnGoogleSignInSuccessHandler(afterLoginResponse) {
 
     try {
@@ -27,7 +56,7 @@ async function OnGoogleSignInSuccessHandler(afterLoginResponse) {
         localStorage.setItem('PreviousLoginMethod', 'Google');
 
         //tell user login was success
-        Swal.fire({ icon: 'success', title: 'Login Success ✅', timer: 1500, showConfirmButton: false });
+        await Swal.fire({ icon: 'success', title: 'Login Success ✅', timer: 1500, showConfirmButton: false });
 
         // wait a little and send user back to previous page (reloaded & not via "Back" functionality to avoid caching)
         setTimeout(() => { navigateToPreviousPage(); }, 1500);
@@ -40,6 +69,9 @@ async function OnGoogleSignInSuccessHandler(afterLoginResponse) {
 
 }
 
+//sends access token to API server for validation
+//will return user id and name only
+//will only be called on successful login by Facebook
 async function OnFacebookSignInSuccessHandler(afterLoginResponse) {
 
     try {
@@ -58,7 +90,7 @@ async function OnFacebookSignInSuccessHandler(afterLoginResponse) {
         localStorage.setItem('PreviousLoginMethod', 'Facebook');
 
         //tell user login was success
-        Swal.fire({ icon: 'success', title: 'Login Success ✅', timer: 1500, showConfirmButton: false });
+        await Swal.fire({ icon: 'success', title: 'Login Success ✅', timer: 1500, showConfirmButton: false });
 
         // wait a little and send user back to previous page (reloaded & not via "Back" functionality to avoid caching)
         setTimeout(() => { navigateToPreviousPage(); }, 1500);

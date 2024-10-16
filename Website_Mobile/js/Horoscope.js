@@ -33,6 +33,9 @@ async function OnClickCalculate_Horoscope() {
     //get full data of selected person
     let selectedPerson = await horoscopePersonSelector.getSelectedPerson();
 
+    //if no selected person then ask user if sleeping 😴
+    if (selectedPerson == null) { Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true }); }
+
     //update page title with person name to for easy multi tab use (UX ease)
     document.title = `${selectedPerson.DisplayName} | Horoscope`;
 

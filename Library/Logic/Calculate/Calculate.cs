@@ -1348,7 +1348,8 @@ namespace VedAstro.Library
         public static ZodiacSign ChaturthamshaSignName(ZodiacSign zodiacSign) => Vargas.VargasCoreCalculator(zodiacSign, Vargas.ChaturthamshaTable[zodiacSign.GetSignName()], 4);
 
 
-
+        //------------ D5 ------------
+        //WAITING TO BE DONE
 
         /// <summary>
         /// Gets list of all planets and the zodiac signs they are in
@@ -1480,7 +1481,6 @@ namespace VedAstro.Library
             }
 
         }
-
 
         /// <summary>
         /// Annual or Progressed Horoscope

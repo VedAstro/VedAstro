@@ -1318,14 +1318,30 @@ class VedAstro {
     /**
        * get user ID from storage else give "101" guest id
        */
-    static get UserId() { return "UserId" in localStorage ? JSON.parse(localStorage["UserId"]) : "101"; }
+    static get UserId() {
+        const storedValue = localStorage.getItem("UserId");
+        try {
+            return JSON.parse(storedValue);
+        } catch (e) {
+            return "101";
+        }
+    }
+    static set UserId(value) {
+        localStorage.setItem("UserId", JSON.stringify(value));
+    }
 
-    static set UserId(value) { localStorage["UserId"] = JSON.stringify(value); }
+    static get UserName() {
+        const storedValue = localStorage.getItem("UserName");
+        try {
+            return JSON.parse(storedValue);
+        } catch (e) {
+            return "";
+        }
+    }
 
-    static get UserName() { return "UserName" in localStorage ? JSON.parse(localStorage["UserName"]) : ""; }
-
-    //set by login.js
-    static set UserName(value) { localStorage["UserName"] = JSON.stringify(value); }
+    static set UserName(value) {
+        localStorage.setItem("UserName", JSON.stringify(value));
+    }
 
     /**
      * get visitor ID from storage else auto generate new visitor id
@@ -1463,10 +1479,10 @@ class VedAstro {
         localStorage.removeItem("UserName");
 
         //tell user logout was success
-        await Swal.fire({ icon: 'success', title: 'Bye, we will miss you 🥰', timer: 2000, showConfirmButton: false });
+        await Swal.fire({ icon: 'success', title: 'Bye, we\'ll miss you 🥰', timer: 2000, showConfirmButton: false });
 
-        // wait a little and send user back to previous page (reloaded & not via "Back" functionality to avoid caching)
-        setTimeout(() => { window.location.href = './Home.html'; }, 1000);
+        // send user back to Home page (to avoid any login related content reloading)
+        window.location.href = './Home.html';
 
     }
 

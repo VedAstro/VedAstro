@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" style="background-color: #f0f2f5">
 <head>
     <!--to stop caching during active development-->
@@ -57,13 +57,8 @@
         }
     </style>
 
-    <!-- FACEBOOK SDK (for login, future share, post...)-->
+    <!-- FACEBOOK LOGIN CODE (for login, share, posts...)-->
     <script>
-
-        //█░░ █▀█ █▀▀ █ █▄░█   █▀▀ █▀█ █▀▄ █▀▀
-        //█▄▄ █▄█ █▄█ █ █░▀█   █▄▄ █▄█ █▄▀ ██▄
-
-        console.log("Login Code Loading");
 
         window.fbAsyncInit = function () {
             FB.init({
@@ -88,24 +83,6 @@
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
 
-        //SPECIAL SCENARIO FUNCTIONS BELOW RELATED TO LOGIN PROVIDERS
-        //------------------------------------------------------------
-        //makes a reference to SignInButton instance, to be used when user clicks sign in
-        //called in Blazor, after component render
-        window.SetSignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
-
-        //have set the size of the google button via JS,
-        //because of google's genius design to lock it iframe
-        //also the same reason they have to buy companies to stay afloat
-        // window.ResizeGoogleLoginButton = function () {
-        //     var myElement = document.querySelector("#container"); //id of elm holding button
-        //     myElement.style.zoom = 2;
-        // }
-
-        //called from Blazor when custom login button clicked
-        window.facebookLogin = () => FB.login(callBackFB, { scope: 'email' });
-        //wrapper function to forward call to blazor (hardwired in Blazor HTML)
-        var callBackFB = (response) => window.SignInButtonInstance.invokeMethodAsync('OnFacebookSignInSuccessHandler', response);
 
     </script>
 
@@ -129,104 +106,79 @@
                 <div class="container" style="background: #F0F2F5;">
                     <div>
 
-                        <div>
-                            <div class="vstack gap-1 mb-4">
-                                <h2 class="align-self-center">Login</h2>
-                                <h5 id="LoginHelperTextHolder" class="align-self-center" style="color: #8f8f8f;"></h5>
-                            </div>
+                        <div class="d-md-flex justify-content-between">
+                            <!-- LOGIN BUTTONS -->
+                            <div>
+                                <div class="vstack gap-1 mb-4">
+                                    <h2 class="align-self-center">Login</h2>
+                                    <h5 id="LoginHelperTextHolder" class="align-self-center" style="color: #8f8f8f;"></h5>
+                                </div>
 
-                            <div class="vstack">
-                                <div class="align-self-center vstack gap-3 mb-4" style="width: 291.9px;">
-                                    <style>
+                                <div class="vstack">
+                                    <div class="align-self-center vstack gap-3 mb-4" style="width: 291.9px;">
+                                        <style>
 
-                                        #GoogleSignInButton {
-                                            text-align: -webkit-center;
-                                            position: relative;
-                                        }
+                                            #GoogleSignInButton {
+                                                text-align: -webkit-center;
+                                                position: relative;
+                                            }
 
-                                        #FacebookSignInButton {
-                                            width: 170px;
-                                            align-self: center;
-                                            border-radius: 30px;
-                                            padding-left: 29px;
-                                        }
+                                            #FacebookSignInButton {
+                                                width: 170px;
+                                                align-self: center;
+                                                border-radius: 30px;
+                                                padding-left: 29px;
+                                            }
 
-                                    </style>
+                                        </style>
 
-                                    <div class="rounded p-4" style="background:#caecff;">
-                                        <div class="vstack gap-4">
-                                            <!-- FACEBOOK LOGIN -->
-                                            <button id="FacebookSignInButton" onclick="window.facebookLogin" class="MakeBig btn btn-primary hstack gap-2 iconButton">
-                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--akar-icons" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="akar-icons:facebook-fill" data-width="25"><g fill="none"><g clip-path="url(#IconifyId19286e6bc68c71ddc1020)"><path fill="currentColor" fill-rule="evenodd" d="M0 12.067C0 18.034 4.333 22.994 10 24v-8.667H7V12h3V9.333c0-3 1.933-4.666 4.667-4.666c.866 0 1.8.133 2.666.266V8H15.8c-1.467 0-1.8.733-1.8 1.667V12h3.2l-.533 3.333H14V24c5.667-1.006 10-5.966 10-11.933C24 5.43 18.6 0 12 0S0 5.43 0 12.067" clip-rule="evenodd"></path></g><defs><clipPath id="IconifyId19286e6bc68c71ddc1020"><path fill="#fff" d="M0 0h24v24H0z"></path></clipPath></defs></g></svg> Sign In
-                                            </button>
+                                        <div class="rounded p-4" style="background: #caecff;">
+                                            <div class="vstack gap-4">
+                                                <!-- FACEBOOK LOGIN -->
+                                                <button id="FacebookSignInButton" onclick="onClickFacebookLoginButton()" class="MakeBig btn btn-primary hstack gap-2 iconButton">
+                                                    <iconify-icon icon="akar-icons:facebook-fill" width="25" height="25"></iconify-icon> Sign In
+                                                </button>
 
-                                            <!-- GOOGLE LOGIN -->
-                                            <div>
-                                                <div id="g_id_onload"
-                                                     data-client_id="19638836771-oflt5g9mnkft6chkl04vp4m5qpu5h569.apps.googleusercontent.com"
-                                                     data-context="signin"
-                                                     data-ux_mode="popup"
-                                                     data-callback="OnGoogleSignInSuccessHandler"
-                                                     data-auto_prompt="false">
-                                                </div>
+                                                <!-- GOOGLE LOGIN -->
+                                                <div>
+                                                    <div id="g_id_onload"
+                                                         data-client_id="19638836771-oflt5g9mnkft6chkl04vp4m5qpu5h569.apps.googleusercontent.com"
+                                                         data-context="signin"
+                                                         data-ux_mode="popup"
+                                                         data-callback="OnGoogleSignInSuccessHandler"
+                                                         data-auto_prompt="false">
+                                                    </div>
 
-                                                <div class="g_id_signin"
-                                                     data-type="standard"
-                                                     data-shape="pill"
-                                                     data-theme="outline"
-                                                     data-text="signin"
-                                                     data-size="large"
-                                                     data-logo_alignment="center"
-                                                     data-width="170"
-                                                     id="GoogleSignInButton">
-                                                    <!-- for css modification -->
+                                                    <div class="g_id_signin"
+                                                         data-type="standard"
+                                                         data-shape="pill"
+                                                         data-theme="outline"
+                                                         data-text="signin"
+                                                         data-size="large"
+                                                         data-logo_alignment="center"
+                                                         data-width="170"
+                                                         id="GoogleSignInButton">
+                                                        <!-- for css modification -->
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
 
-                            <!-- LOGIN BENEFITS INFO BOXES -->
-                            <div class="">
+                            <!-- WHY LOGIN? INFO -->
+                            <div class="mt-md-0 mt-4 me-md-5">
+                                <!--when small give at top-->
                                 <div class="fw-bold hstack gap-2 d-flex" style="">
                                     <div class="" style=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:key" data-width="38" style="vertical-align: text-bottom;"><g fill="#FFA000"><path d="m30 41l-4 4h-4l-4-4V21h12v8l-2 2l2 2v2l-2 2l2 2z"></path><path d="M38 7.8c-.5-1.8-2-3.1-3.7-3.6C31.9 3.7 28.2 3 24 3s-7.9.7-10.3 1.2C12 4.7 10.5 6 10 7.8c-.5 1.7-1 4.1-1 6.7s.5 5 1 6.7c.5 1.8 1.9 3.1 3.7 3.5c2.4.6 6.1 1.3 10.3 1.3s7.9-.7 10.3-1.2c1.8-.4 3.2-1.8 3.7-3.5s1-4.1 1-6.7c0-2.7-.5-5.1-1-6.8M29 13H19c-1.1 0-2-.9-2-2V9c0-.6 3.1-1 7-1s7 .4 7 1v2c0 1.1-.9 2-2 2"></path></g><path fill="#D68600" d="M23 26h2v19h-2z"></path></svg></div><h4 class="mt-2 me-auto">Why login? </h4>
                                 </div>
                                 <hr class="mt-1 mb-2">
-                            </div>
-                            <div class="hstack gap-3">
-                                <div class="" style=" max-width:365px;">
-                                    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color:  !important; ">
-                                        <div class="hstack mb-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:approval" data-width="50"><path fill="#8BC34A" d="m24 3l4.7 3.6l5.8-.8l2.2 5.5l5.5 2.2l-.8 5.8L45 24l-3.6 4.7l.8 5.8l-5.5 2.2l-2.2 5.5l-5.8-.8L24 45l-4.7-3.6l-5.8.8l-2.2-5.5l-5.5-2.2l.8-5.8L3 24l3.6-4.7l-.8-5.8l5.5-2.2l2.2-5.5l5.8.8z"></path><path fill="#CCFF90" d="M34.6 14.6L21 28.2l-5.6-5.6l-2.8 2.8l8.4 8.4l16.4-16.4z"></path></svg>
-                                            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
-                                                <strong>Secure</strong><br>
-                                                Safe &amp; fast with Google or Facebook authentication.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="" style=" max-width:365px;">
-                                    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color:  !important; ">
-                                        <div class="hstack mb-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="ic:baseline-cloud-done" data-width="50"><path fill="currentColor" d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5c0-2.64-2.05-4.78-4.65-4.96M10 17l-3.5-3.5l1.41-1.41L10 14.17L15.18 9l1.41 1.41z"></path></svg>
-                                            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
-                                                <strong>Storage</strong><br>
-                                                Free cloud storage for charts, reports and horoscopes
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="" style=" max-width:365px;">
-                                    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color:  !important; ">
-                                        <div class="hstack mb-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:privacy" data-width="50"><path fill="#424242" d="M24 4c-5.5 0-10 4.5-10 10v4h4v-4c0-3.3 2.7-6 6-6s6 2.7 6 6v4h4v-4c0-5.5-4.5-10-10-10"></path><path fill="#FB8C00" d="M36 44H12c-2.2 0-4-1.8-4-4V22c0-2.2 1.8-4 4-4h24c2.2 0 4 1.8 4 4v18c0 2.2-1.8 4-4 4"></path><circle cx="24" cy="31" r="6" fill="#EFEBE9"></circle><circle cx="24" cy="31" r="3" fill="#1E88E5"></circle><circle cx="26" cy="29" r="1" fill="#fff"></circle></svg>
-                                            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
-                                                <strong>Privacy</strong><br>
-                                                We don't collect data or connect to your Google or Facebook account.
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="vstack gap-0 gap-md-2">
+                                    <div id="InfoBox_Secure_Login" MaxWidth="365" Title="Secure" Description="Safe &amp; fast with Google or Facebook authentication" IconName="flat-color-icons:approval"></div>
+                                    <div id="InfoBox_Storage_Login" MaxWidth="365" Title="Storage" Description="Free cloud storage for charts, reports and horoscopes" IconName="ic:baseline-cloud-done"></div>
+                                    <div id="InfoBox_Privacy_Login" MaxWidth="365" Title="Privacy" Description="We don't collect data or connect to your Google or Facebook account" IconName="flat-color-icons:privacy"></div>
                                 </div>
                             </div>
                         </div>

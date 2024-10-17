@@ -31,7 +31,7 @@ async function OnClickCalculate_Horoscope() {
     $("#SidebarInfoBoxHolder").slideUp(500);
 
     //get full data of selected person
-    let selectedPerson = await horoscopePersonSelector.getSelectedPerson();
+    let selectedPerson = await horoscopePersonSelector.GetSelectedPerson();
 
     //if no selected person then ask user if sleeping 😴
     if (selectedPerson == null) { Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true }); }

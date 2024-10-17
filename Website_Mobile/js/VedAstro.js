@@ -1326,6 +1326,7 @@ class VedAstro {
             return "101";
         }
     }
+
     static set UserId(value) {
         localStorage.setItem("UserId", JSON.stringify(value));
     }
@@ -1349,7 +1350,6 @@ class VedAstro {
      */
     static VisitorId = "VisitorId" in localStorage ? JSON.parse(localStorage["VisitorId"]) : VedAstro.generateAndSaveVisitorId();
 
-
     //generates new visitor id & saves it to local storage
     static generateAndSaveVisitorId() {
         //random id with pretext "guest" for easy identification
@@ -1358,39 +1358,6 @@ class VedAstro {
         localStorage.setItem("VisitorId", JSON.stringify(newVisitorId));
         //return new random id
         return newVisitorId;
-    }
-
-    /**
-     * Gets the selected person. 
-     * TODO needs to be modified to handled multiple person scenarios
-     */
-    static GetSelectedPerson() {
-        try {
-            // Get the selected person from local storage
-            const selectedPersonJson = localStorage.getItem("selectedPerson");
-
-            if (!selectedPersonJson) {
-                return null;
-            }
-
-            // Parse the selected person JSON into a Person object
-            const selectedPersonData = JSON.parse(selectedPersonJson);
-            const selectedPerson = new Person(selectedPersonData);
-
-            // Return the selected person object
-            return selectedPerson;
-        } catch (error) {
-            // If JSON parsing or object parsing fails, return null quietly
-            return null;
-        }
-    }
-
-    /**
-     * Sets the selected person.
-     */
-    static SetSelectedPerson(person) {
-        // Save the selected person ID to local storage
-        localStorage.setItem("selectedPerson", JSON.stringify(person));
     }
 
     /**
@@ -2378,26 +2345,75 @@ class PersonSelectorBox {
     TitleText = "Title Goes Here";
     SelectedPersonNameHolderElementID = "selectedPersonNameHolder";
     SearchInputElementClass = "searchInputElementClass";
+    // Default data
+    personList = [];
+    publicPersonList = [];
+    _personListDisplay = [];
+    _publicPersonListDisplay = [];
+    //name of key where selected person data for
+    //this instance of person selector is stored
+    //exp : SelectedPerson-1, SelectedPerson-2, etc... (to support multiple selectors in 1 page)
+    SelectedPersonStorageKey = "";
 
     constructor(elementId) {
         // Initialize class properties
         this.ElementID = elementId;
 
-        // Default data
-        this.personList = [];
-        this.publicPersonList = [];
-        this._personListDisplay = [];
-        this._publicPersonListDisplay = [];
-
         // Get title and description from the element's custom attributes
         const element = document.getElementById(elementId);
         this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
+
+        //created with nonce from 1 to n, so that multiple selectors supported across pages
+        this.SelectedPersonStorageKey = `SelectedPerson-${PersonSelectorBox.GetSequencedNonce()}`;
 
         // Save a reference to this instance for global access
         this.saveInstanceReference();
 
         // Initialize the component
         this.init();
+    }
+
+    //checks all "SelectedPerson-x" keys and gives next number that has not been taken
+    static GetSequencedNonce() {
+        let nonce = 1;
+        while (true) {
+            const key = `SelectedPerson-${nonce}`;
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, '{}'); // reserve the key
+                return nonce;
+            }
+            nonce++;
+        }
+    }
+
+    /**
+    * Gets the selected person.
+    */
+    GetSelectedPerson() {
+        try {
+            // Get the selected person from local storage
+            const selectedPersonJson = localStorage.getItem(this.SelectedPersonStorageKey);
+
+            if (!selectedPersonJson) { return null; }
+
+            // Parse the selected person JSON into a Person object
+            const selectedPersonData = JSON.parse(selectedPersonJson);
+            const selectedPerson = new Person(selectedPersonData);
+
+            // Return the selected person object
+            return selectedPerson;
+        } catch (error) {
+            // If JSON parsing or object parsing fails, return null quietly
+            return null;
+        }
+    }
+
+    /**
+     * Sets the selected person.
+     */
+    SetSelectedPerson(person) {
+        // Save the selected person ID to local storage
+        localStorage.setItem(this.SelectedPersonStorageKey, JSON.stringify(person));
     }
 
     async init() {
@@ -2469,7 +2485,7 @@ class PersonSelectorBox {
         this._publicPersonListDisplay = this.publicPersonList;
 
         // Get the previously selected person from local storage
-        const selectedPerson = VedAstro.GetSelectedPerson();
+        const selectedPerson = this.GetSelectedPerson();
 
         // If a selected person exists, simulate a click on their name
         selectedPerson && this.updatePersonNameGui(selectedPerson);
@@ -2517,7 +2533,7 @@ class PersonSelectorBox {
 
         // Save the selected person to local storage
         //TODO can be left unupdated when selected person is edited
-        VedAstro.SetSelectedPerson(personData);
+        this.SetSelectedPerson(personData);
 
         // Save the selected person ID for instance-specific selection
         this.selectedPersonId = personData.PersonId;
@@ -2644,36 +2660,10 @@ class PersonSelectorBox {
         return html;
     }
 
-    //gets full person data that has been selected
-    async getSelectedPerson() {
-        const selectedPersonId = this.selectedPersonId;
-        if (selectedPersonId) {
-            return await this.getPersonDataById(selectedPersonId);
-        } else {
-            return null; // or throw an error, depending on your requirements
-        }
-    }
-
     // Handle click on the dropdown button
     onClickDropDown(event) {
         // Set focus to the search text box for instant input
         $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
-    }
-
-    /**
-    * Sets the selected person by ID rest of data fetched by API
-    */
-    static async SetSelectedPersonById(personId) {
-        try {
-            // Fetch the person data from the API
-            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetPerson/UserId/${VedAstro.IsGuestUser ? VedAstro.VisitorId : VedAstro.UserId}/PersonId/${personId}`);
-            const data = await response.json();
-
-            // Save the selected person to local storage
-            localStorage.setItem("selectedPerson", JSON.stringify(data.Payload.GetPerson));
-        } catch (error) {
-            console.error(error);
-        }
     }
 }
 

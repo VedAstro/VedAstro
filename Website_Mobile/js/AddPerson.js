@@ -3,7 +3,8 @@ updateHistory();
 
 new PageTopNavbar("PageTopNavbar");
 new DesktopSidebar("DesktopSidebarHolder");
-new PageHeader("AddPersonPageHeader");
+new PageHeader("PageHeader");
+new PageFooter("PageFooter");
 new InfoBox("InfoBox_EasyImport_AddPerson");
 new InfoBox("InfoBox_Private_AddPerson");
 new InfoBox("InfoBox_ForgotenTime_AddPerson");

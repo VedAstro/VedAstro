@@ -9,6 +9,7 @@
   <ItemGroup>
     <Content Include="coming-soon.html" />
     <Content Include="AddPerson.html" />
+    <Content Include="MatchChecker.html" />
     <Content Include="Login.html" />
     <Content Include="Horoscope.html" />
     <Content Include="Home.html" />
@@ -44,7 +45,9 @@
     <None Remove="image\table-generator-card.jpg" />
     <None Remove="image\vedastro-api-logo.png" />
     <None Remove="image\zodiac-wheel-3-white.png" />
+    <None Remove="js\MatchChecker.js" />
     <None Remove="Login.html" />
+    <None Remove="MatchChecker.html" />
     <None Remove="VedAstro.js" />
   </ItemGroup>
 
@@ -69,7 +72,9 @@
     <PublishFile Remove="js\Home.js" />
     <PublishFile Remove="js\Horoscope.js" />
     <PublishFile Remove="js\Login.js" />
+    <PublishFile Remove="js\MatchChecker.js" />
     <PublishFile Remove="Login.html" />
+    <PublishFile Remove="MatchChecker.html" />
     <PublishFile Remove="VedAstro.js" />
   </ItemGroup>
 

@@ -1939,6 +1939,72 @@ class PageHeader {
     }
 }
 
+class PageFooter {
+    // Class properties
+    ElementID = "";
+
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Get the element by ID
+        var element = $(`#${this.ElementID}`);
+
+        // Add a classes to the element
+        element.addClass("mb-2 pt-3 border-top");
+
+        // Add inline styles to the element
+        element.css({
+            "opacity": "0.65",
+            "margin-top": "231.7px"
+        });
+
+        // Call the method to initialize the main body of the page header
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body of the page header
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML for the page header and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+    }
+
+    // Method to generate the HTML for the page header
+    async generateHtmlBody() {
+        // Return the HTML for the page header, including conditional blocks for different screen sizes
+        return `
+            <!-- FOOTER LINE AND SPACING -->
+            <div class="d-flex justify-content-between">
+
+                    <div class="">
+                        <div class="hstack gap-3" style="font-size:11px !important;">
+                            <a href="./TermsOfService.html" class="nav-link p-0 text-body-secondary">Terms &amp; Conditions</a>
+                            <a href="./PrivacyPolicy.html" class="nav-link p-0 text-body-secondary">Privacy Policy</a>
+                        </div>
+                    </div>
+
+                    <div class="me-5">
+                        <!--SOCIAL ICONS-->
+                        <ul class="list-unstyled d-flex">
+                            <li title="Buy us coffee" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://ko-fi.com/vedastro"><iconify-icon icon="line-md:coffee-half-empty-twotone-loop" width="24" height="24" ></iconify-icon></a></li>
+                            <li title="Buy us Cupcake" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://ko-fi.com/vedastro"><iconify-icon icon="fluent-emoji:cupcake" width="24" height="24" ></iconify-icon></a></li>
+                            <li title="Updates via Twitter" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://x.com/_VedAstro"><iconify-icon icon="skill-icons:twitter" width="22" height="22" ></iconify-icon></a></li>
+                            <li title="Become a Patron" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://patreon.com/vedastro"><iconify-icon icon="logos:patreon" width="22" height="22" ></iconify-icon></a></li>
+                            <li title="View Awesome Source Code" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://github.com/VedAstro/VedAstro"><iconify-icon icon="skill-icons:github-dark" width="22" height="22" ></iconify-icon></a></li>
+                            <li title="Updates via Instagram" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://www.instagram.com/_vedastro/"><iconify-icon icon="skill-icons:instagram" width="22" height="22" ></iconify-icon></a></li>
+                            <li title="Watch How To Guide" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://www.youtube.com/@vedastro/videos"><iconify-icon icon="logos:youtube-icon" width="22" height="22" ></iconify-icon></a></li>
+                            <li title="Updates via Facebook" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://www.facebook.com/vedastro.org"><iconify-icon icon="devicon:facebook" width="22" height="22" ></iconify-icon></a></li>
+                        </ul>
+
+                    </div>
+                </div>
+    `;
+    }
+}
+
 /**
  * Represents a dropdown box for ayanamsa.
  * Generates the HTML & handles auto saving/reading from local storage
@@ -1947,7 +2013,6 @@ class AyanamsaSelectorBox {
     // Class properties
     ElementID = "";
 
-    // Constructor to initialize the PageHeader object
     constructor(elementId) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
@@ -2015,7 +2080,6 @@ class DesktopSidebar {
     ElementID = "";
     ActiveLinkName = ""; //the link of current page highlighted
 
-    // Constructor to initialize the PageHeader object
     constructor(elementId) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
@@ -2192,7 +2256,6 @@ class PageTopNavbar {
     // Class properties
     ElementID = "";
 
-    // Constructor to initialize the PageHeader object
     constructor(elementId) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
@@ -2671,7 +2734,6 @@ class InfoBox {
     IconName = "fluent-emoji:robot";
     Description = "Description Goes Here";
 
-    // Constructor to initialize the PageHeader object
     constructor(elementId) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
@@ -4370,7 +4432,6 @@ class StrengthChart {
     // Class properties
     ElementID = "";
 
-    // Constructor to initialize the PageHeader object
     constructor(elementId) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;

@@ -2,4 +2,5 @@ updateHistory();
 
 new PageTopNavbar("PageTopNavbar");
 new DesktopSidebar("DesktopSidebarHolder");
-new PageHeader("NumerologyPageHeader");
+new PageHeader("PageHeader");
+new PageFooter("PageFooter");

@@ -3,7 +3,9 @@ updateHistory();
 
 new PageTopNavbar("PageTopNavbar");
 new DesktopSidebar("DesktopSidebarHolder");
-new PageHeader("HoroscopePageHeader");
+new PageHeader("PageHeader");
+new PageFooter("PageFooter");
+
 var horoscopePersonSelector = new PersonSelectorBox("PersonSelectorBox");
 var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox");
 var strengthChart = new StrengthChart("StrengthChartHolder");

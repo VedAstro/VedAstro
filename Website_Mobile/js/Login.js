@@ -1,6 +1,7 @@
 ﻿
 new PageTopNavbar("PageTopNavbar");
 new DesktopSidebar("DesktopSidebarHolder");
+new PageFooter("PageFooter");
 
 new InfoBox("InfoBox_Privacy_Login");
 new InfoBox("InfoBox_Storage_Login");

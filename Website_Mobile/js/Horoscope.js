@@ -4,7 +4,7 @@ updateHistory();
 new PageTopNavbar("PageTopNavbar");
 new DesktopSidebar("DesktopSidebarHolder");
 new PageHeader("HoroscopePageHeader");
-var horoscopePersonSelector = new PersonSelectorBox("PersonSelectorBox_Horoscope");
+var horoscopePersonSelector = new PersonSelectorBox("PersonSelectorBox");
 var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox");
 var strengthChart = new StrengthChart("StrengthChartHolder");
 new IconButton("IconButton_Calculate_Horoscope");

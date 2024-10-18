@@ -1441,9 +1441,15 @@ class VedAstro {
         localStorage.removeItem("APICalls"); //this allows a refresh on logout
         localStorage.removeItem("personList");
         localStorage.removeItem("publicPersonList");
-        localStorage.removeItem("selectedPerson");
         localStorage.removeItem("UserId");
         localStorage.removeItem("UserName");
+
+        //remove all localStorage items with key "SelectedPerson-*"
+        for (const key in localStorage) {
+            if (key.startsWith("SelectedPerson-")) {
+                localStorage.removeItem(key);
+            }
+        }
 
         //tell user logout was success
         await Swal.fire({ icon: 'success', title: 'Bye, we\'ll miss you 🥰', timer: 2000, showConfirmButton: false });
@@ -2364,26 +2370,13 @@ class PersonSelectorBox {
         this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
 
         //created with nonce from 1 to n, so that multiple selectors supported across pages
-        this.SelectedPersonStorageKey = `SelectedPerson-${PersonSelectorBox.GetSequencedNonce()}`;
+        this.SelectedPersonStorageKey = `SelectedPerson-${this.ElementID}`;
 
         // Save a reference to this instance for global access
         this.saveInstanceReference();
 
         // Initialize the component
         this.init();
-    }
-
-    //checks all "SelectedPerson-x" keys and gives next number that has not been taken
-    static GetSequencedNonce() {
-        let nonce = 1;
-        while (true) {
-            const key = `SelectedPerson-${nonce}`;
-            if (!localStorage.getItem(key)) {
-                localStorage.setItem(key, '{}'); // reserve the key
-                return nonce;
-            }
-            nonce++;
-        }
     }
 
     /**
@@ -2573,7 +2566,7 @@ class PersonSelectorBox {
         let selectedPersonText = 'Select Person'; //default
 
         //check if any person has been selected before (LocalStorage)
-        let personFromStorage = JSON.parse(localStorage.getItem("selectedPerson"));
+        let personFromStorage = JSON.parse(localStorage.getItem(this.SelectedPersonStorageKey));
         if (personFromStorage && Object.keys(personFromStorage).length !== 0) {
             let parsedPerson = new Person(personFromStorage);
             selectedPersonText = parsedPerson.DisplayName;

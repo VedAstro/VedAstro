@@ -5456,7 +5456,7 @@ class HoroscopeChat {
 
         //if id is add new person, then redirect page to add person site, same tab so refresh onreturn
         if (selectedPersonId == "AddNewPerson") {
-            window.location.href = "http://vedastro.org/Account/Person/Add";
+            window.location.href = "./AddPerson.html";
             return; //end here
         }
 
@@ -5466,9 +5466,11 @@ class HoroscopeChat {
         );
 
         //save for use by other
+        //TODO select person needs be made local to chat
         localStorage.setItem("selectedPerson", JSON.stringify(selectedPerson));
 
         //convert person name to birth DOB (so unregistered person can be checked)
+        //TODO select person needs be made local to chat
         var newTopicId = VedAstro.SelectedPerson.BirthTime.ToUrl();
         window.vedastro.horoscopechat.SelectedBirthTime = newTopicId;
 
@@ -5478,10 +5480,11 @@ class HoroscopeChat {
         //hide normal chat input
         $("#questionInputHolder").show();
 
-        //show user's selection on screen so explicit rememberence
+        //show user's selection on screen for explicit remembrance
         //UPDATE GUI WITH USER MSG (UX)
         debugger;
         var userName = "You";
+        //TODO select person needs be made local to chat
         var selectedPersonTemp = JSON.parse(localStorage.getItem("selectedPerson"));
         const locationName = selectedPersonTemp["BirthTime"]["Location"]["Name"];
         const birthTime = selectedPersonTemp[`BirthTime`][`StdTime`];
@@ -5512,7 +5515,7 @@ class HoroscopeChat {
 
         //reply with AI as ready to respond
         //enter inviting message from AI
-        //note: the minimal message strucuture
+        //note: the minimal message structure
         let jsonObject = {
             Text: `Ok, I've analysed the horoscope.${String.fromCodePoint(
                 0x1f9d0

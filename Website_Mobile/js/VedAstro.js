@@ -2640,7 +2640,7 @@ class PersonSelectorBox {
     <div>
       <label class="form-label">${this.TitleText}</label>
       <div class="hstack">
-        <div class="btn-group" style="width:100%;">
+        <div class="btn-group" style="width:100%; min-width:231px !important;">
           <button onclick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="${this.SelectedPersonNameHolderElementID}" style="cursor: pointer;white-space: nowrap; display: inline-table;" >${selectedPersonText}</div>
           </button>
@@ -2808,10 +2808,6 @@ class IconButton {
     // Class properties
     ElementID = "";
     SmallSize = false;
-    Color = "";
-    IconName = "";
-    ButtonText = "";
-    OnClickCallback = null;
 
     // Constructor to initialize the IconButton object
     constructor(elementId) {
@@ -2825,6 +2821,7 @@ class IconButton {
         this.SmallSize = element.getAttribute("SmallSize") === "true";
         this.Color = element.getAttribute("Color") || "";
         this.IconName = element.getAttribute("IconName") || "";
+        this.ExtraStyle = element.getAttribute("ExtraStyle") || "";
         this.ButtonText = element.getAttribute("ButtonText") || "";
         this.OnClickCallback = element.getAttribute("OnClickCallback") || null;
 
@@ -2845,7 +2842,7 @@ class IconButton {
     async generateHtmlButton() {
         // Return the HTML for the button
         return `
-      <button onclick="${this.OnClickCallback}" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-${this.Color} btn">
+      <button onclick="${this.OnClickCallback}" style="${this.ExtraStyle} justify-content: center; height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-${this.Color} btn">
         <i class="iconify" data-icon="${this.IconName}" data-width="25"></i>
         ${this.ButtonText}
       </button>

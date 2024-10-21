@@ -21,7 +21,7 @@ async function OnClickCalculateMatch() {
     let selectedFemale = await personSelectorFemale.GetSelectedPerson();
 
     //if no selected person then ask user if sleeping 😴
-    if (selectedMale == null && selectedFemale == null) { Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true }); }
+    if (selectedMale == null && selectedFemale == null) { Swal.fire({ icon: 'error', title: 'Are you sleeping? 😴', html:'Please select 2 person names to calculate match.', showConfirmButton: true }); }
 
     //--------------------------------------- LETS START -------------------------------------
 
@@ -39,12 +39,12 @@ async function OnClickCalculateMatch() {
     $("#advancedMatchReportHolder").empty();
     $("#advancedMatchReportHolder").html(advancedPredictionsTableHtml);
 
-    var easyMatchReportHtml = generateEasyMatchReportHtml(selectedMale.DisplayName, selectedFemale.DisplayName, matchReport);
+    var easyMatchReportHtml = generateEasyMatchReportHtml(selectedMale.Name, selectedFemale.Name, matchReport);
     $("#easyMatchReportHolder").empty();
     $("#easyMatchReportHolder").html(easyMatchReportHtml);
 
     //hide sidebar links for nice clean fit (UX improvement)
-    $("#mainOutputHolder").slideDown(3000);
+    await $("#mainOutputHolder").slideDown(2000);
 
     //play sound for better UX
     playBakingDoneSound();
@@ -52,6 +52,8 @@ async function OnClickCalculateMatch() {
     //hide loading
     Swal.close();
 
+    //move view to show report (delay NEEDED else slide & other animations override it)
+    setTimeout(() => { scrollToDivById('mainOutputHolder'); }, 500);
 }
 
 function generateEasyMatchReportHtml(maleName, femaleName, matchReportJson) {
@@ -127,13 +129,6 @@ function convertPredictionListToHtml(predictionListJson) {
       </tbody>
     </table>
   `;
-}
-
-function scrollToDivById(id) {
-    const element = document.getElementById(id);
-    if (element) {
-        element.scrollIntoView();
-    }
 }
 
 async function getMatchReportFromAPI(maleBirthTimeUrl, femaleBirthTimeUrl) {

@@ -161,3 +161,27 @@ function playBakingDoneSound() {
     const audio = new Audio("./sound/positive-notification.mp3");
     audio.play().catch((error) => console.error('Error playing sound:', error));
 }
+
+
+//scrolls to div on page and flashes div using JS
+//can input both Element ref or CSS selector
+//note: just ID without hashtag
+async function scrollToDivById(id) {
+    const element = document.getElementById(id);
+    if (element) {
+        await element.scrollIntoView();
+    }
+}
+
+//flashes div using JS
+//can input both Element ref or CSS selector
+function animateHighlightElement(elmInput) {
+
+    var $elm = $(elmInput);
+
+    //use JS to attract attention to div
+    $elm.fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+
+    $elm.fadeTo(100, 0.4, function () { $(this).fadeTo(500, 1.0); });
+
+}

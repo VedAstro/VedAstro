@@ -2639,7 +2639,7 @@ class PersonSelectorBox {
     <div>
       <label class="form-label">${this.TitleText}</label>
       <div class="hstack">
-        <div class="btn-group" style="width:100%; min-width:231px !important;">
+        <div class="btn-group w-auto" style="min-width:231px !important;">
           <button onclick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="${this.SelectedPersonNameHolderElementID}" style="cursor: pointer;white-space: nowrap; display: inline-table;" >${selectedPersonText}</div>
           </button>

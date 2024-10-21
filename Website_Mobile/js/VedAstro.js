@@ -1719,13 +1719,13 @@ class Time {
 
     // Output TIME only for URL format
     // time converted to the format used in OPEN API url
-    // Sample out : /Location/London/Time/00:00/01/01/2011/+00:00
+    // Sample out : Location/London/Time/00:00/01/01/2011/+00:00/
     ToUrl() {
         // this will be called on instance of Time class
         const stdTime = this.StdTime.replace(/\s+/g, "/"); // convert all spaces to slashes
         const locationName = this.Location.Name.replace(/\s+/g, ""); // remove all spaces from location name
 
-        const finalUrl = `/Location/${locationName}/Time/${stdTime}`;
+        const finalUrl = `Location/${locationName}/Time/${stdTime}/`;
         return finalUrl;
     }
 }

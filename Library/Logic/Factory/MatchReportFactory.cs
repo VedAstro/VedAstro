@@ -12,6 +12,7 @@ namespace VedAstro.Library
     /// </summary>
     public static class MatchReportFactory
     {
+        
         /// <summary>
         /// Gets the compatibility report for a male & female
         /// The place where compatibility report gets generated
@@ -275,7 +276,7 @@ namespace VedAstro.Library
                 //note : should look like this here 42.4444444
                 var rawKutaPercentage = (totalPoints / 36.0) * 100.0;
 
-                //round to nearest for best accuracy
+                //round to nearest 5 for best accuracy
                 var rounded = Math.Round(rawKutaPercentage / 5.0) * 5;
 
                 return rounded;

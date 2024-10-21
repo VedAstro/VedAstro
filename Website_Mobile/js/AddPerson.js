@@ -77,14 +77,14 @@ async function OnClickSave_AddPerson() {
 async function AddPerson(person) {
 
     // convert to birth time to correct URL format
-    var timeUrl = person.BirthTime.ToUrl(); // sample: /Location/Singapore/Time/00:00/24/06/2024
+    var timeUrl = person.BirthTime.ToUrl(); // sample: Location/Singapore/Time/00:00/24/06/2024/
 
     //construct URL to save Person in API Server 
     const apiUrl = [
         `${VedAstro.ApiDomain}/Calculate/AddPerson/`,
         `OwnerId/${VedAstro.IsGuestUser() ? VedAstro.VisitorId : VedAstro.UserId}`, //if guest use visitor id, else use user id
-        `${timeUrl}`,
-        `/PersonName/${person.Name}`,
+        `/${timeUrl}`, // exp: Location/Singapore/Time/00:00/24/06/2024/
+        `PersonName/${person.Name}`, //NOTE: time URL has trailing, so we skip '/' before
         `/Gender/${person.Gender}`,
         `/Notes/${JSON.stringify(person.Notes)}`
     ].join('');

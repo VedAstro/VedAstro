@@ -30,6 +30,7 @@ using Microsoft.Extensions.Logging;
 using Azure.Storage.Blobs;
 using System.Net.Mime;
 using Microsoft.Extensions.Hosting;
+using System.Xml.Linq;
 
 namespace VedAstro.Library
 {
@@ -91,6 +92,7 @@ namespace VedAstro.Library
 
 
         //----------------------------------------CORE CODE---------------------------------------------
+
 
         #region PERSON
 
@@ -601,7 +603,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Get full kuta match data for 2 horoscopes
         /// </summary>
-        public static MatchReport CompatibilityMatch(Time maleBirthTime, Time femaleBirthTime)
+        public static MatchReport MatchReport(Time maleBirthTime, Time femaleBirthTime)
         {
             //get 1st and 2nd only for now (todo support more)
             var male = new Person("", maleBirthTime, Gender.Male);
@@ -609,7 +611,6 @@ namespace VedAstro.Library
 
             //generate compatibility report
             var compatibilityReport = MatchReportFactory.GetNewMatchReport(male, female, "101");
-
 
             return compatibilityReport;
         }

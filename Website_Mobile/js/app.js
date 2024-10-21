@@ -152,3 +152,12 @@ function updateNumerologyPrediction(number, text) {
     //make visible, since default start hidden
     document.getElementById('NumerologyPredictionOutputHolder').style.display = 'block';
 }
+
+
+/**
+* Plays done "baked ding" a sound using HTML5 element on page.
+*/
+function playBakingDoneSound() {
+    const audio = new Audio("./sound/positive-notification.mp3");
+    audio.play().catch((error) => console.error('Error playing sound:', error));
+}

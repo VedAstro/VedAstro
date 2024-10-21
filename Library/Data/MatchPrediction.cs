@@ -127,7 +127,7 @@ namespace VedAstro.Library
         public JToken ToJson()
         {
             var temp = new JObject();
-            temp["Name"] = this.Name.ToString();
+            temp["Name"] = this.Name.ToDisplayString(); //note to show human friendly name for easy print to HTML
             temp["Nature"] = this.Nature.ToString();
             temp["MaleInfo"] = this.MaleInfo;
             temp["FemaleInfo"] = this.FemaleInfo;

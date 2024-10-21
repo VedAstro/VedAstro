@@ -1220,7 +1220,7 @@ class EventsChart {
 }
 
 /**
- * Shortcut method to aimate events chart.
+ * Shortcut method to animate events chart.
  * Used by Blazor to call JS code.
  */
 window.ChartFromSVG = async (chartStr) => {
@@ -2577,6 +2577,9 @@ class PersonSelectorBox {
 
         //update into view
         this.updatePersonNameGui(personData);
+
+        // Save the selected person to local storage
+        this.SetSelectedPerson(personData);
     }
 
     //given full person data will update into selected view
@@ -2586,10 +2589,6 @@ class PersonSelectorBox {
         // Update the visible select button text
         var buttonTextHolder = $(`#${this.ElementID}`).find(`.${this.SelectedPersonNameHolderElementID}`);
         buttonTextHolder.html(displayName);
-
-        // Save the selected person to local storage
-        //TODO can be left unupdated when selected person is edited
-        this.SetSelectedPerson(personData);
 
         // Save the selected person ID for instance-specific selection
         this.selectedPersonId = personData.PersonId;
@@ -2650,7 +2649,7 @@ class PersonSelectorBox {
             <div class="hstack gap-2">
               <input onkeyup="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onKeyUpSearchBar(event)" type="text" class="${this.SearchInputElementClass} form-control ms-0 mb-2 ps-3" placeholder="Search...">
               <div class="mb-2" style="cursor: pointer;">
-                <i class="iconify" data-icon="pepicons-pop:list" data-width="25"></i>
+                <i class="iconify" data-icon="mingcute:list-search-fill" data-width="25"></i>
               </div>
             </div>
 
@@ -2661,7 +2660,7 @@ class PersonSelectorBox {
             <li><hr class="dropdown-divider"/></li>
             <div class="ms-3 d-flex justify-content-between">
               <div class="hstack gap-2">
-                <div><i class="iconify" data-icon="material-symbols:demography-rounded" data-width="25"></i></div>
+                <div><iconify-icon icon="material-symbols:demography-rounded" width="25" height="25" ></iconify-icon></div>
                 <span style="font-size: 13px; color: rgb(143, 143, 143);">Examples</span>
               </div>
             </div>
@@ -2672,8 +2671,9 @@ class PersonSelectorBox {
 
           </ul>
         </div>
-        <a href="./AddPerson.html" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2">
-          <i class="iconify" data-icon="ant-design:user-add-outlined" data-width="25"></i>
+        <!--NOTE: storage key is inject into URL, so that "add person" page knows where to set, for auto selection on return-->
+        <a href="./AddPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2">
+          <iconify-icon icon="ant-design:user-add-outlined" width="25" height="25" ></iconify-icon>
         </a>
       </div>
     </div>
@@ -3517,7 +3517,6 @@ class TimeLocationInput {
 
 
 }
-
 
 //Helps to create a table with astro data columns
 class AstroTable {

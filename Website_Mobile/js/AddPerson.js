@@ -50,8 +50,11 @@ async function OnClickSave_AddPerson() {
     // update new id, before saving into browser storage
     person.PersonId = newPersonId;
 
-    // after adding new person set person, as selected to make life easier for user (UX)
-    localStorage.setItem('selectedPerson', JSON.stringify(person));
+    // after adding new person, set person as selected to make life easier for user (UX)
+    // use localStorage key set by caller in URL if any,
+    // this allows each new person to be auto selected on a multi selector page 
+    const selectedPersonStorageKey = new URL(window.location.href).searchParams.get('SelectedPersonStorageKey');
+    if (selectedPersonStorageKey) { localStorage.setItem(selectedPersonStorageKey, JSON.stringify(person)); } 
 
     //clear cached person list (will cause person drop down to fetch new)
     PersonSelectorBox.ClearPersonListCache('private');
@@ -59,17 +62,20 @@ async function OnClickSave_AddPerson() {
     // hide loading
     Swal.close();
 
+    //play sound for better UX
+    playBakingDoneSound();
+
     // show done message
-    Swal.fire({
+    await Swal.fire({
         icon: 'success',
-        title: 'Done!',
+        title: 'Done! 🚀',
         text: 'Person added successfully!',
-        timer: 1500,
+        timer: 2000,
         showConfirmButton: false
     });
 
-    // wait a little and send user back to previous page (reloaded & not via "Back" functionality to avoid caching)
-    setTimeout(() => { navigateToPreviousPage(); }, 1500);
+    // send user back to previous page (reloaded & not via "Back" functionality to avoid caching)
+    navigateToPreviousPage();
 }
 
 // Add a person to the Vedastro API

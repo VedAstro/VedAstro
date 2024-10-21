@@ -23,6 +23,14 @@ function OnClickAdvanced_Horoscope() {
 
 async function OnClickCalculate_Horoscope() {
 
+    //get full data of selected person
+    let selectedPerson = await horoscopePersonSelector.GetSelectedPerson();
+
+    //if no selected person then ask user if sleeping 😴
+    if (selectedPerson == null) { Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true }); }
+
+    //---------------------------------------- LETS START -----------------------------------------
+
     //show loading to user
     CommonTools.ShowLoading();
 
@@ -32,18 +40,11 @@ async function OnClickCalculate_Horoscope() {
     //hide sidebar links for nice clean fit (UX improvement)
     $("#SidebarInfoBoxHolder").slideUp(500);
 
-    //get full data of selected person
-    let selectedPerson = await horoscopePersonSelector.GetSelectedPerson();
-
-    //if no selected person then ask user if sleeping 😴
-    if (selectedPerson == null) { Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true }); }
-
     //update page title with person name to for easy multi tab use (UX ease)
     document.title = `${selectedPerson.DisplayName} | Horoscope`;
 
     //get birth time of selected person (URL format)
     var timeUrl = selectedPerson.BirthTime.ToUrl();
-    timeUrl = timeUrl.substring(1) + "/"; //remove leading / and add trailing / (minor format correction)
 
     //generate tables and charts
     await initHoroscopeChart(timeUrl);

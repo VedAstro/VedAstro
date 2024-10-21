@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using static VedAstro.Library.PlanetName;
 
 namespace VedAstro.Library
 {
     /// <summary>
     /// Represents the final data generated for compatibility
     /// </summary>
-    public class MatchReport : IToXml
+    public class MatchReport : IToXml, IToJson
     {
 
         public static MatchReport Empty = new MatchReport("0", Person.Empty, Person.Empty, 0, "Empty Notes",
@@ -89,6 +90,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Converts the instance data into XML
         /// Used for transmitting across net
+        /// TODO MARKED FOR OBLIVION
         /// </summary>
         public XElement ToXml()
         {
@@ -109,23 +111,6 @@ namespace VedAstro.Library
 
             return compatibilityReport;
         }
-
-        public JToken ToJson()
-        {
-
-            var temp = new JObject();
-            temp["Embeddings"] = new JArray(this.Embeddings);
-            temp["KutaScore"] = this.KutaScore;  //not rounded
-            temp["Notes"] = this.Notes;  //not rounded
-            temp["Male"] = Male.ToJson();
-            temp["Female"] = Female.ToJson();
-            temp["PredictionList"] = MatchPrediction.ToJsonList(this.PredictionList);
-            temp["UserId"] = this.UserIdString;
-            temp["Id"] = this.Id;
-
-            return temp;
-        }
-
 
         /// <summary>
         /// The root element is expected to be Person
@@ -198,13 +183,35 @@ namespace VedAstro.Library
         /// </summary>
         public static List<MatchReport> FromXml(IEnumerable<XElement> xmlList) => xmlList.Select(matchXml => MatchReport.FromXml(matchXml)).ToList();
 
+        //-------------------TO JSON IMPLEMENTATION ----------------------
+
+
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
+
+        public JToken ToJson()
+        {
+            var temp = new JObject();
+            temp["Embeddings"] = new JArray(this.Embeddings);
+            temp["KutaScore"] = this.KutaScore;  //not rounded
+            temp["Notes"] = this.Notes; 
+            temp["Male"] = Male.ToJson();
+            temp["Female"] = Female.ToJson();
+            temp["PredictionList"] = MatchPrediction.ToJsonList(this.PredictionList);
+            temp["Summary"] = this.Summary.ToJson();
+            temp["UserId"] = this.UserIdString; //TODO marked for oblivion
+            temp["Id"] = this.Id;
+
+            return temp;
+        }
+
+       
+
 
 
 
         //█ █▄░█ ▀█▀ █▀▀ █▀█ █▄░█ ▄▀█ █░░   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█ █░▀█ ░█░ ██▄ █▀▄ █░▀█ █▀█ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
         //----------------------------------------------------------------------------------------------------------------
-
 
         private XElement PredictionListToXml(List<MatchPrediction> predictionList)
         {
@@ -289,7 +296,6 @@ namespace VedAstro.Library
             throw new Exception("END OF THE LINE");
 
         }
-
 
     }
 }

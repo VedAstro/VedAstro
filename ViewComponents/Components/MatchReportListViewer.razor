@@ -29,11 +29,11 @@ else
                     <td>
                         <div class="hstack gap-2">
                             <PersonTooltip Person="@report.Male" />
-                            <Icon Size="(int)GR.W22" NextToText="true" IconName="@report.Summary.heartIcon" />
+                            <Icon Size="(int)GR.W22" NextToText="true" IconName="@report.Summary.HeartIcon" />
                             <PersonTooltip Person="@report.Female" />
                         </div>
                     </td>
-                    <td><b style="color: @report.Summary.scoreColor;">@report.KutaScore%</b></td>
+                    <td><b style="color: @report.Summary.ScoreColor;">@report.KutaScore%</b></td>
                     <td>@report.Notes</td>
                     <td><IconButton ButtonText="View" OpenNewTab="true" ClickUrl=@($"/Match/Report/{@report.Male.Id}/{@report.Female.Id}") /></td>
                 </tr>

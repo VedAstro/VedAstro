@@ -14,6 +14,10 @@
     <Content Include="Login.html" />
     <Content Include="Horoscope.html" />
     <Content Include="Home.html" />
+    <Content Include="sound\positive-notification.mp3">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="**\*.js" />
     <Content Include="**\*.css" />
     <Content Include="**\*.jpg" />
@@ -51,6 +55,7 @@
     <None Remove="js\MatchChecker.js" />
     <None Remove="Login.html" />
     <None Remove="MatchChecker.html" />
+    <None Remove="sound\positive-notification.mp3" />
     <None Remove="VedAstro.js" />
   </ItemGroup>
 
@@ -80,6 +85,7 @@
     <PublishFile Remove="js\MatchChecker.js" />
     <PublishFile Remove="Login.html" />
     <PublishFile Remove="MatchChecker.html" />
+    <PublishFile Remove="sound\positive-notification.mp3" />
     <PublishFile Remove="VedAstro.js" />
   </ItemGroup>
 

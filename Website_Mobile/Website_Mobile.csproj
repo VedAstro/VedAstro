@@ -10,6 +10,7 @@
     <Content Include="coming-soon.html" />
     <Content Include="AddPerson.html" />
     <Content Include="404.html" />
+    <Content Include="GoodTimeFinder.html" />
     <Content Include="MatchChecker.html" />
     <Content Include="Login.html" />
     <Content Include="Horoscope.html" />
@@ -40,6 +41,7 @@
     <None Remove="404.html" />
     <None Remove="AddPerson.html" />
     <None Remove="coming-soon.html" />
+    <None Remove="GoodTimeFinder.html" />
     <None Remove="Horoscope.html" />
     <None Remove="image\ai-chat-card.jpg" />
     <None Remove="image\dasa-card.jpg" />
@@ -52,6 +54,7 @@
     <None Remove="image\vedastro-api-logo.png" />
     <None Remove="image\zodiac-wheel-3-white.png" />
     <None Remove="js\404.js" />
+    <None Remove="js\GoodTimeFinder.js" />
     <None Remove="js\MatchChecker.js" />
     <None Remove="Login.html" />
     <None Remove="MatchChecker.html" />
@@ -65,6 +68,7 @@
     <PublishFile Remove="app.js" />
     <PublishFile Remove="coming-soon.html" />
     <PublishFile Remove="favicon.ico" />
+    <PublishFile Remove="GoodTimeFinder.html" />
     <PublishFile Remove="Home.html" />
     <PublishFile Remove="Horoscope.html" />
     <PublishFile Remove="image\ai-chat-card.jpg" />
@@ -79,6 +83,7 @@
     <PublishFile Remove="image\zodiac-wheel-3-white.png" />
     <PublishFile Remove="js\404.js" />
     <PublishFile Remove="js\AddPerson.js" />
+    <PublishFile Remove="js\GoodTimeFinder.js" />
     <PublishFile Remove="js\Home.js" />
     <PublishFile Remove="js\Horoscope.js" />
     <PublishFile Remove="js\Login.js" />

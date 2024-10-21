@@ -91,6 +91,7 @@ function generateEasyMatchReportHtml(maleName, femaleName, matchReportJson) {
     `;
 }
 
+//given a list of kuta predictions (array), converts to HTML table
 function convertPredictionListToHtml(predictionListJson) {
     return `
     <table class="table table-striped table-hover table-bordered shadow" style="max-width:764px; border-radius: 10px; overflow: hidden;"> <!--overflow hidden to make border rounded work-->

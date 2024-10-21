@@ -53,6 +53,9 @@ async function OnClickCalculate_Horoscope() {
     await initHouseDataTable(timeUrl);
     await initAshtakvargaTable(timeUrl);
 
+    //play sound for better UX
+    playBakingDoneSound();
+
     //hide loading
     Swal.close();
 }
@@ -153,7 +156,7 @@ async function initHouseDataTable(birthTimeUrl) {
 
     //data used to generate table
     var inputArguments = {
-        TimeUrl: birthTimeUrl, 
+        TimeUrl: birthTimeUrl,
         HoraryNumber: 0,
         RotateDegrees: 0,
         Ayanamsa: ayanamsaSelector.SelectedAyanamsa

@@ -23,9 +23,9 @@ namespace VedAstro.Library
                 return (string)field.GetValue(null);
             }
 
-            Console.WriteLine($"The key --> '{key}' is missing sweetheart! Contact us for a testing Key --> vedastro.org/Contact");
-            // give nice message to caller if missing 
-            //throw new Exception($"The key --> '{key}' is missing sweetheart! Contact us for a testing Key --> vedastro.org/Contact");
+            Console.WriteLine($"The key --> '{key}' is missing sweetheart! Contact us for a testing Key --> vedastro.org/Contact.html");
+            //give nice message to caller if missing
+            throw new Exception($"The key --> '{key}' is missing sweetheart! Contact us for a testing Key --> vedastro.org/Contact.html");
             return "";
         }
     }

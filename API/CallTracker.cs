@@ -13,15 +13,11 @@ public static class CallTracker
 
     static CallTracker()
     {
-        //todo cleanup
-        var storageUri = $"https://vedastroapistorage.table.core.windows.net/{tableName}";
-        string accountName = "vedastroapistorage";
-        string storageAccountKey = Secrets.Get("VedAstroApiStorageKey");
+        string connectionString = Secrets.Get("CentralStorageConnectionString");
 
         //save reference for late use
-        tableServiceClient = new TableServiceClient(new Uri(storageUri), new TableSharedKeyCredential(accountName, storageAccountKey));
+        tableServiceClient = new TableServiceClient(connectionString);
         tableClient = tableServiceClient.GetTableClient(tableName);
-
     }
 
     public static bool IsRunning(string callerId)

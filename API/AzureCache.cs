@@ -16,11 +16,15 @@ namespace API
         private static readonly BlobContainerClient blobContainerClient;
         private const string blobContainerName = "cache";
 
+        /// <summary>
+        /// below code is run before 1st run of any class use
+        /// init connection strings
+        /// </summary>
         static AzureCache()
         {
             //get the connection string stored separately (for security reasons)
-            //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Secrets.Get("API_STORAGE");
+            //note: dark art secrets are in Secrets.cs
+            var storageConnectionString = Secrets.Get("CentralStorageConnectionString");
 
             //get image from storage
             blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
@@ -227,7 +231,7 @@ namespace API
                 {
 
 #if DEBUG
-                    Console.WriteLine($"NO CACHE! RUNNING COMPUTE : {callerInfo.CallerId}");
+                    Console.WriteLine($"B: NO CACHE! RUNNING COMPUTE : {callerInfo.CallerId}");
 #endif
                     //no waiting
                     //will execute and save the data to cache,

@@ -108,7 +108,13 @@ namespace VedAstro.Library
         /// Gets STD birth time zone for person
         /// exp : +08:00
         /// </summary>
-        public string BirthTimeZone => this.BirthTime.GetStdDateTimeOffset().ToString("zzz");
+        public string BirthTimeZoneString => this.BirthTime.GetStdDateTimeOffset().ToString("zzz");
+
+        /// <summary>
+        /// Gets STD birth time zone for person
+        /// exp : +08:00
+        /// </summary>
+        public TimeSpan BirthTimeZone => this.BirthTime.GetStdDateTimeOffset().Offset;
 
         /// <summary>
         /// Gets STD birth hour minute for person (24H format)
@@ -290,7 +296,7 @@ namespace VedAstro.Library
         /// Returns STD birth time without hour and minute (for modification by caller)
         /// EXP: 23/12/2000 +02:00
         /// </summary>
-        public string BirthDateMonthYearOffset => $"{this.BirthDateMonthYear} {this.BirthTimeZone}";
+        public string BirthDateMonthYearOffset => $"{this.BirthDateMonthYear} {this.BirthTimeZoneString}";
 
         public XElement ToXml()
         {

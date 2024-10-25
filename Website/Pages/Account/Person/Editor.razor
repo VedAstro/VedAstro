@@ -181,7 +181,7 @@
         _genderInput = SelectedPerson.Gender.ToString();
 
         //set timezone if NOT creator, else component will auto set
-        var personBirthTimeOffset = SelectedPerson.BirthTimeZone;
+        var personBirthTimeOffset = SelectedPerson.BirthTimeZoneString;
         _timeInput.TimeZone = personBirthTimeOffset;
 
         var birthTimeHourMin = SelectedPerson.BirthHourMinute;

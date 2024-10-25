@@ -40,7 +40,7 @@
 [![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library) [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://pypi.org/project/VedAstro/)  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
 
 # 🆓 100% Open Source
-As the sage [Parashara](https://en.wikipedia.org/wiki/Parashara) imparted the wisdom of the stars freely, unbound by wealth or claim, so too does VedAstro, a gift unencumbered by price or title.
+The sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
 
 ![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
 

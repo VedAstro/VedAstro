@@ -149,7 +149,7 @@ namespace VedAstro.Library
         /// 
         /// Note: format was heavily modified to squeeze as much data into 260 char URL server limit
         /// </summary>
-        public static async Task<EventsChart> FromUrl(string url)
+        public static async Task<EventsChart>  FromUrl(string url)
         {
             //NOTE: 2 possible types URL, with "TimePreset/1Week" or with "Start/.../End/..." 
             //split URL into data pieces
@@ -167,11 +167,13 @@ namespace VedAstro.Library
 
                 //use birth location for chart time (needs testing)
                 var person = Tools.GetPersonById(personId);
-                var location = person.GetBirthLocation();
+                //var location = person.GetBirthLocation();
+
+                //use timezone at birth location,
+                //NOTE: we ASSUME user is still at birth location!
+                var systemTimezone = person.BirthTimeZone;
 
                 //start and end time based on preset set
-                var systemTimezone = Tools.GetSystemTimezone();
-
                 var timeRange = EventChartTools.AutoCalculateTimeRange(person, parts[2], systemTimezone);
                 var startTime = timeRange.start;
                 var endTime = timeRange.end;

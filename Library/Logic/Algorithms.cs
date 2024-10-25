@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -19,19 +21,24 @@ namespace VedAstro.Library
         private static double _scoreStepSize = 1;
 
         /// <summary>
-        /// Gets all algorithm methods in nice string for selection in Website
-        /// DYNAMIC!
+        /// Gets list all algorithm methods names & their descriptions for use in Website
         /// </summary>
-        public static MethodInfo[] All => typeof(Algorithm)
-            .GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-            .Where(m => !m.Name.StartsWith("get_") && !m.Name.StartsWith("set_"))
-            .ToArray();
+        public static JArray All => JArray.FromObject(
+            typeof(Algorithm)
+                .GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(m => !m.Name.StartsWith("get_") && !m.Name.StartsWith("set_"))
+                .Select(m => new
+                {
+                    Name = m.Name, //note : leave as unspaced name for id generation & let web js do camel spacing
+                    Description = ((DescriptionAttribute[])m.GetCustomAttributes(typeof(DescriptionAttribute), false)).FirstOrDefault()?.Description
+                })
+                .ToArray()
+        );
 
-        /// <summary>
-        /// Disables all auto coloring, for use with Highlight function. 💡✝️
-        /// </summary>
+        [Description("Turns off auto judging of events, all events coloured as Nuetral.")]
         public static double Neutral(Event foundEvent, Person person) => 0;
 
+        [Description("Events coloured as described by BV Raman from book.")]
         public static double General(Event foundEvent, Person person)
         {
             //score from general nature of event
@@ -49,10 +56,7 @@ namespace VedAstro.Library
             return generalScore;
         }
 
-        /// <summary>
-        /// Adds ashtakvarga bindu to only gochara events
-        /// can give a varied score from +3 to -3
-        /// </summary>
+        [Description("Adds ashtakvarga bindu to only gochara events, can give a varied score from +3 to -3")]
         public static double GocharaAshtakvargaBindu(Event foundEvent, Person person)
         {
             //TODO NOTE: SUSPECT INVALID OUTPUT DATA NEEDS VALIDATION
@@ -91,9 +95,7 @@ namespace VedAstro.Library
             throw new Exception("Not meant to hit here");
         }
 
-        /// <summary>
-        /// if strongest planet, gets an extra point
-        /// </summary>
+        [Description("if strongest planet, gets an extra point")]
         public static double StrongestPlanet(Event foundEvent, Person person)
         {
             //get top planet
@@ -119,6 +121,7 @@ namespace VedAstro.Library
             return planetNatureScore;
         }
 
+        [Description("if weakest planet, gets an extra point")]
         public static double WeakestPlanet(Event foundEvent, Person person)
         {
             //get bottom planet
@@ -144,6 +147,7 @@ namespace VedAstro.Library
             return planetNatureScore;
         }
 
+        [Description("if strongest housed, gets an extra point")]
         public static double StrongestHouse(Event foundEvent, Person person)
         {
             //get top house
@@ -166,6 +170,7 @@ namespace VedAstro.Library
             return houseNatureScore;
         }
 
+        [Description("if strongest housed, gets an extra point")]
         public static double WeakestHouse(Event foundEvent, Person person)
         {
             //get bottom house
@@ -189,9 +194,7 @@ namespace VedAstro.Library
             return houseNatureScore;
         }
 
-        /// <summary>
-        /// If all planets bad, negative step size
-        /// </summary>
+        [Description("If all planets bad, negative step size")]
         public static double CombinedBad(Event foundEvent, Person person)
         {
             //all planets in event is bad
@@ -213,9 +216,7 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// only dasa events get good bad score based on ishata and kashata, bala book pg 110
-        /// </summary>
+        [Description("only dasa events get good bad score based on ishata and kashata, bala book pg 110")]
         public static double IshtaKashtaPhala(Event foundEvent, Person person)
         {
             //must be a dasa event, has PD in event name
@@ -234,6 +235,8 @@ namespace VedAstro.Library
             return score;
         }
 
+        [Description("Gets planets influenceing the dasa, picks the strongest " +
+                     "planet in that dasa. Uses the Ishta Kashta score of said planet.")]
         public static double IshtaKashtaPhalaDegree(Event foundEvent, Person person)
         {
             //must be a dasa event, has PD in event name
@@ -251,6 +254,9 @@ namespace VedAstro.Library
             return score;
         }
 
+        [Description("Combines the strenghts of all the planets in an event to a total score. " +
+                     "If the planet's shadbala is below 50% compared to others, it pulls the total down (negative)." +
+                     "and if the shadbala is higher, then it increases the total score. From a range between 0 to 100.")]
         public static double PlanetStrengthDegree(Event foundEvent, Person person)
         {
             //get all planets in event, scan and give score

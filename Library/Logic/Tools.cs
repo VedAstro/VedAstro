@@ -72,6 +72,32 @@ namespace VedAstro.Library
 
         public const string BlobContainerName = "vedastro-site-data";
 
+        /// <summary>
+        /// takes a camel/pascal case string and returns a string with spaces between the words
+        /// </summary>
+        public static string CamelPascalCaseToSpaced(string camelCase)
+        {
+            // Create a StringBuilder to efficiently build the resulting string
+            var result = new StringBuilder();
+
+            // Iterate through each character in the input camel case string
+            foreach (var c in camelCase)
+            {
+                // Check if the character is an uppercase letter and we've already added at least one character to the result
+                if (char.IsUpper(c) && result.Length > 0)
+                {
+                    // Add a space before adding the character to separate words
+                    result.Append(' ');
+                }
+
+                // Add each character to the result, regardless of whether it's uppercase or lowercase
+                result.Append(c);
+            }
+
+            // Return the resulting string as a string
+            return result.ToString();
+        }
+
 
         /// <summary>
         /// Searches for person's image on BING and return one most probable as result
@@ -1052,8 +1078,8 @@ namespace VedAstro.Library
         public static List<Time> GetTimeSlicesOnBirthDay(Person person, double precisionInHours)
         {
             //start of day till end of day
-            var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
-            var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
+            var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZoneString}", person.GetBirthLocation());
+            var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZoneString}", person.GetBirthLocation());
 
             var finalList = Time.GetTimeListFromRange(dayStart, dayEnd, precisionInHours);
 
@@ -1338,8 +1364,6 @@ namespace VedAstro.Library
 
         }
 
-
-
         /// <summary>
         /// Extracts data from an Exception puts it in a nice XML
         /// </summary>
@@ -1533,10 +1557,12 @@ namespace VedAstro.Library
         public static double DaysToHours(double days) => days * 24.0;
 
         public static double WeeksToHours(double weeks) => weeks * 7.0 * 24.0;
+        
         public static double MonthsToHours(double months) => months * 30.44 * 24.0; // Approximate average number of days in a month
+        
         public static double YearsToHours(double years) => years * 365.25 * 24.0; // Approximate average number of days in a year (accounting for leap years)
+        
         public static double DecadesToHours(double decades) => decades * 10.0 * 365.25 * 24.0;
-
 
         public static double MinutesToHours(double minutes) => minutes / 60.0;
 
@@ -1643,7 +1669,6 @@ namespace VedAstro.Library
             return truncate.HasValue && truncate.Value < id.Length ? id.Substring(0, truncate.Value) : id;
         }
 
-
         /// <summary>
         /// Converts any list to comma separated string
         /// Note: calls ToString();
@@ -1677,9 +1702,6 @@ namespace VedAstro.Library
 
             return combinedNames;
         }
-
-
-
 
 
 
@@ -1890,8 +1912,6 @@ namespace VedAstro.Library
 
             return offset;
         }
-
-
 
         /// <summary>
         /// Given a location & time, will use live/local VedAstro API server to get data
@@ -2309,8 +2329,6 @@ namespace VedAstro.Library
             //return packaged data to caller
             return new StringContent(dataString, encoding, mediaType);
         }
-
-
 
         /// <summary>
         /// Extracts data from an Exception puts it in a nice JSON

@@ -14008,6 +14008,12 @@ namespace VedAstro.Library
         #region TAGS STATIC
 
         /// <summary>
+        /// Gets all possible algorithm functions, for printing on website for user selection when generating events chart.
+        /// </summary>
+        public static JArray GetAllEventsChartAlgorithms() => Algorithm.All;
+        
+
+        /// <summary>
         /// keywords or tag related to a house
         /// </summary>
         public static string GetHouseTags(HouseName house)

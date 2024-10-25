@@ -1530,17 +1530,40 @@ class CommonTools {
     }
 
     //converts camel case to pascal case, like "settings.keyColumn" to "settings.KeyColumn"
-    static ConvertCamelCaseKeysToPascalCase(obj) {
+    static CamelCaseKeysToPascalCase(obj) {
         let newObj = Array.isArray(obj) ? [] : {};
         for (let key in obj) {
             let value = obj[key];
             let newKey = key.charAt(0).toUpperCase() + key.slice(1);
             if (value && typeof value === "object") {
-                value = CommonTools.ConvertCamelCaseKeysToPascalCase(value);
+                value = CommonTools.CamelCaseKeysToPascalCase(value);
             }
             newObj[newKey] = value;
         }
         return newObj;
+    }
+
+    /**
+     * takes a camel case string and returns a string with spaces between the words
+     */
+    static CamelPascalCaseToSpaced(camelCase) {
+        // Create a string to efficiently build the resulting string
+        let result = '';
+
+        // Iterate through each character in the input camel case string
+        for (const c of camelCase) {
+            // Check if the character is an uppercase letter and we've already added at least one character to the result
+            if (c === c.toUpperCase() && result.length > 0) {
+                // Add a space before adding the character to separate words
+                result += ' ';
+            }
+
+            // Add each character to the result, regardless of whether it's uppercase or lowercase
+            result += c;
+        }
+
+        // Return the resulting string as a string
+        return result;
     }
 
 }
@@ -2671,7 +2694,7 @@ class PersonSelectorBox {
 
           </ul>
         </div>
-        <!--NOTE: storage key is inject into URL, so that "add person" page knows where to set, for auto selection on return-->
+        <!-- NOTE: storage key is inject into URL, so that "add person" page knows where to set, for auto selection on return -->
         <a href="./AddPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2">
           <iconify-icon icon="ant-design:user-add-outlined" width="25" height="25" ></iconify-icon>
         </a>
@@ -3559,7 +3582,7 @@ class AstroTable {
 
     constructor(rawSettings) {
         //correct if property names is camel case (for Blazor)
-        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+        var settings = CommonTools.CamelCaseKeysToPascalCase(rawSettings);
 
         //if column data is not supplied use default
         if (!settings.ColumnData) {
@@ -3805,7 +3828,7 @@ class AstroTable {
     ConvertRawParamsToUrl(userInputParams) {
         //handle camel case to pascal case (for blazor only)
         userInputParams =
-            CommonTools.ConvertCamelCaseKeysToPascalCase(userInputParams);
+            CommonTools.CamelCaseKeysToPascalCase(userInputParams);
 
         //extract from input
         var timeUrlParam = userInputParams.TimeUrl;
@@ -4280,7 +4303,7 @@ class AstroTable {
 class AshtakvargaTable {
     constructor(rawSettings) {
         //correct if property names is camel case (for Blazor)
-        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+        var settings = CommonTools.CamelCaseKeysToPascalCase(rawSettings);
 
         //if column data is not supplied use default
         if (!settings.ColumnData) {
@@ -4318,7 +4341,7 @@ class AshtakvargaTable {
 
     async GenerateTable(inputArguments) {
         inputArguments =
-            CommonTools.ConvertCamelCaseKeysToPascalCase(inputArguments);
+            CommonTools.CamelCaseKeysToPascalCase(inputArguments);
 
         //clear old data if any
         $(`#${this.ElementID}`).empty();
@@ -4769,7 +4792,7 @@ class HoroscopeChat {
 
     initializeSettingData(rawSettings) {
         //correct if property names is camel case (for Blazor)
-        var settings = CommonTools.ConvertCamelCaseKeysToPascalCase(rawSettings);
+        var settings = CommonTools.CamelCaseKeysToPascalCase(rawSettings);
 
         //expand data inside settings input
         this.ElementID = settings.ElementID;
@@ -5585,5 +5608,141 @@ class HoroscopeChat {
         };
         var aiReplyData = JSON.stringify(jsonObject);
         this.printAIReplyMessageToView(aiReplyData);
+    }
+}
+
+class AlgorithmsSelector {
+    // Class properties
+    ElementID = "";
+
+    // Constructor to initialize the PageHeader object
+    constructor(elementId, defaultSelection) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+        this.DefaultSelection = defaultSelection;
+
+        // Call the method to initialize the main body of the page header
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body of the page header
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTM and inject it into the element
+        let htmlString = await this.generateHtmlBody();
+        $(`#${this.ElementID}`).html(htmlString);
+
+        //set defaults
+        algoSelector.programaticallySelect(this.DefaultSelection);
+    }
+
+    //given a string like "General,PlanetStrengthDegree,IshtaKashtaPhalaDegree"
+    //will select the checkboxes programatically
+    programaticallySelect(selectionString) {
+
+        // Split the selection string into an array of algorithm names
+        const selectedAlgorithms = selectionString.split(",");
+
+        // Get the element with the specified ID
+        const element = document.getElementById(this.ElementID);
+
+        // Select all checkboxes within the element
+        const checkboxes = element.querySelectorAll('input[type="checkbox"]');
+
+        // Iterate over the checkboxes and update their checked state
+        checkboxes.forEach((checkbox) => {
+            // Get the algorithm name from the checkbox ID (without the "checkbox_" prefix)
+            const algorithmName = checkbox.id.replace("checkbox_", "");
+
+            // Check if the algorithm name is in the selected algorithms array
+            if (selectedAlgorithms.includes(algorithmName)) {
+                // If it is, set the checkbox to checked
+                checkbox.checked = true;
+            } else {
+                // If not, set the checkbox to unchecked
+                checkbox.checked = false;
+            }
+        });
+    }
+
+    /**
+     * Returns a string of selected algorithm names or null if none are selected. EXP: Neutral,StrongestPlanet
+     */
+    getSelectedAlgorithmsAsString() {
+        // Select all checkboxes inside the element with the specified ID
+        const checkboxes = document.querySelectorAll(`#${this.ElementID} input[type="checkbox"]`);
+
+        // Convert the NodeList to an array and filter to only include checked checkboxes
+        const selectedAlgorithms = Array.from(checkboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.id.replace('checkbox_', '')); // Remove 'checkbox_' prefix from IDs
+
+        // Return null if no algorithms are selected, otherwise return a comma-separated string of algorithm names
+        return selectedAlgorithms.length === 0 ? null : selectedAlgorithms.join(',');
+    }
+
+
+    async fetchAlgorithmListFromApi() {
+        try {
+            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetAllEventsChartAlgorithms`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data.Status !== 'Pass') {
+                throw new Error('Failed to retrieve data. Status is not "Pass".');
+            }
+
+            return data.Payload;
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return []; // Return an empty array if there's an error
+        }
+    }
+
+    convertAlgoListToHtml(algorithmInfoList) {
+        let generatedHtml = "";
+
+        //each info contains name & description
+        algorithmInfoList.forEach((algoInfo) => {
+            generatedHtml += `
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="checkbox_${algoInfo.Name}">
+          <label class="form-check-label" title="${algoInfo.Description}" for="checkbox_${algoInfo.Name}">${CommonTools.CamelPascalCaseToSpaced(algoInfo.Name)}</label>
+        </div>
+      `;
+        });
+
+        return generatedHtml;
+    }
+
+    // Method to generate the HTML
+    async generateHtmlBody() {
+
+        //get name & description about available algorithms from API
+        let algorithmList = await this.fetchAlgorithmListFromApi();
+
+        //convert to data to HTML
+        let algorithmListHtml = this.convertAlgoListToHtml(algorithmList);
+
+        return `
+<div class="input-group vstack mb-3">
+    <label style="min-width: 134.4px;" class="input-group-text rounded">
+        <div class="me-2" style="">
+            <iconify-icon icon="fluent:math-symbols-24-filled" width="25" height="25"></iconify-icon>
+        </div>Algorithms
+        <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
+        </div>
+    </label>
+
+    <div class="form-control d-flex flex-wrap gap-2 rounded" style="width: fit-content;">
+        ${algorithmListHtml}
+    </div>
+</div>
+    `;
     }
 }

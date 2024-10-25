@@ -189,8 +189,8 @@ namespace VedAstro.Console
             var summaryOptions = new ChartOptions(algorithmFuncsList);
 
             //time range is preset to full life 100 years from birth
-            var start = new Time($"00:00 {startYear} {foundPerson.BirthTimeZone}", foundPerson.GetBirthLocation());
-            var end = new Time($"00:00 {endYear} {foundPerson.BirthTimeZone}", foundPerson.GetBirthLocation());
+            var start = new Time($"00:00 {startYear} {foundPerson.BirthTimeZoneString}", foundPerson.GetBirthLocation());
+            var end = new Time($"00:00 {endYear} {foundPerson.BirthTimeZoneString}", foundPerson.GetBirthLocation());
             var timeRange = new TimeRange(start, end);
 
             //calculate based on max screen width,

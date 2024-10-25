@@ -323,6 +323,8 @@ namespace API
         /// </summary>
         public static string ParseAndGetFormat(string fullParamString)
         {
+            //handle no parameter API calls
+            if (fullParamString == null) { return ""; }
             try
             {
                 //if url contains word "ayanamsa" than process it

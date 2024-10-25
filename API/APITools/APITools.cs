@@ -530,7 +530,7 @@ namespace API
         {
 
 #if DEBUG
-            Console.WriteLine($"NO CACHE! RUNNING COMPUTE : {cacheName}");
+            Console.WriteLine($"A: NO CACHE! RUNNING COMPUTE : {cacheName}");
 #endif
 
             BlobClient? chartBlobClient;

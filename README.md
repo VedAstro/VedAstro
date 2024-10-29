@@ -295,7 +295,7 @@ Hard coded event data like name is stored in XML file.
 A copy of the event name is stored as Enum to link
 Calculator Methods with data from XML.
 These static methods are the logic to check
-if an event occured. No astro calculation done at this stage.
+if an event occurred. No astro calculation done at this stage.
 This is the linking process of the logic and data.
 
                       -------+

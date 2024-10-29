@@ -44,51 +44,6 @@ namespace API
 
 
 
-        [Function(nameof(FindBirthTimeAnimal))]
-        public static async Task<HttpResponseData> FindBirthTimeAnimal([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = FindBirthTime_Animal_Person)] HttpRequestData incomingRequest, string personId)
-        {
-
-            try
-            {
-                //get person record
-                var foundPerson = Tools.GetPersonById(personId);
-
-                //get list of possible birth time slice in the current birth day
-                var timeSlices = Tools.GetTimeSlicesOnBirthDay(foundPerson, 1);
-
-                //get predictions for each slice and place in out going list  
-                var compiledObj = new JObject();
-                foreach (var timeSlice in timeSlices)
-                {
-                    //replace original birth time
-                    var personAdjusted = foundPerson.ChangeBirthTime(timeSlice);
-
-                    //get the animal prediction for possible birth time
-                    var newBirthConstellation = Calculate.MoonConstellation(personAdjusted.BirthTime).GetConstellationName();
-                    var animal = Calculate.YoniKutaAnimalFromConstellation(newBirthConstellation);
-
-                    //nicely packed
-                    var named = new JProperty(timeSlice.ToString(), animal.ToString());
-                    compiledObj.Add(named);
-
-                }
-
-
-                //send image back to caller
-                return APITools.PassMessageJson(compiledObj, incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log it
-                APILogger.Error(e);
-                var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
-                response.Headers.Add("Call-Status", "Fail"); //caller checks this
-                response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
-                return response;
-            }
-
-        }
 
         [Function(nameof(FindBirthTimeEventsChartPerson))]
         public static async Task<HttpResponseData> FindBirthTimeEventsChartPerson([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = FindBirthTime_EventsChart_Person)] HttpRequestData incomingRequest, string personId)
@@ -166,7 +121,7 @@ namespace API
 
 
         /// <summary>
-        /// Finds in same same day of birth, for quick & easy search
+        /// Finds in same day of birth, for quick & easy search
         /// </summary>
         [Function(nameof(FindBirthTimeRisingSignPerson))]
         public static async Task<HttpResponseData> FindBirthTimeRisingSignPerson([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = FindBirthTime_RisingSign_Person)] HttpRequestData incomingRequest, string personId)
@@ -176,10 +131,10 @@ namespace API
                 //get person record
                 var foundPerson = Tools.GetPersonById(personId);
 
-                //get list of possible birth time slice in the current birth day
+                //get list of possible birth time slice in the current birthday
                 var timeSlices = Tools.GetTimeSlicesOnBirthDay(foundPerson, 1);
 
-                //get predictions for each slice and place in out going list  
+                //get predictions for each slice and place in outgoing list  
                 var compiledObj = new JObject();
                 foreach (var timeSlice in timeSlices)
                 {
@@ -191,7 +146,6 @@ namespace API
                     //nicely packed
                     var named = new JProperty(timeSlice.ToString(), selected.ToString());
                     compiledObj.Add(named);
-
                 }
 
 

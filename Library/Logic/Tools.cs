@@ -98,7 +98,6 @@ namespace VedAstro.Library
             return result.ToString();
         }
 
-
         /// <summary>
         /// Searches for person's image on BING and return one most probable as result
         /// note uses thumbnail version for speed and data save
@@ -149,7 +148,6 @@ namespace VedAstro.Library
             return response;
         }
 
-
         /// <summary>
         /// SPECIAL METHOD made to allow files straight from blob to be sent to caller
         /// as fast as possible
@@ -167,7 +165,6 @@ namespace VedAstro.Library
             response.Body = fileBlobClient.OpenRead();
             return response;
         }
-
 
         /// <summary>
         /// Given an image in byte form, will save it as Person profile image in correct place with ID as file name
@@ -245,7 +242,6 @@ namespace VedAstro.Library
 
         }
 
-
         ///// <summary>
         ///// Gets any file from Azure blob storage in string form
         ///// </summary>
@@ -256,8 +252,6 @@ namespace VedAstro.Library
 
         //    return xmlFile;
         //}
-
-
 
         /// <summary>
         /// Saves XML file direct to Azure storage
@@ -270,8 +264,6 @@ namespace VedAstro.Library
             //upload modified list to storage
             await Tools.OverwriteBlobData(fileClient, dataXml);
         }
-
-
 
         /// <summary>
         /// check if a person's profile image already exist on server
@@ -377,8 +369,7 @@ namespace VedAstro.Library
 
             return response;
         }
-
-
+        
         public static string GetCallerId(string userId, string visitorId)
         {
             var IsLoggedIn = userId != "101";
@@ -1080,6 +1071,21 @@ namespace VedAstro.Library
             //start of day till end of day
             var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZoneString}", person.GetBirthLocation());
             var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZoneString}", person.GetBirthLocation());
+
+            var finalList = Time.GetTimeListFromRange(dayStart, dayEnd, precisionInHours);
+
+            return finalList;
+        }
+
+        /// <summary>
+        /// used for finding uncertain time in certain birthday
+        /// split a day into precision based slices of possible birth times
+        /// </summary>
+        public static List<Time> GetTimeSlicesOnBirthDay(Time birthTime, double precisionInHours)
+        {
+            //start of day till end of day
+            var dayStart = new Time($"00:00 {birthTime.DateMonthYear} {birthTime.TimeZoneString}", birthTime.GetGeoLocation());
+            var dayEnd = new Time($"23:59 {birthTime.DateMonthYear} {birthTime.TimeZoneString}", birthTime.GetGeoLocation());
 
             var finalList = Time.GetTimeListFromRange(dayStart, dayEnd, precisionInHours);
 

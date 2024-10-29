@@ -323,7 +323,7 @@ generated from a start time & end time (inputed at runtime).
 An Event is created if IsOccuring is true.
 This's a merger of Time and EventData to create an
 Event at a specific time. This Event is then used
-throughout the progam.
+throughout the program.
 
 
 
@@ -406,7 +406,7 @@ Shows only clean & nice html index for bots from best known SEs
 
 ## Stop 404 error
 for direct access Blazor page via static storage without 404 error
-since no page acctually exists at page url, blazor takes url and runs the page as app
+since no page actually exists at page url, blazor takes url and runs the page as app
 using rule engine this is possible
 rules also make sure not to redirect file & api access only page access
 - not begins with "/api/"

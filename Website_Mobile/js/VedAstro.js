@@ -4490,13 +4490,10 @@ class StrengthChart {
     async fetchPlanetStrength(inputArguments) {
         try {
             const response = await fetch(`${VedAstro.ApiDomain}/Calculate/PlanetShadbalaPinda/PlanetName/All/${inputArguments.TimeUrl}Ayanamsa/${inputArguments.Ayanamsa}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); } //server connection check
+
             const data = await response.json();
-            if (data.Status !== 'Pass') {
-                throw new Error('Failed to retrieve data. Status is not "Pass".');
-            }
+            if (data.Status !== 'Pass') { throw new Error('Failed to retrieve data. Status is not "Pass".'); } //calc data check
 
             // arrange planets and their strengths for easy access by name
             const shadbalaPindaData = {};

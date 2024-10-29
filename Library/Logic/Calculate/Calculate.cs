@@ -31,6 +31,7 @@ using Azure.Storage.Blobs;
 using System.Net.Mime;
 using Microsoft.Extensions.Hosting;
 using System.Xml.Linq;
+using Microsoft.Bing.ImageSearch.Models;
 
 namespace VedAstro.Library
 {
@@ -93,6 +94,54 @@ namespace VedAstro.Library
 
         //----------------------------------------CORE CODE---------------------------------------------
 
+        #region BIRTH TIME FINDER
+
+        public static JObject FindBirthTimeByAnimal(Time possibleBirthTime, double precisionHours = 1)
+        {
+            //get list of possible birth time slice in the current birth day
+            var timeSlices = Tools.GetTimeSlicesOnBirthDay(possibleBirthTime, 1);
+
+            //get predictions for each slice and place in out going list  
+            var compiledObj = new JObject();
+            foreach (var timeSlice in timeSlices)
+            {
+                //get the animal prediction for possible birth time
+                var newBirthConstellation = Calculate.MoonConstellation(timeSlice).GetConstellationName();
+                var animal = Calculate.YoniKutaAnimalFromConstellation(newBirthConstellation);
+
+                //nicely packed 📦
+                var named = new JProperty(timeSlice.ToString(), animal.ToString());
+                compiledObj.Add(named);
+            }
+
+            //send data back to caller
+            return compiledObj;
+        }
+        
+        public static JObject FindBirthTimeByRisingSign(Time possibleBirthTime, double precisionHours = 1)
+        {
+            //get list of possible birth time slice in the current birth day
+            var timeSlices = Tools.GetTimeSlicesOnBirthDay(possibleBirthTime, 1);
+
+            //get predictions for each slice and place in out going list  
+            var compiledObj = new JObject();
+            foreach (var timeSlice in timeSlices)
+            {
+                //get all predictions for person
+                var allPredictions = Tools.GetHoroscopePrediction(timeSlice);
+                //select only rising sign
+                var risingSignPredict = allPredictions.Where(x => x.FormattedName.Contains("Rising")).FirstOrDefault();
+
+                //nicely packed 📦
+                var named = new JProperty(timeSlice.ToString(), risingSignPredict.ToString());
+                compiledObj.Add(named);
+            }
+
+            //send data back to caller
+            return compiledObj;
+        }
+
+        #endregion
 
         #region PERSON
 
@@ -14011,7 +14060,7 @@ namespace VedAstro.Library
         /// Gets all possible algorithm functions, for printing on website for user selection when generating events chart.
         /// </summary>
         public static JArray GetAllEventsChartAlgorithms() => Algorithm.All;
-        
+
 
         /// <summary>
         /// keywords or tag related to a house

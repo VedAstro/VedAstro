@@ -389,6 +389,17 @@ namespace VedAstro.Library
         /// </summary>
         public readonly string StdHourMinuteText => _stdTime.ToString("HH:mm");
 
+        /// <summary>
+        /// Gets STD Date Month Year
+        /// exp: 31/12/1999
+        /// </summary>
+        public string DateMonthYear => this.GetStdDateTimeOffset().ToString("dd/MM/yyyy"); //note "MM" is month, not "mm"
+
+        /// <summary>
+        /// Gets STD birth time zone
+        /// exp : +08:00
+        /// </summary>
+        public string TimeZoneString => this.GetStdDateTimeOffset().ToString("zzz");
 
         /// <summary>
         /// return internal std time

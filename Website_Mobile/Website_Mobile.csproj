@@ -11,6 +11,7 @@
     <Content Include="AddPerson.html" />
     <Content Include="404.html" />
     <Content Include="GoodTimeFinder.html" />
+    <Content Include="BirthTimeFinder.html" />
     <Content Include="MatchChecker.html" />
     <Content Include="Login.html" />
     <Content Include="Horoscope.html" />
@@ -32,6 +33,7 @@
   <ItemGroup>
     <Content Remove="app.js" />
     <Content Remove="js\AddPerson.js" />
+    <Content Remove="js\BirthTimeFinder.js" />
     <Content Remove="js\Home.js" />
     <Content Remove="js\Horoscope.js" />
     <Content Remove="js\Login.js" />
@@ -40,6 +42,7 @@
   <ItemGroup>
     <None Remove="404.html" />
     <None Remove="AddPerson.html" />
+    <None Remove="BirthTimeFinder.html" />
     <None Remove="coming-soon.html" />
     <None Remove="GoodTimeFinder.html" />
     <None Remove="Horoscope.html" />
@@ -66,6 +69,7 @@
     <PublishFile Remove="404.html" />
     <PublishFile Remove="AddPerson.html" />
     <PublishFile Remove="app.js" />
+    <PublishFile Remove="BirthTimeFinder.html" />
     <PublishFile Remove="coming-soon.html" />
     <PublishFile Remove="favicon.ico" />
     <PublishFile Remove="GoodTimeFinder.html" />
@@ -83,6 +87,7 @@
     <PublishFile Remove="image\zodiac-wheel-3-white.png" />
     <PublishFile Remove="js\404.js" />
     <PublishFile Remove="js\AddPerson.js" />
+    <PublishFile Remove="js\BirthTimeFinder.js" />
     <PublishFile Remove="js\GoodTimeFinder.js" />
     <PublishFile Remove="js\Home.js" />
     <PublishFile Remove="js\Horoscope.js" />

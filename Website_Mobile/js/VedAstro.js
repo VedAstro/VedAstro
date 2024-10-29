@@ -2772,6 +2772,8 @@ class InfoBox {
         this.Title = element.getAttribute("title") || "Title Goes Here";
         this.Description = element.getAttribute("description") || "Description Goes Here";
         this.IconName = element.getAttribute("iconname") || "fluent-emoji:robot";
+        this.ClickUrl = element.getAttribute("ClickUrl") || null;
+        this.IsNewTabOpen = element.getAttribute("IsNewTabOpen") || null;
 
         // Call the method to initialize the main body of the page header
         this.initializeMainBody();
@@ -2787,9 +2789,18 @@ class InfoBox {
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
     }
 
-    // Handle keyup event on the search input field
+    // when the `InfoBox` element is clicked, it will check if the `ClickUrl`
+    //attribute is present.If it is, it will open the URL in a
+    //new tab if the`IsNewTabOpen` attribute is set to`'true'`, otherwise,
+    //it will open the URL in the same tab.
     onClick(event) {
-        console.log(event);
+        if (this.ClickUrl) {
+            if (this.IsNewTabOpen === 'true') {
+                window.open(this.ClickUrl, '_blank');
+            } else {
+                window.location.href = this.ClickUrl;
+            }
+        }
     }
 
     // Method to generate the HTML for the page header

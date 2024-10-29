@@ -466,7 +466,7 @@ So as not to waste time, the API route has been decided since it has been proven
 "It must be noted that when passing through the first 10
 degrees of a sign, Mars and the Sun produce results."
 
-- It's intepreted that Vendha is an obstruction and not a reversal of the Gochara results
+- It's interpreted that Vendha is an obstruction and not a reversal of the Gochara results
   So as for now the design is that if a vedha is present than the result is simply nullified.
 
 - In Horoscope predictions methods have "time" & "person" arguments available, 

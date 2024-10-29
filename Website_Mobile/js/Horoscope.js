@@ -1,5 +1,4 @@
-﻿//-----------------------------> HOROSCOPE PAGE
-updateHistory();
+﻿updateHistory();
 
 new PageTopNavbar("PageTopNavbar");
 new DesktopSidebar("DesktopSidebarHolder");
@@ -16,6 +15,8 @@ new InfoBox("InfoBox_AskAI_Horoscope");
 new InfoBox("InfoBox_EasyImport_Horoscope");
 new InfoBox("InfoBox_ForgotenTime_Horoscope");
 
+
+//----------------------------------- FUNCS ------------------------------------------
 
 function OnClickAdvanced_Horoscope() {
     smoothSlideToggle('#HoroscopeAdvancedInputHolder');

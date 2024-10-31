@@ -2102,10 +2102,14 @@ class DesktopSidebar {
     // Class properties
     ElementID = "";
     ActiveLinkName = ""; //the link of current page highlighted
+    Links = []; // array of link objects
 
-    constructor(elementId) {
+    constructor(elementId, links) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
+
+        // Assign the provided links to the Links property
+        this.Links = links;
 
         // Get the DOM element with the given ID
         const element = document.getElementById(elementId);
@@ -2147,100 +2151,25 @@ class DesktopSidebar {
 
     // Method to generate the HTML for the page header
     async generateHtmlBody() {
-        // Return the HTML for the page header, including conditional blocks for different screen sizes
-        return `
-         <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 100;">
+        // Start building the HTML string
+        let html = `
+        <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 100;">
             <input type="text" class="form-control" placeholder="Search..." >
+        `;
 
-            <a href="./Home.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+        // Loop through the links and generate the HTML for each one
+        this.Links.forEach(link => {
+            html += `
+            <a href="./${link.url}.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn ">
-                <iconify-icon icon="ant-design:home-twotone" width="25" height="25" ></iconify-icon>
-                Home
+                <iconify-icon icon="${link.icon}" width="25" height="25" ></iconify-icon>
+                ${link.text}
             </a>
+            `;
+        });
 
-            <a href="./MatchChecker.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-               class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " >
-                <iconify-icon icon="bi:arrow-through-heart-fill" width="25" height="25" ></iconify-icon>
-                Match Checker
-            </a>
-
-            <a href="./AIChat.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-               class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " >
-                <iconify-icon icon="fluent-mdl2:chat-bot" width="25" height="25" ></iconify-icon>
-                AI Chat
-            </a>
-
-            <a href="./LifePredictor.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-               class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " >
-                <iconify-icon icon="gis:map-time" width="25" height="25" ></iconify-icon>
-                Life Predictor
-            </a>
-
-            <a href="./MatchFinder.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-               class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " >
-                <iconify-icon icon="game-icons:lovers" width="25" height="25" ></iconify-icon>
-                Match Finder
-            </a>
-
-            <a href="./Horoscope.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-               class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " >
-                <iconify-icon icon="fluent:book-star-20-filled" width="25" height="25" ></iconify-icon>
-                Horoscope
-            </a>
-
-            <a href="./GoodTimeFinder.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-               class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " >
-                <iconify-icon icon="svg-spinners:clock" width="25" height="25" ></iconify-icon>
-                Good Time Finder
-            </a>
-
-            <a href="./APIBuilder.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-               class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn ">
-                <iconify-icon icon="mdi:cloud-tags" width="25" height="25" ></iconify-icon>
-                API Builder
-            </a>
-
-            <a href="./Numerology.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-               class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn " >
-                <iconify-icon icon="fluent:text-number-format-20-filled" width="25" height="25" ></iconify-icon>
-                Numerology
-            </a>
-
-            <!-- TODO FUTURE <button href="/StarsAboveMe.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
-                           class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn "  >
-                       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
-                            role="img" class="iconify iconify--solar" width="25" height="25" preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 24 24" data-icon="solar:moon-stars-bold" data-width="25">
-                           <path fill="currentColor"
-                                 d="M19.9 2.307a.483.483 0 0 0-.9 0l-.43 1.095a.484.484 0 0 1-.272.274l-1.091.432a.486.486 0 0 0 0 .903l1.091.432a.48.48 0 0 1 .272.273L19 6.81c.162.41.74.41.9 0l.43-1.095a.484.484 0 0 1 .273-.273l1.091-.432a.486.486 0 0 0 0-.903l-1.091-.432a.484.484 0 0 1-.273-.274zM16.033 8.13a.483.483 0 0 0-.9 0l-.157.399a.484.484 0 0 1-.272.273l-.398.158a.486.486 0 0 0 0 .903l.398.157c.125.05.223.148.272.274l.157.399c.161.41.739.41.9 0l.157-.4a.484.484 0 0 1 .272-.273l.398-.157a.486.486 0 0 0 0-.903l-.398-.158a.484.484 0 0 1-.272-.273z">
-                           </path>
-                           <path fill="currentColor"
-                                 d="M12 22c5.523 0 10-4.477 10-10c0-.463-.694-.54-.933-.143a6.5 6.5 0 1 1-8.924-8.924C12.54 2.693 12.463 2 12 2C6.477 2 2 6.477 2 12s4.477 10 10 10">
-                           </path>
-                       </svg>Stars Above Me
-                   </button>
--->
-            <!--TODO FUTURE <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
-    <button style="height: 37.1px; width: fit-content;"
-            class="btn-sm w-100 dropdown-toggle hstack gap-2 iconButton btn-outline-primary btn " type="button"
-            data-bs-toggle="dropdown" aria-expanded="false" >
-        <svg xmlns="http://www.w3.org/2000/svg"
-             xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
-             class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet"
-             viewBox="0 0 24 24" data-icon="mdi:treasure-chest" data-width="25">
-            <path fill="currentColor"
-                  d="M5 4h14a3 3 0 0 1 3 3v4h-7v-1H9v1H2V7a3 3 0 0 1 3-3m6 7h2v2h-2zm-9 1h7v1l2 2h2l2-2v-1h7v8H2z">
-            </path>
-        </svg>Top Secret
-    </button>
-    <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
-        <li><a class="dropdown-item" href="Journal">Journal</a></li>
-        <li><a class="dropdown-item" href="BirthTimeFinder">Birth Time Finder</a></li>
-        <li><a class="dropdown-item" href="LocalMeanTime">Local Mean Time</a></li>
-        <li><a class="dropdown-item" href="SunRiseSetTime">Sunrise/Sunset Time</a></li>
-    </ul>
-</div> -->
-
+        // Add the login and logout buttons
+        html += `
             <a id="DesktopLoginButton" href="./Login.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
                class="btn-sm w-100 hstack gap-2 iconButton btn-warning btn ">
                 <iconify-icon icon="mdi:user-circle" width="25" height="25" ></iconify-icon>Log In
@@ -2267,7 +2196,9 @@ class DesktopSidebar {
             </div>
             <div style="cursor: pointer;" class="mt-1"><img src="./images/ce-fcc-recycle.svg"></div>
         </div>
-    `;
+        `;
+
+        return html;
     }
 
 }

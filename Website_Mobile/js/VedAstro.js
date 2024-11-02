@@ -3745,8 +3745,12 @@ class AstroTable {
         //# TABLE
         //create empty table inside main holder
         //table will be filled below
+        //NOTE: "table responsive" needed to make nicely scrollable in mobile
         $(`#${this.ElementID}`).append(
-            `<table id="${this.TableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=""></table>`
+            `<div class="table-responsive">
+                <table id="${this.TableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=""></table>
+             </div>
+             `
         );
 
         //generate table from inputed data
@@ -4336,7 +4340,8 @@ class AshtakvargaTable {
 
     //code where Ashtakvarga in JSON format given by API is converted into nice HTML
     static async GenerateHTMLTableFromJson(data, tableId) {
-        let html = '<table border="1">';
+        //note "table responsive" needed to make nicely scrollable in mobile
+        let html = '<div class="table-responsive"><table border="1">';
 
         // Add table headers
         html += "<tr><th></th>";
@@ -4366,7 +4371,7 @@ class AshtakvargaTable {
             html += "</tr>";
         }
 
-        html += "</table>";
+        html += "</table></div>";
 
         // Now you can add 'html' to your webpage
         var currentTable = document.getElementById(tableId);

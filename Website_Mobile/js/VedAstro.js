@@ -2213,7 +2213,7 @@ class PageTopNavbar {
     MoreLinks = [];
     MobileLinks = [];
 
-    constructor(elementId, buttonLinks, moreLinks, mobileLinks) {
+    constructor(headerName, elementId, buttonLinks, moreLinks, mobileLinks) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
 
@@ -2221,6 +2221,7 @@ class PageTopNavbar {
         this.ButtonLinks = buttonLinks;
         this.MoreLinks = moreLinks;
         this.MobileLinks = mobileLinks;
+        this.HeaderName = headerName; //visible at mobile top nav only
 
         // Get the DOM element with the given ID
         const element = document.getElementById(elementId);
@@ -2314,7 +2315,7 @@ class PageTopNavbar {
         <div class="container-fluid">
           <a class="navbar-brand active" href="/">
             <img src="./images/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
-            <span class="ms-1 align-middle">VedAstro</span>
+            <span class="ms-1 align-middle">${this.HeaderName}</span>
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

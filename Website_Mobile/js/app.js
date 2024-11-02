@@ -189,7 +189,7 @@ function animateHighlightElement(elmInput) {
 
 //-----------------CODE TO RUN
 
-new PageTopNavbar("PageTopNavbar", [
+new PageTopNavbar("VedAstro","PageTopNavbar", [
     { icon: "mdi:book-open-page-variant-outline", text: "Guide", href: "/" },
     { icon: "carbon:gateway-api", text: "Open API", href: "/" },
     { icon: "openmoji:love-letter", text: "Donate", href: "/" },

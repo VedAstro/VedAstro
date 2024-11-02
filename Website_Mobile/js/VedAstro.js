@@ -2209,10 +2209,18 @@ class DesktopSidebar {
 class PageTopNavbar {
     // Class properties
     ElementID = "";
+    ButtonLinks = [];
+    MoreLinks = [];
+    MobileLinks = [];
 
-    constructor(elementId) {
+    constructor(elementId, buttonLinks, moreLinks, mobileLinks) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
+
+        // Assign the provided links to their respective properties
+        this.ButtonLinks = buttonLinks;
+        this.MoreLinks = moreLinks;
+        this.MobileLinks = mobileLinks;
 
         // Get the DOM element with the given ID
         const element = document.getElementById(elementId);
@@ -2229,138 +2237,107 @@ class PageTopNavbar {
         // Generate the HTML for the page header and inject it into the element
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
 
+        //based on login status hide/show login/logout button
+        if (VedAstro.IsGuestUser()) {
+            $('#MobileLoginButton').show();
+            $('#MobileLogoutButton').hide();
+        } else {
+            $('#MobileLoginButton').hide();
+            $('#MobileLogoutButton').show();
+        }
+
     }
 
     // Method to generate the HTML for the page header
     async generateHtmlBody() {
+        // Generate the HTML for the button links
+        let buttonLinksHtml = "";
+        this.ButtonLinks.forEach((link) => {
+            buttonLinksHtml += `
+        <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-outline-primary btn" >
+          <iconify-icon icon="${link.icon}" width="25" height="25" ></iconify-icon>
+          ${link.text}
+        </button>
+      `;
+        });
+
+        // Generate the HTML for the more links
+        let moreLinksHtml = "";
+        this.MoreLinks.forEach((link) => {
+            moreLinksHtml += `
+        <li><a class="dropdown-item" href="${link.href}">${link.text}</a></li>
+      `;
+        });
+
+        // Generate the HTML for the mobile links
+        let mobileLinksHtml = "";
+        this.MobileLinks.forEach((link) => {
+            mobileLinksHtml += `
+        <li class="nav-item">
+          <a class="nav-link active" href="${link.href}">
+            <iconify-icon class="align-bottom" icon="${link.icon}" width="28" height="28"></iconify-icon>
+            <span class="ms-1 align-middle" style="">${link.text}</span>
+          </a>
+        </li>
+      `;
+        });
+
         // Return the HTML for the top navbar, including conditional blocks for different screen sizes
         return `
-        <!-- DESKTOP TOP NAV BAR  -->
-        <div style="min-width: 954px;" class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white">
-            <!-- NOTE: id of desktop sidebar is hard coded to match -->
-            <button onclick="$('#DesktopSidebarHolder').toggleClass('d-md-block');" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ">
-                <iconify-icon icon="lucide:panel-left-close" width="24" height="24" ></iconify-icon>
-            </button>
+      <!-- DESKTOP TOP NAV BAR  -->
+      <div style="min-width: 954px;" class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white">
+        <!-- NOTE: id of desktop sidebar is hard coded to match -->
+        <button onclick="$('#DesktopSidebarHolder').toggleClass('d-md-block');" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ">
+          <iconify-icon icon="lucide:panel-left-close" width="24" height="24" ></iconify-icon>
+        </button>
 
-            <!-- BUTTON LINKS -->
-            <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_63="">
-                <iconify-icon icon="mdi:theme-light-dark" width="24" height="24" ></iconify-icon>
-            </button>
+        <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn me-md-auto">
+            <iconify-icon icon="mdi:theme-light-dark" width="25" height="25" ></iconify-icon>
+        </button>
 
-            <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-outline-primary btn ms-md-auto" _bl_64="">
-                <iconify-icon icon="mdi:book-open-page-variant-outline" width="25" height="25" ></iconify-icon>
-                Guide
-            </button>
+        <!-- BUTTON LINKS -->
+        ${buttonLinksHtml}
 
-            <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-outline-primary btn " _bl_65="">
-                <iconify-icon icon="carbon:gateway-api" width="25" height="25" ></iconify-icon>
-                Open API
-            </button>
-
-            <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-warning btn " _bl_66="">
-                <iconify-icon icon="openmoji:love-letter" width="25" height="25" ></iconify-icon>
-                Donate
-            </button>
-
-            <!-- MORE LINKS -->
-            <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
-                <button style="height: 37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-outline-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" >
-                    <iconify-icon icon="ep:guide" width="25" height="25" ></iconify-icon>
-                </button>
-                <ul style="cursor: pointer; width: 100%;" class="dropdown-menu">
-                    <li><a class="dropdown-item" href="./Contact.html">Contact Us</a></li>
-                    <li><a class="dropdown-item" href="./About.html">About</a></li>
-                    <li><a class="dropdown-item" href="https://www.youtube.com/@vedastro/videos" target="_blank">Video Guides</a></li>
-                    <li><a class="dropdown-item" href="./JoinOurFamily.html">Join Us</a></li>
-                    <li><a class="dropdown-item" href="./Calculator.html">Calculators</a></li>
-                    <li><a class="dropdown-item" href="./PersonList.html">Person List</a></li>
-                    <li><a class="dropdown-item" href="./TrainAIAstrologer.html">Train AI</a></li>
-                    <li><a class="dropdown-item" href="./Remedy.html">Remedy</a></li>
-                    <li><a class="dropdown-item" href="./Download.html">Download</a></li>
-                    <li><a class="dropdown-item" href="https://vedastroapi.azurewebsites.net/api">API Live Status</a></li>
-                    <li><a class="dropdown-item" href="./TableGenerator.html">Table Generator</a></li>
-                    <li><a class="dropdown-item" href="./BodyTypes.html">Body Types</a></li>
-                    <li><a class="dropdown-item" href="./ImportPerson.html">Import Person</a></li>
-                </ul>
-            </div>
+        <!-- MORE LINKS -->
+        <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
+          <button style="height: 37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-outline-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <iconify-icon icon="ep:guide" width="25" height="25" ></iconify-icon>
+          </button>
+          <ul style="cursor: pointer; width: 100%;" class="dropdown-menu">
+            ${moreLinksHtml}
+          </ul>
         </div>
+      </div>
 
-        <!-- MOBILE LINKS -->
-        <nav class="p-1 navbar rounded-bottom-4 d-block d-md-none" data-bs-theme="dark" style="background-color: #1877f2 !important; margin-top: -1.5rem !important; margin-left: -0.73rem !important; margin-right: -0.73rem !important;">
-            <div class="container-fluid">
-                <a class="navbar-brand active" href="/">
-                    <img src="./images/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
-                    <span class="ms-1 align-middle">VedAstro</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-nav border-opacity-10 border-2 border-top border-white navbar-collapse collapse" id="navbarToggler">
-                    <ul class="nav nav-fill">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./Home.html">
-                                <iconify-icon class="align-bottom" icon="mdi:home" width="28" height="28"></iconify-icon>
-                                <span class="ms-1 align-middle" style="">Home</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./AIChat.html">
-                                <iconify-icon class="align-bottom" icon="mage:we-chat" width="28" height="28"></iconify-icon>
-                                <span class="ms-1 align-middle" style="">AI Chat</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./Horoscope.html">
-                                <iconify-icon class="align-bottom" icon="fluent:book-star-20-filled" width="28" height="28"></iconify-icon>
-                                <span class="ms-1 align-middle" style="">Horoscope</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./MatchChecker.html">
-                                <iconify-icon class="align-bottom" icon="bi:arrow-through-heart-fill" width="28" height="28"></iconify-icon>
-                                <span class="ms-1 align-middle" style="">Match</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./Numerology.html">
-                                <iconify-icon class="align-bottom" icon="mdi:numbers" width="28" height="28"></iconify-icon>
-                                <span class="ms-1 align-middle" style="">Numerology</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./MatchFinder.html">
-                                <iconify-icon class="align-bottom" icon="game-icons:lovers" width="28" height="28"></iconify-icon>
-                                <span class="ms-1 align-middle" style="">Find Match</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./LifePredictor.html">
-                                <iconify-icon class="align-bottom" icon="gis:map-time" width="28" height="28"></iconify-icon>
-                                <span class="ms-1 align-middle" style="">Life Predictor</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./GoodTimeFinder.html">
-                                <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
-                                <span class="ms-1 align-middle" style="">Good Time Finder</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./Login.html">
-                                <iconify-icon class="align-bottom" icon="svg-spinners:clock" width="28" height="28"></iconify-icon>
-                                <span class="ms-1 align-middle" style="">Login</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" onclick="VedAstro.OnClickLogOut()">
-                                <iconify-icon class="align-bottom" icon="bx:log-out" width="28" height="28"></iconify-icon>
-                                <span class="ms-1 align-middle" style="">Log Out</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+      <!-- MOBILE LINKS -->
+      <nav class="p-1 navbar rounded-bottom-4 d-block d-md-none" data-bs-theme="dark" style="background-color: #1877f2 !important; margin-top: -1.5rem !important; margin-left: -0.73rem !important; margin-right: -0.73rem !important;">
+        <div class="container-fluid">
+          <a class="navbar-brand active" href="/">
+            <img src="./images/header-logo.png" style="width: 44px;" class="d-inline-block align-middle">
+            <span class="ms-1 align-middle">VedAstro</span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-nav border-opacity-10 border-2 border-top border-white navbar-collapse collapse" id="navbarToggler">
+            <ul class="nav nav-fill">
+              ${mobileLinksHtml}
+                <li class="nav-item" id="MobileLoginButton">
+                    <a class="nav-link active" href="./Login.html">
+                        <iconify-icon class="align-bottom" icon="mdi:user-circle" width="28" height="28"></iconify-icon>
+                        <span class="ms-1 align-middle" style="">Login</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="MobileLogoutButton">
+                    <a class="nav-link active" onclick="VedAstro.OnClickLogOut()">
+                        <iconify-icon class="align-bottom" icon="bx:log-out" width="28" height="28"></iconify-icon>
+                        <span class="ms-1 align-middle" style="">Log Out</span>
+                    </a>
+                </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     `;
     }
 }

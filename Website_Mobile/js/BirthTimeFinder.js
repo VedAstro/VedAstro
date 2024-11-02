@@ -1,62 +1,8 @@
-updateHistory();
+﻿updateHistory();
 
-new PageTopNavbar("PageTopNavbar");
-const links = [
-    {
-        url: 'Home',
-        icon: 'ant-design:home-twotone',
-        text: 'Home'
-    },
-    {
-        url: 'MatchChecker',
-        icon: 'bi:arrow-through-heart-fill',
-        text: 'Match Checker'
-    },
-    {
-        url: 'AIChat',
-        icon: 'fluent-mdl2:chat-bot',
-        text: 'AI Chat'
-    },
-    {
-        url: 'LifePredictor',
-        icon: 'gis:map-time',
-        text: 'Life Predictor'
-    },
-    {
-        url: 'MatchFinder',
-        icon: 'game-icons:lovers',
-        text: 'Match Finder'
-    },
-    {
-        url: 'Horoscope',
-        icon: 'fluent:book-star-20-filled',
-        text: 'Horoscope'
-    },
-    {
-        url: 'GoodTimeFinder',
-        icon: 'svg-spinners:clock',
-        text: 'Good Time Finder'
-    },
-    {
-        url: 'APIBuilder',
-        icon: 'mdi:cloud-tags',
-        text: 'API Builder'
-    },
-    {
-        url: 'Numerology',
-        icon: 'fluent:text-number-format-20-filled',
-        text: 'Numerology'
-    },
-    //{
-    //    url: 'StarsAboveMe',
-    //    icon: 'solar:moon-stars-bold',
-    //    text: 'Stars Above Me'
-    //}
-];
 
 new DesktopSidebar("DesktopSidebarHolder", links);
 new PageHeader("PageHeader");
-new PageFooter("PageFooter");
 
 var personSelector = new PersonSelectorBox("PersonSelectorBox");
 
@@ -85,8 +31,25 @@ function OnClickCalculate() {
 
     //based on selected finder method, call API
     //NOTE: method value hard coded in HTML corresponds to API call name
-
+    let timeFinderList = getTimeFinderListFromApi(selectedMethod); 
 
     //show results
     $('#OutputHolder').show();
+}
+
+async function getTimeFinderListFromApi(selectedApiCall, timeUrl) {
+    try {
+        const response = await fetch(`${VedAstro.ApiDomain}/Calculate/${selectedApiCall}/${timeUrl}`);
+        if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); } //server connection check
+
+        const data = await response.json();
+        if (data.Status !== 'Pass') { throw new Error('Failed to retrieve data. Status is not "Pass".'); } //calc data check
+
+        
+        return data.Payload[selectedApiCall];
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return null; // Return an empty array if there's an error
+    }
 }

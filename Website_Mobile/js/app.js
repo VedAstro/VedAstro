@@ -185,3 +185,92 @@ function animateHighlightElement(elmInput) {
     $elm.fadeTo(100, 0.4, function () { $(this).fadeTo(500, 1.0); });
 
 }
+
+
+//-----------------CODE TO RUN
+
+new PageTopNavbar("PageTopNavbar", [
+    { icon: "mdi:book-open-page-variant-outline", text: "Guide", href: "/" },
+    { icon: "carbon:gateway-api", text: "Open API", href: "/" },
+    { icon: "openmoji:love-letter", text: "Donate", href: "/" },
+], [
+    { text: "Contact Us", href: "./Contact.html" },
+    { text: "About", href: "./About.html" },
+    { text: "Video Guides", href: "https://www.youtube.com/@vedastro/videos", target: "_blank" },
+    { text: "Join Us", href: "./JoinOurFamily.html" },
+    { text: "Calculators", href: "./Calculator.html" },
+    { text: "Person List", href: "./PersonList.html" },
+    { text: "Train AI", href: "./TrainAIAstrologer.html" },
+    { text: "Remedy", href: "./Remedy.html" },
+    { text: "Download", href: "./Download.html" },
+    { text: "API Live Status", href: "https://vedastroapi.azurewebsites.net/api" },
+    { text: "Table Generator", href: "./TableGenerator.html" },
+    { text: "Body Types", href: "./BodyTypes.html" },
+    { text: "Import Person", href: "./ImportPerson.html" },
+], [
+    { icon: "mdi:home", text: "Home", href: "./Home.html" },
+    { icon: "mage:we-chat", text: "AI Chat", href: "./AIChat.html" },
+    { icon: "fluent:book-star-20-filled", text: "Horoscope", href: "./Horoscope.html" },
+    { icon: "bi:arrow-through-heart-fill", text: "Match", href: "./MatchChecker.html" },
+    { icon: "mdi:numbers", text: "Numerology", href: "./Numerology.html" },
+    { icon: "game-icons:lovers", text: "Find Match", href: "./MatchFinder.html" },
+    { icon: "gis:map-time", text: "Life Predictor", href: "./LifePredictor.html" },
+    { icon: "svg-spinners:clock", text: "Good Time Finder", href: "./GoodTimeFinder.html" },
+]);
+
+const links = [
+    {
+        url: 'Home',
+        icon: 'ant-design:home-twotone',
+        text: 'Home'
+    },
+    {
+        url: 'MatchChecker',
+        icon: 'bi:arrow-through-heart-fill',
+        text: 'Match Checker'
+    },
+    {
+        url: 'AIChat',
+        icon: 'fluent-mdl2:chat-bot',
+        text: 'AI Chat'
+    },
+    {
+        url: 'LifePredictor',
+        icon: 'gis:map-time',
+        text: 'Life Predictor'
+    },
+    {
+        url: 'MatchFinder',
+        icon: 'game-icons:lovers',
+        text: 'Match Finder'
+    },
+    {
+        url: 'Horoscope',
+        icon: 'fluent:book-star-20-filled',
+        text: 'Horoscope'
+    },
+    {
+        url: 'GoodTimeFinder',
+        icon: 'svg-spinners:clock',
+        text: 'Good Time Finder'
+    },
+    {
+        url: 'APIBuilder',
+        icon: 'mdi:cloud-tags',
+        text: 'API Builder'
+    },
+    {
+        url: 'Numerology',
+        icon: 'fluent:text-number-format-20-filled',
+        text: 'Numerology'
+    },
+    //{
+    //    url: 'StarsAboveMe',
+    //    icon: 'solar:moon-stars-bold',
+    //    text: 'Stars Above Me'
+    //}
+];
+
+new DesktopSidebar("DesktopSidebarHolder", links);
+
+new PageFooter("PageFooter");

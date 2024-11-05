@@ -1947,10 +1947,6 @@ namespace VedAstro.Library
         };
 
         /// <summary>
-        /// D30 : Trimshamsha or one-thirtieth of a sign (1°00').
-        /// </summary>
-
-        /// <summary>
         /// D40 : Khavedamsha or one-fortieth of a sign (0°45').
         /// </summary>
         public static Dictionary<ZodiacName, Dictionary<DegreeRange, ZodiacName>> KhavedamshaTable = new()

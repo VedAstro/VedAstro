@@ -1100,7 +1100,7 @@ namespace VedAstro.Library
 
 
                 //3. Moon occupies a benefic Navamsa sign
-                var moonNavamsaSign = Calculate.PlanetNavamsaSign(PlanetName.Moon, time);
+                var moonNavamsaSign = Calculate.PlanetNavamshaSign(PlanetName.Moon, time);
                 var navamsaRelationship = Calculate.PlanetRelationshipWithSign(PlanetName.Moon, moonNavamsaSign, time);
 
                 //check if sign is benefic 
@@ -1836,7 +1836,7 @@ namespace VedAstro.Library
             {
                 //1.0 get navamsa lagna lord
                 //1.1 get navamsa lagna sign
-                var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
+                var navamsaLagnaSign = Calculate.HouseNavamshaSign(HouseName.House1, time);
 
                 var navamsaLagnaLord = Calculate.LordOfZodiacSign(navamsaLagnaSign);
 
@@ -1864,7 +1864,7 @@ namespace VedAstro.Library
             {
                 //1.0 get navamsa 7th lord
                 //1.1 get navamsa 7th sign
-                var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
+                var navamsa7thSign = Calculate.HouseNavamshaSign(HouseName.House7, time);
 
                 var navamsa7thLord = Calculate.LordOfZodiacSign(navamsa7thSign);
 
@@ -1899,7 +1899,7 @@ namespace VedAstro.Library
 
                 //2.0 get navamsa lagna sign
                 //get navamsa lagna at house 1 longitude
-                var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
+                var navamsaLagnaSign = Calculate.HouseNavamshaSign(HouseName.House1, time);
 
                 //3.0
                 //check if navamsa lagna is one of the signs lagna lord is aspecting
@@ -1925,7 +1925,7 @@ namespace VedAstro.Library
                 var signs7thLordIsAspecting = Calculate.SignsPlanetIsAspecting(_7thLord, time);
 
                 //2.0 get navamsa 7th sign
-                var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
+                var navamsa7thSign = Calculate.HouseNavamshaSign(HouseName.House7, time);
 
                 //3.0
                 //check if navamsa 7th is one of the signs 7th lord is aspecting
@@ -1945,7 +1945,7 @@ namespace VedAstro.Library
             {
                 //1.0 get navamsa lagna sign
                 //get navamsa lagna at house 1 longitude
-                var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
+                var navamsaLagnaSign = Calculate.HouseNavamshaSign(HouseName.House1, time);
 
                 //2.0 Get navamsa lagna lord's current sign
                 //get navamsa lagna lord (planet)
@@ -1976,7 +1976,7 @@ namespace VedAstro.Library
             bool IsNavamsa7thLordIn7th(Time time)
             {
                 //1.0 get navamsa 7th sign
-                var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
+                var navamsa7thSign = Calculate.HouseNavamshaSign(HouseName.House7, time);
 
                 //2.0 Get navamsa 7th lord's current sign
                 //get navamsa 7th lord (planet)
@@ -2008,11 +2008,11 @@ namespace VedAstro.Library
                 var lagnaLord = Calculate.LordOfHouse(HouseName.House1, time);
 
                 //get navamsa sign of lagna lord
-                var navamsaSignOfLagnaLord = Calculate.PlanetNavamsaSign(lagnaLord, time);
+                var navamsaSignOfLagnaLord = Calculate.PlanetNavamshaSign(lagnaLord, time);
 
                 //2.0 get navamsa lagna sign
                 //get navamsa lagna at house 1 longitude
-                var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
+                var navamsaLagnaSign = Calculate.HouseNavamshaSign(HouseName.House1, time);
 
                 //3.0 check if lagna lord in navamsa lagna sign
                 if (navamsaSignOfLagnaLord == navamsaLagnaSign)
@@ -2034,10 +2034,10 @@ namespace VedAstro.Library
                 var _7thLord = Calculate.LordOfHouse(HouseName.House7, time);
 
                 //get navamsa sign of 7th lord
-                var navamsaSignOf7thLord = Calculate.PlanetNavamsaSign(_7thLord, time);
+                var navamsaSignOf7thLord = Calculate.PlanetNavamshaSign(_7thLord, time);
 
                 //2.0 get navamsa 7th sign
-                var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
+                var navamsa7thSign = Calculate.HouseNavamshaSign(HouseName.House7, time);
 
                 //3.0 check if 7th lord in navamsa 7th sign
                 if (navamsaSignOf7thLord == navamsa7thSign)
@@ -2057,14 +2057,14 @@ namespace VedAstro.Library
 
                 //1.0 get navamsa lagna sign
                 //get navamsa lagna at house 1 longitude
-                var navamsaLagnaSign = Calculate.HouseNavamsaSign(HouseName.House1, time);
+                var navamsaLagnaSign = Calculate.HouseNavamshaSign(HouseName.House1, time);
 
                 //2.0 Get navamsa lagna lord's current sign
                 //get navamsa lagna lord (planet)
                 var navamsaLagnaLord = Calculate.LordOfZodiacSign(navamsaLagnaSign);
 
                 //get navamsa sign of navamsa lagna lord
-                var navamsaSignOfNavamsaLagnaLord = Calculate.PlanetNavamsaSign(navamsaLagnaLord, time);
+                var navamsaSignOfNavamsaLagnaLord = Calculate.PlanetNavamshaSign(navamsaLagnaLord, time);
 
                 //3.0
                 //check if lagna lord is in navamsa lagna sign
@@ -2083,14 +2083,14 @@ namespace VedAstro.Library
             {
 
                 //1.0 get 7th house navamsa sign
-                var navamsa7thSign = Calculate.HouseNavamsaSign(HouseName.House7, time);
+                var navamsa7thSign = Calculate.HouseNavamshaSign(HouseName.House7, time);
 
                 //2.0 Get navamsa 7th lord's current sign
                 //get navamsa 7th lord (planet)
                 var navamsa7thLord = Calculate.LordOfZodiacSign(navamsa7thSign);
 
                 //get navamsa sign of navamsa 7th lord
-                var navamsaSignOfNavamsa7thLord = Calculate.PlanetNavamsaSign(navamsa7thLord, time);
+                var navamsaSignOfNavamsa7thLord = Calculate.PlanetNavamshaSign(navamsa7thLord, time);
 
                 //3.0
                 //check if 7th lord is in navamsa 7th sign

@@ -1,4 +1,5 @@
-﻿using ExCSS;
+﻿using System;
+using ExCSS;
 using System.Collections.Generic;
 using static VedAstro.Library.Calculate;
 
@@ -161,42 +162,72 @@ namespace VedAstro.Library
                 ZodiacSign houseZodiacSign;
                 switch (this.ChartType)
                 {
-                    case ChartType.Rasi:
+                    case ChartType.RasiD1: 
                         houseZodiacSign = HouseZodiacSign(houseName, time);
                         houseSignName = houseZodiacSign.GetSignName();
                         break;
-                    case ChartType.Hora:
+                    case ChartType.HoraD2:
                         houseZodiacSign = HouseHoraSign(houseName, time);
                         houseSignName = houseZodiacSign.GetSignName();
                         break;
-                    case ChartType.Drekkana:
+                    case ChartType.DrekkanaD3:
                         houseZodiacSign = HouseZodiacSign(houseName, time);
                         houseSignName = Calculate.DrekkanaSignName(houseZodiacSign).GetSignName();
                         break;
-                    case ChartType.Chaturthamsa:
+                    case ChartType.ChaturthamshaD4:
                         houseZodiacSign = HouseZodiacSign(houseName, time);
                         houseSignName = Calculate.ChaturthamshaSignName(houseZodiacSign).GetSignName();
                         break;
-                    case ChartType.Panchamsa:
+                    case ChartType.SaptamshaD7:
                         houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.PanchamsaSignName(houseZodiacSign).GetSignName();
+                        houseSignName = Calculate.SaptamshaSignName(houseZodiacSign).GetSignName();
                         break;
-                    case ChartType.Shashthamsa:
-                    case ChartType.Saptamsa:
-                    case ChartType.Ashtamsa:
-                    case ChartType.Navamsa:
-                    case ChartType.Dasamsa:
-                    case ChartType.Rudramsa:
-                    case ChartType.Dwadasamsa:
-                    case ChartType.Shodasamsa:
-                    case ChartType.Vimsamsa:
-                    case ChartType.Chaturvimsamsa:
-                    case ChartType.Nakshatramsa:
-                    case ChartType.Trimsamsa:
-                    case ChartType.Khavedamsa:
-                    case ChartType.Akshavedamsa:
-                    case ChartType.Shashthyamsa:
+                    case ChartType.NavamshaD9:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.NavamshaSignName(houseZodiacSign).GetSignName();
+                        break;
+                    case ChartType.DashamamshaD10:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.DashamamshaSignName(houseZodiacSign).GetSignName();
+                        break;
+                    case ChartType.DwadashamshaD12:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.DwadashamshaSignName(houseZodiacSign).GetSignName();
+                        break;
+                    case ChartType.ShodashamshaD16:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.ShodashamshaSignName(houseZodiacSign).GetSignName();
+                        break;
+                    case ChartType.VimshamshaD20:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.VimshamshaSignName(houseZodiacSign).GetSignName();
+                        break;
+                    case ChartType.ChaturvimshamshaD24:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.ChaturvimshamshaSignName(houseZodiacSign).GetSignName();
+                        break;
+                    case ChartType.BhamshaD27:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.BhamshaSignName(houseZodiacSign).GetSignName();
+                        break;
+                    case ChartType.TrimshamshaD30:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.TrimshamshaSignName(houseZodiacSign).GetSignName();
+                        break;
+                    case ChartType.KhavedamshaD40:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.KhavedamshaSignName(houseZodiacSign).GetSignName();
+                        break;
+                    case ChartType.AkshavedamshaD45:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.AkshavedamshaSignName(houseZodiacSign).GetSignName();
+                        break;
+                    case ChartType.ShashtyamshaD60:
+                        houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = Calculate.ShashtyamshaSignName(houseZodiacSign).GetSignName();
+                        break;
                     default:
+                        throw new Exception("Chart Type Not YET Coded for!");
                         break;
                 }
 
@@ -220,31 +251,38 @@ namespace VedAstro.Library
 
             switch (this.ChartType)
             {
-                case ChartType.Rasi:
+                case ChartType.RasiD1:
                     allPlanetsSigns = Calculate.AllPlanetSigns(time); break;
-                case ChartType.Hora:
+                case ChartType.HoraD2:
                     allPlanetsSigns = Calculate.AllPlanetHoraSign(time); break;
-                case ChartType.Drekkana:
+                case ChartType.DrekkanaD3:
                     allPlanetsSigns = Calculate.AllPlanetDrekkanaSign(time); break;
-                case ChartType.Chaturthamsa:
+                case ChartType.ChaturthamshaD4:
                     allPlanetsSigns = Calculate.AllPlanetChaturthamsaSign(time); break;
-                case ChartType.Panchamsa:
-                    allPlanetsSigns = Calculate.AllPlanetPanchamsaSign(time); break;
-                case ChartType.Shashthamsa:
-                case ChartType.Saptamsa:
-                case ChartType.Ashtamsa:
-                case ChartType.Navamsa:
-                case ChartType.Dasamsa:
-                case ChartType.Rudramsa:
-                case ChartType.Dwadasamsa:
-                case ChartType.Shodasamsa:
-                case ChartType.Vimsamsa:
-                case ChartType.Chaturvimsamsa:
-                case ChartType.Nakshatramsa:
-                case ChartType.Trimsamsa:
-                case ChartType.Khavedamsa:
-                case ChartType.Akshavedamsa:
-                case ChartType.Shashthyamsa:
+                case ChartType.SaptamshaD7:
+                    allPlanetsSigns = Calculate.AllPlanetSaptamshaSign(time); break;
+                case ChartType.NavamshaD9:
+                    allPlanetsSigns = Calculate.AllPlanetNavamshaSign(time); break;
+                case ChartType.DashamamshaD10:
+                    allPlanetsSigns = Calculate.AllPlanetDashamamshaSign(time); break;
+                case ChartType.DwadashamshaD12:
+                    allPlanetsSigns = Calculate.AllPlanetDwadashamshaSign(time); break;
+                case ChartType.ShodashamshaD16:
+                    allPlanetsSigns = Calculate.AllPlanetShodashamshaSign(time); break;
+                case ChartType.VimshamshaD20:
+                    allPlanetsSigns = Calculate.AllPlanetVimshamshaSign(time); break;
+                case ChartType.ChaturvimshamshaD24:
+                    allPlanetsSigns = Calculate.AllPlanetChaturvimshamshaSign(time); break;
+                case ChartType.BhamshaD27:
+                    allPlanetsSigns = Calculate.AllPlanetBhamshaSign(time); break;
+                case ChartType.TrimshamshaD30:
+                    allPlanetsSigns = Calculate.AllPlanetTrimshamshaSign(time); break;
+                case ChartType.KhavedamshaD40:
+                    allPlanetsSigns = Calculate.AllPlanetKhavedamshaSign(time); break;
+                case ChartType.AkshavedamshaD45:
+                    allPlanetsSigns = Calculate.AllPlanetAkshavedamshaSign(time); break;
+                case ChartType.ShashtyamshaD60:
+                    allPlanetsSigns = Calculate.AllPlanetShashtyamshaSign(time); break;
                 default:
                     break;
             }

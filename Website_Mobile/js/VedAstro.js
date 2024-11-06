@@ -5675,3 +5675,130 @@ class AlgorithmsSelector {
     `;
     }
 }
+
+
+class EventsSelector {
+    // Class properties
+    ElementID = "";
+
+    // Constructor to initialize the EventsSelector object
+    constructor(elementId) {
+        this.ElementID = elementId;
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body of the page header
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Fetch data from API
+        const data = await this.fetchDataFromApi();
+
+        // Generate HTML and inject it into the element
+        const htmlString = this.convertDataToHtml(data);
+        $(`#${this.ElementID}`).html(htmlString);
+
+        // Attach event handlers to checkboxes
+        this.attachEventHandlers();
+    }
+
+    // Fetch data from API
+    async fetchDataFromApi() {
+        try {
+            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetAllEventDataGroupedByTag`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data.Status !== 'Pass') {
+                throw new Error('Failed to retrieve data. Status is not "Pass".');
+            }
+            return data.Payload;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return [];
+        }
+    }
+
+    // Convert data to HTML
+    convertDataToHtml(data) {
+        let generatedHtml = "";
+        Object.keys(data.GetAllEventDataGroupedByTag).forEach((tag) => {
+            const events = data.GetAllEventDataGroupedByTag[tag];
+            generatedHtml += `
+        <div style="width: 254.9px;" class="form-check hstack gap-2">
+            <input value="" id="checkbox_${tag}" style="width: 40px; height: 28px;" class="form-check-input parent-checkbox" type="checkbox">
+            <label class="form-check-label d-flex gap-2 w-100" for="checkbox_${tag}">
+                <div class="" style="">
+                    <iconify-icon icon="carbon:construction" width="25" height="25"></iconify-icon>
+                </div>
+                ${tag}
+
+                <!--TODO make below into button that when clicked toggles the visibility of child checkboxes-->
+                <div class="ms-auto me-3" style="cursor: pointer; float: right; opacity: 1;">
+                    <iconify-icon icon="ic:outline-expand-circle-down" width="22" height="22"></iconify-icon>
+                </div>
+            </label>
+            <div style="display:none;" class="child-checkboxes">
+              ${events.map((event) => `
+                <div class="form-check">
+                  <input class="form-check-input child-checkbox" type="checkbox" value="" id="checkbox_${event.Name}">
+                  <label class="form-check-label" for="checkbox_${event.Name}">${event.Name}</label>
+                </div>
+              `).join('')}
+            </div>
+        </div>
+      `;
+        });
+
+        //wrap nicely in box with header
+        let finalHtml = `
+         <div>
+             <div class="fw-bold hstack gap-2 d-flex" style="max-width: 667px;"><h5 class="mt-2 me-auto">Event Type </h5></div>
+             <hr class="mt-1 mb-2">
+         </div>
+         <div style="width: 667.5px; font-size: 15px; font-family: 'Lexend Deca';" class="d-flex flex-wrap gap-1 mb-3">
+            ${generatedHtml}
+         </div>
+        `;
+        return finalHtml;
+    }
+
+    // Attach event handlers to checkboxes
+    attachEventHandlers() {
+        const parentCheckboxes = $(`#${this.ElementID} .parent-checkbox`);
+        const childCheckboxes = $(`#${this.ElementID} .child-checkbox`);
+
+        // When a parent checkbox is clicked
+        parentCheckboxes.on('click', (e) => {
+            const parentCheckbox = $(e.target);
+            const childCheckboxesContainer = parentCheckbox.closest('.form-check').find('.child-checkboxes');
+            const childCheckboxes = childCheckboxesContainer.find('.child-checkbox');
+
+            if (parentCheckbox.is(':checked')) {
+                childCheckboxes.prop('checked', true);
+            } else {
+                childCheckboxes.prop('checked', false);
+            }
+        });
+
+        // When a child checkbox is clicked
+        childCheckboxes.on('click', (e) => {
+            const childCheckbox = $(e.target);
+            const parentCheckboxContainer = childCheckbox.closest('.form-check').parent().parent();
+            const parentCheckbox = parentCheckboxContainer.find('.parent-checkbox');
+            const childCheckboxesContainer = parentCheckboxContainer.find('.child-checkboxes');
+            const childCheckboxes = childCheckboxesContainer.find('.child-checkbox');
+
+            const checkedChildCheckboxes = childCheckboxes.filter(':checked');
+            if (checkedChildCheckboxes.length === 0) {
+                parentCheckbox.prop('checked', false).prop('indeterminate', false);
+            } else if (checkedChildCheckboxes.length === childCheckboxes.length) {
+                parentCheckbox.prop('checked', true).prop('indeterminate', false);
+            } else {
+                parentCheckbox.prop('checked', false).prop('indeterminate', true);
+            }
+        });
+    }
+}

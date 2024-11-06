@@ -6,6 +6,8 @@ new PageHeader("PageHeader");
 new IconButton("IconButton_Calculate");
 new IconButton("IconButton_Advanced");
 
+new EventsSelector("EventsSelector");
+
 //SELECT DEFAULT ALGORITHMS
 //SET ON : 8 JAN "24
 //below algo tested well for Monroe and Steve

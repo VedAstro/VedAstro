@@ -11,7 +11,7 @@ namespace VedAstro.Library
     /// Note :
     /// -This is the main list, all add & remove is done here
     /// -Edits here also reflects in GUI
-    /// -Multiple tags can be used by 1 event, separated by comma in in the Tag element
+    /// -Multiple tags can be used by 1 event, separated by comma in the Tag element
     /// </summary>
     public enum EventTag
     {

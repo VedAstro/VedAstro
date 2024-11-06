@@ -429,7 +429,6 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Gets all event data/types that match the inputed tag
-        /// NOTE: file is cached, so may not be latest
         /// </summary>
         public static List<EventData> GetEventDataListByTag(EventTag tag)
         {

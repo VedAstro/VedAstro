@@ -167,64 +167,64 @@ namespace VedAstro.Library
                         houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.HoraD2:
-                        houseZodiacSign = HouseHoraSign(houseName, time);
+                        houseZodiacSign = HouseHoraD2Sign(houseName, time);
                         houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.DrekkanaD3:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.DrekkanaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseDrekkanaD3Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.ChaturthamshaD4:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.ChaturthamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseChaturthamshaD4Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.SaptamshaD7:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.SaptamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseSaptamshaD7Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.NavamshaD9:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.NavamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseNavamshaD9Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.DashamamshaD10:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.DashamamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseDashamamshaD10Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.DwadashamshaD12:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.DwadashamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseDwadashamshaD12Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.ShodashamshaD16:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.ShodashamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseShodashamshaD16Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.VimshamshaD20:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.VimshamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseVimshamshaD20Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.ChaturvimshamshaD24:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.ChaturvimshamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseChaturvimshamshaD24Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.BhamshaD27:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.BhamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseBhamshaD27Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.TrimshamshaD30:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.TrimshamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseTrimshamshaD30Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.KhavedamshaD40:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.KhavedamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseKhavedamshaD40Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.AkshavedamshaD45:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.AkshavedamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseAkshavedamshaD45Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.ShashtyamshaD60:
-                        houseZodiacSign = HouseZodiacSign(houseName, time);
-                        houseSignName = Calculate.ShashtyamshaSignName(houseZodiacSign).GetSignName();
+                        houseZodiacSign = HouseShashtyamshaD60Sign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
                         break;
                     default:
                         throw new Exception("Chart Type Not YET Coded for!");

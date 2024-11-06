@@ -1334,31 +1334,31 @@ namespace VedAstro.Library.Tests
             //use LAHIRI
             Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
 
-            var test1 = Calculate.PlanetHoraSigns(PlanetName.Sun, StandardHoroscope);
+            var test1 = Calculate.PlanetHoraD2Signs(PlanetName.Sun, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Leo, test1);
 
-            var test2 = Calculate.PlanetHoraSigns(PlanetName.Moon, StandardHoroscope);
+            var test2 = Calculate.PlanetHoraD2Signs(PlanetName.Moon, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Leo, test2);
 
-            var test3 = Calculate.PlanetHoraSigns(PlanetName.Mars, StandardHoroscope);
+            var test3 = Calculate.PlanetHoraD2Signs(PlanetName.Mars, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Leo, test3);
 
-            var test4 = Calculate.PlanetHoraSigns(PlanetName.Mercury, StandardHoroscope);
+            var test4 = Calculate.PlanetHoraD2Signs(PlanetName.Mercury, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Leo, test4);
 
-            var test5 = Calculate.PlanetHoraSigns(PlanetName.Jupiter, StandardHoroscope);
+            var test5 = Calculate.PlanetHoraD2Signs(PlanetName.Jupiter, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Cancer, test5);
 
-            var test6 = Calculate.PlanetHoraSigns(PlanetName.Venus, StandardHoroscope);
+            var test6 = Calculate.PlanetHoraD2Signs(PlanetName.Venus, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Leo, test6);
 
-            var test7 = Calculate.PlanetHoraSigns(PlanetName.Saturn, StandardHoroscope);
+            var test7 = Calculate.PlanetHoraD2Signs(PlanetName.Saturn, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Leo, test7);
 
-            var test8 = Calculate.PlanetHoraSigns(PlanetName.Rahu, StandardHoroscope);
+            var test8 = Calculate.PlanetHoraD2Signs(PlanetName.Rahu, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Leo, test8);
 
-            var test9 = Calculate.PlanetHoraSigns(PlanetName.Ketu, StandardHoroscope);
+            var test9 = Calculate.PlanetHoraD2Signs(PlanetName.Ketu, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Leo, test9);
 
         }
@@ -1370,31 +1370,31 @@ namespace VedAstro.Library.Tests
             //use LAHIRI
             Calculate.Ayanamsa = (int)SimpleAyanamsa.LahiriChitrapaksha;
 
-            var test1 = Calculate.PlanetDrekkanaSign(PlanetName.Sun, StandardHoroscope);
+            var test1 = Calculate.PlanetDrekkanaD3Sign(PlanetName.Sun, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Taurus, test1);
 
-            var test2 = Calculate.PlanetDrekkanaSign(PlanetName.Moon, StandardHoroscope);
+            var test2 = Calculate.PlanetDrekkanaD3Sign(PlanetName.Moon, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Aquarius, test2);
 
-            var test3 = Calculate.PlanetDrekkanaSign(PlanetName.Mars, StandardHoroscope);
+            var test3 = Calculate.PlanetDrekkanaD3Sign(PlanetName.Mars, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Pisces, test3);
 
-            var test4 = Calculate.PlanetDrekkanaSign(PlanetName.Mercury, StandardHoroscope);
+            var test4 = Calculate.PlanetDrekkanaD3Sign(PlanetName.Mercury, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Libra, test4);
 
-            var test5 = Calculate.PlanetDrekkanaSign(PlanetName.Jupiter, StandardHoroscope);
+            var test5 = Calculate.PlanetDrekkanaD3Sign(PlanetName.Jupiter, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Aquarius, test5);
 
-            var test6 = Calculate.PlanetDrekkanaSign(PlanetName.Venus, StandardHoroscope);
+            var test6 = Calculate.PlanetDrekkanaD3Sign(PlanetName.Venus, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Capricorn, test6);
 
-            var test7 = Calculate.PlanetDrekkanaSign(PlanetName.Saturn, StandardHoroscope);
+            var test7 = Calculate.PlanetDrekkanaD3Sign(PlanetName.Saturn, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Leo, test7);
 
-            var test8 = Calculate.PlanetDrekkanaSign(PlanetName.Rahu, StandardHoroscope);
+            var test8 = Calculate.PlanetDrekkanaD3Sign(PlanetName.Rahu, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Cancer, test8);
 
-            var test9 = Calculate.PlanetDrekkanaSign(PlanetName.Ketu, StandardHoroscope);
+            var test9 = Calculate.PlanetDrekkanaD3Sign(PlanetName.Ketu, StandardHoroscope);
             Assert.AreEqual(ZodiacName.Capricorn, test9);
 
         }

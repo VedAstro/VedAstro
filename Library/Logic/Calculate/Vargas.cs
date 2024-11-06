@@ -49,13 +49,16 @@ namespace VedAstro.Library
         /// Elements of Vedic Astrology - K. S. Charak (chapter on vargas)
         /// </summary>
         /// <param name="precomputedTable">special tables pre made in code for each varga type</param>
-        public static ZodiacSign VargasCoreCalculator(ZodiacSign zodiacSign, Dictionary<DegreeRange, ZodiacName> precomputedTable, int divisionNumber)
+        public static ZodiacSign VargasCoreCalculator(ZodiacSign zodiacSign, Dictionary<ZodiacName, Dictionary<DegreeRange, ZodiacName>> precomputedTable, int divisionNumber)
         {
-            // Get the degree within the sign
+            //get the rasi (D1) signs column of precomputed data
+            var rasiSignColumn = precomputedTable[zodiacSign.GetSignName()];
+
+            //get the degree within the sign of rasi (D1)
             var degreesInSign = zodiacSign.GetDegreesInSign().TotalDegrees;
 
-            //find where table indexes meet
-            foreach (var rowData in precomputedTable)
+            //find row where input degree is in range
+            foreach (var rowData in rasiSignColumn)
             {
                 //NOTE : scan is assumed to begin at small number and work way up
                 var isInRange = rowData.Key.IsWithinRange(degreesInSign);
@@ -70,7 +73,7 @@ namespace VedAstro.Library
                 }
             }
 
-            throw new Exception("END OF LINE!");
+            throw new Exception("Error Degree not found in Varga table!");
         }
 
         //MASSIVE STATIC TABLES

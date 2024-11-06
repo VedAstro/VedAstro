@@ -2012,8 +2012,7 @@ class PageFooter {
                     <div class="me-5">
                         <!--SOCIAL ICONS-->
                         <ul class="list-unstyled d-flex">
-                            <li title="Buy us coffee" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://ko-fi.com/vedastro"><iconify-icon icon="line-md:coffee-half-empty-twotone-loop" width="24" height="24" ></iconify-icon></a></li>
-                            <li title="Buy us Cupcake" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://ko-fi.com/vedastro"><iconify-icon icon="fluent-emoji:cupcake" width="24" height="24" ></iconify-icon></a></li>
+                            <li title="Buy us Coffee" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://ko-fi.com/vedastro"><iconify-icon icon="line-md:coffee-half-empty-twotone-loop" width="24" height="24" ></iconify-icon></a></li>
                             <li title="Updates via Twitter" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://x.com/_VedAstro"><iconify-icon icon="skill-icons:twitter" width="22" height="22" ></iconify-icon></a></li>
                             <li title="Become a Patron" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://patreon.com/vedastro"><iconify-icon icon="logos:patreon" width="22" height="22" ></iconify-icon></a></li>
                             <li title="View Awesome Source Code" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://github.com/VedAstro/VedAstro"><iconify-icon icon="skill-icons:github-dark" width="22" height="22" ></iconify-icon></a></li>

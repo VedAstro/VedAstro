@@ -5723,23 +5723,26 @@ class EventsSelector {
 
     // Convert data to HTML
     convertDataToHtml(data) {
+
         let generatedHtml = "";
         Object.keys(data.GetAllEventDataGroupedByTag).forEach((tag) => {
             const events = data.GetAllEventDataGroupedByTag[tag];
             generatedHtml += `
-        <div style="width: 254.9px;" class="form-check hstack gap-2">
-            <input value="" id="checkbox_${tag}" style="width: 40px; height: 28px;" class="form-check-input parent-checkbox" type="checkbox">
-            <label class="form-check-label d-flex gap-2 w-100" for="checkbox_${tag}">
-                <div class="" style="">
-                    <iconify-icon icon="carbon:construction" width="25" height="25"></iconify-icon>
-                </div>
-                ${tag}
+        <div style="width: 254.9px;" class="form-check vstack gap-2">
+            <div class="hstack gap-2">
+                <input value="" id="checkbox_${tag}" style="width: 40px; height: 28px;" class="form-check-input parent-checkbox" type="checkbox">
+                <label class="form-check-label d-flex gap-2 w-100" for="checkbox_${tag}">
+                    <div class="" style="">
+                        <iconify-icon icon="carbon:construction" width="25" height="25"></iconify-icon>
+                    </div>
+                    ${tag}
 
-                <!--TODO make below into button that when clicked toggles the visibility of child checkboxes-->
-                <div class="ms-auto me-3" style="cursor: pointer; float: right; opacity: 1;">
-                    <iconify-icon icon="ic:outline-expand-circle-down" width="22" height="22"></iconify-icon>
-                </div>
-            </label>
+                    <!-- Button to toggle visibility of child checkboxes -->
+                    <button class="ms-auto me-3 toggle-child-checkboxes" style="cursor: pointer; float: right; opacity: 1; border: none; background: none; padding: 0;">
+                        <iconify-icon icon="ic:outline-expand-circle-down" width="22" height="22"></iconify-icon>
+                    </button>
+                </label>
+            </div>
             <div style="display:none;" class="child-checkboxes">
               ${events.map((event) => `
                 <div class="form-check">
@@ -5751,6 +5754,7 @@ class EventsSelector {
         </div>
       `;
         });
+
 
         //wrap nicely in box with header
         let finalHtml = `
@@ -5800,5 +5804,20 @@ class EventsSelector {
                 parentCheckbox.prop('checked', false).prop('indeterminate', true);
             }
         });
+
+        // Toggle child checkboxes visibility
+        const toggleChildCheckboxesButtons = $(`#${this.ElementID} .toggle-child-checkboxes`);
+        toggleChildCheckboxesButtons.on('click', (e) => {
+            const button = $(e.target);
+            const childCheckboxesContainer = button.closest('.form-check').find('.child-checkboxes');
+            childCheckboxesContainer.toggle();
+            const icon = button.find('iconify-icon');
+            if (childCheckboxesContainer.is(':visible')) {
+                icon.attr('icon', 'ic:outline-expand-circle-up');
+            } else {
+                icon.attr('icon', 'ic:outline-expand-circle-down');
+            }
+        });
+
     }
 }

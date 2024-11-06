@@ -5680,12 +5680,15 @@ class AlgorithmsSelector {
 class EventsSelector {
     // Class properties
     ElementID = "";
+    AllowedParentCheckboxes = [];
 
     // Constructor to initialize the EventsSelector object
-    constructor(elementId) {
+    constructor(elementId, allowedParentCheckboxes) {
         this.ElementID = elementId;
+        this.AllowedParentCheckboxes = allowedParentCheckboxes;
         this.initializeMainBody();
     }
+
 
     // Method to initialize the main body of the page header
     async initializeMainBody() {
@@ -5695,8 +5698,16 @@ class EventsSelector {
         // Fetch data from API
         const data = await this.fetchDataFromApi();
 
+        // Filter the data to only include the specified parent checkboxes
+        const filteredData = {};
+        Object.keys(data.GetAllEventDataGroupedByTag).forEach((tag) => {
+            if (this.AllowedParentCheckboxes.includes(tag)) {
+                filteredData[tag] = data.GetAllEventDataGroupedByTag[tag];
+            }
+        });
+
         // Generate HTML and inject it into the element
-        const htmlString = this.convertDataToHtml(data);
+        const htmlString = this.convertDataToHtml({ GetAllEventDataGroupedByTag: filteredData });
         $(`#${this.ElementID}`).html(htmlString);
 
         // Attach event handlers to checkboxes
@@ -5723,50 +5734,78 @@ class EventsSelector {
 
     // Convert data to HTML
     convertDataToHtml(data) {
-
         let generatedHtml = "";
+        let parentCheckboxCount = 0;
+        let columnHtml = "";
+
         Object.keys(data.GetAllEventDataGroupedByTag).forEach((tag) => {
             const events = data.GetAllEventDataGroupedByTag[tag];
-            generatedHtml += `
-        <div style="width: 254.9px;" class="form-check vstack gap-2">
-            <div class="hstack gap-2">
-                <input value="" id="checkbox_${tag}" style="width: 40px; height: 28px;" class="form-check-input parent-checkbox" type="checkbox">
-                <label class="form-check-label d-flex gap-2 w-100" for="checkbox_${tag}">
-                    <div class="" style="">
-                        <iconify-icon icon="carbon:construction" width="25" height="25"></iconify-icon>
-                    </div>
-                    ${tag}
 
-                    <!-- Button to toggle visibility of child checkboxes -->
-                    <button class="ms-auto me-3 toggle-child-checkboxes" style="cursor: pointer; float: right; opacity: 1; border: none; background: none; padding: 0;">
-                        <iconify-icon icon="ic:outline-expand-circle-down" width="22" height="22"></iconify-icon>
-                    </button>
-                </label>
-            </div>
-            <div style="display:none;" class="child-checkboxes">
-              ${events.map((event) => `
-                <div class="form-check">
-                  <input class="form-check-input child-checkbox" type="checkbox" value="" id="checkbox_${event.Name}">
-                  <label class="form-check-label" for="checkbox_${event.Name}">${event.Name}</label>
+            // Generate HTML for parent checkbox
+            const parentCheckboxHtml = `
+            <div style="width: 254.9px;" class="form-check vstack gap-2">
+                <div class="hstack gap-2">
+                    <input value="" id="checkbox_${tag}" style="width: 40px; height: 28px;" class="form-check-input parent-checkbox" type="checkbox">
+                    <label class="form-check-label d-flex gap-2 w-100" for="checkbox_${tag}">
+                        <div class="" style="">
+                            <iconify-icon icon="carbon:construction" width="25" height="25"></iconify-icon>
+                        </div>
+                        ${tag}
+
+                        <!-- Button to toggle visibility of child checkboxes -->
+                        <button class="ms-auto me-3 toggle-child-checkboxes" style="cursor: pointer; float: right; opacity: 1; border: none; background: none; padding: 0;">
+                            <iconify-icon icon="ic:outline-expand-circle-down" width="22" height="22"></iconify-icon>
+                        </button>
+                    </label>
                 </div>
-              `).join('')}
+                <div style="display:none;" class="child-checkboxes">
+                    ${events.map((event) => `
+                        <div class="form-check">
+                            <input class="form-check-input child-checkbox" type="checkbox" value="" id="checkbox_${event.Name}">
+                            <label class="form-check-label" for="checkbox_${event.Name}">${event.Name}</label>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
-        </div>
-      `;
+        `;
+
+            // Add parent checkbox HTML to column HTML
+            columnHtml += parentCheckboxHtml;
+            parentCheckboxCount++;
+
+            // If 10 parent checkboxes have been added, wrap them in a new div and add to generated HTML
+            if (parentCheckboxCount % 5 === 0) {
+                generatedHtml += `
+                <div style=" font-size: 15px; font-family: 'Lexend Deca';" class="align-self-start d-flex flex-column gap-1 mb-3">
+                    ${columnHtml}
+                </div>
+            `;
+                columnHtml = "";
+            }
         });
 
-
-        //wrap nicely in box with header
-        let finalHtml = `
-         <div>
-             <div class="fw-bold hstack gap-2 d-flex" style="max-width: 667px;"><h5 class="mt-2 me-auto">Event Type </h5></div>
-             <hr class="mt-1 mb-2">
-         </div>
-         <div style="width: 667.5px; font-size: 15px; font-family: 'Lexend Deca';" class="d-flex flex-wrap gap-1 mb-3">
-            ${generatedHtml}
-         </div>
+        // If there are remaining parent checkboxes, wrap them in a new div and add to generated HTML
+        if (columnHtml !== "") {
+            generatedHtml += `
+            <div style=" font-size: 15px; font-family: 'Lexend Deca';" class="align-self-start d-flex flex-column gap-1 mb-3">
+                ${columnHtml}
+            </div>
         `;
-        return finalHtml;
+        }
+
+        // Add header to generated HTML
+        generatedHtml = `
+        <div>
+            <div class="fw-bold hstack gap-2 d-flex" style="max-width: 667px;"><h5 class="mt-2 me-auto">Event Type </h5></div>
+            <hr class="mt-1 mb-2">
+        </div>
+        <div class="d-flex flex-wrap">
+            ${generatedHtml}
+        </div>
+        
+    `;
+
+        return generatedHtml;
     }
 
     // Attach event handlers to checkboxes

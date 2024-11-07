@@ -5984,11 +5984,43 @@ class TimeRangeSelector {
     }
 
     getSelectedTimeRangeAsURLString() {
-        //if a preset is selected function returns "TimeRange/PresetValue"
+        const selectedValue = $(`#${this.ElementID} .time-range-select`).val();
 
         //if a custom range is selected, then it returns "Start/00:00/01/01/2024/End/00:00/31/12/2024/+08:00/"
         //NOTE: time is always set to 00:00 and start date is always the 1st of the month & end date is always end of the month
+        if (selectedValue === 'selectCustomYear') {
+            const startYear = $(`#${this.ElementID} .start-year-input`).val();
+            const startMonth = $(`#${this.ElementID} .start-month-input`).val();
+            const endYear = $(`#${this.ElementID} .end-year-input`).val();
+            const endMonth = $(`#${this.ElementID} .end-month-input`).val();
+
+            //minus -1 because uses 0 based month system by Date object
+            const startDate = new Date(startYear, startMonth - 1, 1);
+            const endDate = new Date(endYear, endMonth - 1, this.getLastDayOfMonth(endYear, endMonth - 1));
+
+            //get user's current timezone UTC offset (system time)
+            let offsetString = this.getSystemOffset();
+
+            return `Start/00:00/${startDate.getDate().toString().padStart(2, '0')}/${startDate.getMonth().toString().padStart(2, '0')}/${startDate.getFullYear()}/End/00:00/${endDate.getDate().toString().padStart(2, '0')}/${endDate.getMonth().toString().padStart(2, '0')}/${endDate.getFullYear()}/${offsetString}/`;
+        }
+        //if a preset is selected function returns "TimeRange/PresetValue"
+        else {
+            return `TimeRange/${selectedValue}`;
+        }
     }
+
+    //offset nicely formatted
+    getSystemOffset() {
+        const offset = new Date().getTimezoneOffset();
+        const offsetHours = Math.floor(Math.abs(offset) / 60);
+        const offsetMinutes = Math.abs(offset) % 60;
+        const offsetString = (offset < 0 ? '+' : '-') + String(offsetHours).padStart(2, '0') + ':' + String(offsetMinutes).padStart(2, '0');
+        return offsetString;
+    }
+    getLastDayOfMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
+    }
+
 
     // Method to generate the HTML for the page header
     async generateHtmlBody() {

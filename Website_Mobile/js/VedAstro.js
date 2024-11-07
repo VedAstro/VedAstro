@@ -6017,7 +6017,20 @@ class TimeRangeSelector {
 
     //calculate the number of days between start date and end date
     getDaysInRange() {
+        const startYear = parseInt($(`#${this.ElementID} .start-year-input`).val());
+        const startMonth = parseInt($(`#${this.ElementID} .start-month-input`).val());
+        const endYear = parseInt($(`#${this.ElementID} .end-year-input`).val());
+        const endMonth = parseInt($(`#${this.ElementID} .end-month-input`).val());
 
+        // Create Date objects for start and end dates
+        const startDate = new Date(startYear, startMonth - 1, 1);
+        const endDate = new Date(endYear, endMonth - 1, this.getLastDayOfMonth(endYear, endMonth - 1));
+
+        // Calculate the difference in days
+        //the `+ 1` at the end of the calculation is to include the last day of the range in the count.
+        const differenceInDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1;
+
+        return differenceInDays;
     }
 
     //check if the dates are valid & filled, else shows user msg, and returns false

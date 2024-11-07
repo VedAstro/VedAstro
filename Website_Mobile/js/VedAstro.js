@@ -5682,6 +5682,7 @@ class EventsSelector {
     ElementID = "";
     AllowedParentCheckboxes = [];
     DefaultSelectedTags = [];
+    ApiDataStorageKey = "AllEventDataGroupedByTag";
 
     // Constructor to initialize the EventsSelector object
     constructor(elementId, allowedParentCheckboxes, defaultSelectedTags = []) {
@@ -5691,14 +5692,13 @@ class EventsSelector {
         this.initializeMainBody();
     }
 
-
     // Method to initialize the main body of the page header
     async initializeMainBody() {
         // Empty the content of the element with the given ID
         $(`#${this.ElementID}`).empty();
 
-        // Fetch data from API
-        const data = await this.fetchDataFromApi();
+        // Fetch data from API or local storage
+        const data = await this.fetchDataFromApiOrStorage();
 
         // Filter the data to only include the specified parent checkboxes
         const filteredData = {};
@@ -5717,11 +5717,25 @@ class EventsSelector {
 
         // Attach event handlers to checkboxes
         this.attachEventHandlers();
-
     }
 
-    // Fetch data from API
-    async fetchDataFromApi() {
+    // Fetch data from API or local storage
+    async fetchDataFromApiOrStorage() {
+        const storedData = localStorage.getItem(this.ApiDataStorageKey);
+        if (storedData) {
+            try {
+                const data = JSON.parse(storedData);
+                if (data.Status === "Pass") {
+                    return data.Payload;
+                } else {
+                    localStorage.removeItem(this.ApiDataStorageKey);
+                }
+            } catch (error) {
+                console.error("Error parsing stored data:", error);
+                localStorage.removeItem(this.ApiDataStorageKey);
+            }
+        }
+
         try {
             const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetAllEventDataGroupedByTag`);
             if (!response.ok) {
@@ -5731,6 +5745,7 @@ class EventsSelector {
             if (data.Status !== 'Pass') {
                 throw new Error('Failed to retrieve data. Status is not "Pass".');
             }
+            localStorage.setItem(this.ApiDataStorageKey, JSON.stringify(data));
             return data.Payload;
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -5738,7 +5753,6 @@ class EventsSelector {
         }
     }
 
-    // Convert data to HTML
     // Convert data to HTML
     convertDataToHtml(data) {
         let generatedHtml = "";
@@ -5814,7 +5828,6 @@ class EventsSelector {
 
         return generatedHtml;
     }
-
 
     //gets preset icons for event tags, if not specified give general event icon
     getIconBasedOnTagName(eventTagName) {

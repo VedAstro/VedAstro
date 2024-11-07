@@ -5543,6 +5543,7 @@ class HoroscopeChat {
 class AlgorithmsSelector {
     // Class properties
     ElementID = "";
+    ApiDataStorageKey = "AllEventsChartAlgorithms";
 
     // Constructor to initialize the PageHeader object
     constructor(elementId, defaultSelection) {
@@ -5614,6 +5615,22 @@ class AlgorithmsSelector {
 
 
     async fetchAlgorithmListFromApi() {
+        const storedData = localStorage.getItem(this.ApiDataStorageKey);
+
+        if (storedData) {
+            try {
+                const data = JSON.parse(storedData);
+                if (data.Status === "Pass") {
+                    return data.Payload;
+                } else {
+                    localStorage.removeItem(this.ApiDataStorageKey);
+                }
+            } catch (error) {
+                console.error("Error parsing stored data:", error);
+                localStorage.removeItem(this.ApiDataStorageKey);
+            }
+        }
+
         try {
             const response = await fetch(`${VedAstro.ApiDomain}/Calculate/GetAllEventsChartAlgorithms`);
             if (!response.ok) {
@@ -5623,9 +5640,8 @@ class AlgorithmsSelector {
             if (data.Status !== 'Pass') {
                 throw new Error('Failed to retrieve data. Status is not "Pass".');
             }
-
+            localStorage.setItem(this.ApiDataStorageKey, JSON.stringify(data));
             return data.Payload;
-
         } catch (error) {
             console.error('Error fetching data:', error);
             return []; // Return an empty array if there's an error
@@ -5675,7 +5691,6 @@ class AlgorithmsSelector {
     `;
     }
 }
-
 
 class EventsSelector {
     // Class properties

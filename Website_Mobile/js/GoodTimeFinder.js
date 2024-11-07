@@ -11,7 +11,8 @@ const allowedParentCheckboxes = ['General', 'Personal', 'Agriculture', 'Building
     'Astronomical', 'BuyingSelling', 'Medical', 'Marriage', 'Travel', 'Studies', 'HairNailCutting'];
 var eventsSelector = new EventsSelector("EventsSelector", allowedParentCheckboxes, defaultSelected);
 
-var timeRangeSelector = new TimeRangeSelector("TimeRangeSelector");
+const defaultPreset = "1month";
+var timeRangeSelector = new TimeRangeSelector("TimeRangeSelector", defaultPreset);
 
 
 //SELECT DEFAULT ALGORITHMS
@@ -39,19 +40,24 @@ async function OnClickCalculate() {
     //if no selected person then ask user if sleeping 😴
     if (selectedPerson == null) { Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true }); }
 
-
     //make sure at least 1 event is selected
+    let selectedEventTags = eventsSelector.getSelectedTagNamesAsString(); //get selected events tag names
+    if (selectedEventTags == null) { Swal.fire({ icon: 'error', title: 'Select an Event Type', html: 'Minimum 1 <strong>Event Type</strong> is needed. Without it what to calculate?😨', showConfirmButton: true }); }
+
+    //check if time range is valid, will auto show invalid msg
+    let rangeIsValid = timeRangeSelector.isValid();
+    if (!rangeIsValid) { return; } //end here if not valid
+
 
     //------------------------------OK LETS START-----------------------------
 
     //update page title with person name to for easy multi tab use (UX ease)
     document.title = `${selectedPerson.DisplayName} | Good Time Finder`;
 
-    //-------------------------------CALCULATION STUFF ---------------------
-    var selectedPersonId = selectedPerson.PersonId;
 
-    //get selected events tag names
-    var selectedEventTags = eventsSelector.getSelectedTagNamesAsString();
+    //------------------------------- CALCULATION STUFF ---------------------
+
+    var selectedPersonId = selectedPerson.PersonId;
 
     //get selected coloring algorithms
     var selectedAlgorithms = algoSelector.getSelectedAlgorithmsAsString();
@@ -59,8 +65,8 @@ async function OnClickCalculate() {
     //NOTE: time range can be both custom & presets
     let timeRangeUrl = timeRangeSelector.getSelectedTimeRangeAsURLString();
 
-    //based on time range calculate days per pixel for 1000px
-    let daysPerPixel = "0.1";
+    //based on time range calculate days per pixel for 1000px (days between/width in px)
+    let daysPerPixel = timeRangeSelector.getDaysInRange()/1000;
 
     //construct API call URL in correct format
     // .../Viknesh1994                     : 0

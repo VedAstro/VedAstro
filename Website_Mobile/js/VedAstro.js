@@ -5962,17 +5962,19 @@ class TimeRangeSelector {
     // Class properties
     ElementID = "";
     storageKey = "timeRangeSelector";
+    defaultPreset = "";
 
     // Constructor to initialize the PageHeader object
-    constructor(elementId) {
+    constructor(elementId, defaultPreset = "") {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
+        this.defaultPreset = defaultPreset;
 
         // Call the method to initialize the body html
         this.initializeMainBody();
     }
 
-    // Method to initialize the render HTML
+
     async initializeMainBody() {
         // Empty the content of the element with the given ID
         $(`#${this.ElementID}`).empty();
@@ -5983,10 +5985,19 @@ class TimeRangeSelector {
         // Initialize stored values
         this.initStoredValues();
 
+        // Set default preset if provided
+        if (this.defaultPreset) {
+            $(`#${this.ElementID} .time-range-select`).val(this.defaultPreset);
+            if (this.defaultPreset !== 'selectCustomYear') {
+                $(`#${this.ElementID} .custom-time-range-holder`).hide();
+            }
+        }
+
         //attach event handlers
         this.addDropdownEventListener();
         this.addInputEventListeners();
     }
+
 
     initStoredValues() {
         const storedValues = localStorage.getItem(this.storageKey);
@@ -6002,6 +6013,42 @@ class TimeRangeSelector {
             $(`#${this.ElementID} .start-year-input`).val(currentYear);
             $(`#${this.ElementID} .end-year-input`).val(currentYear);
         }
+    }
+
+    //calculate the number of days between start date and end date
+    getDaysInRange() {
+
+    }
+
+    //check if the dates are valid & filled, else shows user msg, and returns false
+    isValid() {
+        const startYear = parseInt($(`#${this.ElementID} .start-year-input`).val());
+        const startMonth = parseInt($(`#${this.ElementID} .start-month-input`).val());
+        const endYear = parseInt($(`#${this.ElementID} .end-year-input`).val());
+        const endMonth = parseInt($(`#${this.ElementID} .end-month-input`).val());
+
+        //check if dates is not empty
+        if (isNaN(startYear) || isNaN(startMonth) || isNaN(endYear) || isNaN(endMonth)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Date is wrong sir! 📅',
+                text: 'Please check 🧐 if year and month is correct'
+            });
+            return false;
+        }
+
+        //check if start time is before end time
+        if (startYear < endYear || (startYear === endYear && startMonth <= endMonth)) {
+            return true;
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Dates are reversed! 🤪',
+                text: 'Start date should be before end date'
+            });
+            return false;
+        }
+
     }
 
     getSelectedTimeRangeAsURLString() {
@@ -6064,7 +6111,7 @@ class TimeRangeSelector {
                 </div>
             </label>
             <select class="form-control time-range-select" style="width: 254.9px;">
-                <option value="1month" selected="">+/- 1 Months</option>
+                <option style="font-weight: bold; color: #0d6efd;" value="selectCustomYear">Custom Year</option>
                 <option value="1day">+/- 1 Day</option>
                 <option value="1week">+/- 1 Week</option>
                 <option value="1month">+/- 1 Month</option>
@@ -6075,7 +6122,6 @@ class TimeRangeSelector {
                 <option value="3year">+/- 3 Year</option>
                 <option value="5year">+/- 5 Year</option>
                 <option value="10year">+/- 10 Year</option>
-                <option style="font-weight: bold; color: #0d6efd;" value="selectCustomYear">Custom Year</option>
             </select>
         </div>
 

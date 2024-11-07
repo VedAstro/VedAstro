@@ -5689,7 +5689,6 @@ class EventsSelector {
         this.initializeMainBody();
     }
 
-
     // Method to initialize the main body of the page header
     async initializeMainBody() {
         // Empty the content of the element with the given ID
@@ -5882,6 +5881,26 @@ class EventsSelector {
         });
 
 
+
+    }
+
+    /**
+     * Returns a string of selected tag names or null if none are selected. EXP: General,Agriculture
+     */
+    getSelectedTagNamesAsString() {
+        const selectedParentCheckboxes = $(`#${this.ElementID} .parent-checkbox:checked`);
+        const selectedTagNames = [];
+
+        selectedParentCheckboxes.each((index, checkbox) => {
+            const tagName = checkbox.id.replace('checkbox_', '');
+            selectedTagNames.push(tagName);
+        });
+
+        if (selectedTagNames.length === 0) {
+            return null;
+        }
+
+        return selectedTagNames.join(',');
 
     }
 }

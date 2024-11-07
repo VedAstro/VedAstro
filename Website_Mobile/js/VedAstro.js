@@ -5957,3 +5957,125 @@ class EventsSelector {
 
     }
 }
+
+class TimeRangeSelector {
+    // Class properties
+    ElementID = "";
+
+    // Constructor to initialize the PageHeader object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Call the method to initialize the body html
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the render HTML
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+
+        //attach event handlers
+        this.addDropdownEventListener();
+    }
+
+    getSelectedTimeRangeAsURLString() {
+        //if a preset is selected function returns "TimeRange/PresetValue"
+
+        //if a custom range is selected, then it returns "Start/00:00/01/01/2024/End/00:00/31/12/2024/+08:00/"
+        //NOTE: time is always set to 00:00 and start date is always the 1st of the month & end date is always end of the month
+    }
+
+    // Method to generate the HTML for the page header
+    async generateHtmlBody() {
+        // Return the HTML for the page header, including conditional blocks for different screen sizes
+        return `
+        <!-- PRESET SELECTOR -->
+        <div>
+            <label class="form-label">
+                Time Range
+                <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
+                </div>
+            </label>
+            <select class="form-control time-range-select" style="width: 254.9px;">
+                <option value="1month" selected="">+/- 1 Months</option>
+                <option value="1day">+/- 1 Day</option>
+                <option value="1week">+/- 1 Week</option>
+                <option value="1month">+/- 1 Month</option>
+                <option value="2month">+/- 2 Month</option>
+                <option value="3month">+/- 3 Months</option>
+                <option value="6month">+/- 6 Months</option>
+                <option value="1year">+/- 1 Year</option>
+                <option value="3year">+/- 3 Year</option>
+                <option value="5year">+/- 5 Year</option>
+                <option value="10year">+/- 10 Year</option>
+                <option style="font-weight: bold; color: #0d6efd;" value="selectCustomYear">Custom Year</option>
+            </select>
+        </div>
+
+        <!-- CUSTOM TIME RANGE -->
+        <div class="custom-time-range-holder mt-3" style="display: none;">
+            <div class="input-group mb-2" style="width: 312px;">
+                <label class="input-group-text" style="width: 60.1px;">Start</label>
+                <input type="number" class="form-control start-year-input" pattern="\d{4}" title="Four digit year" required="">
+                <span class="input-group-text">Month</span>
+                <select class="form-select start-month-input">
+                    <option value="01" selected="">JAN</option>
+                    <option value="02">FEB</option>
+                    <option value="03">MAR</option>
+                    <option value="04">APR</option>
+                    <option value="05">MAY</option>
+                    <option value="06">JUN</option>
+                    <option value="07">JUL</option>
+                    <option value="08">AUG</option>
+                    <option value="09">SEP</option>
+                    <option value="10">OCT</option>
+                    <option value="11">NOV</option>
+                    <option value="12">DEC</option>
+                </select>
+            </div>
+            <div class="input-group mb-3" style="width: 312px;">
+                <label class="input-group-text" style="width: 60.1px">End</label>
+                <input type="number" class="form-control end-year-input" pattern="\d{4}" title="Four digit year" required="">
+                <span class="input-group-text">Month</span>
+                <select class="form-select end-month-input">
+                    <option value="01">JAN</option>
+                    <option value="02">FEB</option>
+                    <option value="03">MAR</option>
+                    <option value="04">APR</option>
+                    <option value="05">MAY</option>
+                    <option value="06">JUN</option>
+                    <option value="07">JUL</option>
+                    <option value="08">AUG</option>
+                    <option value="09">SEP</option>
+                    <option value="10">OCT</option>
+                    <option value="11">NOV</option>
+                    <option value="12" selected="">DEC</option>
+                </select>
+            </div>
+        </div>
+
+    `;
+    }
+
+    // Add event listener to dropdown
+    addDropdownEventListener() {
+
+        //make custom date selector hide/show
+        $(`#${this.ElementID} .time-range-select`).on('change', (event) => {
+            var $parent = $(event.target).closest(`#${this.ElementID}`);
+            if ($(event.target).val() === 'selectCustomYear') {
+                $parent.find('.custom-time-range-holder').show();
+            } else {
+                $parent.find('.custom-time-range-holder').hide();
+            }
+        });
+    }
+
+
+}

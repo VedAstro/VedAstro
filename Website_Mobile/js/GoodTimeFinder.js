@@ -11,6 +11,9 @@ const allowedParentCheckboxes = ['General', 'Personal', 'Agriculture', 'Building
     'Astronomical', 'BuyingSelling', 'Medical', 'Marriage', 'Travel', 'Studies', 'HairNailCutting'];
 var eventsSelector = new EventsSelector("EventsSelector", allowedParentCheckboxes, defaultSelected);
 
+var timeRangeSelector = new TimeRangeSelector("TimeRangeSelector");
+
+
 //SELECT DEFAULT ALGORITHMS
 //SET ON : 8 JAN "24
 //below algo tested well for Monroe and Steve
@@ -18,8 +21,11 @@ var eventsSelector = new EventsSelector("EventsSelector", allowedParentCheckboxe
 var algoSelector = new AlgorithmsSelector("AlgorithmsSelector", "General,PlanetStrengthDegree,IshtaKashtaPhalaDegree");
 
 var personSelector = new PersonSelectorBox("PersonSelectorBox");
+
 var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox");
 
+
+//------------------------ FUNCTIONS -----------------------------
 
 function OnClickAdvanced() {
     smoothSlideToggle('#GoodTimeFinderAdvancedInputHolder');
@@ -51,7 +57,7 @@ async function OnClickCalculate() {
     var selectedAlgorithms = algoSelector.getSelectedAlgorithmsAsString();
 
     //NOTE: time range can be both custom & presets
-    let timeRangeUrl = `Start/{}/End/{}`;
+    let timeRangeUrl = timeRangeSelector.getSelectedTimeRangeAsURLString();
 
     //based on time range calculate days per pixel for 1000px
     let daysPerPixel = "0.1";

@@ -5961,6 +5961,7 @@ class EventsSelector {
 class TimeRangeSelector {
     // Class properties
     ElementID = "";
+    storageKey = "timeRangeSelector";
 
     // Constructor to initialize the PageHeader object
     constructor(elementId) {
@@ -5979,8 +5980,28 @@ class TimeRangeSelector {
         // Generate the HTML and inject it into the element
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
 
+        // Initialize stored values
+        this.initStoredValues();
+
         //attach event handlers
         this.addDropdownEventListener();
+        this.addInputEventListeners();
+    }
+
+    initStoredValues() {
+        const storedValues = localStorage.getItem(this.storageKey);
+        if (storedValues) {
+            const values = JSON.parse(storedValues);
+            $(`#${this.ElementID} .start-year-input`).val(values.startYear);
+            $(`#${this.ElementID} .start-month-input`).val(values.startMonth);
+            $(`#${this.ElementID} .end-year-input`).val(values.endYear);
+            $(`#${this.ElementID} .end-month-input`).val(values.endMonth);
+        } else {
+            // Set current year as default
+            const currentYear = new Date().getFullYear();
+            $(`#${this.ElementID} .start-year-input`).val(currentYear);
+            $(`#${this.ElementID} .end-year-input`).val(currentYear);
+        }
     }
 
     getSelectedTimeRangeAsURLString() {
@@ -5994,19 +6015,28 @@ class TimeRangeSelector {
             const endYear = $(`#${this.ElementID} .end-year-input`).val();
             const endMonth = $(`#${this.ElementID} .end-month-input`).val();
 
-            //minus -1 because uses 0 based month system by Date object
-            const startDate = new Date(startYear, startMonth - 1, 1);
-            const endDate = new Date(endYear, endMonth - 1, this.getLastDayOfMonth(endYear, endMonth - 1));
+            // Store values in local storage
+            this.storeValues(startYear, startMonth, endYear, endMonth);
 
             //get user's current timezone UTC offset (system time)
             let offsetString = this.getSystemOffset();
 
-            return `Start/00:00/${startDate.getDate().toString().padStart(2, '0')}/${startDate.getMonth().toString().padStart(2, '0')}/${startDate.getFullYear()}/End/00:00/${endDate.getDate().toString().padStart(2, '0')}/${endDate.getMonth().toString().padStart(2, '0')}/${endDate.getFullYear()}/${offsetString}/`;
+            return `Start/00:00/01/${startMonth}/${startYear}/End/00:00/${this.getLastDayOfMonth(endYear, endMonth - 1)}/${endMonth}/${endYear}/${offsetString}`;
         }
         //if a preset is selected function returns "TimeRange/PresetValue"
         else {
             return `TimeRange/${selectedValue}`;
         }
+    }
+
+    storeValues(startYear, startMonth, endYear, endMonth) {
+        const values = {
+            startYear,
+            startMonth,
+            endYear,
+            endMonth
+        };
+        localStorage.setItem(this.storageKey, JSON.stringify(values));
     }
 
     //offset nicely formatted
@@ -6020,7 +6050,6 @@ class TimeRangeSelector {
     getLastDayOfMonth(year, month) {
         return new Date(year, month + 1, 0).getDate();
     }
-
 
     // Method to generate the HTML for the page header
     async generateHtmlBody() {
@@ -6109,5 +6138,15 @@ class TimeRangeSelector {
         });
     }
 
+    addInputEventListeners() {
+        $(`#${this.ElementID} .start-year-input, #${this.ElementID} .start-month-input, #${this.ElementID} .end-year-input, #${this.ElementID} .end-month-input`).on('change', (event) => {
+            const startYear = $(`#${this.ElementID} .start-year-input`).val();
+            const startMonth = $(`#${this.ElementID} .start-month-input`).val();
+            const endYear = $(`#${this.ElementID} .end-year-input`).val();
+            const endMonth = $(`#${this.ElementID} .end-month-input`).val();
+
+            this.storeValues(startYear, startMonth, endYear, endMonth);
+        });
+    }
 
 }

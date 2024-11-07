@@ -5681,13 +5681,16 @@ class EventsSelector {
     // Class properties
     ElementID = "";
     AllowedParentCheckboxes = [];
+    DefaultSelectedTags = [];
 
     // Constructor to initialize the EventsSelector object
-    constructor(elementId, allowedParentCheckboxes) {
+    constructor(elementId, allowedParentCheckboxes, defaultSelectedTags = []) {
         this.ElementID = elementId;
         this.AllowedParentCheckboxes = allowedParentCheckboxes;
+        this.DefaultSelectedTags = defaultSelectedTags;
         this.initializeMainBody();
     }
+
 
     // Method to initialize the main body of the page header
     async initializeMainBody() {
@@ -5709,8 +5712,12 @@ class EventsSelector {
         const htmlString = this.convertDataToHtml({ GetAllEventDataGroupedByTag: filteredData });
         $(`#${this.ElementID}`).html(htmlString);
 
+        // Set default selected tags
+        this.setDefaultSelectedTags();
+
         // Attach event handlers to checkboxes
         this.attachEventHandlers();
+
     }
 
     // Fetch data from API
@@ -5882,6 +5889,20 @@ class EventsSelector {
 
 
 
+    }
+
+    // Method to set default selected tags
+    setDefaultSelectedTags() {
+        const parentCheckboxes = $(`#${this.ElementID} .parent-checkbox`);
+        parentCheckboxes.each((index, checkbox) => {
+            const tagName = checkbox.id.replace('checkbox_', '');
+            if (this.DefaultSelectedTags.includes(tagName)) {
+                $(checkbox).prop('checked', true);
+                const childCheckboxesContainer = $(checkbox).closest('.form-check').find('.child-checkboxes');
+                const childCheckboxes = childCheckboxesContainer.find('.child-checkbox');
+                childCheckboxes.prop('checked', true);
+            }
+        });
     }
 
     /**

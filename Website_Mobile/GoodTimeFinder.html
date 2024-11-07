@@ -140,7 +140,7 @@
                         <!-- CHART OUTPUT -->
                         <div style="margin-top:60.1px; ">
                             <hr>
-                            <div id="EventsChartMainElement" class="vstack gap-1" style="display: none;" _bl_4076="">
+                            <div id="EventsChartMainElement" class="vstack gap-1" style="display: none;">
                                 <div class="hstack gap-2 mb-2">
                                     <style>
                                         .no-dropdown-arrow.dropdown-toggle::after {
@@ -318,11 +318,11 @@
                                     </div>
                                 </div>
 
-                                <div class="container-xxl" id="EventsChartSvgHolder" style="margin-left: -11px; " _bl_4077=""></div>
+                                <div class="container-xxl" id="EventsChartSvgHolder" style="margin-left: -11px; "></div>
                             </div>
                             
                             <!-- PLACEHOLDER TEXT -->
-                            <div>
+                            <div id="EventsChartPlaceHolderMessage">
                                 <div class="d-flex justify-content-center">
                                     <span class="" style="color: #8f8f8f; font-size: 14px;">Chart will appear <strong>here</strong> after <strong>calculate</strong></span>
                                 </div>
@@ -357,6 +357,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mattboldt/typed.js@2.0.11/lib/typed.min.js"></script>
+    
+    <!-- SVG.js used for events chart animation-->
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
 
     <!-- JS APP CODE -->
     <script src="./js/app.js"></script>

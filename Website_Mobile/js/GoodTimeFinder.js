@@ -24,6 +24,7 @@ var algoSelector = new AlgorithmsSelector("AlgorithmsSelector", "General,PlanetS
 var personSelector = new PersonSelectorBox("PersonSelectorBox");
 
 var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox");
+var daysPerPixelInput = new DayPerPixelInput("DayPerPixelInput");
 
 
 //------------------------ FUNCTIONS -----------------------------
@@ -66,7 +67,7 @@ async function OnClickCalculate() {
     let timeRangeUrl = timeRangeSelector.getSelectedTimeRangeAsURLString();
 
     //based on time range calculate days per pixel for 1000px (days between/width in px)
-    let daysPerPixel = timeRangeSelector.getDaysInRange()/1000;
+    let daysPerPixel = daysPerPixelInput.getValue();
 
     //construct API call URL in correct format
     // .../Viknesh1994                     : 0

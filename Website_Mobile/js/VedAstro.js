@@ -6194,6 +6194,10 @@ class TimeRangeSelector {
             } else {
                 $parent.find('.custom-time-range-holder').hide();
             }
+
+            // let days per pixel component know that time range has changed
+            const daysInRange = this.getDaysInRange();
+            $(`#${this.ElementID}`).trigger('timeRangeChanged', [daysInRange]);
         });
     }
 
@@ -6205,8 +6209,13 @@ class TimeRangeSelector {
             const endMonth = $(`#${this.ElementID} .end-month-input`).val();
 
             this.storeValues(startYear, startMonth, endYear, endMonth);
+
+            // let days per pixel component know that time range has changed
+            const daysInRange = this.getDaysInRange();
+            $(`#${this.ElementID}`).trigger('timeRangeChanged', [daysInRange]);
         });
     }
+
 
 }
 
@@ -6221,6 +6230,14 @@ class DayPerPixelInput {
 
         // Call the method to initialize the main body
         this.initializeMainBody();
+
+        // when time range component is updated, it triggers this to recalculate precision 
+        $(document).on('timeRangeChanged', (event, daysInRange) => {
+
+            let daysPerPixel = daysInRange / 1000; //max 1000px width
+
+            $(`#${this.ElementID} .precision-value-input`).val(daysPerPixel);
+        });
     }
 
     // Method to initialize the main body 
@@ -6231,6 +6248,17 @@ class DayPerPixelInput {
         // Generate the HTML and inject it into the element
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
     }
+
+    getValue() {
+        //gets value in input
+        let value = $(`#${this.ElementID} .precision-value-input`).val();
+        let floatValue = parseFloat(value);
+        if (isNaN(floatValue)) {
+            throw new Error(`Invalid input value: ${value}`);
+        }
+        return floatValue;
+    }
+
 
     // Method to generate the HTML 
     async generateHtmlBody() {

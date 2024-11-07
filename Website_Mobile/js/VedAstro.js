@@ -5752,9 +5752,9 @@ class EventsSelector {
                     <input value="" id="checkbox_${tag}" style="width: 40px; height: 28px;" class="form-check-input parent-checkbox" type="checkbox">
                     <label class="form-check-label d-flex gap-2 w-100" for="checkbox_${tag}">
                         <div class="" style="">
-                            <iconify-icon icon="carbon:construction" width="25" height="25"></iconify-icon>
+                            <iconify-icon icon="${this.getIconBasedOnTagName(tag)}" width="25" height="25"></iconify-icon>
                         </div>
-                        ${tag}
+                        ${CommonTools.CamelPascalCaseToSpaced(tag)}
 
                         <!-- Button to toggle visibility of child checkboxes -->
                         <button class="ms-auto me-3 toggle-child-checkboxes" style="cursor: pointer; float: right; opacity: 1; border: none; background: none; padding: 0;">
@@ -5767,7 +5767,7 @@ class EventsSelector {
                     ${events.map((event) => `
                         <div class="form-check">
                             <input class="form-check-input child-checkbox" type="checkbox" value="" id="checkbox_${event.Name}">
-                            <label class="form-check-label" for="checkbox_${event.Name}" title="${event.Description}">${event.Name}</label>
+                            <label class="form-check-label" for="checkbox_${event.Name}" title="${event.Description}">${CommonTools.CamelPascalCaseToSpaced(event.Name)}</label>
                         </div>
                     `).join('')}
                 </div>
@@ -5804,6 +5804,26 @@ class EventsSelector {
     `;
 
         return generatedHtml;
+    }
+
+    //gets preset icons for event tags, if not specified give general event icon
+    getIconBasedOnTagName(eventTagName) {
+
+        const iconMap = {
+            "General": "fluent:people-team-20-regular",
+            "Agriculture": "material-symbols:potted-plant",
+            "Building": "carbon:construction",
+            "Astronomical": "ion:telescope-outline",
+            "BuyingSelling": "material-symbols:shopping-cart",
+            "Medical": "bxs:injection",
+            "Marriage": "fluent-emoji-high-contrast:heart-with-arrow",
+            "Travel": "mdi:plane-train",
+            "Studies": "tabler:school",
+            "Personal": "bi:person-fill",
+            "HairNailCutting": "game-icons:hair-strands"
+        };
+
+        return iconMap[eventTagName] || "material-symbols:event"; // default to general event icon if not found
     }
 
     // Attach event handlers to checkboxes

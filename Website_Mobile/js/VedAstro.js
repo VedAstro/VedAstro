@@ -5739,20 +5739,22 @@ class EventsSelector {
     }
 
     // Convert data to HTML
+    // Convert data to HTML
     convertDataToHtml(data) {
         let generatedHtml = "";
         let parentCheckboxCount = 0;
         let columnHtmlLeft = "";
         let columnHtmlRight = "";
 
-        const totalParentCheckboxes = Object.keys(data.GetAllEventDataGroupedByTag).length;
+        const totalParentCheckboxes = this.AllowedParentCheckboxes.length;
         const middleIndex = Math.ceil(totalParentCheckboxes / 2);
 
-        Object.keys(data.GetAllEventDataGroupedByTag).forEach((tag, index) => {
+        this.AllowedParentCheckboxes.forEach((tag, index) => {
             const events = data.GetAllEventDataGroupedByTag[tag];
 
-            // Generate HTML for parent checkbox
-            const parentCheckboxHtml = `
+            if (events) {
+                // Generate HTML for parent checkbox
+                const parentCheckboxHtml = `
             <div style="width: 254.9px;" class="form-check vstack gap-2">
                 <div class="hstack gap-2">
                     <input value="" id="checkbox_${tag}" style="width: 40px; height: 28px;" class="form-check-input parent-checkbox" type="checkbox">
@@ -5780,11 +5782,12 @@ class EventsSelector {
             </div>
         `;
 
-            // Add parent checkbox HTML to column HTML
-            if (index < middleIndex) {
-                columnHtmlLeft += parentCheckboxHtml;
-            } else {
-                columnHtmlRight += parentCheckboxHtml;
+                // Add parent checkbox HTML to column HTML
+                if (index < middleIndex) {
+                    columnHtmlLeft += parentCheckboxHtml;
+                } else {
+                    columnHtmlRight += parentCheckboxHtml;
+                }
             }
         });
 
@@ -5811,6 +5814,7 @@ class EventsSelector {
 
         return generatedHtml;
     }
+
 
     //gets preset icons for event tags, if not specified give general event icon
     getIconBasedOnTagName(eventTagName) {

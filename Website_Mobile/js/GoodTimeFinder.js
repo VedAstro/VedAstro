@@ -7,8 +7,8 @@ new IconButton("IconButton_Calculate");
 new IconButton("IconButton_Advanced");
 
 const defaultSelected = ['General', 'Personal'];
-const allowedParentCheckboxes = ['General', 'Agriculture', 'Building',
-    'Astronomical', 'BuyingSelling', 'Medical', 'Marriage', 'Travel', 'Studies', 'Personal', 'HairNailCutting'];
+const allowedParentCheckboxes = ['General', 'Personal', 'Agriculture', 'Building',
+    'Astronomical', 'BuyingSelling', 'Medical', 'Marriage', 'Travel', 'Studies', 'HairNailCutting'];
 var eventsSelector = new EventsSelector("EventsSelector", allowedParentCheckboxes, defaultSelected);
 
 //SELECT DEFAULT ALGORITHMS

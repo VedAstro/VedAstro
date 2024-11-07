@@ -5736,9 +5736,13 @@ class EventsSelector {
     convertDataToHtml(data) {
         let generatedHtml = "";
         let parentCheckboxCount = 0;
-        let columnHtml = "";
+        let columnHtmlLeft = "";
+        let columnHtmlRight = "";
 
-        Object.keys(data.GetAllEventDataGroupedByTag).forEach((tag) => {
+        const totalParentCheckboxes = Object.keys(data.GetAllEventDataGroupedByTag).length;
+        const middleIndex = Math.ceil(totalParentCheckboxes / 2);
+
+        Object.keys(data.GetAllEventDataGroupedByTag).forEach((tag, index) => {
             const events = data.GetAllEventDataGroupedByTag[tag];
 
             // Generate HTML for parent checkbox
@@ -5754,15 +5758,16 @@ class EventsSelector {
 
                         <!-- Button to toggle visibility of child checkboxes -->
                         <button class="ms-auto me-3 toggle-child-checkboxes" style="cursor: pointer; float: right; opacity: 1; border: none; background: none; padding: 0;">
-                            <iconify-icon icon="ic:outline-expand-circle-down" width="22" height="22"></iconify-icon>
+                            <iconify-icon class="show-child-button" icon="material-symbols:expand-circle-down-rounded" width="22" height="22"></iconify-icon>
+                            <iconify-icon class="hide-child-button" style="display:none;" icon="material-symbols:expand-circle-up-rounded" width="22" height="22"></iconify-icon>
                         </button>
                     </label>
                 </div>
-                <div style="display:none;" class="child-checkboxes">
+                <div style="display:none; margin-left: -12px;" class="child-checkboxes">
                     ${events.map((event) => `
                         <div class="form-check">
                             <input class="form-check-input child-checkbox" type="checkbox" value="" id="checkbox_${event.Name}">
-                            <label class="form-check-label" for="checkbox_${event.Name}">${event.Name}</label>
+                            <label class="form-check-label" for="checkbox_${event.Name}" title="${event.Description}">${event.Name}</label>
                         </div>
                     `).join('')}
                 </div>
@@ -5770,28 +5775,24 @@ class EventsSelector {
         `;
 
             // Add parent checkbox HTML to column HTML
-            columnHtml += parentCheckboxHtml;
-            parentCheckboxCount++;
-
-            // If 10 parent checkboxes have been added, wrap them in a new div and add to generated HTML
-            if (parentCheckboxCount % 5 === 0) {
-                generatedHtml += `
-                <div style=" font-size: 15px; font-family: 'Lexend Deca';" class="align-self-start d-flex flex-column gap-1 mb-3">
-                    ${columnHtml}
-                </div>
-            `;
-                columnHtml = "";
+            if (index < middleIndex) {
+                columnHtmlLeft += parentCheckboxHtml;
+            } else {
+                columnHtmlRight += parentCheckboxHtml;
             }
         });
 
-        // If there are remaining parent checkboxes, wrap them in a new div and add to generated HTML
-        if (columnHtml !== "") {
-            generatedHtml += `
-            <div style=" font-size: 15px; font-family: 'Lexend Deca';" class="align-self-start d-flex flex-column gap-1 mb-3">
-                ${columnHtml}
+        // Wrap column HTML in div
+        generatedHtml += `
+        <div style=" font-size: 15px; font-family: 'Lexend Deca';" class="d-flex gap-4">
+            <div class="align-self-start d-flex flex-column gap-1 mb-3">
+                ${columnHtmlLeft}
             </div>
-        `;
-        }
+            <div class="align-self-start d-flex flex-column gap-1 mb-3">
+                ${columnHtmlRight}
+            </div>
+        </div>
+    `;
 
         // Add header to generated HTML
         generatedHtml = `
@@ -5799,10 +5800,7 @@ class EventsSelector {
             <div class="fw-bold hstack gap-2 d-flex" style="max-width: 667px;"><h5 class="mt-2 me-auto">Event Type </h5></div>
             <hr class="mt-1 mb-2">
         </div>
-        <div class="d-flex flex-wrap">
-            ${generatedHtml}
-        </div>
-        
+        ${generatedHtml}
     `;
 
         return generatedHtml;
@@ -5847,16 +5845,23 @@ class EventsSelector {
         // Toggle child checkboxes visibility
         const toggleChildCheckboxesButtons = $(`#${this.ElementID} .toggle-child-checkboxes`);
         toggleChildCheckboxesButtons.on('click', (e) => {
-            const button = $(e.target);
+            const button = $(e.target).closest('.toggle-child-checkboxes'); // Traverse up to get the parent button
             const childCheckboxesContainer = button.closest('.form-check').find('.child-checkboxes');
-            childCheckboxesContainer.toggle();
-            const icon = button.find('iconify-icon');
+            childCheckboxesContainer.toggle(); //show/hide
+
+            // Toggle show/hide button icons
+            const showChildButton = button.find('.show-child-button');
+            const hideChildButton = button.find('.hide-child-button');
             if (childCheckboxesContainer.is(':visible')) {
-                icon.attr('icon', 'ic:outline-expand-circle-up');
+                showChildButton.hide();
+                hideChildButton.show();
             } else {
-                icon.attr('icon', 'ic:outline-expand-circle-down');
+                showChildButton.show();
+                hideChildButton.hide();
             }
         });
+
+
 
     }
 }

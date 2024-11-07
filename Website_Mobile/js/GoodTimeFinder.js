@@ -6,7 +6,9 @@ new PageHeader("PageHeader");
 new IconButton("IconButton_Calculate");
 new IconButton("IconButton_Advanced");
 
-new EventsSelector("EventsSelector");
+const allowedParentCheckboxes = ['General', 'Agriculture', 'Building',
+    'Astronomical', 'BuyingSelling', 'Medical', 'Marriage', 'Travel', 'Studies', 'Personal', 'HairNailCutting'];
+new EventsSelector("EventsSelector", allowedParentCheckboxes);
 
 //SELECT DEFAULT ALGORITHMS
 //SET ON : 8 JAN "24

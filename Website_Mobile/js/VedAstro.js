@@ -1874,30 +1874,40 @@ class PageHeader {
         // Return the HTML for the page header, including conditional blocks for different screen sizes
         return `
       <!-- DESKTOP AND TABLET ONLY -->
-      <div class="d-none d-md-block">
-        <div class="vstack mb-2">
+     
+        <!-- Main container with vertical stacking and margin bottom -->
+        <div class="vstack mb-2 d-none d-md-block">
+          <!-- Horizontal stacking container -->
           <div class="hstack">
+            <!-- Vertical stacking container with gap -->
             <div class="vstack gap-2">
-              <h1 class="fw-bold" tabindex="-1">${this.TitleText}</h1>
-              <span style="max-width: 412.5px; font-size: 21px; font-weight: lighter; font-family: inherit;">${this.DescriptionText}</span>
+              <!-- Heading -->
+              <h1 class="fw-bold">${this.TitleText}</h1>
+              <!-- Description -->
+              <span style="max-width:509.8px; font-size: 21px; font-weight: lighter; font-family: inherit;">
+                ${this.DescriptionText}
+              </span>
             </div>
+            <!-- Image container for medium and larger screens -->
             <div class="w-100 d-none d-md-block" style="max-width: 412.5px; text-align: center;">
-              <img src="${this.ImageSrc}" style="width: 195px;" class="">
+              <img src="${this.ImageSrc}" style="width: 231px;" class="">
             </div>
           </div>
+          <!-- Horizontal rule with secondary border and margin top -->
           <hr class="border-secondary border mt-3">
         </div>
-      </div>
+
 
       <!-- MOBILE PORTRAIT ONLY -->
       <div class="d-block d-md-none">
         <div class="mt-3 col d-flex align-items-start">
           <div>
-            <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">${this.TitleText}</h3>
-            <p>${this.DescriptionText}</p>
+            <h3 class="fw-bold mb-0 fs-4 text-body-emphasis" style="position: absolute;">${this.TitleText}</h3>
+            <p class="mb-0" style=" font-size: 13px; margin-top: 33px;">${this.DescriptionText}</p>
           </div>
-          <img class="bi text-body-secondary flex-shrink-0 mt-3 ms-3" style="width: 141px;" src="${this.ImageSrc}" />
+          <img class="bi text-body-secondary flex-shrink-0 mt-3 ms-3" style="width: 157px; align-self: end;" src="${this.ImageSrc}" />
         </div>
+        <hr class="border-secondary border mb-4">
       </div>
     `;
     }
@@ -4277,11 +4287,15 @@ class AshtakvargaTable {
         //create empty table inside main holder
         //table will be filled later
         $(`#${this.ElementID}`).append(
-            `<table id="${this.SarvashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
+            `<div class="table-responsive">
+                <table id="${this.SarvashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>
+            </div>`
         );
 
         $(`#${this.ElementID}`).append(
-            `<table id="${this.BhinnashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>`
+            `<div class="table-responsive">
+                <table id="${this.BhinnashtakavargaTableId}" class="table table-striped table-hover table-bordered text-nowrap w-auto" style=" font-size: 12px; font-weight: 700; "></table>
+             </div>`
         );
 
         //generate table from inputed data
@@ -4313,7 +4327,7 @@ class AshtakvargaTable {
     //code where Ashtakvarga in JSON format given by API is converted into nice HTML
     static async GenerateHTMLTableFromJson(data, tableId) {
         //note "table responsive" needed to make nicely scrollable in mobile
-        let html = '<div class="table-responsive"><table border="1">';
+        let html = '<table border="1">';
 
         // Add table headers
         html += "<tr><th></th>";
@@ -4343,7 +4357,7 @@ class AshtakvargaTable {
             html += "</tr>";
         }
 
-        html += "</table></div>";
+        html += "</table>";
 
         // Now you can add 'html' to your webpage
         var currentTable = document.getElementById(tableId);

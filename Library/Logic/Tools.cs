@@ -2554,6 +2554,18 @@ namespace VedAstro.Library
             return intFromUrl;
         }
 
+        public static TimeSpan TimeSpanFromUrl(string url)
+        {
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //string has simple structure ../<param name>/+08:00
+            var stringValue = parts[1];
+
+            var intFromUrl = Tools.StringToTimezone(stringValue);
+
+            return intFromUrl;
+        }
+
         /// <summary>
         /// .../Time/14:02/09/11/1977/+00:00
         /// </summary>

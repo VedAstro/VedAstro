@@ -222,7 +222,7 @@ namespace VedAstro.Library
         public static double GetDayPerPixel(TimeRange timeRange, int maxWidth)
         {
 
-            var daysPerPixel = Math.Round(timeRange.daysBetween / maxWidth, 3); //small val = higher precision
+            var daysPerPixel = Math.Round(timeRange.DaysBetween / maxWidth, 3); //small val = higher precision
             //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
             //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
 

@@ -174,7 +174,7 @@ namespace VedAstro.Library
                 var systemTimezone = person.BirthTimeZone;
 
                 //start and end time based on preset set
-                var timeRange = EventChartTools.AutoCalculateTimeRange(person, parts[2], systemTimezone);
+                var timeRange = Calculate.AutoCalculateTimeRange(person.BirthTime, parts[2], systemTimezone);
                 var startTime = timeRange.start;
                 var endTime = timeRange.end;
 
@@ -282,13 +282,11 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// calculates the precision of the events to fit inside 1000px width
+        /// calculates the precision of the events to fit inside width
         /// </summary>
         public static double GetDayPerPixel(TimeRange timeRange, int maxWidth)
         {
-            var daysPerPixel = Math.Round(timeRange.daysBetween / maxWidth, 3); //small val = higher precision
-            //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
-            //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
+            var daysPerPixel = Math.Round(timeRange.DaysBetween / maxWidth, 3); //small val = higher precision
 
             return daysPerPixel;
         }

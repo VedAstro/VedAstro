@@ -531,6 +531,16 @@ namespace API
                             //execute param parser
                             parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
                         }
+                        //TimeSpan
+                        else if (parameterType == typeof(TimeSpan))
+                        {
+                            //get the parser
+                            parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.TimeSpanFromUrl), BindingFlags.Public | BindingFlags.Static);
+
+                            //execute param parser
+                            parsedParam = parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                        }
+
 
                         //UNPREPARED TYPES
                         else

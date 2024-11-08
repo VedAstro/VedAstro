@@ -103,7 +103,6 @@ namespace API
                 //1 : CUSTOM AYANAMSA (removes ayanamsa once read)
                 settingsUrl = OpenAPI.ParseAndSetAyanamsa(settingsUrl);
 
-
                 //get basic spec on how to make chart
                 //check if the specs given is correct and readable
                 //this is partially filled chart with no generated svg content only specs
@@ -348,7 +347,7 @@ namespace API
             var foundPerson = Tools.GetPersonById(personId);
 
             //TIME
-            var timeRange = EventChartTools.AutoCalculateTimeRange(foundPerson, timePreset, timezone);
+            var timeRange = Calculate.AutoCalculateTimeRange(foundPerson.BirthTime, timePreset, timezone);
 
             //EVENTS
             var eventTags = GetSelectedEventTypesEasy(eventPreset);
@@ -368,12 +367,12 @@ namespace API
         private static double GetDayPerPixel(TimeRange timeRange, int maxWidth)
         {
             //const int maxWidth = 1000; //px
-            var daysPerPixel = Math.Round(timeRange.daysBetween / maxWidth, 3); //small val = higher precision
+            var daysPerPixel = Math.Round(timeRange.DaysBetween / maxWidth, 3); //small val = higher precision
                                                                                 //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
                                                                                 //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
 
             //if final value is 0 then recalculate without rounding
-            daysPerPixel = daysPerPixel <= 0 ? timeRange.daysBetween / maxWidth : daysPerPixel;
+            daysPerPixel = daysPerPixel <= 0 ? timeRange.DaysBetween / maxWidth : daysPerPixel;
 
             return daysPerPixel;
         }

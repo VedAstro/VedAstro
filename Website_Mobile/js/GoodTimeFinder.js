@@ -1,4 +1,4 @@
-﻿updateHistory();
+updateHistory();
 
 new DesktopSidebar("DesktopSidebarHolder", links);
 new PageHeader("PageHeader");
@@ -28,7 +28,7 @@ const defaultPreset = "1month";
 //NOTE: person selector is linked into time range so that age presets (age1to10) can be calculated
 var timeRangeSelector = new TimeRangeSelector("TimeRangeSelector", personSelector, defaultPreset);
 
-var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox");
+var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox", "RAMAN");
 
 
 

@@ -179,19 +179,9 @@ namespace VedAstro.Library
                 var endTime = timeRange.end;
 
                 //other data pieces
-                var daysPerPixel = double.Parse(parts[4]);
-                var eventTags = EventTagExtensions.FromString(parts[5]);
-                var summaryOptions = ChartOptions.FromUrl(parts[6]);
-
-
-                //if custom ayanamsa specified
-                var isCustomAya = url.Contains(nameof(Ayanamsa)); //check if ayanamsa specified anywhere
-                if (isCustomAya)
-                {
-                    var ayaRaw = $"{parts[^2]}/{parts[^1]}"; //get last since that will be ayanamsa in text or number int
-                    var enumFromUrl = Tools.EnumFromUrl(ayaRaw);
-                    Calculate.Ayanamsa = (int)enumFromUrl;
-                }
+                var daysPerPixel = double.Parse(parts[3]);
+                var eventTags = EventTagExtensions.FromString(parts[4]);
+                var summaryOptions = ChartOptions.FromUrl(parts[5]);
 
 
                 //a new chart is born
@@ -225,16 +215,6 @@ namespace VedAstro.Library
                 var daysPerPixel = double.Parse(parts[12]);
                 var eventTags = EventTagExtensions.FromString(parts[13]);
                 var summaryOptions = ChartOptions.FromUrl(parts[14]);
-
-                //if custom ayanamsa specified
-                var isCustomAya = url.Contains(nameof(Ayanamsa)); //check if ayanamsa specified anywhere
-                if (isCustomAya)
-                {
-                    var ayaRaw = $"{parts[^2]}/{parts[^1]}"; //get last since that will be ayanamsa in text or number int
-                    var enumFromUrl = Tools.EnumFromUrl(ayaRaw);
-                    Calculate.Ayanamsa = (int)enumFromUrl;
-                }
-
 
                 //a new chart is born
                 var newChartId = Tools.GenerateId();

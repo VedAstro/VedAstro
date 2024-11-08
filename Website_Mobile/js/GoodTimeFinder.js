@@ -17,9 +17,12 @@ var eventsSelector = new EventsSelector("EventsSelector", allowedParentCheckboxe
 //SET ON : 8 JAN "24
 //below algo tested well for Monroe and Steve
 //General,IshtaKashtaPhalaDegree,PlanetStrengthDegree
-var algoSelector = new AlgorithmsSelector("AlgorithmsSelector", "General,PlanetStrengthDegree,IshtaKashtaPhalaDegree");
+var algoSelector = new AlgorithmsSelector("AlgorithmsSelector", "General");
 
 var personSelector = new PersonSelectorBox("PersonSelectorBox");
+
+//NOTE: must init before Time range selector so that, it can catch default days between range
+var daysPerPixelInput = new DayPerPixelInput("DayPerPixelInput");
 
 const defaultPreset = "1month";
 //NOTE: person selector is linked into time range so that age presets (age1to10) can be calculated
@@ -27,7 +30,6 @@ var timeRangeSelector = new TimeRangeSelector("TimeRangeSelector", personSelecto
 
 var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox");
 
-var daysPerPixelInput = new DayPerPixelInput("DayPerPixelInput");
 
 
 //------------------------ FUNCTIONS -----------------------------
@@ -75,7 +77,7 @@ async function OnClickCalculate() {
     let daysPerPixel = daysPerPixelInput.getValue();
 
     //construct API call URL in correct format
-    let apiUrl = `${VedAstro.ApiDomain}/EventsChart/${selectedPersonId}/${timeRangeUrl}/${daysPerPixel}/${selectedEventTags}/${selectedAlgorithms}`;
+    let apiUrl = `${VedAstro.ApiDomain}/EventsChart/${selectedPersonId}/${timeRangeUrl}/${daysPerPixel}/${selectedEventTags}/${selectedAlgorithms}/Ayanamsa/${ayanamsaSelector.SelectedAyanamsa}`;
 
     //call the API and wait for the chart to be complete
     const fetchApi = async () => {
@@ -85,7 +87,7 @@ async function OnClickCalculate() {
 
             //if chart is still being built
             if (callStatus === 'Running') {
-                await new Promise(resolve => setTimeout(resolve, 10000)); // wait 10 seconds
+                await new Promise(resolve => setTimeout(resolve, 5000)); // wait 5 seconds
                 return fetchApi(); // make the call again
             } else if (callStatus === 'Fail') {
                 throw new Error('API call failed');

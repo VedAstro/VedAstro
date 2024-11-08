@@ -2011,13 +2011,13 @@ class AyanamsaSelectorBox {
         }
     }
 
+    //save ayanamsa to storage for future use
     attachEventHandler() {
         $(`#${this.ElementID} select`).on('change', () => {
             const selectedAyanamsa = $(`#${this.ElementID} select`).val();
             localStorage.setItem('selectedAyanamsa', selectedAyanamsa);
         });
     }
-
 
     // Method to generate the HTML for the page header
     async generateHtmlBody() {
@@ -5942,6 +5942,11 @@ class TimeRangeSelector {
             if (this.defaultPreset !== 'selectCustomYear') {
                 $(`#${this.ElementID} .custom-time-range-holder`).hide();
             }
+
+            //let others (days per pixel component) immediately know days between after default is selected
+            this.getDaysInRange().then(daysInRange => {
+                $(`#${this.ElementID}`).trigger('timeRangeChanged', [daysInRange]);
+            });
         }
 
         //attach event handlers
@@ -6064,7 +6069,7 @@ class TimeRangeSelector {
         }
         //if a preset is selected function returns "TimeRange/PresetValue"
         else {
-            return `TimeRange/${selectedValue}`;
+            return `TimePreset/${selectedValue}`;
         }
     }
 

@@ -1975,10 +1975,16 @@ class PageFooter {
 class AyanamsaSelectorBox {
     // Class properties
     ElementID = "";
+    DefaultAyanamsa = "";
 
-    constructor(elementId) {
+    constructor(elementId, defaultAyanamsa = null) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
+
+        // If a default Ayanamsa value is provided, assign it to the DefaultAyanamsa property
+        if (defaultAyanamsa) {
+            this.DefaultAyanamsa = defaultAyanamsa;
+        }
 
         // Call the method to initialize the main body of the page header
         this.initializeMainBody();
@@ -1993,6 +1999,7 @@ class AyanamsaSelectorBox {
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
 
         // Check local storage if any previously selected ayanamsa values exist, if so select that in html
+        // If not, use the default Ayanamsa value
         this.checkLocalStorage();
 
         // Attach event handler such that if selection is changed it is also saved into local storage for future use
@@ -2008,6 +2015,8 @@ class AyanamsaSelectorBox {
         const selectedAyanamsa = localStorage.getItem('selectedAyanamsa');
         if (selectedAyanamsa) {
             $(`#${this.ElementID} select`).val(selectedAyanamsa);
+        } else if (this.DefaultAyanamsa) {
+            $(`#${this.ElementID} select`).val(this.DefaultAyanamsa);
         }
     }
 
@@ -2024,7 +2033,8 @@ class AyanamsaSelectorBox {
         // Return the HTML for the page header, including conditional blocks for different screen sizes
         return `
      <label style="width: 134px;" class="input-group-text">
-         <Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa
+         <iconify-icon class="me-2" icon="solar:stars-line-broken" width="25" height="25"></iconify-icon>
+         Ayanamsa
      </label>
      <select id="SelectedAyanamsa" class="form-select">
          <optgroup label="Easy"><option value="LAHIRI">Lahiri Chitrapaksha</option><option value="KRISHNAMURTI">Krishnamurti KP</option><option value="RAMAN">Raman</option><option value="FAGAN_BRADLEY">Fagan Bradley (Western)</option><option value="J2000">J2000</option><option value="YUKTESHWAR">Yukteshwar</option></optgroup>

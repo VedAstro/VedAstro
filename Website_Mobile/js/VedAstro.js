@@ -1503,6 +1503,10 @@ class CommonTools {
         return result;
     }
 
+    static isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
 }
 
 
@@ -2595,7 +2599,11 @@ class PersonSelectorBox {
     // Handle click on the dropdown button
     onClickDropDown(event) {
         // Set focus to the search text box for instant input
-        $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
+        //NOTE:ONLY on desktop, skip for mobile, because keyboard takes screen space
+        if (!CommonTools.IsMobile()) {
+            $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
+        }
+
     }
 }
 

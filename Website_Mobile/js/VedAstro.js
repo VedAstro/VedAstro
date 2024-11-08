@@ -1950,7 +1950,7 @@ class PageFooter {
                         </div>
                     </div>
 
-                    <div class="me-5">
+                    <div class="me-md-5">
                         <!--SOCIAL ICONS-->
                         <ul class="list-unstyled d-flex">
                             <li title="Buy us Coffee" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://ko-fi.com/vedastro"><iconify-icon icon="line-md:coffee-half-empty-twotone-loop" width="24" height="24" ></iconify-icon></a></li>
@@ -1961,7 +1961,6 @@ class PageFooter {
                             <li title="Watch How To Guide" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://www.youtube.com/@vedastro/videos"><iconify-icon icon="logos:youtube-icon" width="22" height="22" ></iconify-icon></a></li>
                             <li title="Updates via Facebook" class="ms-3 d-none d-md-block"><a target="_blank" class="link-body-emphasis" href="https://www.facebook.com/vedastro.org"><iconify-icon icon="devicon:facebook" width="22" height="22" ></iconify-icon></a></li>
                         </ul>
-
                     </div>
                 </div>
     `;
@@ -2021,10 +2020,29 @@ class AyanamsaSelectorBox {
     }
 
     //save ayanamsa to storage for future use
+    //also warn users against other ayanamsa but RAMAN
     attachEventHandler() {
-        $(`#${this.ElementID} select`).on('change', () => {
-            const selectedAyanamsa = $(`#${this.ElementID} select`).val();
-            localStorage.setItem('selectedAyanamsa', selectedAyanamsa);
+        $(`#${this.ElementID} select`).on('change', (e) => {
+            const selectedAyanamsa = $(e.target).val();
+            if (selectedAyanamsa !== 'RAMAN') {
+                Swal.fire({
+                    title: 'Not Recommended 😮',
+                    html: `${selectedAyanamsa} <strong>not proven accurate</strong> in real world predictions! We recommend <strong>use RAMAN</strong> ayanamsa, it has been proven. Don't just follow the crowd!`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Continue',
+                    cancelButtonText: 'Stay with RAMAN'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.setItem('selectedAyanamsa', selectedAyanamsa);
+                    } else {
+                        $(`#${this.ElementID} select`).val('RAMAN');
+                        localStorage.setItem('selectedAyanamsa', 'RAMAN');
+                    }
+                });
+            } else {
+                localStorage.setItem('selectedAyanamsa', selectedAyanamsa);
+            }
         });
     }
 
@@ -5754,7 +5772,7 @@ class EventsSelector {
                         </button>
                     </label>
                 </div>
-                <div style="display:none; margin-left: -12px;" class="child-checkboxes">
+                <div style="display:none; margin-left: -12px; font-size: 14px;" class="child-checkboxes">
                     ${events.map((event) => `
                         <div class="form-check">
                             <input class="form-check-input child-checkbox" type="checkbox" value="" id="checkbox_${event.Name}">
@@ -6021,7 +6039,7 @@ class TimeRangeSelector {
         let selectedPerson = await this.linkedPersonSelector.GetSelectedPerson();
 
         //if person not selected give empty time string
-        if (selectedPerson == null) { return "Location/Empty/Time/00:00/01/01/0001/+00:00/";}
+        if (selectedPerson == null) { return "Location/Empty/Time/00:00/01/01/0001/+00:00/"; }
 
         //get birth time of selected person (URL format)
         var timeUrl = selectedPerson.BirthTime.ToUrl();

@@ -5903,17 +5903,23 @@ class EventsSelector {
     }
 }
 
+// supports dynamic 3 types of preset
+// - age1to10
+// - 3weeks, 3months, 3years, fulllife
+// - 1990-2000
 class TimeRangeSelector {
     // Class properties
     ElementID = "";
     storageKey = "timeRangeSelector";
     defaultPreset = "";
+    linkedPersonSelector = null;
 
     // Constructor to initialize the PageHeader object
-    constructor(elementId, defaultPreset = "") {
+    constructor(elementId, linkedPersonSelector, defaultPreset,) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
         this.defaultPreset = defaultPreset;
+        this.linkedPersonSelector = linkedPersonSelector; //so that selected person's DOB can be used for time range 
 
         // Call the method to initialize the body html
         this.initializeMainBody();
@@ -5943,7 +5949,6 @@ class TimeRangeSelector {
         this.addInputEventListeners();
     }
 
-
     initStoredValues() {
         const storedValues = localStorage.getItem(this.storageKey);
         if (storedValues) {
@@ -5960,22 +5965,51 @@ class TimeRangeSelector {
         }
     }
 
-    //calculate the number of days between start date and end date
-    getDaysInRange() {
-        const startYear = parseInt($(`#${this.ElementID} .start-year-input`).val());
-        const startMonth = parseInt($(`#${this.ElementID} .start-month-input`).val());
-        const endYear = parseInt($(`#${this.ElementID} .end-year-input`).val());
-        const endMonth = parseInt($(`#${this.ElementID} .end-month-input`).val());
+    //calculate the number of days between start date and end date also handles time range preset by using API
+    async getDaysInRange() {
+        //if user inputs manual time range, get dates and calculate difference
+        if ($(`#${this.ElementID} .time-range-select`).val() === 'selectCustomYear') {
+            const startYear = parseInt($(`#${this.ElementID} .start-year-input`).val());
+            const startMonth = parseInt($(`#${this.ElementID} .start-month-input`).val());
+            const endYear = parseInt($(`#${this.ElementID} .end-year-input`).val());
+            const endMonth = parseInt($(`#${this.ElementID} .end-month-input`).val());
 
-        // Create Date objects for start and end dates
-        const startDate = new Date(startYear, startMonth - 1, 1);
-        const endDate = new Date(endYear, endMonth - 1, this.getLastDayOfMonth(endYear, endMonth - 1));
+            // Create Date objects for start and end dates
+            const startDate = new Date(startYear, startMonth - 1, 1);
+            const endDate = new Date(endYear, endMonth - 1, this.getLastDayOfMonth(endYear, endMonth - 1));
 
-        // Calculate the difference in days
-        //the `+ 1` at the end of the calculation is to include the last day of the range in the count.
-        const differenceInDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1;
+            // Calculate the difference in days
+            //the `+ 1` at the end of the calculation is to include the last day of the range in the count.
+            const differenceInDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1;
+            return differenceInDays;
+        }
+        //else user inputs using time range presets, use API to calculate range
+        else {
+            //get selected person's birth time URL for age preset computation
+            var birthTimeUrl = await this.getSelectedPersonBirthTimeUrl();
 
-        return differenceInDays;
+            let selectedTimePreset = $(`#${this.ElementID} .time-range-select`).val();
+
+            let userTimezoneString = this.getSystemOffset();
+
+            //call API via GET request
+            let callUrl = `${VedAstro.ApiDomain}/Calculate/DaysBetweenTimeRangePreset/${birthTimeUrl}TimePreset/${selectedTimePreset}/OutputTimezone/${userTimezoneString}`;
+            const response = await fetch(callUrl);
+
+            //extract and return the days in range value
+            const data = await response.json();
+            return parseFloat(data.Payload.DaysBetweenTimeRangePreset);
+        }
+    }
+
+    async getSelectedPersonBirthTimeUrl() {
+        //get full data of selected person
+        let selectedPerson = await this.linkedPersonSelector.GetSelectedPerson();
+
+        //get birth time of selected person (URL format)
+        var timeUrl = selectedPerson.BirthTime.ToUrl();
+
+        return timeUrl;
     }
 
     //check if the dates are valid & filled, else shows user msg, and returns false
@@ -6044,7 +6078,7 @@ class TimeRangeSelector {
         localStorage.setItem(this.storageKey, JSON.stringify(values));
     }
 
-    //offset nicely formatted
+    //offset nicely formatted exp:"+08:00"
     getSystemOffset() {
         const offset = new Date().getTimezoneOffset();
         const offsetHours = Math.floor(Math.abs(offset) / 60);
@@ -6052,6 +6086,7 @@ class TimeRangeSelector {
         const offsetString = (offset < 0 ? '+' : '-') + String(offsetHours).padStart(2, '0') + ':' + String(offsetMinutes).padStart(2, '0');
         return offsetString;
     }
+
     getLastDayOfMonth(year, month) {
         return new Date(year, month + 1, 0).getDate();
     }
@@ -6141,8 +6176,9 @@ class TimeRangeSelector {
             }
 
             // let days per pixel component know that time range has changed
-            const daysInRange = this.getDaysInRange();
-            $(`#${this.ElementID}`).trigger('timeRangeChanged', [daysInRange]);
+            this.getDaysInRange().then(daysInRange => {
+                $(`#${this.ElementID}`).trigger('timeRangeChanged', [daysInRange]);
+            });
         });
     }
 
@@ -6156,17 +6192,17 @@ class TimeRangeSelector {
             this.storeValues(startYear, startMonth, endYear, endMonth);
 
             // let days per pixel component know that time range has changed
-            const daysInRange = this.getDaysInRange();
-            $(`#${this.ElementID}`).trigger('timeRangeChanged', [daysInRange]);
+            this.getDaysInRange().then(daysInRange => {
+                $(`#${this.ElementID}`).trigger('timeRangeChanged', [daysInRange]);
+            });
         });
     }
-
-
 }
 
 class DayPerPixelInput {
     // Class properties
     ElementID = "";
+    MaxWidthPx = 1000;
 
     // Constructor to initialize the object
     constructor(elementId) {
@@ -6179,7 +6215,9 @@ class DayPerPixelInput {
         // when time range component is updated, it triggers this to recalculate precision 
         $(document).on('timeRangeChanged', (event, daysInRange) => {
 
-            let daysPerPixel = daysInRange / 1000; //max 1000px width
+            let daysPerPixel = daysInRange / this.MaxWidthPx; //max 1000px width
+
+            daysPerPixel = Math.round(daysPerPixel * 1000) / 1000; //round to 3 decimal places
 
             $(`#${this.ElementID} .precision-value-input`).val(daysPerPixel);
         });
@@ -6223,4 +6261,6 @@ class DayPerPixelInput {
         </div>
     `;
     }
+
+
 }

@@ -11,8 +11,6 @@ const allowedParentCheckboxes = ['General', 'Personal', 'Agriculture', 'Building
     'Astronomical', 'BuyingSelling', 'Medical', 'Marriage', 'Travel', 'Studies', 'HairNailCutting'];
 var eventsSelector = new EventsSelector("EventsSelector", allowedParentCheckboxes, defaultSelected);
 
-const defaultPreset = "1month";
-var timeRangeSelector = new TimeRangeSelector("TimeRangeSelector", defaultPreset);
 
 
 //SELECT DEFAULT ALGORITHMS
@@ -23,7 +21,12 @@ var algoSelector = new AlgorithmsSelector("AlgorithmsSelector", "General,PlanetS
 
 var personSelector = new PersonSelectorBox("PersonSelectorBox");
 
+const defaultPreset = "1month";
+//NOTE: person selector is linked into time range so that age presets (age1to10) can be calculated
+var timeRangeSelector = new TimeRangeSelector("TimeRangeSelector", personSelector, defaultPreset);
+
 var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox");
+
 var daysPerPixelInput = new DayPerPixelInput("DayPerPixelInput");
 
 
@@ -72,14 +75,15 @@ async function OnClickCalculate() {
     let daysPerPixel = daysPerPixelInput.getValue();
 
     //construct API call URL in correct format
-
     let apiUrl = `${VedAstro.ApiDomain}/EventsChart/${selectedPersonId}/${timeRangeUrl}/${daysPerPixel}/${selectedEventTags}/${selectedAlgorithms}`;
 
+    //call the API and wait for the chart to be complete
     const fetchApi = async () => {
         try {
             const response = await fetch(apiUrl);
             const callStatus = response.headers.get('Call-Status');
 
+            //if chart is still being built
             if (callStatus === 'Running') {
                 await new Promise(resolve => setTimeout(resolve, 10000)); // wait 10 seconds
                 return fetchApi(); // make the call again
@@ -88,8 +92,6 @@ async function OnClickCalculate() {
             } else if (callStatus === 'Pass') {
                 const svgString = await response.text();
                 return svgString;
-            } else {
-                throw new Error(`Unknown Call-Status: ${callStatus}`);
             }
         } catch (error) {
             console.error(error);
@@ -105,15 +107,13 @@ async function OnClickCalculate() {
 
     // get id of SVG element
     let svgElement = document.getElementById("EventsChartSvgHolder").querySelector("svg");
-    let chartId = svgElement.id;
+    let chartId = svgElement.id; //NOTE: unique ID of the chart made by server
 
-    //create instance
-    //NOTE: unique ID of the chart made by server
-    // chart is available in window.EventsChartList
-    var index = new EventsChart(chartId); //brings to life
+    //brings to life & makes available in window.EventsChartList
+    new EventsChart(chartId);
 
     //let caller know all went well
-    console.log(`Amen! Chart Loaded : INDEX:${index}, ID:${chartId}`);
+    console.log(`🤲 Amen! Chart Loaded : ID:${chartId}`);
 
     //make chart holder with buttons visible
     $('#EventsChartMainElement').show();

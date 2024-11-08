@@ -1,4 +1,4 @@
-updateHistory();
+﻿updateHistory();
 
 new DesktopSidebar("DesktopSidebarHolder", links);
 new PageHeader("PageHeader");
@@ -62,6 +62,10 @@ async function OnClickCalculate() {
 
     //update page title with person name to for easy multi tab use (UX ease)
     document.title = `${selectedPerson.DisplayName} | Good Time Finder`;
+
+    //if on mobile hide sidebar to remove distraction in limited space (UX improvement)
+    if (CommonTools.IsMobile()) { $("#SidebarInfoBoxHolder").slideUp(500); }
+
 
     //------------------------------- CALL API ---------------------
 

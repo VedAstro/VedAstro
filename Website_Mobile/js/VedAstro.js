@@ -1955,11 +1955,11 @@ class PageFooter {
                         <ul class="list-unstyled d-flex">
                             <li title="Buy us Coffee" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://ko-fi.com/vedastro"><iconify-icon icon="line-md:coffee-half-empty-twotone-loop" width="24" height="24" ></iconify-icon></a></li>
                             <li title="Updates via Twitter" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://x.com/_VedAstro"><iconify-icon icon="skill-icons:twitter" width="22" height="22" ></iconify-icon></a></li>
-                            <li title="Become a Patron" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://patreon.com/vedastro"><iconify-icon icon="logos:patreon" width="22" height="22" ></iconify-icon></a></li>
-                            <li title="View Awesome Source Code" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://github.com/VedAstro/VedAstro"><iconify-icon icon="skill-icons:github-dark" width="22" height="22" ></iconify-icon></a></li>
-                            <li title="Updates via Instagram" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://www.instagram.com/_vedastro/"><iconify-icon icon="skill-icons:instagram" width="22" height="22" ></iconify-icon></a></li>
+                            <li title="Become a Patron" class="ms-3 d-none d-md-block"><a target="_blank" class="link-body-emphasis" href="https://patreon.com/vedastro"><iconify-icon icon="logos:patreon" width="22" height="22" ></iconify-icon></a></li>
+                            <li title="View Awesome Source Code" class="ms-3 d-none d-md-block"><a target="_blank" class="link-body-emphasis" href="https://github.com/VedAstro/VedAstro"><iconify-icon icon="skill-icons:github-dark" width="22" height="22" ></iconify-icon></a></li>
+                            <li title="Updates via Instagram" class="ms-3 d-none d-md-block"><a target="_blank" class="link-body-emphasis" href="https://www.instagram.com/_vedastro/"><iconify-icon icon="skill-icons:instagram" width="22" height="22" ></iconify-icon></a></li>
                             <li title="Watch How To Guide" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://www.youtube.com/@vedastro/videos"><iconify-icon icon="logos:youtube-icon" width="22" height="22" ></iconify-icon></a></li>
-                            <li title="Updates via Facebook" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://www.facebook.com/vedastro.org"><iconify-icon icon="devicon:facebook" width="22" height="22" ></iconify-icon></a></li>
+                            <li title="Updates via Facebook" class="ms-3 d-none d-md-block"><a target="_blank" class="link-body-emphasis" href="https://www.facebook.com/vedastro.org"><iconify-icon icon="devicon:facebook" width="22" height="22" ></iconify-icon></a></li>
                         </ul>
 
                     </div>
@@ -5776,7 +5776,7 @@ class EventsSelector {
 
         // Wrap column HTML in div
         generatedHtml += `
-        <div style=" font-size: 15px; font-family: 'Lexend Deca';" class="d-flex gap-4">
+        <div style=" font-size: 15px; font-family: 'Lexend Deca';" class="d-md-flex justify-content-between">
             <div class="align-self-start d-flex flex-column gap-1 mb-3">
                 ${columnHtmlLeft}
             </div>

@@ -62,6 +62,9 @@ async function OnGoogleSignInSuccessHandler(afterLoginResponse) {
         //make note login method, to help user remember on return 🧠
         localStorage.setItem('PreviousLoginMethod', 'Google');
 
+        //clear cached person list (will cause person drop down to fetch new)
+        PersonSelectorBox.ClearPersonListCache('private');
+
         //tell user login was success
         await Swal.fire({ icon: 'success', title: 'Login Success ✅', timer: 1500, showConfirmButton: false });
 
@@ -98,6 +101,9 @@ function OnFacebookSignInHandler(afterLoginResponse) {
 
                 //make note login method, to help user remember on return 
                 localStorage.setItem('PreviousLoginMethod', 'Facebook');
+
+                //clear cached person list (will cause person drop down to fetch new)
+                PersonSelectorBox.ClearPersonListCache('private');
 
                 //tell user login was success
                 Swal.fire({ icon: 'success', title: 'Login Success ', timer: 1500, showConfirmButton: false })

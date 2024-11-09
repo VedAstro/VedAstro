@@ -2360,6 +2360,14 @@ class PersonSelectorBox {
         this.init();
     }
 
+    async init() {
+        // Fetch person list data from API or local storage
+        await this.initializePersonListData();
+
+        // Inject the component's HTML into the page
+        await this.initializeMainBody();
+    }
+
     /**
     * Gets the selected person.
     */
@@ -2388,14 +2396,6 @@ class PersonSelectorBox {
     SetSelectedPerson(person) {
         // Save the selected person ID to local storage
         localStorage.setItem(this.SelectedPersonStorageKey, JSON.stringify(person));
-    }
-
-    async init() {
-        // Fetch person list data from API or local storage
-        await this.initializePersonListData();
-
-        // Inject the component's HTML into the page
-        await this.initializeMainBody();
     }
 
     // Save a reference to this instance for global access
@@ -2463,29 +2463,6 @@ class PersonSelectorBox {
 
         // If a selected person exists, simulate a click on their name
         selectedPerson && this.updatePersonNameGui(selectedPerson);
-    }
-
-    // call `PersonSelectorBox.ClearPersonListCache('private')` to clear only the private person list cache,
-    // `PersonSelectorBox.ClearPersonListCache('public')` to clear only the public person list cache,
-    // or`PersonSelectorBox.ClearPersonListCache('all')` to clear both caches.If an invalid type is provided,
-    // a warning will be logged to the console and the cache will not be cleared.
-    static ClearPersonListCache(type) {
-        switch (type) {
-            case 'private':
-                localStorage.removeItem('personList');
-                break;
-            case 'public':
-                localStorage.removeItem('publicPersonList');
-                break;
-            case 'all':
-                localStorage.removeItem('personList');
-                localStorage.removeItem('publicPersonList');
-                break;
-            default:
-                console.warn('Invalid cache type provided. Cache not cleared.');
-        }
-
-        console.log('Person list cache cleared.');
     }
 
     // Handle click on a person's name in the dropdown (called from html dropdown)
@@ -2642,6 +2619,31 @@ class PersonSelectorBox {
             $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
         }
 
+    }
+
+    //------------------------------------------------ STATIC FUNCS ----------------------
+    //called by AddPerson to clear the person list cache
+    // call `PersonSelectorBox.ClearPersonListCache('private')` to clear only the private person list cache,
+    // `PersonSelectorBox.ClearPersonListCache('public')` to clear only the public person list cache,
+    // or`PersonSelectorBox.ClearPersonListCache('all')` to clear both caches.If an invalid type is provided,
+    // a warning will be logged to the console and the cache will not be cleared.
+    static ClearPersonListCache(type) {
+        switch (type) {
+        case 'private':
+            localStorage.removeItem('personList');
+            break;
+        case 'public':
+            localStorage.removeItem('publicPersonList');
+            break;
+        case 'all':
+            localStorage.removeItem('personList');
+            localStorage.removeItem('publicPersonList');
+            break;
+        default:
+            console.warn('Invalid cache type provided. Cache not cleared.');
+        }
+
+        console.log('Person list cache cleared.');
     }
 }
 

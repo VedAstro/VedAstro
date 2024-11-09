@@ -10,6 +10,7 @@
     <Content Include="coming-soon.html" />
     <Content Include="AddPerson.html" />
     <Content Include="404.html" />
+    <Content Include="LifePredictor.html" />
     <Content Include="GoodTimeFinder.html" />
     <Content Include="BirthTimeFinder.html" />
     <Content Include="MatchChecker.html" />
@@ -58,7 +59,9 @@
     <None Remove="image\zodiac-wheel-3-white.png" />
     <None Remove="js\404.js" />
     <None Remove="js\GoodTimeFinder.js" />
+    <None Remove="js\LifePredictor.js" />
     <None Remove="js\MatchChecker.js" />
+    <None Remove="LifePredictor.html" />
     <None Remove="Login.html" />
     <None Remove="MatchChecker.html" />
     <None Remove="sound\positive-notification.mp3" />
@@ -91,12 +94,18 @@
     <PublishFile Remove="js\GoodTimeFinder.js" />
     <PublishFile Remove="js\Home.js" />
     <PublishFile Remove="js\Horoscope.js" />
+    <PublishFile Remove="js\LifePredictor.js" />
     <PublishFile Remove="js\Login.js" />
     <PublishFile Remove="js\MatchChecker.js" />
+    <PublishFile Remove="LifePredictor.html" />
     <PublishFile Remove="Login.html" />
     <PublishFile Remove="MatchChecker.html" />
     <PublishFile Remove="sound\positive-notification.mp3" />
     <PublishFile Remove="VedAstro.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="LifePredictor.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -144,6 +153,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="js\third-party\" />
   </ItemGroup>
 
 	<PropertyGroup>

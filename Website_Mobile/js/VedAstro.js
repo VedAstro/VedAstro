@@ -5946,6 +5946,110 @@ class EventsSelector {
     }
 }
 
+class DasaEventsSelector {
+    // Class properties
+    ElementID = "";
+    DefaultSelected = [];
+
+    // Constructor to initialize the PageHeader object
+    constructor(elementId, defaultSelected = []) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Assign the default selected values
+        this.DefaultSelected = defaultSelected;
+
+        // Call the method to initialize the main body 
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body 
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML for th and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+
+        // Set default selected checkboxes
+        this.setDefaultSelected();
+    }
+
+    // Method to generate the HTML for the 
+    async generateHtmlBody() {
+        // Return the HTML for the page header, including conditional blocks for different screen sizes
+        return `
+        <div class="input-group vstack mb-3">
+            <label style="min-width:134.4px;" class="input-group-text rounded">
+                <div class="me-2"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--lucide" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="lucide:calendar-range" data-width="25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M3 10h18M8 2v4m9 8h-6m2 4H7m0-4h.01M17 18h.01"></path></g></svg></div> Events
+                <div style="cursor: help; float: right; margin-left: 8px;margin-top: -2px; scale: 0.75;opacity: 0.8;" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg></div>
+            </label>
+
+            <div id="DasaEventSelectionHolder" class="form-control d-flex flex-wrap gap-2 rounded" style="width: fit-content;">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox_PD1">
+                    <label class="form-check-label" for="checkbox_PD1">Dasa</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox_PD2">
+                    <label class="form-check-label" for="checkbox_PD1">Bhukti</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox_PD3">
+                    <label class="form-check-label" for="checkbox_PD3">Antaram</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox_PD4">
+                    <label class="form-check-label" for="checkbox_PD4">Sukshma</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox_PD5">
+                    <label class="form-check-label" for="checkbox_PD5">Prana</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox_PD6">
+                    <label class="form-check-label" for="checkbox_PD6">Avi Prana</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox_PD7">
+                    <label class="form-check-label" for="checkbox_PD7">Viprana</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox_AshtakvargaGochara">
+                    <label class="form-check-label" for="checkbox_AshtakvargaGochara">Ashtakvarga Gochara</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox_Gochara">
+                    <label class="form-check-label" for="checkbox_Gochara">Gochara</label>
+                </div>
+            </div>
+        </div>
+    `;
+    }
+
+    setDefaultSelected() {
+        // Set default selected checkboxes
+        this.DefaultSelected.forEach((id) => {
+            $(`#${this.ElementID} #checkbox_${id}`).prop('checked', true);
+        });
+    }
+
+    getSelectedEventsAsString() {
+        // Select all checked checkboxes
+        const checkedCheckboxes = $(`#${this.ElementID} input[type="checkbox"]:checked`);
+
+        // If no checkboxes are checked, return null
+        if (checkedCheckboxes.length === 0) return null;
+
+        // Map the checked checkboxes to their values (split by '_' and take the second part)
+        const values = checkedCheckboxes.map((index, checkbox) => checkbox.id.split('_')[1]).get();
+
+        // Join the values into a string separated by commas
+        return values.join(',');
+    }
+}
+
+
 // supports dynamic 3 types of preset
 // - age1to10
 // - 3weeks, 3months, 3years, fulllife

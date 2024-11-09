@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #f0f2f5">
+<head>
+    <!--to stop caching during active development-->
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Life Predictor | VedAstro</title>
+
+    <!--LOAD FONTS-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lexend Deca"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varta"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gowun Dodum"> <!--  article text -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Homemade Apple"> <!--  cursive for quotes -->
+    <!-- DATE PICKER  (Vanilla Calendar) -->
+    <!-- NOTE : current JS code is dependent on version 2.4.0 so maintain, unless you got balls to go update VedAstro.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@2.4.0/build/vanilla-calendar.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@2.4.0/build/vanilla-calendar.min.js"></script>
+
+
+    <!--JQuery-->
+    <!--Note: JQuery needs to be loaded before bootstrap & vedastro.js-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="./js/VedAstro.js"></script>
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            display: flex;
+            justify-content: space-around;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+            }
+
+
+        @media only screen and (max-width: 768px) {
+            .calendar-container {
+                margin-left: -100px;
+            }
+        }
+    </style>
+
+</head>
+<body style="background: #F0F2F5;">
+    <!-- TO PLAY BAKING DONE SOUND -->
+    <audio autoplay=""></audio>
+
+    <div id="app" class="min-vh-100 container-lg pt-4" style="background: #F0F2F5;">
+        <div class="row flex-md-nowrap">
+
+            <!-- DESKTOP SIDE BAR ---------------->
+            <div id="DesktopSidebarHolder" active-link-name="LifePredictor"></div>
+
+            <div class="col mt-0 mt-md-0">
+
+                <!-- DESKTOP/MOBILE TOP NAVBAR -->
+                <div id="PageTopNavbar"></div>
+
+                <!-- PAGE CONTENT -->
+                <div class="container" style="background: #F0F2F5;">
+                    <div>
+
+                        <!-- HEADER -->
+                        <div id="PageHeader" title-text="Life Predictor" description-text="Each life is a story. Computation algorithms fused with ancient astrology predicts this story. A digital snapshot of your life on earth." image-src="images/life-predictor-banner.png"></div>
+
+                        <!-- BODY CONTENT -->
+                        <div class="d-md-flex justify-content-between">
+
+                            <!-- USER INPUT -->
+                            <div class="me-md-5" style="max-width: 546.9px;">
+                                <div class="vstack gap-3">
+                                    <!-- PERSON SELECTOR -->
+                                    <div id="PersonSelectorBox" title-text="Select Person"></div>
+
+                                    <!-- SELECTOR FOR TIME RANGE -->
+                                    <div id="TimeRangeSelector"></div>
+
+                                    <!-- ADVANCED OPTIONS -->
+                                    <div id="GoodTimeFinderAdvancedInputHolder" class="border-top mt-2 pt-2" style="display: none;">
+                                        <span style="font-size: 11.5px; margin-left: 0px; color: grey; margin-top: -20px; position: absolute; background-color: rgb(240, 242, 245);" class="px-1">Advanced Options</span>
+
+                                        <!-- AYANAMSA -->
+                                        <div id="AyanamsaSelectorBox" class="input-group mb-3"></div>
+
+                                        <!-- PRECISION -->
+                                        <div id="DayPerPixelInput"></div>
+
+                                        <!-- DASA TYPE SELECTION -->
+                                        <div id="DasaEventsSelector"></div>
+
+                                        <!-- ALGORITHMS -->
+                                        <div id="AlgorithmsSelector"></div>
+                                    </div>
+
+                                    <!-- BUTTONS -->
+                                    <div class="mt-2 d-flex justify-content-between">
+                                        <div Id="IconButton_Advanced" IconName="gala:settings" Color="primary" SmallSize="true" TooltipPosition="bottom" TooltipText="Advanced (optional)" OnClickCallback="OnClickAdvanced()"></div>
+                                        <div Id="IconButton_Calculate" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="OnClickCalculate()"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SIDEBAR -->
+                            <div id="SidebarInfoBoxHolder" class="mt-md-0 mt-4 me-md-5">
+                                <div class="" style="max-width: 412.5px;">
+                                    <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="background-color: !important;">
+                                        <div class="hstack mb-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto-v1 bi flex-shrink-0 me-2" width="50" height="50" preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="noto-v1:direct-hit" data-width="50"><circle cx="64.65" cy="65.14" r="54.49" fill="#006ca2"></circle><circle cx="64.65" cy="65.14" r="35.33" fill="#ed6c30"></circle><path fill="#fff" d="M64.65 102.59c-20.66 0-37.46-16.8-37.46-37.46s16.8-37.46 37.46-37.46c20.65 0 37.46 16.81 37.46 37.46c0 20.66-16.81 37.46-37.46 37.46m0-70.65c-18.3 0-33.19 14.89-33.19 33.19s14.89 33.19 33.19 33.19s33.19-14.89 33.19-33.19s-14.88-33.19-33.19-33.19"></path><circle cx="64.65" cy="65.14" r="16.66" fill="#fff"></circle><path fill="#fff" d="M122.15 20.3c-1.67-1.7-3.92-1.7-4.67-1.7h-.28l-1.92.03c-1.35.02-3.19.42-3.98-.91c-.62-1.04-1.12-1.25-2.33-1.54c-1-.24-2.17-.39-2.44-1.57c-.15-.64-.06-1.3-.14-1.96c-.11-.91-.31-1.74-.31-2.69c.01-.94-.07-1.82-.15-2.74c-.03-.41-.03-.87-.29-1.22c-.56-.73-1.14-.95-2.12-.95c-.33 0-.68.04-1.02.1c-2.42.47-3.76 2.43-4.49 3.48c-.08.12-.16.24-.23.33l-.09.14c-.74.92-1.58 1.97-2.32 3.16c-.71 1.16-1.6 2.3-2.54 3.5l-.24.31c-.69.88-1.28 1.76-1.84 2.61c-.32.48-.63.97-.97 1.44l-.19.25c-.42.56-1 1.33-1.38 2.33c-.57 1.52-.57 3.02-.5 4.01c.05.8.17 1.63.36 2.56c.14.7.32 1.4.49 2.1c.15.58.3 1.16.42 1.75c.21 1.09.44 2.17.67 3.26l.03.15l.06.28c.07.3.17.58.3.85c-2.35 2.95-4.9 6.18-7.41 9.35c-4.93 6.25-10.97 13.76-14.13 17.7c-1.2 1.5-1.98 2.48-2.14 2.68c-.46.58-.74 1.15-.87 1.73c-.12.59.02 1.18.41 1.66c.44.55 1.17.89 1.88.89c.26 0 .51-.05.74-.13c.21-.07.8-.31 3.54-3.35c2.03-2.25 4.84-5.49 7.86-8.97c2.31-2.68 4.75-5.5 7.06-8.12c2.9-3.29 5.51-6.25 7.89-8.91l.33.01c1.1.04 2.2.06 3.31.09c.58.01 1.18.05 1.78.1c.72.05 1.45.1 2.17.12c.19 0 .39.01.58.01c.72 0 1.38-.04 2.01-.11c.98-.11 2.47-.37 3.87-1.2c.91-.55 1.57-1.25 2.04-1.76l.22-.23c.4-.41.82-.8 1.23-1.2c.74-.71 1.51-1.44 2.26-2.28l.25-.28c1.02-1.15 1.98-2.23 3-3.14c1.05-.95 1.91-1.93 2.74-2.88c.12-.15.23-.24.33-.35c.91-.9 2.6-2.56 2.63-5.03c.03-1.46-.49-2.78-1.47-3.76"></path><path fill="#fff" d="M92.41 31.57c-.23-1.08-.45-2.14-.67-3.21c-.25-1.3-.64-2.56-.91-3.86c-.13-.65-.24-1.3-.28-1.97c-.04-.74-.03-1.54.23-2.24c.22-.56.7-1.12 1.05-1.62c.91-1.28 1.71-2.65 2.69-3.9c1.08-1.36 2.16-2.72 3.07-4.2c.62-1 1.37-1.92 2.1-2.85c.55-.68 1.27-2.11 2.2-2.29c1.05-.2 1.33 1.08 1.45 1.85c.19 1.18.39 2.36.59 3.54c.08.51.21 1.03.33 1.54c.16.74.36 1.48.4 2.24c.03.55.19 1.12-.04 1.65c-.17.42-.54.75-.82 1.1c-.43.55-.73 1.19-1.14 1.76c-.37.5-.78.98-1.08 1.52c-.41.71-.62 1.34-1.19 1.98c-.62.7-1.23 1.43-1.88 2.11c-.6.62-1.41 1.11-1.94 1.77c-.42.51-.62 1.16-1.04 1.69c-.58.75-1.18 1.5-1.75 2.26c-.37.47-.76 1.23-1.28 1.54c-.02-.13-.06-.27-.09-.41"></path><path fill="#2f2f2f" d="M102.11 5.42c.88 0 1.12 1.16 1.23 1.87c.19 1.18.39 2.36.59 3.54c.08.51.21 1.03.33 1.54c.16.74.36 1.48.4 2.24c.03.55.19 1.12-.04 1.65c-.17.42-.54.75-.82 1.1c-.43.55-.73 1.19-1.14 1.76c-.37.5-.78.98-1.08 1.52c-.41.71-.62 1.34-1.19 1.98c-.62.7-1.23 1.43-1.88 2.11c-.6.62-1.41 1.11-1.94 1.77c-.42.51-.62 1.16-1.04 1.69c-.58.75-1.18 1.5-1.75 2.26c-.37.47-.76 1.23-1.28 1.54c-.03-.15-.06-.29-.09-.43c-.23-1.08-.45-2.14-.67-3.21c-.25-1.3-.64-2.56-.91-3.86c-.13-.65-.24-1.3-.28-1.97c-.04-.74-.03-1.54.23-2.24c.22-.56.7-1.12 1.05-1.62c.91-1.28 1.71-2.65 2.69-3.9c1.08-1.36 2.16-2.72 3.07-4.2c.62-1 1.37-1.92 2.1-2.85c.55-.68 1.27-2.11 2.2-2.29c.08.01.15 0 .22 0m0-4.27c-.34 0-.69.03-1.02.1c-2.42.47-3.76 2.42-4.48 3.46c-.08.12-.17.24-.24.34l-.11.14c-.74.92-1.57 1.96-2.3 3.15c-.73 1.18-1.64 2.34-2.6 3.57l-.18.23c-.69.89-1.28 1.76-1.83 2.61c-.33.49-.65.97-.99 1.45l-.2.27c-.41.56-.98 1.32-1.37 2.32c-.58 1.52-.56 3.02-.5 4.01c.05.8.17 1.62.36 2.56c.15.7.32 1.39.49 2.09c.15.59.3 1.17.42 1.76c.22 1.09.43 2.17.67 3.27l.05.22l.03.15l1.19 5.96l5.2-3.15c1.18-.71 1.87-1.74 2.29-2.35c.05-.08.1-.16.16-.23c.45-.59.9-1.16 1.35-1.74l.39-.5c.43-.55.71-1.07.91-1.44c.04-.07.07-.14.11-.21c.09-.08.29-.25.44-.37c.36-.29.8-.65 1.23-1.11c.49-.51.95-1.04 1.4-1.57c.2-.22.39-.45.59-.67c.76-.86 1.17-1.66 1.47-2.25c.08-.14.15-.29.23-.44s.27-.39.45-.62c.12-.17.26-.34.38-.51c.26-.35.5-.74.73-1.13c.11-.17.2-.35.33-.5l.12-.14c.33-.38.88-1.01 1.26-1.92c.61-1.4.47-2.69.4-3.38l-.02-.18c-.06-.99-.26-1.85-.42-2.55l-.08-.38l-.12-.52c-.06-.26-.12-.52-.17-.78l-.24-1.47l-.33-2.05c-.82-5.11-4.38-5.5-5.45-5.5"></path><path fill="#fff" d="M93.91 34.02c1.1.03 2.2.06 3.28.08c1.33.03 2.65.18 3.96.22c.67.01 1.33 0 1.98-.08c.74-.09 1.53-.24 2.17-.63c.52-.31.98-.88 1.41-1.31c1.1-1.13 2.3-2.16 3.35-3.35c1.16-1.29 2.3-2.6 3.59-3.76c.88-.79 1.66-1.68 2.43-2.57c.57-.65 1.85-1.62 1.86-2.57c.02-1.07-1.3-1.11-2.08-1.1c-1.2.02-2.39.03-3.59.05c-.52.01-1.05-.03-1.57-.05c-.76-.03-1.52-.1-2.27 0c-.55.07-1.14.01-1.62.33c-.38.25-.64.67-.94 1c-.47.52-1.05.93-1.53 1.44c-.43.45-.83.93-1.31 1.34c-.63.53-1.21.85-1.74 1.52c-.58.74-1.19 1.46-1.75 2.22c-.5.7-.84 1.58-1.4 2.23c-.43.5-1.03.82-1.48 1.33c-.63.71-1.27 1.42-1.91 2.13c-.4.44-1.08.96-1.28 1.52c.15 0 .3.01.44.01"></path><path fill="#2f2f2f" d="M109.33 18.91c.46 0 .92.03 1.38.05s.93.06 1.38.06h.19c1.2-.02 2.39-.03 3.59-.05h.2c.78 0 1.89.12 1.87 1.1c-.01.95-1.29 1.92-1.86 2.57c-.78.89-1.55 1.78-2.43 2.57c-1.29 1.16-2.43 2.47-3.59 3.76c-1.05 1.18-2.25 2.21-3.35 3.35c-.42.43-.89 1-1.41 1.31c-.64.39-1.42.54-2.17.63c-.52.06-1.04.08-1.57.08h-.42c-1.31-.03-2.63-.18-3.96-.22c-1.08-.02-2.18-.05-3.28-.08c-.14 0-.29-.01-.43-.02c.21-.56.88-1.08 1.28-1.52c.64-.7 1.27-1.42 1.91-2.13c.45-.5 1.05-.82 1.48-1.33c.56-.64.9-1.53 1.4-2.23c.56-.76 1.17-1.48 1.75-2.22c.53-.67 1.11-.99 1.74-1.52c.48-.4.88-.89 1.31-1.34c.48-.51 1.06-.92 1.53-1.44c.3-.34.55-.75.94-1c.48-.32 1.07-.26 1.62-.33c.3-.04.6-.05.9-.05m0-4.27c-.52 0-.98.03-1.43.09l-.17.01c-.68.05-1.96.13-3.25.99c-.84.56-1.35 1.2-1.66 1.59l-.11.14c-.12.12-.26.25-.42.38c-.35.31-.7.62-1.03.97c-.12.13-.28.29-.42.46c-.2.21-.4.44-.53.54c-.13.11-.27.21-.39.3c-.53.4-1.24.94-1.95 1.84l-.47.59c-.47.58-.94 1.16-1.38 1.76c-.38.52-.66 1.02-.88 1.42c-.09.16-.21.38-.28.5c-.06.05-.12.1-.18.14c-.33.27-.8.64-1.28 1.16l-.63.7c-.42.46-.83.93-1.26 1.39c-.06.07-.12.13-.2.2c-.53.52-1.43 1.39-1.92 2.69l-2.12 5.6l5.98.17l.16.01l.29.01l3.3.09c.58.01 1.18.06 1.78.1c.72.05 1.44.1 2.16.12h.53c.76 0 1.43-.03 2.06-.11c1.01-.12 2.5-.38 3.89-1.22c.89-.54 1.54-1.23 2.01-1.74l.22-.24c.42-.42.83-.82 1.25-1.22c.74-.7 1.5-1.44 2.25-2.28l.3-.33c1-1.13 1.95-2.19 2.95-3.09c1.07-.96 1.95-1.97 2.8-2.95c.08-.09.18-.18.29-.29c.9-.9 2.58-2.56 2.62-5.03c.02-1.42-.5-2.74-1.48-3.72c-1.68-1.7-3.92-1.7-4.66-1.7h-.3c-.67.01-1.35.03-2.02.03l-1.56.02h-.11c-.22 0-.46-.01-.68-.03l-.53-.03l-.33-.02c-.4.01-.81-.01-1.21-.01"></path><path fill="#2f2f2f" d="M110.89 14.27c-.34-.58-1.05-1.35-2.48-1.71c-.32-.08-.64-.12-.95-.12c-1.74 0-2.82 1.25-3.79 2.37c-1.35 1.57-2.63 3.23-3.88 4.83c-.63.81-1.26 1.63-1.9 2.43c-1.42 1.79-9.23 11.64-16.67 21.03c-4.94 6.24-10.98 13.76-14.13 17.69c-1.2 1.5-1.99 2.48-2.15 2.68c-.46.58-.74 1.15-.87 1.73c-.12.59.02 1.18.42 1.66c.44.55 1.16.89 1.88.89c.26 0 .51-.05.74-.13c.2-.08.8-.31 3.55-3.35c2.03-2.25 4.84-5.49 7.85-8.97c2.32-2.68 4.75-5.5 7.07-8.12c14.29-16.23 21.74-24.74 22.74-26.02l.35-.43c1.51-1.86 2.37-3 2.55-3.69c.25-.96.13-1.97-.33-2.77"></path></svg>
+                                            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+                                                <strong>Accurate</strong><br>
+                                                Easy manipulation of your life events
+                                            </div>
+                                        </div>
+                                        <img class="img-thumbnail" src="./images/life-predictor-alertbox-examples.jpg">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CHART OUTPUT -->
+                        <div class="overflow-auto" style="margin-top:60.1px;">
+                            <hr>
+                            <div id="EventsChartMainElement" class="vstack gap-1" style="display: none;">
+                                <div class="hstack gap-2 mb-2">
+                                    <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4081=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park-outline" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park-outline:full-screen-one" data-width="25"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m6 6l10 9.9m-10 26L16 32m26 9.9L32.1 32m9.8-26L32 15.9M33 6h9v9m0 18v9h-9m-18 0H6v-9m0-18V6h9"></path></svg></button>
+                                    <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4082=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--iconamoon" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="iconamoon:zoom-in" data-width="25"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21l-4.343-4.343m0 0A8 8 0 1 0 5.343 5.343a8 8 0 0 0 11.314 11.314M11 8v6m-3-3h6"></path></svg></button>
+                                    <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4083=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--iconamoon" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="iconamoon:zoom-out" data-width="25"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21l-4.343-4.343m0 0A8 8 0 1 0 5.343 5.343a8 8 0 0 0 11.314 11.314M8 11h6"></path></svg></button>
+                                    <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4084=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="bx:hide" data-width="25"><path fill="currentColor" d="M12 19c.946 0 1.81-.103 2.598-.281l-1.757-1.757c-.273.021-.55.038-.841.038c-5.351 0-7.424-3.846-7.926-5a8.6 8.6 0 0 1 1.508-2.297L4.184 8.305c-1.538 1.667-2.121 3.346-2.132 3.379a1 1 0 0 0 0 .633C2.073 12.383 4.367 19 12 19m0-14c-1.837 0-3.346.396-4.604.981L3.707 2.293L2.293 3.707l18 18l1.414-1.414l-3.319-3.319c2.614-1.951 3.547-4.615 3.561-4.657a1 1 0 0 0 0-.633C21.927 11.617 19.633 5 12 5m4.972 10.558l-2.28-2.28c.19-.39.308-.819.308-1.278c0-1.641-1.359-3-3-3c-.459 0-.888.118-1.277.309L8.915 7.501A9.3 9.3 0 0 1 12 7c5.351 0 7.424 3.846 7.926 5c-.302.692-1.166 2.342-2.954 3.558"></path></svg></button>
+                                    <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
+                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4085=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--fluent" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16" data-icon="fluent:highlight-16-filled" data-width="25"><path fill="currentColor" d="M3 1a1 1 0 0 0-1 1v2.5A1.5 1.5 0 0 0 3.5 6q-.025 0-.05.003h.102L3.5 6h.246v.003h8.545V6h.21l-.051.003h.102L12.5 6h.001a1.5 1.5 0 0 0 1.5-1.5V2a1 1 0 0 0-1-1zm.001 6.003a2 2 0 0 0 2 1.997h6a2 2 0 0 0 2-1.997zM5.003 14.5V10h5.999v.74a1.5 1.5 0 0 1-.689 1.265l-4.54 2.916a.5.5 0 0 1-.77-.421"></path></svg></button>
+                                        <ul style="cursor: pointer; width: 254.9px;" class="dropdown-menu ">
+                                            <div class="d-flex flex-wrap gap-1">
+                                                <div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 1">
+                                                    <label class="form-check-label" for="House 1">House 1</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 2">
+                                                    <label class="form-check-label" for="House 2">House 2</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 3">
+                                                    <label class="form-check-label" for="House 3">House 3</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 4">
+                                                    <label class="form-check-label" for="House 4">House 4</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 5">
+                                                    <label class="form-check-label" for="House 5">House 5</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 6">
+                                                    <label class="form-check-label" for="House 6">House 6</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 7">
+                                                    <label class="form-check-label" for="House 7">House 7</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 8">
+                                                    <label class="form-check-label" for="House 8">House 8</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 9">
+                                                    <label class="form-check-label" for="House 9">House 9</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 10">
+                                                    <label class="form-check-label" for="House 10">House 10</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 11">
+                                                    <label class="form-check-label" for="House 11">House 11</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 12">
+                                                    <label class="form-check-label" for="House 12">House 12</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Sun">
+                                                    <label class="form-check-label" for="Sun">Sun</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Moon">
+                                                    <label class="form-check-label" for="Moon">Moon</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Mars">
+                                                    <label class="form-check-label" for="Mars">Mars</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Mercury">
+                                                    <label class="form-check-label" for="Mercury">Mercury</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Jupiter">
+                                                    <label class="form-check-label" for="Jupiter">Jupiter</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Venus">
+                                                    <label class="form-check-label" for="Venus">Venus</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Saturn">
+                                                    <label class="form-check-label" for="Saturn">Saturn</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Rahu">
+                                                    <label class="form-check-label" for="Rahu">Rahu</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Ketu">
+                                                    <label class="form-check-label" for="Ketu">Ketu</label>
+                                                </div>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                    <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4086=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256" data-icon="logos:google-calendar" data-width="25"><path fill="#FFF" d="M195.368 60.632H60.632v134.736h134.736z"></path><path fill="#EA4335" d="M195.368 256L256 195.368l-30.316-5.172l-30.316 5.172l-5.533 27.73z"></path><path fill="#188038" d="M0 195.368v40.421C0 246.956 9.044 256 20.21 256h40.422l6.225-30.316l-6.225-30.316l-33.033-5.172z"></path><path fill="#1967D2" d="M256 60.632V20.21C256 9.044 246.956 0 235.79 0h-40.422q-5.532 22.554-5.533 33.196q0 10.641 5.533 27.436q20.115 5.76 30.316 5.76T256 60.631"></path><path fill="#FBBC04" d="M256 60.632h-60.632v134.736H256z"></path><path fill="#34A853" d="M195.368 195.368H60.632V256h134.736z"></path><path fill="#4285F4" d="M195.368 0H20.211C9.044 0 0 9.044 0 20.21v175.158h60.632V60.632h134.736z"></path><path fill="#4285F4" d="M88.27 165.154c-5.036-3.402-8.523-8.37-10.426-14.94l11.689-4.816q1.59 6.063 5.558 9.398c2.627 2.223 5.827 3.318 9.566 3.318q5.734 0 9.852-3.487c2.746-2.324 4.127-5.288 4.127-8.875q0-5.508-4.345-8.994c-2.897-2.324-6.535-3.486-10.88-3.486h-6.754v-11.57h6.063q5.608 0 9.448-3.033c2.56-2.02 3.84-4.783 3.84-8.303c0-3.132-1.145-5.625-3.435-7.494c-2.29-1.87-5.188-2.813-8.708-2.813c-3.436 0-6.164.91-8.185 2.745a16.1 16.1 0 0 0-4.413 6.754l-11.57-4.817c1.532-4.345 4.345-8.185 8.471-11.503s9.398-4.985 15.798-4.985c4.733 0 8.994.91 12.767 2.745c3.772 1.836 6.736 4.379 8.875 7.613c2.14 3.25 3.2 6.888 3.2 10.93c0 4.126-.993 7.613-2.98 10.476s-4.43 5.052-7.327 6.585v.69a22.25 22.25 0 0 1 9.398 7.327c2.442 3.284 3.672 7.208 3.672 11.79c0 4.58-1.163 8.673-3.487 12.26c-2.324 3.588-5.54 6.417-9.617 8.472c-4.092 2.055-8.69 3.1-13.793 3.1c-5.912.016-11.369-1.685-16.405-5.087m71.797-58.005l-12.833 9.28l-6.417-9.734l23.023-16.607h8.825v78.333h-12.598z"></path></svg></button>
+                                    <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4087=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--material-symbols" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="material-symbols:download" data-width="25"><path fill="currentColor" d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z"></path></svg></button>
+                                    <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4088=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="ic:round-print" data-width="25"><path fill="currentColor" d="M19 8H5c-1.66 0-3 1.34-3 3v4c0 1.1.9 2 2 2h2v2c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-2h2c1.1 0 2-.9 2-2v-4c0-1.66-1.34-3-3-3m-4 11H9c-.55 0-1-.45-1-1v-4h8v4c0 .55-.45 1-1 1m4-7c-.55 0-1-.45-1-1s.45-1 1-1s1 .45 1 1s-.45 1-1 1m-2-9H7c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1"></path></svg></button>
+                                    <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4089=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ri" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="ri:bookmark-3-fill" data-width="25"><path fill="currentColor" d="M4 2h16a1 1 0 0 1 1 1v19.276a.5.5 0 0 1-.704.457L12 19.03l-8.296 3.702A.5.5 0 0 1 3 22.276V3a1 1 0 0 1 1-1m8 11.5l2.939 1.545l-.561-3.272l2.377-2.318l-3.285-.478L12 6l-1.47 2.977l-3.285.478l2.377 2.318l-.56 3.272z"></path></svg></button>
+                                    <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
+                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4090=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--tabler" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="tabler:share-2" data-width="25"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1m-4 5V3M9 6l3-3l3 3"></path></svg></button>
+                                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style="" _bl_4094=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="ic:outline-attach-email" data-width="25" style="vertical-align: text-bottom;"><path fill="currentColor" d="m3 6l8 5l8-5v3h2V4c0-1.1-.9-2-2-2H3c-1.1 0-1.99.9-1.99 2L1 16c0 1.1.9 2 2 2h10v-2H3zm16-2l-8 5l-8-5z"></path><path fill="currentColor" d="M21 14v4c0 1.1-.9 2-2 2s-2-.9-2-2v-4.5c0-.28.22-.5.5-.5s.5.22.5.5V18h2v-4.5a2.5 2.5 0 0 0-5 0V18c0 2.21 1.79 4 4 4s4-1.79 4-4v-4z"></path></svg></div>
+                                                    <span>Email PDF</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style="" _bl_4095=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--uil" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="uil:facebook" data-width="25" style="vertical-align: text-bottom;"><path fill="currentColor" d="M20.9 2H3.1A1.1 1.1 0 0 0 2 3.1v17.8A1.1 1.1 0 0 0 3.1 22h9.58v-7.75h-2.6v-3h2.6V9a3.64 3.64 0 0 1 3.88-4a20 20 0 0 1 2.33.12v2.7H17.3c-1.26 0-1.5.6-1.5 1.47v1.93h3l-.39 3H15.8V22h5.1a1.1 1.1 0 0 0 1.1-1.1V3.1A1.1 1.1 0 0 0 20.9 2"></path></svg></div>
+                                                    <span>Facebook</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style="" _bl_4096=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--uil" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="uil:instagram" data-width="25" style="vertical-align: text-bottom;"><path fill="currentColor" d="M17.34 5.46a1.2 1.2 0 1 0 1.2 1.2a1.2 1.2 0 0 0-1.2-1.2m4.6 2.42a7.6 7.6 0 0 0-.46-2.43a4.9 4.9 0 0 0-1.16-1.77a4.7 4.7 0 0 0-1.77-1.15a7.3 7.3 0 0 0-2.43-.47C15.06 2 14.72 2 12 2s-3.06 0-4.12.06a7.3 7.3 0 0 0-2.43.47a4.8 4.8 0 0 0-1.77 1.15a4.7 4.7 0 0 0-1.15 1.77a7.3 7.3 0 0 0-.47 2.43C2 8.94 2 9.28 2 12s0 3.06.06 4.12a7.3 7.3 0 0 0 .47 2.43a4.7 4.7 0 0 0 1.15 1.77a4.8 4.8 0 0 0 1.77 1.15a7.3 7.3 0 0 0 2.43.47C8.94 22 9.28 22 12 22s3.06 0 4.12-.06a7.3 7.3 0 0 0 2.43-.47a4.7 4.7 0 0 0 1.77-1.15a4.85 4.85 0 0 0 1.16-1.77a7.6 7.6 0 0 0 .46-2.43c0-1.06.06-1.4.06-4.12s0-3.06-.06-4.12M20.14 16a5.6 5.6 0 0 1-.34 1.86a3.06 3.06 0 0 1-.75 1.15a3.2 3.2 0 0 1-1.15.75a5.6 5.6 0 0 1-1.86.34c-1 .05-1.37.06-4 .06s-3 0-4-.06a5.7 5.7 0 0 1-1.94-.3a3.3 3.3 0 0 1-1.1-.75a3 3 0 0 1-.74-1.15a5.5 5.5 0 0 1-.4-1.9c0-1-.06-1.37-.06-4s0-3 .06-4a5.5 5.5 0 0 1 .35-1.9A3 3 0 0 1 5 5a3.1 3.1 0 0 1 1.1-.8A5.7 5.7 0 0 1 8 3.86c1 0 1.37-.06 4-.06s3 0 4 .06a5.6 5.6 0 0 1 1.86.34a3.06 3.06 0 0 1 1.19.8a3.1 3.1 0 0 1 .75 1.1a5.6 5.6 0 0 1 .34 1.9c.05 1 .06 1.37.06 4s-.01 3-.06 4M12 6.87A5.13 5.13 0 1 0 17.14 12A5.12 5.12 0 0 0 12 6.87m0 8.46A3.33 3.33 0 1 1 15.33 12A3.33 3.33 0 0 1 12 15.33"></path></svg></div>
+                                                    <span>Instagram</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style="" _bl_4097=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--uil" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="uil:twitter" data-width="25" style="vertical-align: text-bottom;"><path fill="currentColor" d="M22 5.8a8.5 8.5 0 0 1-2.36.64a4.13 4.13 0 0 0 1.81-2.27a8.2 8.2 0 0 1-2.61 1a4.1 4.1 0 0 0-7 3.74a11.64 11.64 0 0 1-8.45-4.29a4.16 4.16 0 0 0-.55 2.07a4.09 4.09 0 0 0 1.82 3.41a4.05 4.05 0 0 1-1.86-.51v.05a4.1 4.1 0 0 0 3.3 4a4 4 0 0 1-1.1.17a5 5 0 0 1-.77-.07a4.11 4.11 0 0 0 3.83 2.84A8.22 8.22 0 0 1 3 18.34a8 8 0 0 1-1-.06a11.57 11.57 0 0 0 6.29 1.85A11.59 11.59 0 0 0 20 8.45v-.53a8.4 8.4 0 0 0 2-2.12"></path></svg></div>
+                                                    <span>Twitter</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4091=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256" data-icon="ph:code-fill" data-width="25"><path fill="currentColor" d="M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16M92.8 145.6a8 8 0 1 1-9.6 12.8l-32-24a8 8 0 0 1 0-12.8l32-24a8 8 0 0 1 9.6 12.8L69.33 128Zm58.89-71.4l-32 112a8 8 0 1 1-15.38-4.4l32-112a8 8 0 0 1 15.38 4.4m53.11 60.2l-32 24a8 8 0 0 1-9.6-12.8l23.47-17.6l-23.47-17.6a8 8 0 1 1 9.6-12.8l32 24a8 8 0 0 1 0 12.8"></path></svg></button>
+                                    <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
+                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm dropdown-toggle hstack gap-2 iconButton btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4092=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--gravity-ui" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16" data-icon="gravity-ui:person" data-width="25"><path fill="currentColor" fill-rule="evenodd" d="M10 4.5a2 2 0 1 1-4 0a2 2 0 0 1 4 0m1.5 0a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0m-9 8c0-.204.22-.809 1.32-1.459C4.838 10.44 6.32 10 8 10s3.162.44 4.18 1.041c1.1.65 1.32 1.255 1.32 1.459a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1m5.5-4c-3.85 0-7 2-7 4A2.5 2.5 0 0 0 3.5 15h9a2.5 2.5 0 0 0 2.5-2.5c0-2-3.15-4-7-4" clip-rule="evenodd"></path></svg>Person</button>
+                                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style="" _bl_4098=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--fluent" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" data-icon="fluent:book-star-20-filled" data-width="25" style="vertical-align: text-bottom;"><path fill="currentColor" d="M4 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v11a1 1 0 0 1-1 1H5a1 1 0 0 0 1 1h9.5a.5.5 0 0 1 0 1H6a2 2 0 0 1-2-2zm6.454 1.29a.5.5 0 0 0-.907 0l-.822 1.77l-1.938.234a.5.5 0 0 0-.28.863l1.43 1.328L7.56 11.4a.5.5 0 0 0 .734.533L10 10.985l1.705.948a.5.5 0 0 0 .734-.533l-.375-1.915l1.43-1.328a.5.5 0 0 0-.281-.863l-1.937-.235zm-.94 2.443L10 6.687l.486 1.046a.5.5 0 0 0 .393.286l1.145.138l-.845.785a.5.5 0 0 0-.15.463l.222 1.131l-1.008-.56a.5.5 0 0 0-.486 0l-1.008.56l.222-1.131a.5.5 0 0 0-.15-.463l-.844-.785L9.12 8.02a.5.5 0 0 0 .393-.286"></path></svg></div>
+                                                    <span>Horoscope</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style="" _bl_4099=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="mdi:calendar-outline" data-width="25" style="vertical-align: text-bottom;"><path fill="currentColor" d="M12 12h5v5h-5zm7-9h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m0 2v2H5V5zM5 19V9h14v10z"></path></svg></div>
+                                                    <span>Journal</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="container-xxl" id="EventsChartSvgHolder" style="margin-left: -11px; "></div>
+                            </div>
+
+                            <!-- PLACEHOLDER TEXT -->
+                            <div id="EventsChartPlaceHolderMessage">
+                                <div class="d-flex justify-content-center">
+                                    <span class="" style="color: #8f8f8f; font-size: 14px;">Chart will appear <strong>here</strong> after <strong>calculate</strong></span>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+
+                        <!----------------------- DESCRIPTION TEXT ----------------------------->
+
+
+                        <div class="gap-3 mt-5" style="max-width: 667.5px">
+                            <div class="py-2" _bl_150="">
+                                <div class="">
+                                    <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" ><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto-v1" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="noto-v1:artist-palette" data-width="38" style="vertical-align: text-bottom;"><defs><path id="IconifyId193105f2004a2948b77" d="M103.44 27.85c-2.15-5.08-6.79-11.67-11.58-14.6C80.72 6.4 66.56 5.08 53.93 7.5C34.09 11.3 15.5 24.13 6.19 42.21c-6.59 12.8-7.95 32.31.83 44.59c5.73 8.01 17.1 11.04 26.12 7.28c6.13-2.55 9.93-8.23 15.23-11.95c6.88-4.84 14.34-3.47 22.32-3.78c22.91-.87 41.64-29.39 32.75-50.5M69.75 60.89c-1.82.7-4.21 1.11-6.17.82c-1.98-.31-4.08-1.76-5.13-3.48c-3.65-5.92 2.41-12.77 8.01-14.26c2.78-.74 6.86-.28 9.07 1.63c5.73 4.95-.52 13.25-5.78 15.29"></path></defs><use fill="#f79329" href="#IconifyId193105f2004a2948b77"></use><path fill="#ed6c30" d="M43.47 21.59c1.57-1.26 3.59-2.05 5.48-2.21c3.45-.3 5.89 2.77 5.75 6.17c-.19 4.3-4.91 6.39-8.85 6.22c-3.06-.13-5.58-2.89-5.07-5.87c.31-1.74 1.33-3.2 2.69-4.31"></path><path fill="#bdcf46" d="M16.49 53.68c1.19-4.79 6.88-7.82 10.93-4.4c3.86 3.25 2.05 9.69-2.04 12.05c-2.72 1.57-6.76.52-8.33-2.39c-.87-1.61-1-3.5-.56-5.26"></path><path fill="#006ca2" d="M28.73 70.02c2.27 4.3.76 10.93-4.77 11.39s-8.62-6.05-7.19-10.81c1.43-4.74 7.29-5.52 10.59-2.4c.56.53 1.02 1.14 1.37 1.82"></path><path fill="#fcc21b" d="M38.28 39.46c-1.49 2.74-4.96 5.13-8.17 4.73c-4.03-.5-5.61-5.3-3.86-8.73c2.4-4.7 9.92-6.58 12.44-.8c.69 1.59.42 3.29-.41 4.8"></path><defs><path id="IconifyId193105f2004a2948b78" d="M73.56 88.64c-5.05-.2-10.42 2.1-13.7 6.37c-3.4 4.42-3.3 10.08-3.44 15.38c-.08 2.88.4 6.9-1.69 9.24c-.94 1.05-1.93 1.27-3.21 1.43c-.5.06-2.94-.32-2.02 1.08c1.75 2.67 8.26 3.35 11.05 3.47c7.5.34 14.88-2.98 19.83-8.59c.51-.59 1-1.2 1.46-1.83c3.69-5.08 5.85-12.28 3.48-18.33c-2.14-5.45-6.8-8.03-11.76-8.22"></path></defs><use fill="#fff" href="#IconifyId193105f2004a2948b78"></use><clipPath id="IconifyId193105f2004a2948b79"><use href="#IconifyId193105f2004a2948b78"></use></clipPath><path fill="#ed6c30" d="M65.05 103.63c.11.24.21.55.26.94c.31 2.38 2.13 2.9 4.29 2.9c2.19 0 4.92-.48 4.92 2.46c-.01 1.26-.61 2.19.65 2.96c1.9 1.16 5.54.89 7.38-.32c1.14-.75 2.74-1.42 2.02.71c-.42 1.23-1.24 2.36-1.84 3.52c-.66 1.27-1.49 2.28-2.49 3.3c-.73.75-1.23 1.65-2.07 2.29c-2.15 1.63-4.95 2.14-7.46 2.96c-3.36 1.1-6.57 3.06-10.17 2.05c-3.81-1.07-7.96-.64-11.71-1.87c-1.85-.61-3-1.73-2.72-3.72c.25-1.71 1.42-2.35 2.98-2.69c1.76-.39 3.2-.86 4.01-2.62c.7-1.49.22-3.66.12-5.24c-.14-2.15-.38-4.42.17-6.53c.46-1.74.97-3.48 1.73-5.12c.35-.77.72-1.71 1.28-2.35c.87-1 1.94-1.45 3.12-1.98c.37.95-.42 2.46-.56 3.42c-.23 1.65-.18 3.42 1.5 4.09c1.63.62 3.8-.82 4.59.84" clip-path="url(#IconifyId193105f2004a2948b79)"></path><path fill="#855c52" d="M91.93 60.63c5.67-6.52 9.85-14.31 14.96-21.29c3.14-4.28 6.03-8.8 8.95-13.21c1.85-2.79 4.51-7.68 8.43-7.61c.68.01 1.3.3 1.85.69c1.21.86 1.2 2.93.8 4.21c-1.59 5.15-4.57 10.08-7.07 14.84c-.95 1.82-1.92 3.64-2.93 5.43c-2.95 5.25-6.03 10.43-8.75 15.81c-1.06 2.1-2.06 4.22-2.97 6.38c-.57 1.34-1.45 2.48-1.8 3.88c-.36 1.44-3.61-2.61-3.81-2.93c-.74-1.23-1.42-1.88-2.74-2.32c-.95-.31-6.04-1.04-5.63-2.66c.11-.42.37-.83.71-1.22"></path><defs><path id="IconifyId193105f2004a2948b80" d="M102.54 68.36c-.96-2.01-2.82-3.14-4.45-4.14c-.42-.26-.84-.51-1.22-.77c-2.58-1.77-4.79-2.2-6.57-1.35c-2.67 1.28-4.56 4.66-6.09 7.38c-.42.74-.8 1.42-1.15 1.98c-2.87 4.47-5.64 7.9-10.54 11.2l-.42.27c-1.11.71-2.63 1.69-2.75 3.46c-.05.75.16 1.88 1.47 2.99c1.43 1.21 3 1.95 4.52 2.66c.54.25 1.09.51 1.62.79c1.75.92 3.34 2.13 5.03 3.42l1 .75c.26.19.52.45.8.7c.78.73 1.75 1.65 3.01 2c.43.12.81.18 1.15.18c1.36 0 2.04-.84 2.41-1.29l.15-.18c1.46-1.71 2.18-4 2.81-6.02c.3-.98.59-1.91.93-2.69c.54-1.23 1.05-2.47 1.56-3.71c1.12-2.74 2.18-5.33 3.55-7.8c.32-.59.79-1.2 1.29-1.84c1.47-1.94 3.5-4.6 1.89-7.99"></path></defs><use fill="#78a3ad" href="#IconifyId193105f2004a2948b80"></use><clipPath id="IconifyId193105f2004a2948b81"><use href="#IconifyId193105f2004a2948b80"></use></clipPath><path fill="#2f2f2f" d="M93.71 98.86c-.72 0-1.42-.35-1.87-.99c-.53-.79-.85-1.57-1.14-2.26c-.26-.63-.48-1.17-.81-1.6c-3.07-3.96-6.79-6.7-12.85-9.47c-1.81-.83-3.46-1.24-4.86-1.24c-1.25 0-2.26-1.01-2.26-2.25s1.01-2.25 2.26-2.25c2.05 0 4.32.56 6.73 1.65c4.71 2.15 10.13 5.12 14.54 10.81c.71.91 1.09 1.83 1.42 2.65c.23.56.43 1.04.71 1.45c.7 1.03.42 2.43-.6 3.12c-.4.25-.84.38-1.27.38" clip-path="url(#IconifyId193105f2004a2948b81)"></path></svg></div><h4 class="mt-2 me-auto">Colors </h4></div>
+                                    <hr class="mt-1 mb-2">
+                                </div>
+                                <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p class="text-justify">
+                                    Our eyes and brain can <strong>process and understand</strong> colors much more easily than text.
+                                    That is why we converted complicated predictions into easy understandable colors.
+                                </p>
+
+                                <img src="images/life-predictor-image-1.jpg" class="img-thumbnail mb-3 mt-1" alt="...">
+
+                                <p class="text-justify">
+                                    <span style="color: red; font-weight: 900;">RED</span> is for bad life events, <span style="color: green; font-weight: 900;">GREEN</span> is for good. This makes it possible to quickly read with
+                                    <strong>zero</strong> astrological knowledge. No manuals needed.
+                                </p></p>
+                            </div>
+                            <div class="py-2" _bl_151="">
+                                <div class="">
+                                    <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_180=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto-v1" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="noto-v1:direct-hit" data-width="38" style="vertical-align: text-bottom;"><circle cx="64.65" cy="65.14" r="54.49" fill="#006ca2"></circle><circle cx="64.65" cy="65.14" r="35.33" fill="#ed6c30"></circle><path fill="#fff" d="M64.65 102.59c-20.66 0-37.46-16.8-37.46-37.46s16.8-37.46 37.46-37.46c20.65 0 37.46 16.81 37.46 37.46c0 20.66-16.81 37.46-37.46 37.46m0-70.65c-18.3 0-33.19 14.89-33.19 33.19s14.89 33.19 33.19 33.19s33.19-14.89 33.19-33.19s-14.88-33.19-33.19-33.19"></path><circle cx="64.65" cy="65.14" r="16.66" fill="#fff"></circle><path fill="#fff" d="M122.15 20.3c-1.67-1.7-3.92-1.7-4.67-1.7h-.28l-1.92.03c-1.35.02-3.19.42-3.98-.91c-.62-1.04-1.12-1.25-2.33-1.54c-1-.24-2.17-.39-2.44-1.57c-.15-.64-.06-1.3-.14-1.96c-.11-.91-.31-1.74-.31-2.69c.01-.94-.07-1.82-.15-2.74c-.03-.41-.03-.87-.29-1.22c-.56-.73-1.14-.95-2.12-.95c-.33 0-.68.04-1.02.1c-2.42.47-3.76 2.43-4.49 3.48c-.08.12-.16.24-.23.33l-.09.14c-.74.92-1.58 1.97-2.32 3.16c-.71 1.16-1.6 2.3-2.54 3.5l-.24.31c-.69.88-1.28 1.76-1.84 2.61c-.32.48-.63.97-.97 1.44l-.19.25c-.42.56-1 1.33-1.38 2.33c-.57 1.52-.57 3.02-.5 4.01c.05.8.17 1.63.36 2.56c.14.7.32 1.4.49 2.1c.15.58.3 1.16.42 1.75c.21 1.09.44 2.17.67 3.26l.03.15l.06.28c.07.3.17.58.3.85c-2.35 2.95-4.9 6.18-7.41 9.35c-4.93 6.25-10.97 13.76-14.13 17.7c-1.2 1.5-1.98 2.48-2.14 2.68c-.46.58-.74 1.15-.87 1.73c-.12.59.02 1.18.41 1.66c.44.55 1.17.89 1.88.89c.26 0 .51-.05.74-.13c.21-.07.8-.31 3.54-3.35c2.03-2.25 4.84-5.49 7.86-8.97c2.31-2.68 4.75-5.5 7.06-8.12c2.9-3.29 5.51-6.25 7.89-8.91l.33.01c1.1.04 2.2.06 3.31.09c.58.01 1.18.05 1.78.1c.72.05 1.45.1 2.17.12c.19 0 .39.01.58.01c.72 0 1.38-.04 2.01-.11c.98-.11 2.47-.37 3.87-1.2c.91-.55 1.57-1.25 2.04-1.76l.22-.23c.4-.41.82-.8 1.23-1.2c.74-.71 1.51-1.44 2.26-2.28l.25-.28c1.02-1.15 1.98-2.23 3-3.14c1.05-.95 1.91-1.93 2.74-2.88c.12-.15.23-.24.33-.35c.91-.9 2.6-2.56 2.63-5.03c.03-1.46-.49-2.78-1.47-3.76"></path><path fill="#fff" d="M92.41 31.57c-.23-1.08-.45-2.14-.67-3.21c-.25-1.3-.64-2.56-.91-3.86c-.13-.65-.24-1.3-.28-1.97c-.04-.74-.03-1.54.23-2.24c.22-.56.7-1.12 1.05-1.62c.91-1.28 1.71-2.65 2.69-3.9c1.08-1.36 2.16-2.72 3.07-4.2c.62-1 1.37-1.92 2.1-2.85c.55-.68 1.27-2.11 2.2-2.29c1.05-.2 1.33 1.08 1.45 1.85c.19 1.18.39 2.36.59 3.54c.08.51.21 1.03.33 1.54c.16.74.36 1.48.4 2.24c.03.55.19 1.12-.04 1.65c-.17.42-.54.75-.82 1.1c-.43.55-.73 1.19-1.14 1.76c-.37.5-.78.98-1.08 1.52c-.41.71-.62 1.34-1.19 1.98c-.62.7-1.23 1.43-1.88 2.11c-.6.62-1.41 1.11-1.94 1.77c-.42.51-.62 1.16-1.04 1.69c-.58.75-1.18 1.5-1.75 2.26c-.37.47-.76 1.23-1.28 1.54c-.02-.13-.06-.27-.09-.41"></path><path fill="#2f2f2f" d="M102.11 5.42c.88 0 1.12 1.16 1.23 1.87c.19 1.18.39 2.36.59 3.54c.08.51.21 1.03.33 1.54c.16.74.36 1.48.4 2.24c.03.55.19 1.12-.04 1.65c-.17.42-.54.75-.82 1.1c-.43.55-.73 1.19-1.14 1.76c-.37.5-.78.98-1.08 1.52c-.41.71-.62 1.34-1.19 1.98c-.62.7-1.23 1.43-1.88 2.11c-.6.62-1.41 1.11-1.94 1.77c-.42.51-.62 1.16-1.04 1.69c-.58.75-1.18 1.5-1.75 2.26c-.37.47-.76 1.23-1.28 1.54c-.03-.15-.06-.29-.09-.43c-.23-1.08-.45-2.14-.67-3.21c-.25-1.3-.64-2.56-.91-3.86c-.13-.65-.24-1.3-.28-1.97c-.04-.74-.03-1.54.23-2.24c.22-.56.7-1.12 1.05-1.62c.91-1.28 1.71-2.65 2.69-3.9c1.08-1.36 2.16-2.72 3.07-4.2c.62-1 1.37-1.92 2.1-2.85c.55-.68 1.27-2.11 2.2-2.29c.08.01.15 0 .22 0m0-4.27c-.34 0-.69.03-1.02.1c-2.42.47-3.76 2.42-4.48 3.46c-.08.12-.17.24-.24.34l-.11.14c-.74.92-1.57 1.96-2.3 3.15c-.73 1.18-1.64 2.34-2.6 3.57l-.18.23c-.69.89-1.28 1.76-1.83 2.61c-.33.49-.65.97-.99 1.45l-.2.27c-.41.56-.98 1.32-1.37 2.32c-.58 1.52-.56 3.02-.5 4.01c.05.8.17 1.62.36 2.56c.15.7.32 1.39.49 2.09c.15.59.3 1.17.42 1.76c.22 1.09.43 2.17.67 3.27l.05.22l.03.15l1.19 5.96l5.2-3.15c1.18-.71 1.87-1.74 2.29-2.35c.05-.08.1-.16.16-.23c.45-.59.9-1.16 1.35-1.74l.39-.5c.43-.55.71-1.07.91-1.44c.04-.07.07-.14.11-.21c.09-.08.29-.25.44-.37c.36-.29.8-.65 1.23-1.11c.49-.51.95-1.04 1.4-1.57c.2-.22.39-.45.59-.67c.76-.86 1.17-1.66 1.47-2.25c.08-.14.15-.29.23-.44s.27-.39.45-.62c.12-.17.26-.34.38-.51c.26-.35.5-.74.73-1.13c.11-.17.2-.35.33-.5l.12-.14c.33-.38.88-1.01 1.26-1.92c.61-1.4.47-2.69.4-3.38l-.02-.18c-.06-.99-.26-1.85-.42-2.55l-.08-.38l-.12-.52c-.06-.26-.12-.52-.17-.78l-.24-1.47l-.33-2.05c-.82-5.11-4.38-5.5-5.45-5.5"></path><path fill="#fff" d="M93.91 34.02c1.1.03 2.2.06 3.28.08c1.33.03 2.65.18 3.96.22c.67.01 1.33 0 1.98-.08c.74-.09 1.53-.24 2.17-.63c.52-.31.98-.88 1.41-1.31c1.1-1.13 2.3-2.16 3.35-3.35c1.16-1.29 2.3-2.6 3.59-3.76c.88-.79 1.66-1.68 2.43-2.57c.57-.65 1.85-1.62 1.86-2.57c.02-1.07-1.3-1.11-2.08-1.1c-1.2.02-2.39.03-3.59.05c-.52.01-1.05-.03-1.57-.05c-.76-.03-1.52-.1-2.27 0c-.55.07-1.14.01-1.62.33c-.38.25-.64.67-.94 1c-.47.52-1.05.93-1.53 1.44c-.43.45-.83.93-1.31 1.34c-.63.53-1.21.85-1.74 1.52c-.58.74-1.19 1.46-1.75 2.22c-.5.7-.84 1.58-1.4 2.23c-.43.5-1.03.82-1.48 1.33c-.63.71-1.27 1.42-1.91 2.13c-.4.44-1.08.96-1.28 1.52c.15 0 .3.01.44.01"></path><path fill="#2f2f2f" d="M109.33 18.91c.46 0 .92.03 1.38.05s.93.06 1.38.06h.19c1.2-.02 2.39-.03 3.59-.05h.2c.78 0 1.89.12 1.87 1.1c-.01.95-1.29 1.92-1.86 2.57c-.78.89-1.55 1.78-2.43 2.57c-1.29 1.16-2.43 2.47-3.59 3.76c-1.05 1.18-2.25 2.21-3.35 3.35c-.42.43-.89 1-1.41 1.31c-.64.39-1.42.54-2.17.63c-.52.06-1.04.08-1.57.08h-.42c-1.31-.03-2.63-.18-3.96-.22c-1.08-.02-2.18-.05-3.28-.08c-.14 0-.29-.01-.43-.02c.21-.56.88-1.08 1.28-1.52c.64-.7 1.27-1.42 1.91-2.13c.45-.5 1.05-.82 1.48-1.33c.56-.64.9-1.53 1.4-2.23c.56-.76 1.17-1.48 1.75-2.22c.53-.67 1.11-.99 1.74-1.52c.48-.4.88-.89 1.31-1.34c.48-.51 1.06-.92 1.53-1.44c.3-.34.55-.75.94-1c.48-.32 1.07-.26 1.62-.33c.3-.04.6-.05.9-.05m0-4.27c-.52 0-.98.03-1.43.09l-.17.01c-.68.05-1.96.13-3.25.99c-.84.56-1.35 1.2-1.66 1.59l-.11.14c-.12.12-.26.25-.42.38c-.35.31-.7.62-1.03.97c-.12.13-.28.29-.42.46c-.2.21-.4.44-.53.54c-.13.11-.27.21-.39.3c-.53.4-1.24.94-1.95 1.84l-.47.59c-.47.58-.94 1.16-1.38 1.76c-.38.52-.66 1.02-.88 1.42c-.09.16-.21.38-.28.5c-.06.05-.12.1-.18.14c-.33.27-.8.64-1.28 1.16l-.63.7c-.42.46-.83.93-1.26 1.39c-.06.07-.12.13-.2.2c-.53.52-1.43 1.39-1.92 2.69l-2.12 5.6l5.98.17l.16.01l.29.01l3.3.09c.58.01 1.18.06 1.78.1c.72.05 1.44.1 2.16.12h.53c.76 0 1.43-.03 2.06-.11c1.01-.12 2.5-.38 3.89-1.22c.89-.54 1.54-1.23 2.01-1.74l.22-.24c.42-.42.83-.82 1.25-1.22c.74-.7 1.5-1.44 2.25-2.28l.3-.33c1-1.13 1.95-2.19 2.95-3.09c1.07-.96 1.95-1.97 2.8-2.95c.08-.09.18-.18.29-.29c.9-.9 2.58-2.56 2.62-5.03c.02-1.42-.5-2.74-1.48-3.72c-1.68-1.7-3.92-1.7-4.66-1.7h-.3c-.67.01-1.35.03-2.02.03l-1.56.02h-.11c-.22 0-.46-.01-.68-.03l-.53-.03l-.33-.02c-.4.01-.81-.01-1.21-.01"></path><path fill="#2f2f2f" d="M110.89 14.27c-.34-.58-1.05-1.35-2.48-1.71c-.32-.08-.64-.12-.95-.12c-1.74 0-2.82 1.25-3.79 2.37c-1.35 1.57-2.63 3.23-3.88 4.83c-.63.81-1.26 1.63-1.9 2.43c-1.42 1.79-9.23 11.64-16.67 21.03c-4.94 6.24-10.98 13.76-14.13 17.69c-1.2 1.5-1.99 2.48-2.15 2.68c-.46.58-.74 1.15-.87 1.73c-.12.59.02 1.18.42 1.66c.44.55 1.16.89 1.88.89c.26 0 .51-.05.74-.13c.2-.08.8-.31 3.55-3.35c2.03-2.25 4.84-5.49 7.85-8.97c2.32-2.68 4.75-5.5 7.07-8.12c14.29-16.23 21.74-24.74 22.74-26.02l.35-.43c1.51-1.86 2.37-3 2.55-3.69c.25-.96.13-1.97-.33-2.77"></path></svg></div><h4 class="mt-2 me-auto">Perfect Predictions </h4></div>
+                                    <hr class="mt-1 mb-2">
+                                </div>
+                                <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;">
+                                    <img class="img-thumbnail mb-3" src="./images/proof/life-chart-proof-steve.jpg">
+                                    <img class="img-thumbnail mb-3" src="./images/proof/life-chart-proof-monroe.jpg">
+                                    <img class="img-thumbnail mb-3" src="./images/proof/life-chart-proof-hitler.jpg">
+                                    <img class="img-thumbnail mb-3" src="./images/proof/life-chart-proof-elon.jpg">
+                                </p>
+                            </div>
+                            <div class="py-2" _bl_152="">
+                                <div class="">
+                                    <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_181=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64" data-icon="emojione:level-slider" data-width="38" style="vertical-align: text-bottom;"><path fill="#333" d="M14 4.5v55c0 3.4 6 3.4 6 0v-55c0-3.3-6-3.3-6 0"></path><path fill="#6d7275" d="M6.6 42h20.8c2.5 0 4.6-2.3 4.6-5s-2.1-5-4.6-5H6.6C4.1 32 2 34.3 2 37s2.1 5 4.6 5"></path><path fill="#94989b" d="M6.9 39.6h20.2c2.4 0 4.5-1.7 4.5-3.8s-2-3.8-4.5-3.8H6.9c-2.4 0-4.5 1.7-4.5 3.8s2 3.8 4.5 3.8"></path><path fill="#5b636b" d="M59 10H39c-4 0-4-6 0-6h20c4 0 4 6 0 6m-2 10H39c-4 0-4-6 0-6h18c4 0 4 6 0 6m-2 10H39c-4 0-4-6 0-6h16c4 0 4 6 0 6"></path><path fill="#c7e755" d="M53 40H39c-4 0-4-6 0-6h14c4 0 4 6 0 6m-2 10H39c-4 0-4-6 0-6h12c4 0 4 6 0 6m-2 10H39c-4 0-4-6 0-6h10c4 0 4 6 0 6"></path></svg></div><h4 class="mt-2 me-auto">Smart Summary </h4></div>
+                                    <hr class="mt-1 mb-2">
+                                </div>
+                                <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p class="text-justify">
+                                    
+                                    Look carefully at the "<strong>Smart Summary</strong>" row, to see how <strong>good or bad</strong> the life event is going to be.
+                                    The intensity of the <span style="color: red; font-weight: 900;">RED</span> or <span style="color: green; font-weight: 900;">GREEN</span> is different.
+                                    When it is very <span style="color: darkred;font-weight: 900;">dark red</span> and no green lines around, it means that a very bad event will happen then.
+                                    What exactly will happen will depend on past and present karma.
+                                </p>
+                                <img src="images/life-predictor-connection.jpg" class="img-thumbnail mt-2 mb-3" alt="...">
+                                <p>
+                                    
+                                    What we can say <strong>for sure</strong>:- during <span style="color: red; font-weight: 900;">RED</span> period a native
+                                    will never say "I'm perfectly happy in life now". When it says <span style="color: red; font-weight: 900;">RED</span>, something will be poking you. Maybe it is big, maybe small.
+                                    But if the chart says it is there, it will be there. Prepare!
+                                </p></p>
+                            </div>
+                            <div class="py-2" _bl_153="">
+                                <div class="">
+                                    <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_182=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--twemoji" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36" data-icon="twemoji:cloud-with-lightning-and-rain" data-width="38" style="vertical-align: text-bottom;"><path fill="#F4900C" d="M13.917 36a.417.417 0 0 1-.371-.607L17 29h-5.078c-.174 0-.438-.031-.562-.297c-.114-.243-.057-.474.047-.703L15 19c.078-.067 6.902.393 7 .393a.417.417 0 0 1 .369.608l-3.817 6h5.032c.174 0 .329.108.391.271a.42.42 0 0 1-.119.461l-9.666 9.166a.42.42 0 0 1-.273.101"></path><path fill="#E1E8ED" d="M28 4c-.825 0-1.62.125-2.369.357A6.5 6.5 0 0 0 19.5 0c-3.044 0-5.592 2.096-6.299 4.921A4.46 4.46 0 0 0 10.5 4A4.5 4.5 0 0 0 6 8.5c0 .604.123 1.178.339 1.704A5 5 0 0 0 5 10c-2.762 0-5 2.238-5 5s2.238 5 5 5h23a8 8 0 1 0 0-16"></path><path fill="#5DADEC" d="m10.999 24.961l-.113-3.421l-2.87 1.708a1.97 1.97 0 0 0-1.036 1.799A2.034 2.034 0 0 0 9.056 27a1.975 1.975 0 0 0 1.943-2.039m-2 8l-.113-3.421l-2.87 1.708a1.97 1.97 0 0 0-1.036 1.799A2.034 2.034 0 0 0 7.056 35a1.974 1.974 0 0 0 1.943-2.039m-4.979-5.54L3.907 24l-2.87 1.708a1.97 1.97 0 0 0-1.036 1.799a2.033 2.033 0 0 0 2.076 1.953a1.974 1.974 0 0 0 1.943-2.039m25-2.46l-.113-3.421l-2.869 1.708a1.96 1.96 0 0 0-1.036 1.799A2.033 2.033 0 0 0 27.078 27a1.974 1.974 0 0 0 1.942-2.039m-2 9l-.113-3.421l-2.869 1.708a1.96 1.96 0 0 0-1.036 1.799A2.033 2.033 0 0 0 25.078 36a1.974 1.974 0 0 0 1.942-2.039m6-4l-.113-3.421l-2.869 1.708a1.96 1.96 0 0 0-1.036 1.799A2.033 2.033 0 0 0 31.078 32a1.974 1.974 0 0 0 1.942-2.039"></path></svg></div><h4 class="mt-2 me-auto">Tis Fate Then? </h4></div>
+                                    <hr class="mt-1 mb-2">
+                                </div>
+                                <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p>
+                                    <strong>No!</strong> This is astrological weather forecast. That is all.
+                                    The planets are <a target="_blank" rel="noopener noreferrer" style="text-decoration-line: none;" href="https://youtu.be/RhtrXdirXk4" class="link-primary fw-bold">not interested</a> in your personal life, to attribute good or evil to them is illogical.
+                                    <a target="_blank" rel="noopener noreferrer" style="text-decoration-line: none;" href="https://en.wikipedia.org/wiki/Swami_Rama" class="link-primary fw-bold">Swami Rama</a> of the himalayas, has written many accounts
+                                    of masters <strong>dodging karmic bullets</strong> like play things.
+                                    How is it possible, if it is fate?
+                                </p>
+                                <p>
+                                    
+                                    You cannot choose when thunderstorms come. <strong>But you can choose</strong> to sit at home dry or to
+                                    get wet outside. Don't take risks or make big changes in life during <span style="color: red; font-weight: 900;">RED</span> periods (<strong>thunderstorm</strong>).
+                                    And when you see <span style="color: green; font-weight: 900;">GREEN</span> make good use of it. Thus, you will sail life untouched by the storms that rage on.
+                                </p></p>
+                            </div>
+                            <div class="py-2" _bl_154="">
+                                <div class="">
+                                    <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_183=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64" data-icon="emojione:umbrella" data-width="38" style="vertical-align: text-bottom;"><path fill="#3e4347" d="M32 2c-.5 0-.9.4-.9.9v4.7H33V2.9c-.1-.5-.5-.9-1-.9"></path><path fill="#b8c2c4" d="M31.1 24.5H33v24.4h-1.9z"></path><path fill="#ffbe5c" d="M32 6.7v24.4c1.8-2.3 4.5-3.8 7.7-3.8c3.1 0 5.9 1.5 7.7 3.8C45.9 17.3 39.7 6.7 32 6.7"></path><path fill="#ed77a8" d="M32 6.7v24.4c-1.8-2.3-4.5-3.8-7.7-3.8s-5.9 1.5-7.7 3.8C18.1 17.3 24.3 6.7 32 6.7"></path><path fill="#c7e86f" d="M32 6.7c7.7 0 13.9 10.6 15.4 24.4c1.8-2.3 4.5-3.8 7.7-3.8c2.7 0 5.2 1.1 7 2.9C59 16.8 46.7 6.7 32 6.7"></path><path fill="#60d4e0" d="M32 6.7c-7.7 0-13.9 10.6-15.4 24.4c-1.8-2.3-4.5-3.8-7.7-3.8c-2.7 0-5.2 1.1-7 2.9C5 16.8 17.3 6.7 32 6.7"></path><path fill="#3e4347" d="M30.1 48.9v5.6c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8c0-1-.8-1.9-1.9-1.9s-1.9.8-1.9 1.9c0 4.1 3.4 7.5 7.5 7.5s7.5-3.4 7.5-7.5v-5.6z"></path></svg></div><h4 class="mt-2 me-auto">Astro Umbrella </h4></div>
+                                    <hr class="mt-1 mb-2">
+                                </div>
+                                <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p>
+                                    
+                                    The power of gems and metals to fight the planets pull should never be underestimated.
+                                    Wear the remedies before your <span style="color: red; font-weight: 900;">RED</span> period starts and never take it off during this period.
+                                </p>
+                                <p>
+                                    
+                                    Even <a target="_blank" rel="noopener noreferrer" style="text-decoration-line: none;" href="https://en.wikipedia.org/wiki/Mahatma_Gandhi" class="link-primary fw-bold">Mahatma Gandhi</a> noted in his writing that his father just before
+                                    death, awoke one night from sleep <strong>took off the astro bangle</strong> he had worn for decades. Threw it
+                                    across the room and only then did he die.
+                                </p>
+                                <p>
+                                    
+                                    This is but one of many public records from all corners of the globe, proving the power of
+                                    gems &amp; metals to change you karma. <a target="_blank" rel="noopener noreferrer" style="text-decoration-line: none;" href="/Remedy" class="link-primary fw-bold">Read more</a> about astro remedies written by Yukteswar himself.
+                                </p></p>
+                            </div>
+                            <div class="py-2" _bl_155="">
+                                <div class="">
+                                    <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_184=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="mdi:death" data-width="38" style="vertical-align: text-bottom;"><path fill="currentColor" d="M8 22L5 8l3-6h8l3 6l-3 14zm3-16v2H9v2h2v5h2v-5h2V8h-2V6z"></path></svg></div><h4 class="mt-2 me-auto">Fear Death Date? </h4></div>
+                                    <hr class="mt-1 mb-2">
+                                </div>
+                                <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p>
+                                    There are many recorded accounts of people through history dying peacefully in their sleep.
+                                    Death will not be a tragedy to everybody, <strong>just not possible</strong>.
+                                    It is only a transition date, to be afraid of it is like being <strong>afraid of your birthday</strong>.
+                                    Life will not be fun that way, we have all tried it.
+                                    And know very well what life without knowing tomorrow's tragedy is like.
+                                </p>
+                                <p>
+                                    
+                                    Even death during <span style="color: green; font-weight: 900;">GREEN</span> period will be happy or peaceful and never tragic.
+                                    Keep in mind this algorithm does "<strong>NOT</strong>" count <strong>death</strong> as a bad life event,
+                                    it is <strong>how</strong> you die that is predicted to be good or bad.
+                                    Some say, "I like not knowing". We say, "<strong>Good luck</strong>".
+                                </p></p>
+                            </div>
+                            <div class="py-2" _bl_156="">
+                                <div class="">
+                                    <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" ><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto-v1" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="noto-v1:money-bag" data-width="38" style="vertical-align: text-bottom;"><path fill="#fcc21b" d="M68.43 5.38c.89-1.95 2.55-2.5 3.93-2.56c2.1-.1 4.3 1.35 6.37 3.06C80.2 7.54 81.96 8.82 84 9.72c1.41.5 2.81.6 4.23.53c2-.1 4.03-.54 6.04-.64l.11-.01l.91-.08c2.3-.11 4.47.43 6.53 1.62c1.89 1.72 2.72 3.86 2.46 6.44c-.44 2.13-.06 4.08 1.13 5.85c2.05 1.44 4.2 2.7 6.46 3.77c2.34 1.28 3.81 3.21 4.45 5.78c.23 2.72-1.03 4.46-3.75 5.21c-3.54.89-8.3.89-12.31 3.99c-5.86 4.89-7.7 9.82-10.25 10.57c-1.25-1.42-9.05-7.45-22.13-10.34c-2.34-8.07-3.76-27.55.55-37.03"></path><path fill="#d19b15" d="M81.63 40.69c2.3-4.6 8.85-12.69 10.42-11.09c1.55 1.74-2.02 10.78-4.53 15.21c-.89-.94-3.76-2.91-5.01-3.24"></path><path fill="#8d6e63" d="M93.2 55.42c-1.35 0-2.67-.69-3.42-1.93c-6.88-11.32-22.46-10.13-22.61-10.11c-2.2.18-4.14-1.44-4.33-3.63a4.006 4.006 0 0 1 3.61-4.34c.84-.08 20.67-1.71 30.17 13.94c1.15 1.89.54 4.35-1.34 5.49c-.66.39-1.37.58-2.08.58"></path><path fill="#fcc21b" d="M96.06 122.07c-17.13 4.22-40.94 3.92-57.95.56C22.19 119.48 10 110.09 11.4 91.61c1.42-18.7 13.81-36.31 30.85-44.07c16.49-7.51 38.62-11.17 50.28 5.87c2.9 4.24 8.44 13.65 8.7 18.27c.02.37.04.7.12 1.02c.02 1.16.49 2.33 1.63 3.19c7.33 5.55 12.67 12.91 13.65 23c1.16 12.03-10.22 20.63-20.57 23.18"></path><path fill="#424242" d="M80.87 91.13c-2.08-3.38-5.91-7.05-9.53-10.2l2.81-7.78c2.5 1.95 4.7 3.78 6.42 5.36c.28.27.72.29 1.04.06l6.44-4.79c.18-.14.29-.34.32-.57a.8.8 0 0 0-.21-.62c-1.91-2.13-6.05-5.86-10.58-8.93l1.65-4.56c.19-.52-.07-1.09-.6-1.29l-7.57-2.74c-.52-.19-1.1.08-1.29.6l-1.23 3.41c-7.13-2.21-12.79-1.5-17.23 2.21c-3.48 2.92-4.98 7.09-3.92 10.87c1.08 4.03 4.24 6.79 8.24 10.28l.51.45c.93.8 1.92 1.63 2.89 2.46l-3.42 9.46c-4.49-2.94-8.25-7.01-8.89-7.9a.806.806 0 0 0-1.08-.21l-7.42 4.74c-.18.11-.31.3-.36.52c-.04.21 0 .43.12.61c2.23 3.36 5.88 7.12 9.77 10.06c.93.7 2.33 1.68 4.05 2.71l-1.29 3.55c-.18.52.08 1.09.6 1.28l7.58 2.75c.52.19 1.1-.08 1.29-.6l1.07-2.96c6.92 1.88 13 .79 17.7-3.23c4.54-3.89 5.32-9.35 2.12-15M65.18 68.4l-2.07 5.73c-1.93-1.5-2.96-2.63-2.23-4.25c.76-1.66 2.65-1.77 4.3-1.48m2.05 23.9c1.33 1.29 2.27 2.48 2.36 3.57c.04.62-.19 1.22-.73 1.84c-.94 1.09-2.44 1.3-3.99 1.11z"></path></svg></div><h4 class="mt-2 me-auto">Winning The Lotto </h4></div>
+                                    <hr class="mt-1 mb-2">
+                                </div>
+                                <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p>
+                                    Predicting when someone will smile or frown may seem certain, leading to the idea that we can predict lottery wins.
+                                    However, the <strong>"lottery prize"</strong> varies for each person; not everyone values money alone.
+                                </p>
+                                <p>
+                                    Predicting a real cash lottery win becomes possible only if money equals happiness for them. In reality, most people seek happiness
+                                    in relationships, fame, career, or education, not just cash. This explains why winning the lottery is <strong>rare in real life</strong>.
+                                </p></p>
+                            </div>
+                            <div class="py-2" _bl_157="">
+                                <div class="">
+                                    <div class="fw-bold hstack gap-2 d-flex" style=""><div class="" style="" _bl_186=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--twemoji" width="38" height="38" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36" data-icon="twemoji:globe-showing-europe-africa" data-width="38" style="vertical-align: text-bottom;"><circle cx="18" cy="18" r="18" fill="#88C9F9"></circle><path fill="#5C913B" d="M25.716 1.756c-1.022.568-1.872 1.528-3.028 1.181c-1.875-.562-4.375-1.812-6-.25s-2 3 0 2.938s3.375-2.438 4.375-1.438s.749 1.813-1.625 2.125S14.5 7 13.125 7s-1.688.812-.75 1.688s-.563.937-2.125 1.812s.375 1.25 1.688 2s2.312-.188 2.875-1.438s2.981-2.75 3.99-2.562s1.01.688.822 1.562s.75.625.812-.375s1.188-1.75 2.062-1.812s1.625 1.188.625 1.812s-2 1.125-.75 1.438s2.125 1.938.688 2.625s-3.937 1.125-5.062.562s-3.688-1.375-4.375-.938s-1.062.89-1.875 1.195s-4.125 1.805-4.188 3.743s-.124 4.126 1.188 4.188s4.5-.812 5.5-1.625s2.375-.625 2.812.312s.125 1.5-.312 3s.286 2.25.987 3.562s1.263 2.062 1.263 3s1 1.875 2.5.312s2.875-4.625 3.5-5.75s1.125-3.625 1.875-4.125s1.938-1.688 1.062-1.5s-2.625-.062-3.062-1.312s-2.312-3.625-1.438-3.875s1.875 1.39 2.25 2.164s.875 1.711 1.625 1.961s2.375-1.673 2.875-1.961s.125-1.476-.875-1.351s-2.312 0-2.312-.624s1.25-1.438 2.25-1.25s1.75.5 2.375 1.25s1.875 2.125 2.375 3s.875 1 1.125-.562c.166-1.038.387-1.609.59-2.222c-1.013-5.829-4.82-10.683-9.999-13.148"></path></svg></div><h4 class="mt-2 me-auto">Future of Humanity </h4></div>
+                                    <hr class="mt-1 mb-2">
+                                </div>
+                                <p class="" style="font-family: 'Gowun Dodum', serif; font-size: 18px;line-break: auto;"><p>
+                                    This tool above all holds great potential for the progress of humanity.
+                                    Imagine a world with <strong>no accidents</strong>, a world with <strong>no tragedies</strong>, <strong>no setbacks</strong>.
+                                    Never has there been a time in human history, where the need has been greater.
+                                </p>
+                                <p>
+                                    More and more is at stake at dime's turn. In our modern age a mere momentary lapse
+                                    in judgment can cost more to the whole of humanity then it ever did before.
+                                    Imagine a world where laughter abounds &amp; fear stands still.
+                                    "<strong>You may say I'm a dreamer, but I'm not the only one</strong>", John Lennon.
+                                </p></p>
+                            </div>
+                        </div>
+
+
+
+                        <footer id="PageFooter"></footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--##############################################################
+    DEPENDENCIES JS & CSS : placed here after html above is already in DOM
+    ##############################################################-->
+    <!-- Bootstrap CSS : Used for styling everything-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- Bootstrap  JS : Used to animate some components like Accordion, dropdown, BUNDLE because popper.js-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js">                </script>
+
+    <!--Icon Generator Lib -->
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+
+    <!--Chart JS  : used in planet strength chart-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js">                                                        </script>
+
+    <!--Sweet Alert Lib -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mattboldt/typed.js@2.0.11/lib/typed.min.js"></script>
+
+    <!-- SVG.js used for events chart animation-->
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+
+    <!-- JS APP CODE -->
+    <script src="./js/app.js"></script>
+    <script src="./js/LifePredictor.js" defer></script>
+
+</body>
+</html>

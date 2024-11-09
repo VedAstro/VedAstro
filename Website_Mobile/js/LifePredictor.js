@@ -6,13 +6,16 @@ new PageHeader("PageHeader");
 new IconButton("IconButton_Calculate");
 new IconButton("IconButton_Advanced");
 
-const defaultSelected = ['General', 'Personal'];
-const allowedParentCheckboxes = ['General', 'Personal', 'Agriculture', 'Building',
-    'Astronomical', 'BuyingSelling', 'Medical', 'Marriage', 'Travel', 'Studies', 'HairNailCutting'];
-var eventsSelector = new EventsSelector("EventsSelector", allowedParentCheckboxes, defaultSelected);
+const defaultSelected = ['PD1', 'PD2', 'PD3', 'PD4', 'PD5', 'PD6', 'PD7'];
+var dasaEventsSelector = new DasaEventsSelector("DasaEventsSelector", defaultSelected);
 
-//default set to "General" since only uses Raman for Muhurtha
-var algoSelector = new AlgorithmsSelector("AlgorithmsSelector", "General");
+
+
+//SELECT DEFAULT ALGORITHMS
+//SET ON : 8 JAN "24
+//below algo tested well for Monroe and Steve
+const defaultSelectedAlgo = "General,IshtaKashtaPhalaDegree,PlanetStrengthDegree";
+var algoSelector = new AlgorithmsSelector("AlgorithmsSelector", defaultSelectedAlgo);
 
 var personSelector = new PersonSelectorBox("PersonSelectorBox");
 
@@ -42,7 +45,7 @@ async function OnClickCalculate() {
     if (selectedPerson == null) { Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true }); }
 
     //make sure at least 1 event is selected
-    let selectedEventTags = eventsSelector.getSelectedTagNamesAsString(); //get selected events tag names
+    let selectedEventTags = dasaEventsSelector.getSelectedEventsAsString(); //get selected events tag names
     if (selectedEventTags == null) { Swal.fire({ icon: 'error', title: 'Select an Event Type', html: 'Minimum 1 <strong>Event Type</strong> is needed. Without it what to calculate?😨', showConfirmButton: true }); }
 
     //check if time range is valid, will auto show invalid msg
@@ -56,7 +59,7 @@ async function OnClickCalculate() {
     CommonTools.ShowLoading();
 
     //update page title with person name to for easy multi tab use (UX ease)
-    document.title = `${selectedPerson.DisplayName} | Good Time Finder`;
+    document.title = `${selectedPerson.DisplayName} | Life Predictor`;
 
     //if on mobile hide sidebar to remove distraction in limited space (UX improvement)
     if (CommonTools.IsMobile()) { $("#SidebarInfoBoxHolder").slideUp(500); }
@@ -66,7 +69,7 @@ async function OnClickCalculate() {
 
     var selectedPersonId = selectedPerson.PersonId;
 
-    //get selected coloring algorithms
+    //get selected coloring algorithms //TODO need to be compulsory
     var selectedAlgorithms = algoSelector.getSelectedAlgorithmsAsString();
 
     //NOTE: time range can be both custom & presets
@@ -129,4 +132,6 @@ async function OnClickCalculate() {
     Swal.close();
 
 }
+
+
 

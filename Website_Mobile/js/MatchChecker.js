@@ -18,7 +18,10 @@ async function OnClickCalculateMatch() {
     let selectedFemale = await personSelectorFemale.GetSelectedPerson();
 
     //if no selected person then ask user if sleeping 😴
-    if (selectedMale == null && selectedFemale == null) { Swal.fire({ icon: 'error', title: 'Are you sleeping? 😴', html:'Please select 2 person names to calculate match.', showConfirmButton: true }); }
+    if (selectedMale == null || selectedFemale == null) {
+        Swal.fire({ icon: 'error', title: 'Are you sleeping? 😴', html: 'Please select 2 person names to calculate match.', showConfirmButton: true });
+        return; //end here
+    }
 
     //--------------------------------------- LETS START -------------------------------------
 
@@ -119,7 +122,7 @@ function convertPredictionListToHtml(predictionListJson) {
                   <div class="hstack gap-2">[male: ${prediction.MaleInfo}, female: ${prediction.FemaleInfo}]</div>
                 </div>
               </div>
-              <button class="btn btn-outline-primary btn-sm" onclick="scrollToDivById('${prediction.Name}')">More Info</button>
+              <button class="d-none d-md-block btn btn-outline-primary btn-sm" onclick="scrollToDivById('${prediction.Name}')">More Info</button>
             </td>
           </tr>
         `).join('')}

@@ -9,8 +9,6 @@ new IconButton("IconButton_Advanced");
 const defaultSelected = ['PD1', 'PD2', 'PD3', 'PD4', 'PD5', 'PD6', 'PD7'];
 var dasaEventsSelector = new DasaEventsSelector("DasaEventsSelector", defaultSelected);
 
-
-
 //SELECT DEFAULT ALGORITHMS
 //SET ON : 8 JAN "24
 //below algo tested well for Monroe and Steve
@@ -42,11 +40,24 @@ async function OnClickCalculate() {
     let selectedPerson = await personSelector.GetSelectedPerson();
 
     //if no selected person then ask user if sleeping 😴
-    if (selectedPerson == null) { Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true }); }
+    if (selectedPerson == null) {
+        Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true });
+        return;
+    }
 
     //make sure at least 1 event is selected
     let selectedEventTags = dasaEventsSelector.getSelectedEventsAsString(); //get selected events tag names
-    if (selectedEventTags == null) { Swal.fire({ icon: 'error', title: 'Select an Event Type', html: 'Minimum 1 <strong>Event Type</strong> is needed. Without it what to calculate?😨', showConfirmButton: true }); }
+    if (selectedEventTags == null) {
+        Swal.fire({ icon: 'error', title: 'Select an Event Type', html: 'Minimum 1 <strong>Event Type</strong> is needed. Without it what to calculate?😨', showConfirmButton: true });
+        return;
+    }
+
+    //get selected coloring algorithms
+    let selectedAlgorithms = algoSelector.getSelectedAlgorithmsAsString();
+    if (selectedAlgorithms == null) {
+        Swal.fire({ icon: 'error', title: 'Select an Algorithm', html: 'Minimum 1 <strong>Algorithm</strong> is needed. If you don\'t want coloring check Neutral.', showConfirmButton: true });
+        return;
+    }
 
     //check if time range is valid, will auto show invalid msg
     let rangeIsValid = timeRangeSelector.isValid();
@@ -68,9 +79,6 @@ async function OnClickCalculate() {
     //------------------------------- CALL API ---------------------
 
     var selectedPersonId = selectedPerson.PersonId;
-
-    //get selected coloring algorithms //TODO need to be compulsory
-    var selectedAlgorithms = algoSelector.getSelectedAlgorithmsAsString();
 
     //NOTE: time range can be both custom & presets
     let timeRangeUrl = timeRangeSelector.getSelectedTimeRangeAsURLString();

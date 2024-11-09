@@ -25,7 +25,10 @@ async function OnClickCalculate_Horoscope() {
     let selectedPerson = await horoscopePersonSelector.GetSelectedPerson();
 
     //if no selected person then ask user if sleeping 😴
-    if (selectedPerson == null) { Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true }); }
+    if (selectedPerson == null) {
+        Swal.fire({ icon: 'error', title: 'Please select person, sir! 🙄', showConfirmButton: true });
+        return;
+    }
 
     //---------------------------------------- LETS START -----------------------------------------
 

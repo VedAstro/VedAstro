@@ -4,11 +4,20 @@ new InfoBox("InfoBox_Privacy_Login");
 new InfoBox("InfoBox_Storage_Login");
 new InfoBox("InfoBox_Secure_Login");
 
-
-
 //fill login helper text, to make user remember previous login method
 fillLoginHelperText();
 
+//due to some possibilities, the user can be in Login page even after login
+//so check every 20s and redirect user to Home page once logged in
+const intervalId = setInterval(() => {
+    // Check if the user is already logged in
+    if (!VedAstro.IsGuest()) {
+        // Clear the interval to prevent further checks
+        clearInterval(intervalId);
+        // Redirect the user to Home.html
+        window.location.href = './Home.html';
+    }
+}, 20000);
 
 //called by custom FB login button on page
 function onClickFacebookLoginButton() {

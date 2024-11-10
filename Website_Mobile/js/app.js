@@ -185,9 +185,19 @@ function animateHighlightElement(elmInput) {
     $elm.fadeTo(100, 0.4, function () { $(this).fadeTo(500, 1.0); });
 
 }
+function printConsoleMessage() {
+    $.get("./data/ConsoleGreeting.txt")
+        .done((result) => {
+            console.log(result);
+        });
+}
 
 
 //-----------------CODE TO RUN
+
+//print console greeting (file in wwwroot)
+printConsoleMessage();
+
 
 new PageTopNavbar("VedAstro","PageTopNavbar", [
     { icon: "mdi:book-open-page-variant-outline", text: "Guide", href: "/" },

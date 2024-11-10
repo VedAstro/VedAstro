@@ -1,4 +1,4 @@
-updateHistory();
+﻿updateHistory();
 
 new DesktopSidebar("DesktopSidebarHolder", links);
 new PageHeader("PageHeader");
@@ -35,6 +35,8 @@ function OnClickAdvanced() {
 
 async function OnClickCalculate() {
 
+    //------------------------------ CHECK DATA -----------------------------
+
     //check if name is selected
     let selectedPerson = await personSelector.GetSelectedPerson();
 
@@ -62,7 +64,7 @@ async function OnClickCalculate() {
     if (!rangeIsValid) { return; } //end here if not valid
 
 
-    //------------------------------ OK LETS START -----------------------------
+    //------------------------------ PREPARE GUI -----------------------------
 
     //show loading to user
     CommonTools.ShowLoading();
@@ -98,7 +100,8 @@ async function OnClickCalculate() {
                 await new Promise(resolve => setTimeout(resolve, 5000)); // wait 5 seconds
                 return fetchApi(); // make the call again
             } else if (callStatus === 'Fail') {
-                throw new Error('API call failed');
+                Swal.fire({ icon: 'error', title: 'Server could not make chart 🤕', html: 'An error report has been sent. 🤞Hopefully it will be fixed soon. Try <strong>again with different settings</strong>, maybe it\'ll work.', showConfirmButton: true });
+                return null;
             } else if (callStatus === 'Pass') {
                 const svgString = await response.text();
                 return svgString;
@@ -111,6 +114,9 @@ async function OnClickCalculate() {
 
     //get chart from api as SVG string
     let svgString = await fetchApi();
+
+    //if chart did not make it end here
+    if (svgString == null) { return; }
 
     // inject SVG string into element with id "EventsChartSvgHolder"
     document.getElementById("EventsChartSvgHolder").innerHTML = svgString;

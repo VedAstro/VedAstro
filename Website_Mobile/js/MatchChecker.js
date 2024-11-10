@@ -19,7 +19,7 @@ async function OnClickCalculateMatch() {
 
     //if no selected person then ask user if sleeping 😴
     if (selectedMale == null || selectedFemale == null) {
-        Swal.fire({ icon: 'error', title: 'Are you sleeping? 😴', html: 'Please select 2 person names to calculate match.', showConfirmButton: true });
+        Swal.fire({ icon: 'warning', title: 'Are you sleeping? 😴', html: 'Please select 2 person names to calculate match.', showConfirmButton: true });
         return; //end here
     }
 

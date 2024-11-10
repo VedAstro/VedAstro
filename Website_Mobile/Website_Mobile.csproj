@@ -10,6 +10,42 @@
     <Content Include="coming-soon.html" />
     <Content Include="AddPerson.html" />
     <Content Include="404.html" />
+    <Content Include="data\APIHomePage.html">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="data\ConsoleGreeting.txt">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="data\EasterEgg.txt">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="data\EventDataList.xml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="data\EventsChartViewer.html">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="data\HoroscopeDataList-non-raman.xml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="data\HoroscopeDataList.xml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="data\Quotes.txt">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="data\ReferenceList.xml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="LifePredictor.html" />
     <Content Include="GoodTimeFinder.html" />
     <Content Include="BirthTimeFinder.html" />
@@ -45,6 +81,15 @@
     <None Remove="AddPerson.html" />
     <None Remove="BirthTimeFinder.html" />
     <None Remove="coming-soon.html" />
+    <None Remove="data\APIHomePage.html" />
+    <None Remove="data\ConsoleGreeting.txt" />
+    <None Remove="data\EasterEgg.txt" />
+    <None Remove="data\EventDataList.xml" />
+    <None Remove="data\EventsChartViewer.html" />
+    <None Remove="data\HoroscopeDataList-non-raman.xml" />
+    <None Remove="data\HoroscopeDataList.xml" />
+    <None Remove="data\Quotes.txt" />
+    <None Remove="data\ReferenceList.xml" />
     <None Remove="GoodTimeFinder.html" />
     <None Remove="Horoscope.html" />
     <None Remove="image\ai-chat-card.jpg" />
@@ -74,6 +119,15 @@
     <PublishFile Remove="app.js" />
     <PublishFile Remove="BirthTimeFinder.html" />
     <PublishFile Remove="coming-soon.html" />
+    <PublishFile Remove="data\APIHomePage.html" />
+    <PublishFile Remove="data\ConsoleGreeting.txt" />
+    <PublishFile Remove="data\EasterEgg.txt" />
+    <PublishFile Remove="data\EventDataList.xml" />
+    <PublishFile Remove="data\EventsChartViewer.html" />
+    <PublishFile Remove="data\HoroscopeDataList-non-raman.xml" />
+    <PublishFile Remove="data\HoroscopeDataList.xml" />
+    <PublishFile Remove="data\Quotes.txt" />
+    <PublishFile Remove="data\ReferenceList.xml" />
     <PublishFile Remove="favicon.ico" />
     <PublishFile Remove="GoodTimeFinder.html" />
     <PublishFile Remove="Home.html" />

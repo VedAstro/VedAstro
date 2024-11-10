@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" style="background-color: #f0f2f5">
 <head>
     <!--to stop caching during active development-->
@@ -12,7 +12,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Horoscope</title>
+    <title>Birth Time Finder</title>
 
     <!--LOAD FONTS-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lexend Deca"> <!-- link, button, nav etc -->
@@ -100,6 +100,9 @@
                                                     <option value="RisingSign">Rising Sign (Lagna)</option>
                                                 </select>
                                             </div>
+                                            
+                                            <!-- PERSON BIRTH -->
+                                            <div id="PersonSelectorBox" title-text="Select Person"></div>
 
                                             <!-- ADVANCED PANEL DROP -->
                                             <div id="HoroscopeAdvancedInputHolder" class="vstack gap-1 mt-2 pt-2 border-top" style="display: none">
@@ -108,12 +111,11 @@
 
                                                 <!-- AYANAMSA -->
                                                 <div id="AyanamsaSelectorBox" class="input-group mb-2"></div>
-
                                             </div>
 
                                             <!-- BUTTONS -->
                                             <div class="mt-2 d-flex justify-content-between">
-                                                <div Id="IconButton_Advanced" IconName="gala:settings" Color="primary" SmallSize="true" TooltipPosition="bottom" TooltipText="Advanced (optional)" OnClickCallback="OnClickAdvanced()"></div>
+                                                <!-- <div Id="IconButton_Advanced" IconName="gala:settings" Color="primary" SmallSize="true" TooltipPosition="bottom" TooltipText="Advanced (optional)" OnClickCallback="OnClickAdvanced()"></div> -->
                                                 <div Id="IconButton_Calculate" IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="OnClickCalculate()"></div>
                                             </div>
 
@@ -141,40 +143,7 @@
                                 <!-- @* OUTPUT *@ -->
                                 <div id="OutputHolder" class="vstack gap-4" style="display: none;">
 
-                                    <!-- @* Chat API *@ -->
-                                    <div id="HoroscopeChat" class="scrollspy mb-5"></div>
-
-
-                                    <!--  @* Strength *@ -->
-                                    <div id="StrengthChartHolder" class="scrollspy"></div>
-
-                                    <!--                                         @* Sky Chart *@
-                                                       @*         <IconTitle Title="Sky Chart" IconName="solar:moon-stars-bold-duotone" TitleHolder="h4" />
-                                                       *@        <SkyChartViewer Id="SkyChart" ExtraClass="scrollspy" @ref="skyChartViewer" />
-                -->
-                                    <!-- @* TODO convert to JS code *@ -->
-                                    <IndianChart Id="IndianChart" ExtraClass="scrollspy" @ref="indianChartViewer" />
-
-                                    <!--  @* below made by vedastro.JS code *@ -->
-                                    <div id="PlanetDataTable" class="scrollspy"></div>
-
-                                    <div id="HouseDataTable" class="scrollspy"></div>
-
-                                    <div id="AshtakvargaTable" class="scrollspy"></div>
-
-                                    <!-- @* Predictions *@ -->
-                                    <div id="Prediction" class="scrollspy">
-                                        <IconTitle Title="Basic Predictions" IconName="noto:scroll" TitleHolder="h4" />
-                                        <AIPrediction @ref="_aiPrediction" />
-                                    </div>
-
-                                    <!-- @* Reference *@ -->
-                                    <div id="Reference" class="scrollspy">
-                                        <IconTitle Title="Reference" IconName="twemoji:books" TitleHolder="h4" />
-                                        <HoroscopeReferenceList @ref="_horoscopeReferenceList" />
-                                    </div>
-
-                                    <PlanetChart @ref="planetChart" />
+                                    
 
                                 </div>
 

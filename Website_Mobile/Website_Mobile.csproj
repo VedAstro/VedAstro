@@ -46,6 +46,8 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Include="TermsOfService.html" />
+    <Content Include="PrivacyPolicy.html" />
     <Content Include="LifePredictor.html" />
     <Content Include="GoodTimeFinder.html" />
     <Content Include="BirthTimeFinder.html" />
@@ -102,14 +104,15 @@
     <None Remove="image\table-generator-card.jpg" />
     <None Remove="image\vedastro-api-logo.png" />
     <None Remove="image\zodiac-wheel-3-white.png" />
-    <None Remove="js\404.js" />
     <None Remove="js\GoodTimeFinder.js" />
     <None Remove="js\LifePredictor.js" />
     <None Remove="js\MatchChecker.js" />
     <None Remove="LifePredictor.html" />
     <None Remove="Login.html" />
     <None Remove="MatchChecker.html" />
+    <None Remove="PrivacyPolicy.html" />
     <None Remove="sound\positive-notification.mp3" />
+    <None Remove="TermsOfService.html" />
     <None Remove="VedAstro.js" />
   </ItemGroup>
 
@@ -142,7 +145,6 @@
     <PublishFile Remove="image\table-generator-card.jpg" />
     <PublishFile Remove="image\vedastro-api-logo.png" />
     <PublishFile Remove="image\zodiac-wheel-3-white.png" />
-    <PublishFile Remove="js\404.js" />
     <PublishFile Remove="js\AddPerson.js" />
     <PublishFile Remove="js\BirthTimeFinder.js" />
     <PublishFile Remove="js\GoodTimeFinder.js" />
@@ -154,7 +156,9 @@
     <PublishFile Remove="LifePredictor.html" />
     <PublishFile Remove="Login.html" />
     <PublishFile Remove="MatchChecker.html" />
+    <PublishFile Remove="PrivacyPolicy.html" />
     <PublishFile Remove="sound\positive-notification.mp3" />
+    <PublishFile Remove="TermsOfService.html" />
     <PublishFile Remove="VedAstro.js" />
   </ItemGroup>
 

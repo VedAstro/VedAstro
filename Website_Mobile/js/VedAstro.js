@@ -1955,8 +1955,8 @@ class PageFooter {
 
                     <div class="">
                         <div class="hstack gap-3" style="font-size:11px !important;">
-                            <a href="./TermsOfService.html" class="nav-link p-0 text-body-secondary">Terms &amp; Conditions</a>
-                            <a href="./PrivacyPolicy.html" class="nav-link p-0 text-body-secondary">Privacy Policy</a>
+                            <a href="./TermsOfService.html" class="nav-link p-0 text-body-secondary">Terms</a>
+                            <a href="./PrivacyPolicy.html" class="nav-link p-0 text-body-secondary">Privacy</a>
                         </div>
                     </div>
 
@@ -1967,7 +1967,7 @@ class PageFooter {
                             <li title="Updates via Twitter" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://x.com/_VedAstro"><iconify-icon icon="skill-icons:twitter" width="22" height="22" ></iconify-icon></a></li>
                             <li title="Become a Patron" class="ms-3 d-none d-md-block"><a target="_blank" class="link-body-emphasis" href="https://patreon.com/vedastro"><iconify-icon icon="logos:patreon" width="22" height="22" ></iconify-icon></a></li>
                             <li title="View Awesome Source Code" class="ms-3 d-none d-md-block"><a target="_blank" class="link-body-emphasis" href="https://github.com/VedAstro/VedAstro"><iconify-icon icon="skill-icons:github-dark" width="22" height="22" ></iconify-icon></a></li>
-                            <li title="Updates via Instagram" class="ms-3 d-none d-md-block"><a target="_blank" class="link-body-emphasis" href="https://www.instagram.com/_vedastro/"><iconify-icon icon="skill-icons:instagram" width="22" height="22" ></iconify-icon></a></li>
+                            <li title="Updates via Instagram" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://www.instagram.com/_vedastro/"><iconify-icon icon="skill-icons:instagram" width="22" height="22" ></iconify-icon></a></li>
                             <li title="Watch How To Guide" class="ms-3"><a target="_blank" class="link-body-emphasis" href="https://www.youtube.com/@vedastro/videos"><iconify-icon icon="logos:youtube-icon" width="22" height="22" ></iconify-icon></a></li>
                             <li title="Updates via Facebook" class="ms-3 d-none d-md-block"><a target="_blank" class="link-body-emphasis" href="https://www.facebook.com/vedastro.org"><iconify-icon icon="devicon:facebook" width="22" height="22" ></iconify-icon></a></li>
                         </ul>
@@ -2131,8 +2131,8 @@ class DesktopSidebar {
     async generateHtmlBody() {
         // Start building the HTML string
         let html = `
-        <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 100;">
-            <input type="text" class="form-control" placeholder="Search..." >
+        <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3" style="z-index: 100;">
+            <!-- DISABLED FOR NOW <input type="text" class="form-control" placeholder="Search..." > -->
         `;
 
         // Loop through the links and generate the HTML for each one
@@ -2159,17 +2159,17 @@ class DesktopSidebar {
         </div>
 
         <!-- WEBSITE VERSION STAMP -->
-        <div class="sticky-bottom position-fixed mb-3 ms-5" style="color: #8f8f8f; font-size: 8px; z-index: 1;">
+        <div class="sticky-bottom position-fixed mb-3 ms-5" style="color: #8f8f8f; font-size: 9px; z-index: 1;">
             <div style="cursor: pointer;" class="hstack gap-1">
-                <iconify-icon icon="ion:earth" width="10" height="10" ></iconify-icon>
+                <iconify-icon icon="ion:earth" width="12" height="12" ></iconify-icon>
                 <span>Made on Earth</span>
             </div>
             <div class="hstack gap-1">
-                <iconify-icon icon="bi:rocket-fill" width="10" height="10" ></iconify-icon>
-                <span>40763952-2665-stable</span>
+                <iconify-icon icon="bi:rocket-fill" width="12" height="12" ></iconify-icon>
+                <span>10-11-24-stable</span>
             </div>
             <div class="hstack gap-1">
-                <iconify-icon icon="material-symbols:copyright-outline" width="11" height="11" ></iconify-icon>
+                <iconify-icon icon="material-symbols:copyright-outline" width="12" height="12" ></iconify-icon>
                 <span>2014 - 2024 VedAstro</span>
             </div>
             <div style="cursor: pointer;" class="mt-1"><img src="./images/ce-fcc-recycle.svg"></div>
@@ -6391,7 +6391,7 @@ class DayPerPixelInput {
 
             let daysPerPixel = daysInRange / this.MaxWidthPx; //max 1000px width
 
-            daysPerPixel = Math.round(daysPerPixel * 1000) / 1000; //round to 3 decimal places
+            daysPerPixel = Math.round(daysPerPixel * 100000) / 100000; //round to 3 decimal places
 
             $(`#${this.ElementID} .precision-value-input`).val(daysPerPixel);
         });
@@ -6430,7 +6430,6 @@ class DayPerPixelInput {
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
                 </div>
             </span>
-
             <input type="number" step="0.01" class="form-control precision-value-input">
         </div>
     `;

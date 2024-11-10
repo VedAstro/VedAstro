@@ -219,7 +219,7 @@ new PageTopNavbar("VedAstro","PageTopNavbar", [
     { text: "Import Person", href: "./ImportPerson.html" },
 ], [
     { icon: "mdi:home", text: "Home", href: "./Home.html" },
-    { icon: "mage:we-chat", text: "AI Chat", href: "./AIChat.html" },
+    //{ icon: "mage:we-chat", text: "AI Chat", href: "./AIChat.html" },
     { icon: "fluent:book-star-20-filled", text: "Horoscope", href: "./Horoscope.html" },
     { icon: "bi:arrow-through-heart-fill", text: "Match", href: "./MatchChecker.html" },
     { icon: "mdi:numbers", text: "Numerology", href: "./Numerology.html" },
@@ -239,11 +239,11 @@ const links = [
         icon: 'bi:arrow-through-heart-fill',
         text: 'Match Checker'
     },
-    {
-        url: 'AIChat',
-        icon: 'fluent-mdl2:chat-bot',
-        text: 'AI Chat'
-    },
+    //{
+    //    url: 'AIChat',
+    //    icon: 'fluent-mdl2:chat-bot',
+    //    text: 'AI Chat'
+    //},
     {
         url: 'LifePredictor',
         icon: 'gis:map-time',

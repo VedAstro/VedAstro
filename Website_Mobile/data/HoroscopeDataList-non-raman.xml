@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root>
+
+	<!--THIS IS THE DATA LIST FOR HOROSCOPE-->
+
+	
+
+
+	<!--UPAGRAHA IN HOUSES-->
+	<!--Dhuma-->
+	<Event>
+		<Name>DhumaInHouse1</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Native will be valiant, endowed with beautiful eyes, stupefied in disposition, unkind, wicked and highly short tempered.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse2</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			One will be sickly, wealth, devoid of a limb, incur humiliation at a royal level, dull-witted and a eunuch.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse3</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Intelligent, bold, delighted, eloquent and endowed with men and wealth.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse4</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Grieved because losing one’s partner, yet learned in all shastras.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse5</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Limited progeny, devoid of wealth, be great, yet devoid of friends and Mantras.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse6</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Strong, able to conquer enemies, brilliant, famous and free from diseases.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse7</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Penniless, ever sensuous, skilled in adultery, never able to shine.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse8</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Enthusiastic but without real courage, truthful, disagreeable, hard hearted and selfish.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse9</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Endowed with sons and fortunes, rich, honorable, kind, religious and well-disposed to one’s guides, relatives and culture.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse10</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Endowed with sons and fortunes, delighted, intelligent, happy and truthful.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse11</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Wealth, grains, gold, beautiful, knowledge of the arts, modesty and a skillful singer.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>DhumaInHouse12</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Lacking morality, indulging in sin, interested in adultery, addicted to vices, unkind and crafty.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+
+	<!--Vyatipaata-->
+	<Event>
+		<Name>VyatipaataInHouse1</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Troubled by miseries, cruel, destructive, foolish and ill-disposed to his relatives.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse2</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Morally crooked, bilious, enjoying pleasures, unkind, ungrateful, wicked and sinful.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse3</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Firm in disposition, a warrior, liberal, rich, dear to a king and head of an army.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse4</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Endowed with relatives but not progeny or fortunes.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse5</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Poor yet charming in appearance, imbalances of phlegm, bile and wind, hard-hearted and shameless.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse6</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Destroyer of his enemies, physically mighty and skilled in all kinds of weapons and in arts, and be peaceful in disposition.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse7</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Bereft of wealth, wife and progeny, subduer of females, miserable, sensuous, shameless, and friendly to others.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse8</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Deformed eyes, ugly, unfortunate, spiteful to Brahmins and troubled by disorders of blood.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse9</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Many kinds of businesses and friends, very learned, well-disposed to his wife and eloquent.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse10</Name>
+		<Nature>Good</Nature>
+		<Description>
+			rich, religious, peaceful, skillful in religious acts, very learned and far sighted.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse11</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Extremely opulent, honorable, truthful, firm in policy, and endowed with many horses and having an interest in singing.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>VyatipaataInHouse12</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Given to anger, associated with many activities, disabled, not religious and hateful towards relatives.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+
+	<!--Parivesha-->
+	<Event>
+		<Name>PariveshaInHouse1</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Learned, truthful, peaceful, rich, endowed with sons, pure, charitable and dear to elders.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse2</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Wealthy, charming, enjoyer of pleasures, happy, religious and a lord.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse3</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Fond of his wife, charming, pious, well-disposed to his men, be a servant and respectful to elders.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse4</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Wonderstruck, helpful to enemies as well, kind, endowed with everything and skillful in singing.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse5</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Affluent, virtuous, splendorous, affectionate, religious and dear to his wife.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse6</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scholarship; kind
+			Famous, wealthy, endowed with sons and pleasures, helpful to all and will conquer his enemies.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse7</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Limited number of children, devoid of happiness, be of mediocre intelligence, very hard-hearted, sickly wife.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse8</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Spiritually disposed, peaceful, strong bodied, firm in decision, religious and gentle.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse9</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Having progeny, happy, brilliant, affluent, devoid of excessive passion, honorable and happy with very little.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse10</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Versed in the arts, enjoy pleasures, strong bodied, learned in all shastras.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse11</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Enjoy pleasures through women, virtuous, intelligent, dear to his people and suffer disorders of digestive fire.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>PariveshaInHouse12</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Spendthrift, miserable, firm and will dishonor relatives.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+
+	<!--Indrachaapa-->
+	<Event>
+		<Name>IndrachaapaInHouse1</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Wealth, grains, gold, grateful, agreeable and devoid of all afflictions.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse2</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Affable speaker, very rich, modest, learned, charming and religious.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse3</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Helping nature; expertise in arts
+			A miser, versed in many arts, indulge in thieving, devoid of some limb and unfriendly.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse4</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Happy, endowed with quadrupeds, wealth and grains. Honored by the king and devoid of sickness.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse5</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Splendorous, far-sighted, pious, affable, acquiring property in all undertakings.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse6</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Destroyer of enemies, happy, affectionate, pure and will achieve plenty in all undertakings.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse7</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Wealth, full of all virtues, learned in shastras, religious, and agreeable.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse8</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Interested in doing other’s work, cruel, interested in adultery and defective limbed.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse9</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Performing penance, take religious observations, highly learned, famous.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse10</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Endowed with progeny, abundant wealth, cows, buffaloes, etc., Famous.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse11</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gainful, healthy, fiery, affectionate to his wife, and knowledge of mantras, weapons and missiles.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>IndrachaapaInHouse12</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Wicked, very honorable, evil in disposition, shameless, an adulterer and ever poor.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+
+	<!--Upaketu-->
+	<Event>
+		<Name>UpaketuInHouse1</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Early death
+			Skillful in all knowledge, happy, good speaker, agreeable and very affectionate.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse2</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Ugly
+			Good and affable speaker, splendorous, poet, scholar, honorable, modest, endowed with conveyances.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse3</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Miserly, cruel, thin-bodied, poor and having severe diseases.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse4</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Grief
+			Charming, virtuous, gentle, interested in the Vedas and always happy.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse5</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Loss of progeny
+			Happy, enjoyer of pleasures, versed in the arts, skilled in expedients, intelligent, eloquent, and respectful to elders.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse6</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Uneasiness
+			Cause problems for maternal relatives, win over enemies, endowed with many relatives, valiant, splendorous, and skillful.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse7</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Impotency
+			Gambler, sensuous, enjoyer of pleasures and supporter of prostitutes.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse8</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Death due to bad character
+			Interested in base acts, sinful, shameless, blame others for lack of happiness, and will take another’s side.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse9</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Opposes righteousness
+			Wearer of religious badges, delighted, helpfully disposed, skilled in religious deeds.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse10</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Fond of wandering
+			Endowed with happiness and fortune, fond of females, charitable and a friend to Brahmins.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse11</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Profits forever
+			Acquisition of gains, religious, honorable, affluent, fortunate, valiant and skilled in sacrificial rites.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>UpaketuInHouse12</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Bad man
+			Interested in sinful acts, valiant, untrustworthy, unkind, adulterer and short-tempered.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+
+	<!--Kaala-->
+	<!--Mrityu-->
+	<!--Arthaprahaara-->
+	<!--NOTE : no prediction reference for above sub-planets found hence left empty for now, technically should exist-->
+
+	<!--Yamaghantaka-->
+	<Event>
+		<Name>YamaghantakaInHouse1</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Religious, full of learning, honest, peaceful, wealthy, charitable and with progeny.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse2</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Wealthy, pleasant disposition, happy, spiritually inclined, dear to one’s traditions.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse3</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Travels often, respectful to one’s peers, pious, charming, fond of one’s spouses.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse4</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Quiet, peaceful heart, helpful to all in need, beautiful lands.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse5</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Full of wonder, intelligent, affectionate, dear to his religion, full of virtue, abundant resources, lord of mantras.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse6</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Diseases of excess, too trusting, difficulties with wealth, giver of loans.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse7</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Unhappy, wasteful with resources, losses to spouse, problems with progeny and legacy.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse8</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Deep intuition, astrologer, peaceful, strong bodied and long lived, gentle, inheritance.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse9</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Having progeny, happy, valuable to one’s society, law giver, honorable, having much wealth, generous to those in need.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse10</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Versed in religion and law, learned in all shastras, intelligent, artistic and happy.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse11</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Enjoys relationships with others, dear to one’s people, phlegmatic diseases, well known and respected.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>YamaghantakaInHouse12</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Many expenses, miserable, dishonorable to relatives, belongs in a Math.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+
+	<!--Gulika-->
+	<Event>
+		<Name>GulikaInHouse1</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Afflicted by disease, lustful, sinful, crafty, wicked and miserable.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse2</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Ugly, miserable, mean, given to vices, shameless and poor.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse3</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Charming, a head of a village, fond of virtuous men, honored by royalty. Although one’s siblings may suffer.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse4</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Sickly, devoid of happiness, sinful and afflicted by windy and bilious excess.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse5</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Praiseworthy, poor, short-lived, spiteful, mean, a eunuch, subdued by wife and a heterodox.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse6</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Devoid of Enemies, strong and healthy, splendorous, liked by his wife, enthusiastic, friendly and helpful.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse7</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Subduer of women, sinful, adulterer, emaciated, devoid of friendship and will live off of others.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse8</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Troubled by hunger, cruel, miserable, short tempered, unkind and poor.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse9</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Experience many ordeals, emaciated, perform evil acts, be very unkind, sluggish, a liar.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse10</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Endowed with sons, happy, enjoyer of life, fond of worshipping gods, and will practice meditation and religion.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse11</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Enjoys women of class, a leader, helpful to relatives, short in stature, yet an emperor.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>GulikaInHouse12</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Sinful, base, unfortunate, indolent, joining to mean people.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+
+	<!--Maandi-->
+	<Event>
+		<Name>MaandiInHouse1</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Afflicted by disease, lustful, sinful, crafty, wicked and miserable.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse2</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Ugly, miserable, mean, given to vices, shameless and poor.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse3</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Charming, a head of a village, fond of virtuous men, honored by royalty. Although one’s siblings may suffer.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse4</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Sickly, devoid of happiness, sinful and afflicted by windy and bilious excess.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse5</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Praiseworthy, poor, short-lived, spiteful, mean, a eunuch, subdued by wife and a heterodox.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse6</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Devoid of Enemies, strong and healthy, splendorous, liked by his wife, enthusiastic, friendly and helpful.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse7</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Subduer of women, sinful, adulterer, emaciated, devoid of friendship and will live off of others.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse8</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Troubled by hunger, cruel, miserable, short tempered, unkind and poor.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse9</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Experience many ordeals, emaciated, perform evil acts, be very unkind, sluggish, a liar.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse10</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Endowed with sons, happy, enjoyer of life, fond of worshipping gods, and will practice meditation and religion.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse11</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Enjoys women of class, a leader, helpful to relatives, short in stature, yet an emperor.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiInHouse12</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Sinful, base, unfortunate, indolent, joining to mean people.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+
+
+	<!--Qualities of Gulika or Mandi associated with Planets-->
+	<Event>
+		<Name>MaandiGulikaWithSun</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Murderer of father
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiGulikaWithMoon</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Brings grief to mother
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiGulikaWithMars</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Loss of brothers
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiGulikaWithMars</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Loss of brothers
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiGulikaWithMercury</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Mad
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiGulikaWithJupiter</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Unbeliever; ignoramous
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiGulikaWithVenus</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Lives with low caste women
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiGulikaWithSaturn</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Leper
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiGulikaWithRahu</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Virus prone for diseases
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiGulikaWithKetu</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Fire accident
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+	<Event>
+		<Name>MaandiGulikaInStrongSign</Name>
+		<Nature>Good</Nature>
+		<Description>
+			If the lord of the house occupied by Gulika be possessed of strength and be posited in a kendra,
+			trikona, his own, exaltation or friendly house, the above results will be modified to the extent
+			that such person will own conveyances, beautiful as Cupid, will be highly respected and widely
+			renowned, and will be a man of power and authority.
+		</Description>
+		<Tag>Yoga, Upagraha</Tag>
+	</Event>
+
+
+</Root>

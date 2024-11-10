@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root>
+
+	<!--
+	Reference Book is the compilation of important astronomical facts for quick access by search
+	-->
+
+	<!--Planetary Nature and Indications-->
+	<Event>
+		<Name>Sun</Name>
+		<Description>
+			Masculine, malefic, copper colour, philosophical
+			tendency, royal, ego, father, sons, patrimony, self reliance, political power, windy and bilious temperament,
+			month, places of worship, money-lenders, goldsmith, bones, fires,
+			coronation chambers, doctoring
+			capacity.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Moon</Name>
+		<Description>
+			Mind, mother, benefic when
+			waxing, malefic when waning, feminine, white colour,
+			women, sea-men, pearls, gems, water, fishermen,
+			stubbornness, romances, bath-rooms, blood, popularity,
+			human responsibilities.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Mars</Name>
+		<Description>
+			Brothers, masculine,
+			blood-red colour, malefic, refined taste, base metals,
+			vegetation, rotten things, orators, ambassadors,
+			military activities, commerce, aerial journeys, weaving,
+			public speakers.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Mercury</Name>
+		<Description>
+			Benefic if well associated,
+			hermaphrodite, green colour, mercantile activity,
+			public speakers, cold nervous, intelligence.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Jupiter</Name>
+		<Description>
+			Masculine, benefic, bright yellow colour, devotion,
+			progeny, truthfulness, religious fervour, philosophical
+			wisdom, corpulence.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Venus</Name>
+		<Description>
+			Feminine, benefic, mixture of all colours, wife, love affairs, sensual pleasure,
+			family bliss, harems of ill-fame, vitality.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Saturn</Name>
+		<Description>
+			Malefic,hermaphrodite, dark colour, stubbornness, impetuosity,
+			demoralisation, windy diseases, despondency, gambling.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Rahu</Name>
+		<Description>
+			Malefic, feminine, renunciation, corruption, epidemics.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Ketu</Name>
+		<Description>Hermaphrodite, malefic, religious,sectarian principles, pride, selfishness, occultism,mendicancy.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+
+
+	<!--Karakas-->
+	<Event>
+		<Name>Karaka</Name>
+		<Description>Each planet is supposed to be the Karaka, or indicator of certain events in life.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Sun</Name>
+		<Description>Karaka of father</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Moon</Name>
+		<Description>Karaka of mother</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Mars</Name>
+		<Description>Karaka of brother</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Mercury</Name>
+		<Description>Karaka of profession</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Jupiter</Name>
+		<Description>Karaka of children</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Venus</Name>
+		<Description>Karaka of wife or husband</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Saturn</Name>
+		<Description>Karaka of longevity</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Rahu</Name>
+		<Description>Karaka of maternal relations</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Ketu</Name>
+		<Description>Karaka of paternal relations.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+
+
+	<!--Kinds of Houses-->
+	<Event>
+		<Name>Kendras</Name>
+		<Description>
+			The 4th, the 7th and the 10th the Kendras or angles or quadrants.
+			Planets in angles generally become fairly strong.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Trikonas</Name>
+		<Description>
+			The 1st, the 5th and the 9th houses are Trikonas or trines.
+			Planets in succeedent houses slightly strong.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Panaparas</Name>
+		<Description>The 2nd, the 8th and the 11th are the Panaparas or succeedent house</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Apoklimas</Name>
+		<Description>3rd, the 6th, the 9th and the 12th houses are Apoklimas or cadent houses.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+
+
+	<!--The Twelve Houses-->
+	<Event>
+		<Name>House 1</Name>
+		<Description>Build, body, appearance</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 2</Name>
+		<Description>Family, source of death, property, vision.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 3</Name>
+		<Description>Intelligence, brothers, sisters.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 4</Name>
+		<Description>Vehicles, general happiness, education, mother and landed properties.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 5</Name>
+		<Description>Fame, children.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 6</Name>
+		<Description>Debts, diseases, misery, enemies. </Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 7</Name>
+		<Description>Wife or husband, tact, death.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 8</Name>
+		<Description>Longevity, gifts</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 9</Name>
+		<Description>God, guru, father, travel, piety.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 10</Name>
+		<Description>Occupation, Karma, philosophical knowledge.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 11</Name>
+		<Description>Gains.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 12</Name>
+		<Description>Losses, moksha.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	
+	
+	<!--The Twelve Houses : How to Judge Horoscope 1 & 2-->
+	<Event>
+		<Name>House 1</Name>
+		<Description>
+			One's complexion, caste,
+			physical appearance, mental characteristics, nature of birth,
+			fame and defame, success, etc., should all be based on the
+			strength or otherwise of the Lagna and the Karaka.
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 2</Name>
+		<Description>
+			The second house signifies, family, speech, vision and
+			financial prosperity.The several yogas—good
+			and bad—formed by the second lord or in the second house
+			will produce their own effects. These considerations hold
+			good in the Navamsa also. In short the second house
+			largely but not exclusively indicates wealth.
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 3</Name>
+		<Description>
+			The third house rules brothers, sisters and relatives in
+			general. It has governance over courage. The third is also
+			concerned with throat, ears and father's death. In regard to
+			brothers and sisters, the reference is generally to younger
+			ones, i.e., those born after the native.
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 4</Name>
+		<Description>
+			The fourth has reference to mother, immovable
+			property, education, vehicles and general happiness. It
+			follows as a matter of course that an affliction to the fourth
+			house may result in the shape of depriving the person of
+			peace of mind, causing misfortune to his mother, troubles
+			in regard to property affairs and so on. But in reality, a
+			person may be educated but may also lose his mother early.
+			He may command good immovable properties but may not
+			be happy. Of the various yogas present in the horoscope,
+			those that have a bearing on the fourth house should be carefully noted.
+			We shall first consider the general combinations and
+			then the effects of planets severally. The fourth, like the
+			tenth, is a very important house and is in fact the pivot
+			around which revolve some of the special events affecting
+			the individual's life.
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 5</Name>
+		<Description>
+			The fifth house refers to children, emotions and
+			feelings, faith in God and past birth good (Poorvapunya).
+			To a certain extent it is also concerned with speculative tendencies.
+			The remarks made in para 2 of page 159 pertaining to the fourth
+			house apply with equal force to the fifth house also.
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 6</Name>
+		<Description>
+			The sixth house rules or signifies accidents, diseases,
+			enemies, mental affliction, mother's brother and
+			misfortunes. An affliction to the sixth house may result in
+			the shape of the person suffering diseases or incurring debts
+			or enemies. In reality however a person may be suffering
+			from diseases, but be free from debts or he may be
+			perfectly healthy but involved in huge debts. The difficulty
+			arises in differentiating the different events comprehended
+			by a single house.Planets involved in aspect-ing the house
+			and the lord are also important. Several arishta yogas
+			having a bearing on the sixth house should be carefully
+			studied.
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 7</Name>
+		<Description>
+			The 7th house mainly refers to marriage, wife or husband
+			and marital happiness. Karaka, who in this case would be Venus.
+			There are the secondary considerations also, viz , the occupants
+			of the 7th house and the planets associating with the 7th lord. 
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 8</Name>
+		<Description>
+			The 8th House deals with longevity, legacies, gifts and
+			unearned wealth, nature of death, disgrace, degradation and
+			details pertaining to death.The yogas formed in
+			the 8th house will produce their own effects. The same
+			considerations must be judged from the Navamsa chart also.
+			Although there are several significations to the eighth house, we
+			will focus our attention on the source and nature, time and place
+			of death.
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 9</Name>
+		<Description>
+			The ninth house, although it denotes several significations, is
+			primarily concerned with father and long distance travel.
+			The ninth house signifies father, righteousness, preceptor,
+			grand-children, intuition, religion, sympathy, fame, charities,
+			leadership, long journeys and communication with spirits.
+			The Sun is the karaka for father. Yogas formed in the 9th house or
+			involving the 9th lord produce their own results. These
+			considerations must be judged from the Navamsa chart also.
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 10</Name>
+		<Description>
+			The tenth house refers to occupation, profession, temporal
+			honours, foreign travels, self-respect, knowledge and dignity and
+			means of livelihood.
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 11</Name>
+		<Description>
+			The eleventh house refers to gains, elder brother, friends,
+			acquisitions, freedom from misery, and happy tidings. An
+			affliction to the 11th house may result in the loss of brother,
+			friends, loss of wealth, misery or unhappy news. The exact
+			nature of the result can be gleaned only after an assessment of
+			the whole chart and the afflicting planets. To some extent the
+			eleventh also concerns marriage.
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 12</Name>
+		<Description>
+			The twelfth house signifies losses, extravagance,
+			expenditure, confiscation, sayana sukha (pleasures of the
+			couch), left eye, feet, incarceration, divine knowledge and piety
+			and Final Emancipation (Moksha).
+		</Description>
+		<Source>How to Judge a Horoscope - 1982 - B.V. Raman</Source>
+	</Event>
+
+
+	<!--Peculiarities of the Signs-->
+	<Event>
+		<Name>Aries</Name>
+		<Description>
+			Aries - Movable,odd, masculine, cruel, fiery, of short ascension, rising by hinder part.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Taurus</Name>
+		<Description>
+			Taurus - Fixed, even, feminine, mild,earthy, fruitful, of short ascension, rising by hinder part.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Gemini</Name>
+		<Description>
+			Gemini - Common, odd, masculine, cruel, airy, barren, of short ascension, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Cancer</Name>
+		<Description>
+			Cancer - Even, movable, feminine, mild, watery, of long ascension, rising by the hinder part and fruitful.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Leo</Name>
+		<Description>
+			Leo - Fixed, odd, masculine, cruel, fiery, of long ascension, barren, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Virgo</Name>
+		<Description>
+			Virgo - Common, even, feminine, mild, earthy, of long ascension, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Libra</Name>
+		<Description>
+			Libra - Movable, odd, masculine, cruel, airy, of long ascension, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Scorpio</Name>
+		<Description>
+			Scorpio - Fixed, even, feminine, mild, watery, of long ascension, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Sagittarius</Name>
+		<Description>
+			Sagittarius - Common, odd, masculine, cruel, fiery, of long ascension, rising by the hinder part.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Capricorn</Name>
+		<Description>
+			Capricorn - Movable, even, feminine, mild, earthy, of long ascension, rising by hinder part.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Aquarius</Name>
+		<Description>
+			Aquarius - Fixed, odd, masculine, cruel, fruitful, airy, of short ascension, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Pisces</Name>
+		<Description>
+			Pisces - Common, feminine water, even, mild, of short ascension, rising by head and hinder part.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+</Root>

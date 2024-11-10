@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="https://www.vedastro.org/images/favicon.ico" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chart | VedAstro</title>
+
+    <!-- Bootstrap 5 CSS : Used for styling everything-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <!--JQuery-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- SVG.js used for events chart animation-->
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+
+    <!-- JS Code Events Chart-->
+    <!-- NOTE: Needs jQuery & SVG.js to load 1st-->
+    <script src="https://www.vedastro.org/js/VedAstro.js"></script>
+
+</head>
+<body class="container vstack d-flex align-items-center justify-content-center">
+    <!--loading box is shown first-->
+    <img id="LoadingBox" src="https://www.vedastro.org/images/loading-animation-progress-transparent.gif" />
+
+    <!--TOOLBAR-->
+    <div id="ToolBar" class="my-3 hstack gap-3 d-flex align-items-center justify-content-center visually-hidden">
+        <text id="PersonNameBox"></text>
+        <div>
+            <label for="TimePreset">Time : </label>
+            <select name="TimePreset" id="TimePresetSelector">
+                <option value="Hour">Hour</option>
+                <option value="Day">Day</option>
+                <option value="Week">Week</option>
+                <option value="Month">Month</option>
+                <option value="Year">Year</option>
+            </select>
+        </div>
+        <div>
+            <label for="EventPreset">Events : </label>
+            <select name="EventPreset" id="EventPresetSelector">
+                <option value="General">General</option>
+                <option value="Gochara">Gochara</option>
+                <option value="Travel">Travel</option>
+                <option value="Agriculture">Agriculture</option>
+                <option value="HairNailCutting">Hair Nail Cutting</option>
+                <option value="Medical">Medical</option>
+                <option value="Marriage">Marriage</option>
+                <option value="Astronomical">Astronomical</option>
+            </select>
+        </div>
+        <button onclick="onClickRefresh()" type="button" class="btn btn-primary btn-sm">Refresh</button>
+    </div>
+
+    <!--CHART VIEW BOX-->
+    <div id="EventsChartSvgHolder" style="display:none;"> <!--ID referenced in EventsChart.js-->
+        <!--INSERT SVG-->
+    </div>
+
+    <!--FOOTER-->
+    <footer class="align-items-center py-3 my-4 border-top vstack gap-1">
+        <span class="text-muted"><small>Light mobile friendly version of Dasa/Muhurtha chart viewer. <a href="https://www.vedastro.org/Muhurtha">Full Version</a></small></span>
+        <span class="text-muted"><small><b>How To Use: </b>Bookmark this page & access URL directly from mobile.</small></span>
+        <button onclick="onClickDarkModeToggle()" type="button" class="btn btn-primary btn-sm">Dark Mode</button>
+        <span class="text-muted"><small><a href="https://www.vedastro.org/Donate">Support</a> ❤ <a href="https://www.vedastro.org">VedAstro</a></small></span>
+    </footer>
+
+    <!--JS CODE-->
+    <script>
+
+        /*JS auto variables are inserted below by*/
+        /*API before sending to client*/
+        //person id, person name, chart type
+        //example : window.PersonName = "James";window.ChartType = "Muhurtha";window.PersonId = "54041d1ffb494a79997f7987ecfcf08b5";
+        /*INSERT-JS-VAR-HERE*/
+
+
+        /*-------------------*/
+
+
+        //FUNCTIONS
+
+        //sets selection box data to URL & loads new chart from API
+        async function onClickRefresh() {
+            EventsChart.showLoading();
+
+            //get needed data out of selection boxes
+            var chartData = EventsChart.GetChartDataFromToolbar();
+
+            //location.href = window.location.origin + newUrl; //set url reload page
+            //todo need cleanup
+            window.history.pushState('page2', 'Title', newUrl);//set url don't load page
+
+            //get chart from API
+            await EventsChart.getEventsChartFromApi(chartData);
+
+            EventsChart.hideLoading();
+        }
+
+        //called when dark mode button clicked
+        function onClickDarkModeToggle() {
+
+
+            //get previous val if any
+            //note: same with Blazor's dark mode key
+            var toggleMode = getProperty("darkmode");
+
+            //set mode based on previous mode
+            if (!toggleMode) { setDarkMode(); }
+            else { setLightMode(); }
+
+
+        }
+
+        function setDarkMode() {
+            //set page background to black
+            $("body").css('background-color', '#333');
+            //set toolbar to white, much easier than changing each little element inside
+            $("#ToolBar").css('background-color', '#ddd');
+
+            //save dark mode state for later visits
+            //note: same with Blazor's dark mode key
+            setProperty("darkmode", true);
+
+        }
+
+        function setLightMode() {
+            //set page background to black
+            $("body").css('background-color', '#ddd');
+            //set toolbar to white, much easier than changing each little element inside
+            $("#ToolBar").css('background-color', '#ddd');
+
+            //save dark mode state for later visits
+            //note: same with Blazor's dark mode key
+            setProperty("darkmode", false);
+
+        }
+
+        function getProperty(key) { return key in localStorage ? JSON.parse(localStorage[key]) : null; }
+
+        function setProperty(key, value) { localStorage[key] = JSON.stringify(value); }
+
+        function initDarkMode() {
+
+            //get previous val if any
+            //note: same with Blazor's dark mode key
+            var prevMode = getProperty("darkmode");
+
+            //set mode based on previous mode
+            if (prevMode) { setDarkMode(); }
+            else { setLightMode(); }
+
+        }
+
+        function hideLoading() {
+            //hide default loading box
+            $("#LoadingBox").hide();
+            //show svg chart
+            $("#EventsChartSvgHolder").show();
+            //show toolbar
+            $("#ToolBar").show();
+        }
+
+        function showLoading() {
+            //show default loading box
+            $("#LoadingBox").show();
+            //hide svg chart
+            $("#EventsChartSvgHolder").hide();
+            //hide toolbar
+            $("#ToolBar").hide();
+        }
+
+        //START
+
+        initDarkMode();
+
+        //when creating from URL, we provide parent where chart will be injected
+        //note: animation will be handled by embedded JS in chart
+        var parentElm = $("#EventsChartSvgHolder");
+        EventsChart.ChartFromUrl(parentElm).then(hideLoading);
+
+
+    </script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-﻿updateHistory();
+updateHistory();
 
 new DesktopSidebar("DesktopSidebarHolder", links);
 new PageHeader("PageHeader");
@@ -121,6 +121,10 @@ async function OnClickCalculate() {
 
     //brings to life & makes available in window.EventsChartList
     new EventsChart(chartId);
+
+    //note : this makes chart appear normal in dark/normal mode
+    var value = window.DarkModeLibInstance.isActivated() ? "difference" : "normal";
+    $('#EventsChartSvgHolder').css('mix-blend-mode', value);
 
     //let caller know all went well
     console.log(`🤲 Amen! Chart Loaded : ID:${chartId}`);

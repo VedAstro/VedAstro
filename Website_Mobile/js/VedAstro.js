@@ -2201,8 +2201,18 @@ class PageTopNavbar {
         this.MobileLinks = mobileLinks;
         this.HeaderName = headerName; //visible at mobile top nav only
 
-        // Get the DOM element with the given ID
-        const element = document.getElementById(elementId);
+        //init dark mode library, so that it can toggle by button
+        const options = {
+            mixColor: '#fff', // default: '#fff'
+            backgroundColor: '#fff', // default: '#fff'
+            buttonColorDark: '#100f2c', // default: '#100f2c'
+            buttonColorLight: '#fff', // default: '#fff'
+            saveInCookies: true, // default: true,
+            autoMatchOsTheme: false // default: true
+        };
+
+        //makes dark mode lib available to events chart viewer via "window"
+        window.DarkModeLibInstance = new Darkmode(options);
 
         // Call the method to initialize the main body of the page header
         this.initializeMainBody();
@@ -2224,6 +2234,16 @@ class PageTopNavbar {
             $('#MobileLoginButton').hide();
             $('#MobileLogoutButton').show();
         }
+
+        // attach handler : Toggle dark mode on button click
+        document.getElementById('DarkModeToggleButton').addEventListener('click', () => {
+            window.DarkModeLibInstance.toggle();
+
+            //special for event chart, if exist on page change vis JS for instant correction
+            //note : this makes chart appear normal in dark/normal mode
+            var value = window.DarkModeLibInstance.isActivated() ? "difference" : "normal";
+            $('#EventsChartSvgHolder').css('mix-blend-mode', value);
+        });
 
     }
 
@@ -2270,7 +2290,7 @@ class PageTopNavbar {
           <iconify-icon icon="lucide:panel-left-close" width="24" height="24" ></iconify-icon>
         </button>
 
-        <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn me-md-auto">
+        <button id="DarkModeToggleButton" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn me-md-auto">
             <iconify-icon icon="mdi:theme-light-dark" width="25" height="25" ></iconify-icon>
         </button>
 
@@ -6048,7 +6068,6 @@ class DasaEventsSelector {
         return values.join(',');
     }
 }
-
 
 // supports dynamic 3 types of preset
 // - age1to10

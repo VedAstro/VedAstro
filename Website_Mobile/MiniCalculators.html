@@ -82,126 +82,130 @@
                         <!-- HEADER -->
                         <div id="PageHeader" title-text="Mini Calculators" description-text="Collection of small calculators for converting, parsing & working with aspects of Astrology." image-src="images/life-predictor-banner.png"></div>
 
-
-                        <div class="container mt-5">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="accordion" id="accordionExample">
-                                        <!-- Calculator 1 -->
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingOne">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                                    Calculator 1: Area of Rectangle
-                                                </button>
-                                            </h2>
-                                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                                <div class="accordion-body">
-                                                    <div class="card border-light">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title">Area of Rectangle Calculator</h5>
-                                                            <p class="card-text">Calculate the area of a rectangle by entering the length and width.</p>
-                                                            <form>
-                                                                <div class="mb-3">
-                                                                    <label for="length" class="form-label">Length:</label>
-                                                                    <input type="number" id="length" class="form-control">
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <label for="width" class="form-label">Width:</label>
-                                                                    <input type="number" id="width" class="form-control">
-                                                                </div>
-                                                                <button type="button" class="btn btn-primary" onclick="calculateArea()">Calculate</button>
-                                                                <p id="result"></p>
-                                                            </form>
+                        <div class="row" style="max-width: 667px;">
+                            <div class="col-md-12">
+                                <div class="accordion" id="accordionExample">
+                                    <!-- Calculator 1 -->
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading1">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                                                <iconify-icon class="me-2" icon="gis:map-time" width="25" height="25"></iconify-icon>
+                                                Local Mean Time (LMT) To Standard Time (STD)
+                                            </button>
+                                        </h2>
+                                        <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <div class="card-body">
+                                                    <p class="card-text">LMT is the real time at a place based on it's longitude, this is converted to UTC or standard time of the inputed offset.</p>
+                                                    <form>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">LMT</span>
+                                                            <input id="localMeanTimeString" type="text" placeholder="19:23 08/08/1912" class="form-control">
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Calculator 2 -->
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingTwo">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                    Calculator 2: Volume of Cube
-                                                </button>
-                                            </h2>
-                                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                                <div class="accordion-body">
-                                                    <div class="card border-light">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title">Volume of Cube Calculator</h5>
-                                                            <p class="card-text">Calculate the volume of a cube by entering the side length.</p>
-                                                            <form>
-                                                                <div class="mb-3">
-                                                                    <label for="sideLength" class="form-label">Side Length:</label>
-                                                                    <input type="number" id="sideLength" class="form-control">
-                                                                </div>
-                                                                <button type="button" class="btn btn-primary" onclick="calculateVolume()">Calculate</button>
-                                                                <p id="result2"></p>
-                                                            </form>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">Longitude</span>
+                                                            <input id="lmtLongitude" type="number" placeholder="75.5" class="form-control">
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Calculator 3 -->
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingThree">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                    Calculator 3: Pythagorean Theorem
-                                                </button>
-                                            </h2>
-                                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                                <div class="accordion-body">
-                                                    <div class="card border-light">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title">Pythagorean Theorem Calculator</h5>
-                                                            <p class="card-text">Calculate the length of the hypotenuse by entering the lengths of the other two sides.</p>
-                                                            <form>
-                                                                <div class="mb-3">
-                                                                    <label for="sideA" class="form-label">Side A:</label>
-                                                                    <input type="number" id="sideA" class="form-control">
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <label for="sideB" class="form-label">Side B:</label>
-                                                                    <input type="number" id="sideB" class="form-control">
-                                                                </div>
-                                                                <button type="button" class="btn btn-primary" onclick="calculateHypotenuse()">Calculate</button>
-                                                                <p id="result3"></p>
-                                                            </form>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">STD Offset</span>
+                                                            <input id="outputStdOffset" type="text" placeholder="+05:30" class="form-control">
                                                         </div>
-                                                    </div>
+
+                                                        <button type="button" class="btn btn-primary" onclick="calculateLmtToStd()">Calculate</button>
+
+                                                        <div class="mt-3" style="display:none;">
+                                                            <h4>Result:</h4>
+                                                            <div class="card border-success">
+                                                                <div class="card-body pb-0 pt-1 text-success">
+                                                                    <h5 class="card-title" id="lmtToStdTimeOutput"></h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- Calculator 2 -->
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading2">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse1">
+                                                <iconify-icon class="me-2" icon="tabler:world-longitude" width="25" height="25"></iconify-icon>
+                                                Longitude To LMT Offset
+                                            </button>
+                                        </h2>
+                                        <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <div class="card-body">
+                                                    <p class="card-text">Input a longitude to see the LMT offset used for that location</p>
+                                                    <form>
+
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">Longitude</span>
+                                                            <input id="longToLmtOffsetLongitude" type="number" placeholder="75.5" class="form-control">
+                                                        </div>
+
+                                                        <button type="button" class="btn btn-primary" onclick="calculatelongToLmtOffset()">Calculate</button>
+
+                                                        <div class="mt-3" style="display:none;">
+                                                            <h4>Result:</h4>
+                                                            <div class="card border-success">
+                                                                <div class="card-body pb-0 pt-1 text-success">
+                                                                    <h5 class="card-title" id="longToLmtOffsetOutput"></h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Calculator 3 -->
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading3">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                                                <iconify-icon class="me-2" icon="wpf:worldwide-location" width="25" height="25"></iconify-icon>
+                                                Coordinates to Geo Location
+                                            </button>
+                                        </h2>
+                                        <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <div class="card-body">
+                                                    <p class="card-text">Convert coordinates to its geo location equivalent.</p>
+                                                    <form>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">Latitude</span>
+                                                            <input id="coordinatesLatitude" type="number" placeholder="35.6764" class="form-control">
+                                                        </div>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">Longitude</span>
+                                                            <input id="coordinatesLongitude" type="number" placeholder="139.6500" class="form-control">
+                                                        </div>
+
+                                                        <button type="button" class="btn btn-primary" onclick="calculateCoordinatesToGeoLocation()">Calculate</button>
+
+                                                        <div class="mt-3" style="display:none;">
+                                                            <h4>Result:</h4>
+                                                            <div class="card border-success">
+                                                                <div class="card-body pb-0 pt-1 text-success">
+                                                                    <h5 class="card-title" id="coordinatesToGeoLocationOutput"></h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
-
-
-                        <script>
-                            function calculateArea() {
-                                let length = document.getElementById("length").value;
-                                let width = document.getElementById("width").value;
-                                let area = length * width;
-                                document.getElementById("result").innerHTML = "Area: " + area;
-                            }
-
-                            function calculateVolume() {
-                                let sideLength = document.getElementById("sideLength").value;
-                                let volume = Math.pow(sideLength, 3);
-                                document.getElementById("result2").innerHTML = "Volume: " + volume;
-                            }
-
-                            function calculateHypotenuse() {
-                                let sideA = document.getElementById("sideA").value;
-                                let sideB = document.getElementById("sideB").value;
-                                let hypotenuse = Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
-                                document.getElementById("result3").innerHTML = "Hypotenuse: " + hypotenuse;
-                            }
-                        </script>
 
 
 
@@ -232,7 +236,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mattboldt/typed.js@2.0.11/lib/typed.min.js"></script>
-    
+
     <!-- JS Dark Mode button-->
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js/lib/darkmode-js.min.js"></script>
 

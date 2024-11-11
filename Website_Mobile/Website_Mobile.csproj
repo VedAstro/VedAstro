@@ -46,6 +46,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Include="MiniCalculators.html" />
     <Content Include="Remedy.html" />
     <Content Include="TermsOfService.html" />
     <Content Include="PrivacyPolicy.html" />
@@ -77,10 +78,12 @@
     <Content Remove="js\Home.js" />
     <Content Remove="js\Horoscope.js" />
     <Content Remove="js\Login.js" />
+    <Content Remove="js\MiniCalculators.js" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="404.html" />
+    <None Remove="About.html" />
     <None Remove="AddPerson.html" />
     <None Remove="BirthTimeFinder.html" />
     <None Remove="coming-soon.html" />
@@ -112,6 +115,7 @@
     <None Remove="LifePredictor.html" />
     <None Remove="Login.html" />
     <None Remove="MatchChecker.html" />
+    <None Remove="MiniCalculators.html" />
     <None Remove="PrivacyPolicy.html" />
     <None Remove="Remedy.html" />
     <None Remove="sound\positive-notification.mp3" />
@@ -156,10 +160,12 @@
     <PublishFile Remove="js\LifePredictor.js" />
     <PublishFile Remove="js\Login.js" />
     <PublishFile Remove="js\MatchChecker.js" />
+    <PublishFile Remove="js\MiniCalculators.js" />
     <PublishFile Remove="js\Remedy.js" />
     <PublishFile Remove="LifePredictor.html" />
     <PublishFile Remove="Login.html" />
     <PublishFile Remove="MatchChecker.html" />
+    <PublishFile Remove="MiniCalculators.html" />
     <PublishFile Remove="PrivacyPolicy.html" />
     <PublishFile Remove="Remedy.html" />
     <PublishFile Remove="sound\positive-notification.mp3" />

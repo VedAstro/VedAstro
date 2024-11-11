@@ -277,7 +277,7 @@ const links = [
     {
         url: 'MiniCalculators',
         icon: 'fluent:calculator-multiple-20-regular',
-        text: 'MiniCalculators'
+        text: 'Mini Calculators'
     },
 
     //{

@@ -101,7 +101,7 @@ namespace VedAstro.Library
         public Time(DateTime lmtDateTime, TimeSpan stdOffset, GeoLocation geoLocation)
         {
             //get lmt time
-            var lmtTime = new DateTimeOffset(lmtDateTime, GetLocalTimeOffset(geoLocation.Longitude()));
+            var lmtTime = new DateTimeOffset(lmtDateTime, Calculate.LongitudeToLMTOffset(geoLocation.Longitude()));
 
             //convert lmt to std & store it
             _stdTime = lmtTime.ToOffset(stdOffset);
@@ -712,7 +712,7 @@ namespace VedAstro.Library
             //NOTE: LMT = STD + LMT offset
 
             //get LMT offset
-            var lmtOffset = GetLocalTimeOffset(longitudeDeg);
+            var lmtOffset = Calculate.LongitudeToLMTOffset(longitudeDeg);
 
             //create LMT from offsetting STD time
             var lmtDateTime = stdDateTime.ToOffset(lmtOffset);
@@ -721,102 +721,6 @@ namespace VedAstro.Library
             return lmtDateTime;
         }
 
-        /// <summary>
-        /// Convert longitude to LMT offset
-        /// input longitude range : -180 to 180 
-        /// </summary>
-        public static TimeSpan GetLocalTimeOffset(double longitudeDeg)
-        {
-            var failCount = 0;
-            var failTryLimit = 3;
-
-
-            try
-            {
-            TryAgain:
-                //raise alarm if longitude is out of range
-                var outOfRange = !(longitudeDeg >= -180 && longitudeDeg <= 180);
-                if (outOfRange)
-                {
-                    if (failCount < failTryLimit)
-                    {
-                        var oldLongitude = longitudeDeg; //back up for logging
-
-                        //instead of giving up, lets take a go at correcting it
-                        //assume input is 48401 but should be 48.401, so divide 1000
-                        longitudeDeg = longitudeDeg / 1000;
-
-                        failCount++; //keep track so not fall into rabbit hole
-
-                        LibLogger.Debug($"Longitude out of range : {oldLongitude} > Auto correct to : {longitudeDeg}"); //log it for debug research
-
-                        goto TryAgain;
-                    }
-
-                    //if control reaches here than raise exception,
-                    //control should not reach here under any good call condition
-                    throw new Exception($"Longitude out of range : {longitudeDeg} > Auto correct failed!");
-                }
-
-                //calculate offset based on longitude
-                var offsetToReturn = TimeSpan.FromHours(longitudeDeg / 15.0);
-
-                //round off offset to full minutes (because datetime doesnt accept fractional minutes in offsets)
-                var offsetMinutes = Math.Round(offsetToReturn.TotalMinutes);
-
-                //get new offset from rounded minutes
-                offsetToReturn = TimeSpan.FromMinutes(offsetMinutes);
-
-                //return offset to caller
-                return offsetToReturn;
-
-            }
-            catch (Exception e)
-            {
-                //let caller know failure silently
-                LibLogger.Debug(e);
-
-                //return empty LMT for controlled failure
-                return TimeSpan.Zero;
-            }
-
-        }
-
-        /// <summary>
-        /// Converts time back to longitude, it is the reverse of GetLocalTimeOffset in Time
-        /// Exp :  5h. 10m. 20s. E. Long. to 77° 35' E. Long
-        /// </summary>
-        public static Angle TimeToLongitude(TimeSpan time)
-        {
-            //degrees is equivelant to hours
-            var totalDegrees = time.TotalHours * 15;
-
-            return Angle.FromDegrees(totalDegrees);
-        }
-
-
-        public static bool TryParse(string cellValue, out object o)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Given an LMT date time in string, will convert to full Time instance
-        /// with STD support
-        /// </summary>
-        public static Time FromLMT(string lmtDateTime, GeoLocation geoLocation)
-        {
-            // Parse the LMT string into a DateTime instance
-            if (!DateTime.TryParseExact(lmtDateTime, "HH:mm dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime lmtParsed))
-            {
-                throw new ArgumentException($"Invalid LMT format. Expected format is 'HH:mm MM/dd/yyyy'.", nameof(lmtDateTime));
-            }
-
-            //Create new instance of time 
-            var returnVal = new Time(lmtParsed, geoLocation);
-
-            return returnVal;
-        }
     }
 
 

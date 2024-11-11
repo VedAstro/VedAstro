@@ -2554,6 +2554,9 @@ namespace VedAstro.Library
             return intFromUrl;
         }
 
+        /// <summary>
+        /// INPUT: /<param name>/+08:00
+        /// </summary>
         public static TimeSpan TimeSpanFromUrl(string url)
         {
             string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);

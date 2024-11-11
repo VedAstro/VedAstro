@@ -204,15 +204,15 @@ new PageTopNavbar("VedAstro","PageTopNavbar", [
     { icon: "carbon:gateway-api", text: "Open API", href: "/" },
     { icon: "openmoji:love-letter", text: "Donate", href: "/" },
 ], [
-    { text: "Contact Us", href: "./Contact.html" },
+    { text: "Contact Us", href: "./ContactUs.html" },
     { text: "About", href: "./About.html" },
     { text: "Video Guides", href: "https://www.youtube.com/@vedastro/videos", target: "_blank" },
-    { text: "Join Us", href: "./JoinOurFamily.html" },
-    { text: "Calculators", href: "./Calculator.html" },
+    /*{ text: "Join Us", href: "./JoinOurFamily.html" },*/
+    /*{ text: "Calculators", href: "./Calculator.html" },*/
     { text: "Person List", href: "./PersonList.html" },
-    { text: "Train AI", href: "./TrainAIAstrologer.html" },
+    /*{ text: "Train AI", href: "./TrainAIAstrologer.html" },*/
     { text: "Remedy", href: "./Remedy.html" },
-    { text: "Download", href: "./Download.html" },
+    /*{ text: "Download", href: "./Download.html" },*/
     { text: "API Live Status", href: "https://vedastroapi.azurewebsites.net/api" },
     { text: "Table Generator", href: "./TableGenerator.html" },
     { text: "Body Types", href: "./BodyTypes.html" },

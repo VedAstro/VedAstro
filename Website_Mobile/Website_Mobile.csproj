@@ -46,6 +46,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Include="Remedy.html" />
     <Content Include="TermsOfService.html" />
     <Content Include="PrivacyPolicy.html" />
     <Content Include="LifePredictor.html" />
@@ -107,10 +108,12 @@
     <None Remove="js\GoodTimeFinder.js" />
     <None Remove="js\LifePredictor.js" />
     <None Remove="js\MatchChecker.js" />
+    <None Remove="js\Remedy.js" />
     <None Remove="LifePredictor.html" />
     <None Remove="Login.html" />
     <None Remove="MatchChecker.html" />
     <None Remove="PrivacyPolicy.html" />
+    <None Remove="Remedy.html" />
     <None Remove="sound\positive-notification.mp3" />
     <None Remove="TermsOfService.html" />
     <None Remove="VedAstro.js" />
@@ -153,10 +156,12 @@
     <PublishFile Remove="js\LifePredictor.js" />
     <PublishFile Remove="js\Login.js" />
     <PublishFile Remove="js\MatchChecker.js" />
+    <PublishFile Remove="js\Remedy.js" />
     <PublishFile Remove="LifePredictor.html" />
     <PublishFile Remove="Login.html" />
     <PublishFile Remove="MatchChecker.html" />
     <PublishFile Remove="PrivacyPolicy.html" />
+    <PublishFile Remove="Remedy.html" />
     <PublishFile Remove="sound\positive-notification.mp3" />
     <PublishFile Remove="TermsOfService.html" />
     <PublishFile Remove="VedAstro.js" />

@@ -61,4 +61,28 @@ async function calculateCoordinatesToGeoLocation() {
     }
 }
 
+async function calculateGeoLocationToTimezone() {
+    //get data inputed by user
+    let location = document.getElementById("geoLocationToTimezoneLocation").value;
+    let latitude = document.getElementById("geoLocationToTimezoneLatitude").value;
+    let longitude = document.getElementById("geoLocationToTimezoneLongitude").value;
+    let time = document.getElementById("geoLocationToTimezoneTime").value;
+    let date = document.getElementById("geoLocationToTimezoneDate").value;
+
+    // Extract day, month and year from date
+    const [day, month, year] = date.split('/');
+
+    // Construct API URL
+    const apiUrl = `${VedAstro.ApiDomain}/Calculate/GeoLocationToTimezone/Location/${location}/Coordinates/${latitude},${longitude}/Time/${time}/${day}/${month}/${year}/+00:00`;
+
+    // Make API call and handle response
+    const response = await fetch(apiUrl);
+
+    const data = await response.json();
+    if (data.Status === "Pass") {
+        document.getElementById("geoLocationToTimezoneOutput").innerHTML = data.Payload.GeoLocationToTimezone;
+        $("#geoLocationToTimezoneOutput").parent().parent().parent().show(); //make holder visible
+    }
+}
+
 

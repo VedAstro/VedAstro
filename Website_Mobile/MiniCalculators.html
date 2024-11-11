@@ -203,11 +203,62 @@
                                         </div>
                                     </div>
 
+                                    <!-- Calculator 4 -->
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading4">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                                                <iconify-icon class="me-2" icon="fluent-mdl2:world-clock" width="25" height="25"></iconify-icon>
+                                                Geo Location To Timezone
+                                            </button>
+                                        </h2>
+                                        <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <div class="card-body">
+                                                    <p class="card-text">Gets all timezones given a location, accounts for Daylight savings & historical changes.</p>
+                                                    <form>
+
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">Location</span>
+                                                            <input id="geoLocationToTimezoneLocation" type="text" placeholder="Tokyo, Japan" class="form-control">
+                                                        </div>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">Latitude</span>
+                                                            <input id="geoLocationToTimezoneLatitude" type="number" placeholder="35.65" class="form-control">
+                                                        </div>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">Longitude</span>
+                                                            <input id="geoLocationToTimezoneLongitude" type="number" placeholder="139.83" class="form-control">
+                                                        </div>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">Time</span>
+                                                            <input id="geoLocationToTimezoneTime" type="text" placeholder="14:02" class="form-control">
+                                                        </div>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text">Date</span>
+                                                            <input id="geoLocationToTimezoneDate" type="text" placeholder="09/11/1977" class="form-control">
+                                                        </div>
+
+                                                        <button type="button" class="btn btn-primary" onclick="calculateGeoLocationToTimezone()">Calculate</button>
+
+                                                        <div class="mt-3" style="display:none;">
+                                                            <h4>Result:</h4>
+                                                            <div class="card border-success">
+                                                                <div class="card-body pb-0 pt-1 text-success">
+                                                                    <h5 class="card-title" id="geoLocationToTimezoneOutput"></h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>
-
-
 
                         <footer id="PageFooter"></footer>
                     </div>

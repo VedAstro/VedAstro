@@ -213,7 +213,7 @@ new PageTopNavbar("VedAstro","PageTopNavbar", [
     /*{ text: "Train AI", href: "./TrainAIAstrologer.html" },*/
     { text: "Remedy", href: "./Remedy.html" },
     /*{ text: "Download", href: "./Download.html" },*/
-    { text: "API Live Status", href: "https://vedastroapi.azurewebsites.net/api" },
+    { text: "API Live Status", href: "https://vedastroapi.azurewebsites.net/api/Home" },
     { text: "Table Generator", href: "./TableGenerator.html" },
     { text: "Body Types", href: "./BodyTypes.html" },
     { text: "Import Person", href: "./ImportPerson.html" },
@@ -274,6 +274,12 @@ const links = [
         icon: 'fluent:text-number-format-20-filled',
         text: 'Numerology'
     },
+    {
+        url: 'MiniCalculators',
+        icon: 'fluent:calculator-multiple-20-regular',
+        text: 'MiniCalculators'
+    },
+
     //{
     //    url: 'StarsAboveMe',
     //    icon: 'solar:moon-stars-bold',

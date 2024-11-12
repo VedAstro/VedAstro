@@ -2649,18 +2649,18 @@ class PersonSelectorBox {
     // a warning will be logged to the console and the cache will not be cleared.
     static ClearPersonListCache(type) {
         switch (type) {
-        case 'private':
-            localStorage.removeItem('personList');
-            break;
-        case 'public':
-            localStorage.removeItem('publicPersonList');
-            break;
-        case 'all':
-            localStorage.removeItem('personList');
-            localStorage.removeItem('publicPersonList');
-            break;
-        default:
-            console.warn('Invalid cache type provided. Cache not cleared.');
+            case 'private':
+                localStorage.removeItem('personList');
+                break;
+            case 'public':
+                localStorage.removeItem('publicPersonList');
+                break;
+            case 'all':
+                localStorage.removeItem('personList');
+                localStorage.removeItem('publicPersonList');
+                break;
+            default:
+                console.warn('Invalid cache type provided. Cache not cleared.');
         }
 
         console.log('Person list cache cleared.');
@@ -6091,7 +6091,6 @@ class TimeRangeSelector {
         this.initializeMainBody();
     }
 
-
     async initializeMainBody() {
         // Empty the content of the element with the given ID
         $(`#${this.ElementID}`).empty();
@@ -6101,12 +6100,20 @@ class TimeRangeSelector {
 
         // Initialize stored values
         this.initStoredValues();
+        this.initStoredAgeValues();
 
         // Set default preset if provided
         if (this.defaultPreset) {
             $(`#${this.ElementID} .time-range-select`).val(this.defaultPreset);
-            if (this.defaultPreset !== 'selectCustomYear') {
+            if (this.defaultPreset !== 'selectCustomYear' && this.defaultPreset !== 'selectCustomAge') {
                 $(`#${this.ElementID} .custom-time-range-holder`).hide();
+                $(`#${this.ElementID} .custom-age-range-holder`).hide();
+            } else if (this.defaultPreset === 'selectCustomYear') {
+                $(`#${this.ElementID} .custom-time-range-holder`).show();
+                $(`#${this.ElementID} .custom-age-range-holder`).hide();
+            } else if (this.defaultPreset === 'selectCustomAge') {
+                $(`#${this.ElementID} .custom-time-range-holder`).hide();
+                $(`#${this.ElementID} .custom-age-range-holder`).show();
             }
 
             //let others (days per pixel component) immediately know days between after default is selected
@@ -6136,6 +6143,16 @@ class TimeRangeSelector {
         }
     }
 
+    initStoredAgeValues() {
+        const storedValues = localStorage.getItem(this.storageKey + '_age');
+        if (storedValues) {
+            const values = JSON.parse(storedValues);
+            $(`#${this.ElementID} .start-age-input`).val(values.startAge);
+            $(`#${this.ElementID} .end-age-input`).val(values.endAge);
+        }
+    }
+
+
     //calculate the number of days between start date and end date also handles time range preset by using API
     async getDaysInRange() {
         //if user inputs manual time range, get dates and calculate difference
@@ -6154,12 +6171,22 @@ class TimeRangeSelector {
             const differenceInDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1;
             return differenceInDays;
         }
-        //else user inputs using time range presets, use API to calculate range
+        //else user inputs using time range presets & custom age range also, use API to calculate range
         else {
             //get selected person's birth time URL for age preset computation
             var birthTimeUrl = await this.getSelectedPersonBirthTimeUrl();
 
+            //this can be age preset & time preset
             let selectedTimePreset = $(`#${this.ElementID} .time-range-select`).val();
+
+            //if user selects age range construct preset, exp age20to40
+            if (selectedTimePreset === 'selectCustomAge') {
+                const startAge = parseInt($(`#${this.ElementID} .start-age-input`).val());
+                const endAge = parseInt($(`#${this.ElementID} .end-age-input`).val());
+
+                //construct new age preset
+                selectedTimePreset = `age${startAge}to${endAge}`;
+            }
 
             let userTimezoneString = this.getSystemOffset();
 
@@ -6236,10 +6263,20 @@ class TimeRangeSelector {
 
             return `Start/00:00/01/${startMonth}/${startYear}/End/00:00/${this.getLastDayOfMonth(endYear, endMonth - 1)}/${endMonth}/${endYear}/${offsetString}`;
         }
-        //if a preset is selected function returns "TimeRange/PresetValue"
-        else {
+        //if custom age is selected then construct age present in correct format "age10to100"
+        else if (selectedValue === 'selectCustomAge') {
+            const startAge = $(`#${this.ElementID} .start-age-input`).val();
+            const endAge = $(`#${this.ElementID} .end-age-input`).val();
+
+            // Store values in local storage
+            this.storeAgeValues(startAge, endAge);
+
+            return `TimePreset/age${startAge}to${endAge}`;
+        } else
+            //if a preset is selected function returns "TimeRange/PresetValue"
+        {
             return `TimePreset/${selectedValue}`;
-        }
+        }       
     }
 
     storeValues(startYear, startMonth, endYear, endMonth) {
@@ -6269,80 +6306,90 @@ class TimeRangeSelector {
     async generateHtmlBody() {
         // Return the HTML for the page header, including conditional blocks for different screen sizes
         return `
-        <!-- PRESET SELECTOR -->
-        <div>
-            <label class="form-label">
-                Time Range
-                <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" aria-expanded="false">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
+            <!-- PRESET SELECTOR -->
+            <div>
+                <label class="form-label">
+                    Time Range
+                    <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
+                    </div>
+                </label>
+                <select class="form-control time-range-select" style="width: 254.9px;">
+                    <option style="font-weight: bold; color: #0d6efd;" value="selectCustomYear">Custom Date</option>
+                    <option value="1day">+/- 1 Day</option>
+                    <option value="1week">+/- 1 Week</option>
+                    <option value="1month">+/- 1 Month</option>
+                    <option value="2month">+/- 2 Month</option>
+                    <option value="3month">+/- 3 Months</option>
+                    <option value="6month">+/- 6 Months</option>
+                    <option value="1year">+/- 1 Year</option>
+                    <option value="3year">+/- 3 Year</option>
+                    <option value="5year">+/- 5 Year</option>
+                    <option value="10year">+/- 10 Year</option>
+                    <option style="font-weight: bold; color: #0d6efd;" value="selectCustomAge">Custom Age</option>
+                    <option value="age1to25">Age 1 to 35</option>
+                    <option value="age10to35">Age 10 to 35</option>
+                    <option value="age25to50">Age 25 to 50</option>
+                    <option value="age35to60">Age 35 to 60</option>
+                    <option value="age60to85">Age 60 to 85</option>
+                    <option value="age50to100">Age 50 to 100</option>
+                    <option style="font-weight: bold;" value="fulllife">Full Life</option>
+                </select>
+            </div>
+
+            <!-- CUSTOM TIME RANGE -->
+            <div class="custom-time-range-holder mt-3" style="display: none;">
+                <div class="input-group mb-2" style="width: 312px;">
+                    <label class="input-group-text" style="width: 60.1px;">Start</label>
+                    <input type="number" class="form-control start-year-input" pattern="\d{4}" title="Four digit year" required="">
+                    <span class="input-group-text">Month</span>
+                    <select class="form-select start-month-input">
+                        <option value="01" selected="">JAN</option>
+                        <option value="02">FEB</option>
+                        <option value="03">MAR</option>
+                        <option value="04">APR</option>
+                        <option value="05">MAY</option>
+                        <option value="06">JUN</option>
+                        <option value="07">JUL</option>
+                        <option value="08">AUG</option>
+                        <option value="09">SEP</option>
+                        <option value="10">OCT</option>
+                        <option value="11">NOV</option>
+                        <option value="12">DEC</option>
+                    </select>
                 </div>
-            </label>
-            <select class="form-control time-range-select" style="width: 254.9px;">
-                <option style="font-weight: bold; color: #0d6efd;" value="selectCustomYear">Custom Date</option>
-                <option value="1day">+/- 1 Day</option>
-                <option value="1week">+/- 1 Week</option>
-                <option value="1month">+/- 1 Month</option>
-                <option value="2month">+/- 2 Month</option>
-                <option value="3month">+/- 3 Months</option>
-                <option value="6month">+/- 6 Months</option>
-                <option value="1year">+/- 1 Year</option>
-                <option value="3year">+/- 3 Year</option>
-                <option value="5year">+/- 5 Year</option>
-                <option value="10year">+/- 10 Year</option>
-                <option style="font-weight: bold; color: #0d6efd;" value="selectCustomAge">Custom Age</option>
-                <option value="age1to25">Age 1 to 35</option>
-                <option value="age10to35">Age 10 to 35</option>
-                <option value="age25to50">Age 25 to 50</option>
-                <option value="age35to60">Age 35 to 60</option>
-                <option value="age60to85">Age 60 to 85</option>
-                <option value="age50to100">Age 50 to 100</option>
-                <option style="font-weight: bold;" value="fulllife">Full Life</option>
-            </select>
-        </div>
-
-        <!-- CUSTOM TIME RANGE -->
-        <div class="custom-time-range-holder mt-3" style="display: none;">
-            <div class="input-group mb-2" style="width: 312px;">
-                <label class="input-group-text" style="width: 60.1px;">Start</label>
-                <input type="number" class="form-control start-year-input" pattern="\d{4}" title="Four digit year" required="">
-                <span class="input-group-text">Month</span>
-                <select class="form-select start-month-input">
-                    <option value="01" selected="">JAN</option>
-                    <option value="02">FEB</option>
-                    <option value="03">MAR</option>
-                    <option value="04">APR</option>
-                    <option value="05">MAY</option>
-                    <option value="06">JUN</option>
-                    <option value="07">JUL</option>
-                    <option value="08">AUG</option>
-                    <option value="09">SEP</option>
-                    <option value="10">OCT</option>
-                    <option value="11">NOV</option>
-                    <option value="12">DEC</option>
-                </select>
+                <div class="input-group mb-3" style="width: 312px;">
+                    <label class="input-group-text" style="width: 60.1px">End</label>
+                    <input type="number" class="form-control end-year-input" pattern="\d{4}" title="Four digit year" required="">
+                    <span class="input-group-text">Month</span>
+                    <select class="form-select end-month-input">
+                        <option value="01">JAN</option>
+                        <option value="02">FEB</option>
+                        <option value="03">MAR</option>
+                        <option value="04">APR</option>
+                        <option value="05">MAY</option>
+                        <option value="06">JUN</option>
+                        <option value="07">JUL</option>
+                        <option value="08">AUG</option>
+                        <option value="09">SEP</option>
+                        <option value="10">OCT</option>
+                        <option value="11">NOV</option>
+                        <option value="12" selected="">DEC</option>
+                    </select>
+                </div>
             </div>
-            <div class="input-group mb-3" style="width: 312px;">
-                <label class="input-group-text" style="width: 60.1px">End</label>
-                <input type="number" class="form-control end-year-input" pattern="\d{4}" title="Four digit year" required="">
-                <span class="input-group-text">Month</span>
-                <select class="form-select end-month-input">
-                    <option value="01">JAN</option>
-                    <option value="02">FEB</option>
-                    <option value="03">MAR</option>
-                    <option value="04">APR</option>
-                    <option value="05">MAY</option>
-                    <option value="06">JUN</option>
-                    <option value="07">JUL</option>
-                    <option value="08">AUG</option>
-                    <option value="09">SEP</option>
-                    <option value="10">OCT</option>
-                    <option value="11">NOV</option>
-                    <option value="12" selected="">DEC</option>
-                </select>
-            </div>
-        </div>
 
-    `;
+            <!-- CUSTOM AGE RANGE -->
+            <div class="custom-age-range-holder mt-3" style="display: none;">
+                <div class="input-group mb-2" style="width: 312px;">
+                    <label class="input-group-text" style="width: 92.1px;">From Age</label>
+                    <input type="number" class="form-control start-age-input" pattern="\d+" title="Age" required="">
+                    <span class="input-group-text">To</span>
+                    <input type="number" class="form-control end-age-input" pattern="\d+" title="Age" required="">
+                </div>
+            </div>
+
+        `;
     }
 
     // Add event listener to dropdown
@@ -6353,8 +6400,13 @@ class TimeRangeSelector {
             var $parent = $(event.target).closest(`#${this.ElementID}`);
             if ($(event.target).val() === 'selectCustomYear') {
                 $parent.find('.custom-time-range-holder').show();
+                $parent.find('.custom-age-range-holder').hide();
+            } else if ($(event.target).val() === 'selectCustomAge') {
+                $parent.find('.custom-time-range-holder').hide();
+                $parent.find('.custom-age-range-holder').show();
             } else {
                 $parent.find('.custom-time-range-holder').hide();
+                $parent.find('.custom-age-range-holder').hide();
             }
 
             // let days per pixel component know that time range has changed
@@ -6365,13 +6417,19 @@ class TimeRangeSelector {
     }
 
     addInputEventListeners() {
-        $(`#${this.ElementID} .start-year-input, #${this.ElementID} .start-month-input, #${this.ElementID} .end-year-input, #${this.ElementID} .end-month-input`).on('change', (event) => {
+        $(`#${this.ElementID} .start-year-input, #${this.ElementID} .start-month-input, #${this.ElementID} .end-year-input, #${this.ElementID} .end-month-input, #${this.ElementID} .start-age-input, #${this.ElementID} .end-age-input`).on('change', (event) => {
             const startYear = $(`#${this.ElementID} .start-year-input`).val();
             const startMonth = $(`#${this.ElementID} .start-month-input`).val();
             const endYear = $(`#${this.ElementID} .end-year-input`).val();
             const endMonth = $(`#${this.ElementID} .end-month-input`).val();
+            const startAge = $(`#${this.ElementID} .start-age-input`).val();
+            const endAge = $(`#${this.ElementID} .end-age-input`).val();
 
-            this.storeValues(startYear, startMonth, endYear, endMonth);
+            if ($(event.target).hasClass('start-age-input') || $(event.target).hasClass('end-age-input')) {
+                this.storeAgeValues(startAge, endAge);
+            } else {
+                this.storeValues(startYear, startMonth, endYear, endMonth);
+            }
 
             // let days per pixel component know that time range has changed
             this.getDaysInRange().then(daysInRange => {
@@ -6379,6 +6437,16 @@ class TimeRangeSelector {
             });
         });
     }
+
+    storeAgeValues(startAge, endAge) {
+        const values = {
+            startAge,
+            endAge
+        };
+        localStorage.setItem(this.storageKey + '_age', JSON.stringify(values));
+    }
+
+
 }
 
 class DayPerPixelInput {

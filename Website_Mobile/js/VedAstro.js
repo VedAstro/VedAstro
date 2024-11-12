@@ -6278,7 +6278,7 @@ class TimeRangeSelector {
                 </div>
             </label>
             <select class="form-control time-range-select" style="width: 254.9px;">
-                <option style="font-weight: bold; color: #0d6efd;" value="selectCustomYear">Custom Year</option>
+                <option style="font-weight: bold; color: #0d6efd;" value="selectCustomYear">Custom Date</option>
                 <option value="1day">+/- 1 Day</option>
                 <option value="1week">+/- 1 Week</option>
                 <option value="1month">+/- 1 Month</option>
@@ -6289,6 +6289,14 @@ class TimeRangeSelector {
                 <option value="3year">+/- 3 Year</option>
                 <option value="5year">+/- 5 Year</option>
                 <option value="10year">+/- 10 Year</option>
+                <option style="font-weight: bold; color: #0d6efd;" value="selectCustomAge">Custom Age</option>
+                <option value="age1to25">Age 1 to 35</option>
+                <option value="age10to35">Age 10 to 35</option>
+                <option value="age25to50">Age 25 to 50</option>
+                <option value="age35to60">Age 35 to 60</option>
+                <option value="age60to85">Age 60 to 85</option>
+                <option value="age50to100">Age 50 to 100</option>
+                <option style="font-weight: bold;" value="fulllife">Full Life</option>
             </select>
         </div>
 

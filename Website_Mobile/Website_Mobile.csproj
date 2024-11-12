@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="About.html" />
     <Content Include="coming-soon.html" />
     <Content Include="AddPerson.html" />
     <Content Include="404.html" />
@@ -73,6 +74,7 @@
 
   <ItemGroup>
     <Content Remove="app.js" />
+    <Content Remove="js\About.js" />
     <Content Remove="js\AddPerson.js" />
     <Content Remove="js\BirthTimeFinder.js" />
     <Content Remove="js\Home.js" />
@@ -125,6 +127,7 @@
 
   <ItemGroup>
     <PublishFile Remove="404.html" />
+    <PublishFile Remove="About.html" />
     <PublishFile Remove="AddPerson.html" />
     <PublishFile Remove="app.js" />
     <PublishFile Remove="BirthTimeFinder.html" />
@@ -152,6 +155,7 @@
     <PublishFile Remove="image\table-generator-card.jpg" />
     <PublishFile Remove="image\vedastro-api-logo.png" />
     <PublishFile Remove="image\zodiac-wheel-3-white.png" />
+    <PublishFile Remove="js\About.js" />
     <PublishFile Remove="js\AddPerson.js" />
     <PublishFile Remove="js\BirthTimeFinder.js" />
     <PublishFile Remove="js\GoodTimeFinder.js" />

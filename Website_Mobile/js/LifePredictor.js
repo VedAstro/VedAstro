@@ -20,7 +20,7 @@ var personSelector = new PersonSelectorBox("PersonSelectorBox");
 //NOTE: must init before Time range selector so that, it can catch default days between range
 var daysPerPixelInput = new DayPerPixelInput("DayPerPixelInput");
 
-const defaultPreset = "1month";
+const defaultPreset = "1year";
 //NOTE: person selector is linked into time range so that age presets (age1to10) can be calculated
 var timeRangeSelector = new TimeRangeSelector("TimeRangeSelector", personSelector, defaultPreset);
 

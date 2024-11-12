@@ -225,7 +225,7 @@ namespace VedAstro.Library.Tests
             //-------------------TEST 2------------------------
             var lmtStdHoro = StandardHoroscope.GetLmtDateTimeOffset();
 
-            var std = Time.FromLMT("14:00 16/10/1918", GeoLocation.Bangalore);
+            //var std = Time.FromLMT("14:00 16/10/1918", GeoLocation.Bangalore);
             Assert.IsTrue(lmtStdHoro == null);
 
         }
@@ -235,16 +235,17 @@ namespace VedAstro.Library.Tests
         {
             //Miss N. Born on 3-5-1932 at 5-45 A.M.
             // (L.M.T.) Lat. 13° N. and 75° O' E. Long. Find
-            // Suryodayadi J ananakala Ghatikaha. 
+            // Suryodayadi Jananakala Ghatikaha. 
 
             //-------------------TEST 2------------------------
             var lmtStdHoro = StandardHoroscope.GetLmtDateTimeOffset();
 
-            var std = Time.FromLMT("05:45 03/05/1932", new GeoLocation("", 75, 13));
+            //var std = Time.FromLMT("05:45 03/05/1932", new GeoLocation("", 75, 13));
 
             var ishtaKala = Calculate.IshtaKaala(std);
 
             Assert.IsTrue(ishtaKala == null);
+            
 
         }
 

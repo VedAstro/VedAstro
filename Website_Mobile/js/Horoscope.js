@@ -5,7 +5,7 @@ new PageHeader("PageHeader");
 var horoscopePersonSelector = new PersonSelectorBox("PersonSelectorBox");
 var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox", "RAMAN");
 var strengthChart = new StrengthChart("StrengthChartHolder");
-var indianChart = new IndianChart("IndianChartHolder");
+var indianChart = new IndianChart("IndianChartHolder", 'South', ['RasiD1', 'NavamshaD9']);
 
 new IconButton("IconButton_Calculate_Horoscope");
 new IconButton("IconButton_Advanced_Horoscope");
@@ -52,7 +52,7 @@ async function OnClickCalculate_Horoscope() {
     //generate tables and charts
     await generateHoroscopeChat(timeUrl);
     await generateStrengthChart(timeUrl);
-    await generateIndiaChart(timeUrl);
+    await generateIndianChart(timeUrl);
     await generatePlanetDataTable(timeUrl);
     await generateHouseDataTable(timeUrl);
     await generateAshtakvargaTable(timeUrl);

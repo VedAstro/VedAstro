@@ -6519,6 +6519,8 @@ class IndianChart {
     ElementID = "";
     SelectedDivisionalCharts = [];
     SelectedChartStyle = "";
+    TimeUrl = "";
+    Ayanamsa = "";
 
     // Constructor to initialize object
     constructor(elementId, defaultChartStyle, defaultDivisionalCharts) {
@@ -6543,14 +6545,19 @@ class IndianChart {
         this.bindEventListeners();
     }
 
-    async GenerateChart(inputArguments) {
+    async GenerateChart(generateArguments) {
+
+        //save generate data for later use
+        this.TimeUrl = generateArguments.TimeUrl;
+        this.Ayanamsa = generateArguments.Ayanamsa;
+
         // Clear holder "all-charts-holder" div of previous charts
         $(`#${this.ElementID} .all-charts-holder`).empty();
 
         // Generate image element for each SelectedDivisionalCharts with its own src and inject into "all-charts-holder"
         this.SelectedDivisionalCharts.forEach((divisionalChartName) => {
             // Get src link for chart
-            let src = this.getChartUrl(divisionalChartName, this.SelectedChartStyle, inputArguments.TimeUrl, inputArguments.Ayanamsa);
+            let src = this.getChartUrl(divisionalChartName, this.SelectedChartStyle, this.TimeUrl, this.Ayanamsa);
 
             // Inject into holder div "all-charts-holder"
             $(`#${this.ElementID} .all-charts-holder`).append(`<img class="img-thumbnail" style="width: 352px;" src="${src}" />`);
@@ -6582,7 +6589,7 @@ class IndianChart {
                     </div>
                 </div>
                 <hr />
-                <div class="d-md-flex justify-content-between all-charts-holder">
+                <div class="d-flex flex-wrap gap-2 all-charts-holder">
                     
                 </div>
             </div>
@@ -6624,7 +6631,17 @@ class IndianChart {
             } else {
                 this.SelectedDivisionalCharts = this.SelectedDivisionalCharts.filter((chart) => chart !== chartName);
             }
-            // Update the GenerateChart method call here if needed
+            // Clear holder "all-charts-holder" div of previous charts
+            $(`#${this.ElementID} .all-charts-holder`).empty();
+
+            // Generate image element for each SelectedDivisionalCharts with its own src and inject into "all-charts-holder"
+            this.SelectedDivisionalCharts.forEach((divisionalChartName) => {
+                // Get src link for chart
+                let src = this.getChartUrl(divisionalChartName, this.SelectedChartStyle, this.TimeUrl, this.Ayanamsa);
+
+                // Inject into holder div "all-charts-holder"
+                $(`#${this.ElementID} .all-charts-holder`).append(`<img class="img-thumbnail" style="width: 352px;" src="${src}" />`);
+            });
         });
     }
 

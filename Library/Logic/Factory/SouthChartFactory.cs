@@ -2,6 +2,7 @@
 using ExCSS;
 using System.Collections.Generic;
 using static VedAstro.Library.Calculate;
+using System.Linq;
 
 namespace VedAstro.Library
 {
@@ -160,10 +161,10 @@ namespace VedAstro.Library
         {
             //add space between chart name and division number
             var chartTypeName = Tools.CamelPascalCaseToSpaced(ChartType.ToString());
-            
+
             //get center of chart based on width & height
-            var centerX = this.widthPx/2;
-            var centerY = this.heightPx/2;
+            var centerX = this.widthPx / 2;
+            var centerY = this.heightPx / 2;
 
             var fontSize = 35;
 
@@ -317,16 +318,21 @@ namespace VedAstro.Library
             }
 
 
-            var fontSize = 35;
+            var signs = allPlanetsSigns.GroupBy(ps => ps.Value.GetSignName()).ToDictionary(g => g.Key, g => g.Count());
 
-            //generate all planet names in list
             foreach (var planetSign in allPlanetsSigns)
             {
                 var zodiacSign = planetSign.Value;
-                var coordinates = GetPlanetPositionForSignBox(zodiacSign.GetSignName());
-                var xx = $"<text  transform=\"matrix(1 0 0 1 {coordinates.xAxis} {coordinates.yAxis})\" font-size=\"{fontSize}\" fill=\"black\">{planetSign.Key}</text>";
+                var coordinates = GetPlanetPositionForSignBox(zodiacSign.GetSignName(), signs[zodiacSign.GetSignName()]);
+                var xx = $"<text  transform=\"matrix(1 0 0 1 {coordinates.xAxis} {coordinates.yAxis})\" font-size=\"{coordinates.fontSize}\" fill=\"black\">{planetSign.Key}</text>";
                 compiled += xx;
+
+                //increment for next check
+                ChartOccupiedMarker[zodiacSign.GetSignName()]++;
             }
+
+            // reset ChartOccupiedMarker
+            foreach (var zodiac in ZodiacSign.All12ZodiacNames) { ChartOccupiedMarker[zodiac] = 0; }
 
             var finalGroup = $@"<g id=""PlanetLayer"">{compiled}</g>";
 
@@ -336,23 +342,31 @@ namespace VedAstro.Library
         /// <summary>
         /// given a house zodiac sign will return x & y where it starts
         /// </summary>
-        private static dynamic GetPlanetPositionForSignBox(ZodiacName zodiacName)
+        private static dynamic GetPlanetPositionForSignBox(ZodiacName zodiacName, int occupancyCount)
         {
-
             double xAxis = 0;
             double yAxis = 0;
 
+            // determine the font size based on the number of planets in the sign
+            int fontSize = 35;
+            int jumpCount = 43;
+            if (occupancyCount > 3)
+            {
+                fontSize = 30;
+                jumpCount = 30;
+            }
+            if (occupancyCount >= 4)
+            {
+                yAxis -= jumpCount; // move the start of the planet list higher
+                xAxis += 13; //move little to right, so not to hit house number
+            }
+
             //check if occupancy number
             var occupancy = ChartOccupiedMarker[zodiacName];
-            var jumpCount = occupancy * 45;
+            xAxis += ChartPlanetStartCoordinates[zodiacName].xAxis;
+            yAxis += ChartPlanetStartCoordinates[zodiacName].yAxis + (occupancy * jumpCount); //if any will go next row
 
-            //increment for next check
-            ChartOccupiedMarker[zodiacName]++;
-
-            xAxis = ChartPlanetStartCoordinates[zodiacName].xAxis;
-            yAxis = ChartPlanetStartCoordinates[zodiacName].yAxis + jumpCount; //if any will go next row
-
-            return new { xAxis = xAxis, yAxis = yAxis };
+            return new { xAxis = xAxis, yAxis = yAxis, fontSize = fontSize };
         }
 
 

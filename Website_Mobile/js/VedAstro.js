@@ -6692,17 +6692,19 @@ class IndianChart {
 class AllPlanetDataTable {
     // Class properties
     ElementID = "";
+    SelectedColumns = [];
 
     // Constructor to initialize the object
-    constructor(elementId) {
+    constructor(elementId, defaultColumns) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
+        this.SelectedColumns = defaultColumns;
     }
 
     // Method to initialize the main body
     async GenerateTable(generateArguments) {
 
-        //save generate data for later use
+        // Save generate data for later use
         this.TimeUrl = generateArguments.TimeUrl;
         this.Ayanamsa = generateArguments.Ayanamsa;
 
@@ -6730,17 +6732,36 @@ class AllPlanetDataTable {
     // Method to generate the HTML table
     async generateHtmlTable() {
         let tableHtml = `
+        <div>
+                <div class="hstack" style="margin-bottom: -11px;">
+                    <h3 class="align-self-end m-0">
+                        <span class="iconify me-2" data-icon="twemoji:dotted-six-pointed-star" data-width="38" data-height="38"></span>
+                        Planet Table
+                    </h3>
+                    <div style="font-family: 'Lexend Deca', serif !important;" class="btn-group dropstart ms-auto align-self-end">
+                        <button style="height: 37.1px; width: fit-content;" class="btn btn-sm dropdown-toggle btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
+                        </button>
+                        <ul class="dropdown-menu px-1" >
+                            ${this.generateCheckboxList()}
+                        </ul>
+                    </div>
+                </div>
+                <hr />
+
       <div class="table-responsive">
         <table class="table table-striped table-hover table-bordered text-nowrap w-auto">
           <thead>
             <tr>
               <th>Planet</th>
-              <th>Planet Zodiac Sign</th>
-              <th>Planet Constellation</th>
-              <th>House Planet Occupies</th>
-              <th>Houses Owned By Planet</th>
-              <th>Planet Lord Of Zodiac Sign</th>
-              <th>Planet Lord Of Constellation</th>
+    `;
+
+        // Dynamically generate table headers based on selected columns
+        this.SelectedColumns.forEach((column) => {
+            tableHtml += `<th>${column}</th>`;
+        });
+
+        tableHtml += `
             </tr>
           </thead>
           <tbody>
@@ -6753,12 +6774,14 @@ class AllPlanetDataTable {
             tableHtml += `
         <tr>
           <td>${planetName}</td>
-          <td>${planetInfo.PlanetZodiacSign.Name} ${planetInfo.PlanetZodiacSign.DegreesIn.DegreeMinuteSecond}</td>
-          <td>${planetInfo.PlanetConstellation}</td>
-          <td>${planetInfo.HousePlanetOccupies}</td>
-          <td>${planetInfo.HousesOwnedByPlanet}</td>
-          <td>${planetInfo.PlanetLordOfZodiacSign.Name}</td>
-          <td>${planetInfo.PlanetLordOfConstellation.Name}</td>
+    `;
+
+            // Dynamically generate table data based on selected columns
+            this.SelectedColumns.forEach((column) => {
+                tableHtml += `<td>${planetInfo[column]}</td>`;
+            });
+
+            tableHtml += `
         </tr>
       `;
         });
@@ -6771,7 +6794,5 @@ class AllPlanetDataTable {
 
         return tableHtml;
     }
-
-
 
 }

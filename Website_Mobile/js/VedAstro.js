@@ -6689,10 +6689,15 @@ class IndianChart {
     }
 }
 
+
 class AllPlanetDataTable {
     // Class properties
     ElementID = "";
     SelectedColumns = [];
+    PlanetsData = [];
+    availableColumns = [];
+    TimeUrl = "";
+    Ayanamsa = "";
 
     // Constructor to initialize the object
     constructor(elementId, defaultColumns) {
@@ -6714,8 +6719,14 @@ class AllPlanetDataTable {
         // Make API call to fetch planets data
         await this.fetchPlanetsData();
 
+        // Generate available columns
+        this.availableColumns = Object.keys(this.PlanetsData[0][Object.keys(this.PlanetsData[0])[0]]);
+
         // Generate the HTML and inject it into the element
         $(`#${this.ElementID}`).html(await this.generateHtmlTable());
+
+        // Bind event listeners to the checkboxes
+        this.bindEventListeners();
     }
 
     // Method to fetch planets data from API
@@ -6795,4 +6806,39 @@ class AllPlanetDataTable {
         return tableHtml;
     }
 
+    generateCheckboxList() {
+        let html = '';
+
+        this.availableColumns.forEach((column) => {
+            const isChecked = this.SelectedColumns.includes(column);
+            html += `
+            <li>
+                <div class="form-check">
+                    <input class="form-check-input column-checkbox" type="checkbox" value="${column}" id="checkbox_${column}" ${isChecked ? 'checked' : ''}>
+                    <label class="text-nowrap form-check-label" for="checkbox_${column}">
+                        ${column}
+                    </label>
+                </div>
+            </li>
+        `;
+        });
+
+        return html;
+    }
+
+    // Bind event listeners to the checkboxes
+    bindEventListeners() {
+        // Bind event listener to column checkboxes
+        $(`#${this.ElementID} .column-checkbox`).on('change', (e) => {
+            const column = e.target.value;
+            if (e.target.checked) {
+                if (!this.SelectedColumns.includes(column)) {
+                    this.SelectedColumns.push(column);
+                }
+            } else {
+                this.SelectedColumns = this.SelectedColumns.filter((col) => col !== column);
+            }
+            this.GenerateTable({ TimeUrl: this.TimeUrl, Ayanamsa: this.Ayanamsa });
+        });
+    }
 }

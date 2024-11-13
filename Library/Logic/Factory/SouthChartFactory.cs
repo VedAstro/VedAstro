@@ -324,7 +324,7 @@ namespace VedAstro.Library
             {
                 var zodiacSign = planetSign.Value;
                 var coordinates = GetPlanetPositionForSignBox(zodiacSign.GetSignName(), signs[zodiacSign.GetSignName()]);
-                var xx = $"<text  transform=\"matrix(1 0 0 1 {coordinates.xAxis} {coordinates.yAxis})\" font-size=\"{coordinates.fontSize}\" fill=\"black\">{planetSign.Key}</text>";
+                var xx = $"<text transform=\"matrix(1 0 0 1 {coordinates.xAxis} {coordinates.yAxis})\" font-size=\"{coordinates.fontSize}\" fill=\"black\">{planetSign.Key}</text>";
                 compiled += xx;
 
                 //increment for next check

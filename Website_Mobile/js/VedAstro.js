@@ -2342,6 +2342,7 @@ class PageTopNavbar {
     }
 }
 
+
 /**
  * Represents a person selector box component.
  * This class generates the HTML for a dropdown list of people and handles user interactions.
@@ -6274,10 +6275,10 @@ class TimeRangeSelector {
 
             return `TimePreset/age${startAge}to${endAge}`;
         } else
-            //if a preset is selected function returns "TimeRange/PresetValue"
+        //if a preset is selected function returns "TimeRange/PresetValue"
         {
             return `TimePreset/${selectedValue}`;
-        }       
+        }
     }
 
     storeValues(startYear, startMonth, endYear, endMonth) {
@@ -6686,4 +6687,91 @@ class IndianChart {
             });
         });
     }
+}
+
+class AllPlanetDataTable {
+    // Class properties
+    ElementID = "";
+
+    // Constructor to initialize the object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+    }
+
+    // Method to initialize the main body
+    async GenerateTable(generateArguments) {
+
+        //save generate data for later use
+        this.TimeUrl = generateArguments.TimeUrl;
+        this.Ayanamsa = generateArguments.Ayanamsa;
+
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Make API call to fetch planets data
+        await this.fetchPlanetsData();
+
+        // Generate the HTML and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlTable());
+    }
+
+    // Method to fetch planets data from API
+    async fetchPlanetsData() {
+        try {
+            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/AllPlanetData/PlanetName/All/${this.TimeUrl}Ayanamsa/${this.Ayanamsa}`); // Replace with your API endpoint
+            const data = await response.json();
+            this.PlanetsData = data.Payload.AllPlanetData;
+        } catch (error) {
+            console.error('Error fetching planets data:', error);
+        }
+    }
+
+    // Method to generate the HTML table
+    async generateHtmlTable() {
+        let tableHtml = `
+      <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered text-nowrap w-auto">
+          <thead>
+            <tr>
+              <th>Planet</th>
+              <th>Planet Zodiac Sign</th>
+              <th>Planet Constellation</th>
+              <th>House Planet Occupies</th>
+              <th>Houses Owned By Planet</th>
+              <th>Planet Lord Of Zodiac Sign</th>
+              <th>Planet Lord Of Constellation</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+
+        this.PlanetsData.forEach((planetData) => {
+            const planetName = Object.keys(planetData)[0];
+            const planetInfo = planetData[planetName];
+
+            tableHtml += `
+        <tr>
+          <td>${planetName}</td>
+          <td>${planetInfo.PlanetZodiacSign.Name} ${planetInfo.PlanetZodiacSign.DegreesIn.DegreeMinuteSecond}</td>
+          <td>${planetInfo.PlanetConstellation}</td>
+          <td>${planetInfo.HousePlanetOccupies}</td>
+          <td>${planetInfo.HousesOwnedByPlanet}</td>
+          <td>${planetInfo.PlanetLordOfZodiacSign.Name}</td>
+          <td>${planetInfo.PlanetLordOfConstellation.Name}</td>
+        </tr>
+      `;
+        });
+
+        tableHtml += `
+          </tbody>
+        </table>
+      </div>
+    `;
+
+        return tableHtml;
+    }
+
+
+
 }

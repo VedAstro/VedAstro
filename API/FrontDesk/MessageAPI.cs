@@ -10,60 +10,6 @@ namespace API
     public class MessageAPI
     {
 
-        [Function("getmessagelist")]
-        public static async Task<HttpResponseData> GetMessageList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-
-            try
-            {
-                //get message list from storage
-                var messageListXml = await Tools.GetXmlFileFromAzureStorage(APITools.MessageListFile, Tools.BlobContainerName);
-
-
-                //send task list to caller
-                return APITools.PassMessage(messageListXml.Root, incomingRequest);
-
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                APILogger.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-        }
-
-        [Function("addmessage")]
-        public static async Task<HttpResponseData> AddMessage([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-
-            try
-            {
-                //get new message data out of incoming request
-                //note: inside new person xml already contains user id
-                var newMessageXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
-
-                //add new message to main list
-                await Tools.AddXElementToXDocumentAzure(newMessageXml, APITools.MessageListFile, Tools.BlobContainerName);
-
-                //notify admin
-                await SendMessageToSlack(newMessageXml.Element("Email")?.Value ?? "Empty", newMessageXml.Element("Text")?.Value ?? "Empty");
-
-                return APITools.PassMessage(incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-        }
-
 
         private static async Task SendMessageToSlack(string fromEmail, string msgContent)
         {

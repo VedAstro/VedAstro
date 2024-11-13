@@ -6513,3 +6513,205 @@ class DayPerPixelInput {
 
 
 }
+
+class IndianChart {
+    // Class properties
+    ElementID = "";
+
+    // Constructor to initialize object
+    constructor(elementId, defaultChartStyle, defaultDivisionalCharts) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+        this.SelectedDivisionalCharts = defaultDivisionalCharts; //example 
+        this.SelectedChartStyle = defaultChartStyle;
+
+        // Call the method to initialize the main body
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+
+    }
+
+    async GenerateChart(inputArguments) {
+
+        //clear holder "all-charts-holder" div of previous charts
+
+        //generate image element for each SelectedDivisionalCharts with its own src and inject into "all-charts-holder"
+        forEach.SelectedDivisionalCharts(divisionalChartName){
+            //get src link for chart
+            let src = this.getChartUrl(divisionalChartName, this.SelectedChartStyle, inputArguments.TimeUrl, inputArguments.Ayanamsa);
+
+            //inject into holder div "all-charts-holder"
+        }
+
+    }
+
+    //given chart division name, generates API url in correct format
+    getChartUrl(chartDivisionName, chartStyle, timeUrl, ayanamsa) {
+        return `${VedAstro.ApiDomain}/Calculate/${chartStyle}IndianChart/${timeUrl}ChartType/${chartDivisionName}/Ayanamsa/${ayanamsa}`;
+    }
+
+
+    // Method to generate the HTML 
+    async generateHtmlBody() {
+        // Return the HTML 
+        return `
+        <div>
+            <h3 style="margin-bottom: -11px;">
+                <span class="iconify me-2" data-icon="twemoji:dotted-six-pointed-star" data-width="38" data-height="38"></span>
+                Charts
+            </h3>
+            <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
+              <button style="height: 37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-outline-primary btn show" type="button" data-bs-toggle="dropdown" aria-expanded="true">
+                <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
+              </button>
+              <ul style="cursor: pointer; width: 100%; position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(-0.754717px, 39.2453px, 0px);" class="dropdown-menu show" data-popper-placement="bottom-end">
+
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="RasiD1" id="checkbox_RasiD1">
+                    <label class="form-check-label" for="checkbox_RasiD1">
+                      Rasi D1
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="HoraD2" id="checkbox_HoraD2">
+                    <label class="form-check-label" for="checkbox_HoraD2">
+                      Hora D2
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="DrekkanaD3" id="checkbox_DrekkanaD3">
+                    <label class="form-check-label" for="checkbox_DrekkanaD3">
+                      Drekkana D3
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="ChaturthamshaD4" id="checkbox_ChaturthamshaD4">
+                    <label class="form-check-label" for="checkbox_ChaturthamshaD4">
+                      Chaturthamsha D4
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="SaptamshaD7" id="checkbox_SaptamshaD7">
+                    <label class="form-check-label" for="checkbox_SaptamshaD7">
+                      Saptamsha D7
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="NavamshaD9" id="checkbox_NavamshaD9">
+                    <label class="form-check-label" for="checkbox_NavamshaD9">
+                      Navamsha D9
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="DashamamshaD10" id="checkbox_DashamamshaD10">
+                    <label class="form-check-label" for="checkbox_DashamamshaD10">
+                      Dashamamsha D10
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="DwadashamshaD12" id="checkbox_DwadashamshaD12">
+                    <label class="form-check-label" for="checkbox_DwadashamshaD12">
+                      Dwadashamsha D12
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="ShodashamshaD16" id="checkbox_ShodashamshaD16">
+                    <label class="form-check-label" for="checkbox_ShodashamshaD16">
+                      Shodashamsha D16
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="VimshamshaD20" id="checkbox_VimshamshaD20">
+                    <label class="form-check-label" for="checkbox_VimshamshaD20">
+                      Vimshamsha D20
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="ChaturvimshamshaD24" id="checkbox_ChaturvimshamshaD24">
+                    <label class="form-check-label" for="checkbox_ChaturvimshamshaD24">
+                      Chaturvimshamsha D24
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="BhamshaD27" id="checkbox_BhamshaD27">
+                    <label class="form-check-label" for="checkbox_BhamshaD27">
+                      Bhamsha D27
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="TrimshamshaD30" id="checkbox_TrimshamshaD30">
+                    <label class="form-check-label" for="checkbox_TrimshamshaD30">
+                      Trimshamsha D30
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="KhavedamshaD40" id="checkbox_KhavedamshaD40">
+                    <label class="form-check-label" for="checkbox_KhavedamshaD40">
+                      Khavedamsha D40
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="AkshavedamshaD45" id="checkbox_AkshavedamshaD45">
+                    <label class="form-check-label" for="checkbox_AkshavedamshaD45">
+                      Akshavedamsha D45
+                    </label>
+                  </div>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="ShashtyamshaD60" id="checkbox_ShashtyamshaD60">
+                    <label class="form-check-label" for="checkbox_ShashtyamshaD60">
+                      Shashtyamsha D60
+                    </label>
+                  </div>
+                </li>
+
+              </ul>
+            </div>
+            <hr />
+            <div class="all-charts-holder">
+                
+            </div>
+        </div>
+
+    `;
+    }
+
+}

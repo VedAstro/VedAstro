@@ -5,6 +5,8 @@ new PageHeader("PageHeader");
 var horoscopePersonSelector = new PersonSelectorBox("PersonSelectorBox");
 var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox", "RAMAN");
 var strengthChart = new StrengthChart("StrengthChartHolder");
+var indianChart = new IndianChart("IndianChartHolder");
+
 new IconButton("IconButton_Calculate_Horoscope");
 new IconButton("IconButton_Advanced_Horoscope");
 
@@ -48,11 +50,12 @@ async function OnClickCalculate_Horoscope() {
     var timeUrl = selectedPerson.BirthTime.ToUrl();
 
     //generate tables and charts
-    await initHoroscopeChart(timeUrl);
-    await initStrengthChart(timeUrl);
-    await initPlanetDataTable(timeUrl);
-    await initHouseDataTable(timeUrl);
-    await initAshtakvargaTable(timeUrl);
+    await generateHoroscopeChat(timeUrl);
+    await generateStrengthChart(timeUrl);
+    await generateIndiaChart(timeUrl);
+    await generatePlanetDataTable(timeUrl);
+    await generateHouseDataTable(timeUrl);
+    await generateAshtakvargaTable(timeUrl);
 
     //play sound for better UX
     playBakingDoneSound();
@@ -61,7 +64,7 @@ async function OnClickCalculate_Horoscope() {
     Swal.close();
 }
 
-async function initHoroscopeChart(birthTimeUrl) {
+async function generateHoroscopeChat(birthTimeUrl) {
 
     var settingsHoroscopeChat = {
         ElementID: "HoroscopeChat",
@@ -71,10 +74,10 @@ async function initHoroscopeChart(birthTimeUrl) {
         //Ayanamsa: ayanamsaSelector.SelectedAyanamsa //NOTE: hard set to Raman in Server since all predictions are from Raman 
     };
 
-    //note: on init, chat instance is loaded into window.vedastro.horoscopechat
+    //note: on generate, chat instance is loaded into window.vedastro.horoscopechat
     new HoroscopeChat(settingsHoroscopeChat);
 }
-async function initStrengthChart(birthTimeUrl) {
+async function generateStrengthChart(birthTimeUrl) {
 
     //data used to generate table
     var inputArguments = {
@@ -85,7 +88,19 @@ async function initStrengthChart(birthTimeUrl) {
     strengthChart.GenerateChart(inputArguments);
 }
 
-async function initPlanetDataTable(birthTimeUrl) {
+async function generateIndianChart(birthTimeUrl) {
+
+    //data used to generate chart
+    var inputArguments = {
+        TimeUrl: birthTimeUrl,
+        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
+    };
+
+    indianChart.GenerateChart(inputArguments);
+}
+
+
+async function generatePlanetDataTable(birthTimeUrl) {
 
     //----------------------PLANET DATA----------------------------
     var planetColumns = [
@@ -100,7 +115,7 @@ async function initPlanetDataTable(birthTimeUrl) {
     ];
 
 
-    //initialize astro table
+    //generateialize astro table
     var settings = {
         ElementID: "PlanetDataTable",
         KeyColumn: "Planet",
@@ -127,7 +142,7 @@ async function initPlanetDataTable(birthTimeUrl) {
 
 }
 
-async function initHouseDataTable(birthTimeUrl) {
+async function generateHouseDataTable(birthTimeUrl) {
     //----------------------HOUSE DATA----------------------------
     var houseColumns = [
         { Api: "HouseZodiacSign", Enabled: true, Name: "Sign" },
@@ -168,7 +183,7 @@ async function initHouseDataTable(birthTimeUrl) {
 
 }
 
-async function initAshtakvargaTable(birthTimeUrl) {
+async function generateAshtakvargaTable(birthTimeUrl) {
 
     //initialize astro table
     var settings = {

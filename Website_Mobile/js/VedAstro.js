@@ -6521,6 +6521,11 @@ class IndianChart {
     SelectedChartStyle = "";
     TimeUrl = "";
     Ayanamsa = "";
+    AllCharts = [
+        'RasiD1', 'HoraD2', 'DrekkanaD3', 'ChaturthamshaD4', 'SaptamshaD7', 'NavamshaD9', 'DashamamshaD10',
+        'DwadashamshaD12', 'ShodashamshaD16', 'VimshamshaD20', 'ChaturvimshamshaD24', 'BhamshaD27',
+        'TrimshamshaD30', 'KhavedamshaD40', 'AkshavedamshaD45', 'ShashtyamshaD60'
+    ];
 
     // Constructor to initialize object
     constructor(elementId, defaultChartStyle, defaultDivisionalCharts) {
@@ -6555,12 +6560,14 @@ class IndianChart {
         $(`#${this.ElementID} .all-charts-holder`).empty();
 
         // Generate image element for each SelectedDivisionalCharts with its own src and inject into "all-charts-holder"
-        this.SelectedDivisionalCharts.forEach((divisionalChartName) => {
-            // Get src link for chart
-            let src = this.getChartUrl(divisionalChartName, this.SelectedChartStyle, this.TimeUrl, this.Ayanamsa);
+        this.AllCharts.forEach((divisionalChartName) => {
+            if (this.SelectedDivisionalCharts.includes(divisionalChartName)) {
+                // Get src link for chart
+                let src = this.getChartUrl(divisionalChartName, this.SelectedChartStyle, this.TimeUrl, this.Ayanamsa);
 
-            // Inject into holder div "all-charts-holder"
-            $(`#${this.ElementID} .all-charts-holder`).append(`<img class="img-thumbnail" style="width: 352px;" src="${src}" />`);
+                // Inject into holder div "all-charts-holder"
+                $(`#${this.ElementID} .all-charts-holder`).append(`<img class="img-thumbnail" style="width: 352px;" src="${src}" />`);
+            }
         });
     }
 
@@ -6598,13 +6605,8 @@ class IndianChart {
 
     generateCheckboxList() {
         let html = '';
-        const charts = [
-            'RasiD1', 'HoraD2', 'DrekkanaD3', 'ChaturthamshaD4', 'SaptamshaD7', 'NavamshaD9', 'DashamamshaD10',
-            'DwadashamshaD12', 'ShodashamshaD16', 'VimshamshaD20', 'ChaturvimshamshaD24', 'BhamshaD27',
-            'TrimshamshaD30', 'KhavedamshaD40', 'AkshavedamshaD45', 'ShashtyamshaD60'
-        ];
 
-        charts.forEach((chart) => {
+        this.AllCharts.forEach((chart) => {
             const isChecked = this.SelectedDivisionalCharts.includes(chart);
             html += `
             <li>
@@ -6635,14 +6637,15 @@ class IndianChart {
             $(`#${this.ElementID} .all-charts-holder`).empty();
 
             // Generate image element for each SelectedDivisionalCharts with its own src and inject into "all-charts-holder"
-            this.SelectedDivisionalCharts.forEach((divisionalChartName) => {
-                // Get src link for chart
-                let src = this.getChartUrl(divisionalChartName, this.SelectedChartStyle, this.TimeUrl, this.Ayanamsa);
+            this.AllCharts.forEach((divisionalChartName) => {
+                if (this.SelectedDivisionalCharts.includes(divisionalChartName)) {
+                    // Get src link for chart
+                    let src = this.getChartUrl(divisionalChartName, this.SelectedChartStyle, this.TimeUrl, this.Ayanamsa);
 
-                // Inject into holder div "all-charts-holder"
-                $(`#${this.ElementID} .all-charts-holder`).append(`<img class="img-thumbnail" style="width: 352px;" src="${src}" />`);
+                    // Inject into holder div "all-charts-holder"
+                    $(`#${this.ElementID} .all-charts-holder`).append(`<img class="img-thumbnail" style="width: 352px;" src="${src}" />`);
+                }
             });
         });
     }
-
 }

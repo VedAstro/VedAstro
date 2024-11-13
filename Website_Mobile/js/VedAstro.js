@@ -2263,8 +2263,9 @@ class PageTopNavbar {
         // Generate the HTML for the more links
         let moreLinksHtml = "";
         this.MoreLinks.forEach((link) => {
+            let targetAttr = link.target ? `target="${link.target}"` : '';
             moreLinksHtml += `
-        <li><a class="dropdown-item" href="${link.href}">${link.text}</a></li>
+        <li><a class="dropdown-item" href="${link.href}" ${targetAttr}>${link.text}</a></li>
       `;
         });
 

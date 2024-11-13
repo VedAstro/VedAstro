@@ -6546,7 +6546,7 @@ class IndianChart {
         // Generate the HTML and inject it into the element
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
 
-        // Bind event listeners to the checkboxes
+        // Bind event listeners to the checkboxes and radio buttons
         this.bindEventListeners();
     }
 
@@ -6591,6 +6591,22 @@ class IndianChart {
                             <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
                         </button>
                         <ul class="dropdown-menu px-1" >
+                            <li>
+                                <div class="form-check">
+                                  <input class="form-check-input chartStyleRadio" type="radio" name="chartStyleRadio" id="chartStyle_South" value="South" ${this.SelectedChartStyle === 'South' ? 'checked' : ''}>
+                                  <label class="form-check-label" for="chartStyle_South">
+                                    South Indian
+                                  </label>
+                                </div>
+                                <div class="form-check">
+                                  <input class="form-check-input chartStyleRadio" type="radio" name="chartStyleRadio" id="chartStyle_North" value="North" ${this.SelectedChartStyle === 'North' ? 'checked' : ''}>
+                                  <label class="form-check-label" for="chartStyle_North">
+                                    North Indian
+                                  </label>
+                                </div>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+
                             ${this.generateCheckboxList()}
                         </ul>
                     </div>
@@ -6623,7 +6639,10 @@ class IndianChart {
         return html;
     }
 
+    //event handlers to update chart when style or division settings is changed
     bindEventListeners() {
+
+        //changes in division selection
         $(`#${this.ElementID} .divisional-chart-checkbox`).on('change', (e) => {
             const chartName = e.target.value;
             if (e.target.checked) {
@@ -6633,6 +6652,24 @@ class IndianChart {
             } else {
                 this.SelectedDivisionalCharts = this.SelectedDivisionalCharts.filter((chart) => chart !== chartName);
             }
+            // Clear holder "all-charts-holder" div of previous charts
+            $(`#${this.ElementID} .all-charts-holder`).empty();
+
+            // Generate image element for each SelectedDivisionalCharts with its own src and inject into "all-charts-holder"
+            this.AllCharts.forEach((divisionalChartName) => {
+                if (this.SelectedDivisionalCharts.includes(divisionalChartName)) {
+                    // Get src link for chart
+                    let src = this.getChartUrl(divisionalChartName, this.SelectedChartStyle, this.TimeUrl, this.Ayanamsa);
+
+                    // Inject into holder div "all-charts-holder"
+                    $(`#${this.ElementID} .all-charts-holder`).append(`<img class="img-thumbnail" style="width: 352px;" src="${src}" />`);
+                }
+            });
+        });
+
+        //change in style
+        $(`#${this.ElementID} .chartStyleRadio`).on('change', (e) => {
+            this.SelectedChartStyle = e.target.value;
             // Clear holder "all-charts-holder" div of previous charts
             $(`#${this.ElementID} .all-charts-holder`).empty();
 

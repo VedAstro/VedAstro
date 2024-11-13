@@ -6553,7 +6553,7 @@ class IndianChart {
             let src = this.getChartUrl(divisionalChartName, this.SelectedChartStyle, inputArguments.TimeUrl, inputArguments.Ayanamsa);
 
             // Inject into holder div "all-charts-holder"
-            $(`#${this.ElementID} .all-charts-holder`).append(`<img style="width: 352px;" src="${src}" />`);
+            $(`#${this.ElementID} .all-charts-holder`).append(`<img class="img-thumbnail" style="width: 352px;" src="${src}" />`);
         });
     }
 
@@ -6572,17 +6572,17 @@ class IndianChart {
                         <span class="iconify me-2" data-icon="twemoji:dotted-six-pointed-star" data-width="38" data-height="38"></span>
                         Charts
                     </h3>
-                    <div style="font-family: 'Lexend Deca', serif !important;" class="ms-auto dropdown align-self-end">
+                    <div style="font-family: 'Lexend Deca', serif !important;" class="btn-group dropstart ms-auto align-self-end">
                         <button style="height: 37.1px; width: fit-content;" class="btn btn-sm dropdown-toggle btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
                         </button>
-                        <ul style="cursor: pointer; width: 100%; position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(-0.754717px, 39.2453px, 0px);" class="dropdown-menu" data-popper-placement="bottom-end">
+                        <ul class="dropdown-menu px-1" >
                             ${this.generateCheckboxList()}
                         </ul>
                     </div>
                 </div>
                 <hr />
-                <div class="all-charts-holder">
+                <div class="d-md-flex justify-content-between all-charts-holder">
                     
                 </div>
             </div>
@@ -6598,16 +6598,17 @@ class IndianChart {
         ];
 
         charts.forEach((chart) => {
+            const isChecked = this.SelectedDivisionalCharts.includes(chart);
             html += `
-                <li>
-                    <div class="form-check">
-                        <input class="form-check-input divisional-chart-checkbox" type="checkbox" value="${chart}" id="checkbox_${chart}">
-                        <label class="form-check-label" for="checkbox_${chart}">
-                            ${chart.replace('D', ' D')}
-                        </label>
-                    </div>
-                </li>
-            `;
+            <li>
+                <div class="form-check">
+                    <input class="form-check-input divisional-chart-checkbox" type="checkbox" value="${chart}" id="checkbox_${chart}" ${isChecked ? 'checked' : ''}>
+                    <label class="text-nowrap form-check-label" for="checkbox_${chart}">
+                        ${chart.replace('D', ' D')}
+                    </label>
+                </div>
+            </li>
+        `;
         });
 
         return html;
@@ -6623,6 +6624,8 @@ class IndianChart {
             } else {
                 this.SelectedDivisionalCharts = this.SelectedDivisionalCharts.filter((chart) => chart !== chartName);
             }
+            // Update the GenerateChart method call here if needed
         });
     }
+
 }

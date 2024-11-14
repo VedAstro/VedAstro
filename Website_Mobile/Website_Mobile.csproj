@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="ContactUs.html" />
     <Content Include="About.html" />
     <Content Include="coming-soon.html" />
     <Content Include="AddPerson.html" />
@@ -77,6 +78,7 @@
     <Content Remove="js\About.js" />
     <Content Remove="js\AddPerson.js" />
     <Content Remove="js\BirthTimeFinder.js" />
+    <Content Remove="js\ContactUs.js" />
     <Content Remove="js\Home.js" />
     <Content Remove="js\Horoscope.js" />
     <Content Remove="js\Login.js" />
@@ -89,6 +91,7 @@
     <None Remove="AddPerson.html" />
     <None Remove="BirthTimeFinder.html" />
     <None Remove="coming-soon.html" />
+    <None Remove="ContactUs.html" />
     <None Remove="data\APIHomePage.html" />
     <None Remove="data\ConsoleGreeting.txt" />
     <None Remove="data\EasterEgg.txt" />
@@ -132,6 +135,7 @@
     <PublishFile Remove="app.js" />
     <PublishFile Remove="BirthTimeFinder.html" />
     <PublishFile Remove="coming-soon.html" />
+    <PublishFile Remove="ContactUs.html" />
     <PublishFile Remove="data\APIHomePage.html" />
     <PublishFile Remove="data\ConsoleGreeting.txt" />
     <PublishFile Remove="data\EasterEgg.txt" />
@@ -158,6 +162,7 @@
     <PublishFile Remove="js\About.js" />
     <PublishFile Remove="js\AddPerson.js" />
     <PublishFile Remove="js\BirthTimeFinder.js" />
+    <PublishFile Remove="js\ContactUs.js" />
     <PublishFile Remove="js\GoodTimeFinder.js" />
     <PublishFile Remove="js\Home.js" />
     <PublishFile Remove="js\Horoscope.js" />

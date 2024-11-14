@@ -6707,7 +6707,7 @@ class AllPlanetDataTable {
     }
 
     // Method to initialize the main body
-    async GenerateTable(generateArguments) {
+    async GenerateTable(generateArguments, useCache = false) {
 
         // Save generate data for later use
         this.TimeUrl = generateArguments.TimeUrl;
@@ -6716,8 +6716,10 @@ class AllPlanetDataTable {
         // Empty the content of the element with the given ID
         $(`#${this.ElementID}`).empty();
 
-        // Make API call to fetch planets data
-        await this.fetchPlanetsData();
+        // Make API call to fetch planets data, only if when specified
+        if (!useCache) {
+            await this.fetchPlanetsData();
+        }
 
         // Generate available columns
         this.availableColumns = Object.keys(this.PlanetsData[0][Object.keys(this.PlanetsData[0])[0]]);
@@ -6838,7 +6840,8 @@ class AllPlanetDataTable {
             } else {
                 this.SelectedColumns = this.SelectedColumns.filter((col) => col !== column);
             }
-            this.GenerateTable({ TimeUrl: this.TimeUrl, Ayanamsa: this.Ayanamsa });
+            //generate table again but with previoulsy gotten data, since DOB has not changed
+            this.GenerateTable({ TimeUrl: this.TimeUrl, Ayanamsa: this.Ayanamsa }, true);
         });
     }
 }

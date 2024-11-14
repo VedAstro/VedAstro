@@ -7,6 +7,9 @@ var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox", "RAMAN");
 var strengthChart = new StrengthChart("StrengthChartHolder");
 var indianChart = new IndianChart("IndianChartHolder", 'South', ['RasiD1', 'NavamshaD9']);
 
+var allPlanetDataTable = new AllPlanetDataTable("AllPlanetDataTableHolder", ['PlanetZodiacSign', 'PlanetConstellation', 'HousePlanetOccupies', 'HousesOwnedByPlanet', 'PlanetLordOfZodiacSign', 'PlanetLordOfConstellation', ]);
+
+
 new IconButton("IconButton_Calculate_Horoscope");
 new IconButton("IconButton_Advanced_Horoscope");
 
@@ -53,8 +56,10 @@ async function OnClickCalculate_Horoscope() {
     await generateHoroscopeChat(timeUrl);
     await generateStrengthChart(timeUrl);
     await generateIndianChart(timeUrl);
-    await generatePlanetDataTable(timeUrl);
-    await generateHouseDataTable(timeUrl);
+    await generateAllPlanetDataTable(timeUrl);
+
+    //await generatePlanetDataTable(timeUrl);
+    //await generateHouseDataTable(timeUrl);
     await generateAshtakvargaTable(timeUrl);
 
     //play sound for better UX
@@ -97,6 +102,17 @@ async function generateIndianChart(birthTimeUrl) {
     };
 
     indianChart.GenerateChart(inputArguments);
+}
+
+async function generateAllPlanetDataTable(birthTimeUrl) {
+
+    //data used to generate chart
+    var inputArguments = {
+        TimeUrl: birthTimeUrl,
+        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
+    };
+
+    allPlanetDataTable.GenerateTable(inputArguments);
 }
 
 

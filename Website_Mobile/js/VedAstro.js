@@ -6790,8 +6790,27 @@ class AllPlanetDataTable {
     `;
 
             // Dynamically generate table data based on selected columns
+            //checks if the value is an object with a `Name` and `DegreesIn` property, and if it is, 
+            //it concatenates these values into a string with the desired format.
+            //If the object has a different structure, it falls back to stringifying the object.
             this.SelectedColumns.forEach((column) => {
-                tableHtml += `<td>${planetInfo[column]}</td>`;
+                let value = planetInfo[column];
+                if (typeof value === 'object' && value !== null) {
+                    if (value.Name && value.DegreesIn) {
+                        value = `${value.Name} ${value.DegreesIn.DegreeMinuteSecond}`;
+                    }
+                    else if (value.DegreeMinuteSecond) {
+                        value = `${value.DegreeMinuteSecond}`;
+                    }
+                    //name only handle planet name
+                    else if (value.Name) {
+                        value = `${value.Name}`;
+                    }
+                    else {
+                        value = JSON.stringify(value);
+                    }
+                }
+                tableHtml += `<td>${value}</td>`;
             });
 
             tableHtml += `

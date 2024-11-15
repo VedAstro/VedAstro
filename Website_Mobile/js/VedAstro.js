@@ -6215,7 +6215,7 @@ class TimeRangeSelector {
 
     //check if the dates are valid & filled, else shows user msg, and returns false
     isValid() {
-       
+
         const startYear = parseInt($(`#${this.ElementID} .start-year-input`).val());
         const startMonth = parseInt($(`#${this.ElementID} .start-month-input`).val());
         const endYear = parseInt($(`#${this.ElementID} .end-year-input`).val());
@@ -6292,7 +6292,7 @@ class TimeRangeSelector {
         }
 
         //checks has passed
-        return true; 
+        return true;
     }
 
     getSelectedTimeRangeAsURLString() {
@@ -6942,6 +6942,7 @@ class AllAstroDataTable {
             }
             // Save the updated selection to localStorage
             localStorage.setItem(`SelectedColumns_${this.ElementID}`, JSON.stringify(this.SelectedColumns));
+
             //generate table again but with previoulsy gotten data, since DOB has not changed
             this.GenerateTable({ TimeUrl: this.TimeUrl, Ayanamsa: this.Ayanamsa }, true);
         });
@@ -6998,6 +6999,7 @@ class EvensChartViewer {
     // Class properties
     ElementID = "";
     CurrentZoomLevel = 100; //defaults to 100 on start
+    EventsChartInstance = null;
 
     // Constructor to initialize the object
     constructor(elementId) {
@@ -7049,8 +7051,24 @@ class EvensChartViewer {
 
             // Zoom in/out 4 times
             const zoomMethod = _isMaximized ? this.OnClickZoomIn(4) : this.OnClickZoomOut(4);
-           
+
         });
+
+        // un/highlight check boxes based on houses or planets
+        $(`#${this.ElementID} .form-check-input`).on('change', (e) => {
+            const eventName = e.target.value;
+
+            //highlight
+            if (e.target.checked) {
+                this.EventsChartInstance.highlightByEventName(eventName);
+            }
+            //unhighlight
+            else {
+                this.EventsChartInstance.unhighlightByEventName(eventName);
+            }
+            
+        });
+
 
 
     }
@@ -7095,7 +7113,7 @@ class EvensChartViewer {
         let chartId = svgElement.id; //NOTE: unique ID of the chart made by server
 
         //brings to life & makes available in window.EventsChartList
-        new EventsChart(chartId);
+        this.EventsChartInstance = new EventsChart(chartId);
 
         //note : this makes chart appear normal in dark/normal mode
         var value = window.DarkModeLibInstance.isActivated() ? "difference" : "normal";
@@ -7149,67 +7167,67 @@ class EvensChartViewer {
                         <ul style="cursor: pointer; width: 254.9px;" class="dropdown-menu ">
                             <div class="d-flex flex-wrap gap-1">
                                 <div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 1">
-                                    <label class="form-check-label" for="House 1">House 1</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 1" id="House-1">
+                                    <label class="form-check-label" for="House-1">House 1</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 2">
-                                    <label class="form-check-label" for="House 2">House 2</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 2" id="House-2">
+                                    <label class="form-check-label" for="House-2">House 2</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 3">
-                                    <label class="form-check-label" for="House 3">House 3</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 3" id="House-3">
+                                    <label class="form-check-label" for="House-3">House 3</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 4">
-                                    <label class="form-check-label" for="House 4">House 4</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 4" id="House-4">
+                                    <label class="form-check-label" for="House-4">House 4</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 5">
-                                    <label class="form-check-label" for="House 5">House 5</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 5" id="House-5">
+                                    <label class="form-check-label" for="House-5">House 5</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 6">
-                                    <label class="form-check-label" for="House 6">House 6</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 6" id="House-6">
+                                    <label class="form-check-label" for="House-6">House 6</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 7">
-                                    <label class="form-check-label" for="House 7">House 7</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 7" id="House-7">
+                                    <label class="form-check-label" for="House-7">House 7</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 8">
-                                    <label class="form-check-label" for="House 8">House 8</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 8" id="House-8">
+                                    <label class="form-check-label" for="House-8">House 8</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 9">
-                                    <label class="form-check-label" for="House 9">House 9</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 9" id="House-9">
+                                    <label class="form-check-label" for="House-9">House 9</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 10">
-                                    <label class="form-check-label" for="House 10">House 10</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 10" id="House-10">
+                                    <label class="form-check-label" for="House-10">House 10</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 11">
-                                    <label class="form-check-label" for="House 11">House 11</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 11" id="House-11">
+                                    <label class="form-check-label" for="House-11">House 11</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 12">
-                                    <label class="form-check-label" for="House 12">House 12</label>
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="House 12" id="House-12">
+                                    <label class="form-check-label" for="House-12">House 12</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Sun">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="Sun" id="Sun">
                                     <label class="form-check-label" for="Sun">Sun</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Moon">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="Moon" id="Moon">
                                     <label class="form-check-label" for="Moon">Moon</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Mars">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="Mars" id="Mars">
                                     <label class="form-check-label" for="Mars">Mars</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Mercury">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="Mercury" id="Mercury">
                                     <label class="form-check-label" for="Mercury">Mercury</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Jupiter">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="Jupiter" id="Jupiter">
                                     <label class="form-check-label" for="Jupiter">Jupiter</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Venus">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="Venus" id="Venus">
                                     <label class="form-check-label" for="Venus">Venus</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Saturn">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="Saturn" id="Saturn">
                                     <label class="form-check-label" for="Saturn">Saturn</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Rahu">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="Rahu" id="Rahu">
                                     <label class="form-check-label" for="Rahu">Rahu</label>
                                 </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Ketu">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" value="Ketu" id="Ketu">
                                     <label class="form-check-label" for="Ketu">Ketu</label>
                                 </div>
                             </div>

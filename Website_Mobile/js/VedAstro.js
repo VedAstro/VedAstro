@@ -6085,7 +6085,7 @@ class TimeRangeSelector {
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
 
         // Initialize stored values
-        this.initStoredValues();
+        this.initStoredYearValues();
         this.initStoredAgeValues();
 
         // Set default preset if provided
@@ -6113,7 +6113,8 @@ class TimeRangeSelector {
         this.addInputEventListeners();
     }
 
-    initStoredValues() {
+    //loads previously saved years if any else use deafults
+    initStoredYearValues() {
         const storedValues = localStorage.getItem(this.storageKey);
         if (storedValues) {
             const values = JSON.parse(storedValues);
@@ -6129,12 +6130,18 @@ class TimeRangeSelector {
         }
     }
 
+    //loads previously saved custom ages if any else use deafults
     initStoredAgeValues() {
         const storedValues = localStorage.getItem(this.storageKey + '_age');
         if (storedValues) {
             const values = JSON.parse(storedValues);
             $(`#${this.ElementID} .start-age-input`).val(values.startAge);
             $(`#${this.ElementID} .end-age-input`).val(values.endAge);
+        }
+        // Set age 10 to 45 as default
+        else {
+            $(`#${this.ElementID} .start-age-input`).val(10);
+            $(`#${this.ElementID} .end-age-input`).val(45);
         }
     }
 
@@ -6307,7 +6314,7 @@ class TimeRangeSelector {
             const endMonth = $(`#${this.ElementID} .end-month-input`).val();
 
             // Store values in local storage
-            this.storeValues(startYear, startMonth, endYear, endMonth);
+            this.storeYearValues(startYear, startMonth, endYear, endMonth);
 
             //get user's current timezone UTC offset (system time)
             let offsetString = this.getSystemOffset();
@@ -6330,7 +6337,10 @@ class TimeRangeSelector {
         }
     }
 
-    storeValues(startYear, startMonth, endYear, endMonth) {
+    storeYearValues(startYear, startMonth, endYear, endMonth) {
+
+        if (!this.isValid()) { return; } //only continue if valid 
+
         const values = {
             startYear,
             startMonth,
@@ -6338,6 +6348,17 @@ class TimeRangeSelector {
             endMonth
         };
         localStorage.setItem(this.storageKey, JSON.stringify(values));
+    }
+
+    storeAgeValues(startAge, endAge) {
+
+        if (!this.isValid()) { return; } //only continue if valid 
+
+        const values = {
+            startAge,
+            endAge
+        };
+        localStorage.setItem(this.storageKey + '_age', JSON.stringify(values));
     }
 
     //offset nicely formatted exp:"+08:00"
@@ -6479,7 +6500,7 @@ class TimeRangeSelector {
             if ($(event.target).hasClass('start-age-input') || $(event.target).hasClass('end-age-input')) {
                 this.storeAgeValues(startAge, endAge);
             } else {
-                this.storeValues(startYear, startMonth, endYear, endMonth);
+                this.storeYearValues(startYear, startMonth, endYear, endMonth);
             }
 
             // let days per pixel component know that time range has changed
@@ -6488,15 +6509,6 @@ class TimeRangeSelector {
             });
         });
     }
-
-    storeAgeValues(startAge, endAge) {
-        const values = {
-            startAge,
-            endAge
-        };
-        localStorage.setItem(this.storageKey + '_age', JSON.stringify(values));
-    }
-
 
 }
 
@@ -7052,6 +7064,16 @@ class EvensChartViewer {
             // Zoom in/out 4 times
             const zoomMethod = _isMaximized ? this.OnClickZoomIn(4) : this.OnClickZoomOut(4);
 
+        });
+
+        // zoom in button
+        $(`#${this.ElementID} .zoom-in-button`).on('click', (e) => {
+            this.OnClickZoomIn();
+        });
+
+        // zoom out button
+        $(`#${this.ElementID} .zoom-out-button`).on('click', (e) => {
+            this.OnClickZoomOut();
         });
 
         // un/highlight check boxes based on houses or planets

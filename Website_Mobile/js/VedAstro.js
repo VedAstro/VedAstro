@@ -6673,11 +6673,11 @@ class IndianChart {
     }
 }
 
-class AllPlanetDataTable {
+class AllAstroDataTable {
     // Class properties
     ElementID = "";
     SelectedColumns = [];
-    PlanetsData = [];
+    ColumnsData = [];
     availableColumns = [];
     TimeUrl = "";
     Ayanamsa = "";
@@ -6685,9 +6685,11 @@ class AllPlanetDataTable {
     defaultColumns = [];
 
     // Constructor to initialize the object
-    constructor(elementId, iconName, defaultColumns) {
+    constructor(elementId, keyColumn, iconName, defaultColumns) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
+        this.KeyColumn = keyColumn; //can Planet or House
+
         this.IconName = iconName;
         this.defaultColumns = defaultColumns; // Store the default columns for when reset
 
@@ -6712,11 +6714,11 @@ class AllPlanetDataTable {
 
         // Make API call to fetch planets data, only if when specified
         if (!useCache) {
-            await this.fetchPlanetsData();
+            await this.fetchColumnsData();
         }
 
         // Generate available columns
-        this.availableColumns = Object.keys(this.PlanetsData[0][Object.keys(this.PlanetsData[0])[0]]);
+        this.availableColumns = Object.keys(this.ColumnsData[0][Object.keys(this.ColumnsData[0])[0]]);
 
         // Generate the HTML and inject it into the element
         $(`#${this.ElementID}`).html(await this.generateHtmlTable());
@@ -6726,11 +6728,12 @@ class AllPlanetDataTable {
     }
 
     // Method to fetch planets data from API
-    async fetchPlanetsData() {
+    async fetchColumnsData() {
         try {
-            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/AllPlanetData/PlanetName/All/${this.TimeUrl}Ayanamsa/${this.Ayanamsa}`); // Replace with your API endpoint
+            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/All${this.KeyColumn}Data/${this.KeyColumn}Name/All/${this.TimeUrl}Ayanamsa/${this.Ayanamsa}`); // Replace with your API endpoint
             const data = await response.json();
-            this.PlanetsData = data.Payload.AllPlanetData;
+            this.ColumnsData = Object.values(data.Payload)[0];
+
         } catch (error) {
             console.error('Error fetching planets data:', error);
         }
@@ -6784,13 +6787,13 @@ class AllPlanetDataTable {
           <tbody>
     `;
 
-        this.PlanetsData.forEach((planetData) => {
-            const planetName = Object.keys(planetData)[0];
-            const planetInfo = planetData[planetName];
+        this.ColumnsData.forEach((columnData) => {
+            const columnName = Object.keys(columnData)[0];
+            const planetInfo = columnData[columnName];
 
             tableHtml += `
         <tr>
-          <td>${planetName}</td>
+          <td>${columnName}</td>
     `;
 
             // Dynamically generate table data based on selected columns

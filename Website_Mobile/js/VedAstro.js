@@ -6739,8 +6739,13 @@ class AllPlanetDataTable {
                         <button style="height: 37.1px; width: fit-content;" class="btn btn-sm dropdown-toggle btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
                         </button>
-                        <ul class="dropdown-menu px-1" >
-                            <input type="text" class="columnListSearchInput form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                        <ul class="dropdown-menu ps-2 pe-1" >
+                            <div class="hstack gap-1">
+                                <input type="text" class="columnListSearchInput form-control ps-2" placeholder="Search...">
+                                <button type="button" class="btn btn-primary">
+                                    <span class="iconify" data-icon="ix:hard-reset" data-width="20" data-height="20"></span>
+                                </button>
+                            </div>
                             <li><hr class="dropdown-divider"></li>
                             <div class="column-list-container">
                                 ${this.generateCheckboxList()}
@@ -6816,11 +6821,12 @@ class AllPlanetDataTable {
     }
 
     generateCheckboxList() {
-        let html = '';
+        let checkedHtml = '';
+        let uncheckedHtml = '';
 
         this.availableColumns.forEach((column) => {
             const isChecked = this.SelectedColumns.includes(column);
-            html += `
+            const checkboxHtml = `
             <li>
                 <div class="form-check">
                     <input class="form-check-input column-checkbox" type="checkbox" value="${column}" id="checkbox_${column}" ${isChecked ? 'checked' : ''}>
@@ -6830,9 +6836,15 @@ class AllPlanetDataTable {
                 </div>
             </li>
         `;
+
+            if (isChecked) {
+                checkedHtml += checkboxHtml;
+            } else {
+                uncheckedHtml += checkboxHtml;
+            }
         });
 
-        return html;
+        return checkedHtml + `<li><hr class="dropdown-divider"></li>` + uncheckedHtml;
     }
 
     // Bind event listeners to the checkboxes and search input
@@ -6864,6 +6876,12 @@ class AllPlanetDataTable {
                     $(element).hide();
                 }
             });
+        });
+
+        // Bind event listener to dropdown
+        $(`#${this.ElementID} .dropdown-menu`).on('hidden.bs.dropdown', () => {
+            const columnList = $(`#${this.ElementID} .column-list-container`);
+            columnList.html(this.generateCheckboxList());
         });
     }
 }

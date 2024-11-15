@@ -6756,7 +6756,11 @@ class AllPlanetDataTable {
                             <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
                         </button>
                         <ul class="dropdown-menu px-1" >
-                            ${this.generateCheckboxList()}
+                            <input type="text" class="columnListSearchInput form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                            <li><hr class="dropdown-divider"></li>
+                            <div class="column-list-container">
+                                ${this.generateCheckboxList()}
+                            </div>
                         </ul>
                     </div>
                 </div>
@@ -6837,7 +6841,7 @@ class AllPlanetDataTable {
                 <div class="form-check">
                     <input class="form-check-input column-checkbox" type="checkbox" value="${column}" id="checkbox_${column}" ${isChecked ? 'checked' : ''}>
                     <label class="text-nowrap form-check-label" for="checkbox_${column}">
-                        ${column}
+                        ${CommonTools.CamelPascalCaseToSpaced(column)}
                     </label>
                 </div>
             </li>
@@ -6847,7 +6851,7 @@ class AllPlanetDataTable {
         return html;
     }
 
-    // Bind event listeners to the checkboxes
+    // Bind event listeners to the checkboxes and search input
     bindEventListeners() {
         // Bind event listener to column checkboxes
         $(`#${this.ElementID} .column-checkbox`).on('change', (e) => {
@@ -6861,6 +6865,21 @@ class AllPlanetDataTable {
             }
             //generate table again but with previoulsy gotten data, since DOB has not changed
             this.GenerateTable({ TimeUrl: this.TimeUrl, Ayanamsa: this.Ayanamsa }, true);
+        });
+
+        // Bind event listener to search input
+        $(`#${this.ElementID} .columnListSearchInput`).on('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const columnList = $(`#${this.ElementID} .column-list-container li`);
+
+            columnList.each((index, element) => {
+                const columnName = $(element).find('.form-check-label').text().toLowerCase();
+                if (columnName.includes(searchTerm)) {
+                    $(element).show();
+                } else {
+                    $(element).hide();
+                }
+            });
         });
     }
 }

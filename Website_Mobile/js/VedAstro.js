@@ -6752,13 +6752,15 @@ class AllAstroDataTable {
                             <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end ps-2 pe-1" data-bs-auto-close="false" >
-                            <div class="hstack gap-2">
-                                <input type="text" class="columnListSearchInput form-control ps-2" placeholder="Search...">
-                                <button type="button" class="px-1 checked-column-reset-btn btn btn-primary d-flex flex-nowrap">
-                                    <span class="me-1 iconify" data-icon="ix:hard-reset" data-width="20" data-height="20"></span>
-                                    Reset
-                                </button>
-                            </div>
+                            <li>
+                                <div class="hstack gap-2">
+                                    <input type="text" class="columnListSearchInput form-control ps-2" placeholder="Search...">
+                                    <button type="button" class="px-1 checked-column-reset-btn btn btn-primary d-flex flex-nowrap">
+                                        <span class="me-1 iconify" data-icon="ix:hard-reset" data-width="20" data-height="20"></span>
+                                        Reset
+                                    </button>
+                                </div>
+                            </li>
                             <li><hr class="dropdown-divider"></li>
                             <div class="column-list-container">
                                 ${this.generateCheckboxList()}
@@ -6924,5 +6926,6 @@ class AllAstroDataTable {
             const columnList = $(`#${this.ElementID} .column-list-container`);
             columnList.html(this.generateCheckboxList());
         });
+
     }
 }

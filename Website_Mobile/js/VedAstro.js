@@ -6572,11 +6572,11 @@ class IndianChart {
                         <span class="iconify me-2" data-icon="twemoji:dotted-six-pointed-star" data-width="38" data-height="38"></span>
                         Charts
                     </h3>
-                    <div style="font-family: 'Lexend Deca', serif !important;" class="btn-group dropstart ms-auto align-self-end">
+                    <div style="font-family: 'Lexend Deca', serif !important;" class="btn-group ms-auto align-self-end">
                         <button style="height: 37.1px; width: fit-content;" class="btn btn-sm dropdown-toggle btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
                         </button>
-                        <ul class="dropdown-menu px-1" >
+                        <ul class="dropdown-menu dropdown-menu-end px-1" >
                             <li>
                                 <div class="form-check">
                                   <input class="form-check-input chartStyleRadio" type="radio" name="chartStyleRadio" id="chartStyle_South" value="South" ${this.SelectedChartStyle === 'South' ? 'checked' : ''}>
@@ -6592,7 +6592,6 @@ class IndianChart {
                                 </div>
                             </li>
                             <li><hr class="dropdown-divider"></li>
-
                             ${this.generateCheckboxList()}
                         </ul>
                     </div>
@@ -6612,10 +6611,10 @@ class IndianChart {
             const isChecked = this.SelectedDivisionalCharts.includes(chart);
             html += `
             <li>
-                <div class="form-check">
-                    <input class="form-check-input divisional-chart-checkbox" type="checkbox" value="${chart}" id="checkbox_${chart}" ${isChecked ? 'checked' : ''}>
-                    <label class="text-nowrap form-check-label" for="checkbox_${chart}">
-                        ${chart.replace('D', ' D')}
+                <div class="form-check hstack">
+                    <input style="width:22px; height:22px;" class="me-1 form-check-input divisional-chart-checkbox" type="checkbox" value="${chart}" id="checkbox_${chart}" ${isChecked ? 'checked' : ''}>
+                    <label class="pt-1 text-nowrap form-check-label" for="checkbox_${chart}">
+                        ${CommonTools.CamelPascalCaseToSpaced(chart)}
                     </label>
                 </div>
             </li>
@@ -6748,14 +6747,14 @@ class AllAstroDataTable {
                         <span class="iconify me-2" data-icon="${this.IconName}" data-width="38" data-height="38"></span>
                         ${this.KeyColumn} Data
                     </h3>
-                    <div style="font-family: 'Lexend Deca', serif !important;" class="btn-group dropstart ms-auto align-self-end">
+                    <div style="font-family: 'Lexend Deca', serif !important;" class="btn-group ms-auto align-self-end">
                         <button style="height: 37.1px; width: fit-content;" class="btn btn-sm dropdown-toggle btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
                         </button>
-                        <ul class="dropdown-menu ps-2 pe-1" >
-                            <div class="hstack gap-1">
+                        <ul class="dropdown-menu dropdown-menu-end ps-2 pe-1" data-bs-auto-close="false" >
+                            <div class="hstack gap-2">
                                 <input type="text" class="columnListSearchInput form-control ps-2" placeholder="Search...">
-                                <button type="button" class="checked-column-reset-btn btn btn-primary d-flex flex-nowrap">
+                                <button type="button" class="px-1 checked-column-reset-btn btn btn-primary d-flex flex-nowrap">
                                     <span class="me-1 iconify" data-icon="ix:hard-reset" data-width="20" data-height="20"></span>
                                     Reset
                                 </button>
@@ -6845,9 +6844,9 @@ class AllAstroDataTable {
             const isChecked = this.SelectedColumns.includes(column);
             const checkboxHtml = `
             <li>
-                <div class="form-check">
-                    <input class="form-check-input column-checkbox" type="checkbox" value="${column}" id="checkbox_${column}" ${isChecked ? 'checked' : ''}>
-                    <label class="text-nowrap form-check-label" for="checkbox_${column}">
+                <div class="form-check hstack">
+                    <input style="width:22px; height:22px;" class="form-check-input column-checkbox me-1" type="checkbox" value="${column}" id="checkbox_${column}" ${isChecked ? 'checked' : ''}>
+                    <label class="pt-1 text-nowrap form-check-label" for="checkbox_${column}">
                         ${CommonTools.CamelPascalCaseToSpaced(column)}
                     </label>
                 </div>
@@ -6899,10 +6898,12 @@ class AllAstroDataTable {
 
         // focus will automatically go to the search input field,
         // allowing the user to start typing immediately
-        $(`#${this.ElementID} .dropdown-menu`).on('shown.bs.dropdown', () => {
+        $(`#${this.ElementID} .dropdown-toggle`).on('click', () => {
             if (CommonTools.IsMobile()) { return; }//if on mobile then do not auto focus, because keyboard takes up screen
-            const searchInput = $(`#${this.ElementID} .columnListSearchInput`);
-            searchInput.focus();
+            setTimeout(() => {
+                const searchInput = $(`#${this.ElementID} .columnListSearchInput`);
+                searchInput.focus();
+            }, 100); // add a small delay to ensure the dropdown is fully shown
         });
 
         // sort checked and unchecked column names for easier viewing

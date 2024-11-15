@@ -6762,7 +6762,7 @@ class AllPlanetDataTable {
                 </div>
                 <hr />
 
-      <div class="table-responsive">
+      <div class="table-responsive-sm">
         <table class="table table-striped table-hover table-bordered text-nowrap w-auto">
           <thead>
             <tr>
@@ -6771,7 +6771,7 @@ class AllPlanetDataTable {
 
         // Dynamically generate table headers based on selected columns
         this.SelectedColumns.forEach((column) => {
-            tableHtml += `<th>${column}</th>`;
+            tableHtml += `<th class="text-wrap">${CommonTools.CamelPascalCaseToSpaced(column)}</th>`;
         });
 
         tableHtml += `

@@ -25,7 +25,7 @@ var timeRangeSelector = new TimeRangeSelector("TimeRangeSelector", personSelecto
 
 var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox", "RAMAN");
 
-
+var goodTimeFinderChart = new EvensChartViewer("GoodTimeFinderChartHolder");
 
 //------------------------ FUNCTIONS -----------------------------
 
@@ -89,57 +89,7 @@ async function OnClickCalculate() {
     //construct API call URL in correct format
     let apiUrl = `${VedAstro.ApiDomain}/EventsChart/${selectedPersonId}/${timeRangeUrl}/${daysPerPixel}/${selectedEventTags}/${selectedAlgorithms}/Ayanamsa/${ayanamsaSelector.SelectedAyanamsa}`;
 
-    //call the API and wait for the chart to be complete
-    const fetchApi = async () => {
-        try {
-            const response = await fetch(apiUrl);
-            const callStatus = response.headers.get('Call-Status');
-
-            //if chart is still being built
-            if (callStatus === 'Running') {
-                await new Promise(resolve => setTimeout(resolve, 5000)); // wait 5 seconds
-                return fetchApi(); // make the call again
-            } else if (callStatus === 'Fail') {
-                Swal.fire({ icon: 'error', title: 'Server could not make chart 🤕', html: 'An error report has been sent. 🤞Hopefully it will be fixed soon. Try <strong>again with different settings</strong>, maybe it\'ll work.', showConfirmButton: true });
-                return null;
-            } else if (callStatus === 'Pass') {
-                const svgString = await response.text();
-                return svgString;
-            }
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    };
-
-    //get chart from api as SVG string
-    let svgString = await fetchApi();
-
-    //if chart did not make it end here
-    if (svgString == null) { return; }
-
-    // inject SVG string into element with id "EventsChartSvgHolder"
-    document.getElementById("EventsChartSvgHolder").innerHTML = svgString;
-
-    // get id of SVG element
-    let svgElement = document.getElementById("EventsChartSvgHolder").querySelector("svg");
-    let chartId = svgElement.id; //NOTE: unique ID of the chart made by server
-
-    //brings to life & makes available in window.EventsChartList
-    new EventsChart(chartId);
-
-    //note : this makes chart appear normal in dark/normal mode
-    var value = window.DarkModeLibInstance.isActivated() ? "difference" : "normal";
-    $('#EventsChartSvgHolder').css('mix-blend-mode', value);
-
-    //let caller know all went well
-    console.log(`🤲 Amen! Chart Loaded : ID:${chartId}`);
-
-    //make chart holder with buttons visible
-    $('#EventsChartMainElement').show();
-
-    //hide placeholder text
-    $('#EventsChartPlaceHolderMessage').hide();
+    await goodTimeFinderChart.GenerateChart(apiUrl);
 
     //play sound for better UX
     playBakingDoneSound();

@@ -2271,11 +2271,11 @@ class PageTopNavbar {
       <!-- DESKTOP TOP NAV BAR  -->
       <div style="min-width: 954px;" class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white">
         <!-- NOTE: id of desktop sidebar is hard coded to match -->
-        <button onclick="$('#DesktopSidebarHolder').toggleClass('d-md-block');" style="height: 37.1px; width: fit-content; " class="btn-sm iconOnlyButton btn-primary btn ">
+        <button onclick="$('#DesktopSidebarHolder').toggleClass('d-md-block');" style="height: 37.1px; width: fit-content; " class="btn-sm  btn-primary btn ">
           <iconify-icon icon="lucide:panel-left-close" width="24" height="24" ></iconify-icon>
         </button>
 
-        <button id="DarkModeToggleButton" style="height: 37.1px; width: fit-content; " class="btn-sm iconOnlyButton btn-primary btn me-md-auto">
+        <button id="DarkModeToggleButton" style="height: 37.1px; width: fit-content; " class="btn-sm  btn-primary btn me-md-auto">
             <iconify-icon icon="mdi:theme-light-dark" width="25" height="25" ></iconify-icon>
         </button>
 
@@ -2284,7 +2284,7 @@ class PageTopNavbar {
 
         <!-- MORE LINKS -->
         <div style="" class="dropdown ">
-          <button style="height: 37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-outline-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <button style="height: 37.1px; width: fit-content;" class="btn-sm  dropdown-toggle btn-outline-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <iconify-icon icon="ep:guide" width="25" height="25" ></iconify-icon>
           </button>
           <ul style="cursor: pointer; width: 100%;" class="dropdown-menu">
@@ -2573,7 +2573,7 @@ class PersonSelectorBox {
           </ul>
         </div>
         <!-- NOTE: storage key is inject into URL, so that "add person" page knows where to set, for auto selection on return -->
-        <a href="./AddPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}" style="height:37.1px; width: fit-content; " class="iconOnlyButton btn-primary btn ms-2">
+        <a href="./AddPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}" style="height:37.1px; width: fit-content; " class=" btn-primary btn ms-2">
           <iconify-icon icon="ant-design:user-add-outlined" width="25" height="25" ></iconify-icon>
         </a>
       </div>
@@ -7010,8 +7010,6 @@ class EvensChartViewer {
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
     }
 
-
-
     // Method to generate the HTML
     async generateHtmlBody() {
         return `
@@ -7019,12 +7017,12 @@ class EvensChartViewer {
                             <hr>
                             <div id="EventsChartMainElement" class="vstack gap-1" style="display: none;">
                                 <div class="hstack gap-2 mb-2">
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4081=""><span class="iconify" data-icon="icon-park-outline:full-screen-one" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4082=""><span class="iconify" data-icon="iconamoon:zoom-in" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4083=""><span class="iconify" data-icon="iconamoon:zoom-out" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4084=""><span class="iconify" data-icon="bx:hide" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="d-none d-md-block btn-sm  btn-primary btn " ><span class="iconify" data-icon="icon-park-outline:full-screen-one" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="iconamoon:zoom-in" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="iconamoon:zoom-out" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="bx:hide" data-width="25" data-height="25"></span></button>
                                     <div style="" class="dropdown ">
-                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4085=""><span class="iconify" data-icon="fluent:highlight-16-filled" data-width="25" data-height="25"></span></button>
+                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm  dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4085=""><span class="iconify" data-icon="fluent:highlight-16-filled" data-width="25" data-height="25"></span></button>
                                         <ul style="cursor: pointer; width: 254.9px;" class="dropdown-menu ">
                                             <div class="d-flex flex-wrap gap-1">
                                                 <div style="width: 97.3px; margin-left: 10px;" class="form-check">
@@ -7094,12 +7092,12 @@ class EvensChartViewer {
                                             </div>
                                         </ul>
                                     </div>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " ><span class="iconify" data-icon="logos:google-calendar" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " ><span class="iconify" data-icon="material-symbols:download" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " ><span class="iconify" data-icon="ic:round-print" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " ><span class="iconify" data-icon="ri:bookmark-3-fill" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="logos:google-calendar" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="material-symbols:download" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="ic:round-print" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="ri:bookmark-3-fill" data-width="25" data-height="25"></span></button>
                                     <div style="" class="dropdown ">
-                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4090=""><span class="iconify" data-icon="tabler:share-2" data-width="25" data-height="25"></span></button>
+                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm  dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4090=""><span class="iconify" data-icon="tabler:share-2" data-width="25" data-height="25"></span></button>
                                         <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
                                             <li>
                                                 <a class="dropdown-item hstack gap-1">
@@ -7127,7 +7125,7 @@ class EvensChartViewer {
                                             </li>
                                         </ul>
                                     </div>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4091=""><span class="iconify" data-icon="ph:code-fill" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " _bl_4091=""><span class="iconify" data-icon="ph:code-fill" data-width="25" data-height="25"></span></button>
                                     <div style="" class="dropdown ">
                                         <button style=" height:37.1px; width: fit-content;" class="btn-sm dropdown-toggle hstack gap-2 iconButton btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4092=""><span class="iconify" data-icon="gravity-ui:person" data-width="25" data-height="25"></span>Person</button>
                                         <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">

@@ -6689,7 +6689,7 @@ class AllPlanetDataTable {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
         this.IconName = iconName;
-        this.defaultColumns = [...defaultColumns]; // Store the default columns for when reset
+        this.defaultColumns = defaultColumns; // Store the default columns for when reset
 
         // Check if there's a previously saved selection in localStorage
         const savedColumns = localStorage.getItem(`SelectedColumns_${this.ElementID}`);
@@ -6794,12 +6794,14 @@ class AllPlanetDataTable {
     `;
 
             // Dynamically generate table data based on selected columns
-            //checks if the value is an object with a `Name` and `DegreesIn` property, and if it is, 
+            //checks if the value is an object with a `Name` and `DegreesIn` property, and if it is,
             //it concatenates these values into a string with the desired format.
             //If the object has a different structure, it falls back to stringifying the object.
             this.SelectedColumns.forEach((column) => {
                 let value = planetInfo[column];
-                if (typeof value === 'object' && value !== null) {
+                if (Array.isArray(value)) {
+                    value = value.join(', ');
+                } else if (typeof value === 'object' && value !== null) {
                     if (value.Name && value.DegreesIn) {
                         value = `${value.Name} ${value.DegreesIn.DegreeMinuteSecond}`;
                     }
@@ -6816,6 +6818,7 @@ class AllPlanetDataTable {
                 }
                 tableHtml += `<td>${value}</td>`;
             });
+
 
             tableHtml += `
         </tr>

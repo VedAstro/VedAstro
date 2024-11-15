@@ -7242,13 +7242,13 @@ class EvensChartViewer {
                         <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
                             <li>
                                 <a class="dropdown-item hstack gap-1">
-                                    <div class="me-2 mt-1" style="" _bl_4094=""><span class="iconify" data-icon="ic:outline-attach-email" data-width="25" data-height="25"></span></div>
+                                    <div class="me-2 mt-1" style="" ><span class="iconify" data-icon="ic:outline-attach-email" data-width="25" data-height="25"></span></div>
                                     <span>Email PDF</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item hstack gap-1">
-                                    <div class="me-2 mt-1" style="" _bl_4095=""><span class="iconify" data-icon="uil:facebook" data-width="25" data-height="25"></span></div>
+                                    <div class="me-2 mt-1" style="" ><span class="iconify" data-icon="uil:facebook" data-width="25" data-height="25"></span></div>
                                     <span>Facebook</span>
                                 </a>
                             </li>

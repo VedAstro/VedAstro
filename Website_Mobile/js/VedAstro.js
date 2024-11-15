@@ -6934,6 +6934,7 @@ class AllAstroDataTable {
 class EvensChartViewer {
     // Class properties
     ElementID = "";
+    CurrentZoomLevel = 100; //defaults to 100 on start
 
     // Constructor to initialize the object
     constructor(elementId) {
@@ -6942,7 +6943,42 @@ class EvensChartViewer {
 
         // generate basic html butttons & place holder text
         this.initializeMainBody();
+
     }
+
+    async OnClickZoomIn() {
+        //increment current zoom level
+        this.CurrentZoomLevel += 10;
+
+        //apply new zoom
+        $(`#${this.ElementID} #EventsChartSvgHolder`).css('zoom', `${this.CurrentZoomLevel}%`);
+    }
+
+    async OnClickZoomOut() {
+        //increment current zoom level
+        this.CurrentZoomLevel -= 10;
+
+        //apply new zoom
+        $(`#${this.ElementID} #EventsChartSvgHolder`).css('zoom', `${this.CurrentZoomLevel}%`);
+    }
+
+
+
+    bindEventListeners() {
+
+        // zoom in button
+        $(`#${this.ElementID} .zoom-in-button`).on('click', (e) => {
+            this.OnClickZoomIn();
+        });
+
+        // zoom out button
+        $(`#${this.ElementID} .zoom-out-button`).on('click', (e) => {
+            this.OnClickZoomOut();
+        });
+
+
+    }
+
 
     async GenerateChart(apiUrl) {
 
@@ -7002,160 +7038,169 @@ class EvensChartViewer {
     }
 
     // Method to initialize the main body
-    async initializeMainBody() {
+    initializeMainBody() {
         // Empty the content of the element with the given ID
         $(`#${this.ElementID}`).empty();
 
         // Generate the HTML and inject it into the element
-        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+
+        // Add the class to the div
+        $(`#${this.ElementID}`).addClass("overflow-auto");
+
+        // Add the style attribute to the div
+        $(`#${this.ElementID}`).css("margin-top", "60.1px");
+
+        // attache handler for button clicks
+        this.bindEventListeners();
     }
 
+
     // Method to generate the HTML
-    async generateHtmlBody() {
+    generateHtmlBody() {
         return `
-                        <div class="overflow-auto-sm" style="margin-top:60.1px;">
-                            <hr>
-                            <div id="EventsChartMainElement" class="vstack gap-1" style="display: none;">
-                                <div class="hstack gap-2 mb-2">
-                                    <button style=" height:37.1px; width: fit-content;" class="d-none d-md-block btn-sm  btn-primary btn " ><span class="iconify" data-icon="icon-park-outline:full-screen-one" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="iconamoon:zoom-in" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="iconamoon:zoom-out" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="bx:hide" data-width="25" data-height="25"></span></button>
-                                    <div style="" class="dropdown ">
-                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm  dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4085=""><span class="iconify" data-icon="fluent:highlight-16-filled" data-width="25" data-height="25"></span></button>
-                                        <ul style="cursor: pointer; width: 254.9px;" class="dropdown-menu ">
-                                            <div class="d-flex flex-wrap gap-1">
-                                                <div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 1">
-                                                    <label class="form-check-label" for="House 1">House 1</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 2">
-                                                    <label class="form-check-label" for="House 2">House 2</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 3">
-                                                    <label class="form-check-label" for="House 3">House 3</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 4">
-                                                    <label class="form-check-label" for="House 4">House 4</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 5">
-                                                    <label class="form-check-label" for="House 5">House 5</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 6">
-                                                    <label class="form-check-label" for="House 6">House 6</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 7">
-                                                    <label class="form-check-label" for="House 7">House 7</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 8">
-                                                    <label class="form-check-label" for="House 8">House 8</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 9">
-                                                    <label class="form-check-label" for="House 9">House 9</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 10">
-                                                    <label class="form-check-label" for="House 10">House 10</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 11">
-                                                    <label class="form-check-label" for="House 11">House 11</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 12">
-                                                    <label class="form-check-label" for="House 12">House 12</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Sun">
-                                                    <label class="form-check-label" for="Sun">Sun</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Moon">
-                                                    <label class="form-check-label" for="Moon">Moon</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Mars">
-                                                    <label class="form-check-label" for="Mars">Mars</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Mercury">
-                                                    <label class="form-check-label" for="Mercury">Mercury</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Jupiter">
-                                                    <label class="form-check-label" for="Jupiter">Jupiter</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Venus">
-                                                    <label class="form-check-label" for="Venus">Venus</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Saturn">
-                                                    <label class="form-check-label" for="Saturn">Saturn</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Rahu">
-                                                    <label class="form-check-label" for="Rahu">Rahu</label>
-                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
-                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Ketu">
-                                                    <label class="form-check-label" for="Ketu">Ketu</label>
-                                                </div>
-                                            </div>
-                                        </ul>
-                                    </div>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="logos:google-calendar" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="material-symbols:download" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="ic:round-print" data-width="25" data-height="25"></span></button>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="ri:bookmark-3-fill" data-width="25" data-height="25"></span></button>
-                                    <div style="" class="dropdown ">
-                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm  dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4090=""><span class="iconify" data-icon="tabler:share-2" data-width="25" data-height="25"></span></button>
-                                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
-                                            <li>
-                                                <a class="dropdown-item hstack gap-1">
-                                                    <div class="me-2 mt-1" style="" _bl_4094=""><span class="iconify" data-icon="ic:outline-attach-email" data-width="25" data-height="25"></span></div>
-                                                    <span>Email PDF</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item hstack gap-1">
-                                                    <div class="me-2 mt-1" style="" _bl_4095=""><span class="iconify" data-icon="uil:facebook" data-width="25" data-height="25"></span></div>
-                                                    <span>Facebook</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item hstack gap-1">
-                                                    <div class="me-2 mt-1" style=""><span class="iconify" data-icon="uil:instagram" data-width="25" data-height="25"></span></div>
-                                                    <span>Instagram</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item hstack gap-1">
-                                                    <div class="me-2 mt-1" style=""><span class="iconify" data-icon="uil:twitter" data-width="25" data-height="25"></span></div>
-                                                    <span>Twitter</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " _bl_4091=""><span class="iconify" data-icon="ph:code-fill" data-width="25" data-height="25"></span></button>
-                                    <div style="" class="dropdown ">
-                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm dropdown-toggle hstack gap-2 iconButton btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4092=""><span class="iconify" data-icon="gravity-ui:person" data-width="25" data-height="25"></span>Person</button>
-                                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
-                                            <li>
-                                                <a class="dropdown-item hstack gap-1">
-                                                    <div class="me-2 mt-1" style="" _bl_4098=""><span class="iconify" data-icon="fluent:book-star-20-filled" data-width="25" data-height="25"></span></div>
-                                                    <span>Horoscope</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item hstack gap-1">
-                                                    <div class="me-2 mt-1" style="" _bl_4099=""><span class="iconify" data-icon="mdi:calendar-outline" data-width="25" data-height="25"></span></div>
-                                                    <span>Journal</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="container-xxl" id="EventsChartSvgHolder" style="margin-left: -11px; "></div>
-                            </div>
-
-                            <!-- PLACEHOLDER TEXT -->
-                            <div id="EventsChartPlaceHolderMessage">
-                                <div class="d-flex justify-content-center">
-                                    <span class="" style="color: #8f8f8f; font-size: 14px;">Chart will appear <strong>here</strong> after <strong>calculate</strong></span>
+            <hr>
+            <div id="EventsChartMainElement" class="vstack gap-1" style="display: none;">
+                <div class="hstack gap-2 mb-2">
+                    <button style=" height:37.1px; width: fit-content;" class="expand-view-button d-none d-md-block btn-sm  btn-primary btn " ><span class="iconify" data-icon="icon-park-outline:full-screen-one" data-width="25" data-height="25"></span></button>
+                    <button style=" height:37.1px; width: fit-content;" class="zoom-in-button btn-sm  btn-primary btn " ><span class="iconify" data-icon="iconamoon:zoom-in" data-width="25" data-height="25"></span></button>
+                    <button style=" height:37.1px; width: fit-content;" class="zoom-out-button btn-sm  btn-primary btn " ><span class="iconify" data-icon="iconamoon:zoom-out" data-width="25" data-height="25"></span></button>
+                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="bx:hide" data-width="25" data-height="25"></span></button>
+                    <div style="" class="dropdown ">
+                        <button style=" height:37.1px; width: fit-content;" class="btn-sm  dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4085=""><span class="iconify" data-icon="fluent:highlight-16-filled" data-width="25" data-height="25"></span></button>
+                        <ul style="cursor: pointer; width: 254.9px;" class="dropdown-menu ">
+                            <div class="d-flex flex-wrap gap-1">
+                                <div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 1">
+                                    <label class="form-check-label" for="House 1">House 1</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 2">
+                                    <label class="form-check-label" for="House 2">House 2</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 3">
+                                    <label class="form-check-label" for="House 3">House 3</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 4">
+                                    <label class="form-check-label" for="House 4">House 4</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 5">
+                                    <label class="form-check-label" for="House 5">House 5</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 6">
+                                    <label class="form-check-label" for="House 6">House 6</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 7">
+                                    <label class="form-check-label" for="House 7">House 7</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 8">
+                                    <label class="form-check-label" for="House 8">House 8</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 9">
+                                    <label class="form-check-label" for="House 9">House 9</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 10">
+                                    <label class="form-check-label" for="House 10">House 10</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 11">
+                                    <label class="form-check-label" for="House 11">House 11</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 12">
+                                    <label class="form-check-label" for="House 12">House 12</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Sun">
+                                    <label class="form-check-label" for="Sun">Sun</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Moon">
+                                    <label class="form-check-label" for="Moon">Moon</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Mars">
+                                    <label class="form-check-label" for="Mars">Mars</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Mercury">
+                                    <label class="form-check-label" for="Mercury">Mercury</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Jupiter">
+                                    <label class="form-check-label" for="Jupiter">Jupiter</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Venus">
+                                    <label class="form-check-label" for="Venus">Venus</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Saturn">
+                                    <label class="form-check-label" for="Saturn">Saturn</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Rahu">
+                                    <label class="form-check-label" for="Rahu">Rahu</label>
+                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Ketu">
+                                    <label class="form-check-label" for="Ketu">Ketu</label>
                                 </div>
                             </div>
-                            <hr>
-                        </div>
+                        </ul>
+                    </div>
+                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="logos:google-calendar" data-width="25" data-height="25"></span></button>
+                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="material-symbols:download" data-width="25" data-height="25"></span></button>
+                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="ic:round-print" data-width="25" data-height="25"></span></button>
+                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="ri:bookmark-3-fill" data-width="25" data-height="25"></span></button>
+                    <div style="" class="dropdown ">
+                        <button style=" height:37.1px; width: fit-content;" class="btn-sm  dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4090=""><span class="iconify" data-icon="tabler:share-2" data-width="25" data-height="25"></span></button>
+                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
+                            <li>
+                                <a class="dropdown-item hstack gap-1">
+                                    <div class="me-2 mt-1" style="" _bl_4094=""><span class="iconify" data-icon="ic:outline-attach-email" data-width="25" data-height="25"></span></div>
+                                    <span>Email PDF</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1">
+                                    <div class="me-2 mt-1" style="" _bl_4095=""><span class="iconify" data-icon="uil:facebook" data-width="25" data-height="25"></span></div>
+                                    <span>Facebook</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1">
+                                    <div class="me-2 mt-1" style=""><span class="iconify" data-icon="uil:instagram" data-width="25" data-height="25"></span></div>
+                                    <span>Instagram</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1">
+                                    <div class="me-2 mt-1" style=""><span class="iconify" data-icon="uil:twitter" data-width="25" data-height="25"></span></div>
+                                    <span>Twitter</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " _bl_4091=""><span class="iconify" data-icon="ph:code-fill" data-width="25" data-height="25"></span></button>
+                    <div style="" class="dropdown ">
+                        <button style=" height:37.1px; width: fit-content;" class="btn-sm dropdown-toggle hstack gap-2 iconButton btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4092=""><span class="iconify" data-icon="gravity-ui:person" data-width="25" data-height="25"></span>Person</button>
+                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
+                            <li>
+                                <a class="dropdown-item hstack gap-1">
+                                    <div class="me-2 mt-1" style="" _bl_4098=""><span class="iconify" data-icon="fluent:book-star-20-filled" data-width="25" data-height="25"></span></div>
+                                    <span>Horoscope</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item hstack gap-1">
+                                    <div class="me-2 mt-1" style="" _bl_4099=""><span class="iconify" data-icon="mdi:calendar-outline" data-width="25" data-height="25"></span></div>
+                                    <span>Journal</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="container-xxl" id="EventsChartSvgHolder" style="margin-left: -11px; "></div>
+            </div>
+
+            <!-- PLACEHOLDER TEXT -->
+            <div id="EventsChartPlaceHolderMessage">
+                <div class="d-flex justify-content-center">
+                    <span class="" style="color: #8f8f8f; font-size: 14px;">Chart will appear <strong>here</strong> after <strong>calculate</strong></span>
+                </div>
+            </div>
+            <hr>
+
 
     `;
     }

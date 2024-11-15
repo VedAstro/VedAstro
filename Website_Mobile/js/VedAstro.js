@@ -1484,23 +1484,7 @@ class CommonTools {
      * takes a camel case string and returns a string with spaces between the words
      */
     static CamelPascalCaseToSpaced(camelCase) {
-        // Create a string to efficiently build the resulting string
-        let result = '';
-
-        // Iterate through each character in the input camel case string
-        for (const c of camelCase) {
-            // Check if the character is an uppercase letter and we've already added at least one character to the result
-            if (c === c.toUpperCase() && result.length > 0) {
-                // Add a space before adding the character to separate words
-                result += ' ';
-            }
-
-            // Add each character to the result, regardless of whether it's uppercase or lowercase
-            result += c;
-        }
-
-        // Return the resulting string as a string
-        return result;
+        return camelCase.replace(/(\d)([A-Z])/g, '$1 $2').replace(/([A-Z])/g, ' $1').trim();
     }
 
     static IsMobile() {

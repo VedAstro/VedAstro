@@ -7,7 +7,7 @@ var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox", "RAMAN");
 var strengthChart = new StrengthChart("StrengthChartHolder");
 var indianChart = new IndianChart("IndianChartHolder", 'South', ['RasiD1', 'NavamshaD9']);
 
-var allPlanetDataTable = new AllPlanetDataTable("AllPlanetDataTableHolder", ['PlanetZodiacSign', 'PlanetConstellation', 'HousePlanetOccupies', 'HousesOwnedByPlanet', 'PlanetLordOfZodiacSign', 'PlanetLordOfConstellation', ]);
+var allPlanetDataTable = new AllPlanetDataTable("AllPlanetDataTableHolder", "twemoji:ringed-planet", ['PlanetZodiacSign', 'PlanetConstellation', 'HousePlanetOccupies', 'HousesOwnedByPlanet', 'PlanetLordOfZodiacSign', 'PlanetLordOfConstellation', ]);
 
 
 new IconButton("IconButton_Calculate_Horoscope");

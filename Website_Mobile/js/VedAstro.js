@@ -6673,7 +6673,6 @@ class IndianChart {
     }
 }
 
-
 class AllPlanetDataTable {
     // Class properties
     ElementID = "";
@@ -6684,9 +6683,10 @@ class AllPlanetDataTable {
     Ayanamsa = "";
 
     // Constructor to initialize the object
-    constructor(elementId, defaultColumns) {
+    constructor(elementId, iconName, defaultColumns) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
+        this.IconName = iconName;
         this.SelectedColumns = defaultColumns;
     }
 
@@ -6732,7 +6732,7 @@ class AllPlanetDataTable {
         <div>
                 <div class="hstack" style="margin-bottom: -11px;">
                     <h3 class="align-self-end m-0">
-                        <span class="iconify me-2" data-icon="twemoji:dotted-six-pointed-star" data-width="38" data-height="38"></span>
+                        <span class="iconify me-2" data-icon="${this.IconName}" data-width="38" data-height="38"></span>
                         Planet Table
                     </h3>
                     <div style="font-family: 'Lexend Deca', serif !important;" class="btn-group dropstart ms-auto align-self-end">
@@ -6742,8 +6742,9 @@ class AllPlanetDataTable {
                         <ul class="dropdown-menu ps-2 pe-1" >
                             <div class="hstack gap-1">
                                 <input type="text" class="columnListSearchInput form-control ps-2" placeholder="Search...">
-                                <button type="button" class="btn btn-primary">
-                                    <span class="iconify" data-icon="ix:hard-reset" data-width="20" data-height="20"></span>
+                                <button type="button" class="btn btn-primary d-flex flex-nowrap">
+                                    <span class="me-1 iconify" data-icon="ix:hard-reset" data-width="20" data-height="20"></span>
+                                    Reset
                                 </button>
                             </div>
                             <li><hr class="dropdown-divider"></li>
@@ -6863,7 +6864,7 @@ class AllPlanetDataTable {
             this.GenerateTable({ TimeUrl: this.TimeUrl, Ayanamsa: this.Ayanamsa }, true);
         });
 
-        // Bind event listener to search input
+        // do filter search on column names
         $(`#${this.ElementID} .columnListSearchInput`).on('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const columnList = $(`#${this.ElementID} .column-list-container li`);
@@ -6878,7 +6879,15 @@ class AllPlanetDataTable {
             });
         });
 
-        // Bind event listener to dropdown
+        // focus will automatically go to the search input field,
+        // allowing the user to start typing immediately
+        $(`#${this.ElementID} .dropdown-menu`).on('shown.bs.dropdown', () => {
+            if (CommonTools.IsMobile()) { return; }//if on mobile then do not auto focus, because keyboard takes up screen
+            const searchInput = $(`#${this.ElementID} .columnListSearchInput`);
+            searchInput.focus();
+        });
+
+        // sort checked and unchecked column names for easier viewing
         $(`#${this.ElementID} .dropdown-menu`).on('hidden.bs.dropdown', () => {
             const columnList = $(`#${this.ElementID} .column-list-container`);
             columnList.html(this.generateCheckboxList());

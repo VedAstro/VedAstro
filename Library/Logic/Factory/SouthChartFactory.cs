@@ -166,7 +166,7 @@ namespace VedAstro.Library
             var centerX = this.widthPx / 2;
             var centerY = this.heightPx / 2;
 
-            var fontSize = 35;
+            var fontSize = 40;
 
             var chartTypeNameLayer = $@"
                 <g id=""ChartTypeNameLayer"">

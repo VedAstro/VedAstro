@@ -122,7 +122,6 @@ function convertPredictionListToHtml(predictionListJson) {
                   <div class="hstack gap-2">[male: ${prediction.MaleInfo}, female: ${prediction.FemaleInfo}]</div>
                 </div>
               </div>
-              <button class="d-none d-md-block btn btn-outline-primary btn-sm" onclick="scrollToDivById('${prediction.Name}')">More Info</button>
             </td>
           </tr>
         `).join('')}

@@ -2122,7 +2122,7 @@ class DesktopSidebar {
         // Loop through the links and generate the HTML for each one
         this.Links.forEach(link => {
             html += `
-            <a href="./${link.url}.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+            <a href="./${link.url}.html" style="height: 37.1px; width: fit-content; "
                class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn ">
                 <iconify-icon icon="${link.icon}" width="25" height="25" ></iconify-icon>
                 ${link.text}
@@ -2132,11 +2132,11 @@ class DesktopSidebar {
 
         // Add the login and logout buttons
         html += `
-            <a id="DesktopLoginButton" href="./Login.html" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+            <a id="DesktopLoginButton" href="./Login.html" style="height: 37.1px; width: fit-content; "
                class="btn-sm w-100 hstack gap-2 iconButton btn-warning btn ">
                 <iconify-icon icon="mdi:user-circle" width="25" height="25" ></iconify-icon>Log In
             </a>
-            <a id="DesktopLogoutButton" onclick="VedAstro.OnClickLogOut()" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;"
+            <a id="DesktopLogoutButton" onclick="VedAstro.OnClickLogOut()" style="height: 37.1px; width: fit-content; "
                class="btn-sm w-100 hstack gap-2 iconButton btn-outline-primary btn ">
                 <iconify-icon icon="bx:log-out" width="25" height="25" ></iconify-icon>Log Out
             </a>
@@ -2237,7 +2237,7 @@ class PageTopNavbar {
         let buttonLinksHtml = "";
         this.ButtonLinks.forEach((link) => {
             buttonLinksHtml += `
-        <button style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-outline-primary btn" >
+        <button style="height: 37.1px; width: fit-content; " class="btn-sm hstack gap-2 iconButton btn-outline-primary btn" >
           <iconify-icon icon="${link.icon}" width="25" height="25" ></iconify-icon>
           ${link.text}
         </button>
@@ -2271,11 +2271,11 @@ class PageTopNavbar {
       <!-- DESKTOP TOP NAV BAR  -->
       <div style="min-width: 954px;" class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white">
         <!-- NOTE: id of desktop sidebar is hard coded to match -->
-        <button onclick="$('#DesktopSidebarHolder').toggleClass('d-md-block');" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn ">
+        <button onclick="$('#DesktopSidebarHolder').toggleClass('d-md-block');" style="height: 37.1px; width: fit-content; " class="btn-sm iconOnlyButton btn-primary btn ">
           <iconify-icon icon="lucide:panel-left-close" width="24" height="24" ></iconify-icon>
         </button>
 
-        <button id="DarkModeToggleButton" style="height: 37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn me-md-auto">
+        <button id="DarkModeToggleButton" style="height: 37.1px; width: fit-content; " class="btn-sm iconOnlyButton btn-primary btn me-md-auto">
             <iconify-icon icon="mdi:theme-light-dark" width="25" height="25" ></iconify-icon>
         </button>
 
@@ -2283,7 +2283,7 @@ class PageTopNavbar {
         ${buttonLinksHtml}
 
         <!-- MORE LINKS -->
-        <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown ">
+        <div style="" class="dropdown ">
           <button style="height: 37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-outline-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <iconify-icon icon="ep:guide" width="25" height="25" ></iconify-icon>
           </button>
@@ -2573,7 +2573,7 @@ class PersonSelectorBox {
           </ul>
         </div>
         <!-- NOTE: storage key is inject into URL, so that "add person" page knows where to set, for auto selection on return -->
-        <a href="./AddPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}" style="height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="iconOnlyButton btn-primary btn ms-2">
+        <a href="./AddPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}" style="height:37.1px; width: fit-content; " class="iconOnlyButton btn-primary btn ms-2">
           <iconify-icon icon="ant-design:user-add-outlined" width="25" height="25" ></iconify-icon>
         </a>
       </div>
@@ -2783,7 +2783,7 @@ class IconButton {
     async generateHtmlButton() {
         // Return the HTML for the button
         return `
-      <button onclick="${this.OnClickCallback}" style="${this.ExtraStyle} justify-content: center; height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-${this.Color} btn">
+      <button onclick="${this.OnClickCallback}" style="${this.ExtraStyle} justify-content: center; height:37.1px; width: fit-content; " class="btn-sm hstack gap-2 iconButton btn-${this.Color} btn">
         <i class="iconify" data-icon="${this.IconName}" data-width="25"></i>
         ${this.ButtonText}
       </button>
@@ -3138,7 +3138,7 @@ class GeoLocationInput {
                 </div>
 
                 <!-- Input Swither button -->
-                <button class="switch-button btn-primary btn p-2" style="font-family: 'Lexend Deca', serif !important;">
+                <button class="switch-button btn-primary btn p-2" style="">
                     <i class="iconify globeIcon" data-icon="bx:globe" data-width="25"></i>
                     <i class="iconify mapIcon d-none" data-icon="bx:map" data-width="25"></i>
                 </button>
@@ -6572,7 +6572,7 @@ class IndianChart {
                         <span class="iconify me-2" data-icon="twemoji:dotted-six-pointed-star" data-width="38" data-height="38"></span>
                         Charts
                     </h3>
-                    <div style="font-family: 'Lexend Deca', serif !important;" class="btn-group ms-auto align-self-end">
+                    <div style="" class="btn-group ms-auto align-self-end">
                         <button style="height: 37.1px; width: fit-content;" class="btn btn-sm dropdown-toggle btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
                         </button>
@@ -6747,7 +6747,7 @@ class AllAstroDataTable {
                         <span class="iconify me-2" data-icon="${this.IconName}" data-width="38" data-height="38"></span>
                         ${this.KeyColumn} Data
                     </h3>
-                    <div style="font-family: 'Lexend Deca', serif !important;" class="btn-group ms-auto align-self-end">
+                    <div style="" class="btn-group ms-auto align-self-end">
                         <button style="height: 37.1px; width: fit-content;" class="btn btn-sm dropdown-toggle btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
                         </button>
@@ -6927,5 +6927,238 @@ class AllAstroDataTable {
             columnList.html(this.generateCheckboxList());
         });
 
+    }
+}
+
+
+class EvensChartViewer {
+    // Class properties
+    ElementID = "";
+
+    // Constructor to initialize the object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // generate basic html butttons & place holder text
+        this.initializeMainBody();
+    }
+
+    async GenerateChart(apiUrl) {
+
+        //call the API and wait for the chart to be complete
+        const fetchApi = async () => {
+            try {
+                const response = await fetch(apiUrl);
+                const callStatus = response.headers.get('Call-Status');
+
+                //if chart is still being built
+                if (callStatus === 'Running') {
+                    await new Promise(resolve => setTimeout(resolve, 5000)); // wait 5 seconds
+                    return fetchApi(); // make the call again
+                } else if (callStatus === 'Fail') {
+                    Swal.fire({ icon: 'error', title: 'Server could not make chart 🤕', html: 'An error report has been sent. 🤞Hopefully it will be fixed soon. Try <strong>again with different settings</strong>, maybe it\'ll work.', showConfirmButton: true });
+                    return null;
+                } else if (callStatus === 'Pass') {
+                    const svgString = await response.text();
+                    return svgString;
+                }
+            } catch (error) {
+                await new Promise(resolve => setTimeout(resolve, 5000)); // wait 5 seconds
+                return fetchApi(); // make the call again
+            }
+        };
+
+        //get chart from api as SVG string
+        let svgString = await fetchApi();
+
+        //if chart did not make it end here
+        if (svgString == null) { return; }
+
+        // inject SVG string into element with id "EventsChartSvgHolder"
+        document.getElementById("EventsChartSvgHolder").innerHTML = svgString;
+
+        // get id of SVG element
+        let svgElement = document.getElementById("EventsChartSvgHolder").querySelector("svg");
+        let chartId = svgElement.id; //NOTE: unique ID of the chart made by server
+
+        //brings to life & makes available in window.EventsChartList
+        new EventsChart(chartId);
+
+        //note : this makes chart appear normal in dark/normal mode
+        var value = window.DarkModeLibInstance.isActivated() ? "difference" : "normal";
+        $('#EventsChartSvgHolder').css('mix-blend-mode', value);
+
+        //let caller know all went well
+        console.log(`🤲 Amen! Chart Loaded : ID:${chartId}`);
+
+        //make chart holder with buttons visible
+        $('#EventsChartMainElement').show();
+
+        //hide placeholder text
+        $('#EventsChartPlaceHolderMessage').hide();
+
+
+    }
+
+    // Method to initialize the main body
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML and inject it into the element
+        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+    }
+
+
+
+    // Method to generate the HTML
+    async generateHtmlBody() {
+        return `
+                        <div class="overflow-auto-sm" style="margin-top:60.1px;">
+                            <hr>
+                            <div id="EventsChartMainElement" class="vstack gap-1" style="display: none;">
+                                <div class="hstack gap-2 mb-2">
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4081=""><span class="iconify" data-icon="icon-park-outline:full-screen-one" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4082=""><span class="iconify" data-icon="iconamoon:zoom-in" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4083=""><span class="iconify" data-icon="iconamoon:zoom-out" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4084=""><span class="iconify" data-icon="bx:hide" data-width="25" data-height="25"></span></button>
+                                    <div style="" class="dropdown ">
+                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4085=""><span class="iconify" data-icon="fluent:highlight-16-filled" data-width="25" data-height="25"></span></button>
+                                        <ul style="cursor: pointer; width: 254.9px;" class="dropdown-menu ">
+                                            <div class="d-flex flex-wrap gap-1">
+                                                <div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 1">
+                                                    <label class="form-check-label" for="House 1">House 1</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 2">
+                                                    <label class="form-check-label" for="House 2">House 2</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 3">
+                                                    <label class="form-check-label" for="House 3">House 3</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 4">
+                                                    <label class="form-check-label" for="House 4">House 4</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 5">
+                                                    <label class="form-check-label" for="House 5">House 5</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 6">
+                                                    <label class="form-check-label" for="House 6">House 6</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 7">
+                                                    <label class="form-check-label" for="House 7">House 7</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 8">
+                                                    <label class="form-check-label" for="House 8">House 8</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 9">
+                                                    <label class="form-check-label" for="House 9">House 9</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 10">
+                                                    <label class="form-check-label" for="House 10">House 10</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 11">
+                                                    <label class="form-check-label" for="House 11">House 11</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="House 12">
+                                                    <label class="form-check-label" for="House 12">House 12</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Sun">
+                                                    <label class="form-check-label" for="Sun">Sun</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Moon">
+                                                    <label class="form-check-label" for="Moon">Moon</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Mars">
+                                                    <label class="form-check-label" for="Mars">Mars</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Mercury">
+                                                    <label class="form-check-label" for="Mercury">Mercury</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Jupiter">
+                                                    <label class="form-check-label" for="Jupiter">Jupiter</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Venus">
+                                                    <label class="form-check-label" for="Venus">Venus</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Saturn">
+                                                    <label class="form-check-label" for="Saturn">Saturn</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Rahu">
+                                                    <label class="form-check-label" for="Rahu">Rahu</label>
+                                                </div><div style="width: 97.3px; margin-left: 10px;" class="form-check">
+                                                    <input style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="Ketu">
+                                                    <label class="form-check-label" for="Ketu">Ketu</label>
+                                                </div>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " ><span class="iconify" data-icon="logos:google-calendar" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " ><span class="iconify" data-icon="material-symbols:download" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " ><span class="iconify" data-icon="ic:round-print" data-width="25" data-height="25"></span></button>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " ><span class="iconify" data-icon="ri:bookmark-3-fill" data-width="25" data-height="25"></span></button>
+                                    <div style="" class="dropdown ">
+                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4090=""><span class="iconify" data-icon="tabler:share-2" data-width="25" data-height="25"></span></button>
+                                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style="" _bl_4094=""><span class="iconify" data-icon="ic:outline-attach-email" data-width="25" data-height="25"></span></div>
+                                                    <span>Email PDF</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style="" _bl_4095=""><span class="iconify" data-icon="uil:facebook" data-width="25" data-height="25"></span></div>
+                                                    <span>Facebook</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style=""><span class="iconify" data-icon="uil:instagram" data-width="25" data-height="25"></span></div>
+                                                    <span>Instagram</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style=""><span class="iconify" data-icon="uil:twitter" data-width="25" data-height="25"></span></div>
+                                                    <span>Twitter</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4091=""><span class="iconify" data-icon="ph:code-fill" data-width="25" data-height="25"></span></button>
+                                    <div style="" class="dropdown ">
+                                        <button style=" height:37.1px; width: fit-content;" class="btn-sm dropdown-toggle hstack gap-2 iconButton btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4092=""><span class="iconify" data-icon="gravity-ui:person" data-width="25" data-height="25"></span>Person</button>
+                                        <ul style="cursor: pointer; width: 100%;" class="dropdown-menu ">
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style="" _bl_4098=""><span class="iconify" data-icon="fluent:book-star-20-filled" data-width="25" data-height="25"></span></div>
+                                                    <span>Horoscope</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item hstack gap-1">
+                                                    <div class="me-2 mt-1" style="" _bl_4099=""><span class="iconify" data-icon="mdi:calendar-outline" data-width="25" data-height="25"></span></div>
+                                                    <span>Journal</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="container-xxl" id="EventsChartSvgHolder" style="margin-left: -11px; "></div>
+                            </div>
+
+                            <!-- PLACEHOLDER TEXT -->
+                            <div id="EventsChartPlaceHolderMessage">
+                                <div class="d-flex justify-content-center">
+                                    <span class="" style="color: #8f8f8f; font-size: 14px;">Chart will appear <strong>here</strong> after <strong>calculate</strong></span>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+
+    `;
     }
 }

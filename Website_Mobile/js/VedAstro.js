@@ -6224,59 +6224,75 @@ class TimeRangeSelector {
         const startAge = parseInt($(`#${this.ElementID} .start-age-input`).val());
         const endAge = parseInt($(`#${this.ElementID} .end-age-input`).val());
 
-        //check if dates is not empty
-        if (isNaN(startYear) || isNaN(startMonth) || isNaN(endYear) || isNaN(endMonth)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Date is wrong sir! 📅',
-                text: 'Please check  if year and month is correct'
-            });
-            return false;
-        }
-
-        //check if start time is before end time
-        if (startYear < endYear || (startYear === endYear && startMonth <= endMonth)) {
-            if (selectedValue === 'selectCustomAge') {
-                // Check for valid age range
-                if (isNaN(startAge) || isNaN(endAge)) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Age is wrong sir! ',
-                        text: 'Please check 🧐 if age is correct'
-                    });
-                    return false;
-                }
-
-                if (startAge < 0 || endAge < 0) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Age cannot be negative! 🧐',
-                        text: 'Please enter a valid age range'
-                    });
-                    return false;
-                }
-
-                if (startAge >= endAge) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Invalid age range! 🧐',
-                        text: 'Start age should be less than end age'
-                    });
-                    return false;
-                }
+        //check custom year
+        if (selectedValue === 'selectCustomYear') {
+            //check if dates is not empty
+            if (isNaN(startYear) || isNaN(startMonth) || isNaN(endYear) || isNaN(endMonth)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Date is wrong sir! 📅',
+                    text: 'Please check  if year and month is correct'
+                });
+                return false;
             }
-            return true;
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Dates are reversed! 🤪',
-                text: 'Start date should be before end date'
-            });
-            return false;
+
+            // Check if years are not negative
+            if (startYear < 0 || endYear < 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Year cannot be negative! ',
+                    text: 'Please enter a valid year'
+                });
+                return false;
+            }
+
+            //check if start time is before end time
+            if (!(startYear < endYear || (startYear === endYear && startMonth <= endMonth))) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Dates are reversed! 🤪',
+                    text: 'Start date should be before end date'
+                });
+                return false;
+            }
+
+
         }
 
+        //check custom age
+        if (selectedValue === 'selectCustomAge') {
+            // Check for valid age range
+            if (isNaN(startAge) || isNaN(endAge)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Age is wrong sir! ',
+                    text: 'Please check 🧐 if age is correct'
+                });
+                return false;
+            }
 
+            if (startAge < 0 || endAge < 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Age cannot be negative! 🧐',
+                    text: 'Please enter a valid age range'
+                });
+                return false;
+            }
 
+            if (startAge >= endAge) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid age range! 🧐',
+                    text: 'Start age should be less than end age'
+                });
+                return false;
+            }
+
+        }
+
+        //checks has passed
+        return true; 
     }
 
     getSelectedTimeRangeAsURLString() {

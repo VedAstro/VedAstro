@@ -6681,15 +6681,23 @@ class AllPlanetDataTable {
     availableColumns = [];
     TimeUrl = "";
     Ayanamsa = "";
+    IconName = "";
+    defaultColumns = [];
 
     // Constructor to initialize the object
     constructor(elementId, iconName, defaultColumns) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
         this.IconName = iconName;
-        this.SelectedColumns = [...defaultColumns]; //assign by value, not reference
         this.defaultColumns = [...defaultColumns]; // Store the default columns for when reset
 
+        // Check if there's a previously saved selection in localStorage
+        const savedColumns = localStorage.getItem(`SelectedColumns_${this.ElementID}`);
+        if (savedColumns) {
+            this.SelectedColumns = JSON.parse(savedColumns);
+        } else {
+            this.SelectedColumns = [...defaultColumns]; //assign by value, not reference
+        }
     }
 
     // Method to initialize the main body
@@ -6862,6 +6870,8 @@ class AllPlanetDataTable {
             } else {
                 this.SelectedColumns = this.SelectedColumns.filter((col) => col !== column);
             }
+            // Save the updated selection to localStorage
+            localStorage.setItem(`SelectedColumns_${this.ElementID}`, JSON.stringify(this.SelectedColumns));
             //generate table again but with previoulsy gotten data, since DOB has not changed
             this.GenerateTable({ TimeUrl: this.TimeUrl, Ayanamsa: this.Ayanamsa }, true);
         });
@@ -6899,12 +6909,13 @@ class AllPlanetDataTable {
         // provided in the constructor, and the checkbox list will be updated to reflect the reset.
         $(`#${this.ElementID} .checked-column-reset-btn`).on('click', () => {
             this.SelectedColumns = this.defaultColumns;
+            // Save the updated selection to localStorage
+            localStorage.setItem(`SelectedColumns_${this.ElementID}`, JSON.stringify(this.SelectedColumns));
             // Generate table again but with previously gotten data, since DOB has not changed
             this.GenerateTable({ TimeUrl: this.TimeUrl, Ayanamsa: this.Ayanamsa }, true);
             // Update the checkbox list to reflect the reset
             const columnList = $(`#${this.ElementID} .column-list-container`);
             columnList.html(this.generateCheckboxList());
         });
-
     }
 }

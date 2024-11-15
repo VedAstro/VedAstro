@@ -6687,7 +6687,9 @@ class AllPlanetDataTable {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
         this.IconName = iconName;
-        this.SelectedColumns = defaultColumns;
+        this.SelectedColumns = [...defaultColumns]; //assign by value, not reference
+        this.defaultColumns = [...defaultColumns]; // Store the default columns for when reset
+
     }
 
     // Method to initialize the main body
@@ -6742,7 +6744,7 @@ class AllPlanetDataTable {
                         <ul class="dropdown-menu ps-2 pe-1" >
                             <div class="hstack gap-1">
                                 <input type="text" class="columnListSearchInput form-control ps-2" placeholder="Search...">
-                                <button type="button" class="btn btn-primary d-flex flex-nowrap">
+                                <button type="button" class="checked-column-reset-btn btn btn-primary d-flex flex-nowrap">
                                     <span class="me-1 iconify" data-icon="ix:hard-reset" data-width="20" data-height="20"></span>
                                     Reset
                                 </button>
@@ -6892,5 +6894,17 @@ class AllPlanetDataTable {
             const columnList = $(`#${this.ElementID} .column-list-container`);
             columnList.html(this.generateCheckboxList());
         });
+
+        // when reset button is clicked, the `SelectedColumns` will be reset to the `defaultColumns` 
+        // provided in the constructor, and the checkbox list will be updated to reflect the reset.
+        $(`#${this.ElementID} .checked-column-reset-btn`).on('click', () => {
+            this.SelectedColumns = this.defaultColumns;
+            // Generate table again but with previously gotten data, since DOB has not changed
+            this.GenerateTable({ TimeUrl: this.TimeUrl, Ayanamsa: this.Ayanamsa }, true);
+            // Update the checkbox list to reflect the reset
+            const columnList = $(`#${this.ElementID} .column-list-container`);
+            columnList.html(this.generateCheckboxList());
+        });
+
     }
 }

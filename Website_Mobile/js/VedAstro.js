@@ -6067,7 +6067,7 @@ class TimeRangeSelector {
     linkedPersonSelector = null;
 
     // Constructor to initialize the PageHeader object
-    constructor(elementId, linkedPersonSelector, defaultPreset,) {
+    constructor(elementId, linkedPersonSelector, defaultPreset) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
         this.defaultPreset = defaultPreset;
@@ -6138,9 +6138,17 @@ class TimeRangeSelector {
         }
     }
 
-
     //calculate the number of days between start date and end date also handles time range preset by using API
     async getDaysInRange() {
+
+        //only continue of dates are valid 
+        if (!this.isValid()) { return 0; }
+
+        //show loading to user
+        CommonTools.ShowLoading();
+
+        let differenceInDays = 0;
+
         //if user inputs manual time range, get dates and calculate difference
         if ($(`#${this.ElementID} .time-range-select`).val() === 'selectCustomYear') {
             const startYear = parseInt($(`#${this.ElementID} .start-year-input`).val());
@@ -6154,8 +6162,8 @@ class TimeRangeSelector {
 
             // Calculate the difference in days
             //the `+ 1` at the end of the calculation is to include the last day of the range in the count.
-            const differenceInDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1;
-            return differenceInDays;
+            differenceInDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1;
+
         }
         //else user inputs using time range presets & custom age range also, use API to calculate range
         else {
@@ -6182,8 +6190,14 @@ class TimeRangeSelector {
 
             //extract and return the days in range value
             const data = await response.json();
-            return parseFloat(data.Payload.DaysBetweenTimeRangePreset);
+            differenceInDays = parseFloat(data.Payload.DaysBetweenTimeRangePreset);
         }
+
+        //hide loading
+        Swal.close();
+
+        return differenceInDays;
+
     }
 
     async getSelectedPersonBirthTimeUrl() {
@@ -6201,23 +6215,56 @@ class TimeRangeSelector {
 
     //check if the dates are valid & filled, else shows user msg, and returns false
     isValid() {
+       
         const startYear = parseInt($(`#${this.ElementID} .start-year-input`).val());
         const startMonth = parseInt($(`#${this.ElementID} .start-month-input`).val());
         const endYear = parseInt($(`#${this.ElementID} .end-year-input`).val());
         const endMonth = parseInt($(`#${this.ElementID} .end-month-input`).val());
+        const selectedValue = $(`#${this.ElementID} .time-range-select`).val();
+        const startAge = parseInt($(`#${this.ElementID} .start-age-input`).val());
+        const endAge = parseInt($(`#${this.ElementID} .end-age-input`).val());
 
         //check if dates is not empty
         if (isNaN(startYear) || isNaN(startMonth) || isNaN(endYear) || isNaN(endMonth)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Date is wrong sir! 📅',
-                text: 'Please check 🧐 if year and month is correct'
+                text: 'Please check  if year and month is correct'
             });
             return false;
         }
 
         //check if start time is before end time
         if (startYear < endYear || (startYear === endYear && startMonth <= endMonth)) {
+            if (selectedValue === 'selectCustomAge') {
+                // Check for valid age range
+                if (isNaN(startAge) || isNaN(endAge)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Age is wrong sir! ',
+                        text: 'Please check 🧐 if age is correct'
+                    });
+                    return false;
+                }
+
+                if (startAge < 0 || endAge < 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Age cannot be negative! 🧐',
+                        text: 'Please enter a valid age range'
+                    });
+                    return false;
+                }
+
+                if (startAge >= endAge) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid age range! 🧐',
+                        text: 'Start age should be less than end age'
+                    });
+                    return false;
+                }
+            }
             return true;
         } else {
             Swal.fire({
@@ -6227,6 +6274,8 @@ class TimeRangeSelector {
             });
             return false;
         }
+
+
 
     }
 
@@ -6478,7 +6527,6 @@ class DayPerPixelInput {
         return floatValue;
     }
 
-
     // Method to generate the HTML 
     async generateHtmlBody() {
         // Return the HTML
@@ -6496,7 +6544,6 @@ class DayPerPixelInput {
         </div>
     `;
     }
-
 
 }
 
@@ -6946,22 +6993,21 @@ class EvensChartViewer {
 
     }
 
-    async OnClickZoomIn() {
+    async OnClickZoomIn(multiply = 1) {
         //increment current zoom level
-        this.CurrentZoomLevel += 10;
+        this.CurrentZoomLevel += (10 * multiply);
 
         //apply new zoom
         $(`#${this.ElementID} #EventsChartSvgHolder`).css('zoom', `${this.CurrentZoomLevel}%`);
     }
 
-    async OnClickZoomOut() {
+    async OnClickZoomOut(multiply = 1) {
         //increment current zoom level
-        this.CurrentZoomLevel -= 10;
+        this.CurrentZoomLevel -= (10 * multiply);
 
         //apply new zoom
         $(`#${this.ElementID} #EventsChartSvgHolder`).css('zoom', `${this.CurrentZoomLevel}%`);
     }
-
 
 
     bindEventListeners() {
@@ -6974,6 +7020,20 @@ class EvensChartViewer {
         // zoom out button
         $(`#${this.ElementID} .zoom-out-button`).on('click', (e) => {
             this.OnClickZoomOut();
+        });
+
+        // expand button
+        $(`#${this.ElementID} .expand-view-button`).on('click', (e) => {
+
+            $('#DesktopSidebarHolder').toggleClass('d-md-block');
+
+            // Save value, so can zoom in and out as toggled
+            let _isMaximized = !$(`#${this.ElementID} .expand-view-button`).hasClass('maximized');
+            $(`#${this.ElementID} .expand-view-button`).toggleClass('maximized');
+
+            // Zoom in/out 4 times
+            const zoomMethod = _isMaximized ? this.OnClickZoomIn(4) : this.OnClickZoomOut(4);
+           
         });
 
 
@@ -7034,6 +7094,8 @@ class EvensChartViewer {
         //hide placeholder text
         $('#EventsChartPlaceHolderMessage').hide();
 
+        //zoom in to make chart clear
+        this.OnClickZoomIn(4);
 
     }
 

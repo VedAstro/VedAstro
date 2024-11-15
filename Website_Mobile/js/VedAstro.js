@@ -6746,7 +6746,7 @@ class AllAstroDataTable {
                 <div class="hstack" style="margin-bottom: -11px;">
                     <h3 class="align-self-end m-0">
                         <span class="iconify me-2" data-icon="${this.IconName}" data-width="38" data-height="38"></span>
-                        Planet Table
+                        ${this.KeyColumn} Data
                     </h3>
                     <div style="font-family: 'Lexend Deca', serif !important;" class="btn-group dropstart ms-auto align-self-end">
                         <button style="height: 37.1px; width: fit-content;" class="btn btn-sm dropdown-toggle btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">

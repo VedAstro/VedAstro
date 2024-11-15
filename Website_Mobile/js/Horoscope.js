@@ -7,7 +7,20 @@ var ayanamsaSelector = new AyanamsaSelectorBox("AyanamsaSelectorBox", "RAMAN");
 var strengthChart = new StrengthChart("StrengthChartHolder");
 var indianChart = new IndianChart("IndianChartHolder", 'South', ['RasiD1', 'NavamshaD9']);
 
-var allPlanetDataTable = new AllAstroDataTable("AllPlanetDataTableHolder", "Planet", "twemoji:ringed-planet", ['PlanetZodiacSign', 'PlanetConstellation', 'HousePlanetOccupies', 'HousesOwnedByPlanet', 'PlanetLordOfZodiacSign', 'PlanetLordOfConstellation',]);
+var allPlanetDataTable = new AllAstroDataTable("PlanetDataTable", "Planet", "twemoji:ringed-planet", ['PlanetZodiacSign', 'PlanetConstellation', 'HousePlanetOccupies', 'HousesOwnedByPlanet', 'PlanetLordOfZodiacSign', 'PlanetLordOfConstellation',]);
+
+var allHouseDataTable = new AllAstroDataTable("HouseDataTable", "House", "fluent-emoji-flat:house", ['HouseZodiacSign', 'HouseConstellation', 'PlanetsInHouse', 'LordOfHouse', 'HouseConstellationLord', 'PlanetsAspectingHouse',]);
+
+//initialize astro table
+var settings = {
+    ElementID: "AshtakvargaTable",
+    KeyColumn: "Ashtakvarga",
+    ShowHeader: true,
+    HeaderIcon: "fluent:table-28-filled"
+};
+
+// Initialize astro table
+var ashtakvargaTable = new AshtakvargaTable(settings);
 
 
 new IconButton("IconButton_Calculate_Horoscope");
@@ -50,17 +63,22 @@ async function OnClickCalculate_Horoscope() {
     document.title = `${selectedPerson.DisplayName} | Horoscope`;
 
     //get birth time of selected person (URL format)
-    var timeUrl = selectedPerson.BirthTime.ToUrl();
+    var birthTimeUrl = selectedPerson.BirthTime.ToUrl();
 
     //generate tables and charts
-    await generateHoroscopeChat(timeUrl);
-    await generateStrengthChart(timeUrl);
-    await generateIndianChart(timeUrl);
-    await generateAllPlanetDataTable(timeUrl);
+    await generateHoroscopeChat(birthTimeUrl);
 
-    //await generatePlanetDataTable(timeUrl);
-    //await generateHouseDataTable(timeUrl);
-    await generateAshtakvargaTable(timeUrl);
+    //data used to generate chart
+    var inputArguments = {
+        TimeUrl: birthTimeUrl,
+        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
+    };
+
+    indianChart.GenerateChart(inputArguments);
+    allPlanetDataTable.GenerateTable(inputArguments);
+    allHouseDataTable.GenerateTable(inputArguments);
+    ashtakvargaTable.GenerateTable(inputArguments);
+    strengthChart.GenerateChart(inputArguments);
 
     //play sound for better UX
     playBakingDoneSound();
@@ -82,143 +100,5 @@ async function generateHoroscopeChat(birthTimeUrl) {
     //note: on generate, chat instance is loaded into window.vedastro.horoscopechat
     new HoroscopeChat(settingsHoroscopeChat);
 }
-async function generateStrengthChart(birthTimeUrl) {
-
-    //data used to generate table
-    var inputArguments = {
-        TimeUrl: birthTimeUrl,
-        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
-    };
-
-    strengthChart.GenerateChart(inputArguments);
-}
-
-async function generateIndianChart(birthTimeUrl) {
-
-    //data used to generate chart
-    var inputArguments = {
-        TimeUrl: birthTimeUrl,
-        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
-    };
-
-    indianChart.GenerateChart(inputArguments);
-}
-
-async function generateAllPlanetDataTable(birthTimeUrl) {
-
-    //data used to generate chart
-    var inputArguments = {
-        TimeUrl: birthTimeUrl,
-        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
-    };
-
-    allPlanetDataTable.GenerateTable(inputArguments);
-}
 
 
-async function generatePlanetDataTable(birthTimeUrl) {
-
-    //----------------------PLANET DATA----------------------------
-    var planetColumns = [
-        { Api: "PlanetZodiacSign", Enabled: true, Name: "Sign" },
-        { Api: "PlanetConstellation", Enabled: true, Name: "Constellation" },
-        { Api: "HousePlanetOccupies", Enabled: true, Name: "Occupies" },
-        { Api: "HousesOwnedByPlanet", Enabled: true, Name: "Owns" },
-        { Api: "PlanetLordOfZodiacSign", Enabled: true, Name: "Sign Lord" },
-        { Api: "PlanetLordOfConstellation", Enabled: true, Name: "Const. Lord" },
-        { Api: "Empty", Enabled: false, Name: "Empty" },
-        { Api: "Empty", Enabled: false, Name: "Empty" },
-    ];
-
-
-    //generateialize astro table
-    var settings = {
-        ElementID: "PlanetDataTable",
-        KeyColumn: "Planet",
-        ShowHeader: true,
-        HeaderIcon: "twemoji:ringed-planet",
-        ColumnData: planetColumns, //columns names to create table
-        EnableSorting: false,
-        SaveSettings: false,
-    };
-
-    //make new astro table
-    var planetDataTable = new AstroTable(settings);
-
-    //data used to generate table
-    var inputArguments = {
-        TimeUrl: birthTimeUrl,
-        HoraryNumber: 0,
-        RotateDegrees: 0,
-        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
-    };
-
-    //generate table
-    await planetDataTable.GenerateTable(inputArguments);
-
-}
-
-async function generateHouseDataTable(birthTimeUrl) {
-    //----------------------HOUSE DATA----------------------------
-    var houseColumns = [
-        { Api: "HouseZodiacSign", Enabled: true, Name: "Sign" },
-        { Api: "HouseConstellation", Enabled: true, Name: "Constellation" },
-        { Api: "PlanetsInHouse", Enabled: true, Name: "Planets In" },
-        { Api: "LordOfHouse", Enabled: true, Name: "House Lord" },
-        { Api: "HouseConstellationLord", Enabled: true, Name: "Const. Lord" },
-        { Api: "PlanetsAspectingHouse", Enabled: true, Name: "Aspects" },
-        { Api: "Empty", Enabled: false, Name: "Empty" },
-        { Api: "Empty", Enabled: false, Name: "Empty" },
-    ];
-
-
-    //initialize astro table
-    var settings = {
-        ElementID: "HouseDataTable",
-        KeyColumn: "House",
-        ShowHeader: true,
-        HeaderIcon: "fluent-emoji-flat:house",
-        ColumnData: houseColumns, //columns names to create table
-        EnableSorting: false,
-        SaveSettings: false,
-    };
-
-    //make new astro table
-    var houseDataTable = new AstroTable(settings);
-
-    //data used to generate table
-    var inputArguments = {
-        TimeUrl: birthTimeUrl,
-        HoraryNumber: 0,
-        RotateDegrees: 0,
-        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
-    };
-
-    //generate table
-    await houseDataTable.GenerateTable(inputArguments);
-
-}
-
-async function generateAshtakvargaTable(birthTimeUrl) {
-
-    //initialize astro table
-    var settings = {
-        ElementID: "AshtakvargaTable",
-        KeyColumn: "Ashtakvarga",
-        ShowHeader: true,
-        HeaderIcon: "fluent:table-28-filled"
-    };
-
-    // Initialize astro table
-    var ashtakvargaTable = new AshtakvargaTable(settings);
-
-    //data used to generate table
-    var inputArguments = {
-        TimeUrl: birthTimeUrl,
-        Ayanamsa: ayanamsaSelector.SelectedAyanamsa
-    };
-
-    // Generate table
-    await ashtakvargaTable.GenerateTable(inputArguments);
-
-}

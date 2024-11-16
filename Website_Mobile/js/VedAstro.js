@@ -2719,7 +2719,7 @@ class InfoBox {
     <div class="alert alert-primary d-flex align-items-center vstack p-2" role="alert" style="">
         <div class="hstack mb-2">
             <span class="iconify bi flex-shrink-0 me-2" data-icon="${this.IconName}" data-width="50"></span>
-            <div style="font-family: 'Gowun Dodum', serif; line-break: auto;">
+            <div style="line-break: auto;">
                 <strong>${this.Title}</strong><br />
                 ${this.Description}
             </div>

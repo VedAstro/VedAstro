@@ -6082,7 +6082,10 @@ class TimeRangeSelector {
         $(`#${this.ElementID}`).empty();
 
         // Generate the HTML and inject it into the element
-        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+
+        //init help text
+        new HelpTextIcon("TimeRangeHelpText");
 
         // Initialize stored values
         this.initStoredYearValues();
@@ -6375,16 +6378,14 @@ class TimeRangeSelector {
     }
 
     // Method to generate the HTML for the page header
-    async generateHtmlBody() {
+    generateHtmlBody() {
         // Return the HTML for the page header, including conditional blocks for different screen sizes
         return `
             <!-- PRESET SELECTOR -->
             <div>
                 <label class="form-label">
                     Time Range
-                    <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
-                    </div>
+                    <div id="TimeRangeHelpText">Start and end time for chart</div>
                 </label>
                 <select class="form-control time-range-select" style="width: 254.9px;">
                     <option style="font-weight: bold; color: #0d6efd;" value="selectCustomYear">Custom Date</option>
@@ -6542,7 +6543,11 @@ class DayPerPixelInput {
         $(`#${this.ElementID}`).empty();
 
         // Generate the HTML and inject it into the element
-        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+
+        //init help text
+        new HelpTextIcon("PrecisionHelpText");
+
     }
 
     getValue() {
@@ -6556,16 +6561,14 @@ class DayPerPixelInput {
     }
 
     // Method to generate the HTML 
-    async generateHtmlBody() {
-        // Return the HTML
+    generateHtmlBody() {
         return `
         <div class="input-group mb-3">
             <span class="input-group-text">
-                <div class="me-2">
-                    <iconify-icon icon="lucide:microscope" width="25" height="25"></iconify-icon>
-                </div> Precision
-                <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" _bl_4071="" aria-expanded="false">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
+                <iconify-icon class="me-2" icon="lucide:microscope" width="25" height="25"></iconify-icon>
+                Precision
+                <div id="PrecisionHelpText">
+                    The number of days in a pixel, more days in 1 pixel equals less precision. If the number is too low, the chart will take too long and will not generate. Change in small steps. For very high precision use Desktop App. Linked to time range, this number will auto update when time range is changed.
                 </div>
             </span>
             <input type="number" step="0.01" class="form-control precision-value-input">
@@ -7193,8 +7196,6 @@ class EvensChartViewer {
 
     }
 
-
-
     // Method to generate the HTML
     generateHtmlBody() {
         return `
@@ -7341,5 +7342,43 @@ class EvensChartViewer {
 
 
     `;
+    }
+}
+
+class HelpTextIcon {
+    // Class properties
+    ElementID = "";
+    HelpText = "Help Goes Here";
+
+    // Constructor to initialize the object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Get the help text HTML from inside div
+        this.HelpText = $(`#${this.ElementID}`).html();
+
+        //clear the HTML of the text
+        $(`#${this.ElementID}`).empty();
+
+        // Add the style attribute to the div
+        $(`#${this.ElementID}`).css("cursor", "help");
+        $(`#${this.ElementID}`).css("float", "right");
+        $(`#${this.ElementID}`).css("margin-left", "8px");
+        $(`#${this.ElementID}`).css("opacity", "0.8");
+
+        //inject in help icon
+        $(`#${this.ElementID}`).html(`<span class="iconify" data-icon="icon-park:help" data-width="18"></span>`);
+
+        //setup the tooltip
+        //- html for multi line
+        //- interactive for selecting text
+        tippy($(`#${this.ElementID}`)[0], {
+            content: this.HelpText,
+            interactive: true,
+            allowHTML: true,
+            placement: "right",
+            trigger: "click"
+        });
     }
 }

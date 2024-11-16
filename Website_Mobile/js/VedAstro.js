@@ -1457,7 +1457,7 @@ class CommonTools {
             allowEscapeKey: false,
             stopKeydownPropagation: true,
             keydownListenerCapture: true,
-            html: `<img src="https://vedastrowebsitestorage.z5.web.core.windows.net/images/loading-animation-progress-transparent.gif">`,
+            html: `<img src="./images/loading-animation-progress-transparent.gif">`,
         });
     }
 
@@ -7006,7 +7006,6 @@ class AllAstroDataTable {
     }
 }
 
-
 class EvensChartViewer {
     // Class properties
     ElementID = "";
@@ -7023,34 +7022,26 @@ class EvensChartViewer {
 
     }
 
-    async OnClickZoomIn(multiply = 1) {
-        //increment current zoom level
-        this.CurrentZoomLevel += (10 * multiply);
+    // Method to initialize the main body
+    initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
 
-        //apply new zoom
-        $(`#${this.ElementID} #EventsChartSvgHolder`).css('zoom', `${this.CurrentZoomLevel}%`);
-    }
+        // Generate the HTML and inject it into the element
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
 
-    async OnClickZoomOut(multiply = 1) {
-        //increment current zoom level
-        this.CurrentZoomLevel -= (10 * multiply);
+        // Add the class to the div
+        $(`#${this.ElementID}`).addClass("overflow-auto");
 
-        //apply new zoom
-        $(`#${this.ElementID} #EventsChartSvgHolder`).css('zoom', `${this.CurrentZoomLevel}%`);
+        // Add the style attribute to the div
+        $(`#${this.ElementID}`).css("margin-top", "60.1px");
+
+        // attache handler for button clicks
+        this.bindEventListeners();
     }
 
 
     bindEventListeners() {
-
-        // zoom in button
-        $(`#${this.ElementID} .zoom-in-button`).on('click', (e) => {
-            this.OnClickZoomIn();
-        });
-
-        // zoom out button
-        $(`#${this.ElementID} .zoom-out-button`).on('click', (e) => {
-            this.OnClickZoomOut();
-        });
 
         // expand button
         $(`#${this.ElementID} .expand-view-button`).on('click', (e) => {
@@ -7088,15 +7079,62 @@ class EvensChartViewer {
             else {
                 this.EventsChartInstance.unhighlightByEventName(eventName);
             }
-            
+
         });
 
+        // download svg button
+        $(`#${this.ElementID} .download-svg-button`).on('click', (e) => {
+
+            //show loading to user
+            CommonTools.ShowLoading();
+
+            const svgElement = document.getElementById("EventsChartSvgHolder").querySelector("svg");
+            const svgString = new XMLSerializer().serializeToString(svgElement);
+            const blob = new Blob([svgString], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Chart-${this.selectedPersonId}-${this.timeRangeUrl.split("/")[1]}-${this.selectedEventTags.replace(/,/g, "-")}.svg`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            //hide loading after little delay for UX
+            setTimeout(() => { Swal.close(); }, 250);
+
+        });
 
 
     }
 
+    async OnClickZoomIn(multiply = 1) {
+        //increment current zoom level
+        this.CurrentZoomLevel += (10 * multiply);
 
-    async GenerateChart(apiUrl) {
+        //apply new zoom
+        $(`#${this.ElementID} #EventsChartSvgHolder`).css('zoom', `${this.CurrentZoomLevel}%`);
+    }
+
+    async OnClickZoomOut(multiply = 1) {
+        //increment current zoom level
+        this.CurrentZoomLevel -= (10 * multiply);
+
+        //apply new zoom
+        $(`#${this.ElementID} #EventsChartSvgHolder`).css('zoom', `${this.CurrentZoomLevel}%`);
+    }
+
+
+    async GenerateChart(selectedPersonId, timeRangeUrl, daysPerPixel, selectedEventTags, selectedAlgorithms, selectedAyanamsa) {
+
+        //save for later use
+        this.selectedPersonId = selectedPersonId;
+        this.timeRangeUrl = timeRangeUrl;
+        this.daysPerPixel = daysPerPixel;
+        this.selectedEventTags = selectedEventTags;
+        this.selectedAlgorithms = selectedAlgorithms;
+        this.selectedAyanamsa = selectedAyanamsa;
+
+        //construct API call URL in correct format
+        let apiUrl = `${VedAstro.ApiDomain}/EventsChart/${selectedPersonId}/${timeRangeUrl}/${daysPerPixel}/${selectedEventTags}/${selectedAlgorithms}/Ayanamsa/${selectedAyanamsa}`;
 
         //call the API and wait for the chart to be complete
         const fetchApi = async () => {
@@ -7155,23 +7193,6 @@ class EvensChartViewer {
 
     }
 
-    // Method to initialize the main body
-    initializeMainBody() {
-        // Empty the content of the element with the given ID
-        $(`#${this.ElementID}`).empty();
-
-        // Generate the HTML and inject it into the element
-        $(`#${this.ElementID}`).html(this.generateHtmlBody());
-
-        // Add the class to the div
-        $(`#${this.ElementID}`).addClass("overflow-auto");
-
-        // Add the style attribute to the div
-        $(`#${this.ElementID}`).css("margin-top", "60.1px");
-
-        // attache handler for button clicks
-        this.bindEventListeners();
-    }
 
 
     // Method to generate the HTML
@@ -7255,8 +7276,7 @@ class EvensChartViewer {
                             </div>
                         </ul>
                     </div>
-                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="logos:google-calendar" data-width="25" data-height="25"></span></button>
-                    <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="material-symbols:download" data-width="25" data-height="25"></span></button>
+                    <button style=" height:37.1px; width: fit-content;" class="download-svg-button btn-sm btn-primary btn " ><span class="iconify" data-icon="material-symbols:download" data-width="25" data-height="25"></span></button>
                     <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="ic:round-print" data-width="25" data-height="25"></span></button>
                     <button style=" height:37.1px; width: fit-content;" class="btn-sm  btn-primary btn " ><span class="iconify" data-icon="ri:bookmark-3-fill" data-width="25" data-height="25"></span></button>
                     <div style="" class="dropdown ">

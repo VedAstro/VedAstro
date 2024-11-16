@@ -86,10 +86,8 @@ async function OnClickCalculate() {
     //based on time range calculate days per pixel for 1000px (days between/width in px)
     let daysPerPixel = daysPerPixelInput.getValue();
 
-    //construct API call URL in correct format
-    let apiUrl = `${VedAstro.ApiDomain}/EventsChart/${selectedPersonId}/${timeRangeUrl}/${daysPerPixel}/${selectedEventTags}/${selectedAlgorithms}/Ayanamsa/${ayanamsaSelector.SelectedAyanamsa}`;
-
-    await goodTimeFinderChart.GenerateChart(apiUrl);
+    //generate chart with data
+    await goodTimeFinderChart.GenerateChart(selectedPersonId, timeRangeUrl, daysPerPixel, selectedEventTags, selectedAlgorithms, ayanamsaSelector.SelectedAyanamsa);
 
     //play sound for better UX
     playBakingDoneSound();

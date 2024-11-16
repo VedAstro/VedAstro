@@ -6389,8 +6389,8 @@ class DayPerPixelInput {
     generateHtmlBody() {
         return `
         <div class="input-group mb-3">
-            <span class="input-group-text">
-                <iconify-icon class="me-2" icon="lucide:microscope" width="25" height="25"></iconify-icon>
+            <span class="input-group-text hstack gap-2">
+                <iconify-icon icon="lucide:microscope" width="25" height="25"></iconify-icon>
                 Precision
                 <div id="PrecisionHelpText">
                     The number of days in a pixel, more days in 1 pixel equals less precision. If the number is too low, the chart will take too long and will not generate. Change in small steps. For very high precision use Desktop App. Linked to time range, this number will auto update when time range is changed.
@@ -7178,9 +7178,9 @@ class HelpTextIcon {
 
         // Add the style attribute to the div
         $(`#${this.ElementID}`).css("cursor", "help");
-        $(`#${this.ElementID}`).css("float", "right");
-        $(`#${this.ElementID}`).css("margin-left", "8px");
         $(`#${this.ElementID}`).css("opacity", "0.8");
+        $(`#${this.ElementID}`).css("display", "inline-flex");
+        $(`#${this.ElementID}`).css("vertical-align", "text-bottom");
 
         //inject in help icon
         $(`#${this.ElementID}`).html(`<iconify-icon icon="icon-park:help" width="18" height="18"></iconify-icon>`);

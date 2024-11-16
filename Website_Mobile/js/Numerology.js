@@ -2,7 +2,7 @@ updateHistory();
 
 
 new PageHeader("PageHeader");
-
+new HelpTextIcon("NameTextHelp");
 
 let nameInputChangeTimeout = null;
 

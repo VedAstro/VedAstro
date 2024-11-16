@@ -63,16 +63,17 @@
                                         <span class="input-group-text gap-2" style="width: 136px;">
                                             <iconify-icon icon="flat-color-icons:butting-in" width="35" height="35"></iconify-icon>
                                             Name
+                                            <div id="NameTextHelp">Can be name of Person, Business or a Project. Enter most widely used name spelling.</div>
                                         </span>
                                         <input oninput="onNameNumberInputChange(this)" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 16px;">
                                     </div>
                                 </div>
 
                                 <!-- OUTPUT -->
-                                <span id="InPageLoadingIcon" style="display:none;" class="mt-5 iconify" data-icon="line-md:loading-twotone-loop" data-width="70" data-height="70"></span>
+                                <iconify-icon id="InPageLoadingIcon" class="mt-5" style="display:none;" icon="line-md:loading-twotone-loop" width="70" height="70"></iconify-icon>
                                 <div id="OutputHolder" class="mt-5" style="display: none;">
                                     <h4>Number: <strong id="NameTotalNumberHolder">0</strong></h4>
-                                    <p id="NameNumberPredictionHolder" class="p-2 rounded" style="background: #fff; font-size: 20px; "></p>
+                                    <p id="NameNumberPredictionHolder" class="p-2 rounded" style="background: #fff; font-size: 18px; "></p>
                                 </div>
                             </div>
 

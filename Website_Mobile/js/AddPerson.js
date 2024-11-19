@@ -1,5 +1,4 @@
 ﻿//-----------------------------> ADD PERSON PAGE
-updateHistory();
 
 new PageHeader("PageHeader");
 new InfoBox("InfoBox_EasyImport_AddPerson");
@@ -8,6 +7,7 @@ new InfoBox("InfoBox_ForgotenTime_AddPerson");
 new IconButton("IconButton_Back_AddPerson");
 new IconButton("IconButton_Save_AddPerson");
 new TimeLocationInput("TimeLocationInput_AddPerson");
+new PersonListViewer("PersonListViewer");
 
 function OnClickBack_AddPerson() {
     navigateToPreviousPage();
@@ -65,7 +65,7 @@ async function OnClickSave_AddPerson() {
     // show done message
     await Swal.fire({
         icon: 'success',
-        title: 'Done! 🚀',
+        title: 'Done ✅',
         text: 'Person added successfully!',
         timer: 2000,
         showConfirmButton: false

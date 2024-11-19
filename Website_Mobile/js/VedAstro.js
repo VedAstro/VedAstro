@@ -7399,3 +7399,48 @@ class HoroscopePredictionTexts {
         });
     }
 }
+
+class PersonListViewer {
+    // Class properties
+    ElementID = "";
+
+    // Constructor to initialize the object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Call the method to initialize the list html
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body 
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // get person list from API or cache automatic
+        this.personList = await VedAstro.GetPersonList('private');
+
+        // Generate the HTML table of person and inject it into the element
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+    }
+
+    // Generate the HTML table of person
+    generateHtmlBody() {
+        return `
+        <!-- PREDICTIONS HEADER -->
+        <div class="hstack" style="margin-bottom: -11px;">
+            <h3 class="align-self-end m-0">
+                <iconify-icon class="me-2" icon="fluent-emoji-flat:floppy-disk" width="38" height="38"></iconify-icon>
+                Saved Persons
+            </h3>
+        </div>
+        <hr />
+        <div class="input-group mb-3">
+          <input type="text" id="person-search" class="form-control" placeholder="🔍 Search">
+        </div>
+
+        <table>...</table>
+    `;
+    }
+}

@@ -18,10 +18,9 @@ var settings = {
     ShowHeader: true,
     HeaderIcon: "fluent:table-28-filled"
 };
-
-// Initialize astro table
 var ashtakvargaTable = new AshtakvargaTable(settings);
 
+var horoscopePredictionTexts = new HoroscopePredictionTexts("HoroscopePredictionTexts");
 
 new IconButton("IconButton_Calculate_Horoscope");
 new IconButton("IconButton_Advanced_Horoscope");
@@ -79,6 +78,7 @@ async function OnClickCalculate_Horoscope() {
     allHouseDataTable.GenerateTable(inputArguments);
     ashtakvargaTable.GenerateTable(inputArguments);
     strengthChart.GenerateChart(inputArguments);
+    horoscopePredictionTexts.GenerateTable(inputArguments);
 
     //play sound for better UX
     playBakingDoneSound();

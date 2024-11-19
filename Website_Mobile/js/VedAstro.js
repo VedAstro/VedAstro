@@ -615,6 +615,46 @@ class GeoLocation {
 
 //-------------------------------- VIEW COMPONENTS -----------------------------------
 
+class TemplateClass {
+    // Class properties
+    ElementID = "";
+    TitleText = "Title Goes Here";
+    DescriptionText = "Description Goes Here";
+    ImageSrc = "images/user-guide-banner.png";
+
+    // Constructor to initialize the object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Get the DOM element with the given ID
+        const element = document.getElementById(elementId);
+
+        // Get the custom attributes from the element and assign default values if not present
+        this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
+        this.DescriptionText = element.getAttribute("description-text") || "Description Goes Here";
+        this.ImageSrc = element.getAttribute("image-src") || "images/user-guide-banner.png";
+
+        // Call the method to initialize the main
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body 
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML and inject it into the element
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+    }
+
+    // Method to generate the HTML
+    generateHtmlBody() {
+        return `
+    `;
+    }
+}
+
 class ID {
     static CursorLineLegendTemplate = `#CursorLineLegendTemplate`;
     static TimeRowLegendTemplate = `#TimeRowLegendTemplate`;
@@ -6635,9 +6675,7 @@ class AllAstroDataTable {
         $(`#${this.ElementID}`).empty();
 
         // Make API call to fetch planets data, only if when specified
-        if (!useCache) {
-            await this.fetchColumnsData();
-        }
+        if (!useCache) { await this.getAstroDataFromApi(); }
 
         // Generate available columns
         this.availableColumns = Object.keys(this.ColumnsData[0][Object.keys(this.ColumnsData[0])[0]]);
@@ -6650,9 +6688,9 @@ class AllAstroDataTable {
     }
 
     // Method to fetch planets data from API
-    async fetchColumnsData() {
+    async getAstroDataFromApi() {
         try {
-            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/All${this.KeyColumn}Data/${this.KeyColumn}Name/All/${this.TimeUrl}Ayanamsa/${this.Ayanamsa}`); // Replace with your API endpoint
+            const response = await fetch(`${VedAstro.ApiDomain}/Calculate/All${this.KeyColumn}Data/${this.KeyColumn}Name/All/${this.TimeUrl}Ayanamsa/${this.Ayanamsa}`);
             const data = await response.json();
             this.ColumnsData = Object.values(data.Payload)[0];
 
@@ -6670,7 +6708,7 @@ class AllAstroDataTable {
                         <iconify-icon class="me-2" icon="${this.IconName}" width="38" height="38"></iconify-icon>
                         ${this.KeyColumn} Data
                     </h3>
-                    <div style="" class="btn-group ms-auto align-self-end">
+                    <div class="btn-group ms-auto align-self-end">
                         <button style="height: 37.1px; width: fit-content;" class="btn btn-sm dropdown-toggle btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <iconify-icon icon="gala:settings" width="25" height="25"></iconify-icon>
                         </button>
@@ -7251,3 +7289,92 @@ class HelpTextIcon {
     }
 }
 
+class HoroscopePredictionTexts {
+    // Class properties
+    ElementID = "";
+
+    // Constructor to initialize the object
+    constructor(elementId) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+    }
+
+    // Method to initialize the main body 
+    async GenerateTable(generateArguments) {
+
+        // Save generate data for later use
+        this.TimeUrl = generateArguments.TimeUrl;
+        this.Ayanamsa = generateArguments.Ayanamsa;
+
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        //get data from API
+        this.HoroscopePredictions = await this.getHoroscopePredictionsFromApi();
+
+        // Generate the HTML and inject it into the element
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+    }
+
+    async getHoroscopePredictionsFromApi() {
+        const response = await fetch(`${VedAstro.ApiDomain}/Calculate/HoroscopePredictions/${this.TimeUrl}Ayanamsa/${this.Ayanamsa}`);
+        const data = await response.json();
+        return data.Payload;
+    }
+
+    generateHtmlBody() {
+        let html = `
+        <!-- PREDICTIONS HEADER -->
+        <div class="hstack" style="margin-bottom: -11px;">
+            <h3 class="align-self-end m-0">
+                <iconify-icon class="me-2" icon="noto:scroll" width="38" height="38"></iconify-icon>
+                Predictions
+            </h3>
+        </div>
+        <hr />
+        <div id="PredictionsHolder">
+            ${this.HoroscopePredictions.map((prediction) => this.generatePredictionCard(prediction)).join('')}
+        </div>
+    `;
+
+        return html;
+    }
+
+    generatePredictionCard(prediction) {
+        return `
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title">${CommonTools.CamelPascalCaseToSpaced(prediction.Name)}</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">${prediction.Description}</p>
+                <h6 class="card-subtitle mb-2 text-muted">Related Bodies:</h6>
+                <ul class="list-group list-group-flush">
+                    ${this.generateRelatedBodiesHtml(prediction.RelatedBody)}
+                </ul>
+            </div>
+        </div>
+    `;
+    }
+
+    generateRelatedBodiesHtml(relatedBody) {
+        let html = '';
+        if (relatedBody.Planets.length > 0) {
+            html += `
+            <li class="list-group-item">Planets: ${relatedBody.Planets.join(', ')}</li>
+        `;
+        }
+        if (relatedBody.Houses.length > 0) {
+            html += `
+            <li class="list-group-item">Houses: ${relatedBody.Houses.join(', ')}</li>
+        `;
+        }
+        if (relatedBody.Zodiacs.length > 0) {
+            html += `
+            <li class="list-group-item">Zodiacs: ${relatedBody.Zodiacs.join(', ')}</li>
+        `;
+        }
+        return html;
+    }
+
+}

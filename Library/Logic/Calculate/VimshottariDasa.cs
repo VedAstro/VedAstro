@@ -116,7 +116,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets the relationship between a mojor period planet and minor period planet based solely on relationship between
+        /// Gets the relationship between a major period planet and minor period planet based solely on relationship between
         /// the planets and nothing to do with the signs yet
         /// based on cyclic relationship between planets
         /// </summary>
@@ -124,7 +124,7 @@ namespace VedAstro.Library
         {
             //------ Code Poetry ------
             // lets take a moment to appreciate this piece of code
-            // it represents mathematically the nueral patern inside the human brain
+            // it represents mathematically the neural pattern inside the human brain
             // what the brain once did, is now done below
             //-------------------------
 

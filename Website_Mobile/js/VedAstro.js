@@ -2204,7 +2204,7 @@ class PageTopNavbar {
 class PersonSelectorBox {
     // Class properties
     ElementID = "";
-    TitleText = "Title Goes Here";
+    TitleText = "";
     SelectedPersonNameHolderElementID = "selectedPersonNameHolder";
     SearchInputElementClass = "searchInputElementClass";
     // Default data
@@ -2220,6 +2220,12 @@ class PersonSelectorBox {
     constructor(elementId) {
         // Initialize class properties
         this.ElementID = elementId;
+
+        // Get the DOM element with the given ID
+        const element = document.getElementById(elementId);
+
+        // Get the custom attributes from the element and assign default values if not present
+        this.TitleText = element.getAttribute("title-text") || "";
 
         //created with nonce from 1 to n, so that multiple selectors supported across pages
         this.SelectedPersonStorageKey = `SelectedPerson-${this.ElementID}`;
@@ -7338,7 +7344,7 @@ class HoroscopePredictionTexts {
         <div class="input-group mb-3">
           <input type="text" id="prediction-search" class="form-control" placeholder="🔍 Search">
         </div>
-        <div id="PredictionsHolder">
+        <div id="PredictionsHolder" class="overflow-auto" style="max-height:546px;">
             ${this.generatePredictionCards()}
         </div>
     `;

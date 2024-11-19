@@ -4,13 +4,13 @@ new PageHeader("PageHeader");
 //new InfoBox("InfoBox_EasyImport_AddPerson");
 new InfoBox("InfoBox_Private_AddPerson");
 new InfoBox("InfoBox_ForgotenTime_AddPerson");
-new IconButton("IconButton_Back_AddPerson");
+new IconButton("IconButton_Advanced");
 new IconButton("IconButton_Save_AddPerson");
 new TimeLocationInput("TimeLocationInput_AddPerson");
 new PersonListViewer("PersonListViewer");
 
-function OnClickBack_AddPerson() {
-    navigateToPreviousPage();
+function OnClickAdvanced() {
+    smoothSlideToggle('#NotesInputHolder');
 }
 async function OnClickSave_AddPerson() {
 

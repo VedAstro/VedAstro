@@ -1683,7 +1683,7 @@ class PageHeader {
     ElementID = "";
     TitleText = "Title Goes Here";
     DescriptionText = "Description Goes Here";
-    ImageSrc = "images/user-guide-banner.png";
+    ImageSrc = "";
 
     // Constructor to initialize the PageHeader object
     constructor(elementId) {
@@ -1696,7 +1696,7 @@ class PageHeader {
         // Get the custom attributes from the element and assign default values if not present
         this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
         this.DescriptionText = element.getAttribute("description-text") || "Description Goes Here";
-        this.ImageSrc = element.getAttribute("image-src") || "images/user-guide-banner.png";
+        this.ImageSrc = element.getAttribute("image-src") || "";
 
         // Call the method to initialize the main body of the page header
         this.initializeMainBody();
@@ -6728,8 +6728,8 @@ class AllAstroDataTable {
                 <hr />
 
       <div class="table-responsive-sm">
-        <table class="table table-striped table-hover table-bordered text-nowrap w-auto">
-          <thead>
+        <table class="table table-striped table-hover table-bordered text-nowrap w-auto" style="border-radius: 10px;overflow: hidden;">
+          <thead class="table-dark">
             <tr>
               <th>Planet</th>
     `;
@@ -7451,9 +7451,29 @@ class PersonListViewer {
                     </td>
                     <td>
                         <div>🕑 ${person.BirthTime.StdTime}</div>
-                        <div>🗺️ ${person.BirthTime.Location.Name}, ${person.BirthTime.Location.Latitude}, ${person.BirthTime.Location.Longitude}</div>
+                        <div>🌍 ${person.BirthTime.Location.Name}, ${person.BirthTime.Location.Latitude}, ${person.BirthTime.Location.Longitude}</div>
                     </td>
-                    <td>${person.Notes}</td>
+                    <td>
+                        <div class="dropdown ">
+                            <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-outline-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_134="">
+                                <iconify-icon icon="bx:edit" width="25" height="25"></iconify-icon>
+                            </button>
+                            <ul style="cursor: pointer; width: 100%;" class="dropdown-menu"><li><a class="dropdown-item" href="/Contact">Contact Us</a></li>
+                                <li><a class="dropdown-item" href="/About">About</a></li>
+                                <li><a class="dropdown-item" href="https://www.youtube.com/@vedastro/videos" target="_blank">Video Guides</a></li>
+                                <li><a class="dropdown-item" href="/JoinOurFamily">Join Us</a></li>
+                                <li><a class="dropdown-item" href="Calculator/">Calculators</a></li>
+                                <li><a class="dropdown-item" href="Account/Person/List">Person List</a></li>
+                                <li><a class="dropdown-item" href="/TrainAIAstrologer">Train AI</a></li>
+                                <li><a class="dropdown-item" href="/Remedy">Remedy</a></li>
+                                <li><a class="dropdown-item" href="/Download">Download</a></li>
+                                <li><a class="dropdown-item" href="https://vedastroapi.azurewebsites.net/api">API Live Status</a></li>
+                                <li><a class="dropdown-item" href="TableGenerator">Table Generator</a></li>
+                                <li><a class="dropdown-item" href="/BodyTypes">Body Types</a></li>
+                                <li><a class="dropdown-item" href="Account/Person/Import">Import Person</a></li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
             `;
         });
@@ -7470,19 +7490,20 @@ class PersonListViewer {
             <div class="input-group mb-3">
               <input type="text" id="person-search" class="form-control" placeholder="🔍 Search">
             </div>
-
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Birth Time</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody id="person-table-body">
-                    ${tableBody}
-                </tbody>
-            </table>
+            <div class="table-responsive-sm">
+                <table class="table table-striped table-hover table-bordered text-nowrap" style="border-radius: 10px;overflow: hidden;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Birth Time</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody id="person-table-body">
+                        ${tableBody}
+                    </tbody>
+                </table>
+            </div>
         `;
     }
 

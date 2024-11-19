@@ -46,7 +46,7 @@
                 <div class="container" style="background: #F0F2F5;">
                     <div>
                         <!-- HEADER -->
-                        <div id="PageHeader" title-text="Add Person" description-text="Create a new person profile" image-src="images/user-guide-banner.png"></div>
+                        <div id="PageHeader" title-text="Add Person" description-text="Create a new person profile"></div>
 
                         <!-- BODY CONTENT -->
                         <div class="d-md-flex justify-content-between">
@@ -65,19 +65,30 @@
 
                                     <!-- @* GENDER *@ -->
                                     <div class="input-group">
-                                        <label class="input-group-text gap-2 py-1" for="genderSelectInput" style="width: 165px;">
+                                        <label class="input-group-text gap-2 py-1" for="GenderInput_AddPerson" style="width: 165px;">
                                             <iconify-icon icon="mdi:human-male-female" width="34" height="34"></iconify-icon>Gender
                                         </label>
-                                        <select id="GenderInput_AddPerson" class="form-select" id="genderSelectInput" style="font-weight: 600; font-size: 16px;">
+                                        <select id="GenderInput_AddPerson" class="form-select" style="font-weight: 600; font-size: 16px;">
                                             <option value="" selected>Select...</option>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                         </select>
                                     </div>
 
+                                    <!-- @* NOTES *@ -->
+                                    <div id="NotesInputHolder" style="display: none;">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <iconify-icon icon="fxemoji:note" class="me-2" width="34" height="34"></iconify-icon>
+                                                Notes
+                                            </span>
+                                            <textarea class="form-control" aria-label="With textarea"></textarea>
+                                        </div>
+                                    </div>
+
                                     <!-- @* BUTTONS *@ -->
                                     <div class="mt-2 d-flex justify-content-between">
-                                        <div id="IconButton_Back_AddPerson" SmallSize="true" Color="primary" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="OnClickBack_AddPerson(this)"></div>
+                                        <div id="IconButton_Advanced" SmallSize="true" Color="primary" IconName="gala:settings" OnClickCallback="OnClickAdvanced()"></div>
                                         <div id="IconButton_Save_AddPerson" SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="OnClickSave_AddPerson(this)"></div>
                                     </div>
                                 </div>
@@ -93,7 +104,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div id="PersonListViewer" class="mt-5"></div>
 
                         <footer id="PageFooter"></footer>
@@ -111,7 +122,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
 
     <!-- Bootstrap  JS : Used to animate some components like Accordion, dropdown, BUNDLE because popper.js-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js">    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js">        </script>
 
     <!--Icon Generator Lib -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>

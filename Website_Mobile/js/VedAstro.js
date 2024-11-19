@@ -7292,6 +7292,9 @@ class HelpTextIcon {
 class HoroscopePredictionTexts {
     // Class properties
     ElementID = "";
+    TimeUrl = "";
+    Ayanamsa = "";
+    HoroscopePredictions = [];
 
     // Constructor to initialize the object
     constructor(elementId) {
@@ -7314,6 +7317,9 @@ class HoroscopePredictionTexts {
 
         // Generate the HTML and inject it into the element
         $(`#${this.ElementID}`).html(this.generateHtmlBody());
+
+        // Add event listener to the search input
+        this.addSearchEventListener();
     }
 
     async getHoroscopePredictionsFromApi() {
@@ -7332,17 +7338,24 @@ class HoroscopePredictionTexts {
             </h3>
         </div>
         <hr />
+        <div class="input-group mb-3">
+          <input type="text" id="prediction-search" class="form-control" placeholder="Search">
+        </div>
         <div id="PredictionsHolder">
-            ${this.HoroscopePredictions.map((prediction) => this.generatePredictionCard(prediction)).join('')}
+            ${this.generatePredictionCards()}
         </div>
     `;
 
         return html;
     }
 
+    generatePredictionCards() {
+        return this.HoroscopePredictions.map((prediction) => this.generatePredictionCard(prediction)).join('');
+    }
+
     generatePredictionCard(prediction) {
         return `
-        <div class="card mb-3">
+        <div class="card mb-3 prediction-card">
             <div class="card-header">
                 <h5 class="card-title">${CommonTools.CamelPascalCaseToSpaced(prediction.Name)}</h5>
             </div>
@@ -7377,4 +7390,19 @@ class HoroscopePredictionTexts {
         return html;
     }
 
+    addSearchEventListener() {
+        $('#prediction-search').on('input', () => {
+            const searchQuery = $('#prediction-search').val().toLowerCase();
+            const predictionCards = $('.prediction-card');
+
+            predictionCards.each((index, card) => {
+                const cardText = $(card).text().toLowerCase();
+                if (cardText.includes(searchQuery)) {
+                    $(card).show();
+                } else {
+                    $(card).hide();
+                }
+            });
+        });
+    }
 }

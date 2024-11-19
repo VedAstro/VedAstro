@@ -420,8 +420,10 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Given a partial person list row, will get full Person data with life events
+        /// option to skip getting life event to save unnecessary DB calls & faster
+        /// default gets life events
         /// </summary>
-        public static Person FromAzureRow(PersonListEntity rowData)
+        public static Person FromAzureRow(PersonListEntity rowData, bool skipLifeEvents = false)
         {
             //parse the person only
             var birthTime = Time.FromJson(JToken.Parse(rowData.BirthTime));
@@ -429,14 +431,18 @@ namespace VedAstro.Library
             var personId = rowData.RowKey;
             var newPerson = new Person(rowData.PartitionKey, personId, rowData.Name, birthTime, rowDataGender);
 
-            //get person life event list (partition key = person id)
-            var lifeEvents = AzureTable.LifeEventList?.Query<LifeEventRow>(call => call.PartitionKey == personId);
+            //only get life events if specified
+            if (!skipLifeEvents)
+            {
+                //get person life event list (partition key = person id)
+                var lifeEvents = AzureTable.LifeEventList?.Query<LifeEventRow>(call => call.PartitionKey == personId);
 
-            //convert to list
-            var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();
+                //convert to list
+                var personJsonList = lifeEvents.Select(call => LifeEvent.FromAzureRow(call)).ToList();
 
-            //add to person data
-            newPerson.LifeEventList = personJsonList;
+                //add to person data
+                newPerson.LifeEventList = personJsonList;
+            }
 
             return newPerson;
         }

@@ -305,7 +305,11 @@ namespace API
             return response;
         }
 
-        public static List<Person> GetAllPersonList()
+        /// <summary>
+        /// Gets all person profiles from DB, has option to skip getting life events (save DB calls & faster)
+        /// default gets life events
+        /// </summary>
+        public static List<Person> GetAllPersonList(bool skipLifeEvents = false)
         {
             //get all
             var foundCalls = AzureTable.PersonList.Query<PersonListEntity>();
@@ -313,7 +317,7 @@ namespace API
             var returnList = new List<Person>();
             foreach (var call in foundCalls)
             {
-                returnList.Add(Person.FromAzureRow(call));
+                returnList.Add(Person.FromAzureRow(call, skipLifeEvents));
             }
 
             return returnList;

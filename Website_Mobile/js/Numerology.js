@@ -2,7 +2,10 @@ updateHistory();
 
 
 new PageHeader("PageHeader");
-new HelpTextIcon("NameTextHelp");
+
+//initialize help text
+new HelpTextIcon(`#NameTextHelp`);
+
 
 let nameInputChangeTimeout = null;
 
@@ -16,12 +19,7 @@ async function onNameNumberInputChange(inputElement) {
     let nameText = inputElement.value.trim();
 
     // Don't make API calls for empty input & hide output from previous
-    if (!nameText) {
-        // hide the output holder
-        $('#OutputHolder').hide();
-
-        return;
-    }; 
+    if (!nameText) { $('#OutputHolder').hide(); return; };
 
     // Clear existing timeout
     clearTimeout(nameInputChangeTimeout);
@@ -50,6 +48,15 @@ async function onNameNumberInputChange(inputElement) {
         // Inject data into HTML
         $('#NameNumberPredictionHolder').text(prediction);
         $('#NameTotalNumberHolder').text(totalNumber);
+
+        // sometimes, text is cleared but API just finish calculating,
+        // so double check if there is no text any more than hide now (happens for last character)
+        let currentNameText = inputElement.value.trim();
+        if (!currentNameText) {
+            $('#OutputHolder').hide();// hide the output holder
+            $('#InPageLoadingIcon').hide();// hide loading icon
+            return;
+        };
 
         // Show the output holder
         $('#OutputHolder').show();

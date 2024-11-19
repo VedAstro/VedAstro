@@ -1807,7 +1807,7 @@ class AyanamsaSelectorBox {
         $(`#${this.ElementID}`).empty();
 
         // Generate the HTML for the page header and inject it into the element
-        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
 
         // Check local storage if any previously selected ayanamsa values exist, if so select that in html
         // If not, use the default Ayanamsa value
@@ -1815,6 +1815,10 @@ class AyanamsaSelectorBox {
 
         // Attach event handler such that if selection is changed it is also saved into local storage for future use
         this.attachEventHandler();
+
+        //initialize help text
+        HelpTextIcon.InitAllIn(`#${this.ElementID}`);
+
     }
 
     get SelectedAyanamsa() {
@@ -1859,12 +1863,20 @@ class AyanamsaSelectorBox {
     }
 
     // Method to generate the HTML for the page header
-    async generateHtmlBody() {
+    generateHtmlBody() {
         // Return the HTML for the page header, including conditional blocks for different screen sizes
         return `
-     <label style="width: 134px;" class="input-group-text">
-         <iconify-icon class="me-2" icon="solar:stars-line-broken" width="25" height="25"></iconify-icon>
+     <label class="input-group-text hstack gap-2">
+         <iconify-icon icon="solar:stars-line-broken" width="25" height="25"></iconify-icon>
          Ayanamsa
+         <div class="help-text-icon">
+            Ayanamsa is the disagreement on the date of a specific star alignment.
+            Greek astronomers say it is around 130 BCE, while Indian astronomers say it hundreds of years later (285 CE or 538 CE).
+            This difference in timing is due to the procession of the equinoxes.
+            As a result, there's a discrepancy of around 23-24 degrees between many astrologers, which is the Ayanamsa.
+            If ayanamsa matchs with the prediction text, then prediction will be accurate.
+            We use BV Raman's prediction text, thus we use Raman ayanamsa.
+         </div>
      </label>
      <select id="SelectedAyanamsa" class="form-select">
          <optgroup label="Easy"><option value="LAHIRI">Lahiri Chitrapaksha</option><option value="KRISHNAMURTI">Krishnamurti KP</option><option value="RAMAN">Raman</option><option value="FAGAN_BRADLEY">Fagan Bradley (Western)</option><option value="J2000">J2000</option><option value="YUKTESHWAR">Yukteshwar</option></optgroup>

@@ -910,8 +910,7 @@ namespace VedAstro.Library
             else
             {
                 //get coordinates for location (API)
-                WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-                geoLocation = geoLocationResult.Payload;
+                geoLocation = Calculate.AddressToGeoLocation(locationName);
             }
 
 
@@ -923,8 +922,7 @@ namespace VedAstro.Library
             var isPass = Time.TryParseStd(timeStr, out var parsedInputTime);
 
             //get timezone as text
-            var timezoneSTDOffsetResult = await Tools.GetTimezoneOffsetApi(geoLocation, parsedInputTime);
-            var timeZone = timezoneSTDOffsetResult.Payload;
+            var timeZone = await Calculate.GeoLocationToTimezone(geoLocation, parsedInputTime);
 
             //if failed to get timezone raise alarm
             if (string.IsNullOrEmpty(timeZone))
@@ -1815,75 +1813,6 @@ namespace VedAstro.Library
         /// </summary>
         public static TimeSpan GetSystemTimezone() => DateTimeOffset.Now.Offset;
 
-        /// <summary>
-        /// Given a place's name, using VedAstro API will get location
-        /// via HTTP request
-        /// </summary>
-        public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
-        {
-
-            //CACHE MECHANISM
-            return await CacheManager.GetCache(new CacheKey("Tools.AddressToGeoLocation", address), addressToGeoLocation);
-
-            async Task<WebResult<GeoLocation>> addressToGeoLocation()
-            {
-                //get location data from VedAstro API
-                var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
-                //exp : .../Calculate/AddressToGeoLocation/London
-                var url = allUrls.AddressToGeoLocationAPI + $"/Address/{address}";
-                var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
-
-                //if fail to make call, end here
-                if (!webResult.IsPass) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
-
-                //if success, get the reply data out
-                var rootJson = webResult.Payload;
-                var parsed = GeoLocation.FromJson(rootJson);
-
-                //return to caller pass
-                return new WebResult<GeoLocation>(true, parsed);
-
-            }
-
-        }
-
-        /// <summary>
-        /// Given a location & time, will use Google Timezone API
-        /// to get accurate time zone that was/is used
-        /// Must input valid geolocation 
-        /// NOTE:
-        /// - offset of timeAtLocation not important
-        /// - googleGeoLocationApiKey needed to work
-        /// </summary>
-        public static async Task<TimeSpan> GetTimezoneOffset(string locationName, DateTimeOffset timeAtLocation)
-        {
-            //get geo location first then call underlying method
-            var geoLocation = await GeoLocation.FromName(locationName);
-            return Tools.StringToTimezone(await GetTimezoneOffsetApi(geoLocation, timeAtLocation));
-        }
-
-        public static async Task<string> GetTimezoneOffsetString(string locationName, DateTime timeAtLocation)
-        {
-            //get geo location first then call underlying method
-            var geoLocation = await GeoLocation.FromName(locationName);
-            return await GetTimezoneOffsetApi(geoLocation, timeAtLocation);
-        }
-
-        public static async Task<string> GetTimezoneOffsetString(string location, string dateTime)
-        {
-            //get timezone from Google API
-            var lifeEvtTimeNoTimezone = DateTime.ParseExact(dateTime, Time.DateTimeFormatNoTimezone, null);
-            var timezone = await Tools.GetTimezoneOffsetString(location, lifeEvtTimeNoTimezone);
-
-            return timezone;
-
-            //get start time of life event and find the position of it in slices (same as now line)
-            //so that this life event line can be placed exactly on the report where it happened
-            //var lifeEvtTimeStr = $"{dateTime} {timezone}"; //add offset 0 only for parsing, not used by API to get timezone
-            //var lifeEvtTime = DateTimeOffset.ParseExact(lifeEvtTimeStr, Time.DateTimeFormat, null);
-
-            //return lifeEvtTime;
-        }
 
         /// <summary>
         /// backup approximate non historic timezone calculator

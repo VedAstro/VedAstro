@@ -50,29 +50,4 @@ public class SearchAddressGeoLocationEntity : ITableEntity
     public ETag ETag { get; set; }
 
 
-    public List<GeoLocation> ToGeoLocationList()
-    {
-        try
-        {
-            //if empty name then fail
-            if (string.IsNullOrEmpty(PartitionKey)) { return new List<GeoLocation>(); }
-
-
-            //parse string into jobject
-            var parsedListJson = JArray.Parse(Results);
-
-            var returnList = new List<GeoLocation>();
-            //convert each jobject list into geo location
-            foreach (var geoLocationJson in parsedListJson)
-            {
-                returnList.Add(GeoLocation.FromJson(geoLocationJson));
-            }
-
-            return returnList;
-        }
-        catch (Exception e)
-        {
-            return new List<GeoLocation>();
-        }
-    }
 }

@@ -257,47 +257,18 @@ namespace VedAstro.Library
         {
             try
             {
-                //PROBABILITY 1 :
-                //rawJson sample JSON
-                //"{
-                //   "AddressToGeoLocation": {
-                //     "Name": "Ipoh, Perak, Malaysia",
-                //     "Longitude": 101.077,
-                //     "Latitude": 4.599
-                //   }
-                // }
-
-                //auto dig 1 level into package
-                var locationJson = ((JObject)rawJson).Properties().FirstOrDefault()?.Value;
-
-                var name = locationJson["Name"].Value<string>();
-                var longitude = locationJson["Longitude"].Value<double>();
-                var latitude = locationJson["Latitude"].Value<double>();
+                var name = rawJson["Name"].Value<string>();
+                var longitude = rawJson["Longitude"].Value<double>();
+                var latitude = rawJson["Latitude"].Value<double>();
 
                 return new GeoLocation(name, longitude, latitude);
-                
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-
-                try
-                {
-                    //TODO AS BACKUP BECAUSE ANOTHER WAY OF SAVING IN DB, MINOR SCHEMA CHANGE
-                    //PROBABILITY 2 :
-                    var name = rawJson["Name"].Value<string>();
-                    var longitude = rawJson["Longitude"].Value<double>();
-                    var latitude = rawJson["Latitude"].Value<double>();
-
-                    return new GeoLocation(name, longitude, latitude);
-
-
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine(exception);
-                    return GeoLocation.Empty;
-                }
+                Console.WriteLine(exception);
+                return GeoLocation.Empty;
             }
+
 
         }
 
@@ -305,92 +276,7 @@ namespace VedAstro.Library
         /// Given a place's name, will get fully initialized GeoLocation.
         /// Using Google API
         /// </summary>
-        public static async Task<GeoLocation> FromName(string locationName)
-        {
-
-            //try get location from name using google API
-            var results = await Tools.AddressToGeoLocation(locationName);
-
-            //meant to fail, so return Empty
-            if (!results.IsPass)
-            {
-                return Empty;
-            }
-            else
-            {
-                //make the new Geo Location and return it
-                return results.Payload;
-            }
-        }
-
-        /// <summary>
-        /// Tries to get location from IP address if fail uses sample location
-        /// important is to always have some location for app to use
-        /// </summary>
-        /// <returns></returns>
-        public static async Task<GeoLocation> FromIpAddress()
-        {
-            try
-            {
-                //get only coordinates 1st
-                var fromIpAddress = await SystemIpAddressToGeoLocation();
-
-                //get name from coordinates
-                //var fromIpAddress = await CoordinatesToGeoLocation(coordinates.Latitude(), coordinates.Longitude());
-
-                //new geolocation from the depths
-                return fromIpAddress;
-            }
-            catch (Exception e)
-            {
-                //log it
-                LibLogger.Debug(e, $"Client Location: FAILED!!!");
-
-                //return some location to avert meltdown
-                return Empty;
-            }
-        }
-
-        /// <summary>
-        /// Gets coordinates with VedAstro API
-        /// </summary>
-        public static async Task<GeoLocation> CoordinatesToGeoLocation(double latitude, double longitude)
-        {
-            //round the coordinates, to match cache better and also because 3 decimal places is enough
-            var latitudeRound = Math.Round(latitude, 3);
-            var longitudeRound = Math.Round(longitude, 3);
-
-            //get from API
-            var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
-            var url = allUrls.CoordinatesToGeoLocationAPI + $"/Latitude/{latitudeRound}/Longitude/{longitudeRound}";
-            var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
-
-            //convert
-            var parsed = GeoLocation.FromJson(webResult.Payload);
-
-            return parsed;
-        }
-
-        /// <summary>
-        /// Gets coordinates with VedAstro API
-        /// IP address is auto-detected by API, so need to supply 
-        /// </summary>
-        public static async Task<GeoLocation> SystemIpAddressToGeoLocation()
-        {
-            //get from API
-            var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
-            var ipAddress = await Tools.GetIPAddress();
-            var url = allUrls.IpAddressToGeoLocationAPI + $"/IpAddress/{ipAddress}";
-            var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
-
-            //convert
-            var parsed = GeoLocation.FromJson(webResult.Payload);
-
-            return parsed;
-        }
-
-
-
+        public static GeoLocation FromName(string locationName) => Calculate.AddressToGeoLocation(locationName);
 
 
         /// <summary>
@@ -450,10 +336,10 @@ namespace VedAstro.Library
         /// given a string value as name, will try to parse it using API,
         /// NOTE: data is cached!
         /// </summary>
-        public static async Task<(bool, GeoLocation)> TryParse(string cellValue)
+        public static async Task<(bool, GeoLocation)> TryParse(string addressText)
         {
             //CACHE MECHANISM
-            return await CacheManager.GetCache(new CacheKey("GeoLocation_TryParse", cellValue), _tryParse);
+            return await CacheManager.GetCache(new CacheKey("GeoLocation_TryParse", addressText), _tryParse);
 
             async Task<(bool, GeoLocation)> _tryParse()
             {
@@ -461,7 +347,7 @@ namespace VedAstro.Library
                 {
 
                     //should return empty 
-                    var tryParsed = await GeoLocation.FromName(cellValue);
+                    var tryParsed = Calculate.AddressToGeoLocation(addressText);
 
                     //if empty than parse failed
                     var isParsed = !(tryParsed.Equals(Empty));

@@ -17,7 +17,7 @@ namespace VedAstro.Library
     /// Wrapper API for Google API with backup built in cache
     /// NOTE: all Google API code should only be here
     /// </summary>
-    public class Location
+    public class LocationManager
     {
         /// <summary>
         /// sample holder type when doing interop
@@ -54,7 +54,7 @@ namespace VedAstro.Library
         /// <summary>
         /// init Table access
         /// </summary>
-        public Location()
+        public LocationManager()
         {
             string accountName = Secrets.Get("CentralStorageAccountName");
 

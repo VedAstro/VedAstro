@@ -2221,10 +2221,6 @@ class PersonSelectorBox {
         // Initialize class properties
         this.ElementID = elementId;
 
-        // Get title and description from the element's custom attributes
-        const element = document.getElementById(elementId);
-        this.TitleText = element.getAttribute("title-text") || "Title Goes Here";
-
         //created with nonce from 1 to n, so that multiple selectors supported across pages
         this.SelectedPersonStorageKey = `SelectedPerson-${this.ElementID}`;
 

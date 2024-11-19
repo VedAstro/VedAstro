@@ -40,9 +40,9 @@ namespace StaticTableGenerator
         };
         static string MetadataStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\OpenAPIStaticTable.cs");
         static string PythonCalculateStubFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro.Python\VedAstro\Library.pyi");
-        static string EventDataListFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Website\wwwroot\data\EventDataList.xml");
+        static string EventDataListFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\XMLData\EventDataList.xml");
         static string EventDataListStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\EventDataListStatic.cs");
-        static string HoroscopeDataListFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Website\wwwroot\data\HoroscopeDataList.xml");
+        static string HoroscopeDataListFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\XMLData\HoroscopeDataList.xml");
         static string HoroscopeDataListStaticTableFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\HoroscopeDataListStatic.cs");
         static string HoroscopeNameEnumFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\Library\Data\Enum\HoroscopeName.cs");
         static string AIPredictionCSSafetyCacheFile = Path.Combine(userFolderPath, @"Desktop\Projects\VedAstro\StaticTableGenerator\AI-MADE-DATA\AI-prediction-cs-safety-cache.csv");
@@ -55,6 +55,7 @@ namespace StaticTableGenerator
 
             var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
 
+            //generate metadata for API methods
             var returnList = new List<OpenAPIMetadata>();
             foreach (var openApiCalc in allApiCalculatorsMethodInfo)
             {
@@ -84,18 +85,22 @@ namespace StaticTableGenerator
 
             //------ TASK 1
             WriteMetadataStaticTableClass(returnList);
+            Console.WriteLine("Metadata Static Table Class ✅");
 
             //------ TASK 2
             WritePythonCalculateStubFile(returnList);
+            Console.WriteLine("Python Calculate Stub File ✅");
 
             //------ TASK 3
             WriteEventDataListStaticTableClass();
+            Console.WriteLine("Event Data List Static Table Class ✅");
 
             //------ TASK 4
             WriteHoroscopeDataListStaticTableClass();
+            Console.WriteLine("Horoscope Data List Static Table Class ✅");
 
 
-            Console.WriteLine("Done!");
+            Console.WriteLine("All Done 🤘 God Wills It ✝️");
             Console.ReadLine();
         }
 
@@ -503,7 +508,10 @@ namespace VedAstro.Library
                 //raw horoscope name because not yet compiled
                 var rawHoroscopeName = eachEventXml.Element("Name")?.Value;
 
-                compiledCode.AppendLine($"{indent}new(HoroscopeName.{rawHoroscopeName}, EventNature.{yy.Nature}, SpecializedSummary.Empty, @\"{cleanedDescription}\", {yTags}, EventManager.GetHoroscopeCalculatorMethod(HoroscopeName.{rawHoroscopeName})),");
+                //specialized summary hard set to empty because not needed in horoscope prediction
+                var specializedSummary = "SpecializedSummary.Empty";
+
+                compiledCode.AppendLine($"{indent}new(HoroscopeName.{rawHoroscopeName}, EventNature.{yy.Nature}, {specializedSummary}, @\"{cleanedDescription}\", {yTags}, EventManager.GetHoroscopeCalculatorMethod(HoroscopeName.{rawHoroscopeName})),");
             }
 
             //remove indentation at start of compiled lines

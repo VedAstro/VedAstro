@@ -3286,6 +3286,7 @@ class TimeLocationInput {
 }
 
 //Helps to create a table with astro data columns
+//TODO Marked for oblivion replaced with AllAstroDataTable
 class AstroTable {
     // Class fields
     Ayanamsa = "Lahiri";
@@ -4103,7 +4104,7 @@ class AshtakvargaTable {
             var htmlContent = `
                 <h3 style="margin-bottom: -11px;">
                     <iconify-icon class="me-2" icon="${this.HeaderIcon}" width="38" height="38"></iconify-icon>
-]                    ${this.KeyColumn}
+                    ${this.KeyColumn}
                 </h3>
                 <hr />`;
 
@@ -5386,6 +5387,9 @@ class AlgorithmsSelector {
 
         //set defaults
         algoSelector.programaticallySelect(this.DefaultSelection);
+
+        //initialize help text
+        HelpTextIcon.InitAllIn(`#${this.ElementID}`);
     }
 
     //given a string like "General,PlanetStrengthDegree,IshtaKashtaPhalaDegree"
@@ -5433,7 +5437,6 @@ class AlgorithmsSelector {
         return selectedAlgorithms.length === 0 ? null : selectedAlgorithms.join(',');
     }
 
-
     async fetchAlgorithmListFromApi() {
         const storedData = localStorage.getItem(this.ApiDataStorageKey);
 
@@ -5476,7 +5479,10 @@ class AlgorithmsSelector {
             generatedHtml += `
         <div class="form-check">
           <input class="form-check-input" type="checkbox" value="" id="checkbox_${algoInfo.Name}">
-          <label class="form-check-label" title="${algoInfo.Description}" for="checkbox_${algoInfo.Name}">${CommonTools.CamelPascalCaseToSpaced(algoInfo.Name)}</label>
+          <label class="form-check-label" for="checkbox_${algoInfo.Name}">
+            ${CommonTools.CamelPascalCaseToSpaced(algoInfo.Name)}
+            <div class="help-text-icon">${algoInfo.Description}</div>
+          </label>
         </div>
       `;
         });
@@ -5494,19 +5500,17 @@ class AlgorithmsSelector {
         let algorithmListHtml = this.convertAlgoListToHtml(algorithmList);
 
         return `
-<div class="input-group vstack mb-3">
-    <label style="min-width: 134.4px;" class="input-group-text rounded">
-        <iconify-icon class="me-2" icon="fluent:math-symbols-24-filled" width="25" height="25"></iconify-icon>
-        Algorithms
-        <div style="cursor: help; float: right; margin-left: 8px; margin-top: -2px; scale: 0.75; opacity: 0.8;" aria-expanded="false">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg>
-        </div>
-    </label>
+        <div class="input-group vstack mb-3">
+            <label style="min-width: 134.4px;" class="input-group-text rounded hstack gap-2">
+                <iconify-icon icon="fluent:math-symbols-24-filled" width="25" height="25"></iconify-icon>
+                Color Algorithms
+                <div class="help-text-icon">Select coloring algoritms that will be used to automaticly judge an astrological event to be good, bad or somewhere in between. The colors can range from red to white to green.</div>
+            </label>
 
-    <div class="form-control d-flex flex-wrap gap-2 rounded" style="width: fit-content;">
-        ${algorithmListHtml}
-    </div>
-</div>
+            <div class="form-control d-flex flex-wrap gap-2 rounded" style="width: fit-content;">
+                ${algorithmListHtml}
+            </div>
+        </div>
     `;
     }
 }
@@ -5800,20 +5804,25 @@ class DasaEventsSelector {
         $(`#${this.ElementID}`).empty();
 
         // Generate the HTML for th and inject it into the element
-        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
 
         // Set default selected checkboxes
         this.setDefaultSelected();
+
+        //initialize help text
+        HelpTextIcon.InitAllIn(`#${this.ElementID}`);
+
     }
 
     // Method to generate the HTML for the 
-    async generateHtmlBody() {
+    generateHtmlBody() {
         // Return the HTML for the page header, including conditional blocks for different screen sizes
         return `
         <div class="input-group vstack mb-3">
-            <label style="min-width:134.4px;" class="input-group-text rounded">
-                <div class="me-2"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--lucide" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="lucide:calendar-range" data-width="25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M3 10h18M8 2v4m9 8h-6m2 4H7m0-4h.01M17 18h.01"></path></g></svg></div> Events
-                <div style="cursor: help; float: right; margin-left: 8px;margin-top: -2px; scale: 0.75;opacity: 0.8;" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--icon-park" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="icon-park:help" data-width="19"><g fill="none"><path fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"></path><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248"></path><path fill="#fff" fill-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" clip-rule="evenodd"></path></g></svg></div>
+            <label style="min-width:134.4px;" class="input-group-text hstack gap-2 rounded">
+                <iconify-icon icon="lucide:calendar-range" width="25" height="25"></iconify-icon>
+                Events
+                <div class="help-text-icon">Type of events to calculate, more events takes longer</div>
             </label>
 
             <div id="DasaEventSelectionHolder" class="form-control d-flex flex-wrap gap-2 rounded" style="width: fit-content;">
@@ -5909,8 +5918,8 @@ class TimeRangeSelector {
         // Generate the HTML and inject it into the element
         $(`#${this.ElementID}`).html(this.generateHtmlBody());
 
-        //init help text
-        new HelpTextIcon("TimeRangeHelpText");
+        //initialize help text
+        HelpTextIcon.InitAllIn(`#${this.ElementID}`);
 
         // Initialize stored values
         this.initStoredYearValues();
@@ -6210,7 +6219,7 @@ class TimeRangeSelector {
             <div>
                 <label class="form-label">
                     Time Range
-                    <div id="TimeRangeHelpText">Start and end time for chart</div>
+                    <div class="help-text-icon">Start and end time for chart</div>
                 </label>
                 <select class="form-control time-range-select" style="width: 254.9px;">
                     <option style="font-weight: bold; color: #0d6efd;" value="selectCustomYear">Custom Date</option>
@@ -6370,9 +6379,8 @@ class DayPerPixelInput {
         // Generate the HTML and inject it into the element
         $(`#${this.ElementID}`).html(this.generateHtmlBody());
 
-        //init help text
-        new HelpTextIcon("PrecisionHelpText");
-
+        //initialize help text
+        HelpTextIcon.InitAllIn(`#${this.ElementID}`);
     }
 
     getValue() {
@@ -6392,7 +6400,7 @@ class DayPerPixelInput {
             <span class="input-group-text hstack gap-2">
                 <iconify-icon icon="lucide:microscope" width="25" height="25"></iconify-icon>
                 Precision
-                <div id="PrecisionHelpText">
+                <div class="help-text-icon">
                     The number of days in a pixel, more days in 1 pixel equals less precision. If the number is too low, the chart will take too long and will not generate. Change in small steps. For very high precision use Desktop App. Linked to time range, this number will auto update when time range is changed.
                 </div>
             </span>
@@ -7162,33 +7170,52 @@ class EvensChartViewer {
 
 class HelpTextIcon {
     // Class properties
-    ElementID = "";
-    HelpText = "Help Goes Here";
+    Element = null;
+    HelpText = "Help Text Goes Here";
 
     // Constructor to initialize the object
-    constructor(elementId) {
-        // Assign the provided elementId to the ElementID property
-        this.ElementID = elementId;
+    //* A string representing the ID or selector of the element: `new HelpTextIcon('#myId')` or`new HelpTextIcon('.myClass')`
+    //* A jQuery object: `new HelpTextIcon($('#myId'))`
+    //* A DOM element: `new HelpTextIcon(document.getElementById('myId'))`
+    constructor(element) {
+        // Check if the provided element is a jQuery object, a DOM element, or a string (id or selector)
+        if (typeof element === 'string') {
+            // If it's a string, try to select the element using jQuery
+            this.Element = $(element);
+        } else if (element instanceof jQuery) {
+            // If it's a jQuery object, use it directly
+            this.Element = element;
+        } else if (element instanceof Element) {
+            // If it's a DOM element, wrap it in a jQuery object
+            this.Element = $(element);
+        } else {
+            throw new Error('Invalid element provided to HelpTextIcon constructor');
+        }
 
-        // Get the help text HTML from inside div
-        this.HelpText = $(`#${this.ElementID}`).html();
+        // Check if the element exists
+        if (this.Element.length === 0) {
+            throw new Error('Element not found');
+        }
 
-        //clear the HTML of the text
-        $(`#${this.ElementID}`).empty();
+        // Get the help text HTML from inside the element
+        this.HelpText = this.Element.html();
 
-        // Add the style attribute to the div
-        $(`#${this.ElementID}`).css("cursor", "help");
-        $(`#${this.ElementID}`).css("opacity", "0.8");
-        $(`#${this.ElementID}`).css("display", "inline-flex");
-        $(`#${this.ElementID}`).css("vertical-align", "text-bottom");
+        // Clear the HTML of the text
+        this.Element.empty();
 
-        //inject in help icon
-        $(`#${this.ElementID}`).html(`<iconify-icon icon="icon-park:help" width="18" height="18"></iconify-icon>`);
+        // Add the style attribute to the element
+        this.Element.css("cursor", "help");
+        this.Element.css("opacity", "0.8");
+        this.Element.css("display", "inline-flex");
+        this.Element.css("vertical-align", "text-bottom");
 
-        //setup the tooltip
+        // Inject the help icon
+        this.Element.html(`<iconify-icon icon="icon-park:help" width="18" height="18"></iconify-icon>`);
+
+        // Set up the tooltip
         //- html for multi line
         //- interactive for selecting text
-        tippy($(`#${this.ElementID}`)[0], {
+        tippy(this.Element[0], {
             content: this.HelpText,
             interactive: true,
             allowHTML: true,
@@ -7196,6 +7223,19 @@ class HelpTextIcon {
             trigger: "click"
         });
     }
-}
 
+    // Given ID or selector of parent div, initialize help icon for each element with class "help-text-icon"
+    // HelpTextIcon.InitAllIn('#parentDivId');
+    static InitAllIn(parent) {
+        // Get all elements with class "help-text-icon" inside the parent div
+        const $parent = $(parent);
+        const $helpTextIcons = $parent.find('.help-text-icon');
+
+        // Initialize each help icon
+        $helpTextIcons.each((index, element) => {
+            // Create a new instance of HelpTextIcon for the current element
+            new HelpTextIcon(element);
+        });
+    }
+}
 

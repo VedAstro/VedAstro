@@ -1,7 +1,7 @@
 ﻿//-----------------------------> ADD PERSON PAGE
 
 new PageHeader("PageHeader");
-new InfoBox("InfoBox_EasyImport_AddPerson");
+//new InfoBox("InfoBox_EasyImport_AddPerson");
 new InfoBox("InfoBox_Private_AddPerson");
 new InfoBox("InfoBox_ForgotenTime_AddPerson");
 new IconButton("IconButton_Back_AddPerson");

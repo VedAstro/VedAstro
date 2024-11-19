@@ -7403,6 +7403,7 @@ class HoroscopePredictionTexts {
 class PersonListViewer {
     // Class properties
     ElementID = "";
+    personList = [];
 
     // Constructor to initialize the object
     constructor(elementId) {
@@ -7423,24 +7424,81 @@ class PersonListViewer {
 
         // Generate the HTML table of person and inject it into the element
         $(`#${this.ElementID}`).html(this.generateHtmlBody());
+
+        // Add event listener for search input
+        $('#person-search').on('input', () => {
+            this.filterTable();
+        });
+    }
+
+    getIconForGender(gender) {
+        if (gender === 'Female') {
+            return '🚺';
+        } else {
+            return '🚹';
+        }
     }
 
     // Generate the HTML table of person
     generateHtmlBody() {
-        return `
-        <!-- PREDICTIONS HEADER -->
-        <div class="hstack" style="margin-bottom: -11px;">
-            <h3 class="align-self-end m-0">
-                <iconify-icon class="me-2" icon="fluent-emoji-flat:floppy-disk" width="38" height="38"></iconify-icon>
-                Saved Persons
-            </h3>
-        </div>
-        <hr />
-        <div class="input-group mb-3">
-          <input type="text" id="person-search" class="form-control" placeholder="🔍 Search">
-        </div>
+        let tableBody = '';
+        this.personList.forEach(person => {
+            tableBody += `
+                <tr>
+                    <td>
+                        <div>${person.Name}</div>
+                        <div>${this.getIconForGender(person.Gender)} ${person.Gender}</div>
+                    </td>
+                    <td>
+                        <div>🕑 ${person.BirthTime.StdTime}</div>
+                        <div>🗺️ ${person.BirthTime.Location.Name}, ${person.BirthTime.Location.Latitude}, ${person.BirthTime.Location.Longitude}</div>
+                    </td>
+                    <td>${person.Notes}</td>
+                </tr>
+            `;
+        });
 
-        <table>...</table>
-    `;
+        return `
+            <!-- HEADER -->
+            <div class="hstack" style="margin-bottom: -11px;">
+                <h3 class="align-self-end m-0">
+                    <iconify-icon class="me-2" icon="fluent-emoji-flat:floppy-disk" width="38" height="38"></iconify-icon>
+                    Saved Persons
+                </h3>
+            </div>
+            <hr />
+            <div class="input-group mb-3">
+              <input type="text" id="person-search" class="form-control" placeholder="🔍 Search">
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Birth Time</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="person-table-body">
+                    ${tableBody}
+                </tbody>
+            </table>
+        `;
+    }
+
+    // Method to filter the table
+    filterTable() {
+        const searchInput = $('#person-search').val().toLowerCase();
+        const tableRows = $('#person-table-body tr');
+
+        tableRows.each((index, row) => {
+            const rowText = $(row).text().toLowerCase();
+            if (rowText.includes(searchInput)) {
+                $(row).show();
+            } else {
+                $(row).hide();
+            }
+        });
     }
 }
+

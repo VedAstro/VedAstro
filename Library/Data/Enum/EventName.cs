@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// Represents events in EventsDataList.xml
-    /// Staticly typed name list of events,
+    /// Static typed name list of events,
     /// This is not the primary list, not all events here will be checked,
     /// only events in the XML list are checked
     /// Not all events here have to have a method

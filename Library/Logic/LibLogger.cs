@@ -13,25 +13,31 @@ namespace VedAstro.Library
     /// </summary>
     public static class LibLogger
     {
-        
+
 
         /// <summary>
         /// Makes a debug log entry
         /// </summary>
         public static async Task Debug(string message = "")
         {
-            
+#if DEBUG
+            Console.WriteLine(message);
+#endif
         }
 
         public static void Debug(Exception message, string s)
         {
-            
+#if DEBUG
+            Console.WriteLine(message.ToString() + "/n" + s);
+#endif
         }
 
 
         public static void Debug(Exception message)
         {
-            
+#if DEBUG
+            Console.WriteLine(message.ToString());
+#endif
         }
     }
 }

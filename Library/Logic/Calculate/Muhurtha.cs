@@ -72,10 +72,10 @@ namespace VedAstro.Library
                                 lunarDayNumber == 13;
 
 
-            //event occuring if right lunar day
-            var occuring = rightLunarDay == true;
+            //event occurring if right lunar day
+            var occurring = rightLunarDay == true;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         /// <summary>
@@ -94,10 +94,10 @@ namespace VedAstro.Library
                                 lunarDayNumber == 15; //full moon
 
 
-            //event occuring if bad lunar day is occuring
-            var occuring = badLunarDay == true;
+            //event occurring if bad lunar day is occurring
+            var occurring = badLunarDay == true;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         /// <summary>
@@ -135,10 +135,10 @@ namespace VedAstro.Library
             //all quaters buts the first
             var isCorrectQuater = rulingConstellation.GetQuarter() != 1;
 
-            //event occuring if is good constellation & correct quater
-            var occuring = isGoodConstellation && isCorrectQuater;
+            //event occurring if is good constellation & correct quater
+            var occurring = isGoodConstellation && isCorrectQuater;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -182,10 +182,10 @@ namespace VedAstro.Library
                 isBadConstellation = true;
             }
 
-            //event occuring if is good constellation & correct quater
-            var occuring = isBadConstellation;
+            //event occurring if is good constellation & correct quater
+            var occurring = isBadConstellation;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -207,7 +207,7 @@ namespace VedAstro.Library
                 case DayOfWeek.Monday:
                     return CalculatorResult.IsOccuring();
                 default:
-                    //event not occuring
+                    //event not occurring
                     return CalculatorResult.NotOccuring();
             }
         }
@@ -229,7 +229,7 @@ namespace VedAstro.Library
                 case DayOfWeek.Thursday:
                     return CalculatorResult.IsOccuring();
                 default:
-                    //event not occuring
+                    //event not occurring
                     return CalculatorResult.NotOccuring();
             }
         }
@@ -252,7 +252,7 @@ namespace VedAstro.Library
                 case DayOfWeek.Friday:
                     return CalculatorResult.IsOccuring();
                 default:
-                    //event not occuring
+                    //event not occurring
                     return CalculatorResult.NotOccuring();
             }
         }
@@ -278,7 +278,7 @@ namespace VedAstro.Library
                 case DayOfWeek.Tuesday:
                     return CalculatorResult.IsOccuring();
                 default:
-                    //event not occuring
+                    //event not occurring
                     return CalculatorResult.NotOccuring();
             }
         }
@@ -293,7 +293,7 @@ namespace VedAstro.Library
             //get rising sign
             var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
-            //if rising sign is the right one then event is occuring
+            //if rising sign is the right one then event is occurring
             if (risingSign == ZodiacName.Aries ||
                 risingSign == ZodiacName.Taurus ||
                 risingSign == ZodiacName.Cancer ||
@@ -305,7 +305,7 @@ namespace VedAstro.Library
             }
             else
             {
-                //if different sign, not occuring
+                //if different sign, not occurring
                 return CalculatorResult.NotOccuring();
             }
 
@@ -331,7 +331,7 @@ namespace VedAstro.Library
             }
             else
             {
-                //if different sign, not occuring
+                //if different sign, not occurring
                 return CalculatorResult.NotOccuring();
             }
 
@@ -356,7 +356,7 @@ namespace VedAstro.Library
             }
             else
             {
-                //if different sign, not occuring
+                //if different sign, not occurring
                 return CalculatorResult.NotOccuring();
             }
 
@@ -378,7 +378,7 @@ namespace VedAstro.Library
             var _7thSign = Calculate.SignCountedFromLagnaSign(7, time);
             var _9thSign = Calculate.SignCountedFromLagnaSign(9, time);
 
-            //if any of the signs match lagna than event is occuring
+            //if any of the signs match lagna than event is occurring
             var isMatch = _5thSign == janmaLagna || _7thSign == janmaLagna || _9thSign == janmaLagna;
 
             if (isMatch)
@@ -387,7 +387,7 @@ namespace VedAstro.Library
             }
             else
             {
-                //if different sign, not occuring
+                //if different sign, not occurring
                 return CalculatorResult.NotOccuring();
             }
 
@@ -422,7 +422,7 @@ namespace VedAstro.Library
                 }
             }
 
-            //if control comes here than not occuring
+            //if control comes here than not occurring
             return CalculatorResult.NotOccuring();
         }
 
@@ -443,9 +443,9 @@ namespace VedAstro.Library
             var isJupiterInKendra = Calculate.IsPlanetInKendra(PlanetName.Jupiter, time);
 
             //both conditions need to be met
-            var occuring = isJupiterInKendra && moonIn3_6_9_12;
+            var occurring = isJupiterInKendra && moonIn3_6_9_12;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -464,9 +464,9 @@ namespace VedAstro.Library
             var isVenusJupiterKendra = Calculate.IsPlanetInKendra(planetNames, time);
 
             //both conditions need to be met to fortify moon
-            var occuring = isMoonInLagna && isVenusJupiterKendra;
+            var occurring = isMoonInLagna && isVenusJupiterKendra;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -488,9 +488,9 @@ namespace VedAstro.Library
             var moonNotIn8 = !Calculate.IsPlanetInHouse(PlanetName.Moon, HouseName.House8, time);
 
             //all conditions need to meet
-            var occuring = jupiterInLagna && jupiterIsStrong && moonNotIn8;
+            var occurring = jupiterInLagna && jupiterIsStrong && moonNotIn8;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -509,9 +509,9 @@ namespace VedAstro.Library
             var isMercuryIn4th = Calculate.IsPlanetInHouse(PlanetName.Mercury, HouseName.House4, time);
 
             //all conditions need to meet
-            var occuring = isMoonIn7th && isVenusIn4th && isMercuryIn4th;
+            var occurring = isMoonIn7th && isVenusIn4th && isMercuryIn4th;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -532,9 +532,9 @@ namespace VedAstro.Library
             var isJupiterIn7th = Calculate.IsPlanetInHouse(PlanetName.Jupiter, HouseName.House7, time);
 
             //either 1 conditions meets 
-            var occuring = isMercuryIn4th || isJupiterIn2nd || isJupiterIn7th;
+            var occurring = isMercuryIn4th || isJupiterIn2nd || isJupiterIn7th;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -549,7 +549,7 @@ namespace VedAstro.Library
             var beneficPlanets = Calculate.BeneficPlanetList(time);
 
             //check if any of the benefic is in kendra or trikona and is strong as well
-            //else event not occuring
+            //else event not occurring
             foreach (var planet in beneficPlanets)
             {
                 //in trine or kendra
@@ -560,12 +560,12 @@ namespace VedAstro.Library
                 //strong
                 var isStrong = Calculate.IsPlanetStrongInShadbala(planet, time);
 
-                //both conditions met, event occuring
+                //both conditions met, event occurring
                 if (trikonaOrKendra && isStrong) { return CalculatorResult.IsOccuring(); }
 
             }
 
-            //if control reache here than not occuring
+            //if control reache here than not occurring
             return CalculatorResult.NotOccuring();
 
         }
@@ -587,9 +587,9 @@ namespace VedAstro.Library
             var venusNotIn7th = !Calculate.IsPlanetInHouse(PlanetName.Venus, HouseName.House7, time);
 
             //all has to meet
-            var occuring = isJupiterInLagna && isMaleficsInUpachayas && venusNotIn7th;
+            var occurring = isJupiterInLagna && isMaleficsInUpachayas && venusNotIn7th;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -709,10 +709,10 @@ namespace VedAstro.Library
         {
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Janma && tarabala.GetCycle() == 1;
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Janma && tarabala.GetCycle() == 1;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TarabalaSampatStrong)]
@@ -721,10 +721,10 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Sampat && tarabala.GetCycle() == 1;
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Sampat && tarabala.GetCycle() == 1;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -734,10 +734,10 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Vipat && tarabala.GetCycle() == 1;
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Vipat && tarabala.GetCycle() == 1;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -747,10 +747,10 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Kshema && tarabala.GetCycle() == 1;
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Kshema && tarabala.GetCycle() == 1;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -760,10 +760,10 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Pratyak && tarabala.GetCycle() == 1;
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Pratyak && tarabala.GetCycle() == 1;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TarabalaSadhanaStrong)]
@@ -772,10 +772,10 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Sadhana && tarabala.GetCycle() == 1;
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Sadhana && tarabala.GetCycle() == 1;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -785,10 +785,10 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Naidhana && tarabala.GetCycle() == 1;
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Naidhana && tarabala.GetCycle() == 1;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -798,10 +798,10 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Mitra && tarabala.GetCycle() == 1;
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Mitra && tarabala.GetCycle() == 1;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
 
         }
 
@@ -811,9 +811,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.ParamaMitra && tarabala.GetCycle() == 1;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.ParamaMitra && tarabala.GetCycle() == 1;
+            return new() { Occuring = occurring };
 
         }
 
@@ -823,9 +823,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Janma && tarabala.GetCycle() == 2;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Janma && tarabala.GetCycle() == 2;
+            return new() { Occuring = occurring };
 
         }
 
@@ -835,9 +835,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Sampat && tarabala.GetCycle() == 2;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Sampat && tarabala.GetCycle() == 2;
+            return new() { Occuring = occurring };
 
         }
 
@@ -847,9 +847,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Vipat && tarabala.GetCycle() == 2;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Vipat && tarabala.GetCycle() == 2;
+            return new() { Occuring = occurring };
 
         }
 
@@ -859,9 +859,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Kshema && tarabala.GetCycle() == 2;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Kshema && tarabala.GetCycle() == 2;
+            return new() { Occuring = occurring };
 
         }
 
@@ -871,9 +871,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Pratyak && tarabala.GetCycle() == 2;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Pratyak && tarabala.GetCycle() == 2;
+            return new() { Occuring = occurring };
 
         }
 
@@ -883,9 +883,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Sadhana && tarabala.GetCycle() == 2;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Sadhana && tarabala.GetCycle() == 2;
+            return new() { Occuring = occurring };
 
         }
 
@@ -895,9 +895,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Naidhana && tarabala.GetCycle() == 2;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Naidhana && tarabala.GetCycle() == 2;
+            return new() { Occuring = occurring };
 
         }
 
@@ -907,9 +907,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Mitra && tarabala.GetCycle() == 2;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Mitra && tarabala.GetCycle() == 2;
+            return new() { Occuring = occurring };
 
         }
 
@@ -919,9 +919,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.ParamaMitra && tarabala.GetCycle() == 2;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.ParamaMitra && tarabala.GetCycle() == 2;
+            return new() { Occuring = occurring };
 
         }
 
@@ -931,9 +931,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Janma && tarabala.GetCycle() == 3;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Janma && tarabala.GetCycle() == 3;
+            return new() { Occuring = occurring };
 
         }
 
@@ -943,9 +943,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Sampat && tarabala.GetCycle() == 3;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Sampat && tarabala.GetCycle() == 3;
+            return new() { Occuring = occurring };
 
         }
 
@@ -955,9 +955,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Vipat && tarabala.GetCycle() == 3;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Vipat && tarabala.GetCycle() == 3;
+            return new() { Occuring = occurring };
 
         }
 
@@ -967,9 +967,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Kshema && tarabala.GetCycle() == 3;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Kshema && tarabala.GetCycle() == 3;
+            return new() { Occuring = occurring };
 
         }
 
@@ -979,9 +979,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Pratyak && tarabala.GetCycle() == 3;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Pratyak && tarabala.GetCycle() == 3;
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TarabalaSadhanaWeak)]
@@ -990,9 +990,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Sadhana && tarabala.GetCycle() == 3;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Sadhana && tarabala.GetCycle() == 3;
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TarabalaNaidhanaWeak)]
@@ -1001,9 +1001,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Naidhana && tarabala.GetCycle() == 3;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Naidhana && tarabala.GetCycle() == 3;
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TarabalaMitraWeak)]
@@ -1012,9 +1012,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.Mitra && tarabala.GetCycle() == 3;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.Mitra && tarabala.GetCycle() == 3;
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TarabalaParamaMitraWeak)]
@@ -1023,9 +1023,9 @@ namespace VedAstro.Library
             //get tarabala for current time
             var tarabala = Calculate.Tarabala(time, person);
 
-            //event occuring based on tarabala name & cycle
-            var occuring = tarabala.GetName() == TarabalaName.ParamaMitra && tarabala.GetCycle() == 3;
-            return new() { Occuring = occuring };
+            //event occurring based on tarabala name & cycle
+            var occurring = tarabala.GetName() == TarabalaName.ParamaMitra && tarabala.GetCycle() == 3;
+            return new() { Occuring = occurring };
         }
 
 
@@ -1033,14 +1033,14 @@ namespace VedAstro.Library
         [EventCalculator(EventName.GoodChandrabala)]
         public static CalculatorResult IsGoodChandrabalaOccuring(Time time, Person person)
         {
-            //if bad chandrabala is occuring
+            //if bad chandrabala is occurring
             if (IsBadChandrabalaOccuring(time, person).Occuring)
             {
                 //return false
                 return CalculatorResult.NotOccuring();
             }
             else
-            {   //if bad chandrabala is not occuring good chandrabala is occuring
+            {   //if bad chandrabala is not occurring good chandrabala is occurring
                 return CalculatorResult.IsOccuring();
             }
         }
@@ -1082,7 +1082,7 @@ namespace VedAstro.Library
                 //check if phase is correct 
                 var rightPhase = moonPhase == MoonPhase.BrightHalf;
 
-                //if not correct phase, end here as not occuring
+                //if not correct phase, end here as not occurring
                 if (rightPhase == false) { return false; }
 
 
@@ -1095,7 +1095,7 @@ namespace VedAstro.Library
                                 relationship == PlanetToSignRelationship.FriendVarga || //Mitravarga - friendly varga
                                 relationship == PlanetToSignRelationship.BestFriendVarga; //Adhi Mitravarga - Intimate friend varga
 
-                //if not benefic, end here as not occuring
+                //if not benefic, end here as not occurring
                 if (isBenefic == false) { return false; }
 
 
@@ -1108,7 +1108,7 @@ namespace VedAstro.Library
                                 navamsaRelationship == PlanetToSignRelationship.FriendVarga || //Mitravarga - friendly varga
                                 navamsaRelationship == PlanetToSignRelationship.BestFriendVarga; //Adhi Mitravarga - Intimate friend varga
 
-                //if not benefic, end here as not occuring
+                //if not benefic, end here as not occurring
                 if (isBeneficNavamsa == false) { return false; }
 
 
@@ -1143,13 +1143,13 @@ namespace VedAstro.Library
         [EventCalculator(EventName.GoodPanchaka)]
         public static CalculatorResult IsGoodPanchakaOccuring(Time time, Person person)
         {
-            //get occuring panchaka
+            //get occurring panchaka
             var panchakaName = Calculate.Panchaka(time);
 
             //if panchaka is good (subha)
             if (panchakaName == PanchakaName.Shubha)
             {
-                //event is occuring
+                //event is occurring
                 return CalculatorResult.IsOccuring();
             }
             else
@@ -1161,18 +1161,18 @@ namespace VedAstro.Library
         [EventCalculator(EventName.BadPanchaka)]
         public static CalculatorResult IsBadPanchakaOccuring(Time time, Person person)
         {
-            //check if good panchaka occuring 
-            var goodPanchakaOcurring = IsGoodPanchakaOccuring(time, person).Occuring;
+            //check if good panchaka occurring 
+            var goodPanchakaOccurring = IsGoodPanchakaOccuring(time, person).Occuring;
 
-            //if good panchaka is occuring
-            if (goodPanchakaOcurring)
+            //if good panchaka is occurring
+            if (goodPanchakaOccurring)
             {
-                //bad panchaka is not occuring
+                //bad panchaka is not occurring
                 return CalculatorResult.NotOccuring();
             }
             else
             {
-                //else bad panchaka is occuring
+                //else bad panchaka is occurring
                 return CalculatorResult.IsOccuring();
             }
         }
@@ -1287,9 +1287,9 @@ namespace VedAstro.Library
             //get current rulling constellation
             var currentRulingConstellation = Calculate.MoonConstellation(time);
 
-            //check only if constellation "name" is match (not checking quater), if match event occuring
-            var occuring = birthRulingConstellation.GetConstellationName() == currentRulingConstellation.GetConstellationName();
-            return new() { Occuring = occuring };
+            //check only if constellation "name" is match (not checking quater), if match event occurring
+            var occurring = birthRulingConstellation.GetConstellationName() == currentRulingConstellation.GetConstellationName();
+            return new() { Occuring = occurring };
 
         }
 
@@ -1355,7 +1355,7 @@ namespace VedAstro.Library
             //right weekdays to look for
             var rightWeekday = weekday == DayOfWeek.Saturday || weekday == DayOfWeek.Monday;
 
-            //if not correct weekdays, end here as not occuring
+            //if not correct weekdays, end here as not occurring
             if (rightWeekday == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -1369,21 +1369,21 @@ namespace VedAstro.Library
                             || risingSign == ZodiacName.Cancer
                             || risingSign == ZodiacName.Virgo;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
 
             //3. The 8th house must be unoccupied
             var planets8thHouse = Calculate.PlanetsInHouse(HouseName.House8, time);
 
-            //if got planets in 8th house, event not occuring
+            //if got planets in 8th house, event not occurring
             if (planets8thHouse.Any()) { return CalculatorResult.NotOccuring(); }
 
 
             //4. Mercury is free from affliction
             var mercuryIsAfflicted = Calculate.IsMercuryAfflicted(time);
 
-            //if afflicted, event not occuring
+            //if afflicted, event not occurring
             if (mercuryIsAfflicted) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -1453,9 +1453,9 @@ namespace VedAstro.Library
             //Thaithula is propitious for marriage
             var karana = Calculate.Karana(time);
 
-            //occuring if correct Karana
-            var occuring = karana == Karana.Taitula;
-            return new() { Occuring = occuring };
+            //occurring if correct Karana
+            var occurring = karana == Karana.Taitula;
+            return new() { Occuring = occurring };
 
         }
 
@@ -1472,9 +1472,9 @@ namespace VedAstro.Library
 
             var karana = Calculate.Karana(time);
 
-            //occuring if correct Karana
-            var occuring = karana == Karana.Sakuna;
-            return new() { Occuring = occuring };
+            //occurring if correct Karana
+            var occurring = karana == Karana.Sakuna;
+            return new() { Occuring = occurring };
 
         }
 
@@ -1484,9 +1484,9 @@ namespace VedAstro.Library
             //Thus Bava is auspicious for starting works of permanent importance while
             var karana = Calculate.Karana(time);
 
-            //occuring if correct Karana
-            var occuring = karana == Karana.Bava;
-            return new() { Occuring = occuring };
+            //occurring if correct Karana
+            var occurring = karana == Karana.Bava;
+            return new() { Occuring = occurring };
 
         }
 
@@ -1498,9 +1498,9 @@ namespace VedAstro.Library
 
             var karana = Calculate.Karana(time);
 
-            //occuring if correct Karana
-            var occuring = karana == Karana.Visti;
-            return new() { Occuring = occuring };
+            //occurring if correct Karana
+            var occurring = karana == Karana.Visti;
+            return new() { Occuring = occurring };
 
         }
 
@@ -1515,7 +1515,7 @@ namespace VedAstro.Library
             //right lunar days to look for
             var rightLunarDay = lunarDayNumber == 11;
 
-            //if not correct lunar days, end here as not occuring
+            //if not correct lunar days, end here as not occurring
             if (rightLunarDay == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -1537,12 +1537,12 @@ namespace VedAstro.Library
             //if venus is in 6th house
             if (houseVenusIsIn == HouseName.House6)
             {
-                //event is occuring
+                //event is occurring
                 return CalculatorResult.IsOccuring();
             }
             else
             {
-                //event is not occuring
+                //event is not occurring
                 return CalculatorResult.NotOccuring();
             }
 
@@ -1564,12 +1564,12 @@ namespace VedAstro.Library
             //if mars is in 8th house
             if (houseMarsIsIn == HouseName.House8)
             {
-                //event is occuring
+                //event is occurring
                 return CalculatorResult.IsOccuring();
             }
             else
             {
-                //event is not occuring
+                //event is not occurring
                 return CalculatorResult.NotOccuring();
             }
 
@@ -1638,14 +1638,14 @@ namespace VedAstro.Library
 
             }
 
-            //3.0 If evil planets found in both houses, event is occuring
+            //3.0 If evil planets found in both houses, event is occurring
             if (evilPlanetFoundInHouse12 && evilPlanetFoundInHouse2)
             {
                 return CalculatorResult.IsOccuring();
             }
             else
             {
-                //event not occuring
+                //event not occurring
                 return CalculatorResult.NotOccuring();
             }
 
@@ -1664,11 +1664,11 @@ namespace VedAstro.Library
             //if house moon is in is 6, 8 or 12
             if (houseMoonIsIn == HouseName.House6 || houseMoonIsIn == HouseName.House8 || houseMoonIsIn == HouseName.House12)
             {
-                //event is occuring
+                //event is occurring
                 return CalculatorResult.IsOccuring();
             }
 
-            //else event is not occuring
+            //else event is not occurring
             return CalculatorResult.NotOccuring();
         }
 
@@ -1682,7 +1682,7 @@ namespace VedAstro.Library
             //get planets in conjunction with the moon
             var planetsInConjunct = Calculate.PlanetsInConjuction(PlanetName.Moon, time);
 
-            //if any planets are in conjunct with moon, event is occuring
+            //if any planets are in conjunct with moon, event is occurring
             if (planetsInConjunct.Count > 0) { return CalculatorResult.IsOccuring(); }
 
             return CalculatorResult.NotOccuring();
@@ -1709,7 +1709,7 @@ namespace VedAstro.Library
             //check if lagna is strong
             var lagnaIsStrong = IsStrongLagnaOccuring(time);
 
-            //if lagna is NOT strong, end here as not occuring
+            //if lagna is NOT strong, end here as not occurring
             if (!lagnaIsStrong) { return CalculatorResult.NotOccuring(); }
 
             //check if 7th is strong
@@ -1717,8 +1717,8 @@ namespace VedAstro.Library
 
 
             //ocurring if lagna & house 7 is strong
-            var occuring = lagnaIsStrong && house7IsStrong;
-            return new() { Occuring = occuring };
+            var occurring = lagnaIsStrong && house7IsStrong;
+            return new() { Occuring = occurring };
 
 
 
@@ -1745,7 +1745,7 @@ namespace VedAstro.Library
 
                 if (lagnaLordInLagna && navamsaLagnaLordInNavamsaLagna)
                 {
-                    //event is occuring
+                    //event is occurring
                     return true;
                 }
 
@@ -1758,7 +1758,7 @@ namespace VedAstro.Library
 
                 if (navamsaLagnaLordInLagna && lagnaLordInNavamsaLagna)
                 {
-                    //event is occuring
+                    //event is occurring
                     return true;
                 }
 
@@ -1771,11 +1771,11 @@ namespace VedAstro.Library
 
                 if (lordOfLagnaAspectsNavamsaLagna && lordOfNavamsaLagnaAspectsLagna)
                 {
-                    //event is occuring
+                    //event is occurring
                     return true;
                 }
 
-                //if no above condition met, event not occuring
+                //if no above condition met, event not occurring
                 return false;
             }
 
@@ -1796,7 +1796,7 @@ namespace VedAstro.Library
 
                 if (_7thLordIn7th && navamsa7thLordInNavamsa7th)
                 {
-                    //event is occuring
+                    //event is occurring
                     return true;
                 }
 
@@ -1810,7 +1810,7 @@ namespace VedAstro.Library
 
                 if (navamsa7thLordIn7th && _7thLordInNavamsa7th)
                 {
-                    //event is occuring
+                    //event is occurring
                     return true;
                 }
 
@@ -1824,11 +1824,11 @@ namespace VedAstro.Library
 
                 if (lordOf7thAspectsNavamsa7th && lordOfNavamsaLagnaAspectsLagna)
                 {
-                    //event is occuring
+                    //event is occurring
                     return true;
                 }
 
-                //if no above condition met, event not occuring
+                //if no above condition met, event not occurring
                 return false;
             }
 
@@ -1850,7 +1850,7 @@ namespace VedAstro.Library
                 //4.0 check if lagna is in one of the signs navamsa lagna lord is aspecting
                 if (signsNavamsaLagnaLordIsAspecting.Contains(lagnaSign))
                 {
-                    //event is occuring
+                    //event is occurring
                     return true;
                 }
                 else
@@ -1878,7 +1878,7 @@ namespace VedAstro.Library
                 //4.0 check if 7th is in one of the signs navamsa 7th lord is aspecting
                 if (signsNavamsa7thLordIsAspecting.Contains(_7thSign))
                 {
-                    //event is occuring
+                    //event is occurring
                     return true; ;
                 }
                 else
@@ -1905,7 +1905,7 @@ namespace VedAstro.Library
                 //check if navamsa lagna is one of the signs lagna lord is aspecting
                 if (signsLagnaLordIsAspecting.Contains(navamsaLagnaSign))
                 {
-                    //event is occuring
+                    //event is occurring
                     return true; ;
                 }
                 else
@@ -1931,7 +1931,7 @@ namespace VedAstro.Library
                 //check if navamsa 7th is one of the signs 7th lord is aspecting
                 if (signs7thLordIsAspecting.Contains(navamsa7thSign))
                 {
-                    //event is occuring
+                    //event is occurring
                     return true; ;
                 }
                 else
@@ -1960,7 +1960,7 @@ namespace VedAstro.Library
                 //check if house 1 sign is same sign as the one navamsa lagna lord is in
                 if (house1Sign == ordinarySignOfNavamsaLagnaLord)
                 {
-                    //event occuring
+                    //event occurring
                     return true; ;
                 }
                 else
@@ -1991,7 +1991,7 @@ namespace VedAstro.Library
                 //check if house 7 sign is same sign as the one navamsa 7th lord is in
                 if (house7Sign == ordinarySignOfNavamsa7thLord)
                 {
-                    //event occuring
+                    //event occurring
                     return true; ;
                 }
                 else
@@ -2017,7 +2017,7 @@ namespace VedAstro.Library
                 //3.0 check if lagna lord in navamsa lagna sign
                 if (navamsaSignOfLagnaLord == navamsaLagnaSign)
                 {
-                    //event is occuring
+                    //event is occurring
                     return true; ;
                 }
                 else
@@ -2042,7 +2042,7 @@ namespace VedAstro.Library
                 //3.0 check if 7th lord in navamsa 7th sign
                 if (navamsaSignOf7thLord == navamsa7thSign)
                 {
-                    //event is occuring
+                    //event is occurring
                     return true; ;
                 }
                 else
@@ -2070,7 +2070,7 @@ namespace VedAstro.Library
                 //check if lagna lord is in navamsa lagna sign
                 if (navamsaSignOfNavamsaLagnaLord == navamsaLagnaSign)
                 {
-                    //event is occuring
+                    //event is occurring
                     return true; ;
                 }
                 else
@@ -2096,7 +2096,7 @@ namespace VedAstro.Library
                 //check if 7th lord is in navamsa 7th sign
                 if (navamsaSignOfNavamsa7thLord == navamsa7thSign)
                 {
-                    //event is occuring
+                    //event is occurring
                     return true; ;
                 }
                 else
@@ -2171,7 +2171,7 @@ namespace VedAstro.Library
 
             }
 
-            //if no condition above met, event not occuring
+            //if no condition above met, event not occurring
             return CalculatorResult.NotOccuring();
 
         }
@@ -2185,13 +2185,13 @@ namespace VedAstro.Library
             //get current weekday
             var weekday = Calculate.DayOfWeek(time);
 
-            //if tuesday & after midday then not occuring, end here
+            //if tuesday & after midday then not occurring, end here
             if (weekday == DayOfWeek.Tuesday && isAfterMidday()) { return CalculatorResult.NotOccuring(); }
 
-            //if tuesday or saturday event occuring
+            //if tuesday or saturday event occurring
             if (weekday == DayOfWeek.Tuesday || weekday == DayOfWeek.Saturday) { return CalculatorResult.IsOccuring(); }
 
-            //if control reaches here, not occuring
+            //if control reaches here, not occurring
             return CalculatorResult.NotOccuring();
 
             //------------FUNCTIONS
@@ -2202,7 +2202,7 @@ namespace VedAstro.Library
                 //get apparent noon
                 var apparentNoon = Calculate.NoonTime(time);
 
-                //if current time is past noon, then occuring
+                //if current time is past noon, then occurring
                 return localApparentTime > apparentNoon;
             }
         }
@@ -2221,11 +2221,11 @@ namespace VedAstro.Library
 
             foreach (var planetName in planetsInLagna)
             {
-                //if planet is good one, event is occuring
+                //if planet is good one, event is occurring
                 if (goodList.Contains(planetName)) { return CalculatorResult.IsOccuring(); }
             }
 
-            //if control reaches here, event not occuring
+            //if control reaches here, event not occurring
             return CalculatorResult.NotOccuring();
         }
 
@@ -2243,11 +2243,11 @@ namespace VedAstro.Library
 
             foreach (var planetName in planetsIn11th)
             {
-                //if planet is found good list, event is occuring
+                //if planet is found good list, event is occurring
                 if (goodList.Contains(planetName)) { return CalculatorResult.IsOccuring(); }
             }
 
-            //if control reaches here, event not occuring
+            //if control reaches here, event not occurring
             return CalculatorResult.NotOccuring();
         }
 
@@ -2266,18 +2266,18 @@ namespace VedAstro.Library
             var planetInKendra = Calculate.IsPlanetInKendra(PlanetName.Jupiter, time) ||
                                  Calculate.IsPlanetInKendra(PlanetName.Venus, time);
 
-            //if neither planet in kendra, end here as not occuring
+            //if neither planet in kendra, end here as not occurring
             if (planetInKendra == false) { return CalculatorResult.NotOccuring(); }
 
 
             //2
             var maleficsIn3rd6th11th = isAllMaleficsIn3rd6th11th();
 
-            //if all melefics are NOT in 3,6,11, end here as not occuring
+            //if all melefics are NOT in 3,6,11, end here as not occurring
             if (maleficsIn3rd6th11th == false) { return CalculatorResult.NotOccuring(); }
 
 
-            //if control reaches here, event is occuring
+            //if control reaches here, event is occurring
             return CalculatorResult.IsOccuring();
 
 
@@ -2295,11 +2295,11 @@ namespace VedAstro.Library
                 {
                     var planetHouse = Calculate.HousePlanetOccupies(malefic, time);
 
-                    //if not in 3, 6 or 11, end here as not occuring
+                    //if not in 3, 6 or 11, end here as not occurring
                     if (!(planetHouse == HouseName.House3 || planetHouse == HouseName.House6 || planetHouse == HouseName.House11)) { return false; }
                 }
 
-                //if control reaches here, than it is occuring
+                //if control reaches here, than it is occurring
                 return true;
             }
 
@@ -2318,7 +2318,7 @@ namespace VedAstro.Library
             //check ruling constellation name
             var rightConstellation = rulingConstellationName == ConstellationName.Pushyami;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (rightConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -2358,7 +2358,7 @@ namespace VedAstro.Library
 
             if (rulingConstellationName == ConstellationName.Bharani || rulingConstellationName == ConstellationName.Krithika)
             {
-                //event occuring
+                //event occurring
                 return CalculatorResult.IsOccuring();
             }
 
@@ -2368,7 +2368,7 @@ namespace VedAstro.Library
             {
                 if (rulingConstellation.GetQuarter() == 4)
                 {
-                    //event occuring
+                    //event occurring
                     return CalculatorResult.IsOccuring();
                 }
 
@@ -2376,7 +2376,7 @@ namespace VedAstro.Library
 
 
 
-            //if control reaches here then event is NOT occuring
+            //if control reaches here then event is NOT occurring
             return CalculatorResult.NotOccuring();
 
         }
@@ -2999,12 +2999,12 @@ namespace VedAstro.Library
                 //check if planet is strong
                 var isStrong = Calculate.IsPlanetStrongInShadbala(malefic, time);
 
-                //if any one malefic is strong, end here as occuring
+                //if any one malefic is strong, end here as occurring
                 if (isStrong) { return CalculatorResult.IsOccuring(); }
 
             }
 
-            //if control reaches here, than it is NOT occuring
+            //if control reaches here, than it is NOT occurring
             return CalculatorResult.NotOccuring();
 
         }
@@ -3037,7 +3037,7 @@ namespace VedAstro.Library
                     rulingConstellationName == ConstellationName.Satabhisha ||
                     rulingConstellationName == ConstellationName.Swathi;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (correctConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3054,7 +3054,7 @@ namespace VedAstro.Library
                                   lunarDayNumber == 1 || //new moon
                                   lunarDayNumber == 15; //full moon
 
-            //if the lunar days to avoid are occuring, end here as not occuring
+            //if the lunar days to avoid are occurring, end here as not occurring
             if (avoidLunarDay == true) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3072,10 +3072,10 @@ namespace VedAstro.Library
             //get weekday
             var dayOfWeek = Calculate.DayOfWeek(time);
 
-            //check if days to avoid are occuring
+            //check if days to avoid are occurring
             var avoidDays = dayOfWeek == DayOfWeek.Friday || dayOfWeek == DayOfWeek.Saturday;
 
-            //if wrong days then, end here as not occuring
+            //if wrong days then, end here as not occurring
             if (avoidDays == true) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3093,7 +3093,7 @@ namespace VedAstro.Library
                                 lunarDayNumber == 1 || //new moon
                                 lunarDayNumber == 15; //full moon
 
-            //if the lunar days to avoid are occuring, end here as not occuring
+            //if the lunar days to avoid are occurring, end here as not occurring
             if (avoidLunarDay == true) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3125,7 +3125,7 @@ namespace VedAstro.Library
                                        rulingConstellationName == ConstellationName.Uttarashada ||
                                        rulingConstellationName == ConstellationName.Uttarabhadra;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (fixedConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3150,7 +3150,7 @@ namespace VedAstro.Library
                                        rulingConstellationName == ConstellationName.Mrigasira ||
                                        rulingConstellationName == ConstellationName.Revathi;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (softConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3175,7 +3175,7 @@ namespace VedAstro.Library
                                        rulingConstellationName == ConstellationName.Pushyami ||
                                        rulingConstellationName == ConstellationName.Hasta;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (lightConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3199,7 +3199,7 @@ namespace VedAstro.Library
                                        rulingConstellationName == ConstellationName.Aridra ||
                                        rulingConstellationName == ConstellationName.Aslesha;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (sharpConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3224,7 +3224,7 @@ namespace VedAstro.Library
                                        rulingConstellationName == ConstellationName.Punarvasu ||
                                        rulingConstellationName == ConstellationName.Swathi;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (movableConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3249,7 +3249,7 @@ namespace VedAstro.Library
                                         rulingConstellationName == ConstellationName.Bharani ||
                                         rulingConstellationName == ConstellationName.Makha;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (dreadfulConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3270,7 +3270,7 @@ namespace VedAstro.Library
             var mixedConstellation = rulingConstellationName == ConstellationName.Krithika ||
                                      rulingConstellationName == ConstellationName.Vishhaka;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (mixedConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3296,7 +3296,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3319,7 +3319,7 @@ namespace VedAstro.Library
                                      rulingConstellationName == ConstellationName.Moola ||
                                      rulingConstellationName == ConstellationName.Anuradha;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (rightConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3336,7 +3336,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3347,7 +3347,7 @@ namespace VedAstro.Library
             //check ruling constellation name
             var rightConstellation = rulingConstellationName == ConstellationName.Rohini;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (rightConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3366,7 +3366,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3384,7 +3384,7 @@ namespace VedAstro.Library
                                      rulingConstellationName == ConstellationName.Revathi;
 
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (rightConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3401,7 +3401,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3412,7 +3412,7 @@ namespace VedAstro.Library
             //check ruling constellation name
             var rightConstellation = rulingConstellationName == ConstellationName.Punarvasu;
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (rightConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3425,7 +3425,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsGoodForPlantingFruitTreesOccuring(Time time, Person person)
         {
 
-            //if either 1 event is occuring
+            //if either 1 event is occurring
             if (fruitTree1() || fruitTree2())
             {
                 return CalculatorResult.IsOccuring();
@@ -3442,7 +3442,7 @@ namespace VedAstro.Library
                 //1. General good yoga for planting
                 var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-                //if not right, end here as not occuring
+                //if not right, end here as not occurring
                 if (rightYoga == false) { return false; }
 
 
@@ -3453,7 +3453,7 @@ namespace VedAstro.Library
                 //check weekday
                 var rightWeekday = currentWeekday == DayOfWeek.Thursday;
 
-                //if not correct weekday, end here as not occuring
+                //if not correct weekday, end here as not occurring
                 if (rightWeekday == false) { return false; }
 
 
@@ -3479,7 +3479,7 @@ namespace VedAstro.Library
                 //1. General good yoga for planting
                 var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-                //if not right, end here as not occuring
+                //if not right, end here as not occurring
                 if (rightYoga == false) { return false; }
 
 
@@ -3490,7 +3490,7 @@ namespace VedAstro.Library
                 //check weekday
                 var rightWeekday = currentWeekday == DayOfWeek.Thursday;
 
-                //if not correct weekday, end here as not occuring
+                //if not correct weekday, end here as not occurring
                 if (rightWeekday == false) { return false; }
 
 
@@ -3502,7 +3502,7 @@ namespace VedAstro.Library
                 var rightSign = risingSign == ZodiacName.Sagittarius ||
                                 risingSign == ZodiacName.Pisces;
 
-                //if not correct sign, end here as not occuring
+                //if not correct sign, end here as not occurring
                 if (rightSign == false) { return false; }
 
 
@@ -3522,7 +3522,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3533,7 +3533,7 @@ namespace VedAstro.Library
             //check weekday
             var rightWeekday = currentWeekday == DayOfWeek.Friday;
 
-            //if not correct weekday, end here as not occuring
+            //if not correct weekday, end here as not occurring
             if (rightWeekday == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3562,7 +3562,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3573,7 +3573,7 @@ namespace VedAstro.Library
             //check weekday
             var rightWeekday = currentWeekday == DayOfWeek.Tuesday;
 
-            //if not correct weekday, end here as not occuring
+            //if not correct weekday, end here as not occurring
             if (rightWeekday == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3602,7 +3602,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3614,7 +3614,7 @@ namespace VedAstro.Library
             var rightSign = risingSign == ZodiacName.Taurus ||
                             risingSign == ZodiacName.Libra;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3632,7 +3632,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3643,7 +3643,7 @@ namespace VedAstro.Library
             //check rising sign
             var rightSign = risingSign == ZodiacName.Virgo;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -3658,7 +3658,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3669,7 +3669,7 @@ namespace VedAstro.Library
             //check rising sign
             var rightSign = risingSign == ZodiacName.Aries;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -3684,7 +3684,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3695,7 +3695,7 @@ namespace VedAstro.Library
             //check rising sign
             var rightSign = risingSign == ZodiacName.Taurus;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -3710,7 +3710,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3721,7 +3721,7 @@ namespace VedAstro.Library
             //check rising sign
             var rightSign = risingSign == ZodiacName.Cancer;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -3736,7 +3736,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3747,7 +3747,7 @@ namespace VedAstro.Library
             //check rising sign
             var rightSign = risingSign == ZodiacName.Libra;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -3762,7 +3762,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3773,7 +3773,7 @@ namespace VedAstro.Library
             //check rising sign
             var rightSign = risingSign == ZodiacName.Scorpio;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -3788,7 +3788,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3799,7 +3799,7 @@ namespace VedAstro.Library
             //check rising sign
             var rightSign = risingSign == ZodiacName.Sagittarius;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -3814,7 +3814,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3825,7 +3825,7 @@ namespace VedAstro.Library
             //check rising sign
             var rightSign = risingSign == ZodiacName.Capricorn;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -3840,7 +3840,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3851,7 +3851,7 @@ namespace VedAstro.Library
             //check rising sign
             var rightSign = risingSign == ZodiacName.Aquarius;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -3866,7 +3866,7 @@ namespace VedAstro.Library
             //1. General good yoga for planting
             var rightYoga = IsGoodYogaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if not right, end here as not occuring
+            //if not right, end here as not occurring
             if (rightYoga == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3877,7 +3877,7 @@ namespace VedAstro.Library
             //check rising sign
             var rightSign = risingSign == ZodiacName.Pisces;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (rightSign == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -3890,10 +3890,10 @@ namespace VedAstro.Library
             //1. Lunar Day
             //provided the lunar day is also propitious.
 
-            //right lunar days for agriculture occuring
+            //right lunar days for agriculture occurring
             var rightLunarDay = IsGoodLunarDayAgricultureOccuring(time, person).Occuring;
 
-            //if not correct lunar days, end here as not occuring
+            //if not correct lunar days, end here as not occurring
             if (rightLunarDay == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3901,7 +3901,7 @@ namespace VedAstro.Library
             //Choose a Lagna, owned by the planet who is lord of the weekday in question.
             var lagnaLordIsWeekdayLord = IsLagnaLordIsWeekdayLordOccuring(time, person).Occuring;
 
-            //if not correct lagna, end here as not occuring
+            //if not correct lagna, end here as not occurring
             if (lagnaLordIsWeekdayLord == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3909,7 +3909,7 @@ namespace VedAstro.Library
             //While beginning all agricultural operations, see that the 8th house is unoccupied
             var house8Occupied = IsBadForStartingAllAgricultureOccuring(time, person).Occuring;
 
-            //if 8th house is occupied, end here as not occuring
+            //if 8th house is occupied, end here as not occurring
             if (house8Occupied == true) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3918,7 +3918,7 @@ namespace VedAstro.Library
             //Leo: Not good for any planting, especially bad for underground plants such as potato.
             var badRising = IsBadLagnaForAllAgricultureOccuring(time, person).Occuring;
 
-            //if bad rising sign, end here as not occuring
+            //if bad rising sign, end here as not occurring
             if (badRising == true) { return CalculatorResult.NotOccuring(); }
 
 
@@ -3934,13 +3934,13 @@ namespace VedAstro.Library
             //get all planets in 8th house
             var planets = Calculate.PlanetsInHouse(HouseName.House8, time);
 
-            //if any planets in 8th house, return occuring
+            //if any planets in 8th house, return occurring
             if (planets.Any())
             {
                 return CalculatorResult.IsOccuring();
             }
             else
-            {   //if no planets, event not occuring
+            {   //if no planets, event not occurring
                 return CalculatorResult.NotOccuring();
             }
         }
@@ -3957,13 +3957,13 @@ namespace VedAstro.Library
             var weekdayLord = Calculate.LordOfWeekday(time);
 
 
-            //if the lord of lagna & lord of weekday same, then event occuring
+            //if the lord of lagna & lord of weekday same, then event occurring
             if (weekdayLord == lagnaLord)
             {
                 return CalculatorResult.IsOccuring();
             }
             else
-            {   //event not occuring, if planet not same
+            {   //event not occurring, if planet not same
                 return CalculatorResult.NotOccuring();
             }
         }
@@ -3990,7 +3990,7 @@ namespace VedAstro.Library
                                 lunarDayNumber == 13 ||
                                 lunarDayNumber == 15; //full moon
 
-            //if not correct lunar days, end here as not occuring
+            //if not correct lunar days, end here as not occurring
             if (rightLunarDay == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4007,14 +4007,14 @@ namespace VedAstro.Library
             //get rising sign
             var risingSign = Calculate.HouseSignName(HouseName.House1, time);
 
-            //if rising sign is Gemini or Leo, then event is occuring
+            //if rising sign is Gemini or Leo, then event is occurring
             if (risingSign == ZodiacName.Gemini || risingSign == ZodiacName.Leo)
             {
                 return CalculatorResult.IsOccuring();
             }
             else
             {
-                //if different sign, not occuring
+                //if different sign, not occurring
                 return CalculatorResult.NotOccuring();
             }
 
@@ -4037,19 +4037,19 @@ namespace VedAstro.Library
 
             //1.Let the Moon and Mercury be free from the conjunction or aspect of Mars
 
-            //if moon aspected by mars, end here as not occuring
+            //if moon aspected by mars, end here as not occurring
             var moonAspectedByMars = Calculate.IsPlanetAspectedByPlanet(PlanetName.Moon, PlanetName.Mars, time);
             if (moonAspectedByMars) { return CalculatorResult.NotOccuring(); }
 
-            //if mercury aspected by mars, end here as not occuring
+            //if mercury aspected by mars, end here as not occurring
             var mercuryAspectedByMars = Calculate.IsPlanetAspectedByPlanet(PlanetName.Mercury, PlanetName.Mars, time);
             if (mercuryAspectedByMars) { return CalculatorResult.NotOccuring(); }
 
-            //if moon conjunct with mars, end here as not occuring
+            //if moon conjunct with mars, end here as not occurring
             var moonConjunctWithMars = Calculate.IsPlanetConjunctWithPlanet(PlanetName.Moon, PlanetName.Mars, time);
             if (moonConjunctWithMars) { return CalculatorResult.NotOccuring(); }
 
-            //if mercury conjunct with mars, end here as not occuring
+            //if mercury conjunct with mars, end here as not occurring
             var mercuryConjunctWithMars = Calculate.IsPlanetConjunctWithPlanet(PlanetName.Mercury, PlanetName.Mars, time);
             if (mercuryConjunctWithMars) { return CalculatorResult.NotOccuring(); }
 
@@ -4064,7 +4064,7 @@ namespace VedAstro.Library
                                 moonSign.GetSignName() == ZodiacName.Cancer ||
                                 moonSign.GetSignName() == ZodiacName.Pisces;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (inCorrectSign == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4072,7 +4072,7 @@ namespace VedAstro.Library
             var mercuryInKendra = Calculate.IsPlanetInKendra(PlanetName.Mercury, time);
             var mercuryInGoodAspectToJupiter = Calculate.IsPlanetInGoodAspectToPlanet(PlanetName.Jupiter, PlanetName.Mercury, time);
 
-            //if NOT in good aspect or in kendra, event not occuring
+            //if NOT in good aspect or in kendra, event not occurring
             if (!(mercuryInKendra || mercuryInGoodAspectToJupiter)) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4088,7 +4088,7 @@ namespace VedAstro.Library
                                    weekDay == DayOfWeek.Thursday ||
                                    weekDay == DayOfWeek.Saturday;
 
-            //if not correct weekday, end here as not occuring
+            //if not correct weekday, end here as not occurring
             if (inCorrectWeekday == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4113,7 +4113,7 @@ namespace VedAstro.Library
                                    weekDay == DayOfWeek.Wednesday ||
                                    weekDay == DayOfWeek.Thursday;
 
-            //if not correct weekday, end here as not occuring
+            //if not correct weekday, end here as not occurring
             if (inCorrectWeekday == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4139,7 +4139,7 @@ namespace VedAstro.Library
                                 moonSign.GetSignName() == ZodiacName.Cancer ||
                                 moonSign.GetSignName() == ZodiacName.Pisces;
 
-            //if not correct sign, end here as not occuring
+            //if not correct sign, end here as not occurring
             if (inCorrectSign == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4172,7 +4172,7 @@ namespace VedAstro.Library
                                      rulingConstellationName == ConstellationName.Jyesta;
 
 
-            //if not correct constellation, end here as not occuring
+            //if not correct constellation, end here as not occurring
             if (rightConstellation == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4186,7 +4186,7 @@ namespace VedAstro.Library
                                 lunarDayNumber == 9 ||
                                 lunarDayNumber == 1;
 
-            //if not correct lunar days, end here as not occuring
+            //if not correct lunar days, end here as not occurring
             if (rightLunarDay == false) { return CalculatorResult.NotOccuring(); }
 
             //if control reaches here then event is ocuring
@@ -4203,10 +4203,10 @@ namespace VedAstro.Library
             // and 9th lunar days and New Moon.
 
             //1
-            //bad tithi & constellation for buying not occuring
+            //bad tithi & constellation for buying not occurring
             var badYoga = IsBadForBuyingToolsUtensilsJewelleryOccuring(time, person).Occuring;
 
-            //if occuring end here, as not occuring
+            //if occurring end here, as not occurring
             if (badYoga) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4214,7 +4214,7 @@ namespace VedAstro.Library
             //check aspect
             var goodAspect = Calculate.IsPlanetInGoodAspectToPlanet(PlanetName.Moon, PlanetName.Jupiter, time);
 
-            //if NOT occuring end here, as not occuring
+            //if NOT occurring end here, as not occurring
             if (goodAspect == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4232,10 +4232,10 @@ namespace VedAstro.Library
             // and 9th lunar days and New Moon.
 
             //1
-            //bad tithi & constellation for buying not occuring
+            //bad tithi & constellation for buying not occurring
             var badYoga = IsBadForBuyingToolsUtensilsJewelleryOccuring(time, person).Occuring;
 
-            //if occuring end here, as not occuring
+            //if occurring end here, as not occurring
             if (badYoga) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4243,7 +4243,7 @@ namespace VedAstro.Library
             //check aspect
             var goodAspect = Calculate.IsPlanetInGoodAspectToPlanet(PlanetName.Mars, PlanetName.Jupiter, time);
 
-            //if NOT occuring end here, as not occuring
+            //if NOT occurring end here, as not occurring
             if (goodAspect == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4261,10 +4261,10 @@ namespace VedAstro.Library
             // and 9th lunar days and New Moon.
 
             //1
-            //bad tithi & constellation for buying not occuring
+            //bad tithi & constellation for buying not occurring
             var badYoga = IsBadForBuyingToolsUtensilsJewelleryOccuring(time, person).Occuring;
 
-            //if occuring end here, as not occuring
+            //if occurring end here, as not occurring
             if (badYoga) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4272,7 +4272,7 @@ namespace VedAstro.Library
             //check aspect
             var goodAspect = Calculate.IsPlanetInGoodAspectToPlanet(PlanetName.Saturn, PlanetName.Jupiter, time);
 
-            //if NOT occuring end here, as not occuring
+            //if NOT occurring end here, as not occurring
             if (goodAspect == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4290,10 +4290,10 @@ namespace VedAstro.Library
             // and 9th lunar days and New Moon.
 
             //1
-            //bad tithi & constellation for buying not occuring
+            //bad tithi & constellation for buying not occurring
             var badYoga = IsBadForBuyingToolsUtensilsJewelleryOccuring(time, person).Occuring;
 
-            //if occuring end here, as not occuring
+            //if occurring end here, as not occurring
             if (badYoga) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4301,7 +4301,7 @@ namespace VedAstro.Library
             //check aspect
             var goodAspect = Calculate.IsPlanetInGoodAspectToHouse(HouseName.House1, PlanetName.Jupiter, time);
 
-            //if NOT occuring end here, as not occuring
+            //if NOT occurring end here, as not occurring
             if (goodAspect == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4317,10 +4317,10 @@ namespace VedAstro.Library
             // avoided.
 
             //1
-            //bad tithi & constellation for buying not occuring
+            //bad tithi & constellation for buying not occurring
             var badYoga = IsBadForBuyingToolsUtensilsJewelleryOccuring(time, person).Occuring;
 
-            //if occuring end here, as not occuring
+            //if occurring end here, as not occurring
             if (badYoga) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4328,7 +4328,7 @@ namespace VedAstro.Library
             //check aspect
             var isGood = SunAndMoonWellSituatedAndAspected();
 
-            //if NOT occuring end here, as not occuring
+            //if NOT occurring end here, as not occurring
             if (isGood == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4394,194 +4394,194 @@ namespace VedAstro.Library
         public static CalculatorResult IsSunIsStrongOccuring(Time time, Person person)
         {
             var strongestPlanet = Calculate.AllPlanetOrderedByStrength(time)[0];
-            var occuring = strongestPlanet == PlanetName.Sun;
+            var occurring = strongestPlanet == PlanetName.Sun;
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MoonIsStrong)]
         public static CalculatorResult IsMoonIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Moon;
+            var occurring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Moon;
 
             //STRENGTH CALCULATION
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MarsIsStrong)]
         public static CalculatorResult IsMarsIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Mars;
+            var occurring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Mars;
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MercuryIsStrong)]
         public static CalculatorResult IsMercuryIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Mercury;
+            var occurring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Mercury;
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.JupiterIsStrong)]
         public static CalculatorResult IsJupiterIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Jupiter;
+            var occurring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Jupiter;
 
             //STRENGTH CALCULATION
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VenusIsStrong)]
         public static CalculatorResult IsVenusIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Venus;
+            var occurring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Venus;
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SaturnIsStrong)]
         public static CalculatorResult IsSaturnIsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Saturn;
+            var occurring = Calculate.AllPlanetOrderedByStrength(time)[0] == PlanetName.Saturn;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House1IsStrong)]
         public static CalculatorResult IsHouse1IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House1;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House1;
 
             //STRENGTH CALCULATION
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House2IsStrong)]
         public static CalculatorResult IsHouse2IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House2;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House2;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House3IsStrong)]
         public static CalculatorResult IsHouse3IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House3;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House3;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House4IsStrong)]
         public static CalculatorResult IsHouse4IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House4;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House4;
 
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House5IsStrong)]
         public static CalculatorResult IsHouse5IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House5;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House5;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House6IsStrong)]
         public static CalculatorResult IsHouse6IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House6;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House6;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House7IsStrong)]
         public static CalculatorResult IsHouse7IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House7;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House7;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House8IsStrong)]
         public static CalculatorResult IsHouse8IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House8;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House8;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House9IsStrong)]
         public static CalculatorResult IsHouse9IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House9;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House9;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House10IsStrong)]
         public static CalculatorResult IsHouse10IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House10;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House10;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House11IsStrong)]
         public static CalculatorResult IsHouse11IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House11;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House11;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.House12IsStrong)]
         public static CalculatorResult IsHouse12IsStrongOccuring(Time time, Person person)
         {
-            var occuring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House12;
+            var occurring = Calculate.AllHousesOrderedByStrength(time)[0] == HouseName.House12;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.Sunrise)]
@@ -4601,11 +4601,11 @@ namespace VedAstro.Library
             var isBefore = time.GetLmtDateTimeOffset() <= _5minAfter.GetLmtDateTimeOffset();//before +5min
 
             //time is within +-5min
-            var occuring = isAfter && isBefore;
+            var occurring = isAfter && isBefore;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.Sunset)]
@@ -4625,11 +4625,11 @@ namespace VedAstro.Library
             var isBefore = time.GetLmtDateTimeOffset() <= _5minAfter.GetLmtDateTimeOffset();//before +5min
 
             //time is within +-5min
-            var occuring = isAfter && isBefore;
+            var occurring = isAfter && isBefore;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.Midday)]
@@ -4653,11 +4653,11 @@ namespace VedAstro.Library
             var isBefore = localApparentTime <= _5minAfter;//before +5min
 
             //time is within 11:55AM to 12:05PM
-            var occuring = isAfter && isBefore;
+            var occurring = isAfter && isBefore;
 
 
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
 
@@ -4704,10 +4704,10 @@ namespace VedAstro.Library
             //check if sign is a fixed or movable sign
             var isFixedSign = Calculate.IsFixedSign(sunSign);
             var isMovableSign = Calculate.IsMovableSign(sunSign);
-            var occuring = isFixedSign || isMovableSign;
+            var occurring = isFixedSign || isMovableSign;
 
             //if conrtol reaches here then event is ocuring
-            return new CalculatorResult() { Occuring = occuring };
+            return new CalculatorResult() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.BadSunSignForBuilding)]
@@ -4721,10 +4721,10 @@ namespace VedAstro.Library
 
             //check if sign is a common sign
             var isCommonSign = Calculate.IsCommonSign(sunSign);
-            var occuring = isCommonSign;
+            var occurring = isCommonSign;
 
             //if conrtol reaches here then event is ocuring
-            return new CalculatorResult() { Occuring = occuring };
+            return new CalculatorResult() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.GoodLunarDayForBuilding)]
@@ -4751,7 +4751,7 @@ namespace VedAstro.Library
                                 lunarDayNumber == 6 ||
                                 lunarDayNumber == 10;
 
-            //if not correct lunar days, end here as not occuring
+            //if not correct lunar days, end here as not occurring
             if (rightLunarDay == false) { return CalculatorResult.NotOccuring(); }
 
 
@@ -4778,7 +4778,7 @@ namespace VedAstro.Library
                 case DayOfWeek.Friday:
                     return CalculatorResult.IsOccuring();
                 default:
-                    //event not occuring, if planet not same
+                    //event not occurring, if planet not same
                     return CalculatorResult.NotOccuring();
             }
 
@@ -4794,10 +4794,10 @@ namespace VedAstro.Library
             //get the moon phase
             var moonPhase = Calculate.LunarDay(time).GetMoonPhase();
 
-            //occuring when moon is wanning
-            var occuring = moonPhase == MoonPhase.DarkHalf;
+            //occurring when moon is wanning
+            var occurring = moonPhase == MoonPhase.DarkHalf;
 
-            return new CalculatorResult() { Occuring = occuring };
+            return new CalculatorResult() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.BadWeekDayForBuilding)]
@@ -4816,7 +4816,7 @@ namespace VedAstro.Library
                 case DayOfWeek.Sunday:
                     return CalculatorResult.IsOccuring();
                 default:
-                    //event not occuring, if planet not same
+                    //event not occurring, if planet not same
                     return CalculatorResult.NotOccuring();
             }
 
@@ -4836,7 +4836,7 @@ namespace VedAstro.Library
                 case DayOfWeek.Tuesday:
                     return CalculatorResult.IsOccuring();
                 default:
-                    //event not occuring, if planet not same
+                    //event not occurring, if planet not same
                     return CalculatorResult.NotOccuring();
             }
 
@@ -4862,9 +4862,9 @@ namespace VedAstro.Library
             var isMondayLagnaCancer = isMonday && lagnaIsCancer;
 
             //if either is true
-            var occuring = isFridayLagnaTaurusLibra || isMondayLagnaCancer;
+            var occurring = isFridayLagnaTaurusLibra || isMondayLagnaCancer;
 
-            return new CalculatorResult() { Occuring = occuring };
+            return new CalculatorResult() { Occuring = occurring };
 
         }
 
@@ -4883,9 +4883,9 @@ namespace VedAstro.Library
             var isMoonInAquaticSign = Calculate.IsWaterSign(moonSign);
 
             //if either is true
-            var occuring = isMoonInAquaticSign || beneficsInLagna;
+            var occurring = isMoonInAquaticSign || beneficsInLagna;
 
-            return new CalculatorResult() { Occuring = occuring };
+            return new CalculatorResult() { Occuring = occurring };
 
         }
 
@@ -4899,9 +4899,9 @@ namespace VedAstro.Library
 
 
 
-        //    var occuring = isMoonInAquaticSign || beneficsInLagna;
+        //    var occurring = isMoonInAquaticSign || beneficsInLagna;
 
-        //    return new Prediction() { Occuring = occuring };
+        //    return new Prediction() { Occuring = occurring };
 
         //}
 
@@ -5479,12 +5479,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TaurusSunPD1)]
@@ -5494,12 +5494,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.GeminiSunPD1)]
@@ -5509,12 +5509,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CancerSunPD1)]
@@ -5524,12 +5524,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LeoSunPD1)]
@@ -5539,12 +5539,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VirgoSunPD1)]
@@ -5554,12 +5554,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LibraSunPD1)]
@@ -5569,12 +5569,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.ScorpioSunPD1)]
@@ -5584,12 +5584,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SagittariusSunPD1)]
@@ -5599,12 +5599,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CapricornSunPD1)]
@@ -5614,12 +5614,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.AquariusSunPD1)]
@@ -5629,12 +5629,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.PiscesSunPD1)]
@@ -5644,12 +5644,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion SUN DASA
@@ -5663,12 +5663,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TaurusMoonPD1)]
@@ -5678,12 +5678,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.GeminiMoonPD1)]
@@ -5693,12 +5693,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CancerMoonPD1)]
@@ -5708,12 +5708,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LeoMoonPD1)]
@@ -5723,12 +5723,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VirgoMoonPD1)]
@@ -5738,12 +5738,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LibraMoonPD1)]
@@ -5753,12 +5753,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.ScorpioMoonPD1)]
@@ -5768,12 +5768,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SagittariusMoonPD1)]
@@ -5783,12 +5783,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CapricornMoonPD1)]
@@ -5798,12 +5798,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.AquariusMoonPD1)]
@@ -5813,12 +5813,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.PiscesMoonPD1)]
@@ -5828,12 +5828,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion MOON DASA
@@ -5847,12 +5847,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TaurusMarsPD1)]
@@ -5862,12 +5862,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.GeminiMarsPD1)]
@@ -5877,12 +5877,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CancerMarsPD1)]
@@ -5892,12 +5892,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LeoMarsPD1)]
@@ -5907,12 +5907,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VirgoMarsPD1)]
@@ -5922,12 +5922,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LibraMarsPD1)]
@@ -5937,12 +5937,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.ScorpioMarsPD1)]
@@ -5952,12 +5952,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SagittariusMarsPD1)]
@@ -5967,12 +5967,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CapricornMarsPD1)]
@@ -5982,12 +5982,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.AquariusMarsPD1)]
@@ -5997,12 +5997,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.PiscesMarsPD1)]
@@ -6012,12 +6012,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion MARS DASA
@@ -6031,12 +6031,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TaurusRahuPD1)]
@@ -6046,12 +6046,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.GeminiRahuPD1)]
@@ -6061,12 +6061,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CancerRahuPD1)]
@@ -6076,12 +6076,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LeoRahuPD1)]
@@ -6091,12 +6091,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VirgoRahuPD1)]
@@ -6106,12 +6106,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LibraRahuPD1)]
@@ -6121,12 +6121,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.ScorpioRahuPD1)]
@@ -6136,12 +6136,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SagittariusRahuPD1)]
@@ -6151,12 +6151,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CapricornRahuPD1)]
@@ -6166,12 +6166,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.AquariusRahuPD1)]
@@ -6181,12 +6181,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.PiscesRahuPD1)]
@@ -6196,12 +6196,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion RAHU DASA
@@ -6215,12 +6215,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TaurusJupiterPD1)]
@@ -6230,12 +6230,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.GeminiJupiterPD1)]
@@ -6245,12 +6245,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CancerJupiterPD1)]
@@ -6260,12 +6260,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LeoJupiterPD1)]
@@ -6275,12 +6275,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VirgoJupiterPD1)]
@@ -6290,12 +6290,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LibraJupiterPD1)]
@@ -6305,12 +6305,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.ScorpioJupiterPD1)]
@@ -6320,12 +6320,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SagittariusJupiterPD1)]
@@ -6335,12 +6335,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CapricornJupiterPD1)]
@@ -6350,12 +6350,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.AquariusJupiterPD1)]
@@ -6365,12 +6365,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.PiscesJupiterPD1)]
@@ -6380,12 +6380,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion JUPITER DASA
@@ -6399,12 +6399,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TaurusSaturnPD1)]
@@ -6414,12 +6414,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.GeminiSaturnPD1)]
@@ -6429,12 +6429,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CancerSaturnPD1)]
@@ -6444,12 +6444,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LeoSaturnPD1)]
@@ -6459,12 +6459,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VirgoSaturnPD1)]
@@ -6474,12 +6474,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LibraSaturnPD1)]
@@ -6489,12 +6489,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.ScorpioSaturnPD1)]
@@ -6504,12 +6504,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SagittariusSaturnPD1)]
@@ -6519,12 +6519,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CapricornSaturnPD1)]
@@ -6534,12 +6534,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.AquariusSaturnPD1)]
@@ -6549,12 +6549,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.PiscesSaturnPD1)]
@@ -6564,12 +6564,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion SATURN DASA
@@ -6583,12 +6583,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TaurusMercuryPD1)]
@@ -6598,12 +6598,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.GeminiMercuryPD1)]
@@ -6613,12 +6613,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CancerMercuryPD1)]
@@ -6628,12 +6628,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LeoMercuryPD1)]
@@ -6643,12 +6643,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VirgoMercuryPD1)]
@@ -6658,12 +6658,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LibraMercuryPD1)]
@@ -6673,12 +6673,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.ScorpioMercuryPD1)]
@@ -6688,12 +6688,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SagittariusMercuryPD1)]
@@ -6703,12 +6703,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CapricornMercuryPD1)]
@@ -6718,12 +6718,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.AquariusMercuryPD1)]
@@ -6733,12 +6733,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.PiscesMercuryPD1)]
@@ -6748,12 +6748,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion MERCURY DASA
@@ -6767,12 +6767,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TaurusKetuPD1)]
@@ -6782,12 +6782,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.GeminiKetuPD1)]
@@ -6797,12 +6797,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CancerKetuPD1)]
@@ -6812,12 +6812,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LeoKetuPD1)]
@@ -6827,12 +6827,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VirgoKetuPD1)]
@@ -6842,12 +6842,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LibraKetuPD1)]
@@ -6857,12 +6857,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.ScorpioKetuPD1)]
@@ -6872,12 +6872,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SagittariusKetuPD1)]
@@ -6887,12 +6887,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CapricornKetuPD1)]
@@ -6902,12 +6902,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.AquariusKetuPD1)]
@@ -6917,12 +6917,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.PiscesKetuPD1)]
@@ -6932,12 +6932,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion KETU DASA
@@ -6951,12 +6951,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.TaurusVenusPD1)]
@@ -6966,12 +6966,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.GeminiVenusPD1)]
@@ -6981,12 +6981,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CancerVenusPD1)]
@@ -6996,12 +6996,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LeoVenusPD1)]
@@ -7011,12 +7011,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VirgoVenusPD1)]
@@ -7026,12 +7026,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LibraVenusPD1)]
@@ -7041,12 +7041,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.ScorpioVenusPD1)]
@@ -7056,12 +7056,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SagittariusVenusPD1)]
@@ -7071,12 +7071,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.CapricornVenusPD1)]
@@ -7086,12 +7086,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.AquariusVenusPD1)]
@@ -7101,12 +7101,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.PiscesVenusPD1)]
@@ -7116,12 +7116,12 @@ namespace VedAstro.Library
             var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetPD1Ocurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
+            var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = planetInSign && planetPD1Ocurring;
+            //occurring if all conditions met
+            var occurring = planetInSign && planetPD1Occurring;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion VENUS DASA
@@ -7144,10 +7144,10 @@ namespace VedAstro.Library
             //check bhukti
             var bhukti = currentPlanetDasas.PD2 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = dasa && bhukti;
+            //occurring if all conditions met
+            var occurring = dasa && bhukti;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SunMoonPD2)]
@@ -7162,10 +7162,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SunMarsPD2)]
@@ -7180,10 +7180,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SunRahuPD2)]
@@ -7198,10 +7198,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SunJupiterPD2)]
@@ -7216,10 +7216,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SunSaturnPD2)]
@@ -7234,10 +7234,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SunMercuryPD2)]
@@ -7252,10 +7252,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SunKetuPD2)]
@@ -7270,10 +7270,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SunVenusPD2)]
@@ -7288,10 +7288,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion SUN PD2
@@ -7310,10 +7310,10 @@ namespace VedAstro.Library
             //check bhukti
             var bhukti = currentPlanetDasas.PD2 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = dasa && bhukti;
+            //occurring if all conditions met
+            var occurring = dasa && bhukti;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MoonMoonPD2)]
@@ -7328,10 +7328,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MoonMarsPD2)]
@@ -7346,10 +7346,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MoonRahuPD2)]
@@ -7364,10 +7364,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MoonJupiterPD2)]
@@ -7382,10 +7382,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MoonSaturnPD2)]
@@ -7400,10 +7400,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MoonMercuryPD2)]
@@ -7418,10 +7418,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MoonKetuPD2)]
@@ -7436,10 +7436,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MoonVenusPD2)]
@@ -7454,10 +7454,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion MOON PD2
@@ -7476,10 +7476,10 @@ namespace VedAstro.Library
             //check bhukti
             var bhukti = currentPlanetDasas.PD2 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = dasa && bhukti;
+            //occurring if all conditions met
+            var occurring = dasa && bhukti;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MarsMoonPD2)]
@@ -7494,10 +7494,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MarsMarsPD2)]
@@ -7512,10 +7512,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MarsRahuPD2)]
@@ -7530,10 +7530,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MarsJupiterPD2)]
@@ -7548,10 +7548,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MarsSaturnPD2)]
@@ -7566,10 +7566,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MarsMercuryPD2)]
@@ -7584,10 +7584,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MarsKetuPD2)]
@@ -7602,10 +7602,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MarsVenusPD2)]
@@ -7620,10 +7620,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion MARS PD2
@@ -7642,10 +7642,10 @@ namespace VedAstro.Library
             //check bhukti
             var bhukti = currentPlanetDasas.PD2 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = dasa && bhukti;
+            //occurring if all conditions met
+            var occurring = dasa && bhukti;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.RahuMoonPD2)]
@@ -7660,10 +7660,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.RahuMarsPD2)]
@@ -7678,10 +7678,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.RahuRahuPD2)]
@@ -7696,10 +7696,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.RahuJupiterPD2)]
@@ -7714,10 +7714,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.RahuSaturnPD2)]
@@ -7732,10 +7732,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.RahuMercuryPD2)]
@@ -7750,10 +7750,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.RahuKetuPD2)]
@@ -7768,10 +7768,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.RahuVenusPD2)]
@@ -7786,10 +7786,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion RAHU PD2
@@ -7808,10 +7808,10 @@ namespace VedAstro.Library
             //check bhukti
             var bhukti = currentPlanetDasas.PD2 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = dasa && bhukti;
+            //occurring if all conditions met
+            var occurring = dasa && bhukti;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.JupiterMoonPD2)]
@@ -7826,10 +7826,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.JupiterMarsPD2)]
@@ -7844,10 +7844,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.JupiterRahuPD2)]
@@ -7862,10 +7862,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.JupiterJupiterPD2)]
@@ -7880,10 +7880,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.JupiterSaturnPD2)]
@@ -7898,10 +7898,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.JupiterMercuryPD2)]
@@ -7916,10 +7916,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.JupiterKetuPD2)]
@@ -7934,10 +7934,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.JupiterVenusPD2)]
@@ -7952,10 +7952,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion JUPITER PD2
@@ -7974,10 +7974,10 @@ namespace VedAstro.Library
             //check bhukti
             var bhukti = currentPlanetDasas.PD2 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = dasa && bhukti;
+            //occurring if all conditions met
+            var occurring = dasa && bhukti;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SaturnMoonPD2)]
@@ -7992,10 +7992,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SaturnMarsPD2)]
@@ -8010,10 +8010,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SaturnRahuPD2)]
@@ -8028,10 +8028,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SaturnJupiterPD2)]
@@ -8046,10 +8046,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SaturnSaturnPD2)]
@@ -8064,10 +8064,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SaturnMercuryPD2)]
@@ -8082,10 +8082,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SaturnKetuPD2)]
@@ -8100,10 +8100,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.SaturnVenusPD2)]
@@ -8118,10 +8118,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion SATURN PD2
@@ -8140,10 +8140,10 @@ namespace VedAstro.Library
             //check bhukti
             var bhukti = currentPlanetDasas.PD2 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = dasa && bhukti;
+            //occurring if all conditions met
+            var occurring = dasa && bhukti;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MercuryMoonPD2)]
@@ -8158,10 +8158,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MercuryMarsPD2)]
@@ -8176,10 +8176,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MercuryRahuPD2)]
@@ -8194,10 +8194,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MercuryJupiterPD2)]
@@ -8212,10 +8212,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MercurySaturnPD2)]
@@ -8230,10 +8230,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MercuryMercuryPD2)]
@@ -8248,10 +8248,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MercuryKetuPD2)]
@@ -8266,10 +8266,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.MercuryVenusPD2)]
@@ -8284,10 +8284,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion MERCURY PD2
@@ -8306,10 +8306,10 @@ namespace VedAstro.Library
             //check bhukti
             var bhukti = currentPlanetDasas.PD2 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = dasa && bhukti;
+            //occurring if all conditions met
+            var occurring = dasa && bhukti;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.KetuMoonPD2)]
@@ -8324,10 +8324,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.KetuMarsPD2)]
@@ -8342,10 +8342,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.KetuRahuPD2)]
@@ -8360,10 +8360,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.KetuJupiterPD2)]
@@ -8378,10 +8378,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.KetuSaturnPD2)]
@@ -8396,10 +8396,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.KetuMercuryPD2)]
@@ -8414,10 +8414,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.KetuKetuPD2)]
@@ -8432,10 +8432,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.KetuVenusPD2)]
@@ -8450,10 +8450,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion KETU PD2
@@ -8472,10 +8472,10 @@ namespace VedAstro.Library
             //check bhukti
             var bhukti = currentPlanetDasas.PD2 == PlanetName.Sun;
 
-            //occuring if all conditions met
-            var occuring = dasa && bhukti;
+            //occurring if all conditions met
+            var occurring = dasa && bhukti;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VenusMoonPD2)]
@@ -8490,10 +8490,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Moon;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VenusMarsPD2)]
@@ -8508,10 +8508,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mars;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VenusRahuPD2)]
@@ -8526,10 +8526,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Rahu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VenusJupiterPD2)]
@@ -8544,10 +8544,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Jupiter;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VenusSaturnPD2)]
@@ -8562,10 +8562,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Saturn;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VenusMercuryPD2)]
@@ -8580,10 +8580,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Mercury;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VenusKetuPD2)]
@@ -8598,10 +8598,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Ketu;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.VenusVenusPD2)]
@@ -8616,10 +8616,10 @@ namespace VedAstro.Library
             //check bhukti
             var isCorrectPD2 = currentPlanetDasas.PD2 == PlanetName.Venus;
 
-            //occuring if all conditions met
-            var occuring = isCorrect && isCorrectPD2;
+            //occurring if all conditions met
+            var occurring = isCorrect && isCorrectPD2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         #endregion VENUS PD2
@@ -10325,19 +10325,19 @@ namespace VedAstro.Library
             //get lord 6th house
             var lord6th = Calculate.LordOfHouse(HouseName.House6, person.BirthTime);
 
-            //is lord 6th dasa occuring
+            //is lord 6th dasa occurring
             var isLord6thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord6th;
 
             //get lord 8th house
             var lord8th = Calculate.LordOfHouse(HouseName.House8, person.BirthTime);
 
-            //is lord 8th dasa occuring
+            //is lord 8th dasa occurring
             var isLord8thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord8th;
 
-            //occuring if one of the conditions met
-            var occuring = isLord6thDasa || isLord8thDasa;
+            //occurring if one of the conditions met
+            var occurring = isLord6thDasa || isLord8thDasa;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.Lord5And9Dasa)]
@@ -10351,19 +10351,19 @@ namespace VedAstro.Library
             //get lord 5th house
             var lord5th = Calculate.LordOfHouse(HouseName.House5, person.BirthTime);
 
-            //is lord 5th dasa occuring
+            //is lord 5th dasa occurring
             var isLord5thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord5th;
 
             //get lord 9th house
             var lord9th = Calculate.LordOfHouse(HouseName.House9, person.BirthTime);
 
-            //is lord 8th dasa occuring
+            //is lord 8th dasa occurring
             var isLord9thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord9th;
 
-            //occuring if one of the conditions met
-            var occuring = isLord5thDasa || isLord9thDasa;
+            //occurring if one of the conditions met
+            var occurring = isLord5thDasa || isLord9thDasa;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.Lord5And9DasaBhukti)]
@@ -10378,11 +10378,11 @@ namespace VedAstro.Library
             //get lord 9th house
             var lord9th = Calculate.LordOfHouse(HouseName.House9, person.BirthTime);
 
-            //is lord 5th dasa occuring
+            //is lord 5th dasa occurring
             var isLord5thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord5th;
             var isLord5thBhukti = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD2 == lord5th;
 
-            //is lord 9th dasa occuring
+            //is lord 9th dasa occurring
             var isLord9thDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lord9th;
             var isLord9thBhukti = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD2 == lord9th;
 
@@ -10394,10 +10394,10 @@ namespace VedAstro.Library
             //dasa 5th lord & bhukti 9th lord
             var condition2 = isLord5thDasa && isLord9thBhukti;
 
-            //occuring if one of the conditions met
-            var occuring = condition1 || condition2;
+            //occurring if one of the conditions met
+            var occurring = condition1 || condition2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.BhuktiDasaLordInBadHouses)]
@@ -10429,10 +10429,10 @@ namespace VedAstro.Library
             //check if both planets are in bad houses at the same time
             var buhktiDasaIn12And2 = bhuktiLordIn12th && dasaLordIn2nd;
 
-            //occuring if one of the conditions are met
-            var occuring = buhktiDasaIn6And8 || buhktiDasaIn12And2;
+            //occurring if one of the conditions are met
+            var occurring = buhktiDasaIn6And8 || buhktiDasaIn12And2;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.Lord2Dasa)]
@@ -10443,13 +10443,13 @@ namespace VedAstro.Library
             //get lord 2nd house
             var lordHouse2 = Calculate.LordOfHouse(HouseName.House2, person.BirthTime);
 
-            //is lord 2nd dasa occuring
+            //is lord 2nd dasa occurring
             var isLord2Dasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lordHouse2;
 
-            //occuring if one of the conditions met
-            var occuring = isLord2Dasa;
+            //occurring if one of the conditions met
+            var occurring = isLord2Dasa;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.Lord3Dasa)]
@@ -10461,13 +10461,13 @@ namespace VedAstro.Library
             //get lord 3rd house
             var lordHouse3 = Calculate.LordOfHouse(HouseName.House3, person.BirthTime);
 
-            //is lord 3rd dasa occuring
+            //is lord 3rd dasa occurring
             var isLord3Dasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lordHouse3;
 
-            //occuring if one of the conditions met
-            var occuring = isLord3Dasa;
+            //occurring if one of the conditions met
+            var occurring = isLord3Dasa;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.LagnaLordDasa)]
@@ -10482,13 +10482,13 @@ namespace VedAstro.Library
             //get lord of 1st house
             var lordHouse1 = Calculate.LordOfHouse(HouseName.House1, person.BirthTime);
 
-            //is lord 1st house dasa occuring
+            //is lord 1st house dasa occurring
             var isLord1Dasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == lordHouse1;
 
-            //occuring if one of the conditions met
-            var occuring = isLord1Dasa;
+            //occurring if one of the conditions met
+            var occurring = isLord1Dasa;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.Saturn4thDasa)]
@@ -10498,16 +10498,16 @@ namespace VedAstro.Library
             // Dasa, will be unfavourable. If Saturn is strong and favourably disposed,
             // the evil effects get considerably modified.
 
-            //is saturn dasa occuring
+            //is saturn dasa occurring
             var isSaturnDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
 
             //is the 4th dasa
             var is4thDasa = VimshottariDasa.CurrentDasaCountFromBirth(person.BirthTime, time) == 4;
 
-            //occuring if one of the conditions met
-            var occuring = isSaturnDasa && is4thDasa;
+            //occurring if one of the conditions met
+            var occurring = isSaturnDasa && is4thDasa;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.Jupiter6thDasa)]
@@ -10516,16 +10516,16 @@ namespace VedAstro.Library
             //The Dasa period of Jupiter will be unfavourable if it
             // happens to be the 6th Dasa.
 
-            //is jupiter dasa occuring
+            //is jupiter dasa occurring
             var isJupiterDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
 
             //is the 6th dasa
             var is6thDasa = VimshottariDasa.CurrentDasaCountFromBirth(person.BirthTime, time) == 6;
 
-            //occuring if one of the conditions met
-            var occuring = isJupiterDasa && is6thDasa;
+            //occurring if one of the conditions met
+            var occurring = isJupiterDasa && is6thDasa;
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occurring };
         }
 
         [EventCalculator(EventName.ElevatedSunDasa)]
@@ -10534,17 +10534,17 @@ namespace VedAstro.Library
             //If the Sun is elevated, he displays wisdom, gets
             //money, attains fame and happiness
 
-            //is sun dasa occuring
+            //is sun dasa occurring
             var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
             //is sun elevated
             //todo what is elvated?
             var isSunElevated = false;
 
-            //occuring if one of the conditions met
-            var occuring = isSunDasa && isSunElevated;
+            //occurring if one of the conditions met
+            var occurring = isSunDasa && isSunElevated;
 
-            return CalculatorResult.New(occuring, PlanetName.Sun);
+            return CalculatorResult.New(occurring, PlanetName.Sun);
         }
 
         [EventCalculator(EventName.SunWithLord9Or10Dasa)]
@@ -10553,7 +10553,7 @@ namespace VedAstro.Library
             //The Sun in good position, in own house or joined with lord of 9 or
             //10 - happiness, gains, riches, honours
 
-            //is sun dasa occuring
+            //is sun dasa occurring
             var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
             //is sun in own house
@@ -10566,10 +10566,10 @@ namespace VedAstro.Library
 
             var sunInGoodPosition = sunInOwn || sunJoined9Or10;
 
-            //occuring if one of the conditions met
-            var occuring = isSunDasa && sunInGoodPosition;
+            //occurring if one of the conditions met
+            var occurring = isSunDasa && sunInGoodPosition;
 
-            return CalculatorResult.New(occuring, new[] { HouseName.House9, HouseName.House10 }, new[] { PlanetName.Sun }, time);
+            return CalculatorResult.New(occurring, new[] { HouseName.House9, HouseName.House10 }, new[] { PlanetName.Sun }, time);
         }
 
         [EventCalculator(EventName.SunWithLord5Dasa)]
@@ -10577,16 +10577,16 @@ namespace VedAstro.Library
         {
             //the Sun with lord of 5 - birth of children.
 
-            //is sun dasa occuring
+            //is sun dasa occurring
             var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
             //is sun with lord of 5th
             var sunWithLord5th = Calculate.IsPlanetSameHouseWithHouseLord(5, PlanetName.Sun, person.BirthTime);
 
-            //occuring if one of the conditions met
-            var occuring = isSunDasa && sunWithLord5th;
+            //occurring if one of the conditions met
+            var occurring = isSunDasa && sunWithLord5th;
 
-            return CalculatorResult.New(occuring, new[] { HouseName.House5 }, new[] { PlanetName.Sun }, time);
+            return CalculatorResult.New(occurring, new[] { HouseName.House5 }, new[] { PlanetName.Sun }, time);
         }
 
         [EventCalculator(EventName.SunWithLord2Dasa)]
@@ -10595,16 +10595,16 @@ namespace VedAstro.Library
             //The Sun when related to lord of 2 - becomes rich, earns money, secures
             //property, gains, favours from influential persons.
 
-            //is sun dasa occuring
+            //is sun dasa occurring
             var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
             //is sun with lord of 2nd
             var sunWithLord2nd = Calculate.IsPlanetSameHouseWithHouseLord(2, PlanetName.Sun, person.BirthTime);
 
-            //occuring if one of the conditions met
-            var occuring = isSunDasa && sunWithLord2nd;
+            //occurring if one of the conditions met
+            var occurring = isSunDasa && sunWithLord2nd;
 
-            return CalculatorResult.New(occuring, new[] { HouseName.House2 }, new[] { PlanetName.Sun }, time);
+            return CalculatorResult.New(occurring, new[] { HouseName.House2 }, new[] { PlanetName.Sun }, time);
         }
 
         [EventCalculator(EventName.SunBadPositionDasa)]
@@ -10631,15 +10631,15 @@ namespace VedAstro.Library
             //among friends and relations, pleasure trios and picnic
             //parties and lovely women.
 
-            //is sun dasa occuring
+            //is sun dasa occurring
             var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
             var isSunExalted = Calculate.IsPlanetExalted(PlanetName.Sun, time);
 
             //conditions met
-            var occuring = isSunDasa && isSunExalted;
+            var occurring = isSunDasa && isSunExalted;
 
-            return CalculatorResult.New(occuring, PlanetName.Sun);
+            return CalculatorResult.New(occurring, PlanetName.Sun);
         }
 
         #endregion DASA SPECIAL RULES
@@ -10660,16 +10660,16 @@ namespace VedAstro.Library
             //check antaram
             var isCorrectAntaram = currentPlanetPeriod.PD3 == antaramPlanet;
 
-            //occuring if all conditions met
-            var occuring = isCorrectAntaram && isCorrectBhukti;
+            //occurring if all conditions met
+            var occurring = isCorrectAntaram && isCorrectBhukti;
 
             //only get prediction if event occurring, else waste compute cycles
-            if (occuring)
+            if (occurring)
             {
                 //nature & description override, based on cyclic relationship between planets
                 var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(bhuktiPlanet, antaramPlanet);
 
-                var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
+                var result = new CalculatorResult() { Occuring = occurring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
                 return result;
             }
@@ -10693,16 +10693,16 @@ namespace VedAstro.Library
             //check Sukshma
             var isCorrectSukshma = currentPlanetPeriod.PD4 == sukshmaPlanet;
 
-            //occuring if all conditions met
-            var occuring = isCorrectAntaram && isCorrectSukshma;
+            //occurring if all conditions met
+            var occurring = isCorrectAntaram && isCorrectSukshma;
 
             //only get prediction if event occurring, else waste compute cycles
-            if (occuring)
+            if (occurring)
             {
                 //nature & description override, based on cyclic relationship between planets
                 var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(antaramPlanet, sukshmaPlanet);
 
-                var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
+                var result = new CalculatorResult() { Occuring = occurring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
                 return result;
             }
@@ -10726,16 +10726,16 @@ namespace VedAstro.Library
             //check PD5
             var isCorrectPD5 = currentPlanetPeriod.PD5 == PD5Planet;
 
-            //occuring if all conditions met
-            var occuring = isCorrectPD4 && isCorrectPD5;
+            //occurring if all conditions met
+            var occurring = isCorrectPD4 && isCorrectPD5;
 
             //only get prediction if event occurring, else waste compute cycles
-            if (occuring)
+            if (occurring)
             {
                 //nature & description override, based on cyclic relationship between planets
                 var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(PD4Planet, PD5Planet);
 
-                var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
+                var result = new CalculatorResult() { Occuring = occurring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
                 return result;
             }
@@ -10759,16 +10759,16 @@ namespace VedAstro.Library
             //check PD6
             var isCorrectPD6 = currentPlanetPeriod.PD6 == PD6Planet;
 
-            //occuring if all conditions met
-            var occuring = isCorrectPD5 && isCorrectPD6;
+            //occurring if all conditions met
+            var occurring = isCorrectPD5 && isCorrectPD6;
 
             //only get prediction if event occurring, else waste compute cycles
-            if (occuring)
+            if (occurring)
             {
                 //nature & description override, based on cyclic relationship between planets
                 var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(PD5Planet, PD6Planet);
 
-                var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
+                var result = new CalculatorResult() { Occuring = occurring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
                 return result;
             }
@@ -10792,16 +10792,16 @@ namespace VedAstro.Library
             //check PD7
             var isCorrectPD7 = currentPlanetPeriod.PD7 == PD7Planet;
 
-            //occuring if all conditions met
-            var occuring = isCorrectPD6 && isCorrectPD7;
+            //occurring if all conditions met
+            var occurring = isCorrectPD6 && isCorrectPD7;
 
             //only get prediction if event occurring, else waste compute cycles
-            if (occuring)
+            if (occurring)
             {
                 //nature & description override, based on cyclic relationship between planets
                 var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(PD6Planet, PD7Planet);
 
-                var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
+                var result = new CalculatorResult() { Occuring = occurring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
                 return result;
             }
@@ -10825,16 +10825,16 @@ namespace VedAstro.Library
             //check PD8
             var isCorrectPD8 = currentPlanetPeriod.PD8 == PD8Planet;
 
-            //occuring if all conditions met
-            var occuring = isCorrectPD7 && isCorrectPD8;
+            //occurring if all conditions met
+            var occurring = isCorrectPD7 && isCorrectPD8;
 
             //only get prediction if event occurring, else waste compute cycles
-            if (occuring)
+            if (occurring)
             {
                 //nature & description override, based on cyclic relationship between planets
                 var periodPrediction = VimshottariDasa.PlanetDasaMajorPlanetAndMinorRelationship(PD7Planet, PD8Planet);
 
-                var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
+                var result = new CalculatorResult() { Occuring = occurring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
                 return result;
             }
@@ -10868,7 +10868,7 @@ namespace VedAstro.Library
 //    //if the house 1 sign & lagna lord sign is same
 //    if (house1Sign == signLagnaLordIsIn.GetSignName())
 //{
-//    //event is occuring
+//    //event is occurring
 //    return Prediction.IsOccuring();
 //}
 //else
@@ -10892,7 +10892,7 @@ namespace VedAstro.Library
 // //if the house 7 sign & 7th lord sign is same
 // if (house7Sign == sign7thLordIsIn.GetSignName())
 // {
-// //event is occuring
+// //event is occurring
 // return Prediction.IsOccuring();
 // }
 // else

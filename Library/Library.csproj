@@ -39,6 +39,32 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="XMLData\EventDataList-not-proved.xml" />
+	  <None Remove="XMLData\EventDataList.xml" />
+	  <None Remove="XMLData\HoroscopeDataList-not-proved.xml" />
+	  <None Remove="XMLData\HoroscopeDataList.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="XMLData\EventDataList-not-proved.xml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="XMLData\EventDataList.xml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="XMLData\HoroscopeDataList-not-proved.xml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="XMLData\HoroscopeDataList.xml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="icon.png" Pack="true" PackagePath="\" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
 		<PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.17" />

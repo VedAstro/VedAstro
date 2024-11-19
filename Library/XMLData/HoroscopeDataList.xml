@@ -3429,7 +3429,6 @@
 
 	<!--CUSTOM-->
 	<Event>
-
 		<Name>GeminiRisingWithEvilPlanet</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -3448,49 +3447,42 @@
 
 	<!--House 2 - Other Important Combinations-->
 	<Event>
-
 		<Name>Lord2WithEvilInHouse</Name>
 		<Nature>Bad</Nature>
 		<Description>If the second lord is in the 2nd with evil planets or aspected by him, he will be poor.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>SaturnIn2WithVenus</Name>
 		<Nature>Neutral</Nature>
 		<Description>Ordinary wealth is indicated if Saturn is in the 2nd aspected by Venus.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>MoonMarsIn2WithSaturnAspect</Name>
 		<Nature>Bad</Nature>
 		<Description>If the Moon and Mars reside in the 2nd bhava and Saturn aspects it, he suffers from a peculiar skin disease.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>MercuryAndEvilIn2WithMoonAspect</Name>
 		<Nature>Bad</Nature>
 		<Description>The situation of Mercury in the 2nd with another evil planet aspected by the Moon is bad for saving money. Even if there is any ancestral wealth, it will be spent—rather wasted on extravagant purposes.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>SunIn2WithNoSaturnAspect</Name>
 		<Nature>Good</Nature>
 		<Description>The Sun in the 2nd without being aspected by Saturn is favorable for a steady fortune.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>MoonIn2WithMercuryAspect</Name>
 		<Nature>Good</Nature>
 		<Description>The Moon being placed in the 2nd and aspected by Mercury is favorable for earning money by self-exertion.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-
 		<Name>Lord2And3In6WithEvilPlanet</Name>
 		<Nature>Bad</Nature>
 		<Description>He will be poor if lords of the 2nd and 3rd are in the 6th with or aspected by evil planets.</Description>

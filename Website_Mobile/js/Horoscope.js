@@ -73,12 +73,12 @@ async function OnClickCalculate_Horoscope() {
         Ayanamsa: ayanamsaSelector.SelectedAyanamsa
     };
 
-    indianChart.GenerateChart(inputArguments);
-    allPlanetDataTable.GenerateTable(inputArguments);
-    allHouseDataTable.GenerateTable(inputArguments);
-    ashtakvargaTable.GenerateTable(inputArguments);
-    strengthChart.GenerateChart(inputArguments);
-    horoscopePredictionTexts.GenerateTable(inputArguments);
+    await indianChart.GenerateChart(inputArguments);
+    await allPlanetDataTable.GenerateTable(inputArguments);
+    await allHouseDataTable.GenerateTable(inputArguments);
+    await ashtakvargaTable.GenerateTable(inputArguments);
+    await strengthChart.GenerateChart(inputArguments);
+    await horoscopePredictionTexts.GenerateTable(inputArguments);
 
     //play sound for better UX
     playBakingDoneSound();

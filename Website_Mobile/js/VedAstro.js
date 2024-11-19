@@ -7336,10 +7336,11 @@ class HoroscopePredictionTexts {
                 <iconify-icon class="me-2" icon="noto:scroll" width="38" height="38"></iconify-icon>
                 Predictions
             </h3>
+            <div class="ms-auto align-self-end" style="font-size: 22px;">Found: <strong id="prediction-count">${this.HoroscopePredictions.length}</strong></div>
         </div>
         <hr />
         <div class="input-group mb-3">
-          <input type="text" id="prediction-search" class="form-control" placeholder="Search">
+          <input type="text" id="prediction-search" class="form-control" placeholder="🔍 Search">
         </div>
         <div id="PredictionsHolder">
             ${this.generatePredictionCards()}
@@ -7356,15 +7357,12 @@ class HoroscopePredictionTexts {
     generatePredictionCard(prediction) {
         return `
         <div class="card mb-3 prediction-card">
-            <div class="card-header">
-                <h5 class="card-title">${CommonTools.CamelPascalCaseToSpaced(prediction.Name)}</h5>
-            </div>
+            <h4 class="card-header">${CommonTools.CamelPascalCaseToSpaced(prediction.Name)}</h5>
             <div class="card-body">
                 <p class="card-text">${prediction.Description}</p>
-                <h6 class="card-subtitle mb-2 text-muted">Related Bodies:</h6>
-                <ul class="list-group list-group-flush">
-                    ${this.generateRelatedBodiesHtml(prediction.RelatedBody)}
-                </ul>
+            </div>
+            <div class="card-footer text-body-secondary" style="font-size: 13px;">
+               ${this.generateRelatedBodiesHtml(prediction.RelatedBody)}
             </div>
         </div>
     `;
@@ -7373,19 +7371,13 @@ class HoroscopePredictionTexts {
     generateRelatedBodiesHtml(relatedBody) {
         let html = '';
         if (relatedBody.Planets.length > 0) {
-            html += `
-            <li class="list-group-item">Planets: ${relatedBody.Planets.join(', ')}</li>
-        `;
+            html += ` ✨${relatedBody.Planets.join(', ')}`;
         }
         if (relatedBody.Houses.length > 0) {
-            html += `
-            <li class="list-group-item">Houses: ${relatedBody.Houses.join(', ')}</li>
-        `;
+            html += ` 🏠${relatedBody.Houses.join(', ')}`;
         }
         if (relatedBody.Zodiacs.length > 0) {
-            html += `
-            <li class="list-group-item">Zodiacs: ${relatedBody.Zodiacs.join(', ')}</li>
-        `;
+            html += ` ☪️${relatedBody.Zodiacs.join(', ')}`;
         }
         return html;
     }
@@ -7395,14 +7387,19 @@ class HoroscopePredictionTexts {
             const searchQuery = $('#prediction-search').val().toLowerCase();
             const predictionCards = $('.prediction-card');
 
+            let visibleCount = 0;
+
             predictionCards.each((index, card) => {
                 const cardText = $(card).text().toLowerCase();
                 if (cardText.includes(searchQuery)) {
                     $(card).show();
+                    visibleCount++;
                 } else {
                     $(card).hide();
                 }
             });
+
+            $('#prediction-count').text(visibleCount);
         });
     }
 }

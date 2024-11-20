@@ -1,4 +1,4 @@
-using ScottPlot.Drawing.Colormaps;
+﻿using ScottPlot.Drawing.Colormaps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1779,18 +1779,20 @@ namespace VedAstro.Library
                         throw new ArgumentOutOfRangeException();
                 }
 
+                //IGNORE NOTE: sometimes planets can be friendly & exalted, neutral & debilitated
+                //in such cases ignore and continue, though mild drop in accuracy, better than 0 prediction
                 //if more than 1 relation occuring, raise alarm
-                var relationship = new[]
-                {
-                    planetInEnemy,
-                    planetInOwn,
-                    planetInNeutral,
-                    planetInFriendly,
-                    planetDebilitated,
-                    planetExalted
-                };
-                var relationshipCount = relationship.Sum(x => x ? 1 : 0);
-                if (relationshipCount > 1) { throw new Exception("Something wrong, more than 1 relationship found!"); }
+                //var relationship = new[]
+                //{
+                //    planetInEnemy,
+                //    planetInOwn,
+                //    planetInNeutral,
+                //    planetInFriendly,
+                //    planetDebilitated,
+                //    planetExalted
+                //};
+                //var relationshipCount = relationship.Sum(x => x ? 1 : 0);
+                //if (relationshipCount > 1) { throw new Exception("Something wrong, more than 1 relationship found!"); }
 
 
                 //4. INTERPRET THE RESULTS GOTTEN FROM ABOVE

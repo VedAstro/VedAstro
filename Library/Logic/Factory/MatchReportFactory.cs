@@ -1,4 +1,4 @@
-﻿using ScottPlot.Drawing.Colormaps;
+using ScottPlot.Drawing.Colormaps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -726,51 +726,63 @@ namespace VedAstro.Library
             //else it is a friendly (3) or perfect (4) pair
             else
             {
+                //get data for checking deeper
+                var sameAnimal = maleAnimal == femaleAnimal;
+                var sameGender = maleGender == femaleGender;
+                var isFriendlyYoni = compatibleGrade == 3;
+                var bothFemale = femaleGender == "Female" && maleGender == "Female";
+                var bothMale = maleGender == "Male" && femaleGender == "Male";
+
+                //NOTE: cases below are designed to be overriden
+                EventNature predictedNature = EventNature.Empty;
+                string predictedInfo = "";
+
+                //CASE 1
                 //Marriage between the constellations indicating same class of yoni and between the male and
                 //female stars of that yoni conduces to great happiness, perfect harmony and progeny.
                 //The union of these is agreeable and conduces to favourable results to the fullest extent.
-                var sameAnimal = maleAnimal == femaleAnimal;
-                var sameGender = maleGender == femaleGender;
                 if (sameAnimal && !sameGender) //same animal opposite gender
                 {
-                    prediction.Nature = EventNature.Good;
-                    prediction.Info = "favourable results to the fullest extent, harmony and progeny";
+                    predictedNature = EventNature.Good;
+                    predictedInfo = "favourable results to the fullest extent, harmony and progeny";
                 }
-                else if (sameAnimal && sameGender) //same animal same gender 
+                else if (sameAnimal && sameGender && !bothMale) //same animal same gender but not both MALE
                 {
-                    prediction.Nature = EventNature.Good;
-                    prediction.Info = "not perfect, better than normal."; //(not 100% known)
+                    predictedNature = EventNature.Good;
+                    predictedInfo = "not perfect, better than normal."; //(not 100% known)
                 }
 
-
+                //CASE 2
                 // If the male and female happen to be born in friendly yonies, but both
                 // representing female constellations there will be fair happiness and agreement.
-                var isFriendlyYoni = compatibleGrade == 3;
-                var bothFemale = femaleGender == "Female" && maleGender == "Female";
                 if (isFriendlyYoni && bothFemale)
                 {
-                    prediction.Nature = EventNature.Good;
-                    prediction.Info = "fair happiness and agreement";
+                    predictedNature = EventNature.Good;
+                    predictedInfo = "fair happiness and agreement";
                 }
 
+                //CASE 3
                 //friendly yoni & opposite genders
                 if (isFriendlyYoni && maleGender != femaleGender)
                 {
-                    prediction.Nature = EventNature.Good;
-                    prediction.Info = "passable, not best but ok";
+                    predictedNature = EventNature.Good;
+                    predictedInfo = "passable, not best but ok";
 
                 }
 
+                //CASE 4
                 // If the couple belong both to male
                 // constellations there will be constant quarrels
                 // and unhappiness.
-                var bothMale = maleGender == "Male" && femaleGender == "Male";
                 if (bothMale)
                 {
-                    prediction.Nature = EventNature.Bad;
-                    prediction.Info = "both male constellations, constant quarrels and unhappiness";
+                    predictedNature = EventNature.Bad;
+                    predictedInfo = "both male constellations, constant quarrels and unhappiness";
                 }
 
+                //transfer final prediction
+                prediction.Nature = predictedNature;
+                prediction.Info = predictedInfo;
             }
 
             return prediction;

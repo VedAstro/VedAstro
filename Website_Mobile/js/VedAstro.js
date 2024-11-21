@@ -2312,7 +2312,36 @@ class PersonSelectorBox {
         // Generate and inject the HTML into the page
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
 
+        // add tooltip to show full birth time and location
+        this.attachTippyToButton();
+
     }
+
+    attachTippyToButton() {
+        const selectedPerson = this.GetSelectedPerson();
+        if (selectedPerson) {
+            const button = $(`#${this.ElementID}`).find(`.${this.SelectedPersonNameHolderElementID}`).parent();
+
+            //location text can sometimes be very long, so auto shorten
+            let locationName = CommonTools.TruncateText(selectedPerson.BirthTime.Location.Name, 20);
+
+            let html = `<div>
+                            <div>🕑 ${selectedPerson.BirthTime.StdTime}</div>
+                            <div>🌍 ${locationName}</div>
+                            <div>📌 ${selectedPerson.BirthTime.Location.Latitude}, ${selectedPerson.BirthTime.Location.Longitude}</div>
+                        </div>`;
+
+            tippy(button[0], {
+                content: html,
+                allowHTML: true,
+                arrow:true,
+                placement: 'right',
+                trigger: 'mouseenter focus',
+                interactive : true //so that can select button
+            });
+        }
+    }
+
 
     //gets list of person to display (checks if underlying cache has been removed)
     async getPersonListDisplay() {
@@ -2371,6 +2400,9 @@ class PersonSelectorBox {
 
         // Save the selected person to local storage
         this.SetSelectedPerson(personData);
+
+        // Re-attach Tippy to button with new selected person's birth time
+        this.attachTippyToButton();
     }
 
     //given full person data will update into selected view

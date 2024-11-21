@@ -290,6 +290,25 @@ class CommonTools {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
+    /**
+     * Truncates a given text to a specified maximum length and appends an ellipsis.
+     *
+     * @param {string} text - The text to be truncated.
+     * @param {number} maxChars - The maximum number of characters allowed.
+     * @returns {string} The truncated text.
+     */
+    static TruncateText(text, maxChars) {
+        if (typeof text !== 'string') {
+            throw new Error('Input text must be a string.');
+        }
+
+        if (typeof maxChars !== 'number' || maxChars <= 0) {
+            throw new Error('Maximum characters must be a positive number.');
+        }
+
+        return text.length > maxChars ? `${text.substring(0, maxChars)}...` : text;
+    }
+
 }
 
 

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -109,6 +110,17 @@ namespace VedAstro.Library
             //store geo location for later use
             _geoLocation = geoLocation;
 
+        }
+
+        public Time(LocalMeanTime lmtDateTime, TimeSpan stdOffset, GeoLocation geoLocation)
+        {
+            DateTimeOffset stdTime = Calculate.LmtToStd(lmtDateTime, stdOffset); //time span 0 for GMT/UTC Greenwich
+
+            //store std time
+            _stdTime = stdTime;
+
+            //store geolocation for later use
+            _geoLocation = geoLocation;
         }
 
         /// <summary>

@@ -2755,7 +2755,7 @@ class TimeInputSimple {
         this.MonthInputID = `${elementId}_MonthInput`;
         this.YearInputID = `${elementId}_YearInput`;
 
-        // Initialize the TimeLocationInputInstances object
+        // Initialize the TimeInputSimple object
         TimeInputSimple.initInstances();
 
         // Save a reference to this instance for global access
@@ -2971,25 +2971,31 @@ class TimeInputSimple {
  */
 class GeoLocationInput {
     // Class properties
-    ElementID = "";
-    LabelText = "";
+    elementId = "";
+    labelText = "";
     dropdownMenuId = "";
     locationNameInputId = "";
     locations = []; // Save the parsed geolocation array in the class instance
+    $element = null;
+    $locationNameInput = null;
+    $dropdownMenu = null;
+    $latitudeInput = null;
+    $longitudeInput = null;
+    $switchButton = null;
 
     /**
      * Constructor to initialize the GeoLocationInput object.
      * @param {string} elementId - The ID of the HTML element to render the component in.
      */
     constructor(elementId) {
-        // Assign the provided elementId to the ElementID property
-        this.ElementID = elementId;
+        // Assign the provided elementId to the elementId property
+        this.elementId = elementId;
 
         // Get the DOM element with the given ID
-        const element = document.getElementById(elementId);
+        this.$element = $(`[id="${elementId}"]`);
 
         // Get the custom attributes from the element and assign default values if not present
-        this.LabelText = element.getAttribute("LabelText") || "Location";
+        this.labelText = this.$element.attr("LabelText") || "Location";
 
         // Generate a random ID for the dropdown menu
         this.dropdownMenuId = `dropdown-menu-${Math.random().toString(36).substr(2, 9)}`;
@@ -2997,22 +3003,6 @@ class GeoLocationInput {
 
         // Call the method to initialize the main body of the page header
         this.initializeMainBody();
-
-        // Save a reference to this instance for global access
-        GeoLocationInput.initInstances();
-        window.vedastro.GeoLocationInputInstances[elementId] = this;
-    }
-
-    /**
-     * Initialize the GeoLocationInput instances object.
-     */
-    static initInstances() {
-        if (!window.vedastro) {
-            window.vedastro = {};
-        }
-        if (!window.vedastro.GeoLocationInputInstances) {
-            window.vedastro.GeoLocationInputInstances = {};
-        }
     }
 
     /**
@@ -3020,15 +3010,23 @@ class GeoLocationInput {
      */
     async initializeMainBody() {
         // Empty the content of the element with the given ID
-        $(`#${this.ElementID}`).empty();
+        this.$element.empty();
 
         // Generate the HTML for the page header and inject it into the element
-        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+        this.$element.html(await this.generateHtmlBody());
 
-        // Add event listener to the switch button
-        $(`#${this.ElementID} .switch-button`).on('click', () => {
-            this.toggleInputFields();
-        });
+        // Get the input field and dropdown menu elements
+        this.$locationNameInput = this.$element.find(`[id="${this.locationNameInputId}"]`);
+        this.$dropdownMenu = this.$element.find(`[id="${this.dropdownMenuId}"]`);
+        this.$latitudeInput = this.$element.find(".latitude");
+        this.$longitudeInput = this.$element.find(".longitude");
+        this.$switchButton = this.$element.find(".switch-button");
+
+        // Add event listeners
+        this.$locationNameInput.on("keyup", (event) => this.onUpdateLocationNameText(event));
+        this.$locationNameInput.on("focus", (event) => this.onInputFocus(event));
+        this.$switchButton.on("click", () => this.toggleInputFields());
+        this.$dropdownMenu.on("click", ".dropdown-item", (event) => this.onClickPresetLocationName(event));
     }
 
     /**
@@ -3042,9 +3040,9 @@ class GeoLocationInput {
                     <!-- HEADER ICON -->
                     <span class="input-group-text gap-2 py-1">
                         <iconify-icon icon="streamline-emojis:globe-showing-americas" width="34" height="34"></iconify-icon>
-                        ${this.LabelText}
+                        ${this.labelText}
                     </span>
-                    <input id="${this.locationNameInputId}" onkeyup="window.vedastro.GeoLocationInputInstances['${this.ElementID}'].onUpdateLocationNameText(event)" type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;" data-bs-toggle="dropdown" onfocus="window.vedastro.GeoLocationInputInstances['${this.ElementID}'].onInputFocus(event)">
+                    <input id="${this.locationNameInputId}" type="text" class="form-control " placeholder="New York" style="font-weight: 600; font-size: 16px;" data-bs-toggle="dropdown">
                     <ul id="${this.dropdownMenuId}" class="dropdown-menu" aria-labelledby="${this.locationNameInputId}">
                         <li><a class="dropdown-item text-muted" href="#">
                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="18" height="18" viewBox="0 0 24 24" data-icon="grommet-icons:map" data-width="18" class="iconify iconify--grommet-icons"><path fill="none" stroke="currentColor" stroke-width="2" d="M15 15h4l3 7H2l3-7h4m4-7a1 1 0 1 1-2 0a1 1 0 0 1 2 0M6 8c0 5 6 10 6 10s6-5 6-10c0-3.417-2.686-6-6-6S6 4.583 6 8Z"></path></svg>
@@ -3060,7 +3058,7 @@ class GeoLocationInput {
                     <!-- HEADER ICON -->
                     <span class="input-group-text gap-2 py-1">
                         <iconify-icon icon="streamline-emojis:globe-showing-americas" width="34" height="34"></iconify-icon>
-                        ${this.LabelText}
+                        ${this.labelText}
                     </span>
                     <span class="input-group-text px-2">Lat</span>
                     <input type="number" class="form-control px-2 latitude" placeholder="4.3°" style="font-weight: 600; font-size: 16px;">
@@ -3079,11 +3077,11 @@ class GeoLocationInput {
 
     /**
      * Method to handle click on preset location name.
-     * @param {Event} eventObject - The event object triggered by the click.
+     * @param {Event} event - The event object triggered by the click.
      */
-    onClickPresetLocationName(eventObject) {
+    onClickPresetLocationName(event) {
         // Get the location name from the clicked element
-        const locationName = eventObject.target.textContent;
+        const locationName = event.target.textContent;
 
         // Find the corresponding location object from the saved instance
         const location = this.locations.find(location => location.Name === locationName);
@@ -3093,86 +3091,76 @@ class GeoLocationInput {
             this.selectedLocation = location;
 
             // Fill location name, longitude and latitude values into HTML
-            document.querySelector(`#${this.ElementID} .location-name input`).value = location.Name;
-            document.querySelector(`#${this.ElementID} .latitude`).value = location.Latitude.toFixed(1); //round for nice fit GUI
-            document.querySelector(`#${this.ElementID} .longitude`).value = location.Longitude.toFixed(1); //round for nice fit GUI
+            this.$locationNameInput.val(location.Name);
+            this.$latitudeInput.val(location.Latitude.toFixed(1)); //round for nice fit GUI
+            this.$longitudeInput.val(location.Longitude.toFixed(1)); //round for nice fit GUI
         }
     }
 
     /**
      * Method to update the location name text.
-     * @param {Event} eventObject - The event object triggered by the input field.
+     * @param {Event} event - The event object triggered by the input field.
      */
-    onUpdateLocationNameText(eventObject) {
+    onUpdateLocationNameText(event) {
         // Get the user input from the event target
-        const userTextInput = eventObject.target.value;
+        const userTextInput = event.target.value;
 
         // Call the API to search for location names based on the user input
         this.locationNameSearchWithAPI(userTextInput)
             .then(locations => {
-                // Get the parent element of the input field
-                const inputParent = eventObject.target.closest(`#${this.ElementID}`);
-
-                // Get the dropdown menu element within the parent element
-                const dropdownMenu = inputParent.querySelector(`#${this.dropdownMenuId}`);
-
                 // Clear any existing content in the dropdown menu
-                dropdownMenu.innerHTML = "";
+                this.$dropdownMenu.empty();
 
                 if (locations.length === 0) {
                     // if no locations are found then only insert below html to notify user no location with that name,
                     // but input must have text, else show `search message` instead
                     if (userTextInput.trim() !== "") {
-                        dropdownMenu.innerHTML = `
-                        <li><a class="dropdown-item text-muted" href="#">
-                            <iconify-icon icon="tdesign:map-cancel" width="18" height="18"></iconify-icon>
-                            Not found, try input coordinates</a>
-                        </li>
-                    `;
+                        this.$dropdownMenu.html(`
+                            <li><a class="dropdown-item text-muted" href="#">
+                                <iconify-icon icon="tdesign:map-cancel" width="18" height="18"></iconify-icon>
+                                Not found, try input coordinates</a>
+                            </li>
+                        `);
                     } else {
-                        dropdownMenu.innerHTML = `
-                        <li><a class="dropdown-item text-muted" href="#">
-                            <iconify-icon icon="grommet-icons:map" width="18" height="18"></iconify-icon>
-                            Search city, town, state</a>
-                        </li>
-                    `;
+                        this.$dropdownMenu.html(`
+                            <li><a class="dropdown-item text-muted" href="#">
+                                <iconify-icon icon="grommet-icons:map" width="18" height="18"></iconify-icon>
+                                Search city, town, state</a>
+                            </li>
+                        `);
                     }
                 } else {
                     // Generate HTML for the locations
                     const locationsHtml = locations.map(location => `
-                    <li><a class="dropdown-item" onClick="window.vedastro.GeoLocationInputInstances['${this.ElementID}'].onClickPresetLocationName(event)">${location.Name}</a></li>
-                `).join("");
-                    dropdownMenu.innerHTML = locationsHtml;
+                        <li><a class="dropdown-item">${location.Name}</a></li>
+                    `).join("");
+                    this.$dropdownMenu.html(locationsHtml);
                 }
 
                 // Show the dropdown menu
-                dropdownMenu.classList.remove("d-none");
+                this.$dropdownMenu.removeClass("d-none");
             });
     }
 
-    onInputFocus(event) {
-        // Get the dropdown menu element that is associated with the input field that received focus
-        const dropdownMenu = event.target.closest(`#${this.ElementID}`).querySelector(`#${this.dropdownMenuId}`);
-
+    onInputFocus() {
         // Remove the 'd-none' class from the dropdown menu, which makes it visible
-        dropdownMenu.classList.remove("d-none");
+        this.$dropdownMenu.removeClass("d-none");
     }
 
     /**
      * Method to toggle the input fields.
      */
     toggleInputFields() {
-        $(`#${this.ElementID} .location-name`).toggleClass('d-none');
-        $(`#${this.ElementID} .lat-lng-fields`).toggleClass('d-none');
+        this.$element.find(".location-name").toggleClass('d-none');
+        this.$element.find(".lat-lng-fields").toggleClass('d-none');
 
         // toggle button icons based on class
-        const switchButton = $(`#${this.ElementID} .switch-button`);
-        if (switchButton.find('.globeIcon').hasClass('d-none')) {
-            switchButton.find('.mapIcon').addClass('d-none');
-            switchButton.find('.globeIcon').removeClass('d-none');
+        if (this.$switchButton.find('.globeIcon').hasClass('d-none')) {
+            this.$switchButton.find('.mapIcon').addClass('d-none');
+            this.$switchButton.find('.globeIcon').removeClass('d-none');
         } else {
-            switchButton.find('.globeIcon').addClass('d-none');
-            switchButton.find('.mapIcon').removeClass('d-none');
+            this.$switchButton.find('.globeIcon').addClass('d-none');
+            this.$switchButton.find('.mapIcon').removeClass('d-none');
         }
     }
 
@@ -3202,13 +3190,14 @@ class GeoLocationInput {
     }
 
     isValid() {
-        const locationName = document.querySelector(`#${this.ElementID} .location-name input`).value;
-        const latitude = document.querySelector(`#${this.ElementID} .latitude`).value;
-        const longitude = document.querySelector(`#${this.ElementID} .longitude`).value;
+        const locationName = this.$locationNameInput.val();
+        const latitude = this.$latitudeInput.val();
+        const longitude = this.$longitudeInput.val();
 
         return locationName !== "" && latitude !== "" && longitude !== "";
     }
 }
+
 
 /**
  * Represents a time location input component.
@@ -3224,15 +3213,6 @@ class TimeLocationInput {
     TimeInputSimpleInstance;
     GeoLocationInputInstance;
 
-    static initInstances() {
-        if (!window.vedastro) {
-            window.vedastro = {};
-        }
-        if (!window.vedastro.TimeLocationInputInstances) {
-            window.vedastro.TimeLocationInputInstances = {};
-        }
-    }
-
     // Constructor to initialize the object
     constructor(elementId) {
         // Assign the provided elementId to the ElementID property
@@ -3242,7 +3222,7 @@ class TimeLocationInput {
         const element = document.getElementById(elementId);
 
         // Get the custom attributes from the element and assign default values if not present
-        this.LabelText = element.getAttribute("LabelText") || "Label Goes Here";
+        this.LabelText = element.getAttribute("LabelText") || "";
 
         // Generate a random ID for TimeInputSimple
         var randoTron = Math.random().toString(36).substr(2, 9);
@@ -3251,10 +3231,6 @@ class TimeLocationInput {
 
         // Call the method to initialize the main body of the page header
         this.initializeMainBody();
-
-        // Save a reference to this instance for global access
-        TimeLocationInput.initInstances();
-        window.vedastro.TimeLocationInputInstances[elementId] = this;
 
     }
 

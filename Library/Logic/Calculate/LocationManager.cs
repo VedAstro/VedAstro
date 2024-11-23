@@ -225,7 +225,8 @@ namespace VedAstro.Library
             {
                 var provider = row.Value;
                 var fullGeoRowData = (await provider(userInputAddress));
-                parsedGeoLocation = fullGeoRowData.MainRow.ToGeoLocationList();
+                SearchAddressGeoLocationEntity mainRow = fullGeoRowData.MainRow;
+                parsedGeoLocation = mainRow.ToGeoLocationList();
 
 
                 // when new location not is cache, we add it
@@ -239,11 +240,14 @@ namespace VedAstro.Library
                     try
                     {
                         //add new data to cache, for future speed up
-                        AddToSearchAddressTable(fullGeoRowData.MainRow);
+                        AddToSearchAddressTable(mainRow);
                     }
                     catch (Exception e)
                     {
                         // ignored
+#if DEBUG
+                        Console.WriteLine(e.ToString());
+#endif
                     }
 
                 }

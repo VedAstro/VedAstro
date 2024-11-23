@@ -1,5 +1,4 @@
-﻿updateHistory();
-
+﻿
 new PageHeader("PageHeader");
 
 async function calculateLmtToStd() {

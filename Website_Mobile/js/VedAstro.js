@@ -2971,7 +2971,7 @@ class TimeInputSimple {
  */
 class GeoLocationInput {
     // Class properties
-    elementId = "";
+    ElementID = "";
     labelText = "";
     dropdownMenuId = "";
     locationNameInputId = "";
@@ -2985,14 +2985,14 @@ class GeoLocationInput {
 
     /**
      * Constructor to initialize the GeoLocationInput object.
-     * @param {string} elementId - The ID of the HTML element to render the component in.
+     * @param {string} ElementId - The ID of the HTML element to render the component in.
      */
     constructor(elementId) {
         // Assign the provided elementId to the elementId property
-        this.elementId = elementId;
+        this.ElementID = elementId;
 
         // Get the DOM element with the given ID
-        this.$element = $(`[id="${elementId}"]`);
+        this.$element = $(`[id="${this.ElementID}"]`);
 
         // Get the custom attributes from the element and assign default values if not present
         this.labelText = this.$element.attr("LabelText") || "Location";
@@ -3023,10 +3023,89 @@ class GeoLocationInput {
         this.$switchButton = this.$element.find(".switch-button");
 
         // Add event listeners
+        this.attachEventHandlers();
+
+    }
+
+    attachEventHandlers() {
+
+        //user searches for location
         this.$locationNameInput.on("keyup", (event) => this.onUpdateLocationNameText(event));
+
+        //show drop down with location names or tell user location not found
         this.$locationNameInput.on("focus", (event) => this.onInputFocus(event));
+
+        //user pastes location name and moves out, so parse to default possible location
+        this.$locationNameInput.on("blur", (event) => this.onLeaveLocationInput());
+
+        //user types in coordinates without location name, so parse to default possible location name
+        this.$latitudeInput.on("blur", (event) => this.onLeaveCoordinateInput());
+        this.$longitudeInput.on("blur", (event) => this.onLeaveCoordinateInput());
+
+        //users switches between name / coordinate input
         this.$switchButton.on("click", () => this.toggleInputFields());
+
+        //user clicks on dropdown location name
         this.$dropdownMenu.on("click", ".dropdown-item", (event) => this.onClickPresetLocationName(event));
+
+    }
+
+    async onLeaveLocationInput() {
+        // Get the unparsed location name
+        let unparsedLocationName = this.$locationNameInput.val().trim();
+
+        // Check if the input field is not empty
+        if (unparsedLocationName !== "") {
+            // Call API and get parsed location
+            var apiUrl = `${VedAstro.ApiDomain}/Calculate/AddressToGeoLocation/Address/${unparsedLocationName}`;
+
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            const location = data.Payload.AddressToGeoLocation;
+
+            //if location not found let user know invalid location name
+            if (location.Name === 'Empty') {
+                Swal.fire({ icon: "error", title: "Location not found!", html: `The location <strong>"${unparsedLocationName}"</strong> not found!`, confirmButtonText: "OK" });
+                //clear coordinates input to raise invalid alarm
+                this.$latitudeInput.empty();
+                this.$longitudeInput.empty();
+            } else {
+                //location found, fill inputs
+                this.$locationNameInput.val(location.Name);
+                this.$latitudeInput.val(location.Latitude.toFixed(1)); // round for nice fit GUI
+                this.$longitudeInput.val(location.Longitude.toFixed(1)); // round for nice fit GUI
+            }
+        }
+    }
+
+    //when user types in coordinates, get the location name from API and fill that
+    //overrides what ever user typed in location name, since now in coordinates view/mode
+    async onLeaveCoordinateInput() {
+        // Get typed in coordinates
+        const latitude = this.$latitudeInput.val().trim();
+        const longitude = this.$longitudeInput.val().trim();
+
+        //only continue if both coordinates is filled
+        if (latitude === "" || longitude === "") { return; }
+
+        // Call API and get parsed location name
+        let apiUrl = `${VedAstro.ApiDomain}/Calculate/CoordinatesToGeoLocation/Latitude/${latitude}/Longitude/${longitude}`;
+
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        const location = data.Payload.CoordinatesToGeoLocation;
+
+        //if location not found let user know invalid location name
+        if (location.Name === 'Empty') {
+            Swal.fire({ icon: "error", title: "Location not found!", html: `No location for <strong>Lat:"${latitude}" & Long:"${longitude}"</strong>`, confirmButtonText: "OK" });
+            //clear location name input to raise invalid alarm
+            this.$locationNameInput.empty();
+        } else {
+            //location found, fill inputs
+            this.$locationNameInput.val(location.Name);
+            this.$latitudeInput.val(location.Latitude.toFixed(1)); // round for nice fit GUI
+            this.$longitudeInput.val(location.Longitude.toFixed(1)); // round for nice fit GUI
+        }
     }
 
     /**
@@ -3067,9 +3146,9 @@ class GeoLocationInput {
                 </div>
 
                 <!-- Input Swither button -->
-                <button class="switch-button btn-primary btn p-2" style="">
-                    <iconify-icon class="globeIcon" icon="bx:globe" width="25" height="25"></iconify-icon>
-                    <iconify-icon class="mapIcon d-none" icon="bx:map" width="25" height="25"></iconify-icon>
+                <button class="switch-button btn-primary btn py-1" style="padding-right: 2px;padding-left: 3px;">
+                    <iconify-icon class="pt-1 globeIcon" icon="bx:globe" width="25" height="25"></iconify-icon>
+                    <iconify-icon class="pt-1 mapIcon d-none" icon="bx:map" width="25" height="25"></iconify-icon>
                 </button>
             </div>
         `;
@@ -3087,9 +3166,6 @@ class GeoLocationInput {
         const location = this.locations.find(location => location.Name === locationName);
 
         if (location) {
-            // Save the selected location JSON for this instance
-            this.selectedLocation = location;
-
             // Fill location name, longitude and latitude values into HTML
             this.$locationNameInput.val(location.Name);
             this.$latitudeInput.val(location.Latitude.toFixed(1)); //round for nice fit GUI
@@ -3250,8 +3326,8 @@ class TimeLocationInput {
     // Method to generate the HTML for the page header
     async generateHtmlBody() {
         return `
-      <div id="${this.TimeInputSimpleID}" LabelText="${this.LabelText}"></div>
-      <div id="${this.GeoLocationInputID}" class="mt-3" LabelText="${this.LabelText}"></div>
+      <div id="${this.TimeInputSimpleID}" LabelText="Time"></div>
+      <div id="${this.GeoLocationInputID}" class="mt-3" LabelText="Map"></div>
     `;
     }
 
@@ -7504,7 +7580,7 @@ class PersonListViewer {
                     </td>
                     <td>
                         <div>🕑 ${person.BirthTime.StdTime}</div>
-                        <div>🌍 ${person.BirthTime.Location.Name}, ${person.BirthTime.Location.Latitude}, ${person.BirthTime.Location.Longitude}</div>
+                        <div title="${person.BirthTime.Location.Name}">🌍 ${CommonTools.TruncateText(person.BirthTime.Location.Name, 43)}, ${person.BirthTime.Location.Latitude}, ${person.BirthTime.Location.Longitude}</div>
                     </td>
                     <td>
                         <div class="dropdown ">

@@ -3281,18 +3281,18 @@ class TimeLocationInput {
 
     // Method to get the time and location as a JSON object
     // exp out : {"StdTime":"13:54 25/10/1992 +08:00","Location":{"Name":"Taiping","Longitude":103.82,"Latitude":1.352}}
-    getTimeJson() {
+    async getTimeJson() {
         // Get the instances of the TimeInputSimple and GeoLocationInput classes
         const timeInputSimple = this.TimeInputSimpleInstance;
         const geoLocationInput = this.GeoLocationInputInstance;
 
         // Get the time values from the input fields
-        const hour = document.getElementById(timeInputSimple.HourInputID).innerText;
-        const minute = document.getElementById(timeInputSimple.MinuteInputID).innerText;
-        const meridian = document.getElementById(timeInputSimple.MeridianInputID).innerText;
-        const date = document.getElementById(timeInputSimple.DateInputID).innerText;
-        const month = document.getElementById(timeInputSimple.MonthInputID).innerText;
-        const year = document.getElementById(timeInputSimple.YearInputID).innerText;
+        let hour = document.getElementById(timeInputSimple.HourInputID).innerText;
+        let minute = document.getElementById(timeInputSimple.MinuteInputID).innerText;
+        let meridian = document.getElementById(timeInputSimple.MeridianInputID).innerText;
+        let date = document.getElementById(timeInputSimple.DateInputID).innerText;
+        let month = document.getElementById(timeInputSimple.MonthInputID).innerText;
+        let year = document.getElementById(timeInputSimple.YearInputID).innerText;
 
         //convert hour and minute from 12H to 24H
         let hour24 = hour;
@@ -3302,14 +3302,20 @@ class TimeLocationInput {
             hour24 = '00';
         }
 
+        //fix formatting to include 0 infront if single digit
+        hour24 = hour24.toString().padStart(2, '0');
+        minute = minute.toString().padStart(2, '0');
+        date = date.toString().padStart(2, '0');
+        month = month.toString().padStart(2, '0');
+
         // Get the location values from the input fields
         const locationName = document.querySelector(`#${geoLocationInput.ElementID} .location-name input`).value;
         const latitude = document.querySelector(`#${geoLocationInput.ElementID} .latitude`).value;
         const longitude = document.querySelector(`#${geoLocationInput.ElementID} .longitude`).value;
 
         // Construct the StdTime string in the format "HH:MM DD/MM/YYYY tmz"
-        var timeZone = TimeLocationInput.getSystemTimezone(); // Format: +08:00
-        const stdTime = `${hour24.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} ${date.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year} ${timeZone}`;
+        var timeZone = await this.getTimezoneForLocationFromApi(locationName, latitude, longitude, hour, minute, date, month, year); // Format: +08:00
+        const stdTime = `${hour}:${minute} ${date}/${month}/${year} ${timeZone}`;
 
         // Construct the Location object with Name, Longitude, and Latitude properties
         const location = {
@@ -3326,6 +3332,21 @@ class TimeLocationInput {
 
         // Return the timeObject
         return timeObject;
+    }
+
+    async getTimezoneForLocationFromApi(locationName, latitude, longitude, hour, minute, date, month, year) {
+
+        // Construct API URL
+        const apiUrl = `${VedAstro.ApiDomain}/Calculate/GeoLocationToTimezone/Location/${locationName}/Coordinates/${latitude},${longitude}/Time/${hour}:${minute}/${date}/${month}/${year}/+00:00`;
+
+        // Make API call and handle response
+        const response = await fetch(apiUrl);
+
+        const data = await response.json();
+        if (data.Status === "Pass") {
+            return data.Payload.GeoLocationToTimezone;
+        }
+
     }
 
     static getSystemTimezone() {

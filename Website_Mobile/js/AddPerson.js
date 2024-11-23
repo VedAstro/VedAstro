@@ -6,7 +6,7 @@ new InfoBox("InfoBox_Private_AddPerson");
 new InfoBox("InfoBox_ForgotenTime_AddPerson");
 new IconButton("IconButton_Advanced");
 new IconButton("IconButton_Save_AddPerson");
-new TimeLocationInput("TimeLocationInput_AddPerson");
+let timeLocationInput = new TimeLocationInput("TimeLocationInput_AddPerson");
 new PersonListViewer("PersonListViewer");
 
 //update name input on loose focus to not be all caps
@@ -135,7 +135,6 @@ function toUrlSafe(text) {
 async function getPersonInstanceFromInput() {
     const nameInput = document.getElementById("NameInput_AddPerson");
     const genderInput = document.getElementById("GenderInput_AddPerson");
-    const timeLocationInput = window.vedastro.TimeLocationInputInstances["TimeLocationInput_AddPerson"];
     const notesInput = document.getElementById("NotesInput_AddPerson");
 
     //person ID is not filled, so Server can intelligently generate one
@@ -172,7 +171,6 @@ function convertNameToPascalCase(name) {
 
 async function isValidationPassed_AddPerson() {
     // Prepare view components for checking
-    var timeInput = window.vedastro.TimeLocationInputInstances["TimeLocationInput_AddPerson"];
     const nameInput = document.getElementById("NameInput_AddPerson");
     const genderInput = document.getElementById("GenderInput_AddPerson");
 
@@ -198,7 +196,7 @@ async function isValidationPassed_AddPerson() {
 
 
     // TEST 3: Time & Location
-    const isValidTime = await timeInput.isValid();
+    const isValidTime = await timeLocationInput.isValid();
     if (!isValidTime) {
         await Swal.fire({
             icon: 'error',
@@ -209,7 +207,7 @@ async function isValidationPassed_AddPerson() {
     }
 
     // TEST 4: Check if user is sleeping by letting time be set as current year and date and month
-    const tempTime = await timeInput.getDateTimeOffset();
+    const tempTime = await timeLocationInput.getDateTimeOffset();
     const thisYear = tempTime.year === new Date().getFullYear();
     const thisMonth = tempTime.month === new Date().getMonth();
     const thisDate = tempTime.date === new Date().getDate();

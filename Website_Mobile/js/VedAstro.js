@@ -2334,10 +2334,10 @@ class PersonSelectorBox {
             tippy(button[0], {
                 content: html,
                 allowHTML: true,
-                arrow:true,
+                arrow: true,
                 placement: 'right',
                 trigger: 'mouseenter focus',
-                interactive : true //so that can select button
+                interactive: true //so that can select button
             });
         }
     }
@@ -3407,7 +3407,6 @@ class TimeLocationInput {
         }
         return false;
     }
-
 
 }
 

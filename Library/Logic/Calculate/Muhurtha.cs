@@ -401,7 +401,7 @@ namespace VedAstro.Library
         public static CalculatorResult GoodPlanetsInLagnaForTravel(Time time, Person person)
         {
             //planets in lagna
-            var planetsInLagna = Calculate.PlanetsInHouse(HouseName.House1, time);
+            var planetsInLagna = Calculate.PlanetsInHouseBasedOnSign(HouseName.House1, time);
 
             //check all planets in lagna
             foreach (var planetName in planetsInLagna)
@@ -1374,7 +1374,7 @@ namespace VedAstro.Library
 
 
             //3. The 8th house must be unoccupied
-            var planets8thHouse = Calculate.PlanetsInHouse(HouseName.House8, time);
+            var planets8thHouse = Calculate.PlanetsInHouseBasedOnSign(HouseName.House8, time);
 
             //if got planets in 8th house, event not occurring
             if (planets8thHouse.Any()) { return CalculatorResult.NotOccuring(); }
@@ -1600,7 +1600,7 @@ namespace VedAstro.Library
             var evilPlanetFoundInHouse2 = false;
 
             //get planets in 12th house
-            List<PlanetName> planetsInHouse12 = Calculate.PlanetsInHouse(HouseName.House12, time);
+            List<PlanetName> planetsInHouse12 = Calculate.PlanetsInHouseBasedOnSign(HouseName.House12, time);
 
             //check if evil planets are found in house 12
             foreach (var planet in listOfEvilPlanets)
@@ -1620,7 +1620,7 @@ namespace VedAstro.Library
             if (evilPlanetFoundInHouse12)
             {
                 //get planets in 2nd house
-                List<PlanetName> planetsInHouse2 = Calculate.PlanetsInHouse(HouseName.House2, time);
+                List<PlanetName> planetsInHouse2 = Calculate.PlanetsInHouseBasedOnSign(HouseName.House2, time);
 
                 //check if evil planets are found in house 2
                 foreach (var planet in listOfEvilPlanets)
@@ -2214,7 +2214,7 @@ namespace VedAstro.Library
             //other adverse influences
 
             //get planets in 1st house (ascendant)
-            var planetsInLagna = Calculate.PlanetsInHouse(HouseName.House1, time);
+            var planetsInLagna = Calculate.PlanetsInHouseBasedOnSign(HouseName.House1, time);
 
             //list of good planets to look for
             var goodList = new List<PlanetName>() { PlanetName.Venus, PlanetName.Mercury, PlanetName.Jupiter };
@@ -2236,7 +2236,7 @@ namespace VedAstro.Library
             // antidote for other evils obtaining in the horoscope
 
             //get planets in 11st house 
-            var planetsIn11th = Calculate.PlanetsInHouse(HouseName.House11, time);
+            var planetsIn11th = Calculate.PlanetsInHouseBasedOnSign(HouseName.House11, time);
 
             //list of good planets to look for
             var goodList = new List<PlanetName>() { PlanetName.Moon, PlanetName.Sun };
@@ -3459,7 +3459,7 @@ namespace VedAstro.Library
 
                 //2. Jupiter is in Lagna
                 //get planets in lagna 
-                var currentPlanetsInLagna = Calculate.PlanetsInHouse(HouseName.House1, time);
+                var currentPlanetsInLagna = Calculate.PlanetsInHouseBasedOnSign(HouseName.House1, time);
 
                 //check if jupiter is in lagna
                 var rightPlanet = currentPlanetsInLagna.Contains(PlanetName.Jupiter);
@@ -3539,7 +3539,7 @@ namespace VedAstro.Library
 
             //2. Planet is in Lagna
             //get planets in lagna 
-            var currentPlanetsInLagna = Calculate.PlanetsInHouse(HouseName.House1, time);
+            var currentPlanetsInLagna = Calculate.PlanetsInHouseBasedOnSign(HouseName.House1, time);
 
             //check if correct planet is in lagna
             var rightPlanet = currentPlanetsInLagna.Contains(PlanetName.Venus);
@@ -3579,7 +3579,7 @@ namespace VedAstro.Library
 
             //2. Planet is in Lagna
             //get planets in lagna 
-            var currentPlanetsInLagna = Calculate.PlanetsInHouse(HouseName.House1, time);
+            var currentPlanetsInLagna = Calculate.PlanetsInHouseBasedOnSign(HouseName.House1, time);
 
             //check if correct planet is in lagna
             var rightPlanet = currentPlanetsInLagna.Contains(PlanetName.Mars);
@@ -3932,7 +3932,7 @@ namespace VedAstro.Library
             //While beginning all agricultural operations, see that the 8th house is unoccupied
 
             //get all planets in 8th house
-            var planets = Calculate.PlanetsInHouse(HouseName.House8, time);
+            var planets = Calculate.PlanetsInHouseBasedOnSign(HouseName.House8, time);
 
             //if any planets in 8th house, return occurring
             if (planets.Any())

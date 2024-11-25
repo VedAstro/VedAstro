@@ -3,6 +3,7 @@ using System.Formats.Asn1;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using VedAstro.Library;
@@ -27,6 +28,10 @@ namespace MigrateGeoLocationData
                         csv.Read();
                         csv.ReadHeader();
 
+                        var locationManager = new LocationManager();
+
+                        var rows = new List<CsvRow>();
+
                         while (csv.Read())
                         {
                             try
@@ -41,29 +46,51 @@ namespace MigrateGeoLocationData
                                 string source = csv.GetField(7);
                                 string searchedName = csv.GetField(8);
 
+                                rows.Add(new CsvRow
+                                {
+                                    PartitionKey = partitionKey,
+                                    RowKey = rowKey,
+                                    Timestamp = timestamp,
+                                    CleanedName = cleanedName,
+                                    Latitude = latitude,
+                                    Longitude = longitude,
+                                    Timezone = timezone,
+                                    Source = source,
+                                    SearchedName = searchedName
+                                });
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                            }
+                        }
+
+                        await Parallel.ForEachAsync(rows, new ParallelOptions { MaxDegreeOfParallelism = 10 }, async (row, token) =>
+                        {
+                            try
+                            {
                                 // Do something with the data
-                                Console.WriteLine($"PartitionKey: {partitionKey}");
-                                Console.WriteLine($"RowKey: {rowKey}"); //ticks
-                                Console.WriteLine($"Timestamp: {timestamp}");
-                                Console.WriteLine($"CleanedName: {cleanedName}");
-                                Console.WriteLine($"Latitude: {latitude}");
-                                Console.WriteLine($"Longitude: {longitude}");
-                                Console.WriteLine($"Timezone: {timezone}");
-                                Console.WriteLine($"Source: {source}");
-                                Console.WriteLine($"SearchedName: {searchedName}");
+                                Console.WriteLine($"PartitionKey: {row.PartitionKey}");
+                                Console.WriteLine($"RowKey: {row.RowKey}"); //ticks
+                                Console.WriteLine($"Timestamp: {row.Timestamp}");
+                                Console.WriteLine($"CleanedName: {row.CleanedName}");
+                                Console.WriteLine($"Latitude: {row.Latitude}");
+                                Console.WriteLine($"Longitude: {row.Longitude}");
+                                Console.WriteLine($"Timezone: {row.Timezone}");
+                                Console.WriteLine($"Source: {row.Source}");
+                                Console.WriteLine($"SearchedName: {row.SearchedName}");
                                 Console.WriteLine("------------------------");
 
                                 //get time of offset (UTC) as in DB
-                                var timeOfOffset = new DateTimeOffset(Int64.Parse(rowKey), TimeSpan.Zero);
-                                var geoLocation = new GeoLocation("", double.Parse(longitude), double.Parse(latitude));
+                                var timeOfOffset = new DateTimeOffset(Int64.Parse(row.RowKey), TimeSpan.Zero);
+                                var geoLocation = new GeoLocation("", double.Parse(row.Longitude), double.Parse(row.Latitude));
 
                                 //if empty than pass
-                                var timezoneIs0 = timezone == "+00:00";
-                                var timezoneIsEmpty = string.IsNullOrEmpty(timezone);
-                                if (timezoneIs0 || timezoneIsEmpty) { continue; }
+                                var timezoneIs0 = row.Timezone == "+00:00";
+                                var timezoneIsEmpty = string.IsNullOrEmpty(row.Timezone);
+                                if (timezoneIs0 || timezoneIsEmpty) { return; }
 
                                 //check if DB already has record
-                                var locationManager = new LocationManager();
                                 var foundTimezoneRecord = await locationManager.GeoLocationToTimezone_Vedastro(geoLocation, timeOfOffset);
                                 string timezoneStr = foundTimezoneRecord.MainRow.TimezoneText;
                                 var noRecord = string.IsNullOrEmpty(timezoneStr);
@@ -74,7 +101,7 @@ namespace MigrateGeoLocationData
                                     var geoLocationTimezoneEntity = new GeoLocationTimezoneEntity();
                                     geoLocationTimezoneEntity.PartitionKey = geoLocation.ToPartitionKey();
                                     geoLocationTimezoneEntity.RowKey = timeOfOffset.ToRowKey();
-                                    geoLocationTimezoneEntity.TimezoneText = timezone;
+                                    geoLocationTimezoneEntity.TimezoneText = row.Timezone;
                                     geoLocationTimezoneEntity.MetadataHash = "FromOldDB";
                                     locationManager.AddToTimezoneTable(geoLocationTimezoneEntity);
                                 }
@@ -82,9 +109,8 @@ namespace MigrateGeoLocationData
                             catch (Exception e)
                             {
                                 Console.WriteLine(e);
-                                //continue
                             }
-                        }
+                        });
                     }
                 }
                 else
@@ -97,5 +123,18 @@ namespace MigrateGeoLocationData
                 Console.WriteLine("An error occurred: " + ex.Message);
             }
         }
+    }
+
+    public class CsvRow
+    {
+        public string PartitionKey { get; set; }
+        public string RowKey { get; set; }
+        public string Timestamp { get; set; }
+        public string CleanedName { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public string Timezone { get; set; }
+        public string Source { get; set; }
+        public string SearchedName { get; set; }
     }
 }

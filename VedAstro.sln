@@ -102,6 +102,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LLMCoder", "LLMCoder\LLMCod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocToEmbeddings", "DocToEmbeddings\DocToEmbeddings.csproj", "{A97B97DC-5431-4A20-8F24-00724E85C0C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MigrateGeoLocationData", "MigrateGeoLocationData\MigrateGeoLocationData.csproj", "{216F2526-41E1-45A7-B2EE-F810AADAB66B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -343,6 +345,18 @@ Global
 		{A97B97DC-5431-4A20-8F24-00724E85C0C7}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
 		{A97B97DC-5431-4A20-8F24-00724E85C0C7}.ReleaseTest|x64.ActiveCfg = Release|Any CPU
 		{A97B97DC-5431-4A20-8F24-00724E85C0C7}.ReleaseTest|x64.Build.0 = Release|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.Debug|x64.Build.0 = Debug|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.Release|x64.ActiveCfg = Release|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.Release|x64.Build.0 = Release|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.ReleaseTest|x64.ActiveCfg = Release|Any CPU
+		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.ReleaseTest|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

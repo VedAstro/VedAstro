@@ -894,6 +894,21 @@ namespace LLMCoder
                 //frequency_penalty = 0
             };
 
+            // Check if model property is specified (special for GPT)
+            var modelString = this.SelectedLLMConfig.Model;
+            if (!string.IsNullOrEmpty(modelString))
+            {
+                var requestBodyObjectWithModel = new
+                {
+                    messages, // List of messages
+                    temperature = double.Parse(tempValue), // Temperature for sampling
+                    top_p = double.Parse(topPValue), // Nucleus sampling parameter
+                    model = modelString
+                };
+
+                return requestBodyObjectWithModel;
+            }
+
             return requestBodyObject;
         }
 
@@ -1550,7 +1565,7 @@ namespace LLMCoder
 
     }
 
-    public record ApiConfig(string Name, string Endpoint, string ApiKey, int MaxContextWindowTokens);
+    public record ApiConfig(string Name, string Endpoint, string ApiKey, int MaxContextWindowTokens, string Model="");
 
     public class InputDialog : Form
     {

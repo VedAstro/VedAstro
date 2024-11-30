@@ -5,8 +5,114 @@
 
 
 	<!--ASHTAKAVARGA YOGAS-->
+	
+	<!--SUN-->
 	<Event>
-		<Name>MoonAshtakavargaYoga</Name>
+		<Name>SunAshtakavargaYoga2</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>
+			if the bindus are 3 or 4 and the Sun does not happen to be in his place of exaltation or own sign.
+		</ConditionDescription>
+		<Description>
+			The person will always be ill
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>SunAshtakavargaYoga3</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>
+			if the Sun as ascendant lord is in a sign having more than 5 or 6 bindus.
+		</ConditionDescription>
+		<Description>
+			One will be blessed with all the paraphernalia of political power and eminence
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>SunAshtakavargaYoga5</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			if the sign occupied by the Sun
+			has more than 5 bindus and happens to be a Kendra or Trikona.
+		</ConditionDescription>
+		<Description>
+			The native's father may meet with death near a burial ground,
+			or a mountain, or a fireplace, or sea
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>SunAshtakavargaYoga6</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>
+			if the Sun is in a quadrant (Kendra) or a trine (Trikona),
+			which should also be a friendly sign associated with 3, 4, or 5 bindus.
+		</ConditionDescription>
+		<Description>
+			The father expires in the 17th year of the native
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>SunAshtakavargaYoga7</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>
+			if the Sun is in the 9th with Rahu, and the number of bindus is 3.
+		</ConditionDescription>
+		<Description>
+			Death of the father happens after five years
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>SunAshtakavargaYoga8</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>
+			Sun in the 5th having 3 bindus, in association with Moon, Mars, and Saturn,
+		</ConditionDescription>
+		<Description>
+			destroys parents and brothers
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>SunAshtakavargaYoga9</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>
+			if the Sun is in the 3rd, with 3 or 4 bindus aspected by malefics from the 9th.
+		</ConditionDescription>
+		<Description>
+			Death of the father takes place after the 20th year
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>SunAshtakavargaYoga10</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>
+			When the Sun is in the 6th in a Rasi having 4 bindus, and aspected by Jupiter,
+		</ConditionDescription>
+		<Description>
+			father dies after the 25th year
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>SunAshtakavargaYoga11</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>
+			Sun is in a trine or angle and has five or more bindus.
+		</ConditionDescription>
+		<Description>
+			Death of the father will happen between the 30th and 36th year
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	
+	<!--MOON-->
+	<Event>
+		<Name>MoonAshtakavargaYoga1A</Name>
 		<Nature>Bad</Nature>
 		<ConditionDescription>
 			If the Rasi occupied by the Moon is
@@ -18,25 +124,316 @@
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
-		<Name>MoonAshtakavargaYoga2</Name>
+		<Name>MoonAshtakavargaYoga1B</Name>
 		<Nature>Bad</Nature>
-		<ConditionDescription>MoonAshtakavargaYoga AND  if two or three planets join the Moon</ConditionDescription>
+		<ConditionDescription>MoonAshtakavargaYoga1A AND  if two or three planets join the Moon</ConditionDescription>
 		<Description>
 			the native is likely to pass away in his 37th year
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
 	<Event>
-		<Name>MoonAshtakavargaYoga3</Name>
+		<Name>MoonAshtakavargaYoga2B</Name>
 		<Nature>Good</Nature>
-		<Description>
+		<ConditionDescription>
 			The Moon in the 6th or 11th associated with
-			more than 6 bindus is found to make one rich
-			and when there is Jupiter's aspect, philanthropic
-			also.
+			more than 6 bindus
+		</ConditionDescription>
+		<Description>
+			is found to make one rich
 		</Description>
 		<Tag>Yoga</Tag>
 	</Event>
+	<Event>
+		<Name>MoonAshtakavargaYoga4</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>One born when the Moon is in a Kendra and associated with 7 to 8 bindus</ConditionDescription>
+		<Description>
+			becomes highly learned, powerful, a ruler and endowed with wealth.
+		</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MoonAshtakavargaYoga6</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If Rahu is in the 2nd and the Moon occupies the 7th or 8th with 1, 2, or 3 bindus.</ConditionDescription>
+		<Description>The mother suffers from frequent ill-health.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MoonAshtakavargaYoga7</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If Mars with less bindus is in the 4th or 8th from the Moon.</ConditionDescription>
+		<Description>Separation from the mother takes place.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MoonAshtakavargaYoga8</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If the Moon occupies a Kendra or the 12th with 1 to 3 bindus, and the 4th house is joined by malefic planets.</ConditionDescription>
+		<Description>Mother's death is likely in the 36th year.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MoonAshtakavargaYoga9</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If the waning Moon in Lagna is associated with 1, 2, 3, or no bindus.</ConditionDescription>
+		<Description>Indicates danger from weapons and poisonous insects, with a likelihood of the mother's death.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MoonAshtakavargaYoga10</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If the 4th house is occupied by malefics and the Moon is in Lagna with few bindus.</ConditionDescription>
+		<Description>Mother's death can take place in the 36th year.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	
+	<!--MARS-->
+	<Event>
+		<Name>MarsAshtakavargaYoga2</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>When Mars is exalted or in his own sign occupying the 9th, 4th, 10th or 1st house, associated with 8 bindus.</ConditionDescription>
+		<Description>The person becomes a millionaire.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga3</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>When Sagittarius, Leo, Aries, Cancer or Capricorn happens to be the ascendant and Mars occupies it, associated with 4 bindus.</ConditionDescription>
+		<Description>One will become a ruler.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga4</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>If Mars has 8 bindus, depending upon the strength of Mars.</ConditionDescription>
+		<Description>One rises to a high position such as head of a small principality or a high government official or even a minister</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga5</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>If in addition to acquiring 8 bindus, Mars happens to be in the ascendant or the 10th or the 2nd.</ConditionDescription>
+		<Description>He will become a king or head of a government.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga6</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>If Mars has 8 bindus and Mars happens to be in the ascendant or the 10th or the 2nd and Mars is also exalted or in his own house.</ConditionDescription>
+		<Description>The person becomes a powerful ruler.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga7</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>
+			if Mars, associated with 4 or more bindus occupies the Lagna, Chandra Lagna, or the 9th or the 10th house which should also happen to be his own or exaltation sign.
+		</ConditionDescription>
+		<Description>One will become wealthy</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga8</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>Mars as lord of the 2nd in the 6th endowed with 6 bindus</ConditionDescription>
+		<Description>Can confer on a person all the comforts of life but he will always have plenty of enemies to contend with.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga9</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>Mars as lord of Lagna or the 8th, is in Lagna, or Chandra Lagna or in the 10th or 9th, associated with no or a few bindus and joined by a debilitated or inimical planet</ConditionDescription>
+		<Description>One will be an adopted son.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga10A</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>Mars with 6 bindus occupies the 6th, 8th or 12th being debilitated or combust and joined by waxing Moon</ConditionDescription>
+		<Description>One will have no brothers.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga10B</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>Mars with 6 bindus occupies the 6th, 8th or 12th being debilitated or combust and joined by waxing Moon and Mars is strong</ConditionDescription>
+		<Description>one becomes a head of a town or a municipal corporator.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga11</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>Mars, possessing 4 bindus, occupies the 5th, Lagna, or a quadrant</ConditionDescription>
+		<Description>one becomes a head of a town or a municipal corporator.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga12A</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>if Mars or Saturn with 1 to 3 bindus occupy the 3rd house and the lord of the 3rd or the lord of the sign occupied by Karaka (Mars) is in an even sign</ConditionDescription>
+		<Description>There will also be loss of sisters (by abortion to mother)</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga12B</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>if Mars or Saturn with 1 to 3 bindus occupy the 3rd house and the lord of the 3rd or the lord of the sign occupied by Karaka (Mars) is in an odd sign</ConditionDescription>
+		<Description>There will also be loss of brothers (by abortion to mother)</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga13A</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>if the ascendant is a movable sign, and Saturn with 1 to 3 bindus occupies a common sign OR If the ascendant is a common sign and Saturn is in a movable sign</ConditionDescription>
+		<Description> No brothers or sisters will be born </Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga13B</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>If the ascendant is a fixed sign and Saturn or Mars is associated with 1 to 3 bindus</ConditionDescription>
+		<Description>there will be loss of father and brothers.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga14</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>The ascendant being a movable sign and Saturn with 5 bindus is in a movable or fixed sign</ConditionDescription>
+		<Description>one becomes not only wealthy but also possessed of brothers.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga15</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>When the Lagna is a fixed sign and the 3rd lord is in a common sign with 5 bindus</ConditionDescription>
+		<Description>The person will live long, enjoy all the pleasures of life, and will possess a number of brothers.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga16</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>Mars is in the 3rd with 5 or more bindus associated with or aspected by a benefic</ConditionDescription>
+		<Description>One will have a number of brothers.</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga17</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>
+			(a) Mars, devoid of bindus and joined by the lord of the 7th, is debilitated or
+			combust or is in association with malefics, (b) when Mars and Saturn occupy Lagna, associated with 1 to 3 bindus,
+			(c) when Mars endowed with 1 to 3 bindus is in the 8th from Saturn or vice versa,
+			(d) when Mars is in the 8th from Saturn and malefics are in the 3rd from Lagna, both with 1 to 3 bindus.
+
+			In the combinations, the sign in which Mars is placed as well as the sign in which the malefics are placed should have 1 to 3 bindus.
+		</ConditionDescription>
+		<Description>There will be loss of brothers</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga19</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>If Mars is in the 3rd house associated with three bindus</ConditionDescription>
+		<Description>The number of brothers will be 9</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga22</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>If Mars occupies Kendra or Trikona identical with Sagittarius, Aries, or Capricorn associated with 4 bindus</ConditionDescription>
+		<Description>becomes head of a state</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga23</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>If Mars with 5 or more bindus is in conjunction with or in mutual aspect with Saturn</ConditionDescription>
+		<Description>becomes head of a state</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga24</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>If Mars with 1 to 3 bindus is in conjunction with or aspected by Mercury</ConditionDescription>
+		<Description>Poverty and sorrow will be the result</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAshtakavargaYoga25</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>If Mars with 5 or more bindus joins or is aspected by the Moon</ConditionDescription>
+		<Description>One becomes head of two or three villages</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	
+	<!--MERCURY-->
+	<Event>
+		<Name>MercuryAshtakavargaYoga3</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>When Mercury with 1 to 3 bindus is in the 6th or 8th devoid of benefic aspects</ConditionDescription>
+		<Description>One becomes a hypocrite and crooked in outlook</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryAshtakavargaYoga4</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>Associated with 1 to 3 bindus, if Mercury occupies the 6th, 8th or 12th in conjunction with Venus</ConditionDescription>
+		<Description>One becomes uneducated</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryAshtakavargaYoga5</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>When Mercury is in a trine or a quadrant associated with 5 bindus, and joined or aspected by Jupiter or Saturn</ConditionDescription>
+		<Description>The person becomes highly learned in the Vedas</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryAshtakavargaYoga6</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>If Mercury with 5 bindus is in the 4th or 6th from Saturn and Jupiter occupies or aspects the 2nd</ConditionDescription>
+		<Description>Great proficiency in astrology is indicated</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryAshtakavargaYoga7</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>When Mercury, with 5 bindus, conjoins Jupiter or is in association with or aspected by Mars</ConditionDescription>
+		<Description>One becomes a great logician</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryAshtakavargaYoga8</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>If Ketu, associated with 3 bindus (in Mercury’s Ashtakavarga), is in the 5th house or with the lord of the 5th house</ConditionDescription>
+		<Description>One becomes an expert in astrology and allied subjects</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryAshtakavargaYoga9</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>Disposition of Mercury with 4 bindus in a sign of Mars and in a Navamsa of Venus, aspected by Jupiter</ConditionDescription>
+		<Description>One becomes a litterateur</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryAshtakavargaYoga12A</Name>
+		<Nature>Good</Nature>
+		<ConditionDescription>if the lord of the sign occupied by Mercury happens to be placed in a trine or quadrant associated with more bindus</ConditionDescription>
+		<Description>Fame, intelligence and learning</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryAshtakavargaYoga12B</Name>
+		<Nature>Bad</Nature>
+		<ConditionDescription>if the lord of the sign occupied by Mercury happens to be placed in the 6th, 8th or 12th</ConditionDescription>
+		<Description>one will have break in education</Description>
+		<Tag>Yoga</Tag>
+	</Event>
+	
+	
 
 	<!--YOGA DETECTOR RESULTS-->
 	<Event>
@@ -528,7 +925,7 @@
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-			
+
 			Twelve types of Malika Yogas, one
 			for each Bhava, are caused. Thus the Yoga beginning
 			from the first is Lagna Malika, the one beginning
@@ -551,7 +948,7 @@
 			seven houses contiguously, reckoned from Lagna or
 			any particular Bhava, the appropriate Malika Yoga
 			is caused.
-			
+
 			Twelve types of Malika Yogas, one
 			for each Bhava, are caused. Thus the Yoga beginning
 			from the first is Lagna Malika, the one beginning
@@ -1422,10 +1819,10 @@
 			Conjoined with or aspected by benefics the native
 			will have untold suffering in family life and deep sorrows,
 			loss of money through enemies, defective vision, uneven teeth and stammering.
-			
+
 			If the sixth lord is weak and otherwise ill-disposed in the 2nd,
 			there will be loss of wife in the Dasa or Bhukti of the malefic lord.
-			
+
 			If Venus is weak, the native will be a celibate and poverty-stricken,
 			just able to get a morsel of food when hungry.
 		</Description>

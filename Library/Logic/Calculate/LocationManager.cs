@@ -919,7 +919,7 @@ namespace VedAstro.Library
             {
                 // Mark as fail & return empty for fail detection
                 returnResult.IsPass = false;
-                returnResult.Payload = new GeoLocationRawAPI(GeoLocationTimezoneEntity.Empty, GeoLocationTimezoneMetadataEntity.Empty);
+                returnResult.Payload = new GeoLocationRawAPI(AddressGeoLocationEntity.Empty, null);
             }
 
             return returnResult;
@@ -1113,7 +1113,7 @@ namespace VedAstro.Library
             {
                 // Mark as fail & return empty for fail detection
                 returnResult.IsPass = false;
-                returnResult.Payload = new GeoLocationRawAPI(GeoLocationTimezoneEntity.Empty, GeoLocationTimezoneMetadataEntity.Empty);
+                returnResult.Payload = new GeoLocationRawAPI(AddressGeoLocationEntity.Empty, null);
             }
 
             return returnResult;
@@ -1359,7 +1359,7 @@ namespace VedAstro.Library
                 var rawAzureReply = geocodeResponseJson["results"][0];
 
                 //check the data, if location was NOT found by Azure Maps API, end here
-                if (rawAzureReply == null || rawAzureReply["type"].Value<string>() != "Geography") { return null; }
+                if (rawAzureReply == null || rawAzureReply["type"].Value<string>() != "Geography") { return new { IsParsed = false, TimezoneRow = AddressGeoLocationEntity.Empty }; }
 
                 //if success, extract out the longitude & latitude
                 var locationElement = rawAzureReply["position"];

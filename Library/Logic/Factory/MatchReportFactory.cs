@@ -1673,7 +1673,7 @@ namespace VedAstro.Library
             {
                 //1. GET DETAILS
                 //get planets house details
-                var planetHouse = Calculate.HousePlanetOccupies(planet, birthTime);
+                var planetHouse = Calculate.HousePlanetOccupiesBasedOnLongitudes(planet, birthTime);
                 var planetSign = Calculate.PlanetZodiacSign(planet, birthTime).GetSignName();
                 var planetIn7Or8 = planetHouse == HouseName.House7 || planetHouse == HouseName.House8;
                 var planetIn2Or4Or12 = planetHouse == HouseName.House2 || planetHouse == HouseName.House4 || planetHouse == HouseName.House12;

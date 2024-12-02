@@ -8,6 +8,11 @@ namespace VedAstro.Library
 {
     public enum ChartType
     {
+        /// <summary>
+        /// Based on house longitudes
+        /// </summary>
+        Bhava,
+
         RasiD1,
         
         HoraD2,

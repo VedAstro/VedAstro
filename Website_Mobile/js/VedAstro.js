@@ -7276,7 +7276,7 @@ class EvensChartViewer {
         $('#EventsChartPlaceHolderMessage').hide();
 
         //zoom in to make chart clear
-        this.OnClickZoomIn(4);
+        this.OnClickZoomIn(2);
 
     }
 

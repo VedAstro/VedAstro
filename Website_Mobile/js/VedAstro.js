@@ -2946,7 +2946,7 @@ class TimeInputSimple {
         document.addEventListener('click', (e) => this.autoHidePicker(e), { capture: true });
     }
 
-    //if click is outside picker & input then hide it
+    //if click is outside picker & input then hide it & let others know
     autoHidePicker(e) {
         //check if click was outside input
         const pickerHolder = e.target.closest(`#${this.CalendarPickerHolderID}`);
@@ -2955,12 +2955,48 @@ class TimeInputSimple {
         //if click is not on either inputs then hide picker
         if (!(timeInput || pickerHolder)) {
             document.getElementById(this.CalendarPickerHolderID).classList.add('visually-hidden');
+
+            //let others know time set updated
+            $(document).trigger('timeUpdated');
         }
     }
 
     isValid() {
         // Check if all fields have been filled
         return this.hour !== "" && this.minute !== "" && this.meridian !== "" && this.date !== "" && this.month !== "" && this.year !== "";
+    }
+
+    getInputDateTime() {
+        // Get the time values from the input fields
+        let hour = document.getElementById(this.HourInputID).innerText;
+        let minute = document.getElementById(this.MinuteInputID).innerText;
+        let meridian = document.getElementById(this.MeridianInputID).innerText;
+        let date = document.getElementById(this.DateInputID).innerText;
+        let month = document.getElementById(this.MonthInputID).innerText;
+        let year = document.getElementById(this.YearInputID).innerText;
+
+        //convert hour and minute from 12H to 24H
+        let hour24 = hour;
+        if (meridian === 'PM' && hour !== '12') {
+            hour24 = parseInt(hour) + 12;
+        } else if (meridian === 'AM' && hour === '12') {
+            hour24 = '00';
+        }
+
+        //fix formatting to include 0 in front if single digit
+        hour24 = hour24.toString().padStart(2, '0');
+        minute = minute.toString().padStart(2, '0');
+        date = date.toString().padStart(2, '0');
+        month = month.toString().padStart(2, '0');
+
+        //pack data into object
+        return {
+            "Hour24": hour24,
+            "Minute": minute,
+            "Date": date,
+            "Month": month,
+            "Year": year
+        };
     }
 }
 
@@ -3035,8 +3071,18 @@ class GeoLocationInput {
         //show drop down with location names or tell user location not found
         this.$locationNameInput.on("focus", (event) => this.onInputFocus(event));
 
+        //user clicks on dropdown location name
+        this.$dropdownMenu.on("click", ".dropdown-item", (event) => this.onClickPresetLocationName(event));
+
         //user pastes location name and moves out, so parse to default possible location
-        this.$locationNameInput.on("blur", (event) => this.onLeaveLocationInput());
+        this.$locationNameInput.on("blur", (event) => {
+            setTimeout(() => {
+                if (!this.isDropdownClick) {
+                    this.onLeaveLocationInput();
+                }
+            }, 100); // Delay the execution so that "dropdown" click has time to fill if user clicked on it 1st
+        });
+
 
         //user types in coordinates without location name, so parse to default possible location name
         this.$latitudeInput.on("blur", (event) => this.onLeaveCoordinateInput());
@@ -3045,8 +3091,6 @@ class GeoLocationInput {
         //users switches between name / coordinate input
         this.$switchButton.on("click", () => this.toggleInputFields());
 
-        //user clicks on dropdown location name
-        this.$dropdownMenu.on("click", ".dropdown-item", (event) => this.onClickPresetLocationName(event));
 
     }
 
@@ -3055,7 +3099,9 @@ class GeoLocationInput {
         let unparsedLocationName = this.$locationNameInput.val().trim();
 
         // Check if the input field is not empty
-        if (unparsedLocationName !== "") {
+        // & has not been filled by dropdown click (only possible because handler is fired with delay)
+        var isNotFilledByDropdown = !(this.isValid());
+        if (unparsedLocationName !== "" && isNotFilledByDropdown) {
             // Call API and get parsed location
             var apiUrl = `${VedAstro.ApiDomain}/Calculate/AddressToGeoLocation/Address/${unparsedLocationName}`;
 
@@ -3074,8 +3120,13 @@ class GeoLocationInput {
                 this.$locationNameInput.val(location.Name);
                 this.$latitudeInput.val(location.Latitude.toFixed(1)); // round for nice fit GUI
                 this.$longitudeInput.val(location.Longitude.toFixed(1)); // round for nice fit GUI
+
+                //let others know location set successfully
+                $(document).trigger('locationUpdated');
+
             }
         }
+
     }
 
     //when user types in coordinates, get the location name from API and fill that
@@ -3105,6 +3156,9 @@ class GeoLocationInput {
             this.$locationNameInput.val(location.Name);
             this.$latitudeInput.val(location.Latitude.toFixed(1)); // round for nice fit GUI
             this.$longitudeInput.val(location.Longitude.toFixed(1)); // round for nice fit GUI
+
+            //let others know location set successfully
+            $(document).trigger('locationUpdated');
         }
     }
 
@@ -3272,6 +3326,20 @@ class GeoLocationInput {
 
         return locationName !== "" && latitude !== "" && longitude !== "";
     }
+
+    getInputLocation() {
+        // Get the location values from the input fields
+        const locationName = document.querySelector(`#${this.ElementID} .location-name input`).value;
+        const latitude = document.querySelector(`#${this.ElementID} .latitude`).value;
+        const longitude = document.querySelector(`#${this.ElementID} .longitude`).value;
+
+        return {
+            "Name": locationName,
+            "Latitude": latitude,
+            "Longitude": longitude
+        };
+
+    }
 }
 
 
@@ -3304,6 +3372,8 @@ class TimeLocationInput {
         var randoTron = Math.random().toString(36).substr(2, 9);
         this.TimeInputSimpleID = `TimeInputSimpleID-${randoTron}`;
         this.GeoLocationInputID = `GeoLocationInputID-${randoTron}`;
+        this.TimezoneOffsetInputID = `TimezoneOffsetInputID-${randoTron}`;
+        this.TimezoneOffsetInputHolderID = `TimezoneOffsetInputHolderID-${randoTron}`; //to hide/show
 
         // Call the method to initialize the main body of the page header
         this.initializeMainBody();
@@ -3321,65 +3391,75 @@ class TimeLocationInput {
         // render subview components via code now that sub view base HTML is in DOM
         this.TimeInputSimpleInstance = new TimeInputSimple(this.TimeInputSimpleID);
         this.GeoLocationInputInstance = new GeoLocationInput(this.GeoLocationInputID);
+
+        //when time or location input is ready,
+        //update timezone offset accurately
+        this.attachEventHandlers();
     }
+
+    attachEventHandlers() {
+
+        //when time or location input is ready,
+        //update timezone offset accurately
+        $(document).on('locationUpdated', (event) => this.updateTimezoneOffset());
+        $(document).on('timeUpdated', (event) => this.updateTimezoneOffset());
+
+
+    }
+
+    //when time or location input is ready,
+    //update timezone offset accurately
+    async updateTimezoneOffset() {
+        //make sure both time & location is valid (filled)
+        var timeIsValid = this.TimeInputSimpleInstance.isValid();
+        var locationIsValid = this.GeoLocationInputInstance.isValid();
+
+        //if both is filled, then update timezone input using API
+        if (timeIsValid && locationIsValid) {
+            // get the inputed location & time data
+            const inputTime = this.TimeInputSimpleInstance.getInputDateTime();
+            const inputLocation = this.GeoLocationInputInstance.getInputLocation();
+
+            // call API to get exact timezone for location at give time
+            var timeZone = await this.getTimezoneForLocationFromApi(inputLocation.Name, inputLocation.Latitude, inputLocation.Longitude, inputTime.Hour24, inputTime.Minute, inputTime.Date, inputTime.Month, inputTime.Year); // Format: +08:00
+
+            //inject correct timezone into view
+            $(`#${this.TimezoneOffsetInputID}`).val(timeZone);
+        }
+    }
+
 
     // Method to generate the HTML for the page header
     async generateHtmlBody() {
         return `
-      <div id="${this.TimeInputSimpleID}" LabelText="Time"></div>
-      <div id="${this.GeoLocationInputID}" class="mt-3" LabelText="Map"></div>
+        <div id="${this.TimeInputSimpleID}" LabelText="Time"></div>
+        <!-- Timezone Offset (advanced menu) -->
+        <div id="${this.TimezoneOffsetInputHolderID}" style="display:none;">
+            <div class="input-group mt-3">
+                <span class="input-group-text gap-2 py-1" style="width: 136px;"><iconify-icon icon="stash:globe-timezone-light" width="35" height="35"></iconify-icon>Timezone</span>
+                <input id="${this.TimezoneOffsetInputID}" type="text" class="form-control" placeholder="+00:00" style="font-weight: 600; font-size: 16px;">
+            </div>
+        </div>
+
+        <div id="${this.GeoLocationInputID}" class="mt-3" LabelText="Map"></div>
     `;
     }
 
     // Method to get the time and location as a JSON object
     // exp out : {"StdTime":"13:54 25/10/1992 +08:00","Location":{"Name":"Taiping","Longitude":103.82,"Latitude":1.352}}
     async getTimeJson() {
-        // Get the instances of the TimeInputSimple and GeoLocationInput classes
-        const timeInputSimple = this.TimeInputSimpleInstance;
-        const geoLocationInput = this.GeoLocationInputInstance;
-
-        // Get the time values from the input fields
-        let hour = document.getElementById(timeInputSimple.HourInputID).innerText;
-        let minute = document.getElementById(timeInputSimple.MinuteInputID).innerText;
-        let meridian = document.getElementById(timeInputSimple.MeridianInputID).innerText;
-        let date = document.getElementById(timeInputSimple.DateInputID).innerText;
-        let month = document.getElementById(timeInputSimple.MonthInputID).innerText;
-        let year = document.getElementById(timeInputSimple.YearInputID).innerText;
-
-        //convert hour and minute from 12H to 24H
-        let hour24 = hour;
-        if (meridian === 'PM' && hour !== '12') {
-            hour24 = parseInt(hour) + 12;
-        } else if (meridian === 'AM' && hour === '12') {
-            hour24 = '00';
-        }
-
-        //fix formatting to include 0 infront if single digit
-        hour24 = hour24.toString().padStart(2, '0');
-        minute = minute.toString().padStart(2, '0');
-        date = date.toString().padStart(2, '0');
-        month = month.toString().padStart(2, '0');
-
-        // Get the location values from the input fields
-        const locationName = document.querySelector(`#${geoLocationInput.ElementID} .location-name input`).value;
-        const latitude = document.querySelector(`#${geoLocationInput.ElementID} .latitude`).value;
-        const longitude = document.querySelector(`#${geoLocationInput.ElementID} .longitude`).value;
+        // get the inputed location & time data
+        const inputTime = this.TimeInputSimpleInstance.getInputDateTime();
+        const inputLocation = this.GeoLocationInputInstance.getInputLocation();
 
         // Construct the StdTime string in the format "HH:MM DD/MM/YYYY tmz"
-        var timeZone = await this.getTimezoneForLocationFromApi(locationName, latitude, longitude, hour, minute, date, month, year); // Format: +08:00
-        const stdTime = `${hour}:${minute} ${date}/${month}/${year} ${timeZone}`;
-
-        // Construct the Location object with Name, Longitude, and Latitude properties
-        const location = {
-            Name: locationName,
-            Longitude: longitude,
-            Latitude: latitude
-        };
+        var timeZone = await this.getTimezoneForLocationFromApi(inputLocation.Name, inputLocation.Latitude, inputLocation.Longitude, inputTime.Hour24, inputTime.Minute, inputTime.Date, inputTime.Month, inputTime.Year); // Format: +08:00
+        const stdTime = `${inputTime.Hour24}:${inputTime.Minute} ${inputTime.Date}/${inputTime.Month}/${inputTime.Year} ${timeZone}`;
 
         // Construct the timeObject with StdTime and Location properties
         const timeObject = {
             StdTime: stdTime,
-            Location: location
+            Location: inputLocation
         };
 
         // Return the timeObject
@@ -3408,7 +3488,6 @@ class TimeLocationInput {
         const minutes = Math.abs(timezoneOffset) % 60;
         return (timezoneOffset <= 0 ? '+' : '-') + String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0');
     }
-
 
     getDateTimeOffset() {
         // Get the instances of the TimeInputSimple and GeoLocationInput classes
@@ -3446,7 +3525,6 @@ class TimeLocationInput {
         // Return the DateTime object
         return dateTime;
     }
-
 
     isValid() {
         // Get the time and location input fields
@@ -7051,7 +7129,6 @@ class EvensChartViewer {
         this.bindEventListeners();
     }
 
-
     bindEventListeners() {
 
         // expand button
@@ -7132,7 +7209,6 @@ class EvensChartViewer {
         //apply new zoom
         $(`#${this.ElementID} #EventsChartSvgHolder`).css('zoom', `${this.CurrentZoomLevel}%`);
     }
-
 
     async GenerateChart(selectedPersonId, timeRangeUrl, daysPerPixel, selectedEventTags, selectedAlgorithms, selectedAyanamsa) {
 

@@ -85,22 +85,22 @@ namespace StaticTableGenerator
 
             //------ TASK 1
             WriteMetadataStaticTableClass(returnList);
-            Console.WriteLine("Metadata Static Table Class ✅");
+            Console.WriteLine("# Metadata Static Table Class");
 
             //------ TASK 2
             WritePythonCalculateStubFile(returnList);
-            Console.WriteLine("Python Calculate Stub File ✅");
+            Console.WriteLine("# Python Calculate Stub File");
 
             //------ TASK 3
             WriteEventDataListStaticTableClass();
-            Console.WriteLine("Event Data List Static Table Class ✅");
+            Console.WriteLine("# Event Data List Static Table Class");
 
             //------ TASK 4
             WriteHoroscopeDataListStaticTableClass();
-            Console.WriteLine("Horoscope Data List Static Table Class ✅");
+            Console.WriteLine("# Horoscope Data List Static Table Class");
 
 
-            Console.WriteLine("All Done 🤘 God Wills It ✝️");
+            Console.WriteLine("All Done -- God Wills It --");
             Console.ReadLine();
         }
 

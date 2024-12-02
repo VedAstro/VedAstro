@@ -1532,7 +1532,7 @@ namespace VedAstro.Library
             // associated with benefics, such a disposition is not approved.
 
             //get house venus is in
-            var houseVenusIsIn = Calculate.HousePlanetOccupies(PlanetName.Venus, time);
+            var houseVenusIsIn = Calculate.HousePlanetOccupiesBasedOnSign(PlanetName.Venus, time);
 
             //if venus is in 6th house
             if (houseVenusIsIn == HouseName.House6)
@@ -1559,7 +1559,7 @@ namespace VedAstro.Library
             // should not occupy the 8th house.
 
             //get house mars is in
-            var houseMarsIsIn = Calculate.HousePlanetOccupies(PlanetName.Mars, time);
+            var houseMarsIsIn = Calculate.HousePlanetOccupiesBasedOnLongitudes(PlanetName.Mars, time);
 
             //if mars is in 8th house
             if (houseMarsIsIn == HouseName.House8)
@@ -1659,7 +1659,7 @@ namespace VedAstro.Library
             // rising in an election chart.
 
             //get house moon is in
-            var houseMoonIsIn = Calculate.HousePlanetOccupies(PlanetName.Moon, time);
+            var houseMoonIsIn = Calculate.HousePlanetOccupiesBasedOnLongitudes(PlanetName.Moon, time);
 
             //if house moon is in is 6, 8 or 12
             if (houseMoonIsIn == HouseName.House6 || houseMoonIsIn == HouseName.House8 || houseMoonIsIn == HouseName.House12)
@@ -2293,7 +2293,7 @@ namespace VedAstro.Library
                 //make sure each is in 3, 6 or 11th house
                 foreach (var malefic in allMalefics)
                 {
-                    var planetHouse = Calculate.HousePlanetOccupies(malefic, time);
+                    var planetHouse = Calculate.HousePlanetOccupiesBasedOnLongitudes(malefic, time);
 
                     //if not in 3, 6 or 11, end here as not occurring
                     if (!(planetHouse == HouseName.House3 || planetHouse == HouseName.House6 || planetHouse == HouseName.House11)) { return false; }

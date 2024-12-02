@@ -12,6 +12,8 @@ namespace VedAstro.Library
     public class SouthChartFactory
     {
         private ChartType ChartType { get; set; }
+        private Time Time { get; set; }
+
         public string SVGChart { get; set; }
 
         private double widthPx = 1000;
@@ -24,9 +26,10 @@ namespace VedAstro.Library
         {
             //save for later
             ChartType = chartType;
+            Time = time;
 
             //generate SVG chart based on given data
-            SVGChart = GenerateChart(time);
+            SVGChart = GenerateChart();
         }
 
         /// <summary>
@@ -94,7 +97,7 @@ namespace VedAstro.Library
         /// Sweet heart takes this away!
         /// Basically generating 1 frame
         /// </summary>
-        private string GenerateChart(Time time)
+        private string GenerateChart()
         {
             //PART I : declare the components
             string svgHead = null;
@@ -132,9 +135,9 @@ namespace VedAstro.Library
                 var svgBackgroundColor = "#f0f2f5"; //not bleach white
                 var randomId = Tools.GenerateId();
 
-                planetsLayer = GetPlanetsPositionLayer(time);
+                planetsLayer = GetPlanetsPositionLayer(this.Time);
 
-                houseNumberLayer = GetHouseNumberLayer(time);
+                houseNumberLayer = GetHouseNumberLayer(this.Time);
 
                 chartTypeNameLayer = GetChartTypeNameLayer();
 
@@ -192,6 +195,7 @@ namespace VedAstro.Library
                 ZodiacSign houseZodiacSign;
                 switch (this.ChartType)
                 {
+                    case ChartType.Bhava:
                     case ChartType.RasiD1:
                         houseZodiacSign = HouseZodiacSign(houseName, time);
                         houseSignName = houseZodiacSign.GetSignName();
@@ -281,8 +285,10 @@ namespace VedAstro.Library
 
             switch (this.ChartType)
             {
+                case ChartType.Bhava:
+                    allPlanetsSigns = Calculate.AllPlanetSignsBasedOnHouseLongitudes(time); break;
                 case ChartType.RasiD1:
-                    allPlanetsSigns = Calculate.AllPlanetSigns(time); break;
+                    allPlanetsSigns = Calculate.AllPlanetZodiacSigns(time); break;
                 case ChartType.HoraD2:
                     allPlanetsSigns = Calculate.AllPlanetHoraSign(time); break;
                 case ChartType.DrekkanaD3:

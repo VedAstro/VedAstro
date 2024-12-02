@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace VedAstro.Library
 {
@@ -19,7 +21,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Keeps track of planets in a sign box so that stack nicely
         /// </summary>
-        private static Dictionary<HouseName, int> ChartOccupiedMarker { get; set; } =
+        private Dictionary<HouseName, int> ChartOccupiedMarker { get; set; } =
             new Dictionary<HouseName, int>()
             {
                 { HouseName.House1, 0 },
@@ -36,7 +38,7 @@ namespace VedAstro.Library
                 { HouseName.House12, 0 },
             };
 
-        private static Dictionary<HouseName, dynamic> ChartSignCoordinates { get; set; } =
+        private Dictionary<HouseName, dynamic> ChartSignCoordinates { get; set; } =
             new Dictionary<HouseName, dynamic>()
             {
                 { HouseName.House1, new { xAxis = 475, yAxis = 150 } },
@@ -70,7 +72,7 @@ namespace VedAstro.Library
         /// Sweet heart takes this away!
         /// Basically generating 1 frame
         /// </summary>
-        public string GenerateChart()
+        private string GenerateChart()
         {
             //PART I : declare the components
             string svgHead = null;
@@ -122,33 +124,71 @@ namespace VedAstro.Library
 
 
                 //note: if width & height not hard set, parent div clips it
-                var svgTotalHeight = heightPx;//todo for now hard set, future use: verticalYAxis;
-                var svgTotalWidth = widthPx;//todo for now hard set, future use: verticalYAxis;
+                var svgTotalHeight = heightPx;
+                var svgTotalWidth = widthPx;
                 var svgStyle = $@"background:{svgBackgroundColor};";//end of style tag
                 svgHead = $"<svg viewBox=\"0 0 {svgTotalWidth} {svgTotalHeight}\" width=\"{svgTotalWidth}px\" height=\"{svgTotalHeight}px\" style=\"{svgStyle}\" class=\"SkyChartHolder\" id=\"{randomId}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 
                 svgTail = "</svg>";
-                contentTail = "</g>";
-
 
             }
 
         }
 
-        private static string GetPlanetsPositionLayer(Time time)
+        private string GetPlanetsPositionLayer(Time time)
         {
             var compiled = "";
 
-            //bhava chart
-            var allPlanetsSigns = Calculate.HouseAllPlanetOccupiesBasedOnLongitudes(time);
 
+            Dictionary<PlanetName, ZodiacSign> allPlanetsSigns = new Dictionary<PlanetName, ZodiacSign>();
 
-
-            foreach (var planetSign in allPlanetsSigns)
+            switch (this.ChartType)
             {
-                var houseName = planetSign.Value;
-                var coordinates = GetPositionForHouse(houseName);
-                var xx = $"<text  transform=\"matrix(1 0 0 1 {coordinates.xAxis} {coordinates.yAxis})\" font-size=\"35\" fill=\"black\">{planetSign.Key}</text>";
+                case ChartType.Bhava:
+                    allPlanetsSigns = Calculate.AllPlanetSignsBasedOnHouseLongitudes(time); break;
+                case ChartType.RasiD1:
+                    allPlanetsSigns = Calculate.AllPlanetZodiacSigns(time); break;
+                case ChartType.HoraD2:
+                    allPlanetsSigns = Calculate.AllPlanetHoraSign(time); break;
+                case ChartType.DrekkanaD3:
+                    allPlanetsSigns = Calculate.AllPlanetDrekkanaSign(time); break;
+                case ChartType.ChaturthamshaD4:
+                    allPlanetsSigns = Calculate.AllPlanetChaturthamsaSign(time); break;
+                case ChartType.SaptamshaD7:
+                    allPlanetsSigns = Calculate.AllPlanetSaptamshaSign(time); break;
+                case ChartType.NavamshaD9:
+                    allPlanetsSigns = Calculate.AllPlanetNavamshaSign(time); break;
+                case ChartType.DashamamshaD10:
+                    allPlanetsSigns = Calculate.AllPlanetDashamamshaSign(time); break;
+                case ChartType.DwadashamshaD12:
+                    allPlanetsSigns = Calculate.AllPlanetDwadashamshaSign(time); break;
+                case ChartType.ShodashamshaD16:
+                    allPlanetsSigns = Calculate.AllPlanetShodashamshaSign(time); break;
+                case ChartType.VimshamshaD20:
+                    allPlanetsSigns = Calculate.AllPlanetVimshamshaSign(time); break;
+                case ChartType.ChaturvimshamshaD24:
+                    allPlanetsSigns = Calculate.AllPlanetChaturvimshamshaSign(time); break;
+                case ChartType.BhamshaD27:
+                    allPlanetsSigns = Calculate.AllPlanetBhamshaSign(time); break;
+                case ChartType.TrimshamshaD30:
+                    allPlanetsSigns = Calculate.AllPlanetTrimshamshaSign(time); break;
+                case ChartType.KhavedamshaD40:
+                    allPlanetsSigns = Calculate.AllPlanetKhavedamshaSign(time); break;
+                case ChartType.AkshavedamshaD45:
+                    allPlanetsSigns = Calculate.AllPlanetAkshavedamshaSign(time); break;
+                case ChartType.ShashtyamshaD60:
+                    allPlanetsSigns = Calculate.AllPlanetShashtyamshaSign(time); break;
+                default:
+                    break;
+            }
+
+
+
+            foreach (var data in allPlanetsSigns)
+            {
+                var zodiacSign = data.Value;
+                var coordinates = GetPositionForHouseBasedOnSign(zodiacSign);
+                var xx = $"<text  transform=\"matrix(1 0 0 1 {coordinates.xAxis} {coordinates.yAxis})\" font-size=\"35\" fill=\"black\">{data.Key}</text>";
                 compiled += xx;
             }
 
@@ -157,16 +197,69 @@ namespace VedAstro.Library
             return finalGroup;
         }
 
+        /// <summary>
+        /// Based on chart type will get position of house based on rasi, hora, etc...
+        /// </summary>
+        private dynamic GetPositionForHouseBasedOnSign(ZodiacSign zodiacSign)
+        {
+            //get the house at given sign based on chart type
+            Dictionary<HouseName, ZodiacSign> allHousesSigns = new Dictionary<HouseName, ZodiacSign>();
+
+            switch (this.ChartType)
+            {
+                case ChartType.Bhava:
+                case ChartType.RasiD1:
+                    allHousesSigns = Calculate.AllHouseZodiacSigns(this.Time); break;
+                case ChartType.HoraD2:
+                    allHousesSigns = Calculate.AllHouseHoraSign(this.Time); break;
+                case ChartType.DrekkanaD3:
+                    allHousesSigns = Calculate.AllHouseDrekkanaSign(this.Time); break;
+                case ChartType.ChaturthamshaD4:
+                    allHousesSigns = Calculate.AllHouseChaturthamsaSign(this.Time); break;
+                case ChartType.SaptamshaD7:
+                    allHousesSigns = Calculate.AllHouseSaptamshaSign(this.Time); break;
+                case ChartType.NavamshaD9:
+                    allHousesSigns = Calculate.AllHouseNavamshaSign(this.Time); break;
+                case ChartType.DashamamshaD10:
+                    allHousesSigns = Calculate.AllHouseDashamamshaSign(this.Time); break;
+                case ChartType.DwadashamshaD12:
+                    allHousesSigns = Calculate.AllHouseDwadashamshaSign(this.Time); break;
+                case ChartType.ShodashamshaD16:
+                    allHousesSigns = Calculate.AllHouseShodashamshaSign(this.Time); break;
+                case ChartType.VimshamshaD20:
+                    allHousesSigns = Calculate.AllHouseVimshamshaSign(this.Time); break;
+                case ChartType.ChaturvimshamshaD24:
+                    allHousesSigns = Calculate.AllHouseChaturvimshamshaSign(this.Time); break;
+                case ChartType.BhamshaD27:
+                    allHousesSigns = Calculate.AllHouseBhamshaSign(this.Time); break;
+                case ChartType.TrimshamshaD30:
+                    allHousesSigns = Calculate.AllHouseTrimshamshaSign(this.Time); break;
+                case ChartType.KhavedamshaD40:
+                    allHousesSigns = Calculate.AllHouseKhavedamshaSign(this.Time); break;
+                case ChartType.AkshavedamshaD45:
+                    allHousesSigns = Calculate.AllHouseAkshavedamshaSign(this.Time); break;
+                case ChartType.ShashtyamshaD60:
+                    allHousesSigns = Calculate.AllHouseShashtyamshaSign(this.Time); break;
+                default:
+                    break;
+            }
+
+            //find the house based on given sign
+            var house = allHousesSigns.First(data => data.Value.GetSignName() == zodiacSign.GetSignName()).Key;
+
+            //using house get position in chart
+            var positionData = GetPositionForHouse(house);
+
+            return positionData;
+        }
 
         /// <summary>
         /// Given a house name will return x & y for start of house
         /// </summary>
-        private static dynamic GetPositionForHouse(HouseName houseName)
+        private dynamic GetPositionForHouse(HouseName houseName)
         {
-
             var xAxis = 0;
             var yAxis = 0;
-
 
             //check if occupancy number
             var occupancy = ChartOccupiedMarker[houseName];

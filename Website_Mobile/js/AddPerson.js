@@ -28,6 +28,7 @@ $(document).ready(function () {
 
 function OnClickAdvanced() {
     smoothSlideToggle('#NotesInputHolder');
+    smoothSlideToggle(`#${timeLocationInput.TimezoneOffsetInputHolderID}`);
 }
 async function OnClickSave_AddPerson() {
 

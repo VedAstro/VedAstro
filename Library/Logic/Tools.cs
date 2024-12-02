@@ -2994,7 +2994,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// 
+        /// converts time to string for storage in timezone DB cache
         /// </summary>
         public static string ToRowKey(this DateTimeOffset dateTimeOffset)
         {
@@ -3003,9 +3003,6 @@ namespace VedAstro.Library
 
             //convert all spaces to hyphens
             var cleaned1 = rawString.Replace('/', '-');
-
-            //remove all spaces into hypes
-            //var cleaned2 = cleaned1.Replace(' ', '-');
 
             return cleaned1;
         }

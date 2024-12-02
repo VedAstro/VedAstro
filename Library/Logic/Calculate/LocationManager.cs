@@ -147,8 +147,8 @@ namespace VedAstro.Library
 
 
         /// <summary>
-        /// https://vedastroapibeta.azurewebsites.net/api/Calculate/AddressToGeoLocation/Gaithersburg, MD, USA
-        /// http://localhost:7071/api/Calculate/AddressToGeoLocation/Gaithersburg, MD, USA
+        /// https://vedastroapibeta.azurewebsites.net/api/Calculate/AddressToGeoLocation/Address/Gaithersburg, MD, USA
+        /// http://localhost:7071/api/Calculate/AddressToGeoLocation/Address/Gaithersburg, MD, USA
         /// </summary>
         public async Task<GeoLocation> AddressToGeoLocation(string userInputAddressRaw)
         {
@@ -382,7 +382,13 @@ namespace VedAstro.Library
         /// </summary>
         public async Task<string> GeoLocationToTimezone(GeoLocation geoLocation, DateTimeOffset stdTimeAtLocation)
         {
-            //2 : CALCULATE
+            //time that is linked to timezone
+            //removes timezone offset since, offset is what is not known here
+            //NOTE :reduce accuracy to days so time is removed (this only checks, another writes)
+            //      done to reduce cache clogging, so might miss offset by hours but not days
+            //      !!DO NOT lower accuracy below time as needed for Western daylight saving changes!! 
+            stdTimeAtLocation = new DateTimeOffset(stdTimeAtLocation.Year, stdTimeAtLocation.Month, stdTimeAtLocation.Day, 0, 0, 0, TimeSpan.Zero);
+
             // Define a list of functions in the order of priority
             var geoLocationProviders = new Dictionary<APIProvider, Func<GeoLocation, DateTimeOffset, Task<GeoLocationRawAPI>>>
             {
@@ -1337,7 +1343,7 @@ namespace VedAstro.Library
                 timezoneMetadataRow.Standard_Name = (firstTimeZoneObject["Names"]?["Standard"] ?? "").Value<string>() ?? string.Empty;
                 timezoneMetadataRow.Daylight_Name = (firstTimeZoneObject["Names"]?["Daylight"] ?? "").Value<string>() ?? string.Empty;
                 timezoneMetadataRow.ISO_Name = (firstTimeZoneObject["Id"] ?? "").Value<string>() ?? string.Empty;
-                timezoneMetadataRow.RowKey = "0";//DateTimeOffset.Now.ToOffset(TimeSpan.FromHours(8)).ToRowKey(); //to know when was created
+                timezoneMetadataRow.RowKey = "0";//leave empty as not needed
 
                 //NOTE: linking is done last, because hash is based on data, and it needs to be filled 1st
                 timezoneMetadataRow.PartitionKey = timezoneMetadataRow.CalculateCombinedHash();

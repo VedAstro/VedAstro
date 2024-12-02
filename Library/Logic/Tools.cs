@@ -4411,7 +4411,7 @@ namespace VedAstro.Library
             SwissEph ephemeris = new SwissEph();
 
             // Convert DOB to ET
-            jul_day_ET = Calculate.TimeToEphemerisTime(time);
+            jul_day_ET = Calculate.TimeToJulianEphemerisTime(time);
 
             //Get planet long
             int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);

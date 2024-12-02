@@ -387,9 +387,15 @@ namespace VedAstro.Library
         /// <summary>
         /// Returns lat long in google format
         /// EXP: -3.9571599,103.8723379
+        /// 1 decimal place: 11.1 km
+        /// 2 decimal places: 1.11 km
+        /// 3 decimal places: 111 m
+        /// 4 decimal places: 11.1 m
+        /// 5 decimal places: 1.11 m
+        /// 6 decimal places: 0.111 m
         /// </summary>
         /// <returns></returns>
-        public string GetPartitionKey()
+        public string ToPartitionKey()
         {
             var roundedLong1DeciPlaces11Km = Math.Round(this.Longitude(), 1).ToString();
             var roundedLat1DeciPlaces11Km = Math.Round(this.Latitude(), 1).ToString();

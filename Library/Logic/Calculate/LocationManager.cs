@@ -415,8 +415,8 @@ namespace VedAstro.Library
                 var isNotEmpty = !(string.IsNullOrEmpty(timezoneStr));
                 var apiProvider = row.Key;
                 var isNotVedAstro = apiProvider != APIProvider.VedAstro;
-                var isNotCPU = apiProvider != APIProvider.CPU;
-                if (isNotEmpty && isNotVedAstro && isNotCPU)
+                var isNotCpu = apiProvider != APIProvider.CPU;
+                if (isNotEmpty && isNotVedAstro && isNotCpu)
                 {
                     //NOTE: to support local development, since saving to azure db will be unavailable
                     try
@@ -1179,7 +1179,7 @@ namespace VedAstro.Library
 
                 //# TYPE 1 : ONLY TIMEZONE BY COORDINATES
                 var timezoneRow = new GeoLocationTimezoneEntity();
-                timezoneRow.PartitionKey = geoLocation.GetPartitionKey();
+                timezoneRow.PartitionKey = geoLocation.ToPartitionKey();
 
                 //NOTE :reduce accuracy to days so time is removed (this only writes, another checks)
                 //      done to reduce cache clogging, so might miss offset by hours but not days
@@ -1319,7 +1319,7 @@ namespace VedAstro.Library
 
                 //# TYPE 1 : ONLY TIMEZONE BY COORDINATES
                 var timezoneRow = new GeoLocationTimezoneEntity();
-                timezoneRow.PartitionKey = geoLocation.GetPartitionKey();
+                timezoneRow.PartitionKey = geoLocation.ToPartitionKey();
 
                 //NOTE :reduce accuracy to days so time is removed (this only writes, another checks)
                 //      done to reduce cache clogging, so might miss offset by hours but not days

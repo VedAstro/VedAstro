@@ -157,6 +157,7 @@ namespace VedAstro.Library.Tests
             // is in the 9th with 5 bindus. Consequently, combination (12) bestows great intelligence on the subject.
 
             var isOccuring = CalculateHoroscope.MercuryAshtakavargaYoga8(StandardHoroscope);
+            var isOccuringB = CalculateHoroscope.MercuryAshtakavargaYoga12A(StandardHoroscope);
 
             Assert.AreEqual(true, isOccuring.Occuring);
         }

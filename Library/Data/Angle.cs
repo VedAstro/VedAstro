@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
@@ -102,26 +102,24 @@ namespace VedAstro.Library
         public static double ConvertDegreeMinuteToTotalDegrees(double degree, double minute) => new Angle(degree, minute, 0).TotalDegrees;
 
         /// <summary>
-        /// If total degrees is more than 360°,
-        /// minus 360° from total degrees.
-        /// returns new modified instance
+        /// Normalizes an angle to the range (0, 360°).
         /// </summary>
-        public Angle Expunge360()
+        public Angle Normalize360()
         {
-            //if total degrees is more 360
-            if (this.TotalDegrees > 360)
-            {
-                //minus 360 from total
-                var expungedValue = this - Angle.Degrees360;
+            // Get the raw degrees value
+            double degrees = this.TotalDegrees;
 
-                //return expunged value
-                return expungedValue;
-            }
-            //else return original value
-            else
+            // Use modulo to bring the angle within [-360, 360]
+            degrees = degrees % 360.0;
+
+            // Adjust to (0, 360) if the value is negative
+            if (degrees < 0)
             {
-                return this;
+                degrees += 360.0;
             }
+
+            // Return a new Angle instance with the normalized value
+            return Angle.FromDegrees(degrees);
 
         }
 

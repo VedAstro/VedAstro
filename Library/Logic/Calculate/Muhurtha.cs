@@ -1532,7 +1532,7 @@ namespace VedAstro.Library
             // associated with benefics, such a disposition is not approved.
 
             //get house venus is in
-            var houseVenusIsIn = Calculate.HousePlanetOccupiesBasedOnSign(PlanetName.Venus, time);
+            var houseVenusIsIn = Calculate.HousePlanetOccupiesBasedOnLongitudes(PlanetName.Venus, time);
 
             //if venus is in 6th house
             if (houseVenusIsIn == HouseName.House6)

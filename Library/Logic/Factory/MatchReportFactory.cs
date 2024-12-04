@@ -1733,7 +1733,7 @@ namespace VedAstro.Library
 
                 //get planet debilitated & exalted friendship
                 var planetDebilitated = Calculate.IsPlanetDebilitated(planet, birthTime);
-                var planetExalted = Calculate.IsPlanetExalted(planet, birthTime);
+                var planetExalted = Calculate.IsPlanetExaltedSign(planet, birthTime);
 
 
                 //for rahu/ketu special method

@@ -10634,7 +10634,7 @@ namespace VedAstro.Library
             //is sun dasa occurring
             var isSunDasa = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
 
-            var isSunExalted = Calculate.IsPlanetExalted(PlanetName.Sun, time);
+            var isSunExalted = Calculate.IsPlanetExaltedSign(PlanetName.Sun, time);
 
             //conditions met
             var occurring = isSunDasa && isSunExalted;

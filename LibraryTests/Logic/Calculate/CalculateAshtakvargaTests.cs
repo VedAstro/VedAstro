@@ -16,8 +16,8 @@ namespace VedAstro.Library.Tests
     {
         Time KarlMarx = new("02:00 05/05/1818 +02:00", new GeoLocation("", 6.637, 49.75));
         Time HavelockEllis = new("08:15 02/02/1859 +00:00", new GeoLocation("", 0.0957, 51.377));
-        Time HenryFord = new ("07:00 30/07/1863 -05:32", new GeoLocation("", -83, 42));
-        Time HenryFord2 = new ("18:32 29/07/1863 -05:32", new GeoLocation("", -83, 42));
+        Time HenryFord = new("07:00 30/07/1863 -05:32", new GeoLocation("", -83, 42));
+        Time HenryFord2 = new("18:32 29/07/1863 -05:32", new GeoLocation("", -83, 42));
 
         Time StandardHoroscope = new("14:20 16/10/1918 +05:30", GeoLocation.Bangalore);
 
@@ -67,7 +67,9 @@ namespace VedAstro.Library.Tests
             //Naradeeya is emphatic that when the Sun as lord of Lagna is associated with
             //5, 6 or 7 bindus, the native becomes a "King of many countries" (Bahu-bhumipala).
 
-            Time franklinDRoosevelt = new("01:37 31/01/1882 +00:00", new GeoLocation("Hyde Park, USA", -73.935242, 41.791840));
+            Time franklinDRoosevelt = new Time(new LocalMeanTime("20:00 30/08/1882", -73.9), TimeSpan.Zero, new GeoLocation("Hyde Park, USA", -73.935242, 41.791840));
+
+            //Time franklinDRoosevelt = new("01:37 30/08/1882 +00:00", new GeoLocation("Hyde Park, USA", -73.935242, 41.791840));
 
             var isOccuring = CalculateHoroscope.SunAshtakavargaYoga3(franklinDRoosevelt);
 
@@ -101,7 +103,7 @@ namespace VedAstro.Library.Tests
 
             //aspected by Saturn
             var aspectedBySaturn = Calculate.IsPlanetAspectedByPlanet(PlanetName.Moon, PlanetName.Saturn, HavelockEllis);
-            Assert.AreEqual(true, aspectedBySaturn); 
+            Assert.AreEqual(true, aspectedBySaturn);
 
 
             var isOccuring = CalculateHoroscope.MoonAshtakavargaYoga1A(HavelockEllis);
@@ -143,7 +145,7 @@ namespace VedAstro.Library.Tests
         }
 
         /// <summary>
-        /// 
+        /// PASS : 4/12/2024
         /// </summary>
         [TestMethod()]
         public void MarsAshtakavargaYoga8And12Test()
@@ -157,8 +159,9 @@ namespace VedAstro.Library.Tests
             // is in the 9th with 5 bindus. Consequently, combination (12) bestows great intelligence on the subject.
 
             var isOccuring = CalculateHoroscope.MercuryAshtakavargaYoga8(StandardHoroscope);
-            var isOccuringB = CalculateHoroscope.MercuryAshtakavargaYoga12A(StandardHoroscope);
+            Assert.AreEqual(true, isOccuring.Occuring);
 
+            var isOccuringB = CalculateHoroscope.MercuryAshtakavargaYoga12A(StandardHoroscope);
             Assert.AreEqual(true, isOccuring.Occuring);
         }
     }

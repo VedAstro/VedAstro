@@ -25,17 +25,9 @@ namespace VedAstro.Library
         /// <summary>
         /// if specified overrides event description text from XML file
         /// will default to Empty when not set
-        /// note: implemented to allow calculator method to modify final event nature
+        /// note: implemented to allow calculator method to modify final event description
         /// </summary>
         public string DescriptionOverride { get; set; } = ""; //empty to detect if set
-
-        ///// <summary>
-        ///// Defaults set here
-        ///// </summary>
-        //public CalculatorResult()
-        //{
-        //    Info = "";
-        //}
 
         /// <summary>
         /// Return an Not Occuring Prediction

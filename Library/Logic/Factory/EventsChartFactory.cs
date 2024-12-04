@@ -103,8 +103,8 @@ namespace VedAstro.Library
                         {contentTail}
 
                         <!--outside border-->
-                        {cursorLine}
-                        {border} <!--border painted last-->
+                        {border} <!--border painted on top events-->
+                        {cursorLine} <!--events legend painted on top border-->
                         {jsCode} <!--place last-->
                     {svgTail}
                 ";
@@ -829,8 +829,8 @@ namespace VedAstro.Library
 
                             <g id=""IBeam"">
 			                    <rect width=""20"" height=""2"" style=""fill:black;"" x=""-9"" y=""0""></rect>
-			                    <rect width=""2"" height=""{lineHeight}"" style=""fill:#000000;"" x=""0"" y=""0""></rect>
-			                    <rect width=""20"" height=""2"" style=""fill:black;"" x=""-9"" y=""{lineHeight - 2}""></rect>
+			                    <rect width=""2"" height=""{lineHeight}"" style=""fill:black;"" x=""0"" y=""0""></rect>
+			                    <rect width=""20"" height=""2"" style=""fill:black;"" x=""-9"" y=""{lineHeight - 1}""></rect>
 		                    </g>
                             <!--TIME ROW-->
 		                    <g id=""TimeRowLegendTemplate"" transform=""matrix(1, 0, 0, 1, 10, 26)"" style=""display:none;"">

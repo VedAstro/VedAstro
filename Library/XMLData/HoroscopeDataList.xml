@@ -126,7 +126,8 @@
 	<Event>
 		<Name>MoonAshtakavargaYoga1B</Name>
 		<Nature>Bad</Nature>
-		<ConditionDescription>MoonAshtakavargaYoga1A AND  if two or three planets join the Moon</ConditionDescription>
+		<ConditionDescription>If the Rasi occupied by the Moon is
+			associated with 1,2,3 bindus (in his own Ashtakavarga), AND if two or three planets join the Moon</ConditionDescription>
 		<Description>
 			the native is likely to pass away in his 37th year
 		</Description>

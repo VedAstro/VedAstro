@@ -229,7 +229,7 @@
 		<Name>MarsAshtakavargaYoga7</Name>
 		<Nature>Good</Nature>
 		<ConditionDescription>
-			if Mars, associated with 4 or more bindus occupies the Lagna, Chandra Lagna, or the 9th or the 10th house which should also happen to be his own or exaltation sign.
+			if Mars, associated with 4 or more bindus occupies the Lagna, Chandra Lagna, or the 9th or the 10th from Moon house which should also happen to be his own or exaltation sign.
 		</ConditionDescription>
 		<Description>One will become wealthy</Description>
 		<Tag>Yoga</Tag>
@@ -244,7 +244,8 @@
 	<Event>
 		<Name>MarsAshtakavargaYoga9</Name>
 		<Nature>Neutral</Nature>
-		<ConditionDescription>Mars as lord of Lagna or the 8th, is in Lagna, or Chandra Lagna or in the 10th or 9th, associated with no or a few bindus and joined by a debilitated or inimical planet</ConditionDescription>
+		<ConditionDescription>Mars as lord of Lagna or the 8th, is in Lagna, or Chandra Lagna or in the 10th or 9th from Moon,
+		associated with no or a few bindus and joined by a debilitated or inimical planet</ConditionDescription>
 		<Description>One will be an adopted son.</Description>
 		<Tag>Yoga</Tag>
 	</Event>

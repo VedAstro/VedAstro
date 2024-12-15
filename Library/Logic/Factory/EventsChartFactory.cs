@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Drawing;
 using System.Reflection;
+using System.Collections.Concurrent;
+using System.Text;
 
 
 namespace VedAstro.Library
@@ -556,7 +558,7 @@ namespace VedAstro.Library
                                         <!-- EVENT NAME-->
                                         <g transform=""translate(18,0)"" style=""{evtNameStyle}"">
 						                    <rect class=""background"" x=""0"" y=""0"" style=""fill: blue; opacity: 0.8;"" width=""{nameBackgroundWidth}"" height=""{nameTextHeight}"" rx=""2"" ry=""2"" />
-						                    <text class=""event-name"" x=""3"" y=""11"" style=""fill:#FFFFFF; font-size:12px;"">{formattedEventName}</text>
+						                    <text class=""event-name"" x=""3"" y=""11"" style=""fill:#FFFFFF; font-size:12px;"">{HttpUtility.HtmlEncode(formattedEventName)}</text>
 					                    </g>
 
                                         <!-- EVENT ICON-->
@@ -577,7 +579,7 @@ namespace VedAstro.Library
                                 ";
 
             //put together icon + line + event data
-            var lifeEventLine = $@"<g eventname=""{lifeEvent.Name}"" eventweight=""{lifeEvent.Weight}"" class=""LifeEventLines"" stdtime=""{lifeEvtTime:dd/MM/yyyy}"" 
+            var lifeEventLine = $@"<g eventname=""{lifeEvent.DescriptionHtmlSafe}"" eventweight=""{lifeEvent.Weight}"" class=""LifeEventLines"" stdtime=""{lifeEvtTime:dd/MM/yyyy}"" 
                               transform=""translate({positionX}, 0)"">{iconSvg}</g>";
 
             return lifeEventLine;
@@ -676,8 +678,6 @@ namespace VedAstro.Library
 
             //save to be used to draw border around
             boxHeightPx = nextYAxis;
-
-            //var finalTextSvg = $@"{compiledSvgLines}";
 
             return compiledSvgLines;
         }
@@ -1657,11 +1657,6 @@ namespace VedAstro.Library
                                    $"eventname=\"{foundEvent?.FormattedName}\" " +
                                    $"eventdescription=\"{foundEvent?.Description}\" " +
                                    $"naturescore=\"{foundEvent?.NatureScore}\" " +
-                                   $"mind=\"{foundEvent?.SpecializedSummary.Mind}\" " +
-                                   $"body=\"{foundEvent?.SpecializedSummary.Body}\" " +
-                                   $"family=\"{foundEvent?.SpecializedSummary.Family}\" " +
-                                   $"money=\"{foundEvent?.SpecializedSummary.Money}\" " +
-                                   $"studies=\"{foundEvent?.SpecializedSummary.Studies}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
                                    $"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\" " +
                                    $"x=\"{horizontalPosition}\" " +

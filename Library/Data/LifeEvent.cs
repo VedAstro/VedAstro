@@ -37,6 +37,11 @@ namespace VedAstro.Library
             set => _name = HttpUtility.HtmlEncode(value);
         }
 
+        public string NameHtmlSafe
+        {
+            get => _name;
+        }
+
         /// <summary>
         /// Description of life event
         /// HTML safety included
@@ -45,6 +50,11 @@ namespace VedAstro.Library
         {
             get => HttpUtility.HtmlDecode(_description);
             set => _description = HttpUtility.HtmlEncode(value);
+        }
+
+        public string DescriptionHtmlSafe
+        {
+            get => _description;
         }
 
         public Time StartTime { get; set; }

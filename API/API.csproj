@@ -14,8 +14,8 @@
 	<ItemGroup>
 		<PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.17" />
 		<PackageReference Include="Azure.Communication.Email" Version="1.0.1" />
-		<PackageReference Include="Azure.Data.Tables" Version="12.8.3" />
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.20.0-beta.1" />
+		<PackageReference Include="Azure.Data.Tables" Version="12.9.1" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
 		<PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
 		<PackageReference Include="Microsoft.Bing.Search.ImageSearch" Version="1.0.0" />

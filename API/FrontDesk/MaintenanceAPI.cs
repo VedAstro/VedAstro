@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Xml.Linq;
 using VedAstro.Library;
@@ -48,39 +48,6 @@ namespace API
             return APITools.SendTextToCaller(apiHomePageTxt, incomingRequest);
         }
 
-        /// <summary>
-        /// wrapper place to run 1 time debug code
-        /// </summary>
-        [Function(nameof(DEBUG))]
-        public static async Task<HttpResponseData> DEBUG([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DEBUG")] HttpRequestData incomingRequest)
-        {
-            throw new NotImplementedException();
-            //      //get latest all match reports
-            //      var personListXml = await Tools.GetXmlFileFromAzureStorage(Tools.PersonListFile, Tools.BlobContainerName);
-
-            //      //list of person XMLs
-            //      var personXmlList = personListXml?.Root?.Elements() ?? new List<XElement>();
-
-            //      var personList = Person.FromXml(personXmlList);
-
-            //      var xxx = ConvertListToCsv(personList);
-
-            //return APITools.SendTextToCaller(xxx, incomingRequest);
-
-            // string ConvertListToCsv(List<Person> people)
-            //{
-            //	var csv = new StringBuilder();
-            //	// Add headers
-            //	csv.AppendLine("Name,Gender,BirthDate,BirthLocation");
-            //	foreach (var person in people)
-            //	{
-            //		var localNameClean = person.GetBirthLocation().Name().Replace(",", "");
-            //		csv.AppendLine($"{person.Name.Truncate(5," ")},{person.Gender},{person.BirthTimeString},{localNameClean}");
-            //	}
-            //	return csv.ToString();
-            //}
-
-        }
 
         /// <summary>
         /// Searches for image and gives URL

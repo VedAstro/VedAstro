@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Collections.Concurrent;
+using System.Text.Json.Nodes;
+using Azure.Data.Tables;
 using Google.Apis.Auth;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -15,7 +17,7 @@ namespace API
         {
             try
             {
-                //validate the the token & get data to id the user
+                //validate the token & get data to id the user
                 var validPayload = await GoogleJsonWebSignature.ValidateAsync(token);
                 var userId = validPayload.Subject; //Unique Google User ID
                 var userName = validPayload.Name;
@@ -92,12 +94,13 @@ namespace API
         /// </summary>
         private static async Task AddOrUpdateUserData(string userId, string userName, string userEmail)
         {
-            //package data
+            // Package data
             var userData = new UserData(userId, userName, userEmail);
 
-            //add/update user data based on Email which is immutable & uniquer
-            await AzureTable.PersonList?.UpsertEntityAsync(userData.ToAzureRow());
+            // Add/update user data
+            await AzureTable.UserDataList.UpsertEntityAsync(userData.ToAzureRow());
         }
+
 
     }
 }

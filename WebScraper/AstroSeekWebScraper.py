@@ -68,7 +68,7 @@ class AstroSeekWebScraper:
                 profile["person_name"],
                 profile["gender"],
                 profile["notes"],
-                "102111269113114363117",
+                "xxxxxx",
                 profile["location_name"],
                 profile["birth_time"],
             )
@@ -302,7 +302,7 @@ class AstroSeekWebScraper:
 
         return soup
 
-    # http://localhost:7071/api/Calculate/AddPerson/OwnerId/101/Location/Singapore/Time/00:00/24/06/2024/+08:00/PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%22%7D
+    # http://localhost:7071/api/Calculate/AddPerson/OwnerId/xxxx/Location/Singapore/Time/00:00/24/06/2024/+08:00/PersonName/James%20Brown/Gender/Male/Notes/%7Brodden:%22AA%22%7D
     @staticmethod
     def add_new_person_to_vedastro(
         person_name, gender, notes, owner_id, location_name, birth_time
@@ -310,7 +310,7 @@ class AstroSeekWebScraper:
 
         # Construct the URL with parameters
         full_url = (
-            f"https://vedastroapibeta.azurewebsites.net/api/Calculate/AddPerson/OwnerId/{owner_id}"
+            f"http://localhost:7071/api/Calculate/AddPerson/OwnerId/{owner_id}"
             f"/Location/{location_name}"
             f"/Time/{birth_time}/+00:00"  # 00:00/24/06/2024/+08:00 # add +00:00 for format sake, will be ignored since location name
             f"/PersonName/{person_name}"

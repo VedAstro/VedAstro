@@ -52,7 +52,7 @@ jobs:
         with:
           files: VedAstro-API-Server.zip
           tag_name: ${{ env.SHORT_SHA }}
-          name: API Server  ${{ env.SHORT_SHA }}
+          name: API Server - ${{ env.SHORT_SHA }}
           body: |
             ## 🔢 Steps to Run Server
 

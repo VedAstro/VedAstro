@@ -22,7 +22,7 @@ namespace API
                 //return APITools.PassMessage(incomingRequest);
 
                 //if user id local skip
-                //var isLocal = newVisitorXml.Element("UserId")?.Value == "102111269113114363117";
+                //var isLocal = newVisitorXml.Element("UserId")?.Value == "xxxx";
                 //var isLocal2 = newVisitorXml.Element("TimeStamp")?.Value.Contains("+08:00") ?? false;
                 //if (isLocal || isLocal2)
                 //{

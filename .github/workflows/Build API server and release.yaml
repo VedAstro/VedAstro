@@ -63,10 +63,10 @@ jobs:
                ```bash
                func start
                ```
-            5. **Test API with** : http://localhost:7071/Calculate/AllPlanetData/PlanetName/All/Location/-3.9571599,103.8723379/Time/00:00/24/04/2024/+08:00
+            5. **Test API with** : http://localhost:7071/api/Calculate/AllPlanetData/PlanetName/All/Location/-3.9571599,103.8723379/Time/00:00/24/04/2024/+08:00
             6. 🎈 Enjoy the world's 1st open-source, non-profit Vedic astrology **API server**.
 
-            💌 Donate to support the project --> **vedastro.org/Donate.html**
+            💌 Support the project --> **[vedastro.org/Donate.html](https://vedastro.org/Donate.html)**
 
             ------
             _-You need [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local) & [.NET SDK](https://dotnet.microsoft.com/en-us/download) installed._

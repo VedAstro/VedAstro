@@ -1,4 +1,4 @@
-name: Build and Release API Server
+﻿name: Build and Release API Server
 
 on:
   workflow_dispatch:
@@ -32,14 +32,43 @@ jobs:
           $publishPath = 'API\publish'
           Compress-Archive -Path "$publishPath\*" -DestinationPath 'VedAstro-API-Server.zip'
 
-      # Create a release and upload the zip file
+      # Get shortened commit hash
+      - name: Get short commit hash
+        id: vars
+        shell: pwsh
+        run: |
+          $shortSha = $env:GITHUB_SHA.Substring(0,7)
+          echo "SHORT_SHA=$shortSha" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+      # Create Release and Upload Asset
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: VedAstro-API-Server.zip
-          tag_name: v1.0.${{ github.run_number }}    # Adjust the versioning as needed
-          name: Azure Functions Release v1.0.${{ github.run_number }}
+          tag_name: ${{ env.SHORT_SHA }}
+          name: API Server ${{ env.SHORT_SHA }}
+          body: |
+            ## How to Use this Release
+
+            **👣 Steps:**
+
+            1. **Download the `VedAstro-API-Server.zip`** file attached below.
+            2. **Extract** the contents of the zip file to a directory of your choice.
+            3. **Open a command prompt or terminal** and navigate to the extracted directory.
+            4. **Start the Azure Functions host** by running:
+
+               ```bash
+               func start
+               ```
+
+               Ensure you have the [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local) installed.
+
+            5. **Access your functions** using the URLs provided in the console output.
+            6. 🎈 Enjoy the worlds 1st open-source, non-profit vedic astrology API server
+
+            💌 Donate to Support the project --> vedastro.org/Donate.html
           draft: false
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatically provided by GitHub Actions
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # Automatically provided by GitHub Actions
+

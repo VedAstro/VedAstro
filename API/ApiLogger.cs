@@ -32,25 +32,12 @@ public static class APILogger
     public static string URL = "NOT SET";
 
 
-
-    private static TableClient openApiErrorBookClient = APITools.GetTableClientFromTableName("OpenAPIErrorBook");
-
-
     static APILogger()
     {
         try
         {
-            string accountName = Secrets.Get("CentralStorageAccountName");
-            string storageAccountKey = Secrets.Get("CentralStorageKey");
-            var logBookUri = $"https://{accountName}.table.core.windows.net/{OpenApiLogBook}";
-            var errorBookUri = $"https://{accountName}.table.core.windows.net/{OpenApiErrorBook}";
-
-            //get connection & load tables
-            var tableServiceClient = new TableServiceClient(new Uri(logBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
-            LogBookClient = tableServiceClient.GetTableClient(OpenApiLogBook);
-
-            tableServiceClient = new TableServiceClient(new Uri(errorBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
-            ErrorBookClient = tableServiceClient.GetTableClient(errorBookUri);
+            LogBookClient = APITools.GetTableClientFromTableName(OpenApiLogBook);
+            ErrorBookClient = APITools.GetTableClientFromTableName(OpenApiErrorBook);
         }
         catch (Exception e)
         {

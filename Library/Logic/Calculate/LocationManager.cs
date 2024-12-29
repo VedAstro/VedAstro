@@ -677,15 +677,10 @@ namespace VedAstro.Library
         {
 
             //HANDLE LOCATIONS WHERE DST (DAYLIGHT SAVINGS)
-            //time that is linked to timezone
-            //NOTE :reduce accuracy to days so time is removed (this only checks, another writes)
-            //      done to reduce cache clogging, so might miss offset by hours but not days
-            //      !!DO NOT lower accuracy below time as needed for Western daylight saving changes!! 
-            var roundedTime = new DateTimeOffset(timeAtLocation.Year, timeAtLocation.Month, timeAtLocation.Day, 0, 0, 0, timeAtLocation.Offset);
 
             //do search only with latitude, longitude and time
-            Expression<Func<GeoLocationTimezoneEntity, bool>> expression = call => call.PartitionKey == geoLocation.GetPartitionKey() //lat & long 
-                                                                                && call.RowKey == roundedTime.ToRowKey();
+            Expression<Func<GeoLocationTimezoneEntity, bool>> expression = call => call.PartitionKey == geoLocation.ToPartitionKey() //lat & long 
+                                                                                && call.RowKey == timeAtLocation.ToRowKey();
 
             var recordFound = timezoneTableClient.Query(expression).FirstOrDefault();
 

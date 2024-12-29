@@ -11,7 +11,7 @@ fillLoginHelperText();
 //so check every 20s and redirect user to Home page once logged in
 const intervalId = setInterval(() => {
     // Check if the user is already logged in
-    if (!VedAstro.IsGuest()) {
+    if (!VedAstro.IsGuestUser()) {
         // Clear the interval to prevent further checks
         clearInterval(intervalId);
         // Redirect the user to Home.html

@@ -2342,7 +2342,6 @@ class PersonSelectorBox {
         }
     }
 
-
     //gets list of person to display (checks if underlying cache has been removed)
     async getPersonListDisplay() {
         //check if cache exist
@@ -5770,6 +5769,7 @@ class AlgorithmsSelector {
     }
 }
 
+//gives checkboxes to select all events from eventdatalist.xml via API
 class EventsSelector {
     // Class properties
     ElementID = "";

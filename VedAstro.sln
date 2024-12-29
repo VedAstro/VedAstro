@@ -7,6 +7,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{317ADC97-8BF1-49D5-880F-07818908FCE3}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\AutoUpdateVedAstroDLLForPython.yaml = .github\workflows\AutoUpdateVedAstroDLLForPython.yaml
+		.github\workflows\Build API server and release.yaml = .github\workflows\Build API server and release.yaml
 		Demo To Calculate Events.cs = Demo To Calculate Events.cs
 		Directory.Build.props = Directory.Build.props
 		Dockerfile = Dockerfile

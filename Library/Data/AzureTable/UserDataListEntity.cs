@@ -1,24 +1,25 @@
-﻿using Azure;
-using Azure.Data.Tables;
+﻿using Azure.Data.Tables;
+using Azure;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VedAstro.Library
 {
     public class UserDataListEntity : ITableEntity
     {
         /// <summary>
-        /// Email (since more unique)
+        /// Id given by Google or Facebook
         /// </summary>
         public string PartitionKey { get; set; }
 
         /// <summary>
-        /// leave null not needed
+        /// email registered with FB or google
         /// </summary>
         public string RowKey { get; set; }
+
+        /// <summary>
+        /// registered name
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// Time of change
@@ -26,14 +27,6 @@ namespace VedAstro.Library
         public DateTimeOffset? Timestamp { get; set; }
 
         public ETag ETag { get; set; }
-
-        //CUSTOM DATA
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Id given by Google or Facebook
-        /// </summary>
-        public string Id { get; set; }
 
     }
 }

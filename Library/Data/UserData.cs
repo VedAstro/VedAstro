@@ -32,7 +32,7 @@ namespace VedAstro.Library
         public string Name
         {
             get => _name;
-            set => _name = value == "Vignes" ? "James Brown" : value;
+            set => _name = value;
         }
 
         public string Email { get; set; }
@@ -105,11 +105,9 @@ namespace VedAstro.Library
             //make the cache row to be added
             var newRow = new UserDataListEntity()
             {
-                //make email as partition key
-                PartitionKey = this.Email,
-                RowKey = "",
+                PartitionKey = this.Id,
+                RowKey = this.Email,
                 Name = this.Name,
-                Id = this.Id,
             };
 
             return newRow;

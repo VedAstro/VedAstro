@@ -1,0 +1,45 @@
+name: Build and Release API Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest  # Use Windows environment
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up .NET (adjust the version as needed)
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '7.0.0'  # Update to match your project's .NET version
+
+      # Build the Azure Functions project
+      - name: Build Azure Functions project
+        shell: pwsh  # Use PowerShell
+        run: |
+          cd API
+          dotnet publish -c Release -o publish
+
+      # Zip the build output
+      - name: Zip build output
+        shell: pwsh
+        run: |
+          $publishPath = 'API\publish'
+          Compress-Archive -Path "$publishPath\*" -DestinationPath 'VedAstro-API-Server.zip'
+
+      # Create a release and upload the zip file
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: VedAstro-API-Server.zip
+          tag_name: v1.0.${{ github.run_number }}    # Adjust the versioning as needed
+          name: Azure Functions Release v1.0.${{ github.run_number }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatically provided by GitHub Actions

@@ -67,7 +67,7 @@ public static class APILogger
             };
 
             //creates record if no exist, update if already there
-            openApiErrorBookClient.UpsertEntity(errorLog);
+            ErrorBookClient.UpsertEntity(errorLog);
 
         }
         catch (Exception deeperException)

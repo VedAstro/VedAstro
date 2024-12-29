@@ -39,67 +39,54 @@ namespace VedAstro.Library
         /// </summary>
         static ApiStatistic()
         {
-            string accountName = Secrets.Get("CentralStorageAccountName");
 
+            try
+            {
+                string accountName = Secrets.Get("CentralStorageAccountName");
+                string storageUri = $"https://{accountName}.table.core.windows.net/";
+                var tableServiceClient = new TableServiceClient(new Uri(storageUri), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
 
-            //# RAW REQUEST : (use only when needed, costly🤑)
-            //------------------------------------
-            //Initialize address table 
-            string tableNameRawRequestStatistic = "RawRequestStatistic";
-            var storageUriRawRequestStatistic = $"https://{accountName}.table.core.windows.net/{tableNameRawRequestStatistic}";
-            //save reference for late use
-            rawRequestStatisticServiceClient = new TableServiceClient(new Uri(storageUriRawRequestStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            rawRequestStatisticTableClient = rawRequestStatisticServiceClient.GetTableClient(tableNameRawRequestStatistic);
+                //# RAW REQUEST : (use only when needed, costly)
+                //------------------------------------
+                //Initialize address table 
+                string tableNameRawRequestStatistic = "RawRequestStatistic";
+                rawRequestStatisticTableClient = tableServiceClient.GetTableClient(tableNameRawRequestStatistic);
 
+                //# REQUEST URL
+                //------------------------------------
+                //Initialize address table 
+                string tableNameRequestUrlStatistic = "RequestUrlStatistic";
+                requestUrlStatisticTableClient = tableServiceClient.GetTableClient(tableNameRequestUrlStatistic);
 
-            //# REQUEST URL
-            //------------------------------------
-            //Initialize address table 
-            string tableNameRequestUrlStatistic = "RequestUrlStatistic";
-            var storageUriRequestUrlStatistic = $"https://{accountName}.table.core.windows.net/{tableNameRequestUrlStatistic}";
-            //save reference for late use
-            requestUrlStatisticServiceClient = new TableServiceClient(new Uri(storageUriRequestUrlStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            requestUrlStatisticTableClient = requestUrlStatisticServiceClient.GetTableClient(tableNameRequestUrlStatistic);
+                //# SUBSCRIBER
+                //------------------------------------
+                //Initialize address table 
+                string tableNameSubscriberStatistic = "SubscriberStatistic";
+                subscriberStatisticTableClient = tableServiceClient.GetTableClient(tableNameSubscriberStatistic);
 
-            //# SUBSCRIBER
-            //------------------------------------
-            //Initialize address table 
-            string tableNameSubscriberStatistic = "SubscriberStatistic";
-            var storageUriSubscriberStatistic = $"https://{accountName}.table.core.windows.net/{tableNameSubscriberStatistic}";
-            //save reference for late use
-            subscriberStatisticServiceClient = new TableServiceClient(new Uri(storageUriSubscriberStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            subscriberStatisticTableClient = subscriberStatisticServiceClient.GetTableClient(tableNameSubscriberStatistic);
+                //# USER AGENT
+                //------------------------------------
+                //Initialize address table 
+                string tableNameUserAgentStatistic = "UserAgentStatistic";
+                userAgentStatisticTableClient = tableServiceClient.GetTableClient(tableNameUserAgentStatistic);
 
-            //# USER AGENT
-            //------------------------------------
-            //Initialize address table 
-            string tableNameUserAgentStatistic = "UserAgentStatistic";
-            var storageUriUserAgentStatistic = $"https://{accountName}.table.core.windows.net/{tableNameUserAgentStatistic}";
-            //save reference for late use
-            userAgentStatisticServiceClient = new TableServiceClient(new Uri(storageUriUserAgentStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            userAgentStatisticTableClient = userAgentStatisticServiceClient.GetTableClient(tableNameUserAgentStatistic);
+                //# IP ADDRESS (ML FEED DATASET)
+                //------------------------------------
+                //Initialize address table 
+                string tableNameIpAddressStatistic = "IpAddressStatistic";
+                ipAddressStatisticTableClient = tableServiceClient.GetTableClient(tableNameIpAddressStatistic);
 
-
-            //# IP ADDRESS (ML FEED DATASET)
-            //------------------------------------
-            //Initialize address table 
-            string tableNameIpAddressStatistic = "IpAddressStatistic";
-            var storageUriIpAddressStatistic = $"https://{accountName}.table.core.windows.net/{tableNameIpAddressStatistic}";
-            //save reference for late use
-            ipAddressServiceClient = new TableServiceClient(new Uri(storageUriIpAddressStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            ipAddressStatisticTableClient = ipAddressServiceClient.GetTableClient(tableNameIpAddressStatistic);
-
-
-            //# WEB PAGE
-            //------------------------------------
-            //Initialize address table 
-            string tableNameWebPageStatistic = "WebPageStatistic";
-            var storageUriWebPageStatistic = $"https://{accountName}.table.core.windows.net/{tableNameWebPageStatistic}";
-            //save reference for late use
-            webPageServiceClient = new TableServiceClient(new Uri(storageUriWebPageStatistic), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            webPageStatisticTableClient = webPageServiceClient.GetTableClient(tableNameWebPageStatistic);
-
-
+                //# WEB PAGE
+                //------------------------------------
+                //Initialize address table 
+                string tableNameWebPageStatistic = "WebPageStatistic";
+                webPageStatisticTableClient = tableServiceClient.GetTableClient(tableNameWebPageStatistic);
+            }
+            catch (Exception e)
+            {
+                //SILENT FAIL
+                Console.WriteLine(e);
+            }
         }
 
         //-------------------------------------

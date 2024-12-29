@@ -52,27 +52,25 @@ jobs:
         with:
           files: VedAstro-API-Server.zip
           tag_name: ${{ env.SHORT_SHA }}
-          name: API Server ${{ env.SHORT_SHA }}
+          name: API Server  ${{ env.SHORT_SHA }}
           body: |
-            ## How to Use this Release
-
-            **🔢 Steps:**
+            ## 🔢 Steps to Run Server
 
             1. **Download the `VedAstro-API-Server.zip`** file attached below.
             2. **Extract** the contents of the zip file to a directory of your choice.
             3. **Open a command prompt or terminal** and navigate to the extracted directory.
-            4. **Start the Azure Functions host** by running:
-
+            4. **Start the server** by running:
                ```bash
                func start
                ```
+            5. **Test API with** : http://localhost:7071/Calculate/AllPlanetData/PlanetName/All/Location/-3.9571599,103.8723379/Time/00:00/24/04/2024/+08:00
+            6. 🎈 Enjoy the world's 1st open-source, non-profit Vedic astrology **API server**.
 
-               Ensure you have the [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local) installed.
+            💌 Donate to support the project --> **vedastro.org/Donate.html**
 
-            5. **Access your functions** using the URLs provided in the console output.
-            6. 🎈 Enjoy the world's first open-source, non-profit Vedic astrology API server.
-
-            💌 Donate to support the project --> vedastro.org/Donate.html
+            ------
+            _-You need [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local) & [.NET SDK](https://dotnet.microsoft.com/en-us/download) installed._
+            _-Works on Windows, Linux & Mac_
           draft: false
           prerelease: false
         env:

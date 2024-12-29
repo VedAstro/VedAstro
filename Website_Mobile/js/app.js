@@ -214,16 +214,16 @@ new PageTopNavbar("VedAstro","PageTopNavbar", [
     { text: "Remedy", href: "./Remedy.html" },
     /*{ text: "Download", href: "./Download.html" },*/
     { text: "API Live Status", href: "https://vedastroapi.azurewebsites.net/api/Home" },
-    { text: "Table Generator", href: "./TableGenerator.html" },
-    { text: "Body Types", href: "./BodyTypes.html" },
-    { text: "Import Person", href: "./ImportPerson.html" },
+    /*{ text: "Table Generator", href: "./TableGenerator.html" },*/
+    /*{ text: "Body Types", href: "./BodyTypes.html" },*/
+    /*{ text: "Import Person", href: "./ImportPerson.html" },*/
 ], [
     { icon: "mdi:home", text: "Home", href: "./Home.html" },
     //{ icon: "mage:we-chat", text: "AI Chat", href: "./AIChat.html" },
     { icon: "fluent:book-star-20-filled", text: "Horoscope", href: "./Horoscope.html" },
     { icon: "bi:arrow-through-heart-fill", text: "Match", href: "./MatchChecker.html" },
     { icon: "mdi:numbers", text: "Numerology", href: "./Numerology.html" },
-    { icon: "game-icons:lovers", text: "Find Match", href: "./MatchFinder.html" },
+    /*{ icon: "game-icons:lovers", text: "Find Match", href: "./MatchFinder.html" },*/
     { icon: "gis:map-time", text: "Life Predictor", href: "./LifePredictor.html" },
     { icon: "svg-spinners:clock", text: "Good Time Finder", href: "./GoodTimeFinder.html" },
 ]);
@@ -249,11 +249,11 @@ const links = [
         icon: 'gis:map-time',
         text: 'Life Predictor'
     },
-    {
-        url: 'MatchFinder',
-        icon: 'game-icons:lovers',
-        text: 'Match Finder'
-    },
+    //{
+    //    url: 'MatchFinder',
+    //    icon: 'game-icons:lovers',
+    //    text: 'Match Finder'
+    //},
     {
         url: 'Horoscope',
         icon: 'fluent:book-star-20-filled',
@@ -264,11 +264,11 @@ const links = [
         icon: 'svg-spinners:clock',
         text: 'Good Time Finder'
     },
-    {
-        url: 'APIBuilder',
-        icon: 'mdi:cloud-tags',
-        text: 'API Builder'
-    },
+    //{
+    //    url: 'APIBuilder',
+    //    icon: 'mdi:cloud-tags',
+    //    text: 'API Builder'
+    //},
     {
         url: 'Numerology',
         icon: 'fluent:text-number-format-20-filled',

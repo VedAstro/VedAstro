@@ -1,4 +1,4 @@
-
+﻿
 <a href="https://vedastro.org">
 <img
   src="https://vedastro.org/images/website-header-screenshot.png"
@@ -228,7 +228,7 @@ Now it's coded in machines unseen.<br>
 The human touch, that once gave knowledge birth,<br>
 Replaced by algorithms, shaping future's girth.<br>
 
-# 🛖 Philosophy
+<!-- # 🛖 Philosophy
 Philosophy is equivalent to the **scaffolding** used when constructing a building.
 You can build without **scaffolding** it is called a **mud hut** not a building.
 Thus philosophy is essential to build a large & complex code structure like **VedAstro**.
@@ -238,7 +238,7 @@ This is a project born of joy, kept alive by it and as such do not touch the cod
 your heart is filled with the joy of building beauty with electrons and your fingers can't keep up.
 
 Then you know your code is right, and **has a place for it in this universe**.
-
+-->
 
 # 🙏 Special Thanks
 <img src="https://pics.paypal.com/00/p/ZjU4ZjZiMjEtNDE0Ny00MGExLTg2ZTMtNzkxOTQ1MTI4Mzc0/image_34.PNG" width="100"/>
@@ -259,10 +259,11 @@ Just **Like** & **Share** our social pages and it'll be a **big** help already!
 [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/_VedAstro)
 [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
 
-
+<!--
 # 👪 Join our family
 If you want to do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily)  
 We're always looking for somebody to **[improve code.](https://vedastro.org/JoinOurFamily)** or **[help with funding](https://vedastro.org/Donate)**.
+-->
 
 # 🙋‍♂️ Come say "Hi", we don't bite!
 We discuss & share ideas on astrology and computation. And ways you can integrate VedAstro into your own project.
@@ -345,6 +346,7 @@ throughout the program.
                     +------------------------+                +------------------+
 ```
 
+<!--
 # ⚙️ Setup Guide
 
 ### Prerequisite
@@ -376,7 +378,7 @@ throughout the program.
   - go to provide and Enable Debug, save (this will instruct the code to look for API in local).
 
 Now you can have fun with VedAstro, ;-) try making horoscope and share your feedback in Slack channel. 
-
+-->
 
 # Code Edit Guide
 

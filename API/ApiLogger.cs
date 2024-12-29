@@ -38,17 +38,24 @@ public static class APILogger
 
     static APILogger()
     {
-        string accountName = Secrets.Get("CentralStorageAccountName");
-        string storageAccountKey = Secrets.Get("CentralStorageKey");
-        var logBookUri = $"https://{accountName}.table.core.windows.net/{OpenApiLogBook}";
-        var errorBookUri = $"https://{accountName}.table.core.windows.net/{OpenApiErrorBook}";
+        try
+        {
+            string accountName = Secrets.Get("CentralStorageAccountName");
+            string storageAccountKey = Secrets.Get("CentralStorageKey");
+            var logBookUri = $"https://{accountName}.table.core.windows.net/{OpenApiLogBook}";
+            var errorBookUri = $"https://{accountName}.table.core.windows.net/{OpenApiErrorBook}";
 
-        //get connection & load tables
-        var tableServiceClient = new TableServiceClient(new Uri(logBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
-        LogBookClient = tableServiceClient.GetTableClient(OpenApiLogBook);
+            //get connection & load tables
+            var tableServiceClient = new TableServiceClient(new Uri(logBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
+            LogBookClient = tableServiceClient.GetTableClient(OpenApiLogBook);
 
-        tableServiceClient = new TableServiceClient(new Uri(errorBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
-        ErrorBookClient = tableServiceClient.GetTableClient(errorBookUri);
+            tableServiceClient = new TableServiceClient(new Uri(errorBookUri), new TableSharedKeyCredential(accountName, storageAccountKey));
+            ErrorBookClient = tableServiceClient.GetTableClient(errorBookUri);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
 
     }
 

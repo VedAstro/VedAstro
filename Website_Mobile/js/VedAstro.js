@@ -210,30 +210,27 @@ class CommonTools {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
-    //will auto get payload out of json and checks reports failures to user
-    // Define an asynchronous function named 'GetAPIPayload'
-    static async GetAPIPayload(url, payload = null) {
+    // will auto get payload out of json and checks reports failures to user
+    // throws exception if fail
+    static async GetAPIPayload(url) {
         try {
-            // If a payload is provided, prepare options for a POST request
-            const options = payload
-                ? {
-                    method: "POST", // Specify the HTTP method as POST
-                    headers: { "Content-Type": "application/json" }, // Set the content type of the request to JSON
-                    body: JSON.stringify(payload), // Convert the payload to a JSON string and include it in the body of the request
-                }
-                : {}; // If no payload is provided, create an empty options object, which defaults to a GET request
+
             // Send the request to the specified URL with the prepared options
-            const response = await fetch(url, options);
+            const response = await fetch(url);
+
             // If the response is not ok (status is not in the range 200-299), throw an error
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+
             // Parse the response body as JSON
             const data = await response.json();
+
             // If the 'Status' property of the parsed data is not 'Pass', throw an error
             if (data.Status !== "Pass") {
                 throw new Error(data.Payload);
             }
+
             // If everything is ok, return the 'Payload' property of the parsed data
             return data.Payload;
         } catch (error) {
@@ -2734,6 +2731,7 @@ class IconButton {
         this.Color = element.getAttribute("Color") || "";
         this.IconName = element.getAttribute("IconName") || "";
         this.ExtraStyle = element.getAttribute("ExtraStyle") || "";
+        this.ExtraClass = element.getAttribute("ExtraClass") || "";
         this.ButtonText = element.getAttribute("ButtonText") || "";
         this.OnClickCallback = element.getAttribute("OnClickCallback") || null;
 
@@ -2754,7 +2752,7 @@ class IconButton {
     async generateHtmlButton() {
         // Return the HTML for the button
         return `
-      <button onclick="${this.OnClickCallback}" style="${this.ExtraStyle} justify-content: center; height:37.1px; width: fit-content; " class="btn-sm hstack gap-2 iconButton btn-${this.Color} btn">
+      <button onclick="${this.OnClickCallback}" style="${this.ExtraStyle} justify-content: center; height:37.1px; width: fit-content; " class="${this.ExtraClass} btn-sm hstack gap-2 iconButton btn-${this.Color} btn">
         <iconify-icon icon="${this.IconName}" width="25" height="25"></iconify-icon>
         ${this.ButtonText}
       </button>

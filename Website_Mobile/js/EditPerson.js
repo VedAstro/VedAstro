@@ -6,6 +6,7 @@ new InfoBox("InfoBox_Private");
 new InfoBox("InfoBox_ForgotenTime");
 new IconButton("IconButton_Advanced");
 new IconButton("IconButton_Save");
+new IconButton("IconButton_Delete");
 let timeLocationInput = new TimeLocationInput("TimeLocationInput");
 new PersonListViewer("PersonListViewer");
 
@@ -151,6 +152,93 @@ async function OnClickSave() {
 }
 
 /**
+ * Handles the Delete button click event to delete the person.
+ */
+async function OnClickDelete() {
+    // Confirm with user before deleting
+    const result = await Swal.fire({
+        icon: 'warning',
+        title: 'Are you sure?',
+        html: 'This will delete the person <strong>permanently</strong>.',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6'
+    });
+
+    if (result.isConfirmed) {
+        // Show loading indicator
+        CommonTools.ShowLoading();
+
+        // Call the API to delete the person
+        const deleteResult = await DeletePersonViaApi(originalPerson.PersonId);
+
+        if (deleteResult) {
+            // Clear cached person list
+            PersonSelectorBox.ClearPersonListCache('private');
+
+            // Remove selected person from local storage
+            const selectedPersonStorageKey = new URL(window.location.href).searchParams.get('SelectedPersonStorageKey');
+            if (selectedPersonStorageKey) {
+                localStorage.removeItem(selectedPersonStorageKey);
+            }
+
+            // Hide loading indicator
+            CommonTools.HideLoading();
+
+            // Show success message
+            await Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: 'Person has been deleted successfully.',
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+            // Navigate back to the person list or previous page
+            navigateToPreviousPage();
+
+        } else {
+            // Hide loading indicator
+            CommonTools.HideLoading();
+
+            // Show error message
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to delete person. Please try again later.'
+            });
+        }
+    }
+}
+
+/**
+ * Deletes a person in the VedAstro API.
+ * @param {string} personId - The ID of the person to delete.
+ * @returns {Promise<boolean>} - True if delete is successful, false otherwise.
+ */
+async function DeletePersonViaApi(personId) {
+    // Construct API URL
+    const apiUrl = [
+        `${VedAstro.ApiDomain}/Calculate/DeletePerson/`,
+        `OwnerId/${VedAstro.IsGuestUser() ? VedAstro.VisitorId : VedAstro.UserId}`,
+        `/PersonId/${personId}`
+    ].join('');
+
+    // Make the API call to delete the person
+    try {
+        await CommonTools.GetAPIPayload(apiUrl);
+        // Assuming API returns a success status
+        return true;
+    } catch (error) {
+        console.error('Error deleting person:', error);
+        return false;
+    }
+
+}
+
+/**
  * Updates a person in the VedAstro API.
  * @param {Person} person - The person object to update.
  * @returns {Promise<boolean>} - True if update is successful, false otherwise.
@@ -172,7 +260,7 @@ async function UpdatePersonViaApi(person) {
 
     // Make the API call to update the person
     try {
-        var response = await CommonTools.GetAPIPayload(apiUrl);
+        await CommonTools.GetAPIPayload(apiUrl);
         // Assuming API returns a success status
         return true;
     } catch (error) {

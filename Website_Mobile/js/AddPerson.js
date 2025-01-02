@@ -30,6 +30,7 @@ function OnClickAdvanced() {
     smoothSlideToggle('#NotesInputHolder');
     smoothSlideToggle(`#${timeLocationInput.TimezoneOffsetInputHolderID}`);
 }
+
 async function OnClickSave_AddPerson() {
 
     // if not logged in tell user what the f he is doing
@@ -60,7 +61,7 @@ async function OnClickSave_AddPerson() {
     const person = await getPersonInstanceFromInput();
 
     // send newly created person to API server (server gives back unique ID 🆕)
-    const newPersonId = await AddPerson(person);
+    const newPersonId = await AddPersonViaApi(person);
 
     // update new id, before saving into browser storage
     person.PersonId = newPersonId;
@@ -95,7 +96,7 @@ async function OnClickSave_AddPerson() {
 
 // Add a person to the Vedastro API
 // returns newly created ID for person
-async function AddPerson(person) {
+async function AddPersonViaApi(person) {
 
     // convert to birth time to correct URL format
     var timeUrl = person.BirthTime.ToUrl(); // sample: Location/Singapore/Time/00:00/24/06/2024/

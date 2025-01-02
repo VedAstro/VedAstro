@@ -18,7 +18,7 @@ $(document).ready(function () {
         var currentValue = $(this).val();
 
         // Convert the value to Pascal Case
-        var convertedValue = convertNameToPascalCase(currentValue);
+        var convertedValue = CommonTools.convertNameToPascalCase(currentValue);
 
         // Update the input element with the converted value
         $(this).val(convertedValue);
@@ -31,7 +31,7 @@ function OnClickAdvanced() {
     smoothSlideToggle(`#${timeLocationInput.TimezoneOffsetInputHolderID}`);
 }
 
-async function OnClickSave_AddPerson() {
+async function OnClickSave() {
 
     // if not logged in tell user what the f he is doing
     if (VedAstro.IsGuestUser()) {
@@ -49,7 +49,7 @@ async function OnClickSave_AddPerson() {
     }
 
     // only continue if passed input field validation
-    if (!(await isValidationPassed_AddPerson())) {
+    if (!(await isValidationPassed())) {
         Swal.close();
         return;
     }
@@ -108,7 +108,7 @@ async function AddPersonViaApi(person) {
         `/${timeUrl}`, // exp: Location/Singapore/Time/00:00/24/06/2024/
         `PersonName/${person.Name}`, //NOTE: time URL has trailing, so we skip '/' before
         `/Gender/${person.Gender}`,
-        `/Notes/${toUrlSafe(person.Notes)}`
+        `/Notes/${CommonTools.toUrlSafe(person.Notes)}`
     ].join('');
 
     // Make the API call to add the person
@@ -120,17 +120,6 @@ async function AddPersonViaApi(person) {
 
     return newPersonId;
 }
-
-/**
- * Converts text to URL-safe text.
- *
- * @param {string} text - The text to be converted.
- * @returns {string} The URL-safe text.
- */
-function toUrlSafe(text) {
-    return encodeURIComponent(text).replace(/%20/g, '+');
-}
-
 
 //brings together all the individual data for making person 
 //profile from page into 1 parsed Person instance object
@@ -154,24 +143,10 @@ async function getPersonInstanceFromInput() {
 }
 
 /**
- * Converts a name given in all caps to Pascal Case, but not initials.
- * @param {string} name - The name to be converted.
- * @returns {string} The converted name.
+ * Validates the input fields.
+ * @returns {Promise<boolean>} - True if validation passes.
  */
-function convertNameToPascalCase(name) {
-    return name.split(' ').map(word => {
-        // If the word is longer than 2 characters, it's probably not an initial
-        if (word.length > 2) {
-            // Convert the first character to uppercase and the rest to lowercase
-            return word.charAt(0) + word.slice(1).toLowerCase();
-        } else {
-            // Leave the word as it is (all uppercase)
-            return word;
-        }
-    }).join(' ');
-}
-
-async function isValidationPassed_AddPerson() {
+async function isValidationPassed() {
     // Prepare view components for checking
     const nameInput = document.getElementById("NameInput_AddPerson");
     const genderInput = document.getElementById("GenderInput_AddPerson");

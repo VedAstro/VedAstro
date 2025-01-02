@@ -286,6 +286,33 @@ class CommonTools {
         return camelCase.replace(/(\d)([A-Z])/g, '$1 $2').replace(/([A-Z])/g, ' $1').trim();
     }
 
+    /**
+     * Converts a name given in all caps to Pascal Case, but not initials.
+     * @param {string} name - The name to be converted.
+     * @returns {string} The converted name.
+     */
+    static convertNameToPascalCase(name) {
+        return name.split(' ').map(word => {
+            // If the word is longer than 2 characters, it's probably not an initial
+            if (word.length > 2) {
+                // Convert the first character to uppercase and the rest to lowercase
+                return word.charAt(0) + word.slice(1).toLowerCase();
+            } else {
+                // Leave the word as it is (all uppercase)
+                return word;
+            }
+        }).join(' ');
+    }
+
+    /**
+     * Converts text to URL-safe text.
+     * @param {string} text - The text to convert.
+     * @returns {string} - The URL-safe text.
+     */
+    static toUrlSafe(text) {
+        return encodeURIComponent(text).replace(/%20/g, '+');
+    }
+
     static IsMobile() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
@@ -308,6 +335,7 @@ class CommonTools {
 
         return text.length > maxChars ? `${text.substring(0, maxChars)}...` : text;
     }
+
 
 }
 
@@ -2493,10 +2521,32 @@ class PersonSelectorBox {
 
           </ul>
         </div>
-        <!-- NOTE: storage key is inject into URL, so that "add person" page knows where to set, for auto selection on return -->
-        <a href="./AddPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}" style="height:37.1px; width: fit-content; " class=" btn-primary btn ms-2">
-          <iconify-icon icon="ant-design:user-add-outlined" width="25" height="25" ></iconify-icon>
-        </a>
+        <div class="btn-group ">
+          <button class="ms-2 px-0 btn btn-primary dropdown-toggle" type="button" style="height:37.1px; width: fit-content; " data-bs-toggle="dropdown" aria-expanded="false">
+            <iconify-icon class="" icon="mi:options-horizontal" width="25" height="25" ></iconify-icon>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <!-- NOTE: storage key is inject into URL, so that "add person" page knows where to set, for auto selection on return -->
+            <li>
+                <a class="dropdown-item gap-2 d-flex align-items-center" href="./AddPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}">
+                    <iconify-icon class="" icon="ant-design:user-add-outlined" width="25" height="25" ></iconify-icon>
+                    Add Person
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item gap-2 d-flex align-items-center" href="./EditPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}">
+                    <iconify-icon class="" icon="uil:edit" width="25" height="25" ></iconify-icon>
+                    Edit Person
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item gap-2 d-flex align-items-center" href="./PersonList.html">
+                    <iconify-icon class="" icon="line-md:list" width="25" height="25" ></iconify-icon>
+                    View All
+                </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   `;
@@ -2765,7 +2815,7 @@ class TimeInputSimple {
     }
 
     // Method to initialize the time location input
-    async initializeTimeLocationInput() {
+    initializeTimeLocationInput() {
         // Get the element with the given ID
         const element = document.getElementById(this.ElementID);
 
@@ -2773,11 +2823,11 @@ class TimeInputSimple {
         const labelText = element.getAttribute("LabelText");
 
         // Generate the HTML for the time location input and inject it into the element
-        element.innerHTML = await this.generateTimeLocationInputHtml(labelText);
+        element.innerHTML = this.generateTimeLocationInputHtml(labelText);
     }
 
     // Method to generate the HTML for the time location input
-    async generateTimeLocationInputHtml(labelText) {
+    generateTimeLocationInputHtml(labelText) {
         //language=html
         var outputHtml = `
     <style>
@@ -2997,6 +3047,40 @@ class TimeInputSimple {
             "Year": year
         };
     }
+
+    /**
+     * Sets the input fields with the provided time data.
+     * @param {Time} timeData - The time data to set.
+     */
+    setInputDateTime(timeData) {
+        const stdTime = timeData.StdTime; // "13:54 25/10/1992 +08:00"
+        const [timePart, datePart, timezone] = stdTime.split(' ');
+        const [hour24, minute] = timePart.split(':');
+        const [day, month, year] = datePart.split('/');
+
+        // Convert 24-hour format to 12-hour format
+        let hour = parseInt(hour24);
+        let meridian = 'AM';
+        if (hour >= 12) {
+            meridian = 'PM';
+            if (hour > 12) {
+                hour -= 12;
+            }
+        }
+        if (hour === 0) {
+            hour = 12;
+        }
+        hour = hour.toString().padStart(2, '0');
+
+        // Set values into the inputs
+        document.getElementById(this.HourInputID).innerText = hour;
+        document.getElementById(this.MinuteInputID).innerText = minute;
+        document.getElementById(this.MeridianInputID).innerText = meridian;
+        document.getElementById(this.DateInputID).innerText = day;
+        document.getElementById(this.MonthInputID).innerText = month;
+        document.getElementById(this.YearInputID).innerText = year;
+    }
+
 }
 
 /**
@@ -3339,6 +3423,18 @@ class GeoLocationInput {
         };
 
     }
+
+    /**
+     * Sets the input fields with the provided location data.
+     * @param {GeoLocation} locationData - The location data to set.
+     */
+    setInputLocation(locationData) {
+        // Set values into inputs
+        this.$locationNameInput.val(locationData.Name);
+        this.$latitudeInput.val(locationData.Latitude);
+        this.$longitudeInput.val(locationData.Longitude);
+    }
+
 }
 
 
@@ -3380,12 +3476,12 @@ class TimeLocationInput {
     }
 
     // Method to initialize the main body of the page header
-    async initializeMainBody() {
+    initializeMainBody() {
         // Empty the content of the element with the given ID
         $(`#${this.ElementID}`).empty();
 
         // Generate the HTML for the page header and inject it into the element
-        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
 
         // render subview components via code now that sub view base HTML is in DOM
         this.TimeInputSimpleInstance = new TimeInputSimple(this.TimeInputSimpleID);
@@ -3427,9 +3523,8 @@ class TimeLocationInput {
         }
     }
 
-
     // Method to generate the HTML for the page header
-    async generateHtmlBody() {
+    generateHtmlBody() {
         return `
         <div id="${this.TimeInputSimpleID}" LabelText="Time"></div>
         <!-- Timezone Offset (advanced menu) -->
@@ -3535,6 +3630,15 @@ class TimeLocationInput {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Sets the input fields with the provided birth time data.
+     * @param {Time} birthTime - The birth time data to set.
+     */
+    setInputDateTime(birthTime) {
+        this.TimeInputSimpleInstance.setInputDateTime(birthTime);
+        this.GeoLocationInputInstance.setInputLocation(birthTime.Location);
     }
 
 }

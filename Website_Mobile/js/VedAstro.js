@@ -2451,8 +2451,8 @@ class PersonSelectorBox {
         // Get the search text from the input field
         const searchText = event.target.value.toLowerCase();
 
-        // Filter the person lists based on the search text
-        var allPersonDropItems = $(`#${this.ElementID}`).find('.dropdown-menu li');
+        // Filter only the person items based on the search text
+        var allPersonDropItems = $(`#${this.ElementID}`).find('.dropdown-menu li.person-item');
         allPersonDropItems.each(function () {
             const personName = $(this).text().toLowerCase();
             if (personName.includes(searchText)) {
@@ -2531,7 +2531,7 @@ class PersonSelectorBox {
                 </a>
             </li>
             <li>
-                <a class="dropdown-item gap-2 d-flex align-items-center" href="./EditPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}">
+                <a class="dropdown-item gap-2 d-flex align-items-center" href="./EditPerson.html?SelectedPersonStorageKey=${this.SelectedPersonStorageKey}" onclick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickEditPerson(event)">
                     <iconify-icon class="" icon="uil:edit" width="25" height="25" ></iconify-icon>
                     Edit Person
                 </a>
@@ -2567,7 +2567,7 @@ class PersonSelectorBox {
     async generatePublicPersonListHtml() {
         const html = (await this.getPublicPersonListDisplay())
             .map((person) => {
-                return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.DisplayName}</li>`;
+                return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item person-item" style="cursor: pointer;">${person.DisplayName}</li>`;
             })
             .join("");
 
@@ -2578,7 +2578,7 @@ class PersonSelectorBox {
     async generatePersonListHtml() {
         const html = (await this.getPersonListDisplay())
             .map((person) => {
-                return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item" style="cursor: pointer;">${person.DisplayName}</li>`;
+                return `<li onClick="window.vedastro.PersonSelectorBoxInstances['${this.ElementID}'].onClickPersonName('${person.PersonId}')" class="dropdown-item person-item" style="cursor: pointer;">${person.DisplayName}</li>`;
             })
             .join("");
 
@@ -2593,6 +2593,17 @@ class PersonSelectorBox {
             $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
         }
 
+    }
+
+    // Handle click on the "Edit Person" link
+    onClickEditPerson(event) {
+        const selectedPerson = this.GetSelectedPerson();
+        if (!selectedPerson) {
+            // Prevent navigation to the edit page
+            event.preventDefault();
+            // Show message to the user
+            Swal.fire('Please select a person first', '', 'warning');
+        }
     }
 
     //------------------------------------------------ STATIC FUNCS ----------------------

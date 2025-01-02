@@ -130,7 +130,7 @@ async function OnClickSave() {
             icon: 'success',
             title: 'Done ✅',
             text: 'Person updated successfully!',
-            timer: 2000,
+            timer: 2300,
             showConfirmButton: false
         });
 
@@ -161,7 +161,7 @@ async function OnClickDelete() {
         title: 'Are you sure?',
         html: 'This will delete the person <strong>permanently</strong>.',
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: 'Yes, delete!',
         cancelButtonText: 'Cancel',
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6'
@@ -187,12 +187,15 @@ async function OnClickDelete() {
             // Hide loading indicator
             CommonTools.HideLoading();
 
+            // Play sound for better UX
+            playBakingDoneSound();
+
             // Show success message
             await Swal.fire({
                 icon: 'success',
                 title: 'Deleted!',
                 text: 'Person has been deleted successfully.',
-                timer: 2000,
+                timer: 2300,
                 showConfirmButton: false
             });
 

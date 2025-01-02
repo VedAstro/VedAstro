@@ -7779,8 +7779,22 @@ class PersonListViewer {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
 
-        // Call the method to initialize the list html
+        // Save a reference to this instance
+        this.saveInstanceReference();
+
+        // Initialize the main body
         this.initializeMainBody();
+    }
+
+    // Save a reference to this instance for global access
+    saveInstanceReference() {
+        if (!window.vedastro) {
+            window.vedastro = {};
+        }
+        if (!window.vedastro.PersonListViewerInstances) {
+            window.vedastro.PersonListViewerInstances = {};
+        }
+        window.vedastro.PersonListViewerInstances[this.ElementID] = this;
     }
 
     // Method to initialize the main body 
@@ -7823,25 +7837,10 @@ class PersonListViewer {
                         <div title="${person.BirthTime.Location.Name}">🌍 ${CommonTools.TruncateText(person.BirthTime.Location.Name, 43)}, ${person.BirthTime.Location.Latitude}, ${person.BirthTime.Location.Longitude}</div>
                     </td>
                     <td>
-                        <div class="dropdown ">
-                            <button style=" height:37.1px; width: fit-content;" class="btn-sm iconOnlyButton dropdown-toggle btn-outline-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_134="">
-                                <iconify-icon icon="bx:edit" width="25" height="25"></iconify-icon>
-                            </button>
-                            <ul style="cursor: pointer; width: 100%;" class="dropdown-menu"><li><a class="dropdown-item" href="/Contact">Contact Us</a></li>
-                                <li><a class="dropdown-item" href="/About">About</a></li>
-                                <li><a class="dropdown-item" href="https://www.youtube.com/@vedastro/videos" target="_blank">Video Guides</a></li>
-                                <li><a class="dropdown-item" href="/JoinOurFamily">Join Us</a></li>
-                                <li><a class="dropdown-item" href="Calculator/">Calculators</a></li>
-                                <li><a class="dropdown-item" href="Account/Person/List">Person List</a></li>
-                                <li><a class="dropdown-item" href="/TrainAIAstrologer">Train AI</a></li>
-                                <li><a class="dropdown-item" href="/Remedy">Remedy</a></li>
-                                <li><a class="dropdown-item" href="/Download">Download</a></li>
-                                <li><a class="dropdown-item" href="https://vedastroapi.azurewebsites.net/api">API Live Status</a></li>
-                                <li><a class="dropdown-item" href="TableGenerator">Table Generator</a></li>
-                                <li><a class="dropdown-item" href="/BodyTypes">Body Types</a></li>
-                                <li><a class="dropdown-item" href="Account/Person/Import">Import Person</a></li>
-                            </ul>
-                        </div>
+                        <button style=" height:37.1px; width: fit-content;" class="btn-sm btn-outline-primary btn" type="button"
+                            onclick="window.vedastro.PersonListViewerInstances['${this.ElementID}'].onClickEdit('${person.PersonId}')">
+                            <iconify-icon icon="uil:edit" width="25" height="25"></iconify-icon>
+                        </button>
                     </td>
                 </tr>
             `;
@@ -7874,6 +7873,29 @@ class PersonListViewer {
                 </table>
             </div>
         `;
+    }
+
+    // Method to handle the edit button click
+    onClickEdit(personId) {
+        // Find the person data based on the person ID
+        const person = this.personList.find(p => p.PersonId === personId);
+        if (!person) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Person not found',
+                text: 'Could not find person data.'
+            });
+            return;
+        }
+
+        // Generate a unique storage key, for example the person ID
+        const selectedPersonStorageKey = `SelectedPerson-${person.PersonId}`;
+
+        // Save the person data into local storage
+        localStorage.setItem(selectedPersonStorageKey, JSON.stringify(person));
+
+        // Navigate to EditPerson.html with the query parameter using selectedPersonStorageKey
+        window.location.href = `./EditPerson.html?SelectedPersonStorageKey=${selectedPersonStorageKey}`;
     }
 
     // Method to filter the table

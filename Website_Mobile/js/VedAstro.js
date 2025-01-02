@@ -310,7 +310,7 @@ class CommonTools {
      * @returns {string} - The URL-safe text.
      */
     static toUrlSafe(text) {
-        return encodeURIComponent(text).replace(/%20/g, '+');
+        return encodeURIComponent(text);
     }
 
     static IsMobile() {
@@ -2810,12 +2810,12 @@ class TimeInputSimple {
         // Save a reference to this instance for global access
         this.saveInstanceReference();
 
-        // Call the method to initialize the time location input
-        this.initializeTimeLocationInput();
+        // Call the method to create the instance
+        this.initialize();
     }
 
     // Method to initialize the time location input
-    initializeTimeLocationInput() {
+    initialize() {
         // Get the element with the given ID
         const element = document.getElementById(this.ElementID);
 
@@ -2823,11 +2823,11 @@ class TimeInputSimple {
         const labelText = element.getAttribute("LabelText");
 
         // Generate the HTML for the time location input and inject it into the element
-        element.innerHTML = this.generateTimeLocationInputHtml(labelText);
+        element.innerHTML = this.generateHtml(labelText);
     }
 
     // Method to generate the HTML for the time location input
-    generateTimeLocationInputHtml(labelText) {
+    generateHtml(labelText) {
         //language=html
         var outputHtml = `
     <style>
@@ -3437,7 +3437,6 @@ class GeoLocationInput {
 
 }
 
-
 /**
  * Represents a time location input component.
  * This class generates the HTML for a time and location input field and handles user interactions.
@@ -3451,6 +3450,9 @@ class TimeLocationInput {
     GeoLocationInputID;
     TimeInputSimpleInstance;
     GeoLocationInputInstance;
+    TimezoneOffsetInputID;
+    TimezoneOffsetInputHolderID;
+    userModifiedTimezoneOffset = false; // Flag to track if user modified the timezone offset
 
     // Constructor to initialize the object
     constructor(elementId) {
@@ -3470,12 +3472,11 @@ class TimeLocationInput {
         this.TimezoneOffsetInputID = `TimezoneOffsetInputID-${randoTron}`;
         this.TimezoneOffsetInputHolderID = `TimezoneOffsetInputHolderID-${randoTron}`; //to hide/show
 
-        // Call the method to initialize the main body of the page header
+        // Initialize the main body
         this.initializeMainBody();
-
     }
 
-    // Method to initialize the main body of the page header
+    // Method to initialize the main body
     initializeMainBody() {
         // Empty the content of the element with the given ID
         $(`#${this.ElementID}`).empty();
@@ -3483,71 +3484,105 @@ class TimeLocationInput {
         // Generate the HTML for the page header and inject it into the element
         $(`#${this.ElementID}`).html(this.generateHtmlBody());
 
-        // render subview components via code now that sub view base HTML is in DOM
+        // Render subview components now that the base HTML is in the DOM
         this.TimeInputSimpleInstance = new TimeInputSimple(this.TimeInputSimpleID);
         this.GeoLocationInputInstance = new GeoLocationInput(this.GeoLocationInputID);
 
-        //when time or location input is ready,
-        //update timezone offset accurately
+        // Attach event handlers
         this.attachEventHandlers();
     }
 
     attachEventHandlers() {
-
-        //when time or location input is ready,
-        //update timezone offset accurately
+        // When time or location input is updated, update timezone offset accurately
         $(document).on('locationUpdated', (event) => this.updateTimezoneOffset());
         $(document).on('timeUpdated', (event) => this.updateTimezoneOffset());
 
-
+        // Attach event listener to detect if the user modifies the timezone offset input field
+        $(`#${this.TimezoneOffsetInputID}`).on('input', (event) => {
+            this.userModifiedTimezoneOffset = true;
+        });
     }
 
-    //when time or location input is ready,
-    //update timezone offset accurately
+    // When time or location input is updated, update timezone offset accurately
     async updateTimezoneOffset() {
-        //make sure both time & location is valid (filled)
+        // Make sure both time & location are valid (filled)
         var timeIsValid = this.TimeInputSimpleInstance.isValid();
         var locationIsValid = this.GeoLocationInputInstance.isValid();
 
-        //if both is filled, then update timezone input using API
+        // If both are filled, then update timezone input using API
         if (timeIsValid && locationIsValid) {
-            // get the inputed location & time data
+            // Get the inputted location & time data
             const inputTime = this.TimeInputSimpleInstance.getInputDateTime();
             const inputLocation = this.GeoLocationInputInstance.getInputLocation();
 
-            // call API to get exact timezone for location at give time
-            var timeZone = await this.getTimezoneForLocationFromApi(inputLocation.Name, inputLocation.Latitude, inputLocation.Longitude, inputTime.Hour24, inputTime.Minute, inputTime.Date, inputTime.Month, inputTime.Year); // Format: +08:00
+            // Call API to get exact timezone for location at given time
+            var timeZone = await this.getTimezoneForLocationFromApi(
+                inputLocation.Name,
+                inputLocation.Latitude,
+                inputLocation.Longitude,
+                inputTime.Hour24,
+                inputTime.Minute,
+                inputTime.Date,
+                inputTime.Month,
+                inputTime.Year
+            ); // Format: +08:00
 
-            //inject correct timezone into view
+            // Inject correct timezone into view
             $(`#${this.TimezoneOffsetInputID}`).val(timeZone);
+
+            // Since we updated the value programmatically, reset the flag
+            this.userModifiedTimezoneOffset = false;
         }
     }
 
     // Method to generate the HTML for the page header
     generateHtmlBody() {
         return `
-        <div id="${this.TimeInputSimpleID}" LabelText="Time"></div>
-        <!-- Timezone Offset (advanced menu) -->
-        <div id="${this.TimezoneOffsetInputHolderID}" style="display:none;">
-            <div class="input-group mt-3">
-                <span class="input-group-text gap-2 py-1" style="width: 136px;"><iconify-icon icon="stash:globe-timezone-light" width="35" height="35"></iconify-icon>Timezone</span>
-                <input id="${this.TimezoneOffsetInputID}" type="text" class="form-control" placeholder="+00:00" style="font-weight: 600; font-size: 16px;">
+            <div id="${this.TimeInputSimpleID}" LabelText="Time"></div>
+            <!-- Timezone Offset (advanced menu) -->
+            <div id="${this.TimezoneOffsetInputHolderID}" style="display:none;">
+                <div class="input-group mt-3">
+                    <span class="input-group-text gap-2 py-1" style="width: 136px;">
+                        <iconify-icon icon="stash:globe-timezone-light" width="35" height="35"></iconify-icon>Timezone
+                    </span>
+                    <input id="${this.TimezoneOffsetInputID}" type="text" class="form-control" placeholder="+00:00" style="font-weight: 600; font-size: 16px;">
+                </div>
             </div>
-        </div>
 
-        <div id="${this.GeoLocationInputID}" class="mt-3" LabelText="Map"></div>
-    `;
+            <div id="${this.GeoLocationInputID}" class="mt-3" LabelText="Map"></div>
+        `;
     }
 
-    // Method to get the time and location as a JSON object
-    // exp out : {"StdTime":"13:54 25/10/1992 +08:00","Location":{"Name":"Taiping","Longitude":103.82,"Latitude":1.352}}
+    /**
+     * Method to get the time and location as a JSON object.
+     * Example output: {"StdTime":"13:54 25/10/1992 +08:00","Location":{"Name":"Taiping","Longitude":103.82,"Latitude":1.352}}
+     */
     async getTimeJson() {
-        // get the inputed location & time data
+        // Get the inputted location & time data
         const inputTime = this.TimeInputSimpleInstance.getInputDateTime();
         const inputLocation = this.GeoLocationInputInstance.getInputLocation();
 
         // Construct the StdTime string in the format "HH:MM DD/MM/YYYY tmz"
-        var timeZone = await this.getTimezoneForLocationFromApi(inputLocation.Name, inputLocation.Latitude, inputLocation.Longitude, inputTime.Hour24, inputTime.Minute, inputTime.Date, inputTime.Month, inputTime.Year); // Format: +08:00
+        let timeZone;
+
+        // Check if the user modified the timezone offset 
+        // TODO NOTE: server does not respect inputed timezone
+        if (this.userModifiedTimezoneOffset) {
+            timeZone = $(`#${this.TimezoneOffsetInputID}`).val(); // Get the value from the input field
+        } else {
+            // Call API to get exact timezone for location at given time
+            timeZone = await this.getTimezoneForLocationFromApi(
+                inputLocation.Name,
+                inputLocation.Latitude,
+                inputLocation.Longitude,
+                inputTime.Hour24,
+                inputTime.Minute,
+                inputTime.Date,
+                inputTime.Month,
+                inputTime.Year
+            ); // Format: +08:00
+        }
+
         const stdTime = `${inputTime.Hour24}:${inputTime.Minute} ${inputTime.Date}/${inputTime.Month}/${inputTime.Year} ${timeZone}`;
 
         // Construct the timeObject with StdTime and Location properties
@@ -3561,9 +3596,8 @@ class TimeLocationInput {
     }
 
     async getTimezoneForLocationFromApi(locationName, latitude, longitude, hour, minute, date, month, year) {
-
         // Construct API URL
-        const apiUrl = `${VedAstro.ApiDomain}/Calculate/GeoLocationToTimezone/Location/${locationName}/Coordinates/${latitude},${longitude}/Time/${hour}:${minute}/${date}/${month}/${year}/+00:00`;
+        const apiUrl = `${VedAstro.ApiDomain}/Calculate/GeoLocationToTimezone/Location/${encodeURIComponent(locationName)}/Coordinates/${latitude},${longitude}/Time/${hour}:${minute}/${date}/${month}/${year}/+00:00`;
 
         // Make API call and handle response
         const response = await fetch(apiUrl);
@@ -3571,8 +3605,16 @@ class TimeLocationInput {
         const data = await response.json();
         if (data.Status === "Pass") {
             return data.Payload.GeoLocationToTimezone;
-        }
+        } else {
+            // Handle error, notify the user
+            Swal.fire({
+                icon: 'error',
+                title: 'Auto detect timezone failed!',
+                text: 'Could not detect accurate timezone for given location & time. Try input manually.'
+            });
 
+            return "+00:00"; // Default to UTC if API call fails
+        }
     }
 
     static getSystemTimezone() {
@@ -3639,9 +3681,18 @@ class TimeLocationInput {
     setInputDateTime(birthTime) {
         this.TimeInputSimpleInstance.setInputDateTime(birthTime);
         this.GeoLocationInputInstance.setInputLocation(birthTime.Location);
+
+        // Extract the timezone offset from birthTime.StdTime
+        const stdTime = birthTime.StdTime; // "13:54 25/10/1992 +08:00"
+        const parts = stdTime.split(' ');
+        const timezoneOffset = parts[2]; // "+08:00"
+
+        // Set the timezone offset in the input field
+        $(`#${this.TimezoneOffsetInputID}`).val(timezoneOffset);
     }
 
 }
+
 
 //Helps to create a table with astro data columns
 //TODO Marked for oblivion replaced with AllAstroDataTable

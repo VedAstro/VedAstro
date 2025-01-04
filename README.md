@@ -246,13 +246,15 @@ Then you know your code is right, and **has a place for it in this universe**.
 # 🙏 Special Thanks
 <img src="https://pics.paypal.com/00/p/ZjU4ZjZiMjEtNDE0Ny00MGExLTg2ZTMtNzkxOTQ1MTI4Mzc0/image_34.PNG" width="100"/>
 
-**Leslie Choi** : Sponsored & believed in the project even when work was only half done.
+**Leslie Choi** : Believed in the project even when work was only half done.
 
+<img src="https://play-lh.googleusercontent.com/Rya_zHj8gLRk3uenRehcLbfhSj-fushukfQH-JbtO2-hbJTRyr43F42Z9CrypGMacyY=w240-h480-rw" width="100"/>
+
+**[Swarn Siddhi](https://swarnsiddhi.com/)** : The makers of this awesome app keep this VedAstro project alive 
 
 <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="100"/>
 
 **JetBrains** : Gave free "ReSharper License" that made coding life easier.
-
 
 # ❤️ Social
 Just **Like** & **Share** our social pages and it'll be a **big** help already!

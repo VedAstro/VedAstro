@@ -7914,3 +7914,206 @@ class PersonListViewer {
     }
 }
 
+class ApiMethodViewer {
+    // Class properties
+    ElementID = "";
+    apiMethodData = null;
+    timeInputInstances = {}; // To store instances of TimeLocationInput
+    timeLocationInputParams = []; // To store IDs and names of time parameters
+
+    // Constructor to initialize the object
+    constructor(elementId, apiMethodData) {
+        // Assign the provided elementId to the ElementID property
+        this.ElementID = elementId;
+
+        // Assign the provided API method data to a property
+        this.apiMethodData = apiMethodData;
+
+        // Call the method to initialize the main body
+        this.initializeMainBody();
+    }
+
+    // Method to initialize the main body 
+    async initializeMainBody() {
+        // Empty the content of the element with the given ID
+        $(`#${this.ElementID}`).empty();
+
+        // Generate the HTML and inject it into the element
+        $(`#${this.ElementID}`).html(this.generateHtmlBody());
+
+        // Initialize tippy.js on elements with class 'parameter-label'
+        tippy(`#${this.ElementID} .parameter-label`, {
+            content(reference) {
+                return reference.getAttribute('data-tippy-content');
+            },
+            allowHTML: true,
+            arrow: true,
+            placement: 'right',
+            theme: 'light-border'
+        });
+
+        // Initialize TimeLocationInput instances
+        this.timeInputInstances = {}; // reset the dictionary
+        this.timeLocationInputParams.forEach(item => {
+            const timeLocationInstance = new TimeLocationInput(item.id);
+            // Save the instance in the timeInputInstances dictionary with paramName as key
+            this.timeInputInstances[item.paramName] = timeLocationInstance;
+        });
+
+        // Add event listener to the "Generate" button
+        const generateButton = document.getElementById(`${this.ElementID}_generateButton`);
+        generateButton.addEventListener('click', () => this.onGenerateButtonClick());
+    }
+
+    // Method to generate the HTML
+    generateHtmlBody() {
+        const method = this.apiMethodData;
+        const methodInfo = method.MethodInfo;
+
+        // Storage for TimeInput IDs and names
+        const timeLocationInputParams = [];
+
+        // Generate HTML
+
+        let html = `
+        <div class="container mt-3">
+            <h3>${methodInfo.Name}</h3>
+            <p>${method.Description}</p>
+            <form id="${this.ElementID}_form">
+        `;
+
+        // For each parameter
+        methodInfo.Parameters.forEach(param => {
+            const paramName = param.Name;
+            const paramDescription = param.Description;
+            const paramType = param.ParameterType;
+
+            let inputHtml = '';
+
+            // Depending on the paramType, create suitable input
+            if (paramType === 'VedAstro.Library.Time') {
+                // For Time parameters, we can create a TimeLocationInput component
+                // Generate unique IDs for the input elements
+                const timeInputId = `${this.ElementID}_timeInput_${paramName}`;
+
+                inputHtml = `
+                <div class="mb-3">
+                    <label class="form-label parameter-label" data-tippy-content="${paramDescription || 'No description'}">${paramName}</label>
+                    <div id="${timeInputId}"></div>
+                </div>
+                `;
+
+                // Store the ID and paramName for later initialization
+                timeLocationInputParams.push({ id: timeInputId, paramName: paramName });
+
+            } else if (paramType === 'System.Int32' || paramType === 'System.Double') {
+                // For integer or double parameters, create number input
+                const inputId = `${this.ElementID}_input_${paramName}`;
+                inputHtml = `
+                <div class="mb-3">
+                    <label class="form-label parameter-label" data-tippy-content="${paramDescription || 'No description'}">${paramName}</label>
+                    <input type="number" class="form-control" id="${inputId}" name="${paramName}">
+                </div>
+                `;
+            } else {
+                // For other types, use text input
+                const inputId = `${this.ElementID}_input_${paramName}`;
+                inputHtml = `
+                <div class="mb-3">
+                    <label class="form-label parameter-label" data-tippy-content="${paramDescription || 'No description'}">${paramName}</label>
+                    <input type="text" class="form-control" id="${inputId}" name="${paramName}">
+                </div>
+                `;
+            }
+
+            html += inputHtml;
+        });
+
+        // Add Generate button
+        const generateButtonId = `${this.ElementID}_generateButton`;
+        html += `
+            <button type="button" class="btn btn-primary" id="${generateButtonId}">Generate</button>
+        </form>
+        <div id="${this.ElementID}_output" class="mt-3">
+        </div>
+        </div>
+        `;
+
+        // Store the timeInputParams array for later use
+        this.timeLocationInputParams = timeLocationInputParams;
+
+        return html;
+    }
+
+    // Method to handle the "Generate" button click
+    async onGenerateButtonClick() {
+        const method = this.apiMethodData;
+        const methodInfo = method.MethodInfo;
+
+        let url = `${VedAstro.ApiDomain}/Calculate/${methodInfo.Name}/`;
+
+        const params = methodInfo.Parameters;
+
+        for (let param of params) {
+            const paramName = param.Name;
+            const paramType = param.ParameterType;
+
+            let paramValue = null;
+
+            if (paramType === 'VedAstro.Library.Time') {
+                const timeInputInstance = this.timeInputInstances[paramName];
+                if (!timeInputInstance.isValid()) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: `Please fill in the ${paramName} field correctly.`
+                    });
+                    return;
+                }
+                // Get the time object
+                const timeData = await timeInputInstance.getTimeJson(); // returns object with StdTime and Location
+
+                const stdTime = timeData.StdTime; // "13:54 25/10/1992 +08:00"
+
+                // Build the URL segment for the Time parameter
+                const [timePart, datePart, tzPart] = stdTime.split(' ');
+                const [day, month, year] = datePart.split('/');
+                const locationName = timeData.Location.Name;
+                const timeUrlSegment = `Location/${encodeURIComponent(locationName)}/Time/${timePart}/${day}/${month}/${year}/${tzPart}/`;
+
+                url += timeUrlSegment;
+            } else if (paramType === 'System.Int32' || paramType === 'System.Double') {
+                const inputElement = document.getElementById(`${this.ElementID}_input_${paramName}`);
+                paramValue = inputElement.value;
+                if (paramValue === "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: `Please fill in the ${paramName} field.`
+                    });
+                    return;
+                }
+                // For int parameters, we can append directly
+                url += `${paramValue}/`;
+            } else {
+                // For other types, get the value from input field
+                const inputElement = document.getElementById(`${this.ElementID}_input_${paramName}`);
+                paramValue = inputElement.value;
+                if (paramValue === "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: `Please fill in the ${paramName} field.`
+                    });
+                    return;
+                }
+                // Append to URL
+                url += `${paramName}/${encodeURIComponent(paramValue)}/`;
+            }
+        }
+
+        // Remove any double slashes
+        url = url.replace(/([^:]\/)\/+/g, "$1");
+
+        // Output the generated URL
+        const outputDiv = document.getElementById(`${this.ElementID}_output`);
+        outputDiv.innerHTML = `<p><strong>Generated URL:</strong></p><p><a href="${url}" target="_blank">${url}</a></p>`;
+    }
+}

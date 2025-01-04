@@ -164,6 +164,7 @@ function animateHighlightElement(elmInput) {
     $elm.fadeTo(100, 0.4, function () { $(this).fadeTo(500, 1.0); });
 
 }
+
 function printConsoleMessage() {
     $.get("./data/ConsoleGreeting.txt")
         .done((result) => {
@@ -171,17 +172,15 @@ function printConsoleMessage() {
         });
 }
 
-
 //-----------------CODE TO RUN
 
 //print console greeting (file in wwwroot)
 printConsoleMessage();
 
-
 new PageTopNavbar("VedAstro","PageTopNavbar", [
     { icon: "mdi:book-open-page-variant-outline", text: "Guide", href: "/" },
-    { icon: "carbon:gateway-api", text: "Open API", href: "/" },
-    { icon: "openmoji:love-letter", text: "Donate", href: "/" },
+    { icon: "carbon:gateway-api", text: "Open API", href: "/APIBuilder.html" },
+    { icon: "openmoji:love-letter", text: "Donate", href: "/Donate.html" },
 ], [
     { text: "Contact Us", href: "./ContactUs.html" },
     { text: "About", href: "./About.html" },
@@ -243,11 +242,11 @@ const links = [
         icon: 'svg-spinners:clock',
         text: 'Good Time Finder'
     },
-    //{
-    //    url: 'APIBuilder',
-    //    icon: 'mdi:cloud-tags',
-    //    text: 'API Builder'
-    //},
+    {
+        url: 'APIBuilder',
+        icon: 'mdi:cloud-tags',
+        text: 'API Builder'
+    },
     {
         url: 'Numerology',
         icon: 'fluent:text-number-format-20-filled',

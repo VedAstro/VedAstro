@@ -36,7 +36,7 @@ function loadExistingPersonData() {
     const selectedPersonStorageKey = new URL(window.location.href).searchParams.get('SelectedPersonStorageKey');
 
     if (selectedPersonStorageKey) {
-        const personJson = localStorage.getItem(selectedPersonStorageKey);
+        const personJson = sessionStorage.getItem(selectedPersonStorageKey);
         if (personJson) {
             originalPerson = new Person(JSON.parse(personJson));
 
@@ -113,10 +113,10 @@ async function OnClickSave() {
         //clear cached person list (will cause person drop down to fetch newly updated data from API)
         PersonSelectorBox.ClearPersonListCache('private');
 
-        // Update selected person in local storage
+        // Update selected person in session storage
         const selectedPersonStorageKey = new URL(window.location.href).searchParams.get('SelectedPersonStorageKey');
         if (selectedPersonStorageKey) {
-            localStorage.setItem(selectedPersonStorageKey, JSON.stringify(person));
+            sessionStorage.setItem(selectedPersonStorageKey, JSON.stringify(person));
         }
 
         // Hide loading indicator
@@ -178,10 +178,10 @@ async function OnClickDelete() {
             // Clear cached person list
             PersonSelectorBox.ClearPersonListCache('private');
 
-            // Remove selected person from local storage
+            // Remove selected person from session storage
             const selectedPersonStorageKey = new URL(window.location.href).searchParams.get('SelectedPersonStorageKey');
             if (selectedPersonStorageKey) {
-                localStorage.removeItem(selectedPersonStorageKey);
+                sessionStorage.removeItem(selectedPersonStorageKey);
             }
 
             // Hide loading indicator

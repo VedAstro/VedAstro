@@ -2294,8 +2294,8 @@ class PersonSelectorBox {
     */
     GetSelectedPerson() {
         try {
-            // Get the selected person from local storage
-            const selectedPersonJson = localStorage.getItem(this.SelectedPersonStorageKey);
+            // Get the selected person from session storage (so that unique across tabs)
+            const selectedPersonJson = sessionStorage.getItem(this.SelectedPersonStorageKey);
 
             if (!selectedPersonJson) { return null; }
 
@@ -2315,8 +2315,8 @@ class PersonSelectorBox {
      * Sets the selected person.
      */
     SetSelectedPerson(person) {
-        // Save the selected person ID to local storage
-        localStorage.setItem(this.SelectedPersonStorageKey, JSON.stringify(person));
+        // Save the selected person ID to session storage (so that unique across tabs)
+        sessionStorage.setItem(this.SelectedPersonStorageKey, JSON.stringify(person));
     }
 
     // Save a reference to this instance for global access
@@ -2474,8 +2474,8 @@ class PersonSelectorBox {
         // Auto set selected person from previous selection
         let selectedPersonText = 'Select Person'; //default
 
-        //check if any person has been selected before (LocalStorage)
-        let personFromStorage = JSON.parse(localStorage.getItem(this.SelectedPersonStorageKey));
+        //check if any person has been selected before (session storage)
+        let personFromStorage = JSON.parse(sessionStorage.getItem(this.SelectedPersonStorageKey));
         if (personFromStorage && Object.keys(personFromStorage).length !== 0) {
             let parsedPerson = new Person(personFromStorage);
             selectedPersonText = parsedPerson.DisplayName;
@@ -7891,8 +7891,8 @@ class PersonListViewer {
         // Generate a unique storage key, for example the person ID
         const selectedPersonStorageKey = `SelectedPerson-${person.PersonId}`;
 
-        // Save the person data into local storage
-        localStorage.setItem(selectedPersonStorageKey, JSON.stringify(person));
+        // Save the person data into session storage (so that unique across tabs)
+        sessionStorage.setItem(selectedPersonStorageKey, JSON.stringify(person));
 
         // Navigate to EditPerson.html with the query parameter using selectedPersonStorageKey
         window.location.href = `./EditPerson.html?SelectedPersonStorageKey=${selectedPersonStorageKey}`;

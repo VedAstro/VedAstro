@@ -66,11 +66,13 @@ async function OnClickSave() {
     // update new id, before saving into browser storage
     person.PersonId = newPersonId;
 
-    // after adding new person, set person as selected to make life easier for user (UX)
-    // use localStorage key set by caller in URL if any,
+    // After adding new person, set person as selected to make life easier for user (UX)
+    // Use sessionStorage key set by caller in URL if any,
     // this allows each new person to be auto selected on a multi selector page 
     const selectedPersonStorageKey = new URL(window.location.href).searchParams.get('SelectedPersonStorageKey');
-    if (selectedPersonStorageKey) { localStorage.setItem(selectedPersonStorageKey, JSON.stringify(person)); } 
+    if (selectedPersonStorageKey) {
+        sessionStorage.setItem(selectedPersonStorageKey, JSON.stringify(person));
+    }
 
     //clear cached person list (will cause person drop down to fetch new)
     PersonSelectorBox.ClearPersonListCache('private');

@@ -7926,35 +7926,189 @@ class PersonListViewer {
     }
 }
 
+/**
+ * Represents an API method viewer component.
+ * This class generates the HTML for selecting and invoking API methods
+ */
 class ApiMethodViewer {
     // Class properties
     ElementID = "";
-    apiMethodData = null;
+    apiMethods = []; // To store the list of API methods
+    selectedMethodData = null; // The currently selected API method data
     timeInputInstances = {}; // To store instances of TimeLocationInput
     timeLocationInputParams = []; // To store IDs and names of time parameters
+    SearchInputElementClass = "searchInputElementClass"; // Class for the search input
 
     // Constructor to initialize the object
-    constructor(elementId, apiMethodData) {
+    constructor(elementId) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
 
-        // Assign the provided API method data to a property
-        this.apiMethodData = apiMethodData;
+        // Save a reference to this instance
+        this.saveInstanceReference();
 
-        // Call the method to initialize the main body
+        // Initialize the main body
         this.initializeMainBody();
     }
 
-    // Method to initialize the main body 
+    // Save a reference to this instance for global access
+    saveInstanceReference() {
+        if (!window.vedastro) {
+            window.vedastro = {};
+        }
+        if (!window.vedastro.ApiMethodViewerInstances) {
+            window.vedastro.ApiMethodViewerInstances = {};
+        }
+        window.vedastro.ApiMethodViewerInstances[this.ElementID] = this;
+    }
+
+    // Method to initialize the main body
     async initializeMainBody() {
         // Empty the content of the element with the given ID
         $(`#${this.ElementID}`).empty();
+
+        // Fetch the API methods
+        await this.fetchApiMethods();
 
         // Generate the HTML and inject it into the element
         $(`#${this.ElementID}`).html(this.generateHtmlBody());
 
         // Initialize help text icons
         HelpTextIcon.InitAllIn(`#${this.ElementID}`);
+
+        // Bind event listener to the "Generate" button
+        const generateButton = document.getElementById(`${this.ElementID}_generateButton`);
+        generateButton.addEventListener('click', () => this.onGenerateButtonClick());
+    }
+
+    // Method to fetch API methods from the server
+    async fetchApiMethods() {
+        try {
+            const response = await fetch(`${VedAstro.ApiDomain}/ListCalls`);
+            const data = await response.json();
+
+            if (data.Status === "Pass") {
+                this.apiMethods = data.Payload;
+            } else {
+                console.error('Failed to retrieve API methods:', data.Payload);
+            }
+        } catch (error) {
+            console.error('Error fetching API methods:', error);
+        }
+    }
+
+    // Method to generate the HTML
+    generateHtmlBody() {
+        // Generate the method list HTML
+        let methodListHTML = this.generateMethodListHtml();
+
+        let html = `
+        <div class="container mt-3">
+            <div class="">
+                <div class="fw-bold hstack gap-2 d-flex" style="max-width:667px;">
+                    <div class="" style="">
+                        <iconify-icon icon="flat-color-icons:calculator" width="38" height="38"></iconify-icon>
+                    </div>
+                    <h5 class="mt-2 me-auto">Calculator </h5>
+                </div>
+                <hr class="mt-0 mb-2">
+            </div>
+            <div class="mb-3">
+                <label class="form-label hstack gap-2">
+                    Select API Method
+                </label>
+                <div class="hstack">
+                    <div class="btn-group w-auto" style="min-width:231px !important;">
+                        <button onclick="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="selected-method-name" style="cursor: pointer;white-space: nowrap; display: inline-table;" >Select Method</div>
+                        </button>
+                        <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
+                            <!-- SEARCH INPUT -->
+                            <div class="hstack gap-2">
+                                <input onkeyup="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onKeyUpSearchBar(event)" type="text" class="${this.SearchInputElementClass} form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                                <div class="mb-2" style="cursor: pointer;">
+                                    <iconify-icon icon="mingcute:list-search-fill" width="25" height="25"></iconify-icon>
+                                </div>
+                            </div>
+                            <!-- METHOD LIST -->
+                            ${methodListHTML}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Parameters will be loaded here -->
+            <div id="${this.ElementID}_parameters"></div>
+            <button id="${this.ElementID}_generateButton" style=" place-content: center !important;font-weight: 500 !important;font-size: 17px !important; height:37.1px; width: fit-content;" class="btn-sm w-100 hstack gap-2 btn-success btn " disabled>
+                <iconify-icon icon="flat-color-icons:flash-auto" width="25" height="25"></iconify-icon>
+                Generate
+            </button>
+            <div id="${this.ElementID}_output" class="mt-3">
+            </div>
+        </div>
+        `;
+
+        return html;
+    }
+
+    // Method to generate the method list HTML
+    generateMethodListHtml() {
+        const html = this.apiMethods.map((method) => {
+            return `<li onClick="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onClickMethodName('${method.MethodInfo.Name}')" class="dropdown-item method-item" style="cursor: pointer;">${method.MethodInfo.Name}</li>`;
+        }).join("");
+
+        return html;
+    }
+
+    // Handle click on the dropdown button
+    onClickDropDown(event) {
+        // Set focus to the search text box for instant input
+        // Note: Only on desktop, skip for mobile, because keyboard takes screen space
+        if (!CommonTools.IsMobile()) {
+            $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
+        }
+    }
+
+    // Handle keyup event on the search input field
+    onKeyUpSearchBar(event) {
+        // Ignore certain keys to prevent unnecessary filtering
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space", "ControlLeft", "ControlRight", "AltLeft", "AltRight", "ShiftLeft", "ShiftRight", "Enter", "Tab", "Escape"].includes(event.code)) {
+            return;
+        }
+
+        // Get the search text from the input field
+        const searchText = event.target.value.toLowerCase();
+
+        // Filter only the method items based on the search text
+        var allMethodDropItems = $(`#${this.ElementID}`).find('.dropdown-menu li.method-item');
+        allMethodDropItems.each(function () {
+            const methodName = $(this).text().toLowerCase();
+            if (methodName.includes(searchText)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+    // Handle click on a method name in the dropdown
+    async onClickMethodName(methodName) {
+        // Find the selected method data
+        this.selectedMethodData = this.apiMethods.find(method => method.MethodInfo.Name === methodName);
+
+        // Update the selected method name in the button
+        const buttonTextHolder = $(`#${this.ElementID}`).find('.selected-method-name');
+        buttonTextHolder.html(methodName);
+
+        // Enable the Generate button
+        const generateButton = document.getElementById(`${this.ElementID}_generateButton`);
+        generateButton.disabled = false;
+
+        // Generate the parameter inputs
+        const parametersDiv = document.getElementById(`${this.ElementID}_parameters`);
+        parametersDiv.innerHTML = this.generateParametersHtml();
+
+        // Initialize help text icons in the parameters
+        HelpTextIcon.InitAllIn(`#${this.ElementID}_parameters`);
 
         // Initialize TimeLocationInput instances
         this.timeInputInstances = {}; // reset the dictionary
@@ -7968,47 +8122,17 @@ class ApiMethodViewer {
             // Save the instance in the timeInputInstances dictionary with paramName as key
             this.timeInputInstances[item.paramName] = timeLocationInstance;
         });
-
-        // Add event listener to the "Generate" button
-        const generateButton = document.getElementById(`${this.ElementID}_generateButton`);
-        generateButton.addEventListener('click', () => this.onGenerateButtonClick());
     }
 
-    // Method to generate the HTML
-    generateHtmlBody() {
-        const method = this.apiMethodData;
+    // Method to generate the HTML for parameters
+    generateParametersHtml() {
+        const method = this.selectedMethodData;
         const methodInfo = method.MethodInfo;
 
         // Storage for TimeInput IDs and names
         const timeLocationInputParams = [];
 
-        // Generate HTML
-
-        let html = `
-        <div class="container mt-3">
-            <div class="">
-                <div class="fw-bold hstack gap-2 d-flex" style="max-width:667px;">
-                    <div class="" style="">
-                        <iconify-icon icon="flat-color-icons:calculator" width="38" height="38"></iconify-icon>
-                    </div>
-                    <h5 class="mt-2 me-auto">Calculator </h5>
-                </div>
-                <hr class="mt-0 mb-2">
-            </div>
-            <h3>${methodInfo.Name}</h3>
-            <p>${method.Description}</p>
-
-            <div class="">
-                <div class="fw-bold hstack gap-2 d-flex" style="max-width:667px;">
-                    <div class="" style="">
-                        <iconify-icon icon="flat-color-icons:multiple-inputs" width="38" height="38"></iconify-icon>
-                    </div>
-                    <h5 class="mt-2 me-auto">Input Parameters </h5>
-                </div>
-                <hr class="mt-0 mb-2">
-            </div>
-            <form id="${this.ElementID}_form">
-        `;
+        let html = '';
 
         // For each parameter
         methodInfo.Parameters.forEach(param => {
@@ -8074,19 +8198,6 @@ class ApiMethodViewer {
             html += inputHtml;
         });
 
-        // Add Generate button
-        const generateButtonId = `${this.ElementID}_generateButton`;
-        html += `
-                <button id="${generateButtonId}" style=" place-content: center !important;font-weight: 500 !important;font-size: 17px !important; height:37.1px; width: fit-content;" class="btn-sm w-100 hstack gap-2 btn-success btn ">
-                    <iconify-icon icon="flat-color-icons:flash-auto" width="25" height="25"></iconify-icon>
-                    Generate
-                </button>
-            </form>
-            <div id="${this.ElementID}_output" class="mt-3">
-            </div>
-        </div>
-        `;
-
         // Store the timeInputParams array for later use
         this.timeLocationInputParams = timeLocationInputParams;
 
@@ -8095,7 +8206,7 @@ class ApiMethodViewer {
 
     // Method to handle the "Generate" button click
     async onGenerateButtonClick() {
-        const method = this.apiMethodData;
+        const method = this.selectedMethodData;
         const methodInfo = method.MethodInfo;
 
         let url = `${VedAstro.ApiDomain}/Calculate/${methodInfo.Name}/`;
@@ -8113,7 +8224,7 @@ class ApiMethodViewer {
                 if (!timeInputInstance.isValid()) {
                     Swal.fire({
                         icon: 'error',
-                        title: `Please fill in the ${paramName} field correctly.`
+                        title: `Please fill in the <strong>"${CommonTools.CamelPascalCaseToSpaced(paramName)}"</strong> field correctly.`
                     });
                     return;
                 }
@@ -8135,7 +8246,7 @@ class ApiMethodViewer {
                 if (paramValue === "") {
                     Swal.fire({
                         icon: 'error',
-                        title: `Please fill in the ${paramName} field.`
+                        title: `Please fill in the <strong>"${CommonTools.CamelPascalCaseToSpaced(paramName)}"</strong> field.`
                     });
                     return;
                 }
@@ -8148,7 +8259,7 @@ class ApiMethodViewer {
                 if (paramValue === "") {
                     Swal.fire({
                         icon: 'error',
-                        title: `Please fill in the ${paramName} field.`
+                        title: `Please fill in the <strong>"${CommonTools.CamelPascalCaseToSpaced(paramName)}"</strong> field.`
                     });
                     return;
                 }
@@ -8178,20 +8289,83 @@ class ApiMethodViewer {
 
             <!--BUTTON ROW-->
             <div class="d-flex justify-content-between">
-                <button style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-primary btn">
+                <button id="${this.ElementID}_callApiButton" style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-success btn">
+                    <iconify-icon icon="ph:phone-call-light" width="25" height="25"></iconify-icon>
+                    Call API
+                </button>
+                <button id="${this.ElementID}_copyUrlButton" style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-primary btn">
+                    <iconify-icon icon="carbon:copy" width="25" height="25"></iconify-icon>
+                    Copy URL
+                </button>
+                <button id="${this.ElementID}_copyCodeButton" style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-primary btn">
                     <iconify-icon icon="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" width="25" height="25"></iconify-icon>
-                    Code
-                </button>
-                <button style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-primary btn">
-                    <iconify-icon icon="carbon:link" width="25" height="25" class="iconify iconify--carbon" aria-hidden="true" role="img"></iconify-icon>
-                    URL
-                </button>
-                <button class="btn-sm hstack gap-2 btn-success btn">
-                    <iconify-icon icon="ph:phone-call-light" width="25" height="25" class="iconify iconify--ph" aria-hidden="true" role="img"></iconify-icon>
-                    Test Call
+                    Copy Code
                 </button>
             </div>
+
+            <!--API Response-->
+            <div id="${this.ElementID}_apiResponse" class="mt-3"></div>
         </div>
             `;
+
+        // Add event listeners to the new buttons
+        // Call API button
+        document.getElementById(`${this.ElementID}_callApiButton`).addEventListener('click', () => this.callApi(url));
+
+        // Copy URL button
+        document.getElementById(`${this.ElementID}_copyUrlButton`).addEventListener('click', () => {
+            navigator.clipboard.writeText(url);
+            Swal.fire({
+                icon: 'success',
+                title: 'URL copied to clipboard'
+            });
+        });
+
+        // Copy Code button
+        document.getElementById(`${this.ElementID}_copyCodeButton`).addEventListener('click', () => {
+            const codeSnippet = `fetch('${url}')
+  .then(response => response.json())
+  .then(data => {
+    // Handle data
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });`;
+            navigator.clipboard.writeText(codeSnippet);
+            Swal.fire({
+                icon: 'success',
+                title: 'Code snippet copied to clipboard'
+            });
+        });
+    }
+
+    // Method to call the API and display the response
+    async callApi(url) {
+        const apiResponseDiv = document.getElementById(`${this.ElementID}_apiResponse`);
+
+        try {
+            CommonTools.ShowLoading();
+            const response = await fetch(url);
+            const data = await response.json();
+            CommonTools.HideLoading();
+
+            apiResponseDiv.innerHTML = `
+            <div class="mt-3">
+                <h5>API Response</h5>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            </div>
+            `;
+        } catch (error) {
+            CommonTools.HideLoading();
+            console.error('Error calling API:', error);
+            apiResponseDiv.innerHTML = `
+            <div class="mt-3">
+                <h5>API Response</h5>
+                <pre>Error: ${error}</pre>
+            </div>
+            `;
+        }
     }
 }
+

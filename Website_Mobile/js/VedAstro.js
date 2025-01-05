@@ -7938,6 +7938,7 @@ class ApiMethodViewer {
     timeInputInstances = {}; // To store instances of TimeLocationInput
     timeLocationInputParams = []; // To store IDs and names of time parameters
     SearchInputElementClass = "searchInputElementClass"; // Class for the search input
+    ApiDataStorageKey = "AllApiMethods"; // Key for local storage
 
     // Constructor to initialize the object
     constructor(elementId) {
@@ -7981,14 +7982,38 @@ class ApiMethodViewer {
         generateButton.addEventListener('click', () => this.onGenerateButtonClick());
     }
 
-    // Method to fetch API methods from the server
+    // Modified method to fetch API methods from the server or local storage
     async fetchApiMethods() {
+        // Check if data is in local storage
+        const storedData = localStorage.getItem(this.ApiDataStorageKey);
+        if (storedData) {
+            try {
+                const data = JSON.parse(storedData);
+
+                if (data.Status === "Pass") {
+                    console.log("Loaded API methods from local storage");
+                    this.apiMethods = data.Payload;
+                    return; // Return early since data is loaded from local storage
+                } else {
+                    // If data in local storage is invalid, remove it
+                    localStorage.removeItem(this.ApiDataStorageKey);
+                }
+            } catch (error) {
+                console.error("Error parsing stored data:", error);
+                // If there's an error parsing, remove the corrupted data
+                localStorage.removeItem(this.ApiDataStorageKey);
+            }
+        }
+
+        // If data not in local storage, fetch from server
         try {
             const response = await fetch(`${VedAstro.ApiDomain}/ListCalls`);
             const data = await response.json();
 
             if (data.Status === "Pass") {
                 this.apiMethods = data.Payload;
+                // Cache data in local storage
+                localStorage.setItem(this.ApiDataStorageKey, JSON.stringify(data));
             } else {
                 console.error('Failed to retrieve API methods:', data.Payload);
             }
@@ -7996,6 +8021,7 @@ class ApiMethodViewer {
             console.error('Error fetching API methods:', error);
         }
     }
+
 
     // Method to generate the HTML
     generateHtmlBody() {

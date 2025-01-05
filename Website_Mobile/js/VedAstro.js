@@ -8094,7 +8094,9 @@ class ApiMethodViewer {
     // Method to generate the method list HTML
     generateMethodListHtml() {
         const html = this.apiMethods.map((method) => {
-            return `<li onClick="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onClickMethodName('${method.MethodInfo.Name}')" class="dropdown-item method-item" style="cursor: pointer;">${method.MethodInfo.Name}</li>`;
+            const formattedName = CommonTools.CamelPascalCaseToSpaced(method.MethodInfo.Name);
+            const description = method.Description || '';
+            return `<li onClick="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onClickMethodName('${method.MethodInfo.Name}')" class="dropdown-item method-item" style="cursor: pointer;" data-method-name="${method.MethodInfo.Name.toLowerCase()}" data-formatted-name="${formattedName.toLowerCase()}" data-description="${description.toLowerCase()}">${formattedName}</li>`;
         }).join("");
 
         return html;
@@ -8119,11 +8121,14 @@ class ApiMethodViewer {
         // Get the search text from the input field
         const searchText = event.target.value.toLowerCase();
 
-        // Filter only the method items based on the search text
+        // Filter method items based on the search text
         var allMethodDropItems = $(`#${this.ElementID}`).find('.dropdown-menu li.method-item');
         allMethodDropItems.each(function () {
-            const methodName = $(this).text().toLowerCase();
-            if (methodName.includes(searchText)) {
+            const methodName = $(this).data('method-name'); // method name in lowercase
+            const formattedName = $(this).data('formatted-name'); // formatted name in lowercase
+            const description = $(this).data('description'); // description in lowercase
+
+            if (methodName.includes(searchText) || formattedName.includes(searchText) || description.includes(searchText)) {
                 $(this).show();
             } else {
                 $(this).hide();
@@ -8136,9 +8141,11 @@ class ApiMethodViewer {
         // Find the selected method data
         this.selectedMethodData = this.apiMethods.find(method => method.MethodInfo.Name === methodName);
 
+        const formattedName = CommonTools.CamelPascalCaseToSpaced(methodName);
+
         // Update the selected method name in the button
         const buttonTextHolder = $(`#${this.ElementID}`).find('.selected-method-name');
-        buttonTextHolder.html(methodName);
+        buttonTextHolder.html(formattedName);
 
         // Enable the Generate button
         const generateButton = document.getElementById(`${this.ElementID}_generateButton`);

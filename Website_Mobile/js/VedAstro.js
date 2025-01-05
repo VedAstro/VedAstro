@@ -8043,7 +8043,7 @@ class ApiMethodViewer {
             <div class="mb-3">
                 <div class="hstack">
                     <div class="btn-group w-100" style="min-width:231px !important;">
-                        <button onclick="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button onclick="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-primary text-centre" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="selected-method-name" style="cursor: pointer;white-space: nowrap; display: inline-table;" >Select Method</div>
                         </button>
                         <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
@@ -8060,7 +8060,10 @@ class ApiMethodViewer {
                     </div>
                 </div>
             </div>
-          
+
+            <!-- Method Description -->
+            <div id="${this.ElementID}_methodDescription" class="mt-2"></div>
+
             <div class="">
                 <div class="fw-bold hstack gap-2 d-flex">
                     <iconify-icon icon="flat-color-icons:multiple-inputs" width="38" height="38"></iconify-icon>
@@ -8146,6 +8149,11 @@ class ApiMethodViewer {
         // Enable the Generate button
         const generateButton = document.getElementById(`${this.ElementID}_generateButton`);
         generateButton.disabled = false;
+
+        // Update the method description
+        const methodDescriptionDiv = document.getElementById(`${this.ElementID}_methodDescription`);
+        const description = this.selectedMethodData.Description || 'No description available.';
+        methodDescriptionDiv.innerHTML = `<p><iconify-icon class="me-1" style="margin-bottom: -7px;" icon="icon-park:info" width="25" height="25"></iconify-icon>${description}</p>`;
 
         // Generate the parameter inputs
         const parametersDiv = document.getElementById(`${this.ElementID}_parameters`);
@@ -8236,7 +8244,7 @@ class ApiMethodViewer {
                 `;
 
             } else if (paramType === 'VedAstro.Library.PlanetName') {
-                // New code for PlanetName parameter
+                // For PlanetName parameters, create a dropdown
                 const inputId = `${this.ElementID}_input_${paramName}`;
 
                 // Generate options: All, Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu
@@ -8244,18 +8252,18 @@ class ApiMethodViewer {
                 const options = planets.map(planet => `<option value="${planet}">${planet}</option>`).join('');
 
                 inputHtml = `
-            <div class="mb-3">
-                <label class="form-label hstack gap-2">
-                    ${formatedParamName}
-                    <div class="help-text-icon">
-                        ${paramDescription || 'No description'}
-                    </div>
-                </label>
-                <select class="form-control" id="${inputId}" name="${paramName}">
-                    ${options}
-                </select>
-            </div>
-            `;
+                <div class="mb-3">
+                    <label class="form-label hstack gap-2">
+                        ${formatedParamName}
+                        <div class="help-text-icon">
+                            ${paramDescription || 'No description'}
+                        </div>
+                    </label>
+                    <select class="form-control" id="${inputId}" name="${paramName}">
+                        ${options}
+                    </select>
+                </div>
+                `;
             } else if (paramType === 'System.Int32' || paramType === 'System.Double') {
                 // For integer or double parameters, create number input
                 const inputId = `${this.ElementID}_input_${paramName}`;

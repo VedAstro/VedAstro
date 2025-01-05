@@ -7960,6 +7960,11 @@ class ApiMethodViewer {
         this.timeInputInstances = {}; // reset the dictionary
         this.timeLocationInputParams.forEach(item => {
             const timeLocationInstance = new TimeLocationInput(item.id);
+            // If default value exists, set it
+            if (item.defaultValue) {
+                // Assuming item.defaultValue is in a suitable format for setInputDateTime()
+                timeLocationInstance.setInputDateTime(item.defaultValue);
+            }
             // Save the instance in the timeInputInstances dictionary with paramName as key
             this.timeInputInstances[item.paramName] = timeLocationInstance;
         });
@@ -7981,16 +7986,37 @@ class ApiMethodViewer {
 
         let html = `
         <div class="container mt-3">
+            <div class="">
+                <div class="fw-bold hstack gap-2 d-flex" style="max-width:667px;">
+                    <div class="" style="">
+                        <iconify-icon icon="flat-color-icons:calculator" width="38" height="38"></iconify-icon>
+                    </div>
+                    <h5 class="mt-2 me-auto">Calculator </h5>
+                </div>
+                <hr class="mt-0 mb-2">
+            </div>
             <h3>${methodInfo.Name}</h3>
             <p>${method.Description}</p>
+
+            <div class="">
+                <div class="fw-bold hstack gap-2 d-flex" style="max-width:667px;">
+                    <div class="" style="">
+                        <iconify-icon icon="flat-color-icons:multiple-inputs" width="38" height="38"></iconify-icon>
+                    </div>
+                    <h5 class="mt-2 me-auto">Input Parameters </h5>
+                </div>
+                <hr class="mt-0 mb-2">
+            </div>
             <form id="${this.ElementID}_form">
         `;
 
         // For each parameter
         methodInfo.Parameters.forEach(param => {
             const paramName = param.Name;
+            const formatedParamName = CommonTools.CamelPascalCaseToSpaced(param.Name);
             const paramDescription = param.Description;
             const paramType = param.ParameterType;
+            const defaultValue = param.DefaultValue || '';
 
             let inputHtml = '';
 
@@ -8003,7 +8029,7 @@ class ApiMethodViewer {
                 inputHtml = `
                 <div class="mb-3">
                     <label class="form-label hstack gap-2">
-                        ${paramName}
+                        ${formatedParamName}
                         <div class="help-text-icon">
                             ${paramDescription || 'No description'}
                         </div>
@@ -8012,8 +8038,8 @@ class ApiMethodViewer {
                 </div>
                 `;
 
-                // Store the ID and paramName for later initialization
-                timeLocationInputParams.push({ id: timeInputId, paramName: paramName });
+                // Store the ID, paramName, and defaultValue for later initialization
+                timeLocationInputParams.push({ id: timeInputId, paramName: paramName, defaultValue });
 
             } else if (paramType === 'System.Int32' || paramType === 'System.Double') {
                 // For integer or double parameters, create number input
@@ -8021,12 +8047,12 @@ class ApiMethodViewer {
                 inputHtml = `
                 <div class="mb-3">
                     <label class="form-label hstack gap-2">
-                        ${paramName}
+                        ${formatedParamName}
                         <div class="help-text-icon">
                             ${paramDescription || 'No description'}
                         </div>
                     </label>
-                    <input type="number" class="form-control" id="${inputId}" name="${paramName}">
+                    <input type="number" class="form-control" id="${inputId}" name="${paramName}" value="${defaultValue}">
                 </div>
                 `;
             } else {
@@ -8035,12 +8061,12 @@ class ApiMethodViewer {
                 inputHtml = `
                 <div class="mb-3">
                     <label class="form-label hstack gap-2">
-                        ${paramName}
+                        ${formatedParamName}
                         <div class="help-text-icon">
                             ${paramDescription || 'No description'}
                         </div>
                     </label>
-                    <input type="text" class="form-control" id="${inputId}" name="${paramName}">
+                    <input type="text" class="form-control" id="${inputId}" name="${paramName}" value="${defaultValue}">
                 </div>
                 `;
             }
@@ -8051,10 +8077,13 @@ class ApiMethodViewer {
         // Add Generate button
         const generateButtonId = `${this.ElementID}_generateButton`;
         html += `
-            <button type="button" class="btn btn-primary" id="${generateButtonId}">Generate</button>
-        </form>
-        <div id="${this.ElementID}_output" class="mt-3">
-        </div>
+                <button id="${generateButtonId}" style=" place-content: center !important;font-weight: 500 !important;font-size: 17px !important; height:37.1px; width: fit-content;" class="btn-sm w-100 hstack gap-2 btn-success btn ">
+                    <iconify-icon icon="flat-color-icons:flash-auto" width="25" height="25"></iconify-icon>
+                    Generate
+                </button>
+            </form>
+            <div id="${this.ElementID}_output" class="mt-3">
+            </div>
         </div>
         `;
 
@@ -8134,49 +8163,35 @@ class ApiMethodViewer {
         // Output the generated URL
         const outputDiv = document.getElementById(`${this.ElementID}_output`);
         outputDiv.innerHTML = `
-                <div id="ParamOutputOptionsPanel" class="vstack gap-3" style="">
-                <div class="" style="text-align: center;" _bl_4085="">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--flat-color-icons" width="80" height="80" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" data-icon="flat-color-icons:down" data-width="80"><g fill="#3F51B5"><path d="M24 44L12.3 30h23.4z"></path><path d="M20 6h8v27h-8z"></path></g></svg>
-                </div>
 
-                    <div class="vstack gap-1" style="margin-top: -32px;"><span style="font-size: 14px; color: #8f8f8f;">URL</span>
-                        <kbd id="UrlDisplayOut" style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">${url}</kbd></div>
+        <div id="ParamOutputOptionsPanel" class="vstack gap-3" style="">
+            <!--ARROW DOWN ICON-->
+            <div class="" style="text-align: center;">
+                <iconify-icon icon="flat-color-icons:down" width="80" height="80"></iconify-icon>
+            </div>
 
-                    <div class="d-flex justify-content-center gap-3">
-                                    <style>
-                    .no-dropdown-arrow.dropdown-toggle::after {
-                        display: none !important;
-                    }
-                </style>
-                    <button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm iconOnlyButton btn-primary btn " _bl_4086=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--streamline" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 14 14" data-icon="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" data-width="25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect width="13" height="13" x=".5" y=".5" rx="1"></rect><path d="M.5 4h13m-9 3L3 8.5L4.5 10M10 7l1.5 1.5L10 10m-3.5.5L8 6"></path></g></svg></button>
+            <!--URL OUT-->
+            <div class="vstack gap-1" style="margin-top: -32px;">
+                <span style="font-size: 14px; color: #8f8f8f;">URL</span>
+                <kbd id="UrlDisplayOut" style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">${url}</kbd>
+            </div>
 
-                        <style>
-    .no-dropdown-arrow.dropdown-toggle::after {
-        display: none !important;
-    }
-</style><div style="font-family: 'Lexend Deca', serif !important;" class="dropdown "><button style=" height:37.1px; width: fit-content;" class="btn-sm dropdown-toggle hstack gap-2 iconButton btn-primary btn " type="button" data-bs-toggle="dropdown" aria-expanded="false" _bl_4087=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256" data-icon="ph:code-fill" data-width="25"><path fill="currentColor" d="M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16M92.8 145.6a8 8 0 1 1-9.6 12.8l-32-24a8 8 0 0 1 0-12.8l32-24a8 8 0 0 1 9.6 12.8L69.33 128Zm58.89-71.4l-32 112a8 8 0 1 1-15.38-4.4l32-112a8 8 0 0 1 15.38 4.4m53.11 60.2l-32 24a8 8 0 0 1-9.6-12.8l23.47-17.6l-23.47-17.6a8 8 0 1 1 9.6-12.8l32 24a8 8 0 0 1 0 12.8"></path></svg>Snippet</button>
-            <ul style="cursor: pointer; width: 100%;" class="dropdown-menu "><li><a class="dropdown-item hstack gap-1"><div class="me-2 mt-1" style="" _bl_4965=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--vscode-icons" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32" data-icon="vscode-icons:file-type-python" data-width="25" style="vertical-align: text-bottom;"><defs><linearGradient id="IconifyId19431872ac3530bcd1026" x1="-133.268" x2="-133.198" y1="-202.91" y2="-202.84" gradientTransform="matrix(189.38 0 0 189.81 25243.061 38519.17)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#387eb8"></stop><stop offset="1" stop-color="#366994"></stop></linearGradient><linearGradient id="IconifyId19431872ac3530bcd1027" x1="-133.575" x2="-133.495" y1="-203.203" y2="-203.133" gradientTransform="matrix(189.38 0 0 189.81 25309.061 38583.42)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffe052"></stop><stop offset="1" stop-color="#ffc331"></stop></linearGradient></defs><path fill="url(#IconifyId19431872ac3530bcd1026)" d="M15.885 2.1c-7.1 0-6.651 3.07-6.651 3.07v3.19h6.752v1H6.545S2 8.8 2 16.005s4.013 6.912 4.013 6.912H8.33v-3.361s-.13-4.013 3.9-4.013h6.762s3.772.06 3.772-3.652V5.8s.572-3.712-6.842-3.712Zm-3.732 2.137a1.214 1.214 0 1 1-1.183 1.244v-.02a1.214 1.214 0 0 1 1.214-1.214Z"></path><path fill="url(#IconifyId19431872ac3530bcd1027)" d="M16.085 29.91c7.1 0 6.651-3.08 6.651-3.08v-3.18h-6.751v-1h9.47S30 23.158 30 15.995s-4.013-6.912-4.013-6.912H23.64V12.4s.13 4.013-3.9 4.013h-6.765S9.2 16.356 9.2 20.068V26.2s-.572 3.712 6.842 3.712h.04Zm3.732-2.147A1.214 1.214 0 1 1 21 26.519v.03a1.214 1.214 0 0 1-1.214 1.214z"></path></svg></div>
-                                        <span>Python</span></a></li>
-                                <li><a class="dropdown-item hstack gap-1"><div class="me-2 mt-1" style="" _bl_4966=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--skill-icons" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256" data-icon="skill-icons:javascript" data-width="25" style="vertical-align: text-bottom;"><g fill="none"><rect width="256" height="256" fill="#F0DB4F" rx="60"></rect><path fill="#323330" d="m67.312 213.932l19.59-11.856c3.78 6.701 7.218 12.371 15.465 12.371c7.905 0 12.889-3.092 12.889-15.12v-81.798h24.058v82.138c0 24.917-14.606 36.259-35.916 36.259c-19.245 0-30.416-9.967-36.087-21.996m85.07-2.576l19.588-11.341c5.157 8.421 11.859 14.607 23.715 14.607c9.969 0 16.325-4.984 16.325-11.858c0-8.248-6.53-11.17-17.528-15.98l-6.013-2.579c-17.357-7.388-28.871-16.668-28.871-36.258c0-18.044 13.748-31.792 35.229-31.792c15.294 0 26.292 5.328 34.196 19.247l-18.731 12.029c-4.125-7.389-8.591-10.31-15.465-10.31c-7.046 0-11.514 4.468-11.514 10.31c0 7.217 4.468 10.139 14.778 14.608l6.014 2.577c20.449 8.765 31.963 17.699 31.963 37.804c0 21.654-17.012 33.51-39.867 33.51c-22.339 0-36.774-10.654-43.819-24.574"></path></g></svg></div>
-                                        <span>JavaScript</span></a></li>
-                                <li><a class="dropdown-item hstack gap-1"><div class="me-2 mt-1" style="" _bl_4967=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--devicon" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="devicon:swift" data-width="25" style="vertical-align: text-bottom;"><path fill="#f05138" d="M126.33 34.06a39.3 39.3 0 0 0-.79-7.83a28.8 28.8 0 0 0-2.65-7.58a28.8 28.8 0 0 0-4.76-6.32a23.4 23.4 0 0 0-6.62-4.55a27.3 27.3 0 0 0-7.68-2.53c-2.65-.51-5.56-.51-8.21-.76H30.25a45.5 45.5 0 0 0-6.09.51a21.8 21.8 0 0 0-5.82 1.52c-.53.25-1.32.51-1.85.76a34 34 0 0 0-5 3.28c-.53.51-1.06.76-1.59 1.26a22.4 22.4 0 0 0-4.76 6.32a23.6 23.6 0 0 0-2.65 7.58a79 79 0 0 0-.79 7.83v60.39a39.3 39.3 0 0 0 .79 7.83a28.8 28.8 0 0 0 2.65 7.58a28.8 28.8 0 0 0 4.76 6.32a23.4 23.4 0 0 0 6.62 4.55a27.3 27.3 0 0 0 7.68 2.53c2.65.51 5.56.51 8.21.76h63.22a45 45 0 0 0 8.21-.76a27.3 27.3 0 0 0 7.68-2.53a30 30 0 0 0 6.62-4.55a22.4 22.4 0 0 0 4.76-6.32a23.6 23.6 0 0 0 2.65-7.58a79 79 0 0 0 .79-7.83V34.06z"></path><path fill="#fefefe" d="M85 96.5c-11.11 6.13-26.38 6.76-41.75.47A64.53 64.53 0 0 1 13.84 73a50 50 0 0 0 10.85 6.32c15.87 7.1 31.73 6.61 42.9 0c-15.9-11.66-29.4-26.82-39.46-39.2a43.5 43.5 0 0 1-5.29-6.82c12.16 10.61 31.5 24 38.38 27.79a272 272 0 0 1-27-32.34a266.8 266.8 0 0 0 44.47 34.87c.71.38 1.26.7 1.7 1a33 33 0 0 0 1.21-3.51c3.71-12.89-.53-27.54-9.79-39.67C93.25 33.81 106 57.05 100.66 76.51c-.14.53-.29 1-.45 1.55l.19.22c10.59 12.63 7.68 26 6.35 23.5C101 91 90.37 94.33 85 96.5"></path></svg></div>
-                                        <span>Swift</span></a></li>
-                                <li><a class="dropdown-item hstack gap-1"><div class="me-2 mt-1" style="" _bl_4968=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--devicon" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="devicon:java" data-width="25" style="vertical-align: text-bottom;"><path fill="#0074BD" d="M47.617 98.12s-4.767 2.774 3.397 3.71c9.892 1.13 14.947.968 25.845-1.092c0 0 2.871 1.795 6.873 3.351c-24.439 10.47-55.308-.607-36.115-5.969m-2.988-13.665s-5.348 3.959 2.823 4.805c10.567 1.091 18.91 1.18 33.354-1.6c0 0 1.993 2.025 5.132 3.131c-29.542 8.64-62.446.68-41.309-6.336"></path><path fill="#EA2D2E" d="M69.802 61.271c6.025 6.935-1.58 13.17-1.58 13.17s15.289-7.891 8.269-17.777c-6.559-9.215-11.587-13.792 15.635-29.58c0 .001-42.731 10.67-22.324 34.187"></path><path fill="#0074BD" d="M102.123 108.229s3.529 2.91-3.888 5.159c-14.102 4.272-58.706 5.56-71.094.171c-4.451-1.938 3.899-4.625 6.526-5.192c2.739-.593 4.303-.485 4.303-.485c-4.953-3.487-32.013 6.85-13.743 9.815c49.821 8.076 90.817-3.637 77.896-9.468M49.912 70.294s-22.686 5.389-8.033 7.348c6.188.828 18.518.638 30.011-.326c9.39-.789 18.813-2.474 18.813-2.474s-3.308 1.419-5.704 3.053c-23.042 6.061-67.544 3.238-54.731-2.958c10.832-5.239 19.644-4.643 19.644-4.643m40.697 22.747c23.421-12.167 12.591-23.86 5.032-22.285c-1.848.385-2.677.72-2.677.72s.688-1.079 2-1.543c14.953-5.255 26.451 15.503-4.823 23.725c0-.002.359-.327.468-.617"></path><path fill="#EA2D2E" d="M76.491 1.587S89.459 14.563 64.188 34.51c-20.266 16.006-4.621 25.13-.007 35.559c-11.831-10.673-20.509-20.07-14.688-28.815C58.041 28.42 81.722 22.195 76.491 1.587"></path><path fill="#0074BD" d="M52.214 126.021c22.476 1.437 57-.8 57.817-11.436c0 0-1.571 4.032-18.577 7.231c-19.186 3.612-42.854 3.191-56.887.874c0 .001 2.875 2.381 17.647 3.331"></path></svg></div>
-                                        <span>Java</span></a></li>
-                                <li><a class="dropdown-item hstack gap-1"><div class="me-2 mt-1" style="" _bl_4969=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--devicon" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="devicon:csharp" data-width="25" style="vertical-align: text-bottom;"><path fill="#9B4F96" d="M115.4 30.7L67.1 2.9c-.8-.5-1.9-.7-3.1-.7s-2.3.3-3.1.7l-48 27.9c-1.7 1-2.9 3.5-2.9 5.4v55.7c0 1.1.2 2.4 1 3.5l106.8-62c-.6-1.2-1.5-2.1-2.4-2.7"></path><path fill="#68217A" d="M10.7 95.3c.5.8 1.2 1.5 1.9 1.9l48.2 27.9c.8.5 1.9.7 3.1.7s2.3-.3 3.1-.7l48-27.9c1.7-1 2.9-3.5 2.9-5.4V36.1c0-.9-.1-1.9-.6-2.8z"></path><path fill="#fff" d="M85.3 76.1C81.1 83.5 73.1 88.5 64 88.5c-13.5 0-24.5-11-24.5-24.5s11-24.5 24.5-24.5c9.1 0 17.1 5 21.3 12.5l13-7.5c-6.8-11.9-19.6-20-34.3-20c-21.8 0-39.5 17.7-39.5 39.5s17.7 39.5 39.5 39.5c14.6 0 27.4-8 34.2-19.8zM97 66.2l.9-4.3h-4.2v-4.7h5.1L100 51h4.9l-1.2 6.1h3.8l1.2-6.1h4.8l-1.2 6.1h2.4v4.7h-3.3l-.9 4.3h4.2v4.7h-5.1l-1.2 6h-4.9l1.2-6h-3.8l-1.2 6h-4.8l1.2-6h-2.4v-4.7H97zm4.8 0h3.8l.9-4.3h-3.8z"></path></svg></div>
-                                        <span>C# .NET</span></a></li>
-                                <li><a class="dropdown-item hstack gap-1"><div class="me-2 mt-1" style="" _bl_4970=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--devicon" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 128 128" data-icon="devicon:php" data-width="25" style="vertical-align: text-bottom;"><path fill="url(#IconifyId19431872ac3530bcd1028)" d="M0 64c0 18.593 28.654 33.667 64 33.667S128 82.593 128 64S99.345 30.333 64 30.333S0 45.407 0 64"></path><path fill="#777bb3" d="M64 95.167c33.965 0 61.5-13.955 61.5-31.167c0-17.214-27.535-31.167-61.5-31.167S2.5 46.786 2.5 64c0 17.212 27.535 31.167 61.5 31.167"></path><path d="M34.772 67.864c2.793 0 4.877-.515 6.196-1.53c1.306-1.006 2.207-2.747 2.68-5.175c.44-2.27.272-3.854-.5-4.71c-.788-.874-2.493-1.317-5.067-1.317h-4.464l-2.473 12.732zM20.173 83.547a.694.694 0 0 1-.68-.828l6.557-33.738a.695.695 0 0 1 .68-.561h14.134c4.442 0 7.748 1.206 9.827 3.585c2.088 2.39 2.734 5.734 1.917 9.935c-.333 1.711-.905 3.3-1.7 4.724a15.8 15.8 0 0 1-3.128 3.92c-1.531 1.432-3.264 2.472-5.147 3.083c-1.852.604-4.232.91-7.07.91h-5.724l-1.634 8.408a.695.695 0 0 1-.682.562z"></path><path fill="#fff" d="M34.19 55.826h3.891c3.107 0 4.186.682 4.553 1.089c.607.674.723 2.097.331 4.112c-.439 2.257-1.253 3.858-2.42 4.756c-1.194.92-3.138 1.386-5.773 1.386h-2.786zm6.674-8.1H26.731a1.39 1.39 0 0 0-1.364 1.123L18.81 82.588a1.39 1.39 0 0 0 1.363 1.653h7.35a1.39 1.39 0 0 0 1.363-1.124l1.525-7.846h5.151c2.912 0 5.364-.318 7.287-.944c1.977-.642 3.796-1.731 5.406-3.237a16.5 16.5 0 0 0 3.259-4.087c.831-1.487 1.429-3.147 1.775-4.931c.86-4.423.161-7.964-2.076-10.524c-2.216-2.537-5.698-3.823-10.349-3.823zM30.301 68.557h4.471q4.445.001 6.62-1.675q2.175-1.674 2.938-5.591q.728-3.762-.665-5.308q-1.395-1.546-5.584-1.546h-5.036l-2.743 14.12m10.563-19.445q6.378 0 9.303 3.348t1.76 9.346q-.482 2.472-1.625 4.518q-1.145 2.048-2.991 3.747q-2.2 2.06-4.892 2.935q-2.691.876-6.857.875h-6.296l-1.743 8.97h-7.35l6.558-33.739z"></path><path d="M69.459 74.577a.694.694 0 0 1-.682-.827l2.9-14.928c.277-1.42.209-2.438-.19-2.87c-.245-.263-.979-.704-3.15-.704h-5.256l-3.646 18.768a.695.695 0 0 1-.683.56h-7.29a.695.695 0 0 1-.683-.826l6.558-33.739a.695.695 0 0 1 .682-.561h7.29a.695.695 0 0 1 .683.826L64.41 48.42h5.653c4.307 0 7.227.758 8.928 2.321c1.733 1.593 2.275 4.14 1.608 7.573l-3.051 15.702a.695.695 0 0 1-.682.56z"></path><path fill="#fff" d="M65.31 38.755h-7.291a1.39 1.39 0 0 0-1.364 1.124l-6.557 33.738a1.39 1.39 0 0 0 1.363 1.654h7.291a1.39 1.39 0 0 0 1.364-1.124l3.537-18.205h4.682c2.168 0 2.624.463 2.641.484c.132.14.305.795.019 2.264l-2.9 14.927a1.39 1.39 0 0 0 1.364 1.654h7.408a1.39 1.39 0 0 0 1.363-1.124l3.051-15.7c.715-3.686.103-6.45-1.82-8.217c-1.836-1.686-4.91-2.505-9.398-2.505h-4.81l1.421-7.315a1.39 1.39 0 0 0-1.364-1.655m0 1.39l-1.743 8.968h6.496q6.131 0 8.457 2.14q2.328 2.138 1.398 6.93l-3.052 15.699h-7.407l2.901-14.928q.495-2.547-.365-3.474q-.86-.926-3.658-.926h-5.829l-3.756 19.327H51.46l6.558-33.739h7.292z"></path><path d="M92.136 67.864c2.793 0 4.878-.515 6.198-1.53c1.304-1.006 2.206-2.747 2.679-5.175c.44-2.27.273-3.854-.5-4.71c-.788-.874-2.493-1.317-5.067-1.317h-4.463l-2.475 12.732zM77.54 83.547a.694.694 0 0 1-.682-.828l6.557-33.738a.695.695 0 0 1 .682-.561H98.23c4.442 0 7.748 1.206 9.826 3.585c2.089 2.39 2.734 5.734 1.917 9.935a15.9 15.9 0 0 1-1.699 4.724a15.8 15.8 0 0 1-3.128 3.92c-1.53 1.432-3.265 2.472-5.147 3.083c-1.852.604-4.232.91-7.071.91h-5.723l-1.633 8.408a.695.695 0 0 1-.683.562z"></path><path fill="#fff" d="M91.555 55.826h3.891c3.107 0 4.186.682 4.552 1.089c.61.674.724 2.097.333 4.112c-.44 2.257-1.254 3.858-2.421 4.756c-1.195.92-3.139 1.386-5.773 1.386h-2.786zm6.674-8.1H84.096a1.39 1.39 0 0 0-1.363 1.123l-6.558 33.739a1.39 1.39 0 0 0 1.364 1.653h7.35a1.39 1.39 0 0 0 1.363-1.124l1.525-7.846h5.15c2.911 0 5.364-.318 7.286-.944c1.978-.642 3.797-1.731 5.408-3.238a16.5 16.5 0 0 0 3.258-4.086c.832-1.487 1.428-3.147 1.775-4.931c.86-4.423.162-7.964-2.076-10.524c-2.216-2.537-5.697-3.823-10.35-3.823zM87.666 68.557h4.47q4.445.001 6.622-1.675q2.175-1.674 2.936-5.591q.731-3.762-.665-5.308t-5.583-1.546h-5.035Zm10.563-19.445q6.378 0 9.303 3.348t1.759 9.346q-.48 2.472-1.624 4.518q-1.144 2.048-2.992 3.747q-2.2 2.06-4.892 2.935q-2.69.876-6.856.875h-6.295l-1.745 8.97h-7.35l6.558-33.739h14.133"></path><defs><radialGradient id="IconifyId19431872ac3530bcd1028" cx="0" cy="0" r="1" gradientTransform="translate(38.426 42.169)scale(84.04136)" gradientUnits="userSpaceOnUse"><stop stop-color="#AEB2D5"></stop><stop offset=".3" stop-color="#AEB2D5"></stop><stop offset=".75" stop-color="#484C89"></stop><stop offset="1" stop-color="#484C89"></stop></radialGradient></defs></svg></div>
-                                        <span>PHP</span></a></li></ul></div>
-                        <style>
-    .no-dropdown-arrow.dropdown-toggle::after {
-        display: none !important;
-    }
-</style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm hstack gap-2 iconButton btn-primary btn " _bl_4088=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--carbon" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32" data-icon="carbon:link" data-width="25"><path fill="currentColor" d="M29.25 6.76a6 6 0 0 0-8.5 0l1.42 1.42a4 4 0 1 1 5.67 5.67l-8 8a4 4 0 1 1-5.67-5.66l1.41-1.42l-1.41-1.42l-1.42 1.42a6 6 0 0 0 0 8.5A6 6 0 0 0 17 25a6 6 0 0 0 4.27-1.76l8-8a6 6 0 0 0-.02-8.48"></path><path fill="currentColor" d="M4.19 24.82a4 4 0 0 1 0-5.67l8-8a4 4 0 0 1 5.67 0A3.94 3.94 0 0 1 19 14a4 4 0 0 1-1.17 2.85L15.71 19l1.42 1.42l2.12-2.12a6 6 0 0 0-8.51-8.51l-8 8a6 6 0 0 0 0 8.51A6 6 0 0 0 7 28a6.07 6.07 0 0 0 4.28-1.76l-1.42-1.42a4 4 0 0 1-5.67 0"></path></svg>URL</button>
-                        <style>
-    .no-dropdown-arrow.dropdown-toggle::after {
-        display: none !important;
-    }
-</style><button style=" height:37.1px; width: fit-content; font-family: 'Lexend Deca', serif !important;" class="btn-sm w-100 hstack gap-2 iconButton btn-success btn " _bl_4089=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ph" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256" data-icon="ph:phone-call-light" data-width="25"><path fill="currentColor" d="M146.2 46.45a6 6 0 0 1 7.35-4.25a84.24 84.24 0 0 1 60.25 60.25a6 6 0 0 1-4.25 7.35a6 6 0 0 1-1.55.2a6 6 0 0 1-5.8-4.45a72.34 72.34 0 0 0-51.75-51.75a6 6 0 0 1-4.25-7.35m-3.75 39.35C157 89.68 166.32 99 170.2 113.55A6 6 0 0 0 176 118a6 6 0 0 0 1.55-.2a6 6 0 0 0 4.25-7.35c-5-18.71-17.54-31.25-36.25-36.25a6 6 0 1 0-3.1 11.6m79.44 97A54.25 54.25 0 0 1 168 230C89.7 230 26 166.3 26 88a54.25 54.25 0 0 1 47.17-53.89a14 14 0 0 1 14.56 8.39l21.1 47.1a14 14 0 0 1-1.12 13.28a6 6 0 0 1-.42.57l-21.07 25.06a1.89 1.89 0 0 0 0 1.67c7.66 15.68 24.1 32 40 39.65a1.88 1.88 0 0 0 1.68-.06l24.69-21a5 5 0 0 1 .56-.42a14 14 0 0 1 13.28-1.22l47.24 21.17a14 14 0 0 1 8.22 14.53ZM210 181.32a2 2 0 0 0-1.21-2l-47.25-21.17a1.92 1.92 0 0 0-1.6.1l-24.68 21c-.18.15-.37.29-.56.42a14 14 0 0 1-13.77 1c-18.36-8.87-36.66-27-45.53-45.19a14 14 0 0 1 .91-13.73a5 5 0 0 1 .43-.57l21.05-25.09a2 2 0 0 0 0-1.67L76.74 47.31A2 2 0 0 0 74.9 46h-.23A42.24 42.24 0 0 0 38 88c0 71.68 58.32 130 130 130a42.24 42.24 0 0 0 42-36.68"></path></svg>Test Call</button></div></div>
-        `;
+            <!--BUTTON ROW-->
+            <div class="d-flex justify-content-between">
+                <button style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-primary btn">
+                    <iconify-icon icon="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" width="25" height="25"></iconify-icon>
+                    Code
+                </button>
+                <button style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-primary btn">
+                    <iconify-icon icon="carbon:link" width="25" height="25" class="iconify iconify--carbon" aria-hidden="true" role="img"></iconify-icon>
+                    URL
+                </button>
+                <button class="btn-sm hstack gap-2 btn-success btn">
+                    <iconify-icon icon="ph:phone-call-light" width="25" height="25" class="iconify iconify--ph" aria-hidden="true" role="img"></iconify-icon>
+                    Test Call
+                </button>
+            </div>
+        </div>
+            `;
     }
 }

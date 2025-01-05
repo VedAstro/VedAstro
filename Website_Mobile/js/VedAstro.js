@@ -8029,11 +8029,13 @@ class ApiMethodViewer {
 
         let html = `
         <div class="container mt-3" style="width:412px;">
-            <div class="">
+            <div class="input-group">
+                <span class="input-group-text gap-2 py-1" style="width: 136px;"><iconify-icon icon="lucide:server-crash" width="35" height="35"></iconify-icon>Server</span>
+                <input id="ServerAddressInput" type="text" class="form-control" value="http://localhost:7071" placeholder="http://localhost:7071" style="font-weight: 600; font-size: 16px;">
+            </div>
+            <div class="mt-3">
                 <div class="fw-bold hstack gap-2 d-flex">
-                    <div class="" style="">
-                        <iconify-icon icon="flat-color-icons:calculator" width="38" height="38"></iconify-icon>
-                    </div>
+                    <iconify-icon icon="flat-color-icons:calculator" width="38" height="38"></iconify-icon>
                     <h5 class="mt-2 me-auto">Calculator </h5>
                 </div>
                 <hr class="mt-0 mb-2">
@@ -8298,7 +8300,8 @@ class ApiMethodViewer {
         const method = this.selectedMethodData;
         const methodInfo = method.MethodInfo;
 
-        let url = `${VedAstro.ApiDomain}/Calculate/${methodInfo.Name}/`;
+        const serverAddress = this.getServerAddress();
+        let url = `${serverAddress}/api/Calculate/${methodInfo.Name}/`;
 
         const params = methodInfo.Parameters;
 
@@ -8326,7 +8329,7 @@ class ApiMethodViewer {
                 const [timePart, datePart, tzPart] = stdTime.split(' ');
                 const [day, month, year] = datePart.split('/');
                 const locationName = timeData.Location.Name;
-                const timeUrlSegment = `Location/${encodeURIComponent(locationName)}/Time/${timePart}/${day}/${month}/${year}/${tzPart}/`;
+                const timeUrlSegment = `Location/${locationName}/Time/${timePart}/${day}/${month}/${year}/${tzPart}/`;
 
                 url += timeUrlSegment;
             } else if (paramType === 'VedAstro.Library.HouseName' || paramType === 'VedAstro.Library.PlanetName') {
@@ -8440,6 +8443,15 @@ class ApiMethodViewer {
 
         // Open link in new tab
         window.open(searchLink, '_blank');
+    }
+
+    // Method to get the server address from input or default
+    getServerAddress() {
+        let serverAddress = document.getElementById('ServerAddressInput').value;
+        if (!serverAddress) {
+            serverAddress = 'http://localhost:7071';
+        }
+        return serverAddress;
     }
 }
 

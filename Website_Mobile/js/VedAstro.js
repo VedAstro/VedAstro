@@ -8213,6 +8213,32 @@ class ApiMethodViewer {
                 // Store the ID, paramName, and defaultValue for later initialization
                 timeLocationInputParams.push({ id: timeInputId, paramName: paramName, defaultValue });
 
+            } else if (paramType === 'VedAstro.Library.HouseName') {
+                // For HouseName parameters, create a dropdown
+                const inputId = `${this.ElementID}_input_${paramName}`;
+
+                // Generate options: All, House1 to House12
+                let options = '<option value="All">All</option>';
+                for (let i = 1; i <= 12; i++) {
+                    const value = `House${i}`;
+                    const display = `House ${i}`;
+                    options += `<option value="${value}">${display}</option>`;
+                }
+
+                inputHtml = `
+                <div class="mb-3">
+                    <label class="form-label hstack gap-2">
+                        ${formatedParamName}
+                        <div class="help-text-icon">
+                            ${paramDescription || 'No description'}
+                        </div>
+                    </label>
+                    <select class="form-control" id="${inputId}" name="${paramName}">
+                        ${options}
+                    </select>
+                </div>
+                `;
+
             } else if (paramType === 'System.Int32' || paramType === 'System.Double') {
                 // For integer or double parameters, create number input
                 const inputId = `${this.ElementID}_input_${paramName}`;
@@ -8288,6 +8314,19 @@ class ApiMethodViewer {
                 const timeUrlSegment = `Location/${encodeURIComponent(locationName)}/Time/${timePart}/${day}/${month}/${year}/${tzPart}/`;
 
                 url += timeUrlSegment;
+            } else if (paramType === 'VedAstro.Library.HouseName') {
+                // For HouseName parameter, get the value from the select input
+                const selectElement = document.getElementById(`${this.ElementID}_input_${paramName}`);
+                paramValue = selectElement.value;
+                if (paramValue === "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: `Please select a value for <strong>"${CommonTools.CamelPascalCaseToSpaced(paramName)}"</strong>.`
+                    });
+                    return;
+                }
+                // Append to URL
+                url += `${paramName}/${encodeURIComponent(paramValue)}/`;
             } else if (paramType === 'System.Int32' || paramType === 'System.Double') {
                 const inputElement = document.getElementById(`${this.ElementID}_input_${paramName}`);
                 paramValue = inputElement.value;

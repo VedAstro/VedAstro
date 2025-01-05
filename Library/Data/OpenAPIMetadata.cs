@@ -339,11 +339,8 @@ public class OpenAPIMetadata : EventArgs, IToJson
 
         temp[nameof(this.SelectedParams)] = package;
 
-
         //# METHOD INFO
-        temp[nameof(this.MethodInfo)] = this.MethodInfo.ToJson();
-
-
+        temp[nameof(this.MethodInfo)] = this.MethodInfo.ToJson(this);
 
         return temp;
     }

@@ -532,7 +532,7 @@ namespace VedAstro.Library
         /// </summary>
         /// <param name="methodInfo"></param>
         /// <returns></returns>
-        public static JObject ToJson(this MethodInfo methodInfo)
+        public static JObject ToJson(this MethodInfo methodInfo, OpenAPIMetadata apiMetaData)
         {
             var jObject = new JObject
             {
@@ -541,6 +541,8 @@ namespace VedAstro.Library
                 ["Parameters"] = new JArray(methodInfo.GetParameters().Select(p => new JObject
                 {
                     ["Name"] = p.Name,
+                    ["DefaultValue"] = p.DefaultValue?.ToString() ?? "",
+                    ["Description"] = apiMetaData.GetParamDesc(p.Name),
                     ["ParameterType"] = p.ParameterType.FullName
                 }))
             };

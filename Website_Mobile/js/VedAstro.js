@@ -8028,9 +8028,9 @@ class ApiMethodViewer {
         let methodListHTML = this.generateMethodListHtml();
 
         let html = `
-        <div class="container mt-3">
+        <div class="container mt-3" style="width:412px;">
             <div class="">
-                <div class="fw-bold hstack gap-2 d-flex" style="max-width:667px;">
+                <div class="fw-bold hstack gap-2 d-flex">
                     <div class="" style="">
                         <iconify-icon icon="flat-color-icons:calculator" width="38" height="38"></iconify-icon>
                     </div>
@@ -8061,9 +8061,7 @@ class ApiMethodViewer {
           
             <div class="">
                 <div class="fw-bold hstack gap-2 d-flex">
-                    <div class="" style="">
-                        <iconify-icon icon="flat-color-icons:multiple-inputs" width="38" height="38"></iconify-icon>
-                    </div>
+                    <iconify-icon icon="flat-color-icons:multiple-inputs" width="38" height="38"></iconify-icon>
                     <h5 class="mt-2 me-auto">Input Parameters </h5>
                 </div>
                 <hr class="mt-0 mb-2">
@@ -8235,9 +8233,7 @@ class ApiMethodViewer {
                 </div>
                 `;
 
-            }
-
-            else if (paramType === 'VedAstro.Library.PlanetName') {
+            } else if (paramType === 'VedAstro.Library.PlanetName') {
                 // New code for PlanetName parameter
                 const inputId = `${this.ElementID}_input_${paramName}`;
 
@@ -8258,8 +8254,7 @@ class ApiMethodViewer {
                 </select>
             </div>
             `;
-            }
-            else if (paramType === 'System.Int32' || paramType === 'System.Double') {
+            } else if (paramType === 'System.Int32' || paramType === 'System.Double') {
                 // For integer or double parameters, create number input
                 const inputId = `${this.ElementID}_input_${paramName}`;
                 inputHtml = `
@@ -8382,7 +8377,7 @@ class ApiMethodViewer {
         const outputDiv = document.getElementById(`${this.ElementID}_output`);
         outputDiv.innerHTML = `
 
-        <div id="ParamOutputOptionsPanel" class="vstack gap-3" style="">
+        <div id="ParamOutputOptionsPanel" class="vstack gap-3">
             <!--ARROW DOWN ICON-->
             <div class="" style="text-align: center;">
                 <iconify-icon icon="flat-color-icons:down" width="80" height="80"></iconify-icon>
@@ -8396,22 +8391,19 @@ class ApiMethodViewer {
 
             <!--BUTTON ROW-->
             <div class="d-flex justify-content-between">
+                <button id="${this.ElementID}_viewSourceCodeButton" style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-primary btn">
+                    <iconify-icon icon="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" width="25" height="25"></iconify-icon>
+                    View Code
+                </button>
+                <button id="${this.ElementID}_copyUrlButton" style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-primary btn">
+                    <iconify-icon icon="carbon:link" width="25" height="25"></iconify-icon>
+                    Copy URL
+                </button>
                 <button id="${this.ElementID}_callApiButton" style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-success btn">
                     <iconify-icon icon="ph:phone-call-light" width="25" height="25"></iconify-icon>
                     Call API
                 </button>
-                <button id="${this.ElementID}_copyUrlButton" style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-primary btn">
-                    <iconify-icon icon="carbon:copy" width="25" height="25"></iconify-icon>
-                    Copy URL
-                </button>
-                <button id="${this.ElementID}_copyCodeButton" style="height:37.1px; width: fit-content;" class="btn-sm hstack gap-2 btn-primary btn">
-                    <iconify-icon icon="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" width="25" height="25"></iconify-icon>
-                    Copy Code
-                </button>
             </div>
-
-            <!--API Response-->
-            <div id="${this.ElementID}_apiResponse" class="mt-3"></div>
         </div>
             `;
 
@@ -8428,51 +8420,26 @@ class ApiMethodViewer {
             });
         });
 
-        // Copy Code button
-        document.getElementById(`${this.ElementID}_copyCodeButton`).addEventListener('click', () => {
-            const codeSnippet = `fetch('${url}')
-  .then(response => response.json())
-  .then(data => {
-    // Handle data
-    console.log(data);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });`;
-            navigator.clipboard.writeText(codeSnippet);
-            Swal.fire({
-                icon: 'success',
-                title: 'Code snippet copied to clipboard'
-            });
-        });
+        // View Source Code button
+        document.getElementById(`${this.ElementID}_viewSourceCodeButton`).addEventListener('click', () => this.onClickViewSourceCode());
     }
 
-    // Method to call the API and display the response
+    // Modified method to call the API and open the URL in a new tab
     async callApi(url) {
-        const apiResponseDiv = document.getElementById(`${this.ElementID}_apiResponse`);
+        window.open(url, '_blank');
+    }
 
-        try {
-            CommonTools.ShowLoading();
-            const response = await fetch(url);
-            const data = await response.json();
-            CommonTools.HideLoading();
+    // Method to handle the "View Source Code" button click
+    onClickViewSourceCode() {
+        const metadata = this.selectedMethodData;
 
-            apiResponseDiv.innerHTML = `
-            <div class="mt-3">
-                <h5>API Response</h5>
-                <pre>${JSON.stringify(data, null, 2)}</pre>
-            </div>
-            `;
-        } catch (error) {
-            CommonTools.HideLoading();
-            console.error('Error calling API:', error);
-            apiResponseDiv.innerHTML = `
-            <div class="mt-3">
-                <h5>API Response</h5>
-                <pre>Error: ${error}</pre>
-            </div>
-            `;
-        }
+        const lineNumber = metadata.LineNumber;
+
+        // Construct the GitHub link
+        const searchLink = `https://github.com/VedAstro/VedAstro/blob/master/Library/Logic/Calculate/Calculate.cs#L${lineNumber}`;
+
+        // Open link in new tab
+        window.open(searchLink, '_blank');
     }
 }
 

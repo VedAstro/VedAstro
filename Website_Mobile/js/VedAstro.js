@@ -8022,7 +8022,6 @@ class ApiMethodViewer {
         }
     }
 
-
     // Method to generate the HTML
     generateHtmlBody() {
         // Generate the method list HTML
@@ -8040,9 +8039,6 @@ class ApiMethodViewer {
                 <hr class="mt-0 mb-2">
             </div>
             <div class="mb-3">
-                <label class="form-label hstack gap-2">
-                    Select API Method
-                </label>
                 <div class="hstack">
                     <div class="btn-group w-100" style="min-width:231px !important;">
                         <button onclick="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
@@ -8239,7 +8235,31 @@ class ApiMethodViewer {
                 </div>
                 `;
 
-            } else if (paramType === 'System.Int32' || paramType === 'System.Double') {
+            }
+
+            else if (paramType === 'VedAstro.Library.PlanetName') {
+                // New code for PlanetName parameter
+                const inputId = `${this.ElementID}_input_${paramName}`;
+
+                // Generate options: All, Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu
+                const planets = ['All', 'Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn', 'Rahu', 'Ketu'];
+                const options = planets.map(planet => `<option value="${planet}">${planet}</option>`).join('');
+
+                inputHtml = `
+            <div class="mb-3">
+                <label class="form-label hstack gap-2">
+                    ${formatedParamName}
+                    <div class="help-text-icon">
+                        ${paramDescription || 'No description'}
+                    </div>
+                </label>
+                <select class="form-control" id="${inputId}" name="${paramName}">
+                    ${options}
+                </select>
+            </div>
+            `;
+            }
+            else if (paramType === 'System.Int32' || paramType === 'System.Double') {
                 // For integer or double parameters, create number input
                 const inputId = `${this.ElementID}_input_${paramName}`;
                 inputHtml = `
@@ -8314,8 +8334,8 @@ class ApiMethodViewer {
                 const timeUrlSegment = `Location/${encodeURIComponent(locationName)}/Time/${timePart}/${day}/${month}/${year}/${tzPart}/`;
 
                 url += timeUrlSegment;
-            } else if (paramType === 'VedAstro.Library.HouseName') {
-                // For HouseName parameter, get the value from the select input
+            } else if (paramType === 'VedAstro.Library.HouseName' || paramType === 'VedAstro.Library.PlanetName') {
+                // Modified code to handle both HouseName and PlanetName parameters
                 const selectElement = document.getElementById(`${this.ElementID}_input_${paramName}`);
                 paramValue = selectElement.value;
                 if (paramValue === "") {

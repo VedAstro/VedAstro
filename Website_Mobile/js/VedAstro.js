@@ -277,10 +277,22 @@ class CommonTools {
     }
 
     /**
-     * takes a camel case string and returns a string with spaces between the words
+     * Takes a camel case or pascal case string and returns a string with spaces between the words.
+     * Converts "MyNameIs" -> "My Name Is", "myNameIs" -> "My Name Is"
      */
     static CamelPascalCaseToSpaced(camelCase) {
-        return camelCase.replace(/(\d)([A-Z])/g, '$1 $2').replace(/([A-Z])/g, ' $1').trim();
+        let result = camelCase
+            .replace(/(\d)([A-Z])/g, '$1 $2')          // Insert space between a digit and uppercase letter
+            .replace(/([a-z])([A-Z])/g, '$1 $2')       // Insert space between lowercase and uppercase letters
+            .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')  // Insert space between consecutive uppercase letters followed by lowercase
+            .trim();
+
+        // Capitalize the first character if the original string starts with a lowercase letter
+        if (camelCase[0] !== camelCase[0].toUpperCase()) {
+            result = result.charAt(0).toUpperCase() + result.slice(1);
+        }
+
+        return result;
     }
 
     /**

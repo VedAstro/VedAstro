@@ -8018,8 +8018,8 @@ class ApiMethodViewer {
                     Select API Method
                 </label>
                 <div class="hstack">
-                    <div class="btn-group w-auto" style="min-width:231px !important;">
-                        <button onclick="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="btn-group w-100" style="min-width:231px !important;">
+                        <button onclick="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="selected-method-name" style="cursor: pointer;white-space: nowrap; display: inline-table;" >Select Method</div>
                         </button>
                         <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
@@ -8036,12 +8036,27 @@ class ApiMethodViewer {
                     </div>
                 </div>
             </div>
+          
+            <div class="">
+                <div class="fw-bold hstack gap-2 d-flex">
+                    <div class="" style="">
+                        <iconify-icon icon="flat-color-icons:multiple-inputs" width="38" height="38"></iconify-icon>
+                    </div>
+                    <h5 class="mt-2 me-auto">Input Parameters </h5>
+                </div>
+                <hr class="mt-0 mb-2">
+            </div>
+
             <!-- Parameters will be loaded here -->
             <div id="${this.ElementID}_parameters"></div>
+
+            <!-- Generate button -->
             <button id="${this.ElementID}_generateButton" style=" place-content: center !important;font-weight: 500 !important;font-size: 17px !important; height:37.1px; width: fit-content;" class="btn-sm w-100 hstack gap-2 btn-success btn " disabled>
                 <iconify-icon icon="flat-color-icons:flash-auto" width="25" height="25"></iconify-icon>
                 Generate
             </button>
+
+            <!-- URL output -->
             <div id="${this.ElementID}_output" class="mt-3">
             </div>
         </div>

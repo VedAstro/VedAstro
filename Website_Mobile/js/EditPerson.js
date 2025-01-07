@@ -76,19 +76,19 @@ function OnClickAdvanced() {
  */
 async function OnClickSave() {
     // Check if the user is a guest
-    if (VedAstro.IsGuestUser()) {
-        const loginLink = `<a href="./Login.html" target="_blank" style="text-decoration-line: none;" class="link-primary fw-bold">logged in</a>`;
-        const result = await Swal.fire({
-            icon: 'info',
-            title: 'Remember!',
-            html: `You have not ${loginLink}, continue as <strong>Guest</strong>?`,
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, continue!'
-        });
-        if (!result.isConfirmed) return;
-    }
+    //if (VedAstro.IsGuestUser()) {
+    //    const loginLink = `<a href="./Login.html" target="_blank" style="text-decoration-line: none;" class="link-primary fw-bold">logged in</a>`;
+    //    const result = await Swal.fire({
+    //        icon: 'info',
+    //        title: 'Remember!',
+    //        html: `You have not ${loginLink}, continue as <strong>Guest</strong>?`,
+    //        showCancelButton: true,
+    //        confirmButtonColor: '#3085d6',
+    //        cancelButtonColor: '#d33',
+    //        confirmButtonText: 'Yes, continue!'
+    //    });
+    //    if (!result.isConfirmed) return;
+    //}
 
     // Validate input fields
     if (!(await isValidationPassed())) {

@@ -7174,6 +7174,7 @@ class PersonListViewer {
  * Represents an API method viewer component.
  * This class generates the HTML for selecting and invoking API methods
  */
+
 class ApiMethodViewer {
     // Class properties
     ElementID = "";
@@ -7183,6 +7184,7 @@ class ApiMethodViewer {
     timeLocationInputParams = []; // To store IDs and names of time parameters
     SearchInputElementClass = "searchInputElementClass"; // Class for the search input
     ApiDataStorageKey = "AllApiMethods"; // Key for local storage
+    ServerAddressStorageKey = "ServerAddress"; // Key for storing server address in localStorage
 
     // Constructor to initialize the object
     constructor(elementId) {
@@ -7226,7 +7228,7 @@ class ApiMethodViewer {
         generateButton.addEventListener('click', () => this.onGenerateButtonClick());
     }
 
-    // Modified method to fetch API methods from the server or local storage
+    // Method to fetch API methods from the server or local storage
     async fetchApiMethods() {
         // Check if data is in local storage
         const storedData = localStorage.getItem(this.ApiDataStorageKey);
@@ -7268,6 +7270,9 @@ class ApiMethodViewer {
 
     // Method to generate the HTML
     generateHtmlBody() {
+        // Get the stored server address
+        const serverAddress = this.getStoredServerAddress();
+
         // Generate the method list HTML
         let methodListHTML = this.generateMethodListHtml();
 
@@ -7275,7 +7280,7 @@ class ApiMethodViewer {
         <div class="container mt-3" style="width:412px;">
             <div class="input-group">
                 <span class="input-group-text gap-2 py-1" style="width: 136px;"><iconify-icon icon="lucide:server-crash" width="35" height="35"></iconify-icon>Server</span>
-                <input id="ServerAddressInput" type="text" class="form-control" value="http://localhost:7071" placeholder="http://localhost:7071" style="font-weight: 600; font-size: 16px;">
+                <input id="ServerAddressInput" type="text" class="form-control" value="${serverAddress}" placeholder="http://localhost:7071" style="font-weight: 600; font-size: 16px;">
             </div>
             <div class="mt-3">
                 <div class="fw-bold hstack gap-2 d-flex">
@@ -7290,7 +7295,7 @@ class ApiMethodViewer {
                         <button onclick="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onClickDropDown(event)" type="button" class="btn dropdown-toggle btn-primary text-centre" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="selected-method-name" style="cursor: pointer;white-space: nowrap; display: inline-table;" >Select Method</div>
                         </button>
-                        <ul class="dropdown-menu ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
+                        <ul class="dropdown-menu w-100 ps-2 pe-3" style="height: 412.5px; overflow: clip scroll;">
                             <!-- SEARCH INPUT -->
                             <div class="hstack gap-2">
                                 <input onkeyup="window.vedastro.ApiMethodViewerInstances['${this.ElementID}'].onKeyUpSearchBar(event)" type="text" class="${this.SearchInputElementClass} form-control ms-0 mb-2 ps-3" placeholder="Search...">
@@ -7332,6 +7337,15 @@ class ApiMethodViewer {
         `;
 
         return html;
+    }
+
+    // Method to get the stored server address or default
+    getStoredServerAddress() {
+        const storedAddress = localStorage.getItem(this.ServerAddressStorageKey);
+        if (storedAddress) {
+            return storedAddress;
+        }
+        return 'http://localhost:7071';
     }
 
     // Method to generate the method list HTML
@@ -7549,10 +7563,13 @@ class ApiMethodViewer {
 
     // Method to handle the "Generate" button click
     async onGenerateButtonClick() {
+        // Save the current server address to localStorage
+        const serverAddress = this.getServerAddress();
+        localStorage.setItem(this.ServerAddressStorageKey, serverAddress);
+
         const method = this.selectedMethodData;
         const methodInfo = method.MethodInfo;
 
-        const serverAddress = this.getServerAddress();
         let url = `${serverAddress}/api/Calculate/${methodInfo.Name}/`;
 
         const params = methodInfo.Parameters;
@@ -7679,7 +7696,7 @@ class ApiMethodViewer {
         document.getElementById(`${this.ElementID}_viewSourceCodeButton`).addEventListener('click', () => this.onClickViewSourceCode());
     }
 
-    // Modified method to call the API and open the URL in a new tab
+    // Method to call the API and open the URL in a new tab
     async callApi(url) {
         window.open(url, '_blank');
     }
@@ -7706,4 +7723,3 @@ class ApiMethodViewer {
         return serverAddress;
     }
 }
-

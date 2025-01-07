@@ -3724,11 +3724,6 @@ class AshtakvargaTable {
         //correct if property names is camel case (for Blazor)
         var settings = CommonTools.CamelCaseKeysToPascalCase(rawSettings);
 
-        //if column data is not supplied use default
-        if (!settings.ColumnData) {
-            settings.ColumnData = AstroTable.DefaultColumns;
-        }
-
         //expand data inside settings input
         this.ElementID = settings.ElementID;
         this.SarvashtakavargaTableId = `${this.ElementID}_SarvashtakavargaTable`;
@@ -3820,12 +3815,19 @@ class AshtakvargaTable {
 
     async GenerateHTMLTableFromAPI(url, tableId) {
         //make the final API call in the perfect URL format
-        var apiPayload = await AstroTable.GetAPIPayload(url);
+        var apiPayload = await CommonTools.GetAPIPayload(url);
 
         //clean old data
-        AstroTable.ClearTableRows(tableId);
+        AshtakvargaTable.ClearTableRows(tableId);
 
         AshtakvargaTable.GenerateHTMLTableFromJson(apiPayload, tableId);
+    }
+
+    static ClearTableRows(tableId) {
+        let table = document.getElementById(tableId);
+        while (table?.rows?.length > 0) {
+            table?.deleteRow(0);
+        }
     }
 
     //code where Ashtakvarga in JSON format given by API is converted into nice HTML

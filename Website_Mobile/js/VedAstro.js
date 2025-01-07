@@ -2162,13 +2162,15 @@ class PageTopNavbar {
         // Generate the HTML for the button links
         let buttonLinksHtml = "";
         this.ButtonLinks.forEach((link) => {
+            let targetAttr = link.target ? `target="${link.target}"` : '';
             buttonLinksHtml += `
-        <button style="height: 37.1px; width: fit-content; " class="btn-sm hstack gap-2 iconButton btn-outline-primary btn" >
-          <iconify-icon icon="${link.icon}" width="25" height="25" ></iconify-icon>
-          ${link.text}
-        </button>
+        <a href="${link.href}" ${targetAttr} style="height: 37.1px; width: fit-content;" class="btn-sm hstack gap-2 iconButton btn-outline-primary btn">
+            <iconify-icon icon="${link.icon}" width="25" height="25"></iconify-icon>
+            ${link.text}
+        </a>
       `;
         });
+
 
         // Generate the HTML for the more links
         let moreLinksHtml = "";

@@ -178,9 +178,9 @@ function printConsoleMessage() {
 printConsoleMessage();
 
 new PageTopNavbar("VedAstro","PageTopNavbar", [
-    { icon: "mdi:book-open-page-variant-outline", text: "Guide", href: "/" },
-    { icon: "carbon:gateway-api", text: "Open API", href: "/APIBuilder.html" },
-    { icon: "openmoji:love-letter", text: "Donate", href: "/Donate.html" },
+    //{ icon: "mdi:book-open-page-variant-outline", text: "Guide", href: "/" },
+    { icon: "carbon:gateway-api", text: "Open API", href: "./APIBuilder.html" },
+    { icon: "openmoji:love-letter", text: "Donate", href: "./Donate.html" },
 ], [
     { text: "Contact Us", href: "./ContactUs.html" },
     { text: "About", href: "./About.html" },

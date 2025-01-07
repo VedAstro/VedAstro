@@ -2615,6 +2615,11 @@ class PersonSelectorBox {
             event.preventDefault();
             // Show message to the user
             Swal.fire('Please select a person first', '', 'warning');
+        } else if (selectedPerson.OwnerId === '101') {
+            // Prevent navigation to the edit page
+            event.preventDefault();
+            // Show error message that public profiles can't be edited
+            Swal.fire('Public profiles cannot be edited', '', 'error');
         }
     }
 

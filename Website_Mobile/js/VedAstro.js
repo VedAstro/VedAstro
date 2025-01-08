@@ -2070,7 +2070,7 @@ class DesktopSidebar {
 
         <!-- WEBSITE VERSION STAMP -->
         <div class="sticky-bottom position-fixed mb-3 ms-5" style="color: #8f8f8f; font-size: 9px; z-index: 1;">
-            <div style="cursor: pointer;" class="hstack gap-1">
+            <div onclick="window.location.href='./MadeOnEarth.html'" style="cursor: pointer;" class="hstack gap-1">
                 <iconify-icon icon="ion:earth" width="12" height="12" ></iconify-icon>
                 <span>Made on Earth</span>
             </div>

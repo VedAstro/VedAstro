@@ -3,7 +3,7 @@
 new PageHeader("PageHeader");
 
 new IconButton("IconButton_Calculate");
-new InfoBox("InfoBox_FindMatch");
+//new InfoBox("InfoBox_FindMatch");
 new InfoBox("InfoBox_FullCheck");
 
 var personSelectorMale = new PersonSelectorBox("PersonSelectorBox_Male");

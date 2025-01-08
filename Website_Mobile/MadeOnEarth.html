@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="en" style="background-color: #f0f2f5">
+<head>
+    <!--to stop caching during active development-->
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Made On Earth | VedAstro</title>
+
+    <!--LOAD FONTS-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lexend Deca"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varta"> <!-- link, button, nav etc -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gowun Dodum"> <!--  article text -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Homemade Apple"> <!--  cursive for quotes -->
+
+    <style>
+        body {
+            font-family: 'Lexend Deca', serif !important;
+        }
+    </style>
+
+</head>
+<body style="background: #F0F2F5;">
+    <!-- TO PLAY BAKING DONE SOUND -->
+    <audio autoplay=""></audio>
+
+    <div id="app" class="min-vh-100 container-lg pt-4" style="background: #F0F2F5;">
+        <div class="row flex-md-nowrap">
+
+            <!-- DESKTOP SIDE BAR ---------------->
+            <div id="DesktopSidebarHolder" active-link-name="Home"></div>
+
+            <div class="col mt-0 mt-md-0">
+
+                <!-- DESKTOP/MOBILE TOP NAVBAR -->
+                <div id="PageTopNavbar"></div>
+
+                <!-- PAGE CONTENT -->
+                <div class="container" style="background: #F0F2F5;">
+                    <div>
+                        <div style="max-width:412.5px">
+                            <img src="images/made-on-earth.jpg" width="412.5px" class="img-thumbnail" alt="...">
+
+
+                            <figure class="text-center mt-1" style="max-width:412.5px; cursor: pointer;">
+                                
+                                <blockquote class="blockquote"><p style=" font-size: 25px; ">There is not a single person in the world who could make a pencil.</p></blockquote>
+                                
+                                <figcaption class="blockquote-footer" style=" font-size: 16px; ">
+                                    Milton Freedman <cite title="Source Title">Nobel Prize '76</cite>
+                                </figcaption>
+                            </figure>
+
+
+                            <div>
+                                <h4 class="fw-bold text-center mt-4">Made On Earth Movement</h4>
+
+                                <div>
+                                    <p class="text-justify" style="font-family: 'Gowun Dodum', serif; font-size: 18px; line-break: auto;"><p class="mt-3">
+                                        Everywhere on so many things we see "Made in USA", "Made in Great Britain", "Made in China", "Made in Sweden",
+                                        made here &amp; made there. I would love to put such a label on this project, but where to begin?
+                                    </p>
+                                    <p>
+                                        
+                                        As the genius <a target="_blank" rel="noopener noreferrer" style="text-decoration-line: none;" href="https://youtu.be/67tHtpac5ws" class="link-primary fw-bold">M. Freedman put it</a>, even to manufacture a humble <strong>"pencil"</strong> it takes the accumulated
+                                        might of industry spread across the earth. From graphite mines in Brazil to rubber
+                                        trees in Indonesia, just to make a pencil!
+                                    </p>
+                                    <p>
+                                        The point we're trying to make here is this. VedAstro is only possible because of people and
+                                        resources from many countries spread across the earth and time.
+                                        As such, the only valid label for this project is, <br>
+                                    </p></p>
+                                </div>
+                                <strong style="margin-left: 153px; font-family: 'Gowun Dodum', serif; font-size: 18px;">"Made on Earth"</strong>.
+                            </div>
+                        </div>
+
+                        <footer id="PageFooter"></footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--##############################################################
+    DEPENDENCIES JS & CSS : placed here after html above is already in DOM
+    ##############################################################-->
+    <!-- Bootstrap CSS : Used for styling everything-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- Bootstrap  JS : Used to animate some components like Accordion, dropdown, BUNDLE because popper.js -->
+    <script src="./js/third-party/bootstrap.bundle.min.js"></script>
+
+    <!--Icon Generator Lib -->
+    <script src="./js/third-party/iconify-icon.min.js"></script>
+
+    <!--Chart JS  : used in planet strength chart-->
+    <script src="./js/third-party/chart.umd.min.js"></script>
+
+    <!--Sweet Alert Lib -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2/dist/sweetalert2.min.css">
+    <script src="./js/third-party/sweetalert2.all.min.js"></script>
+    <script src="./js/third-party/typed.min.js"></script>
+
+    <!-- SVG.js used for events chart animation-->
+    <script src="./js/third-party/svg.min.js"></script>
+
+    <!-- JS Dark Mode button-->
+    <script src="./js/third-party/darkmode-js.min.js"></script>
+
+    <!-- DATE PICKER  (Vanilla Calendar) -->
+    <!-- NOTE : current JS code is dependent on version 2.4.0 so maintain, unless you got balls to go update VedAstro.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@2.4.0/build/vanilla-calendar.min.css">
+    <script src="./js/third-party/vanilla-calendar.min.js"></script>
+
+    <!--Tooltip Lib -->
+    <script src="./js/third-party/popper.min.js"></script>
+    <script src="./js/third-party/tippy.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tippy.js/dist/tippy.min.css">
+
+    <!--JQuery-->
+    <!--Note: JQuery needs to be loaded before bootstrap & vedastro.js-->
+    <script src="./js/third-party/jquery.min.js"></script>
+    <script src="./js/VedAstro.js"></script>
+
+    <!-- JS APP CODE -->
+    <script src="./js/app.js" defer></script>
+
+</body>
+</html>

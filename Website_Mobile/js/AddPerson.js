@@ -3,7 +3,7 @@
 new PageHeader("PageHeader");
 //new InfoBox("InfoBox_EasyImport_AddPerson");
 new InfoBox("InfoBox_Private_AddPerson");
-new InfoBox("InfoBox_ForgotenTime_AddPerson");
+//new InfoBox("InfoBox_ForgotenTime_AddPerson");
 new IconButton("IconButton_Advanced");
 new IconButton("IconButton_Save_AddPerson");
 let timeLocationInput = new TimeLocationInput("TimeLocationInput_AddPerson");

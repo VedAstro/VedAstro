@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Xml.Linq;
 using Newtonsoft.Json;
+using System.Globalization;
+using System.IO;
+using System.Text;
 
 namespace VedAstro.Library
 {
@@ -47,7 +50,8 @@ namespace VedAstro.Library
 
         public enum APIProvider
         {
-            VedAstro, Azure, Google, IpData, CPU
+            VedAstro, Azure, Google, IpData, CPU,
+            LocalFile
         }
 
 
@@ -56,98 +60,105 @@ namespace VedAstro.Library
         /// </summary>
         public LocationManager()
         {
-            string accountName = Secrets.Get("CentralStorageAccountName");
+            try
+            {
+                string accountName = Secrets.Get("CentralStorageAccountName");
 
-            //#SEARCH ADDRESS
-            //------------------------------------
-            //Initialize address table 
-            string tableNameSearchAddress = "SearchAddressGeoLocation";
+                //#SEARCH ADDRESS
+                //------------------------------------
+                //Initialize address table 
+                string tableNameSearchAddress = "SearchAddressGeoLocation";
 
-            var storageUriSearchAddress = $"https://{accountName}.table.core.windows.net/{tableNameSearchAddress}";
-            //save reference for late use
-            searchAddressServiceClient = new TableServiceClient(new Uri(storageUriSearchAddress), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            searchAddressTableClient = searchAddressServiceClient.GetTableClient(tableNameSearchAddress);
+                var storageUriSearchAddress = $"https://{accountName}.table.core.windows.net/{tableNameSearchAddress}";
+                //save reference for late use
+                searchAddressServiceClient = new TableServiceClient(new Uri(storageUriSearchAddress), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
+                searchAddressTableClient = searchAddressServiceClient.GetTableClient(tableNameSearchAddress);
 
-            //# ADDRESS
-            //------------------------------------
-            //Initialize address table 
-            string tableNameAddress = "AddressGeoLocation";
+                //# ADDRESS
+                //------------------------------------
+                //Initialize address table 
+                string tableNameAddress = "AddressGeoLocation";
 
-            var storageUriAddress = $"https://{accountName}.table.core.windows.net/{tableNameAddress}";
-            //save reference for late use
-            addressServiceClient = new TableServiceClient(new Uri(storageUriAddress), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            addressTableClient = addressServiceClient.GetTableClient(tableNameAddress);
+                var storageUriAddress = $"https://{accountName}.table.core.windows.net/{tableNameAddress}";
+                //save reference for late use
+                addressServiceClient = new TableServiceClient(new Uri(storageUriAddress), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
+                addressTableClient = addressServiceClient.GetTableClient(tableNameAddress);
 
-            //Initialize address metadata table 
-            string tableNameAddressMetadata = "AddressGeoLocationMetadata";
-            var storageUriAddressMetadata = $"https://{accountName}.table.core.windows.net/{tableNameAddressMetadata}";
+                //Initialize address metadata table 
+                string tableNameAddressMetadata = "AddressGeoLocationMetadata";
+                var storageUriAddressMetadata = $"https://{accountName}.table.core.windows.net/{tableNameAddressMetadata}";
 
-            //save reference for late use
-            addressMetadataServiceClient = new TableServiceClient(new Uri(storageUriAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            addressMetadataTableClient = addressMetadataServiceClient.GetTableClient(tableNameAddressMetadata);
-
-
-            //# COORDINATES
-            //------------------------------------
-            //Initialize coordinates table 
-            string tableNameCoordinates = "CoordinatesGeoLocation";
-
-            var storageUriCoordinates = $"https://{accountName}.table.core.windows.net/{tableNameCoordinates}";
-            //save reference for late use
-            coordinatesServiceClient = new TableServiceClient(new Uri(storageUriCoordinates), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            coordinatesTableClient = coordinatesServiceClient.GetTableClient(tableNameCoordinates);
-
-            //Initialize coordinates metadata table 
-            string tableNameCoordinatesMetadata = "CoordinatesGeoLocationMetadata";
-            var storageUriCoordinatesMetadata = $"https://{accountName}.table.core.windows.net/{tableNameCoordinatesMetadata}";
-
-            //save reference for late use
-            coordinatesMetadataServiceClient = new TableServiceClient(new Uri(storageUriCoordinatesMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            coordinatesMetadataTableClient = coordinatesMetadataServiceClient.GetTableClient(tableNameCoordinatesMetadata);
+                //save reference for late use
+                addressMetadataServiceClient = new TableServiceClient(new Uri(storageUriAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
+                addressMetadataTableClient = addressMetadataServiceClient.GetTableClient(tableNameAddressMetadata);
 
 
-            //# IP ADDRESS
-            //------------------------------------
-            //Initialize address table 
-            string tableNameIpAddress = "IpAddressGeoLocation";
-            var storageUriIpAddress = $"https://{accountName}.table.core.windows.net/{tableNameIpAddress}";
-            //save reference for late use
-            ipAddressServiceClient = new TableServiceClient(new Uri(storageUriIpAddress), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            ipAddressTableClient = ipAddressServiceClient.GetTableClient(tableNameIpAddress);
+                //# COORDINATES
+                //------------------------------------
+                //Initialize coordinates table 
+                string tableNameCoordinates = "CoordinatesGeoLocation";
 
-            //Initialize address metadata table 
-            string tableNameIpAddressMetadata = "IpAddressGeoLocationMetadata";
-            var storageUriIpAddressMetadata = $"https://{accountName}.table.core.windows.net/{tableNameIpAddressMetadata}";
+                var storageUriCoordinates = $"https://{accountName}.table.core.windows.net/{tableNameCoordinates}";
+                //save reference for late use
+                coordinatesServiceClient = new TableServiceClient(new Uri(storageUriCoordinates), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
+                coordinatesTableClient = coordinatesServiceClient.GetTableClient(tableNameCoordinates);
 
-            //save reference for late use
-            ipAddressMetadataServiceClient = new TableServiceClient(new Uri(storageUriIpAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            ipAddressMetadataTableClient = ipAddressMetadataServiceClient.GetTableClient(tableNameIpAddressMetadata);
+                //Initialize coordinates metadata table 
+                string tableNameCoordinatesMetadata = "CoordinatesGeoLocationMetadata";
+                var storageUriCoordinatesMetadata = $"https://{accountName}.table.core.windows.net/{tableNameCoordinatesMetadata}";
 
-
-            //# TIMEZONE
-            //------------------------------------
-            //Initialize timezone table 
-            string tableNameTimezone = "GeoLocationTimezone";
-            var storageUriTimezone = $"https://{accountName}.table.core.windows.net/{tableNameTimezone}";
-
-            //save reference for late use
-            timezoneServiceClient = new TableServiceClient(new Uri(storageUriTimezone), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            timezoneTableClient = timezoneServiceClient.GetTableClient(tableNameTimezone);
-
-            //Initialize timezone table 
-            string tableNameTimezoneMetadata = "GeoLocationTimezoneMetadata";
-            var storageUriTimezoneMetadata = $"https://{accountName}.table.core.windows.net/{tableNameTimezoneMetadata}";
-
-            //save reference for late use
-            timezoneMetadataServiceClient = new TableServiceClient(new Uri(storageUriTimezoneMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-            timezoneMetadataTableClient = timezoneMetadataServiceClient.GetTableClient(tableNameTimezoneMetadata);
+                //save reference for late use
+                coordinatesMetadataServiceClient = new TableServiceClient(new Uri(storageUriCoordinatesMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
+                coordinatesMetadataTableClient = coordinatesMetadataServiceClient.GetTableClient(tableNameCoordinatesMetadata);
 
 
+                //# IP ADDRESS
+                //------------------------------------
+                //Initialize address table 
+                string tableNameIpAddress = "IpAddressGeoLocation";
+                var storageUriIpAddress = $"https://{accountName}.table.core.windows.net/{tableNameIpAddress}";
+                //save reference for late use
+                ipAddressServiceClient = new TableServiceClient(new Uri(storageUriIpAddress), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
+                ipAddressTableClient = ipAddressServiceClient.GetTableClient(tableNameIpAddress);
+
+                //Initialize address metadata table 
+                string tableNameIpAddressMetadata = "IpAddressGeoLocationMetadata";
+                var storageUriIpAddressMetadata = $"https://{accountName}.table.core.windows.net/{tableNameIpAddressMetadata}";
+
+                //save reference for late use
+                ipAddressMetadataServiceClient = new TableServiceClient(new Uri(storageUriIpAddressMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
+                ipAddressMetadataTableClient = ipAddressMetadataServiceClient.GetTableClient(tableNameIpAddressMetadata);
+
+
+                //# TIMEZONE
+                //------------------------------------
+                //Initialize timezone table 
+                string tableNameTimezone = "GeoLocationTimezone";
+                var storageUriTimezone = $"https://{accountName}.table.core.windows.net/{tableNameTimezone}";
+
+                //save reference for late use
+                timezoneServiceClient = new TableServiceClient(new Uri(storageUriTimezone), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
+                timezoneTableClient = timezoneServiceClient.GetTableClient(tableNameTimezone);
+
+                //Initialize timezone table 
+                string tableNameTimezoneMetadata = "GeoLocationTimezoneMetadata";
+                var storageUriTimezoneMetadata = $"https://{accountName}.table.core.windows.net/{tableNameTimezoneMetadata}";
+
+                //save reference for late use
+                timezoneMetadataServiceClient = new TableServiceClient(new Uri(storageUriTimezoneMetadata), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
+                timezoneMetadataTableClient = timezoneMetadataServiceClient.GetTableClient(tableNameTimezoneMetadata);
+            }
+            catch (Exception e)
+            {
+                //code can still continue, because God has
+                //placed local files in build folder to get location data
+                Console.WriteLine(e);
+            }
         }
 
 
         /// <summary>
-        /// https://vedastroapibeta.azurewebsites.net/api/Calculate/AddressToGeoLocation/Address/Gaithersburg, MD, USA
+        /// https://vedastroapi.azurewebsites.net/api/Calculate/AddressToGeoLocation/Address/Gaithersburg, MD, USA
         /// http://localhost:7071/api/Calculate/AddressToGeoLocation/Address/Gaithersburg, MD, USA
         /// </summary>
         public async Task<GeoLocation> AddressToGeoLocation(string userInputAddressRaw)
@@ -163,6 +174,7 @@ namespace VedAstro.Library
                 {APIProvider.VedAstro, AddressToGeoLocation_VedAstro},
                 {APIProvider.Azure, AddressToGeoLocation_Azure},
                 {APIProvider.Google, AddressToGeoLocation_Google},
+                {APIProvider.LocalFile, AddressToGeoLocation_LocalFile},
             };
 
             //start with empty as default if fail
@@ -696,7 +708,7 @@ namespace VedAstro.Library
             //do direct search for address in name field
             Expression<Func<AddressGeoLocationEntity, bool>> expression = call => call.RowKey == userInputAddress;
 
-            var recordFound = addressTableClient.Query(expression).FirstOrDefault();
+            var recordFound = addressTableClient?.Query(expression).FirstOrDefault();
 
             //if old call found check if running else default false
             //NOTE : important return empty, because used to detect later if empty
@@ -813,7 +825,6 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Gets coordinates from Google API
         /// </summary>
@@ -860,24 +871,33 @@ namespace VedAstro.Library
         {
             var returnResult = new WebResult<GeoLocationRawAPI>();
 
-            //create the request url for Google API
-            var apiKey = Secrets.Get("GoogleAPIKey");
-            var url = $"https://maps.googleapis.com/maps/api/geocode/json?key={apiKey}&address={Uri.EscapeDataString(userInputAddress)}&sensor=false";
-
-            //get location data from Azure Maps API
-            var apiResult = await Tools.ReadFromServerJsonReply(url);
-
-            // If result from API is a failure, use the system time zone as fallback
-            if (apiResult.IsPass) // All well
+            try
             {
-                // Parse Azure API's payload
-                var outData = TryParseGoogleAddressResponse(apiResult.Payload, userInputAddress);
-                bool isParsed = outData.IsParsed;
-                if (isParsed)
+                //create the request url for Google API
+                var apiKey = Secrets.Get("GoogleAPIKey");
+                var url = $"https://maps.googleapis.com/maps/api/geocode/json?key={apiKey}&address={Uri.EscapeDataString(userInputAddress)}&sensor=false";
+
+                //get location data from Azure Maps API
+                var apiResult = await Tools.ReadFromServerJsonReply(url);
+
+                // If result from API is a failure, use the system time zone as fallback
+                if (apiResult.IsPass) // All well
                 {
-                    // Convert to string (example: +08:00)
-                    returnResult.Payload = new GeoLocationRawAPI(outData.MainRow, null);
-                    returnResult.IsPass = true;
+                    // Parse Azure API's payload
+                    var outData = TryParseGoogleAddressResponse(apiResult.Payload, userInputAddress);
+                    bool isParsed = outData.IsParsed;
+                    if (isParsed)
+                    {
+                        // Convert to string (example: +08:00)
+                        returnResult.Payload = new GeoLocationRawAPI(outData.MainRow, null);
+                        returnResult.IsPass = true;
+                    }
+                    else
+                    {
+                        // Mark as fail & return empty for fail detection
+                        returnResult.IsPass = false;
+                        returnResult.Payload = new GeoLocationRawAPI(AddressGeoLocationEntity.Empty, null);
+                    }
                 }
                 else
                 {
@@ -885,8 +905,9 @@ namespace VedAstro.Library
                     returnResult.IsPass = false;
                     returnResult.Payload = new GeoLocationRawAPI(AddressGeoLocationEntity.Empty, null);
                 }
+
             }
-            else
+            catch (Exception e)
             {
                 // Mark as fail & return empty for fail detection
                 returnResult.IsPass = false;
@@ -894,9 +915,7 @@ namespace VedAstro.Library
             }
 
             return returnResult;
-
         }
-
 
 
 
@@ -1050,28 +1069,38 @@ namespace VedAstro.Library
             return returnResult;
 
         }
+        
         public static async Task<GeoLocationRawAPI> AddressToGeoLocation_Azure(string userInputAddress)
         {
             var returnResult = new WebResult<GeoLocationRawAPI>();
 
-            //create the request url for Azure Maps API
-            var apiKey = Secrets.Get("AzureMapsAPIKey");
-            var url = $"https://atlas.microsoft.com/search/address/json?api-version=1.0&subscription-key={apiKey}&query={Uri.EscapeDataString(userInputAddress)}";
-
-            //get location data from Azure Maps API
-            var apiResult = await Tools.ReadFromServerJsonReply(url);
-
-            // If result from API is a failure, use the system time zone as fallback
-            if (apiResult.IsPass) // All well
+            try
             {
-                // Parse Azure API's payload
-                var outData = TryParseAzureAddressResponse(apiResult.Payload, userInputAddress);
-                bool isParsed = outData.IsParsed;
-                if (isParsed)
+                //create the request url for Azure Maps API
+                var apiKey = Secrets.Get("AzureMapsAPIKey");
+                var url = $"https://atlas.microsoft.com/search/address/json?api-version=1.0&subscription-key={apiKey}&query={Uri.EscapeDataString(userInputAddress)}";
+
+                //get location data from Azure Maps API
+                var apiResult = await Tools.ReadFromServerJsonReply(url);
+
+                // If result from API is a failure, use the system time zone as fallback
+                if (apiResult.IsPass) // All well
                 {
-                    // Convert to string (example: +08:00)
-                    returnResult.Payload = new GeoLocationRawAPI(outData.MainRow, null);
-                    returnResult.IsPass = true;
+                    // Parse Azure API's payload
+                    var outData = TryParseAzureAddressResponse(apiResult.Payload, userInputAddress);
+                    bool isParsed = outData.IsParsed;
+                    if (isParsed)
+                    {
+                        // Convert to string (example: +08:00)
+                        returnResult.Payload = new GeoLocationRawAPI(outData.MainRow, null);
+                        returnResult.IsPass = true;
+                    }
+                    else
+                    {
+                        // Mark as fail & return empty for fail detection
+                        returnResult.IsPass = false;
+                        returnResult.Payload = new GeoLocationRawAPI(AddressGeoLocationEntity.Empty, null);
+                    }
                 }
                 else
                 {
@@ -1079,8 +1108,9 @@ namespace VedAstro.Library
                     returnResult.IsPass = false;
                     returnResult.Payload = new GeoLocationRawAPI(AddressGeoLocationEntity.Empty, null);
                 }
+
             }
-            else
+            catch (Exception e)
             {
                 // Mark as fail & return empty for fail detection
                 returnResult.IsPass = false;
@@ -1088,7 +1118,6 @@ namespace VedAstro.Library
             }
 
             return returnResult;
-
         }
 
         private static async Task<GeoLocationRawAPI> GeoLocationToTimezone_Azure(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
@@ -1644,6 +1673,148 @@ namespace VedAstro.Library
                 return new { IsParsed = false, MainRow = IpAddressGeoLocationEntity.Empty, MetadataRow = IpAddressGeoLocationMetadataEntity.Empty };
             }
         }
+
+
+        //--------------- LOCAL FILE -----------------
+        //------------  BELOW CODE EXISTS ONLY BECAUSE GOD EXIST, NO OTHER REASON --------------
+
+        /// <summary>
+        /// Gets data coordinates data from local csv file if any 
+        /// </summary>
+        private static async Task<GeoLocationRawAPI> AddressToGeoLocation_LocalFile(string userInputAddress)
+        {
+            // Define the CSV file name
+            const string fileName = "AddressGeoLocation.csv";
+
+            // Check if the CSV file exists in the root directory
+            if (!File.Exists(fileName))
+            {
+                // If the file doesn't exist, return an empty result
+                return new GeoLocationRawAPI(AddressGeoLocationEntity.Empty, null);
+            }
+
+            try
+            {
+                // Read all lines from the CSV file asynchronously
+                var lines = await File.ReadAllLinesAsync(fileName).ConfigureAwait(false);
+
+                // Skip the header line and process the data lines
+                var dataLines = lines.Skip(1);
+
+                // Clean the user input address for comparison
+                var cleanedInputAddress = Tools.CleanAzureTableKey(userInputAddress.ToLower());
+
+                AddressGeoLocationEntity matchedRow = null;
+
+                foreach (var line in dataLines)
+                {
+                    // Parse the CSV line into individual fields
+                    var values = ParseCsvLine(line);
+                    if (values.Count < 4)
+                    {
+                        // If there are not enough fields, skip this line
+                        continue;
+                    }
+
+                    // Extract the RowKey and clean it for comparison
+                    var rowKey = values[1];
+                    var cleanedRowKey = rowKey.ToLower();
+
+                    // Compare the cleaned RowKey with the cleaned user input address
+                    if (cleanedRowKey == cleanedInputAddress)
+                    {
+                        // If a match is found, extract the remaining data
+                        var partitionKey = values[0];
+                        var longitudeStr = values[2];
+                        var latitudeStr = values[3];
+
+                        if (double.TryParse(longitudeStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double longitude) &&
+                            double.TryParse(latitudeStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double latitude))
+                        {
+                            // Round the coordinates to 3 decimal places
+                            longitude = Math.Round(longitude, 3);
+                            latitude = Math.Round(latitude, 3);
+
+                            // Create a new AddressGeoLocationEntity with the parsed data
+                            matchedRow = new AddressGeoLocationEntity
+                            {
+                                PartitionKey = partitionKey,
+                                RowKey = rowKey,
+                                Longitude = longitude,
+                                Latitude = latitude,
+                            };
+
+                            break; // Stop searching after a match is found
+                        }
+                    }
+                }
+
+                if (matchedRow != null)
+                {
+                    // Return the found coordinates encapsulated in GeoLocationRawAPI
+                    return new GeoLocationRawAPI(matchedRow, null);
+                }
+                else
+                {
+                    // If no matching address is found, return an empty result
+                    return new GeoLocationRawAPI(AddressGeoLocationEntity.Empty, null);
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                // Log the exception details in debug mode
+                Console.WriteLine(ex.ToString());
+#endif
+                // Return an empty result in case of any exceptions
+                return new GeoLocationRawAPI(AddressGeoLocationEntity.Empty, null);
+            }
+        }
+
+        /// <summary>
+        /// Gets data coordinates data from local csv file if any 
+        /// </summary>
+        private static async Task<GeoLocationRawAPI> GeoLocationToTimezone_LocalFile(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
+        {
+
+        }
+
+        // Helper method to parse a CSV line considering quoted fields
+        private static List<string> ParseCsvLine(string line)
+        {
+            var result = new List<string>();
+            bool inQuotes = false;
+            var valueBuilder = new StringBuilder();
+
+            for (int i = 0; i < line.Length; i++)
+            {
+                char c = line[i];
+
+                if (c == '"')
+                {
+                    inQuotes = !inQuotes;
+                    continue;
+                }
+
+                if (c == ',' && !inQuotes)
+                {
+                    // If not inside quotes, this comma separates values
+                    result.Add(valueBuilder.ToString());
+                    valueBuilder.Clear();
+                }
+                else
+                {
+                    // Append character to the current value
+                    valueBuilder.Append(c);
+                }
+            }
+
+            // Add the last value
+            result.Add(valueBuilder.ToString());
+
+            return result;
+        }
+
 
     }
 }

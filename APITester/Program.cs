@@ -6,7 +6,7 @@ namespace APITester
         {
             // TARGET SERVER
             string SubDomain = "vedastroapi";
-            //string SubDomain = "vedastroapibeta";
+            //string SubDomain = "vedastroapi";
             //string SubDomain = "vedicastrogpt";
 
             //

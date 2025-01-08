@@ -1,39 +1,105 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
-		<loc>https://vedastro.org</loc>
-		<lastmod>2024-03-10T15:33:54+00:00</lastmod>
+		<loc>https://vedastro.org/</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>1.0</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/About.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/APIBuilder.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/ContactUs.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/Donate.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/GoodTimeFinder.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>1.0</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/Home.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 	<url>
 		<loc>https://vedastro.org/Horoscope.html</loc>
-		<lastmod>2024-03-10T15:33:54+00:00</lastmod>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 	<url>
 		<loc>https://vedastro.org/LifePredictor.html</loc>
-		<lastmod>2024-03-09T20:00:00+00:00</lastmod>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/Login.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/MadeOnEarth.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
 	</url>
 	<url>
 		<loc>https://vedastro.org/MatchChecker.html</loc>
-		<lastmod>2024-03-01T20:00:00+00:00</lastmod>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 	<url>
-		<loc>https://vedastro.org/GoodTimeFinder.html</loc>
-		<lastmod>2024-03-01T20:00:00+00:00</lastmod>
+		<loc>https://vedastro.org/MiniCalculators.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
 		<changefreq>monthly</changefreq>
-		<priority>1.0</priority>
+		<priority>0.8</priority>
 	</url>
 	<url>
-		<loc>https://vedastro.org/APIBuilder.html</loc>
-		<lastmod>2024-03-01T20:00:00+00:00</lastmod>
+		<loc>https://vedastro.org/NowInDwapara.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
 		<changefreq>monthly</changefreq>
-		<priority>1.0</priority>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/Numerology.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/PersonList.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://vedastro.org/Remedy.html</loc>
+		<lastmod>2025-01-08T12:00:00+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
 	</url>
 </urlset>

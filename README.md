@@ -27,10 +27,10 @@
 
 # 🙏 How VedAstro can help you...
 
-- [Website](https://vedastro.org/Docs/QuickGuide) --> easy & fast astrology data for **normal users**
+- [Website](https://vedastro.org) --> easy & fast astrology data for **normal users**
 - [JavaScript SDK](https://github.com/VedAstro/VedAstro/tree/master/Website/wwwroot/Demo/JavaScript) --> easy to use JS library to simplify API access and use
 - [Learn Astro Computation](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> learn exact math & logic used in astrology via **`Free Open Source`** code
-- [Life Predictor](https://vedastro.org/LifePredictor) --> accurate algorithmic prediction of a human life's past and future
+- [Life Predictor](https://vedastro.org/LifePredictor.html) --> accurate algorithmic prediction of a human life's past and future
 - [Build On Top](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> import VedAstro code directly into your existing projects
 - [15000 Famous People DOB](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location) --> Accurate birth dataset for Machine Learning & AI
 - [15000 Famous People Marriage Info](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Marriage-Divorce-Info) --> Accurate marriage/divorce dataset for Machine Learning & AI
@@ -61,12 +61,12 @@ In the universe vast, it finds its own way,<br>
 Your work shines with brilliance, come what may.<br>
 
 # 🎯 Perfect Predictions
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-steve.jpg)](https://vedastro.org/LifePredictor)   
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-monroe.jpg)](https://vedastro.org/LifePredictor)   
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-hitler.jpg)](https://vedastro.org/LifePredictor)   
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-elon.jpg)](https://vedastro.org/LifePredictor)   
-[![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/Match)   
-[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Horoscope)   
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-steve.jpg)](https://vedastro.org/LifePredictor.html)   
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-monroe.jpg)](https://vedastro.org/LifePredictor.html)   
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-hitler.jpg)](https://vedastro.org/LifePredictor.html)   
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-elon.jpg)](https://vedastro.org/LifePredictor.html)   
+[![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/MatchChecker.html)   
+[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Horoscope.html)   
 
 
 # 📊 +200 Astro API Calls
@@ -168,7 +168,7 @@ Anybody who has studied Vedic Astrology knows well how accurate it can be.
 But also how complex it can get to make accurate predictions.
 It takes **decades of experience** to be able make accurate prediction.
 As such this knowledge only reaches a limited people.
-This project is an effort to change that. [Read More](https://vedastro.org/About)
+This project is an effort to change that. [Read More](https://vedastro.org/About.html)
 
 # 🎂 9 Years Old 
 The first line of code for this project was written in **late 2014** at **Itä-Pasila**.
@@ -178,7 +178,7 @@ With continued support from users, this project has steadily grown to what it is
 # 📚 Credits &amp; Reference 
 ![credits](https://vedastro.org/images/bv-raman-rao.png)
 
-Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao for pioneering easy to read astrology books. Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle) for proving the **efficacy of free and open work** for the benefit of all men...[Read More](https://vedastro.org/About).
+Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao for pioneering easy to read astrology books. Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle) for proving the **efficacy of free and open work** for the benefit of all men...[Read More](https://vedastro.org/About.html).
 
 
 # 💌 Support
@@ -266,8 +266,8 @@ Just **Like** & **Share** our social pages and it'll be a **big** help already!
 
 <!--
 # 👪 Join our family
-If you want to do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily)  
-We're always looking for somebody to **[improve code.](https://vedastro.org/JoinOurFamily)** or **[help with funding](https://vedastro.org/Donate)**.
+If you want to do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily.html)  
+We're always looking for somebody to **[improve code.](https://vedastro.org/JoinOurFamily.html)** or **[help with funding](https://vedastro.org/Donate.html)**.
 -->
 
 # 🙋‍♂️ Come say "Hi", we don't bite!

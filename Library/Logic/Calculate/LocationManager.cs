@@ -449,36 +449,6 @@ namespace VedAstro.Library
 
         //----------------------------------PRIVATE FUNCS-----------------------------
 
-        /// <summary>
-        /// Will add new cache to Geo Location Cache
-        /// </summary>
-        //private void AddToCache(GeoLocation parsedGeoLocation, string rowKeyData = "", string timezone = "", string source = "")
-        //{
-
-        //    //if cleaned name is same with user input name (RowKey), than remove cleaned name (save space)
-        //    var cleanedName = CreateSearchableName(parsedGeoLocation.Name());
-        //    cleanedName = cleanedName == rowKeyData ? "" : cleanedName;
-
-        //    //NOTES
-        //    //Azure Table Storage is designed for fast point
-        //    //queries where the client knows the
-        //    //Partition Key and Row Key
-
-        //    //package the data
-        //    GeoLocationCacheEntity customerEntity = new()
-        //    {
-        //        PartitionKey = parsedGeoLocation.Name(), //name given by Google API
-        //        CleanedName = cleanedName, //used for fuzzy search on query side
-        //        RowKey = rowKeyData, //row key data can be time or name inputed by caller
-        //        Timezone = timezone,
-        //        Latitude = parsedGeoLocation.Latitude(),
-        //        Longitude = parsedGeoLocation.Longitude(),
-        //        Source = source // used for identifying who made it, for validation checking
-        //    };
-
-        //    //creates record if no exist, update if already there
-        //    tableClient.UpsertEntity(customerEntity);
-        //}
 
         private void AddToTimezoneTable(GeoLocationTimezoneEntity newRow)
         {

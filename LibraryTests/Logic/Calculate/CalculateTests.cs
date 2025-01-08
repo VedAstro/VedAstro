@@ -245,10 +245,66 @@ namespace VedAstro.Library.Tests
         //    var ishtaKala = Calculate.IshtaKaala(std);
 
         //    Assert.IsTrue(ishtaKala == null);
-            
+
 
         //}
 
+        [TestMethod()]
+        public void LagnaChartTest()
+        {
+            var house1Planets = new List<PlanetName>() { };
+            var house2Planets = new List<PlanetName>() { }; // Empty
+            var house3Planets = new List<PlanetName>() { PlanetName.Jupiter };
+            var house4Planets = new List<PlanetName>() { };
+            var house5Planets = new List<PlanetName>() { PlanetName.Mars };
+            var house6Planets = new List<PlanetName>() { PlanetName.Ketu };
+            var house7Planets = new List<PlanetName>() { PlanetName.Sun };
+            var house8Planets = new List<PlanetName>() { PlanetName.Mercury };
+            var house9Planets = new List<PlanetName>() { PlanetName.Moon, PlanetName.Venus };
+            var house10Planets = new List<PlanetName>() { };
+            var house11Planets = new List<PlanetName>() { PlanetName.Saturn };
+            var house12Planets = new List<PlanetName>() { PlanetName.Rahu };
+
+            Time timeSample = new("15:05 27/11/2004 +05:30", new GeoLocation("", 77.2088, 28.6139));
+            
+            var house1PlanetsTest = Calculate.PlanetsInHouseBasedOnSign(HouseName.House1, timeSample);
+            var house1PlanetsTestx = Calculate.PlanetsInHouse(HouseName.House1, timeSample);
+            var xxx = CalculateKP.PlanetsInHouse(HouseName.House1, timeSample);
+            //CollectionAssert.AreEqual(house1Planets, house1PlanetsTest);
+
+            var house2PlanetsTest = Calculate.PlanetsInHouseBasedOnSign(HouseName.House2, timeSample);
+            //CollectionAssert.AreEqual(house2Planets, house2PlanetsTest);
+
+            var house3PlanetsTest = Calculate.PlanetsInHouseBasedOnSign(HouseName.House3, timeSample);
+            //CollectionAssert.AreEqual(house3Planets, house3PlanetsTest);
+
+            var house4PlanetsTest = Calculate.PlanetsInHouseBasedOnSign(HouseName.House4, timeSample);
+            //CollectionAssert.AreEqual(house4Planets, house4PlanetsTest);
+
+            var house5PlanetsTest = Calculate.PlanetsInHouse(HouseName.House5, timeSample);
+            CollectionAssert.AreEqual(house5Planets, house5PlanetsTest);
+
+            var house6PlanetsTest = Calculate.PlanetsInHouse(HouseName.House6, timeSample);
+            CollectionAssert.AreEqual(house6Planets, house6PlanetsTest);
+
+            var house7PlanetsTest = Calculate.PlanetsInHouse(HouseName.House7, timeSample);
+            CollectionAssert.AreEqual(house7Planets, house7PlanetsTest);
+
+            var house8PlanetsTest = Calculate.PlanetsInHouse(HouseName.House8, timeSample);
+            CollectionAssert.AreEqual(house8Planets, house8PlanetsTest);
+
+            var house9PlanetsTest = Calculate.PlanetsInHouse(HouseName.House9, timeSample);
+            CollectionAssert.AreEqual(house9Planets, house9PlanetsTest);
+
+            var house10PlanetsTest = Calculate.PlanetsInHouse(HouseName.House10, timeSample);
+            CollectionAssert.AreEqual(house10Planets, house10PlanetsTest);
+
+            var house11PlanetsTest = Calculate.PlanetsInHouse(HouseName.House11, timeSample);
+            CollectionAssert.AreEqual(house11Planets, house11PlanetsTest);
+
+            var house12PlanetsTest = Calculate.PlanetsInHouse(HouseName.House12, timeSample);
+            CollectionAssert.AreEqual(house12Planets, house12PlanetsTest);
+        }
 
 
 
@@ -550,10 +606,10 @@ namespace VedAstro.Library.Tests
             // In case of Venus in the Standard
             // Horoscope the Kashta predominates over, Ishta.
             // Therefore, in his Dasa or Bhukti, Venus will give
-            // aJl sorts of miseries with regard to the bhavas ruled
+            // all sorts of miseries with regard to the bhavas ruled
             // or aspected by him. 
 
-            var venusScore = Calculate.PlanetIshtaKashtaScore(PlanetName.Venus, StandardHoroscope);
+            var venusScore = Calculate.PlanetIshtaKashtaScoreDegree(PlanetName.Venus, StandardHoroscope);
 
             Assert.AreEqual(-1, venusScore);
 
@@ -1591,6 +1647,6 @@ namespace VedAstro.Library.Tests
 
         }
 
-        
+
     }
 }

@@ -25,9 +25,9 @@ var horoscopePredictionTexts = new HoroscopePredictionTexts("HoroscopePrediction
 new IconButton("IconButton_Calculate_Horoscope");
 new IconButton("IconButton_Advanced_Horoscope");
 
-new InfoBox("InfoBox_AskAI_Horoscope");
-new InfoBox("InfoBox_EasyImport_Horoscope");
-new InfoBox("InfoBox_ForgotenTime_Horoscope");
+//new InfoBox("InfoBox_AskAI_Horoscope");
+//new InfoBox("InfoBox_EasyImport_Horoscope");
+//new InfoBox("InfoBox_ForgotenTime_Horoscope");
 
 
 //----------------------------------- FUNCS ------------------------------------------
@@ -65,7 +65,7 @@ async function OnClickCalculate_Horoscope() {
     var birthTimeUrl = selectedPerson.BirthTime.ToUrl();
 
     //generate tables and charts
-    await generateHoroscopeChat(birthTimeUrl);
+    //await generateHoroscopeChat(birthTimeUrl);
 
     //data used to generate chart
     var inputArguments = {

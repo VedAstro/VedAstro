@@ -47,9 +47,9 @@ class VedAstro {
     /**
      * The default API domain.
      */
-    static ApiDomain = "http://localhost:7071/api";
+    //static ApiDomain = "http://localhost:7071/api";
     //static ApiDomain = "https://vedastroapi.azurewebsites.net/api";
-    //static ApiDomain = "https://vedastroapibeta.azurewebsites.net/api";
+    static ApiDomain = "https://vedastroapibeta.azurewebsites.net/api";
 
     /**
        * get user ID from storage else give "101" guest id
@@ -7602,7 +7602,7 @@ class ApiMethodViewer {
 
                 url += timeUrlSegment;
             } else if (paramType === 'VedAstro.Library.HouseName' || paramType === 'VedAstro.Library.PlanetName') {
-                // Modified code to handle both HouseName and PlanetName parameters
+                // Handle both HouseName and PlanetName parameters
                 const selectElement = document.getElementById(`${this.ElementID}_input_${paramName}`);
                 paramValue = selectElement.value;
                 if (paramValue === "") {

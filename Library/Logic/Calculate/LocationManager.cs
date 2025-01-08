@@ -274,7 +274,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Will get ip address from caller need to supply IP
-        /// https://vedastroapibeta.azurewebsites.net/api/IpAddressToGeoLocation/IpAddress/180.75.241.81
+        /// https://vedastroapi.azurewebsites.net/api/IpAddressToGeoLocation/IpAddress/180.75.241.81
         /// </summary>
         public async Task<GeoLocation> IpAddressToGeoLocation(string ipAddress)
         {
@@ -331,7 +331,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// https://vedastroapibeta.azurewebsites.net/api/CoordinatesToGeoLocation/Latitude/46.9748794/Longitude/8.7843529
+        /// https://vedastroapi.azurewebsites.net/api/CoordinatesToGeoLocation/Latitude/46.9748794/Longitude/8.7843529
         /// </summary>
         public async Task<GeoLocation> CoordinatesToGeoLocation(string latitudeStr, string longitudeStr)
         {
@@ -390,7 +390,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// https://vedastroapibeta.azurewebsites.net/api/GeoLocationToTimezone/Location/Chennai,TamilNadu,India/Time/23:37/07/08/1990/+01:00
+        /// https://vedastroapi.azurewebsites.net/api/GeoLocationToTimezone/Location/Chennai,TamilNadu,India/Time/23:37/07/08/1990/+01:00
         /// </summary>
         public async Task<string> GeoLocationToTimezone(GeoLocation geoLocation, DateTimeOffset stdTimeAtLocation)
         {

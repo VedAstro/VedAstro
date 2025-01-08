@@ -6,7 +6,7 @@ public class URL
 {
     //keep inside
     //public const string ApiBeta = "https://beta.api.vedastro.org";
-    public const string ApiBetaDirect = "https://vedastroapibeta.azurewebsites.net/api";
+    public const string ApiBetaDirect = "https://vedastroapi.azurewebsites.net/api";
     //public const string ApiStable = "https://api.vedastro.org";
     public const string ApiStableDirect = "https://vedastroapi.azurewebsites.net/api";
     public const string WebBeta = "https://beta.vedastro.org";

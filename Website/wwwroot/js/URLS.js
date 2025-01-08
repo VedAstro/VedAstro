@@ -5,7 +5,7 @@
 export class URLS {
 
     static ApiBeta = "https://beta.api.vedastro.org";
-    static ApiBetaDirect = "https://vedastroapibeta.azurewebsites.net";
+    static ApiBetaDirect = "https://vedastroapi.azurewebsites.net";
     static ApiStable = "https://api.vedastro.org";
     static ApiStableDirect = "https://vedastroapi.azurewebsites.net";
     static WebBeta = "https://beta.vedastro.org";

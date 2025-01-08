@@ -49,7 +49,7 @@ class VedAstro {
      */
     //static ApiDomain = "http://localhost:7071/api";
     //static ApiDomain = "https://vedastroapi.azurewebsites.net/api";
-    static ApiDomain = "https://vedastroapibeta.azurewebsites.net/api";
+    static ApiDomain = "https://vedastroapi.azurewebsites.net/api";
 
     /**
        * get user ID from storage else give "101" guest id

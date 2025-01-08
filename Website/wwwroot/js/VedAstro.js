@@ -1082,7 +1082,7 @@ window.GenerateAstroTable = (settings, inputArguments) => {
  */
 class AstroTable {
     //# LOCAL <--> LIVE Switch
-    //APIDomain = "https://vedastroapibeta.azurewebsites.net/api";
+    //APIDomain = "https://vedastroapi.azurewebsites.net/api";
     APIDomain = "https://vedastroapi.azurewebsites.net/api";
     //APIDomain = "http://localhost:7071/api";
 
@@ -3398,7 +3398,7 @@ class HoroscopeChat {
     SelectedTopicText = "";//she's filled in when set
     ServerURL = ""; //filled in later just before use
     //LiveServerURL = "http://localhost:7071/api/Calculate";
-    //LiveServerURL = "https://vedastroapibeta.azurewebsites.net/api/Calculate";
+    //LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
     LiveServerURL = "https://vedastroapi.azurewebsites.net/api/Calculate";
     //LocalServerURL = "http://localhost:7071/api/Calculate/HoroscopeChat";
     ElementID = ""; //ID of main div where table & header will be injected

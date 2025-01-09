@@ -407,6 +407,7 @@ namespace VedAstro.Library
                 {APIProvider.VedAstro, GeoLocationToTimezone_Vedastro},
                 {APIProvider.Azure, GeoLocationToTimezone_Azure},
                 {APIProvider.Google, GeoLocationToTimezone_Google},
+                {APIProvider.LocalFile, GeoLocationToTimezone_LocalFile},
                 {APIProvider.CPU, GeoLocationToTimezone_CPU}, //NOTE: last resort option for testing locally (not accurate)
             };
 
@@ -664,7 +665,7 @@ namespace VedAstro.Library
             Expression<Func<GeoLocationTimezoneEntity, bool>> expression = call => call.PartitionKey == geoLocation.ToPartitionKey() //lat & long 
                                                                                 && call.RowKey == timeAtLocation.ToRowKey();
 
-            var recordFound = timezoneTableClient.Query(expression).FirstOrDefault();
+            var recordFound = timezoneTableClient?.Query(expression).FirstOrDefault();
 
             //get timezone data out
             var foundRaw = recordFound ?? GeoLocationTimezoneEntity.Empty;
@@ -783,29 +784,38 @@ namespace VedAstro.Library
         {
             var returnResult = new WebResult<GeoLocationRawAPI>();
 
-            //use timestamp to account for historic timezone changes
-            var locationTimeUnix = timeAtLocation.ToUnixTimeSeconds();
-            var longitude = geoLocation.Longitude();
-            var latitude = geoLocation.Latitude();
-
-            //create the request url for Google API 
-            var apiKey = Secrets.Get("GoogleAPIKey");
-            var url = string.Format($@"https://maps.googleapis.com/maps/api/timezone/xml?location={latitude},{longitude}&timestamp={locationTimeUnix}&key={apiKey}");
-
-            //get raw location data from GoogleAPI
-            var apiResult = await Tools.ReadFromServerXmlReply(url);
-
-            // If result from API is a failure, use the system time zone as fallback
-            if (apiResult.IsPass) // All well
+            try
             {
-                // Parse Azure API's payload
-                var outData = TryParseGoogleTimeZoneResponse(timeAtLocation, geoLocation, apiResult.Payload);
-                bool isParsed = outData.IsParsed;
-                if (isParsed)
+                //use timestamp to account for historic timezone changes
+                var locationTimeUnix = timeAtLocation.ToUnixTimeSeconds();
+                var longitude = geoLocation.Longitude();
+                var latitude = geoLocation.Latitude();
+
+                //create the request url for Google API 
+                var apiKey = Secrets.Get("GoogleAPIKey");
+                var url = string.Format($@"https://maps.googleapis.com/maps/api/timezone/xml?location={latitude},{longitude}&timestamp={locationTimeUnix}&key={apiKey}");
+
+                //get raw location data from GoogleAPI
+                var apiResult = await Tools.ReadFromServerXmlReply(url);
+
+                // If result from API is a failure, use the system time zone as fallback
+                if (apiResult.IsPass) // All well
                 {
-                    // Convert to string (example: +08:00)
-                    returnResult.Payload = new GeoLocationRawAPI(outData.MainRow, outData.MetadataRow);
-                    returnResult.IsPass = true;
+                    // Parse Azure API's payload
+                    var outData = TryParseGoogleTimeZoneResponse(timeAtLocation, geoLocation, apiResult.Payload);
+                    bool isParsed = outData.IsParsed;
+                    if (isParsed)
+                    {
+                        // Convert to string (example: +08:00)
+                        returnResult.Payload = new GeoLocationRawAPI(outData.MainRow, outData.MetadataRow);
+                        returnResult.IsPass = true;
+                    }
+                    else
+                    {
+                        // Mark as fail & return empty for fail detection
+                        returnResult.IsPass = false;
+                        returnResult.Payload = new GeoLocationRawAPI(GeoLocationTimezoneEntity.Empty, GeoLocationTimezoneMetadataEntity.Empty);
+                    }
                 }
                 else
                 {
@@ -814,7 +824,7 @@ namespace VedAstro.Library
                     returnResult.Payload = new GeoLocationRawAPI(GeoLocationTimezoneEntity.Empty, GeoLocationTimezoneMetadataEntity.Empty);
                 }
             }
-            else
+            catch (Exception e)
             {
                 // Mark as fail & return empty for fail detection
                 returnResult.IsPass = false;
@@ -1124,27 +1134,36 @@ namespace VedAstro.Library
         {
             var returnResult = new WebResult<GeoLocationRawAPI>();
 
-            // Convert the DateTimeOffset to ISO 8601 format ("yyyy-MM-ddTHH:mm:ssZ")
-            var locationTimeIso8601 = timeAtLocation.ToString("O", System.Globalization.CultureInfo.InvariantCulture);
-
-            // Create the request URL for Azure Maps API
-            var apiKey = Secrets.Get("AzureMapsAPIKey");
-            var url = $@"https://atlas.microsoft.com/timezone/byCoordinates/json?api-version=1.0&subscription-key={apiKey}&query={geoLocation.Latitude()},{geoLocation.Longitude()}&timestamp={Uri.EscapeDataString(locationTimeIso8601)}";
-
-            // Get raw location data from Azure Maps API
-            var apiResult = await Tools.ReadFromServerJsonReply(url);
-
-            // If result from API is a failure, use the system time zone as fallback
-            if (apiResult.IsPass) // All well
+            try
             {
-                // Parse Azure API's payload
-                var outData = TryParseAzureTimeZoneResponse(timeAtLocation, geoLocation, apiResult.Payload);
-                bool isParsed = outData.IsParsed;
-                if (isParsed)
+                // Convert the DateTimeOffset to ISO 8601 format ("yyyy-MM-ddTHH:mm:ssZ")
+                var locationTimeIso8601 = timeAtLocation.ToString("O", CultureInfo.InvariantCulture);
+
+                // Create the request URL for Azure Maps API
+                var apiKey = Secrets.Get("AzureMapsAPIKey");
+                var url = $@"https://atlas.microsoft.com/timezone/byCoordinates/json?api-version=1.0&subscription-key={apiKey}&query={geoLocation.Latitude()},{geoLocation.Longitude()}&timestamp={Uri.EscapeDataString(locationTimeIso8601)}";
+
+                // Get raw location data from Azure Maps API
+                var apiResult = await Tools.ReadFromServerJsonReply(url);
+
+                // If result from API is a failure, use the system time zone as fallback
+                if (apiResult.IsPass) // All well
                 {
-                    // Convert to string (example: +08:00)
-                    returnResult.Payload = new GeoLocationRawAPI(outData.MainRow, outData.MetadataRow);
-                    returnResult.IsPass = true;
+                    // Parse Azure API's payload
+                    var outData = TryParseAzureTimeZoneResponse(timeAtLocation, geoLocation, apiResult.Payload);
+                    bool isParsed = outData.IsParsed;
+                    if (isParsed)
+                    {
+                        // Convert to string (example: +08:00)
+                        returnResult.Payload = new GeoLocationRawAPI(outData.MainRow, outData.MetadataRow);
+                        returnResult.IsPass = true;
+                    }
+                    else
+                    {
+                        // Mark as fail & return empty for fail detection
+                        returnResult.IsPass = false;
+                        returnResult.Payload = new GeoLocationRawAPI(GeoLocationTimezoneEntity.Empty, GeoLocationTimezoneMetadataEntity.Empty);
+                    }
                 }
                 else
                 {
@@ -1153,7 +1172,7 @@ namespace VedAstro.Library
                     returnResult.Payload = new GeoLocationRawAPI(GeoLocationTimezoneEntity.Empty, GeoLocationTimezoneMetadataEntity.Empty);
                 }
             }
-            else
+            catch (Exception e)
             {
                 // Mark as fail & return empty for fail detection
                 returnResult.IsPass = false;
@@ -1776,7 +1795,92 @@ namespace VedAstro.Library
         /// </summary>
         private static async Task<GeoLocationRawAPI> GeoLocationToTimezone_LocalFile(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
+            const string fileName = "GeoLocationTimezone.csv";
 
+            // Check if the CSV file exists in the root directory
+            if (!File.Exists(fileName))
+            {
+                // If the file doesn't exist, return an empty result
+                return new GeoLocationRawAPI(GeoLocationTimezoneEntity.Empty, null);
+            }
+
+            try
+            {
+                // Read all lines from the CSV file asynchronously
+                var lines = await File.ReadAllLinesAsync(fileName).ConfigureAwait(false);
+
+                // Skip the header line and process the data lines
+                var dataLines = lines.Skip(1);
+
+                // Generate the PartitionKey and RowKey for comparison
+
+                // Round latitude and longitude to 1 decimal place to match the format in CSV
+                double roundedLatitude = Math.Round(geoLocation.Latitude(), 1);
+                double roundedLongitude = Math.Round(geoLocation.Longitude(), 1);
+
+                // Format the PartitionKey as per the CSV format (including quotes)
+                string partitionKey = $"\"{roundedLatitude.ToString(CultureInfo.InvariantCulture)},{roundedLongitude.ToString(CultureInfo.InvariantCulture)}\"";
+
+                // Round timeAtLocation to date with zero offset
+                DateTimeOffset roundedTime = new DateTimeOffset(timeAtLocation.Year, timeAtLocation.Month, timeAtLocation.Day, 0, 0, 0, TimeSpan.Zero);
+
+                // Format the RowKey as per the CSV format
+                string rowKey = roundedTime.ToString("HH:mm dd-MM-yyyy zzz", CultureInfo.InvariantCulture);
+
+                GeoLocationTimezoneEntity matchedRow = null;
+
+                foreach (var line in dataLines)
+                {
+                    // Parse the CSV line into individual fields
+                    var values = ParseCsvLine(line);
+                    if (values.Count < 4)
+                    {
+                        // If there are not enough fields, skip this line
+                        continue;
+                    }
+
+                    // Extract the PartitionKey and RowKey
+                    var filePartitionKey = values[0];
+                    var fileRowKey = values[1];
+                    var timezoneText = values[2];
+                    var metadataHash = values[3];
+
+                    // Compare the PartitionKey and RowKey
+                    if (filePartitionKey == partitionKey && fileRowKey == rowKey)
+                    {
+                        // Create a new GeoLocationTimezoneEntity with the parsed data
+                        matchedRow = new GeoLocationTimezoneEntity
+                        {
+                            PartitionKey = filePartitionKey,
+                            RowKey = fileRowKey,
+                            TimezoneText = timezoneText,
+                            MetadataHash = metadataHash
+                        };
+
+                        break; // Stop searching after a match is found
+                    }
+                }
+
+                if (matchedRow != null)
+                {
+                    // Return the found data encapsulated in GeoLocationRawAPI
+                    return new GeoLocationRawAPI(matchedRow, null);
+                }
+                else
+                {
+                    // If no matching data is found, return an empty result
+                    return new GeoLocationRawAPI(GeoLocationTimezoneEntity.Empty, null);
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                // Log the exception details in debug mode
+                Console.WriteLine(ex.ToString());
+#endif
+                // Return an empty result in case of any exceptions
+                return new GeoLocationRawAPI(GeoLocationTimezoneEntity.Empty, null);
+            }
         }
 
         // Helper method to parse a CSV line considering quoted fields
@@ -1814,7 +1918,6 @@ namespace VedAstro.Library
 
             return result;
         }
-
 
     }
 }

@@ -610,7 +610,8 @@ namespace VedAstro.Library
                         hhmmStr: parts[3], //note skip "Time"
                         dateStr: parts[4],
                         monthStr: parts[5],
-                        yearStr: parts[6]).Result;
+                        yearStr: parts[6],
+                        offsetStr: parts[7]).Result;
 
                     return Task.FromResult<dynamic>(parsedTime);
 

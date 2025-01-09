@@ -881,13 +881,14 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Converts raw call from API via URL to parsed Time
-        /// Note: Timezone/Offset auto get from API based on location
+        /// Note: Timezone/Offset auto get from API based on location ONLY if set to +00:00
         /// </summary>
         public static async Task<Time> ParseTime(string locationName,
             string hhmmStr,
             string dateStr,
             string monthStr,
-            string yearStr)
+            string yearStr,
+            string offsetStr)
         {
             //NOTE: location name can be "coordinates" or "real location names" 
             //      detect here which is which based on pattern
@@ -915,25 +916,28 @@ namespace VedAstro.Library
                 geoLocation = Calculate.AddressToGeoLocation(locationName);
             }
 
-
-            //compile the time string into standard format
-            //NOTE : offset hard set to UTC 0, because not used, only format filler (will be overriden later)
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} +00:00";
-
-            //get standard UTC Timezone offset at location at time (API) 
-            var isPass = Time.TryParseStd(timeStr, out var parsedInputTime);
-
-            //get timezone as text
-            var timeZone = await Calculate.GeoLocationToTimezone(geoLocation, parsedInputTime);
-
-            //if failed to get timezone raise alarm
-            if (string.IsNullOrEmpty(timeZone))
+            //if timezone offset is +00:00 the do API search else use as inputed by caller
+            if (offsetStr == "+00:00")
             {
-                throw new Exception("Timezone failed to get from API!");
+                //compile the time string into standard format
+                //NOTE : offset hard set to UTC 0, because not used, only format filler (will be overriden later)
+                var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} +00:00";
+
+                //get standard UTC Timezone offset at location at time (API) 
+                var isPass = Time.TryParseStd(timeStr, out var parsedInputTime);
+
+                //get timezone as text
+                offsetStr = await Calculate.GeoLocationToTimezone(geoLocation, parsedInputTime);
+
+                //if failed to get timezone raise alarm
+                if (string.IsNullOrEmpty(offsetStr))
+                {
+                    throw new Exception("Timezone failed to get from API!");
+                }
             }
 
             //create time with perfect coordinates & time zone
-            var correctTimeString = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {timeZone}";
+            var correctTimeString = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
             var parsedTime = new Time(correctTimeString, geoLocation);
 
             return parsedTime;

@@ -14,6 +14,10 @@ jobs:
           persist-credentials: false  # This prevents GitHub Actions from using its token
           fetch-depth: 0              # This ensures all history is fetched
 
+      # Add this new step
+      - name: Configure NuGet to Use nuget.org
+        run: nuget sources Add -Name nuget.org -Source https://api.nuget.org/v3/index.json
+          
       # Restore project dependencies for Library
       - name: Restore dependencies for Library
         run: dotnet restore ./Library

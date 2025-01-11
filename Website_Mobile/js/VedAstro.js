@@ -262,6 +262,20 @@ class CommonTools {
         Swal.close();
     }
 
+    /**
+     * Converts a camelCase string to PascalCase.
+     * @param {string} camelCaseStr - The camelCase string to convert.
+     * @returns {string} - The PascalCase string.
+     */
+    static camelCaseToPascalCase(camelCaseStr) {
+        if (camelCaseStr && typeof camelCaseStr === 'string') {
+            return camelCaseStr.charAt(0).toUpperCase() + camelCaseStr.slice(1);
+        } else {
+            return camelCaseStr;
+        }
+    }
+
+
     //converts camel case to pascal case, like "settings.keyColumn" to "settings.KeyColumn"
     static CamelCaseKeysToPascalCase(obj) {
         let newObj = Array.isArray(obj) ? [] : {};
@@ -7613,7 +7627,7 @@ class ApiMethodViewer {
                     return;
                 }
                 // Append to URL
-                url += `${paramName}/${encodeURIComponent(paramValue)}/`;
+                url += `${CommonTools.camelCaseToPascalCase(paramName)}/${paramValue}/`;
             } else if (paramType === 'System.Int32' || paramType === 'System.Double') {
                 const inputElement = document.getElementById(`${this.ElementID}_input_${paramName}`);
                 paramValue = inputElement.value;
@@ -7625,7 +7639,7 @@ class ApiMethodViewer {
                     return;
                 }
                 // For int parameters, we can append directly
-                url += `${paramValue}/`;
+                url += `${CommonTools.camelCaseToPascalCase(paramName)}/${paramValue}/`;
             } else {
                 // For other types, get the value from input field
                 const inputElement = document.getElementById(`${this.ElementID}_input_${paramName}`);
@@ -7638,9 +7652,10 @@ class ApiMethodViewer {
                     return;
                 }
                 // Append to URL
-                url += `${paramName}/${encodeURIComponent(paramValue)}/`;
+                url += `${CommonTools.camelCaseToPascalCase(paramName)}/${encodeURIComponent(paramValue)}/`;
             }
         }
+
 
         // Remove any double slashes
         url = url.replace(/([^:]\/)\/+/g, "$1");

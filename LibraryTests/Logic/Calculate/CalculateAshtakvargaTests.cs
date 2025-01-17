@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Bing.ImageSearch.Models;
+using SwissEphNet;
+using System.Runtime.Intrinsics.X86;
 
 namespace VedAstro.Library.Tests
 {
@@ -74,7 +77,6 @@ namespace VedAstro.Library.Tests
             var isOccuring = CalculateHoroscope.SunAshtakavargaYoga3(franklinDRoosevelt);
 
             Assert.AreEqual(true, isOccuring.Occuring);
-
         }
 
         [TestMethod()]

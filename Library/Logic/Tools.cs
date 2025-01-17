@@ -1854,51 +1854,6 @@ namespace VedAstro.Library
             return offset;
         }
 
-        /// <summary>
-        /// Given a location & time, will use live/local VedAstro API server to get data
-        ///  - Cached in runtime memory
-        ///  - Checks API live and local during debug mode
-        ///  - Uses backup low accuracy timezone if all else fails (via api)
-        /// </summary>
-        public static async Task<WebResult<string>> GetTimezoneOffsetApi(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
-        {
-            //CACHE MECHANISM
-            return await CacheManager.GetCache(new CacheKey("Tools.GetTimezoneOffsetApi", geoLocation, timeAtLocation), getTimezoneOffsetApi);
-
-            async Task<WebResult<string>> getTimezoneOffsetApi()
-            {
-                try
-                {
-                    //get location data from VedAstro API
-                    var allUrls = new URL(ThisAssembly.BranchName.Contains("beta")); //todo clean up
-
-                    //call url must be correct format
-                    //.../Calculate/GeoLocationToTimezone/Location/Tokyo, Japan/Coordinates/35.65,139.83/Time/14:02/09/11/1977/+00:00
-                    var url = allUrls.GeoLocationToTimezoneAPI + geoLocation.ToUrl() + timeAtLocation.ToUrl();
-
-                    //make call to Vedastro Live/Local API
-                    //NOTE: when running from python lib will default to live server
-                    var webResult = await Tools.ReadFromServerJsonReplyVedAstro(url);
-
-                    //if fail to make call, end here
-                    if (!webResult.IsPass) { return new WebResult<string>(false, ""); }
-
-                    //if success, get the reply data out
-                    var box = webResult.Payload["GeoLocationToTimezone"];
-                    var data = box.Value<string>();
-
-                    //return to caller pass
-                    return new WebResult<string>(true, data);
-
-                }
-                catch (Exception e)
-                {
-                    LibLogger.Debug(e);
-                    //return to caller pass
-                    return new WebResult<string>(false, "");
-                }
-            }
-        }
 
         /// <summary>
         /// Given a timespan instance converts to string timezone +08:00

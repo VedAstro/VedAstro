@@ -169,9 +169,9 @@ namespace VedAstro.Library
             var dateTimeOffset = DateTimeOffset.UtcNow;
 
             //get standard offset at location
-            var locationOffset = await Tools.GetTimezoneOffsetApi(geoLocation, dateTimeOffset);
+            var locationOffset = await Calculate.GeoLocationToTimezone(geoLocation, dateTimeOffset);
 
-            DateTimeOffset temp = DateTimeOffset.ParseExact(locationOffset.Payload, Time.DateTimeFormatTimezone, null);
+            DateTimeOffset temp = DateTimeOffset.ParseExact(locationOffset, Time.DateTimeFormatTimezone, null);
             TimeSpan timespan = temp.Offset;
 
             //var timeSpan = TimeSpan.Parse(locationOffset.Payload);

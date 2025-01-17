@@ -4141,13 +4141,7 @@ namespace VedAstro.Library
         public static async Task<Person> GetPersonByIdViaAPI(string personId, string ownerId)
         {
 
-            var url = $"{URL.ApiStableDirect}/GetPerson/OwnerId/{ownerId}/PersonId/{personId}";
-            var result = await Tools.ReadServerRaw<JObject>(url);
-
-            //get parsed payload from raw result
-            var person = Tools.GetPayload(result, Person.FromJson);
-
-            return person;
+            throw new NotImplementedException();
 
         }
 

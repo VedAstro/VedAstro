@@ -15,6 +15,8 @@ namespace VedAstro.Library.Tests
             //Pisces is aspected by the Putrakaraka(child-giver) Mercury.
             //In August 1982 she gave birth to a daughter.
 
+            Calculate.Ayanamsa = (int)Ayanamsa.RAMAN;
+
             //Jan 19. 1958 2:45 pm. Hanoi 
             Time testHoroscope = new("14:45 19/01/1958 +05:30", new GeoLocation("Hanoi", 105.8342, 21.0278)); //° N, ° E
 

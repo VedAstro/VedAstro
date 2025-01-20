@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Net.Http;
 
 namespace LLMCoder
 {
@@ -662,6 +663,7 @@ namespace LLMCoder
             client = new HttpClient();
             client.Timeout = Timeout.InfiniteTimeSpan;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.SelectedLLMConfig.ApiKey);
+            client.DefaultRequestHeaders.Add("api-key", this.SelectedLLMConfig.ApiKey); //for OpenAI models
             client.BaseAddress = new Uri(this.SelectedLLMConfig.Endpoint);
             this.llmThinkingProgressBar.Value = 0; //NOTE: reset since previous Call would be dropped if done mid-way of stuck llm
 

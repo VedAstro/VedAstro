@@ -226,7 +226,7 @@
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="heading5">
                                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                                                <iconify-icon class="me-2" icon="gis:map-time" width="25" height="25"></iconify-icon>
+                                                <iconify-icon class="me-2" icon="material-symbols:map-search-outline-sharp" width="25" height="25"></iconify-icon>
                                                 Location Search
                                             </button>
                                         </h2>
@@ -234,12 +234,11 @@
                                             <div class="accordion-body">
                                                 <div class="card-body">
                                                     <p class="card-text">Search for a location and get its coordinates.</p>
-                                                    <form>
+                                                    <form onsubmit="return false;">
                                                         <div class="input-group mb-3">
                                                             <span class="input-group-text">Location</span>
-                                                            <input id="locationSearchInput" type="text" placeholder="London" class="form-control">
+                                                            <input id="locationSearchInput" type="text" placeholder="London" class="form-control" oninput="searchLocation()">
                                                         </div>
-                                                        <button type="button" class="btn btn-primary" onclick="searchLocation()">Search</button>
                                                         <div id="locationSearchResults" style="display:none;">
                                                             <h4>Results:</h4>
                                                             <ul id="locationSearchList"></ul>

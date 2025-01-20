@@ -84,21 +84,32 @@ async function calculateGeoLocationToTimezone() {
     }
 }
 
-async function searchLocation() {
+let searchTimeout = null;
+
+function searchLocation() {
     const locationInput = document.getElementById("locationSearchInput").value;
-    const apiUrl = `${VedAstro.ApiDomain}/Calculate/SearchLocation/Address/${locationInput}`;
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    if (data.Status === "Pass") {
-        const locationList = document.getElementById("locationSearchList");
-        locationList.innerHTML = "";
-        data.Payload.SearchLocation.forEach(location => {
-            const listItem = document.createElement("li");
-            listItem.textContent = `${location.Name} (${location.Latitude}, ${location.Longitude})`;
-            locationList.appendChild(listItem);
-        });
-        document.getElementById("locationSearchResults").style.display = "block";
+    if (locationInput.length < 3) {
+        // do not search for very short inputs
+        return;
     }
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);
+    }
+    searchTimeout = setTimeout(async () => {
+        const apiUrl = `${VedAstro.ApiDomain}/Calculate/SearchLocation/Address/${locationInput}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        if (data.Status === "Pass") {
+            const locationList = document.getElementById("locationSearchList");
+            locationList.innerHTML = "";
+            data.Payload.SearchLocation.forEach(location => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `${location.Name} (${location.Latitude}, ${location.Longitude})`;
+                locationList.appendChild(listItem);
+            });
+            document.getElementById("locationSearchResults").style.display = "block";
+        }
+    }, 500);
 }
 
 

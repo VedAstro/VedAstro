@@ -259,26 +259,6 @@ namespace API
         /// Relies on cache names having prefix person ID to be detected and deleted
         /// Exp: Travis1985-EventsChart-20010202...
         /// </summary>
-        public static async Task DeleteCacheRelatedToPerson(Person newPerson)
-        {
-            //if empty id, end here
-            if (Person.Empty.Equals(newPerson)) { return; }
-
-            //person is placed infront if that cache belongs to that person
-            //as such get all cache such way and delete
-            var foundCaches = blobContainerClient.GetBlobs(BlobTraits.All, BlobStates.None, newPerson.Id);
-
-            //delete all cache
-            foreach (var cache in foundCaches)
-            {
-                await blobContainerClient.DeleteBlobIfExistsAsync(cache.Name, DeleteSnapshotsOption.None);
-            }
-        }
-
-        /// <summary>
-        /// Relies on cache names having prefix person ID to be detected and deleted
-        /// Exp: Travis1985-EventsChart-20010202...
-        /// </summary>
         public static async Task DeleteCacheRelatedToPerson(string personId)
         {
             //if empty id, end here

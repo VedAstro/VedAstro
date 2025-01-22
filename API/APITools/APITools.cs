@@ -51,24 +51,6 @@ namespace API
         //hard coded links to files stored in storage
         //public const string ApiDataStorageContainer = "vedastro-site-data";
 
-        //NAMES OF FILES IN AZURE STORAGE FOR ACCESS
-        public const string LiveChartHtml = "LiveChart.html";
-
-        public const string VisitorLogFile = "VisitorLog.xml";
-        public const string MessageListFile = "MessageList.xml";
-        public const string SavedEventsChartListFile = "SavedChartList.xml";
-        public const string SavedMatchReportList = "SavedMatchReportList.xml";
-        public const string UserDataListXml = "UserDataList.xml";
-
-
-        public static URL Url { get; set; } //instance of beta or stable URLs
-
-        static APITools()
-        {
-            //make urls used here for beta or stable
-            Url = new URL(GetIsBetaRuntime(), false); //obviously no debug mode
-        }
-
 
         public static async Task<JObject> ExtractDataFromRequestJson(HttpRequestData request)
         {
@@ -407,25 +389,6 @@ namespace API
                 //sign in to email
                 return new EmailClient(connectionString);
             }
-        }
-
-
-        public static IEnumerable<LogItem> GetOnlineVisitors(XDocument visitorLogDocument)
-        {
-
-            //parse all logs
-            var xmlRecordList = visitorLogDocument.Root?.Elements() ?? new List<XElement>();
-            List<LogItem> logItemList = LogItem.FromXml(xmlRecordList);
-
-            //last hour
-            var lastHourRecords = from logItem in logItemList
-                                  where Tools.IsWithinLastHour(logItem.Time, -24)
-                                  select logItem;
-
-            //unique visitors
-            List<LogItem> uniqueList = lastHourRecords.DistinctBy(p => p.VisitorId).ToList();
-
-            return uniqueList;
         }
 
 

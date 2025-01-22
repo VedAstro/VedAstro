@@ -25,7 +25,6 @@ namespace API
 
             var returnJson = PersonKutaScore.ToJsonList(personList);
 
-
             return APITools.PassMessageJson(returnJson, incomingRequest);
         }
 

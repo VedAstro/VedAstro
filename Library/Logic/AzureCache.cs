@@ -249,7 +249,7 @@ namespace VedAstro.Library
             //if empty id, end here
             if (Person.Empty.Equals(newPerson)) { return; }
 
-            //person is placed infront if that cache belongs to that person
+            //person id is placed in-front if that cache belongs to that person
             //as such get all cache such way and delete
             var foundCaches = blobContainerClient.GetBlobs(BlobTraits.All, BlobStates.None, newPerson.Id);
 

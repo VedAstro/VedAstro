@@ -4,6 +4,9 @@ using Azure;
 namespace API
 {
 
+    /// <summary>
+    /// To track long-running calls like EventsChart
+    /// </summary>
     public class CallStatusEntity : ITableEntity
     {
         public string PartitionKey { get; set; }

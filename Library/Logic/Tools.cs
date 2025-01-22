@@ -2227,60 +2227,53 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Extracts data from an Exception puts it in a nice JSON
+        /// Extracts data from an Exception and puts it in a nice JSON
         /// </summary>
-        public static JObject ExceptionToJSON(Exception e)
+        public static JObject ExceptionToJSON(Exception exception)
         {
-            //place to store the exception data
-            string fileName;
-            string methodName;
-            int line;
-            int columnNumber;
-            string message;
-            string source;
+            //if no exception, then empty
+            if (exception == null) { return new JObject(); }
 
-            //get the exception that started it all
-            var originalException = e.GetBaseException();
+            var baseException = exception.GetBaseException();
+            var stackTrace = new StackTrace(exception, true);
+            var stackFrame = stackTrace.GetFrame(stackTrace.FrameCount - 1);
 
-            //extract the data from the error
-            StackTrace st = new StackTrace(e, true);
+            var exceptionData = new JObject
+            {
+                ["Error"] = new JObject
+                {
+                    ["Message"] = baseException.Message,
+                    ["Source"] = baseException.Source,
+                    ["FileName"] = stackFrame?.GetFileName(),
+                    ["SourceLineNumber"] = stackFrame?.GetFileLineNumber(),
+                    ["SourceColNumber"] = stackFrame?.GetFileColumnNumber(),
+                    ["MethodName"] = stackFrame?.GetMethod()?.Name,
+                    ["StackTrace"] = baseException.StackTrace,
+                }
+            };
 
-            //Get the first stack frame
-            StackFrame frame = st.GetFrame(st.FrameCount - 1);
+            var innerExceptions = GetInnerExceptions(exception);
+            if (innerExceptions.Any())
+            {
+                exceptionData["InnerExceptions"] = JArray.FromObject(innerExceptions);
+            }
 
-            //Get the file name
-            fileName = frame?.GetFileName();
+            return exceptionData;
+        }
 
-            //Get the method name
-            methodName = frame.GetMethod()?.Name;
-
-            //Get the line number from the stack frame
-            line = frame.GetFileLineNumber();
-
-            //Get the column number
-            columnNumber = frame.GetFileColumnNumber();
-
-            message = originalException.ToString();
-
-            source = originalException.Source;
-            //todo include inner exception data
-            var stackTrace = originalException.StackTrace;
-
-
-            //put together the new error record
-            var newRecord = new JObject(
-                new JProperty("Error", new JObject(
-                    new JProperty("Message", message),
-                    new JProperty("Source", source),
-                    new JProperty("FileName", fileName),
-                    new JProperty("SourceLineNumber", line),
-                    new JProperty("SourceColNumber", columnNumber),
-                    new JProperty("MethodName", methodName)
-                ))
-            );
-
-
-            return newRecord;
+        private static IEnumerable<JObject> GetInnerExceptions(Exception exception)
+        {
+            var innerException = exception.InnerException;
+            while (innerException != null)
+            {
+                yield return new JObject
+                {
+                    ["Message"] = innerException.Message,
+                    ["Source"] = innerException.Source,
+                    ["StackTrace"] = innerException.StackTrace,
+                };
+                innerException = innerException.InnerException;
+            }
         }
 
         /// <summary>

@@ -916,8 +916,9 @@ namespace VedAstro.Library
                 geoLocation = Calculate.AddressToGeoLocation(locationName);
             }
 
-            //if timezone offset is +00:00 the do API search else use as inputed by caller
-            if (offsetStr == "+00:00")
+            //if timezone offset is +00:00/invalid the do API search else use as inputed by caller
+            var parsedTimezone = Tools.StringToTimezone(offsetStr);
+            if (parsedTimezone == null || parsedTimezone == TimeSpan.Zero)
             {
                 //compile the time string into standard format
                 //NOTE : offset hard set to UTC 0, because not used, only format filler (will be overriden later)
@@ -1802,11 +1803,19 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Converts a timezone (+08:00) in string form to parsed timespan 
+        /// Converts a timezone (+08:00) in string form to parsed timespan
+        /// returns null if fail
         /// </summary>
-        public static TimeSpan StringToTimezone(string timezoneRaw)
+        public static TimeSpan? StringToTimezone(string timezoneRaw)
         {
-            return DateTimeOffset.ParseExact(timezoneRaw, "zzz", CultureInfo.InvariantCulture).Offset;
+            try
+            {
+                return DateTimeOffset.ParseExact(timezoneRaw, "zzz", CultureInfo.InvariantCulture).Offset;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         /// <summary>

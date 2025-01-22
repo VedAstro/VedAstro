@@ -7187,7 +7187,6 @@ class PersonListViewer {
  * Represents an API method viewer component.
  * This class generates the HTML for selecting and invoking API methods
  */
-
 class ApiMethodViewer {
     // Class properties
     ElementID = "";
@@ -7245,34 +7244,45 @@ class ApiMethodViewer {
     async fetchApiMethods() {
         // Check if data is in local storage
         const storedData = localStorage.getItem(this.ApiDataStorageKey);
-        if (storedData) {
-            try {
-                const data = JSON.parse(storedData);
+        const storedHash = localStorage.getItem(`${this.ApiDataStorageKey}_hash`);
 
-                if (data.Status === "Pass") {
-                    console.log("Loaded API methods from local storage");
-                    this.apiMethods = data.Payload;
-                    return; // Return early since data is loaded from local storage
-                } else {
-                    // If data in local storage is invalid, remove it
-                    localStorage.removeItem(this.ApiDataStorageKey);
+        // Fetch the server-side hash
+        const serverHashResponse = await fetch(`${VedAstro.ApiDomain}/AllCallsHash`);
+        const serverHashData = await serverHashResponse.json();
+
+        if (serverHashData.Status === "Pass") {
+            const serverHash = serverHashData.Payload.toString(); // Convert the integer to a string
+
+            if (storedHash === serverHash) {
+                // Load from local storage if hashes match
+                if (storedData) {
+                    try {
+                        const data = JSON.parse(storedData);
+                        if (data.Status === "Pass") {
+                            console.log("Loaded API methods from local storage");
+                            this.apiMethods = data.Payload;
+                            return; // Return early since data is loaded from local storage
+                        } else {
+                            localStorage.removeItem(this.ApiDataStorageKey);
+                        }
+                    } catch (error) {
+                        console.error("Error parsing stored data:", error);
+                        localStorage.removeItem(this.ApiDataStorageKey);
+                    }
                 }
-            } catch (error) {
-                console.error("Error parsing stored data:", error);
-                // If there's an error parsing, remove the corrupted data
-                localStorage.removeItem(this.ApiDataStorageKey);
             }
         }
 
-        // If data not in local storage, fetch from server
+        // If data not in local storage or hashes differ, fetch from server
         try {
             const response = await fetch(`${VedAstro.ApiDomain}/ListCalls`);
             const data = await response.json();
 
             if (data.Status === "Pass") {
                 this.apiMethods = data.Payload;
-                // Cache data in local storage
+                // Cache both the data and the hash in local storage
                 localStorage.setItem(this.ApiDataStorageKey, JSON.stringify(data));
+                localStorage.setItem(`${this.ApiDataStorageKey}_hash`, serverHashData.Payload); // Save the hash
             } else {
                 console.error('Failed to retrieve API methods:', data.Payload);
             }

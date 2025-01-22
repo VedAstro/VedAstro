@@ -1,4 +1,4 @@
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 using Google.Apis.Auth;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -74,13 +74,13 @@ namespace API
         [Function(nameof(FacebookDeauthorize))]
         public static async Task<HttpResponseData> FacebookDeauthorize([HttpTrigger(AuthorizationLevel.Anonymous, "post,get", Route = null)] HttpRequestData incomingRequest)
         {
-
+            //TODO change URL in FB
             //facebook pings this when user Deauthorize facebook login
             //https://api.vedastro.org/FacebookDeauthorize 
 
             ApiStatistic.Log(incomingRequest); //logger
 
-            return APITools.PassMessage(incomingRequest);
+            return APITools.PassMessageJson(incomingRequest);
         }
 
 

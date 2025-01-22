@@ -10,9 +10,6 @@ namespace API
 
     public static class EventsChartAPI
     {
-
-        private static Dictionary<double, string> _cacheList;
-
         //CENTRAL FOR ROUTES
         private const string RouteGetEventsChartNoCache = "EventsChartNoCache/{*settingsUrl}";
         private const string RouteGetEventsChart = "EventsChart/{*settingsUrl}";
@@ -29,9 +26,9 @@ namespace API
         /// user than selects the chart, with data,
         /// when called via generate will auto get the cached chart
         /// </summary>
-        [Function(nameof(GetSavedChartNameList))]
-        public static async Task<HttpResponseData> GetSavedChartNameList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(GetSavedChartNameList)}/{{personId}}")] HttpRequestData req, string personId)
+        [Function(nameof(SavedChartNameList))]
+        public static async Task<HttpResponseData> SavedChartNameList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(SavedChartNameList)}/{{personId}}")] HttpRequestData req, string personId)
         {
             try
             {
@@ -41,7 +38,7 @@ namespace API
                 var eventDataList = new JArray();
                 foreach (var chart in allSavedCharts)
                 {
-                    EventsChart parsedChart = await EventsChart.FromCacheName(chart.Name);
+                    EventsChart parsedChart = await VedAstro.Library.EventsChart.FromCacheName(chart.Name);
 
                     eventDataList.Add(parsedChart.ToJson());
                 }
@@ -57,43 +54,13 @@ namespace API
             }
         }
 
-        /// <summary>
-        /// Gets all entries in EventDataList.xml as parsed JSON
-        /// NOTE:
-        /// used by good time finder
-        /// </summary>
-        [Function(nameof(GetEventDataList))]
-        public static async Task<HttpResponseData> GetEventDataList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(GetEventDataList)}")] HttpRequestData req)
-        {
-            try
-            {
-                //get raw xml file
-                //package nicely into JSON
-                var eventDataList = new JArray();
-                foreach (var eventData in EventDataListStatic.Rows)
-                {
-                    eventDataList.Add(eventData.ToJson());
-                }
-
-
-                return APITools.PassMessageJson(eventDataList, req);
-            }
-
-            //if any failure, show error in payload
-            catch (Exception e)
-            {
-                APILogger.Error(e, req);
-                return APITools.FailMessageJson(e.Message, req);
-            }
-        }
 
 
         /// <summary>
         /// Main func to generate event charts used by site, via awesome built in cache mechanism
         /// </summary>
-        [Function(nameof(GetEventsChart))]
-        public static async Task<HttpResponseData> GetEventsChart(
+        [Function(nameof(EventsChart))]
+        public static async Task<HttpResponseData> EventsChart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = RouteGetEventsChart)] HttpRequestData incomingRequest,
              string settingsUrl)
         {
@@ -106,7 +73,7 @@ namespace API
                 //get basic spec on how to make chart
                 //check if the specs given is correct and readable
                 //this is partially filled chart with no generated svg content only specs
-                var chartSpecsOnly = await EventsChart.FromUrl(settingsUrl);
+                var chartSpecsOnly = await VedAstro.Library.EventsChart.FromUrl(settingsUrl);
 
                 //a hash to id the chart's specs (caching)
                 var chartId = chartSpecsOnly.GetEventsChartSignature();
@@ -153,8 +120,8 @@ namespace API
         /// <summary>
         /// SPECIAL DEBUG version to generate life chart without cache for R & D purposes
         /// </summary>
-        [Function(nameof(GetEventsChartNoCache))]
-        public static async Task<HttpResponseData> GetEventsChartNoCache(
+        [Function(nameof(EventsChartNoCache))]
+        public static async Task<HttpResponseData> EventsChartNoCache(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = RouteGetEventsChartNoCache)] HttpRequestData incomingRequest,
             string userId, string visitorId, string settingsUrl)
         {
@@ -166,7 +133,7 @@ namespace API
 
                 //check if the specs given is correct and readable
                 //this is partially filled chart with no generated svg content only specs
-                var chartSpecsOnly = await EventsChart.FromUrl(settingsUrl);
+                var chartSpecsOnly = await VedAstro.Library.EventsChart.FromUrl(settingsUrl);
 
                 //PREPARE THE CALL
                 var chartSvg = EventsChartFactory.GenerateEventsChartSvg(chartSpecsOnly);
@@ -207,7 +174,7 @@ namespace API
 
                 //check if the specs given is correct and readable
                 //this is partially filled chart with no generated svg content only specs
-                var chartSpecsOnly = await EventsChart.FromJson(requestJson);
+                var chartSpecsOnly = await VedAstro.Library.EventsChart.FromJson(requestJson);
 
                 //PREPARE THE CALL
                 var foundPerson = Tools.GetPersonById(chartSpecsOnly.Person.Id);
@@ -238,75 +205,7 @@ namespace API
 
 
 
-
-
-
         //---------------------------------------
-
-
-        /// <summary>
-        /// Special function to make Light Viewer(EventsChartViewer.html) work
-        /// This API is called by EventsChart.js when viewing chart view lite viewer
-        /// </summary>
-        [Function("geteventscharteasy")]
-        public static async Task<HttpResponseData> GetEventsChartEasy([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-            try
-            {
-
-                //get dasa report for sending
-                var chart = await GetEventReportSvgForIncomingRequestEasy(incomingRequest);
-
-                //send image back to caller
-                return APITools.SendSvgToCaller(chart.ContentSvg, incomingRequest);
-            }
-            catch (Exception e)
-            {
-                //log error
-                APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-        }
-
-
-        /// <summary>
-        /// Returns EventsChartViewer.html with injected variables
-        /// Special function to generate new Events Chart directly without website
-        /// Does not do anything to generate the chart, that is done by
-        /// geteventscharteasy API called by the JS in HTML
-        /// </summary>
-        [Function("chart")]
-        public static async Task<HttpResponseData> GetEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "chart/{personId}/{eventPreset}/{timePreset}")]
-            HttpRequestData incomingRequest, string personId, string eventPreset, string timePreset)
-        {
-            try
-            {
-                //get chart index.html and send that to caller
-                var eventsChartViewerHtml = await Tools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
-
-                //insert person name into page, to show ready page faster
-                var personName = Tools.GetPersonById(personId).Name;
-                var jsVariables = $@"window.PersonName = ""{personName}"";";
-                jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
-                jsVariables += $@"window.PersonId = ""{personId}"";";
-                var finalHtml = eventsChartViewerHtml.Replace("/*INSERT-JS-VAR-HERE*/", jsVariables);
-
-                return APITools.SendHtmlToCaller(finalHtml, incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-        }
-
 
 
 
@@ -315,124 +214,6 @@ namespace API
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
 
-
-        private static async Task<EventsChart> GetEventReportSvgForIncomingRequestEasy(HttpRequestData req)
-        {
-            //ACT 1 : SET VARIABLES
-
-            //get all the data needed out of the incoming request
-            var rootXml = await APITools.ExtractDataFromRequestXml(req);
-            var personId = rootXml.Element("PersonId")?.Value;
-            var timePreset = rootXml.Element("TimePreset")?.Value;
-            var eventPreset = rootXml.Element("EventPreset")?.Value;
-            var maxWidth = int.Parse(rootXml.Element("MaxWidth")?.Value); //px
-            //client's timezone, not based on birth
-            var timezone = Tools.StringToTimezone(rootXml.Element("Timezone")?.Value);//should be "+08:00"
-
-
-            //hard set max width to 1000px so that no forever calculation created
-            maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
-
-            //todo needs to be pumped in from input
-            var algorithmFuncsList = new List<AlgorithmFuncs>() { Algorithm.General };
-            var summaryOptions = new ChartOptions(algorithmFuncsList);
-
-            //minus 7% from width for side padding
-            //so that chart not squeezed to side of page
-            maxWidth = maxWidth - (int)(maxWidth * 0.07); ;
-
-            //EXTRACT & PREPARE DATA
-
-            //get the person instance by id
-            var foundPerson = Tools.GetPersonById(personId);
-
-            //TIME
-            var timeRange = Calculate.AutoCalculateTimeRange(foundPerson.BirthTime, timePreset, timezone);
-
-            //EVENTS
-            var eventTags = GetSelectedEventTypesEasy(eventPreset);
-
-            //PRECISION
-            //calculate based on max screen width,
-            //done for fast calculation only for needed viewability
-            var daysPerPixel = GetDayPerPixel(timeRange, maxWidth);
-
-            return EventsChartFactory.GenerateEventsChart(foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
-        }
-
-
-        /// <summary>
-        /// calculates the precision of the events to fit inside 1000px width
-        /// </summary>
-        private static double GetDayPerPixel(TimeRange timeRange, int maxWidth)
-        {
-            //const int maxWidth = 1000; //px
-            var daysPerPixel = Math.Round(timeRange.DaysBetween / maxWidth, 3); //small val = higher precision
-                                                                                //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
-                                                                                //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
-
-            //if final value is 0 then recalculate without rounding
-            daysPerPixel = daysPerPixel <= 0 ? timeRange.DaysBetween / maxWidth : daysPerPixel;
-
-            return daysPerPixel;
-        }
-
-        /// <summary>
-        /// Parses event preset, string to list
-        /// </summary>
-        private static List<EventTag> GetSelectedEventTypesEasy(string eventPreset)
-        {
-            var returnList = new List<EventTag>();
-
-            //split into pieces if any
-            var presetList = eventPreset.Split(',');
-            foreach (var preset in presetList)
-            {
-                switch (preset)
-                {
-                    //only general is customized
-                    case "Summary":
-                        returnList.Add(EventTag.GocharaSummary);
-                        returnList.Add(EventTag.General);
-                        returnList.Add(EventTag.Personal);
-                        returnList.Add(EventTag.RulingConstellation);
-                        break;
-
-                    //others are converted as is
-                    default:
-                        returnList.Add(Enum.Parse<EventTag>(preset));
-                        break;
-
-                }
-            }
-
-            return returnList;
-        }
-
-        /// <summary>
-        /// Given a time preset in string like "Today"
-        /// a precise start and end time will be returned
-        /// used in dasa/muhurtha easy calculator
-        /// </summary>
-
-        private static byte[] StreamToByteArray(Stream input)
-        {
-            //reset stream position
-            input.Position = 0;
-            MemoryStream ms = new MemoryStream();
-            input.CopyTo(ms);
-            return ms.ToArray();
-        }
-
-        private static Stream GenerateStreamFromString(string s)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
     }
 
 

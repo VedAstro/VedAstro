@@ -8,44 +8,11 @@ namespace API;
 /// </summary>
 public static class APILogger
 {
-    /// <summary>
-    /// Table client used for API LogBook
-    /// </summary>
-    public static readonly TableClient LogBookClient;
-    public static readonly TableClient ErrorBookClient;
-    private const string OpenApiLogBook = "OpenAPILogBook";
-    private const string OpenApiErrorBook = "OpenAPIErrorBook"; //place to store errors, should be cleaned regularly
-
-    /// <summary>
-    /// ip address set when visit log is made
-    /// </summary>
-    public static string IpAddress = "NOT SET";
-
-    /// <summary>
-    /// URL set when visit log is made
-    /// </summary>
-    public static string URL = "NOT SET";
-
-
-    static APILogger()
-    {
-        try
-        {
-            LogBookClient = APITools.GetTableClientFromTableName(OpenApiLogBook);
-            ErrorBookClient = APITools.GetTableClientFromTableName(OpenApiErrorBook);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-
-    }
-
 
     /// <summary>
     /// Adds error log to OpenAPIErrorBook
     /// </summary>
-    public static void Error(Exception exception, HttpRequestData req = null)
+    public static void Error(Exception exception, HttpRequestData incomingRequest = null)
     {
         try
         {
@@ -54,15 +21,15 @@ public static class APILogger
 
             var errorLog = new OpenAPIErrorBookEntity()
             {
-                PartitionKey = IpAddress,
+                PartitionKey = incomingRequest?.GetCallerIp()?.ToString() ?? "0.0.0.0",
                 RowKey = DateTimeOffset.UtcNow.Ticks.ToString(),
                 Branch = ThisAssembly.Version,
-                URL = URL,
+                URL = incomingRequest?.Url.ToString() ?? "no URL",
                 Message = exceptionData
             };
 
             //creates record if no exist, update if already there
-            ErrorBookClient.UpsertEntity(errorLog);
+            AzureTable.OpenAPIErrorBook.UpsertEntity(errorLog);
 
         }
         catch (Exception deeperException)
@@ -75,34 +42,5 @@ public static class APILogger
 
         
     }
-
-
-
-    /// <summary>
-    /// Adds error log to OpenAPIErrorBook
-    /// </summary>
-    public static void Error(string message)
-    {
-        try
-        {
-            var errorLog = new OpenAPIErrorBookEntity()
-            {
-                PartitionKey = IpAddress,
-                RowKey = DateTimeOffset.UtcNow.Ticks.ToString(),
-                Branch = ThisAssembly.Version,
-                URL = URL,
-                Message = message
-            };
-
-            //creates record if no exist, update if already there
-            ErrorBookClient.UpsertEntity(errorLog);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("ERROR LOGGING FAILED!");
-        }
-
-    }
-
 
 }

@@ -71,47 +71,6 @@ namespace API
 
 
         /// <summary>
-        /// Default success message sent to caller
-        /// - .ToString(SaveOptions.DisableFormatting); to remove make xml indented
-        /// </summary>
-        public static HttpResponseData PassMessage(HttpRequestData req) => PassMessage("", req);
-
-        /// <summary>
-        /// we specify xml catch error at compile time, likely to fail
-        /// </summary>
-        public static HttpResponseData PassMessage(XElement payload, HttpRequestData req)
-        {
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/xml"); //todo check if charset is needed
-
-            //wrap data in nice tag
-            var finalXml =
-                new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payload)).ToString(
-                    SaveOptions.DisableFormatting); //no XML indent
-
-            //place in response body
-            response.WriteString(finalXml);
-
-            return response;
-        }
-
-        public static HttpResponseData PassMessage(string payload, HttpRequestData req)
-        {
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            //response.Headers.Add("Content-Type", "text/xml"); //todo check if charset is needed
-
-            //wrap data in nice tag
-            var finalXml =
-                new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payload)).ToString(
-                    SaveOptions.DisableFormatting); //no XML indent
-
-            //place in response body
-            response.WriteString(finalXml);
-
-            return response;
-        }
-
-        /// <summary>
         /// data comes in as XML should leave as JSON ready for sending to client via HTTP
         /// </summary>
         public static HttpResponseData MessageJson<T>(string statusResult, T payload, HttpRequestData req, string contentType = MediaTypeNames.Application.Json)
@@ -528,83 +487,6 @@ namespace API
             Console.WriteLine(csvPath);
 
             return csvPath;
-        }
-
-
-       
-
-
-        /// <summary>
-        /// based on caller's ip address, set limit
-        /// </summary>
-        /// <returns></returns>
-        public static async Task AutoControlOpenAPIOverload(OpenAPILogBookEntity callData)
-        {
-            var minute1 = 1;
-            var minute30 = 30;
-            var ipAddress = callData.PartitionKey;
-            var lastCallsCount = APILogger.GetAllCallsWithinLastTimeperiod(ipAddress, minute1);
-
-            //rate set in runtime settings is multipliedfull 
-            var msDelayRate = 800;
-            var freeCallRate = 50;//allowed high speed calls per minute //int.Parse(Secrets.OpenAPICallDelayMs); TODO add to Secrets
-
-            //if more than 1 abuse count in the last 10 minutes than end the call here with no reply
-            //NOTE : no default way in Azure Function to cut connection, so THROW EXCEPTION cuts call
-            var abuseCount = APILogger.GetAbuseCountWithinLastTimeperiod(ipAddress, minute30);
-            if (abuseCount > 2)
-            {
-                //drop the call
-                await Task.Delay(9999999); //12min
-                throw new Exception();
-            }
-
-            //if delay applied then let caller know
-            //NOTE : other words allowed 1 call every 30 seconds
-            var userCallRate = lastCallsCount / minute1; //calls per minute
-            if (userCallRate > freeCallRate)
-            {
-                //make a mark in API abuse list, to detect excessive non-stop calls
-                await AzureTable.APIAbuseList.UpsertEntityAsync(new APIAbuseRow() { PartitionKey = ipAddress, RowKey = Tools.GenerateId() });
-
-                //every additional call within specified time limit gets slowed accordingly
-                //exp: last 3 calls x 800ms = 4th call delay --> 2400ms
-                var msDelay = lastCallsCount * msDelayRate;
-
-                //todo shorten link
-                APITools.ApiExtraNote = $"Donate To Increase Speed : " +
-                                        $"{URL.Donate}";
-
-                await Task.Delay(msDelay);
-#if DEBUG
-                Console.WriteLine($"AUTO Throttle : IP -> {ipAddress} Delay ->{msDelay}ms");
-#endif
-
-            }
-            else
-            {
-                //if below limit than let call run, clear message
-                APITools.ApiExtraNote = "";
-            }
-
-        }
-
-
-        /// <summary>
-        /// only for specified table vedastroapistorage
-        /// </summary>
-        public static TableClient GetTableClientFromTableName(string tableName)
-        {
-            //prepare call stuff
-            string storageAccountKey = Secrets.Get("CentralStorageKey");
-            string accountName = Secrets.Get("CentralStorageAccountName");
-            var tableUlr = $"https://{accountName}.table.core.windows.net/{tableName}";
-            
-            //get connection
-            var tableServiceClient = new TableServiceClient(new Uri(tableUlr), new TableSharedKeyCredential(accountName, storageAccountKey));
-            var client = tableServiceClient.GetTableClient(tableName);
-
-            return client;
         }
 
 

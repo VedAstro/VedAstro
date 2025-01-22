@@ -1,4 +1,4 @@
-using VedAstro.Library;
+﻿using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Net;
@@ -19,7 +19,7 @@ namespace API
         public static async Task<HttpResponseData> FavIcon([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "favicon.ico")] HttpRequestData incomingRequest)
         {
             //use same fav icon from website
-            string url = "https://vedastro.org/images/favicon.ico";
+            string url = URL.WebStable+"/images/favicon.ico";
 
             //send to caller
             using (var client = new HttpClient())
@@ -28,7 +28,7 @@ namespace API
                 var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
                 
                 //copy caller data from original caller if any, so calls are traceable
-                CurrentCallerData.AddOriginalCallerHeadersIfAny(response);
+                //CurrentCallerData.AddOriginalCallerHeadersIfAny(response);
 
                 response.Headers.Add("Content-Type", "image/x-icon");
                 await response.Body.WriteAsync(bytes, 0, bytes.Length);
@@ -36,6 +36,20 @@ namespace API
             }
         }
 
+        /// <summary>
+        /// API Home page
+        /// </summary>
+        [Function(nameof(Home))]
+        public static async Task<HttpResponseData> Home([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Home")] HttpRequestData incomingRequest)
+        {
+
+            ApiStatistic.Log(incomingRequest); //logger
+
+            //get chart special API home page and send that to caller
+            var apiHomePageTxt = await Tools.GetStringFileHttp(URL.WebStable + "/data/APIHomePage.html");
+
+            return APITools.SendTextToCaller(apiHomePageTxt, incomingRequest);
+        }
 
 
 

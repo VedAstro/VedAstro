@@ -37,23 +37,12 @@ namespace API
 
             var blobItems = blobContainerClient.GetBlobs(prefix: searchKeyword).ToList();
 
-            //foreach (var blobItem in blobItems)
-            //{
-            //    if (blobItem.Name.Contains(searchKeyword))
-            //    {
-            //        blobNames.Add(blobItem);
-            //    }
-            //}
 
             return blobItems;
         }
 
         public static async Task<bool> IsExist(string callerId)
         {
-            //#if DEBUG
-            //            Console.WriteLine("CACHE TURNED OFF IN DEBUG MODE!!");
-            //            return false;
-            //#endif
 
             BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
 
@@ -63,13 +52,6 @@ namespace API
             return isExists;
         }
 
-        //public static async Task<string> GetLarge(string callerId)
-        //{
-        //    BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
-
-        //    var data = await APITools.BlobClientToString(blobClient);
-        //    return data;
-        //}
         public static async Task<dynamic> GetData<T>(string callerId)
         {
 
@@ -167,16 +149,6 @@ namespace API
 
             return blobClient;
 
-        }
-
-        public static async Task Delete(string callerId)
-        {
-            var blobClient = blobContainerClient.GetBlobClient(callerId);
-
-            var result = await blobClient.DeleteIfExistsAsync();
-
-            //if result unexpected raise alarm
-            if (result?.Value == false) { APILogger.Error($"WARNING! FILE DID NOT EXIST : {callerId}"); }
         }
 
         /// <summary>

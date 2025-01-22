@@ -18,115 +18,28 @@ namespace API
         /// <summary>
         /// scans through dates and rebuilds maps cache table
         /// </summary>
-        [Function(nameof(RebuildGeoLocationTimezoneTable))]
-        public static async Task<HttpResponseData> RebuildGeoLocationTimezoneTable([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "RebuildGeoLocationTimezoneTable")] HttpRequestData incomingRequest)
+        [Function(nameof(ResetOpenAPIErrorBook))]
+        public static async Task<HttpResponseData> ResetOpenAPIErrorBook([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ResetOpenAPIErrorBook/Password/{password}")] HttpRequestData incomingRequest, string password)
         {
 
-            Tools.PasswordProtect("123"); //password is Spotty
+            // Only allow call if using admin password (throws exception if pass fails)
+            Tools.PasswordProtect(password);
 
+            // Get the client for the OpenAPIErrorBook table
+            var openApiErrorBookClient = AzureTable.OpenAPIErrorBook;
 
-            //get chart special API home page and send that to caller
-            var APIHomePageTxt = "";
+            // Create a query to retrieve all entities in the table
+            var query = openApiErrorBookClient.Query<TableEntity>();
 
-            return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
-        }
-
-        /// <summary>
-        /// API Home page
-        /// </summary>
-        [Function(nameof(Home))]
-        public static async Task<HttpResponseData> Home([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Home")] HttpRequestData incomingRequest)
-        {
-            
-            ApiStatistic.Log(incomingRequest); //logger
-
-            //get chart special API home page and send that to caller
-            var apiHomePageTxt = await Tools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
-
-            return APITools.SendTextToCaller(apiHomePageTxt, incomingRequest);
-        }
-
-
-        /// <summary>
-        /// Searches for image and gives URL
-        /// </summary>
-        [Function(nameof(SearchImage))]
-        public static async Task<HttpResponseData> SearchImage([HttpTrigger(AuthorizationLevel.Anonymous, "get",
-            Route = "SearchImage/Keywords/{keywords}")] HttpRequestData incomingRequest,
-            string keywords)
-        {
-            ApiStatistic.Log(incomingRequest); //logger
-
-            //IMPORTANT: replace this variable with your Cognitive Services subscription key
-            string subscriptionKey = Secrets.Get("BING_IMAGE_SEARCH");
-            //stores the image results returned by Bing
-            Images imageResults = null;
-
-            var client = new ImageSearchClient(new ApiKeyServiceClientCredentials(subscriptionKey));
-
-            // make the search request to the Bing Image API, and get the results"
-            imageResults = await client.Images.SearchAsync(query: keywords); //search query
-
-            //get only jpeg images for ease of handling down the road
-            var jpegOnly = imageResults.Value.Where(x => x.EncodingFormat == "jpeg");
-
-
-            var possibleImages = new JArray();
-            foreach (var image in jpegOnly)
+            // Iterate through all entities and delete them
+            foreach (var entity in query)
             {
-                //pack data nicely
-                var temp = new JObject();
-                temp["Name"] = image.Name; //keywords to image
-                temp["URL"] = image.ThumbnailUrl; //show as number
-
-                //add to main list
-                possibleImages.Add(temp);
+                await openApiErrorBookClient.DeleteEntityAsync(entity.PartitionKey, entity.RowKey);
             }
 
-            return APITools.PassMessageJson(possibleImages, incomingRequest);
+            // Return a success message
+            return APITools.PassMessageJson(incomingRequest);
 
-        }
-
-        /// <summary>
-        /// designed to be called directly, getting ANY and ALL needed data in one simple GET call
-        /// </summary>
-        [Function(nameof(GetCallData))]
-        public static async Task<HttpResponseData> GetCallData(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetCallData/CallerId/{callerId}/Format/{formatName}")]
-            HttpRequestData incomingRequest,
-            string callerId, string formatName)
-        {
-            ApiStatistic.Log(incomingRequest); //logger
-
-            if (formatName.ToLower() == "json")
-            {
-                string jsonText = await AzureCache.GetData<string>(callerId);
-
-                var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
-                response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
-
-                //place in response body
-                await response.WriteStringAsync(jsonText);
-
-                return response;
-            }
-
-            else if (formatName.ToLower() == "gif")
-            {
-                //for images get and send direct with as less operations as possible
-                var fileBlobClient = await AzureCache.GetData<BlobClient>(callerId);
-
-                return Tools.SendFileToCaller(fileBlobClient, incomingRequest, MediaTypeNames.Image.Gif);
-            }
-            else if (formatName.ToLower() == "svg")
-            {
-                //for images get and send direct with as less operations as possible
-                var fileBlobClient = await AzureCache.GetData<BlobClient>(callerId);
-
-                return Tools.SendFileToCaller(fileBlobClient, incomingRequest, "image/svg+xml");
-            }
-
-            throw new Exception("END OF THE LINE");
         }
 
         /// <summary>
@@ -169,14 +82,14 @@ namespace API
         /// Function for debugging purposes
         /// Call to see if return correct IP
         /// </summary>
-        [Function("getipaddress")]
-        public static HttpResponseData GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
+        [Function(nameof(GetIpAddress))]
+        public static HttpResponseData GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequestData incomingRequest)
         {
             ApiStatistic.Log(incomingRequest); //logger
 
             try
             {
-                return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
+                return APITools.PassMessageJson(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
             }
             catch (Exception e)
             {
@@ -203,91 +116,9 @@ namespace API
 
             return response;
 
-            //try
-            //{
-            //    var holder = new XElement("Root");
-            //    var versionNumberXml = new XElement("Version", ThisAssembly.Version);
-            //    holder.Add(versionNumberXml, Tools.TimeStampServerXml);
-
-            //    return APITools.PassMessage(holder, incomingRequest);
-
-            //}
-            //catch (Exception e)
-            //{
-            //    //log it
-            //    APILogger.Error(e);
-
-            //    //let user know
-            //    return APITools.FailMessageJson(e, incomingRequest);
-            //}
-
-
         }
 
-        [Function("Stats")]
-        public static async Task<HttpResponseData> GetStats([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
-        {
-            ApiStatistic.Log(incomingRequest); //logger
 
-
-            try
-            {
-                //get visitor log from storage
-                var visitorLogDocument = await Tools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, Tools.BlobContainerName);
-
-                //unique visitors
-                var uniqueList = APITools.GetOnlineVisitors(visitorLogDocument);
-
-                //convert list to nice string before sending to caller
-                var x = uniqueList.ToList();
-                var visitorLogXmlString = Tools.ListToString(x);
-                return APITools.PassMessage(visitorLogXmlString, incomingRequest);
-            }
-            catch (Exception e)
-            {
-                //log it
-                APILogger.Error(e);
-
-                //let user know
-                return APITools.FailMessageJson(e, incomingRequest);
-            }
-
-
-
-        }
-
-        /// <summary>
-        /// Build to be pinged by Render server for live build, but can be used by any for checking health
-        /// </summary>
-        [Function("health")]
-        public static HttpResponseData GetHealth([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
-        {
-            ApiStatistic.Log(incomingRequest); //logger
-
-            try
-            {
-
-                //so long as respond as OK 200, then will pass (Render server)
-                //todo real health check please
-                //check if all data files are accessible
-
-                var holder = new XElement("Root");
-                var versionNumberXml = new XElement("Version", ThisAssembly.Version);
-                holder.Add(versionNumberXml, Tools.TimeStampServerXml);
-
-                return APITools.PassMessage(holder, incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log it
-                APILogger.Error(e);
-
-                //let user know
-                return APITools.FailMessageJson(e, incomingRequest);
-            }
-
-        }
 
     }
 }

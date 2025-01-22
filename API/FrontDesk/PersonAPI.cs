@@ -54,40 +54,6 @@ namespace API
             }
         }
 
-        /// <summary>
-        /// Gets person list with swap function
-        /// TODO MARKED FOR OBLIVION
-        /// </summary>
-        //[Function(nameof(GetPersonListSwap))]
-        //public static async Task<HttpResponseData> GetPersonListSwap(
-        //    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = $"{nameof(GetPersonListSwap)}/OwnerId/{{ownerId}}/VisitorId/{{visitorId}}")] HttpRequestData req,
-        //    string ownerId, string visitorId)
-        //{
-        //    try
-        //    {
-        //        //STAGE 1 : swap visitor ID with user ID if any (data follows user when log in)
-        //        await APITools.SwapUserId(ownerId, visitorId);
-
-        //        //STAGE 2 : continue as normal to get person list
-        //        var foundPersons = AzureTable.PersonList.Query<PersonListEntity>(call => call.PartitionKey == ownerId);
-
-        //        //add each to return list
-        //        var personJsonList = new JArray();
-        //        foreach (var call in foundPersons) { personJsonList.Add(Person.FromAzureRow(call).ToJson()); }
-
-        //        //send to caller
-        //        return APITools.PassMessageJson(personJsonList, req);
-        //    }
-
-        //    //if any failure, show error in payload
-        //    catch (Exception e)
-        //    {
-        //        APILogger.Error(e, req);
-        //        return APITools.FailMessageJson(e.Message, req);
-        //    }
-        //}
-
-
 
         /// <summary>
         /// TODO MARKED FOR OBLIVION

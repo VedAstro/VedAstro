@@ -387,38 +387,38 @@ namespace VedAstro.Library
 
 
         /// <summary>
-        /// Gets public IP address of client sending the http request
+        /// Gets the public IP address of the client sending the HTTP request.
+        /// Checks common headers for forwarded client IPs, handling case-insensitivity.
         /// </summary>
         public static IPAddress GetCallerIp(this HttpRequestData req)
         {
-            var headerDictionary = req.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+            // Common headers that may contain the client IP address
+            const string ForwardedForHeader = "x-forwarded-for";
+            const string AzureClientIpHeader = "x-azure-clientip";
 
-            //debug print
-            //foreach (var item in headerDictionary) { Console.WriteLine($"Key: {item.Key}, Value: {Tools.ListToString<string>(item.Value.ToList())}"); }
+            // Normalize headers to handle case-insensitivity
+            var normalizedHeaders = req.Headers.ToDictionary(
+                h => h.Key.ToLowerInvariant(),
+                h => h.Value,
+                StringComparer.OrdinalIgnoreCase);
 
-            var key = "x-forwarded-for";
-            var key2 = "x-azure-clientip";
-            IPAddress? ipAddress = null;
+            // Attempt to extract the client IP from headers
+            string? clientIp = null;
 
-            if (headerDictionary.ContainsKey(key) || headerDictionary.ContainsKey(key2))
+            if (normalizedHeaders.TryGetValue(ForwardedForHeader, out var forwardedForValues))
             {
-                var headerValues = headerDictionary[key];
-                var ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()
-                    ?.Split(new char[] { ':' }).FirstOrDefault();
-                var key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
-
-                //if key 1 fail , try key 2
-                if (!key1ParseResult)
-                {
-                    headerValues = headerDictionary[key];
-                    ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()
-                        ?.Split(new char[] { ':' }).FirstOrDefault();
-                    key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
-                }
+                clientIp = forwardedForValues.FirstOrDefault()?.Split(',').FirstOrDefault()?.Split(':').FirstOrDefault();
             }
 
-            return ipAddress ?? IPAddress.None;
+            if (string.IsNullOrEmpty(clientIp) && normalizedHeaders.TryGetValue(AzureClientIpHeader, out var azureClientIpValues))
+            {
+                clientIp = azureClientIpValues.FirstOrDefault()?.Split(',').FirstOrDefault()?.Split(':').FirstOrDefault();
+            }
+
+            // Attempt to parse the extracted IP address
+            return IPAddress.TryParse(clientIp, out var ipAddress) ? ipAddress : IPAddress.None;
         }
+
 
         /// <summary>
         /// Method from Azure Website

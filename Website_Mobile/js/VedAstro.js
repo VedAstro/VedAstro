@@ -104,41 +104,108 @@ class VedAstro {
     }
 
     static CachePersonList(cacheType, personList) {
-        const cacheKey = cacheType === 'private' ? 'personList' : 'publicPersonList';
+        const cacheKey = cacheType === 'private' ? 'privatePersonList' : 'publicPersonList';
         localStorage.setItem(cacheKey, JSON.stringify(personList));
     }
 
     /**
-     * Gets the person list from local storage or API.
-     * 
-     * @param {string} cacheType - Type of cache, either 'private' or 'public'.
-     * @returns {Promise<Array<Person>>} - Promise that resolves to an array of Person objects.
-     */
+ * Gets the person list from local storage or API.
+ * 
+ * @param {string} cacheType - Type of cache, either 'private' or 'public'.
+ * @returns {Promise<Array<Person>>} - Promise that resolves to an array of Person objects.
+ */
     static async GetPersonList(cacheType) {
-        // Determine the cache key based on the cache type
-        const cacheKey = cacheType === 'private' ? 'personList' : 'publicPersonList';
+
+        // Construct the cache key based on the cache type
+        const cacheKey = `${cacheType}PersonList`;
+        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101'; // Set owner ID based on cache type
+        const visitorId = VedAstro.VisitorId; // Visitor ID
 
         try {
-            // Check if the person list is cached in local storage
+            // Retrieve the cached person list and its hash from local storage
             const cachedPersonList = localStorage.getItem(cacheKey);
-            if (cachedPersonList !== null && cachedPersonList !== undefined && cachedPersonList !== "null") {
-                // If cached, parse the JSON and create Person objects
-                return JSON.parse(cachedPersonList).map((person) => new Person(person));
+            const cachedHash = localStorage.getItem(`${cacheKey}_hash`);
+
+            // If cached data exists, check if it's up-to-date with the server
+            if (cachedPersonList && cachedHash) {
+                const isCacheUpToDate = await VedAstro.isCacheUpToDate(ownerId, visitorId, cachedHash);
+
+                // If the cache is up-to-date, return the cached person list
+                if (isCacheUpToDate) {
+                    return JSON.parse(cachedPersonList).map((person) => new Person(person));
+                }
             }
 
-            // If no cached data, fetch the person list from the API
+            // If no valid cached data or cache is outdated, fetch the person list from the API
             const personList = await VedAstro.FetchPersonListFromAPI(cacheType);
-            // Cache the person list
+            // Cache the newly fetched person list
             VedAstro.CachePersonList(cacheType, personList);
-            // Return the person list
+            // Retrieve the new hash for the person list and store it in local storage
+            const newHash = await VedAstro.getPersonListHash(ownerId, visitorId);
+            localStorage.setItem(`${cacheKey}_hash`, newHash);
+
+            // Return the fetched person list
             return personList;
         } catch (error) {
-            // Handle any errors that occur during JSON parsing or object parsing
-            console.error('Error getting person list:', error);
-            // Return null quietly
-            return null;
+            console.error('Error getting person list:', error); // Log any errors
+            throw error; // Rethrow the error to let the caller handle it
         }
     }
+
+    /**
+     * Checks if the cache is up to date with the server.
+     * 
+     * @param {string} ownerId - Owner ID.
+     * @param {string} visitorId - Visitor ID.
+     * @param {string} cachedHash - Cached hash.
+     * @returns {Promise<boolean>} - Promise that resolves to a boolean indicating whether the cache is up to date.
+     */
+    static async isCacheUpToDate(ownerId, visitorId, cachedHash) {
+        try {
+            // Call the server to get the current hash for the person list
+            const serverHashResponse = await fetch(`${VedAstro.ApiDomain}/Calculate/GetPersonListHash/OwnerId/${ownerId}/VisitorId/${visitorId}/`);
+            const serverHashData = await serverHashResponse.json();
+
+            // Check if the server response indicates success
+            if (serverHashData.Status === 'Pass') {
+                const serverHash = serverHashData.Payload.GetPersonListHash;
+                // Compare the cached hash with the server hash
+                return cachedHash === serverHash;
+            } else {
+                throw new Error(`Failed to retrieve server hash. Status: ${serverHashData.Status}`);
+            }
+        } catch (error) {
+            console.error('Error checking cache:', error); // Log any errors
+            throw error; // Rethrow the error for handling by the caller
+        }
+    }
+
+    /**
+     * Gets the person list hash from the server.
+     * 
+     * @param {string} ownerId - Owner ID.
+     * @param {string} visitorId - Visitor ID.
+     * @returns {Promise<string>} - Promise that resolves to the person list hash.
+     */
+    static async getPersonListHash(ownerId, visitorId) {
+        try {
+            // Call the server to get the current hash for the person list
+            const serverHashResponse = await fetch(`${VedAstro.ApiDomain}/Calculate/GetPersonListHash/OwnerId/${ownerId}/VisitorId/${visitorId}/`);
+            const serverHashData = await serverHashResponse.json();
+
+            // Check if the server response indicates success
+            if (serverHashData.Status === 'Pass') {
+                // Return the hash from the server response
+                return serverHashData.Payload.GetPersonListHash;
+            } else {
+                throw new Error(`Failed to retrieve server hash. Status: ${serverHashData.Status}`);
+            }
+        } catch (error) {
+            console.error('Error getting person list hash:', error); // Log any errors
+            throw error; // Rethrow the error for handling by the caller
+        }
+    }
+
 
     /**
      * Fetches the person list from the API.
@@ -174,7 +241,7 @@ class VedAstro {
         //clear all local storage data related to account
         //NOTE: visitor ID & history is maintained because needed without login
         localStorage.removeItem("APICalls"); //this allows a refresh on logout
-        localStorage.removeItem("personList");
+        localStorage.removeItem("privatePersonList");
         localStorage.removeItem("publicPersonList");
         localStorage.removeItem("UserId");
         localStorage.removeItem("UserName");

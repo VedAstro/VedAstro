@@ -1,10 +1,6 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Newtonsoft.Json.Linq;
-using System.Xml.Linq;
-using Newtonsoft.Json;
 using VedAstro.Library;
-using System.Net.Mime;
 
 namespace API
 {

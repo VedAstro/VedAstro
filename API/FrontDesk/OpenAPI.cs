@@ -1,10 +1,7 @@
-﻿using VedAstro.Library;
+using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Newtonsoft.Json.Linq;
 using System.Reflection;
-using Azure;
-using ScottPlot.Palettes;
 
 
 namespace API

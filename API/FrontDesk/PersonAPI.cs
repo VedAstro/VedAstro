@@ -1,13 +1,7 @@
-using System.Net.Mime;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
-using Azure.Storage.Blobs;
 using Person = VedAstro.Library.Person;
-using Azure.Data.Tables;
-using Newtonsoft.Json.Linq;
-using System.Dynamic;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace API

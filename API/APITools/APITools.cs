@@ -26,17 +26,12 @@ using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
 using System.Xml.Linq;
-using Azure.Data.Tables;
 using Azure.Storage.Blobs;
 using SuperConvert.Extensions;
 using VedAstro.Library;
-using Microsoft.Bing.ImageSearch.Models;
-using Microsoft.Bing.ImageSearch;
-using Microsoft.Extensions.DependencyModel;
 using Person = VedAstro.Library.Person;
 
 using MimeDetective;
-using HtmlAgilityPack;
 
 namespace API
 {

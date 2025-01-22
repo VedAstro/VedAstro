@@ -1,10 +1,5 @@
-using System.Text;
-using Azure;
-using Azure.Data.Tables;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.AspNetCore.Http;
-using System.Reflection;
 
 namespace API;
 

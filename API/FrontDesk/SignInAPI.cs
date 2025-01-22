@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
 using System.Text.Json.Nodes;
-using Azure.Data.Tables;
 using Google.Apis.Auth;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;

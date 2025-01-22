@@ -1,13 +1,11 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using System.Xml.Linq;
 using VedAstro.Library;
-using System.Net.Mime;
 using System.Net;
-using Azure.Storage.Blobs;
 using Microsoft.Bing.ImageSearch;
 using Microsoft.Bing.ImageSearch.Models;
 using Newtonsoft.Json.Linq;
+using Azure.Data.Tables;
 
 namespace API
 {

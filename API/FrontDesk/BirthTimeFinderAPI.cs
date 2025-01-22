@@ -1,10 +1,6 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
-using System.Net;
-using Newtonsoft.Json.Linq;
-using Time = VedAstro.Library.Time;
-
 
 
 //█░█░█ █░█ █▀▀ █▄░█   ▀█▀ █▀▀ █▀▀ █░█ █▄░█ █▀█ █░░ █▀█ █▀▀ █▄█   █▀▀ ▄▀█ █▄░█ ▀ ▀█▀   █▄▀ █▀▀ █▀▀ █▀█   █░█ █▀█

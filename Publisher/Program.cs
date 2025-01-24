@@ -4,12 +4,15 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Publisher
 {
     class Program
     {
         private static readonly IConfiguration _configuration;
+        private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(10, 10); // This will limit the number of parallel uploads to 10
 
         static Program()
         {
@@ -23,6 +26,9 @@ namespace Publisher
             var connectionString = _configuration["StorageAccountConnectionString"];
             var containerName = _configuration["ContainerName"];
             var localFolderPath = _configuration["LocalFolderPath"];
+            var resourceGroup = _configuration["ResourceGroup"];
+            var profileName = _configuration["CDNProfileName"];
+            var endpointName = _configuration["CDNEndpointName"];
 
             // Create a BlobServiceClient
             BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
@@ -32,6 +38,9 @@ namespace Publisher
 
             // Sync local folder to blob storage
             await SyncLocalFolderToBlob(containerClient, localFolderPath);
+
+            // Purge Azure CDN
+            await PurgeAzureCDN(resourceGroup, profileName, endpointName);
         }
 
         private static async Task SyncLocalFolderToBlob(BlobContainerClient containerClient, string localFolderPath)
@@ -39,6 +48,7 @@ namespace Publisher
             // Get all files in the local folder
             var files = Directory.GetFiles(localFolderPath, "*", SearchOption.AllDirectories);
 
+            var tasks = new List<Task>();
             foreach (var filePath in files)
             {
                 // Exclude specified files and directories
@@ -51,16 +61,112 @@ namespace Publisher
                     continue;
                 }
 
+                tasks.Add(UploadFile(containerClient, filePath, localFolderPath));
+            }
+
+            await Task.WhenAll(tasks);
+        }
+
+        private static async Task UploadFile(BlobContainerClient containerClient, string filePath, string localFolderPath)
+        {
+            await semaphore.WaitAsync();
+
+            try
+            {
                 string relativePath = Path.GetRelativePath(localFolderPath, filePath);
                 string blobName = relativePath.Replace("\\", "/");
 
                 BlobClient blobClient = containerClient.GetBlobClient(blobName);
 
+                // Get the file extension
+                string fileExtension = Path.GetExtension(filePath);
+
+                // Set the correct content type based on the file extension
+                string contentType;
+                switch (fileExtension.ToLower())
+                {
+                    case ".txt":
+                    case ".html":
+                        contentType = "text/html";
+                        break;
+                    case ".css":
+                        contentType = "text/css";
+                        break;
+                    case ".js":
+                        contentType = "application/javascript";
+                        break;
+                    case ".json":
+                        contentType = "application/json";
+                        break;
+                    case ".xml":
+                        contentType = "application/xml";
+                        break;
+                    case ".png":
+                    case ".jpg":
+                    case ".jpeg":
+                    case ".gif":
+                    case ".bmp":
+                        contentType = "image/" + fileExtension.Substring(1);
+                        break;
+                    case ".woff":
+                    case ".woff2":
+                        contentType = "font/woff" + fileExtension.Substring(1);
+                        break;
+                    case ".ttf":
+                        contentType = "font/ttf";
+                        break;
+                    case ".eot":
+                        contentType = "application/vnd.ms-fontobject";
+                        break;
+                    case ".svg":
+                        contentType = "image/svg+xml";
+                        break;
+                    case ".mp3":
+                    case ".wav":
+                    case ".aac":
+                    case ".ogg":
+                        contentType = "audio/" + fileExtension.Substring(1);
+                        break;
+                    case ".mp4":
+                    case ".avi":
+                    case ".mov":
+                    case ".wmv":
+                        contentType = "video/" + fileExtension.Substring(1);
+                        break;
+                    case ".zip":
+                    case ".rar":
+                    case ".7z":
+                        contentType = "application/zip";
+                        break;
+                    case ".pdf":
+                        contentType = "application/pdf";
+                        break;
+                    case ".docx":
+                    case ".doc":
+                        contentType = "application/msword";
+                        break;
+                    case ".xlsx":
+                    case ".xls":
+                        contentType = "application/vnd.ms-excel";
+                        break;
+                    case ".pptx":
+                    case ".ppt":
+                        contentType = "application/vnd.ms-powerpoint";
+                        break;
+                    case ".csv":
+                        contentType = "text/csv";
+                        break;
+                    default:
+                        contentType = "application/octet-stream";
+                        break;
+                }
+
                 // Upload the file if it doesn't exist or if the local file is newer than the blob
                 if (!await blobClient.ExistsAsync())
                 {
                     Console.WriteLine($"Uploading new file: {blobName}");
-                    await blobClient.UploadAsync(filePath);
+                    var blobHttpHeaders = new BlobHttpHeaders { ContentType = contentType };
+                    await blobClient.UploadAsync(filePath, new BlobUploadOptions { HttpHeaders = blobHttpHeaders });
                 }
                 else
                 {
@@ -71,7 +177,8 @@ namespace Publisher
                     if (File.GetLastWriteTimeUtc(filePath) > lastModified.UtcDateTime)
                     {
                         Console.WriteLine($"Updating file: {blobName}");
-                        await blobClient.UploadAsync(filePath, overwrite: true);
+                        var blobHttpHeaders = new BlobHttpHeaders { ContentType = contentType };
+                        await blobClient.UploadAsync(filePath, new BlobUploadOptions { HttpHeaders = blobHttpHeaders });
                     }
                     else
                     {
@@ -79,6 +186,32 @@ namespace Publisher
                     }
                 }
             }
+            finally
+            {
+                semaphore.Release();
+            }
+        }
+
+        private static async Task PurgeAzureCDN(string resourceGroup, string profileName, string endpointName)
+        {
+            Console.WriteLine("Purging Azure CDN...");
+
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/c az cdn endpoint purge --resource-group {resourceGroup} --profile-name {profileName} --name {endpointName} --content-paths '/*'",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
+
+            process.Start();
+            await process.WaitForExitAsync();
+
+            Console.WriteLine("Azure CDN purged successfully.");
         }
     }
 }

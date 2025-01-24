@@ -182,16 +182,16 @@ new PageTopNavbar("VedAstro","PageTopNavbar", [
     { icon: "carbon:gateway-api", text: "Open API", href: "./APIBuilder.html" },
     { icon: "openmoji:love-letter", text: "Donate", href: "./Donate.html" },
 ], [
-    { text: "Contact Us", href: "./ContactUs.html" },
-    { text: "About", href: "./About.html" },
-    { text: "Video Guides", href: "https://www.youtube.com/@vedastro/videos", target: "_blank" },
+    { icon: "heroicons-outline:mail", text: "Contact Us", href: "./ContactUs.html" },
+    { icon: "ix:about", text: "About", href: "./About.html" },
+    { icon: "octicon:video-16", text: "Video Guides", href: "https://www.youtube.com/@vedastro/videos", target: "_blank" },
     /*{ text: "Join Us", href: "./JoinOurFamily.html" },*/
     /*{ text: "Calculators", href: "./Calculator.html" },*/
-    { text: "Person List", href: "./PersonList.html" },
+    { icon: "line-md:list", text: "Person List", href: "./PersonList.html" },
     /*{ text: "Train AI", href: "./TrainAIAstrologer.html" },*/
-    { text: "Remedy", href: "./Remedy.html" },
+    /*{ text: "Remedy", href: "./Remedy.html" },*/
     /*{ text: "Download", href: "./Download.html" },*/
-    { text: "API Live Status", href: "https://vedastroapi.azurewebsites.net/api/Home" },
+    /*{ text: "API Live Status", href: "https://vedastroapi.azurewebsites.net/api/Home" },*/
     /*{ text: "Table Generator", href: "./TableGenerator.html" },*/
     /*{ text: "Body Types", href: "./BodyTypes.html" },*/
     /*{ text: "Import Person", href: "./ImportPerson.html" },*/

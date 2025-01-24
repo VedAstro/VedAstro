@@ -45,10 +45,10 @@
  */
 class VedAstro {
     /**
-     * The default API domain.
+     * The API server address used by all classes.
+     * Get URL from storage if user has changed it
      */
-    //static ApiDomain = "http://localhost:7071/api";
-    static ApiDomain = "https://vedastro.azurewebsites.net/api";
+    static ApiDomain = localStorage.getItem("ApiDomain") || "https://vedastro.azurewebsites.net/api";
 
     /**
        * get user ID from storage else give "101" guest id
@@ -2180,18 +2180,17 @@ class PageTopNavbar {
     ButtonLinks = [];
     MoreLinks = [];
     MobileLinks = [];
+    HeaderName = "";
 
     constructor(headerName, elementId, buttonLinks, moreLinks, mobileLinks) {
         // Assign the provided elementId to the ElementID property
         this.ElementID = elementId;
-
-        // Assign the provided links to their respective properties
         this.ButtonLinks = buttonLinks;
         this.MoreLinks = moreLinks;
         this.MobileLinks = mobileLinks;
         this.HeaderName = headerName; //visible at mobile top nav only
 
-        //init dark mode library, so that it can toggle by button
+        // Initialize dark mode library
         const options = {
             mixColor: '#fff', // default: '#fff'
             backgroundColor: '#fff', // default: '#fff'
@@ -2201,7 +2200,7 @@ class PageTopNavbar {
             autoMatchOsTheme: false // default: true
         };
 
-        //makes dark mode lib available to events chart viewer via "window"
+        // Makes dark mode lib available to events chart viewer via "window"
         window.DarkModeLibInstance = new Darkmode(options);
 
         // Call the method to initialize the main body of the page header
@@ -2216,7 +2215,7 @@ class PageTopNavbar {
         // Generate the HTML for the page header and inject it into the element
         $(`#${this.ElementID}`).html(await this.generateHtmlBody());
 
-        //based on login status hide/show login/logout button
+        // Based on login status hide/show login/logout button
         if (VedAstro.IsGuestUser()) {
             $('#MobileLoginButton').show();
             $('#MobileLogoutButton').hide();
@@ -2225,16 +2224,17 @@ class PageTopNavbar {
             $('#MobileLogoutButton').show();
         }
 
-        // attach handler : Toggle dark mode on button click
+        // Attach handler: Toggle dark mode on button click
         document.getElementById('DarkModeToggleButton').addEventListener('click', () => {
             window.DarkModeLibInstance.toggle();
 
-            //special for event chart, if exist on page change vis JS for instant correction
-            //note : this makes chart appear normal in dark/normal mode
+            // Special for event chart, if exist on page change vis JS for instant correction
             var value = window.DarkModeLibInstance.isActivated() ? "difference" : "normal";
             $('#EventsChartSvgHolder').css('mix-blend-mode', value);
         });
 
+        // Attach event listener for the Settings option
+        this.attachSettingsEventListener();
     }
 
     // Method to generate the HTML for the page header
@@ -2244,21 +2244,21 @@ class PageTopNavbar {
         this.ButtonLinks.forEach((link) => {
             let targetAttr = link.target ? `target="${link.target}"` : '';
             buttonLinksHtml += `
-        <a href="${link.href}" ${targetAttr} style="height: 37.1px; width: fit-content;" class="btn-sm hstack gap-2 iconButton btn-outline-primary btn">
+        <a href="${link.href}" ${targetAttr} style="height: 37.1px; width: fit-content; " class="btn-sm hstack gap-2 iconButton btn-outline-primary btn">
             <iconify-icon icon="${link.icon}" width="25" height="25"></iconify-icon>
             ${link.text}
         </a>
       `;
         });
 
-
         // Generate the HTML for the more links
         let moreLinksHtml = "";
         this.MoreLinks.forEach((link) => {
             let targetAttr = link.target ? `target="${link.target}"` : '';
+            let iconHtml = link.icon ? `<iconify-icon icon="${link.icon}" width="23" height="23"></iconify-icon>` : '';
             moreLinksHtml += `
-        <li><a class="dropdown-item" href="${link.href}" ${targetAttr}>${link.text}</a></li>
-      `;
+        <li><a class="dropdown-item hstack gap-2" href="${link.href}" ${targetAttr}>${iconHtml} ${link.text}</a></li>
+        `;
         });
 
         // Generate the HTML for the mobile links
@@ -2292,15 +2292,17 @@ class PageTopNavbar {
 
         <!-- MORE LINKS -->
         <div style="" class="dropdown ">
-          <button style="height: 37.1px; width: fit-content;" class="btn-sm  dropdown-toggle btn-outline-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <button style="height: 37.1px; width: fit-content;" class="btn-sm  dropdown-toggle btn-primary btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <iconify-icon icon="ep:guide" width="25" height="25" ></iconify-icon>
           </button>
           <ul style="cursor: pointer; width: 100%;" class="dropdown-menu">
             ${moreLinksHtml}
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item hstack gap-2" href="#"><iconify-icon icon="eos-icons:rotating-gear" width="23" height="23"></iconify-icon> Settings</a></li> <!-- Added Settings option -->
           </ul>
         </div>
       </div>
-
+     
       <!-- MOBILE LINKS -->
       <nav class="p-1 navbar rounded-bottom-4 d-block d-md-none" data-bs-theme="dark" style="background-color: #1877f2 !important; margin-top: -1.5rem !important; margin-left: -0.73rem !important; margin-right: -0.73rem !important;">
         <div class="container-fluid">
@@ -2332,6 +2334,54 @@ class PageTopNavbar {
       </nav>
     `;
     }
+
+    // Attach event listener for the Settings option
+    attachSettingsEventListener() {
+        // Get the Settings link
+        $(`#${this.ElementID} .dropdown-item:contains('Settings')`).on('click', async () => {
+            const currentApiDomain = VedAstro.ApiDomain;
+
+            // Show SweetAlert modal with an additional Reset button
+            const { value: newApiDomain, dismiss } = await Swal.fire({
+                title: 'API Server',
+                input: 'text',
+                inputLabel: 'Set the API server used, change to "http://localhost:7071/api" to use your local server',
+                inputValue: currentApiDomain,
+                showCancelButton: true,
+                showDenyButton: true,
+                confirmButtonText: 'Save',
+                denyButtonText: 'Reset',
+                cancelButtonText: 'Cancel',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to enter a domain!';
+                    }
+                }
+            });
+
+            // If the user clicked Save
+            if (newApiDomain && !dismiss) {
+                // Save new API domain to localStorage
+                localStorage.setItem("ApiDomain", newApiDomain);
+                Swal.fire('Saved!', 'Your API Domain has been updated.', 'success').then(() => {
+                    // Refresh the page
+                    location.reload();
+                });
+            }
+
+            // If the user clicked Reset
+            if (dismiss === Swal.DismissReason.deny) {
+                // Clear the localStorage
+                localStorage.removeItem("ApiDomain");
+                Swal.fire('Reset!', 'API Domain reset to default.', 'success').then(() => {
+                    // Refresh the page
+                    location.reload();
+                });
+            }
+        });
+    }
+
+
 }
 
 /**

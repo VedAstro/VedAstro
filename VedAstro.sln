@@ -105,6 +105,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocToEmbeddings", "DocToEmb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MigrateGeoLocationData", "MigrateGeoLocationData\MigrateGeoLocationData.csproj", "{216F2526-41E1-45A7-B2EE-F810AADAB66B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Publisher", "Publisher\Publisher.csproj", "{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -358,6 +360,18 @@ Global
 		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
 		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.ReleaseTest|x64.ActiveCfg = Release|Any CPU
 		{216F2526-41E1-45A7-B2EE-F810AADAB66B}.ReleaseTest|x64.Build.0 = Release|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.Debug|x64.Build.0 = Debug|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.Release|x64.ActiveCfg = Release|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.Release|x64.Build.0 = Release|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.ReleaseTest|x64.ActiveCfg = Release|Any CPU
+		{CEBF8CFC-41FA-4FDC-94F1-737C88A3F230}.ReleaseTest|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

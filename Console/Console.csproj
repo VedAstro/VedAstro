@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Azure.Storage.Blobs" Version="12.16.0" />
+	  <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0-rc.2.22472.3" />
 	  <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.3.0-preview.8" />
 	  <PackageReference Include="System.Management.Automation" Version="7.3.0-preview.8" />

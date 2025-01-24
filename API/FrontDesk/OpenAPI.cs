@@ -1,4 +1,4 @@
-using VedAstro.Library;
+﻿using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Reflection;
@@ -11,16 +11,32 @@ namespace API
 
         //.../Calculate/Karana/Location/Singapore/Time/23:59/31/12/2000/+08:00
         private const string CalculateRoute = $"{nameof(Calculate)}/{{calculatorName}}/{{*fullParamString}}"; //* that captures the rest of the URL path
-        private const string ListRoute = $"{nameof(ListCalls)}"; 
 
         [Function(nameof(ListCalls))]
         public static async Task<HttpResponseData> ListCalls(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ListRoute)] HttpRequestData incomingRequest
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ListCalls")] HttpRequestData incomingRequest
         )
         {
             var apiCallListJson = OpenAPIMetadata.FromMethodInfoList();
 
             return APITools.PassMessageJson(apiCallListJson, incomingRequest);
+        }
+
+        /// <summary>
+        /// Gives hash of all calls f
+        /// </summary>
+        [Function(nameof(AllCallsHash))]
+        public static async Task<HttpResponseData> AllCallsHash(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "AllCallsHash")] HttpRequestData incomingRequest
+        )
+        {
+            //get all calls
+            List<OpenAPIMetadata>? apiCallListJson = OpenAPIMetadata.FromMethodInfoList();
+
+            //generate hash for the calls and return to caller
+            var hash = Tools.GenerateHashCode(apiCallListJson);
+
+            return APITools.PassMessageJson(hash, incomingRequest);
         }
 
         /// <summary>
@@ -33,25 +49,19 @@ namespace API
         string fullParamString
         )
         {
+            //if API key is present allows full speed call, else only allows slowed speed call except if browser
+            fullParamString = await ThrottleManager.HandleCall(incomingRequest, fullParamString);
+
             try
             {
-                //make caller data global to all children calling HTTP
-                CurrentCallerData.originalHttpRequest = incomingRequest;
-
-                //0 : SET LOCAL HOST : used when making same API server sub calls  "http://localhost:7071/api"
-                VedAstro.Library.Calculate.CurrentServerAddress = incomingRequest.ExtractHostAddress()+"/api";
-
                 //0 : LOG CALL : used later for throttle limit
-                ApiStatistic.Log(incomingRequest); //logger
+                //ApiStatistic.Log(incomingRequest); //logger
 
                 //1 : extract out custom format else empty string (removed from url)
                 var format = ParseAndGetFormat(fullParamString);
 
                 //process call smartly
                 var rawProcessedData = await HandleOpenAPICalls(calculatorName, fullParamString);
-
-                // Control API overload
-                //await APITools.AutoControlOpenAPIOverload(callLog);
 
                 // Send data to the caller
                 // Some calculators return SVG, so need to send to caller directly without "Payload" wrapper
@@ -276,7 +286,7 @@ namespace API
             // Control API overload, even this if hit hard can COST Money via CDN
             //await APITools.AutoControlOpenAPIOverload(callLog);
 
-            var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder";
+            var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder.html";
             return APITools.FailMessageJson(message, incomingRequest);
         }
 

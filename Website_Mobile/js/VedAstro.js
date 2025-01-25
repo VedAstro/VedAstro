@@ -2342,7 +2342,7 @@ class PageTopNavbar {
             const currentApiDomain = VedAstro.ApiDomain;
 
             // Show SweetAlert modal with an additional Reset button
-            const { value: newApiDomain, dismiss } = await Swal.fire({
+            const { value: newApiDomain, isDenied, isDismissed } = await Swal.fire({
                 title: 'API Server',
                 input: 'text',
                 inputLabel: 'Set the API server used, change to "http://localhost:7071/api" to use your local server',
@@ -2360,7 +2360,7 @@ class PageTopNavbar {
             });
 
             // If the user clicked Save
-            if (newApiDomain && !dismiss) {
+            if (newApiDomain && !isDismissed) {
                 // Save new API domain to localStorage
                 localStorage.setItem("ApiDomain", newApiDomain);
                 Swal.fire('Saved!', 'Your API Domain has been updated.', 'success').then(() => {
@@ -2370,7 +2370,7 @@ class PageTopNavbar {
             }
 
             // If the user clicked Reset
-            if (dismiss === Swal.DismissReason.deny) {
+            if (isDenied) {
                 // Clear the localStorage
                 localStorage.removeItem("ApiDomain");
                 Swal.fire('Reset!', 'API Domain reset to default.', 'success').then(() => {
@@ -2380,7 +2380,6 @@ class PageTopNavbar {
             }
         });
     }
-
 
 }
 
@@ -2426,6 +2425,14 @@ class PersonSelectorBox {
     }
 
     async init() {
+        // Show loading spinners as soon as possible
+        $(`#${this.ElementID}`).html(`
+        <div class="vstack" style="width:255px;">
+            <iconify-icon class="align-self-center" icon="svg-spinners:270-ring" width="37" height="37"></iconify-icon>
+            <p class="align-self-center m-0">Please wait...</p>
+        </div>
+        `);
+
         // Fetch person list data from API or local storage
         await this.initializePersonListData();
 
@@ -2475,11 +2482,15 @@ class PersonSelectorBox {
     }
 
     async initializeMainBody() {
-        // Clean any existing content
+
+        // Generate new html
+        var html = await this.generateHtmlBody();
+
+        // Clean any existing/loading icon just before rendering new 
         $(`#${this.ElementID}`).empty();
 
-        // Generate and inject the HTML into the page
-        $(`#${this.ElementID}`).html(await this.generateHtmlBody());
+        //inject the HTML into the page
+        $(`#${this.ElementID}`).html(html);
 
         // add tooltip to show full birth time and location
         this.attachTippyToButton();

@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace Publisher
 {
@@ -37,17 +38,18 @@ namespace Publisher
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
             // Sync local folder to blob storage
-            await SyncLocalFolderToBlob(containerClient, localFolderPath);
+            var uploadedFiles = await SyncLocalFolderToBlob(containerClient, localFolderPath);
 
             // Purge Azure CDN
-            await PurgeAzureCDN(resourceGroup, profileName, endpointName);
+            await PurgeAzureCDN(resourceGroup, profileName, endpointName, uploadedFiles);
         }
 
-        private static async Task SyncLocalFolderToBlob(BlobContainerClient containerClient, string localFolderPath)
+        private static async Task<List<string>> SyncLocalFolderToBlob(BlobContainerClient containerClient, string localFolderPath)
         {
             // Get all files in the local folder
             var files = Directory.GetFiles(localFolderPath, "*", SearchOption.AllDirectories);
 
+            var uploadedFiles = new List<string>();
             var tasks = new List<Task>();
             foreach (var filePath in files)
             {
@@ -61,13 +63,14 @@ namespace Publisher
                     continue;
                 }
 
-                tasks.Add(UploadFile(containerClient, filePath, localFolderPath));
+                tasks.Add(UploadFile(containerClient, filePath, localFolderPath, uploadedFiles));
             }
 
             await Task.WhenAll(tasks);
+            return uploadedFiles;
         }
 
-        private static async Task UploadFile(BlobContainerClient containerClient, string filePath, string localFolderPath)
+        private static async Task UploadFile(BlobContainerClient containerClient, string filePath, string localFolderPath, List<string> uploadedFiles)
         {
             await semaphore.WaitAsync();
 
@@ -167,6 +170,7 @@ namespace Publisher
                     Console.WriteLine($"Uploading new file: {blobName}");
                     var blobHttpHeaders = new BlobHttpHeaders { ContentType = contentType };
                     await blobClient.UploadAsync(filePath, new BlobUploadOptions { HttpHeaders = blobHttpHeaders });
+                    uploadedFiles.Add(blobName);
                 }
                 else
                 {
@@ -179,6 +183,7 @@ namespace Publisher
                         Console.WriteLine($"Updating file: {blobName}");
                         var blobHttpHeaders = new BlobHttpHeaders { ContentType = contentType };
                         await blobClient.UploadAsync(filePath, new BlobUploadOptions { HttpHeaders = blobHttpHeaders });
+                        uploadedFiles.Add(blobName);
                     }
                     else
                     {
@@ -192,26 +197,38 @@ namespace Publisher
             }
         }
 
-        private static async Task PurgeAzureCDN(string resourceGroup, string profileName, string endpointName)
+        private static async Task PurgeAzureCDN(string resourceGroup, string profileName, string endpointName, List<string> uploadedFiles)
         {
             Console.WriteLine("Purging Azure CDN...");
 
-            var process = new Process
+            foreach (var file in uploadedFiles)
             {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "cmd.exe",
-                    Arguments = $"/c az cdn endpoint purge --resource-group {resourceGroup} --profile-name {profileName} --name {endpointName} --content-paths '/*'",
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                }
-            };
+                // Ensure the file path starts with a single `/` and format it correctly
+                var purgePath = $"/{file}";
 
-            process.Start();
-            await process.WaitForExitAsync();
+                // Inform the user which file is being purged
+                Console.WriteLine($"Purging file: {purgePath}");
+
+                var arguments = $"/c az cdn endpoint purge --resource-group {resourceGroup} --profile-name {profileName} --name {endpointName} --content-paths \"{purgePath}\"";
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        Arguments = arguments,
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                };
+
+                process.Start();
+                await process.WaitForExitAsync();
+            }
 
             Console.WriteLine("Azure CDN purged successfully.");
         }
+
+
     }
 }

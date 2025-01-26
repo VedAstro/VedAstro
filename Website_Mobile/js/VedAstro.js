@@ -56,7 +56,7 @@ class VedAstro {
     static get UserId() {
         const storedValue = localStorage.getItem("UserId");
         try {
-            return JSON.parse(storedValue);
+            return storedValue ? JSON.parse(storedValue) : "101";
         } catch (e) {
             return "101";
         }
@@ -100,7 +100,7 @@ class VedAstro {
      * True if the user is a guest, false otherwise.
      */
     static IsGuestUser() {
-        return !VedAstro.UserId || VedAstro.UserId === "101";
+        return VedAstro.UserId === "101";
     }
 
     static CachePersonList(cacheType, personList) {

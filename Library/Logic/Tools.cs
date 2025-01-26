@@ -40,6 +40,7 @@ using MimeDetective.Definitions;
 using Formatting = Newtonsoft.Json.Formatting;
 using XmlSerializer = System.Xml.Serialization.XmlSerializer;
 using System.Reflection.Metadata;
+using Microsoft.Extensions.Primitives;
 
 
 //█ ▀ █▀▄▀█   █▄░█ █▀█ ▀█▀   ▄▀█ █▄░█   █ █▄░█ █▀▀ █░█   ▀█▀ █▀█ █▀█   █▀▀ ▄▀█ █▀█
@@ -369,7 +370,7 @@ namespace VedAstro.Library
 
             return response;
         }
-        
+
         public static string GetCallerId(string userId, string visitorId)
         {
             var IsLoggedIn = userId != "101";
@@ -1021,51 +1022,6 @@ namespace VedAstro.Library
             xDocument.Root.Add(newElement);
         }
 
-        /// <summary>
-        /// Deletes an XML element from an XML document in by file & container name
-        /// and saves files directly to Azure blob store
-        /// </summary>
-        public static async Task DeleteXElementFromXDocumentAzure(XElement dataXmlToDelete, string fileName, string containerName)
-        {
-            //access to file
-            var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
-
-            //get xml file
-            var xmlDocFile = await Tools.DownloadToXDoc(fileClient);
-
-            //check if record to delete exists
-            //if not found, raise alarm
-            var xmlRecordList = xmlDocFile.Root.Elements();
-            var personToDelete = Person.FromXml(dataXmlToDelete);
-            var foundRecords = xmlRecordList.Where(x => Person.FromXml(x).Id == personToDelete.Id);
-            if (!foundRecords.Any()) { throw new Exception("Could not find XML record to delete in main list!"); }
-
-            //continue with delete
-            foundRecords.First().Remove();
-
-            //upload modified list to storage
-            await OverwriteBlobData(fileClient, xmlDocFile);
-        }
-
-        /// <summary>
-        /// deletes by using same reference to limit unnecessary calls to storage
-        /// used in maintenance scripts
-        /// deletes by ID not HASH
-        /// </summary>
-        public static void DeleteXElementFromXDocumentAzure(XElement dataXmlToDelete, ref XDocument xmlDocFile)
-        {
-
-            //check if record to delete exists
-            //if not found, raise alarm
-            var xmlRecordList = xmlDocFile.Root.Elements();
-            var personToDelete = Person.FromXml(dataXmlToDelete);
-            var foundRecords = xmlRecordList.Where(x => Person.FromXml(x).Id == personToDelete.Id);
-            if (!foundRecords.Any()) { throw new Exception("Could not find XML record to delete in main list!"); }
-
-            //continue with delete
-            foundRecords.First().Remove();
-
-        }
 
         /// <summary>
         /// used for finding uncertain time in certain birth day
@@ -1237,7 +1193,6 @@ namespace VedAstro.Library
             return xml.ToString(SaveOptions.DisableFormatting);
         }
 
-
         /// <summary>
         /// Gets XML file from any URL and parses it into xelement list
         /// </summary>
@@ -1266,244 +1221,6 @@ namespace VedAstro.Library
             return document.Root.Elements().ToList();
         }
 
-
-        /// <summary>
-        /// Converts any type to XML, it will use Type's own ToXml() converter if available
-        /// else ToString is called and placed inside element with Type's full name
-        /// Note, used to transfer data via internet Client to API Server
-        /// Example:
-        /// <TypeName>
-        ///     DataValue
-        /// </TypeName>
-        /// </summary>
-        public static XElement AnyTypeToXml<T>(T value)
-        {
-            //check if type has own ToXml method
-            //use the Type's own converter if available
-            if (value is IToXml hasToXml)
-            {
-                var betterXml = hasToXml.ToXml();
-                return betterXml;
-            }
-
-            //gets enum value as string to place inside XML
-            //note: value can be null hence ?, fails quietly
-            var enumValueStr = value?.ToString();
-
-            //get the name of the Enum
-            //Note: This is the name that will be used
-            //later to instantiate the class from string
-            var typeName = typeof(T).FullName;
-
-            return new XElement(typeName, enumValueStr);
-        }
-
-        /// <summary>
-        /// will convert inputed type to xelement via .net serializer
-        /// </summary>
-        public static XElement AnyTypeToXElement(object o)
-        {
-            var doc = new XDocument();
-            using (XmlWriter writer = doc.CreateWriter())
-            {
-                XmlSerializer serializer = new XmlSerializer(o.GetType());
-                serializer.Serialize(writer, o);
-            }
-
-            return doc.Root;
-        }
-
-        /// <summary>
-        /// Converts any type that implements IToXml to XML, it will use Type's own ToXml() converter
-        /// Note, used to transfer data via internet Client to API Server
-        /// Placed inside "Root" xml
-        /// Default name for root element is Root
-        /// </summary>
-        public static XElement AnyTypeToXmlList<T>(List<T> xmlList, string rootElementName = "Root") where T : IToXml
-        {
-            var rootXml = new XElement(rootElementName);
-            foreach (var xmlItem in xmlList)
-            {
-                rootXml.Add(AnyTypeToXml(xmlItem));
-            }
-            return rootXml;
-        }
-
-        /// <summary>
-        /// Simple override for XML, to skip parsing to type before sorting
-        /// </summary>
-        public static XElement AnyTypeToXmlList(List<XElement> xmlList, string rootElementName = "Root")
-        {
-            var rootXml = new XElement(rootElementName);
-            foreach (var xmlItem in xmlList)
-            {
-                rootXml.Add(xmlItem);
-            }
-            return rootXml;
-        }
-
-        /// <summary>
-        /// Given the URL of a standard VedAstro XML file, like "http://...PersonList.xml",
-        /// will convert to the specified type and return in nice list, with time to be home for dinner
-        /// </summary>
-        public static async Task<List<T>> ConvertXmlListFileToInstanceList<T>(string httpUrl) where T : IToXml, new()
-        {
-            //get data list from Static Website storage
-            //note : done so that any updates to that live file will be instantly reflected in API results
-            var eventDataListXml = await Tools.GetXmlFile(httpUrl);
-
-            var finalInstance = await ConvertXmlListFileToInstanceList<T>(eventDataListXml);
-
-            return finalInstance;
-        }
-
-        /// <summary>
-        /// Given an XML file will auto convert it to an instance using ToXml() method
-        /// </summary>
-        public static async Task<List<T>> ConvertXmlListFileToInstanceList<T>(List<XElement> eventDataListXml) where T : IToXml, new()
-        {
-            //parse each raw event data in list
-            var eventDataList = new List<T>();
-            foreach (var eventDataXml in eventDataListXml)
-            {
-                //add it to the return list
-                var x = new T();
-                eventDataList.Add(x.FromXml<T>(eventDataXml));
-            }
-
-            return eventDataList;
-
-        }
-
-        /// <summary>
-        /// Extracts data from an Exception puts it in a nice XML
-        /// </summary>
-        public static XElement ExceptionToXML(Exception e)
-        {
-            //place to store the exception data
-            string fileName;
-            string methodName;
-            int line;
-            int columnNumber;
-            string message;
-            string source;
-
-            //get the exception that started it all
-            var originalException = e.GetBaseException();
-
-            //extract the data from the error
-            StackTrace st = new StackTrace(e, true);
-
-            //Get the first stack frame
-            StackFrame frame = st.GetFrame(st.FrameCount - 1);
-
-            //Get the file name
-            fileName = frame?.GetFileName();
-
-            //Get the method name
-            methodName = frame.GetMethod()?.Name;
-
-            //Get the line number from the stack frame
-            line = frame.GetFileLineNumber();
-
-            //Get the column number
-            columnNumber = frame.GetFileColumnNumber();
-
-            message = originalException.ToString();
-
-            source = originalException.Source;
-            //todo include inner exception data
-            var stackTrace = originalException.StackTrace;
-
-
-            //put together the new error record
-            var newRecord = new XElement("Error",
-                new XElement("Message", message),
-                new XElement("Source", source),
-                new XElement("FileName", fileName),
-                new XElement("SourceLineNumber", line),
-                new XElement("SourceColNumber", columnNumber),
-                new XElement("MethodName", methodName),
-                new XElement("MethodName", methodName)
-            );
-
-
-            return newRecord;
-        }
-
-        /// <summary>
-        /// - Type is a value typ
-        /// - Enum
-        /// </summary>
-        public static dynamic XmlToAnyType<T>(XElement xml) // where T : //IToXml, new()
-        {
-            //get the name of the Enum
-            var typeNameFullName = typeof(T).FullName;
-            var typeNameShortName = typeof(T).FullName;
-
-#if DEBUG
-            Console.WriteLine(xml.ToString());
-#endif
-
-            //type name inside XML
-            var xmlElementName = xml?.Name;
-
-            //get the value for parsing later
-            var rawVal = xml.Value;
-
-
-            //make sure the XML enclosing type has the same name
-            //check both full class name, and short class name
-            var isSameName = xmlElementName == typeNameFullName || xmlElementName == typeof(T).GetShortTypeName();
-
-            //if not same name raise error
-            if (!isSameName)
-            {
-                throw new Exception($"Can't parse XML {xmlElementName} to {typeNameFullName}");
-            }
-
-            //implements ToXml()
-            var typeImplementsToXml = typeof(T).GetInterfaces().Any(x =>
-                x.IsGenericType &&
-                x.GetGenericTypeDefinition() == typeof(IToXml));
-
-            //type has owm ToXml method
-            if (typeImplementsToXml)
-            {
-                dynamic inputTypeInstance = GetInstance(typeof(T).FullName);
-
-                return inputTypeInstance.FromXml(xml);
-
-            }
-
-            //if type is an Enum process differently
-            if (typeof(T).IsEnum)
-            {
-                var parsedEnum = (T)Enum.Parse(typeof(T), rawVal);
-
-                return parsedEnum;
-            }
-
-            //else it is a value type
-            if (typeof(T) == typeof(string))
-            {
-                return rawVal;
-            }
-
-            if (typeof(T) == typeof(double))
-            {
-                return Double.Parse(rawVal);
-            }
-
-            if (typeof(T) == typeof(int))
-            {
-                return int.Parse(rawVal);
-            }
-
-            //raise error since converter not implemented
-            throw new NotImplementedException($"XML converter for {typeNameFullName}, not implemented!");
-        }
-
         /// <summary>
         /// Gets only the name of the Class, without assembly
         /// </summary>
@@ -1529,20 +1246,6 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// For converting value types, String, Double, etc.
-        /// </summary>
-        //public static dynamic XmlToValueType<T>(XElement xml) 
-        //{
-        //    //get the name of the Enum
-        //    var typeName = nameof(T);
-
-
-        //    //raise error since not XML type and Input type mismatch
-        //    throw new Exception($"Can't parse XML to {typeName}");
-        //}
-
-
-        /// <summary>
         /// Gets an instance of Class from string name
         /// </summary>
         public static object GetInstance(string strFullyQualifiedName)
@@ -1560,7 +1263,6 @@ namespace VedAstro.Library
             return null;
         }
 
-
         /// <summary>
         /// Converts days to hours
         /// </summary>
@@ -1568,11 +1270,11 @@ namespace VedAstro.Library
         public static double DaysToHours(double days) => days * 24.0;
 
         public static double WeeksToHours(double weeks) => weeks * 7.0 * 24.0;
-        
+
         public static double MonthsToHours(double months) => months * 30.44 * 24.0; // Approximate average number of days in a month
-        
+
         public static double YearsToHours(double years) => years * 365.25 * 24.0; // Approximate average number of days in a year (accounting for leap years)
-        
+
         public static double DecadesToHours(double decades) => decades * 10.0 * 365.25 * 24.0;
 
         public static double MinutesToHours(double minutes) => minutes / 60.0;
@@ -1612,6 +1314,28 @@ namespace VedAstro.Library
         /// Gets the time now in the Server (+8:00) in text form with seconds (HH:mm:ss dd/MM/yyyy zzz) 
         /// </summary>
         public static string GetNowServerTimeSecondsText() => DateTimeOffset.Now.ToOffset(TimeSpan.FromHours(8)).ToString(Time.DateTimeFormatSeconds);
+
+        /// <summary>
+        /// Generates consistent hash code for OpenAPI metadata
+        /// </summary>
+        public static uint GenerateHashCode(List<OpenAPIMetadata> apiCallListJson)
+        {
+
+            unchecked
+            {
+                uint hash = 2166136261;
+                foreach (var item in apiCallListJson)
+                {
+                    var signature = item?.Signature ?? "";
+                    foreach (var c in signature)
+                    {
+                        hash = (hash ^ c) * 16777219;
+                    }
+                }
+                return hash;
+            }
+
+        }
 
         /// <summary>
         /// Custom hash generator for Strings. Returns consistent/deterministic values
@@ -2448,6 +2172,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// INPUT: /<param name>/+08:00
+        /// if invalid timezone will default to +00:00
         /// </summary>
         public static TimeSpan TimeSpanFromUrl(string url)
         {
@@ -2456,7 +2181,7 @@ namespace VedAstro.Library
             //string has simple structure ../<param name>/+08:00
             var stringValue = parts[1];
 
-            var intFromUrl = Tools.StringToTimezone(stringValue);
+            var intFromUrl = Tools.StringToTimezone(stringValue) ?? TimeSpan.Zero;
 
             return intFromUrl;
         }
@@ -3487,172 +3212,6 @@ namespace VedAstro.Library
 
         }
 
-        public static DataTable AnyToDataTable(string dataName, dynamic anyTypeData)
-        {
-            //process list differently
-            var table = new DataTable();
-
-            switch (anyTypeData)
-            {
-                //case JObject jObject:
-                //    rootPayloadJson = new JProperty(dataName, jObject);
-                //    break;
-
-                //case List<House> dictionary:
-                //    {
-                //        var array = new JArray();
-                //        foreach (var item in dictionary)
-                //        {
-                //            var obj = new JObject
-                //        {
-                //            { "House", item.GetHouseName().ToString() },
-                //            { "Begin", item.GetBeginLongitude().ToString() },
-                //            { "Mid", item.GetMiddleLongitude().ToString() },
-                //            { "End", item.GetEndLongitude().ToString() }
-                //        };
-                //            array.Add(obj);
-                //        }
-
-                //        rootPayloadJson = new JProperty(dataName, array);
-                //        break;
-                //    }
-                //case List<Tuple<Time, Time, ZodiacName, PlanetName>> dictionary:
-                //    {
-                //        var array = new JArray();
-                //        foreach (var item in dictionary)
-                //        {
-                //            var obj = new JObject
-                //        {
-                //            { "Start", item.Item1.ToJson() },
-                //            { "End", item.Item2.ToJson() },
-                //            { "ZodiacSign", item.Item3.ToString() },
-                //            { "Planet", item.Item4.ToString() }
-                //        };
-                //            array.Add(obj);
-                //        }
-
-                //        rootPayloadJson = new JProperty(dataName, array);
-                //        break;
-                //    }
-
-                ////handles results that have many props from 1 call, exp : SwissEphemeris
-                //case List<APIFunctionResult> apiList:
-                //    {
-                //        //converts into JSON list with property names
-                //        //NOTE: uses back this AnyToJSON to convert nested types
-                //        var parsed = APIFunctionResult.ToJsonList(apiList);
-                //        rootPayloadJson = new JProperty(dataName, parsed);
-                //        return rootPayloadJson;
-                //    }
-
-                case List<HoroscopePrediction> apiList:
-                    {
-                        table.Columns.Add("Column1", typeof(string));
-                        table.Columns.Add("Column2", typeof(string));
-                        table.Columns.Add("Column3", typeof(string));
-                        //add in rows
-                        foreach (var item in apiList)
-                        {
-                            table.Rows.Add(item.ToDataRow());
-                        }
-                        break;
-                    }
-
-                //case List<PlanetName> planetList:
-                //    {
-                //        var parsed = PlanetName.ToJsonList(planetList);
-                //        rootPayloadJson = new JProperty(dataName, parsed);
-                //        return rootPayloadJson;
-                //    }
-
-                //case List<JObject> jObjectList:
-                //    {
-
-                //        var parsed = ListToJson(jObjectList);
-                //        rootPayloadJson = new JProperty(dataName, parsed);
-
-                //        return rootPayloadJson;
-                //    }
-
-                //case List<DasaEvent> dasaEventList:
-                //    {
-                //        var parsed = DasaEvent.ToJsonList(dasaEventList);
-                //        rootPayloadJson = new JProperty(dataName, parsed);
-
-                //        return rootPayloadJson;
-                //    }
-
-                case IList iList:
-                    {
-                        //add in rows
-                        foreach (var item in iList)
-                        {
-                            table.Rows.Add(item.ToString());
-                        }
-                        break;
-                    }
-
-                //handles results that have many props from 1 call, exp : SwissEphemeris
-                case Dictionary<PlanetName, ZodiacSign> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<PlanetName, Angle> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<PlanetName, PlanetName> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<PlanetName, ZodiacName> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<PlanetName, Constellation> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<PlanetName, HouseName> dictionary: DictionaryToDataTable(dictionary, table); break;
-
-                case Dictionary<string, object> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<HouseName, Angle> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<HouseName, ZodiacSign> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<HouseName, PlanetName> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<HouseName, ZodiacName> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<HouseName, Constellation> dictionary: DictionaryToDataTable(dictionary, table); break;
-                case Dictionary<HouseName, IList> dictionary: DictionaryToDataTable(dictionary, table); break;
-                //case Dictionary<HouseName, IList> dictionary:
-                //    {
-
-                //        var array = new JArray();
-                //        foreach (var item in dictionary)
-                //        {
-                //            var obj = new JObject
-                //        {
-                //            { "House", item.Key.ToString() },
-                //            { dataName,  Tools.ListToString((List<IList>)item.Value) }
-                //        };
-                //            array.Add(obj);
-                //        }
-
-                //        rootPayloadJson = new JProperty(dataName, array);
-                //        break;
-
-                //    }
-
-                //case Dictionary<ZodiacName, int> dictionary:
-                //    {
-                //        //convert list to comma separated string
-                //        var parsedList = dictionary.Cast<object>().ToList();
-                //        var stringComma = Tools.ListToString(parsedList);
-
-                //        rootPayloadJson = new JProperty(dataName, stringComma);
-                //        break;
-                //    }
-                //custom JSON converter available
-                case IToJson iToJson:
-
-                    //rootPayloadJson = new JProperty(dataName, iToJson.ToJson());
-                    break;
-                //normal conversion via "ToString"
-                default:
-                    //throw new NotImplementedException();
-                    //rootPayloadJson = new JProperty(dataName, anyTypeData?.ToString());
-                    break;
-            }
-
-
-
-            return table;
-
-        }
-
 
         /// <summary>
         /// Given a dictionary of example Dictionary<PlanetName, ZodiacSign>
@@ -4517,63 +4076,6 @@ namespace VedAstro.Library
 
         }
 
-        public static byte[] DataTableToJpeg(DataTable table)
-        {
-            // Create a new Bitmap object
-            Bitmap bitmap = new Bitmap(1, 1);
-            Graphics g = Graphics.FromImage(bitmap);
-
-            // Calculate the maximum width for each column
-            int[] columnWidths = new int[table.Columns.Count];
-            for (int j = 0; j < table.Columns.Count; j++)
-            {
-                // Use the column name for the header row
-                var headerFont = new Font("Arial", 10, FontStyle.Bold);
-                var headerSize = g.MeasureString(table.Columns[j].ColumnName, headerFont);
-                columnWidths[j] = (int)headerSize.Width;
-
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    var font = new Font("Arial", 10);
-                    var textSize = g.MeasureString(table.Rows[i][j].ToString(), font);
-                    columnWidths[j] = Math.Max(columnWidths[j], (int)textSize.Width);
-                }
-            }
-
-            // Dispose of the initial Graphics object and create a new one with the correct dimensions
-            g.Dispose();
-            int totalWidth = columnWidths.Sum() + table.Columns.Count * 2; // Add padding
-            bitmap = new Bitmap(totalWidth, (table.Rows.Count + 1) * 20); // Add a row for the header
-            g = Graphics.FromImage(bitmap);
-
-            // Draw the table
-            int currentX = 0;
-            for (int j = 0; j < table.Columns.Count; j++)
-            {
-                // Draw the header row
-                g.FillRectangle(Brushes.White, new Rectangle(currentX, 0, columnWidths[j] + 2, 20)); // Add padding
-                g.DrawRectangle(Pens.Black, new Rectangle(currentX, 0, columnWidths[j] + 2, 20)); // Add padding
-                var headerFont = new Font("Arial", 10, FontStyle.Bold);
-                g.DrawString(table.Columns[j].ColumnName, headerFont, Brushes.Black, new PointF(currentX + 3, 1)); // Add padding
-
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    g.FillRectangle(Brushes.White, new Rectangle(currentX, (i + 1) * 20, columnWidths[j] + 2, 20)); // Add padding
-                    g.DrawRectangle(Pens.Black, new Rectangle(currentX, (i + 1) * 20, columnWidths[j] + 2, 20)); // Add padding
-
-                    var font = new Font("Arial", 10);
-                    g.DrawString(table.Rows[i][j].ToString(), font, Brushes.Black, new PointF(currentX + 3, (i + 1) * 20 + 1)); // Add padding
-                }
-                currentX += columnWidths[j] + 2; // Move to next column position
-            }
-
-            // Convert the image to a byte array
-            using (MemoryStream ms = new MemoryStream())
-            {
-                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                return ms.ToArray();
-            }
-        }
 
         public static DataTable ConvertJPropertyToDataTable(JProperty jProperty)
         {
@@ -4736,6 +4238,7 @@ namespace VedAstro.Library
 
             return result;
         }
+
     }
 
 

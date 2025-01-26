@@ -9,7 +9,7 @@ namespace VedAstro.Library
     /// <summary>
     /// Compiled list of properties attached to a Sign
     /// </summary>
-    public class SignProperties : IToJpeg, IToJson, IToDataTable
+    public class SignProperties : IToJson
     {
         public class SignInfo
         {
@@ -110,12 +110,6 @@ namespace VedAstro.Library
             {
                 throw new ArgumentException("Invalid ZodiacName");
             }
-        }
-
-        public byte[] ToJpeg()
-        {
-            var table = this.ToDataTable();
-            return Tools.DataTableToJpeg(table);
         }
 
         public DataTable ToDataTable()

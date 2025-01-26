@@ -36,7 +36,7 @@ namespace VedAstro.Library
         Vaidhriti = 27
     }
 
-    public class NithyaYoga(NithyaYogaName name, string description) : IToJson, IToJpeg, IToDataTable
+    public class NithyaYoga(NithyaYogaName name, string description) : IToJson
     {
         public NithyaYogaName Name { get; set; } = name;
 
@@ -99,28 +99,6 @@ namespace VedAstro.Library
         {
             return $"{Name.ToString()} - {Description}";
         }
-
-        /// <summary>
-        /// Made by AI 🤖🤖
-        /// </summary>
-        public DataTable ToDataTable()
-        {
-            var dataTable = new DataTable();
-
-            // Assuming Name and Description are properties of the class
-            dataTable.Columns.Add("Name", typeof(string));
-            dataTable.Columns.Add("Description", typeof(string));
-
-            var row = dataTable.NewRow();
-            row["Name"] = Name.ToString();
-            row["Description"] = Description;
-
-            dataTable.Rows.Add(row);
-
-            return dataTable;
-        }
-
-        public byte[] ToJpeg() { var table = this.ToDataTable(); return Tools.DataTableToJpeg(table); }
 
         public JObject ToJson()
         {

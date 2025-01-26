@@ -19,7 +19,7 @@ namespace VedAstro.Library
     //IMMUTABLE CLASS
     [Serializable()]
     //TODO CANDIDATE FOR RECORD STRUCT
-    public class GeoLocation : IToXml, IToJpeg, IToJson, IToDataTable, IFromUrl
+    public class GeoLocation : IToJson, IFromUrl
     {
         /// <summary>
         /// The number of pieces the URL version of this instance needs to be cut for processing
@@ -180,25 +180,6 @@ namespace VedAstro.Library
             return hash1 + hash2 + hash3;
         }
 
-        public byte[] ToJpeg() { var table = this.ToDataTable(); return Tools.DataTableToJpeg(table); }
-
-        public DataTable ToDataTable()
-        {
-            // Create a new DataTable.
-            DataTable table = new DataTable("GeoLocation");
-
-            // Define columns.
-            table.Columns.Add("Name", typeof(string));
-            table.Columns.Add("Value", typeof(string));
-
-            // fill rows
-            table.Rows.Add("Name", this.Name());
-            table.Rows.Add("Longitude", this.Longitude());
-            table.Rows.Add("Latitude", this.Latitude());
-
-            return table;
-        }
-
         public JToken ToJson()
         {
             var temp = new JObject();
@@ -210,48 +191,6 @@ namespace VedAstro.Library
         }
 
         JObject IToJson.ToJson() => (JObject)this.ToJson();
-
-        public XElement ToXml()
-        {
-            var locationHolder = new XElement("Location");
-            var name = new XElement("Name", this.Name());
-            var longitude = new XElement("Longitude", this.Longitude());
-            var latitude = new XElement("Latitude", this.Latitude());
-
-            locationHolder.Add(name, longitude, latitude);
-
-            return locationHolder;
-        }
-
-        /// <summary>
-        /// The root element is expected to be name of Type
-        /// Note: Special method done to implement IToXml
-        /// </summary>
-        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
-
-        public static GeoLocation FromXml(XElement locationXml)
-        {
-            try
-            {
-                var name = locationXml.Element("Name")?.Value;
-                var longitude = Double.Parse(locationXml.Element("Longitude")?.Value ?? "-1"); //-1 so easy to spot
-                var latitude = Double.Parse(locationXml.Element("Latitude")?.Value ?? "-1");
-
-
-                return new GeoLocation(name, longitude, latitude);
-
-            }
-            catch (Exception e)
-            {
-                //log it
-                LibLogger.Debug(e, $"GeoLocation.FromXml FAIL! : {locationXml}");
-
-                //instead of giving up return something
-                return GeoLocation.Empty;
-
-                throw new Exception($"BLZ:GeoLocation.FromXml() Failed : {locationXml}");
-            }
-        }
 
         public static GeoLocation FromJson(JToken rawJson)
         {

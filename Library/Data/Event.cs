@@ -19,7 +19,7 @@ namespace VedAstro.Library
     /// <summary>
     /// Represents a period of time "Event" with start, end time and data related
     /// </summary>
-    public class Event : IToXml, IToJson
+    public class Event :  IToJson
     {
         /// <summary>
         /// Returns an Empty Time instance meant to be used as null/void filler
@@ -166,96 +166,6 @@ namespace VedAstro.Library
             return difference.TotalHours;
         }
 
-        /// <summary>
-        /// The root element is expected to be Person
-        /// Note: Special method done to implement IToXml
-        /// </summary>
-        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
-
-        /// <summary>
-        /// Convert an XML representation of Event to an Event instance
-        /// Accepts both 1 XML Event and a list of XML events placed in 1 "Root" element
-        /// But always returns a list
-        /// </summary>
-        public static List<Event> FromXml(XElement resultsRaw)
-        {
-            var returnList = new List<Event>();
-
-            //first find out if it's 1 or list
-            var firstElementName = resultsRaw.Name.LocalName;
-            var isList = firstElementName == "Root";
-
-            if (isList)
-            {
-                //parse as list
-                foreach (var eventXml in resultsRaw.Elements())
-                {
-                    returnList.Add(XmlToEvent(eventXml));
-                }
-
-            }
-            //else it is only 1 event xml
-            else
-            {
-                returnList.Add(XmlToEvent(resultsRaw));
-            }
-
-
-            return returnList;
-
-
-            //FUNCTIONS
-
-            //convert 1 event xml to instance
-            Event XmlToEvent(XElement eventXml)
-            {
-
-                var nameXml = eventXml.Element("Name")?.Element(typeof(EventName).FullName);
-                var name = Enum.Parse<EventName>(nameXml.Value);
-
-                var natureXml = eventXml.Element("Nature")?.Element(typeof(EventNature).FullName);
-                var nature = Enum.Parse<EventNature>(natureXml.Value);
-
-                var descriptionXml = eventXml.Element("Description")?.Element(typeof(String).FullName);
-                var description = descriptionXml.Value;
-
-                var startTimeXml = eventXml.Element("StartTime").Element("Time");
-                var startTime = Time.FromXml(startTimeXml);
-
-                var endTimeXml = eventXml.Element("EndTime").Element("Time");
-                var endTime = Time.FromXml(endTimeXml);
-
-                // Get the list of tags, split by comma and parse each tag
-                var tagString = eventXml.Element("Tag")?.Value;
-                var tagList = EventData.GetEventTags(tagString);
-
-                //note: specialized summary only pumped in at static tables with LLM preprocessing
-                //      so when coming from XML file touched by user, there should not be any specialized summary
-                var specializedSummary = SpecializedSummary.Empty;
-                var parsedPerson = new Event(name, nature, description, specializedSummary,  startTime, endTime, tagList);
-
-                return parsedPerson;
-
-            }
-        }
-
-        /// <summary>
-        /// converts the current instance of Event to its XML version
-        /// </summary>
-        public XElement ToXml()
-        {
-            var eventXml = new XElement("Event");
-            var nameXml = new XElement("Name", Tools.AnyTypeToXml(this.Name));
-            var natureXml = new XElement("Nature", Tools.AnyTypeToXml(this.Nature));
-            var descriptionXml = new XElement("Description", Tools.AnyTypeToXml(this.Description));
-            var startTimeXml = new XElement("StartTime", Tools.AnyTypeToXml(this.StartTime));
-            var endTimeXml = new XElement("EndTime", Tools.AnyTypeToXml(this.EndTime));
-
-            eventXml.Add(nameXml, descriptionXml, natureXml, startTimeXml, endTimeXml);
-
-            return eventXml;
-
-        }
 
         /// <summary>
         /// Checks if this event occurred at the inputed time

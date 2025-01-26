@@ -10,7 +10,7 @@ namespace VedAstro.Library
     /// Note : properties can only be set once,
     /// so that doesn't accidentally get changed
     /// </summary>
-    public class MatchPrediction : IToXml
+    public class MatchPrediction : IToJson
     {
         public static MatchPrediction Empty = new MatchPrediction(MatchPredictionName.Empty, EventNature.Empty, "Empty", "Empty","Empty", "Empty");
 
@@ -87,42 +87,7 @@ namespace VedAstro.Library
 
         //PUBLIC METHODS
 
-        /// <summary>
-        /// The root element is expected to be Person
-        /// Note: Special method done to implement IToXml
-        /// </summary>
-        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
-
-        public MatchPrediction FromXml(XElement xml)
-        {
-            var name = Enum.Parse<MatchPredictionName>(xml.Element("Name")?.Value);
-            var nature = Enum.Parse<EventNature>(xml.Element("Nature")?.Value);
-            var maleInfo = xml.Element("MaleInfo")?.Value;
-            var femaleInfo = xml.Element("FemaleInfo")?.Value;
-            var info = xml.Element("Info")?.Value;
-            var description = xml.Element("Description")?.Value;
-
-            var parsed = new MatchPrediction(name, nature, maleInfo, femaleInfo, info, description);
-
-            return parsed;
-
-        }
-
-        public XElement ToXml()
-        {
-            //create root tag to hold data
-            var predictionXml = new XElement(nameof(MatchPrediction));
-            var name = new XElement("Name", this.Name);
-            var nature = new XElement("Nature", this.Nature);
-            var maleInfo = new XElement("MaleInfo", this.MaleInfo);
-            var femaleInfo = new XElement("FemaleInfo", this.FemaleInfo);
-            var info = new XElement("Info", this.Info);
-            var description = new XElement("Description", this.Description);
-
-            predictionXml.Add(name, nature, maleInfo, femaleInfo, info, description);
-
-            return predictionXml;
-        }
+        JObject IToJson.ToJson() => (JObject)this.ToJson();
 
         public JToken ToJson()
         {

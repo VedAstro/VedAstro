@@ -12,7 +12,7 @@ namespace VedAstro.Library
     /// Simple data type to contain a person's details
     /// NOTE: try to maintain as struct, for unmutable data
     /// </summary>
-    public struct Person : IToXml, IFromUrl, IToJson
+    public struct Person : IFromUrl, IToJson
     {
 
         /// <summary>
@@ -253,28 +253,6 @@ namespace VedAstro.Library
 
         //METHODS
 
-        /// <summary>
-        /// Given an XML list of persons record from storage
-        /// converts to json
-        /// TODO CHANGE TO SELECT BASED METHOD
-        /// </summary>
-        /// <param name="personXmlList"></param>
-        /// <returns></returns>
-        public static JArray XmlListToJsonList(List<XElement> personXmlList)
-        {
-            //parse to person first (don't care about speed we are on durable API yeah!)
-            var personList = Person.FromXml(personXmlList);
-            JArray returnArray = new JArray();
-            foreach (var person in personList)
-            {
-
-                //compile into an JSON array
-                returnArray.Add(person.ToJson());
-            }
-
-
-            return returnArray;
-        }
 
         /// <summary>
         /// Converts life event list to JSON on the fly
@@ -298,79 +276,6 @@ namespace VedAstro.Library
         /// </summary>
         public string BirthDateMonthYearOffset => $"{this.BirthDateMonthYear} {this.BirthTimeZoneString}";
 
-        public XElement ToXml()
-        {
-            var person = new XElement("Person");
-            var name = new XElement("Name", this.Name);
-            var id = new XElement("PersonId", this.Id);
-            var notes = new XElement("Notes", this.Notes);
-            var gender = new XElement("Gender", this.Gender.ToString());
-            var birthTime = new XElement("BirthTime", this.BirthTime.ToXml());
-            var ownerId = new XElement("OwnerId", this.OwnerId);
-            var lifeEventListXml = getLifeEventListXml(LifeEventList);
-
-            person.Add(id, name, gender, birthTime, ownerId, lifeEventListXml, notes);
-
-            return person;
-
-            //----------LOCAL FUNCTIONS ---------------
-            XElement getLifeEventListXml(List<LifeEvent> lifeList)
-            {
-                //create the empty list holder xml
-                var returnXml = new XElement("LifeEventList");
-
-                //if null just return empty list
-                if (lifeList is null) { return returnXml; }
-
-                //convert to xml and add to holder xml
-                foreach (var lifeEvent in lifeList)
-                {
-                    var lifeXml = lifeEvent.ToXml();
-                    returnXml.Add(lifeXml);
-                }
-
-                return returnXml;
-            }
-        }
-
-        /// <summary>
-        /// The root element is expected to be Person
-        /// Note: Special method done to implement IToXml
-        /// </summary>
-        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
-
-        /// <summary>
-        /// The root element is expected to be Person
-        /// </summary>
-        public static Person FromXml(XElement? personXml)
-        {
-            //if null return empty, end here
-            if (personXml == null) { return Person.Empty; }
-
-            //if no id place 0 find the error
-            //note:
-            //  - do not just generate a new ID, it should only be generated in one place for easy maintenance
-            //  - some times can use to clean data, but once done change back
-            var id = personXml.Element("PersonId")?.Value ?? "0";
-            var name = personXml.Element("Name")?.Value;
-            var notes = personXml.Element("Notes")?.Value;
-            var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
-            var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
-            var ownerId = personXml.Element("OwnerId")?.Value;
-
-            var parsedPerson = new Person(ownerId, id, name, time, gender, notes);
-
-            return parsedPerson;
-
-            //-------------------LOCAL FUNCTION--------
-        }
-
-        /// <summary>
-        /// Parses a list of person's
-        /// </summary>
-        /// <param name="personXmlList"></param>
-        /// <returns></returns>
-        public static List<Person> FromXml(IEnumerable<XElement> personXmlList) => personXmlList.Select(personXml => Person.FromXml(personXml)).ToList();
 
         /// <summary>
         /// Given Time instance in URL form will convert to instance

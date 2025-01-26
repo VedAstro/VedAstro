@@ -18,7 +18,7 @@ namespace VedAstro.Library
     /// to generate the Local Mean Time needed for astrological calculation
     /// </summary>
     [Serializable()]
-    public struct Time : IToXml, IFromUrl, IToJson
+    public struct Time : IFromUrl, IToJson
     {
         //FIELDS
 
@@ -476,21 +476,6 @@ namespace VedAstro.Library
 
         #region CONVERTERS
 
-        /// <summary>
-        /// Note root element is "Time"
-        /// </summary>
-        public XElement ToXml()
-        {
-            var timeHolder = new XElement("Time");
-            var timeString = this.GetStdDateTimeOffsetText();
-            var timeValue = new XElement("StdTime", timeString);
-            var location = this.GetGeoLocation().ToXml();
-
-            timeHolder.Add(timeValue, location);
-
-            return timeHolder;
-        }
-
         public JObject ToJson()
         {
             var temp = new JObject();
@@ -500,46 +485,6 @@ namespace VedAstro.Library
             //compile into an JSON array
             return temp;
         }
-
-        /// <summary>
-        /// The root element is expected to be name of Type
-        /// Note: Special method done to implement IToXml
-        /// </summary>
-        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
-
-        /// <summary>
-        /// Note: Root element must be named Time
-        /// </summary>
-        public static Time FromXml(XElement timeXmlElement)
-        {
-            try
-            {
-                var timeString = timeXmlElement.Element("StdTime")?.Value ?? "00:00 01/01/2000 +08:00";
-
-                //know issue to have "." instead of "/" for date separator, so change it here if at all
-                timeString = timeString.Replace('.', '/');
-
-                var locationXml = timeXmlElement.Element("Location");
-                var geoLocation = GeoLocation.FromXml(locationXml);
-
-                var parsedTime = new Time(timeString, geoLocation);
-
-                return parsedTime;
-            }
-            catch (Exception e)
-            {
-                //log it
-                LibLogger.Debug(e, $"Time.FromXml FAIL! : {timeXmlElement}");
-
-                //return empty time to stop keep things running
-                return Time.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Parse list of XML directly
-        /// </summary>
-        public static List<Time> FromXml(IEnumerable<XElement> xmlList) => xmlList.Select(timeXml => Time.FromXml(timeXml)).ToList();
 
         public static Time FromJson(JToken timeJson)
         {

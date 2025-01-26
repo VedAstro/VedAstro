@@ -10,7 +10,7 @@ namespace VedAstro.Library
     /// <summary>
     /// Represents the final data generated for compatibility
     /// </summary>
-    public class MatchReport : IToXml, IToJson
+    public class MatchReport : IToJson
     {
 
         public static MatchReport Empty = new MatchReport("0", Person.Empty, Person.Empty, 0, "Empty Notes",
@@ -87,101 +87,7 @@ namespace VedAstro.Library
             UserId = userId.Any() ? userId : DefaultUserId;
         }
 
-        /// <summary>
-        /// Converts the instance data into XML
-        /// Used for transmitting across net
-        /// TODO MARKED FOR OBLIVION
-        /// </summary>
-        public XElement ToXml()
-        {
-            //create root tag to hold data
-            var compatibilityReport = new XElement("MatchReport");
 
-            //place data in individual tags
-            var kutaScore = new XElement("KutaScore", this.KutaScore); //not rounded
-            var male = new XElement("Male", Male.ToXml());
-            var female = new XElement("Female", Female.ToXml());
-            var predictionList = PredictionListToXml(this.PredictionList);
-            var userId = new XElement("UserId", this.UserIdString);
-            var notes = new XElement("Notes", this.Notes);
-            var matchId = new XElement("Id", Id);
-
-            //add in the data
-            compatibilityReport.Add(matchId, userId, notes, male, female, kutaScore, predictionList);
-
-            return compatibilityReport;
-        }
-
-        /// <summary>
-        /// The root element is expected to be Person
-        /// Note: Special method done to implement IToXml
-        /// </summary>
-        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
-
-        /// <summary>
-        /// If unparseable will return null
-        /// </summary>
-        public static MatchReport FromXml(XElement reportXml)
-        {
-            //end here if null
-            if (reportXml == null) { return null; }
-
-            //it is possible xml is not valid data, possible error xml, so end here
-            if (reportXml?.Element("Male")?.Element("Person") == null) { return null; }
-
-            //extract out data from xml
-            var matchId = reportXml.Element("Id")?.Value ?? "0";
-            var notes = reportXml.Element("Notes")?.Value ?? "Notes";
-            var male = Person.FromXml(reportXml.Element("Male")?.Element("Person"));
-            var female = Person.FromXml(reportXml.Element("Female")?.Element("Person"));
-            var kutaScore = Double.Parse(reportXml.Element("KutaScore")?.Value ?? "0");
-            var userId = Tools.GetUserIdFromData(reportXml);
-
-            var predictionListXml = reportXml.Element("PredictionList");
-            var predictionList = ParseXmlToPredictionList(predictionListXml);
-
-
-            //package as new data
-            var newCompatibilityReport = new MatchReport(matchId, male, female, kutaScore, notes, predictionList, userId);
-            return newCompatibilityReport;
-
-            //----------------------------------------------
-            //FUNCTIONS
-
-            List<MatchPrediction> ParseXmlToPredictionList(XElement xmlData)
-            {
-                var returnVal = new List<MatchPrediction>();
-
-                foreach (var xElement in xmlData.Elements())
-                {
-                    var name = Enum.Parse<MatchPredictionName>(xElement.Element("Name")?.Value);
-                    var nature = Enum.Parse<EventNature>(xElement.Element("Nature")?.Value);
-                    var maleInfo = xElement.Element("MaleInfo")?.Value;
-                    var femaleInfo = xElement.Element("FemaleInfo")?.Value;
-                    var description = xElement.Element("Description")?.Value;
-                    var info = xElement.Element("Info")?.Value;
-
-                    var newPrediction = new MatchPrediction()
-                    {
-                        Name = name,
-                        Nature = nature,
-                        MaleInfo = maleInfo,
-                        FemaleInfo = femaleInfo,
-                        Description = description,
-                        Info = info
-                    };
-
-                    returnVal.Add(newPrediction);
-                }
-
-                return returnVal;
-            }
-        }
-
-        /// <summary>
-        /// Parse list of XML directly
-        /// </summary>
-        public static List<MatchReport> FromXml(IEnumerable<XElement> xmlList) => xmlList.Select(matchXml => MatchReport.FromXml(matchXml)).ToList();
 
         //-------------------TO JSON IMPLEMENTATION ----------------------
 
@@ -213,19 +119,6 @@ namespace VedAstro.Library
         //█ █░▀█ ░█░ ██▄ █▀▄ █░▀█ █▀█ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
         //----------------------------------------------------------------------------------------------------------------
 
-        private XElement PredictionListToXml(List<MatchPrediction> predictionList)
-        {
-            //create root tag to hold data
-            var predictionListXml = new XElement("PredictionList");
-
-            //convert each prediction to XML and add it in
-            foreach (var prediction in predictionList)
-            {
-                predictionListXml.Add(prediction.ToXml());
-            }
-
-            return predictionListXml;
-        }
 
         /// <summary>
         /// Based on kuta score will summary data

@@ -12,7 +12,7 @@ namespace VedAstro.Library
     /// <summary>
     /// Data representation of Gochara Kakshas
     /// </summary>
-    public class GocharaKakshas : IToJson, IToJpeg, IToDataTable
+    public class GocharaKakshas : IToJson
     {
         public GocharaKakshas(List<PlanetName> column1, Dictionary<PlanetName, ZodiacSign> column2, Dictionary<PlanetName, string> column3, Dictionary<PlanetName, int> column4, Dictionary<PlanetName, int> column5, Dictionary<PlanetName, int> column6)
         {
@@ -41,6 +41,7 @@ namespace VedAstro.Library
                 var valueHolder = new JObject
                 {
                     //make the columns
+                    ["Planet"] = mainPlanet.Name.ToString(),
                     ["Sign"] = Column2[mainPlanet].GetSignName().ToString(),//current sign
                     ["KakshaScore"] = Column4[mainPlanet],
                     ["KakshaLord"] = Column3[mainPlanet],
@@ -55,44 +56,6 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// AI written code 😁
-        /// </summary>
-        public byte[] ToJpeg()
-        {
-            //convert current instance to a table format
-            var table = this.ToDataTable();
-
-            return Tools.DataTableToJpeg(table);
-        }
-
-
-        public DataTable ToDataTable()
-        {
-            // Create a new DataTable.
-            DataTable table = new DataTable("GocharaKakshas");
-
-            // Define columns.
-            table.Columns.Add("Planet", typeof(string));
-            table.Columns.Add("Sign", typeof(string));
-            table.Columns.Add("KakshaScore", typeof(string));
-            table.Columns.Add("KakshaLord", typeof(string));
-            table.Columns.Add("Ashtaka", typeof(string));
-            table.Columns.Add("Sarvashtaka", typeof(string));
-
-            //fill table with data in rows
-            foreach (var mainPlanet in Column1)
-            {
-                table.Rows.Add(mainPlanet.Name.ToString(),
-                    Column2[mainPlanet].GetSignName().ToString(),
-                    Column4[mainPlanet],
-                    Column3[mainPlanet],
-                    Column5[mainPlanet],
-                    Column6[mainPlanet]);
-            }
-
-            return table;
-        }
     }
 
 }

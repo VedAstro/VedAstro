@@ -13,7 +13,7 @@ namespace VedAstro.Library
     /// Data structure to encapsulate an event before it's calculated
     /// In other words an object instance of the event data as stored in file
     /// </summary>
-    public struct EventData : IToXml, IToJson
+    public struct EventData : IToJson
     {
         /** FIELDS **/
 
@@ -68,38 +68,6 @@ namespace VedAstro.Library
 
 
         /** PUBLIC METHODS **/
-
-
-        /// <summary>
-        /// Converts an XML list of Event Data to instance List
-        /// </summary>
-        public static List<EventData> FromXmlList(List<XElement> eventDataListXml)
-        {
-            //create a place to store the list
-            List<EventData> eventDataList = new List<EventData>();
-
-            //parse each raw event data in list
-            foreach (var eventDataXml in eventDataListXml)
-            {
-
-                //add it to the return list
-                eventDataList.Add(EventData.FromXml(eventDataXml));
-            }
-
-            //return the list to caller
-            return eventDataList;
-        }
-
-        public XElement ToXml()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// The root element is expected to be Person
-        /// Note: Special method done to implement IToXml
-        /// </summary>
-        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
 
         /// <summary>
         /// Converts XML to Instance

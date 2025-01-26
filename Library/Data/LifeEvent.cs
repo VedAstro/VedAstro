@@ -11,7 +11,7 @@ namespace VedAstro.Library
     /// This event is to mark important moments in a persons life
     /// This is used later by calculators like Dasa to show against astrological predictions
     /// </summary>
-    public class LifeEvent : IToXml
+    public class LifeEvent 
     {
         public static LifeEvent Empty = new LifeEvent("Empty", "Empty", Time.Empty, "New Life Event",
             "Event Description", "Neutral", "Normal");
@@ -168,47 +168,6 @@ namespace VedAstro.Library
             return newPerson;
         }
 
-        public XElement ToXml()
-        {
-            var lifeEventXml = new XElement("LifeEvent");
-            var idXml = new XElement("Id", this.Id);
-            var personIdXml = new XElement("PersonId", this.PersonId);
-            var nameXml = new XElement("Name", this.Name);
-            var startTimeXml = new XElement("StartTime", this.StartTime.ToXml());
-            var descriptionXml = new XElement("Description", this.Description);
-            var natureXml = new XElement("Nature", this.Nature);
-            var weightXml = new XElement("Weight", this?.Weight ?? "Normal");
-
-            lifeEventXml.Add(personIdXml, idXml, nameXml, startTimeXml, descriptionXml, natureXml, weightXml);
-
-            return lifeEventXml;
-        }
-
-        /// <summary>
-        /// The root element is expected to be LifeEvent
-        /// Note: Special method done to implement IToXml
-        /// </summary>
-        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
-
-        /// <summary>
-        /// The root element is expected to be Person
-        /// </summary>
-        public static LifeEvent FromXml(XElement lifeEventXml)
-        {
-
-            //try get data from xml else use empty string
-            var id = !string.IsNullOrEmpty(lifeEventXml.Element("Id")?.Value) ? lifeEventXml?.Element("Id")?.Value : ""; //leave empty to detect
-            var personId = !string.IsNullOrEmpty(lifeEventXml.Element("PersonId")?.Value) ? lifeEventXml?.Element("PersonIdId")?.Value : ""; //leave empty to detect
-            var name = !string.IsNullOrEmpty(lifeEventXml.Element("Name")?.Value) ? lifeEventXml?.Element("Name")?.Value : "";
-            var description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml?.Element("Description")?.Value : "";
-            var nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml?.Element("Nature")?.Value : "";
-            var weight = !string.IsNullOrEmpty(lifeEventXml.Element("Weight")?.Value) ? lifeEventXml?.Element("Weight")?.Value : "Normal";
-            var startTime = Time.FromXml(lifeEventXml.Element("StartTime")?.Element("Time"));
-
-            var lifeEventParsed = new LifeEvent(personId, id, startTime, name, description, nature, weight);
-
-            return lifeEventParsed;
-        }
 
         /// <summary>
         /// input is json array

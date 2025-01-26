@@ -12,7 +12,7 @@ namespace VedAstro.Library
     /// Simple data wrapper for an instance of Horoscope Prediction (data)
     /// Note : EventData + Time + Calc MetaData = HoroscopePrediction
     /// </summary>
-    public class HoroscopePrediction : IToXml, IToJson
+    public class HoroscopePrediction : IToJson
     {
         //FIELDS
         public static readonly HoroscopePrediction Empty = new(HoroscopeName.Empty, "Empty", new RelatedBody());
@@ -39,59 +39,6 @@ namespace VedAstro.Library
         public string FormattedName => Format.FormatName(Name.ToString());
 
 
-
-        /// <summary>
-        /// Note: Root element must be named HoroscopePrediction
-        /// </summary>
-        public static HoroscopePrediction FromXml(XElement predictionXml)
-        {
-            var eventName = Enum.Parse<HoroscopeName>(predictionXml.Element("Name")?.Value ?? "Empty");
-            var description = predictionXml.Element("Description")?.Value ?? "Empty Description";
-            var relatedBodyXml = predictionXml?.Element("RelatedBody") ?? new XElement("RelatedBody");
-            var relatedBody = RelatedBody.FromXml(relatedBodyXml);
-
-            var parsed = new HoroscopePrediction(eventName, description, relatedBody);
-
-            return parsed;
-        }
-
-        /// <summary>
-        /// Converts a list of prediction xml 
-        /// Note: Root element must be named Root with children as HoroscopePrediction
-        /// </summary>
-        public static List<HoroscopePrediction> FromXmlList(XElement rootXml)
-        {
-            var returnList = new List<HoroscopePrediction>();
-
-            foreach (var predictionXml in rootXml.Elements())
-            {
-                returnList.Add(HoroscopePrediction.FromXml(predictionXml));
-            }
-
-            return returnList;
-        }
-
-        /// <summary>
-        /// Note root element is "Time"
-        /// </summary>
-        public XElement ToXml()
-        {
-            var predictionHolder = new XElement("HoroscopePrediction");
-            var nameXml = new XElement("Name", this.Name.ToString());
-            var descriptionXml = new XElement("Description", this.Description);
-            var relatedBodyXml = this.RelatedBody.ToXml();
-
-            predictionHolder.Add(nameXml, descriptionXml, relatedBodyXml);
-
-            return predictionHolder;
-        }
-
-
-        /// <summary>
-        /// The root element is expected to be name of Type
-        /// Note: Special method done to implement IToXml
-        /// </summary>
-        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
 
 
         //PRIVATE METHODS

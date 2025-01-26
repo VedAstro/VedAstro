@@ -10,7 +10,7 @@ namespace VedAstro.Library
     /// Simple class to wrap all related bodies (Planets, Houses & Signs)
     /// to Calculator Result
     /// </summary>
-    public class RelatedBody : IToXml, IToJson
+    public class RelatedBody : IToJson
     {
         public static readonly RelatedBody Empty = new RelatedBody();
 
@@ -51,33 +51,6 @@ namespace VedAstro.Library
             compiledText += Tools.ListToString(this.RelatedZodiac);
 
             return compiledText;
-        }
-
-        public dynamic FromXml<T>(XElement relatedBodyXml) where T : IToXml => RelatedBody.FromXml(relatedBodyXml);
-
-        public static RelatedBody FromXml(XElement relatedBodyXml)
-        {
-            var parsed = new RelatedBody();
-            var relatedPlanetsXml = relatedBodyXml?.Element("PlanetNameList") ?? new XElement("PlanetNameList");
-            parsed.RelatedPlanets = PlanetName.FromXmlList(relatedPlanetsXml);
-            var relatedHousesXml = relatedBodyXml?.Element("HouseNameList") ?? new XElement("HouseNameList");
-            parsed.RelatedHouses = HouseNameExtensions.FromXmlList(relatedHousesXml);
-            var relatedZodiacXml = relatedBodyXml?.Element("ZodiacNameList") ?? new XElement("ZodiacNameList");
-            parsed.RelatedZodiac = ZodiacNameExtensions.FromXmlList(relatedZodiacXml);
-
-            return parsed;
-
-        }
-
-        public XElement ToXml()
-        {
-            var relatedPlanetsXml = PlanetName.ToXmlList(this.RelatedPlanets);
-            var relatedHousesXml = HouseNameExtensions.ToXmlList(this.RelatedHouses);
-            var relatedSignsXml = ZodiacNameExtensions.ToXmlList(this.RelatedZodiac);
-
-            var returnXml = new XElement("RelatedBody", relatedPlanetsXml, relatedHousesXml, relatedSignsXml);
-            return returnXml;
-
         }
 
 

@@ -37,9 +37,4 @@ public class CallerInfo
     /// </summary>
     public bool Both101 => UserId == "101" && VisitorId == "101";
 
-
-    /// <summary>
-    /// for getting cache not data from xml
-    /// </summary>
-
 }

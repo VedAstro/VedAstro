@@ -7,7 +7,7 @@ namespace VedAstro.Library
     /// <summary>
     /// Data package for holding Panchanga Table as data
     /// </summary>
-    public class PanchangaTable : IToJpeg, IToJson, IToDataTable
+    public class PanchangaTable : IToJson
     {
         public string Ayanamsa { get; set; }
         public LunarDay Tithi { get; set; }
@@ -37,35 +37,6 @@ namespace VedAstro.Library
             Sunrise = sunrise;
             Sunset = sunset;
             IshtaKaala = ishtaKaala;
-        }
-
-        public byte[] ToJpeg() { var table = this.ToDataTable(); return Tools.DataTableToJpeg(table); }
-
-        public DataTable ToDataTable()
-        {
-            // Create a new DataTable.
-            DataTable table = new DataTable("PanchangaTable");
-
-            // Define columns.
-            table.Columns.Add("Name", typeof(string));
-            table.Columns.Add("Value", typeof(string));
-
-            // fill rows
-            foreach (var prop in GetType().GetProperties())
-            {
-                var value = prop.GetValue(this);
-
-                if (value is Angle angleVal)
-                {
-                    table.Rows.Add(prop.Name, angleVal.DegreesMinutesSecondsText);
-                }
-                else
-                {
-                    table.Rows.Add(prop.Name, value.ToString());
-                }
-            }
-
-            return table;
         }
 
         public JObject ToJson()

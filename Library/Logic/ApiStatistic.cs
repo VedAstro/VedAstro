@@ -315,7 +315,6 @@ namespace VedAstro.Library
             }
         }
 
-
         public static void LogUserAgent(HttpRequestData incomingRequest)
         {
             //get host address as main ID of record

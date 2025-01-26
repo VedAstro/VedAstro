@@ -11,8 +11,7 @@ namespace VedAstro.Library
     /// <summary>
     /// A list of planet names, with string parsing & comparison
     /// </summary>
-    [TypeConverter(typeof(PlanetNameTypeConverter))]
-    public class PlanetName : IToXml, IFromUrl, IToJson
+    public class PlanetName : IFromUrl, IToJson
     {
         /// <summary>
         /// The number of pieces the URL version of this instance needs to be cut for processing
@@ -228,38 +227,6 @@ namespace VedAstro.Library
             return false;
         }
 
-        public XElement ToXml()
-        {
-            var planetNameHolder = new XElement("PlanetName");
-            var nameXml = new XElement("Name", this.Name.ToString());
-
-            planetNameHolder.Add(nameXml);
-
-            return planetNameHolder;
-
-        }
-
-        public dynamic FromXml<T>(XElement planetNameXml) where T : IToXml => FromXml(planetNameXml);
-
-        public static PlanetName FromXml(XElement planetNameXml)
-        {
-            var nameRaw = planetNameXml?.Element("Name")?.Value ?? "Empty";
-            var planetName = Enum.Parse<PlanetNameEnum>(nameRaw);
-            return new PlanetName(planetName);
-        }
-
-        /// <summary>
-        /// Note: Root element must be named EventTagList
-        /// </summary>
-        public static List<PlanetName> FromXmlList(XElement planetNameListXml)
-        {
-            var returnList = new List<PlanetName>();
-            foreach (var planetNameXml in planetNameListXml.Elements())
-            {
-                returnList.Add(PlanetName.FromXml(planetNameXml));
-            }
-            return returnList;
-        }
 
         /// <summary>
         /// Given PlanetName instance in URL form will convert to instance
@@ -273,21 +240,6 @@ namespace VedAstro.Library
             var parsed = PlanetName.Parse(parts[1]);
 
             return parsed;
-        }
-
-        /// <summary>
-        /// Note: Root element must be named PlanetNameList
-        /// </summary>
-        public static XElement ToXmlList(List<PlanetName> planetNameList)
-        {
-            var planetNameListXml = new XElement("PlanetNameList");
-
-            foreach (var planetName in planetNameList)
-            {
-                planetNameListXml.Add(planetName.ToXml());
-            }
-
-            return planetNameListXml;
         }
 
 
@@ -418,31 +370,6 @@ namespace VedAstro.Library
             return hash1;
         }
 
-
-
     }
 
-
-    /// <summary>
-    /// Special class to allow direct use Planet Name in blazor
-    /// </summary>
-    public class PlanetNameTypeConverter : TypeConverter
-    {
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-        {
-            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
-        }
-
-        /// <summary>
-        /// Tells blazor how to auto convert string to Planet Name
-        /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-        {
-            if (value is string stringValue)
-            {
-                return PlanetName.Parse(stringValue);
-            }
-            return base.ConvertFrom(context, culture, value);
-        }
-    }
 }

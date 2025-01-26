@@ -44,6 +44,12 @@
  * VedAstro class representing the global app data and settings.
  */
 class VedAstro {
+    // Cache keys centralized here
+    static CacheKeys = {
+        PRIVATE: 'privatePersonList',
+        PUBLIC: 'publicPersonList',
+    };
+
     // API server address, defaults to a stored value or a predefined URL
     static ApiDomain = localStorage.getItem("ApiDomain") || "https://vedastro.azurewebsites.net/api";
 
@@ -92,10 +98,43 @@ class VedAstro {
         return VedAstro.UserId === "101"; // "101" indicates a guest
     }
 
-    // Caches the person list (private or public) in local storage
-    static CachePersonList(cacheType, personList) {
-        const cacheKey = cacheType === 'private' ? 'privatePersonList' : 'publicPersonList';
-        localStorage.setItem(cacheKey, JSON.stringify(personList)); // Store person list as JSON
+    // Sets the person list in local storage
+    static setPersonList(cacheType, personList) {
+        const cacheKey = VedAstro.CacheKeys[cacheType.toUpperCase()];
+        if (cacheKey) {
+            localStorage.setItem(cacheKey, JSON.stringify(personList)); // Store person list as JSON
+        } else {
+            console.warn('Invalid cache type provided. Cache not set.');
+        }
+    }
+
+    // Gets the person list from local storage
+    static getPersonListFromCache(cacheType) {
+        const cacheKey = VedAstro.CacheKeys[cacheType.toUpperCase()];
+        if (cacheKey) {
+            const cachedPersonList = localStorage.getItem(cacheKey);
+            return cachedPersonList ? JSON.parse(cachedPersonList) : null;
+        } else {
+            console.warn('Invalid cache type provided. Cache not retrieved.');
+            return null;
+        }
+    }
+
+    // Removes the person list from local storage
+    static removePersonListFromCache(cacheType) {
+        const cacheKey = VedAstro.CacheKeys[cacheType.toUpperCase()];
+        if (cacheKey) {
+            localStorage.removeItem(cacheKey);
+        } else {
+            console.warn('Invalid cache type provided. Cache not removed.');
+        }
+    }
+
+    // Clears all person list caches
+    static clearAllPersonListCaches() {
+        Object.values(VedAstro.CacheKeys).forEach((cacheKey) => {
+            localStorage.removeItem(cacheKey);
+        });
     }
 
     /**
@@ -105,13 +144,13 @@ class VedAstro {
      * @returns {Promise<Array<Person>>} - Promise that resolves to an array of Person objects.
      */
     static async GetPersonList(cacheType) {
-        const cacheKey = `${cacheType}PersonList`; // Define cache key based on cache type
+        const cacheKey = VedAstro.CacheKeys[cacheType.toUpperCase()]; // Define cache key based on cache type
         const ownerId = cacheType === 'private' ? VedAstro.UserId : '101'; // Owner ID based on cache type
         const visitorId = VedAstro.VisitorId; // Current visitor ID
 
         try {
             // Get cached person list and hash from local storage
-            const cachedPersonList = localStorage.getItem(cacheKey);
+            const cachedPersonList = VedAstro.getPersonListFromCache(cacheType);
             const cachedHash = localStorage.getItem(`${cacheKey}_hash`);
 
             // If cached data exists, check if it's up-to-date
@@ -120,13 +159,13 @@ class VedAstro {
 
                 // Return cached person list if up-to-date
                 if (isCacheUpToDate) {
-                    return JSON.parse(cachedPersonList).map((person) => new Person(person));
+                    return cachedPersonList.map((person) => new Person(person));
                 }
             }
 
             // Fetch the person list from the API if cache is outdated or doesn't exist
             const personList = await VedAstro.FetchPersonListFromAPI(cacheType);
-            VedAstro.CachePersonList(cacheType, personList); // Cache the newly fetched person list
+            VedAstro.setPersonList(cacheType, personList); // Cache the newly fetched person list
 
             // Retrieve the new hash for the person list and store it in local storage
             const newHash = await VedAstro.getPersonListHash(ownerId, visitorId);
@@ -217,35 +256,30 @@ class VedAstro {
         }
     }
 
-    //when user clicks logout button from Desktop
-    //sidebar or mobile top nav, this code runs.
-    //clears all session data & gives user nice message & reloads page
+    // When user clicks logout button from Desktop
+    // sidebar or mobile top nav, this code runs.
+    // Clears all session data & gives user nice message & reloads page
     static async OnClickLogOut() {
-
-        //clear all local storage data related to account
-        //NOTE: visitor ID & history is maintained because needed without login
-        localStorage.removeItem("APICalls"); //this allows a refresh on logout
-        localStorage.removeItem("privatePersonList");
-        localStorage.removeItem("publicPersonList");
+        // Clear all local storage data related to account
+        // NOTE: visitor ID & history is maintained because needed without login
+        localStorage.removeItem("APICalls"); // This allows a refresh on logout
+        VedAstro.clearAllPersonListCaches();
         localStorage.removeItem("UserId");
         localStorage.removeItem("UserName");
 
-        //remove all localStorage items with key "SelectedPerson-*"
+        // Remove all localStorage items with key "SelectedPerson-*"
         for (const key in localStorage) {
             if (key.startsWith("SelectedPerson-")) {
                 localStorage.removeItem(key);
             }
         }
 
-        //tell user logout was success
+        // Tell user logout was success
         await Swal.fire({ icon: 'success', title: 'Bye, we\'ll miss you 🥰', timer: 2000, showConfirmButton: false });
 
-        // send user back to Home page (to avoid any login related content reloading)
+        // Send user back to Home page (to avoid any login-related content reloading)
         window.location.href = './Home.html';
-
     }
-
-
 }
 
 
@@ -2372,6 +2406,7 @@ class PageTopNavbar {
  * This class generates the HTML for a dropdown list of people and handles user interactions.
  * It also caches person data and updates the selected person.
  */
+
 class PersonSelectorBox {
     // Class properties
     ElementID = "";
@@ -2383,9 +2418,9 @@ class PersonSelectorBox {
     publicPersonList = [];
     _personListDisplay = [];
     _publicPersonListDisplay = [];
-    //name of key where selected person data for
-    //this instance of person selector is stored
-    //exp : SelectedPerson-1, SelectedPerson-2, etc... (to support multiple selectors in 1 page)
+    // Name of key where selected person data for
+    // this instance of person selector is stored
+    // exp: SelectedPerson-1, SelectedPerson-2, etc... (to support multiple selectors in 1 page)
     SelectedPersonStorageKey = "";
 
     constructor(elementId) {
@@ -2398,7 +2433,7 @@ class PersonSelectorBox {
         // Get the custom attributes from the element and assign default values if not present
         this.TitleText = element.getAttribute("title-text") || "";
 
-        //created with nonce from 1 to n, so that multiple selectors supported across pages
+        // Created with nonce from 1 to n, so that multiple selectors supported across pages
         this.SelectedPersonStorageKey = `SelectedPerson-${this.ElementID}`;
 
         // Save a reference to this instance for global access
@@ -2466,19 +2501,17 @@ class PersonSelectorBox {
     }
 
     async initializeMainBody() {
-
-        // Generate new html
+        // Generate new HTML
         var html = await this.generateHtmlBody();
 
         // Clean any existing/loading icon just before rendering new 
         $(`#${this.ElementID}`).empty();
 
-        //inject the HTML into the page
+        // Inject the HTML into the page
         $(`#${this.ElementID}`).html(html);
 
-        // add tooltip to show full birth time and location
+        // Add tooltip to show full birth time and location
         this.attachTippyToButton();
-
     }
 
     attachTippyToButton() {
@@ -2486,7 +2519,7 @@ class PersonSelectorBox {
         if (selectedPerson) {
             const button = $(`#${this.ElementID}`).find(`.${this.SelectedPersonNameHolderElementID}`).parent();
 
-            //location text can sometimes be very long, so auto shorten
+            // Location text can sometimes be very long, so auto shorten
             let locationName = CommonTools.TruncateText(selectedPerson.BirthTime.Location.Name, 20);
 
             let html = `<div>
@@ -2501,20 +2534,20 @@ class PersonSelectorBox {
                 arrow: true,
                 placement: 'right',
                 trigger: 'mouseenter focus',
-                interactive: true //so that can select button
+                interactive: true // So that can select button
             });
         }
     }
 
-    //gets list of person to display (checks if underlying cache has been removed)
+    // Gets list of person to display (checks if underlying cache has been removed)
     async getPersonListDisplay() {
-        //check if cache exist
-        let isExist = localStorage.getItem('personList') !== null;
+        // Check if cache exists
+        const isExist = VedAstro.getPersonListFromCache('private') !== null;
 
-        //if cache exist, then no need to reinitialize, use in memory
+        // If cache exists, then no need to reinitialize, use in memory
         if (isExist) { return this._personListDisplay; }
 
-        //else get new data from API and fill from that (as though 1st time load)
+        // Else get new data from API and fill from that (as though 1st time load)
         else {
             this.personList = await VedAstro.GetPersonList('private');
             this._personListDisplay = this.personList;
@@ -2522,15 +2555,15 @@ class PersonSelectorBox {
         }
     }
 
-    //gets public list of person to display (checks if underlying cache has been removed)
+    // Gets public list of person to display (checks if underlying cache has been removed)
     async getPublicPersonListDisplay() {
-        //check if cache exist
-        let isExist = localStorage.getItem('publicPersonList') !== null;
+        // Check if cache exists
+        const isExist = VedAstro.getPersonListFromCache('public') !== null;
 
-        //if cache exist, then no need to reinitialize, use in memory
+        // If cache exists, then no need to reinitialize, use in memory
         if (isExist) { return this._publicPersonListDisplay; }
 
-        //else get new data from API and fill from that (as though 1st time load)
+        // Else get new data from API and fill from that (as though 1st time load)
         else {
             this.publicPersonList = await VedAstro.GetPersonList('public');
             this._publicPersonListDisplay = this.publicPersonList;
@@ -2538,9 +2571,9 @@ class PersonSelectorBox {
         }
     }
 
-    //fetch list for use in this specific instance
+    // Fetch list for use in this specific instance
     async initializePersonListData() {
-        // get person list from API or cache automatic
+        // Get person list from API or cache automatically
         this.personList = await VedAstro.GetPersonList('private');
         this._personListDisplay = this.personList;
         this.publicPersonList = await VedAstro.GetPersonList('public');
@@ -2553,12 +2586,12 @@ class PersonSelectorBox {
         selectedPerson && this.updatePersonNameGui(selectedPerson);
     }
 
-    // Handle click on a person's name in the dropdown (called from html dropdown)
+    // Handle click on a person's name in the dropdown (called from HTML dropdown)
     async onClickPersonName(personId) {
         // Get the full person details based on the ID
         var personData = await this.getPersonDataById(personId);
 
-        //update into view
+        // Update into view
         this.updatePersonNameGui(personData);
 
         // Save the selected person to local storage
@@ -2568,7 +2601,7 @@ class PersonSelectorBox {
         this.attachTippyToButton();
     }
 
-    //given full person data will update into selected view
+    // Given full person data will update into selected view
     updatePersonNameGui(personData) {
         var displayName = personData.DisplayName;
 
@@ -2607,13 +2640,10 @@ class PersonSelectorBox {
         this.personListHTML = await this.generatePersonListHtml();
         this.publicPersonListHTML = await this.generatePublicPersonListHtml();
 
-        // Get a reference to the search input element
-        this.searchInput = document.getElementById('searchInput');
-
         // Auto set selected person from previous selection
-        let selectedPersonText = 'Select Person'; //default
+        let selectedPersonText = 'Select Person'; // Default
 
-        //check if any person has been selected before (session storage)
+        // Check if any person has been selected before (session storage)
         let personFromStorage = JSON.parse(sessionStorage.getItem(this.SelectedPersonStorageKey));
         if (personFromStorage && Object.keys(personFromStorage).length !== 0) {
             let parsedPerson = new Person(personFromStorage);
@@ -2727,11 +2757,10 @@ class PersonSelectorBox {
     // Handle click on the dropdown button
     onClickDropDown(event) {
         // Set focus to the search text box for instant input
-        //NOTE:ONLY on desktop, skip for mobile, because keyboard takes screen space
+        // NOTE: ONLY on desktop, skip for mobile, because keyboard takes screen space
         if (!CommonTools.IsMobile()) {
             $(`#${this.ElementID}`).find(`.${this.SearchInputElementClass}`).focus();
         }
-
     }
 
     // Handle click on the "Edit Person" link
@@ -2751,22 +2780,21 @@ class PersonSelectorBox {
     }
 
     //------------------------------------------------ STATIC FUNCS ----------------------
-    //called by AddPerson to clear the person list cache
-    // call `PersonSelectorBox.ClearPersonListCache('private')` to clear only the private person list cache,
+    // Called by AddPerson to clear the person list cache
+    // Call `PersonSelectorBox.ClearPersonListCache('private')` to clear only the private person list cache,
     // `PersonSelectorBox.ClearPersonListCache('public')` to clear only the public person list cache,
-    // or`PersonSelectorBox.ClearPersonListCache('all')` to clear both caches.If an invalid type is provided,
+    // or `PersonSelectorBox.ClearPersonListCache('all')` to clear both caches. If an invalid type is provided,
     // a warning will be logged to the console and the cache will not be cleared.
     static ClearPersonListCache(type) {
         switch (type) {
             case 'private':
-                localStorage.removeItem('personList');
+                VedAstro.removePersonListFromCache('private');
                 break;
             case 'public':
-                localStorage.removeItem('publicPersonList');
+                VedAstro.removePersonListFromCache('public');
                 break;
             case 'all':
-                localStorage.removeItem('personList');
-                localStorage.removeItem('publicPersonList');
+                VedAstro.clearAllPersonListCaches();
                 break;
             default:
                 console.warn('Invalid cache type provided. Cache not cleared.');
@@ -2775,6 +2803,7 @@ class PersonSelectorBox {
         console.log('Person list cache cleared.');
     }
 }
+
 
 /**
  * Represents an info box component.

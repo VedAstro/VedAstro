@@ -44,111 +44,98 @@
  * VedAstro class representing the global app data and settings.
  */
 class VedAstro {
-    /**
-     * The API server address used by all classes.
-     * Get URL from storage if user has changed it
-     */
+    // API server address, defaults to a stored value or a predefined URL
     static ApiDomain = localStorage.getItem("ApiDomain") || "https://vedastro.azurewebsites.net/api";
 
-    /**
-       * get user ID from storage else give "101" guest id
-       */
+    // Gets the user ID from local storage or assigns a guest ID if not present
     static get UserId() {
         const storedValue = localStorage.getItem("UserId");
         try {
-            return storedValue ? JSON.parse(storedValue) : "101";
+            return storedValue ? JSON.parse(storedValue) : "101"; // Guest ID is "101"
         } catch (e) {
-            return "101";
+            return "101"; // Return guest ID on parse error
         }
     }
 
+    // Sets the User ID in local storage
     static set UserId(value) {
         localStorage.setItem("UserId", JSON.stringify(value));
     }
 
+    // Gets the user name from local storage
     static get UserName() {
         const storedValue = localStorage.getItem("UserName");
         try {
             return JSON.parse(storedValue);
         } catch (e) {
-            return "";
+            return ""; // Return empty string on parse error
         }
     }
 
+    // Sets the User Name in local storage
     static set UserName(value) {
         localStorage.setItem("UserName", JSON.stringify(value));
     }
 
-    /**
-     * get visitor ID from storage else auto generate new visitor id
-     * for use in place of user id when not logged in (manually by caller)
-     */
+    // Gets or generates a visitor ID for non-logged-in users
     static VisitorId = "VisitorId" in localStorage ? JSON.parse(localStorage["VisitorId"]) : VedAstro.generateAndSaveVisitorId();
 
-    //generates new visitor id & saves it to local storage
+    // Generates and saves a new visitor ID in local storage
     static generateAndSaveVisitorId() {
-        //random id with pretext "guest" for easy identification
-        const newVisitorId = `guest-${Math.random().toString(36).substr(2, 15)}`;
-        //save the new random id in local storage 
-        localStorage.setItem("VisitorId", JSON.stringify(newVisitorId));
-        //return new random id
-        return newVisitorId;
+        const newVisitorId = `guest-${Math.random().toString(36).substr(2, 15)}`; // Generate random ID
+        localStorage.setItem("VisitorId", JSON.stringify(newVisitorId)); // Store in local storage
+        return newVisitorId; // Return the new ID
     }
 
-    /**
-     * Checks if the user is a guest.
-     * True if the user is a guest, false otherwise.
-     */
+    // Checks if the current user is a guest
     static IsGuestUser() {
-        return VedAstro.UserId === "101";
+        return VedAstro.UserId === "101"; // "101" indicates a guest
     }
 
+    // Caches the person list (private or public) in local storage
     static CachePersonList(cacheType, personList) {
         const cacheKey = cacheType === 'private' ? 'privatePersonList' : 'publicPersonList';
-        localStorage.setItem(cacheKey, JSON.stringify(personList));
+        localStorage.setItem(cacheKey, JSON.stringify(personList)); // Store person list as JSON
     }
 
     /**
- * Gets the person list from local storage or API.
- * 
- * @param {string} cacheType - Type of cache, either 'private' or 'public'.
- * @returns {Promise<Array<Person>>} - Promise that resolves to an array of Person objects.
- */
+     * Gets the person list from local storage or fetches it from the API.
+     * 
+     * @param {string} cacheType - Type of cache, either 'private' or 'public'.
+     * @returns {Promise<Array<Person>>} - Promise that resolves to an array of Person objects.
+     */
     static async GetPersonList(cacheType) {
-
-        // Construct the cache key based on the cache type
-        const cacheKey = `${cacheType}PersonList`;
-        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101'; // Set owner ID based on cache type
-        const visitorId = VedAstro.VisitorId; // Visitor ID
+        const cacheKey = `${cacheType}PersonList`; // Define cache key based on cache type
+        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101'; // Owner ID based on cache type
+        const visitorId = VedAstro.VisitorId; // Current visitor ID
 
         try {
-            // Retrieve the cached person list and its hash from local storage
+            // Get cached person list and hash from local storage
             const cachedPersonList = localStorage.getItem(cacheKey);
             const cachedHash = localStorage.getItem(`${cacheKey}_hash`);
 
-            // If cached data exists, check if it's up-to-date with the server
+            // If cached data exists, check if it's up-to-date
             if (cachedPersonList && cachedHash) {
                 const isCacheUpToDate = await VedAstro.isCacheUpToDate(ownerId, visitorId, cachedHash);
 
-                // If the cache is up-to-date, return the cached person list
+                // Return cached person list if up-to-date
                 if (isCacheUpToDate) {
                     return JSON.parse(cachedPersonList).map((person) => new Person(person));
                 }
             }
 
-            // If no valid cached data or cache is outdated, fetch the person list from the API
+            // Fetch the person list from the API if cache is outdated or doesn't exist
             const personList = await VedAstro.FetchPersonListFromAPI(cacheType);
-            // Cache the newly fetched person list
-            VedAstro.CachePersonList(cacheType, personList);
+            VedAstro.CachePersonList(cacheType, personList); // Cache the newly fetched person list
+
             // Retrieve the new hash for the person list and store it in local storage
             const newHash = await VedAstro.getPersonListHash(ownerId, visitorId);
-            localStorage.setItem(`${cacheKey}_hash`, newHash);
+            localStorage.setItem(`${cacheKey}_hash`, newHash); // Store the new hash
 
-            // Return the fetched person list
-            return personList;
+            return personList; // Return the fetched person list
         } catch (error) {
             console.error('Error getting person list:', error); // Log any errors
-            throw error; // Rethrow the error to let the caller handle it
+            throw error; // Rethrow the error for handling by the caller
         }
     }
 
@@ -168,9 +155,8 @@ class VedAstro {
 
             // Check if the server response indicates success
             if (serverHashData.Status === 'Pass') {
-                const serverHash = serverHashData.Payload.GetPersonListHash;
-                // Compare the cached hash with the server hash
-                return cachedHash === serverHash;
+                const serverHash = serverHashData.Payload.GetPersonListHash; // Get server hash
+                return cachedHash === serverHash; // Compare cached hash with server hash
             } else {
                 throw new Error(`Failed to retrieve server hash. Status: ${serverHashData.Status}`);
             }
@@ -195,8 +181,7 @@ class VedAstro {
 
             // Check if the server response indicates success
             if (serverHashData.Status === 'Pass') {
-                // Return the hash from the server response
-                return serverHashData.Payload.GetPersonListHash;
+                return serverHashData.Payload.GetPersonListHash; // Return the hash from the server response
             } else {
                 throw new Error(`Failed to retrieve server hash. Status: ${serverHashData.Status}`);
             }

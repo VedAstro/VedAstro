@@ -40,7 +40,7 @@ namespace VedAstro.Library.Tests
             Time horoscope = new("19:35 08/08/1912 +05:30", GeoLocation.Bangalore);
 
             //sun is in cancer
-            var sunSign = Calculate.PlanetZodiacSign(PlanetName.Sun, horoscope);
+            var sunSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, horoscope);
             Assert.AreEqual(ZodiacName.Cancer, sunSign.GetSignName()); //check if sun's sign is cancer
 
             var countFromLagna = Calculate.SignCountedFromLagnaSign(6, horoscope);

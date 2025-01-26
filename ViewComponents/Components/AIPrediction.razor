@@ -140,7 +140,7 @@ else
         //--------------------------------
         //1 strongest planet in sign
         var strongestPlanet = Calculate.AllPlanetOrderedByStrength(_birthTime)[0];
-        var strongestPlanetSign = Calculate.PlanetZodiacSign(strongestPlanet, _birthTime).GetSignName();
+        var strongestPlanetSign = Calculate.PlanetRasiD1Sign(strongestPlanet, _birthTime).GetSignName();
         var allPredictions = Tools.GetHoroscopePrediction(person.BirthTime);
 
         //pick out planet predictions based on related body of planet and sign
@@ -158,7 +158,7 @@ else
         //--------------------------------
         //2 2nd strongest planet in sign
         var strongestPlanet2 = Calculate.AllPlanetOrderedByStrength(_birthTime)[1];
-        var strongestPlanetSign2 = Calculate.PlanetZodiacSign(strongestPlanet2, _birthTime).GetSignName();
+        var strongestPlanetSign2 = Calculate.PlanetRasiD1Sign(strongestPlanet2, _birthTime).GetSignName();
 
         //pick out planet predictions based on related body of planet and sign
         var strPlanetPredicts2 = allPredictions.FindAll(x =>

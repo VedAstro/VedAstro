@@ -1,4 +1,4 @@
-﻿//-----------------------------> ADD PERSON PAGE
+//-----------------------------> ADD PERSON PAGE
 
 new PageHeader("PageHeader");
 //new InfoBox("InfoBox_EasyImport_AddPerson");

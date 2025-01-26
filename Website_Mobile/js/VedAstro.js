@@ -39,7 +39,6 @@
 //          But in this moment, as the code runs its course true, there is a sense of unity,
 //          a shared purpose that transcends the boundaries of carbon and silicon. Spirit and matter.
 
-
 /**
  * VedAstro class representing the global app data and settings.
  */
@@ -7416,7 +7415,7 @@ class ApiMethodViewer {
 
         // If data not in local storage or hashes differ, fetch from server
         try {
-            const response = await fetch(`${VedAstro.ApiDomain}/ListCalls`);
+            const response = await fetch(`${VedAstro.ApiDomain}/ListAllCalls`);
             const data = await response.json();
 
             if (data.Status === "Pass") {

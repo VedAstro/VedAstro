@@ -156,7 +156,7 @@ namespace API
             MessageJson("Fail", payload, req);
 
         public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) =>
-            MessageJson("Fail", Tools.ExceptionToXML(payloadException), req);
+            MessageJson("Fail", Tools.ExceptionToJSON(payloadException), req);
 
         public static HttpResponseData PassMessageJson(object payload, HttpRequestData req) =>
             MessageJson("Pass", payload, req);
@@ -178,9 +178,6 @@ namespace API
 
             return response;
         }
-
-        public static HttpResponseData FailMessage(Exception payloadException, HttpRequestData req) =>
-            FailMessage(Tools.ExceptionToXML(payloadException), req);
 
 
         //----------------------------------------FUNCTIONS---------------------------------------------
@@ -493,45 +490,10 @@ namespace API
         /// <summary>
         /// Given a file or string convertible data, send it to caller accordingly
         /// </summary>
-        public static HttpResponseData SendAnyToCaller(string format, string calculatorName, dynamic rawPlanetData, HttpRequestData incomingRequest)
+        public static HttpResponseData SendAnyToCaller(string calculatorName, dynamic rawPlanetData, HttpRequestData incomingRequest)
         {
-            //if format specified as JPEG, then process separately if body is not binary already
-            //meaning here process methods that can output JSON
-            if (format == "JPEG" && rawPlanetData is not byte[])
-            {
-                //if supports JPEG convert here and end it
-                if (rawPlanetData is IToJpeg iToJpeg)
-                {
-                    var rawFileData = iToJpeg.ToJpeg();
-
-                    //get correct mime type so browser or receiver knows how to present
-                    var mimeType = GetMimeType(rawFileData);
-
-                    return Tools.SendFileToCaller(rawFileData, incomingRequest, mimeType);
-                }
-                //JSON convert to table needs extra step
-                //NOTE: this generic JSON to JPEG converter,
-                //if rendering not good implement custom IToJpeg
-                else  /*(rawPlanetData is IToJson iToJson)*/
-                {
-                    //first convert to json
-                    DataTable rawTable = Tools.AnyToDataTable(calculatorName, rawPlanetData);
-
-                    //convert data table to JPEG image
-                    var image = Tools.DataTableToJpeg(rawTable);
-
-                    //get correct mime type so browser or receiver knows how to present
-                    var mimeType = GetMimeType(image);
-
-                    return Tools.SendFileToCaller(image, incomingRequest, mimeType);
-                }
-
-                Type type = rawPlanetData.GetType();
-                return APITools.FailMessageJson($"JPEG Formatter for {type.Name} under construction. Donate to speed up development.", incomingRequest);
-            }
-
             //then it is a file
-            else if (rawPlanetData is byte[] rawFileData)
+            if (rawPlanetData is byte[] rawFileData)
             {
                 //get correct mime type so browser or receiver knows how to present
                 var mimeType = GetMimeType(rawFileData);

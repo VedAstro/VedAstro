@@ -111,7 +111,7 @@ namespace API
                 APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
+                return APITools.FailMessageJson(e, incomingRequest);
             }
         }
 

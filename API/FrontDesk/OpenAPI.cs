@@ -1,4 +1,4 @@
-﻿using VedAstro.Library;
+using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Reflection;
@@ -12,9 +12,9 @@ namespace API
         //.../Calculate/Karana/Location/Singapore/Time/23:59/31/12/2000/+08:00
         private const string CalculateRoute = $"{nameof(Calculate)}/{{calculatorName}}/{{*fullParamString}}"; //* that captures the rest of the URL path
 
-        [Function(nameof(ListCalls))]
-        public static async Task<HttpResponseData> ListCalls(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ListCalls")] HttpRequestData incomingRequest
+        [Function(nameof(ListAllCalls))]
+        public static async Task<HttpResponseData> ListAllCalls(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ListAllCalls")] HttpRequestData incomingRequest
         )
         {
             var apiCallListJson = OpenAPIMetadata.FromMethodInfoList();
@@ -78,7 +78,7 @@ namespace API
                         //send direct as raw CSV file
                         return Tools.SendFileToCaller(System.Text.Encoding.UTF8.GetBytes((string)rawProcessedData), incomingRequest, "text/csv");
                     default:
-                        return APITools.SendAnyToCaller(format, calculatorName, rawProcessedData, incomingRequest);
+                        return APITools.SendAnyToCaller(calculatorName, rawProcessedData, incomingRequest);
                 }
             }
 
@@ -208,27 +208,6 @@ namespace API
         }
 
 
-        //private static async Task<JArray> ProcessAllCalls(string calculatorName, Dictionary<dynamic, string> callList)
-        //{
-        //    var rawPlanetData = new JArray();
-        //    //TODO can be made PARALLEL for speed, but disordered data
-        //    foreach (var callUrl in callList)
-        //    {
-        //        var variedDataName = callUrl.Key.ToString();
-        //        var variedURL = callUrl.Value;
-
-        //        //do heavy compute to get raw data
-        //        var rawData = await SingleAPICallData(calculatorName, variedURL);
-
-        //        var jProperty = Tools.AnyToJSON(variedDataName, rawData);
-        //        JObject obj = new JObject();
-        //        obj.Add(jProperty);
-        //        rawPlanetData.Add(obj);
-        //    }
-        //    return rawPlanetData;
-        //}
-
-
         /// <summary>
         /// Main method that handles all API calls, be it SINGLE or ALL
         /// </summary>
@@ -237,7 +216,7 @@ namespace API
             //1 : GET INPUT DATA
             var calculator =
                 Tools.MethodNameToMethodInfo(calculatorName,
-                    new[] { typeof(Calculate), /*typeof(CalculateKP)*/ }); //get calculator name
+                    new[] { typeof(Calculate), typeof(PersonAPI) }); //get calculator name
 
             //2 : CUSTOM AYANAMSA (removes ayanamsa once read)
             fullParamString = ParseAndSetAyanamsa(fullParamString);
@@ -269,31 +248,6 @@ namespace API
 
         }
 
-        /// <summary>
-        /// Backup function to catch invalid calls, say gracefully fails
-        /// NOTE: "z" in name needed to make as last API call, else will be called all the time
-        /// </summary>
-        [Function(nameof(zCatch404))]
-        public static async Task<HttpResponseData> zCatch404([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{*Catch404}")]
-            HttpRequestData incomingRequest,
-            string Catch404
-        )
-        {
-            //0 : LOG CALL
-            //log ip address, call time and URL,  used later for throttle limit
-            ApiStatistic.Log(incomingRequest); //logger
-
-            // Control API overload, even this if hit hard can COST Money via CDN
-            //await APITools.AutoControlOpenAPIOverload(callLog);
-
-            var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder.html";
-            return APITools.FailMessageJson(message, incomingRequest);
-        }
-
-
-
-        //-----------------------------------------------PRIVATE-----------------------------------------------
-
 
         /// <summary>
         /// takes out Ayanamsa from URL and returns remainder of URL
@@ -323,40 +277,6 @@ namespace API
             else
             {
                 return fullParamString ?? "";
-            }
-        }
-
-        /// <summary>
-        /// To detect if api caller wants image instead
-        /// </summary>
-        public static string ParseAndGetFormat(string fullParamString)
-        {
-            //handle no parameter API calls
-            if (fullParamString == null) { return ""; }
-            try
-            {
-                //if url contains word "ayanamsa" than process it
-                var isCustomFormat = fullParamString.Contains("Format/");
-                if (isCustomFormat)
-                {
-                    //scan URL and take out ayanamsa and set it
-                    var splitParamString = fullParamString.Split('/');
-                    var formatLocation = Array.IndexOf(splitParamString, "Format");
-                    var formatValue = splitParamString[formatLocation + 1];
-
-                    return formatValue;
-                }
-
-                //if no ayanamsa, then return as is
-                else
-                {
-                    return "";
-                }
-
-            }
-            catch (Exception e)
-            {
-                return "";
             }
         }
 

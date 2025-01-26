@@ -11,7 +11,6 @@ namespace API
     public class GeneralAPI
     {
 
-
         /// <summary>
         /// When browser visit API, they ask for FavIcon, so yeah redirect favicon from website
         /// </summary>
@@ -51,6 +50,27 @@ namespace API
             return APITools.SendTextToCaller(apiHomePageTxt, incomingRequest);
         }
 
+
+        /// <summary>
+        /// Backup function to catch invalid calls, say gracefully fails
+        /// NOTE: "z" in name needed to make as last API call, else will be called all the time
+        /// </summary>
+        [Function(nameof(zCatch404))]
+        public static async Task<HttpResponseData> zCatch404([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{*Catch404}")]
+            HttpRequestData incomingRequest,
+            string Catch404
+        )
+        {
+            //0 : LOG CALL
+            //log ip address, call time and URL,  used later for throttle limit
+            ApiStatistic.Log(incomingRequest); //logger
+
+            // Control API overload, even this if hit hard can COST Money via CDN
+            //await APITools.AutoControlOpenAPIOverload(callLog);
+
+            var message = "Invalid or Outdated Call, please rebuild API URL at vedastro.org/APIBuilder.html";
+            return APITools.FailMessageJson(message, incomingRequest);
+        }
 
 
     }

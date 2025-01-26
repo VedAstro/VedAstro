@@ -191,7 +191,6 @@ class VedAstro {
         }
     }
 
-
     /**
      * Fetches the person list from the API.
      * 

@@ -24,7 +24,7 @@ async function onNameNumberInputChange(inputElement) {
     // Clear existing timeout
     clearTimeout(nameInputChangeTimeout);
 
-    // Set new timeout to make API call after 500ms delay
+    // Set new timeout to make API call after 700ms delay
     nameInputChangeTimeout = setTimeout(async () => {
         // show in page loading icon let user know something is happening
         $('#InPageLoadingIcon').show();
@@ -33,21 +33,61 @@ async function onNameNumberInputChange(inputElement) {
 
         // Construct API URLs
         const namePredictionAPI = `${VedAstro.ApiDomain}/Calculate/NameNumberPrediction/FullName/${nameText}`;
-        const nameTotalNumberAPI = `${VedAstro.ApiDomain}/Calculate/NameNumber/FullName/${nameText}`;
 
         // Make API calls
-        const [predictionResponse, totalNumberResponse] = await Promise.all([
+        const [predictionResponse] = await Promise.all([
             fetch(namePredictionAPI).then(response => response.json()),
-            fetch(nameTotalNumberAPI).then(response => response.json())
         ]);
 
         // Extract data from responses
-        const prediction = predictionResponse.Payload.NameNumberPrediction;
-        const totalNumber = totalNumberResponse.Payload.NameNumber;
+        const prediction = predictionResponse.Payload.NameNumberPrediction.Prediction;
+        const predictionSummary = predictionResponse.Payload.NameNumberPrediction.PredictionSummary;
+        const totalNumber = predictionResponse.Payload.NameNumberPrediction.Number;
+        const planet = predictionResponse.Payload.NameNumberPrediction.Planet;
 
         // Inject data into HTML
         $('#NameNumberPredictionHolder').text(prediction);
         $('#NameTotalNumberHolder').text(totalNumber);
+        $('#NameTotalPlanetHolder').text(planet);
+
+        // Update prediction summary
+        $('#PredictionSummary').html(`
+            <!-- Finance -->
+            <div class="vstack">
+                <div class="hstack d-flex justify-content-center">
+                    <iconify-icon icon="mdi:currency-usd" width="32" height="32"></iconify-icon>
+                    <div style="font-size: 32px; color: red;">${predictionSummary.Finance}%</div>
+                </div>
+                <div class="d-flex justify-content-center">Finance</div>
+            </div>
+
+            <!-- Romance -->
+            <div class="vstack">
+                <div class="hstack d-flex justify-content-center">
+                    <iconify-icon icon="mdi:heart" width="32" height="32"></iconify-icon>
+                    <div style="font-size: 32px; color: red;">${predictionSummary.Romance}%</div>
+                </div>
+                <div class="d-flex justify-content-center">Romance</div>
+            </div>
+
+            <!-- Education -->
+            <div class="vstack">
+                <div class="hstack d-flex justify-content-center">
+                    <iconify-icon icon="mdi:school" width="32" height="32"></iconify-icon>
+                    <div style="font-size: 32px; color: red;">${predictionSummary.Education}%</div>
+                </div>
+                <div class="d-flex justify-content-center">Education</div>
+            </div>
+
+            <!-- Health -->
+            <div class="vstack">
+                <div class="hstack d-flex justify-content-center">
+                    <iconify-icon icon="mdi:medical-bag" width="32" height="32"></iconify-icon>
+                    <div style="font-size: 32px; color: red;">${predictionSummary.Health}%</div>
+                </div>
+                <div class="d-flex justify-content-center">Health</div>
+            </div>
+        `);
 
         // sometimes, text is cleared but API just finish calculating,
         // so double check if there is no text any more than hide now (happens for last character)
@@ -63,5 +103,5 @@ async function onNameNumberInputChange(inputElement) {
         // hide loading icon
         $('#InPageLoadingIcon').hide();
 
-    }, 500);
+    }, 700);
 }

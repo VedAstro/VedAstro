@@ -1,18 +1,23 @@
 updateHistory();
 
-
 new PageHeader("PageHeader");
 
-//initialize help text
+// Initialize help text
 new HelpTextIcon(`#NameTextHelp`);
-
 
 let nameInputChangeTimeout = null;
 
-//every time the user types something, it clears the existing timeout and sets a
-//new timeout to make the API call after a 500ms delay.If the user types something 
-//else before the 500ms delay is over, it clears the existing timeout and sets a new one,
-//effectively delaying the API call until the user has finished typing.
+// Function to calculate color based on percentage
+function getColorFromScore(score) {
+    const green = Math.round((score / 100) * 255);
+    const red = 255 - green;
+    return `rgb(${red}, ${green}, 0)`;
+}
+
+// Every time the user types something, it clears the existing timeout and sets a
+// new timeout to make the API call after a 700ms delay. If the user types something 
+// else before the 700ms delay is over, it clears the existing timeout and sets a new one,
+// effectively delaying the API call until the user has finished typing.
 async function onNameNumberInputChange(inputElement) {
 
     // Get text from input
@@ -26,9 +31,9 @@ async function onNameNumberInputChange(inputElement) {
 
     // Set new timeout to make API call after 700ms delay
     nameInputChangeTimeout = setTimeout(async () => {
-        // show in page loading icon let user know something is happening
+        // Show in-page loading icon to let user know something is happening
         $('#InPageLoadingIcon').show();
-        // hide the output holder
+        // Hide the output holder
         $('#OutputHolder').hide();
 
         // Construct API URLs
@@ -56,7 +61,7 @@ async function onNameNumberInputChange(inputElement) {
             <div class="vstack">
                 <div class="hstack d-flex justify-content-center">
                     <iconify-icon icon="mdi:currency-usd" width="32" height="32"></iconify-icon>
-                    <div style="font-size: 32px; color: red;">${predictionSummary.Finance}%</div>
+                    <div style="font-size: 32px; color: ${getColorFromScore(predictionSummary.Finance)};">${predictionSummary.Finance}%</div>
                 </div>
                 <div class="d-flex justify-content-center">Finance</div>
             </div>
@@ -65,7 +70,7 @@ async function onNameNumberInputChange(inputElement) {
             <div class="vstack">
                 <div class="hstack d-flex justify-content-center">
                     <iconify-icon icon="mdi:heart" width="32" height="32"></iconify-icon>
-                    <div style="font-size: 32px; color: red;">${predictionSummary.Romance}%</div>
+                    <div style="font-size: 32px; color: ${getColorFromScore(predictionSummary.Romance)};">${predictionSummary.Romance}%</div>
                 </div>
                 <div class="d-flex justify-content-center">Romance</div>
             </div>
@@ -74,7 +79,7 @@ async function onNameNumberInputChange(inputElement) {
             <div class="vstack">
                 <div class="hstack d-flex justify-content-center">
                     <iconify-icon icon="mdi:school" width="32" height="32"></iconify-icon>
-                    <div style="font-size: 32px; color: red;">${predictionSummary.Education}%</div>
+                    <div style="font-size: 32px; color: ${getColorFromScore(predictionSummary.Education)};">${predictionSummary.Education}%</div>
                 </div>
                 <div class="d-flex justify-content-center">Education</div>
             </div>
@@ -83,24 +88,24 @@ async function onNameNumberInputChange(inputElement) {
             <div class="vstack">
                 <div class="hstack d-flex justify-content-center">
                     <iconify-icon icon="mdi:medical-bag" width="32" height="32"></iconify-icon>
-                    <div style="font-size: 32px; color: red;">${predictionSummary.Health}%</div>
+                    <div style="font-size: 32px; color: ${getColorFromScore(predictionSummary.Health)};">${predictionSummary.Health}%</div>
                 </div>
                 <div class="d-flex justify-content-center">Health</div>
             </div>
         `);
 
-        // sometimes, text is cleared but API just finish calculating,
-        // so double check if there is no text any more than hide now (happens for last character)
+        // Sometimes, text is cleared but API just finishes calculating,
+        // so double-check if there is no text anymore then hide now (happens for last character)
         let currentNameText = inputElement.value.trim();
         if (!currentNameText) {
-            $('#OutputHolder').hide();// hide the output holder
-            $('#InPageLoadingIcon').hide();// hide loading icon
+            $('#OutputHolder').hide(); // Hide the output holder
+            $('#InPageLoadingIcon').hide(); // Hide loading icon
             return;
         };
 
         // Show the output holder
         $('#OutputHolder').show();
-        // hide loading icon
+        // Hide loading icon
         $('#InPageLoadingIcon').hide();
 
     }, 700);

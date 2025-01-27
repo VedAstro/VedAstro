@@ -46,13 +46,23 @@ async function onNameNumberInputChange(inputElement) {
 
         // Extract data from responses
         const prediction = predictionResponse.Payload.NameNumberPrediction.Prediction;
-        const predictionSummary = predictionResponse.Payload.NameNumberPrediction.PredictionSummary;
         const totalNumber = predictionResponse.Payload.NameNumberPrediction.Number;
         const planet = predictionResponse.Payload.NameNumberPrediction.Planet;
+        const predictionSummary = predictionResponse.Payload.NameNumberPrediction.PredictionSummary;
 
         // Inject data into HTML
         $('#NameNumberPredictionHolder').text(prediction);
         $('#NameTotalNumberHolder').text(totalNumber);
+
+        // Check if planet is "Empty" and prediction summary is empty
+        if (planet === "Empty" && Object.keys(predictionSummary).length === 0) {
+            // Show the output holder without processing the summary and planet
+            $('#NameTotalPlanetHolder').empty();
+            $('#OutputHolder').show();
+            $('#InPageLoadingIcon').hide();
+            return;
+        }
+
         $('#NameTotalPlanetHolder').text(planet);
 
         // Update prediction summary

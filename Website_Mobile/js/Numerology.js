@@ -58,6 +58,7 @@ async function onNameNumberInputChange(inputElement) {
         if (planet === "Empty" && Object.keys(predictionSummary).length === 0) {
             // Show the output holder without processing the summary and planet
             $('#NameTotalPlanetHolder').empty();
+            $('#PredictionSummary').empty();
             $('#OutputHolder').show();
             $('#InPageLoadingIcon').hide();
             return;

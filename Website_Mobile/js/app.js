@@ -1,34 +1,83 @@
-﻿//-----------------------------> MAIN APP CODE
-//stored in an array(up to 10 pages deep) in local storage, and the `updateHistory` function is used to update the history array 
+const vedAstroJsHash = "f0f351f8777dcd61cf8638e8b5fe1ec516cc0672ae8ebeb8ee502c00f38552e8";
 
+
+//-----------------------------> MAIN APP CODE
 // create an array to store the navigation history (up to 10 pages deep)
 const history = JSON.parse(localStorage.getItem('history')) || [];
 
-//when errors occur allow user to reset all memory and restart
-//const handleError = () => {
-//    Swal.fire({
-//        title: 'App Crashed 🤕',
-//        text: 'Do you want to reset the app?',
-//        icon: 'error',
-//        showCancelButton: true,
-//        confirmButtonColor: '#3085d6',
-//        cancelButtonColor: '#d33',
-//        confirmButtonText: 'Reset App',
-//        cancelButtonText: 'Cancel'
-//    }).then((result) => {
-//        if (result.value) {
-//            localStorage.clear();
-//            window.location.reload();
-//        }
-//    });
-//};
+//when errors occur send to server for logging
+const handleError = (error) => {
+    // Get error details
+    const errorDetails = {
+        message: error.message,
+        stack: error.stack,
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        ipAddress: ''
+    };
+
+    // Get client's IP address using an external service
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            errorDetails.ipAddress = data.ip;
+
+            // Send error details to server
+            fetch('https://api.vedastro.org/api/LogError', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(errorDetails)
+            });
+        });
+};
 
 //handle all types of errors
 window.onerror = handleError;
 window.onunhandledrejection = handleError;
 
+// Call the function to check the hash and refresh if necessary
+checkAndUpdateVedAstroJs();
+
+// Optionally, you can set an interval to periodically check for updates
+setInterval(checkAndUpdateVedAstroJs, 60 * 60 * 1000); // Check every hour
+
+
+// gets latest hash from server & compares with local placed during build
+async function checkAndUpdateVedAstroJs() {
+    async function fetchLatestHash() {
+        try {
+            const response = await fetch('https://api.vedastro.org/api/GetVedAstroJSHash');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.Status === "Pass") {
+                return data.Payload;
+            } else {
+                console.error('Failed to get a valid hash:', data);
+                return null;
+            }
+        } catch (error) {
+            console.error('Failed to fetch the latest hash:', error);
+            return null;
+        }
+    }
+
+    const latestHash = await fetchLatestHash();
+
+    if (latestHash && latestHash !== vedAstroJsHash) {
+        console.log('New version detected. Refreshing the page...');
+        location.reload(true); // Reload the page from the server
+    } else {
+        console.log('No new version detected. Current version is up-to-date.');
+    }
+}
+
+
 //similar to JQuery's .slideToggle("slow")
-// note that this function uses CSS transitions for the
+//note that this function uses CSS transitions for the
 //sliding effect, which are smoother than jQuery’s animations but might not be supported in all browsers
 function smoothSlideToggle(elementSelector, speed = 1000) {
 

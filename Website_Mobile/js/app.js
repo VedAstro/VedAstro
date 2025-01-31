@@ -5,23 +5,23 @@
 const history = JSON.parse(localStorage.getItem('history')) || [];
 
 //when errors occur allow user to reset all memory and restart
-const handleError = () => {
-    Swal.fire({
-        title: 'App Crashed 🤕',
-        text: 'Do you want to reset the app?',
-        icon: 'error',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Reset App',
-        cancelButtonText: 'Cancel'
-    }).then((result) => {
-        if (result.value) {
-            localStorage.clear();
-            window.location.reload();
-        }
-    });
-};
+//const handleError = () => {
+//    Swal.fire({
+//        title: 'App Crashed 🤕',
+//        text: 'Do you want to reset the app?',
+//        icon: 'error',
+//        showCancelButton: true,
+//        confirmButtonColor: '#3085d6',
+//        cancelButtonColor: '#d33',
+//        confirmButtonText: 'Reset App',
+//        cancelButtonText: 'Cancel'
+//    }).then((result) => {
+//        if (result.value) {
+//            localStorage.clear();
+//            window.location.reload();
+//        }
+//    });
+//};
 
 //handle all types of errors
 window.onerror = handleError;

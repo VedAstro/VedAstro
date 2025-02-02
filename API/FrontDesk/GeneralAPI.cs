@@ -70,7 +70,7 @@ namespace API
             FunctionContext executionContext)
         {
             //direct link to JS file without CDN
-            string fileUrl = "https://vedastrowebsitestorage.z5.web.core.windows.net/js/VedAstro.js";
+            string fileUrl = $"{URL.WebStableDirect}/js/VedAstro.js";
             string vedAstroJSHash;
 
             // Fetch the file from Azure Storage

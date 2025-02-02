@@ -11,10 +11,10 @@ namespace VedAstro.Library
         /// <summary>
         /// Based on house longitudes
         /// </summary>
-        Bhava,
+        BhavaChalit,
 
         RasiD1,
-        
+
         HoraD2,
         
         DrekkanaD3, 

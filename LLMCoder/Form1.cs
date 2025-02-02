@@ -792,7 +792,7 @@ namespace LLMCoder
                 }
 
                 var fullReplyRaw = await response.Content.ReadAsStringAsync();// Read response content as string
-                var fullReply = new Phi3ReplyJson(fullReplyRaw);
+                var fullReply = new ReplyJson(fullReplyRaw);
 
                 var replyMessage = fullReply?.Choices?.FirstOrDefault()?.Message.Content ?? "No response!!";
 
@@ -1556,6 +1556,19 @@ namespace LLMCoder
 
             //update main counters of KB and Tokens
             UpdateGlobalTokenStats();
+
+        }
+
+        private void copyFinalPromptButton_Click(object sender, EventArgs e)
+        {
+            // get all messages to send to LLM stacked properly
+            var finalChatMessageStack = GenerateFinalChatMessageStack();
+
+            // convert to json 
+            var requestBody = JsonConvert.SerializeObject(finalChatMessageStack);
+
+            //copy to clipboard
+            Clipboard.SetText(requestBody);
 
         }
     }

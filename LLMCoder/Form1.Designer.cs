@@ -71,6 +71,7 @@ namespace LLMCoder
             llmThinkingTimerLabel = new Label();
             llmThinkingProgressBar = new ProgressBar();
             clearUserMsgButton = new Button();
+            copyFinalPromptButton = new Button();
             codePage = new TabPage();
             codeSnippetInjectMainTablePanel = new TableLayoutPanel();
             label2 = new Label();
@@ -142,7 +143,7 @@ namespace LLMCoder
             pastPromptsLabel.ForeColor = Color.White;
             pastPromptsLabel.Location = new Point(3, 124);
             pastPromptsLabel.Name = "pastPromptsLabel";
-            pastPromptsLabel.Size = new Size(241, 20);
+            pastPromptsLabel.Size = new Size(242, 20);
             pastPromptsLabel.TabIndex = 2;
             pastPromptsLabel.Text = "📜 Past Prompts";
             // 
@@ -187,23 +188,23 @@ namespace LLMCoder
             codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
             codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
             codeFileInjectTablePanel.RowStyles.Add(new RowStyle());
-            codeFileInjectTablePanel.Size = new Size(833, 320);
+            codeFileInjectTablePanel.Size = new Size(831, 320);
             codeFileInjectTablePanel.TabIndex = 1;
             // 
             // postCodePromptTextBox
             // 
             postCodePromptTextBox.Dock = DockStyle.Fill;
-            postCodePromptTextBox.Location = new Point(104, 252);
+            postCodePromptTextBox.Location = new Point(104, 246);
             postCodePromptTextBox.Margin = new Padding(3, 4, 3, 4);
             postCodePromptTextBox.Name = "postCodePromptTextBox";
-            postCodePromptTextBox.Size = new Size(726, 27);
+            postCodePromptTextBox.Size = new Size(724, 27);
             postCodePromptTextBox.TabIndex = 12;
             // 
             // postCodePromptLabel
             // 
             postCodePromptLabel.AutoSize = true;
             postCodePromptLabel.ForeColor = Color.Azure;
-            postCodePromptLabel.Location = new Point(3, 257);
+            postCodePromptLabel.Location = new Point(3, 251);
             postCodePromptLabel.Margin = new Padding(3, 9, 3, 0);
             postCodePromptLabel.Name = "postCodePromptLabel";
             postCodePromptLabel.Size = new Size(89, 20);
@@ -216,11 +217,11 @@ namespace LLMCoder
             codeFileInjectTextBox.Dock = DockStyle.Fill;
             codeFileInjectTextBox.Font = new Font("Cascadia Code", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             codeFileInjectTextBox.ForeColor = Color.LightGreen;
-            codeFileInjectTextBox.Location = new Point(104, 117);
+            codeFileInjectTextBox.Location = new Point(104, 111);
             codeFileInjectTextBox.Margin = new Padding(3, 4, 3, 4);
             codeFileInjectTextBox.MinimumSize = new Size(114, 36);
             codeFileInjectTextBox.Name = "codeFileInjectTextBox";
-            codeFileInjectTextBox.Size = new Size(726, 127);
+            codeFileInjectTextBox.Size = new Size(724, 127);
             codeFileInjectTextBox.TabIndex = 13;
             codeFileInjectTextBox.Text = "";
             // 
@@ -228,7 +229,7 @@ namespace LLMCoder
             // 
             codeFileInjectLabel.AutoSize = true;
             codeFileInjectLabel.ForeColor = Color.Azure;
-            codeFileInjectLabel.Location = new Point(3, 122);
+            codeFileInjectLabel.Location = new Point(3, 116);
             codeFileInjectLabel.Margin = new Padding(3, 9, 3, 0);
             codeFileInjectLabel.Name = "codeFileInjectLabel";
             codeFileInjectLabel.Size = new Size(71, 20);
@@ -238,17 +239,17 @@ namespace LLMCoder
             // preCodePromptTextBox
             // 
             preCodePromptTextBox.Dock = DockStyle.Fill;
-            preCodePromptTextBox.Location = new Point(104, 82);
+            preCodePromptTextBox.Location = new Point(104, 76);
             preCodePromptTextBox.Margin = new Padding(3, 4, 3, 4);
             preCodePromptTextBox.Name = "preCodePromptTextBox";
-            preCodePromptTextBox.Size = new Size(726, 27);
+            preCodePromptTextBox.Size = new Size(724, 27);
             preCodePromptTextBox.TabIndex = 8;
             // 
             // preCodePromptLabel
             // 
             preCodePromptLabel.AutoSize = true;
             preCodePromptLabel.ForeColor = Color.Azure;
-            preCodePromptLabel.Location = new Point(3, 87);
+            preCodePromptLabel.Location = new Point(3, 81);
             preCodePromptLabel.Margin = new Padding(3, 9, 3, 0);
             preCodePromptLabel.Name = "preCodePromptLabel";
             preCodePromptLabel.Size = new Size(83, 20);
@@ -275,7 +276,7 @@ namespace LLMCoder
             lineNumRangeInputTable.Name = "lineNumRangeInputTable";
             lineNumRangeInputTable.RowCount = 1;
             lineNumRangeInputTable.RowStyles.Add(new RowStyle());
-            lineNumRangeInputTable.Size = new Size(726, 35);
+            lineNumRangeInputTable.Size = new Size(724, 29);
             lineNumRangeInputTable.TabIndex = 6;
             // 
             // fetchCodeStatusMessageLabel
@@ -350,7 +351,7 @@ namespace LLMCoder
             codeFileInjectPathTextBox.Location = new Point(104, 4);
             codeFileInjectPathTextBox.Margin = new Padding(3, 4, 3, 4);
             codeFileInjectPathTextBox.Name = "codeFileInjectPathTextBox";
-            codeFileInjectPathTextBox.Size = new Size(726, 27);
+            codeFileInjectPathTextBox.Size = new Size(724, 27);
             codeFileInjectPathTextBox.TabIndex = 3;
             codeFileInjectPathTextBox.TextChanged += codeFileInjectPathTextBox_TextChanged;
             // 
@@ -373,7 +374,7 @@ namespace LLMCoder
             totalByteUsageMeterTextLabel.ImageAlign = ContentAlignment.MiddleRight;
             totalByteUsageMeterTextLabel.Location = new Point(3, 104);
             totalByteUsageMeterTextLabel.Name = "totalByteUsageMeterTextLabel";
-            totalByteUsageMeterTextLabel.Size = new Size(241, 20);
+            totalByteUsageMeterTextLabel.Size = new Size(242, 20);
             totalByteUsageMeterTextLabel.TabIndex = 9;
             totalByteUsageMeterTextLabel.Text = "0 / 256 KB";
             totalByteUsageMeterTextLabel.TextAlign = ContentAlignment.TopRight;
@@ -393,7 +394,7 @@ namespace LLMCoder
             // 
             splitContainer1.Panel2.Controls.Add(sidePanelTable);
             splitContainer1.Size = new Size(1234, 921);
-            splitContainer1.SplitterDistance = 982;
+            splitContainer1.SplitterDistance = 981;
             splitContainer1.SplitterWidth = 5;
             splitContainer1.TabIndex = 1;
             // 
@@ -409,7 +410,7 @@ namespace LLMCoder
             mainTabControl.Margin = new Padding(3, 4, 3, 4);
             mainTabControl.Name = "mainTabControl";
             mainTabControl.SelectedIndex = 0;
-            mainTabControl.Size = new Size(982, 921);
+            mainTabControl.Size = new Size(981, 921);
             mainTabControl.TabIndex = 4;
             // 
             // llmPage
@@ -421,7 +422,7 @@ namespace LLMCoder
             llmPage.Margin = new Padding(3, 4, 3, 4);
             llmPage.Name = "llmPage";
             llmPage.Padding = new Padding(3, 4, 3, 4);
-            llmPage.Size = new Size(974, 888);
+            llmPage.Size = new Size(973, 888);
             llmPage.TabIndex = 0;
             llmPage.Text = "🗨️ Chat";
             // 
@@ -443,7 +444,7 @@ namespace LLMCoder
             mainChatPageHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             mainChatPageHolderTable.RowStyles.Add(new RowStyle());
             mainChatPageHolderTable.RowStyles.Add(new RowStyle());
-            mainChatPageHolderTable.Size = new Size(968, 880);
+            mainChatPageHolderTable.Size = new Size(967, 880);
             mainChatPageHolderTable.TabIndex = 4;
             // 
             // chatInputHolderTable
@@ -460,7 +461,7 @@ namespace LLMCoder
             chatInputHolderTable.Name = "chatInputHolderTable";
             chatInputHolderTable.RowCount = 1;
             chatInputHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            chatInputHolderTable.Size = new Size(962, 148);
+            chatInputHolderTable.Size = new Size(961, 148);
             chatInputHolderTable.TabIndex = 11;
             // 
             // sendUserMsgButton
@@ -473,7 +474,7 @@ namespace LLMCoder
             sendUserMsgButton.FlatStyle = FlatStyle.Flat;
             sendUserMsgButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             sendUserMsgButton.ForeColor = SystemColors.ButtonFace;
-            sendUserMsgButton.Location = new Point(878, 4);
+            sendUserMsgButton.Location = new Point(877, 4);
             sendUserMsgButton.Margin = new Padding(3, 4, 3, 4);
             sendUserMsgButton.Name = "sendUserMsgButton";
             sendUserMsgButton.Size = new Size(81, 140);
@@ -491,7 +492,7 @@ namespace LLMCoder
             userInputTextBox.Location = new Point(3, 4);
             userInputTextBox.Margin = new Padding(3, 4, 3, 4);
             userInputTextBox.Name = "userInputTextBox";
-            userInputTextBox.Size = new Size(869, 140);
+            userInputTextBox.Size = new Size(868, 140);
             userInputTextBox.TabIndex = 0;
             userInputTextBox.Text = "";
             // 
@@ -524,7 +525,7 @@ namespace LLMCoder
             mainChatHeaderRow.Name = "mainChatHeaderRow";
             mainChatHeaderRow.RowCount = 1;
             mainChatHeaderRow.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            mainChatHeaderRow.Size = new Size(962, 39);
+            mainChatHeaderRow.Size = new Size(961, 39);
             mainChatHeaderRow.TabIndex = 9;
             // 
             // duplicateCurrentChatHistoryButton
@@ -568,7 +569,7 @@ namespace LLMCoder
             injectSourceLabel.Dock = DockStyle.Fill;
             injectSourceLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             injectSourceLabel.ForeColor = Color.White;
-            injectSourceLabel.Location = new Point(660, 4);
+            injectSourceLabel.Location = new Point(659, 4);
             injectSourceLabel.Margin = new Padding(3, 4, 3, 4);
             injectSourceLabel.Name = "injectSourceLabel";
             injectSourceLabel.Padding = new Padding(3, 4, 3, 4);
@@ -604,7 +605,7 @@ namespace LLMCoder
             // 
             webInjectCheckBox.AutoSize = true;
             webInjectCheckBox.ForeColor = Color.White;
-            webInjectCheckBox.Location = new Point(898, 8);
+            webInjectCheckBox.Location = new Point(897, 8);
             webInjectCheckBox.Margin = new Padding(3, 8, 3, 4);
             webInjectCheckBox.Name = "webInjectCheckBox";
             webInjectCheckBox.Size = new Size(61, 24);
@@ -616,7 +617,7 @@ namespace LLMCoder
             // 
             fileInjectCheckBox.AutoSize = true;
             fileInjectCheckBox.ForeColor = Color.White;
-            fileInjectCheckBox.Location = new Point(838, 8);
+            fileInjectCheckBox.Location = new Point(837, 8);
             fileInjectCheckBox.Margin = new Padding(3, 8, 3, 4);
             fileInjectCheckBox.Name = "fileInjectCheckBox";
             fileInjectCheckBox.Size = new Size(54, 24);
@@ -628,7 +629,7 @@ namespace LLMCoder
             // 
             snippetInjectCheckBox.AutoSize = true;
             snippetInjectCheckBox.ForeColor = Color.White;
-            snippetInjectCheckBox.Location = new Point(750, 8);
+            snippetInjectCheckBox.Location = new Point(749, 8);
             snippetInjectCheckBox.Margin = new Padding(3, 8, 3, 4);
             snippetInjectCheckBox.Name = "snippetInjectCheckBox";
             snippetInjectCheckBox.Size = new Size(82, 24);
@@ -649,34 +650,33 @@ namespace LLMCoder
             outputChatMessagePanel.Name = "outputChatMessagePanel";
             outputChatMessagePanel.RowCount = 1;
             outputChatMessagePanel.RowStyles.Add(new RowStyle());
-            outputChatMessagePanel.Size = new Size(962, 617);
+            outputChatMessagePanel.Size = new Size(961, 617);
             outputChatMessagePanel.TabIndex = 7;
             // 
             // llmButtonRowHolderTable
             // 
             llmButtonRowHolderTable.AutoSize = true;
-            llmButtonRowHolderTable.ColumnCount = 6;
+            llmButtonRowHolderTable.ColumnCount = 7;
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
+            llmButtonRowHolderTable.ColumnStyles.Add(new ColumnStyle());
             llmButtonRowHolderTable.Controls.Add(terminateOngoingLLMCallButton, 2, 0);
             llmButtonRowHolderTable.Controls.Add(llmThinkingLabel, 3, 0);
             llmButtonRowHolderTable.Controls.Add(llmThinkingTimerLabel, 0, 0);
             llmButtonRowHolderTable.Controls.Add(llmThinkingProgressBar, 1, 0);
-            llmButtonRowHolderTable.Controls.Add(clearUserMsgButton, 5, 0);
+            llmButtonRowHolderTable.Controls.Add(clearUserMsgButton, 6, 0);
+            llmButtonRowHolderTable.Controls.Add(copyFinalPromptButton, 5, 0);
             llmButtonRowHolderTable.Dock = DockStyle.Bottom;
             llmButtonRowHolderTable.Location = new Point(3, 833);
             llmButtonRowHolderTable.Margin = new Padding(3, 4, 3, 4);
             llmButtonRowHolderTable.Name = "llmButtonRowHolderTable";
             llmButtonRowHolderTable.RowCount = 1;
             llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            llmButtonRowHolderTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            llmButtonRowHolderTable.Size = new Size(962, 43);
+            llmButtonRowHolderTable.Size = new Size(961, 43);
             llmButtonRowHolderTable.TabIndex = 5;
             // 
             // terminateOngoingLLMCallButton
@@ -741,7 +741,7 @@ namespace LLMCoder
             clearUserMsgButton.FlatStyle = FlatStyle.Flat;
             clearUserMsgButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             clearUserMsgButton.ForeColor = SystemColors.ButtonFace;
-            clearUserMsgButton.Location = new Point(865, 0);
+            clearUserMsgButton.Location = new Point(864, 0);
             clearUserMsgButton.Margin = new Padding(0, 0, 3, 0);
             clearUserMsgButton.Name = "clearUserMsgButton";
             clearUserMsgButton.Size = new Size(94, 43);
@@ -750,6 +750,23 @@ namespace LLMCoder
             clearUserMsgButton.UseVisualStyleBackColor = false;
             clearUserMsgButton.Click += clearUserMsgButton_Click;
             // 
+            // copyFinalPromptButton
+            // 
+            copyFinalPromptButton.AutoSize = true;
+            copyFinalPromptButton.BackColor = Color.MediumSeaGreen;
+            copyFinalPromptButton.Cursor = Cursors.Hand;
+            copyFinalPromptButton.FlatStyle = FlatStyle.Flat;
+            copyFinalPromptButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            copyFinalPromptButton.ForeColor = SystemColors.ButtonFace;
+            copyFinalPromptButton.Location = new Point(722, 0);
+            copyFinalPromptButton.Margin = new Padding(0, 0, 3, 0);
+            copyFinalPromptButton.Name = "copyFinalPromptButton";
+            copyFinalPromptButton.Size = new Size(139, 43);
+            copyFinalPromptButton.TabIndex = 11;
+            copyFinalPromptButton.Text = "Copy Prompt \U0001f9fe";
+            copyFinalPromptButton.UseVisualStyleBackColor = false;
+            copyFinalPromptButton.Click += copyFinalPromptButton_Click;
+            // 
             // codePage
             // 
             codePage.Controls.Add(codeSnippetInjectMainTablePanel);
@@ -757,7 +774,7 @@ namespace LLMCoder
             codePage.Margin = new Padding(3, 4, 3, 4);
             codePage.Name = "codePage";
             codePage.Padding = new Padding(3, 4, 3, 4);
-            codePage.Size = new Size(975, 888);
+            codePage.Size = new Size(973, 888);
             codePage.TabIndex = 3;
             codePage.Text = "🎞️ Snippet";
             codePage.UseVisualStyleBackColor = true;
@@ -783,7 +800,7 @@ namespace LLMCoder
             codeSnippetInjectMainTablePanel.RowStyles.Add(new RowStyle());
             codeSnippetInjectMainTablePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             codeSnippetInjectMainTablePanel.RowStyles.Add(new RowStyle());
-            codeSnippetInjectMainTablePanel.Size = new Size(969, 880);
+            codeSnippetInjectMainTablePanel.Size = new Size(967, 880);
             codeSnippetInjectMainTablePanel.TabIndex = 11;
             // 
             // label2
@@ -804,7 +821,7 @@ namespace LLMCoder
             codeInjectPretextTextBox.Location = new Point(124, 4);
             codeInjectPretextTextBox.Margin = new Padding(3, 4, 3, 4);
             codeInjectPretextTextBox.Name = "codeInjectPretextTextBox";
-            codeInjectPretextTextBox.Size = new Size(842, 27);
+            codeInjectPretextTextBox.Size = new Size(840, 27);
             codeInjectPretextTextBox.TabIndex = 3;
             // 
             // flowLayoutPanel1
@@ -850,7 +867,7 @@ namespace LLMCoder
             largeCodeSnippetTextBox.Location = new Point(124, 40);
             largeCodeSnippetTextBox.Margin = new Padding(3, 4, 3, 4);
             largeCodeSnippetTextBox.Name = "largeCodeSnippetTextBox";
-            largeCodeSnippetTextBox.Size = new Size(842, 800);
+            largeCodeSnippetTextBox.Size = new Size(840, 800);
             largeCodeSnippetTextBox.TabIndex = 1;
             largeCodeSnippetTextBox.Text = resources.GetString("largeCodeSnippetTextBox.Text");
             largeCodeSnippetTextBox.TextChanged += largeCodeSnippetTextBox_TextChanged;
@@ -872,7 +889,7 @@ namespace LLMCoder
             injectAssitantPretextTextBox.Location = new Point(124, 848);
             injectAssitantPretextTextBox.Margin = new Padding(3, 4, 3, 4);
             injectAssitantPretextTextBox.Name = "injectAssitantPretextTextBox";
-            injectAssitantPretextTextBox.Size = new Size(842, 27);
+            injectAssitantPretextTextBox.Size = new Size(840, 27);
             injectAssitantPretextTextBox.TabIndex = 8;
             // 
             // codeFilePage
@@ -881,7 +898,7 @@ namespace LLMCoder
             codeFilePage.Location = new Point(4, 29);
             codeFilePage.Margin = new Padding(3, 4, 3, 4);
             codeFilePage.Name = "codeFilePage";
-            codeFilePage.Size = new Size(975, 888);
+            codeFilePage.Size = new Size(973, 888);
             codeFilePage.TabIndex = 4;
             codeFilePage.Text = "📜 Code File";
             codeFilePage.UseVisualStyleBackColor = true;
@@ -906,7 +923,7 @@ namespace LLMCoder
             codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle());
             codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             codeFileInjectTabMainTablePanel.RowStyles.Add(new RowStyle());
-            codeFileInjectTabMainTablePanel.Size = new Size(975, 888);
+            codeFileInjectTabMainTablePanel.Size = new Size(973, 888);
             codeFileInjectTabMainTablePanel.TabIndex = 1;
             // 
             // newFileInjectHolderTable
@@ -923,7 +940,7 @@ namespace LLMCoder
             newFileInjectHolderTable.Name = "newFileInjectHolderTable";
             newFileInjectHolderTable.RowCount = 1;
             newFileInjectHolderTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            newFileInjectHolderTable.Size = new Size(960, 328);
+            newFileInjectHolderTable.Size = new Size(958, 328);
             newFileInjectHolderTable.TabIndex = 6;
             // 
             // addNewCodeFileInjectButton
@@ -933,7 +950,7 @@ namespace LLMCoder
             addNewCodeFileInjectButton.Dock = DockStyle.Fill;
             addNewCodeFileInjectButton.FlatStyle = FlatStyle.Flat;
             addNewCodeFileInjectButton.ForeColor = SystemColors.ButtonFace;
-            addNewCodeFileInjectButton.Location = new Point(842, 4);
+            addNewCodeFileInjectButton.Location = new Point(840, 4);
             addNewCodeFileInjectButton.Margin = new Padding(3, 4, 3, 4);
             addNewCodeFileInjectButton.Name = "addNewCodeFileInjectButton";
             addNewCodeFileInjectButton.Size = new Size(115, 320);
@@ -957,7 +974,7 @@ namespace LLMCoder
             selectedCodeFileViewTable.RowCount = 1;
             selectedCodeFileViewTable.RowStyles.Add(new RowStyle());
             selectedCodeFileViewTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 480F));
-            selectedCodeFileViewTable.Size = new Size(960, 500);
+            selectedCodeFileViewTable.Size = new Size(958, 500);
             selectedCodeFileViewTable.TabIndex = 4;
             // 
             // codeFileInjectHeaderTable
@@ -979,7 +996,7 @@ namespace LLMCoder
             codeFileInjectHeaderTable.Name = "codeFileInjectHeaderTable";
             codeFileInjectHeaderTable.RowCount = 1;
             codeFileInjectHeaderTable.RowStyles.Add(new RowStyle());
-            codeFileInjectHeaderTable.Size = new Size(960, 36);
+            codeFileInjectHeaderTable.Size = new Size(958, 36);
             codeFileInjectHeaderTable.TabIndex = 2;
             // 
             // presetLabel
@@ -1029,7 +1046,7 @@ namespace LLMCoder
             settingsPage.Margin = new Padding(3, 4, 3, 4);
             settingsPage.Name = "settingsPage";
             settingsPage.Padding = new Padding(3, 4, 3, 4);
-            settingsPage.Size = new Size(975, 888);
+            settingsPage.Size = new Size(973, 888);
             settingsPage.TabIndex = 2;
             settingsPage.Text = "⚙️ Settings";
             settingsPage.UseVisualStyleBackColor = true;
@@ -1054,7 +1071,7 @@ namespace LLMCoder
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
-            tableLayoutPanel4.Size = new Size(969, 880);
+            tableLayoutPanel4.Size = new Size(967, 880);
             tableLayoutPanel4.TabIndex = 1;
             // 
             // topPTextBox
@@ -1098,7 +1115,7 @@ namespace LLMCoder
             nerdStatsPage.Location = new Point(4, 29);
             nerdStatsPage.Margin = new Padding(3, 4, 3, 4);
             nerdStatsPage.Name = "nerdStatsPage";
-            nerdStatsPage.Size = new Size(975, 888);
+            nerdStatsPage.Size = new Size(973, 888);
             nerdStatsPage.TabIndex = 5;
             nerdStatsPage.Text = "\U0001f9e0 Nerd Stats";
             nerdStatsPage.UseVisualStyleBackColor = true;
@@ -1123,7 +1140,7 @@ namespace LLMCoder
             sidePanelTable.RowStyles.Add(new RowStyle());
             sidePanelTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             sidePanelTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
-            sidePanelTable.Size = new Size(247, 921);
+            sidePanelTable.Size = new Size(248, 921);
             sidePanelTable.TabIndex = 4;
             // 
             // llmSelectorTable
@@ -1141,7 +1158,7 @@ namespace LLMCoder
             llmSelectorTable.RowCount = 1;
             llmSelectorTable.RowStyles.Add(new RowStyle());
             llmSelectorTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
-            llmSelectorTable.Size = new Size(241, 45);
+            llmSelectorTable.Size = new Size(242, 45);
             llmSelectorTable.TabIndex = 7;
             // 
             // llmSelector
@@ -1151,7 +1168,7 @@ namespace LLMCoder
             llmSelector.Location = new Point(94, 4);
             llmSelector.Margin = new Padding(3, 4, 3, 4);
             llmSelector.Name = "llmSelector";
-            llmSelector.Size = new Size(144, 28);
+            llmSelector.Size = new Size(145, 28);
             llmSelector.TabIndex = 1;
             llmSelector.SelectedIndexChanged += llmSelector_SelectedIndexChanged;
             // 
@@ -1171,7 +1188,7 @@ namespace LLMCoder
             totalTokenUsageTable.RowStyles.Add(new RowStyle());
             totalTokenUsageTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 43F));
             totalTokenUsageTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 43F));
-            totalTokenUsageTable.Size = new Size(241, 43);
+            totalTokenUsageTable.Size = new Size(242, 43);
             totalTokenUsageTable.TabIndex = 5;
             // 
             // finalChatTokenLimitLabel
@@ -1198,7 +1215,7 @@ namespace LLMCoder
             finalChatTokenUsageProgressBar.MarqueeAnimationSpeed = 1000;
             finalChatTokenUsageProgressBar.Name = "finalChatTokenUsageProgressBar";
             finalChatTokenUsageProgressBar.ProgressBarColor = Color.LightGreen;
-            finalChatTokenUsageProgressBar.Size = new Size(133, 35);
+            finalChatTokenUsageProgressBar.Size = new Size(134, 35);
             finalChatTokenUsageProgressBar.Style = ProgressBarStyle.Continuous;
             finalChatTokenUsageProgressBar.TabIndex = 17;
             // 
@@ -1210,7 +1227,7 @@ namespace LLMCoder
             pastUserPrompts.Location = new Point(3, 148);
             pastUserPrompts.Margin = new Padding(3, 4, 3, 4);
             pastUserPrompts.Name = "pastUserPrompts";
-            pastUserPrompts.Size = new Size(241, 742);
+            pastUserPrompts.Size = new Size(242, 742);
             pastUserPrompts.TabIndex = 1;
             pastUserPrompts.SelectedIndexChanged += pastUserPrompts_SelectedIndexChanged;
             // 
@@ -1365,6 +1382,6 @@ namespace LLMCoder
         private RichTextBox codeFileInjectTextBox;
         private Label postCodePromptLabel;
         private TextBox postCodePromptTextBox;
-
+        private Button copyFinalPromptButton;
     }
 }

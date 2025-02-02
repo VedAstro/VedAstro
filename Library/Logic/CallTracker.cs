@@ -9,29 +9,12 @@ namespace VedAstro.Library;
 public static class CallTracker
 {
 
-    private static readonly TableServiceClient tableServiceClient;
-    private static string tableName = "CallTracker";
-    private static readonly TableClient tableClient;
-
-    static CallTracker()
-    {
-        //todo cleanup
-        var storageUri = $"https://vedastroapistorage.table.core.windows.net/{tableName}";
-        string accountName = "vedastroapistorage";
-        string storageAccountKey = Secrets.Get("VedAstroApiStorageKey");
-
-        //save reference for late use
-        tableServiceClient = new TableServiceClient(new Uri(storageUri), new TableSharedKeyCredential(accountName, storageAccountKey));
-        tableClient = tableServiceClient.GetTableClient(tableName);
-
-    }
-
     public static bool IsRunning(string callerId)
     {
 
         try
         {
-            Pageable<CallStatusEntity> linqEntities = tableClient.Query<CallStatusEntity>(call => call.PartitionKey == callerId);
+            Pageable<CallStatusEntity> linqEntities = AzureTable.CallTracker.Query<CallStatusEntity>(call => call.PartitionKey == callerId);
 
             //if old call found check if running else default false
             var found = linqEntities?.FirstOrDefault();
@@ -65,7 +48,7 @@ public static class CallTracker
         };
 
         //creates record if no exist, update if already there
-        tableClient.UpsertEntity(customerEntity);
+        AzureTable.CallTracker.UpsertEntity(customerEntity);
 
     }
 
@@ -83,9 +66,25 @@ public static class CallTracker
         };
 
         //creates record if no exist, update if already there
-        tableClient.UpsertEntity(customerEntity);
+        AzureTable.CallTracker.UpsertEntity(customerEntity);
     }
 
+    /// <summary>
+    /// clear the record for the call
+    /// </summary>
+    public static void DeleteCall(string callerId)
+    {
+        // Query for the entity to be deleted
+        Pageable<CallStatusEntity> linqEntities = AzureTable.CallTracker.Query<CallStatusEntity>(call => call.PartitionKey == callerId);
 
+        var entityToDelete = linqEntities?.FirstOrDefault();
+
+        if (entityToDelete != null)
+        {
+            // Delete the entity
+            AzureTable.CallTracker.DeleteEntity(entityToDelete.PartitionKey, entityToDelete.RowKey);
+        }
+
+    }
 
 }

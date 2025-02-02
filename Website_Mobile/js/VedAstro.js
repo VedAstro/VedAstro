@@ -144,7 +144,7 @@ class VedAstro {
      */
     static async GetPersonList(cacheType) {
         const cacheKey = VedAstro.CacheKeys[cacheType.toUpperCase()]; // Define cache key based on cache type
-        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101'; // Owner ID based on cache type
+        const ownerId = cacheType === 'private' ? VedAstro.UserId : '101'; // use 101 when getting public person list
         const visitorId = VedAstro.VisitorId; // Current visitor ID
 
         try {
@@ -442,6 +442,21 @@ class CommonTools {
         return text.length > maxChars ? `${text.substring(0, maxChars)}...` : text;
     }
 
+    // returns local time of browser. EXP : 14:00 23/04/2005 +07:00 
+    static GetFormattedLocalTime() {
+        try {
+            const now = new Date();
+            const offset = now.getTimezoneOffset();
+            const offsetHours = Math.floor(Math.abs(offset) / 60);
+            const offsetMinutes = Math.abs(offset) % 60;
+            const sign = offset < 0 ? '+' : '-';
+            const localTime = `${now.toLocaleTimeString('en-GB', { hour12: false })} ${now.toLocaleDateString('en-GB')} ${sign}${String(offsetHours).padStart(2, '0')}:${String(offsetMinutes).padStart(2, '0')}`;
+            return localTime;
+        } catch (error) {
+            console.error('Error formatting local time:', error);
+            return "00:00 00/00/0000 +00:00";
+        }
+    }
 
 }
 

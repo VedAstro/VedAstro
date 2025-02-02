@@ -1087,7 +1087,7 @@ namespace VedAstro.Library
 
 
                 //2. Moon occupies a benefic sign
-                var moonSign = Calculate.PlanetZodiacSign(PlanetName.Moon, time);
+                var moonSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, time);
                 var relationship = Calculate.PlanetRelationshipWithSign(PlanetName.Moon, moonSign.GetSignName(), time);
 
                 //check if sign is benefic 
@@ -1680,7 +1680,7 @@ namespace VedAstro.Library
             // applicable in case of marriage.
 
             //get planets in conjunction with the moon
-            var planetsInConjunct = Calculate.PlanetsInConjuction(PlanetName.Moon, time);
+            var planetsInConjunct = Calculate.PlanetsInConjunction(PlanetName.Moon, time);
 
             //if any planets are in conjunct with moon, event is occurring
             if (planetsInConjunct.Count > 0) { return CalculatorResult.IsOccuring(); }
@@ -1738,7 +1738,7 @@ namespace VedAstro.Library
 
                 //POSSIBLE 1
                 //1.1 Lagna occupied by Lagna Lord
-                bool lagnaLordInLagna = Calculate.IsHouseLordInHouse(HouseName.House1, HouseName.House1, time);
+                bool lagnaLordInLagna = Calculate.IsHouseLordInHouseBasedOnLongitudes(HouseName.House1, HouseName.House1, time);
 
                 //1.2 Navamsa lagna occupied Navamsa Lagna Lord
                 bool navamsaLagnaLordInNavamsaLagna = IsNavamsaLagnaLordInNavamsaLagnaOccuring(time);
@@ -1789,7 +1789,7 @@ namespace VedAstro.Library
 
                 //POSSIBLE 1
                 //7th occupied by 7th Lord
-                bool _7thLordIn7th = Calculate.IsHouseLordInHouse(HouseName.House7, HouseName.House7, time);
+                bool _7thLordIn7th = Calculate.IsHouseLordInHouseBasedOnLongitudes(HouseName.House7, HouseName.House7, time);
 
                 //Navamsa 7th occupied Navamsa 7th Lord
                 bool navamsa7thLordInNavamsa7th = IsNavamsa7thLordInNavamsa7thOccuring(time);
@@ -1952,7 +1952,7 @@ namespace VedAstro.Library
                 var navamsaLagnaLord = Calculate.LordOfZodiacSign(navamsaLagnaSign);
 
                 //get ordinary sign of navamsa lagna lord
-                var ordinarySignOfNavamsaLagnaLord = Calculate.PlanetZodiacSign(navamsaLagnaLord, person.BirthTime).GetSignName();
+                var ordinarySignOfNavamsaLagnaLord = Calculate.PlanetRasiD1Sign(navamsaLagnaLord, person.BirthTime).GetSignName();
 
                 //3.0 Get sign of house 1
                 var house1Sign = Calculate.HouseSignName(HouseName.House1, time);
@@ -1983,7 +1983,7 @@ namespace VedAstro.Library
                 var navamsa7thLord = Calculate.LordOfZodiacSign(navamsa7thSign);
 
                 //get ordinary sign of navamsa 7th lord
-                var ordinarySignOfNavamsa7thLord = Calculate.PlanetZodiacSign(navamsa7thLord, person.BirthTime).GetSignName();
+                var ordinarySignOfNavamsa7thLord = Calculate.PlanetRasiD1Sign(navamsa7thLord, person.BirthTime).GetSignName();
 
                 //3.0 Get sign of house 7
                 var house7Sign = Calculate.HouseSignName(HouseName.House7, time);
@@ -4057,7 +4057,7 @@ namespace VedAstro.Library
             //2. The Moon's situation in Taurus. Cancer or Pisces would greatly help the seller.
 
             //get sign moon is in 
-            var moonSign = Calculate.PlanetZodiacSign(PlanetName.Moon, time);
+            var moonSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, time);
 
             //check if moon is in the correct sign
             var inCorrectSign = moonSign.GetSignName() == ZodiacName.Taurus ||
@@ -4132,7 +4132,7 @@ namespace VedAstro.Library
             //2. The Moon's situation in Taurus. Cancer or Pisces would greatly help the seller.
 
             //get sign moon is in 
-            var moonSign = Calculate.PlanetZodiacSign(PlanetName.Moon, time);
+            var moonSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, time);
 
             //check if moon is in the correct sign
             var inCorrectSign = moonSign.GetSignName() == ZodiacName.Taurus ||
@@ -5476,7 +5476,7 @@ namespace VedAstro.Library
         public static CalculatorResult AriesSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Aries;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5491,7 +5491,7 @@ namespace VedAstro.Library
         public static CalculatorResult TaurusSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5506,7 +5506,7 @@ namespace VedAstro.Library
         public static CalculatorResult GeminiSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5521,7 +5521,7 @@ namespace VedAstro.Library
         public static CalculatorResult CancerSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5536,7 +5536,7 @@ namespace VedAstro.Library
         public static CalculatorResult LeoSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Leo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5551,7 +5551,7 @@ namespace VedAstro.Library
         public static CalculatorResult VirgoSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5566,7 +5566,7 @@ namespace VedAstro.Library
         public static CalculatorResult LibraSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Libra;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5581,7 +5581,7 @@ namespace VedAstro.Library
         public static CalculatorResult ScorpioSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5596,7 +5596,7 @@ namespace VedAstro.Library
         public static CalculatorResult SagittariusSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5611,7 +5611,7 @@ namespace VedAstro.Library
         public static CalculatorResult CapricornSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5626,7 +5626,7 @@ namespace VedAstro.Library
         public static CalculatorResult AquariusSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5641,7 +5641,7 @@ namespace VedAstro.Library
         public static CalculatorResult PiscesSunPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Sun;
@@ -5660,7 +5660,7 @@ namespace VedAstro.Library
         public static CalculatorResult AriesMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Aries;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5675,7 +5675,7 @@ namespace VedAstro.Library
         public static CalculatorResult TaurusMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5690,7 +5690,7 @@ namespace VedAstro.Library
         public static CalculatorResult GeminiMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5705,7 +5705,7 @@ namespace VedAstro.Library
         public static CalculatorResult CancerMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5720,7 +5720,7 @@ namespace VedAstro.Library
         public static CalculatorResult LeoMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Leo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5735,7 +5735,7 @@ namespace VedAstro.Library
         public static CalculatorResult VirgoMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5750,7 +5750,7 @@ namespace VedAstro.Library
         public static CalculatorResult LibraMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Libra;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5765,7 +5765,7 @@ namespace VedAstro.Library
         public static CalculatorResult ScorpioMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5780,7 +5780,7 @@ namespace VedAstro.Library
         public static CalculatorResult SagittariusMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5795,7 +5795,7 @@ namespace VedAstro.Library
         public static CalculatorResult CapricornMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5810,7 +5810,7 @@ namespace VedAstro.Library
         public static CalculatorResult AquariusMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5825,7 +5825,7 @@ namespace VedAstro.Library
         public static CalculatorResult PiscesMoonPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Moon;
@@ -5844,7 +5844,7 @@ namespace VedAstro.Library
         public static CalculatorResult AriesMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Aries;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5859,7 +5859,7 @@ namespace VedAstro.Library
         public static CalculatorResult TaurusMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5874,7 +5874,7 @@ namespace VedAstro.Library
         public static CalculatorResult GeminiMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5889,7 +5889,7 @@ namespace VedAstro.Library
         public static CalculatorResult CancerMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5904,7 +5904,7 @@ namespace VedAstro.Library
         public static CalculatorResult LeoMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Leo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5919,7 +5919,7 @@ namespace VedAstro.Library
         public static CalculatorResult VirgoMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5934,7 +5934,7 @@ namespace VedAstro.Library
         public static CalculatorResult LibraMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Libra;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5949,7 +5949,7 @@ namespace VedAstro.Library
         public static CalculatorResult ScorpioMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5964,7 +5964,7 @@ namespace VedAstro.Library
         public static CalculatorResult SagittariusMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5979,7 +5979,7 @@ namespace VedAstro.Library
         public static CalculatorResult CapricornMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -5994,7 +5994,7 @@ namespace VedAstro.Library
         public static CalculatorResult AquariusMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -6009,7 +6009,7 @@ namespace VedAstro.Library
         public static CalculatorResult PiscesMarsPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mars;
@@ -6028,7 +6028,7 @@ namespace VedAstro.Library
         public static CalculatorResult AriesRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Aries;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6043,7 +6043,7 @@ namespace VedAstro.Library
         public static CalculatorResult TaurusRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6058,7 +6058,7 @@ namespace VedAstro.Library
         public static CalculatorResult GeminiRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6073,7 +6073,7 @@ namespace VedAstro.Library
         public static CalculatorResult CancerRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6088,7 +6088,7 @@ namespace VedAstro.Library
         public static CalculatorResult LeoRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Leo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6103,7 +6103,7 @@ namespace VedAstro.Library
         public static CalculatorResult VirgoRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6118,7 +6118,7 @@ namespace VedAstro.Library
         public static CalculatorResult LibraRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Libra;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6133,7 +6133,7 @@ namespace VedAstro.Library
         public static CalculatorResult ScorpioRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6148,7 +6148,7 @@ namespace VedAstro.Library
         public static CalculatorResult SagittariusRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6163,7 +6163,7 @@ namespace VedAstro.Library
         public static CalculatorResult CapricornRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6178,7 +6178,7 @@ namespace VedAstro.Library
         public static CalculatorResult AquariusRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6193,7 +6193,7 @@ namespace VedAstro.Library
         public static CalculatorResult PiscesRahuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Rahu;
@@ -6212,7 +6212,7 @@ namespace VedAstro.Library
         public static CalculatorResult AriesJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Aries;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6227,7 +6227,7 @@ namespace VedAstro.Library
         public static CalculatorResult TaurusJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6242,7 +6242,7 @@ namespace VedAstro.Library
         public static CalculatorResult GeminiJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6257,7 +6257,7 @@ namespace VedAstro.Library
         public static CalculatorResult CancerJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6272,7 +6272,7 @@ namespace VedAstro.Library
         public static CalculatorResult LeoJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Leo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6287,7 +6287,7 @@ namespace VedAstro.Library
         public static CalculatorResult VirgoJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6302,7 +6302,7 @@ namespace VedAstro.Library
         public static CalculatorResult LibraJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Libra;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6317,7 +6317,7 @@ namespace VedAstro.Library
         public static CalculatorResult ScorpioJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6332,7 +6332,7 @@ namespace VedAstro.Library
         public static CalculatorResult SagittariusJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6347,7 +6347,7 @@ namespace VedAstro.Library
         public static CalculatorResult CapricornJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6362,7 +6362,7 @@ namespace VedAstro.Library
         public static CalculatorResult AquariusJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6377,7 +6377,7 @@ namespace VedAstro.Library
         public static CalculatorResult PiscesJupiterPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Jupiter;
@@ -6396,7 +6396,7 @@ namespace VedAstro.Library
         public static CalculatorResult AriesSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Aries;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6411,7 +6411,7 @@ namespace VedAstro.Library
         public static CalculatorResult TaurusSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6426,7 +6426,7 @@ namespace VedAstro.Library
         public static CalculatorResult GeminiSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6441,7 +6441,7 @@ namespace VedAstro.Library
         public static CalculatorResult CancerSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6456,7 +6456,7 @@ namespace VedAstro.Library
         public static CalculatorResult LeoSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Leo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6471,7 +6471,7 @@ namespace VedAstro.Library
         public static CalculatorResult VirgoSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6486,7 +6486,7 @@ namespace VedAstro.Library
         public static CalculatorResult LibraSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Libra;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6501,7 +6501,7 @@ namespace VedAstro.Library
         public static CalculatorResult ScorpioSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6516,7 +6516,7 @@ namespace VedAstro.Library
         public static CalculatorResult SagittariusSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6531,7 +6531,7 @@ namespace VedAstro.Library
         public static CalculatorResult CapricornSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6546,7 +6546,7 @@ namespace VedAstro.Library
         public static CalculatorResult AquariusSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6561,7 +6561,7 @@ namespace VedAstro.Library
         public static CalculatorResult PiscesSaturnPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Saturn;
@@ -6580,7 +6580,7 @@ namespace VedAstro.Library
         public static CalculatorResult AriesMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Aries;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6595,7 +6595,7 @@ namespace VedAstro.Library
         public static CalculatorResult TaurusMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6610,7 +6610,7 @@ namespace VedAstro.Library
         public static CalculatorResult GeminiMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6625,7 +6625,7 @@ namespace VedAstro.Library
         public static CalculatorResult CancerMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6640,7 +6640,7 @@ namespace VedAstro.Library
         public static CalculatorResult LeoMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Leo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6655,7 +6655,7 @@ namespace VedAstro.Library
         public static CalculatorResult VirgoMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6670,7 +6670,7 @@ namespace VedAstro.Library
         public static CalculatorResult LibraMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Libra;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6685,7 +6685,7 @@ namespace VedAstro.Library
         public static CalculatorResult ScorpioMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6700,7 +6700,7 @@ namespace VedAstro.Library
         public static CalculatorResult SagittariusMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6715,7 +6715,7 @@ namespace VedAstro.Library
         public static CalculatorResult CapricornMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6730,7 +6730,7 @@ namespace VedAstro.Library
         public static CalculatorResult AquariusMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6745,7 +6745,7 @@ namespace VedAstro.Library
         public static CalculatorResult PiscesMercuryPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Mercury;
@@ -6764,7 +6764,7 @@ namespace VedAstro.Library
         public static CalculatorResult AriesKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Aries;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6779,7 +6779,7 @@ namespace VedAstro.Library
         public static CalculatorResult TaurusKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6794,7 +6794,7 @@ namespace VedAstro.Library
         public static CalculatorResult GeminiKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6809,7 +6809,7 @@ namespace VedAstro.Library
         public static CalculatorResult CancerKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6824,7 +6824,7 @@ namespace VedAstro.Library
         public static CalculatorResult LeoKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Leo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6839,7 +6839,7 @@ namespace VedAstro.Library
         public static CalculatorResult VirgoKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6854,7 +6854,7 @@ namespace VedAstro.Library
         public static CalculatorResult LibraKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Libra;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6869,7 +6869,7 @@ namespace VedAstro.Library
         public static CalculatorResult ScorpioKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6884,7 +6884,7 @@ namespace VedAstro.Library
         public static CalculatorResult SagittariusKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6899,7 +6899,7 @@ namespace VedAstro.Library
         public static CalculatorResult CapricornKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6914,7 +6914,7 @@ namespace VedAstro.Library
         public static CalculatorResult AquariusKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6929,7 +6929,7 @@ namespace VedAstro.Library
         public static CalculatorResult PiscesKetuPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Ketu;
@@ -6948,7 +6948,7 @@ namespace VedAstro.Library
         public static CalculatorResult AriesVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Aries;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -6963,7 +6963,7 @@ namespace VedAstro.Library
         public static CalculatorResult TaurusVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -6978,7 +6978,7 @@ namespace VedAstro.Library
         public static CalculatorResult GeminiVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -6993,7 +6993,7 @@ namespace VedAstro.Library
         public static CalculatorResult CancerVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -7008,7 +7008,7 @@ namespace VedAstro.Library
         public static CalculatorResult LeoVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Leo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -7023,7 +7023,7 @@ namespace VedAstro.Library
         public static CalculatorResult VirgoVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -7038,7 +7038,7 @@ namespace VedAstro.Library
         public static CalculatorResult LibraVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Libra;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -7053,7 +7053,7 @@ namespace VedAstro.Library
         public static CalculatorResult ScorpioVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -7068,7 +7068,7 @@ namespace VedAstro.Library
         public static CalculatorResult SagittariusVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -7083,7 +7083,7 @@ namespace VedAstro.Library
         public static CalculatorResult CapricornVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Capricorn;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -7098,7 +7098,7 @@ namespace VedAstro.Library
         public static CalculatorResult AquariusVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -7113,7 +7113,7 @@ namespace VedAstro.Library
         public static CalculatorResult PiscesVenusPD1(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = Calculate.PlanetZodiacSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = Calculate.PlanetRasiD1Sign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
             var planetPD1Occurring = VimshottariDasa.CurrentDasa8Levels(person.BirthTime, time).PD1 == PlanetName.Venus;
@@ -10850,54 +10850,3 @@ namespace VedAstro.Library
     }
 
 }
-
-//--------------ARCHIVED CODE-----------------
-//bool IsLagnaLordInLagnaOccuring(Time time)
-//{
-////lagna lord is in same sign as first house
-
-////get lord of lagna (house 1)
-//PlanetName lordOfLagna = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-////get house 1 sign
-//var house1Sign = AstronomicalCalculator.GetHouseSignName(1, time);
-
-////get sign lagna lord is in
-//var signLagnaLordIsIn = AstronomicalCalculator.GetPlanetRasiSign(lordOfLagna, time);
-
-//    //if the house 1 sign & lagna lord sign is same
-//    if (house1Sign == signLagnaLordIsIn.GetSignName())
-//{
-//    //event is occurring
-//    return Prediction.IsOccuring();
-//}
-//else
-//{
-//    return Prediction.NotOccuring();
-//}
-//}
-//bool Is7thLordIn7thOccuring(Time time)
-// {
-// //7t lord is in same sign as 7th house
-// 
-// //get lord of 7th 
-// PlanetName lordOf7th = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-// 
-// //get house 7 sign
-// var house7Sign = AstronomicalCalculator.GetHouseSignName(7, time);
-// 
-// //get sign 7th lord is in
-// var sign7thLordIsIn = AstronomicalCalculator.GetPlanetRasiSign(lordOf7th, time);
-// 
-// //if the house 7 sign & 7th lord sign is same
-// if (house7Sign == sign7thLordIsIn.GetSignName())
-// {
-// //event is occurring
-// return Prediction.IsOccuring();
-// }
-// else
-// {
-// return Prediction.NotOccuring();
-// }
-// }
-// 

@@ -55,7 +55,7 @@ namespace VedAstro.Library
                 var isAscendant = minorPlanet == "Ascendant";
                 var minorPlanetStartSign = isAscendant
                     ? Calculate.HouseSignName(HouseName.House1, birthTime)
-                    : Calculate.PlanetZodiacSign(Parse(minorPlanet), birthTime).GetSignName();
+                    : Calculate.PlanetRasiD1Sign(Parse(minorPlanet), birthTime).GetSignName();
 
                 var prastarakaRow = ZodiacNameExtensions.AllZodiacSignsDictionary(0);
 
@@ -117,7 +117,7 @@ namespace VedAstro.Library
                 var isAscendant = astakaRow.Key == "Ascendant";
                 var planetStartSign = isAscendant
                     ? Calculate.HouseSignName(HouseName.House1, birthTime)
-                    : Calculate.PlanetZodiacSign(Parse(astakaRow.Key), birthTime).GetSignName();
+                    : Calculate.PlanetRasiD1Sign(Parse(astakaRow.Key), birthTime).GetSignName();
 
                 //#2 MOVE ROW TO RIGHT BY DISTANCE FROM ARIES
                 var distanceFromAries = (int)planetStartSign;
@@ -181,7 +181,7 @@ namespace VedAstro.Library
                 var isAscendant = minorPlanet == "ascendant";
                 var minorPlanetStartSign = isAscendant
                     ? Calculate.HouseSignName(HouseName.House1, birthTime)
-                    : Calculate.PlanetZodiacSign(Parse(minorPlanet), birthTime).GetSignName();
+                    : Calculate.PlanetRasiD1Sign(Parse(minorPlanet), birthTime).GetSignName();
 
                 //add the points together, add 1 for a benefic sign
                 foreach (var houseCount in allPlanetBeneficList[minorPlanet])

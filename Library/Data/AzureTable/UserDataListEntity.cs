@@ -7,7 +7,7 @@ namespace VedAstro.Library
     public class UserDataListEntity : ITableEntity
     {
         /// <summary>
-        /// Id given by Google or Facebook
+        /// Id given by Google or Facebook (owner ID)
         /// </summary>
         public string PartitionKey { get; set; }
 
@@ -20,6 +20,11 @@ namespace VedAstro.Library
         /// registered name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// subscription API key (only generated if subscribed)
+        /// </summary>
+        public string APIKey { get; set; }
 
         /// <summary>
         /// Time of change

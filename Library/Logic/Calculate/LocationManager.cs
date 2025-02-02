@@ -1550,29 +1550,41 @@ namespace VedAstro.Library
         {
             try
             {
-                //get address data out
-                //NOTE: multiple locations that match are given, only 1 first is taken
+                // Get address data out
+                // NOTE: multiple locations that match are given, only the first one is taken
                 var resultsJson = geocodeResponseJson["results"][0];
                 var locationNameLong = resultsJson["formatted_address"].Value<string>();
+                var addressComponents = resultsJson["address_components"];
+
+                // Get the component that has the type "plus_code" if any, then remove it from locationNameLong
+                foreach (var component in addressComponents)
+                {
+                    var types = component["types"].ToObject<List<string>>();
+                    if (types.Contains("plus_code"))
+                    {
+                        var plusCode = component["long_name"].Value<string>();
+                        locationNameLong = locationNameLong.Replace(plusCode + " ", string.Empty);
+                        break;
+                    }
+                }
+
+                // NOTE: front part sometimes contains a street address which is not needed
+                // Keep only the city, state & country... EXP: Ipoh, Perak, Malaysia
                 var splitted = locationNameLong.Split(',');
+                var relevantParts = splitted.Skip(Math.Max(0, splitted.Length - 3)).ToArray();
+                var fullName = string.Join(", ", relevantParts);
 
-                //NOTE: front part sometimes contain, street address, not needed
-                //keep only the last parts, country, state... EXP : Ipoh, Perak, Malaysia
-                var fullName = $"{splitted[splitted.Length - 3]},{splitted[splitted.Length - 2]},{splitted[splitted.Length - 1]}";
-
-
-                //# MAIN ROW
+                // MAIN ROW
                 var mainRow = new CoordinatesGeoLocationEntity();
                 mainRow.PartitionKey = latitude.ToString();
                 mainRow.RowKey = longitude.ToString();
-                mainRow.Name = fullName.Trim(); //remove leading & trailing white space if any
+                mainRow.Name = fullName.Trim(); // Remove leading & trailing white space if any
 
                 return new { IsParsed = true, MainRow = mainRow };
-
             }
             catch
             {
-                //if fail return empty and fail
+                // If fail return empty and fail
                 return new { IsParsed = false, MainRow = CoordinatesGeoLocationEntity.Empty };
             }
         }

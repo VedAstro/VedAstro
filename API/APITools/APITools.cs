@@ -412,68 +412,8 @@ namespace API
 
 
 
-        /// <summary>
-        /// Uses cache if available else calculates the data
-        /// also auto adds the newly calculated data cache for future
-        /// </summary>
-        public static async Task<T> CacheExecuteTask<T>(Func<Task<T>> generateChart, string callerId, string mimeType = "")
-        {
-            //check if cache exist
-            var isExist = await AzureCache.IsExist(callerId);
-
-            T chart;
-
-            if (!isExist)
-            {
-                //squeeze the Sky Juice!
-                chart = await generateChart.Invoke();
-                //save for future
-                var blobClient = await AzureCache.Add<T>(callerId, chart, mimeType);
-            }
-            else
-            {
-                chart = await AzureCache.GetData<T>(callerId);
-            }
-
-            return chart;
-        }
 
 
-
-        /// <summary>
-        /// Given a cache generator function and a name for the data
-        /// it'll calculate and save data to cache Data Blob storage
-        /// </summary>
-        public static async Task<BlobClient> ExecuteAndSaveToCache(Func<string> cacheGenerator, string cacheName, string mimeType = "")
-        {
-
-#if DEBUG
-            Console.WriteLine($"A: NO CACHE! RUNNING COMPUTE : {cacheName}");
-#endif
-
-            BlobClient? chartBlobClient;
-
-            try
-            {
-                //lets everybody know call is running
-                CallTracker.CallStart(cacheName);
-
-                //squeeze the Sky Juice!
-                var chartBytes = cacheGenerator.Invoke();
-
-                //save for future
-                chartBlobClient = await AzureCache.Add(cacheName, chartBytes, mimeType);
-
-            }
-            //always mark the call as ended
-            finally
-            {
-                CallTracker.CallEnd(cacheName); //mark the call as ended
-            }
-
-
-            return chartBlobClient;
-        }
 
         public static string JsonToCsv(string jsonData)
         {

@@ -17,58 +17,65 @@ namespace API
         /// </summary>
         public static async Task<string> HandleCall(HttpRequestData incomingRequest, string fullParamString)
         {
-            // Extract the API key from the fullParamString
-            string apiKey = ExtractAPIKey(ref fullParamString);
-            
-            if (APIKeyIsValid(apiKey)) //check if key is registered to user
-            {
-                // Call contains valid API key, allow full access
-                // Make a record of the call count by API key (Azure Table Storage)
-                await RecordAPISubscriberCall(apiKey);
-            }
+            // if browser then let call through
+            if (IsBrowser(incomingRequest)) { return fullParamString; }
+
+            //not browser, check for API key
             else
             {
-                // Call does not contain API key, only allow browsers to access at full speed
-                // if not browser throttle call based on caller's IP address
-                if (!IsBrowser(incomingRequest))
+                // Extract the API key from the fullParamString
+                string apiKey = ExtractAPIKey(ref fullParamString);
+                if (APIKeyIsValid(apiKey)) //check if key is registered to user
                 {
+                    // Call contains valid API key, allow full access
+                    // Make a record of the call count by API key (Azure Table Storage)
+                    await RecordAPISubscriberCall(apiKey);
+                }
+                else
+                {
+                    //not valid KEY throttle call
                     await ThrottleCallBasedOnIp(incomingRequest);
                 }
-            }
 
-            return fullParamString;
+                return fullParamString;
+            }
         }
 
 
+
+
+
+        //------------------------- PRIVATE METHODS ---------------------------------
+
         /// <summary>
-        /// Checks if API is registered to a user
+        /// Checks if API is registered to a user TODO api key checking is paused
         /// </summary>
         private static bool APIKeyIsValid(string apiKey)
         {
             // If the API key is null or empty, it's not valid
             if (string.IsNullOrEmpty(apiKey)) { return false; }
-
-            // Get the table client for the UserDataList table
-            var tableClient = AzureTable.UserDataList;
-
-            try
+            else
             {
-                // Try to retrieve the entity with the matching API key
-                var entity = tableClient.Query<UserDataListEntity>(e => e.APIKey == apiKey).FirstOrDefault();
+                return true;
+            }
+            //// Get the table client for the UserDataList table
+            //var tableClient = AzureTable.UserDataList;
 
-                // If the entity is not null, the API key is valid
-                return entity != null;
-            }
-            catch (RequestFailedException ex)
-            {
-                // If there's an error querying the table, assume the API key is not valid
-                return false;
-            }
+            //try
+            //{
+            //    // Try to retrieve the entity with the matching API key
+            //    var entity = tableClient.Query<UserDataListEntity>(e => e.APIKey == apiKey).FirstOrDefault();
+
+            //    // If the entity is not null, the API key is valid
+            //    return entity != null;
+            //}
+            //catch (RequestFailedException ex)
+            //{
+            //    // If there's an error querying the table, assume the API key is not valid
+            //    return false;
+            //}
         }
 
-
-
-        //------------------------- PRIVATE METHODS ---------------------------------
 
         /// <summary>
         /// True if caller is a browser
@@ -134,92 +141,109 @@ namespace API
         private static async Task ThrottleCallBasedOnIp(HttpRequestData incomingRequest)
         {
             // Step 1: Get delay from environment settings 
-            var delay = GetDelayFromSettings();
-            if (delay == 0) return; //(don't control if not specified)
+            var threshold = GetCallCountThresholdFromSettings();
+            if (threshold == 0) return; //(don't control if not specified, to support private servers)
 
             // Step 2: Get the caller's IP address
             var ipAddress = incomingRequest?.GetCallerIp()?.ToString() ?? "0.0.0.0";
 
-            // Step 3: Record the call for this IP address
-            var callCount = await GetCallsInLast30Seconds(ipAddress);
+            // Step 3: Update the call count for this IP address
+            await RecordAnonymousIPCall(ipAddress);
 
-            // Step 4: Delay call speed based call rate
-            var totalDelay = callCount * delay;
+            // Step 4: Get the call count for this IP address
+            var callCount = await GetCallsInLast60Seconds(ipAddress);
 
-            // Apply the delay
-            await Task.Delay(TimeSpan.FromSeconds(totalDelay));
+            // Step 5: if to many calls then slow down call
+            if (callCount > threshold)
+            {
+                // Apply the delay
+                await Task.Delay(TimeSpan.FromSeconds(100));
+            }
 
         }
 
         /// <summary>
-        /// Gets calls made in last 30 seconds not including current call 
+        /// record call by IP address to azure data table list
         /// </summary>
-        private static async Task<int> GetCallsInLast30Seconds(string ipAddress)
+        private static async Task RecordAnonymousIPCall(string ipAddress)
         {
-            var tableClient = AzureTable.PublicIpCallRateRecords;
+            var tableClient = AzureTable.AnonymousIpCallRecords; // Get the table client
 
-            try
+            // Create a new entity for the call
+            var entity = new TableEntity(ipAddress, Guid.NewGuid().ToString())
             {
-                // Try to retrieve the existing entity for that IP
-                TableEntity entity = await tableClient.GetEntityAsync<TableEntity>(ipAddress, "");
+                { "Timestamp", DateTime.UtcNow }
+            };
 
-                // Step 4: Update the call count
-                int callsInLast30s = entity.GetInt32("CallsInLast30s") ?? 0;
-
-                // Step 5: Get the current timestamp and calculate the time window
-                DateTime now = DateTime.UtcNow;
-                var lastCallTime = entity.GetDateTime("LastCallTime") ?? DateTime.UtcNow;
-
-                // Clean up old calls (more sophisticated management could be added)
-                if ((now - lastCallTime).TotalSeconds > 30)
-                {
-                    // Reset the call count if the last call was more than 30 seconds ago
-                    callsInLast30s = 0;
-                }
-
-                // Increment the calls in the last 30 seconds
-                callsInLast30s++;
-                entity["CallsInLast30s"] = callsInLast30s;
-                entity["LastCallTime"] = now; // Update the last call time
-
-                // Update the entity back in the table
-                await tableClient.UpdateEntityAsync(entity, entity.ETag, TableUpdateMode.Replace);
-
-                return callsInLast30s;
-            }
-            catch (RequestFailedException ex) when (ex.Status == 404)
-            {
-                // Entity does not exist, create it
-                var newEntity = new TableEntity(ipAddress, "CallRate")
-                                {
-                                    { "CallsInLast30s", 1 },
-                                    { "LastCallTime", DateTime.UtcNow }
-                                };
-
-                await tableClient.AddEntityAsync(newEntity);
-
-                return 0; //not including current call
-            }
-
+            // Add the entity to the table
+            await tableClient.AddEntityAsync(entity);
         }
+
+
+        /// <summary>
+        /// Gets the number of calls made by the specified IP address in the last 60 seconds.
+        /// Also cleans up records older than 60 seconds and records older than 1 hour.
+        /// </summary>
+        private static async Task<int> GetCallsInLast60Seconds(string ipAddress)
+        {
+            var tableClient = AzureTable.AnonymousIpCallRecords; // Get the table client
+
+            // Define the time windows
+            var currentTime = DateTime.UtcNow;
+            var timeWindowStart = currentTime.AddSeconds(-60);
+            var oneHourAgo = currentTime.AddHours(-1);
+
+            // Query for entities within the 1-hour window
+            var query = tableClient.QueryAsync<TableEntity>(entity =>
+                entity.PartitionKey == ipAddress && entity.GetDateTime("Timestamp") >= oneHourAgo);
+
+            var entitiesToDelete = new List<TableEntity>();
+            var callsInLast60Seconds = 0;
+
+            await foreach (var entity in query)
+            {
+                if (entity.GetDateTime("Timestamp") < timeWindowStart)
+                {
+                    entitiesToDelete.Add(entity);
+                }
+                else
+                {
+                    callsInLast60Seconds++;
+                }
+            }
+
+            // Delete old entities in a batch operation
+            if (entitiesToDelete.Count > 0)
+            {
+                var batch = new List<TableTransactionAction>();
+                foreach (var entity in entitiesToDelete)
+                {
+                    batch.Add(new TableTransactionAction(TableTransactionActionType.Delete, entity));
+                }
+                await tableClient.SubmitTransactionAsync(batch);
+            }
+
+            return callsInLast60Seconds;
+        }
+
 
 
         /// <summary>
         /// Get delay in seconds from API server settings if specified else returns 0 seconds
         /// </summary>
         /// <returns></returns>
-        private static double GetDelayFromSettings()
+        private static double GetCallCountThresholdFromSettings()
         {
             // Retrieve the environment variable
-            var delaySecondsStr = Environment.GetEnvironmentVariable("ServerThrotleDelaySeconds");
+            var thresholdStr = Environment.GetEnvironmentVariable("AnonymousIpCallThreshold");
 
             // Initialize delaySeconds to 0 by default
             int delaySeconds = 0;
 
             // Attempt to parse the environment variable, if it exists
-            if (!string.IsNullOrEmpty(delaySecondsStr))
+            if (!string.IsNullOrEmpty(thresholdStr))
             {
-                if (!int.TryParse(delaySecondsStr, out delaySeconds))
+                if (!int.TryParse(thresholdStr, out delaySeconds))
                 {
                     // Parsing failed; use the default value
                     delaySeconds = 0;

@@ -17,25 +17,22 @@ namespace VedAstro.Library
         /// </summary>
         public static UserData Guest = new UserData("101", "Guest", "guest@example.com");
 
-        private string _name;
 
-
-        public UserData(string id = "", string name = "", string email = "")
+        public UserData(string id = "", string name = "", string email = "", string apiKey = "")
         {
             Id = id;
             Name = name;
             Email = email;
+            APIKey = apiKey;
         }
 
         public string Id { get; set; }
 
-        public string Name
-        {
-            get => _name;
-            set => _name = value;
-        }
+        public string Name { get; set; }
 
         public string Email { get; set; }
+
+        public string APIKey { get; set; }
 
         /// <summary>
         /// Split the given name by space, and take the first name as first name
@@ -49,6 +46,7 @@ namespace VedAstro.Library
             temp["Name"] = this.Name;
             temp["Id"] = this.Id;
             temp["Email"] = this.Email;
+            temp["APIKey"] = this.APIKey;
             return temp;
         }
 
@@ -108,6 +106,7 @@ namespace VedAstro.Library
                 PartitionKey = this.Id,
                 RowKey = this.Email,
                 Name = this.Name,
+                APIKey = this.APIKey,
             };
 
             return newRow;

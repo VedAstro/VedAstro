@@ -2,10 +2,8 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
 using System.Net;
-using Microsoft.Bing.ImageSearch;
-using Microsoft.Bing.ImageSearch.Models;
-using Newtonsoft.Json.Linq;
 using Azure.Data.Tables;
+
 
 namespace API
 {
@@ -14,6 +12,7 @@ namespace API
     /// </summary>
     public static class MaintenanceAPI
     {
+
 
         /// <summary>
         /// scans through dates and rebuilds maps cache table

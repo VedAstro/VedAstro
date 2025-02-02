@@ -1,4 +1,4 @@
-using VedAstro.Library;
+﻿using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Reflection;
@@ -56,9 +56,6 @@ namespace API
             {
                 //0 : LOG CALL : used later for throttle limit
                 //ApiStatistic.Log(incomingRequest); //logger
-
-                //1 : extract out custom format else empty string (removed from url)
-                var format = ParseAndGetFormat(fullParamString);
 
                 //process call smartly
                 var rawProcessedData = await HandleOpenAPICalls(calculatorName, fullParamString);

@@ -2,6 +2,15 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Net;
+using System.IO;
+using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace API
 {
@@ -48,6 +57,38 @@ namespace API
             var apiHomePageTxt = await Tools.GetStringFileHttp(URL.WebStable + "/data/APIHomePage.html");
 
             return APITools.SendTextToCaller(apiHomePageTxt, incomingRequest);
+        }
+
+        private static readonly HttpClient httpClient = new HttpClient();
+
+        /// <summary>
+        /// Gets hash of VedAstro.js file located in direct azure storage
+        /// </summary>
+        [Function(nameof(GetVedAstroJSHash))]
+        public static async Task<HttpResponseData> GetVedAstroJSHash(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetVedAstroJSHash")] HttpRequestData incomingRequest,
+            FunctionContext executionContext)
+        {
+            //direct link to JS file without CDN
+            string fileUrl = "https://vedastrowebsitestorage.z5.web.core.windows.net/js/VedAstro.js";
+            string vedAstroJSHash;
+
+            // Fetch the file from Azure Storage
+            using (var response = await httpClient.GetAsync(fileUrl))
+            {
+                response.EnsureSuccessStatusCode();
+                using (var stream = await response.Content.ReadAsStreamAsync())
+                {
+                    // Generate the hash
+                    using (var sha256 = SHA256.Create())
+                    {
+                        var hash = sha256.ComputeHash(stream);
+                        vedAstroJSHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                    }
+                }
+            }
+
+            return APITools.PassMessageJson(vedAstroJSHash, incomingRequest);
         }
 
 

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Publisher
 {
@@ -24,6 +26,8 @@ namespace Publisher
 
         static async Task Main(string[] args)
         {
+            Console.WriteLine("Creating Connection to web storage");
+
             var connectionString = _configuration["StorageAccountConnectionString"];
             var containerName = _configuration["ContainerName"];
             var localFolderPath = _configuration["LocalFolderPath"];
@@ -37,12 +41,63 @@ namespace Publisher
             // Get a reference to the container
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
+            // Generate hash for js/VedAstro.js file in local folder path
+            string vedAstroJsPath = Path.Combine(localFolderPath, "js", "VedAstro.js");
+            string hash = GenerateFileHash(vedAstroJsPath);
+            Console.WriteLine($"Generated hash for VedAstro.js: {hash}");
+
+            // place hash as constant at top of js/app.js file 
+            string appJsPath = Path.Combine(localFolderPath, "js", "app.js");
+            InsertHashIntoAppJs(appJsPath, hash);
+
             // Sync local folder to blob storage
             var uploadedFiles = await SyncLocalFolderToBlob(containerClient, localFolderPath);
 
             // Purge Azure CDN
             await PurgeAzureCDN(resourceGroup, profileName, endpointName, uploadedFiles);
         }
+
+        private static string GenerateFileHash(string filePath)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                using (var stream = File.OpenRead(filePath))
+                {
+                    var hash = sha256.ComputeHash(stream);
+                    return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                }
+            }
+        }
+
+        private static void InsertHashIntoAppJs(string appJsPath, string hash)
+        {
+            const string hashConstantName = "const vedAstroJsHash = ";
+
+            string[] lines = File.ReadAllLines(appJsPath);
+
+            // Check if the constant already exists, and update it if so
+            bool hashInserted = false;
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (lines[i].StartsWith(hashConstantName))
+                {
+                    lines[i] = $"{hashConstantName}\"{hash}\";";
+                    hashInserted = true;
+                    break;
+                }
+            }
+
+            // If the constant does not exist, insert it at the top of the file
+            if (!hashInserted)
+            {
+                List<string> updatedLines = new List<string> { $"{hashConstantName}\"{hash}\";" };
+                updatedLines.AddRange(lines);
+                lines = updatedLines.ToArray();
+            }
+
+            File.WriteAllLines(appJsPath, lines);
+        }
+
 
         private static async Task<List<string>> SyncLocalFolderToBlob(BlobContainerClient containerClient, string localFolderPath)
         {

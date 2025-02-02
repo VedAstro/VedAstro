@@ -86,7 +86,7 @@ namespace API
                 };
 
                 //NOTE USING CHART ID INSTEAD OF CALLER ID, FOR CACHE SHARING BETWEEN ALL WHO COME
-                Func<Task<BlobClient>> cacheExecuteTask = () => APITools.ExecuteAndSaveToCache(generateChart, chartId);
+                Func<Task<BlobClient>> cacheExecuteTask = () => AzureCache.ExecuteAndSaveToCache(generateChart, chartId);
 
 
                 //CACHE MECHANISM

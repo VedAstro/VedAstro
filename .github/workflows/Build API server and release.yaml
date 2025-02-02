@@ -37,11 +37,6 @@ jobs:
         run: |
           Copy-Item -Path API\local.settings.json -Destination API\publish\
 
-      # **New Step: Copy LocationData files to build directory**
-      - name: Copy LocationData files to build directory
-        run: |
-          Copy-Item -Path LocationData\* -Destination API\publish\ -Recurse
-
       # Zip the build output directly containing the build files
       - name: Zip build output
         run: |
@@ -72,7 +67,7 @@ jobs:
                ```bash
                func start
                ```
-            5. **Get API link from [API Builder](https://vedastro.org/APIBuilder.html)** : Exp [http://localhost:7071/api/Calculate/AllPlanetData/PlanetName/](http://localhost:7071/api/Calculate/AllPlanetData/PlanetName/All/Location/-3.9571599,103.8723379/Time/00:00/24/04/2024/+08:00)
+            5. **Get API link from [API Builder](https://vedastro.org/APIBuilder.html)** : Exp [http://localhost:7071/api/Calculate/AllPlanetData/PlanetName/](http://localhost:7071/api/Calculate/AllPlanetData/PlanetName/All/Location/Germany/Time/00:00/24/04/2024/+02:00)
             6. 🎈 Enjoy the world's 1st open-source, non-profit Vedic astrology **API server**.
 
             💌 Support the project --> **[vedastro.org/Donate.html](https://vedastro.org/Donate.html)**

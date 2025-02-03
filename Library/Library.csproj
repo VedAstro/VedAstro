@@ -74,7 +74,7 @@
 		<PackageReference Include="Microsoft.Azure.Functions.Worker.Core" Version="1.17.0" />
 		<PackageReference Include="Microsoft.Bing.Search.ImageSearch" Version="1.0.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" />
 		<PackageReference Include="Microsoft.JSInterop" Version="7.0.13" />
 		<PackageReference Include="Mime-Detective" Version="23.6.1" />
 		<PackageReference Include="ScottPlot" Version="4.1.67" />

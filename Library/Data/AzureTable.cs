@@ -38,6 +38,7 @@ namespace VedAstro.Library
         public static readonly TableClient WebsiteErrorLog = TableServiceClient.GetTableClient("WebsiteErrorLog");
 
         public static readonly TableClient WebsiteDebugLog = TableServiceClient.GetTableClient("WebsiteDebugLog");
+        public static readonly TableClient CallInfoStatistic = TableServiceClient.GetTableClient("CallInfoStatistic");
 
         /// <summary>
         /// Allows multiple users to share one person profile with read & write privileges.

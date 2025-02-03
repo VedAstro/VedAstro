@@ -3,7 +3,186 @@
 
 	<!--THIS IS THE DATA LIST FOR HOROSCOPE-->
 
-	
+	<Event>
+		<Name>House10InAries</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House from the Ascendant sign falls on the sign of Aries
+		</ConditionDescription>
+		<Description>
+			it can be said the person concerned may have a profession or job which is generally regarded as
+			his livelihood in the line somehow associated with - 1) goiter 2) shop farming 3) cattle shed 4)
+			Forestry 5) Mining 6) Firefighting etc. 7) Washing 8) Cinema 9) Writing, Publishing 10) Astrology 11)
+			Boxing or Wrestling 12) Fighter.
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InTaurus</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Taurus
+		</ConditionDescription>
+		<Description>
+			the person concerned may have a living by associating himself with — 1) Agriculture 2) Cattle sheds 3) Circus 4)Wood cutting 5) Engineering 6) Industry 7) Paper 8) Cloth &amp; garments 9) Police 10) Security
+		</Description>
+		<Tag>Yoga,Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InGemini</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Gemini
+		</ConditionDescription>
+		<Description>
+			the person concerned may have a living by associating himself with— 1) Carpentry 2) Gambling House 3) Cinema 4) Musical connection 5) Theatre Hall 6) Granaries 7) Aero planes 8) Libraries 9) Banking 10) Anthology 11) Publishing 12) Stone-Houses 13) Excise 14) Narcotic 15) Revenue 16) Teaching
+		</Description>
+		<Tag>Yoga,Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InCancer</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Cancer
+		</ConditionDescription>
+		<Description>
+			the native may have livelihood by associating himself with the works of — 1) Fishing 2) Fiery Ghats 3) River boater 4) Wet cultivation 5) Water-work 6) Jeweler 7) Foods 8) Earthen work 9) Management of Marshy lands 10) Bravery 11) Wine shop 12) Gems 13) Steed 14) Hotel 15) Teacher
+		</Description>
+		<Tag>Yoga,Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InLeo</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Leo
+		</ConditionDescription>
+		<Description>
+			the person concerned may have living by associating himself with the work of—1) Missionary 2) Government Instrumentation 3) Chemical laboratory 4) Jute Motes 5) Fire Brigade 6) Astrology 7) Explosive factories 8) Circus 9) Forts 10) Palaces 11) Embassy 12) Army
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InVirgo</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Virgo
+		</ConditionDescription>
+		<Description>
+			the native may have living by associating himself with any— 1) Science Institution 2) Art works 3) Banking 4) Peons  5) Big Industry 6) Medicine Manufacturing 7) Drug -store 8)Nursery 9) Pottery 10) Writings 11) Education 12) Coaching 13) Industry 14) Manufacturing
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InLibra</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Libra
+		</ConditionDescription>
+		<Description>
+			the native may get his living by associating himself with the work of— 1) An organization managing a commercial center or trading place 2) An organization running any gambling center 3) A contract of making or repairing roads or a municipality 4) A telephone exchange office 5) Astrology 6) Education 7) Railway 8) Typing , Printing and copying 9) Supplier of clothes and stationery goods
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InCancer</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Cancer
+		</ConditionDescription>
+		<Description>
+			the native may have livelihood by associating himself with the works of — 1) Fishing 2) Fiery Ghats 3) River boater 4) Wet cultivation 5) Water-work 6) Jeweler 7) Foods 8) Earthen work 9) Management of Marshy lands 10) Bravery 11) Wine shop 12) Gems 13) Steed 14) Hotel 15) Teacher
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InLeo</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Leo
+		</ConditionDescription>
+		<Description>
+			the person concerned may have living by associating himself with the work of—1) Missionary 2) Government Instrumentation 3) Chemical laboratory 4) Jute Motes 5) Fire Brigade 6) Astrology 7) Explosive factories 8) Circus 9) Forts 10) Palaces 11) Embassy 12) Army
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InVirgo</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Virgo
+		</ConditionDescription>
+		<Description>
+			the native may have living by associating himself with any— 1) Science Institution 2) Art works 3) Banking 4) Peons  5) Big Industry 6) Medicine Manufacturing 7) Drug -store 8)Nursery 9) Pottery 10) Writings 11) Education 12) Coaching 13) Industry 14) Manufacturing
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InLibra</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Libra
+		</ConditionDescription>
+		<Description>
+			the native may get his living by associating himself with the work of— 1) An organization managing a commercial center or trading place 2) An organization running any gambling center 3) A contract of making or repairing roads or a municipality 4) A telephone exchange office 5) Astrology 6) Education 7) Railway 8) Typing , Printing and copying 9) Supplier of clothes and stationery goods
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InScorpio</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Scorpio
+		</ConditionDescription>
+		<Description>
+			the native may for his living associate himself with any— 1) Any organization running eating places. 2) Cultivation,  orchard 3) Maintenance of any Vineyard 4) Resorts with swimming pool 5) Baking 6) Excise 7) Science 8) Education 9) Politics 10) Hospital 11) Prison 12) Mint
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InSagittarius</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			When the 10th House falls in the sign of Sagittarius
+		</ConditionDescription>
+		<Description>
+			the native may get himself associated for his living with any— 1) Organization supplying material to army barrack, battlefields. 2) Trading or supplying material to defence department 3) organization running depots of communication. 4) Military stores 5) Playground 6) Educational Institution and 7) Ministry 8) A religious Institution 9) Scientist and Philosopher 10) Engineering.
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InCapricorn</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			In the case where 10th House falls in Capricorn
+		</ConditionDescription>
+		<Description>
+			the native may get any post or job associated with— 1) Water management 2) Irrigation 3) Forestry 4) Oil refinery 5) Oil Petrol or Industry 6) Works in Church or Church yard 7) Temples or Math’s Institutions 8) Arsenals 9) Fishery 10) Woodcutting 11) Marshy land management 12) Literature
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InAquarius</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			In case the 10th House falls in the sign of Aquarius
+		</ConditionDescription>
+		<Description>
+			the native may get a living by associating himself with— 1) Wine shop 2) Brewing 3) Toddy shop 4) Vulgar folks 5) Gambling6)Thriving 7) Machinery 8) Aero plane &amp; Mining 9) Orchard 10) Vine yards.
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+	<Event>
+		<Name>House10InPisces</Name>
+		<Nature>Neutral</Nature>
+		<ConditionDescription>
+			In case the 10th House falls in the sign of Pisces
+		</ConditionDescription>
+		<Description>
+			the native may associate himself for a living with— 1) Religions Institution 2) Any work in a pious place. 3) Water-management 4) Irrigation 5) Shipping 6) Fishery 7) Oil interest 8) Food 9) Publishing 10) Astrology 11) Medicine 14) Priest 15) Education 16) Electronics
+		</Description>
+		<Tag>Yoga, Occupation</Tag>
+	</Event>
+
 
 
 	<!--UPAGRAHA IN HOUSES-->

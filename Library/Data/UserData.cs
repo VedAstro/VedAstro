@@ -18,12 +18,13 @@ namespace VedAstro.Library
         public static UserData Guest = new UserData("101", "Guest", "guest@example.com");
 
 
-        public UserData(string id = "", string name = "", string email = "", string apiKey = "")
+        public UserData(string id = "", string name = "", string email = "", string apiKey = "", string stripeCustomerID = "")
         {
             Id = id;
             Name = name;
             Email = email;
             APIKey = apiKey;
+            StripeCustomerID = stripeCustomerID;
         }
 
         public string Id { get; set; }
@@ -33,6 +34,8 @@ namespace VedAstro.Library
         public string Email { get; set; }
 
         public string APIKey { get; set; }
+
+        public string StripeCustomerID { get; set; }
 
         /// <summary>
         /// Split the given name by space, and take the first name as first name
@@ -47,6 +50,7 @@ namespace VedAstro.Library
             temp["Id"] = this.Id;
             temp["Email"] = this.Email;
             temp["APIKey"] = this.APIKey;
+            temp["StripeCustomerID"] = this.StripeCustomerID;
             return temp;
         }
 
@@ -107,6 +111,7 @@ namespace VedAstro.Library
                 RowKey = this.Email,
                 Name = this.Name,
                 APIKey = this.APIKey,
+                StripeCustomerID = this.StripeCustomerID,
             };
 
             return newRow;

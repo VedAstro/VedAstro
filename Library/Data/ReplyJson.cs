@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace VedAstro.Library
 {
-    public class Phi3ReplyJson
+    public class ReplyJson
     {
         public string Id { get; set; }
         public string Object { get; set; }
@@ -16,9 +16,9 @@ namespace VedAstro.Library
         public List<Choice> Choices { get; set; }
         public Usage Usage { get; set; }
 
-        public Phi3ReplyJson(string jsonString)
+        public ReplyJson(string jsonString)
         {
-            var chatCompletion = JsonConvert.DeserializeObject<Phi3ReplyJson>(jsonString);
+            var chatCompletion = JsonConvert.DeserializeObject<ReplyJson>(jsonString);
 
             // Assign properties manually
             Id = chatCompletion?.Id;
@@ -31,13 +31,13 @@ namespace VedAstro.Library
 
         // Alternatively, you can use the DeserializeObject method to directly 
         // initialize the properties of the current instance
-        public Phi3ReplyJson()
+        public ReplyJson()
         {
         }
 
-        public static Phi3ReplyJson FromJson(string jsonString)
+        public static ReplyJson FromJson(string jsonString)
         {
-            return JsonConvert.DeserializeObject<Phi3ReplyJson>(jsonString);
+            return JsonConvert.DeserializeObject<ReplyJson>(jsonString);
         }
     }
 

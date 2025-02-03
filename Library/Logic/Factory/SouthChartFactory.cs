@@ -195,9 +195,12 @@ namespace VedAstro.Library
                 ZodiacSign houseZodiacSign;
                 switch (this.ChartType)
                 {
-                    case ChartType.Bhava:
-                    case ChartType.RasiD1:
+                    case ChartType.BhavaChalit:
                         houseZodiacSign = HouseZodiacSign(houseName, time);
+                        houseSignName = houseZodiacSign.GetSignName();
+                        break;
+                    case ChartType.RasiD1:
+                        houseZodiacSign = HouseRasiSign(houseName, time);
                         houseSignName = houseZodiacSign.GetSignName();
                         break;
                     case ChartType.HoraD2:
@@ -285,10 +288,10 @@ namespace VedAstro.Library
 
             switch (this.ChartType)
             {
-                case ChartType.Bhava:
+                case ChartType.BhavaChalit:
                     allPlanetsSigns = Calculate.AllPlanetSignsBasedOnHouseLongitudes(time); break;
                 case ChartType.RasiD1:
-                    allPlanetsSigns = Calculate.AllPlanetZodiacSigns(time); break;
+                    allPlanetsSigns = Calculate.AllPlanetRasiSigns(time); break;
                 case ChartType.HoraD2:
                     allPlanetsSigns = Calculate.AllPlanetHoraSign(time); break;
                 case ChartType.DrekkanaD3:

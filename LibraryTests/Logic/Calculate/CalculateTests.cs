@@ -266,7 +266,7 @@ namespace VedAstro.Library.Tests
             var house12Planets = new List<PlanetName>() { PlanetName.Rahu };
 
             Time timeSample = new("15:05 27/11/2004 +05:30", new GeoLocation("", 77.2088, 28.6139));
-            
+
             var house1PlanetsTest = Calculate.PlanetsInHouseBasedOnSign(HouseName.House1, timeSample);
             var house1PlanetsTestx = Calculate.PlanetsInHouse(HouseName.House1, timeSample);
             var xxx = CalculateKP.PlanetsInHouse(HouseName.House1, timeSample);
@@ -312,6 +312,17 @@ namespace VedAstro.Library.Tests
         public void GeoLocationTest()
         {
             var x = new GeoLocation("Tokyo", 35.6895, 139.6917);
+        }
+
+        [TestMethod()]
+        public void DasaTest()
+        {
+            Calculate.Ayanamsa = (int)Ayanamsa.LAHIRI_ICRC;
+            Calculate.SolarYearTimeSpan = 365.2564;
+            Time rajiv = new("16:10 12/04/1983 +05:30", new GeoLocation("", 80.949, 26.846));
+            Time now = Time.NowSystem(new GeoLocation("", 80.949, 26.846));
+
+            var x = VimshottariDasa.CurrentDasa8Levels(rajiv, now);
         }
 
 

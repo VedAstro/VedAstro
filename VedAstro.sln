@@ -9,13 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\AutoUpdateVedAstroDLLForPython.yaml = .github\workflows\AutoUpdateVedAstroDLLForPython.yaml
 		.github\workflows\Build API server and release.yaml = .github\workflows\Build API server and release.yaml
 		Demo To Calculate Events.cs = Demo To Calculate Events.cs
-		Directory.Build.props = Directory.Build.props
 		Dockerfile = Dockerfile
-		HoroscopeAnalysisTips.txt = HoroscopeAnalysisTips.txt
 		LICENSE.md = LICENSE.md
 		README.md = README.md
-		VedAstroAPIDemo.html = VedAstroAPIDemo.html
-		version.json = version.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{4B39926B-9DDC-4B45-9737-9DAA5FA88A09}"

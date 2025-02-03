@@ -21,6 +21,7 @@ namespace VedAstro.Library
         General,
         Personal,
         Yoga, //todo not yet implemented 
+        Occupation, 
         RulingConstellation,
         HairNailCutting,
         Medical,

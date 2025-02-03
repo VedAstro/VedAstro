@@ -7,6 +7,7 @@ using System.ComponentModel;
 using ScottPlot.Palettes;
 using System.Net;
 using System.Threading.Tasks;
+using Azure;
 
 namespace VedAstro.Library
 {
@@ -33,61 +34,6 @@ namespace VedAstro.Library
 
 
 
-
-        /// <summary>
-        /// init Table access
-        /// </summary>
-        static ApiStatistic()
-        {
-
-            try
-            {
-                string accountName = Secrets.Get("CentralStorageAccountName");
-                string storageUri = $"https://{accountName}.table.core.windows.net/";
-                var tableServiceClient = new TableServiceClient(new Uri(storageUri), new TableSharedKeyCredential(accountName, Secrets.Get("CentralStorageKey")));
-
-                //# RAW REQUEST : (use only when needed, costly)
-                //------------------------------------
-                //Initialize address table 
-                string tableNameRawRequestStatistic = "RawRequestStatistic";
-                rawRequestStatisticTableClient = tableServiceClient.GetTableClient(tableNameRawRequestStatistic);
-
-                //# REQUEST URL
-                //------------------------------------
-                //Initialize address table 
-                string tableNameRequestUrlStatistic = "RequestUrlStatistic";
-                requestUrlStatisticTableClient = tableServiceClient.GetTableClient(tableNameRequestUrlStatistic);
-
-                //# SUBSCRIBER
-                //------------------------------------
-                //Initialize address table 
-                string tableNameSubscriberStatistic = "SubscriberStatistic";
-                subscriberStatisticTableClient = tableServiceClient.GetTableClient(tableNameSubscriberStatistic);
-
-                //# USER AGENT
-                //------------------------------------
-                //Initialize address table 
-                string tableNameUserAgentStatistic = "UserAgentStatistic";
-                userAgentStatisticTableClient = tableServiceClient.GetTableClient(tableNameUserAgentStatistic);
-
-                //# IP ADDRESS (ML FEED DATASET)
-                //------------------------------------
-                //Initialize address table 
-                string tableNameIpAddressStatistic = "IpAddressStatistic";
-                ipAddressStatisticTableClient = tableServiceClient.GetTableClient(tableNameIpAddressStatistic);
-
-                //# WEB PAGE
-                //------------------------------------
-                //Initialize address table 
-                string tableNameWebPageStatistic = "WebPageStatistic";
-                webPageStatisticTableClient = tableServiceClient.GetTableClient(tableNameWebPageStatistic);
-            }
-            catch (Exception e)
-            {
-                //SILENT FAIL
-                Console.WriteLine(e);
-            }
-        }
 
         //-------------------------------------
 
@@ -198,8 +144,6 @@ namespace VedAstro.Library
             }
 
         }
-
-
         public static void LogWebPage(string webPage)
         {
             //get month and year in correct format 2019-10
@@ -401,9 +345,68 @@ namespace VedAstro.Library
             rawRequestStatisticTableClient.UpsertEntity(newRow);
         }
 
+        private static bool IsLoggingEnabled()
+        {
+            // Retrieve the environment variable
+            var isEnabled = Environment.GetEnvironmentVariable("EnableLogging");
+
+            // If the variable is not defined, default to false
+            if (string.IsNullOrEmpty(isEnabled))
+            {
+                return false;
+            }
+
+            // If the variable is defined, try to parse it as a boolean
+            if (bool.TryParse(isEnabled, out bool result))
+            {
+                return result;
+            }
+
+            // If the variable cannot be parsed as a boolean, default to false
+            return false;
+        }
+
+        public static void LogCallInfo(HttpRequestData incomingRequest)
+        {
+            // Only continue if logging is enabled
+            if (!IsLoggingEnabled())
+            {
+                return;
+            }
+
+            // Step 1: Extract needed data from request
+            var callerIp = incomingRequest?.GetCallerIp()?.ToString() ?? "no ip";
+            var userAgent = incomingRequest.Headers.FirstOrDefault(x => x.Key.Equals("User-Agent", StringComparison.OrdinalIgnoreCase)).Value.FirstOrDefault() ?? "no User-Agent";
+            var requestUrl = incomingRequest?.Url.AbsolutePath ?? "no URL";
+
+            // Step 3: Create a new log entry
+            var callInfoEntity = new CallInfoStatisticEntity
+            {
+                PartitionKey = callerIp,
+                RowKey = Guid.NewGuid().ToString(),
+                UserAgent = userAgent,
+                RequestUrl = requestUrl,
+                Timestamp = DateTime.UtcNow
+            };
+
+            // Step 4: Add the log entry to the database
+            AzureTable.CallInfoStatistic.AddEntity(callInfoEntity);
+        }
+
+        // Define the CallInfoStatisticEntity class
+        public class CallInfoStatisticEntity : ITableEntity
+        {
+            public string UserAgent { get; set; }
+            public string RequestUrl { get; set; }
+            public string PartitionKey { get; set; }
+            public string RowKey { get; set; }
+            public DateTimeOffset? Timestamp { get; set; }
+            public ETag ETag { get; set; }
+        }
 
         public static void Log(HttpRequestData incomingRequest)
         {
+            ApiStatistic.LogCallInfo(incomingRequest);
             //ApiStatistic.LogIpAddress(incomingRequest);
             //ApiStatistic.LogRequestUrl(incomingRequest);
             //ApiStatistic.LogRawRequest(incomingRequest);

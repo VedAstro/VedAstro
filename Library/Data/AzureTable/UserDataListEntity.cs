@@ -25,6 +25,11 @@ namespace VedAstro.Library
         /// subscription API key (only generated if subscribed)
         /// </summary>
         public string APIKey { get; set; }
+        
+        /// <summary>
+        /// ID used by Stripe for billing API
+        /// </summary>
+        public string StripeCustomerID { get; set; }
 
         /// <summary>
         /// Time of change

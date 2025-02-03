@@ -4,6 +4,7 @@
 	<!--THIS IS THE DATA LIST FOR HOROSCOPE-->
 
 
+
 	<!--ASHTAKAVARGA YOGAS-->
 	
 	<!--SUN-->
@@ -441,11 +442,12 @@
 	<Event>
 		<Name>GajakesariYoga</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Definition.-If Jupiter is in a kendra from the
+		<ConditionDescription>
+			If Jupiter is in a kendra from the
 			Moon the combination goes under the name Gajakesari.
-
-			Results.-Many relations, polite and generous,
+		</ConditionDescription>
+		<Description>
+			Many relations, polite and generous,
 			builder of villages and towns or magistrate over
 			them; will have a lasting reputation even long after
 			death

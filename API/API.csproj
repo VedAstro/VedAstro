@@ -22,6 +22,7 @@
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
 		<PackageReference Include="Mime-Detective" Version="23.6.1" />
 		<PackageReference Include="ScottPlot" Version="4.1.67" />
+		<PackageReference Include="Stripe.net" Version="47.3.0" />
 		<PackageReference Include="SuperConvert" Version="1.0.4.4" />
 		<PackageReference Include="Svg" Version="3.4.4" />
 		<PackageReference Include="SwissEphNet" Version="2.8.0.2" />

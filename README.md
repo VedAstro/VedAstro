@@ -28,7 +28,8 @@
 # 🙏 How VedAstro can help you...
 
 - [Website](https://vedastro.org) --> easy & fast astrology data for **normal users**
-- [JavaScript SDK](https://github.com/VedAstro/VedAstro/tree/master/Website/wwwroot/Demo/JavaScript) --> easy to use JS library to simplify API access and use
+- [AI Astrologer](https://vedastro.org/AIAstrologer.html) --> 🤖 World's 1st open source **Vedic AI astrologer**
+- [Numerology](https://vedastro.org/Numerology.html) --> Accurate Name Numerology using **Mantra Shastra**
 - [Learn Astro Computation](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> learn exact math & logic used in astrology via **`Free Open Source`** code
 - [Life Predictor](https://vedastro.org/LifePredictor.html) --> accurate algorithmic prediction of a human life's past and future
 - [Build On Top](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> import VedAstro code directly into your existing projects
@@ -38,27 +39,6 @@
 
 [![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library) [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://pypi.org/project/VedAstro/)  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
 
-# 🆓 100% Open Source
-The sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
-
-![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
-
-
-# 🛖 Philosophy
-Philosophy's the scaffold we use when we build,<br>
-Without it, a mud hut, not a structure fulfilled.<br>
-For creating grand codes, like VedAstro’s design,<br>
-Philosophy’s essential, its role is divine.<br>
-
-The purpose of VedAstro, we must understand,<br>
-Born of joy, in development it must stand.<br>
-This project thrives on happiness, pure and bright,<br>
-Don’t code till your heart feels the building's delight.<br>
-
-When your fingers can’t keep up, joy fills the air,<br>
-You’ll know that your code is placed right with care.<br>
-In the universe vast, it finds its own way,<br>
-Your work shines with brilliance, come what may.<br>
 
 # 🎯 Perfect Predictions
 [![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-steve.jpg)](https://vedastro.org/LifePredictor.html)   
@@ -68,12 +48,18 @@ Your work shines with brilliance, come what may.<br>
 [![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/MatchChecker.html)   
 [![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Horoscope.html)   
 
+# 🆓 100% Open Source
+The sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
 
+![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
+
+
+<!--
 # 📊 +200 Astro API Calls
 Below is sample API call result for data related to "**Sun**" on "**30/06/2023**" at "**Singapore**"
---> [Watch Video Guide](https://www.youtube.com/watch?v=y110RAgIorY)
---> [JS Demo Files](https://github.com/VedAstro/VedAstro/tree/master/Demo/JavaScript)
---> [Demo API Call](https://vedastroapi.azurewebsites.net/api/Calculate/AllPlanetData/PlanetName/Sun/Location/Singapore/Time/00:00/24/04/2024/+08:00)
+ [Watch Video Guide](https://www.youtube.com/watch?v=y110RAgIorY)
+ [JS Demo Files](https://github.com/VedAstro/VedAstro/tree/master/Demo/JavaScript)
+ [Demo API Call](https://vedastroapi.azurewebsites.net/api/Calculate/AllPlanetData/PlanetName/Sun/Location/Singapore/Time/00:00/24/04/2024/+08:00)
 ```json
  "Payload": {
     "SwissEphemeris": "{ Longitude = 97.672406549912, Latitude = 2.2248025536827577E-05, DistanceAU = 1.0165940297895264, SpeedLongitude = 0, SpeedLatitude = 0, SpeedDistance = 0 }",
@@ -147,7 +133,7 @@ Below is sample API call result for data related to "**Sun**" on "**30/06/2023**
     "VaraBala": "0"
   }
 ```
-
+-->
 
 <!--
 
@@ -243,14 +229,12 @@ your heart is filled with the joy of building beauty with electrons and your fin
 Then you know your code is right, and **has a place for it in this universe**.
 -->
 
+
+
 # 🙏 Special Thanks
 <img src="https://pics.paypal.com/00/p/ZjU4ZjZiMjEtNDE0Ny00MGExLTg2ZTMtNzkxOTQ1MTI4Mzc0/image_34.PNG" width="100"/>
 
 **Leslie Choi** : Believed in the project even when work was only half done.
-
-<img src="https://play-lh.googleusercontent.com/Rya_zHj8gLRk3uenRehcLbfhSj-fushukfQH-JbtO2-hbJTRyr43F42Z9CrypGMacyY=w240-h480-rw" width="100"/>
-
-**[Swarn Siddhi](https://swarnsiddhi.com/)** : The makers of this awesome app keep this VedAstro project alive 
 
 <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="100"/>
 
@@ -274,6 +258,22 @@ We're always looking for somebody to **[improve code.](https://vedastro.org/Join
 We discuss & share ideas on astrology and computation. And ways you can integrate VedAstro into your own project.
 <!-- SLACK JOIN IMAGE -->
 [![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1u7pdqjky-hrJZ7e3_vM2dZOmVY8FeHA)
+
+# 🛖 Philosophy
+Philosophy's the scaffold we use when we build,<br>
+Without it, a mud hut, not a structure fulfilled.<br>
+For creating grand codes, like VedAstro’s design,<br>
+Philosophy’s essential, its role is divine.<br>
+
+The purpose of VedAstro, we must understand,<br>
+Born of joy, in development it must stand.<br>
+This project thrives on happiness, pure and bright,<br>
+Don’t code till your heart feels the building's delight.<br>
+
+When your fingers can’t keep up, joy fills the air,<br>
+You’ll know that your code is placed right with care.<br>
+In the universe vast, it finds its own way,<br>
+Your work shines with brilliance, come what may.<br>
 
 
 # ⚙️ Project Structure

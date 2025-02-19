@@ -28,7 +28,7 @@
 # 🙏 How VedAstro can help you...
 
 - [Website](https://vedastro.org) --> easy & fast astrology data for **normal users**
-- [AI Astrologer](https://vedastro.org/AIAstrologer.html) --> 🤖 World's 1st open source **Vedic AI astrologer**
+- [AI Astrologer](https://vedastro.org/AstrologerChat.html) --> 🤖 World's 1st open source **Vedic AI astrologer**
 - [Numerology](https://vedastro.org/Numerology.html) --> Accurate Name Numerology using **Mantra Shastra**
 - [Learn Astro Computation](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> learn exact math & logic used in astrology via **`Free Open Source`** code
 - [Life Predictor](https://vedastro.org/LifePredictor.html) --> accurate algorithmic prediction of a human life's past and future

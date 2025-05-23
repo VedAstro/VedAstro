@@ -14,8 +14,26 @@ $null = Read-Host
 $rootDirectory = Split-Path -Parent $MyInvocation.MyCommand.Definition
 cd $rootDirectory
 
-# Build the .NET MAUI App
-dotnet publish -c Release -f net8.0-windows10.0.19041.0 --no-self-contained
+# Build the .NET MAUI App for a specific RID to make output path predictable
+Write-Host "Building .NET MAUI App for Windows (win-x64)..."
+dotnet publish -c Release -f net8.0-windows10.0.19041.0 -r win-x64 --no-self-contained
+
+# Define paths
+$mauiPublishDir = Join-Path $rootDirectory "bin\Release\net8.0-windows10.0.19041.0\win-x64\publish"
+$innoSetupSourceDir = Join-Path $rootDirectory "publish"
+
+# Prepare the target directory for Inno Setup
+Write-Host "Preparing files for Inno Setup installer..."
+if (Test-Path $innoSetupSourceDir) {
+    Write-Host "Removing existing Inno Setup source directory: $innoSetupSourceDir"
+    Remove-Item -Recurse -Force $innoSetupSourceDir
+}
+Write-Host "Creating Inno Setup source directory: $innoSetupSourceDir"
+New-Item -ItemType Directory -Force -Path $innoSetupSourceDir
+
+# Copy published files to the directory Inno Setup expects
+Write-Host "Copying MAUI app files from $mauiPublishDir to $innoSetupSourceDir"
+Copy-Item -Path (Join-Path $mauiPublishDir "*") -Destination $innoSetupSourceDir -Recurse -Force
 
 Write-Host "**************"
 Write-Host "Creating Inno Setup..."

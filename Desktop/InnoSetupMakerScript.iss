@@ -27,9 +27,9 @@ DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 OutputDir=InnoSetupOutput
 OutputBaseFilename=VedAstroSetup
-SetupIconFile=wwwroot\images\favicon.ico
-WizardSmallImageFile=wwwroot\images\wizard_small.bmp
-WizardImageFile=wwwroot\images\wizard_large.bmp
+;SetupIconFile=images\favicon.ico
+;WizardSmallImageFile=images\wizard_small.bmp
+;WizardImageFile=images\wizard_large.bmp
 ;Default is hide the welcome page, ms guidelines
 DisableWelcomePage=no
 UninstallDisplayIcon={app}\{#MyAppExeName}
@@ -44,10 +44,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce
 
 [Files]
-Source: "C:\Users\ASUS\Desktop\Projects\VedAstro\Desktop\bin\Release\net8.0-windows10.0.19041.0\win10-x64\{#MyAppExeName}"; DestDir: "{app}"; Flags: onlyifdoesntexist
-Source: "C:\Users\ASUS\Desktop\Projects\VedAstro\Desktop\bin\Release\net8.0-windows10.0.19041.0\win10-x64\*"; DestDir: "{app}"; Flags: onlyifdoesntexist recursesubdirs createallsubdirs
+Source: "publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: onlyifdoesntexist
+Source: "publish\*"; DestDir: "{app}"; Flags: onlyifdoesntexist recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "{#SourcePath}\dotnet\{#NetInstaller}"; DestDir: "{tmp}"; Flags: deleteafterinstall
+; Source: "{#SourcePath}\dotnet\{#NetInstaller}"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "{#SourcePath}\dotnet\netcorecheck.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
@@ -57,7 +57,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 ; IMPORTANT : SET version number below
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "{tmp}\{#NetInstaller}"; Parameters: /install /quiet /norestart; Check: NetCoreNeedsInstall('8.0.1');  StatusMsg: Installing .NET needed for calculations...
+; Filename: "{tmp}\{#NetInstaller}"; Parameters: /install /quiet /norestart; Check: NetCoreNeedsInstall('8.0.1');  StatusMsg: Installing .NET needed for calculations...
 
 
 [Code]

@@ -12,7 +12,7 @@ namespace VedAstro.Library
     /// </summary>
     public static class MatchReportFactory
     {
-        
+
         /// <summary>
         /// Gets the compatibility report for a male & female
         /// The place where compatibility report gets generated
@@ -1092,7 +1092,7 @@ namespace VedAstro.Library
             var maleControlFemale = false;
             var count = 0;
 
-        //the point of this is to calculate both male & female 
+            //the point of this is to calculate both male & female 
 
         CheckAgain:
             //if count above 1, switch the signs
@@ -1264,6 +1264,7 @@ namespace VedAstro.Library
             prediction.FemaleInfo = femaleToMaleRelation.ToString() + " Sign";
 
             //rename relationship for readability
+            var isBothSamePlanet = maleToFemaleRelation is PlanetToPlanetRelationship.SamePlanet;
             var isMaleFriend = maleToFemaleRelation is PlanetToPlanetRelationship.BestFriend or PlanetToPlanetRelationship.Friend;
             var isFemaleFriend = femaleToMaleRelation is PlanetToPlanetRelationship.BestFriend or PlanetToPlanetRelationship.Friend;
             var isMaleEnemy = maleToFemaleRelation is PlanetToPlanetRelationship.BitterEnemy or PlanetToPlanetRelationship.Enemy;
@@ -1274,6 +1275,14 @@ namespace VedAstro.Library
             var maleOrFemaleNeutral = isMaleNeutral || isFemaleNeutral;
 
 
+            // When the lords of the Janma Rasis of the
+            // bride and bridegroom are same, then GrahaMaitram
+            // is said to obtain in full.
+            if (isBothSamePlanet)
+            {
+                prediction.Nature = EventNature.Good;
+                prediction.Info = "GrahaMaitram is said to obtain in full.";
+            }
             //When the lords of the Janma Rasis of the
             // bride and bridegroom are friends, then Rasi
             // Kuta is said to obtain in full.

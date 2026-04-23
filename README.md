@@ -1,11 +1,13 @@
-﻿
-<a href="https://vedastro.org">
-<img
-  src="https://vedastro.org/images/website-header-screenshot.png"
-  alt="VedAstro.org"
-  title="VedAstro.org">
-</a>
-<span align="center">
+<p align="center">
+  <a href="https://vedastro.org">
+    <img
+      src="https://vedastro.org/images/website-header-screenshot.webp"
+      alt="VedAstro.org"
+      title="VedAstro.org">
+  </a>
+</p>
+
+<p align="center">
 
 [![Ko-fi](https://img.shields.io/static/v1?style=for-the-badge&message=Ko-fi&color=FF5E5B&logo=Ko-fi&logoColor=FFFFFF&label=)](https://ko-fi.com/vedastro)
 [![Patreon](https://img.shields.io/static/v1?style=for-the-badge&message=Patreon&color=FF424D&logo=Patreon&logoColor=FFFFFF&label=)](https://www.patreon.com/vedastro)
@@ -15,43 +17,77 @@
 [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/_VedAstro)
 [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
 
-</span>
-<span align="center">
+</p>
+
+<p align="center">
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/gen-so/Genso.Astrology)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/gen-so/Genso.Astrology)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
-</span>
+</p>
 
+<p align="center">
+
+[![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
+[![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://pypi.org/project/VedAstro/)
+[![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
+
+</p>
+
+---
 
 # 🙏 How VedAstro can help you...
 
-- [Website](https://vedastro.org) --> easy & fast astrology data for **normal users**
-- [AI Astrologer](https://vedastro.org/AstrologerChat.html) --> 🤖 World's 1st open source **Vedic AI astrologer**
-- [Numerology](https://vedastro.org/Numerology.html) --> Accurate Name Numerology using **Mantra Shastra**
-- [Learn Astro Computation](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> learn exact math & logic used in astrology via **`Free Open Source`** code
-- [Life Predictor](https://vedastro.org/LifePredictor.html) --> accurate algorithmic prediction of a human life's past and future
-- [Build On Top](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) --> import VedAstro code directly into your existing projects
-- [15000 Famous People DOB](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location) --> Accurate birth dataset for Machine Learning & AI
-- [15000 Famous People Marriage Info](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Marriage-Divorce-Info) --> Accurate marriage/divorce dataset for Machine Learning & AI
+### 🌐 Tools for Everyone
+- [**Website**](https://vedastro.org) — easy & fast astrology data for **normal users**
+- [**AI Astrologer**](https://vedastro.org/AstrologerChat.html) — 🤖 World's 1st open source **Vedic AI astrologer**
+- [**Life Predictor**](https://vedastro.org/LifePredictor.html) — accurate algorithmic prediction of a human life's past and future
+- [**Horoscope**](https://vedastro.org/Horoscope.html) — full birth chart with 100+ Vedic predictions & divisional charts
+- [**Match Checker**](https://vedastro.org/MatchChecker.html) — marriage compatibility via 10 classical Kuta methods
+- [**Match Finder**](https://vedastro.org/MatchFinder.html) — find your most compatible partner from a list
+- [**Horary**](https://vedastro.org/Horary.html) — ask a question, get an answer via **Prashna** astrology
+- [**Numerology**](https://vedastro.org/Numerology.html) — accurate Name Numerology using **Mantra Shastra**
+- [**Birth Time Finder**](https://vedastro.org/BirthTimeFinder.html) — rectify unknown/uncertain birth times
+- [**Dream Interpreter**](https://vedastro.org/AIDreamInterpreter.html) — AI-powered dream analysis rooted in Vedic thought
+- [**Now Astrology / Panchang**](https://vedastro.org/NowAstrologyPanchang.html) — live planetary positions & daily Panchang
+- [**Earthquake Predictor**](https://vedastro.org/EarthquakePredictor.html) — experimental astrological seismic forecasts
+- [**Journal**](https://vedastro.org/Journal.html) — log life events and see them mapped against your chart
 
+### 🤖 For AI Builders & Developers
+- [**MCP Server**](https://mcp.vedastro.org/api/mcp) — plug VedAstro tools into **Claude, Cursor, VS Code** and any MCP client ([docs](https://github.com/VedAstro/VedAstro/blob/master/Docs/MCPServer.MD))
+- [**REST API**](https://vedastro.org/API.html) — 200+ astrology calculation endpoints ([API Builder](https://vedastro.org/APIBuilder.html))
+- [**.NET Library**](https://www.nuget.org/packages/VedAstro.Library) — `VedAstro.Library` on NuGet
+- [**Python Library**](https://pypi.org/project/VedAstro/) — `pip install VedAstro`
+- [**Docker Image**](https://hub.docker.com/r/vedastro/api) — self-host the full API stack
+- [**WordPress Plugin**](https://vedastro.org/WordPressPlugin.html) — drop Vedic widgets into any WP site
+- [**Mobile App**](https://vedastro.org/MobileAndroidIOSApp.html) — Android & iOS clients
+- [**Learn Astro Computation**](https://github.com/VedAstro/VedAstro/tree/master/Library/Logic/Calculate) — learn the exact math & logic via **`Free Open Source`** code
+- [**Build On Top**](https://github.com/VedAstro/VedAstro/tree/master/Library) — import VedAstro code directly into your existing projects
 
-[![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library) [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://pypi.org/project/VedAstro/)  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
+### 📊 Datasets for ML & Research
+- [**15,000 Famous People — Birth Data**](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location) — curated birth date/time/location dataset
+- [**15,000 Famous People — Marriage Info**](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Marriage-Divorce-Info) — marriage & divorce dataset
 
 
 # 🎯 Perfect Predictions
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-steve.jpg)](https://vedastro.org/LifePredictor.html)   
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-monroe.jpg)](https://vedastro.org/LifePredictor.html)   
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-hitler.jpg)](https://vedastro.org/LifePredictor.html)   
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-elon.jpg)](https://vedastro.org/LifePredictor.html)   
-[![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/MatchChecker.html)   
-[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Horoscope.html)   
+
+<p align="center">
+
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-steve.webp)](https://vedastro.org/LifePredictor.html)
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-monroe.webp)](https://vedastro.org/LifePredictor.html)
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-hitler.webp)](https://vedastro.org/LifePredictor.html)
+[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-elon.webp)](https://vedastro.org/LifePredictor.html)
+[![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.webp)](https://vedastro.org/MatchChecker.html)
+[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Horoscope.html)
+
+</p>
+
 
 # 🆓 100% Open Source
 The sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
 
-![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.png)
+![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.webp)
 
 
 <!--
@@ -156,13 +192,15 @@ It takes **decades of experience** to be able make accurate prediction.
 As such this knowledge only reaches a limited people.
 This project is an effort to change that. [Read More](https://vedastro.org/About.html)
 
-# 🎂 9 Years Old 
+
+# 🎂 9 Years Old
 The first line of code for this project was written in **late 2014** at **Itä-Pasila**.
 Started as a simple desktop software, with no UI and only text display.
 With continued support from users, this project has steadily grown to what it is today. Helping people from all over the world. 🌍
-    
-# 📚 Credits &amp; Reference 
-![credits](https://vedastro.org/images/bv-raman-rao.png)
+
+
+# 📚 Credits &amp; Reference
+![credits](https://vedastro.org/images/bv-raman-rao.webp)
 
 Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao for pioneering easy to read astrology books. Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle) for proving the **efficacy of free and open work** for the benefit of all men...[Read More](https://vedastro.org/About.html).
 
@@ -180,7 +218,7 @@ Other development styles like "Waterfall" and "Scrum" are equally good when the 
 
 ✅ We want to :
 - 💓 try out novel ideas at a heartbeat
-- 📬 we want the latest platform 
+- 📬 we want the latest platform
 - 💰 we want it cheap
 
 Hence the "**gonzo development**" pattern is best suited for this needs.
@@ -197,17 +235,18 @@ Stable version will contain an old version of the App, while beta will always co
 But the database will be shared between these. Meaning data changes in Beta will seen in Stable as well.
 -->
 
- # 👶 Drunk Proof UI 
- We would like to introduce in this project a novel UX concept called "**Drunk Proofing**".
- The idea is simple. All UI is designed to be operated by an alcoholically intoxicated person aka drunk.
 
- Why? Because this forces the team to make a simple and intuitive UI design.
- It is all too easy during development to make a complicated UI that only coders understand.
- But it is far more difficult and **rewarding** to make the UI intuitive & easy.
- A "no manuals" and "no brainer" approach to design.
+# 👶 Drunk Proof UI
+We would like to introduce in this project a novel UX concept called "**Drunk Proofing**".
+The idea is simple. All UI is designed to be operated by an alcoholically intoxicated person aka drunk.
 
- 
- # 🥀 Digital Astrology
+Why? Because this forces the team to make a simple and intuitive UI design.
+It is all too easy during development to make a complicated UI that only coders understand.
+But it is far more difficult and **rewarding** to make the UI intuitive & easy.
+A "no manuals" and "no brainer" approach to design.
+
+
+# 🥀 Digital Astrology
 The wisdom of ages, once passed down by word,<br>
 Now stored in circuits, rarely heard.<br>
 
@@ -223,22 +262,32 @@ You can build without **scaffolding** it is called a **mud hut** not a building.
 Thus philosophy is essential to build a large & complex code structure like **VedAstro**.
 
 The reason for the existence of **VedAstro** needs to be understood and kept in mind during development.
-This is a project born of joy, kept alive by it and as such do not touch the code until 
+This is a project born of joy, kept alive by it and as such do not touch the code until
 your heart is filled with the joy of building beauty with electrons and your fingers can't keep up.
 
 Then you know your code is right, and **has a place for it in this universe**.
 -->
 
 
-
 # 🙏 Special Thanks
-<img src="https://pics.paypal.com/00/p/ZjU4ZjZiMjEtNDE0Ny00MGExLTg2ZTMtNzkxOTQ1MTI4Mzc0/image_34.PNG" width="100"/>
 
-**Leslie Choi** : Believed in the project even when work was only half done.
+<table>
+<tr>
+<td align="center" width="160">
+<img src="https://pics.paypal.com/00/p/ZjU4ZjZiMjEtNDE0Ny00MGExLTg2ZTMtNzkxOTQ1MTI4Mzc0/image_34.webp" width="100"/><br>
+<b>Leslie Choi</b>
+</td>
+<td>Believed in the project even when work was only half done.</td>
+</tr>
+<tr>
+<td align="center" width="160">
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.webp" width="100"/><br>
+<b>JetBrains</b>
+</td>
+<td>Gave free "ReSharper License" that made coding life easier.</td>
+</tr>
+</table>
 
-<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="100"/>
-
-**JetBrains** : Gave free "ReSharper License" that made coding life easier.
 
 # ❤️ Social
 Just **Like** & **Share** our social pages and it'll be a **big** help already!
@@ -250,34 +299,36 @@ Just **Like** & **Share** our social pages and it'll be a **big** help already!
 
 <!--
 # 👪 Join our family
-If you want to do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily.html)  
+If you want to do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily.html)
 We're always looking for somebody to **[improve code.](https://vedastro.org/JoinOurFamily.html)** or **[help with funding](https://vedastro.org/Donate.html)**.
 -->
+
 
 # 🙋‍♂️ Come say "Hi", we don't bite!
 We discuss & share ideas on astrology and computation. And ways you can integrate VedAstro into your own project.
 <!-- SLACK JOIN IMAGE -->
 [![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1u7pdqjky-hrJZ7e3_vM2dZOmVY8FeHA)
 
+
 # 🛖 Philosophy
 Philosophy's the scaffold we use when we build,<br>
 Without it, a mud hut, not a structure fulfilled.<br>
-For creating grand codes, like VedAstro’s design,<br>
-Philosophy’s essential, its role is divine.<br>
+For creating grand codes, like VedAstro's design,<br>
+Philosophy's essential, its role is divine.<br>
 
 The purpose of VedAstro, we must understand,<br>
 Born of joy, in development it must stand.<br>
 This project thrives on happiness, pure and bright,<br>
-Don’t code till your heart feels the building's delight.<br>
+Don't code till your heart feels the building's delight.<br>
 
-When your fingers can’t keep up, joy fills the air,<br>
-You’ll know that your code is placed right with care.<br>
+When your fingers can't keep up, joy fills the air,<br>
+You'll know that your code is placed right with care.<br>
 In the universe vast, it finds its own way,<br>
 Your work shines with brilliance, come what may.<br>
 
 
 # ⚙️ Project Structure
-![vedastro-4-parts](https://vedastro.org/images/4-parts-of-vedastro.jpg)
+![vedastro-4-parts](https://vedastro.org/images/4-parts-of-vedastro.webp)
 
 ## Core Library Explained
 The main part of the program is the prediction/event generator.
@@ -370,19 +421,19 @@ throughout the program.
 - Right click on project and 'Build Solution' (If face any issues please post in Slack channel for support)
 - If you want to run against server running API you need to set "Website" as "startup project" by right click
   - Now from Run menu in toolbar (dark Green Arrow) select "IISExpress" (dont select Website)
-  - this will open a browser window, you can copy the URL and paste to open in other main browser window so that you can use logged in Google/Facebook Auth 
-- If you want to run against your local running VedAstro APIs then 
-  - stop the running website in local and then do below steps  
-  - you need to open one more instance of VS2022 
-  - open same project, and now set API as "startup project" for that VS instance 
+  - this will open a browser window, you can copy the URL and paste to open in other main browser window so that you can use logged in Google/Facebook Auth
+- If you want to run against your local running VedAstro APIs then
+  - stop the running website in local and then do below steps
+  - you need to open one more instance of VS2022
+  - open same project, and now set API as "startup project" for that VS instance
   - find local.settings.sample.json file  (contact Slack Channel to get these properties - these are sensitive so not need to be checked in)
   - and rename it by removing "sample" from the name and it become "local.settings.json"
-  - Now from Run menu in toolbar (dark Green Arrow) select "API" (not need to select Docker) 
+  - Now from Run menu in toolbar (dark Green Arrow) select "API" (not need to select Docker)
   - this will open a command window and show APIs initialized (if any error please connect @ Slack Vedastro channel)
-  - run the website using above steps and then login using your Facebook or Google OAuth 
+  - run the website using above steps and then login using your Facebook or Google OAuth
   - go to provide and Enable Debug, save (this will instruct the code to look for API in local).
 
-Now you can have fun with VedAstro, ;-) try making horoscope and share your feedback in Slack channel. 
+Now you can have fun with VedAstro, ;-) try making horoscope and share your feedback in Slack channel.
 -->
 
 # Code Edit Guide
@@ -454,7 +505,7 @@ This timezone must be visible/changeable to users who need to use otherwise.
 - The calculations tested on Intel Xeon with parallel procesing takes about 1GB RAM & 30% CPU.
 With these loads browsers with mobile CPU's are going to be probelmatic for sure.
 So as not to waste time, the API route has been decided since it has been proven to work.
-- There are places where all Astronomical computation is done in client, exp. Planet Info Box 
+- There are places where all Astronomical computation is done in client, exp. Planet Info Box
 
 
 ## MUHURTHA : Notes On Gochara Prediction (from book ) # FEB 2022
@@ -472,8 +523,8 @@ degrees of a sign, Mars and the Sun produce results."
 - It's interpreted that Vendha is an obstruction and not a reversal of the Gochara results
   So as for now the design is that if a vedha is present than the result is simply nullified.
 
-- In Horoscope predictions methods have "time" & "person" arguments available, 
-  obvioulsy "time" is not needed, but for sake of semantic similarity 
+- In Horoscope predictions methods have "time" & "person" arguments available,
+  obvioulsy "time" is not needed, but for sake of semantic similarity
   with Muhurtha methods this is maintained.
 
 
@@ -505,14 +556,14 @@ Thus Option 3 was chosen.
 - default hashing is inconsistent, MD5 is used
 - many class's get hash overrides still use default hashing (in cache mechanism),
   could result in errors, needs to be updated
-- NOTE : all default hashing is instance specific (FOR STRINGS ONLY so far), works as id in 1 enviroment, 
+- NOTE : all default hashing is instance specific (FOR STRINGS ONLY so far), works as id in 1 enviroment,
 but with Client + Server config, hashes become different, needs changing to MD5
 
 
 ## Not Obvious Code Conventions
 -   In class/struct that only represent data and not computation, use direct property naming without modifiers like "Get" or "Set".
     Example: Person struct should be "Person.BirthTime" and not "Person.GetBirthTime()"
-        
+
 
 ## EventDataList.xml
 -   3 files exist now, azure storage, desktop, wwwroot (TODO delete all but wwwroot)
@@ -529,13 +580,16 @@ but with Client + Server config, hashes become different, needs changing to MD5
 -   Needs to be added with care and where absolutely needed,
     else could get very confusing.
 
+
 # Things to remember
 To all those who say we need money todo good. Jesus said not.
 
-"It is easier for a camel to go through the eye of a needle,
-than for a rich man to enter the kingdom of God"
+> "It is easier for a camel to go through the eye of a needle,
+> than for a rich man to enter the kingdom of God"
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Hoffman-ChristAndTheRichYoungRuler.jpg/1024px-Hoffman-ChristAndTheRichYoungRuler.jpg" width="600"/>
+<p align="center">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Hoffman-ChristAndTheRichYoungRuler.jpg/1024px-Hoffman-ChristAndTheRichYoungRuler.webp" width="600"/>
+</p>
 
 
 # POEMS

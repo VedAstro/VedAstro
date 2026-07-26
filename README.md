@@ -51,7 +51,7 @@
 [![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-hitler.webp)](https://vedastro.org/LifePredictor.html)
 [![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-elon.webp)](https://vedastro.org/LifePredictor.html)
 [![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.webp)](https://vedastro.org/MatchChecker.html)
-[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Horoscope.html)
+[![SkyChartGIF](https://vedastroassets.blob.core.windows.net/images/SkyChart/dev-files/release-mk3.gif)](https://vedastro.org/Horoscope.html)
 
 </p>
 
@@ -178,7 +178,7 @@ Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandf
 
 
 # 💌 Support
-[![membership](https://vedastro.org/images/kofi-membership-page.png)](https://ko-fi.com/vedastro/tiers)
+[![membership](https://vedastroassets.blob.core.windows.net/images/kofi-membership-page.webp)](https://ko-fi.com/vedastro/tiers)
 
 
 # 🧰 Gonzo Development Pattern
@@ -201,7 +201,7 @@ The negative side effect is that there will be bugs forever. Because it's near i
 change an ever-growing code base without having to constantly fix breaking changes.
 To deal with this, we split the Web App into Beta and Stable.
 
-![gonzon-dev-button](https://vedastro.org/images/gonzon-dev-button.png)
+![gonzon-dev-button](https://vedastroassets.blob.core.windows.net/images/gonzon-dev-button.webp)
 
 Stable version will contain an old version of the App, while beta will always contain latest buildable code.
 But the database will be shared between these. Meaning data changes in Beta will seen in Stable as well.

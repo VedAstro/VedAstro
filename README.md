@@ -1,7 +1,7 @@
 <p align="center">
   <a href="https://vedastro.org">
     <img
-      src="https://vedastro.org/images/website-header-screenshot.webp"
+      src="https://vedastroassets.blob.core.windows.net/images/website-header-screenshot.webp"
       alt="VedAstro.org"
       title="VedAstro.org">
   </a>
@@ -46,11 +46,11 @@
 
 <p align="center">
 
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-steve.webp)](https://vedastro.org/LifePredictor.html)
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-monroe.webp)](https://vedastro.org/LifePredictor.html)
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-hitler.webp)](https://vedastro.org/LifePredictor.html)
-[![LifePredictor](https://vedastro.org/images/proof/life-chart-proof-elon.webp)](https://vedastro.org/LifePredictor.html)
-[![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.webp)](https://vedastro.org/MatchChecker.html)
+[![LifePredictor](https://vedastroassets.blob.core.windows.net/images/proof/life-chart-proof-steve.webp)](https://vedastro.org/LifePredictor.html)
+[![LifePredictor](https://vedastroassets.blob.core.windows.net/images/proof/life-chart-proof-monroe.webp)](https://vedastro.org/LifePredictor.html)
+[![LifePredictor](https://vedastroassets.blob.core.windows.net/images/proof/life-chart-proof-hitler.webp)](https://vedastro.org/LifePredictor.html)
+[![LifePredictor](https://vedastroassets.blob.core.windows.net/images/proof/life-chart-proof-elon.webp)](https://vedastro.org/LifePredictor.html)
+[![MatchChecker](https://vedastroassets.blob.core.windows.net/images/marriage-prediction-perfect-example.webp)](https://vedastro.org/MatchChecker.html)
 [![SkyChartGIF](https://vedastroassets.blob.core.windows.net/images/SkyChart/dev-files/release-mk3.gif)](https://vedastro.org/Horoscope.html)
 
 </p>
@@ -59,7 +59,7 @@
 # 🆓 100% Open Source
 The sage **`Parashara taught everybody`** the ways of astrology without asking money, as such VedAstro does the same.
 
-![OpenSourceCode](https://vedastro.org/images/open-source-code-sample.webp)
+![OpenSourceCode](https://vedastroassets.blob.core.windows.net/images/open-source-code-sample.webp)
 
 
 <!--
@@ -172,7 +172,7 @@ With continued support from users, this project has steadily grown to what it is
 
 
 # 📚 Credits &amp; Reference
-![credits](https://vedastro.org/images/bv-raman-rao.webp)
+![credits](https://vedastroassets.blob.core.windows.net/images/bv-raman-rao.webp)
 
 Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao for pioneering easy to read astrology books. Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle) for proving the **efficacy of free and open work** for the benefit of all men...[Read More](https://vedastro.org/About.html).
 
@@ -300,7 +300,7 @@ Your work shines with brilliance, come what may.<br>
 
 
 # ⚙️ Project Structure
-![vedastro-4-parts](https://vedastro.org/images/4-parts-of-vedastro.webp)
+![vedastro-4-parts](https://vedastroassets.blob.core.windows.net/images/4-parts-of-vedastro.webp)
 
 ## Core Library Explained
 The main part of the program is the prediction/event generator.

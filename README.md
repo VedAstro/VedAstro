@@ -150,7 +150,7 @@ The Dasa Life Calculator is the most advanced and amazingly accurate prediction 
 Take a look at this example charts of Napoleon Bonaparte and Queen Elizabeth II. Every major event in their life
 can be clearly seen predicted by the chart in the "Summary Row". Red for a bad event and green for a good life event.
 Using a combination of Dasa, Bhukti, Antaram and Gocharam of 9 planets this complex chart can give perfect predictions!
-The chart takes alot of computational power to generate, so please be patient after you click the Calculate button.
+The chart takes a lot of computational power to generate, so please be patient after you click the Calculate button.
 
 [![](GithubImages/napoleon-dasa-chart.png)](https://vedastro.org)
 [![](GithubImages/elizabeth-dasa-chart.png)](https://vedastro.org)
@@ -343,8 +343,8 @@ This is the linking process of the logic and data.
 STEP 2
 
 From the above step, list of Event Data is generated.
-Is occuring logic of each Event Data is called with time slices,
-generated from a start time & end time (inputed at runtime).
+The occurrence logic of each Event Data is called with time slices,
+generated from a start time & end time (entered at runtime).
 An Event is created if IsOccuring is true.
 This's a merger of Time and EventData to create an
 Event at a specific time. This Event is then used
@@ -444,7 +444,7 @@ rules also make sure not to redirect file & api access only page access
 web : vedastro.org -> domain registra -> azure DNS -> azure cdn -> web blob storage
 api **stable** : api.vedastro.org -> domain registra -> azure DNS -> azure cdn -> stable api server (render)
 api **beta** : beta.api.vedastro.org -> domain registra -> azure DNS -> azure cdn -> beta api server (azure)
-domain cert managed by lets encyrpt acme bot azure func
+domain cert managed by Let's Encrypt ACME bot Azure Function
 
 ## API domain is routed # MAR 2023
 via Azure CDN Rules Engine, this allows the use of ```api.vedastro.org/...``` & ```api.vedastro.org/nlp/...```
@@ -454,7 +454,7 @@ Since not documented by BV. Raman, code here is created through experimentation 
 repeating relationship between Dasa planet & Bhukti planet.
 
 ## Skipping EventDataList.xml # FEB 2023
-Not all data regarding an event is hardwired. Generating gochara, antaram, sukshma and others is more effcient if description was created by Astronomical calculator
+Not all data regarding an event is hardwired. Generating gochara, antaram, sukshma and others is more efficient if the description was created by the astronomical calculator.
 At the moment EventDataList.xml is the source of truth, meaning if an event exists in xml file, then it must exist in code.
 
 ## Direct Events Chart # NOV 2022
@@ -463,18 +463,18 @@ At the moment EventDataList.xml is the source of truth, meaning if an event exis
 
 ## Events Chart default timezone # NOV 2022
 The default timezone generated for all svg charts will be based on client timezone.
-Timezone does not matter when full life charts are made, but will matter alot when
+Timezone does not matter when full life charts are made, but will matter a lot when
 short term muhurtha charts are generated. Since most users are not living where they were born,
 it is only logical to default it client browser's timezone.
 This timezone must be visible/changeable to users who need to use otherwise.
 
 ## Event Chart Notes : Life Events # APR 2022
 - This feature is to store notes on the dasa report
-- The notes are actualy Events converted to XML and stored inside each person's record
+- The notes are actually Events converted to XML and stored inside each person's record
 - When rendering these events are placed on top dasa report view
 
 ## WEBSITE : Why astrological calculation done on API server and not in client (browser) via webassmebly?
-- The calculations tested on Intel Xeon with parallel procesing takes about 1GB RAM & 30% CPU.
+- The calculations tested on Intel Xeon with parallel processing take about 1GB RAM & 30% CPU.
 With these loads browsers with mobile CPU's are going to be probelmatic for sure.
 So as not to waste time, the API route has been decided since it has been proven to work.
 - There are places where all Astronomical computation is done in client, exp. Planet Info Box
@@ -528,7 +528,7 @@ Thus Option 3 was chosen.
 - default hashing is inconsistent, MD5 is used
 - many class's get hash overrides still use default hashing (in cache mechanism),
   could result in errors, needs to be updated
-- NOTE : all default hashing is instance specific (FOR STRINGS ONLY so far), works as id in 1 enviroment,
+- NOTE : all default hashing is instance specific (FOR STRINGS ONLY so far), works as id in 1 environment,
 but with Client + Server config, hashes become different, needs changing to MD5
 
 
@@ -548,7 +548,7 @@ but with Client + Server config, hashes become different, needs changing to MD5
 -   Generally 1 tag for 1 event, add only when needed.
 -   Multiple tags can be used by 1 event, separated by "," in in the Tag element
 -   Done so that event can be accessed for multiple uses.
-    Example, Tarabala Events is taged for Personal & Tarabala.
+    Example, Tarabala Events is tagged for Personal & Tarabala.
 -   Needs to be added with care and where absolutely needed,
     else could get very confusing.
 
